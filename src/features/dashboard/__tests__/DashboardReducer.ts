@@ -1,6 +1,6 @@
 import { defaultDashBoard } from '../../../commons/application/ApplicationTypes';
-import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
 import { DashboardReducer } from '../DashboardReducer';
+import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
 import { GroupOverview } from '../DashboardTypes';
 
 const groupOverviewsTest1: GroupOverview[] = [

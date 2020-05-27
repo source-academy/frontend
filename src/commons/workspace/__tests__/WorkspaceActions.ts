@@ -1,3 +1,4 @@
+import { HIGHLIGHT_LINE } from '../../../actions/actionTypes';
 import * as actionTypes from '../..//application/types/ActionTypes';
 import { Library } from '../..//assessment/AssessmentTypes';
 import { createDefaultWorkspace } from '../../application/ApplicationTypes';
@@ -40,7 +41,6 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from '../WorkspaceActions';
-import { HIGHLIGHT_LINE } from '../../../actions/actionTypes';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;

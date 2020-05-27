@@ -4,6 +4,7 @@ import { Testcase } from '../assessment/AssessmentTypes';
 import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
 import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../../utils/actionsHelper';
+import { MAX_BROWSE_INDEX } from '../../utils/constants';
 import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
@@ -61,8 +62,11 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
-import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from '../workspace/WorkspaceTypes';
-import { MAX_BROWSE_INDEX } from '../../utils/constants';
+import {
+  WorkspaceLocation,
+  WorkspaceLocations,
+  WorkspaceManagerState
+} from '../workspace/WorkspaceTypes';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
@@ -375,17 +379,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
-            if (i === action.payload.index) {
-              return {
-                ...testcase,
-                result: action.payload.value,
-                errors: undefined
-              };
-            } else {
-              return testcase;
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: Testcase, i: any) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: action.payload.value,
+                  errors: undefined
+                };
+              } else {
+                return testcase;
+              }
             }
-          }),
+          ),
           isRunning: false
         }
       };
@@ -485,17 +491,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
-            if (i === action.payload.index) {
-              return {
-                ...testcase,
-                result: undefined,
-                errors: undefined
-              };
-            } else {
-              return testcase;
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: Testcase, i: any) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: undefined,
+                  errors: undefined
+                };
+              } else {
+                return testcase;
+              }
             }
-          })
+          )
         }
       };
 

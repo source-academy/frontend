@@ -55,7 +55,7 @@ export const timerReset = (workspaceLocation: WorkspaceLocation) =>
     workspaceLocation
   });
 
-  export const timerResume = (timeBefore: number, workspaceLocation: WorkspaceLocation) =>
+export const timerResume = (timeBefore: number, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.TIMER_RESUME, {
     timeBefore,
     timeNow: Date.now(),

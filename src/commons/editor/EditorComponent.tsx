@@ -549,7 +549,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
       }
       checkSessionIdExists(
         this.props.editorSessionId,
-        () => { },
+        () => {},
         sessionIdNotFound,
         cannotReachServer
       );
@@ -568,7 +568,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => { }
+  goGreen: () => {}
 };
 
 // TODO: Removal

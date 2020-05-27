@@ -1,11 +1,4 @@
 import {
-  FINISH_INVITE, 
-  INIT_INVITE, 
-  INVALID_EDITOR_SESSION_ID,
-  SET_EDITOR_SESSION_ID, 
-  SET_WEBSOCKET_STATUS
-} from '../CollabEditingTypes';
-import {
   finishInvite,
   initInvite,
   invalidEditorSessionId,
@@ -13,6 +6,13 @@ import {
   setWebsocketStatus
 } from '../../collabEditing/CollabEditingActions';
 import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  INVALID_EDITOR_SESSION_ID,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS
+} from '../CollabEditingTypes';
 
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
 const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;

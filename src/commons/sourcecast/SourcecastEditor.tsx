@@ -312,7 +312,7 @@ class SourcecastEditor extends React.PureComponent<SourcecastEditorProps, {}> {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => { }
+  goGreen: () => {}
 };
 
 export default SourcecastEditor;

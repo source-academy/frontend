@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 
+import { SourceActionType } from '../../../utils/actionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import {
   LOG_OUT,
@@ -16,7 +17,6 @@ import {
   UPDATE_NOTIFICATIONS
 } from '../types/ActionTypes';
 import { SessionState } from '../types/SessionTypes';
-import { SourceActionType } from '../../../utils/actionsHelper';
 
 export const SessionsReducer: Reducer<SessionState> = (
   state = defaultSession,

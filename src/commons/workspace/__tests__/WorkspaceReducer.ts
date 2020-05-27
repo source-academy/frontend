@@ -1,4 +1,5 @@
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { MAX_BROWSE_INDEX } from '../../../utils/constants';
 import { createContext } from '../../../utils/slangHelper';
 import {
   CodeOutput,
@@ -7,10 +8,6 @@ import {
   InterpreterOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
-import { 
-  PlaygroundWorkspaceState, 
-  WorkspaceManagerState 
-} from '../WorkspaceTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -38,28 +35,28 @@ import {
   UPDATE_REPL_VALUE
 } from '../../application/types/ActionTypes';
 import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS,
-} from '../../collabEditing/CollabEditingTypes';
-import {  
-  DEBUG_RESET, 
-  DEBUG_RESUME, 
-  END_DEBUG_PAUSE, 
-  END_INTERRUPT_EXECUTION, 
+  DEBUG_RESET,
+  DEBUG_RESUME,
+  END_DEBUG_PAUSE,
+  END_INTERRUPT_EXECUTION,
   EVAL_INTERPRETER_ERROR,
-  EVAL_TESTCASE_FAILURE, 
-  EVAL_INTERPRETER_SUCCESS, 
-  EVAL_TESTCASE_SUCCESS, 
+  EVAL_INTERPRETER_SUCCESS,
+  EVAL_TESTCASE_FAILURE,
+  EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE
 } from '../../application/types/InterpreterTypes';
-import { MAX_BROWSE_INDEX } from '../../../utils/constants';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS
+} from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
 import { WorkspaceReducer } from '../WorkspaceReducer';
+import { PlaygroundWorkspaceState, WorkspaceManagerState } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;

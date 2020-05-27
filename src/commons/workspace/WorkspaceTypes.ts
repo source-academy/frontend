@@ -1,15 +1,12 @@
 import { Context } from 'js-slang';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
-import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import {
-  AutogradingResult,
-  Testcase
-} from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
 import { SourcecastWorkspaceState } from '../../features/sourcecast/SourcecastTypes';
 import { SourcereelWorkspaceState } from '../../features/sourcereel/SourcereelTypes';
+import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 
 /**
  * Used to differenciate between the sources of actions, as

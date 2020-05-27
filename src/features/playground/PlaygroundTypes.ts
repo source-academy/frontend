@@ -5,7 +5,7 @@ export const SHORTEN_URL = 'SHORTEN_URL';
 export const UPDATE_SHORT_URL = 'UPDATE_SHORT_URL';
 
 export type PlaygroundState = {
-    readonly queryString?: string;
-    readonly shortURL?: string;
-    readonly usingSubst: boolean;
+  readonly queryString?: string;
+  readonly shortURL?: string;
+  readonly usingSubst: boolean;
 };

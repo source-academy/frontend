@@ -1,5 +1,5 @@
 import { fetchGroupOverviews, updateGroupOverviews } from '../DashboardActions';
-import { GroupOverview, FETCH_GROUP_OVERVIEWS, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
+import { FETCH_GROUP_OVERVIEWS, GroupOverview, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
 
 test('fetchGroupOverviews generates correct action object', () => {
   const action = fetchGroupOverviews();

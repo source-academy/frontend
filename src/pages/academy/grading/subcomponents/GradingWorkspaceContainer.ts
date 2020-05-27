@@ -34,10 +34,10 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { 
-  WorkspaceLocation, 
-  WorkspaceLocations, 
-  WorkspaceState 
+import {
+  WorkspaceLocation,
+  WorkspaceLocations,
+  WorkspaceState
 } from 'src/commons/workspace/WorkspaceTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';

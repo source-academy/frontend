@@ -62,7 +62,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
 
   public async componentDidMount() {
     Recorder.getPermission().then(
-      () => { },
+      () => {},
       (error: any) => {
         alert('Microphone not found: ' + error);
       }
