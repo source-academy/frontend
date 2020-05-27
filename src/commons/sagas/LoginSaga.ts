@@ -3,7 +3,7 @@ import { takeEvery } from 'redux-saga/effects';
 import { LUMINUS_CLIENT_ID } from '../../utils/constants';
 import { LOGIN } from '../application/types/SessionTypes';
 
-export default function* loginSaga(): SagaIterator {
+export default function* LoginSaga(): SagaIterator {
   yield takeEvery(LOGIN, updateLoginHref);
 }
 

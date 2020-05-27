@@ -15,7 +15,7 @@ import { defaultEditorValue, OverallState } from '../application/ApplicationType
 import { Variant } from 'js-slang/dist/types';
 import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../../utils/constants';
 
-export default function* playgroundSaga(): SagaIterator {
+export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
 
   yield takeEvery(SHORTEN_URL, function*(action: ReturnType<typeof shortenURL>) {

@@ -6,7 +6,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 import {
   DELETE_SOURCECAST_ENTRY,
   SAVE_SOURCECAST_DATA
-} from 'src/features/sourcereel/SourcereelTypes';
+} from '../../features/sourcereel/SourcereelTypes';
 import * as actions from '../../actions'; // TODO: Fix after implementing GroundControlActions and GameActions
 import { GameState, OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
@@ -91,7 +91,7 @@ import {
   uploadAssessment
 } from './RequestsSaga';
 
-function* backendSaga(): SagaIterator {
+function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function*(action: ReturnType<typeof actions.fetchAuth>) {
     const luminusCode = action.payload;
     const tokens = yield call(postAuth, luminusCode);
@@ -795,4 +795,4 @@ function* backendSaga(): SagaIterator {
   });
 }
 
-export default backendSaga;
+export default BackendSaga;

@@ -67,7 +67,7 @@ import {
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 let breakpoints: string[] = [];
-export default function* workspaceSaga(): SagaIterator {
+export default function* WorkspaceSaga(): SagaIterator {
   let context: Context;
 
   yield takeEvery(EVAL_EDITOR, function*(action: ReturnType<typeof actions.evalEditor>) {
