@@ -9,7 +9,7 @@ var SaveManager = require('../saveManager/saveManager.js');
 var ExternalManager = require('../externalManager/externalManager.js');
 var MapOverlay = require('../mapOverlay/mapOverlay.js');
 var Utils = require('../utils/utils.js');
-var FilterEffects = require('../filterEffects/filterEffects.js');
+var FilterEffects = require('../effects/filterEffects.js');
 var GameState = require('../backend/game-state');
 
 var mapObjects;

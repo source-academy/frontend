@@ -39,7 +39,7 @@ export function init(div, canvas, options) {
   var dialogLayers = DialogManager.init(options.playerName, options.playerImageCanvas);
   stage.addChild(dialogLayers);
   stage.addChild(BlackOverlay.init());
-  stage.addChild(StoryManager.init());
+  stage.addChild(StoryManager.showLoadingScreen());
 
   function animate() {
     requestAnimationFrame(animate);
@@ -63,9 +63,9 @@ export function loadingScreen(div, canvas) {
   // create the root of the scene graph
   stage = new PIXI.Container();
   stage.addChild(BlackOverlay.init());
-  const loadingScreen = StoryManager.init();
+  const loadingScreen = StoryManager.showLoadingScreen();
   loadingScreen.visible = true;
-  stage.addChild(StoryManager.init());
+  stage.addChild(StoryManager.showLoadingScreen());
 
   function animate() {
     requestAnimationFrame(animate);

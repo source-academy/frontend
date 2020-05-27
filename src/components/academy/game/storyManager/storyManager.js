@@ -1,5 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { isStudent } from '../backend/user.js';
+import { createLoadingScreen, createBlackOverlay, createText } from '../effects/effects.js';
+import { defaultText } from '../constants/styles.js';
 
 var Constants = require('../constants/constants.js');
 var QuestManager = require('../questManager/questManager.js');
@@ -9,30 +11,11 @@ var BlackOverlay = require('../blackOverlay/blackOverlay.js');
 var SoundManager = require('../soundManager/soundManager.js');
 
 var loadedStories = {};
-
 var loadingOverlay;
-var loadingText;
 
-export function init() {
-  loadingOverlay = new PIXI.Container();
-  let blackOverlay = new PIXI.Graphics();
-  blackOverlay.beginFill(0, 1);
-  blackOverlay.drawRect(0, 0, Constants.screenWidth, Constants.screenHeight);
-  blackOverlay.endFill();
-  blackOverlay.hitArea = new PIXI.Rectangle(0, 0, Constants.screenWidth, Constants.screenHeight);
-  blackOverlay.interactive = true;
-  blackOverlay.alpha = 0.8;
-  loadingOverlay.addChild(blackOverlay);
-  loadingText = new PIXI.Text('Loading...', {
-    fontFamily: 'Arial',
-    fontSize: 2 * Constants.fontSize,
-    fill: 'white'
-  });
-  loadingText.anchor.set(0.5, 0.5);
-  loadingText.position.set(Constants.screenWidth / 2, Constants.screenHeight / 2);
-  loadingOverlay.addChild(loadingText);
-  loadingOverlay.visible = false;
-
+export function showLoadingScreen() {
+  const blackOverlay = createBlackOverlay(0.8).setInteractive(true);
+  loadingOverlay = createLoadingScreen();
   return loadingOverlay;
 }
 

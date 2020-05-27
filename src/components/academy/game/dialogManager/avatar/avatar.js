@@ -1,5 +1,5 @@
 var Constants = require('../../constants/constants.js');
-var FilterEffects = require('../../filterEffects/filterEffects.js');
+var FilterEffects = require('../../effects/filterEffects.js');
 
 var playerName;
 var playerAvatar;

@@ -4,7 +4,7 @@ import Text from './Text';
 var Constants = require('../constants/constants.js');
 var LocationManager = require('../locationManager/locationManager.js');
 var ObjectManager = require('../objectManager/objectManager.js');
-var FilterEffects = require('../filterEffects/filterEffects.js');
+var FilterEffects = require('../effects/filterEffects.js');
 var Avatar = require('./avatar/avatar.js');
 var Utils = require('../utils/utils.js');
 var SoundManager = require('../soundManager/soundManager.js');
