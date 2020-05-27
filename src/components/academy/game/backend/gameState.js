@@ -21,12 +21,11 @@ const OVERRIDE_KEY = 'source_academy_override',
 
 let sessionData = undefined;
 
-export async function fetchGameData(story, gameStates, missions, callback) {
+export async function fetchGameData(story, gameStates, missions) {
   // fetch only needs to be called once; if there are additional calls somehow then ignore them
   // only for students
   if (hasBeenFetched() && isStudent()) {
-    callback(getSessionData().story.story);
-    return;
+    return getSessionData().story.story;
   }
   const data = {
     story: story,
@@ -41,7 +40,7 @@ export async function fetchGameData(story, gameStates, missions, callback) {
     SaveManager.resetLocalSaveData();
   }
   missions = organiseMissions(missions);
-  getMissionPointer(missions, callback);
+  return getMissionPointer(missions);
 }
 
 function printSessionData() {
@@ -174,7 +173,7 @@ function organiseMissions(missions) {
  * However, in the event the student's current mission pointer falls outside the bounds of the
  * global list of open missions, then the corresponding upper (or lower) bound will be used.
  */
-function getMissionPointer(missions, callback) {
+function getMissionPointer(missions) {
   // in the scenario with no missions
   if (missions == undefined) {
     return;
@@ -196,5 +195,5 @@ function getMissionPointer(missions, callback) {
   if (missionPointer === undefined) {
     missionPointer = missions[0];
   }
-  callback(missionPointer && missionPointer.story);
+  return missionPointer && missionPointer.story;
 }

@@ -14,7 +14,7 @@ const config = {
     localStorage.setItem(Constants.LOCATION_KEY, newLocation)
 };
 
-export default function(
+async function startGame(
   div: HTMLDivElement,
   canvas: HTMLCanvasElement,
   username: string | undefined,
@@ -22,10 +22,9 @@ export default function(
   gameState: Object,
   missions: IAssessmentOverview[] | undefined
 ) {
-  function initialize(story: Story | undefined, div: HTMLDivElement, canvas: HTMLCanvasElement) {
-    StoryXMLPlayer.init(div, canvas, { ...config, playerName: username });
-    StoryXMLPlayer.loadStory(story, Constants.nullFunction);
-  }
-
-  fetchGameData(userStory, gameState, missions, (story: Story) => initialize(story, div, canvas));
+  const gameData: any = await fetchGameData(userStory, gameState, missions);
+  StoryXMLPlayer.init(div, canvas, { ...config, playerName: username });
+  StoryXMLPlayer.loadStory(gameData);
 }
+
+export default startGame;

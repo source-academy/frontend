@@ -41,6 +41,7 @@ export function unlockFirstQuest(storyId, callback) {
 }
 
 export function loadStory(storyXML, callback, startLocation) {
+  callback = callback || Constants.nullFunction;
   if (loadedStories[storyXML]) {
     return;
   }
