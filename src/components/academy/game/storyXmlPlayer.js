@@ -16,7 +16,7 @@ var Utils = require('./utils/utils.js');
 var renderer;
 var stage;
 
-export function init(div, canvas, options) {
+export function initStage(div, canvas, options) {
   renderer = PIXI.autoDetectRenderer(Constants.screenWidth, Constants.screenHeight, {
     backgroundColor: 0x000000,
     view: canvas

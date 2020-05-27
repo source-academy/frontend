@@ -4,7 +4,8 @@ import Constants from './constants/constants';
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { Story } from 'src/reducers/states';
 import { LINKS } from 'src/utils/constants';
-const StoryXMLPlayer = require('./storyXmlPlayer');
+import { GameData } from './gameTypes';
+import { initStage, loadStory } from './storyXmlPlayer';
 
 const config = {
   hookHandlers: hookHandlers,
@@ -22,9 +23,9 @@ async function startGame(
   gameState: Object,
   missions: IAssessmentOverview[] | undefined
 ) {
-  const gameData: any = await fetchGameData(userStory, gameState, missions);
-  StoryXMLPlayer.init(div, canvas, { ...config, playerName: username });
-  StoryXMLPlayer.loadStory(gameData);
+  const gameData: GameData = await fetchGameData(userStory, gameState, missions);
+  initStage(div, canvas, { ...config, playerName: username });
+  loadStory(gameData);
 }
 
 export default startGame;
