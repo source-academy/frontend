@@ -8,7 +8,7 @@ import {
   GradingStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
-import { defaultSession, GameState, ISessionState, Role, Story } from '../../ApplicationTypes';
+import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import {
   LOG_OUT,
   SET_TOKENS,
@@ -20,6 +20,7 @@ import {
   UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS
 } from '../../types/ActionTypes';
+import { SessionState } from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {
@@ -27,7 +28,7 @@ test('LOG_OUT works correctly on default session', () => {
     type: LOG_OUT,
     payload: {}
   };
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual(defaultSession);
 });
@@ -43,7 +44,7 @@ test('SET_TOKEN sets accessToken and refreshToken correctly', () => {
       refreshToken
     }
   };
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
@@ -73,7 +74,7 @@ test('SET_USER works correctly', () => {
     type: SET_USER,
     payload
   };
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
@@ -112,7 +113,7 @@ test('UPDATE_HISTORY_HELPERS works on academy location', () => {
     lastGeneralLocations: ['/academy/1', '/academy/2']
   };
 
-  const newDefaultSession: ISessionState = {
+  const newDefaultSession: SessionState = {
     ...defaultSession,
     historyHelper
   };
@@ -180,7 +181,7 @@ test('UPDATE_ASSESSMENT works correctly in inserting assessment and retains old 
   const assessments = new Map<number, Assessment>();
   assessments.set(assessmentTest3.id, assessmentTest3);
 
-  const newDefaultSession: ISessionState = {
+  const newDefaultSession: SessionState = {
     ...defaultSession,
     assessments
   };
@@ -258,7 +259,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in inserting assessment overvi
     payload: assessmentOverviewsTest1
   };
 
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
@@ -277,7 +278,7 @@ test('UPDATE_ASSESSMENT_OVERVIEWS works correctly in updating assessment overvie
     payload: assessmentOverviewsPayload
   };
 
-  const result: ISessionState = SessionsReducer(newDefaultSession, action);
+  const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result).toEqual({
     ...defaultSession,
@@ -437,7 +438,7 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in inserting grading overviews', 
     type: UPDATE_GRADING_OVERVIEWS,
     payload: gradingOverviewTest1
   };
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewTest1);
 });
@@ -452,7 +453,7 @@ test('UPDATE_GRADING_OVERVIEWS works correctly in updating grading overviews', (
     type: UPDATE_GRADING_OVERVIEWS,
     payload: gradingOverviewsPayload
   };
-  const result: ISessionState = SessionsReducer(newDefaultSession, action);
+  const result: SessionState = SessionsReducer(newDefaultSession, action);
 
   expect(result.gradingOverviews).toEqual(gradingOverviewsPayload);
 });
@@ -480,7 +481,7 @@ test('UPDATE_NOTIFICATIONS works correctly in updating notifications', () => {
     payload: notifications
   };
 
-  const result: ISessionState = SessionsReducer(defaultSession, action);
+  const result: SessionState = SessionsReducer(defaultSession, action);
 
   expect(result.notifications).toEqual(notifications);
 });
