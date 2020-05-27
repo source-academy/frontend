@@ -3,11 +3,11 @@ import { Reducer } from 'redux';
 import { SourceActionType } from '../../../utils/actionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import {
-  LOG_OUT,
   SET_GAME_STATE,
   UPDATE_MATERIAL_DIRECTORY_TREE,
   UPDATE_MATERIAL_INDEX,
 } from '../types/ActionTypes';
+import { LOG_OUT } from '../types/CommonsTypes';
 import { 
   SessionState,
   SET_TOKENS,

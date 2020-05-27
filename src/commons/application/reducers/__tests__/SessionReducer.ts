@@ -9,7 +9,7 @@ import {
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
-import { LOG_OUT } from '../../types/ActionTypes';
+import { LOG_OUT } from '../../types/CommonsTypes';
 import {
   SessionState,
   SET_TOKENS,

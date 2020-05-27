@@ -1,8 +1,5 @@
 // TODO: Further breakdown into corresponding featureTypes.ts
 
-// Commons Action Types
-export const LOG_OUT = 'LOG_OUT';
-
 // Workspace Action Types
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
 export const BROWSE_REPL_HISTORY_DOWN = 'BROWSE_REPL_HISTORY_DOWN';

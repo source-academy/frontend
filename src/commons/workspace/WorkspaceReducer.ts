@@ -29,7 +29,6 @@ import {
   END_CLEAR_CONTEXT,
   EVAL_EDITOR,
   EVAL_REPL,
-  LOG_OUT,
   MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
@@ -44,6 +43,7 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
 } from '../application/types/ActionTypes';
+import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
