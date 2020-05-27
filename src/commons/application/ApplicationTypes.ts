@@ -105,12 +105,12 @@ export enum Role {
  * Defines what chapters are available for usage.
  * For external libraries, see ExternalLibrariesTypes.ts
  */
-export interface ISourceLanguage {
+export type SourceLanguage = {
   chapter: number;
   variant: Variant;
-}
+};
 
-export const sourceLanguages: ISourceLanguage[] = [
+export const sourceLanguages: SourceLanguage[] = [
   { chapter: 1, variant: 'default' },
   { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },

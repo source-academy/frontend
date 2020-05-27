@@ -1,4 +1,3 @@
-import * as actionTypes from '../../../commons/application/types/ActionTypes';
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import { CodeDelta, Input, PlaybackData } from '../../sourcecast/SourcecastTypes';
@@ -12,6 +11,16 @@ import {
   timerStart,
   timerStop
 } from '../SourcereelActions';
+import { 
+  RECORD_INIT, 
+  RECORD_INPUT, 
+  SAVE_SOURCECAST_DATA, 
+  TIMER_PAUSE,
+  TIMER_RESET,
+  TIMER_RESUME,
+  TIMER_START,
+  TIMER_STOP
+} from '../SourcereelTypes';
 
 const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
@@ -27,7 +36,7 @@ test('recordInit generates correct action object', () => {
   };
   const action = recordInit(initData, sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.RECORD_INIT,
+    type: RECORD_INIT,
     payload: {
       initData,
       workspaceLocation: sourcereelWorkspace
@@ -55,7 +64,7 @@ test('recordInput generates correct action object', () => {
   };
   const action = recordInput(input, sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.RECORD_INPUT,
+    type: RECORD_INPUT,
     payload: {
       input,
       workspaceLocation: sourcereelWorkspace
@@ -80,7 +89,7 @@ test('saveSourcecastData generates correct action object', () => {
   };
   const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.SAVE_SOURCECAST_DATA,
+    type: SAVE_SOURCECAST_DATA,
     payload: {
       title,
       description,
@@ -95,7 +104,7 @@ test('saveSourcecastData generates correct action object', () => {
 test('timerPause generates correct action object', () => {
   const currentTime = Date.now();
   const action = timerPause(sourcereelWorkspace);
-  expect(action.type).toEqual(actionTypes.TIMER_PAUSE);
+  expect(action.type).toEqual(TIMER_PAUSE);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
@@ -103,7 +112,7 @@ test('timerPause generates correct action object', () => {
 test('timerReset generates correct action object', () => {
   const action = timerReset(sourcereelWorkspace);
   expect(action).toEqual({
-    type: actionTypes.TIMER_RESET,
+    type: TIMER_RESET,
     payload: { workspaceLocation: sourcereelWorkspace }
   });
 });
@@ -111,7 +120,7 @@ test('timerReset generates correct action object', () => {
 test('timerResume generates correct action object', () => {
   const currentTime = Date.now();
   const action = timerResume(1000, sourcereelWorkspace);
-  expect(action.type).toEqual(actionTypes.TIMER_RESUME);
+  expect(action.type).toEqual(TIMER_RESUME);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
@@ -119,7 +128,7 @@ test('timerResume generates correct action object', () => {
 test('timerStart generates correct action object', () => {
   const currentTime = Date.now();
   const action = timerStart(sourcereelWorkspace);
-  expect(action.type).toEqual(actionTypes.TIMER_START);
+  expect(action.type).toEqual(TIMER_START);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });
@@ -127,7 +136,7 @@ test('timerStart generates correct action object', () => {
 test('timerStop generates correct action object', () => {
   const currentTime = Date.now();
   const action = timerStop(sourcereelWorkspace);
-  expect(action.type).toEqual(actionTypes.TIMER_STOP);
+  expect(action.type).toEqual(TIMER_STOP);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();
 });

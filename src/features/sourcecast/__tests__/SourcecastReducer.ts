@@ -1,6 +1,5 @@
 import { defaultWorkspaceManager } from '../../../commons/application/ApplicationTypes';
 import {
-  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
@@ -11,6 +10,7 @@ import {
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { CodeDelta, Input, PlaybackData, PlaybackStatus, SourcecastData } from '../SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../sourcereel/SourcereelTypes';
 
 function generateAction(type: string, payload: any = {}) {
   return {

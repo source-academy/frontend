@@ -1,7 +1,6 @@
 import { Reducer } from 'redux';
 
 import {
-  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_CURRENT_PLAYER_TIME,
   SET_INPUT_TO_APPLY,
@@ -13,6 +12,7 @@ import {
 import { SourceActionType } from '../../utils/actionsHelper';
 
 import { SourcecastWorkspaceState } from './SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../sourcereel/SourcereelTypes';
 
 export const SourcecastReducer: Reducer<SourcecastWorkspaceState> = (
   state: SourcecastWorkspaceState,
