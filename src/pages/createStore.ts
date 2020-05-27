@@ -6,7 +6,7 @@ import createSagaMiddleware from 'redux-saga';
 
 import { defaultState } from 'src/commons/application/ApplicationTypes';
 import createRootReducer from 'src/reducers';
-import mainSaga from 'src/sagas';
+import MainSaga from '../commons/sagas/MainSaga';
 import { history as appHistory } from 'src/utils/history';
 
 import { loadStoredState, SavedState, saveState } from './localStorage';
@@ -29,7 +29,7 @@ export function createStore(history: History) {
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
   const createdStore = _createStore(createRootReducer(history), initialStore, enhancers);
-  sagaMiddleware.run(mainSaga);
+  sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
     throttle(() => {
