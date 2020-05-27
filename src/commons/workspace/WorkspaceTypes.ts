@@ -1,15 +1,12 @@
 import { Context } from 'js-slang';
 
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import {
-  AutogradingResult,
-  Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { SourcecastWorkspaceState } from 'src/features/sourcecast/SourcecastTypes';
-import { SourcereelWorkspaceState } from 'src/features/sourcereel/SourcereelTypes';
+import { SourcecastWorkspaceState } from '../../features/sourcecast/SourcecastTypes';
+import { SourcereelWorkspaceState } from '../../features/sourcereel/SourcereelTypes';
+import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
 
 /**
  * Used to differenciate between the sources of actions, as
@@ -48,7 +45,7 @@ type GradingWorkspaceState = GradingWorkspaceAttr & WorkspaceState;
 type PlaygroundWorkspaceAttr = {
   readonly usingSubst: boolean;
 };
-type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
+export type PlaygroundWorkspaceState = PlaygroundWorkspaceAttr & WorkspaceState;
 
 export type WorkspaceManagerState = {
   readonly assessment: AssessmentWorkspaceState;

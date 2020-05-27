@@ -1,26 +1,23 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import { ExternalLibraryNames } from 'src/commons/application/types/ExternalTypes';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { 
-  WorkspaceLocation, 
+import { Grading } from '../../features/grading/GradingTypes';
+import { PlaybackStatus, RecordingStatus } from '../../features/sourcecast/SourcecastTypes';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../../utils/constants';
+import { createContext } from '../../utils/slangHelper';
+import { Assessment } from '../assessment/AssessmentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import {
+  WorkspaceLocation,
   WorkspaceLocations,
   WorkspaceManagerState,
-  WorkspaceState 
-} from 'src/commons/workspace/WorkspaceTypes';
-import { Grading } from 'src/features/grading/GradingTypes';
-import {
-  PlaybackStatus,
-  RecordingStatus,
-} from 'src/features/sourcecast/SourcecastTypes';
-import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from 'src/utils/constants';
-import { createContext } from 'src/utils/slangHelper';
+  WorkspaceState
+} from '../workspace/WorkspaceTypes';
+import { ExternalLibraryNames } from './types/ExternalTypes';
 
-import { SessionState } from 'src/commons/application/types/SessionTypes';
-import { AcademyState } from 'src/features/academy/AcademyTypes';
-import { DashBoardState } from 'src/features/dashboard/DashboardTypes';
-import { PlaygroundState } from 'src/features/playground/PlaygroundTypes';
+import { AcademyState } from '../../features/academy/AcademyTypes';
+import { DashBoardState } from '../../features/dashboard/DashboardTypes';
+import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
+import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;

@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
-import { defaultDashBoard } from 'src/commons/application/ApplicationTypes';
-import { SourceActionType } from 'src/utils/actionsHelper';
+import { defaultDashBoard } from '../../commons/application/ApplicationTypes';
+import { SourceActionType } from '../../utils/actionsHelper';
 
 import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from './DashboardTypes';
 

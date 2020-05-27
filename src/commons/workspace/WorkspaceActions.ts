@@ -2,13 +2,13 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
-import * as actionTypes from 'src/commons/application/types/ActionTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { HIGHLIGHT_LINE } from 'src/commons/application/types/InterpreterTypes';
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+import * as actionTypes from '../application/types/ActionTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
+import { Library } from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 import { WorkspaceLocation } from './WorkspaceTypes';
 

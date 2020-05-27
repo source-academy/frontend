@@ -9,8 +9,8 @@ import {
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
-} from 'src/commons/application/types/ActionTypes';
-import { SourceActionType } from 'src/utils/actionsHelper';
+} from '../../commons/application/types/ActionTypes';
+import { SourceActionType } from '../../utils/actionsHelper';
 
 import { SourcecastWorkspaceState } from './SourcecastTypes';
 

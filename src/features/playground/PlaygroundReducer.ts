@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
-import { defaultPlayground } from 'src/commons/application/ApplicationTypes';
-import { SourceActionType } from 'src/utils/actionsHelper';
+import { defaultPlayground } from '../../commons/application/ApplicationTypes';
+import { SourceActionType } from '../../utils/actionsHelper';
 
 import {
   CHANGE_QUERY_STRING,

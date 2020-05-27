@@ -1,6 +1,6 @@
 import { action } from 'typesafe-actions'; // EDITING
 
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 import {
   FINISH_INVITE,

@@ -1,8 +1,8 @@
 import { Reducer } from 'redux';
 
-import { defaultAcademy } from 'src/commons/application/ApplicationTypes';
-import { LOG_OUT } from 'src/commons/application/types/ActionTypes';
-import { SourceActionType } from 'src/utils/actionsHelper';
+import { defaultAcademy } from '../../commons/application/ApplicationTypes';
+import { LOG_OUT } from '../../commons/application/types/ActionTypes';
+import { SourceActionType } from '../../utils/actionsHelper';
 
 import { AcademyState, SAVE_CANVAS } from './AcademyTypes';
 

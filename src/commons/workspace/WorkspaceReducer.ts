@@ -1,6 +1,11 @@
 import { Reducer } from 'redux';
-import { Testcase } from 'src/commons/assessment/AssessmentTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
 
+import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
+import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
+import { SourceActionType } from '../../utils/actionsHelper';
+import { MAX_BROWSE_INDEX } from '../../utils/constants';
+import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -8,7 +13,7 @@ import {
   ErrorOutput,
   InterpreterOutput,
   ResultOutput
-} from 'src/commons/application/ApplicationTypes';
+} from '../application/ApplicationTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -38,7 +43,7 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
-} from 'src/commons/application/types/ActionTypes';
+} from '../application/types/ActionTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
@@ -50,19 +55,18 @@ import {
   EVAL_TESTCASE_SUCCESS,
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE
-} from 'src/commons/application/types/InterpreterTypes';
+} from '../application/types/InterpreterTypes';
 import {
   FINISH_INVITE,
   INIT_INVITE,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
-} from 'src/commons/collabEditing/CollabEditingTypes';
-import { WorkspaceLocation, WorkspaceLocations, WorkspaceManagerState } from 'src/commons/workspace/WorkspaceTypes';
-import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
-import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
-import { SourceActionType } from 'src/utils/actionsHelper';
-import { MAX_BROWSE_INDEX } from 'src/utils/constants';
-import { createContext } from 'src/utils/slangHelper';
+} from '../collabEditing/CollabEditingTypes';
+import {
+  WorkspaceLocation,
+  WorkspaceLocations,
+  WorkspaceManagerState
+} from '../workspace/WorkspaceTypes';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
@@ -375,17 +379,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
-            if (i === action.payload.index) {
-              return {
-                ...testcase,
-                result: action.payload.value,
-                errors: undefined
-              };
-            } else {
-              return testcase;
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: Testcase, i: any) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: action.payload.value,
+                  errors: undefined
+                };
+              } else {
+                return testcase;
+              }
             }
-          }),
+          ),
           isRunning: false
         }
       };
@@ -485,17 +491,19 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          editorTestcases: state[workspaceLocation].editorTestcases.map((testcase: Testcase, i: any) => {
-            if (i === action.payload.index) {
-              return {
-                ...testcase,
-                result: undefined,
-                errors: undefined
-              };
-            } else {
-              return testcase;
+          editorTestcases: state[workspaceLocation].editorTestcases.map(
+            (testcase: Testcase, i: any) => {
+              if (i === action.payload.index) {
+                return {
+                  ...testcase,
+                  result: undefined,
+                  errors: undefined
+                };
+              } else {
+                return testcase;
+              }
             }
-          })
+          )
         }
       };
 

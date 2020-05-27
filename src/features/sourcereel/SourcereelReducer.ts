@@ -9,9 +9,9 @@ import {
   TIMER_RESUME,
   TIMER_START,
   TIMER_STOP
-} from 'src/commons/application/types/ActionTypes';
-import { RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
-import { SourceActionType } from 'src/utils/actionsHelper';
+} from '../../commons/application/types/ActionTypes';
+import { SourceActionType } from '../../utils/actionsHelper';
+import { RecordingStatus } from '../sourcecast/SourcecastTypes';
 
 import { SourcereelWorkspaceState } from './SourcereelTypes';
 
