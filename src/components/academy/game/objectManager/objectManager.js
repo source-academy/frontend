@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
+import Constants from '../constants/constants';
 
-var Constants = require('../constants/constants.js');
 var LocationManager = require('../locationManager/locationManager.js');
 var MapManager = require('../mapManager/mapManager.js');
 var DialogManager = require('../dialogManager/dialogManager.js');

@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Methods from '../utils/protos.js';
 import { defaultText } from '../constants/styles.js';
-
-var Constants = require('../constants/constants.js');
+import Constants from '../constants/constants';
 
 var blackOverlay;
 var tween;

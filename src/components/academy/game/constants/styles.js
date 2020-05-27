@@ -1,4 +1,4 @@
-import Constants from './constants2.js';
+import Constants from './constants.js';
 
 export const defaultText = {
   fontFamily: 'Arial',

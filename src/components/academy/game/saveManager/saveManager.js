@@ -1,5 +1,5 @@
 import { saveStudentData } from '../backend/gameState';
-import { SAVE_DATA_KEY, LOCATION_KEY } from '../constants/constants';
+import Constants from '../constants/constants';
 
 var LocationManager = require('../locationManager/locationManager.js');
 var QuestManager = require('../questManager/questManager.js');
@@ -114,23 +114,23 @@ export function saveLoadStories(stories) {
 }
 
 export function hasLocalSave() {
-  return localStorage.hasOwnProperty(SAVE_DATA_KEY);
+  return localStorage.hasOwnProperty(Constants.SAVE_DATA_KEY);
 }
 
 export function getLocalSaveData() {
-  const jsonString = localStorage.getItem(SAVE_DATA_KEY);
+  const jsonString = localStorage.getItem(Constants.SAVE_DATA_KEY);
   return jsonString ? JSON.parse(jsonString) : undefined;
 }
 
 export function resetLocalSaveData() {
-  localStorage.removeItem(SAVE_DATA_KEY);
-  localStorage.removeItem(LOCATION_KEY);
+  localStorage.removeItem(Constants.SAVE_DATA_KEY);
+  localStorage.removeItem(Constants.LOCATION_KEY);
 }
 
 // saves actionsequence and start location into local storage
 function saveGame() {
   localStorage.setItem(
-    SAVE_DATA_KEY,
+    Constants.SAVE_DATA_KEY,
     JSON.stringify({
       actionSequence: actionSequence,
       startLocation: LocationManager.getStartLocation()

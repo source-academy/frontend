@@ -1,7 +1,7 @@
-import * as PIXI from 'pixi.js'
-import * as Filters from 'pixi-filters'
+import * as PIXI from 'pixi.js';
+import * as Filters from 'pixi-filters';
+import Constants from '../constants/constants';
 
-var Constants = require('../constants/constants.js');
 var Utils = require('../utils/utils.js');
 
 var darkFilter = new PIXI.filters.ColorMatrixFilter();
@@ -26,13 +26,7 @@ export function createGlowTexture(displayObject) {
   displayObject.position.y = height / 2;
   var container = new PIXI.Container();
   container.addChild(displayObject);
-  var glowFilter = new Filters.GlowFilter(
-    Constants.glowDistance,
-    2.5,
-    0,
-    0xfffbd6,
-    0.5
-  );
+  var glowFilter = new Filters.GlowFilter(Constants.glowDistance, 2.5, 0, 0xfffbd6, 0.5);
   glowFilter.padding = Constants.glowDistance;
   return createTexture(container, [glowFilter], width, height);
 }
@@ -59,8 +53,6 @@ export function createTelescopeEffect(parent) {
     focus.position.y = event.data.global.y - focus.height / 2;
   }
 }
-
-
 
 export function createDarkenedTexture(texture) {
   return createFilteredTexture(texture, [darkFilter]);

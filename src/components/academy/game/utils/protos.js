@@ -1,4 +1,4 @@
-import Constants from '../constants/constants2';
+import Constants from '../constants/constants';
 
 PIXI.Graphics.prototype.setAlpha = function(alpha) {
   this.alpha = alpha;

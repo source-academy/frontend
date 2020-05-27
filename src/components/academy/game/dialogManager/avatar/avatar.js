@@ -1,4 +1,4 @@
-var Constants = require('../../constants/constants.js');
+var Constants = require('../../constants/constants');
 var FilterEffects = require('../../effects/filterEffects.js');
 
 var playerName;

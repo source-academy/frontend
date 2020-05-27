@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import Text from './Text';
+import Constants from '../constants/constants';
 
-var Constants = require('../constants/constants.js');
 var LocationManager = require('../locationManager/locationManager.js');
 var ObjectManager = require('../objectManager/objectManager.js');
 var FilterEffects = require('../effects/filterEffects.js');

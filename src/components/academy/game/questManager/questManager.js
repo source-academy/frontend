@@ -1,4 +1,5 @@
-var Constants = require('../constants/constants.js');
+import Constants from '../constants/constants';
+
 var LocationManager = require('../locationManager/locationManager.js');
 var DialogManager = require('../dialogManager/dialogManager.js');
 var MapManager = require('../mapManager/mapManager.js');

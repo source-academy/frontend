@@ -2,8 +2,8 @@ import * as PIXI from 'pixi.js';
 import { isStudent } from '../backend/user.js';
 import { createLoadingScreen, createBlackOverlay, createText } from '../effects/effects.js';
 import { defaultText } from '../constants/styles.js';
+import Constants from '../constants/constants';
 
-var Constants = require('../constants/constants.js');
 var QuestManager = require('../questManager/questManager.js');
 var LocationManager = require('../locationManager/locationManager.js');
 var SaveManager = require('../saveManager/saveManager.js');

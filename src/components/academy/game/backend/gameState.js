@@ -1,9 +1,5 @@
-import {
-  storyXMLPathTest,
-  storyXMLPathLive,
-  SAVE_DATA_KEY,
-  LOCATION_KEY
-} from '../constants/constants';
+import Constants from '../constants/constants';
+
 import { isStudent } from './user';
 
 var SaveManager = require('../saveManager/saveManager.js');
@@ -191,7 +187,7 @@ function getMissionPointer(missions, callback) {
     : missions.find(mission => mission.story === studentStory);
   //if mission pointer is in localStorage and can't find any proper story.
   if (missionPointer === undefined && SaveManager.hasLocalSave()) {
-    localStorage.removeItem(SAVE_DATA_KEY);
+    localStorage.removeItem(Constants.SAVE_DATA_KEY);
     studentStory = getStudentStory();
     missionPointer = isStoryEmpty(studentStory)
       ? missions[0]

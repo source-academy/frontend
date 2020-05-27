@@ -1,4 +1,4 @@
-var Constants = require('../constants/constants.js');
+import Constants from '../constants/constants';
 
 var soundAssets = {};
 var soundsToLoad = {};
@@ -34,7 +34,7 @@ export function playAsyncSound(name) {
 }
 
 export function playSound(name) {
-  var sound = new Audio(soundPath + name + '.mp3');
+  var sound = new Audio(Constants.soundPath + name + '.mp3');
   if (sound) {
     sound.play();
   }

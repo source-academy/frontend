@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 
-// CommonJS Imports
-var Constants = require('./constants/constants.js');
+import Constants from './constants/constants';
+
 var LocationManager = require('./locationManager/locationManager.js');
 var ObjectManager = require('./objectManager/objectManager.js');
 var DialogManager = require('./dialogManager/dialogManager.js');
@@ -13,13 +13,9 @@ var BlackOverlay = require('./blackOverlay/blackOverlay.js');
 var MapOverlay = require('./mapOverlay/mapOverlay.js');
 var Utils = require('./utils/utils.js');
 
-//-----GLOBAL-----
 var renderer;
 var stage;
-//--------LOGIC--------
-// options contains the following properties:
-// saveData, hookHandlers, wristDeviceFunc
-// changeLocationHook, playerImageCanvas, playerName
+
 export function init(div, canvas, options) {
   renderer = PIXI.autoDetectRenderer(Constants.screenWidth, Constants.screenHeight, {
     backgroundColor: 0x000000,

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-var Constants = require('../constants/constants.js');
+import Constants from '../constants/constants';
 
 var blackOverlay;
 var tween;
