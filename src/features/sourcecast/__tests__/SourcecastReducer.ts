@@ -1,4 +1,5 @@
 import { defaultWorkspaceManager } from '../../../commons/application/ApplicationTypes';
+import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import {
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
@@ -6,11 +7,10 @@ import {
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
-} from '../../../commons/application/types/ActionTypes';
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
+} from '../../sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../sourcereel/SourcereelTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { CodeDelta, Input, PlaybackData, PlaybackStatus, SourcecastData } from '../SourcecastTypes';
-import { SAVE_SOURCECAST_DATA } from '../../sourcereel/SourcereelTypes';
 
 function generateAction(type: string, payload: any = {}) {
   return {

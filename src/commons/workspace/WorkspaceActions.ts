@@ -2,6 +2,7 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
+import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import * as actionTypes from '../application/types/ActionTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
@@ -176,7 +177,7 @@ export const updateWorkspace = (
   });
 
 export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
-  action(actionTypes.SET_EDITOR_READONLY, {
+  action(SET_EDITOR_READONLY, {
     workspaceLocation,
     editorReadonly
   });

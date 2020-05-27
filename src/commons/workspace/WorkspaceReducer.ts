@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 import { Testcase } from '../assessment/AssessmentTypes';
 
 import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
+import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../../utils/actionsHelper';
 import { MAX_BROWSE_INDEX } from '../../utils/constants';
@@ -33,7 +34,6 @@ import {
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_EDITOR_READONLY,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
   UPDATE_CHAPTER,

@@ -7,12 +7,12 @@ import {
   RECORD_INIT, 
   RECORD_INPUT, 
   RESET_INPUTS, 
+  SourcereelWorkspaceState, 
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
   TIMER_START,
-  TIMER_STOP, 
-  SourcereelWorkspaceState 
+  TIMER_STOP,
 } from './SourcereelTypes';
 
 export const SourcereelReducer: Reducer<SourcereelWorkspaceState> = (
