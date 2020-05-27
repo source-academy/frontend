@@ -21,12 +21,17 @@ import SourcecastEditor, { SourcecastEditorProps } from 'src/commons/sourcecast/
 import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
 import {
+  CodeDelta,
   Input,
   KeyboardCommand,
   PlaybackData,
+  PlaybackStatus,
   RecordingStatus,
   SourcecastData
 } from 'src/features/sourcecast/SourcecastTypes';
+import SourcecastControlbar, {
+  SourcecastControlbarProps
+} from 'src/pages/sourcecast/subcomponents/SourcecastControlbar';
 
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
@@ -50,6 +55,8 @@ export type DispatchProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleResetInputs: (inputs: Input[]) => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -61,17 +68,31 @@ export type DispatchProps = {
     audio: Blob,
     playbackData: PlaybackData
   ) => void;
-  handleSetEditorReadonly: (readonly: boolean) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    audioUrl: string,
+    playbackData: PlaybackData
+  ) => void;
+  handleSetCurrentPlayerTime: (playTime: number) => void;
+  handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetInputToApply: (inputToApply: Input) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
-  handleTimerResume: () => void;
+  handleTimerResume: (timeBefore: number) => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
 };
 
 export type StateProps = {
+  audioUrl: string;
+  currentPlayerTime: number;
+  codeDeltasToApply: CodeDelta[] | null;
   breakpoints: string[];
   editorHeight?: string;
   editorReadonly: boolean;
@@ -80,12 +101,15 @@ export type StateProps = {
   enableDebugging: boolean;
   externalLibraryName: string;
   highlightedLines: number[][];
+  inputToApply: Input | null;
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
   newCursorPosition?: Position;
   output: InterpreterOutput[];
   playbackData: PlaybackData;
+  playbackDuration: number;
+  playbackStatus: PlaybackStatus;
   recordingStatus: RecordingStatus;
   replValue: string;
   timeElapsedBeforePause: number;
@@ -182,6 +206,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
     );
 
     const editorProps: SourcecastEditorProps = {
+      codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
       editorSessionId: '',
@@ -190,6 +215,8 @@ class Sourcereel extends React.Component<SourcereelProps> {
       handleEditorEval: this.props.handleEditorEval,
       handleEditorValueChange: this.props.handleEditorValueChange,
       isEditorAutorun: this.props.isEditorAutorun,
+      inputToApply: this.props.inputToApply,
+      isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
@@ -229,11 +256,14 @@ class Sourcereel extends React.Component<SourcereelProps> {
                   <Pre> {INTRODUCTION} </Pre>
                 </span>
                 <SourcereelControlbar
+                  currentPlayerTime={this.props.currentPlayerTime}
                   editorValue={this.props.editorValue}
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
                   handleRecordInit={this.handleRecordInit}
+                  handleResetInputs={this.props.handleResetInputs}
                   handleSaveSourcecastData={this.props.handleSaveSourcecastData}
+                  handleSetSourcecastData={this.props.handleSetSourcecastData}
                   handleSetEditorReadonly={this.props.handleSetEditorReadonly}
                   handleTimerPause={this.props.handleTimerPause}
                   handleTimerReset={this.props.handleTimerReset}
@@ -265,8 +295,30 @@ class Sourcereel extends React.Component<SourcereelProps> {
         ]
       }
     };
+    const sourcecastControlbarProps: SourcecastControlbarProps = {
+      handleEditorValueChange: this.props.handleEditorValueChange,
+      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+      handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
+      handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
+      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+      handleSetInputToApply: this.props.handleSetInputToApply,
+      handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
+      handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
+      audioUrl: this.props.audioUrl,
+      currentPlayerTime: this.props.currentPlayerTime,
+      duration: this.props.playbackDuration,
+      playbackData: this.props.playbackData,
+      playbackStatus: this.props.playbackStatus,
+      handleChapterSelect: this.props.handleChapterSelect,
+      handleExternalSelect: this.props.handleExternalSelect
+    };
     return (
       <div className={classNames('Sourcereel', Classes.DARK)}>
+        {this.props.recordingStatus === RecordingStatus.paused ? (
+          <SourcecastControlbar {...sourcecastControlbarProps} />
+        ) : (
+          undefined
+        )}
         <Workspace {...workspaceProps} />
       </div>
     );

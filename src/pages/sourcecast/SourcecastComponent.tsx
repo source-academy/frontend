@@ -55,6 +55,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (delta: CodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
@@ -72,6 +73,7 @@ export type DispatchProps = {
 
 export type StateProps = {
   audioUrl: string;
+  currentPlayerTime: number;
   codeDeltasToApply: CodeDelta[] | null;
   title: string | null;
   description: string | null;
@@ -241,12 +243,14 @@ class Sourcecast extends React.Component<SourcecastProps> {
     const sourcecastControlbarProps: SourcecastControlbarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
       handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+      handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
       handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
       handleSetEditorReadonly: this.props.handleSetEditorReadonly,
       handleSetInputToApply: this.props.handleSetInputToApply,
       handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
       handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
       audioUrl: this.props.audioUrl,
+      currentPlayerTime: this.props.currentPlayerTime,
       duration: this.props.playbackDuration,
       playbackData: this.props.playbackData,
       playbackStatus: this.props.playbackStatus,
