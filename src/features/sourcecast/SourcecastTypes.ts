@@ -1,14 +1,15 @@
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
+import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 
-export interface IInputTypeShape {
+export type InputTypeShape = {
   chapterSelect: number;
   cursorPositionChange: Position;
   codeDelta: CodeDelta;
   externalLibrarySelect: ExternalLibraryName;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: SelectionData;
-}
+};
 
 export enum KeyboardCommand {
   run = 'run'
@@ -37,9 +38,9 @@ export type SelectionData = {
 };
 
 // Refer: https://stackoverflow.com/questions/55758713/match-pair-for-keyof-and-valueof-an-interface
-export type Input = keyof IInputTypeShape extends infer K
-  ? K extends keyof IInputTypeShape
-    ? { time: number; type: K; data: IInputTypeShape[K] }
+export type Input = keyof InputTypeShape extends infer K
+  ? K extends keyof InputTypeShape
+    ? { time: number; type: K; data: InputTypeShape[K] }
     : never
   : never;
 
@@ -72,3 +73,17 @@ export enum RecordingStatus {
   paused = 'paused',
   finished = 'finished'
 }
+
+type SourcecastWorkspaceAttr = {
+  readonly audioUrl: string;
+  readonly codeDeltasToApply: CodeDelta[] | null;
+  readonly currentPlayerTime: number;
+  readonly description: string | null;
+  readonly inputToApply: Input | null;
+  readonly playbackData: PlaybackData;
+  readonly playbackDuration: number;
+  readonly playbackStatus: PlaybackStatus;
+  readonly sourcecastIndex: SourcecastData[] | null;
+  readonly title: string | null;
+};
+export type SourcecastWorkspaceState = SourcecastWorkspaceAttr & WorkspaceState;

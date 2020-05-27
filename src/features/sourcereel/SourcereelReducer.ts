@@ -1,9 +1,9 @@
 import { Reducer } from 'redux';
-import { ISourcereelWorkspace } from '../../commons/application/ApplicationTypes';
 
 import {
   RECORD_INIT,
   RECORD_INPUT,
+  RESET_INPUTS,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
@@ -13,8 +13,10 @@ import {
 import { SourceActionType } from '../../utils/actionsHelper';
 import { RecordingStatus } from '../sourcecast/SourcecastTypes';
 
-export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
-  state: ISourcereelWorkspace,
+import { SourcereelWorkspaceState } from './SourcereelTypes';
+
+export const SourcereelReducer: Reducer<SourcereelWorkspaceState> = (
+  state: SourcereelWorkspaceState,
   action: SourceActionType
 ) => {
   switch (action.type) {
@@ -32,6 +34,14 @@ export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
         playbackData: {
           ...state.playbackData,
           inputs: [...state.playbackData.inputs, action.payload.input]
+        }
+      };
+    case RESET_INPUTS:
+      return {
+        ...state,
+        playbackData: {
+          ...state.playbackData,
+          inputs: action.payload.inputs
         }
       };
     case TIMER_PAUSE:
@@ -52,6 +62,8 @@ export const SourcereelReducer: Reducer<ISourcereelWorkspace> = (
       return {
         ...state,
         recordingStatus: RecordingStatus.recording,
+        timeElapsedBeforePause:
+          action.payload.timeBefore >= 0 ? action.payload.timeBefore : state.timeElapsedBeforePause,
         timeResumed: action.payload.timeNow
       };
     case TIMER_START:

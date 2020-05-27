@@ -1,165 +1,40 @@
-import { Context } from 'js-slang';
 import { SourceError, Variant } from 'js-slang/dist/types';
 
-import { Announcement } from '../../components/Announcements'; // TODO: Remove
-import { DirectoryData, MaterialData } from '../../components/material/materialShape'; // TODO: Remove
-import { GroupOverview } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import { ExternalLibraryNames } from './types/ExternalTypes';
+import { Assessment } from '../assessment/AssessmentTypes';
+import { SideContentType } from '../sideContent/SideContentTypes';
+import { 
+  WorkspaceLocation, 
+  WorkspaceLocations,
+  WorkspaceManagerState,
+  WorkspaceState 
+} from '../workspace/WorkspaceTypes';
+import { Grading } from '../../features/grading/GradingTypes';
 import {
-  CodeDelta,
-  Input,
-  PlaybackData,
   PlaybackStatus,
   RecordingStatus,
-  SourcecastData
 } from '../../features/sourcecast/SourcecastTypes';
 import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../../utils/constants';
-import { HistoryHelper } from '../../utils/history';
 import { createContext } from '../../utils/slangHelper';
-import {
-  Assessment,
-  AssessmentOverview,
-  AutogradingResult,
-  Testcase
-} from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
-import { Notification } from '../notificationBadge/NotificationBadgeTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
-import { WorkspaceLocation, WorkspaceLocations } from '../workspace/WorkspaceTypes';
-import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
 
-export interface IState {
-  readonly academy: IAcademyState;
-  readonly application: IApplicationState;
-  readonly playground: IPlaygroundState;
-  readonly session: ISessionState;
-  readonly workspaces: IWorkspaceManagerState;
-  readonly dashboard: IDashBoardState;
-}
+import { SessionState } from './types/SessionTypes';
+import { AcademyState } from '../../features/academy/AcademyTypes';
+import { DashBoardState } from '../../features/dashboard/DashboardTypes';
+import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 
-export interface IAcademyState {
-  readonly gameCanvas?: HTMLCanvasElement;
-}
-
-export interface IApplicationState {
-  readonly title: string;
-  readonly environment: ApplicationEnvironment;
-}
-
-export interface IDashBoardState {
-  readonly groupOverviews: GroupOverview[];
-}
-
-export interface IPlaygroundState {
-  readonly queryString?: string;
-  readonly shortURL?: string;
-  readonly usingSubst: boolean;
-}
-
-interface IAssessmentWorkspace extends IWorkspaceState {
-  readonly currentAssessment?: number;
-  readonly currentQuestion?: number;
-  readonly hasUnsavedChanges: boolean;
-}
-
-interface IGradingWorkspace extends IWorkspaceState {
-  readonly currentSubmission?: number;
-  readonly currentQuestion?: number;
-  readonly hasUnsavedChanges: boolean;
-}
-
-export interface IPlaygroundWorkspace extends IWorkspaceState {
-  readonly usingSubst: boolean;
-}
-
-export interface ISourcecastWorkspace extends IWorkspaceState {
-  readonly audioUrl: string;
-  readonly codeDeltasToApply: CodeDelta[] | null;
-  readonly description: string | null;
-  readonly inputToApply: Input | null;
-  readonly playbackData: PlaybackData;
-  readonly playbackDuration: number;
-  readonly playbackStatus: PlaybackStatus;
-  readonly sourcecastIndex: SourcecastData[] | null;
-  readonly title: string | null;
-}
-
-export interface ISourcereelWorkspace extends IWorkspaceState {
-  readonly playbackData: PlaybackData;
-  readonly recordingStatus: RecordingStatus;
-  readonly timeElapsedBeforePause: number;
-  readonly timeResumed: number;
-}
-
-export interface IWorkspaceManagerState {
-  readonly assessment: IAssessmentWorkspace;
-  readonly grading: IGradingWorkspace;
-  readonly playground: IPlaygroundWorkspace;
-  readonly sourcecast: ISourcecastWorkspace;
-  readonly sourcereel: ISourcereelWorkspace;
-}
-
-export interface IWorkspaceState {
-  readonly autogradingResults: AutogradingResult[];
-  readonly breakpoints: string[];
-  readonly context: Context;
-  readonly editorPrepend: string;
-  readonly editorReadonly: boolean;
-  readonly editorSessionId: string;
-  readonly editorValue: string | null;
-  readonly editorPostpend: string;
-  readonly editorTestcases: Testcase[];
-  readonly editorHeight: number;
-  readonly editorWidth: string;
-  readonly execTime: number;
-  readonly highlightedLines: number[][];
-  readonly newCursorPosition?: Position;
-  readonly isRunning: boolean;
-  readonly isDebugging: boolean;
-  readonly enableDebugging: boolean;
-  readonly isEditorAutorun: boolean;
-  readonly output: InterpreterOutput[];
-  readonly externalLibrary: ExternalLibraryName;
-  readonly replHistory: ReplHistory;
-  readonly replValue: string;
-  readonly sharedbAceInitValue: string;
-  readonly sharedbAceIsInviting: boolean;
-  readonly sideContentActiveTab: SideContentType;
-  readonly sideContentHeight?: number;
-  readonly websocketStatus: number;
-  readonly globals: Array<[string, any]>;
-}
-
-export interface ISessionState {
-  readonly accessToken?: string;
-  readonly assessmentOverviews?: AssessmentOverview[];
-  readonly assessments: Map<number, Assessment>;
-  readonly announcements?: Announcement[];
-  readonly grade: number;
-  readonly gradingOverviews?: GradingOverview[];
-  readonly gradings: Map<number, Grading>;
-  readonly group: string | null;
-  readonly historyHelper: HistoryHelper;
-  readonly materialDirectoryTree: DirectoryData[] | null;
-  readonly materialIndex: MaterialData[] | null;
-  readonly maxGrade: number;
-  readonly maxXp: number;
-  readonly refreshToken?: string;
-  readonly role?: Role;
-  readonly story: Story;
-  readonly gameState: GameState;
-  readonly name?: string;
-  readonly xp: number;
-  readonly notifications: Notification[];
-}
-
-type ReplHistory = {
-  browseIndex: null | number; // [0, 49] if browsing, else null
-  records: string[];
-  originalValue: string;
+export type OverallState = {
+  readonly academy: AcademyState;
+  readonly application: ApplicationState;
+  readonly playground: PlaygroundState;
+  readonly session: SessionState;
+  readonly workspaces: WorkspaceManagerState;
+  readonly dashboard: DashBoardState;
 };
 
-export const maxBrowseIndex = 50;
+export type ApplicationState = {
+  readonly title: string;
+  readonly environment: ApplicationEnvironment;
+};
 
 export type Story = {
   story: string;
@@ -278,20 +153,20 @@ const currentEnvironment = (): ApplicationEnvironment => {
   }
 };
 
-export const defaultAcademy: IAcademyState = {
+export const defaultAcademy: AcademyState = {
   gameCanvas: undefined
 };
 
-export const defaultApplication: IApplicationState = {
+export const defaultApplication: ApplicationState = {
   title: 'Cadet',
   environment: currentEnvironment()
 };
 
-export const defaultDashBoard: IDashBoardState = {
+export const defaultDashBoard: DashBoardState = {
   groupOverviews: []
 };
 
-export const defaultPlayground: IPlaygroundState = {
+export const defaultPlayground: PlaygroundState = {
   usingSubst: false
 };
 
@@ -303,7 +178,7 @@ export const defaultEditorValue = '// Type your program in here!';
  *
  * @param workspaceLocation the location of the workspace, used for context
  */
-export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IWorkspaceState => ({
+export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): WorkspaceState => ({
   autogradingResults: [],
   breakpoints: [],
   context: createContext<WorkspaceLocation>(
@@ -346,7 +221,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): IW
 
 export const defaultRoomId = null;
 
-export const defaultWorkspaceManager: IWorkspaceManagerState = {
+export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
     ...createDefaultWorkspace(WorkspaceLocations.assessment),
     currentAssessment: undefined,
@@ -367,6 +242,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     audioUrl: '',
     codeDeltasToApply: null,
+    currentPlayerTime: 0,
     description: null,
     inputToApply: null,
     playbackData: {
@@ -390,7 +266,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
   }
 };
 
-export const defaultSession: ISessionState = {
+export const defaultSession: SessionState = {
   accessToken: undefined,
   announcements: [
     {
@@ -430,7 +306,7 @@ export const defaultSession: ISessionState = {
   notifications: []
 };
 
-export const defaultState: IState = {
+export const defaultState: OverallState = {
   academy: defaultAcademy,
   application: defaultApplication,
   dashboard: defaultDashBoard,

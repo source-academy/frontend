@@ -5,11 +5,12 @@ import {
   createDefaultWorkspace,
   defaultWorkspaceManager,
   InterpreterOutput,
-  IPlaygroundWorkspace,
-  IWorkspaceManagerState,
-  maxBrowseIndex,
   RunningOutput
 } from '../../application/ApplicationTypes';
+import { 
+  PlaygroundWorkspaceState, 
+  WorkspaceManagerState 
+} from '../WorkspaceTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -20,28 +21,14 @@ import {
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
-  DEBUG_RESET,
-  DEBUG_RESUME,
   END_CLEAR_CONTEXT,
-  END_DEBUG_PAUSE,
-  END_INTERRUPT_EXECUTION,
   EVAL_EDITOR,
-  EVAL_INTERPRETER_ERROR,
-  EVAL_INTERPRETER_SUCCESS,
   EVAL_REPL,
-  EVAL_TESTCASE_FAILURE,
-  EVAL_TESTCASE_SUCCESS,
-  FINISH_INVITE,
-  HANDLE_CONSOLE_LOG,
-  HIGHLIGHT_LINE,
-  INIT_INVITE,
   LOG_OUT,
   MOVE_CURSOR,
   RESET_TESTCASE,
   RESET_WORKSPACE,
   SEND_REPL_INPUT_TO_OUTPUT,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
   UPDATE_CURRENT_ASSESSMENT_ID,
@@ -50,6 +37,25 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE
 } from '../../application/types/ActionTypes';
+import {
+  FINISH_INVITE,
+  INIT_INVITE,
+  SET_EDITOR_SESSION_ID,
+  SET_WEBSOCKET_STATUS,
+} from '../../collabEditing/CollabEditingTypes';
+import {  
+  DEBUG_RESET, 
+  DEBUG_RESUME, 
+  END_DEBUG_PAUSE, 
+  END_INTERRUPT_EXECUTION, 
+  EVAL_INTERPRETER_ERROR,
+  EVAL_TESTCASE_FAILURE, 
+  EVAL_INTERPRETER_SUCCESS, 
+  EVAL_TESTCASE_SUCCESS, 
+  HANDLE_CONSOLE_LOG,
+  HIGHLIGHT_LINE
+} from '../../application/types/InterpreterTypes';
+import { MAX_BROWSE_INDEX } from '../../../utils/constants';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
@@ -101,7 +107,7 @@ function generateActions(type: string, payload: any = {}): any[] {
   ];
 }
 
-function generateDefaultWorkspace(payload: any = {}): IWorkspaceManagerState {
+function generateDefaultWorkspace(payload: any = {}): WorkspaceManagerState {
   return {
     assessment: {
       ...defaultWorkspaceManager.assessment,
@@ -137,7 +143,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
       originalValue
     };
 
-    const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
+    const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
     const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
     actions.forEach(action => {
@@ -181,7 +187,7 @@ describe('BROWSE_REPL_HISTORY_DOWN', () => {
       originalValue
     };
 
-    const replDownDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replHistory });
+    const replDownDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replHistory });
     const actions = generateActions(BROWSE_REPL_HISTORY_DOWN, { replHistory });
 
     actions.forEach(action => {
@@ -201,7 +207,7 @@ describe('BROWSE_REPL_HISTORY_UP', () => {
       records
     };
 
-    const replUpDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const replUpDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       replHistory,
       replValue
     });
@@ -338,7 +344,7 @@ describe('CHANGE_SIDE_CONTENT_HEIGHT', () => {
 describe('CLEAR_REPL_INPUT', () => {
   test('clears replValue', () => {
     const replValue = 'test repl value';
-    const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ replValue });
+    const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ replValue });
     const actions = generateActions(CLEAR_REPL_INPUT);
 
     actions.forEach(action => {
@@ -363,7 +369,7 @@ describe('CLEAR_REPL_OUTPUT', () => {
         value: 'test repl input'
       }
     ];
-    const clearReplDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
+    const clearReplDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(CLEAR_REPL_OUTPUT);
 
     actions.forEach(action => {
@@ -394,7 +400,7 @@ describe('CLEAR_REPL_OUTPUT_LAST', () => {
         consoleLogs: ['these', 'are', 'display', 'calls']
       }
     ];
-    const clearReplLastPriorState: IWorkspaceManagerState = generateDefaultWorkspace({ output });
+    const clearReplLastPriorState: WorkspaceManagerState = generateDefaultWorkspace({ output });
     const actions = generateActions(CLEAR_REPL_OUTPUT_LAST);
 
     actions.forEach(action => {
@@ -415,7 +421,7 @@ describe('DEBUG_RESET', () => {
   test('sets isRunning and isDebugging to false', () => {
     const isRunning = true;
     const isDebugging = true;
-    const debugResetDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const debugResetDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
       isDebugging
     });
@@ -439,7 +445,7 @@ describe('DEBUG_RESET', () => {
 describe('DEBUG_RESUME', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
-    const debugResumeDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const debugResumeDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
     const actions = generateActions(DEBUG_RESUME);
@@ -511,7 +517,7 @@ describe('END_CLEAR_CONTEXT', () => {
 describe('END_DEBUG_PAUSE', () => {
   test('sets isRunning to false and isDebugging to true', () => {
     const isRunning = true;
-    const debugPauseDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({ isRunning });
+    const debugPauseDefaultState: WorkspaceManagerState = generateDefaultWorkspace({ isRunning });
     const actions = generateActions(END_DEBUG_PAUSE);
 
     actions.forEach(action => {
@@ -533,7 +539,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
   test('sets isRunning and isDebugging to false', () => {
     const isRunning = true;
     const isDebugging = true;
-    const interruptExecutionDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const interruptExecutionDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isRunning,
       isDebugging
     });
@@ -557,7 +563,7 @@ describe('END_INTERRUPT_EXECUTION', () => {
 describe('EVAL_EDITOR', () => {
   test('sets isRunning to true and isDebugging to false', () => {
     const isDebugging = true;
-    const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       isDebugging
     });
     const actions = generateActions(EVAL_EDITOR);
@@ -605,7 +611,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
     const isRunning = true;
     const isDebugging = true;
 
-    const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
       isDebugging
@@ -637,7 +643,7 @@ describe('EVAL_INTERPRETER_ERROR', () => {
   test('works correctly with other outputs', () => {
     const isRunning = true;
     const isDebugging = true;
-    const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
       isDebugging
@@ -677,7 +683,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const breakpoints = ['1', '2'];
     const highlightedLines = [[3], [5]];
 
-    const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningOutput,
       isRunning,
       breakpoints,
@@ -714,7 +720,7 @@ describe('EVAL_INTERPRETER_SUCCESS', () => {
     const breakpoints = ['1', '2'];
     const highlightedLines = [[3], [5]];
 
-    const evalEditorDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalEditorDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       output: outputWithRunningAndCodeOutput,
       isRunning,
       breakpoints,
@@ -809,7 +815,7 @@ const editorTestcases: Testcase[] = [
 describe('EVAL_TESTCASE_FAILURE', () => {
   test('sets editorTestcases correctly', () => {
     const value = 'test-value-failure';
-    const evalFailureDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const evalFailureDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorTestcases
     });
     const actions = generateActions(EVAL_TESTCASE_FAILURE, {
@@ -1054,7 +1060,7 @@ describe('FINISH_INVITE', () => {
 
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
-    const newPlayground: IPlaygroundWorkspace = {
+    const newPlayground: PlaygroundWorkspaceState = {
       ...createDefaultWorkspace(WorkspaceLocations.playground),
       editorHeight: 200,
       editorValue: 'test program here',
@@ -1065,7 +1071,7 @@ describe('LOG_OUT', () => {
       usingSubst: false
     };
 
-    const logoutDefaultState: IWorkspaceManagerState = {
+    const logoutDefaultState: WorkspaceManagerState = {
       ...defaultWorkspaceManager,
       playground: newPlayground
     };
@@ -1120,7 +1126,7 @@ describe('RESET_WORKSPACE', () => {
   test('works correctly', () => {
     const editorHeight = 200;
     const editorWidth = '70%';
-    const resetWorkspaceDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const resetWorkspaceDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       editorHeight,
       editorWidth
     });
@@ -1155,13 +1161,13 @@ describe('RESET_WORKSPACE', () => {
 });
 
 describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
-  test('works correctly and pops replHistory when exceeding maxBrowseIndex', () => {
+  test('works correctly and pops replHistory when exceeding MAX_BROWSE_INDEX', () => {
     const replHistory = {
       browseIndex: null,
-      records: Array.from(Array(maxBrowseIndex), (x, index) => index + '') // Create an array with size maxBrowseIndex
+      records: Array.from(Array(MAX_BROWSE_INDEX), (x, index) => index + '') // Create an array with size MAX_BROWSE_INDEX
     };
 
-    const inputToOutputDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const inputToOutputDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       replHistory
     });
     const newOutput = 'new-output-test';
@@ -1202,7 +1208,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
       browseIndex: null,
       records: ['record-1', 'record-2']
     };
-    const inputToOutputDefaultState: IWorkspaceManagerState = generateDefaultWorkspace({
+    const inputToOutputDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
       replHistory
     });
     const newOutput = '';

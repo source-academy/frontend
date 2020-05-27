@@ -14,7 +14,7 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -43,6 +43,7 @@ import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
 import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
 import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
 import { USE_CHATKIT } from 'src/utils/constants';
 import { beforeNow } from 'src/utils/dateHelpers';
@@ -71,7 +72,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
-  handleResetWorkspace: (options: Partial<IWorkspaceState>) => void;
+  handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;

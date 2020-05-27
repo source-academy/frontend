@@ -8,7 +8,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { submitAnswer } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import {
@@ -33,11 +33,11 @@ import {
   updateReplValue,
   updateWorkspace
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     editorValue: state.workspaces.assessment.editorValue,
     editorHeight: state.workspaces.assessment.editorHeight,
@@ -80,9 +80,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
-      handleUpdateWorkspace: (options: Partial<IWorkspaceState>) =>
+      handleUpdateWorkspace: (options: Partial<WorkspaceState>) =>
         updateWorkspace(workspaceLocation, options),
       handleSave: submitAnswer,
       handleSideContentHeightChange: (heightChange: number) =>

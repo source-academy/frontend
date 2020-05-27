@@ -1,6 +1,5 @@
 import { defaultWorkspaceManager } from '../../../commons/application/ApplicationTypes';
 import {
-  // EDITED
   RECORD_INIT,
   RECORD_INPUT,
   TIMER_PAUSE,

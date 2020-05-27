@@ -1,5 +1,16 @@
 import { WorkspaceLocation, WorkspaceLocations } from '../../../workspace/WorkspaceTypes';
-import * as actionTypes from '../../types/ActionTypes';
+import { 
+  BEGIN_DEBUG_PAUSE, 
+  BEGIN_INTERRUPT_EXECUTION, 
+  DEBUG_RESET, 
+  DEBUG_RESUME, 
+  END_DEBUG_PAUSE, 
+  END_INTERRUPT_EXECUTION, 
+  EVAL_INTERPRETER_ERROR,
+  EVAL_INTERPRETER_SUCCESS, 
+  EVAL_TESTCASE_SUCCESS, 
+  HANDLE_CONSOLE_LOG
+} from '../../types/InterpreterTypes';
 import {
   beginDebuggerPause,
   beginInterruptExecution,
@@ -21,7 +32,7 @@ test('handleConsoleLog generates correct action object', () => {
   const logString = 'test-log-string';
   const action = handleConsoleLog(logString, assessmentWorkspace);
   expect(action).toEqual({
-    type: actionTypes.HANDLE_CONSOLE_LOG,
+    type: HANDLE_CONSOLE_LOG,
     payload: {
       logString,
       workspaceLocation: assessmentWorkspace
@@ -33,7 +44,7 @@ test('evalInterpreterSuccess generates correct action object', () => {
   const value = 'value';
   const action = evalInterpreterSuccess(value, gradingWorkspace);
   expect(action).toEqual({
-    type: actionTypes.EVAL_INTERPRETER_SUCCESS,
+    type: EVAL_INTERPRETER_SUCCESS,
     payload: {
       type: 'result',
       value,
@@ -47,7 +58,7 @@ test('evalTestcaseSuccess generates correct action object', () => {
   const index = 3;
   const action = evalTestcaseSuccess(value, playgroundWorkspace, index);
   expect(action).toEqual({
-    type: actionTypes.EVAL_TESTCASE_SUCCESS,
+    type: EVAL_TESTCASE_SUCCESS,
     payload: {
       type: 'result',
       value,
@@ -61,7 +72,7 @@ test('evalInterpreterError generates correct action object', () => {
   const errors: any = [];
   const action = evalInterpreterError(errors, assessmentWorkspace);
   expect(action).toEqual({
-    type: actionTypes.EVAL_INTERPRETER_ERROR,
+    type: EVAL_INTERPRETER_ERROR,
     payload: {
       type: 'errors',
       errors,
@@ -73,7 +84,7 @@ test('evalInterpreterError generates correct action object', () => {
 test('beginInterruptExecution generates correct action object', () => {
   const action = beginInterruptExecution(gradingWorkspace);
   expect(action).toEqual({
-    type: actionTypes.BEGIN_INTERRUPT_EXECUTION,
+    type: BEGIN_INTERRUPT_EXECUTION,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -83,7 +94,7 @@ test('beginInterruptExecution generates correct action object', () => {
 test('endInterruptExecution generates correct action object', () => {
   const action = endInterruptExecution(playgroundWorkspace);
   expect(action).toEqual({
-    type: actionTypes.END_INTERRUPT_EXECUTION,
+    type: END_INTERRUPT_EXECUTION,
     payload: {
       workspaceLocation: playgroundWorkspace
     }
@@ -93,7 +104,7 @@ test('endInterruptExecution generates correct action object', () => {
 test('beginDebuggerPause generates correct action object', () => {
   const action = beginDebuggerPause(assessmentWorkspace);
   expect(action).toEqual({
-    type: actionTypes.BEGIN_DEBUG_PAUSE,
+    type: BEGIN_DEBUG_PAUSE,
     payload: {
       workspaceLocation: assessmentWorkspace
     }
@@ -103,7 +114,7 @@ test('beginDebuggerPause generates correct action object', () => {
 test('endDebuggerPause generates correct action object', () => {
   const action = endDebuggerPause(gradingWorkspace);
   expect(action).toEqual({
-    type: actionTypes.END_DEBUG_PAUSE,
+    type: END_DEBUG_PAUSE,
     payload: {
       workspaceLocation: gradingWorkspace
     }
@@ -113,7 +124,7 @@ test('endDebuggerPause generates correct action object', () => {
 test('debuggerResume generates correct action object', () => {
   const action = debuggerResume(playgroundWorkspace);
   expect(action).toEqual({
-    type: actionTypes.DEBUG_RESUME,
+    type: DEBUG_RESUME,
     payload: {
       workspaceLocation: playgroundWorkspace
     }
@@ -123,7 +134,7 @@ test('debuggerResume generates correct action object', () => {
 test('debuggerReset generates correct action object', () => {
   const action = debuggerReset(assessmentWorkspace);
   expect(action).toEqual({
-    type: actionTypes.DEBUG_RESET,
+    type: DEBUG_RESET,
     payload: {
       workspaceLocation: assessmentWorkspace
     }

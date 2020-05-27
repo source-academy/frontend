@@ -40,6 +40,7 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from '../WorkspaceActions';
+import { HIGHLIGHT_LINE } from '../../../actions/actionTypes';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
@@ -282,7 +283,7 @@ test('highlightEditorLine generates correct action object', () => {
   const highlightedLines = [1, 2, 5];
   const action = highlightEditorLine(highlightedLines, playgroundWorkspace);
   expect(action).toEqual({
-    type: actionTypes.HIGHLIGHT_LINE,
+    type: HIGHLIGHT_LINE,
     payload: {
       highlightedLines,
       workspaceLocation: playgroundWorkspace

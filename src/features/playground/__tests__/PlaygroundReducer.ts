@@ -2,7 +2,7 @@ import { defaultPlayground } from '../../../commons/application/ApplicationTypes
 import {
   CHANGE_QUERY_STRING,
   TOGGLE_USING_SUBST
-} from '../../../commons/application/types/ActionTypes';
+} from '../PlaygroundTypes';
 import { PlaygroundReducer } from '../PlaygroundReducer';
 
 test('CHANGE_QUERY_STRING sets queryString correctly ', () => {

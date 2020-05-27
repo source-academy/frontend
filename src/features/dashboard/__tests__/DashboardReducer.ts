@@ -1,5 +1,5 @@
-import { defaultDashBoard, IDashBoardState } from '../../../commons/application/ApplicationTypes';
-import { UPDATE_GROUP_OVERVIEWS } from '../../../commons/application/types/ActionTypes';
+import { defaultDashBoard } from '../../../commons/application/ApplicationTypes';
+import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
 import { DashboardReducer } from '../DashboardReducer';
 import { GroupOverview } from '../DashboardTypes';
 
@@ -25,7 +25,7 @@ test('UPDATE_GROUP_OVERVIEWS works correctly in inserting group overviews', () =
     payload: groupOverviewsTest1
   };
 
-  const result: IDashBoardState = DashboardReducer(defaultDashBoard, action);
+  const result: DashBoardState = DashboardReducer(defaultDashBoard, action);
 
   expect(result).toEqual({
     ...defaultDashBoard,
@@ -45,7 +45,7 @@ test('UPDATE_GROUP_OVERVIEWS works correctly in updating group overviews', () =>
     payload: groupOverviewsPayload
   };
 
-  const result: IDashBoardState = DashboardReducer(newDefaultDashBoard, action);
+  const result: DashBoardState = DashboardReducer(newDefaultDashBoard, action);
 
   expect(result).toEqual({
     ...defaultDashBoard,

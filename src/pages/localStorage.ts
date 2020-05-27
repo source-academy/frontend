@@ -2,12 +2,13 @@ import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { ISessionState, IState } from 'src/commons/application/ApplicationTypes';
+import {  OverallState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { SessionState } from 'src/commons/application/types/SessionTypes';
 import { showWarningMessage } from 'src/utils/notification';
 
 export type SavedState = {
-  session: Partial<ISessionState>;
+  session: Partial<SessionState>;
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
@@ -28,7 +29,7 @@ export const loadStoredState = (): SavedState | undefined => {
   }
 };
 
-export const saveState = (state: IState) => {
+export const saveState = (state: OverallState) => {
   try {
     const stateToBeSaved: SavedState = {
       session: {

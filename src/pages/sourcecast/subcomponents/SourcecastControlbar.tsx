@@ -16,6 +16,7 @@ export type SourcecastControlbarProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleEditorValueChange: (newCode: string) => void;
+  handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (deltas: CodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
@@ -28,6 +29,7 @@ type DispatchProps = {
 
 type StateProps = {
   audioUrl: string;
+  currentPlayerTime: number;
   duration: number;
   playbackData: PlaybackData;
   playbackStatus: PlaybackStatus;
@@ -35,7 +37,6 @@ type StateProps = {
 
 type State = {
   currentDeltaRevision: number;
-  currentPlayerTime: number;
   currentPlayerProgress: number;
   currentSourcecastItem: SourcecastData | null;
   duration: number;
@@ -49,7 +50,6 @@ class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps
     this.audio = React.createRef();
     this.state = {
       currentDeltaRevision: 0,
-      currentPlayerTime: 0,
       currentPlayerProgress: 0,
       currentSourcecastItem: null,
       duration: 0
@@ -178,16 +178,16 @@ class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps
   private handlePlayerStopping = () => {
     this.props.handleSetEditorReadonly(false);
     this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
+    this.props.handleSetCurrentPlayerTime(0);
     this.setState({
-      currentPlayerTime: 0,
       currentPlayerProgress: 0
     });
   };
 
   private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
+    this.props.handleSetCurrentPlayerTime(currentTime);
     this.setState({
-      currentPlayerTime: currentTime,
       currentPlayerProgress: currentTime / this.props.duration
     });
   };
@@ -196,8 +196,8 @@ class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps
     if (this.audio.current) {
       const currentTime = this.props.duration * value;
       this.audio.current.currentTime = currentTime;
+      this.props.handleSetCurrentPlayerTime(currentTime);
       this.setState({
-        currentPlayerTime: currentTime,
         currentPlayerProgress: value
       });
     }

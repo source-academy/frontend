@@ -10,7 +10,7 @@ import {
   debuggerReset,
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 import {
   finishInvite,
@@ -54,7 +54,7 @@ import {
 
 import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,

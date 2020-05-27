@@ -1,9 +1,9 @@
 import { Reducer } from 'redux';
-import { ISourcecastWorkspace } from '../../commons/application/ApplicationTypes';
 
 import {
   SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
+  SET_CURRENT_PLAYER_TIME,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
@@ -12,8 +12,10 @@ import {
 } from '../../commons/application/types/ActionTypes';
 import { SourceActionType } from '../../utils/actionsHelper';
 
-export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
-  state: ISourcecastWorkspace,
+import { SourcecastWorkspaceState } from './SourcecastTypes';
+
+export const SourcecastReducer: Reducer<SourcecastWorkspaceState> = (
+  state: SourcecastWorkspaceState,
   action: SourceActionType
 ) => {
   switch (action.type) {
@@ -24,6 +26,11 @@ export const SourcecastReducer: Reducer<ISourcecastWorkspace> = (
         description: action.payload.description,
         audioUrl: action.payload.audioUrl,
         playbackData: action.payload.playbackData
+      };
+    case SET_CURRENT_PLAYER_TIME:
+      return {
+        ...state,
+        currentPlayerTime: action.payload.playerTime
       };
     case SET_CODE_DELTAS_TO_APPLY:
       return {

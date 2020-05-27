@@ -2,10 +2,10 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchAssessmentOverviews } from 'src/commons/application/actions/SessionActions';
-import { IState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import Profile, { DispatchProps, StateProps } from './ProfileComponent';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews,
   name: state.session.name,
   role: state.session.role

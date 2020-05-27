@@ -8,7 +8,7 @@ import {
   debuggerResume
 } from 'src/commons/application/actions/InterpreterActions';
 import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { IState, IWorkspaceState } from 'src/commons/application/ApplicationTypes';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { Library } from 'src/commons/assessment/AssessmentTypes';
 import { Position } from 'src/commons/editor/EditorTypes';
 import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
@@ -34,13 +34,17 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+import { 
+  WorkspaceLocation, 
+  WorkspaceLocations, 
+  WorkspaceState 
+} from 'src/commons/workspace/WorkspaceTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 
-const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, props) => {
+const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
     autogradingResults: state.workspaces.grading.autogradingResults,
     editorPrepend: state.workspaces.grading.editorPrepend,
@@ -89,7 +93,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
-      handleResetWorkspace: (options: Partial<IWorkspaceState>) =>
+      handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),

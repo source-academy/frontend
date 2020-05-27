@@ -1,5 +1,6 @@
-import { defaultAcademy, IAcademyState } from '../../../commons/application/ApplicationTypes';
-import { LOG_OUT, SAVE_CANVAS } from '../../../commons/application/types/ActionTypes';
+import { defaultAcademy } from '../../../commons/application/ApplicationTypes';
+import { AcademyState, SAVE_CANVAS } from '../../../features/academy/AcademyTypes';
+import { LOG_OUT } from '../../../commons/application/types/ActionTypes';
 import { AcademyReducer } from '../AcademyReducer';
 
 function createContext(width: number, height: number): HTMLCanvasElement {
@@ -14,7 +15,7 @@ test('LOG_OUT works correctly on default academy', () => {
     type: LOG_OUT,
     payload: {}
   };
-  const result: IAcademyState = AcademyReducer(defaultAcademy, action);
+  const result: AcademyState = AcademyReducer(defaultAcademy, action);
 
   expect(result).toEqual(defaultAcademy);
 });
@@ -26,7 +27,7 @@ test('SAVE_CANVAS works correctly on default academy', () => {
     type: SAVE_CANVAS,
     payload: payloadCanvas
   };
-  const result: IAcademyState = AcademyReducer(defaultAcademy, action);
+  const result: AcademyState = AcademyReducer(defaultAcademy, action);
 
   expect(result).toEqual({
     ...defaultAcademy,

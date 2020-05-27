@@ -16,6 +16,7 @@ export const INSTANCE_LOCATOR = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 export const DEFAULT_SOURCE_CHAPTER = 4;
 export const DEFAULT_SOURCE_VARIANT = 'default';
 export const DEFAULT_QUESTION_ID = 0;
+export const MAX_BROWSE_INDEX = 50;
 export const URL_SHORTENER = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
 export const URL_SHORTENER_SIGNATURE = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 

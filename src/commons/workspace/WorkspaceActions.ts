@@ -2,12 +2,13 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { IWorkspaceState } from '../application/ApplicationTypes';
 import * as actionTypes from '../application/types/ActionTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 import { WorkspaceLocation } from './WorkspaceTypes';
 
@@ -124,7 +125,7 @@ export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: Wo
 export const highlightEditorLine = (
   highlightedLines: number[],
   workspaceLocation: WorkspaceLocation
-) => action(actionTypes.HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
+) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
@@ -158,7 +159,7 @@ export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition:
  */
 export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<IWorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(actionTypes.RESET_WORKSPACE, {
     workspaceLocation,
@@ -167,7 +168,7 @@ export const resetWorkspace = (
 
 export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
-  workspaceOptions?: Partial<IWorkspaceState>
+  workspaceOptions?: Partial<WorkspaceState>
 ) =>
   action(actionTypes.UPDATE_WORKSPACE, {
     workspaceLocation,
