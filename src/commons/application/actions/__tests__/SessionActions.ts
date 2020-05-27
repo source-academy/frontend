@@ -368,7 +368,7 @@ test('updateGrading generates correct action object', () => {
   const submissionId = 3;
   const grading: Grading = [
     {
-      question: jest.genMockFromModule('../../../../components/academy/grading/gradingShape'),
+      question: jest.genMockFromModule('../../../../features/grading/GradingTypes'),
       student: {
         name: 'test student',
         id: 234

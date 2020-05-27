@@ -1,6 +1,10 @@
 import { Reducer } from 'redux';
-import { Testcase } from 'src/commons/assessment/AssessmentTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
 
+import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
+import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
+import { SourceActionType } from '../../utils/actionsHelper';
+import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -10,7 +14,7 @@ import {
   IWorkspaceManagerState,
   maxBrowseIndex,
   ResultOutput
-} from 'src/commons/application/ApplicationTypes';
+} from '../application/ApplicationTypes';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
@@ -54,12 +58,8 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE
-} from 'src/commons/application/types/ActionTypes';
-import { WorkspaceLocation, WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
-import { SourcecastReducer } from 'src/features/sourcecast/SourcecastReducer';
-import { SourcereelReducer } from 'src/features/sourcereel/SourcereelReducer';
-import { SourceActionType } from 'src/utils/actionsHelper';
-import { createContext } from 'src/utils/slangHelper';
+} from '../application/types/ActionTypes';
+import { WorkspaceLocation, WorkspaceLocations } from '../workspace/WorkspaceTypes';
 
 /**
  * Takes in a IWorkspaceManagerState and maps it to a new state. The
