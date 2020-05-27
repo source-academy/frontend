@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Variant } from 'js-slang/dist/types';
 
 import {
-  ISourceLanguage,
+  SourceLanguage,
   sourceLanguages,
   styliseChapter
 } from 'src/commons/application/ApplicationTypes';
@@ -25,7 +25,7 @@ type StateProps = {
 };
 
 export function ChapterSelect(props: ChapterSelectProps) {
-  const chapters = sourceLanguages.map((lang: ISourceLanguage) => {
+  const chapters = sourceLanguages.map((lang: SourceLanguage) => {
     return {
       chapter: lang.chapter,
       variant: lang.variant,

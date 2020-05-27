@@ -1,5 +1,5 @@
 import { defaultAcademy } from '../../../commons/application/ApplicationTypes';
-import { LOG_OUT } from '../../../commons/application/types/ActionTypes';
+import { LOG_OUT } from '../../../commons/application/types/CommonsTypes';
 import { AcademyState, SAVE_CANVAS } from '../../../features/academy/AcademyTypes';
 import { AcademyReducer } from '../AcademyReducer';
 

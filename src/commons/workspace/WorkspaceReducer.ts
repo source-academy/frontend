@@ -2,6 +2,7 @@ import { Reducer } from 'redux';
 import { Testcase } from '../assessment/AssessmentTypes';
 
 import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
+import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../../utils/actionsHelper';
 import { MAX_BROWSE_INDEX } from '../../utils/constants';
@@ -14,36 +15,7 @@ import {
   InterpreterOutput,
   ResultOutput
 } from '../application/ApplicationTypes';
-import {
-  BROWSE_REPL_HISTORY_DOWN,
-  BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
-  CHANGE_EXEC_TIME,
-  CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
-  END_CLEAR_CONTEXT,
-  EVAL_EDITOR,
-  EVAL_REPL,
-  LOG_OUT,
-  MOVE_CURSOR,
-  RESET_TESTCASE,
-  RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
-  SET_EDITOR_READONLY,
-  TOGGLE_EDITOR_AUTORUN,
-  UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
-  UPDATE_CURRENT_ASSESSMENT_ID,
-  UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_EDITOR_VALUE,
-  UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE,
-  UPDATE_WORKSPACE
-} from '../application/types/ActionTypes';
+import { LOG_OUT } from '../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
@@ -63,6 +35,32 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
 import {
+  BROWSE_REPL_HISTORY_DOWN,
+  BROWSE_REPL_HISTORY_UP,
+  CHANGE_EDITOR_HEIGHT,
+  CHANGE_EDITOR_WIDTH,
+  CHANGE_EXEC_TIME,
+  CHANGE_EXTERNAL_LIBRARY,
+  CHANGE_SIDE_CONTENT_HEIGHT,
+  CLEAR_REPL_INPUT,
+  CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT_LAST,
+  END_CLEAR_CONTEXT,
+  EVAL_EDITOR,
+  EVAL_REPL,
+  MOVE_CURSOR,
+  RESET_TESTCASE,
+  RESET_WORKSPACE,
+  SEND_REPL_INPUT_TO_OUTPUT,
+  TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
+  UPDATE_CHAPTER,
+  UPDATE_CURRENT_ASSESSMENT_ID,
+  UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_VALUE,
+  UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_REPL_VALUE,
+  UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceLocations,
   WorkspaceManagerState

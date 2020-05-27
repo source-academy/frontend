@@ -1,12 +1,18 @@
-import * as actionTypes from '../../../commons/application/types/ActionTypes';
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
+  FETCH_SOURCECAST_INDEX,
   Input,
-  PlaybackData,
+  PlaybackData, 
   PlaybackStatus,
-  SourcecastData
+  SET_CODE_DELTAS_TO_APPLY,
+  SET_INPUT_TO_APPLY,
+  SET_SOURCECAST_DATA,
+  SET_SOURCECAST_PLAYBACK_DURATION,
+  SET_SOURCECAST_PLAYBACK_STATUS,
+  SourcecastData,
+  UPDATE_SOURCECAST_INDEX
 } from '../../../features/sourcecast/SourcecastTypes';
 import {
   fetchSourcecastIndex,
@@ -23,7 +29,7 @@ const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
 test('fetchSourcecastIndex generates correct action object', () => {
   const action = fetchSourcecastIndex(sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.FETCH_SOURCECAST_INDEX,
+    type: FETCH_SOURCECAST_INDEX,
     payload: {
       workspaceLocation: sourcecastWorkspace
     }
@@ -47,7 +53,7 @@ test('setCodeDeltasToApply generates correct action object', () => {
   ];
   const action = setCodeDeltasToApply(codeDeltas, sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.SET_CODE_DELTAS_TO_APPLY,
+    type: SET_CODE_DELTAS_TO_APPLY,
     payload: {
       deltas: codeDeltas,
       workspaceLocation: sourcecastWorkspace
@@ -75,7 +81,7 @@ test('setInputToApply generates correct action object', () => {
   };
   const action = setInputToApply(input, sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.SET_INPUT_TO_APPLY,
+    type: SET_INPUT_TO_APPLY,
     payload: {
       inputToApply: input,
       workspaceLocation: sourcecastWorkspace
@@ -117,7 +123,7 @@ test('setSourcecastData generates correct action object', () => {
     sourcecastWorkspace
   );
   expect(action).toEqual({
-    type: actionTypes.SET_SOURCECAST_DATA,
+    type: SET_SOURCECAST_DATA,
     payload: {
       title: 'Test Title',
       description: 'Test Description',
@@ -132,7 +138,7 @@ test('setSourcecastDuration generates correct action object', () => {
   const duration = 5;
   const action = setSourcecastDuration(duration, sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.SET_SOURCECAST_PLAYBACK_DURATION,
+    type: SET_SOURCECAST_PLAYBACK_DURATION,
     payload: { duration, workspaceLocation: sourcecastWorkspace }
   });
 });
@@ -141,7 +147,7 @@ test('setSourcecastStatus generates correct action object', () => {
   const status = PlaybackStatus.paused;
   const action = setSourcecastStatus(status, sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.SET_SOURCECAST_PLAYBACK_STATUS,
+    type: SET_SOURCECAST_PLAYBACK_STATUS,
     payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
   });
 });
@@ -162,7 +168,7 @@ test('updateSourcecastIndex generates correct action object', () => {
   };
   const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_SOURCECAST_INDEX,
+    type: UPDATE_SOURCECAST_INDEX,
     payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });

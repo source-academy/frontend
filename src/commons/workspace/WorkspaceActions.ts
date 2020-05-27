@@ -2,43 +2,80 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
-import * as actionTypes from '../application/types/ActionTypes';
+import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
-
-import { WorkspaceLocation } from './WorkspaceTypes';
+import {
+  BEGIN_CLEAR_CONTEXT,
+  BROWSE_REPL_HISTORY_DOWN,
+  BROWSE_REPL_HISTORY_UP,
+  CHANGE_CHAPTER,
+  CHANGE_EDITOR_HEIGHT,
+  CHANGE_EDITOR_WIDTH,
+  CHANGE_EXEC_TIME,
+  CHANGE_EXTERNAL_LIBRARY,
+  CHANGE_SIDE_CONTENT_HEIGHT,
+  CHAPTER_SELECT,
+  CLEAR_REPL_INPUT,
+  CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT_LAST,
+  END_CLEAR_CONTEXT,
+  ENSURE_LIBRARIES_LOADED,
+  EVAL_EDITOR,
+  EVAL_REPL,
+  EVAL_TESTCASE,
+  FETCH_CHAPTER,
+  MOVE_CURSOR,
+  NAV_DECLARATION,
+  PLAYGROUND_EXTERNAL_SELECT,
+  PROMPT_AUTOCOMPLETE,
+  RESET_TESTCASE,
+  RESET_WORKSPACE,
+  SEND_REPL_INPUT_TO_OUTPUT,
+  TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
+  UPDATE_CHAPTER,
+  UPDATE_CURRENT_ASSESSMENT_ID,
+  UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_BREAKPOINTS,
+  UPDATE_EDITOR_VALUE,
+  UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_REPL_VALUE,
+  UPDATE_WORKSPACE,
+  WorkspaceLocation,
+  WorkspaceState
+} from './WorkspaceTypes';
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
+  action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
 
 export const browseReplHistoryUp = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.BROWSE_REPL_HISTORY_UP, { workspaceLocation });
+  action(BROWSE_REPL_HISTORY_UP, { workspaceLocation });
 
 export const changeExternalLibrary = (newExternal: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CHANGE_EXTERNAL_LIBRARY, { newExternal, workspaceLocation });
+  action(CHANGE_EXTERNAL_LIBRARY, { newExternal, workspaceLocation });
 
 export const changeEditorHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CHANGE_EDITOR_HEIGHT, { height, workspaceLocation });
+  action(CHANGE_EDITOR_HEIGHT, { height, workspaceLocation });
 
 export const changeEditorWidth = (widthChange: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
+  action(CHANGE_EDITOR_WIDTH, { widthChange, workspaceLocation });
 
 export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CHANGE_EXEC_TIME, { execTime, workspaceLocation });
+  action(CHANGE_EXEC_TIME, { execTime, workspaceLocation });
 
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
+  action(CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
 export const chapterSelect = (
   chapter: number,
   variant: Variant,
   workspaceLocation: WorkspaceLocation
 ) =>
-  action(actionTypes.CHAPTER_SELECT, {
+  action(CHAPTER_SELECT, {
     chapter,
     variant,
     workspaceLocation
@@ -48,16 +85,16 @@ export const externalLibrarySelect = (
   externalLibraryName: ExternalLibraryName,
   workspaceLocation: WorkspaceLocation
 ) =>
-  action(actionTypes.PLAYGROUND_EXTERNAL_SELECT, {
+  action(PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
     workspaceLocation
   });
 
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TOGGLE_EDITOR_AUTORUN, { workspaceLocation });
+  action(TOGGLE_EDITOR_AUTORUN, { workspaceLocation });
 
 export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.UPDATE_ACTIVE_TAB, { activeTab, workspaceLocation });
+  action(UPDATE_ACTIVE_TAB, { activeTab, workspaceLocation });
 
 /**
  * Starts the process to clear the js-slang Context
@@ -73,19 +110,19 @@ export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: W
  * @see Library in assessmentShape.ts
  */
 export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.BEGIN_CLEAR_CONTEXT, {
+  action(BEGIN_CLEAR_CONTEXT, {
     library,
     workspaceLocation
   });
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CLEAR_REPL_INPUT, { workspaceLocation });
+  action(CLEAR_REPL_INPUT, { workspaceLocation });
 
 export const clearReplOutput = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CLEAR_REPL_OUTPUT, { workspaceLocation });
+  action(CLEAR_REPL_OUTPUT, { workspaceLocation });
 
 export const clearReplOutputLast = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.CLEAR_REPL_OUTPUT_LAST, { workspaceLocation });
+  action(CLEAR_REPL_OUTPUT_LAST, { workspaceLocation });
 
 /**
  * Finishes the process to clear the js-slang Context
@@ -100,27 +137,27 @@ export const clearReplOutputLast = (workspaceLocation: WorkspaceLocation) =>
  * @see Library in assessmentShape.ts
  */
 export const endClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.END_CLEAR_CONTEXT, {
+  action(END_CLEAR_CONTEXT, {
     library,
     workspaceLocation
   });
 
-export const ensureLibrariesLoaded = () => action(actionTypes.ENSURE_LIBRARIES_LOADED);
+export const ensureLibrariesLoaded = () => action(ENSURE_LIBRARIES_LOADED);
 
 export const evalEditor = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.EVAL_EDITOR, { workspaceLocation });
+  action(EVAL_EDITOR, { workspaceLocation });
 
 export const evalRepl = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.EVAL_REPL, { workspaceLocation });
+  action(EVAL_REPL, { workspaceLocation });
 
 export const evalTestcase = (workspaceLocation: WorkspaceLocation, testcaseId: number) =>
-  action(actionTypes.EVAL_TESTCASE, { workspaceLocation, testcaseId });
+  action(EVAL_TESTCASE, { workspaceLocation, testcaseId });
 
 export const updateEditorValue = (newEditorValue: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
+  action(UPDATE_EDITOR_VALUE, { newEditorValue, workspaceLocation });
 
 export const setEditorBreakpoint = (breakpoints: string[], workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
+  action(UPDATE_EDITOR_BREAKPOINTS, { breakpoints, workspaceLocation });
 
 export const highlightEditorLine = (
   highlightedLines: number[],
@@ -128,25 +165,25 @@ export const highlightEditorLine = (
 ) => action(HIGHLIGHT_LINE, { highlightedLines, workspaceLocation });
 
 export const updateReplValue = (newReplValue: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
+  action(UPDATE_REPL_VALUE, { newReplValue, workspaceLocation });
 
 export const sendReplInputToOutput = (newOutput: string, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.SEND_REPL_INPUT_TO_OUTPUT, {
+  action(SEND_REPL_INPUT_TO_OUTPUT, {
     type: 'code',
     workspaceLocation,
     value: newOutput
   });
 
 export const resetTestcase = (workspaceLocation: WorkspaceLocation, index: number) =>
-  action(actionTypes.RESET_TESTCASE, { workspaceLocation, index });
+  action(RESET_TESTCASE, { workspaceLocation, index });
 
 export const navigateToDeclaration = (
   workspaceLocation: WorkspaceLocation,
   cursorPosition: Position
-) => action(actionTypes.NAV_DECLARATION, { workspaceLocation, cursorPosition });
+) => action(NAV_DECLARATION, { workspaceLocation, cursorPosition });
 
 export const moveCursor = (workspaceLocation: WorkspaceLocation, cursorPosition: Position) =>
-  action(actionTypes.MOVE_CURSOR, { workspaceLocation, cursorPosition });
+  action(MOVE_CURSOR, { workspaceLocation, cursorPosition });
 
 /**
  * Resets a workspace to its default properties.
@@ -161,7 +198,7 @@ export const resetWorkspace = (
   workspaceLocation: WorkspaceLocation,
   workspaceOptions?: Partial<WorkspaceState>
 ) =>
-  action(actionTypes.RESET_WORKSPACE, {
+  action(RESET_WORKSPACE, {
     workspaceLocation,
     workspaceOptions
   });
@@ -170,25 +207,25 @@ export const updateWorkspace = (
   workspaceLocation: WorkspaceLocation,
   workspaceOptions?: Partial<WorkspaceState>
 ) =>
-  action(actionTypes.UPDATE_WORKSPACE, {
+  action(UPDATE_WORKSPACE, {
     workspaceLocation,
     workspaceOptions
   });
 
 export const setEditorReadonly = (workspaceLocation: WorkspaceLocation, editorReadonly: boolean) =>
-  action(actionTypes.SET_EDITOR_READONLY, {
+  action(SET_EDITOR_READONLY, {
     workspaceLocation,
     editorReadonly
   });
 
 export const updateCurrentAssessmentId = (assessmentId: number, questionId: number) =>
-  action(actionTypes.UPDATE_CURRENT_ASSESSMENT_ID, {
+  action(UPDATE_CURRENT_ASSESSMENT_ID, {
     assessmentId,
     questionId
   });
 
 export const updateCurrentSubmissionId = (submissionId: number, questionId: number) =>
-  action(actionTypes.UPDATE_CURRENT_SUBMISSION_ID, {
+  action(UPDATE_CURRENT_SUBMISSION_ID, {
     submissionId,
     questionId
   });
@@ -197,18 +234,18 @@ export const updateHasUnsavedChanges = (
   workspaceLocation: WorkspaceLocation,
   hasUnsavedChanges: boolean
 ) =>
-  action(actionTypes.UPDATE_HAS_UNSAVED_CHANGES, {
+  action(UPDATE_HAS_UNSAVED_CHANGES, {
     workspaceLocation,
     hasUnsavedChanges
   });
 
-export const fetchChapter = () => action(actionTypes.FETCH_CHAPTER);
+export const fetchChapter = () => action(FETCH_CHAPTER);
 
 export const changeChapter = (chapter: number, variant: Variant) =>
-  action(actionTypes.CHANGE_CHAPTER, { chapter, variant });
+  action(CHANGE_CHAPTER, { chapter, variant });
 
 export const updateChapter = (chapter: number, variant: Variant) =>
-  action(actionTypes.UPDATE_CHAPTER, { chapter, variant });
+  action(UPDATE_CHAPTER, { chapter, variant });
 
 export const promptAutocomplete = (
   workspaceLocation: WorkspaceLocation,
@@ -216,7 +253,7 @@ export const promptAutocomplete = (
   column: number,
   callback: any // TODO: define a type for this
 ) =>
-  action(actionTypes.PROMPT_AUTOCOMPLETE, {
+  action(PROMPT_AUTOCOMPLETE, {
     workspaceLocation,
     row,
     column,

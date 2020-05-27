@@ -2,6 +2,16 @@ import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes
 import { Position } from 'src/commons/editor/EditorTypes';
 import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
 
+export const FETCH_SOURCECAST_INDEX = 'FETCH_SOURCECAST_INDEX';
+export const SET_CURRENT_PLAYER_TIME = 'SET_CURRENT_PLAYER_TIME';
+export const SET_CODE_DELTAS_TO_APPLY = 'SET_CODE_DELTAS_TO_APPLY';
+export const SET_EDITOR_READONLY = 'SET_EDITOR_READONLY';
+export const SET_INPUT_TO_APPLY = 'SET_INPUT_TO_APPLY';
+export const SET_SOURCECAST_DATA = 'SET_SOURCECAST_DATA';
+export const SET_SOURCECAST_PLAYBACK_DURATION = 'SET_SOURCECAST_PLAYBACK_DURATION';
+export const SET_SOURCECAST_PLAYBACK_STATUS = 'SET_SOURCECAST_PLAYBACK_STATUS';
+export const UPDATE_SOURCECAST_INDEX = 'UPDATE_SOURCECAST_INDEX';
+
 export type InputTypeShape = {
   chapterSelect: number;
   cursorPositionChange: Position;

@@ -1,4 +1,7 @@
 import { defaultWorkspaceManager } from '../../../commons/application/ApplicationTypes';
+import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
+import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../sourcecast/SourcecastTypes';
+import { SourcereelReducer } from '../SourcereelReducer';
 import {
   RECORD_INIT,
   RECORD_INPUT,
@@ -7,10 +10,7 @@ import {
   TIMER_RESUME,
   TIMER_START,
   TIMER_STOP
-} from '../../../commons/application/types/ActionTypes';
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
-import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../sourcecast/SourcecastTypes';
-import { SourcereelReducer } from '../SourcereelReducer';
+} from '../SourcereelTypes';
 
 function generateAction(type: string, payload: any = {}) {
   return {

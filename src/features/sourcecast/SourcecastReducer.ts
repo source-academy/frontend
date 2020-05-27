@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
+import { SourceActionType } from '../../utils/actionsHelper';
 import {
-  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_CURRENT_PLAYER_TIME,
   SET_INPUT_TO_APPLY,
@@ -9,9 +9,8 @@ import {
   SET_SOURCECAST_PLAYBACK_DURATION,
   SET_SOURCECAST_PLAYBACK_STATUS,
   UPDATE_SOURCECAST_INDEX
-} from '../../commons/application/types/ActionTypes';
-import { SourceActionType } from '../../utils/actionsHelper';
-
+} from '../sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../sourcereel/SourcereelTypes';
 import { SourcecastWorkspaceState } from './SourcecastTypes';
 
 export const SourcecastReducer: Reducer<SourcecastWorkspaceState> = (

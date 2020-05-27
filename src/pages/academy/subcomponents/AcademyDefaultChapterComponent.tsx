@@ -7,7 +7,7 @@ import { RouteComponentProps } from 'react-router';
 import { Variant } from 'js-slang/dist/types';
 
 import {
-  ISourceLanguage,
+  SourceLanguage,
   sourceLanguages,
   styliseChapter
 } from 'src/commons/application/ApplicationTypes';
@@ -29,7 +29,7 @@ export type StateProps = {
 export function DefaultChapter(props: DefaultChapterProps) {
   props.handleFetchChapter();
 
-  const chapters = sourceLanguages.map((lang: ISourceLanguage) => {
+  const chapters = sourceLanguages.map((lang: SourceLanguage) => {
     return {
       chapter: lang.chapter,
       variant: lang.variant,

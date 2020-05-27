@@ -8,32 +8,7 @@ import {
   InterpreterOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
-import {
-  BROWSE_REPL_HISTORY_DOWN,
-  BROWSE_REPL_HISTORY_UP,
-  CHANGE_EDITOR_HEIGHT,
-  CHANGE_EDITOR_WIDTH,
-  CHANGE_EXTERNAL_LIBRARY,
-  CHANGE_SIDE_CONTENT_HEIGHT,
-  CLEAR_REPL_INPUT,
-  CLEAR_REPL_OUTPUT,
-  CLEAR_REPL_OUTPUT_LAST,
-  END_CLEAR_CONTEXT,
-  EVAL_EDITOR,
-  EVAL_REPL,
-  LOG_OUT,
-  MOVE_CURSOR,
-  RESET_TESTCASE,
-  RESET_WORKSPACE,
-  SEND_REPL_INPUT_TO_OUTPUT,
-  TOGGLE_EDITOR_AUTORUN,
-  UPDATE_ACTIVE_TAB,
-  UPDATE_CURRENT_ASSESSMENT_ID,
-  UPDATE_CURRENT_SUBMISSION_ID,
-  UPDATE_EDITOR_VALUE,
-  UPDATE_HAS_UNSAVED_CHANGES,
-  UPDATE_REPL_VALUE
-} from '../../application/types/ActionTypes';
+import { LOG_OUT } from '../../application/types/CommonsTypes';
 import {
   DEBUG_RESET,
   DEBUG_RESUME,
@@ -54,9 +29,36 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
-import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
 import { WorkspaceReducer } from '../WorkspaceReducer';
-import { PlaygroundWorkspaceState, WorkspaceManagerState } from '../WorkspaceTypes';
+import {   
+  BROWSE_REPL_HISTORY_DOWN,
+  BROWSE_REPL_HISTORY_UP,
+  CHANGE_EDITOR_HEIGHT,
+  CHANGE_EDITOR_WIDTH,
+  CHANGE_EXTERNAL_LIBRARY,
+  CHANGE_SIDE_CONTENT_HEIGHT,
+  CLEAR_REPL_INPUT,
+  CLEAR_REPL_OUTPUT,
+  CLEAR_REPL_OUTPUT_LAST,
+  END_CLEAR_CONTEXT,
+  EVAL_EDITOR,
+  EVAL_REPL,
+  MOVE_CURSOR,
+  PlaygroundWorkspaceState,
+  RESET_TESTCASE,
+  RESET_WORKSPACE,
+  SEND_REPL_INPUT_TO_OUTPUT,
+  TOGGLE_EDITOR_AUTORUN,
+  UPDATE_ACTIVE_TAB,
+  UPDATE_CURRENT_ASSESSMENT_ID,
+  UPDATE_CURRENT_SUBMISSION_ID,
+  UPDATE_EDITOR_VALUE,
+  UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_REPL_VALUE,
+  WorkspaceLocation, 
+  WorkspaceLocations,
+  WorkspaceManagerState 
+} from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
 const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;

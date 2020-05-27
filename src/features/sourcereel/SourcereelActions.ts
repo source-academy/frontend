@@ -1,29 +1,41 @@
 import { action } from 'typesafe-actions';
 
-import * as actionTypes from '../../commons/application/types/ActionTypes';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import { Input, PlaybackData } from '../sourcecast/SourcecastTypes';
 
+import { 
+  DELETE_SOURCECAST_ENTRY, 
+  RECORD_INIT, 
+  RECORD_INPUT, 
+  RESET_INPUTS, 
+  SAVE_SOURCECAST_DATA,
+  TIMER_PAUSE,
+  TIMER_RESET,
+  TIMER_RESUME,
+  TIMER_START,
+  TIMER_STOP
+} from './SourcereelTypes';
+
 export const deleteSourcecastEntry = (id: number, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.DELETE_SOURCECAST_ENTRY, {
+  action(DELETE_SOURCECAST_ENTRY, {
     id,
     workspaceLocation
   });
 
 export const recordInit = (initData: PlaybackData['init'], workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.RECORD_INIT, {
+  action(RECORD_INIT, {
     initData,
     workspaceLocation
   });
 
 export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.RECORD_INPUT, {
+  action(RECORD_INPUT, {
     input,
     workspaceLocation
   });
 
 export const resetInputs = (inputs: Input[], workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.RESET_INPUTS, {
+  action(RESET_INPUTS, {
     inputs,
     workspaceLocation
   });
@@ -35,7 +47,7 @@ export const saveSourcecastData = (
   playbackData: PlaybackData,
   workspaceLocation: WorkspaceLocation
 ) =>
-  action(actionTypes.SAVE_SOURCECAST_DATA, {
+  action(SAVE_SOURCECAST_DATA, {
     title,
     description,
     audio,
@@ -45,31 +57,31 @@ export const saveSourcecastData = (
   });
 
 export const timerPause = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TIMER_PAUSE, {
+  action(TIMER_PAUSE, {
     timeNow: Date.now(),
     workspaceLocation
   });
 
 export const timerReset = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TIMER_RESET, {
+  action(TIMER_RESET, {
     workspaceLocation
   });
 
 export const timerResume = (timeBefore: number, workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TIMER_RESUME, {
+  action(TIMER_RESUME, {
     timeBefore,
     timeNow: Date.now(),
     workspaceLocation
   });
 
 export const timerStart = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TIMER_START, {
+  action(TIMER_START, {
     timeNow: Date.now(),
     workspaceLocation
   });
 
 export const timerStop = (workspaceLocation: WorkspaceLocation) =>
-  action(actionTypes.TIMER_STOP, {
+  action(TIMER_STOP, {
     timeNow: Date.now(),
     workspaceLocation
   });

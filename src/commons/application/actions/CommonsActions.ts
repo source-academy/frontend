@@ -1,5 +1,5 @@
 import { action } from 'typesafe-actions'; // EDITED
 
-import * as actionTypes from '../types/ActionTypes';
+import { LOG_OUT } from '../types/CommonsTypes';
 
-export const logOut = () => action(actionTypes.LOG_OUT);
+export const logOut = () => action(LOG_OUT);
