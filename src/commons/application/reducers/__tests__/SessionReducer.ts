@@ -9,8 +9,9 @@ import {
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
+import { LOG_OUT } from '../../types/ActionTypes';
 import {
-  LOG_OUT,
+  SessionState,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -19,8 +20,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS
-} from '../../types/ActionTypes';
-import { SessionState } from '../../types/SessionTypes';
+} from '../../types/SessionTypes';
 import { SessionsReducer } from '../SessionsReducer';
 
 test('LOG_OUT works correctly on default session', () => {

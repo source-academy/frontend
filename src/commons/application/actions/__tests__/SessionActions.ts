@@ -2,7 +2,31 @@ import { Notification } from '../../../../components/notification/notificationSh
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';
-import * as actionTypes from '../../types/ActionTypes';
+import {
+  ACKNOWLEDGE_NOTIFICATIONS,
+  FETCH_ANNOUNCEMENTS,
+  FETCH_ASSESSMENT,
+  FETCH_ASSESSMENT_OVERVIEWS,
+  FETCH_AUTH,
+  FETCH_GRADING,
+  FETCH_GRADING_OVERVIEWS,
+  FETCH_NOTIFICATIONS,
+  LOGIN,
+  NOTIFY_CHATKIT_USERS, 
+  SET_TOKENS,
+  SET_USER,
+  SUBMIT_ANSWER,
+  SUBMIT_ASSESSMENT,
+  SUBMIT_GRADING,
+  SUBMIT_GRADING_AND_CONTINUE,
+  UNSUBMIT_SUBMISSION,
+  UPDATE_ASSESSMENT,
+  UPDATE_ASSESSMENT_OVERVIEWS,
+  UPDATE_GRADING,
+  UPDATE_GRADING_OVERVIEWS,
+  UPDATE_HISTORY_HELPERS,
+  UPDATE_NOTIFICATIONS
+} from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
   fetchAnnouncements,
@@ -33,7 +57,7 @@ test('acknowledgeNotifications generates correct action object', () => {
   const action = acknowledgeNotifications();
 
   expect(action).toEqual({
-    type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS,
+    type: ACKNOWLEDGE_NOTIFICATIONS,
     payload: {
       withFilter: undefined
     }
@@ -44,7 +68,7 @@ test('fetchAuth generates correct action object', () => {
   const luminusCode = 'luminus-code-test';
   const action = fetchAuth(luminusCode);
   expect(action).toEqual({
-    type: actionTypes.FETCH_AUTH,
+    type: FETCH_AUTH,
     payload: luminusCode
   });
 });
@@ -52,7 +76,7 @@ test('fetchAuth generates correct action object', () => {
 test('fetchAnnouncements generates correct action object', () => {
   const action = fetchAnnouncements();
   expect(action).toEqual({
-    type: actionTypes.FETCH_ANNOUNCEMENTS
+    type: FETCH_ANNOUNCEMENTS
   });
 });
 
@@ -60,7 +84,7 @@ test('fetchAssessment generates correct action object', () => {
   const id = 3;
   const action = fetchAssessment(id);
   expect(action).toEqual({
-    type: actionTypes.FETCH_ASSESSMENT,
+    type: FETCH_ASSESSMENT,
     payload: id
   });
 });
@@ -68,7 +92,7 @@ test('fetchAssessment generates correct action object', () => {
 test('fetchAssessmentOverviews generates correct action object', () => {
   const action = fetchAssessmentOverviews();
   expect(action).toEqual({
-    type: actionTypes.FETCH_ASSESSMENT_OVERVIEWS
+    type: FETCH_ASSESSMENT_OVERVIEWS
   });
 });
 
@@ -76,7 +100,7 @@ test('fetchGrading generates correct action object', () => {
   const submissionId = 5;
   const action = fetchGrading(submissionId);
   expect(action).toEqual({
-    type: actionTypes.FETCH_GRADING,
+    type: FETCH_GRADING,
     payload: submissionId
   });
 });
@@ -84,7 +108,7 @@ test('fetchGrading generates correct action object', () => {
 test('fetchGradingOverviews generates correct default action object', () => {
   const action = fetchGradingOverviews();
   expect(action).toEqual({
-    type: actionTypes.FETCH_GRADING_OVERVIEWS,
+    type: FETCH_GRADING_OVERVIEWS,
     payload: true
   });
 });
@@ -93,7 +117,7 @@ test('fetchGradingOverviews generates correct action object', () => {
   const filterToGroup = false;
   const action = fetchGradingOverviews(filterToGroup);
   expect(action).toEqual({
-    type: actionTypes.FETCH_GRADING_OVERVIEWS,
+    type: FETCH_GRADING_OVERVIEWS,
     payload: filterToGroup
   });
 });
@@ -102,22 +126,23 @@ test('fetchNotifications generates correct action object', () => {
   const action = fetchNotifications();
 
   expect(action).toEqual({
-    type: actionTypes.FETCH_NOTIFICATIONS
+    type: FETCH_NOTIFICATIONS
   });
 });
 
 test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
-    type: actionTypes.LOGIN
+    type: LOGIN
   });
 });
 
+// TODO: Remove
 test('notifyChatUsers generates correct action object with undefined submission id', () => {
   const action = notifyChatUsers(1, undefined);
 
   expect(action).toEqual({
-    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    type: NOTIFY_CHATKIT_USERS,
     payload: {
       assessmentId: 1,
       submissionId: undefined
@@ -129,7 +154,7 @@ test('notifyChatUsers generates correct action object with undefined assessment 
   const action = notifyChatUsers(undefined, 1);
 
   expect(action).toEqual({
-    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    type: NOTIFY_CHATKIT_USERS,
     payload: {
       assessmentId: undefined,
       submissionId: 1
@@ -142,7 +167,7 @@ test('setTokens generates correct action object', () => {
   const refreshToken = 'refresh-token-test';
   const action = setTokens({ accessToken, refreshToken });
   expect(action).toEqual({
-    type: actionTypes.SET_TOKENS,
+    type: SET_TOKENS,
     payload: {
       accessToken,
       refreshToken
@@ -161,7 +186,7 @@ test('setUser generates correct action object', () => {
   };
   const action = setUser(user);
   expect(action).toEqual({
-    type: actionTypes.SET_USER,
+    type: SET_USER,
     payload: user
   });
 });
@@ -171,7 +196,7 @@ test('submitAnswer generates correct action object', () => {
   const answer = 'test-answer-here';
   const action = submitAnswer(id, answer);
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_ANSWER,
+    type: SUBMIT_ANSWER,
     payload: {
       id,
       answer
@@ -183,7 +208,7 @@ test('submitAssessment generates correct action object', () => {
   const id = 7;
   const action = submitAssessment(id);
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_ASSESSMENT,
+    type: SUBMIT_ASSESSMENT,
     payload: id
   });
 });
@@ -194,7 +219,7 @@ test('submitGrading generates correct action object with default values', () => 
 
   const action = submitGrading(submissionId, questionId);
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_GRADING,
+    type: SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
@@ -211,7 +236,7 @@ test('submitGradingAndContinue generates correct action object with default valu
 
   const action = submitGradingAndContinue(submissionId, questionId);
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    type: SUBMIT_GRADING_AND_CONTINUE,
     payload: {
       submissionId,
       questionId,
@@ -230,7 +255,7 @@ test('submitGrading generates correct action object', () => {
   const comments = 'my comment';
   const action = submitGrading(submissionId, questionId, gradeAdjustment, xpAdjustment, comments);
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_GRADING,
+    type: SUBMIT_GRADING,
     payload: {
       submissionId,
       questionId,
@@ -255,7 +280,7 @@ test('submitGradingAndContinue generates correct action object', () => {
     comments
   );
   expect(action).toEqual({
-    type: actionTypes.SUBMIT_GRADING_AND_CONTINUE,
+    type: SUBMIT_GRADING_AND_CONTINUE,
     payload: {
       submissionId,
       questionId,
@@ -270,7 +295,7 @@ test('unsubmitSubmission generates correct action object', () => {
   const submissionId = 10;
   const action = unsubmitSubmission(submissionId);
   expect(action).toEqual({
-    type: actionTypes.UNSUBMIT_SUBMISSION,
+    type: UNSUBMIT_SUBMISSION,
     payload: {
       submissionId
     }
@@ -281,7 +306,7 @@ test('updateHistoryHelpers generates correct action object', () => {
   const loc = 'location';
   const action = updateHistoryHelpers(loc);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_HISTORY_HELPERS,
+    type: UPDATE_HISTORY_HELPERS,
     payload: loc
   });
 });
@@ -307,7 +332,7 @@ test('updateAssessmentOverviews generates correct action object', () => {
   ];
   const action = updateAssessmentOverviews(overviews);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_ASSESSMENT_OVERVIEWS,
+    type: UPDATE_ASSESSMENT_OVERVIEWS,
     payload: overviews
   });
 });
@@ -326,7 +351,7 @@ test('updateAssessment generates correct action object', () => {
 
   const action = updateAssessment(assessment);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_ASSESSMENT,
+    type: UPDATE_ASSESSMENT,
     payload: assessment
   });
 });
@@ -359,7 +384,7 @@ test('updateGradingOverviews generates correct action object', () => {
 
   const action = updateGradingOverviews(overviews);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_GRADING_OVERVIEWS,
+    type: UPDATE_GRADING_OVERVIEWS,
     payload: overviews
   });
 });
@@ -391,7 +416,7 @@ test('updateGrading generates correct action object', () => {
 
   const action = updateGrading(submissionId, grading);
   expect(action).toEqual({
-    type: actionTypes.UPDATE_GRADING,
+    type: UPDATE_GRADING,
     payload: {
       submissionId,
       grading
@@ -420,7 +445,7 @@ test('updateNotifications generates correct action object', () => {
   const action = updateNotifications(notifications);
 
   expect(action).toEqual({
-    type: actionTypes.UPDATE_NOTIFICATIONS,
+    type: UPDATE_NOTIFICATIONS,
     payload: notifications
   });
 });

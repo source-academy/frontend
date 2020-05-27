@@ -5,6 +5,11 @@ import { defaultSession } from '../ApplicationTypes';
 import {
   LOG_OUT,
   SET_GAME_STATE,
+  UPDATE_MATERIAL_DIRECTORY_TREE,
+  UPDATE_MATERIAL_INDEX,
+} from '../types/ActionTypes';
+import { 
+  SessionState,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -12,11 +17,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_MATERIAL_DIRECTORY_TREE,
-  UPDATE_MATERIAL_INDEX,
   UPDATE_NOTIFICATIONS
-} from '../types/ActionTypes';
-import { SessionState } from '../types/SessionTypes';
+ } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (
   state = defaultSession,
