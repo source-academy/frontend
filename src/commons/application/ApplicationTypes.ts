@@ -242,6 +242,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     audioUrl: '',
     codeDeltasToApply: null,
+    currentPlayerTime: 0,
     description: null,
     inputToApply: null,
     playbackData: {

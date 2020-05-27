@@ -77,6 +77,7 @@ export enum RecordingStatus {
 type SourcecastWorkspaceAttr = {
   readonly audioUrl: string;
   readonly codeDeltasToApply: CodeDelta[] | null;
+  readonly currentPlayerTime: number;
   readonly description: string | null;
   readonly inputToApply: Input | null;
   readonly playbackData: PlaybackData;
