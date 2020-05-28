@@ -1,7 +1,9 @@
+import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   changeQueryString,
@@ -11,8 +13,6 @@ import {
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
-
-import { Variant } from 'js-slang/dist/types';
 import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../../utils/constants';
 
 export default function* PlaygroundSaga(): SagaIterator {

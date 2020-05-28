@@ -1,5 +1,6 @@
 import { SagaIterator } from 'redux-saga';
 import { takeEvery } from 'redux-saga/effects';
+
 import { LUMINUS_CLIENT_ID } from '../../utils/constants';
 import { LOGIN } from '../application/types/SessionTypes';
 
