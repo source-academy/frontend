@@ -3,10 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
-import {
-  checkSessionIdExists,
-  createNewSession
-} from '../collabEditing/CollabEditingHelper';
+import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
 import controlButton from '../ControlButton';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
@@ -28,7 +25,10 @@ type State = {
   joinElemValue: string;
 };
 
-export class ControlBarSessionButtons extends React.PureComponent<ControlBarSessionButtonsProps, State> {
+export class ControlBarSessionButtons extends React.PureComponent<
+  ControlBarSessionButtonsProps,
+  State
+> {
   private inviteInputElem: React.RefObject<HTMLInputElement>;
 
   constructor(props: ControlBarSessionButtonsProps) {

@@ -486,7 +486,10 @@ class AssessmentWorkspace extends React.Component<
     };
 
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
     );
 
     const evalButton = (
@@ -531,7 +534,9 @@ class AssessmentWorkspace extends React.Component<
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
+    );
 
     const saveButton =
       !beforeNow(this.props.closeDate) &&

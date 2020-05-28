@@ -3,16 +3,16 @@ import { Reducer } from 'redux';
 import { SourceActionType } from '../../utils/actionsHelper';
 import { RecordingStatus } from '../sourcecast/SourcecastTypes';
 
-import { 
-  RECORD_INIT, 
-  RECORD_INPUT, 
-  RESET_INPUTS, 
-  SourcereelWorkspaceState, 
+import {
+  RECORD_INIT,
+  RECORD_INPUT,
+  RESET_INPUTS,
+  SourcereelWorkspaceState,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
   TIMER_START,
-  TIMER_STOP,
+  TIMER_STOP
 } from './SourcereelTypes';
 
 export const SourcereelReducer: Reducer<SourcereelWorkspaceState> = (

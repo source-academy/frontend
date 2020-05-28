@@ -15,7 +15,9 @@ import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLPars
 import { DEFAULT_QUESTION_ID } from '../../utils/constants';
 import { stringParamToInt } from '../../utils/paramParseHelpers';
 
-export type MissionControlProps = DispatchProps & StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
+export type MissionControlProps = DispatchProps &
+  StateProps &
+  RouteComponentProps<AssessmentWorkspaceParams>;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;

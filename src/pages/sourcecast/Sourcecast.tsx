@@ -151,7 +151,10 @@ class Sourcecast extends React.Component<SourcecastProps> {
     );
 
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
     );
 
     const evalButton = (

@@ -163,7 +163,10 @@ class Playground extends React.Component<PlaygroundProps, State> {
 
     const clearButton =
       this.state.selectedTab === SideContentType.substVisualizer ? null : (
-        <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+        <ControlBarClearButton
+          handleReplOutputClear={this.props.handleReplOutputClear}
+          key="clear_repl"
+        />
       );
 
     const evalButton =

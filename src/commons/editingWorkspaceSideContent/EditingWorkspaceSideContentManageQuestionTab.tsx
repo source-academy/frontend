@@ -3,11 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { history } from '../../utils/history';
-import {
-  Assessment,
-  mcqTemplate,
-  programmingTemplate
-} from '../assessment/AssessmentTypes';
+import { Assessment, mcqTemplate, programmingTemplate } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
 

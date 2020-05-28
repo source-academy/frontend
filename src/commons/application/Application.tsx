@@ -15,10 +15,7 @@ import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import { stringParamToInt } from '../../utils/paramParseHelpers';
 import NavigationBar from '../navigationBar/NavigationBar';
 import { Role, sourceLanguages } from './ApplicationTypes';
-import {
-  ExternalLibraryName,
-  ExternalLibraryNames
-} from './types/ExternalTypes';
+import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
 
 import Material from '../../containers/material/MaterialContainer'; // TODO: Remove
 

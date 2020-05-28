@@ -17,7 +17,9 @@ import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEn
 import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import SourcecastEditor, { SourcecastEditorProps } from '../../../commons/sourcecast/SourcecastEditor';
+import SourcecastEditor, {
+  SourcecastEditorProps
+} from '../../../commons/sourcecast/SourcecastEditor';
 import SourcecastTable from '../../../commons/sourcecast/SourcecastTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import {
@@ -173,7 +175,10 @@ class Sourcereel extends React.Component<SourcereelProps> {
     );
 
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
     );
 
     const evalButton = (

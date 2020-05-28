@@ -165,4 +165,4 @@ const SourcereelContainer = connect(
   mapDispatchToProps
 )(Sourcereel);
 
-export default SourcereelContainer; 
+export default SourcereelContainer;

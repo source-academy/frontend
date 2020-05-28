@@ -16,7 +16,10 @@ type StateProps = {
   comments?: string;
 };
 
-class AssessmentWorkspaceGradingResult extends React.Component<AssessmentWorkspaceGradingResultProps, {}> {
+class AssessmentWorkspaceGradingResult extends React.Component<
+  AssessmentWorkspaceGradingResultProps,
+  {}
+> {
   constructor(props: AssessmentWorkspaceGradingResultProps) {
     super(props);
   }

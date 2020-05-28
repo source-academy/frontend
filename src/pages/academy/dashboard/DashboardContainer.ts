@@ -23,6 +23,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
 const DashboardContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Dashboard); 
+)(Dashboard);
 
-export default DashboardContainer; 
+export default DashboardContainer;

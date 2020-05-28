@@ -365,7 +365,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const onClickReturn = () => history.push(listingPath);
 
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
     );
 
     const evalButton = (
@@ -397,7 +400,9 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
+    );
 
     return {
       editorButtons: [runButton],

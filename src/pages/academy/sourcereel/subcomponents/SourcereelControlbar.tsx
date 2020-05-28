@@ -4,7 +4,11 @@ import * as React from 'react';
 import Recorder from 'yareco';
 
 import controlButton from '../../../../commons/ControlButton';
-import { Input, PlaybackData, RecordingStatus } from '../../../../features/sourcecast/SourcecastTypes';
+import {
+  Input,
+  PlaybackData,
+  RecordingStatus
+} from '../../../../features/sourcecast/SourcecastTypes';
 
 type SourcereelControlbarProps = DispatchProps & StateProps;
 

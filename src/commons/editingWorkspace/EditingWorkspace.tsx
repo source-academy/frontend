@@ -623,7 +623,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     };
 
     const clearButton = (
-      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
     );
 
     const evalButton = (
@@ -655,9 +658,13 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const resetButton = <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />;
+    const resetButton = (
+      <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
+    );
 
-    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = (
+      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
+    );
 
     const saveButton = (
       <ControlButtonSaveButton

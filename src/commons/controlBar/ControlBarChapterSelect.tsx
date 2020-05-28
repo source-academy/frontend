@@ -5,11 +5,7 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import {
-  SourceLanguage,
-  sourceLanguages,
-  styliseChapter
-} from '../application/ApplicationTypes';
+import { SourceLanguage, sourceLanguages, styliseChapter } from '../application/ApplicationTypes';
 import { Chapter } from '../application/types/ChapterTypes';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;

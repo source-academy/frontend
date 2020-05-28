@@ -30,7 +30,7 @@ import {
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import { WorkspaceReducer } from '../WorkspaceReducer';
-import {   
+import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
   CHANGE_EDITOR_HEIGHT,
@@ -55,9 +55,9 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  WorkspaceLocation, 
+  WorkspaceLocation,
   WorkspaceLocations,
-  WorkspaceManagerState 
+  WorkspaceManagerState
 } from '../WorkspaceTypes';
 
 const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;

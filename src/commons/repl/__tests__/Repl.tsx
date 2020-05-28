@@ -2,11 +2,11 @@ import { shallow } from 'enzyme';
 import * as React from 'react';
 
 import { mockTypeError } from '../../../mocks/context';
-import { 
-  CodeOutput, 
-  ErrorOutput, 
-  InterpreterOutput, 
-  ResultOutput, 
+import {
+  CodeOutput,
+  ErrorOutput,
+  InterpreterOutput,
+  ResultOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
 import Repl, { Output } from '../Repl';

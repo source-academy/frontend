@@ -91,7 +91,7 @@ class Academy extends React.Component<AcademyProps> {
   private assessmentRenderFactory = (cat: AssessmentCategory) => (
     routerProps: RouteComponentProps<any>
   ) => <AssessmentContainer assessmentCategory={cat} />;
-  
+
   /**
    * 1. If user is in /academy.*, redirect to game
    * 2. If not, redirect to the last /acdaemy.* route the user was in
@@ -106,11 +106,10 @@ class Academy extends React.Component<AcademyProps> {
       return this.redirectToGame;
     }
   };
-  
+
   private redirectTo404 = () => <Redirect to="/404" />;
-  
+
   private redirectToGame = () => <Redirect to="/academy/game" />;
 }
-
 
 export default Academy;
