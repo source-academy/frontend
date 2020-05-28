@@ -20,7 +20,7 @@ import {
   ExternalLibraryNames
 } from './types/ExternalTypes';
 
-import Material from 'src/containers/material/MaterialContainer'; // TODO: Remove
+import Material from '../../containers/material/MaterialContainer'; // TODO: Remove
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

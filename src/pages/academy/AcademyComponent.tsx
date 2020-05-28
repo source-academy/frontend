@@ -13,10 +13,10 @@ import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBarComponent';
 
-import StoryUpload from 'src/containers/game-dev/StoryUploadContainer'; // TODO: Fix
-import Game from 'src/containers/GameContainer'; // TODO: Fix
-import GroundControl from 'src/containers/groundControl/GroundControlContainer'; // TODO: Fix
-import MaterialUploadContainer from 'src/containers/material/MaterialUploadContainer'; // TODO: Remove
+import StoryUpload from '../../containers/game-dev/StoryUploadContainer'; // TODO: Fix
+import Game from '../../containers/GameContainer'; // TODO: Fix
+import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
+import MaterialUploadContainer from '../../containers/material/MaterialUploadContainer'; // TODO: Remove
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
@@ -95,7 +95,7 @@ class Academy extends React.Component<AcademyProps> {
   /**
    * 1. If user is in /academy.*, redirect to game
    * 2. If not, redirect to the last /acdaemy.* route the user was in
-   * See src/utils/history.ts for more details
+   * See ../../utils/history.ts for more details
    */
   private dynamicRedirect = (props: StateProps) => {
     const clickedFrom = props.historyHelper.lastGeneralLocations[0];

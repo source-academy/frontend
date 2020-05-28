@@ -49,8 +49,8 @@ import ToneMatrix from '../sideContent/ToneMatrix';
 import Workspace, { WorkspaceProps } from '../workspace/WorkspaceComponent';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
-import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from 'src/utils/constants'; // TODO: Remove
+import ChatApp from '../../containers/ChatContainer'; // TODO: Remove
+import { USE_CHATKIT } from '../../utils/constants'; // TODO: Remove
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 

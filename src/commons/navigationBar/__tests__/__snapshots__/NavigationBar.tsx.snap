@@ -1,0 +1,57 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`NavigationBar renders "Not logged in" correctly 1`] = `
+"<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
+  <Blueprint3.NavbarGroup align=\\"left\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Source Academy Playground
+      </div>
+    </NavLink>
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Contributors
+      </div>
+    </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
+  </Blueprint3.NavbarGroup>
+</Blueprint3.Navbar>"
+`;
+
+exports[`NavigationBar renders correctly with username 1`] = `
+"<Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
+  <Blueprint3.NavbarGroup align=\\"left\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/playground\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"code\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Source Academy Playground
+      </div>
+    </NavLink>
+  </Blueprint3.NavbarGroup>
+  <Blueprint3.NavbarGroup align=\\"right\\">
+    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"heart\\" />
+      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+        Contributors
+      </div>
+    </NavLink>
+    <div className=\\"visible-xs\\">
+      <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
+    </div>
+    <div className=\\"hidden-xs\\">
+      <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+    </div>
+    <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
+  </Blueprint3.NavbarGroup>
+</Blueprint3.Navbar>"
+`;
