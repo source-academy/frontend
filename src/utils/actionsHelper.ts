@@ -1,19 +1,19 @@
 import { ActionType } from 'typesafe-actions';
 
-import * as CommonsActions from 'src/commons/application/actions/CommonsActions';
-import * as InterpreterActions from 'src/commons/application/actions/InterpreterActions';
-import * as SessionActions from 'src/commons/application/actions/SessionActions';
-import * as CollabEditingActions from 'src/commons/collabEditing/CollabEditingActions';
-import * as WorkspaceActions from 'src/commons/workspace/WorkspaceActions';
-import * as DashboardActions from 'src/features/dashboard/DashboardActions';
-import * as PlaygroundActions from 'src/features/playground/PlaygroundActions';
-import * as SourcecastActions from 'src/features/sourcecast/SourcecastActions';
-import * as SourcereelActions from 'src/features/sourcereel/SourcereelActions';
+import * as CommonsActions from '../commons/application/actions/CommonsActions';
+import * as InterpreterActions from '../commons/application/actions/InterpreterActions';
+import * as SessionActions from '../commons/application/actions/SessionActions';
+import * as CollabEditingActions from '../commons/collabEditing/CollabEditingActions';
+import * as WorkspaceActions from '../commons/workspace/WorkspaceActions';
+import * as DashboardActions from '../features/dashboard/DashboardActions';
+import * as PlaygroundActions from '../features/playground/PlaygroundActions';
+import * as SourcecastActions from '../features/sourcecast/SourcecastActions';
+import * as SourcereelActions from '../features/sourcereel/SourcereelActions';
 
-import * as GameActions from 'src/actions/game';
-import * as MaterialActions from 'src/actions/material';
+import * as GameActions from '../actions/game';
+import * as MaterialActions from '../actions/material';
 
-const actions = {
+export const actions = {
   ...CommonsActions,
   ...CollabEditingActions,
   ...DashboardActions,
