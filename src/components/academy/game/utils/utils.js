@@ -15,3 +15,5 @@ export function saveRenderer(aRenderer) {
 export function getRenderer() {
   return renderer;
 }
+
+export default { saveRenderer };

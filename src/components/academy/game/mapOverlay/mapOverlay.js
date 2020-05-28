@@ -66,3 +66,7 @@ export function changeWristDeviceFunction(newFunc) {
 export function setVisibility(value) {
   mapOverlay.visible = value;
 }
+
+export default {
+  init
+};

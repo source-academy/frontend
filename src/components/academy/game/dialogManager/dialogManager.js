@@ -420,3 +420,7 @@ export function skipSequence(node, callback) {
     callback();
   }
 }
+
+export default {
+  init
+};

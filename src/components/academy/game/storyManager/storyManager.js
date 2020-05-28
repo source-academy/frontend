@@ -275,3 +275,7 @@ function markAssetsToLoad(story, assetsToLoadTable) {
     }
   }
 }
+
+export default {
+  showLoadingScreen
+};

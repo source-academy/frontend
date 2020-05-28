@@ -1,6 +1,7 @@
 import Constants from '../constants/constants';
 
 import { isStudent } from './user';
+import { getMissionPointer } from './missionPointer';
 
 var SaveManager = require('../saveManager/saveManager.js');
 
@@ -39,6 +40,7 @@ export async function fetchGameData(story, gameStates, missions) {
     // resets current progress (local storage) for testers
     SaveManager.resetLocalSaveData();
   }
+  return getMissionPointer(missions);
 }
 
 function printSessionData() {

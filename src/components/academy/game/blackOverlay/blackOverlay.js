@@ -50,3 +50,7 @@ export function blackScreen(callback) {
   callback = callback || Constants.nullFunction;
   fadeIn(blackOverlay, callback);
 }
+
+export default {
+  init
+};

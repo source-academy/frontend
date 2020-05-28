@@ -195,5 +195,6 @@ export function saveClickTempObject(node, storyId) {
 
 export default {
   resetLocalSaveData,
-  hasLocalSave
+  hasLocalSave,
+  init
 };

@@ -1,4 +1,4 @@
-import * as PIXI from 'pixi.js'
+import * as PIXI from 'pixi.js';
 
 var externalHooks;
 
@@ -10,7 +10,7 @@ export function init(hookHandlers) {
   externalOverlay = new PIXI.Container();
   externalOverlay.visible = false;
   return externalOverlay;
-};
+}
 
 export function getExternalOverlay() {
   return externalOverlay;
@@ -35,3 +35,7 @@ export function playExternalAction(node) {
   }
   externalHooks[node.getAttribute('name')].apply(this, argList);
 }
+
+export default {
+  init
+};

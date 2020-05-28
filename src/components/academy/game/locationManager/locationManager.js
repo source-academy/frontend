@@ -168,3 +168,7 @@ export function verifyGotoStart(callback) {
     }
   };
 }
+
+export default {
+  init
+};

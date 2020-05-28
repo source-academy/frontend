@@ -83,10 +83,12 @@ export function getMissionPointer(missions) {
   return missionPointer && missionPointer.story;
 }
 
+/**
+ * Tries to retrieve local version of story
+ * if unable to find, use backend's version.
+ * this is to prevent any jumps in story after student completes a mission
+ */
 function getStudentStory() {
-  //tries to retrieve local version of story
-  //if unable to find, use backend's version.
-  //this is to prevent any jumps in story after student completes a mission
   if (SaveManager.hasLocalSave()) {
     let actionSequence = SaveManager.getLocalSaveData().actionSequence;
     let story = actionSequence[actionSequence.length - 1].storyID;

@@ -219,3 +219,7 @@ export function setMapObjectsInteractivity(flag) {
   objectOverlay.visible = !flag;
   MapOverlay.setVisibility(flag);
 }
+
+export default {
+  init
+};

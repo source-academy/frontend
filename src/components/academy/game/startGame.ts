@@ -2,7 +2,6 @@ import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { Story } from '../../../reducers/states';
 import { LINKS } from '../../../utils/constants';
 import { fetchGameData } from './backend/gameState';
-import { getMissionPointer } from './backend/missionPointer';
 import Constants from './constants/constants';
 import { initStage, loadStory } from './storyXmlPlayer';
 import hookHandlers from './utils/hookHandlers';
@@ -23,8 +22,7 @@ async function startGame(
   gameState: object,
   missions: IAssessmentOverview[] | undefined
 ) {
-  await fetchGameData(userStory, gameState, missions);
-  const xmlFileName: string = getMissionPointer(missions);
+  const xmlFileName: string = await fetchGameData(userStory, gameState, missions);
   initStage(div, canvas, { ...config, playerName: username });
   loadStory(xmlFileName);
 }
