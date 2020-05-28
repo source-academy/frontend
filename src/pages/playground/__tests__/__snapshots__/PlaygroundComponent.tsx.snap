@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Playground renders correctly 1`] = `
+"<HotKeys className=\\"Playground bp3-dark\\" keyMap={{...}} handlers={{...}}>
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} replProps={{...}} sideContentHeight={40} sideContentProps={{...}} sideContentIsResizeable={true} />
+</HotKeys>"
+`;
+
+exports[`Playground with link renders correctly 1`] = `
+"<HotKeys className=\\"Playground bp3-dark\\" keyMap={{...}} handlers={{...}}>
+  <Workspace controlBarProps={{...}} editorProps={{...}} editorHeight={[undefined]} editorWidth=\\"50%\\" handleEditorHeightChange={[Function: handleEditorHeightChange]} handleEditorWidthChange={[Function: handleEditorWidthChange]} handleSideContentHeightChange={[Function: handleSideContentHeightChange]} replProps={{...}} sideContentHeight={40} sideContentProps={{...}} sideContentIsResizeable={true} />
+</HotKeys>"
+`;
