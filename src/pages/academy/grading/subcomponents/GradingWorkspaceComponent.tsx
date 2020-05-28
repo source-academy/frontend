@@ -31,8 +31,8 @@ import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingT
 import { history } from '../../../../utils/history';
 import GradingEditor from './GradingEditorContainer';
 
-import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from 'src/utils/constants'; // TODO: Remove
+import ChatApp from '../../../../containers/ChatContainer'; // TODO: Remove
+import { USE_CHATKIT } from '../../../../utils/constants'; // TODO: Remove
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 
