@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchGradingOverviews } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { fetchGroupOverviews } from 'src/features/dashboard/DashboardActions';
+import { fetchGradingOverviews } from '../../../commons/application/actions/SessionActions';
+import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { fetchGroupOverviews } from '../../../features/dashboard/DashboardActions';
 import Dashboard, { DispatchProps, StateProps } from './DashboardComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -20,7 +20,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const DashboardContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(Dashboard);
+)(Dashboard); 
+
+export default DashboardContainer; 

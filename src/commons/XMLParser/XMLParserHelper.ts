@@ -1,6 +1,6 @@
 import { Builder } from 'xml2js';
 
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -14,8 +14,7 @@ import {
   Question,
   Testcase,
   TestcaseTypes
-} from 'src/commons/assessment/AssessmentTypes';
-
+} from '../assessment/AssessmentTypes';
 import {
   EDITING_ID,
   XmlParseStrCProblem,

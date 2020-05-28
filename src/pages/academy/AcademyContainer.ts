@@ -2,8 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { RouteComponentProps, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 
-import { fetchNotifications } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { fetchNotifications } from '../../commons/application/actions/SessionActions';
+import { OverallState } from '../../commons/application/ApplicationTypes';
 
 import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
 
@@ -21,9 +21,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = dispatch =>
 
 type AcademyPropType = OwnProps & RouteComponentProps<any>;
 
-export default withRouter<AcademyPropType>(
+const AcademyContainer = withRouter<AcademyPropType>(
   connect(
     mapStateToProps,
     mapDispatchToProps
   )(Academy)
 );
+
+export default AcademyContainer;

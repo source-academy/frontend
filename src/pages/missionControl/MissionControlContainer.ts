@@ -5,8 +5,8 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   fetchAssessmentOverviews,
   submitAssessment
-} from 'src/commons/application/actions/SessionActions';
-import { OverallState, Role } from 'src/commons/application/ApplicationTypes';
+} from '../../commons/application/actions/SessionActions';
+import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import MissionControl, { DispatchProps, StateProps } from './MissionControlComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = (state, props) => {

@@ -2,7 +2,7 @@ import { Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 import { RunButton } from './RunButton';
 
 type AutorunButtonProps = DispatchProps & StateProps;

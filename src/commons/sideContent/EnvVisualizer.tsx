@@ -2,7 +2,7 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { LINKS } from 'src/utils/constants';
+import { LINKS } from '../../utils/constants';
 
 type State = {
   loading: boolean;

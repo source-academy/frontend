@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { updateAssessment } from 'src/commons/application/actions/SessionActions';
+import { updateAssessment } from '../application/actions/SessionActions';
 
 import MissionCreator, { DispatchProps } from './MissionCreatorComponent';
 
@@ -15,7 +15,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const MissionCreatorContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(MissionCreator);
+
+export default MissionCreatorContainer;

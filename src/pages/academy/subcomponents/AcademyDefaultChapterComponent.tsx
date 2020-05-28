@@ -10,8 +10,8 @@ import {
   SourceLanguage,
   sourceLanguages,
   styliseChapter
-} from 'src/commons/application/ApplicationTypes';
-import { Chapter } from 'src/commons/application/types/ChapterTypes';
+} from '../../../commons/application/ApplicationTypes';
+import { Chapter } from '../../../commons/application/types/ChapterTypes';
 
 export type DefaultChapterProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

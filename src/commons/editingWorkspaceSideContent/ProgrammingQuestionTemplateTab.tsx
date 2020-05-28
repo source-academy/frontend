@@ -4,10 +4,9 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-
+import { Assessment } from '../assessment/AssessmentTypes';
+import controlButton from '../ControlButton';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import { assignToPath, getValueFromPath } from './EditingWorkspaceSideContentHelper';
 
 type QuestionEditorProps = DispatchProps & StateProps;

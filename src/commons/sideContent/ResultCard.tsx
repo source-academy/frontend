@@ -1,7 +1,7 @@
 import { Card, Elevation, Pre } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { AutogradingError, AutogradingResult } from 'src/commons/assessment/AssessmentTypes';
+import { AutogradingError, AutogradingResult } from '../assessment/AssessmentTypes';
 
 type ResultCardProps = StateProps;
 

@@ -1,7 +1,8 @@
-import { AssessmentCategories } from 'src/commons/assessment/AssessmentTypes';
-import { Notification, NotificationFilterFunction } from './NotificationBadgeTypes';
-
-type filterByTypeOptions = AssessmentCategories | 'Grading';
+import { 
+  filterByTypeOptions,
+  Notification, 
+  NotificationFilterFunction 
+} from './NotificationBadgeTypes';
 
 /**
  * @return A function that takes in an array of notification and filters it by assessment id.

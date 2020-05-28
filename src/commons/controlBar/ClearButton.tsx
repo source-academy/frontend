@@ -1,6 +1,6 @@
 import { IconNames } from '@blueprintjs/icons';
 
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 
 type ClearButtonProps = DispatchProps & StateProps;
 

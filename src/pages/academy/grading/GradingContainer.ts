@@ -5,8 +5,8 @@ import {
   acknowledgeNotifications,
   fetchGradingOverviews,
   unsubmitSubmission
-} from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
+} from '../../../commons/application/actions/SessionActions';
+import { OverallState } from '../../../commons/application/ApplicationTypes';
 import Grading, { DispatchProps, StateProps } from './GradingComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

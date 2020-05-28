@@ -17,20 +17,19 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 
-import { Role } from 'src/commons/application/ApplicationTypes';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import NotificationBadge from 'src/commons/notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/NotificationBadgeHelper';
+import { Role } from '../../../commons/application/ApplicationTypes';
+import ContentDisplay from '../../../commons/ContentDisplay';
+import NotificationBadge from '../../../commons/notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsBySubmission } from '../../../commons/notificationBadge/NotificationBadgeHelper';
 import {
   Notification,
   NotificationFilterFunction
-} from 'src/commons/notificationBadge/NotificationBadgeTypes';
+} from '../../../commons/notificationBadge/NotificationBadgeTypes';
 import {
   GradingOverview,
   GradingOverviewWithNotifications
-} from 'src/features/grading/GradingTypes';
-import { stringParamToInt } from 'src/utils/paramParseHelpers';
-
+} from '../../../features/grading/GradingTypes';
+import { stringParamToInt } from '../../../utils/paramParseHelpers';
 import EditGradingCell from './subcomponents/GradingEditGradingCellComponent';
 import GradeCell from './subcomponents/GradingGradeCellComponent';
 import GradingStatusCell from './subcomponents/GradingStatusCellComponent';

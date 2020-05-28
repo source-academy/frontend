@@ -8,7 +8,7 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import 'js-slang/dist/editors/ace/theme/source';
 import { IStepperPropContents } from 'js-slang/dist/stepper/stepper';
 
-import controlButton from 'src/commons/ControlButton';
+import controlButton from '../ControlButton';
 
 const SubstDefaultText = () => {
   return (

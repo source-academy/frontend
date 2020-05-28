@@ -6,12 +6,12 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import { fetchGrading } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
-import { SideContentType } from 'src/commons/sideContent/SideContentTypes';
+} from '../../../../commons/application/actions/InterpreterActions';
+import { fetchGrading } from '../../../../commons/application/actions/SessionActions';
+import { OverallState } from '../../../../commons/application/ApplicationTypes';
+import { Library } from '../../../../commons/assessment/AssessmentTypes';
+import { Position } from '../../../../commons/editor/EditorTypes';
+import { SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -33,12 +33,12 @@ import {
   updateEditorValue,
   updateHasUnsavedChanges,
   updateReplValue
-} from 'src/commons/workspace/WorkspaceActions';
+} from '../../../../commons/workspace/WorkspaceActions';
 import {
   WorkspaceLocation,
   WorkspaceLocations,
   WorkspaceState
-} from 'src/commons/workspace/WorkspaceTypes';
+} from '../../../../commons/workspace/WorkspaceTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
 
@@ -110,7 +110,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const GradingWorkspaceContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(GradingWorkspace);
+
+export default GradingWorkspaceContainer;

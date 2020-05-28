@@ -4,8 +4,7 @@ import { SourceError } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
-import { Testcase, TestcaseTypes } from 'src/commons/assessment/AssessmentTypes';
-
+import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import CanvasOutput from './CanvasOutput';
 
 type AutograderCardProps = DispatchProps & StateProps;

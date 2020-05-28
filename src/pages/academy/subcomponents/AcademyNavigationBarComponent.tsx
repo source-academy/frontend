@@ -4,12 +4,11 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Role } from 'src/commons/application/ApplicationTypes';
-import { AssessmentCategories } from 'src/commons/assessment/AssessmentTypes';
-import NotificationBadgeContainer from 'src/commons/notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsByType } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
-
+import { Role } from '../../../commons/application/ApplicationTypes';
+import { AssessmentCategories } from '../../../commons/assessment/AssessmentTypes';
+import NotificationBadgeContainer from '../../../commons/notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsByType } from '../../../commons/notificationBadge/NotificationBadgeHelper';
+import { assessmentCategoryLink } from '../../../utils/paramParseHelpers';
 import DefaultChapterContainer from './AcademyDefaultChapterContainer';
 
 type OwnProps = {

@@ -18,18 +18,18 @@ import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
-import defaultCoverImage from 'src/assets/default_cover_image.jpg';
+import defaultCoverImage from '../../assets/default_cover_image.jpg';
+import { DEFAULT_QUESTION_ID } from '../../utils/constants';
+import { getPrettyDate } from '../../utils/dateHelpers';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import {
   AssessmentCategories,
   AssessmentCategory,
   AssessmentOverview
-} from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
-import Markdown from 'src/commons/Markdown';
-import { exportXml, storeLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
-import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
-import { getPrettyDate } from 'src/utils/dateHelpers';
-import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+} from '../assessment/AssessmentTypes';
+import controlButton from '../ControlButton';
+import Markdown from '../Markdown';
+import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
 
 type EditingOverviewCardProps = DispatchProps & StateProps;
 

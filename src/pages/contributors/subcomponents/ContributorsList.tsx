@@ -2,7 +2,7 @@ import { Card, Elevation } from '@blueprintjs/core';
 import { H2, H3, H5 } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { Contributor, ContributorsState, Repo } from 'src/features/contributors/ContributorsTypes';
+import { Contributor, ContributorsState, Repo } from '../../../features/contributors/ContributorsTypes';
 import { fetchContributors, fetchRepos } from './ContributorsGithubApi';
 
 class ContributorsList extends React.Component<{}, ContributorsState> {

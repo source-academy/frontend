@@ -1,5 +1,5 @@
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { Question } from 'src/commons/assessment/AssessmentTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { Question } from '../assessment/AssessmentTypes';
 
 export const EDITING_ID = -1;
 

@@ -4,9 +4,9 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
-import ContentDisplay from 'src/commons/ContentDisplay';
-import { GroupOverview, LeaderBoardInfo } from 'src/features/dashboard/DashboardTypes';
-import { GradingOverview } from 'src/features/grading/GradingTypes';
+import ContentDisplay from '../../../commons/ContentDisplay';
+import { GroupOverview, LeaderBoardInfo } from '../../../features/dashboard/DashboardTypes';
+import { GradingOverview } from '../../../features/grading/GradingTypes';
 
 type DashboardProps = DispatchProps & StateProps;
 

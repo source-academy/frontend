@@ -1,9 +1,9 @@
 import { Button, Card, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { IMCQQuestion } from 'src/commons/assessment/AssessmentTypes';
-import Markdown from 'src/commons/Markdown';
-import { showSuccessMessage, showWarningMessage } from 'src/utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
+import { IMCQQuestion } from '../assessment/AssessmentTypes';
+import Markdown from '../Markdown';
 
 export type MCQChooserProps = {
   mcq: IMCQQuestion;

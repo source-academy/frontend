@@ -3,7 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import { history } from '../../utils/history';
+import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -13,38 +14,37 @@ import {
   Question,
   QuestionTypes,
   Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { ClearButton } from 'src/commons/controlBar/ClearButton';
-import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import { EvalButton } from 'src/commons/controlBar/EvalButton';
-import { NextButton } from 'src/commons/controlBar/NextButton';
-import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
-import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
-import { ResetButton } from 'src/commons/controlBar/ResetButton';
-import { RunButton } from 'src/commons/controlBar/RunButton';
-import { SaveButton } from 'src/commons/controlBar/SaveButton';
-import { ToggleEditModeButton } from 'src/commons/controlBar/ToggleEditModeButton';
-import controlButton from 'src/commons/ControlButton';
-import { AutograderTab } from 'src/commons/editingWorkspaceSideContent/AutograderTab';
-import { DeploymentTab } from 'src/commons/editingWorkspaceSideContent/DeploymentTab';
-import { GradingTab } from 'src/commons/editingWorkspaceSideContent/GradingTab';
-import { ManageQuestionTab } from 'src/commons/editingWorkspaceSideContent/ManageQuestionTab';
-import { MCQQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/MCQQuestionTemplateTab';
-import { ProgrammingQuestionTemplateTab } from 'src/commons/editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
-import { TextAreaContent } from 'src/commons/editingWorkspaceSideContent/TextAreaContent';
-import { Position } from 'src/commons/editor/EditorTypes';
-import Markdown from 'src/commons/Markdown';
-import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+} from '../assessment/AssessmentTypes';
+import { ClearButton } from '../controlBar/ClearButton';
+import { ControlBarProps } from '../controlBar/ControlBarComponent';
+import { EvalButton } from '../controlBar/EvalButton';
+import { NextButton } from '../controlBar/NextButton';
+import { PreviousButton } from '../controlBar/PreviousButton';
+import { QuestionViewButton } from '../controlBar/QuestionViewButton';
+import { ResetButton } from '../controlBar/ResetButton';
+import { RunButton } from '../controlBar/RunButton';
+import { SaveButton } from '../controlBar/SaveButton';
+import { ToggleEditModeButton } from '../controlBar/ToggleEditModeButton';
+import controlButton from '../ControlButton';
+import { AutograderTab } from '../editingWorkspaceSideContent/AutograderTab';
+import { DeploymentTab } from '../editingWorkspaceSideContent/DeploymentTab';
+import { GradingTab } from '../editingWorkspaceSideContent/GradingTab';
+import { ManageQuestionTab } from '../editingWorkspaceSideContent/ManageQuestionTab';
+import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/MCQQuestionTemplateTab';
+import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/ProgrammingQuestionTemplateTab';
+import { TextAreaContent } from '../editingWorkspaceSideContent/TextAreaContent';
+import { Position } from '../editor/EditorTypes';
+import Markdown from '../Markdown';
+import { SideContentProps } from '../sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import ToneMatrix from '../sideContent/ToneMatrix';
+import Workspace, { WorkspaceProps } from '../workspace/WorkspaceComponent';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import {
   retrieveLocalAssessment,
   storeLocalAssessment,
   storeLocalAssessmentOverview
-} from 'src/commons/XMLParser/XMLParserHelper';
-import { history } from 'src/utils/history';
+} from '../XMLParser/XMLParserHelper';
 
 export type EditingWorkspaceProps = DispatchProps & StateProps & OwnProps;
 

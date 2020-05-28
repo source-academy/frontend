@@ -14,7 +14,11 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
+import { beforeNow } from '../../utils/dateHelpers';
+import { history } from '../../utils/history';
+import { showWarningMessage } from '../../utils/notification';
+import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -25,31 +29,28 @@ import {
   Question,
   QuestionTypes,
   Testcase
-} from 'src/commons/assessment/AssessmentTypes';
-import { ClearButton } from 'src/commons/controlBar/ClearButton';
-import { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import { EvalButton } from 'src/commons/controlBar/EvalButton';
-import { NextButton } from 'src/commons/controlBar/NextButton';
-import { PreviousButton } from 'src/commons/controlBar/PreviousButton';
-import { QuestionViewButton } from 'src/commons/controlBar/QuestionViewButton';
-import { ResetButton } from 'src/commons/controlBar/ResetButton';
-import { RunButton } from 'src/commons/controlBar/RunButton';
-import { SaveButton } from 'src/commons/controlBar/SaveButton';
-import controlButton from 'src/commons/ControlButton';
-import { Position } from 'src/commons/editor/EditorTypes';
-import Markdown from 'src/commons/Markdown';
-import Autograder from 'src/commons/sideContent/Autograder';
-import { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import ToneMatrix from 'src/commons/sideContent/ToneMatrix';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
+} from '../assessment/AssessmentTypes';
+import { ClearButton } from '../controlBar/ClearButton';
+import { ControlBarProps } from '../controlBar/ControlBarComponent';
+import { EvalButton } from '../controlBar/EvalButton';
+import { NextButton } from '../controlBar/NextButton';
+import { PreviousButton } from '../controlBar/PreviousButton';
+import { QuestionViewButton } from '../controlBar/QuestionViewButton';
+import { ResetButton } from '../controlBar/ResetButton';
+import { RunButton } from '../controlBar/RunButton';
+import { SaveButton } from '../controlBar/SaveButton';
+import controlButton from '../ControlButton';
+import { Position } from '../editor/EditorTypes';
+import Markdown from '../Markdown';
+import Autograder from '../sideContent/Autograder';
+import { SideContentProps } from '../sideContent/SideContentComponent';
+import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import ToneMatrix from '../sideContent/ToneMatrix';
+import Workspace, { WorkspaceProps } from '../workspace/WorkspaceComponent';
+import { WorkspaceState } from '../workspace/WorkspaceTypes';
+
 import ChatApp from 'src/containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from 'src/utils/constants';
-import { beforeNow } from 'src/utils/dateHelpers';
-import { history } from 'src/utils/history';
-import { showWarningMessage } from 'src/utils/notification';
-import { assessmentCategoryLink } from 'src/utils/paramParseHelpers';
+import { USE_CHATKIT } from 'src/utils/constants'; // TODO: Remove
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 

@@ -5,21 +5,21 @@ import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { AutorunButtons } from 'src/commons/controlBar/AutorunButtons';
-import { ChapterSelect } from 'src/commons/controlBar/ChapterSelect';
-import { ClearButton } from 'src/commons/controlBar/ClearButton';
-import { EvalButton } from 'src/commons/controlBar/EvalButton';
-import { ExternalLibrarySelect } from 'src/commons/controlBar/ExternalLibrarySelect';
-import { Position } from 'src/commons/editor/EditorTypes';
-import EnvVisualizer from 'src/commons/sideContent/EnvVisualizer';
-import Inspector from 'src/commons/sideContent/Inspector';
-import ListVisualizer from 'src/commons/sideContent/ListVisualizer';
-import { SideContentTab, SideContentType } from 'src/commons/sideContent/SideContentTypes';
-import SourcecastEditor, { SourcecastEditorProps } from 'src/commons/sourcecast/SourcecastEditor';
-import SourcecastTable from 'src/commons/sourcecast/SourcecastTable';
-import Workspace, { WorkspaceProps } from 'src/commons/workspace/WorkspaceComponent';
+import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { AutorunButtons } from '../../../commons/controlBar/AutorunButtons';
+import { ChapterSelect } from '../../../commons/controlBar/ChapterSelect';
+import { ClearButton } from '../../../commons/controlBar/ClearButton';
+import { EvalButton } from '../../../commons/controlBar/EvalButton';
+import { ExternalLibrarySelect } from '../../../commons/controlBar/ExternalLibrarySelect';
+import { Position } from '../../../commons/editor/EditorTypes';
+import EnvVisualizer from '../../../commons/sideContent/EnvVisualizer';
+import Inspector from '../../../commons/sideContent/Inspector';
+import ListVisualizer from '../../../commons/sideContent/ListVisualizer';
+import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
+import SourcecastEditor, { SourcecastEditorProps } from '../../../commons/sourcecast/SourcecastEditor';
+import SourcecastTable from '../../../commons/sourcecast/SourcecastTable';
+import Workspace, { WorkspaceProps } from '../../../commons/workspace/WorkspaceComponent';
 import {
   CodeDelta,
   Input,
@@ -28,11 +28,10 @@ import {
   PlaybackStatus,
   RecordingStatus,
   SourcecastData
-} from 'src/features/sourcecast/SourcecastTypes';
+} from '../../../features/sourcecast/SourcecastTypes';
 import SourcecastControlbar, {
   SourcecastControlbarProps
-} from 'src/pages/sourcecast/subcomponents/SourcecastControlbar';
-
+} from '../../sourcecast/subcomponents/SourcecastControlbar';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
 type SourcereelProps = DispatchProps & StateProps;

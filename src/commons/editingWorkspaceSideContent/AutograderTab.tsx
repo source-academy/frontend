@@ -7,8 +7,8 @@ import {
   IProgrammingQuestion,
   Testcase,
   testcaseTemplate
-} from 'src/commons/assessment/AssessmentTypes';
-import controlButton from 'src/commons/ControlButton';
+} from '../assessment/AssessmentTypes';
+import controlButton from '../ControlButton';
 
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './TextAreaContent';

@@ -7,7 +7,7 @@ import {
   External,
   externalLibraries,
   ExternalLibraryName
-} from 'src/commons/application/types/ExternalTypes';
+} from '../application/types/ExternalTypes';
 
 type ExternalLibrarySelectProps = DispatchProps & StateProps;
 

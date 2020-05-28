@@ -3,10 +3,10 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import controlButton from 'src/commons/ControlButton';
-import { filterNotificationsBySubmission } from 'src/commons/notificationBadge/NotificationBadgeHelper';
-import { NotificationFilterFunction } from 'src/commons/notificationBadge/NotificationBadgeTypes';
-import { GradingOverviewWithNotifications } from 'src/features/grading/GradingTypes';
+import controlButton from '../../../../commons/ControlButton';
+import { filterNotificationsBySubmission } from '../../../../commons/notificationBadge/NotificationBadgeHelper';
+import { NotificationFilterFunction } from '../../../../commons/notificationBadge/NotificationBadgeTypes';
+import { GradingOverviewWithNotifications } from '../../../../features/grading/GradingTypes';
 
 type EditGradingCellProps = DispatchProps & StateProps;
 

@@ -2,15 +2,14 @@ import { Drawer, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { Role } from 'src/commons/application/ApplicationTypes';
+import { Role } from '../application/ApplicationTypes';
 import {
   AssessmentCategories,
   AssessmentCategory,
   AssessmentOverview,
   AssessmentStatuses,
   GradingStatuses
-} from 'src/commons/assessment/AssessmentTypes';
-
+} from '../assessment/AssessmentTypes';
 import ProfileCard from './ProfileCard';
 
 type ProfileProps = DispatchProps & StateProps & OwnProps;

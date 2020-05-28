@@ -2,11 +2,11 @@ import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
-import ControlBar, { ControlBarProps } from 'src/commons/controlBar/ControlBarComponent';
-import Editor, { EditorProps } from 'src/commons/editor/EditorComponent';
-import MCQChooser, { MCQChooserProps } from 'src/commons/MCQChooser/MCQChooserComponent';
-import Repl, { ReplProps } from 'src/commons/repl/ReplComponent';
-import SideContent, { SideContentProps } from 'src/commons/sideContent/SideContentComponent';
+import ControlBar, { ControlBarProps } from '../controlBar/ControlBarComponent';
+import Editor, { EditorProps } from '../editor/EditorComponent';
+import MCQChooser, { MCQChooserProps } from '../MCQChooser/MCQChooserComponent';
+import Repl, { ReplProps } from '../repl/ReplComponent';
+import SideContent, { SideContentProps } from '../sideContent/SideContentComponent';
 
 export type WorkspaceProps = DispatchProps & StateProps;
 

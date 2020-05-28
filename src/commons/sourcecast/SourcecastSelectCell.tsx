@@ -1,8 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import controlButton from 'src/commons/ControlButton';
-import { PlaybackData, SourcecastData } from 'src/features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import controlButton from '../ControlButton';
 
 type SelectCellProps = DispatchProps & StateProps;
 

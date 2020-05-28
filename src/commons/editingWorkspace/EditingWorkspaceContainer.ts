@@ -6,11 +6,11 @@ import {
   beginInterruptExecution,
   debuggerReset,
   debuggerResume
-} from 'src/commons/application/actions/InterpreterActions';
-import { submitAnswer } from 'src/commons/application/actions/SessionActions';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { Library } from 'src/commons/assessment/AssessmentTypes';
-import { Position } from 'src/commons/editor/EditorTypes';
+} from '../application/actions/InterpreterActions';
+import { submitAnswer } from '../application/actions/SessionActions';
+import { OverallState } from '../application/ApplicationTypes';
+import { Library } from '../assessment/AssessmentTypes';
+import { Position } from '../editor/EditorTypes';
 import {
   beginClearContext,
   browseReplHistoryDown,
@@ -32,9 +32,8 @@ import {
   updateHasUnsavedChanges,
   updateReplValue,
   updateWorkspace
-} from 'src/commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-
+} from '../workspace/WorkspaceActions';
+import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
 import EditingWorkspace, { DispatchProps, OwnProps, StateProps } from './EditingWorkspaceComponent';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
@@ -100,7 +99,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-export default connect(
+const EditingWorkspaceContainer = connect(
   mapStateToProps,
   mapDispatchToProps
 )(EditingWorkspace);
+
+export default EditingWorkspaceContainer;

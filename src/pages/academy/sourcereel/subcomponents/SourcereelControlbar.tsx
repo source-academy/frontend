@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import Recorder from 'yareco';
 
-import controlButton from 'src/commons/ControlButton';
-import { Input, PlaybackData, RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
+import controlButton from '../../../../commons/ControlButton';
+import { Input, PlaybackData, RecordingStatus } from '../../../../features/sourcecast/SourcecastTypes';
 
 type SourcereelControlbarProps = DispatchProps & StateProps;
 
@@ -92,11 +92,6 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
       IconNames.REFRESH,
       this.handleRecorderResetting
     );
-    // const RecorderDownloadButton = controlButton(
-    //   'Download',
-    //   IconNames.DOWNLOAD,
-    //   this.handleRecorderDownloading
-    // );
     const RecorderSaveButton = (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Save', IconNames.FLOPPY_DISK)}
@@ -246,23 +241,6 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
       this.props.playbackData
     );
   };
-
-  // private handleRecorderDownloading = () => {
-  //   if (!this.state.fileDataBlob) {
-  //     alert('No recording found');
-  //     return;
-  //   }
-  //   const url = window.URL.createObjectURL(this.state.fileDataBlob);
-  //   this.props.handleRecordAudioUrl(url);
-  //   const click = document.createEvent('Event');
-  //   click.initEvent('click', true, true);
-  //   const link = document.createElement('A') as HTMLAnchorElement;
-  //   link.href = url;
-  //   link.download = 'output.wav';
-  //   link.dispatchEvent(click);
-  //   link.click();
-  //   return link;
-  // };
 
   private renderLabel = (value: number) => {
     const min = Math.floor(value / 60);

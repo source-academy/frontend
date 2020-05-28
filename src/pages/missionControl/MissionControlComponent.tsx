@@ -5,19 +5,17 @@ import {
   AssessmentOverview,
   AssessmentStatuses,
   AssessmentWorkspaceParams
-} from 'src/commons/assessment/AssessmentTypes';
-import ContentDisplay from 'src/commons/ContentDisplay';
-import { EditingOverviewCard } from 'src/commons/editingOverviewCard/EditingOverviewCardComponent';
-import { OwnProps as EditingWorkspaceOwnProps } from 'src/commons/editingWorkspace/EditingWorkspaceComponent';
-import EditingWorkspaceContainer from 'src/commons/editingWorkspace/EditingWorkspaceContainer';
-import MissionCreator from 'src/commons/missionCreator/MissionCreatorContainer';
-import { retrieveLocalAssessmentOverview } from 'src/commons/XMLParser/XMLParserHelper';
-import { DEFAULT_QUESTION_ID } from 'src/utils/constants';
-import { stringParamToInt } from 'src/utils/paramParseHelpers';
+} from '../../commons/assessment/AssessmentTypes';
+import ContentDisplay from '../../commons/ContentDisplay';
+import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOverviewCardComponent';
+import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspaceComponent';
+import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
+import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
+import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
+import { DEFAULT_QUESTION_ID } from '../../utils/constants';
+import { stringParamToInt } from '../../utils/paramParseHelpers';
 
-export type MissionControlProps = DispatchProps &
-  StateProps &
-  RouteComponentProps<AssessmentWorkspaceParams>;
+export type MissionControlProps = DispatchProps & StateProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
