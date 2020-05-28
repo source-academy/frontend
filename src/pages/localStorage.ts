@@ -2,10 +2,10 @@ import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
-import { SessionState } from 'src/commons/application/types/SessionTypes';
-import { showWarningMessage } from 'src/utils/notification';
+import { OverallState } from '../commons/application/ApplicationTypes';
+import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
+import { SessionState } from '../commons/application/types/SessionTypes';
+import { showWarningMessage } from '../utils/notification';
 
 export type SavedState = {
   session: Partial<SessionState>;
