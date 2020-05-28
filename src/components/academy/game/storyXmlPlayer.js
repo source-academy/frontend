@@ -26,6 +26,7 @@ export function initStage(div, canvas, options) {
 
   // create the root of the scene graph
   g_stage = new PIXI.Container();
+
   // create necessary layers
   var locationLayers = LocationManager.init(options.changeLocationHook);
   g_stage.addChild(locationLayers);
@@ -35,7 +36,7 @@ export function initStage(div, canvas, options) {
   var dialogLayers = DialogManager.init(options.playerName, options.playerImageCanvas);
   g_stage.addChild(dialogLayers);
   g_stage.addChild(BlackOverlay.init());
-  g_stage.addChild(StoryManager.showLoadingScreen());
+  g_stage.addChild(StoryManager.init());
 
   function animate() {
     requestAnimationFrame(animate);
@@ -59,9 +60,9 @@ export function loadingScreen(div, canvas) {
   // create the root of the scene graph
   g_stage = new PIXI.Container();
   g_stage.addChild(BlackOverlay.init());
-  const loadingScreen = StoryManager.showLoadingScreen();
+  const loadingScreen = StoryManager.init();
   loadingScreen.visible = true;
-  g_stage.addChild(StoryManager.showLoadingScreen());
+  g_stage.addChild(StoryManager.init());
 
   function animate() {
     requestAnimationFrame(animate);
@@ -76,6 +77,6 @@ export {
   gotoStartLocation,
   gotoLocation
 } from './locationManager/locationManager.js';
-export { loadStory, loadStoryWithoutFirstQuest } from './storyManager/storyManager.js';
+export { loadStoryWithoutFirstQuest } from './storyManager/storyManager.js';
 export { unlockQuest, completeQuest, unlockLastQuest } from './questManager/questManager.js';
 export { sendNotification, changeWristDeviceFunction } from './mapOverlay/mapOverlay.js';

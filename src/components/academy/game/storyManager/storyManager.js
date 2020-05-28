@@ -10,21 +10,20 @@ var SaveManager = require('../saveManager/saveManager.js');
 var BlackOverlay = require('../blackOverlay/blackOverlay.js');
 var SoundManager = require('../soundManager/soundManager.js');
 
-var loadedStories = {};
-var loadingOverlay;
+var g_loadedStories = {};
+var g_loadingOverlay;
 
-export function showLoadingScreen() {
-  const blackOverlay = createBlackOverlay(0.8).setInteractive(true);
-  loadingOverlay = createLoadingScreen();
-  return loadingOverlay;
+export function init() {
+  g_loadingOverlay = createLoadingScreen();
+  return g_loadingOverlay;
 }
 
 export function getLoadedStory(storyId) {
-  return loadedStories[storyId];
+  return g_loadedStories[storyId];
 }
 
 export function unlockFirstQuest(storyId, callback) {
-  var story = loadedStories[storyId];
+  var story = g_loadedStories[storyId];
   if (!story) {
     return;
   }
@@ -40,21 +39,17 @@ export function unlockFirstQuest(storyId, callback) {
   }
 }
 
-export function loadStory(storyXML, callback, startLocation) {
-  callback = callback || Constants.nullFunction;
-  if (loadedStories[storyXML]) {
+export function loadStory(storyId) {
+  if (g_loadedStories[storyId]) {
     return;
   }
-  loadStoryXML([storyXML], true, function() {
-    if (startLocation) {
-      LocationManager.changeStartLocation(startLocation);
-    }
-    unlockFirstQuest(storyXML, LocationManager.verifyGotoStart(callback));
+  loadStoryXML([storyId], true, function() {
+    unlockFirstQuest(storyId, LocationManager.verifyGotoStart());
   });
 }
 
 export function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
-  if (loadedStories[storyXML]) {
+  if (g_loadedStories[storyXML]) {
     return;
   }
   loadStoryXML([storyXML], true, function() {
@@ -66,17 +61,17 @@ export function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
 }
 
 function processStory(story) {
-  if (loadedStories[story.id]) {
+  if (g_loadedStories[story.id]) {
     return;
   }
-  loadedStories[story.id] = story;
+  g_loadedStories[story.id] = story;
   // process quests
   QuestManager.loadQuests(story);
 }
 
 export function loadStoryXML(storyXMLs, willSave, callback) {
   callback = callback || Constants.nullFunction;
-  loadingOverlay.visible = true;
+  g_loadingOverlay.visible = true;
   var downloaded = {};
   var downloadRequestSent = {};
   var willBeDownloaded = storyXMLs.slice();
@@ -88,7 +83,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     }
     // check whether this story has been downloaded or will be downloaded
     var curId = storyXMLs[i];
-    if (loadedStories[curId] || downloadRequestSent[curId]) {
+    if (g_loadedStories[curId] || downloadRequestSent[curId]) {
       download(i + 1, storyXMLs, callback);
       // } else if (loadingStories.indexOf(curId) !== -1) {
       //     throw new Error("Circular dependencies");
@@ -112,7 +107,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
             if (dependencies) {
               storyDependencies[curId] = dependencies.split(' ');
               notDownloading = storyDependencies[curId].filter(function(id) {
-                return !loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
+                return !g_loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
               });
             } else {
               storyDependencies[curId] = [];
@@ -136,7 +131,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
                 makeAjax(false);
               }
             : () => {
-                loadingOverlay.visible = false;
+                g_loadingOverlay.visible = false;
                 console.error('Cannot find story ' + curId);
               }
         });
@@ -152,7 +147,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     function dfs(storyId) {
       if (visiting[storyId]) {
         throw new Error('Circular dependencies');
-      } else if (!(loadedStories[storyId] || visited[storyId])) {
+      } else if (!(g_loadedStories[storyId] || visited[storyId])) {
         visiting[storyId] = true;
         storyDependencies[storyId].forEach(dfs);
         visited[storyId] = true;
@@ -181,19 +176,19 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
         SaveManager.saveLoadStories(sorted);
       }
       SaveManager.updateGameMap();
-      loadingOverlay.visible = false;
+      g_loadingOverlay.visible = false;
       callback();
     });
   });
 }
 
 export function closeStory(storyId, callback) {
-  if (!loadedStories[storyId]) {
+  if (!g_loadedStories[storyId]) {
     return;
   }
   callback = callback || Constants.nullFunction;
   BlackOverlay.blackScreen(function() {
-    loadedStories[storyId] = null;
+    g_loadedStories[storyId] = null;
     QuestManager.unloadQuests(storyId);
     SaveManager.removeActions({ storyId: storyId }, true);
     LocationManager.verifyCurCamLocation();
@@ -277,5 +272,5 @@ function markAssetsToLoad(story, assetsToLoadTable) {
 }
 
 export default {
-  showLoadingScreen
+  init
 };

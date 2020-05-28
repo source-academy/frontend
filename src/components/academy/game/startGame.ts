@@ -3,7 +3,8 @@ import { Story } from '../../../reducers/states';
 import { LINKS } from '../../../utils/constants';
 import { fetchGameData } from './backend/gameState';
 import Constants from './constants/constants';
-import { initStage, loadStory } from './storyXmlPlayer';
+import { loadStory } from './storyManager/storyManager';
+import { initStage } from './storyXmlPlayer';
 import hookHandlers from './utils/hookHandlers';
 
 const config = {
@@ -22,9 +23,9 @@ async function startGame(
   gameState: object,
   missions: IAssessmentOverview[] | undefined
 ) {
-  const xmlFileName: string = await fetchGameData(userStory, gameState, missions);
+  const storyId: string = await fetchGameData(userStory, gameState, missions);
   initStage(div, canvas, { ...config, playerName: username });
-  loadStory(xmlFileName);
+  loadStory(storyId);
 }
 
 export default startGame;

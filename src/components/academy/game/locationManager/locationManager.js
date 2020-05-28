@@ -158,6 +158,7 @@ export function gotoStartLocation(callback, middleSynchronous) {
 
 // return a callback function that check ensure valid current location before proceeding
 export function verifyGotoStart(callback) {
+  callback = callback || Constants.nullFunction;
   return function() {
     if (!verifyCurCamLocation()) {
       gotoStartLocation(callback, function() {
