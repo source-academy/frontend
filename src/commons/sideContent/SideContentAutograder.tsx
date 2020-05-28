@@ -4,10 +4,10 @@ import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
-import AutograderCard from './SideContentAutograderCard';
-import ResultCard from './SideContentResultCard';
+import SideContentAutograderCard from './SideContentAutograderCard';
+import SideContentResultCard from './SideContentResultCard';
 
-export type AutograderProps = DispatchProps & StateProps;
+export type SideContentAutograderProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -23,8 +23,8 @@ type State = {
   showResults: boolean;
 };
 
-class Autograder extends React.Component<AutograderProps, State> {
-  public constructor(props: AutograderProps) {
+class SideContentAutograder extends React.Component<SideContentAutograderProps, State> {
+  public constructor(props: SideContentAutograderProps) {
     super(props);
 
     this.state = {
@@ -78,7 +78,7 @@ class Autograder extends React.Component<AutograderProps, State> {
       this.props.testcases.length > 0 ? (
         [testcasesHeader].concat(
           this.props.testcases.map((testcase, index) => (
-            <AutograderCard
+            <SideContentAutograderCard
               key={index}
               index={index}
               testcase={testcase}
@@ -94,7 +94,7 @@ class Autograder extends React.Component<AutograderProps, State> {
       this.props.autogradingResults.length > 0 ? (
         [resultsHeader].concat(
           this.props.autogradingResults.map((result, index) => (
-            <ResultCard key={index} index={index} result={result} />
+            <SideContentResultCard key={index} index={index} result={result} />
           ))
         )
       ) : (
@@ -130,4 +130,4 @@ class Autograder extends React.Component<AutograderProps, State> {
     });
 }
 
-export default Autograder;
+export default SideContentAutograder;

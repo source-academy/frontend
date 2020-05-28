@@ -5,7 +5,7 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import controlButton from '../ControlButton';
 
-type ShareButtonProps = DispatchProps & StateProps;
+type ControlBarShareButtonProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleGenerateLz?: () => void;
@@ -24,10 +24,10 @@ type State = {
   isLoading: boolean;
 };
 
-export class ShareButton extends React.PureComponent<ShareButtonProps, State> {
+export class ControlBarShareButton extends React.PureComponent<ControlBarShareButtonProps, State> {
   private shareInputElem: React.RefObject<HTMLInputElement>;
 
-  constructor(props: ShareButtonProps) {
+  constructor(props: ControlBarShareButtonProps) {
     super(props);
     this.selectShareInputText = this.selectShareInputText.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -86,7 +86,7 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, State> {
     );
   }
 
-  public componentDidUpdate(prevProps: ShareButtonProps) {
+  public componentDidUpdate(prevProps: ControlBarShareButtonProps) {
     if (this.props.shortURL !== prevProps.shortURL) {
       this.setState({ keyword: '', isLoading: false });
     }

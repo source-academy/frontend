@@ -9,7 +9,7 @@ import {
 } from '../collabEditing/CollabEditingHelper';
 import controlButton from '../ControlButton';
 
-type SessionButtonsProps = DispatchProps & StateProps;
+type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleInitInvite?: (value: string) => void;
@@ -28,10 +28,10 @@ type State = {
   joinElemValue: string;
 };
 
-export class SessionButtons extends React.PureComponent<SessionButtonsProps, State> {
+export class ControlBarSessionButtons extends React.PureComponent<ControlBarSessionButtonsProps, State> {
   private inviteInputElem: React.RefObject<HTMLInputElement>;
 
-  constructor(props: SessionButtonsProps) {
+  constructor(props: ControlBarSessionButtonsProps) {
     super(props);
     this.state = { joinElemValue: '' };
 

@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import controlButton from '../ControlButton';
 
-type ToggleEditModeButtonProps = DispatchProps & StateProps;
+type ControlBarToggleEditModeButtonProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   toggleEditMode?(): void;
@@ -15,7 +15,7 @@ type StateProps = {
   editingMode?: string;
 };
 
-export function ToggleEditModeButton(props: ToggleEditModeButtonProps) {
+export function ControlBarToggleEditModeButton(props: ControlBarToggleEditModeButtonProps) {
   const editMode = props.editingMode === 'question' ? 'Global' : 'Question Specific';
   return (
     <Tooltip content={'Switch to ' + editMode + ' Editing Mode'}>

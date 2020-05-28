@@ -9,7 +9,7 @@ import { GradingCellProps } from '../../../../features/grading/GradingTypes';
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class GradeCell extends React.Component<GradingCellProps, {}> {
+class GradingGradeCell extends React.Component<GradingCellProps, {}> {
   constructor(props: GradingCellProps) {
     super(props);
   }
@@ -34,4 +34,4 @@ class GradeCell extends React.Component<GradingCellProps, {}> {
   }
 }
 
-export default GradeCell;
+export default GradingGradeCell;

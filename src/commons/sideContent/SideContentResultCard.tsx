@@ -3,14 +3,14 @@ import * as React from 'react';
 
 import { AutogradingError, AutogradingResult } from '../assessment/AssessmentTypes';
 
-type ResultCardProps = StateProps;
+type SideContentResultCardProps = StateProps;
 
 type StateProps = {
   index: number;
   result: AutogradingResult;
 };
 
-class ResultCard extends React.Component<ResultCardProps, {}> {
+class SideContentResultCard extends React.Component<SideContentResultCardProps, {}> {
   public render() {
     const buildErrorString = (errors: AutogradingError[]) => {
       return errors
@@ -43,4 +43,4 @@ class ResultCard extends React.Component<ResultCardProps, {}> {
   }
 }
 
-export default ResultCard;
+export default SideContentResultCard;

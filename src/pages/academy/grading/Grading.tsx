@@ -30,13 +30,13 @@ import {
   GradingOverviewWithNotifications
 } from '../../../features/grading/GradingTypes';
 import { stringParamToInt } from '../../../utils/paramParseHelpers';
-import EditGradingCell from './subcomponents/GradingEditGradingCell';
-import GradeCell from './subcomponents/GradingGradeCell';
+import GradingEditGradingCell from './subcomponents/GradingEditGradingCell';
+import GradingGradeCell from './subcomponents/GradingGradeCell';
 import GradingStatusCell from './subcomponents/GradingStatusCell';
-import UnsubmitCell from './subcomponents/GradingUnsubmitCell';
+import GradingUnsubmitCell from './subcomponents/GradingUnsubmitCell';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
-import XPCell from './subcomponents/GradingXPCell';
+import GradingXPCell from './subcomponents/GradingXPCell';
 
 import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
@@ -144,7 +144,7 @@ class Grading extends React.Component<GradingProps, State> {
       },
       {
         headerName: 'Edit',
-        cellRendererFramework: EditGradingCell,
+        cellRendererFramework: GradingEditGradingCell,
         cellRendererParams: {
           handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
         },
@@ -162,7 +162,7 @@ class Grading extends React.Component<GradingProps, State> {
         colId: 'Unsubmit',
         width: 100,
         field: '',
-        cellRendererFramework: UnsubmitCell,
+        cellRendererFramework: GradingUnsubmitCell,
         cellRendererParams: {
           group: this.props.group,
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
@@ -339,7 +339,7 @@ class Grading extends React.Component<GradingProps, State> {
 
   /** Component to render in table - marks */
   private GradingMarks = (props: GradingNavLinkProps) => {
-    return <GradeCell data={props.data} />;
+    return <GradingGradeCell data={props.data} />;
   };
 
   private NotificationBadgeCell = (props: GradingNavLinkProps) => {
@@ -352,7 +352,7 @@ class Grading extends React.Component<GradingProps, State> {
 
   /** Component to render in table - XP */
   private GradingExp = (props: GradingNavLinkProps) => {
-    return <XPCell data={props.data} />;
+    return <GradingXPCell data={props.data} />;
   };
 
   // Forcibly resizes columns to fit the width of the datagrid - prevents datagrid

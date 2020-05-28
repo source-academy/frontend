@@ -7,15 +7,15 @@ import { Variant } from 'js-slang/dist/types';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { AutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
-import { ChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
-import { ClearButton } from '../../../commons/controlBar/ControlBarClearButton';
-import { EvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
-import { ExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from '../../../commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarExternalLibrarySelect } from '../../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { Position } from '../../../commons/editor/EditorTypes';
-import EnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
-import Inspector from '../../../commons/sideContent/SideContentInspector';
-import ListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
+import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEnvVisualizer';
+import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
+import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import SourcecastEditor, { SourcecastEditorProps } from '../../../commons/sourcecast/SourcecastEditor';
 import SourcecastTable from '../../../commons/sourcecast/SourcecastTable';
@@ -137,7 +137,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
       });
     };
     const autorunButtons = (
-      <AutorunButtons
+      <ControlBarAutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
         handleDebuggerReset={this.props.handleDebuggerReset}
         handleDebuggerResume={this.props.handleDebuggerResume}
@@ -164,7 +164,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
     };
 
     const chapterSelect = (
-      <ChapterSelect
+      <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
         sourceVariant={this.props.sourceVariant}
@@ -173,11 +173,11 @@ class Sourcereel extends React.Component<SourcereelProps> {
     );
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <EvalButton
+      <ControlBarEvalButton
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
         key="eval_repl"
@@ -197,7 +197,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
     };
 
     const externalLibrarySelect = (
-      <ExternalLibrarySelect
+      <ControlBarExternalLibrarySelect
         externalLibraryName={this.props.externalLibraryName}
         handleExternalSelect={externalSelectHandler}
         key="external_library"
@@ -339,21 +339,21 @@ const INTRODUCTION = 'Welcome to Sourcereel!';
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <ListVisualizer />,
+  body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
-  body: <Inspector />,
+  body: <SideContentInspector />,
   id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
-  body: <EnvVisualizer />,
+  body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser
 };
 

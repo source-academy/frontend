@@ -12,7 +12,7 @@ import {
 } from '../application/ApplicationTypes';
 import { Chapter } from '../application/types/ChapterTypes';
 
-type ChapterSelectProps = DispatchProps & StateProps;
+type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -24,7 +24,7 @@ type StateProps = {
   key: string;
 };
 
-export function ChapterSelect(props: ChapterSelectProps) {
+export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   const chapters = sourceLanguages.map((lang: SourceLanguage) => {
     return {
       chapter: lang.chapter,

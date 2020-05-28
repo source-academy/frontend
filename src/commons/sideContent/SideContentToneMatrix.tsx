@@ -2,7 +2,7 @@ import { Button, Classes } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-class ToneMatrix extends React.Component<{}, {}> {
+class SideContentToneMatrix extends React.Component<{}, {}> {
   private $container: HTMLElement | null;
 
   public shouldComponentUpdate() {
@@ -44,4 +44,4 @@ class ToneMatrix extends React.Component<{}, {}> {
   }
 }
 
-export default ToneMatrix;
+export default SideContentToneMatrix;

@@ -8,7 +8,7 @@ type State = {
   loading: boolean;
 };
 
-class EnvVisualizer extends React.Component<{}, State> {
+class SideContentEnvVisualizer extends React.Component<{}, State> {
   private $parent: HTMLElement | null;
 
   constructor(props: any) {
@@ -63,4 +63,4 @@ class EnvVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default EnvVisualizer;
+export default SideContentEnvVisualizer;

@@ -5,7 +5,7 @@ import { showSuccessMessage, showWarningMessage } from '../../utils/notification
 import { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 
-export type MCQChooserProps = {
+export type McqChooserProps = {
   mcq: IMCQQuestion;
   handleMCQSubmit: (choiceId: number) => void;
 };
@@ -14,8 +14,8 @@ type State = {
   mcqOption: number | null;
 };
 
-class MCQChooser extends React.PureComponent<MCQChooserProps, State> {
-  constructor(props: MCQChooserProps) {
+class McqChooser extends React.PureComponent<McqChooserProps, State> {
+  constructor(props: McqChooserProps) {
     super(props);
     this.state = {
       mcqOption: props.mcq.answer
@@ -101,4 +101,4 @@ class MCQChooser extends React.PureComponent<MCQChooserProps, State> {
   };
 }
 
-export default MCQChooser;
+export default McqChooser;

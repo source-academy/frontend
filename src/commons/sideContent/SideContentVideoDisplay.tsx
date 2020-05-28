@@ -2,15 +2,15 @@ import { Button, ButtonGroup, Divider, NumericInput, Tooltip } from '@blueprintj
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-export type VideoDisplayMode = 'video' | 'still';
+export type SideContentVideoDisplayMode = 'video' | 'still';
 
 type State = {
   width: number;
   height: number;
-  mode: VideoDisplayMode;
+  mode: SideContentVideoDisplayMode;
 };
 
-class VideoDisplay extends React.Component<{}, State> {
+class SideContentVideoDisplay extends React.Component<{}, State> {
   private $video: HTMLElement | null;
   private $canvas: HTMLElement | null;
   constructor(props: any) {
@@ -18,7 +18,7 @@ class VideoDisplay extends React.Component<{}, State> {
     this.state = {
       width: (window as any)._WIDTH,
       height: (window as any)._HEIGHT,
-      mode: 'video' as VideoDisplayMode
+      mode: 'video' as SideContentVideoDisplayMode
     };
     this.handleWidthChange = this.handleWidthChange.bind(this);
     this.handleHeightChange = this.handleHeightChange.bind(this);
@@ -67,8 +67,8 @@ class VideoDisplay extends React.Component<{}, State> {
       display: 'none'
     };
 
-    const videoIsActive = this.state.mode === ('video' as VideoDisplayMode);
-    const stillIsActive = this.state.mode === ('still' as VideoDisplayMode);
+    const videoIsActive = this.state.mode === ('video' as SideContentVideoDisplayMode);
+    const stillIsActive = this.state.mode === ('still' as SideContentVideoDisplayMode);
 
     return (
       <div className="sa-video">
@@ -139,21 +139,21 @@ class VideoDisplay extends React.Component<{}, State> {
     );
   }
 
-  private swapModes = (mode: VideoDisplayMode) => () => {
+  private swapModes = (mode: SideContentVideoDisplayMode) => () => {
     switch (mode) {
       case 'video':
         this.setState((state: State) => {
-          return { ...state, mode: 'still' as VideoDisplayMode };
+          return { ...state, mode: 'still' as SideContentVideoDisplayMode };
         }, this.handleSnapPicture);
         break;
 
       case 'still':
         this.setState((state: State) => {
-          return { ...state, mode: 'video' as VideoDisplayMode };
+          return { ...state, mode: 'video' as SideContentVideoDisplayMode };
         }, this.handleStartVideo);
         break;
     }
   };
 }
 
-export default VideoDisplay;
+export default SideContentVideoDisplay;

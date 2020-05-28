@@ -8,7 +8,7 @@ type State = {
   loading: boolean;
 };
 
-class ListVisualizer extends React.Component<{}, State> {
+class SideContentListVisualizer extends React.Component<{}, State> {
   private $parent: HTMLElement | null;
 
   constructor(props: any) {
@@ -63,4 +63,4 @@ class ListVisualizer extends React.Component<{}, State> {
   };
 }
 
-export default ListVisualizer;
+export default SideContentListVisualizer;

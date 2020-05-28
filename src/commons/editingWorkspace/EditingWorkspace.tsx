@@ -16,15 +16,15 @@ import {
   Testcase
 } from '../assessment/AssessmentTypes';
 import { ControlBarProps } from '../controlBar/ControlBar';
-import { ClearButton } from '../controlBar/ControlBarClearButton';
-import { EvalButton } from '../controlBar/ControlBarEvalButton';
-import { NextButton } from '../controlBar/ControlBarNextButton';
-import { PreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { QuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ResetButton } from '../controlBar/ControlBarResetButton';
-import { RunButton } from '../controlBar/ControlBarRunButton';
-import { SaveButton } from '../controlBar/ControlBarSaveButton';
-import { ToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
+import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
+import { ControlBarToggleEditModeButton } from '../controlBar/ControlBarToggleEditModeButton';
 import controlButton from '../ControlButton';
 import { AutograderTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentAutograderTab';
 import { DeploymentTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentDeploymentTab';
@@ -36,7 +36,7 @@ import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspace
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
-import ToneMatrix from '../sideContent/SideContentToneMatrix';
+import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
@@ -531,7 +531,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         tabs.push({
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
-          body: <ToneMatrix />,
+          body: <SideContentToneMatrix />,
           id: SideContentType.toneMatrix
         });
       }
@@ -623,11 +623,11 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     };
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <EvalButton
+      <ControlBarEvalButton
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
         key="eval_repl"
@@ -635,7 +635,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     );
 
     const nextButton = (
-      <NextButton
+      <ControlBarNextButton
         onClickNext={onClickNext}
         onClickReturn={onClickReturn}
         questionProgress={questionProgress}
@@ -644,7 +644,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     );
 
     const previousButton = (
-      <PreviousButton
+      <ControlBarPreviousButton
         onClick={onClickPrevious}
         questionProgress={questionProgress}
         key="previous_question"
@@ -652,15 +652,15 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     );
 
     const questionView = (
-      <QuestionViewButton questionProgress={questionProgress} key="question_view" />
+      <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const resetButton = <ResetButton onClick={onClickResetTemplate} key="reset_template" />;
+    const resetButton = <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />;
 
-    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 
     const saveButton = (
-      <SaveButton
+      <ControlButtonSaveButton
         hasUnsavedChanges={this.state.hasUnsavedChanges}
         onClickSave={this.handleSave}
         key="save"
@@ -668,7 +668,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
     );
 
     const toggleEditModeButton = (
-      <ToggleEditModeButton
+      <ControlBarToggleEditModeButton
         editingMode={this.state.editingMode}
         toggleEditMode={this.toggleEditingMode}
         key="toggle_edit_mode"

@@ -13,17 +13,17 @@ import {
   Testcase
 } from '../../../../commons/assessment/AssessmentTypes';
 import { ControlBarProps } from '../../../../commons/controlBar/ControlBar';
-import { ClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
-import { EvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
-import { NextButton } from '../../../../commons/controlBar/ControlBarNextButton';
-import { PreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
-import { QuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
-import { RunButton } from '../../../../commons/controlBar/ControlBarRunButton';
+import { ControlBarClearButton } from '../../../../commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../../../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
+import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
 import { Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
-import Autograder from '../../../../commons/sideContent/SideContentAutograder';
-import ToneMatrix from '../../../../commons/sideContent/SideContentToneMatrix';
+import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
+import SideContentToneMatrix from '../../../../commons/sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
@@ -324,7 +324,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Autograder`,
         iconName: IconNames.AIRPLANE,
         body: (
-          <Autograder
+          <SideContentAutograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
@@ -339,7 +339,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       tabs.push({
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
-        body: <ToneMatrix />,
+        body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
       });
     }
@@ -365,11 +365,11 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const onClickReturn = () => history.push(listingPath);
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <EvalButton
+      <ControlBarEvalButton
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
         key="eval_repl"
@@ -377,7 +377,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     );
 
     const nextButton = (
-      <NextButton
+      <ControlBarNextButton
         onClickNext={onClickNext}
         onClickReturn={onClickReturn}
         questionProgress={questionProgress}
@@ -386,7 +386,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     );
 
     const previousButton = (
-      <PreviousButton
+      <ControlBarPreviousButton
         onClick={onClickPrevious}
         questionProgress={questionProgress}
         key="previous_question"
@@ -394,10 +394,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     );
 
     const questionView = (
-      <QuestionViewButton questionProgress={questionProgress} key="question_view" />
+      <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
-    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 
     return {
       editorButtons: [runButton],

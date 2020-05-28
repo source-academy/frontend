@@ -31,20 +31,20 @@ import {
   Testcase
 } from '../assessment/AssessmentTypes';
 import { ControlBarProps } from '../controlBar/ControlBar';
-import { ClearButton } from '../controlBar/ControlBarClearButton';
-import { EvalButton } from '../controlBar/ControlBarEvalButton';
-import { NextButton } from '../controlBar/ControlBarNextButton';
-import { PreviousButton } from '../controlBar/ControlBarPreviousButton';
-import { QuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
-import { ResetButton } from '../controlBar/ControlBarResetButton';
-import { RunButton } from '../controlBar/ControlBarRunButton';
-import { SaveButton } from '../controlBar/ControlBarSaveButton';
+import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
+import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
+import { ControlBarPreviousButton } from '../controlBar/ControlBarPreviousButton';
+import { ControlBarQuestionViewButton } from '../controlBar/ControlBarQuestionViewButton';
+import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
+import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
+import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
 import { Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
-import Autograder from '../sideContent/SideContentAutograder';
-import ToneMatrix from '../sideContent/SideContentToneMatrix';
+import SideContentAutograder from '../sideContent/SideContentAutograder';
+import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
@@ -368,7 +368,7 @@ class AssessmentWorkspace extends React.Component<
         label: `${props.assessment!.category} Autograder`,
         iconName: IconNames.AIRPLANE,
         body: (
-          <Autograder
+          <SideContentAutograder
             testcases={props.editorTestcases}
             autogradingResults={props.autogradingResults}
             handleTestcaseEval={this.props.handleTestcaseEval}
@@ -419,7 +419,7 @@ class AssessmentWorkspace extends React.Component<
       tabs.push({
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
-        body: <ToneMatrix />,
+        body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix
       });
     }
@@ -486,11 +486,11 @@ class AssessmentWorkspace extends React.Component<
     };
 
     const clearButton = (
-      <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+      <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
     );
 
     const evalButton = (
-      <EvalButton
+      <ControlBarEvalButton
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
         key="eval_repl"
@@ -498,7 +498,7 @@ class AssessmentWorkspace extends React.Component<
     );
 
     const nextButton = (
-      <NextButton
+      <ControlBarNextButton
         onClickNext={
           this.props.assessment!.category === AssessmentCategories.Path
             ? onClickProgress(onClickNext)
@@ -515,7 +515,7 @@ class AssessmentWorkspace extends React.Component<
     );
 
     const previousButton = (
-      <PreviousButton
+      <ControlBarPreviousButton
         onClick={onClickPrevious}
         questionProgress={questionProgress}
         key="previous_question"
@@ -523,20 +523,20 @@ class AssessmentWorkspace extends React.Component<
     );
 
     const questionView = (
-      <QuestionViewButton questionProgress={questionProgress} key="question_view" />
+      <ControlBarQuestionViewButton questionProgress={questionProgress} key="question_view" />
     );
 
     const resetButton =
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
-        <ResetButton onClick={onClickResetTemplate} key="reset_template" />
+        <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = <RunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
+    const runButton = <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />;
 
     const saveButton =
       !beforeNow(this.props.closeDate) &&
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
-        <SaveButton
+        <ControlButtonSaveButton
           hasUnsavedChanges={this.props.hasUnsavedChanges}
           onClickSave={onClickSave}
           key="save"

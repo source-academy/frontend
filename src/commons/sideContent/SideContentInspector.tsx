@@ -5,7 +5,7 @@ type State = {
   loading: boolean;
 };
 
-class Inspector extends React.Component<{}, State> {
+class SideContentInspector extends React.Component<{}, State> {
   private $parent: HTMLElement | null;
 
   constructor(props: any) {
@@ -51,4 +51,4 @@ class Inspector extends React.Component<{}, State> {
   };
 }
 
-export default Inspector;
+export default SideContentInspector;

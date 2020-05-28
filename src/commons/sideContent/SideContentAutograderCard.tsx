@@ -5,9 +5,9 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
-import CanvasOutput from './SideContentCanvasOutput';
+import SideContentCanvasOutput from './SideContentCanvasOutput';
 
-type AutograderCardProps = DispatchProps & StateProps;
+type SideContentAutograderCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleTestcaseEval: (testcaseId: number) => void;
@@ -18,7 +18,7 @@ type StateProps = {
   index: number;
 };
 
-class AutograderCard extends React.Component<AutograderCardProps, {}> {
+class SideContentAutograderCard extends React.Component<SideContentAutograderCardProps, {}> {
   public render() {
     let gradingStatus: string = '';
 
@@ -30,7 +30,7 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
       /** A class which is the output of the show() function */
       const ShapeDrawn = (window as any).ShapeDrawn;
       if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-        return <CanvasOutput canvas={value.$canvas} />;
+        return <SideContentCanvasOutput canvas={value.$canvas} />;
       } else {
         return stringify(value);
       }
@@ -78,4 +78,4 @@ class AutograderCard extends React.Component<AutograderCardProps, {}> {
   };
 }
 
-export default AutograderCard;
+export default SideContentAutograderCard;

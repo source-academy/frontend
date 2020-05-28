@@ -68,7 +68,7 @@ type State = {
   value: number;
 };
 
-class SubstVisualizer extends React.Component<SubstVisualizerProps, State> {
+class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, State> {
   constructor(props: SubstVisualizerProps) {
     super(props);
     this.state = {
@@ -218,4 +218,4 @@ class SubstVisualizer extends React.Component<SubstVisualizerProps, State> {
   };
 }
 
-export default SubstVisualizer;
+export default SideContentSubstVisualizer;

@@ -3,9 +3,9 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from '../ControlButton';
-import { RunButton } from './ControlBarRunButton';
+import { ControlBarRunButton } from './ControlBarRunButton';
 
-type AutorunButtonProps = DispatchProps & StateProps;
+type ControlBarAutorunButtonProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleDebuggerPause: () => void;
@@ -23,7 +23,7 @@ type StateProps = {
   key: string;
 };
 
-export function AutorunButtons(props: AutorunButtonProps) {
+export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
   const toggleAutorunButton = (
     <div className="Switch">
       <Switch label="" checked={props.isEditorAutorun} onChange={props.handleToggleEditorAutorun} />
@@ -50,7 +50,7 @@ export function AutorunButtons(props: AutorunButtonProps) {
     if (props.isDebugging) {
       return null;
     }
-    return <RunButton handleEditorEval={props.handleEditorEval} key="run" />;
+    return <ControlBarRunButton handleEditorEval={props.handleEditorEval} key="run" />;
   };
 
   const pauseButtonGrouping = () => {

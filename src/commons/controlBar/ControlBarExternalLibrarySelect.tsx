@@ -9,7 +9,7 @@ import {
   ExternalLibraryName
 } from '../application/types/ExternalTypes';
 
-type ExternalLibrarySelectProps = DispatchProps & StateProps;
+type ControlBarExternalLibrarySelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleExternalSelect?: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -20,7 +20,7 @@ type StateProps = {
   key: string;
 };
 
-export function ExternalLibrarySelect(props: ExternalLibrarySelectProps) {
+export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrarySelectProps) {
   const iExternals = Array.from(externalLibraries.entries()).map((entry, index) => ({
     name: entry[0] as ExternalLibraryName,
     key: index,

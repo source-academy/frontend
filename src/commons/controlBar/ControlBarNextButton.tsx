@@ -2,9 +2,9 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from '../ControlButton';
-import { ReturnToAcademyButton } from './ControlBarReturnToAcademyButton';
+import { ControlBarReturnToAcademyButton } from './ControlBarReturnToAcademyButton';
 
-type NextButtonProps = DispatchProps & StateProps;
+type ControlBarNextButtonProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   onClickNext?(): any;
@@ -16,9 +16,9 @@ type StateProps = {
   questionProgress: [number, number] | null;
 };
 
-export function NextButton(props: NextButtonProps) {
+export function ControlBarNextButton(props: ControlBarNextButtonProps) {
   return props.questionProgress![0] === props.questionProgress![1] ? (
-    <ReturnToAcademyButton onClick={props.onClickReturn} key="return_to_academy" />
+    <ControlBarReturnToAcademyButton onClick={props.onClickReturn} key="return_to_academy" />
   ) : (
     controlButton('Next', IconNames.ARROW_RIGHT, props.onClickNext, { iconOnRight: true })
   );

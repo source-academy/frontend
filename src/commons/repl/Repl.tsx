@@ -8,7 +8,7 @@ import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
-import CanvasOutput from '../sideContent/SideContentCanvasOutput';
+import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
 
 import ReplInput, { ReplInputProps } from './ReplInput';
 import { OutputProps } from './ReplTypes';
@@ -118,7 +118,7 @@ const renderResult = (value: any) => {
   /** A class which is the output of the show() function */
   const ShapeDrawn = (window as any).ShapeDrawn;
   if (typeof ShapeDrawn !== 'undefined' && value instanceof ShapeDrawn) {
-    return <CanvasOutput canvas={value.$canvas} />;
+    return <SideContentCanvasOutput canvas={value.$canvas} />;
   } else {
     return stringify(value);
   }

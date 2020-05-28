@@ -7,7 +7,7 @@ type State = {
   height: number;
 };
 
-class FaceapiDisplay extends React.Component<{}, State> {
+class SideContentFaceapiDisplay extends React.Component<{}, State> {
   constructor(props: any) {
     super(props);
     this.state = {
@@ -145,4 +145,4 @@ class FaceapiDisplay extends React.Component<{}, State> {
   }
 }
 
-export default FaceapiDisplay;
+export default SideContentFaceapiDisplay;

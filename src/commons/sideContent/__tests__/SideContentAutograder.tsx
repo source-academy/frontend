@@ -4,7 +4,7 @@ import * as React from 'react';
 import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import Autograder, { AutograderProps } from '../SideContentAutograder';
+import SideContentAutograder, { SideContentAutograderProps } from '../SideContentAutograder';
 
 const mockErrors: SourceError[] = [
   {
@@ -84,12 +84,12 @@ const resultCardClasses = ['ResultCard correct', 'ResultCard wrong', 'ResultCard
 */
 
 test('Autograder renders placeholders correctly when testcases and results are empty', () => {
-  const props: AutograderProps = {
+  const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: [],
     handleTestcaseEval: (testcaseId: number) => {}
   };
-  const app = <Autograder {...props} />;
+  const app = <SideContentAutograder {...props} />;
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
@@ -113,12 +113,12 @@ test('Autograder renders placeholders correctly when testcases and results are e
 });
 
 test('Autograder renders public testcases with different statuses correctly', () => {
-  const props: AutograderProps = {
+  const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockPublicTestcases,
     handleTestcaseEval: (testcaseId: number) => {}
   };
-  const app = <Autograder {...props} />;
+  const app = <SideContentAutograder {...props} />;
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect only the header <div> for testcases section to be rendered
@@ -166,12 +166,12 @@ test('Autograder renders public testcases with different statuses correctly', ()
 });
 
 test('Autograder renders hidden testcases with different statuses correctly', () => {
-  const props: AutograderProps = {
+  const props: SideContentAutograderProps = {
     autogradingResults: [],
     testcases: mockHiddenTestcases,
     handleTestcaseEval: (testcaseId: number) => {}
   };
-  const app = <Autograder {...props} />;
+  const app = <SideContentAutograder {...props} />;
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // No autograder result Card components should be rendered
@@ -192,12 +192,12 @@ test('Autograder renders hidden testcases with different statuses correctly', ()
 });
 
 test('Autograder renders autograder results with different statuses correctly', () => {
-  const props: AutograderProps = {
+  const props: SideContentAutograderProps = {
     autogradingResults: mockAutogradingResults,
     testcases: [],
     handleTestcaseEval: (testcaseId: number) => {}
   };
-  const app = <Autograder {...props} />;
+  const app = <SideContentAutograder {...props} />;
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect only the header <div> for autograder results section to be rendered

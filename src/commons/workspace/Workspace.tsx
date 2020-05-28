@@ -4,7 +4,7 @@ import { Prompt } from 'react-router';
 
 import ControlBar, { ControlBarProps } from '../controlBar/ControlBar';
 import Editor, { EditorProps } from '../editor/Editor';
-import MCQChooser, { MCQChooserProps } from '../mcqChooser/McqChooser';
+import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
 import SideContent, { SideContentProps } from '../sideContent/SideContent';
 
@@ -24,7 +24,7 @@ type StateProps = {
   editorHeight?: string | number;
   editorWidth: string;
   hasUnsavedChanges?: boolean;
-  mcqProps?: MCQChooserProps;
+  mcqProps?: McqChooserProps;
   replProps: ReplProps;
   sideContentHeight?: number;
   sideContentProps: SideContentProps;
@@ -185,7 +185,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         />
       );
     } else {
-      return <MCQChooser {...props.mcqProps!} />;
+      return <McqChooser {...props.mcqProps!} />;
     }
   };
 }

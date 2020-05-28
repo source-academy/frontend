@@ -13,23 +13,23 @@ import {
   ExternalLibraryName,
   ExternalLibraryNames
 } from '../../commons/application/types/ExternalTypes';
-import { AutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
-import { ChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
-import { ClearButton } from '../../commons/controlBar/ControlBarClearButton';
-import { EvalButton } from '../../commons/controlBar/ControlBarEvalButton';
-import { ExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
-import { ExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { SessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
-import { ShareButton } from '../../commons/controlBar/ControlBarShareButton';
+import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
+import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
+import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
+import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
+import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
+import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
+import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
 import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
-import EnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
-import FaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
-import Inspector from '../../commons/sideContent/SideContentInspector';
-import ListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
-import SubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
+import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
+import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
+import SideContentInspector from '../../commons/sideContent/SideContentInspector';
+import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
+import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import VideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
+import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { generateSourceIntroduction } from '../../utils/introductionHelper';
 
@@ -122,7 +122,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
 
   public render() {
     const autorunButtons = (
-      <AutorunButtons
+      <ControlBarAutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
         handleDebuggerReset={this.props.handleDebuggerReset}
         handleDebuggerResume={this.props.handleDebuggerResume}
@@ -153,7 +153,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
       this.props.handleChapterSelect(chapter, variant);
     };
     const chapterSelect = (
-      <ChapterSelect
+      <ControlBarChapterSelect
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
         sourceVariant={this.props.sourceVariant}
@@ -163,12 +163,12 @@ class Playground extends React.Component<PlaygroundProps, State> {
 
     const clearButton =
       this.state.selectedTab === SideContentType.substVisualizer ? null : (
-        <ClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
+        <ControlBarClearButton handleReplOutputClear={this.props.handleReplOutputClear} key="clear_repl" />
       );
 
     const evalButton =
       this.state.selectedTab === SideContentType.substVisualizer ? null : (
-        <EvalButton
+        <ControlBarEvalButton
           handleReplEval={this.props.handleReplEval}
           isRunning={this.props.isRunning}
           key="eval_repl"
@@ -178,7 +178,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
     const changeExecutionTimeHandler = (execTime: number) =>
       this.props.handleChangeExecTime(execTime);
     const executionTime = (
-      <ExecutionTime
+      <ControlBarExecutionTime
         execTime={this.props.execTime}
         handleChangeExecTime={changeExecutionTimeHandler}
         key="execution_time"
@@ -188,7 +188,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
     const externalLibrarySelectHandler = ({ name }: { name: ExternalLibraryName }, e: any) =>
       this.props.handleExternalSelect(name);
     const externalLibrarySelect = (
-      <ExternalLibrarySelect
+      <ControlBarExternalLibrarySelect
         externalLibraryName={this.props.externalLibraryName}
         handleExternalSelect={externalLibrarySelectHandler}
         key="external_library"
@@ -196,7 +196,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
     );
 
     const sessionButtons = (
-      <SessionButtons
+      <ControlBarSessionButtons
         editorSessionId={this.props.editorSessionId}
         editorValue={this.props.editorValue}
         handleInitInvite={this.props.handleInitInvite}
@@ -208,7 +208,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
     );
 
     const shareButton = (
-      <ShareButton
+      <ControlBarShareButton
         handleGenerateLz={this.props.handleGenerateLz}
         handleShortenURL={this.props.handleShortenURL}
         handleUpdateShortURL={this.props.handleUpdateShortURL}
@@ -263,7 +263,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
       tabs.push({
         label: 'Substituter',
         iconName: IconNames.FLOW_REVIEW,
-        body: <SubstVisualizer content={this.processStepperOutput(this.props.output)} />,
+        body: <SideContentSubstVisualizer content={this.processStepperOutput(this.props.output)} />,
         id: SideContentType.substVisualizer
       });
     }
@@ -422,33 +422,33 @@ class Playground extends React.Component<PlaygroundProps, State> {
 const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
-  body: <ListVisualizer />,
+  body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <VideoDisplay />
+  body: <SideContentVideoDisplay />
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <FaceapiDisplay />
+  body: <SideContentFaceapiDisplay />
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
-  body: <Inspector />,
+  body: <SideContentInspector />,
   id: SideContentType.inspector
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
-  body: <EnvVisualizer />,
+  body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser
 };
 

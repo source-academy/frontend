@@ -25,7 +25,7 @@ type StateProps = {
  *
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
-class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
+class GradingEditGradingCell extends React.Component<EditGradingCellProps, {}> {
   constructor(props: EditGradingCellProps) {
     super(props);
   }
@@ -50,4 +50,4 @@ class EditGradingCell extends React.Component<EditGradingCellProps, {}> {
   }
 }
 
-export default EditGradingCell;
+export default GradingEditGradingCell;

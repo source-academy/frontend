@@ -22,7 +22,7 @@ type State = {
   isAlertOpen: boolean;
 };
 
-class UnsubmitCell extends React.Component<UnsubmitCellProps, State> {
+class GradingUnsubmitCell extends React.Component<UnsubmitCellProps, State> {
   public constructor(props: UnsubmitCellProps) {
     super(props);
 
@@ -67,4 +67,4 @@ class UnsubmitCell extends React.Component<UnsubmitCellProps, State> {
   private handleUnsubmitAlertClose = () => this.setState({ isAlertOpen: false });
 }
 
-export default UnsubmitCell;
+export default GradingUnsubmitCell;
