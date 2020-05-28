@@ -1,7 +1,6 @@
-
+import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 import * as NotificationHelpers from '../NotificationBadgeHelper';
 import { Notification } from '../NotificationBadgeTypes';
-import { AssessmentCategories } from '../../assessment/AssessmentTypes';
 
 const notificationMission: Notification = {
   id: 1,

@@ -8,7 +8,7 @@ import {
   submitAssessment
 } from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
-import Assessment, { DispatchProps, OwnProps, StateProps } from './AssessmentComponent';
+import Assessment, { DispatchProps, OwnProps, StateProps } from './Assessment';
 import { AssessmentOverview, AssessmentWorkspaceParams } from './AssessmentTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {

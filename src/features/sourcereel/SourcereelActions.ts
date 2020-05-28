@@ -3,11 +3,11 @@ import { action } from 'typesafe-actions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import { Input, PlaybackData } from '../sourcecast/SourcecastTypes';
 
-import { 
-  DELETE_SOURCECAST_ENTRY, 
-  RECORD_INIT, 
-  RECORD_INPUT, 
-  RESET_INPUTS, 
+import {
+  DELETE_SOURCECAST_ENTRY,
+  RECORD_INIT,
+  RECORD_INPUT,
+  RESET_INPUTS,
   SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,

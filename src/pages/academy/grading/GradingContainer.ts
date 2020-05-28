@@ -7,7 +7,7 @@ import {
   unsubmitSubmission
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import Grading, { DispatchProps, StateProps } from './GradingComponent';
+import Grading, { DispatchProps, StateProps } from './Grading';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   gradingOverviews: state.session.gradingOverviews,

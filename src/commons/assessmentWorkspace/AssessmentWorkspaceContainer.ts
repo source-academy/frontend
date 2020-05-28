@@ -35,11 +35,7 @@ import {
   updateReplValue
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceState } from '../workspace/WorkspaceTypes';
-import AssessmentWorkspace, {
-  DispatchProps,
-  OwnProps,
-  StateProps
-} from './AssessmentWorkspaceComponent';
+import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './AssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {

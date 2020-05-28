@@ -11,10 +11,10 @@ import {
   timerStart,
   timerStop
 } from '../SourcereelActions';
-import { 
-  RECORD_INIT, 
-  RECORD_INPUT, 
-  SAVE_SOURCECAST_DATA, 
+import {
+  RECORD_INIT,
+  RECORD_INPUT,
+  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,

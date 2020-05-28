@@ -2,8 +2,12 @@ import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
 import { ErrorSeverity, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
+
 import createContext from 'js-slang/dist/createContext';
 
+import { mockRuntimeContext } from '../../../mocks/context';
+import { mockTestcases } from '../../../mocks/gradingAPI';
+import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
 import {
   beginInterruptExecution,
   debuggerReset,
@@ -14,6 +18,7 @@ import {
   evalTestcaseFailure,
   evalTestcaseSuccess
 } from '../../application/actions/InterpreterActions';
+import { defaultState, OverallState } from '../../application/ApplicationTypes';
 import {
   externalLibraries,
   ExternalLibraryName,
@@ -28,6 +33,7 @@ import {
   EVAL_TESTCASE_FAILURE,
   EVAL_TESTCASE_SUCCESS
 } from '../../application/types/InterpreterTypes';
+import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import {
@@ -42,11 +48,6 @@ import {
   moveCursor,
   sendReplInputToOutput
 } from '../../workspace/WorkspaceActions';
-import { mockRuntimeContext } from '../../../mocks/context';
-import { mockTestcases } from '../../../mocks/gradingAPI';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
-import { defaultState, OverallState } from '../../application/ApplicationTypes';
-import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,

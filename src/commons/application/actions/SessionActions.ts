@@ -18,7 +18,7 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
-  NOTIFY_CHATKIT_USERS, 
+  NOTIFY_CHATKIT_USERS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -42,8 +42,7 @@ export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 
 export const fetchAssessmentOverviews = () => action(FETCH_ASSESSMENT_OVERVIEWS);
 
-export const fetchGrading = (submissionId: number) =>
-  action(FETCH_GRADING, submissionId);
+export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, submissionId);
 
 /**
  * @param filterToGroup - param when set to true, only shows submissions under the group
@@ -115,14 +114,12 @@ export const submitGradingAndContinue = (
     comments
   });
 
-export const updateHistoryHelpers = (loc: string) =>
-  action(UPDATE_HISTORY_HELPERS, loc);
+export const updateHistoryHelpers = (loc: string) => action(UPDATE_HISTORY_HELPERS, loc);
 
 export const updateAssessmentOverviews = (overviews: AssessmentOverview[]) =>
   action(UPDATE_ASSESSMENT_OVERVIEWS, overviews);
 
-export const updateAssessment = (assessment: Assessment) =>
-  action(UPDATE_ASSESSMENT, assessment);
+export const updateAssessment = (assessment: Assessment) => action(UPDATE_ASSESSMENT, assessment);
 
 export const updateGradingOverviews = (overviews: GradingOverview[]) =>
   action(UPDATE_GRADING_OVERVIEWS, overviews);

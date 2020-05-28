@@ -2,7 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchAuth, login } from '../../commons/application/actions/SessionActions';
-import Login, { DispatchProps, OwnProps } from './LoginComponent';
+import Login, { DispatchProps, OwnProps } from './Login';
 
 const mapStateToProps: MapStateToProps<{}, OwnProps, {}> = (_, ownProps) => ownProps;
 

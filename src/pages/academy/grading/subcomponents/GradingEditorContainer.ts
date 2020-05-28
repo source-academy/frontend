@@ -5,7 +5,7 @@ import {
   submitGrading,
   submitGradingAndContinue
 } from '../../../../commons/application/actions/SessionActions';
-import GradingEditor, { DispatchProps } from './GradingEditorComponent';
+import GradingEditor, { DispatchProps } from './GradingEditor';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

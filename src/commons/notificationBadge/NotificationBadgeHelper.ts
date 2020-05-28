@@ -1,7 +1,7 @@
-import { 
+import {
   filterByTypeOptions,
-  Notification, 
-  NotificationFilterFunction 
+  Notification,
+  NotificationFilterFunction
 } from './NotificationBadgeTypes';
 
 /**

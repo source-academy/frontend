@@ -50,7 +50,7 @@ import {
   toggleUsingSubst,
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
-import Playground, { DispatchProps, StateProps } from './PlaygroundComponent';
+import Playground, { DispatchProps, StateProps } from './Playground';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   editorSessionId: state.workspaces.playground.editorSessionId,

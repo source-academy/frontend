@@ -5,10 +5,9 @@ import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
 import { defaultState } from '../commons/application/ApplicationTypes';
-import createRootReducer from '../reducers';
+import createRootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
 import { history as appHistory } from '../utils/history';
-
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
 export const store = createStore(appHistory);

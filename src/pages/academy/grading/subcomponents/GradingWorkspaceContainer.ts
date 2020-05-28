@@ -40,7 +40,7 @@ import {
   WorkspaceState
 } from '../../../../commons/workspace/WorkspaceTypes';
 
-import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspaceComponent';
+import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspace';
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
 

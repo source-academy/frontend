@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { fetchAssessmentOverviews } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import Profile, { DispatchProps, StateProps } from './ProfileComponent';
+import Profile, { DispatchProps, StateProps } from './Profile';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews,

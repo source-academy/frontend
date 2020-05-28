@@ -5,10 +5,10 @@ import { defaultSession } from '../ApplicationTypes';
 import {
   SET_GAME_STATE,
   UPDATE_MATERIAL_DIRECTORY_TREE,
-  UPDATE_MATERIAL_INDEX,
+  UPDATE_MATERIAL_INDEX
 } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
-import { 
+import {
   SessionState,
   SET_TOKENS,
   SET_USER,
@@ -18,7 +18,7 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS
- } from '../types/SessionTypes';
+} from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (
   state = defaultSession,

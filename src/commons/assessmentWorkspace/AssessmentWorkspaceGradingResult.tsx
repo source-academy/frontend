@@ -4,7 +4,7 @@ import * as React from 'react';
 import { getPrettyDate } from '../../utils/dateHelpers';
 import Markdown from '../Markdown';
 
-type GradingResultProps = StateProps;
+type AssessmentWorkspaceGradingResultProps = StateProps;
 
 type StateProps = {
   graderName: string;
@@ -16,8 +16,11 @@ type StateProps = {
   comments?: string;
 };
 
-class AssessmentWorkspaceGradingResult extends React.Component<GradingResultProps, {}> {
-  constructor(props: GradingResultProps) {
+class AssessmentWorkspaceGradingResult extends React.Component<
+  AssessmentWorkspaceGradingResultProps,
+  {}
+> {
+  constructor(props: AssessmentWorkspaceGradingResultProps) {
     super(props);
   }
 

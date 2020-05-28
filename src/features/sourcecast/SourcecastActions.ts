@@ -5,7 +5,7 @@ import {
   CodeDelta,
   FETCH_SOURCECAST_INDEX,
   Input,
-  PlaybackData, 
+  PlaybackData,
   PlaybackStatus,
   SET_CODE_DELTAS_TO_APPLY,
   SET_CURRENT_PLAYER_TIME,

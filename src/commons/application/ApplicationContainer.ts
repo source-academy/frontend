@@ -15,12 +15,9 @@ import {
 } from '../workspace/WorkspaceActions';
 import { WorkspaceLocations } from '../workspace/WorkspaceTypes';
 import { logOut } from './actions/CommonsActions';
-import Application, { DispatchProps, StateProps } from './ApplicationComponent';
+import Application, { DispatchProps, StateProps } from './Application';
 import { OverallState } from './ApplicationTypes';
-import {
-  externalLibraries,
-  ExternalLibraryName
-} from './types/ExternalTypes';
+import { externalLibraries, ExternalLibraryName } from './types/ExternalTypes';
 
 /**
  * Provides the title of the application for display.
