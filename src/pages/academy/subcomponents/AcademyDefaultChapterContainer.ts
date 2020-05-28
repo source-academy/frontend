@@ -6,7 +6,7 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { Chapter } from '../../../commons/application/types/ChapterTypes';
 import { changeChapter, fetchChapter } from '../../../commons/workspace/WorkspaceActions';
 
-import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapterComponent';
+import { DefaultChapter, DispatchProps, StateProps } from './AcademyDefaultChapter';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   sourceChapter: state.workspaces.playground.context.chapter,

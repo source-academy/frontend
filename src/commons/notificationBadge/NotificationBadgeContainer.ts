@@ -3,7 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { acknowledgeNotifications } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
-import NotificationBadge, { DispatchProps, StateProps } from './NotificationBadgeComponent';
+import NotificationBadge, { DispatchProps, StateProps } from './NotificationBadge';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   notifications: state.session.notifications

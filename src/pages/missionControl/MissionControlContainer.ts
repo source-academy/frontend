@@ -7,7 +7,7 @@ import {
   submitAssessment
 } from '../../commons/application/actions/SessionActions';
 import { OverallState, Role } from '../../commons/application/ApplicationTypes';
-import MissionControl, { DispatchProps, StateProps } from './MissionControlComponent';
+import MissionControl, { DispatchProps, StateProps } from './MissionControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = (state, props) => {
   const stateProps: StateProps = {

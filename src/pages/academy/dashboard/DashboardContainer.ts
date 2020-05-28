@@ -4,7 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import { fetchGradingOverviews } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { fetchGroupOverviews } from '../../../features/dashboard/DashboardActions';
-import Dashboard, { DispatchProps, StateProps } from './DashboardComponent';
+import Dashboard, { DispatchProps, StateProps } from './Dashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   gradingOverviews: state.session.gradingOverviews ? state.session.gradingOverviews : [],

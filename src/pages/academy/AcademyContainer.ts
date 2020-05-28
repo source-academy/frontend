@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import { fetchNotifications } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 
-import Academy, { DispatchProps, OwnProps, StateProps } from './AcademyComponent';
+import Academy, { DispatchProps, OwnProps, StateProps } from './Academy';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   historyHelper: state.session.historyHelper

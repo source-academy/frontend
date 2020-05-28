@@ -49,7 +49,7 @@ import {
   PlaybackStatus
 } from '../../features/sourcecast/SourcecastTypes';
 
-import Sourcecast, { DispatchProps, StateProps } from './SourcecastComponent';
+import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,

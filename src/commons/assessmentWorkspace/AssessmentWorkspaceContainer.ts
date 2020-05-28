@@ -39,7 +39,7 @@ import AssessmentWorkspace, {
   DispatchProps,
   OwnProps,
   StateProps
-} from './AssessmentWorkspaceComponent';
+} from './AssessmentWorkspace';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
