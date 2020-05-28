@@ -1,7 +1,7 @@
 import { Card, Elevation } from '@blueprintjs/core';
 import * as React from 'react';
 
-type ContentDisplayProps = {
+export type ContentDisplayProps = {
   fullWidth?: boolean;
   display: JSX.Element;
   loadContentDispatch: () => void;
