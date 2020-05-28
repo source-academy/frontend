@@ -122,12 +122,11 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     } else {
       // download the story
       downloadRequestSent[curId] = true;
-      const makeAjax = isTest => $.ajax({
-        type: 'GET',
-        url: (isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive)
-          + curId + '.story.xml',
-        dataType: 'xml',
-        success: function(xml) {
+      const makeAjax = isTest => {
+        const xhr = new XMLHttpRequest();
+        xhr.open('GET', `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`);
+        xhr.addEventListener('load', () => {
+          var xml = xhr.responseXML;
           var story = xml.children[0];
           downloaded[curId] = story;
           // check and load dependencies
@@ -156,17 +155,17 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
               callback();
             }
           }
-        },
-        error: isTest
-          ? () => {
-              console.log('Trying on live...');
-              makeAjax(false);
-            }
+        });
+        xhr.addEventListener('error', isTest ? () => {
+          console.log('Trying on live...');
+          makeAjax(false);
+        }
           : () => {
-            loadingOverlay.visible = false;
-            console.error('Cannot find story ' + curId);
-          }
-      });
+          loadingOverlay.visible = false;
+          console.error('Cannot find story ' + curId);
+        });
+        xhr.send();
+      }
       makeAjax(!isStudent());
       download(i + 1, storyXMLs, callback);
     }
