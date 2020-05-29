@@ -26,7 +26,7 @@ import {
 } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
 import Markdown from '../Markdown';
-import { DEFAULT_QUESTION_ID } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import { exportXml, storeLocalAssessmentOverview } from '../XMLParser/XMLParserHelper';
@@ -259,7 +259,7 @@ const makeOverviewCardButton = (overview: AssessmentOverview, listingPath: strin
   const label: string = 'Edit mission';
   listingPath = listingPath || '/academy/' + assessmentCategoryLink(overview.category);
   return (
-    <NavLink to={listingPath + `/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}>
+    <NavLink to={listingPath + `/${overview.id.toString()}/${Constants.defaultQuestionId}`}>
       {controlButton(label, IconNames.EDIT)}
     </NavLink>
   );

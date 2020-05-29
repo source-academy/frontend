@@ -12,7 +12,7 @@ import {
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
-import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export default function* PlaygroundSaga(): SagaIterator {
@@ -93,7 +93,7 @@ export async function shortenURLRequest(
     method
   };
   const params = {
-    signature: URL_SHORTENER_SIGNATURE,
+    signature: Constants.urlShortenerSignature,
     action: 'shorturl',
     format: 'json',
     keyword,
@@ -104,7 +104,7 @@ export async function shortenURLRequest(
     .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
     .join('&');
 
-  const resp = await fetch(URL_SHORTENER + '?' + query, fetchOpts);
+  const resp = await fetch(Constants.urlShortener + '?' + query, fetchOpts);
   if (!resp || !resp.ok) {
     return null;
   }

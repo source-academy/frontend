@@ -50,7 +50,7 @@ import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 import ChatApp from '../../containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from '../utils/Constants'; // TODO: Remove
+import Constants from '../utils/Constants'; // TODO: Remove
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
@@ -400,7 +400,7 @@ class AssessmentWorkspace extends React.Component<
         {
           label: `Chat`,
           iconName: IconNames.CHAT,
-          body: USE_CHATKIT ? (
+          body: Constants.useChatkit ? (
             <ChatApp
               assessmentId={this.props.assessment!.id}
               roomId={props.assessment!.questions[questionId].roomId}
@@ -409,7 +409,7 @@ class AssessmentWorkspace extends React.Component<
             <span>Chatkit disabled.</span>
           ),
           id: SideContentType.chat,
-          disabled: !USE_CHATKIT
+          disabled: !Constants.useChatkit
         }
       );
     }

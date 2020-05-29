@@ -19,7 +19,7 @@ import { Variant } from 'js-slang/dist/types';
 
 import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
 import { Documentation } from '../documentation/Documentation';
-import { LINKS } from '../utils/Constants';
+import { Links } from '../utils/Constants';
 import AceRange from './EditorAceRange';
 import { Position } from './EditorTypes';
 
@@ -293,7 +293,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
       this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
     const pos = this.AceEditor.current!.editor.selection.getCursor();
     const token = this.AceEditor.current!.editor.session.getTokenAt(pos.row, pos.column);
-    const url = LINKS.TEXTBOOK;
+    const url = Links.textbook;
 
     const external =
       this.props.externalLibraryName === undefined ? 'NONE' : this.props.externalLibraryName;
@@ -511,7 +511,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
 
   private handleStartCollabEditing = (editor: any) => {
     const ShareAce = new sharedbAce(this.props.editorSessionId!, {
-      WsUrl: 'wss://' + LINKS.SHAREDB_SERVER + 'ws/',
+      WsUrl: 'wss://' + Links.shareDBServer + 'ws/',
       pluginWsUrl: null,
       namespace: 'codepad'
     });

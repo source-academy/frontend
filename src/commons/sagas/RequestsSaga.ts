@@ -20,7 +20,7 @@ import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/Sour
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
-import { BACKEND_URL } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 
 /**
@@ -746,7 +746,7 @@ async function request(
     }
   }
   try {
-    const resp = await fetch(`${BACKEND_URL}/v1/${path}`, fetchOpts);
+    const resp = await fetch(`${Constants.backendUrl}/v1/${path}`, fetchOpts);
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && resp && resp.status === 401) {
