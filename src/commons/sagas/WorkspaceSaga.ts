@@ -22,7 +22,7 @@ import * as Sourceror from 'sourceror-driver';
 
 import * as actions from '../../actions'; // TODO: Fix
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -32,7 +32,7 @@ import {
   inspectorUpdate,
   makeElevatedContext,
   visualiseEnv
-} from '../../utils/slangHelper';
+} from '../utils/JsSlangHelper';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
 import {

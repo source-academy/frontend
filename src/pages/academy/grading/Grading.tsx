@@ -29,7 +29,7 @@ import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from '../../../features/grading/GradingTypes';
-import { stringParamToInt } from '../../../utils/paramParseHelpers';
+import { stringParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingEditGradingCell from './subcomponents/GradingEditGradingCell';
 import GradingGradeCell from './subcomponents/GradingGradeCell';
 import GradingStatusCell from './subcomponents/GradingStatusCell';

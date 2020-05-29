@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { SourceActionType } from '../../../utils/actionsHelper';
+import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import {
   SET_GAME_STATE,

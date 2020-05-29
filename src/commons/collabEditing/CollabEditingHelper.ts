@@ -1,4 +1,4 @@
-import { LINKS } from '../../utils/constants';
+import { LINKS } from '../utils/Constants';
 import { XMLHttpReadyState, XMLHttpStatus } from './CollabEditingTypes';
 
 export function checkSessionIdExists(

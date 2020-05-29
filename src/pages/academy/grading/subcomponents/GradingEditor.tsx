@@ -15,9 +15,9 @@ import { Prompt } from 'react-router';
 
 import controlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
-import { getPrettyDate } from '../../../../utils/dateHelpers';
-import { showSuccessMessage, showWarningMessage } from '../../../../utils/notification';
-import { stringParamToInt } from '../../../../utils/paramParseHelpers';
+import { getPrettyDate } from '../../../../commons/utils/DateHelper';
+import { showSuccessMessage, showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
+import { stringParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;
 

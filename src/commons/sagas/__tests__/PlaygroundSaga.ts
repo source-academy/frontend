@@ -6,7 +6,7 @@ import { call } from 'redux-saga/effects';
 
 import { changeQueryString, updateShortURL } from '../../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   createDefaultWorkspace,
   defaultState,

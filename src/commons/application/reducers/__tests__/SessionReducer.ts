@@ -1,5 +1,5 @@
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
-import { HistoryHelper } from '../../../../utils/history';
+import { HistoryHelper } from '../../../utils/HistoryHelper';
 import {
   Assessment,
   AssessmentCategories,

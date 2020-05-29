@@ -7,7 +7,7 @@ import createSagaMiddleware from 'redux-saga';
 import { defaultState } from '../commons/application/ApplicationTypes';
 import createRootReducer from '../commons/application/reducers/RootReducer';
 import MainSaga from '../commons/sagas/MainSaga';
-import { history as appHistory } from '../utils/history';
+import { history as appHistory } from '../commons/utils/HistoryHelper';
 import { loadStoredState, SavedState, saveState } from './localStorage';
 
 export const store = createStore(appHistory);

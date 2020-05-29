@@ -2,8 +2,8 @@ import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourcecast/SourcecastTypes';
-import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../../utils/constants';
-import { createContext } from '../../utils/slangHelper';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import {

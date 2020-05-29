@@ -28,11 +28,11 @@ import { SideContentTab, SideContentType } from '../../../../commons/sideContent
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
 import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
-import { history } from '../../../../utils/history';
+import { history } from '../../../../commons/utils/HistoryHelper';
 import GradingEditor from './GradingEditorContainer';
 
 import ChatApp from '../../../../containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from '../../../../utils/constants'; // TODO: Remove
+import { USE_CHATKIT } from '../../../../commons/utils/Constants'; // TODO: Remove
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 

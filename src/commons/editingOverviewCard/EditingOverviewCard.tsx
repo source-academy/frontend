@@ -19,9 +19,9 @@ import { NavLink } from 'react-router-dom';
 import Textarea from 'react-textarea-autosize';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { DEFAULT_QUESTION_ID } from '../../utils/constants';
-import { getPrettyDate } from '../../utils/dateHelpers';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { DEFAULT_QUESTION_ID } from '../utils/Constants';
+import { getPrettyDate } from '../utils/DateHelper';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import {
   AssessmentCategories,
   AssessmentCategory,

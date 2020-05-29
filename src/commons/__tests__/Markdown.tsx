@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import * as React from 'react';
 
-import { generateSourceIntroduction } from '../../utils/introductionHelper';
+import { generateSourceIntroduction } from '../utils/IntroductionHelper';
 import Markdown from '../Markdown';
 
 const mockProps = (sourceChapter: number, sourceVariant: string) => {
