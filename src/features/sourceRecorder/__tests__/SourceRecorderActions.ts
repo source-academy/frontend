@@ -1,8 +1,14 @@
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
+  setCodeDeltasToApply,
+  setInputToApply,
+  setSourcecastData,
+  setSourcecastDuration,
+  setSourcecastStatus
+} from '../SourceRecorderActions';
+import {
   CodeDelta,
-  FETCH_SOURCECAST_INDEX,
   Input,
   PlaybackData,
   PlaybackStatus,
@@ -10,31 +16,10 @@ import {
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
-  SET_SOURCECAST_PLAYBACK_STATUS,
-  SourcecastData,
-  UPDATE_SOURCECAST_INDEX
-} from '../../../features/sourcecast/SourcecastTypes';
-import {
-  fetchSourcecastIndex,
-  setCodeDeltasToApply,
-  setInputToApply,
-  setSourcecastData,
-  setSourcecastDuration,
-  setSourcecastStatus,
-  updateSourcecastIndex
-} from '../SourcecastActions';
+  SET_SOURCECAST_PLAYBACK_STATUS
+} from '../SourceRecorderTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
-
-test('fetchSourcecastIndex generates correct action object', () => {
-  const action = fetchSourcecastIndex(sourcecastWorkspace);
-  expect(action).toEqual({
-    type: FETCH_SOURCECAST_INDEX,
-    payload: {
-      workspaceLocation: sourcecastWorkspace
-    }
-  });
-});
 
 test('setCodeDeltasToApply generates correct action object', () => {
   const codeDeltas: CodeDelta[] = [
@@ -149,26 +134,5 @@ test('setSourcecastStatus generates correct action object', () => {
   expect(action).toEqual({
     type: SET_SOURCECAST_PLAYBACK_STATUS,
     payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
-  });
-});
-
-test('updateSourcecastIndex generates correct action object', () => {
-  const sourcecastData: SourcecastData = {
-    title: 'Test Title',
-    description: 'Test Description',
-    inserted_at: '2019-07-17T15:54:57',
-    updated_at: '2019-07-17T15:54:57',
-    playbackData: '{}',
-    id: 1,
-    uploader: {
-      id: 2,
-      name: 'Tester'
-    },
-    url: 'testurl.com'
-  };
-  const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
-  expect(action).toEqual({
-    type: UPDATE_SOURCECAST_INDEX,
-    payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });

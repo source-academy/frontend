@@ -8,7 +8,7 @@ import {
   Input,
   PlaybackData,
   RecordingStatus
-} from '../../../../features/sourcecast/SourcecastTypes';
+} from '../../../../features/sourceRecorder/SourceRecorderTypes';
 
 type SourcereelControlbarProps = DispatchProps & StateProps;
 

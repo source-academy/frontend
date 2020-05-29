@@ -2,10 +2,10 @@ import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import controlButton from '../ControlButton';
 
-type SourcecastDeleteCellProps = DispatchProps & StateProps;
+type SourceRecorderDeleteCellProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleDeleteSourcecastEntry: (id: number) => void;
@@ -19,8 +19,8 @@ type State = {
   dialogOpen: boolean;
 };
 
-class SourcecastDeleteCell extends React.Component<SourcecastDeleteCellProps, State> {
-  public constructor(props: SourcecastDeleteCellProps) {
+class SourceRecorderDeleteCell extends React.Component<SourceRecorderDeleteCellProps, State> {
+  public constructor(props: SourceRecorderDeleteCellProps) {
     super(props);
     this.state = {
       dialogOpen: false
@@ -60,4 +60,4 @@ class SourcecastDeleteCell extends React.Component<SourcecastDeleteCellProps, St
   };
 }
 
-export default SourcecastDeleteCell;
+export default SourceRecorderDeleteCell;

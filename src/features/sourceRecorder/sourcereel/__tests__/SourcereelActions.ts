@@ -1,10 +1,13 @@
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
-import { CodeDelta, Input, PlaybackData } from '../../sourcecast/SourcecastTypes';
+import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import {
+  WorkspaceLocation,
+  WorkspaceLocations
+} from '../../../../commons/workspace/WorkspaceTypes';
+import { saveSourcecastData } from '../../SourceRecorderActions';
+import { CodeDelta, Input, PlaybackData, SAVE_SOURCECAST_DATA } from '../../SourceRecorderTypes';
 import {
   recordInit,
   recordInput,
-  saveSourcecastData,
   timerPause,
   timerReset,
   timerResume,
@@ -14,7 +17,6 @@ import {
 import {
   RECORD_INIT,
   RECORD_INPUT,
-  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,

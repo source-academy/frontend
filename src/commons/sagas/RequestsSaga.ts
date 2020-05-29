@@ -16,7 +16,7 @@ import { MaterialData } from '../../components/material/materialShape';
 import { store } from '../../createStore';
 import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { actions } from '../../utils/actionsHelper';
 import { castLibrary } from '../../utils/castBackend';
 import { BACKEND_URL } from '../../utils/constants';

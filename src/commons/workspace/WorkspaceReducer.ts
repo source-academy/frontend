@@ -1,9 +1,9 @@
 import { Reducer } from 'redux';
 import { Testcase } from '../assessment/AssessmentTypes';
 
-import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
-import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
-import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
+import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
+import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../../utils/actionsHelper';
 import { MAX_BROWSE_INDEX } from '../../utils/constants';
 import { createContext } from '../../utils/slangHelper';

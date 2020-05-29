@@ -2,7 +2,7 @@ import { action } from 'typesafe-actions';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
+import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';

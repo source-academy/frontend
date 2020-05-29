@@ -17,8 +17,13 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
-import SourcecastEditor, { SourcecastEditorProps } from '../../commons/sourcecast/SourcecastEditor';
-import SourcecastTable from '../../commons/sourcecast/SourcecastTable';
+import SourceRecorderControlBar, {
+  SourceRecorderControlBarProps
+} from '../../commons/sourceRecorder/SourceRecorderControlBar';
+import SourceRecorderEditor, {
+  SourceRecorderEditorProps
+} from '../../commons/sourceRecorder/SourceRecorderEditor';
+import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   CodeDelta,
@@ -26,10 +31,7 @@ import {
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from '../../features/sourcecast/SourcecastTypes';
-import SourcecastControlbar, {
-  SourcecastControlbarProps
-} from './subcomponents/SourcecastControlbar';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 
 export type SourcecastProps = DispatchProps & StateProps;
 
@@ -176,7 +178,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
       />
     );
 
-    const editorProps: SourcecastEditorProps = {
+    const editorProps: SourceRecorderEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
@@ -197,7 +199,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
         replButtons: [evalButton, clearButton]
       },
-      customEditor: <SourcecastEditor {...editorProps} />,
+      customEditor: <SourceRecorderEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,
@@ -227,7 +229,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
                       : INTRODUCTION}
                   </Pre>
                 </span>
-                <SourcecastTable
+                <SourceRecorderTable
                   handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
                   handleSetSourcecastData={this.props.handleSetSourcecastData}
                   sourcecastIndex={this.props.sourcecastIndex}
@@ -242,7 +244,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
         ]
       }
     };
-    const sourcecastControlbarProps: SourcecastControlbarProps = {
+    const sourcecastControlbarProps: SourceRecorderControlBarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
       handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
@@ -261,7 +263,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
     };
     return (
       <div className={classNames('Sourcecast', Classes.DARK)}>
-        <SourcecastControlbar {...sourcecastControlbarProps} />
+        <SourceRecorderControlBar {...sourcecastControlbarProps} />
         <Workspace {...workspaceProps} />
       </div>
     );

@@ -1,6 +1,6 @@
-import { defaultWorkspaceManager } from '../../../commons/application/ApplicationTypes';
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
-import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../sourcecast/SourcecastTypes';
+import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
+import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
 import { SourcereelReducer } from '../SourcereelReducer';
 import {
   RECORD_INIT,

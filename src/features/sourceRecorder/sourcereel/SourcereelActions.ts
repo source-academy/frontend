@@ -1,14 +1,12 @@
 import { action } from 'typesafe-actions';
 
-import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import { Input, PlaybackData } from '../sourcecast/SourcecastTypes';
-
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
+import { Input, PlaybackData } from '../SourceRecorderTypes';
 import {
   DELETE_SOURCECAST_ENTRY,
   RECORD_INIT,
   RECORD_INPUT,
   RESET_INPUTS,
-  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
@@ -37,22 +35,6 @@ export const recordInput = (input: Input, workspaceLocation: WorkspaceLocation) 
 export const resetInputs = (inputs: Input[], workspaceLocation: WorkspaceLocation) =>
   action(RESET_INPUTS, {
     inputs,
-    workspaceLocation
-  });
-
-export const saveSourcecastData = (
-  title: string,
-  description: string,
-  audio: Blob,
-  playbackData: PlaybackData,
-  workspaceLocation: WorkspaceLocation
-) =>
-  action(SAVE_SOURCECAST_DATA, {
-    title,
-    description,
-    audio,
-    audioUrl: window.URL.createObjectURL(audio),
-    playbackData,
     workspaceLocation
   });
 

@@ -25,11 +25,9 @@ import {
 import { MaterialData } from '../../components/game-dev/storyShape';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourcecast/SourcecastTypes';
-import {
-  DELETE_SOURCECAST_ENTRY,
-  SAVE_SOURCECAST_DATA
-} from '../../features/sourcereel/SourcereelTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { history } from '../../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import {

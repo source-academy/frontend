@@ -5,12 +5,12 @@ import 'ag-grid/dist/styles/ag-grid.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { getStandardDate } from '../../utils/dateHelpers';
-import SourcastDeleteCell from './SourcecastDeleteCell';
-import SourcecastSelectCell from './SourcecastSelectCell';
+import SourcastDeleteCell from './SourceRecorderDeleteCell';
+import SourceRecorderSelectCell from './SourceRecorderSelectCell';
 
-type SourcecastTableProps = OwnProps;
+type SourceRecorderTableProps = OwnProps;
 
 type OwnProps = {
   handleDeleteSourcecastEntry?: (id: number) => void;
@@ -34,10 +34,10 @@ type State = {
   groupFilterEnabled: boolean;
 };
 
-class SourcecastTable extends React.Component<SourcecastTableProps, State> {
+class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
   private gridApi?: GridApi;
 
-  public constructor(props: SourcecastTableProps) {
+  public constructor(props: SourceRecorderTableProps) {
     super(props);
 
     this.state = {
@@ -45,7 +45,7 @@ class SourcecastTable extends React.Component<SourcecastTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          cellRendererFramework: SourcecastSelectCell,
+          cellRendererFramework: SourceRecorderSelectCell,
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },

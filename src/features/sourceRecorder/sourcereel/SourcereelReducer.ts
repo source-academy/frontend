@@ -1,7 +1,7 @@
 import { Reducer } from 'redux';
 
-import { SourceActionType } from '../../utils/actionsHelper';
-import { RecordingStatus } from '../sourcecast/SourcecastTypes';
+import { SourceActionType } from '../../../utils/actionsHelper';
+import { RecordingStatus } from '../SourceRecorderTypes';
 
 import {
   RECORD_INIT,
