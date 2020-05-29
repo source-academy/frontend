@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { SourceActionType } from '../../../utils/actionsHelper';
+import { SourceActionType } from '../../../commons/utils/ActionsHelper';
 import { RecordingStatus } from '../SourceRecorderTypes';
 
 import {

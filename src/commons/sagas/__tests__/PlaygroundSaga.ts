@@ -6,7 +6,6 @@ import { call } from 'redux-saga/effects';
 
 import { changeQueryString, updateShortURL } from '../../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
 import {
   createDefaultWorkspace,
   defaultState,
@@ -14,6 +13,7 @@ import {
   OverallState
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from '../../application/types/ExternalTypes';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import { WorkspaceLocations } from '../../workspace/WorkspaceTypes';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 

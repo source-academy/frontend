@@ -3,12 +3,12 @@ import { IconName } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import {
   AssessmentCategories,
   AssessmentCategory,
   AssessmentOverview
 } from '../assessment/AssessmentTypes';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 
 type ProfileCardProps = DispatchProps & StateProps;
 

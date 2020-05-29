@@ -14,10 +14,6 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { beforeNow } from '../../utils/dateHelpers';
-import { history } from '../../utils/history';
-import { showWarningMessage } from '../../utils/notification';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -46,11 +42,15 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { beforeNow } from '../utils/DateHelper';
+import { history } from '../utils/HistoryHelper';
+import { showWarningMessage } from '../utils/NotificationsHelper';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 import ChatApp from '../../containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from '../../utils/constants'; // TODO: Remove
+import { USE_CHATKIT } from '../utils/Constants'; // TODO: Remove
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 

@@ -11,9 +11,9 @@ import {
   updateShortURL
 } from '../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/PlaygroundTypes';
-import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../../utils/constants';
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
+import { URL_SHORTENER, URL_SHORTENER_SIGNATURE } from '../utils/Constants';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);

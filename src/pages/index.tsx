@@ -6,9 +6,9 @@ import { Provider } from 'react-redux';
 import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
-import { LINKS, MODULE_BACKEND_URL, SOURCE_ACADEMY_VERSION } from 'src/utils/constants';
-import { history } from 'src/utils/history';
-import registerServiceWorker from 'src/utils/registerServiceWorker';
+import { LINKS, MODULE_BACKEND_URL, SOURCE_ACADEMY_VERSION } from 'src/commons/utils/Constants';
+import { history } from 'src/commons/utils/HistoryHelper';
+import registerServiceWorker from '../commons/utils/RegisterServiceWorker';
 
 import { store } from './createStore';
 import './styles/index.css';

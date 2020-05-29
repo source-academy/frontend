@@ -6,7 +6,7 @@ import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { getStandardDate } from '../../utils/dateHelpers';
+import { getStandardDate } from '../utils/DateHelper';
 import SourcastDeleteCell from './SourceRecorderDeleteCell';
 import SourceRecorderSelectCell from './SourceRecorderSelectCell';
 

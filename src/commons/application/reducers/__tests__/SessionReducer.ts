@@ -1,5 +1,4 @@
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
-import { HistoryHelper } from '../../../../utils/history';
 import {
   Assessment,
   AssessmentCategories,
@@ -8,6 +7,7 @@ import {
   GradingStatuses
 } from '../../../assessment/AssessmentTypes';
 import { Notification } from '../../../notificationBadge/NotificationBadgeTypes';
+import { HistoryHelper } from '../../../utils/HistoryHelper';
 import { defaultSession, GameState, Role, Story } from '../../ApplicationTypes';
 import { LOG_OUT } from '../../types/CommonsTypes';
 import {

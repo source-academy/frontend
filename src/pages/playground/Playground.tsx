@@ -30,8 +30,8 @@ import SideContentListVisualizer from '../../commons/sideContent/SideContentList
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
+import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { generateSourceIntroduction } from '../../utils/introductionHelper';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

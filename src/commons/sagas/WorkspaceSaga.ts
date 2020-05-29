@@ -22,17 +22,6 @@ import * as Sourceror from 'sourceror-driver';
 
 import * as actions from '../../actions'; // TODO: Fix
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
-import {
-  getBlockExtraMethodsString,
-  getDifferenceInMethods,
-  getRestoreExtraMethodsString,
-  getStoreExtraMethodsString,
-  highlightLine,
-  inspectorUpdate,
-  makeElevatedContext,
-  visualiseEnv
-} from '../../utils/slangHelper';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
 import {
@@ -48,6 +37,17 @@ import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentT
 import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import {
+  getBlockExtraMethodsString,
+  getDifferenceInMethods,
+  getRestoreExtraMethodsString,
+  getStoreExtraMethodsString,
+  highlightLine,
+  inspectorUpdate,
+  makeElevatedContext,
+  visualiseEnv
+} from '../utils/JsSlangHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,

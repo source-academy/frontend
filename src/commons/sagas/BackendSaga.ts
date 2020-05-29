@@ -28,8 +28,6 @@ import { Grading, GradingOverview, GradingQuestion } from '../../features/gradin
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { history } from '../../utils/history';
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
 import {
   CHANGE_DATE_ASSESSMENT,
   CREATE_MATERIAL_FOLDER,
@@ -56,6 +54,8 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
+import { history } from '../utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   changeChapter,
   changeDateAssessment,

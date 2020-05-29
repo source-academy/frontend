@@ -14,7 +14,6 @@ import {
 } from '../../../mocks/assessmentAPI';
 import { mockGroupOverviews } from '../../../mocks/groupAPI';
 import { mockNotifications } from '../../../mocks/userAPI';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
 import {
   setTokens,
   setUser,
@@ -42,6 +41,7 @@ import {
   Question,
   SUBMIT_ASSESSMENT
 } from '../../assessment/AssessmentTypes';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_CHAPTER,

@@ -24,9 +24,6 @@ import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { DEFAULT_QUESTION_ID } from '../../utils/constants';
-import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
-import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';
 import AssessmentWorkspaceContainer from '../assessmentWorkspace/AssessmentWorkspaceContainer';
 import ContentDisplay from '../ContentDisplay';
@@ -35,6 +32,9 @@ import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
+import { DEFAULT_QUESTION_ID } from '../utils/Constants';
+import { beforeNow, getPrettyDate } from '../utils/DateHelper';
+import { assessmentCategoryLink, stringParamToInt } from '../utils/ParamParseHelper';
 import {
   AssessmentCategory,
   AssessmentOverview,

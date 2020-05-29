@@ -1,7 +1,7 @@
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { HistoryHelper } from '../../../utils/history';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
+import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
 import { Announcement } from 'src/components/Announcements'; // TODO: Remove

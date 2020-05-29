@@ -8,7 +8,7 @@ import { Role } from '../../../commons/application/ApplicationTypes';
 import { AssessmentCategories } from '../../../commons/assessment/AssessmentTypes';
 import NotificationBadgeContainer from '../../../commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../../commons/notificationBadge/NotificationBadgeHelper';
-import { assessmentCategoryLink } from '../../../utils/paramParseHelpers';
+import { assessmentCategoryLink } from '../../../commons/utils/ParamParseHelper';
 import DefaultChapterContainer from './AcademyDefaultChapterContainer';
 
 type OwnProps = {

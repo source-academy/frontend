@@ -1,6 +1,4 @@
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { MAX_BROWSE_INDEX } from '../../../utils/constants';
-import { createContext } from '../../../utils/slangHelper';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -29,6 +27,8 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
+import { MAX_BROWSE_INDEX } from '../../utils/Constants';
+import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
   BROWSE_REPL_HISTORY_DOWN,
