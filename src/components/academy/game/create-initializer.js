@@ -55,7 +55,7 @@ export default function (StoryXMLPlayer, username, userStory, gameState, mission
             hookHandlers: hookHandlers,
             wristDeviceFunc: openWristDevice,
             playerName: username,
-            playerImageCanvas: $('<canvas />'),
+            playerImageCanvas: document.createElement('canvas'),
             changeLocationHook: function (newLocation) {
                 if (typeof Storage !== 'undefined') {
                     // Code for localStorage/sessionStorage.
