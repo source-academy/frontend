@@ -1,6 +1,7 @@
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
+  saveSourcecastData,
   setCodeDeltasToApply,
   setInputToApply,
   setSourcecastData,
@@ -12,6 +13,7 @@ import {
   Input,
   PlaybackData,
   PlaybackStatus,
+  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
@@ -20,6 +22,36 @@ import {
 } from '../SourceRecorderTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
+const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+
+test('saveSourcecastData generates correct action object', () => {
+  const fakeUrl = 'someFakeAudioUrl.com';
+  const noOp = () => fakeUrl;
+  window.URL.createObjectURL = noOp;
+  const title = 'Test Title';
+  const description = 'Test Description';
+  const audio = new Blob();
+  const playbackData: PlaybackData = {
+    init: {
+      editorValue: 'Editor Init Value',
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE
+    },
+    inputs: []
+  };
+  const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
+  expect(action).toEqual({
+    type: SAVE_SOURCECAST_DATA,
+    payload: {
+      title,
+      description,
+      audio,
+      audioUrl: fakeUrl,
+      playbackData,
+      workspaceLocation: sourcereelWorkspace
+    }
+  });
+});
 
 test('setCodeDeltasToApply generates correct action object', () => {
   const codeDeltas: CodeDelta[] = [
