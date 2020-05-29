@@ -354,7 +354,6 @@
    */
   function drawTree(tree, x, y, layer) {
     var drawer = tree.getDrawer()
-    console.log(drawer.draw);
     drawer.draw(x, y, layer)
 
     layer.draw()
