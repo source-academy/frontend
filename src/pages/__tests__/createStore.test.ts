@@ -4,7 +4,7 @@ import { compressToUTF16 } from 'lz-string';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
 import { DEFAULT_SOURCE_CHAPTER } from '../../commons/utils/Constants';
-import { history } from '../../utils/history';
+import { history } from '../../commons/utils/HistoryHelper';
 import { OverallState, defaultState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 

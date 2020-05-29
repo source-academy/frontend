@@ -6,7 +6,7 @@ import { isAcademyRe } from '../../commons/application/reducers/SessionsReducer'
 import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { AssessmentCategories, AssessmentCategory } from '../../commons/assessment/AssessmentTypes';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
-import { HistoryHelper } from '../../utils/history';
+import { HistoryHelper } from '../../commons/utils/HistoryHelper';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Grading from './grading/GradingContainer';
@@ -95,7 +95,7 @@ class Academy extends React.Component<AcademyProps> {
   /**
    * 1. If user is in /academy.*, redirect to game
    * 2. If not, redirect to the last /acdaemy.* route the user was in
-   * See ../../utils/history.ts for more details
+   * See ../../commons/utils/HistoryHelper.ts for more details
    */
   private dynamicRedirect = (props: StateProps) => {
     const clickedFrom = props.historyHelper.lastGeneralLocations[0];

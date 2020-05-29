@@ -18,9 +18,9 @@ import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
 import { actions } from '../utils/ActionsHelper';
-import { castLibrary } from '../../utils/castBackend';
+import { castLibrary } from '../utils/CastBackend';
 import { BACKEND_URL } from '../utils/Constants';
-import { showWarningMessage } from '../../utils/notification';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 
 /**

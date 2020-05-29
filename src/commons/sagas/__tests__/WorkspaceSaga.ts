@@ -7,7 +7,7 @@ import createContext from 'js-slang/dist/createContext';
 
 import { mockRuntimeContext } from '../../../mocks/context';
 import { mockTestcases } from '../../../mocks/gradingAPI';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginInterruptExecution,
   debuggerReset,

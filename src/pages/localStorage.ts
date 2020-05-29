@@ -5,7 +5,7 @@ import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
-import { showWarningMessage } from '../utils/notification';
+import { showWarningMessage } from '../commons/utils/NotificationsHelper';
 
 export type SavedState = {
   session: Partial<SessionState>;

@@ -7,7 +7,7 @@ import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
 import { LINKS, MODULE_BACKEND_URL, SOURCE_ACADEMY_VERSION } from 'src/commons/utils/Constants';
-import { history } from 'src/utils/history';
+import { history } from 'src/commons/utils/HistoryHelper';
 import registerServiceWorker from 'src/utils/registerServiceWorker';
 
 import { store } from './createStore';

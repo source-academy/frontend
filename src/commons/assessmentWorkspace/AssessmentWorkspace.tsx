@@ -14,9 +14,9 @@ import * as React from 'react';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { beforeNow } from '../../utils/dateHelpers';
-import { history } from '../../utils/history';
-import { showWarningMessage } from '../../utils/notification';
+import { beforeNow } from '../utils/DateHelper';
+import { history } from '../utils/HistoryHelper';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {

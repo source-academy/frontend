@@ -30,8 +30,8 @@ import {
   DELETE_SOURCECAST_ENTRY,
   SAVE_SOURCECAST_DATA
 } from '../../features/sourcereel/SourcereelTypes';
-import { history } from '../../utils/history';
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
+import { history } from '../utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   CHANGE_DATE_ASSESSMENT,
   CREATE_MATERIAL_FOLDER,

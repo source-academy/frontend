@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { history } from '../../utils/history';
+import { history } from '../utils/HistoryHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,

@@ -1,7 +1,7 @@
 import { Button, Card, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { showSuccessMessage, showWarningMessage } from '../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import { IMCQQuestion } from '../assessment/AssessmentTypes';
 import Markdown from '../Markdown';
 

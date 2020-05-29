@@ -14,7 +14,7 @@ import {
 } from '../../../mocks/assessmentAPI';
 import { mockGroupOverviews } from '../../../mocks/groupAPI';
 import { mockNotifications } from '../../../mocks/userAPI';
-import { showSuccessMessage, showWarningMessage } from '../../../utils/notification';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   setTokens,
   setUser,
