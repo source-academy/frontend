@@ -7,7 +7,7 @@ import AssessmentContainer from '../../commons/assessment/AssessmentContainer';
 import { AssessmentCategories, AssessmentCategory } from '../../commons/assessment/AssessmentTypes';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
 import { HistoryHelper } from '../../commons/utils/HistoryHelper';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { assessmentCategoryLink } from '../../commons/utils/ParamParseHelper';
 import DashboardContainer from './dashboard/DashboardContainer';
 import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';

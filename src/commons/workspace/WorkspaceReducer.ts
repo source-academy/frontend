@@ -6,7 +6,7 @@ import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../utils/ActionsHelper';
 import { MAX_BROWSE_INDEX } from '../utils/Constants';
-import { createContext } from '../../utils/slangHelper';
+import { createContext } from '../utils/JsSlangHelper';
 import {
   CodeOutput,
   createDefaultWorkspace,

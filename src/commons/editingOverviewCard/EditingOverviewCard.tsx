@@ -21,7 +21,7 @@ import Textarea from 'react-textarea-autosize';
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
 import { DEFAULT_QUESTION_ID } from '../utils/Constants';
 import { getPrettyDate } from '../utils/DateHelper';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import {
   AssessmentCategories,
   AssessmentCategory,

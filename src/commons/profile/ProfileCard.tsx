@@ -3,7 +3,7 @@ import { IconName } from '@blueprintjs/icons';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import {
   AssessmentCategories,
   AssessmentCategory,

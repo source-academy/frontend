@@ -17,7 +17,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import { beforeNow } from '../utils/DateHelper';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
+import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,

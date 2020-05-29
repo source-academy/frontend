@@ -13,7 +13,7 @@ import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWor
 import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 import { DEFAULT_QUESTION_ID } from '../../commons/utils/Constants';
-import { stringParamToInt } from '../../utils/paramParseHelpers';
+import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 
 export type MissionControlProps = DispatchProps &
   StateProps &

@@ -32,7 +32,7 @@ import {
   inspectorUpdate,
   makeElevatedContext,
   visualiseEnv
-} from '../../utils/slangHelper';
+} from '../utils/JsSlangHelper';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
 import {
