@@ -981,7 +981,6 @@
 
     // update current ID
     currentListVisualizer = layerList.length - 1
-    updateListVisualizerButtons()
   }
   exports.draw = draw
 
@@ -998,27 +997,12 @@
     }
   }
 
-  function updateListVisualizerButtons() {
-    if (currentListVisualizer <= 0) {
-      $('.sa-list-visualizer #previous').attr('disabled', 'disabled')
-    } else {
-      $('.sa-list-visualizer #previous').removeAttr('disabled')
-    }
-
-    if (currentListVisualizer >= layerList.length - 1) {
-      $('.sa-list-visualizer #next').attr('disabled', 'disabled')
-    } else {
-      $('.sa-list-visualizer #next').removeAttr('disabled')
-    }
-  }
-
   function clearListVisualizer() {
     currentListVisualizer = -1
     for (var i = 0; i < layerList.length; i++) {
       layerList[i].hide()
     }
     layerList = []
-    updateListVisualizerButtons()
   }
 	
   function is_function(data) {
@@ -1100,21 +1084,18 @@
     init: function(parent) {
       container.hidden = false
       parent.appendChild(container)
-      updateListVisualizerButtons()
     },
     next: function() {
       if (currentListVisualizer > 0) {
         currentListVisualizer--
       }
       showListVisualizer(currentListVisualizer)
-      updateListVisualizerButtons()
     },
     previous: function() {
       if (currentListVisualizer > 0) {
         currentListVisualizer--
       }
       showListVisualizer(currentListVisualizer)
-      updateListVisualizerButtons()
     }
   }
 
