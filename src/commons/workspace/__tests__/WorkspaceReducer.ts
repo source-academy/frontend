@@ -1,5 +1,5 @@
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { MAX_BROWSE_INDEX } from '../../../utils/constants';
+import { MAX_BROWSE_INDEX } from '../../utils/Constants';
 import { createContext } from '../../../utils/slangHelper';
 import {
   CodeOutput,

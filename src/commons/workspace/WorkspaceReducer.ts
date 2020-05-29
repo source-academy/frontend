@@ -5,7 +5,7 @@ import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
 import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
 import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
 import { SourceActionType } from '../../utils/actionsHelper';
-import { MAX_BROWSE_INDEX } from '../../utils/constants';
+import { MAX_BROWSE_INDEX } from '../utils/Constants';
 import { createContext } from '../../utils/slangHelper';
 import {
   CodeOutput,

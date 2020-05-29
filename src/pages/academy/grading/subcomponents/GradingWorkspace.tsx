@@ -32,7 +32,7 @@ import { history } from '../../../../utils/history';
 import GradingEditor from './GradingEditorContainer';
 
 import ChatApp from '../../../../containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from '../../../../utils/constants'; // TODO: Remove
+import { USE_CHATKIT } from '../../../../commons/utils/Constants'; // TODO: Remove
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
 

@@ -24,7 +24,7 @@ import { RouteComponentProps } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import defaultCoverImage from '../../assets/default_cover_image.jpg';
-import { DEFAULT_QUESTION_ID } from '../../utils/constants';
+import { DEFAULT_QUESTION_ID } from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../../utils/dateHelpers';
 import { assessmentCategoryLink, stringParamToInt } from '../../utils/paramParseHelpers';
 import { OwnProps as AssessmentWorkspaceOwnProps } from '../assessmentWorkspace/AssessmentWorkspace';

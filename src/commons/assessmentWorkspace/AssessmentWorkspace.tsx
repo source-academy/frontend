@@ -50,7 +50,7 @@ import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 import ChatApp from '../../containers/ChatContainer'; // TODO: Remove
-import { USE_CHATKIT } from '../../utils/constants'; // TODO: Remove
+import { USE_CHATKIT } from '../utils/Constants'; // TODO: Remove
 
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 

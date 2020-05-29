@@ -12,7 +12,7 @@ import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorks
 import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
 import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
-import { DEFAULT_QUESTION_ID } from '../../utils/constants';
+import { DEFAULT_QUESTION_ID } from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../utils/paramParseHelpers';
 
 export type MissionControlProps = DispatchProps &

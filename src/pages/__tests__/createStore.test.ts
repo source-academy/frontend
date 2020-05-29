@@ -3,7 +3,7 @@ import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16 } from 'lz-string';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
-import { DEFAULT_SOURCE_CHAPTER } from '../../utils/constants';
+import { DEFAULT_SOURCE_CHAPTER } from '../../commons/utils/Constants';
 import { history } from '../../utils/history';
 import { OverallState, defaultState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';

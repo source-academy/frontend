@@ -1,5 +1,5 @@
 import { mockBackendSaga } from '../../mocks/backend';
-import { USE_BACKEND } from '../../utils/constants';
+import { USE_BACKEND } from '../utils/Constants';
 import BackendSaga from './BackendSaga';
 import LoginSaga from './LoginSaga';
 import PlaygroundSaga from './PlaygroundSaga';

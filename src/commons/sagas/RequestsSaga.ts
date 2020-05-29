@@ -19,7 +19,7 @@ import { Grading, GradingOverview, GradingQuestion } from '../../features/gradin
 import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
 import { actions } from '../../utils/actionsHelper';
 import { castLibrary } from '../../utils/castBackend';
-import { BACKEND_URL } from '../../utils/constants';
+import { BACKEND_URL } from '../utils/Constants';
 import { showWarningMessage } from '../../utils/notification';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 
