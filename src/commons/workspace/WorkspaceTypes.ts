@@ -1,7 +1,7 @@
 import { Context } from 'js-slang';
 
-import { SourcecastWorkspaceState } from '../../features/sourcecast/SourcecastTypes';
-import { SourcereelWorkspaceState } from '../../features/sourcereel/SourcereelTypes';
+import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';

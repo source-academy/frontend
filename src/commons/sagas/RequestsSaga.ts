@@ -16,12 +16,12 @@ import { MaterialData } from '../../components/material/materialShape';
 import { store } from '../../createStore';
 import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import { BACKEND_URL } from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 
 /**
  * @property accessToken - backend access token

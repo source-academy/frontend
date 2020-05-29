@@ -11,9 +11,9 @@ import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOv
 import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspace';
 import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
 import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
-import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 import { DEFAULT_QUESTION_ID } from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
 export type MissionControlProps = DispatchProps &
   StateProps &

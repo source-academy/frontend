@@ -3,22 +3,31 @@ import { action } from 'typesafe-actions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
-  FETCH_SOURCECAST_INDEX,
   Input,
   PlaybackData,
   PlaybackStatus,
+  SAVE_SOURCECAST_DATA,
   SET_CODE_DELTAS_TO_APPLY,
   SET_CURRENT_PLAYER_TIME,
   SET_INPUT_TO_APPLY,
   SET_SOURCECAST_DATA,
   SET_SOURCECAST_PLAYBACK_DURATION,
-  SET_SOURCECAST_PLAYBACK_STATUS,
-  SourcecastData,
-  UPDATE_SOURCECAST_INDEX
-} from './SourcecastTypes';
+  SET_SOURCECAST_PLAYBACK_STATUS
+} from './SourceRecorderTypes';
 
-export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
-  action(FETCH_SOURCECAST_INDEX, {
+export const saveSourcecastData = (
+  title: string,
+  description: string,
+  audio: Blob,
+  playbackData: PlaybackData,
+  workspaceLocation: WorkspaceLocation
+) =>
+  action(SAVE_SOURCECAST_DATA, {
+    title,
+    description,
+    audio,
+    audioUrl: window.URL.createObjectURL(audio),
+    playbackData,
     workspaceLocation
   });
 
@@ -67,14 +76,5 @@ export const setSourcecastStatus = (
 ) =>
   action(SET_SOURCECAST_PLAYBACK_STATUS, {
     playbackStatus,
-    workspaceLocation
-  });
-
-export const updateSourcecastIndex = (
-  index: SourcecastData[],
-  workspaceLocation: WorkspaceLocation
-) =>
-  action(UPDATE_SOURCECAST_INDEX, {
-    index,
     workspaceLocation
   });

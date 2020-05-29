@@ -1,8 +1,8 @@
 import { Divider, HTMLTable, Text } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { getPrettyDate } from '../utils/DateHelper';
 import Markdown from '../Markdown';
+import { getPrettyDate } from '../utils/DateHelper';
 
 type AssessmentWorkspaceGradingResultProps = StateProps;
 

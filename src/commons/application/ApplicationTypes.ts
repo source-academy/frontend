@@ -1,11 +1,11 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { Grading } from '../../features/grading/GradingTypes';
-import { PlaybackStatus, RecordingStatus } from '../../features/sourcecast/SourcecastTypes';
-import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/Constants';
-import { createContext } from '../utils/JsSlangHelper';
+import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
 import {
   WorkspaceLocation,
   WorkspaceLocations,

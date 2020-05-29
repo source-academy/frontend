@@ -1,5 +1,5 @@
-import { ExternalLibraryName } from "../application/types/ExternalTypes";
-import { Library } from "../assessment/AssessmentTypes";
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { Library } from '../assessment/AssessmentTypes';
 
 /**
  * Casts a library returned by an API call to a
@@ -21,4 +21,3 @@ export const castLibrary = (lib: any): Library => ({
     return entry;
   })
 });
-

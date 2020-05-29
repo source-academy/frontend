@@ -1,10 +1,10 @@
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { PlaybackData, SourcecastData } from '../../features/sourcecast/SourcecastTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import controlButton from '../ControlButton';
 
-type SelectCellProps = DispatchProps & StateProps;
+type SourceRecorderSelectCellProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleSetSourcecastData: (
@@ -19,8 +19,8 @@ type StateProps = {
   data: SourcecastData;
 };
 
-class SourcecastSelectCell extends React.Component<SelectCellProps, {}> {
-  public constructor(props: SelectCellProps) {
+class SourceRecorderSelectCell extends React.Component<SourceRecorderSelectCellProps, {}> {
+  public constructor(props: SourceRecorderSelectCellProps) {
     super(props);
   }
 
@@ -38,4 +38,4 @@ class SourcecastSelectCell extends React.Component<SelectCellProps, {}> {
   };
 }
 
-export default SourcecastSelectCell;
+export default SourceRecorderSelectCell;

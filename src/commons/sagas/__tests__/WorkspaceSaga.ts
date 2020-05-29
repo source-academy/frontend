@@ -7,7 +7,6 @@ import createContext from 'js-slang/dist/createContext';
 
 import { mockRuntimeContext } from '../../../mocks/context';
 import { mockTestcases } from '../../../mocks/gradingAPI';
-import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginInterruptExecution,
   debuggerReset,
@@ -36,6 +35,7 @@ import {
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
+import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
   changeExternalLibrary,

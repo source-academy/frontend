@@ -3,7 +3,6 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { history } from '../utils/HistoryHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -38,6 +37,7 @@ import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import { history } from '../utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import {

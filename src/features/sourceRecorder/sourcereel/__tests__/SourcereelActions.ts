@@ -1,10 +1,12 @@
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
-import { CodeDelta, Input, PlaybackData } from '../../sourcecast/SourcecastTypes';
+import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import {
+  WorkspaceLocation,
+  WorkspaceLocations
+} from '../../../../commons/workspace/WorkspaceTypes';
+import { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
 import {
   recordInit,
   recordInput,
-  saveSourcecastData,
   timerPause,
   timerReset,
   timerResume,
@@ -14,7 +16,6 @@ import {
 import {
   RECORD_INIT,
   RECORD_INPUT,
-  SAVE_SOURCECAST_DATA,
   TIMER_PAUSE,
   TIMER_RESET,
   TIMER_RESUME,
@@ -67,35 +68,6 @@ test('recordInput generates correct action object', () => {
     type: RECORD_INPUT,
     payload: {
       input,
-      workspaceLocation: sourcereelWorkspace
-    }
-  });
-});
-
-test('saveSourcecastData generates correct action object', () => {
-  const fakeUrl = 'someFakeAudioUrl.com';
-  const noOp = () => fakeUrl;
-  window.URL.createObjectURL = noOp;
-  const title = 'Test Title';
-  const description = 'Test Description';
-  const audio = new Blob();
-  const playbackData: PlaybackData = {
-    init: {
-      editorValue: 'Editor Init Value',
-      chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE
-    },
-    inputs: []
-  };
-  const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
-  expect(action).toEqual({
-    type: SAVE_SOURCECAST_DATA,
-    payload: {
-      title,
-      description,
-      audio,
-      audioUrl: fakeUrl,
-      playbackData,
       workspaceLocation: sourcereelWorkspace
     }
   });

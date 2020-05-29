@@ -1,37 +1,54 @@
 import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
-  CodeDelta,
-  FETCH_SOURCECAST_INDEX,
-  Input,
-  PlaybackData,
-  PlaybackStatus,
-  SET_CODE_DELTAS_TO_APPLY,
-  SET_INPUT_TO_APPLY,
-  SET_SOURCECAST_DATA,
-  SET_SOURCECAST_PLAYBACK_DURATION,
-  SET_SOURCECAST_PLAYBACK_STATUS,
-  SourcecastData,
-  UPDATE_SOURCECAST_INDEX
-} from '../../../features/sourcecast/SourcecastTypes';
-import {
-  fetchSourcecastIndex,
+  saveSourcecastData,
   setCodeDeltasToApply,
   setInputToApply,
   setSourcecastData,
   setSourcecastDuration,
-  setSourcecastStatus,
-  updateSourcecastIndex
-} from '../SourcecastActions';
+  setSourcecastStatus
+} from '../SourceRecorderActions';
+import {
+  CodeDelta,
+  Input,
+  PlaybackData,
+  PlaybackStatus,
+  SAVE_SOURCECAST_DATA,
+  SET_CODE_DELTAS_TO_APPLY,
+  SET_INPUT_TO_APPLY,
+  SET_SOURCECAST_DATA,
+  SET_SOURCECAST_PLAYBACK_DURATION,
+  SET_SOURCECAST_PLAYBACK_STATUS
+} from '../SourceRecorderTypes';
 
 const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
+const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
 
-test('fetchSourcecastIndex generates correct action object', () => {
-  const action = fetchSourcecastIndex(sourcecastWorkspace);
+test('saveSourcecastData generates correct action object', () => {
+  const fakeUrl = 'someFakeAudioUrl.com';
+  const noOp = () => fakeUrl;
+  window.URL.createObjectURL = noOp;
+  const title = 'Test Title';
+  const description = 'Test Description';
+  const audio = new Blob();
+  const playbackData: PlaybackData = {
+    init: {
+      editorValue: 'Editor Init Value',
+      chapter: 1,
+      externalLibrary: ExternalLibraryNames.NONE
+    },
+    inputs: []
+  };
+  const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
   expect(action).toEqual({
-    type: FETCH_SOURCECAST_INDEX,
+    type: SAVE_SOURCECAST_DATA,
     payload: {
-      workspaceLocation: sourcecastWorkspace
+      title,
+      description,
+      audio,
+      audioUrl: fakeUrl,
+      playbackData,
+      workspaceLocation: sourcereelWorkspace
     }
   });
 });
@@ -149,26 +166,5 @@ test('setSourcecastStatus generates correct action object', () => {
   expect(action).toEqual({
     type: SET_SOURCECAST_PLAYBACK_STATUS,
     payload: { playbackStatus: status, workspaceLocation: sourcecastWorkspace }
-  });
-});
-
-test('updateSourcecastIndex generates correct action object', () => {
-  const sourcecastData: SourcecastData = {
-    title: 'Test Title',
-    description: 'Test Description',
-    inserted_at: '2019-07-17T15:54:57',
-    updated_at: '2019-07-17T15:54:57',
-    playbackData: '{}',
-    id: 1,
-    uploader: {
-      id: 2,
-      name: 'Tester'
-    },
-    url: 'testurl.com'
-  };
-  const action = updateSourcecastIndex([sourcecastData], sourcecastWorkspace);
-  expect(action).toEqual({
-    type: UPDATE_SOURCECAST_INDEX,
-    payload: { index: [sourcecastData], workspaceLocation: sourcecastWorkspace }
   });
 });

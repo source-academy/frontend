@@ -25,11 +25,11 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../../commons/notificationBadge/NotificationBadgeTypes';
+import { stringParamToInt } from '../../../commons/utils/ParamParseHelper';
 import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from '../../../features/grading/GradingTypes';
-import { stringParamToInt } from '../../../commons/utils/ParamParseHelper';
 import GradingEditGradingCell from './subcomponents/GradingEditGradingCell';
 import GradingGradeCell from './subcomponents/GradingGradeCell';
 import GradingStatusCell from './subcomponents/GradingStatusCell';

@@ -12,7 +12,7 @@ import {
   Input,
   KeyboardCommand,
   SelectionRange
-} from '../../features/sourcecast/SourcecastTypes';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Position } from '../editor/EditorTypes';
 
 /**
@@ -23,7 +23,7 @@ import { Position } from '../editor/EditorTypes';
  *           of the editor's content, using `slang`
  * @property editorReadonly - Used for sourcecast only
  */
-export type SourcecastEditorProps = DispatchProps & StateProps;
+export type SourceRecorderEditorProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   getTimerDuration?: () => number;
@@ -53,14 +53,14 @@ type StateProps = {
   sharedbAceIsInviting?: boolean;
 };
 
-class SourcecastEditor extends React.PureComponent<SourcecastEditorProps, {}> {
+class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string, delta: CodeDelta) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
 
-  constructor(props: SourcecastEditorProps) {
+  constructor(props: SourceRecorderEditorProps) {
     super(props);
     this.AceEditor = React.createRef();
     this.ShareAce = null;
@@ -108,7 +108,7 @@ class SourcecastEditor extends React.PureComponent<SourcecastEditorProps, {}> {
     };
   }
 
-  public componentDidUpdate(prevProps: SourcecastEditorProps) {
+  public componentDidUpdate(prevProps: SourceRecorderEditorProps) {
     const { codeDeltasToApply, inputToApply, newCursorPosition } = this.props;
 
     if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {
