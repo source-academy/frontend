@@ -4,8 +4,6 @@ import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
-import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
-
 export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
@@ -37,8 +35,6 @@ export type SessionState = {
   readonly gradings: Map<number, Grading>;
   readonly group: string | null;
   readonly historyHelper: HistoryHelper;
-  readonly materialDirectoryTree: DirectoryData[] | null;
-  readonly materialIndex: MaterialData[] | null;
   readonly maxGrade: number;
   readonly maxXp: number;
   readonly refreshToken?: string;

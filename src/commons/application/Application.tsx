@@ -17,8 +17,6 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
 
-import Material from '../../containers/material/MaterialContainer'; // TODO: Remove
-
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -68,7 +66,6 @@ class Application extends React.Component<ApplicationProps, {}> {
             <Route path="/playground" component={Playground} />
             <Route path="/login" render={toLogin(this.props)} />
             <Route path="/contributors" component={Contributors} />
-            <Route path="/material" component={Material} />
             <Route path="/sourcecast" component={SourcecastContainer} />
             <Route exact={true} path="/" render={this.redirectToPlayground} />
             <Route component={NotFound} />

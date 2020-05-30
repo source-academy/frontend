@@ -111,15 +111,6 @@ const AcademyNavigationBar: React.SFC<OwnProps> = props => (
         </NavLink>
 
         <NavLink
-          to={'/academy/material'}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.CLOUD_UPLOAD} />
-          <div className="navbar-button-text hidden-xs">Upload</div>
-        </NavLink>
-
-        <NavLink
           to={'/academy/grading'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}

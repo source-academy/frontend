@@ -17,12 +17,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
-import {
-  CHANGE_CHAPTER,
-  FETCH_CHAPTER,
-  WorkspaceLocation
-} from '../../commons/workspace/WorkspaceTypes';
-import { MaterialData } from '../../components/game-dev/storyShape';
+import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -30,16 +25,10 @@ import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecord
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
-  CREATE_MATERIAL_FOLDER,
   DELETE_ASSESSMENT,
-  DELETE_MATERIAL,
-  DELETE_MATERIAL_FOLDER,
-  FETCH_MATERIAL_INDEX,
-  FETCH_TEST_STORIES,
   PUBLISH_ASSESSMENT,
   SAVE_USER_STATE,
-  UPLOAD_ASSESSMENT,
-  UPLOAD_MATERIAL
+  UPLOAD_ASSESSMENT
 } from '../application/types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
@@ -59,16 +48,12 @@ import {
   changeChapter,
   changeDateAssessment,
   deleteAssessment,
-  deleteMaterial,
-  deleteMaterialFolder,
   deleteSourcecastEntry,
-  fetchChapter,
   getAssessment,
   getAssessmentOverviews,
   getGrading,
   getGradingOverviews,
   getGroupOverviews,
-  getMaterialIndex,
   getNotifications,
   getSourcecastIndex,
   getUser,
@@ -78,8 +63,6 @@ import {
   postAssessment,
   postAuth,
   postGrading,
-  postMaterial,
-  postMaterialFolder,
   postSourcecast,
   postUnsubmit,
   publishAssessment,
@@ -472,138 +455,6 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/sourcecast');
   });
 
-  yield takeEvery(DELETE_MATERIAL, function*(action: ReturnType<typeof actions.deleteMaterial>) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can delete material.');
-    }
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const { id } = action.payload;
-    const resp: Response = yield deleteMaterial(id, tokens);
-
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-    const materialDirectoryTree = yield select(
-      (state: OverallState) => state.session.materialDirectoryTree!
-    );
-    const directoryLength = materialDirectoryTree.length;
-    const folderId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
-    yield put(actions.fetchMaterialIndex(folderId));
-    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  });
-
-  yield takeEvery(FETCH_MATERIAL_INDEX, function*(
-    action: ReturnType<typeof actions.fetchMaterialIndex>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const { id } = action.payload;
-    const resp = yield call(getMaterialIndex, id, tokens);
-    if (resp) {
-      const directory_tree = resp.directory_tree;
-      const materialIndex = resp.index;
-      yield put(actions.updateMaterialDirectoryTree(directory_tree));
-      yield put(actions.updateMaterialIndex(materialIndex));
-    }
-  });
-
-  yield takeEvery(UPLOAD_MATERIAL, function*(action: ReturnType<typeof actions.uploadMaterial>) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can upload materials.');
-    }
-    const { file, title, description } = action.payload;
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const materialDirectoryTree = yield select(
-      (state: OverallState) => state.session.materialDirectoryTree!
-    );
-    const directoryLength = materialDirectoryTree.length;
-    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
-    const resp = yield postMaterial(file, title, description, parentId, tokens);
-
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-
-    yield put(actions.fetchMaterialIndex(parentId));
-    yield call(showSuccessMessage, 'Saved successfully!', 1000);
-  });
-
-  yield takeEvery(CREATE_MATERIAL_FOLDER, function*(
-    action: ReturnType<typeof actions.createMaterialFolder>
-  ) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can create materials folder.');
-    }
-    const { title } = action.payload;
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const materialDirectoryTree = yield select(
-      (state: OverallState) => state.session.materialDirectoryTree!
-    );
-    const directoryLength = materialDirectoryTree.length;
-    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
-    const resp = yield postMaterialFolder(title, parentId, tokens);
-
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-
-    yield put(actions.fetchMaterialIndex(parentId));
-    yield call(showSuccessMessage, 'Created successfully!', 1000);
-  });
-
-  yield takeEvery(DELETE_MATERIAL_FOLDER, function*(
-    action: ReturnType<typeof actions.deleteMaterial>
-  ) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can delete material folder.');
-    }
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const { id } = action.payload;
-    const resp: Response = yield deleteMaterialFolder(id, tokens);
-
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-
-    const materialDirectoryTree = yield select(
-      (state: OverallState) => state.session.materialDirectoryTree!
-    );
-    const directoryLength = materialDirectoryTree.length;
-    const parentId = !!directoryLength ? materialDirectoryTree[directoryLength - 1].id : -1;
-    yield put(actions.fetchMaterialIndex(parentId));
-    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  });
-
-  yield takeEvery(FETCH_CHAPTER, function*() {
-    const chapter = yield call(fetchChapter);
-
-    if (chapter) {
-      yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
-    }
-  });
-
   yield takeEvery(CHANGE_CHAPTER, function*(action: ReturnType<typeof actions.changeChapter>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
@@ -725,43 +576,11 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.fetchAssessmentOverviews());
   });
 
-  yield takeEvery(FETCH_TEST_STORIES, function*(
+  /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
     action: ReturnType<typeof actions.fetchTestStories>
   ) {
-    const fileName: string = 'Test Stories';
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    let resp = yield call(getMaterialIndex, -1, tokens);
-    if (resp) {
-      let materialIndex = resp.index;
-      let storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
-      if (storyFolder === undefined) {
-        const role = yield select((state: OverallState) => state.session.role!);
-        if (role === Role.Student) {
-          return yield call(showWarningMessage, 'Only staff can create materials folder.');
-        }
-        resp = yield postMaterialFolder(fileName, -1, tokens);
-        if (!resp || !resp.ok) {
-          yield handleResponseError(resp);
-          return;
-        }
-      }
-      resp = yield call(getMaterialIndex, -1, tokens);
-      if (resp) {
-        materialIndex = resp.index;
-        storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
-        resp = yield call(getMaterialIndex, storyFolder.id, tokens);
-        if (resp) {
-          const directory_tree = resp.directory_tree;
-          materialIndex = resp.index;
-          yield put(actions.updateMaterialDirectoryTree(directory_tree));
-          yield put(actions.updateMaterialIndex(materialIndex));
-        }
-      }
-    }
-  });
+    // TODO: implement when stories backend is implemented
+  }); */
 
   yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
     const tokens = yield select((state: OverallState) => ({

@@ -16,7 +16,6 @@ import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 import StoryUpload from '../../containers/game-dev/StoryUploadContainer'; // TODO: Fix
 import Game from '../../containers/GameContainer'; // TODO: Fix
 import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
-import MaterialUploadContainer from '../../containers/material/MaterialUploadContainer'; // TODO: Remove
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
@@ -78,7 +77,6 @@ class Academy extends React.Component<AcademyProps> {
           <Route path="/academy/groundcontrol" component={GroundControl} />
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
-          <Route path={'/academy/material'} component={MaterialUploadContainer} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
           <Route path={'/academy/gamedev'} component={StoryUpload} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />

@@ -275,8 +275,6 @@ export const defaultSession: SessionState = {
     lastAcademyLocations: [null, null],
     lastGeneralLocations: [null, null]
   },
-  materialDirectoryTree: null,
-  materialIndex: null,
   maxGrade: 0,
   maxXp: 0,
   refreshToken: undefined,
