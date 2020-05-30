@@ -48,10 +48,6 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
-
-import ChatApp from '../../containers/ChatContainer'; // TODO: Remove
-import Constants from '../utils/Constants'; // TODO: Remove
-
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
@@ -379,39 +375,22 @@ class AssessmentWorkspace extends React.Component<
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
-      tabs.push(
-        {
-          label: `Report Card`,
-          iconName: IconNames.TICK,
-          body: (
-            <AssessmentWorkspaceGradingResult
-              graderName={props.assessment!.questions[questionId].grader!.name}
-              gradedAt={props.assessment!.questions[questionId].gradedAt!}
-              xp={props.assessment!.questions[questionId].xp}
-              grade={props.assessment!.questions[questionId].grade}
-              maxGrade={props.assessment!.questions[questionId].maxGrade}
-              maxXp={props.assessment!.questions[questionId].maxXp}
-              comments={props.assessment!.questions[questionId].comments}
-            />
-          ),
-          id: SideContentType.grading
-        },
-        // TODO: Remove Chat legacy code
-        {
-          label: `Chat`,
-          iconName: IconNames.CHAT,
-          body: Constants.useChatkit ? (
-            <ChatApp
-              assessmentId={this.props.assessment!.id}
-              roomId={props.assessment!.questions[questionId].roomId}
-            />
-          ) : (
-            <span>Chatkit disabled.</span>
-          ),
-          id: SideContentType.chat,
-          disabled: !Constants.useChatkit
-        }
-      );
+      tabs.push({
+        label: `Report Card`,
+        iconName: IconNames.TICK,
+        body: (
+          <AssessmentWorkspaceGradingResult
+            graderName={props.assessment!.questions[questionId].grader!.name}
+            gradedAt={props.assessment!.questions[questionId].gradedAt!}
+            xp={props.assessment!.questions[questionId].xp}
+            grade={props.assessment!.questions[questionId].grade}
+            maxGrade={props.assessment!.questions[questionId].maxGrade}
+            maxXp={props.assessment!.questions[questionId].maxXp}
+            comments={props.assessment!.questions[questionId].comments}
+          />
+        ),
+        id: SideContentType.grading
+      });
     }
 
     const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;

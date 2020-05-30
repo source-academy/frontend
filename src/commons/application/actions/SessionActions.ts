@@ -18,7 +18,6 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
-  NOTIFY_CHATKIT_USERS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -152,9 +151,3 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
-
-export const notifyChatUsers = (assessmentId?: number, submissionId?: number) =>
-  action(NOTIFY_CHATKIT_USERS, {
-    assessmentId,
-    submissionId
-  });

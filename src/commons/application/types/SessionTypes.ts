@@ -29,7 +29,6 @@ export const UPDATE_GRADING = 'UPDATE_GRADING';
 export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
-export const NOTIFY_CHATKIT_USERS = 'NOTIFY_CHATKIT_USERS'; // TODO: Remove
 
 export type SessionState = {
   readonly accessToken?: string;

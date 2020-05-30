@@ -48,7 +48,6 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
-  NOTIFY_CHATKIT_USERS,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
@@ -81,7 +80,6 @@ import {
   postGrading,
   postMaterial,
   postMaterialFolder,
-  postNotify,
   postSourcecast,
   postUnsubmit,
   publishAssessment,
@@ -409,19 +407,6 @@ function* BackendSaga(): SagaIterator {
       yield handleResponseError(resp);
       return;
     }
-  });
-
-  yield takeEvery(NOTIFY_CHATKIT_USERS, function*(
-    action: ReturnType<typeof actions.notifyChatUsers>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const assessmentId = action.payload.assessmentId;
-    const submissionId = action.payload.submissionId;
-    yield call(postNotify, tokens, assessmentId, submissionId);
   });
 
   yield takeEvery(DELETE_SOURCECAST_ENTRY, function*(

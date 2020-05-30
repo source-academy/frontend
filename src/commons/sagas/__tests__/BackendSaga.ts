@@ -27,7 +27,6 @@ import {
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_NOTIFICATIONS,
-  NOTIFY_CHATKIT_USERS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -59,8 +58,7 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth,
-  postNotify
+  postAuth
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -416,16 +414,6 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
       ])
       .call(showWarningMessage, 'Something went wrong (got 404 response)')
       .dispatch({ type: ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
-      .silentRun();
-  });
-});
-
-describe('Test NOTIFY_CHATKIT_USERS Action', () => {
-  test('called', () => {
-    return expectSaga(BackendSaga)
-      .withState(mockStates)
-      .call(postNotify, mockTokens, 1, undefined)
-      .dispatch({ type: NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
       .silentRun();
   });
 });
