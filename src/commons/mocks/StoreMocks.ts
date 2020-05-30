@@ -1,6 +1,15 @@
 import { Store } from 'redux';
 import mockStore from 'redux-mock-store';
-import { OverallState, defaultAcademy, defaultApplication, defaultDashBoard, defaultPlayground, defaultWorkspaceManager, defaultSession } from '../application/ApplicationTypes';
+
+import {
+  defaultAcademy,
+  defaultApplication,
+  defaultDashBoard,
+  defaultPlayground,
+  defaultSession,
+  defaultWorkspaceManager,
+  OverallState
+} from '../application/ApplicationTypes';
 
 export function mockInitialStore<P>(): Store<OverallState> {
   const createStore = (mockStore as any)();

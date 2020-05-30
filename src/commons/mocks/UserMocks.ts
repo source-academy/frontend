@@ -8,7 +8,7 @@ export enum Roles {
   trainer = 'trainer',
   admin = 'admin'
 }
-export type Role = keyof typeof Roles;
+export type Role = keyof typeof Roles; // TODO: Duplicate at ApplicationTypes.ts
 
 /**
  * Mock for fetching a role, given an access token. A null

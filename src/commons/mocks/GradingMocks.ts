@@ -1,7 +1,7 @@
+import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
+import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockRuneLibrary } from './AssessmentMocks';
 import { mockFetchRole, Role, Roles } from './UserMocks';
-import { GradingOverview, Grading } from '../../features/grading/GradingTypes';
-import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 
 export const mockGradingOverviews: GradingOverview[] = [
   {

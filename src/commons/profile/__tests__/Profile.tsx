@@ -2,9 +2,9 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 
-import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import { Role } from '../../application/ApplicationTypes';
 import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
+import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import Profile from '../Profile';
 
 const mockNoClosedAssessmentOverviews = mockAssessmentOverviews.filter(

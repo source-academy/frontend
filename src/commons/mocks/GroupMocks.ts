@@ -1,4 +1,4 @@
-import { GroupOverview } from "../../features/dashboard/DashboardTypes";
+import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 
 export const mockGroupOverviews: GroupOverview[] = [
   {

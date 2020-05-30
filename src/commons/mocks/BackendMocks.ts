@@ -1,24 +1,35 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import {actions } from '../utils/ActionsHelper';
-import { Question, FETCH_ASSESSMENT_OVERVIEWS } from '../assessment/AssessmentTypes';
+import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import { store } from '../../pages/createStore';
+import { GameState, OverallState, Role } from '../application/ApplicationTypes';
+import {
+  ACKNOWLEDGE_NOTIFICATIONS,
+  FETCH_ASSESSMENT,
+  FETCH_AUTH,
+  FETCH_GRADING,
+  FETCH_GRADING_OVERVIEWS,
+  FETCH_NOTIFICATIONS,
+  SUBMIT_ANSWER,
+  SUBMIT_GRADING,
+  SUBMIT_GRADING_AND_CONTINUE,
+  UNSUBMIT_SUBMISSION
+} from '../application/types/SessionTypes';
+import { FETCH_ASSESSMENT_OVERVIEWS, Question } from '../assessment/AssessmentTypes';
 import {
   Notification,
   NotificationFilterFunction
 } from '../notificationBadge/NotificationBadgeTypes';
-import { store } from '../../pages/createStore';
+import { actions } from '../utils/ActionsHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { mockAssessmentOverviews, mockAssessments } from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview } from './GradingMocks';
 import { mockGroupOverviews } from './GroupMocks';
 import { mockNotifications } from './UserMocks';
-import { GradingOverview, GradingQuestion, Grading } from 'src/features/grading/GradingTypes';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
-import { OverallState, GameState, Role } from '../application/ApplicationTypes';
-import { FETCH_AUTH, FETCH_ASSESSMENT, FETCH_GRADING_OVERVIEWS, FETCH_GRADING, SUBMIT_ANSWER, UNSUBMIT_SUBMISSION, SUBMIT_GRADING, SUBMIT_GRADING_AND_CONTINUE, ACKNOWLEDGE_NOTIFICATIONS, FETCH_NOTIFICATIONS } from '../application/types/SessionTypes';
-import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 
 export function* mockBackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function*(action: ReturnType<typeof actions.fetchAuth>) {
@@ -46,9 +57,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateAssessmentOverviews([...mockAssessmentOverviews]));
   });
 
-  yield takeEvery(FETCH_ASSESSMENT, function*(
-    action: ReturnType<typeof actions.fetchAssessment>
-  ) {
+  yield takeEvery(FETCH_ASSESSMENT, function*(action: ReturnType<typeof actions.fetchAssessment>) {
     const id = action.payload;
     const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
@@ -65,9 +74,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(FETCH_GRADING, function*(
-    action: ReturnType<typeof actions.fetchGrading>
-  ) {
+  yield takeEvery(FETCH_GRADING, function*(action: ReturnType<typeof actions.fetchGrading>) {
     const submissionId = action.payload;
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
@@ -76,16 +83,16 @@ export function* mockBackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SUBMIT_ANSWER, function*(
-    action: ReturnType<typeof actions.submitAnswer>
-  ) {
+  yield takeEvery(SUBMIT_ANSWER, function*(action: ReturnType<typeof actions.submitAnswer>) {
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     // Now, update the answer for the question in the assessment in the store
     const assessmentId = yield select(
       (state: OverallState) => state.workspaces.assessment.currentAssessment!
     );
-    const assessment = yield select((state: OverallState) => state.session.assessments.get(assessmentId));
+    const assessment = yield select((state: OverallState) =>
+      state.session.assessments.get(assessmentId)
+    );
     const newQuestions = assessment.questions.slice().map((question: Question) => {
       if (question.id === questionId) {
         question.answer = answer;

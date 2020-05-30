@@ -1,48 +1,48 @@
-import {
-    AssessmentCategories,
-    AssessmentStatuses,
-    GradingStatuses,
-    Assessment,
-    AssessmentOverview,
-    IMCQQuestion,
-    IProgrammingQuestion,
-    Library,
-    TestcaseTypes
-  } from '../assessment/AssessmentTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
-  
-  const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
-    {
-      category: AssessmentCategories.Mission,
-      closeAt: '2048-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/300/',
-      grade: 1,
-      id: 1,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2038-06-18T05:24:26.026Z',
-      title: 'An Odessey to Runes (Duplicate)',
-      shortSummary:
-        'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
-      status: AssessmentStatuses.not_attempted,
-      story: 'mission-1',
-      xp: 0,
-      gradingStatus: GradingStatuses.none
-    }
-  ];
-  
-  const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
-    {
-      category: AssessmentCategories.Mission,
-      closeAt: '2048-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/300/',
-      grade: 2,
-      id: 1,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2018-06-18T05:24:26.026Z',
-      title: 'An Odessey to Runes',
-      shortSummary: `
+import {
+  Assessment,
+  AssessmentCategories,
+  AssessmentOverview,
+  AssessmentStatuses,
+  GradingStatuses,
+  IMCQQuestion,
+  IProgrammingQuestion,
+  Library,
+  TestcaseTypes
+} from '../assessment/AssessmentTypes';
+
+const mockUnopenedAssessmentsOverviews: AssessmentOverview[] = [
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/300/',
+    grade: 1,
+    id: 1,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2038-06-18T05:24:26.026Z',
+    title: 'An Odessey to Runes (Duplicate)',
+    shortSummary:
+      'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
+    status: AssessmentStatuses.not_attempted,
+    story: 'mission-1',
+    xp: 0,
+    gradingStatus: GradingStatuses.none
+  }
+];
+
+const mockOpenedAssessmentsOverviews: AssessmentOverview[] = [
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/300/',
+    grade: 2,
+    id: 1,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-06-18T05:24:26.026Z',
+    title: 'An Odessey to Runes',
+    shortSummary: `
   *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
   incididunt ut labore et dolore magna aliqua.
   
@@ -56,430 +56,430 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
   \`explicabo\`.
   
   `,
-      status: AssessmentStatuses.attempted,
-      story: 'mission-1',
-      xp: 1,
-      gradingStatus: GradingStatuses.none
-    },
-    {
-      category: AssessmentCategories.Mission,
-      closeAt: '2048-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
-      grade: 3,
-      id: 2,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2018-07-18T05:24:26.026Z',
-      title: 'The Secret to Streams',
-      shortSummary:
-        'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-      status: AssessmentStatuses.attempting,
-      story: 'mission-2',
-      xp: 2,
-      gradingStatus: GradingStatuses.none
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      closeAt: '2048-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-      grade: 4,
-      id: 3,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2018-07-18T05:24:26.026Z',
-      title: 'A sample Sidequest',
-      shortSummary:
-        'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-      status: AssessmentStatuses.not_attempted,
-      story: 'sidequest-2.1',
-      xp: 3,
-      gradingStatus: GradingStatuses.none
-    },
-    {
-      category: AssessmentCategories.Path,
-      closeAt: '2069-04-20T01:23:45.111Z',
-      coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
-      grade: 0,
-      id: 6,
-      maxGrade: 0,
-      maxXp: 200,
-      openAt: '2018-01-01T00:00:00.000Z',
-      title: 'Basic logic gates',
-      shortSummary:
-        'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
-      status: AssessmentStatuses.not_attempted,
-      story: null,
-      xp: 0,
-      gradingStatus: GradingStatuses.excluded
-    },
-    {
-      category: AssessmentCategories.Practical,
-      closeAt: '2048-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-      grade: 4,
-      id: 5,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2018-07-18T05:24:26.026Z',
-      title: 'A sample Practical',
-      shortSummary:
-        'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
-      status: AssessmentStatuses.not_attempted,
-      story: 'sidequest-2.1',
-      xp: 3,
-      gradingStatus: GradingStatuses.none,
-      private: true
-    }
-  ];
-  
-  const mockClosedAssessmentOverviews: AssessmentOverview[] = [
-    {
-      category: AssessmentCategories.Mission,
-      closeAt: '2008-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-      grade: 2700,
-      id: 4,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2007-07-18T05:24:26.026Z',
-      title: 'A closed Mission',
-      shortSummary:
-        'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
-      status: AssessmentStatuses.submitted,
-      story: 'mission-3',
-      xp: 800,
-      gradingStatus: GradingStatuses.grading
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      closeAt: '2008-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-      grade: 1950,
-      id: 5,
-      maxGrade: 3000,
-      maxXp: 1000,
-      openAt: '2007-07-18T05:24:26.026Z',
-      title: 'Closed (not graded) Sidequest',
-      shortSummary:
-        'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
-      status: AssessmentStatuses.submitted,
-      story: null,
-      xp: 500,
-      gradingStatus: GradingStatuses.none
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      closeAt: '2008-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-      grade: 300,
-      id: 5,
-      maxGrade: 700,
-      maxXp: 500,
-      openAt: '2007-07-18T05:24:26.026Z',
-      title: 'Closed (fully graded) Sidequest',
-      shortSummary:
-        'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
-      status: AssessmentStatuses.submitted,
-      story: null,
-      xp: 150,
-      gradingStatus: GradingStatuses.graded
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      closeAt: '2008-06-18T05:24:26.026Z',
-      coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-      grade: 0,
-      id: 5,
-      maxGrade: 0,
-      maxXp: 0,
-      openAt: '2007-07-18T05:24:26.026Z',
-      title: 'Ungraded assessment',
-      shortSummary:
-        'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
-      status: AssessmentStatuses.submitted,
-      story: null,
-      xp: 100,
-      gradingStatus: GradingStatuses.excluded
-    }
-  ];
-  
-  export const mockAssessmentOverviews = [
-    ...mockUnopenedAssessmentsOverviews,
-    ...mockOpenedAssessmentsOverviews,
-    ...mockClosedAssessmentOverviews
-  ];
-  
-  const mockGlobals: Array<[string, any]> = [
-    ['testNumber', 3.141592653589793],
-    ['testString', 'who dat boi'],
-    ['testBooleanTrue', true],
-    ['testBooleanFalse', false],
-    ['testBooleanUndefined', undefined],
-    ['testBooleanNull', null],
-    ['testObject', { a: 1, b: 2 }],
-    ['testArray', [1, 2, 'a', 'b']]
-  ];
-  
-  const mockSoundLibrary: Library = {
-    chapter: 4,
-    external: {
-      name: ExternalLibraryNames.SOUNDS,
-      symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
-    },
-    globals: mockGlobals
-  };
-  
-  export const mockRuneLibrary: Library = {
-    chapter: 1,
-    external: {
-      name: ExternalLibraryNames.RUNES,
-      symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
-    },
-    globals: mockGlobals
-  };
-  
-  const mockCurveLibrary: Library = {
-    chapter: 4,
-    external: {
-      name: ExternalLibraryNames.CURVES,
-      symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
-    },
-    globals: mockGlobals
-  };
-  
-  const mockToneMatrixLibrary: Library = {
-    chapter: 4,
-    external: {
-      name: ExternalLibraryNames.SOUNDS,
-      symbols: ['get_matrix']
-    },
-    globals: mockGlobals
-  };
-  
-  export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
-    {
-      autogradingResults: [],
-      answer: null,
-      content: `
+    status: AssessmentStatuses.attempted,
+    story: 'mission-1',
+    xp: 1,
+    gradingStatus: GradingStatuses.none
+  },
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
+    grade: 3,
+    id: 2,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'The Secret to Streams',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.attempting,
+    story: 'mission-2',
+    xp: 2,
+    gradingStatus: GradingStatuses.none
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
+    id: 3,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Sidequest',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1',
+    xp: 3,
+    gradingStatus: GradingStatuses.none
+  },
+  {
+    category: AssessmentCategories.Path,
+    closeAt: '2069-04-20T01:23:45.111Z',
+    coverImage: 'https://fakeimg.pl/700x400/417678,64/?text=%E3%83%91%E3%82%B9&font=noto',
+    grade: 0,
+    id: 6,
+    maxGrade: 0,
+    maxXp: 200,
+    openAt: '2018-01-01T00:00:00.000Z',
+    title: 'Basic logic gates',
+    shortSummary:
+      'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
+    status: AssessmentStatuses.not_attempted,
+    story: null,
+    xp: 0,
+    gradingStatus: GradingStatuses.excluded
+  },
+  {
+    category: AssessmentCategories.Practical,
+    closeAt: '2048-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
+    grade: 4,
+    id: 5,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2018-07-18T05:24:26.026Z',
+    title: 'A sample Practical',
+    shortSummary:
+      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+    status: AssessmentStatuses.not_attempted,
+    story: 'sidequest-2.1',
+    xp: 3,
+    gradingStatus: GradingStatuses.none,
+    private: true
+  }
+];
+
+const mockClosedAssessmentOverviews: AssessmentOverview[] = [
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
+    grade: 2700,
+    id: 4,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'A closed Mission',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
+    status: AssessmentStatuses.submitted,
+    story: 'mission-3',
+    xp: 800,
+    gradingStatus: GradingStatuses.grading
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
+    grade: 1950,
+    id: 5,
+    maxGrade: 3000,
+    maxXp: 1000,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Closed (not graded) Sidequest',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 500,
+    gradingStatus: GradingStatuses.none
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
+    grade: 300,
+    id: 5,
+    maxGrade: 700,
+    maxXp: 500,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Closed (fully graded) Sidequest',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 150,
+    gradingStatus: GradingStatuses.graded
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    closeAt: '2008-06-18T05:24:26.026Z',
+    coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
+    grade: 0,
+    id: 5,
+    maxGrade: 0,
+    maxXp: 0,
+    openAt: '2007-07-18T05:24:26.026Z',
+    title: 'Ungraded assessment',
+    shortSummary:
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+    status: AssessmentStatuses.submitted,
+    story: null,
+    xp: 100,
+    gradingStatus: GradingStatuses.excluded
+  }
+];
+
+export const mockAssessmentOverviews = [
+  ...mockUnopenedAssessmentsOverviews,
+  ...mockOpenedAssessmentsOverviews,
+  ...mockClosedAssessmentOverviews
+];
+
+const mockGlobals: Array<[string, any]> = [
+  ['testNumber', 3.141592653589793],
+  ['testString', 'who dat boi'],
+  ['testBooleanTrue', true],
+  ['testBooleanFalse', false],
+  ['testBooleanUndefined', undefined],
+  ['testBooleanNull', null],
+  ['testObject', { a: 1, b: 2 }],
+  ['testArray', [1, 2, 'a', 'b']]
+];
+
+const mockSoundLibrary: Library = {
+  chapter: 4,
+  external: {
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
+  },
+  globals: mockGlobals
+};
+
+export const mockRuneLibrary: Library = {
+  chapter: 1,
+  external: {
+    name: ExternalLibraryNames.RUNES,
+    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
+  },
+  globals: mockGlobals
+};
+
+const mockCurveLibrary: Library = {
+  chapter: 4,
+  external: {
+    name: ExternalLibraryNames.CURVES,
+    symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
+  },
+  globals: mockGlobals
+};
+
+const mockToneMatrixLibrary: Library = {
+  chapter: 4,
+  external: {
+    name: ExternalLibraryNames.SOUNDS,
+    symbols: ['get_matrix']
+  },
+  globals: mockGlobals
+};
+
+export const mockAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    autogradingResults: [],
+    answer: null,
+    content: `
   This question has an id of \`0\`.
   
   \`\`\`
   What's your favourite dinner food?
   \`\`\`
   `,
-      roomId: null,
-      id: 0,
-      library: mockSoundLibrary,
-      prepend: `const pizza = "pizza";
+    roomId: null,
+    id: 0,
+    library: mockSoundLibrary,
+    prepend: `const pizza = "pizza";
   const sushi = "sushi";
   const chickenrice = "chicken rice";`,
-      postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `answer();`,
-          score: 1,
-          answer: `"pizza"`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `answer();`,
-          score: 1,
-          answer: `"sushi"`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `answer();`,
-          score: 1,
-          answer: `"chicken rice"`
-        }
-      ],
-      solutionTemplate: `function answer() {
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `answer();`,
+        score: 1,
+        answer: `"pizza"`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `answer();`,
+        score: 1,
+        answer: `"sushi"`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `answer();`,
+        score: 1,
+        answer: `"chicken rice"`
+      }
+    ],
+    solutionTemplate: `function answer() {
       // Write something here!
   }
   `,
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2
-    },
-    {
-      autogradingResults: [],
-      answer: `function areaOfCircle(x) {
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    autogradingResults: [],
+    answer: `function areaOfCircle(x) {
       return square(x) * pi;
   }
   
   function volumeOfSphere(x) {
       return 4 / 3 * cube(x) * pi;
   }`,
-      roomId: '19422043',
-      content: 'Hello and welcome to this assessment! This is the 1st question.',
-      id: 1,
-      library: mockRuneLibrary,
-      prepend: `const square = x => x * x;
+    roomId: '19422043',
+    content: 'Hello and welcome to this assessment! This is the 1st question.',
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: `const square = x => x * x;
   const cube = x => x * x * x;
   const pi = 3.1415928;`,
-      postpend: '',
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `areaOfCircle(5);`,
-          score: 1,
-          answer: `78.53982`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `volumeOfSphere(5);`,
-          score: 1,
-          answer: `523.5988`
-        }
-      ],
-      solutionTemplate: `function areaOfCircle(x) {
+    postpend: '',
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `areaOfCircle(5);`,
+        score: 1,
+        answer: `78.53982`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `volumeOfSphere(5);`,
+        score: 1,
+        answer: `523.5988`
+      }
+    ],
+    solutionTemplate: `function areaOfCircle(x) {
       // return area of circle
   }
   
   function volumeOfSphere(x) {
       // return volume of sphere
   }`,
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2
-    },
-    {
-      answer: 3,
-      roomId: '19422046',
-      content:
-        'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
-      choices: [
-        {
-          content: '**Option** `A`',
-          hint: '_hint_ A is `here`'
-        },
-        {
-          content: '### B',
-          hint: 'hint B'
-        },
-        {
-          content: 'C',
-          hint: null
-        },
-        {
-          content: 'D',
-          hint: 'hint D'
-        }
-      ],
-      id: 2,
-      library: mockCurveLibrary,
-      type: 'mcq',
-      solution: 0,
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2
-    },
-    {
-      answer: 3,
-      roomId: null,
-      content:
-        'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
-      choices: [
-        {
-          content: 'A',
-          hint: null
-        },
-        {
-          content: 'B',
-          hint: null
-        },
-        {
-          content: 'C',
-          hint: null
-        },
-        {
-          content: 'D',
-          hint: null
-        }
-      ],
-      id: 3,
-      library: mockCurveLibrary,
-      type: 'mcq',
-      solution: null,
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2
-    },
-    {
-      autogradingResults: [],
-      answer: null,
-      roomId: '19422032',
-      content: 'You have reached the last question! Have some fun with the tone matrix...',
-      id: 4,
-      library: mockToneMatrixLibrary,
-      prepend: '',
-      postpend: '',
-      testcases: [],
-      solutionTemplate: '5th question mock solution template',
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2
-    }
-  ];
-  
-  export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
-    {
-      answer: `function fibonacci(n) {
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    answer: 3,
+    roomId: '19422046',
+    content:
+      'This is the 3rd question. Oddly enough, it is an ungraded MCQ question that uses the curves library! Option C has a null hint!',
+    choices: [
+      {
+        content: '**Option** `A`',
+        hint: '_hint_ A is `here`'
+      },
+      {
+        content: '### B',
+        hint: 'hint B'
+      },
+      {
+        content: 'C',
+        hint: null
+      },
+      {
+        content: 'D',
+        hint: 'hint D'
+      }
+    ],
+    id: 2,
+    library: mockCurveLibrary,
+    type: 'mcq',
+    solution: 0,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    answer: 3,
+    roomId: null,
+    content:
+      'This is the 4rth question. Oddly enough, it is a graded MCQ question that uses the curves library!',
+    choices: [
+      {
+        content: 'A',
+        hint: null
+      },
+      {
+        content: 'B',
+        hint: null
+      },
+      {
+        content: 'C',
+        hint: null
+      },
+      {
+        content: 'D',
+        hint: null
+      }
+    ],
+    id: 3,
+    library: mockCurveLibrary,
+    type: 'mcq',
+    solution: null,
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: '19422032',
+    content: 'You have reached the last question! Have some fun with the tone matrix...',
+    id: 4,
+    library: mockToneMatrixLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
+    solutionTemplate: '5th question mock solution template',
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2
+  }
+];
+
+export const mockClosedAssessmentQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: `function fibonacci(n) {
       if (n <= 2) {
           return 1;
       } else {
           return fibonacci(n-1) + fibonacci(n-2);
       }
   }`,
-      roomId: '19422032',
-      content: 'You can see autograding results!!!',
-      id: 0,
-      library: mockCurveLibrary,
-      prepend: '',
-      postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `fibonacci(3);`,
-          score: 1,
-          answer: `2`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `fibonacci(4);`,
-          score: 1,
-          answer: `3`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `fibonacci(5);`,
-          score: 1,
-          answer: `5`
-        }
-      ],
-      solutionTemplate: `function fibonacci(n) {
+    roomId: '19422032',
+    content: 'You can see autograding results!!!',
+    id: 0,
+    library: mockCurveLibrary,
+    prepend: '',
+    postpend: "// This is a mock Postpend! You shouldn't be able to see me!",
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `fibonacci(3);`,
+        score: 1,
+        answer: `2`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `fibonacci(4);`,
+        score: 1,
+        answer: `3`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `fibonacci(5);`,
+        score: 1,
+        answer: `5`
+      }
+    ],
+    solutionTemplate: `function fibonacci(n) {
       // Your answer here
   }`,
-      type: 'programming',
-      grader: {
-        name: 'avenger',
-        id: 1
-      },
-      gradedAt: '2038-06-18T05:24:26.026Z',
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2,
-      comments: `Good job. You are awarded the full marks!
+    type: 'programming',
+    grader: {
+      name: 'avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    comments: `Good job. You are awarded the full marks!
   
   ----
   ## markdown test
@@ -503,57 +503,57 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
   [link to Source Academy](https://sourceacademy.nus.edu.sg)  
   
   ![](image-url-goes-here)`,
-      autogradingResults: [
-        {
-          resultType: 'pass'
-        },
-        {
-          resultType: 'fail',
-          expected: '8',
-          actual: '5'
-        },
-        {
-          resultType: 'error',
-          errors: [
-            {
-              errorType: 'timeout'
-            },
-            {
-              errorType: 'syntax',
-              line: 1,
-              location: 'student',
-              errorLine: 'function fibonacci(n) {',
-              errorExplanation: 'Just kidding!'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      answer: `function recurse(rune, n) {
+    autogradingResults: [
+      {
+        resultType: 'pass'
+      },
+      {
+        resultType: 'fail',
+        expected: '8',
+        actual: '5'
+      },
+      {
+        resultType: 'error',
+        errors: [
+          {
+            errorType: 'timeout'
+          },
+          {
+            errorType: 'syntax',
+            line: 1,
+            location: 'student',
+            errorLine: 'function fibonacci(n) {',
+            errorExplanation: 'Just kidding!'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    answer: `function recurse(rune, n) {
       return n <= 1 ? rune : make_cross(recurse(rune, n - 1));
   }`,
-      roomId: '19422033',
-      content: 'This is a runes question - there are no testcases nor autograding results.',
-      id: 1,
-      library: mockRuneLibrary,
-      prepend: '',
-      postpend: '',
-      testcases: [],
-      solutionTemplate: `function recurse(rune, n) {
+    roomId: '19422033',
+    content: 'This is a runes question - there are no testcases nor autograding results.',
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: '',
+    postpend: '',
+    testcases: [],
+    solutionTemplate: `function recurse(rune, n) {
       // Your answer here
   }`,
-      type: 'programming',
-      grader: {
-        name: 'some avenger',
-        id: 1
-      },
-      gradedAt: '2038-06-18T05:24:26.026Z',
-      xp: 0,
-      grade: 0,
-      maxGrade: 2,
-      maxXp: 2,
-      comments: `You open the Report Card, not knowing what to expect...
+    type: 'programming',
+    grader: {
+      name: 'some avenger',
+      id: 1
+    },
+    gradedAt: '2038-06-18T05:24:26.026Z',
+    xp: 0,
+    grade: 0,
+    maxGrade: 2,
+    maxXp: 2,
+    comments: `You open the Report Card, not knowing what to expect...
   
       ## WOW!
       Amazing grasp of runes. We can now move on to the next assignment.
@@ -587,57 +587,57 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
       #### Upcoming Tasks
       - [] Meet Avenger Avenger at Level X-05
       - [] Open the Pod Bay Doors`,
-      autogradingResults: []
-    }
-  ];
-  
-  export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
-    {
-      answer: null,
-      roomId: null,
-      content: 'As a recap: which of the following is not a valid logic gate?',
-      choices: [
-        {
-          content: 'XOR gate',
-          hint: 'This is the exclusive-OR gate!'
-        },
-        {
-          content: 'IF gate',
-          hint: 'Correct!'
-        },
-        {
-          content: 'AND gate',
-          hint: 'This logic gate exists!'
-        },
-        {
-          content: 'OR gate',
-          hint: 'This logic gate exists!'
-        }
-      ],
-      id: 0,
-      library: mockRuneLibrary,
-      type: 'mcq',
-      solution: 1,
-      xp: 0,
-      grade: 0,
-      maxGrade: 0,
-      maxXp: 0
-    },
-    {
-      autogradingResults: [],
-      answer: null,
-      roomId: null,
-      content: `An AND gate is a digital logic gate that implements logical conjunction on its inputs. It returns a single output that is HIGH (active) iff all the inputs to the AND gate are HIGH (active).
+    autogradingResults: []
+  }
+];
+
+export const mockPathQuestions: Array<IProgrammingQuestion | IMCQQuestion> = [
+  {
+    answer: null,
+    roomId: null,
+    content: 'As a recap: which of the following is not a valid logic gate?',
+    choices: [
+      {
+        content: 'XOR gate',
+        hint: 'This is the exclusive-OR gate!'
+      },
+      {
+        content: 'IF gate',
+        hint: 'Correct!'
+      },
+      {
+        content: 'AND gate',
+        hint: 'This logic gate exists!'
+      },
+      {
+        content: 'OR gate',
+        hint: 'This logic gate exists!'
+      }
+    ],
+    id: 0,
+    library: mockRuneLibrary,
+    type: 'mcq',
+    solution: 1,
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `An AND gate is a digital logic gate that implements logical conjunction on its inputs. It returns a single output that is HIGH (active) iff all the inputs to the AND gate are HIGH (active).
   
   In this question, let us model an AND gate as a function, and treat HIGH (active) inputs as the boolean value \`true\` and LOW (inactive) inputs as the boolean value \`false\`.
   
   As an AND gate is not restricted to exactly two inputs, our function shall be the same. Implement the function \`AND(inputs)\` which takes in the list \`inputs\` (a list of boolean values), and returns the output of the AND gate as a boolean. You may assume the list \`inputs\` is of minimum length 2.
   
   This question makes use of the sentinel function method to throw custom errors for each testcase.`,
-      id: 1,
-      library: mockRuneLibrary,
-      prepend: `const OR = (x, y) => x || y;`,
-      postpend: `
+    id: 1,
+    library: mockRuneLibrary,
+    prepend: `const OR = (x, y) => x || y;`,
+    postpend: `
   const __AND = (xs) => {
     if (AND(list(true, true)) === undefined) {
       error('Your function is empty!');
@@ -661,60 +661,60 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
       return result;
     }
   };`,
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `__AND(list(true, false));`,
-          score: 0,
-          answer: `false`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `__AND(list(true, true, false));`,
-          score: 0,
-          answer: `false`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `__AND(list(true, OR(true, false), OR(true, true)));`,
-          score: 0,
-          answer: `true`
-        },
-        {
-          type: TestcaseTypes.hidden,
-          program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
-          score: 0,
-          answer: `false`
-        },
-        {
-          type: TestcaseTypes.hidden,
-          program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
-          score: 0,
-          answer: `true`
-        }
-      ],
-      solutionTemplate: `function AND(inputs) {
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, true, false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__AND(list(true, OR(true, false), OR(true, true)));`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__AND(list(true, OR(false, true), AND(list(true, false)), false));`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__AND(list(true, OR(true, false), OR(true, AND(list(false, true))), true));`,
+        score: 0,
+        answer: `true`
+      }
+    ],
+    solutionTemplate: `function AND(inputs) {
       // Your answer here!
   }`,
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 0,
-      maxXp: 0
-    },
-    {
-      autogradingResults: [],
-      answer: null,
-      roomId: null,
-      content: `The XOR (exclusive-OR) gate is a digital logic gate that accepts two inputs and returns a single output that is HIGH (active) iff one of the inputs are HIGH (active), but not both.
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `The XOR (exclusive-OR) gate is a digital logic gate that accepts two inputs and returns a single output that is HIGH (active) iff one of the inputs are HIGH (active), but not both.
   
   In this question, let us model the XOR gate as a function. Implement the function \`XOR(x, y)\` which takes two boolean inputs \`x\` and \`y\` and which returns the output of the XOR gate as a boolean.
   
   This question makes use of the wrapping container method to throw custom errors for each testcase.`,
-      id: 2,
-      library: mockRuneLibrary,
-      prepend: ``,
-      postpend: `
+    id: 2,
+    library: mockRuneLibrary,
+    prepend: ``,
+    postpend: `
   const __XOR = (x, y) => {
     if (XOR(false, false) === undefined) {
       error('Your function is empty!');
@@ -734,53 +734,53 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
       return result;
     }
   };`,
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `__XOR(true, false);`,
-          score: 0,
-          answer: `true`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `__XOR(false, true);`,
-          score: 0,
-          answer: `true`
-        },
-        {
-          type: TestcaseTypes.hidden,
-          program: `__XOR(true, XOR(true, false));`,
-          score: 0,
-          answer: `false`
-        }
-      ],
-      solutionTemplate: `function XOR(x, y) {
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__XOR(true, false);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__XOR(false, true);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__XOR(true, XOR(true, false));`,
+        score: 0,
+        answer: `false`
+      }
+    ],
+    solutionTemplate: `function XOR(x, y) {
       // Your answer here!
   }`,
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 0,
-      maxXp: 0
-    },
-    {
-      autogradingResults: [],
-      answer: null,
-      roomId: null,
-      content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  },
+  {
+    autogradingResults: [],
+    answer: null,
+    roomId: null,
+    content: `The NOR logic gate is special in that it is an _universal logic gate_, that is to say, they can be composed to form any other logic gate.
   
   Implement the AND logic gate **using ONLY the NOR logic gate**, as the \`NOR_AND(x, y)\` function that takes in two booleans as input.
   
   The \`NOR\` function modeled after a NOR gate is provided for you - it accepts two boolean values and returns \`true\` iff both inputs are \`false\`.`,
-      id: 3,
-      library: mockRuneLibrary,
-      prepend: `
+    id: 3,
+    library: mockRuneLibrary,
+    prepend: `
   let counter = 0;
   const NOR = (x, y) => {
     counter = counter + 1;
     return !(x || y);
   };`,
-      postpend: `
+    postpend: `
   const __NOR_AND = (x, y) => {
     if (NOR_AND(false, false) === undefined) {
       error('Your function is empty!');
@@ -807,63 +807,63 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
       return result;
     }
   };`,
-      testcases: [
-        {
-          type: TestcaseTypes.public,
-          program: `__NOR_AND(false, true);`,
-          score: 0,
-          answer: `false`
-        },
-        {
-          type: TestcaseTypes.public,
-          program: `__NOR_AND(true, true);`,
-          score: 0,
-          answer: `true`
-        },
-        {
-          type: TestcaseTypes.hidden,
-          program: `__NOR_AND(true, NOR_AND(false, true));`,
-          score: 0,
-          answer: `false`
-        }
-      ],
-      solutionTemplate: `function NOR_AND(x, y) {
+    testcases: [
+      {
+        type: TestcaseTypes.public,
+        program: `__NOR_AND(false, true);`,
+        score: 0,
+        answer: `false`
+      },
+      {
+        type: TestcaseTypes.public,
+        program: `__NOR_AND(true, true);`,
+        score: 0,
+        answer: `true`
+      },
+      {
+        type: TestcaseTypes.hidden,
+        program: `__NOR_AND(true, NOR_AND(false, true));`,
+        score: 0,
+        answer: `false`
+      }
+    ],
+    solutionTemplate: `function NOR_AND(x, y) {
       // Your answer here!
   }`,
-      type: 'programming',
-      xp: 0,
-      grade: 0,
-      maxGrade: 0,
-      maxXp: 0
-    }
-  ];
-  
-  /*
-   * A few Assessments to try out in workspaces.
-   */
-  export const mockAssessments: Assessment[] = [
-    {
-      category: 'Mission',
-      id: 1,
-      longSummary:
-        'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-      missionPDF: 'www.google.com',
-      questions: mockAssessmentQuestions,
-      title: 'An Odessey to Runes'
-    },
-    {
-      category: 'Mission',
-      id: 2,
-      longSummary:
-        'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-      missionPDF: 'www.google.com',
-      questions: mockAssessmentQuestions,
-      title: 'The Secret to Streams'
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      id: 3,
-      longSummary: `###This is the sidequest briefing.
+    type: 'programming',
+    xp: 0,
+    grade: 0,
+    maxGrade: 0,
+    maxXp: 0
+  }
+];
+
+/*
+ * A few Assessments to try out in workspaces.
+ */
+export const mockAssessments: Assessment[] = [
+  {
+    category: 'Mission',
+    id: 1,
+    longSummary:
+      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'An Odessey to Runes'
+  },
+  {
+    category: 'Mission',
+    id: 2,
+    longSummary:
+      'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'The Secret to Streams'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 3,
+    longSummary: `###This is the sidequest briefing.
   
   *Lorem ipsum* dolor sit amet, consectetur adipiscing elit.
   
@@ -882,39 +882,38 @@ import { externalLibraries, ExternalLibraryNames } from '../application/types/Ex
   pulvinar
   sapien
   \`\`\``,
-      missionPDF: 'www.google.com',
-      questions: mockAssessmentQuestions,
-      title: 'A sample Sidequest'
-    },
-    {
-      category: AssessmentCategories.Mission,
-      id: 4,
-      longSummary:
-        'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
-      missionPDF: 'www.google.com',
-      questions: mockClosedAssessmentQuestions,
-      title: 'A Closed Mission'
-    },
-    {
-      category: AssessmentCategories.Sidequest,
-      id: 5,
-      longSummary:
-        'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
-      missionPDF: 'www.google.com',
-      questions: mockClosedAssessmentQuestions,
-      title: 'A Closed Sidequest'
-    },
-    {
-      category: AssessmentCategories.Path,
-      id: 6,
-      longSummary: `### Basic logic gates
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'A sample Sidequest'
+  },
+  {
+    category: AssessmentCategories.Mission,
+    id: 4,
+    longSummary:
+      'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A Closed Mission'
+  },
+  {
+    category: AssessmentCategories.Sidequest,
+    id: 5,
+    longSummary:
+      'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
+    missionPDF: 'www.google.com',
+    questions: mockClosedAssessmentQuestions,
+    title: 'A Closed Sidequest'
+  },
+  {
+    category: AssessmentCategories.Path,
+    id: 6,
+    longSummary: `### Basic logic gates
   
   This path is intended to demonstrate concepts from the lecture **Logic Circuits**. You are strongly encouraged to attempt this path to check your understanding, prior to the next Studio session. For this, you will be granted a small amount of XP!
   
   The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
-      missionPDF: 'www.google.com',
-      questions: mockPathQuestions,
-      title: 'A sample guided path'
-    }
-  ];
-  
+    missionPDF: 'www.google.com',
+    questions: mockPathQuestions,
+    title: 'A sample guided path'
+  }
+];
