@@ -23,7 +23,6 @@ class SourcecastControlbar extends React.PureComponent<
     this.audio = React.createRef();
     this.state = {
       currentDeltaRevision: 0,
-      currentPlayerTime: 0,
       currentPlayerProgress: 0,
       currentSourcecastItem: null,
       duration: 0
@@ -152,16 +151,16 @@ class SourcecastControlbar extends React.PureComponent<
   private handlePlayerStopping = () => {
     this.props.handleSetEditorReadonly(false);
     this.props.handleSetSourcecastStatus(PlaybackStatus.paused);
+    this.props.handleSetCurrentPlayerTime(0);
     this.setState({
-      currentPlayerTime: 0,
       currentPlayerProgress: 0
     });
   };
 
   private updatePlayerTime: React.ReactEventHandler<HTMLAudioElement> = e => {
     const { currentTime }: { currentTime: number } = e.target as HTMLMediaElement;
+    this.props.handleSetCurrentPlayerTime(currentTime);
     this.setState({
-      currentPlayerTime: currentTime,
       currentPlayerProgress: currentTime / this.props.duration
     });
   };
@@ -170,8 +169,8 @@ class SourcecastControlbar extends React.PureComponent<
     if (this.audio.current) {
       const currentTime = this.props.duration * value;
       this.audio.current.currentTime = currentTime;
+      this.props.handleSetCurrentPlayerTime(currentTime);
       this.setState({
-        currentPlayerTime: currentTime,
         currentPlayerProgress: value
       });
     }
@@ -193,12 +192,14 @@ class SourcecastControlbar extends React.PureComponent<
 
 export interface ISourcecastControlbarProps {
   handleEditorValueChange: (newCode: string) => void;
+  handleSetCurrentPlayerTime: (playTime: number) => void;
   handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => void;
   handleSetEditorReadonly: (editorReadonly: boolean) => void;
   handleSetInputToApply: (inputToApply: Input) => void;
   handleSetSourcecastDuration: (duration: number) => void;
   handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) => void;
   audioUrl: string;
+  currentPlayerTime: number;
   duration: number;
   playbackData: IPlaybackData;
   playbackStatus: PlaybackStatus;
@@ -209,7 +210,6 @@ export interface ISourcecastControlbarProps {
 
 export interface ISourcecastControlbarState {
   currentDeltaRevision: number;
-  currentPlayerTime: number;
   currentPlayerProgress: number;
   currentSourcecastItem: ISourcecastData | null;
   duration: number;

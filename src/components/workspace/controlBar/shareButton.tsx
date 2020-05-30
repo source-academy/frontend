@@ -56,7 +56,7 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
               ) : (
                 <div>
                   <NonIdealState
-                    description="Shortening URL..."
+                    description="Generating Shareable Link..."
                     icon={<Spinner size={Spinner.SIZE_SMALL} />}
                   />
                 </div>
@@ -81,6 +81,12 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
     );
   }
 
+  public componentDidUpdate(prevProps: ShareButtonProps) {
+    if (this.props.shortURL !== prevProps.shortURL) {
+      this.setState({ keyword: '', isLoading: false });
+    }
+  }
+
   private toggleButton() {
     if (this.props.handleGenerateLz) {
       this.props.handleGenerateLz();
@@ -88,7 +94,7 @@ export class ShareButton extends React.PureComponent<ShareButtonProps, ShareButt
 
     // reset state
     this.props.handleUpdateShortURL('');
-    this.setState({ isLoading: false });
+    this.setState({ keyword: '', isLoading: false });
   }
 
   private handleChange(event: React.FormEvent<HTMLInputElement>) {

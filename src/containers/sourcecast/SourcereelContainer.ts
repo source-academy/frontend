@@ -22,9 +22,16 @@ import {
   promptAutocomplete,
   recordInit,
   recordInput,
+  resetInputs,
   saveSourcecastData,
+  setCodeDeltasToApply,
+  setCurrentPlayerTime,
   setEditorBreakpoint,
   setEditorReadonly,
+  setInputToApply,
+  setSourcecastData,
+  setSourcecastDuration,
+  setSourcecastStatus,
   timerPause,
   timerReset,
   timerResume,
@@ -37,11 +44,20 @@ import {
   WorkspaceLocation
 } from '../../actions';
 import { ExternalLibraryName } from '../../components/assessment/assessmentShape';
-import { Input, IPlaybackData, IPosition } from '../../components/sourcecast/sourcecastShape';
+import {
+  ICodeDelta,
+  Input,
+  IPlaybackData,
+  IPosition,
+  PlaybackStatus
+} from '../../components/sourcecast/sourcecastShape';
 import Sourcereel, { IDispatchProps, IStateProps } from '../../components/sourcecast/Sourcereel';
 import { IState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
+  audioUrl: state.workspaces.sourcecast.audioUrl,
+  currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
+  codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   breakpoints: state.workspaces.sourcereel.breakpoints,
   editorReadonly: state.workspaces.sourcereel.editorReadonly,
   editorValue: state.workspaces.sourcereel.editorValue!,
@@ -49,12 +65,15 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   enableDebugging: state.workspaces.sourcereel.enableDebugging,
   externalLibraryName: state.workspaces.sourcereel.externalLibrary,
   highlightedLines: state.workspaces.sourcereel.highlightedLines,
+  inputToApply: state.workspaces.sourcecast.inputToApply,
   isDebugging: state.workspaces.sourcereel.isDebugging,
   isEditorAutorun: state.workspaces.sourcereel.isEditorAutorun,
   isRunning: state.workspaces.sourcereel.isRunning,
   newCursorPosition: state.workspaces.sourcereel.newCursorPosition,
   output: state.workspaces.sourcereel.output,
   playbackData: state.workspaces.sourcereel.playbackData,
+  playbackDuration: state.workspaces.sourcecast.playbackDuration,
+  playbackStatus: state.workspaces.sourcecast.playbackStatus,
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
   replValue: state.workspaces.sourcereel.replValue,
   sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
@@ -98,13 +117,29 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         audio: Blob,
         playbackData: IPlaybackData
       ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
+      handleSetCurrentPlayerTime: (playerTime: number) =>
+        setCurrentPlayerTime(playerTime, 'sourcecast'),
+      handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) =>
+        setCodeDeltasToApply(deltas, 'sourcecast'),
+      handleSetInputToApply: (inputToApply: Input) => setInputToApply(inputToApply, 'sourcecast'),
+      handleSetSourcecastData: (
+        title: string,
+        description: string,
+        audioUrl: string,
+        playbackData: IPlaybackData
+      ) => setSourcecastData(title, description, audioUrl, playbackData, 'sourcecast'),
+      handleSetSourcecastDuration: (duration: number) =>
+        setSourcecastDuration(duration, 'sourcecast'),
+      handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
+        setSourcecastStatus(playbackStatus, 'sourcecast'),
       handleSetEditorReadonly: (readonly: boolean) => setEditorReadonly(location, readonly),
+      handleResetInputs: (inputs: Input[]) => resetInputs(inputs, location),
       handleRecordInit: (initData: IPlaybackData['init']) => recordInit(initData, location),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, location),
       handleTimerPause: () => timerPause(location),
       handleTimerReset: () => timerReset(location),
-      handleTimerResume: () => timerResume(location),
+      handleTimerResume: (timeBefore: number) => timerResume(timeBefore, location),
       handleTimerStart: () => timerStart(location),
       handleTimerStop: () => timerStop(location),
       handleToggleEditorAutorun: () => toggleEditorAutorun(location),

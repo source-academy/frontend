@@ -15,6 +15,12 @@ export const fetchSourcecastIndex = (workspaceLocation: WorkspaceLocation) =>
     workspaceLocation
   });
 
+export const setCurrentPlayerTime = (playerTime: number, workspaceLocation: WorkspaceLocation) =>
+  action(actionTypes.SET_CURRENT_PLAYER_TIME, {
+    playerTime,
+    workspaceLocation
+  });
+
 export const setCodeDeltasToApply = (deltas: ICodeDelta[], workspaceLocation: WorkspaceLocation) =>
   action(actionTypes.SET_CODE_DELTAS_TO_APPLY, {
     deltas,

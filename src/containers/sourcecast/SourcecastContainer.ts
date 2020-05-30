@@ -21,6 +21,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   setCodeDeltasToApply,
+  setCurrentPlayerTime,
   setEditorBreakpoint,
   setEditorReadonly,
   setInputToApply,
@@ -46,6 +47,7 @@ import { IState, SideContentType } from '../../reducers/states';
 
 const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   audioUrl: state.workspaces.sourcecast.audioUrl,
+  currentPlayerTime: state.workspaces.sourcecast.currentPlayerTime,
   codeDeltasToApply: state.workspaces.sourcecast.codeDeltasToApply,
   title: state.workspaces.sourcecast.title,
   description: state.workspaces.sourcecast.description,
@@ -97,6 +99,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleReplEval: () => evalRepl(location),
       handleReplOutputClear: () => clearReplOutput(location),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, location),
+      handleSetCurrentPlayerTime: (playerTime: number) =>
+        setCurrentPlayerTime(playerTime, location),
       handleSetCodeDeltasToApply: (deltas: ICodeDelta[]) => setCodeDeltasToApply(deltas, location),
       handleSetEditorReadonly: (editorReadonly: boolean) =>
         setEditorReadonly(location, editorReadonly),

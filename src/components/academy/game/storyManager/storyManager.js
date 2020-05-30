@@ -90,51 +90,54 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     } else {
       // download the story
       downloadRequestSent[curId] = true;
-      const makeAjax = isTest =>
-        $.ajax({
-          type: 'GET',
-          url:
-            (isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive) +
-            curId +
-            '.story.xml',
-          dataType: 'xml',
-          success: function(xml) {
-            var story = xml.children[0];
-            downloaded[curId] = story;
-            // check and load dependencies
-            var dependencies = story.getAttribute('dependencies');
-            var notDownloading = [];
-            if (dependencies) {
-              storyDependencies[curId] = dependencies.split(' ');
-              notDownloading = storyDependencies[curId].filter(function(id) {
-                return !g_loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
-              });
-            } else {
-              storyDependencies[curId] = [];
+      const makeAjax = isTest => {
+        const xhr = new XMLHttpRequest();
+        xhr.open(
+          'GET',
+          `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`
+        );
+        xhr.addEventListener('load', () => {
+          var xml = xhr.responseXML;
+          var story = xml.children[0];
+          downloaded[curId] = story;
+          // check and load dependencies
+          var dependencies = story.getAttribute('dependencies');
+          var notDownloading = [];
+          if (dependencies) {
+            storyDependencies[curId] = dependencies.split(' ');
+            notDownloading = storyDependencies[curId].filter(function(id) {
+              return !loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
+            });
+          } else {
+            storyDependencies[curId] = [];
+          }
+          willBeDownloaded = willBeDownloaded.concat(notDownloading);
+          if (notDownloading.length > 0) {
+            download(0, notDownloading, callback);
+          } else {
+            // figure out whether all files have been downloaded
+            var allRequestSent = willBeDownloaded.reduce(function(prev, cur) {
+              return prev && downloadRequestSent[cur];
+            }, true);
+            if (allRequestSent && Object.keys(downloaded).length == willBeDownloaded.length) {
+              callback();
             }
-            willBeDownloaded = willBeDownloaded.concat(notDownloading);
-            if (notDownloading.length > 0) {
-              download(0, notDownloading, callback);
-            } else {
-              // figure out whether all files have been downloaded
-              var allRequestSent = willBeDownloaded.reduce(function(prev, cur) {
-                return prev && downloadRequestSent[cur];
-              }, true);
-              if (allRequestSent && Object.keys(downloaded).length == willBeDownloaded.length) {
-                callback();
-              }
-            }
-          },
-          error: isTest
+          }
+        });
+        xhr.addEventListener(
+          'error',
+          isTest
             ? () => {
                 console.log('Trying on live...');
                 makeAjax(false);
               }
             : () => {
-                g_loadingOverlay.visible = false;
+                loadingOverlay.visible = false;
                 console.error('Cannot find story ' + curId);
               }
-        });
+        );
+        xhr.send();
+      };
       makeAjax(!isStudent());
       download(i + 1, storyXMLs, callback);
     }
