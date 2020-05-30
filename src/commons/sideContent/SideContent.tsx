@@ -40,6 +40,7 @@ type DispatchProps = {
 
 type StateProps = {
   animate?: boolean;
+  selectedTabId?: SideContentType;
   defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
@@ -79,6 +80,7 @@ class SideContent extends React.PureComponent<SideContentProps, {}> {
               onChange={changeTabsCallback}
               defaultSelectedTabId={this.props.defaultSelectedTabId}
               renderActiveTabPanelOnly={this.props.renderActiveTabPanelOnly}
+              selectedTabId={this.props.selectedTabId}
             >
               {tabs}
             </Tabs>

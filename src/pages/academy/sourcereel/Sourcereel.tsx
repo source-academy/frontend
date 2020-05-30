@@ -114,6 +114,7 @@ export type StateProps = {
   recordingStatus: RecordingStatus;
   replValue: string;
   timeElapsedBeforePause: number;
+  sideContentActiveTab: SideContentType;
   sideContentHeight?: number;
   sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
@@ -124,6 +125,26 @@ export type StateProps = {
 class Sourcereel extends React.Component<SourcereelProps> {
   constructor(props: SourcereelProps) {
     super(props);
+  }
+
+  public componentDidUpdate(prevProps: SourcereelProps) {
+    const { inputToApply } = this.props;
+
+    if (!inputToApply || inputToApply === prevProps.inputToApply) {
+      return;
+    }
+
+    switch (inputToApply.type) {
+      case 'activeTabChange':
+        this.props.handleActiveTabChange(inputToApply.data);
+        break;
+      case 'chapterSelect':
+        this.props.handleChapterSelect(inputToApply.data);
+        break;
+      case 'externalLibrarySelect':
+        this.props.handleExternalSelect(inputToApply.data);
+        break;
+    }
   }
 
   public render() {
@@ -228,6 +249,19 @@ class Sourcereel extends React.Component<SourcereelProps> {
       handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
       handleRecordInput: this.props.handleRecordInput
     };
+
+    const activeTabChangeHandler = (activeTab: SideContentType) => {
+      this.props.handleActiveTabChange(activeTab);
+      if (this.props.recordingStatus !== RecordingStatus.recording) {
+        return;
+      }
+      this.props.handleRecordInput({
+        time: this.getTimerDuration(),
+        type: 'activeTabChange',
+        data: activeTab
+      });
+    };
+
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
         editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
@@ -249,10 +283,11 @@ class Sourcereel extends React.Component<SourcereelProps> {
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
-        handleActiveTabChange: this.props.handleActiveTabChange,
+        handleActiveTabChange: activeTabChangeHandler,
+        selectedTabId: this.props.sideContentActiveTab,
         tabs: [
           {
-            label: 'Introduction',
+            label: 'Recording Panel',
             iconName: IconNames.COMPASS,
             body: (
               <div>
@@ -277,10 +312,11 @@ class Sourcereel extends React.Component<SourcereelProps> {
                   recordingStatus={this.props.recordingStatus}
                 />
               </div>
-            )
+            ),
+            id: SideContentType.sourcereel
           },
           {
-            label: 'Management',
+            label: 'Sourcecast Table',
             iconName: IconNames.EDIT,
             body: (
               <div>
