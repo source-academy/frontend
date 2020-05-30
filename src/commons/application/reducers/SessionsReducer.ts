@@ -2,11 +2,7 @@ import { Reducer } from 'redux';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
-import {
-  SET_GAME_STATE,
-  UPDATE_MATERIAL_DIRECTORY_TREE,
-  UPDATE_MATERIAL_INDEX
-} from '../types/ActionTypes';
+import { SET_GAME_STATE } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
@@ -75,16 +71,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         gradingOverviews: action.payload
-      };
-    case UPDATE_MATERIAL_DIRECTORY_TREE:
-      return {
-        ...state,
-        materialDirectoryTree: action.payload.directoryTree
-      };
-    case UPDATE_MATERIAL_INDEX:
-      return {
-        ...state,
-        materialIndex: action.payload.index
       };
     case UPDATE_NOTIFICATIONS:
       return {

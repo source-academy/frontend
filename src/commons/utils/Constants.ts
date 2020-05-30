@@ -9,10 +9,6 @@ const useBackend =
   process.env.REACT_APP_USE_BACKEND !== undefined &&
   process.env.REACT_APP_USE_BACKEND !== '' &&
   process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
-const useChatkit =
-  process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== undefined &&
-  process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR !== ''; // TODO: Remove
-const instanceLocator = process.env.REACT_APP_CHATKIT_INSTANCE_LOCATOR;
 const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
@@ -58,8 +54,6 @@ const Constants = {
   sourceAcademyVersion,
   backendUrl,
   useBackend,
-  useChatkit, // TODO: Remove
-  instanceLocator,
   defaultSourceChapter,
   defaultSourceVariant,
   defaultQuestionId,

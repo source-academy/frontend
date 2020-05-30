@@ -6,12 +6,11 @@ import { Provider } from 'react-redux';
 import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
 
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';
+import Constants, { Links } from 'src/commons/utils/Constants';
 import { history } from 'src/commons/utils/HistoryHelper';
-import Constants, { Links } from '../commons/utils/Constants';
-import registerServiceWorker from '../commons/utils/RegisterServiceWorker';
-
-import { store } from './createStore';
-import './styles/index.css';
+import registerServiceWorker from 'src/commons/utils/RegisterServiceWorker';
+import { store } from 'src/pages/createStore';
+import 'src/styles/index.css';
 
 const rootContainer = document.getElementById('root') as HTMLElement;
 (window as any).__REDUX_STORE__ = store; // need this for slang's display

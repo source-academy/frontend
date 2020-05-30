@@ -10,7 +10,6 @@ import { GameState, Role, Story } from '../ApplicationTypes';
 import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  FETCH_ANNOUNCEMENTS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -18,7 +17,6 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
-  NOTIFY_CHATKIT_USERS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -35,8 +33,6 @@ import {
 } from '../types/SessionTypes';
 
 export const fetchAuth = (luminusCode: string) => action(FETCH_AUTH, luminusCode);
-
-export const fetchAnnouncements = () => action(FETCH_ANNOUNCEMENTS);
 
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 
@@ -152,9 +148,3 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
-
-export const notifyChatUsers = (assessmentId?: number, submissionId?: number) =>
-  action(NOTIFY_CHATKIT_USERS, {
-    assessmentId,
-    submissionId
-  });

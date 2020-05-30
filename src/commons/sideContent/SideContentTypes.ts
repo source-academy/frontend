@@ -3,7 +3,6 @@ import { IconName } from '@blueprintjs/core';
 export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
-  chat = 'chat',
   dataVisualiser = 'data_visualiser',
   editorGrading = 'editor_grading',
   editorAutograder = 'editor_autograder',

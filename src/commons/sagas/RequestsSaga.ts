@@ -12,7 +12,6 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
-import { MaterialData } from '../../components/material/materialShape';
 import { store } from '../../createStore';
 import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -443,21 +442,6 @@ export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]
 }
 
 /**
- * POST /chat/notify
- */
-export async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
-  await request(`chat/notify`, 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    body: {
-      assessmentId,
-      submissionId
-    },
-    shouldAutoLogout: false
-  });
-}
-
-/**
  * DELETE /sourcecast
  */
 export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
@@ -508,96 +492,6 @@ export const postSourcecast = async (
     accessToken: tokens.accessToken,
     body: formData,
     noContentType: true,
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  return resp;
-};
-
-/**
- * DELETE /material
- */
-export async function deleteMaterial(id: number, tokens: Tokens) {
-  const resp = await request(`material/${id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  return resp;
-}
-
-/**
- * GET /material
- */
-export async function getMaterialIndex(id: number, tokens: Tokens): Promise<MaterialData[] | null> {
-  const url = id === -1 ? `material` : `material?id=${id}`;
-  const resp = await request(url, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  if (resp && resp.ok) {
-    return await resp.json();
-  } else {
-    return null;
-  }
-}
-
-/**
- * POST /material
- */
-export const postMaterial = async (
-  file: File,
-  title: string,
-  description: string,
-  parentId: number,
-  tokens: Tokens
-) => {
-  const formData = new FormData();
-  formData.append('material[file]', file, title);
-  formData.append('material[title]', title);
-  formData.append('material[description]', description);
-  if (parentId !== -1) {
-    formData.append('material[parentId]', parentId.toString());
-  }
-  const resp = await request(`material`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: formData,
-    noContentType: true,
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  return resp;
-};
-
-/**
- * DELETE /category
- */
-export async function deleteMaterialFolder(id: number, tokens: Tokens) {
-  const resp = await request(`category/${id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-  return resp;
-}
-
-/**
- * POST /category
- */
-export const postMaterialFolder = async (title: string, parentId: number, tokens: Tokens) => {
-  const resp = await request(`category`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: { title, parentId: parentId === -1 ? null : parentId },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

@@ -28,7 +28,6 @@ The project requires some environment variables to be set to work properly. In t
 
 1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment.*
 2. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
-3. **REACT_APP_CHATKIT_INSTANCE_LOCATOR**: Set this up if running with chatkit. Its documentation can be found [here](https://pusher.com/docs/chatkit).
 
  \*If you require access to Luminus keys please email Prof Henz at henz@comp.nus.edu.sg to request for a with the email subject heading "Request for Luminus API Keys".
  

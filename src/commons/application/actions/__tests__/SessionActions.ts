@@ -4,7 +4,6 @@ import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTy
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  FETCH_ANNOUNCEMENTS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -12,7 +11,6 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
-  NOTIFY_CHATKIT_USERS,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -29,7 +27,6 @@ import {
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
-  fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
   fetchAuth,
@@ -37,7 +34,6 @@ import {
   fetchGradingOverviews,
   fetchNotifications,
   login,
-  notifyChatUsers,
   setTokens,
   setUser,
   submitAnswer,
@@ -70,13 +66,6 @@ test('fetchAuth generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_AUTH,
     payload: luminusCode
-  });
-});
-
-test('fetchAnnouncements generates correct action object', () => {
-  const action = fetchAnnouncements();
-  expect(action).toEqual({
-    type: FETCH_ANNOUNCEMENTS
   });
 });
 
@@ -134,31 +123,6 @@ test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
     type: LOGIN
-  });
-});
-
-// TODO: Remove
-test('notifyChatUsers generates correct action object with undefined submission id', () => {
-  const action = notifyChatUsers(1, undefined);
-
-  expect(action).toEqual({
-    type: NOTIFY_CHATKIT_USERS,
-    payload: {
-      assessmentId: 1,
-      submissionId: undefined
-    }
-  });
-});
-
-test('notifyChatUsers generates correct action object with undefined assessment id', () => {
-  const action = notifyChatUsers(undefined, 1);
-
-  expect(action).toEqual({
-    type: NOTIFY_CHATKIT_USERS,
-    payload: {
-      assessmentId: undefined,
-      submissionId: 1
-    }
   });
 });
 

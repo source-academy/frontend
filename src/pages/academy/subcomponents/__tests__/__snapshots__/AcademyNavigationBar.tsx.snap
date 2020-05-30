@@ -99,12 +99,6 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
         Sourcereel
       </div>
     </NavLink>
-    <NavLink to=\\"/academy/material\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"cloud-upload\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Upload
-      </div>
-    </NavLink>
     <NavLink to=\\"/academy/grading\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"endorsed\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
@@ -178,12 +172,6 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
       <Blueprint3.Icon icon=\\"mobile-video\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Sourcereel
-      </div>
-    </NavLink>
-    <NavLink to=\\"/academy/material\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
-      <Blueprint3.Icon icon=\\"cloud-upload\\" />
-      <div className=\\"navbar-button-text hidden-xs\\">
-        Upload
       </div>
     </NavLink>
     <NavLink to=\\"/academy/grading\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
