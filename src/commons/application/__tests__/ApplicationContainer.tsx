@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router';
 
-import { mockInitialStore } from '../../../mocks/store';
+import { mockInitialStore } from '../../mocks/StoreMocks';
 import ApplicationContainer from '../ApplicationContainer';
 
 /* TODO: currently crashes w/ ReferenceError---PIXI libraries are not loaded in this test

@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { mockAssessments } from '../../../mocks/assessmentAPI';
+import { mockAssessments } from '../../mocks/AssessmentMocks';
 import { Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';

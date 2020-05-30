@@ -1,4 +1,4 @@
-import { mockBackendSaga } from '../../mocks/backend';
+import { mockBackendSaga } from '../mocks/BackendMocks';
 import Constants from '../utils/Constants';
 import BackendSaga from './BackendSaga';
 import LoginSaga from './LoginSaga';
