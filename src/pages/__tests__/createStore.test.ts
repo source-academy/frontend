@@ -4,7 +4,7 @@ import { compressToUTF16 } from 'lz-string';
 
 import { defaultState, OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { DEFAULT_SOURCE_CHAPTER } from '../../commons/utils/Constants';
+import Constants from '../../commons/utils/Constants';
 import { history } from '../../commons/utils/HistoryHelper';
 import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
@@ -18,7 +18,7 @@ const mockChangedStoredState: SavedState = {
   },
   playgroundEditorValue: 'Nihao everybody',
   playgroundIsEditorAutorun: true,
-  playgroundSourceChapter: DEFAULT_SOURCE_CHAPTER,
+  playgroundSourceChapter: Constants.defaultSourceChapter,
   playgroundSourceVariant: 'default' as Variant,
   playgroundExternalLibrary: 'NONE' as ExternalLibraryName
 };

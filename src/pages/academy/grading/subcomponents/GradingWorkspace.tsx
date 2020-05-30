@@ -31,7 +31,7 @@ import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
-import { USE_CHATKIT } from '../../../../commons/utils/Constants'; // TODO: Remove
+import Constants from '../../../../commons/utils/Constants'; // TODO: Remove
 import ChatApp from '../../../../containers/ChatContainer'; // TODO: Remove
 
 type GradingWorkspaceProps = DispatchProps & OwnProps & StateProps;
@@ -309,7 +309,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       {
         label: `Chat`,
         iconName: IconNames.CHAT,
-        body: USE_CHATKIT ? (
+        body: Constants.useChatkit ? (
           <ChatApp
             roomId={props.grading![questionId].grade.roomId}
             submissionId={this.props.submissionId}
@@ -318,7 +318,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           <span>Chatkit disabled.</span>
         ),
         id: SideContentType.chat,
-        disabled: !USE_CHATKIT
+        disabled: !Constants.useChatkit
       },
       {
         label: `Autograder`,

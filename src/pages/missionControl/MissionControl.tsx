@@ -11,7 +11,7 @@ import { EditingOverviewCard } from '../../commons/editingOverviewCard/EditingOv
 import { OwnProps as EditingWorkspaceOwnProps } from '../../commons/editingWorkspace/EditingWorkspace';
 import EditingWorkspaceContainer from '../../commons/editingWorkspace/EditingWorkspaceContainer';
 import MissionCreator from '../../commons/missionCreator/MissionCreatorContainer';
-import { DEFAULT_QUESTION_ID } from '../../commons/utils/Constants';
+import Constants from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
@@ -45,7 +45,7 @@ class MissionControl extends React.Component<MissionControlProps, State> {
   public render() {
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const questionId: number =
-      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID;
+      stringParamToInt(this.props.match.params.questionId) || Constants.defaultQuestionId;
 
     // If mission for testing is to render, create workspace
     if (assessmentId === -1) {

@@ -32,7 +32,7 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
-import { MAX_BROWSE_INDEX } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   BROWSE_REPL_HISTORY_DOWN,
@@ -276,7 +276,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       } else {
         newReplHistoryRecords = state[workspaceLocation].replHistory.records;
       }
-      if (newReplHistoryRecords.length > MAX_BROWSE_INDEX) {
+      if (newReplHistoryRecords.length > Constants.maxBrowseIndex) {
         newReplHistoryRecords.pop();
       }
       return {

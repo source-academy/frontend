@@ -1,4 +1,4 @@
-import { LINKS } from '../utils/Constants';
+import { Links } from '../utils/Constants';
 import { XMLHttpReadyState, XMLHttpStatus } from './CollabEditingTypes';
 
 export function checkSessionIdExists(
@@ -23,7 +23,7 @@ export function checkSessionIdExists(
     }
     handleConnectionOK();
   };
-  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/' + editorSessionId, true);
+  xmlhttp.open('GET', 'https://' + Links.shareDBServer + 'gists/' + editorSessionId, true);
   xmlhttp.send();
 }
 
@@ -35,6 +35,6 @@ export function createNewSession(onSessionCreated: (sessionId: string) => void) 
       onSessionCreated(id);
     }
   };
-  xmlhttp.open('GET', 'https://' + LINKS.SHAREDB_SERVER + 'gists/latest/', true);
+  xmlhttp.open('GET', 'https://' + Links.shareDBServer + 'gists/latest/', true);
   xmlhttp.send();
 }

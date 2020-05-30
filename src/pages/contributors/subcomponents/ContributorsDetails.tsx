@@ -2,7 +2,7 @@ import { Card, Elevation } from '@blueprintjs/core';
 import { H3, H5 } from '@blueprintjs/core';
 import * as React from 'react';
 
-import { LINKS } from '../../../commons/utils/Constants';
+import { Links } from '../../../commons/utils/Constants';
 
 const dot = <span className="dot">&bull;</span>;
 
@@ -93,7 +93,7 @@ class ContributorsDetails extends React.Component {
             </H5>
             <p>
               Below are all contributors to the{' '}
-              <a href={LINKS.GITHUB_ORG}>Github repositories of the Source Academy</a>.
+              <a href={Links.githubOrg}>Github repositories of the Source Academy</a>.
             </p>
           </div>
         </Card>

@@ -27,7 +27,7 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
-import { MAX_BROWSE_INDEX } from '../../utils/Constants';
+import Constants from '../../utils/Constants';
 import { createContext } from '../../utils/JsSlangHelper';
 import { WorkspaceReducer } from '../WorkspaceReducer';
 import {
@@ -1163,7 +1163,7 @@ describe('SEND_REPL_INPUT_TO_OUTPUT', () => {
   test('works correctly and pops replHistory when exceeding MAX_BROWSE_INDEX', () => {
     const replHistory = {
       browseIndex: null,
-      records: Array.from(Array(MAX_BROWSE_INDEX), (x, index) => index + '') // Create an array with size MAX_BROWSE_INDEX
+      records: Array.from(Array(Constants.maxBrowseIndex), (x, index) => index + '') // Create an array with size MAX_BROWSE_INDEX
     };
 
     const inputToOutputDefaultState: WorkspaceManagerState = generateDefaultWorkspace({
