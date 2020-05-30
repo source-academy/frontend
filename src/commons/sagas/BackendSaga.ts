@@ -25,13 +25,9 @@ import {
 import { MaterialData } from '../../components/game-dev/storyShape';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourcecast/SourcecastTypes';
-import {
-  DELETE_SOURCECAST_ENTRY,
-  SAVE_SOURCECAST_DATA
-} from '../../features/sourcereel/SourcereelTypes';
-import { history } from '../utils/HistoryHelper';
-import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
   CREATE_MATERIAL_FOLDER,
@@ -58,6 +54,8 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
+import { history } from '../utils/HistoryHelper';
+import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   changeChapter,
   changeDateAssessment,

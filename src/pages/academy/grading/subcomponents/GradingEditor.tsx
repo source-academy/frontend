@@ -16,7 +16,10 @@ import { Prompt } from 'react-router';
 import controlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
-import { showSuccessMessage, showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
+import {
+  showSuccessMessage,
+  showWarningMessage
+} from '../../../../commons/utils/NotificationsHelper';
 import { stringParamToInt } from '../../../../commons/utils/ParamParseHelper';
 
 type GradingEditorProps = DispatchProps & OwnProps;

@@ -1,12 +1,9 @@
 import { Reducer } from 'redux';
 import { Testcase } from '../assessment/AssessmentTypes';
 
-import { SourcecastReducer } from '../../features/sourcecast/SourcecastReducer';
-import { SET_EDITOR_READONLY } from '../../features/sourcecast/SourcecastTypes';
-import { SourcereelReducer } from '../../features/sourcereel/SourcereelReducer';
-import { SourceActionType } from '../utils/ActionsHelper';
-import { MAX_BROWSE_INDEX } from '../utils/Constants';
-import { createContext } from '../utils/JsSlangHelper';
+import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
+import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourcereelReducer } from '../../features/sourceRecorder/sourcereel/SourcereelReducer';
 import {
   CodeOutput,
   createDefaultWorkspace,
@@ -34,6 +31,9 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
+import { SourceActionType } from '../utils/ActionsHelper';
+import { MAX_BROWSE_INDEX } from '../utils/Constants';
+import { createContext } from '../utils/JsSlangHelper';
 import {
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,

@@ -17,10 +17,13 @@ import SideContentEnvVisualizer from '../../../commons/sideContent/SideContentEn
 import SideContentInspector from '../../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../../commons/sideContent/SideContentListVisualizer';
 import { SideContentTab, SideContentType } from '../../../commons/sideContent/SideContentTypes';
+import SourceRecorderControlBar, {
+  SourceRecorderControlBarProps
+} from '../../../commons/sourceRecorder/SourceRecorderControlBar';
 import SourcecastEditor, {
-  SourcecastEditorProps
-} from '../../../commons/sourcecast/SourcecastEditor';
-import SourcecastTable from '../../../commons/sourcecast/SourcecastTable';
+  SourceRecorderEditorProps
+} from '../../../commons/sourceRecorder/SourceRecorderEditor';
+import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
 import {
   CodeDelta,
@@ -30,10 +33,7 @@ import {
   PlaybackStatus,
   RecordingStatus,
   SourcecastData
-} from '../../../features/sourcecast/SourcecastTypes';
-import SourcecastControlbar, {
-  SourcecastControlbarProps
-} from '../../sourcecast/subcomponents/SourcecastControlbar';
+} from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
 
 type SourcereelProps = DispatchProps & StateProps;
@@ -209,7 +209,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
       />
     );
 
-    const editorProps: SourcecastEditorProps = {
+    const editorProps: SourceRecorderEditorProps = {
       codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
@@ -299,7 +299,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
         ]
       }
     };
-    const sourcecastControlbarProps: SourcecastControlbarProps = {
+    const sourcecastControlbarProps: SourceRecorderControlBarProps = {
       handleEditorValueChange: this.props.handleEditorValueChange,
       handlePromptAutocomplete: this.props.handlePromptAutocomplete,
       handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
@@ -319,7 +319,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
     return (
       <div className={classNames('Sourcereel', Classes.DARK)}>
         {this.props.recordingStatus === RecordingStatus.paused ? (
-          <SourcecastControlbar {...sourcecastControlbarProps} />
+          <SourceRecorderControlBar {...sourcecastControlbarProps} />
         ) : (
           undefined
         )}

@@ -17,9 +17,9 @@ import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
 
-import { LINKS } from '../utils/Constants';
 import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
 import { Documentation } from '../documentation/Documentation';
+import { LINKS } from '../utils/Constants';
 import AceRange from './EditorAceRange';
 import { Position } from './EditorTypes';
 

@@ -33,21 +33,21 @@ import {
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import { fetchSourcecastIndex } from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import {
-  fetchSourcecastIndex,
   setCodeDeltasToApply,
   setCurrentPlayerTime,
   setInputToApply,
   setSourcecastData,
   setSourcecastDuration,
   setSourcecastStatus
-} from '../../features/sourcecast/SourcecastActions';
+} from '../../features/sourceRecorder/SourceRecorderActions';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus
-} from '../../features/sourcecast/SourcecastTypes';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 

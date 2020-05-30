@@ -1,11 +1,10 @@
-import { WorkspaceState } from 'src/commons/workspace/WorkspaceTypes';
-import { PlaybackData, RecordingStatus } from 'src/features/sourcecast/SourcecastTypes';
+import { WorkspaceState } from '../../../commons/workspace/WorkspaceTypes';
+import { PlaybackData, RecordingStatus } from '../SourceRecorderTypes';
 
 export const DELETE_SOURCECAST_ENTRY = 'DELETE_SOURCECAST_ENTRY';
 export const RECORD_INIT = 'RECORD_INIT';
 export const RECORD_INPUT = 'RECORD_INPUT';
 export const RESET_INPUTS = 'RESET_INPUTS';
-export const SAVE_SOURCECAST_DATA = 'SAVE_SOURCECAST_DATA';
 export const TIMER_PAUSE = 'TIMER_PAUSE';
 export const TIMER_RESET = 'TIMER_RESET';
 export const TIMER_RESUME = 'TIMER_RESUME';

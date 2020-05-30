@@ -2,17 +2,17 @@ import { Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import controlButton from '../../../commons/ControlButton';
 import {
   CodeDelta,
   Input,
   PlaybackData,
   PlaybackStatus,
   SourcecastData
-} from '../../../features/sourcecast/SourcecastTypes';
+} from '../../features/sourceRecorder/SourceRecorderTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import controlButton from '../ControlButton';
 
-export type SourcecastControlbarProps = DispatchProps & StateProps;
+export type SourceRecorderControlBarProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleEditorValueChange: (newCode: string) => void;
@@ -42,10 +42,10 @@ type State = {
   duration: number;
 };
 
-class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps, State> {
+class SourceRecorderControlBar extends React.PureComponent<SourceRecorderControlBarProps, State> {
   private audio: React.RefObject<HTMLAudioElement>;
 
-  constructor(props: SourcecastControlbarProps) {
+  constructor(props: SourceRecorderControlBarProps) {
     super(props);
     this.audio = React.createRef();
     this.state = {
@@ -217,4 +217,4 @@ class SourcecastControlbar extends React.PureComponent<SourcecastControlbarProps
   };
 }
 
-export default SourcecastControlbar;
+export default SourceRecorderControlBar;

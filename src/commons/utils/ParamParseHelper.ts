@@ -1,4 +1,4 @@
-import { AssessmentCategory, AssessmentCategories } from "../assessment/AssessmentTypes";
+import { AssessmentCategories, AssessmentCategory } from '../assessment/AssessmentTypes';
 
 /**
  * Converts an AssessmentCategory into a string for use in URLs.
