@@ -4,7 +4,6 @@ import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTy
 import { GameState, Role, Story } from '../../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  FETCH_ANNOUNCEMENTS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -28,7 +27,6 @@ import {
 } from '../../types/SessionTypes';
 import {
   acknowledgeNotifications,
-  fetchAnnouncements,
   fetchAssessment,
   fetchAssessmentOverviews,
   fetchAuth,
@@ -68,13 +66,6 @@ test('fetchAuth generates correct action object', () => {
   expect(action).toEqual({
     type: FETCH_AUTH,
     payload: luminusCode
-  });
-});
-
-test('fetchAnnouncements generates correct action object', () => {
-  const action = fetchAnnouncements();
-  expect(action).toEqual({
-    type: FETCH_ANNOUNCEMENTS
   });
 });
 

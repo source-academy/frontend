@@ -10,7 +10,6 @@ import { GameState, Role, Story } from '../ApplicationTypes';
 import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  FETCH_ANNOUNCEMENTS,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -34,8 +33,6 @@ import {
 } from '../types/SessionTypes';
 
 export const fetchAuth = (luminusCode: string) => action(FETCH_AUTH, luminusCode);
-
-export const fetchAnnouncements = () => action(FETCH_ANNOUNCEMENTS);
 
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 

@@ -4,10 +4,8 @@ import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
 import { GameState, Role, Story } from '../ApplicationTypes';
 
-import { Announcement } from 'src/components/Announcements'; // TODO: Remove
 import { DirectoryData, MaterialData } from 'src/components/material/materialShape'; // TODO: Remove
 
-export const FETCH_ANNOUNCEMENTS = 'FETCH_ANNOUNCEMENTS';
 export const FETCH_AUTH = 'FETCH_AUTH';
 export const FETCH_ASSESSMENT = 'FETCH_ASSESSMENT';
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
@@ -34,7 +32,6 @@ export type SessionState = {
   readonly accessToken?: string;
   readonly assessmentOverviews?: AssessmentOverview[];
   readonly assessments: Map<number, Assessment>;
-  readonly announcements?: Announcement[]; // TODO: Remove
   readonly grade: number;
   readonly gradingOverviews?: GradingOverview[];
   readonly gradings: Map<number, Grading>;
