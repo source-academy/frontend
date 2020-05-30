@@ -2,7 +2,7 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import * as classNames from 'classnames';
 import * as React from 'react';
 
-import { LINKS } from '../utils/Constants';
+import { Links } from '../utils/Constants';
 
 type State = {
   loading: boolean;
@@ -33,7 +33,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
           <br />
           <br />
           The data visualizer uses box-and-pointer diagrams, as introduced in{' '}
-          <a href={LINKS.SOURCE_DOCS_CHAPTER_2_2} target="_blank">
+          <a href={Links.sourceDocsChapter2_2} target="_blank">
             <i>
               Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 2,
               Section 2

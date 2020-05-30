@@ -4,7 +4,7 @@ import { Grading } from '../../features/grading/GradingTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
-import { DEFAULT_SOURCE_CHAPTER, DEFAULT_SOURCE_VARIANT } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   WorkspaceLocation,
@@ -179,10 +179,10 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   autogradingResults: [],
   breakpoints: [],
   context: createContext<WorkspaceLocation>(
-    DEFAULT_SOURCE_CHAPTER,
+    Constants.defaultSourceChapter,
     [],
     workspaceLocation,
-    DEFAULT_SOURCE_VARIANT
+    Constants.defaultSourceVariant as Variant
   ),
   editorPrepend: '',
   editorSessionId: '',

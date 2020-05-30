@@ -32,7 +32,7 @@ import Markdown from '../Markdown';
 import NotificationBadge from '../notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByAssessment } from '../notificationBadge/NotificationBadgeHelper';
 import { NotificationFilterFunction } from '../notificationBadge/NotificationBadgeTypes';
-import { DEFAULT_QUESTION_ID } from '../utils/Constants';
+import Constants from '../utils/Constants';
 import { beforeNow, getPrettyDate } from '../utils/DateHelper';
 import { assessmentCategoryLink, stringParamToInt } from '../utils/ParamParseHelper';
 import {
@@ -85,7 +85,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
     const { assessmentOverviews, isStudent } = this.props;
     const assessmentId: number | null = stringParamToInt(this.props.match.params.assessmentId);
     const questionId: number =
-      stringParamToInt(this.props.match.params.questionId) || DEFAULT_QUESTION_ID;
+      stringParamToInt(this.props.match.params.questionId) || Constants.defaultQuestionId;
 
     // If there is an assessment to render, create a workspace. The assessment
     // overviews must still be loaded for this, to send the due date.
@@ -304,9 +304,9 @@ class Assessment extends React.Component<AssessmentProps, State> {
     }
     return (
       <NavLink
-        to={`/academy/${assessmentCategoryLink(
-          overview.category
-        )}/${overview.id.toString()}/${DEFAULT_QUESTION_ID}`}
+        to={`/academy/${assessmentCategoryLink(overview.category)}/${overview.id.toString()}/${
+          Constants.defaultQuestionId
+        }`}
       >
         <Button
           icon={icon}
