@@ -1,7 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { mockTypeError } from '../../mocks/ContextMocks';
 import {
   CodeOutput,
   ErrorOutput,
@@ -9,6 +8,7 @@ import {
   ResultOutput,
   RunningOutput
 } from '../../application/ApplicationTypes';
+import { mockTypeError } from '../../mocks/ContextMocks';
 import Repl, { Output } from '../Repl';
 
 const mockRunningOutput: RunningOutput = {

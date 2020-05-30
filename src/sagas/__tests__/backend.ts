@@ -29,8 +29,7 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth,
-  postNotify
+  postAuth
 } from '../requests';
 
 // ----------------------------------------
@@ -386,16 +385,6 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
       ])
       .call(showWarningMessage, 'Something went wrong (got 404 response)')
       .dispatch({ type: actionTypes.ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
-      .silentRun();
-  });
-});
-
-describe('Test NOTIFY_CHATKIT_USERS Action', () => {
-  test('called', () => {
-    return expectSaga(backendSaga)
-      .withState(mockStates)
-      .call(postNotify, mockTokens, 1, undefined)
-      .dispatch({ type: actionTypes.NOTIFY_CHATKIT_USERS, payload: { assessmentId: 1 } })
       .silentRun();
   });
 });
