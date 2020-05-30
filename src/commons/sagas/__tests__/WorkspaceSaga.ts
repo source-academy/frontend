@@ -5,8 +5,8 @@ import { call } from 'redux-saga/effects';
 
 import createContext from 'js-slang/dist/createContext';
 
-import { mockRuntimeContext } from '../../../mocks/context';
-import { mockTestcases } from '../../../mocks/gradingAPI';
+import { mockRuntimeContext } from '../../mocks/ContextMocks';
+import { mockTestcases } from '../../mocks/GradingMocks';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginInterruptExecution,

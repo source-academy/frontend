@@ -11,9 +11,9 @@ import {
   mockAssessmentOverviews,
   mockAssessmentQuestions,
   mockAssessments
-} from '../../../mocks/assessmentAPI';
-import { mockGroupOverviews } from '../../../mocks/groupAPI';
-import { mockNotifications } from '../../../mocks/userAPI';
+} from '../../mocks/AssessmentMocks';
+import { mockGroupOverviews } from '../../mocks/GroupMocks';
+import { mockNotifications } from '../../mocks/UserMocks';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   setTokens,

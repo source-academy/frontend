@@ -2,7 +2,7 @@ import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import { mockRouterProps } from '../../../mocks/components';
+import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Application, { ApplicationProps } from '../Application';
 import { ExternalLibraryName, ExternalLibraryNames } from '../types/ExternalTypes';
 

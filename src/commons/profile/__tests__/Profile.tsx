@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import * as React from 'react';
 import { MemoryRouter } from 'react-router';
 
-import { mockAssessmentOverviews } from '../../../mocks/assessmentAPI';
+import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import { Role } from '../../application/ApplicationTypes';
 import { AssessmentStatuses } from '../../assessment/AssessmentTypes';
 import Profile from '../Profile';
