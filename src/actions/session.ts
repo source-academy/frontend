@@ -132,3 +132,9 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(actionTypes.UPDATE_NOTIFICATIONS, notifications);
+
+export const notifyChatUsers = (assessmentId?: number, submissionId?: number) =>
+  action(actionTypes.NOTIFY_CHATKIT_USERS, {
+    assessmentId,
+    submissionId
+  });

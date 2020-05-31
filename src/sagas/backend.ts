@@ -353,6 +353,19 @@ function* backendSaga(): SagaIterator {
     }
   });
 
+  yield takeEvery(actionTypes.NOTIFY_CHATKIT_USERS, function*(
+    action: ReturnType<typeof actions.notifyChatUsers>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const assessmentId = action.payload.assessmentId;
+    const submissionId = action.payload.submissionId;
+    yield call(request.postNotify, tokens, assessmentId, submissionId);
+  });
+
   yield takeEvery(actionTypes.DELETE_SOURCECAST_ENTRY, function*(
     action: ReturnType<typeof actions.deleteSourcecastEntry>
   ) {

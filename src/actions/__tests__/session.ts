@@ -13,6 +13,7 @@ import {
   fetchGradingOverviews,
   fetchNotifications,
   login,
+  notifyChatUsers,
   setTokens,
   setUser,
   submitAnswer,
@@ -109,6 +110,30 @@ test('login action generates correct action object', () => {
   const action = login();
   expect(action).toEqual({
     type: actionTypes.LOGIN
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined submission id', () => {
+  const action = notifyChatUsers(1, undefined);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: 1,
+      submissionId: undefined
+    }
+  });
+});
+
+test('notifyChatUsers generates correct action object with undefined assessment id', () => {
+  const action = notifyChatUsers(undefined, 1);
+
+  expect(action).toEqual({
+    type: actionTypes.NOTIFY_CHATKIT_USERS,
+    payload: {
+      assessmentId: undefined,
+      submissionId: 1
+    }
   });
 });
 

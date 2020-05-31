@@ -4,7 +4,9 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 import GradingEditor from '../../../containers/academy/grading/GradingEditorContainer';
+import ChatApp from '../../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../../reducers/states';
+import { USE_CHATKIT } from '../../../utils/constants';
 import { history } from '../../../utils/history';
 import {
   AutogradingResult,
@@ -302,6 +304,20 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
         id: SideContentType.questionOverview
+      },
+      {
+        label: `Chat`,
+        iconName: IconNames.CHAT,
+        body: USE_CHATKIT ? (
+          <ChatApp
+            roomId={props.grading![questionId].grade.roomId}
+            submissionId={this.props.submissionId}
+          />
+        ) : (
+          <span>Chatkit disabled.</span>
+        ),
+        id: SideContentType.chat,
+        disabled: !USE_CHATKIT
       },
       {
         label: `Autograder`,

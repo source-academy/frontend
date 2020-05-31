@@ -449,6 +449,21 @@ export async function postAcknowledgeNotifications(tokens: Tokens, ids: number[]
 }
 
 /**
+ * POST /chat/notify
+ */
+export async function postNotify(tokens: Tokens, assessmentId?: number, submissionId?: number) {
+  await request(`chat/notify`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      assessmentId,
+      submissionId
+    },
+    shouldAutoLogout: false
+  });
+}
+
+/**
  * DELETE /sourcecast
  */
 export async function deleteSourcecastEntry(id: number, tokens: Tokens) {
