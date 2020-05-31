@@ -8,13 +8,6 @@ import {
   UPDATE_GROUP_OVERVIEWS
 } from '../../../features/dashboard/DashboardTypes';
 import {
-  mockAssessmentOverviews,
-  mockAssessmentQuestions,
-  mockAssessments
-} from '../../mocks/AssessmentMocks';
-import { mockGroupOverviews } from '../../mocks/GroupMocks';
-import { mockNotifications } from '../../mocks/UserMocks';
-import {
   setTokens,
   setUser,
   updateAssessment,
@@ -40,6 +33,13 @@ import {
   Question,
   SUBMIT_ASSESSMENT
 } from '../../assessment/AssessmentTypes';
+import {
+  mockAssessmentOverviews,
+  mockAssessmentQuestions,
+  mockAssessments
+} from '../../mocks/AssessmentMocks';
+import { mockGroupOverviews } from '../../mocks/GroupMocks';
+import { mockNotifications } from '../../mocks/UserMocks';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {

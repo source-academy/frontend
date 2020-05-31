@@ -12,9 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
-import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
-import { USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { showWarningMessage } from '../../utils/notification';
@@ -375,38 +373,22 @@ class AssessmentWorkspace extends React.Component<
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
-      tabs.push(
-        {
-          label: `Report Card`,
-          iconName: IconNames.TICK,
-          body: (
-            <GradingResult
-              graderName={props.assessment!.questions[questionId].grader!.name}
-              gradedAt={props.assessment!.questions[questionId].gradedAt!}
-              xp={props.assessment!.questions[questionId].xp}
-              grade={props.assessment!.questions[questionId].grade}
-              maxGrade={props.assessment!.questions[questionId].maxGrade}
-              maxXp={props.assessment!.questions[questionId].maxXp}
-              comments={props.assessment!.questions[questionId].comments}
-            />
-          ),
-          id: SideContentType.grading
-        },
-        {
-          label: `Chat`,
-          iconName: IconNames.CHAT,
-          body: USE_CHATKIT ? (
-            <ChatApp
-              assessmentId={this.props.assessment!.id}
-              roomId={props.assessment!.questions[questionId].roomId}
-            />
-          ) : (
-            <span>Chatkit disabled.</span>
-          ),
-          id: SideContentType.chat,
-          disabled: !USE_CHATKIT
-        }
-      );
+      tabs.push({
+        label: `Report Card`,
+        iconName: IconNames.TICK,
+        body: (
+          <GradingResult
+            graderName={props.assessment!.questions[questionId].grader!.name}
+            gradedAt={props.assessment!.questions[questionId].gradedAt!}
+            xp={props.assessment!.questions[questionId].xp}
+            grade={props.assessment!.questions[questionId].grade}
+            maxGrade={props.assessment!.questions[questionId].maxGrade}
+            maxXp={props.assessment!.questions[questionId].maxXp}
+            comments={props.assessment!.questions[questionId].comments}
+          />
+        ),
+        id: SideContentType.grading
+      });
     }
 
     const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;

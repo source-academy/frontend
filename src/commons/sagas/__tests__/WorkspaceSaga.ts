@@ -5,8 +5,6 @@ import { call } from 'redux-saga/effects';
 
 import createContext from 'js-slang/dist/createContext';
 
-import { mockRuntimeContext } from '../../mocks/ContextMocks';
-import { mockTestcases } from '../../mocks/GradingMocks';
 import {
   beginInterruptExecution,
   debuggerReset,
@@ -34,6 +32,8 @@ import {
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingTypes';
+import { mockRuntimeContext } from '../../mocks/ContextMocks';
+import { mockTestcases } from '../../mocks/GradingMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {

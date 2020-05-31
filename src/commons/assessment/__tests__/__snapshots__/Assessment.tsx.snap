@@ -752,7 +752,7 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"\\\\n*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\nincididunt ut labore et dolore magna aliqua.\\\\n\\\\n\`\`\`\\\\nconst a = 5;\\\\n\`\`\`\\\\n\\\\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n[veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n\`explicabo\`.\\\\n\\\\n\\">
+                                    <Markdown content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
@@ -1635,7 +1635,7 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"\\\\n*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\nincididunt ut labore et dolore magna aliqua.\\\\n\\\\n\`\`\`\\\\nconst a = 5;\\\\n\`\`\`\\\\n\\\\nSed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n[veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n\`explicabo\`.\\\\n\\\\n\\">
+                                    <Markdown content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
                                     </Markdown>
                                   </div>
