@@ -1,4 +1,6 @@
 import * as React from 'react';
+import 'ace-builds/webpack-resolver';
+
 import { s3Folder } from '../features/StorySimulatorConstants';
 import { fetchStories } from '../features/StorySimulatorServices';
 import StoryItems from './StoryItems';

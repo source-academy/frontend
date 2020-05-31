@@ -15,8 +15,8 @@ function StorySimulator() {
   const storyId = 'mission-1';
 
   return (
-    <div className="ContentDisplay row center-xs">
-      <div className={`${'col-xs-10'} contentdisplay-content-parent`}>
+    <div className="ContentDisplay row center-xs ">
+      <div className="col-xs-10 contentdisplay-content-parent">
         <div className="WhiteBackground VerticalStack">
           <h2>Story Simulator</h2>
 
