@@ -1,4 +1,5 @@
-import { Notification } from '../notificationBadge/NotificationBadgeTypes';
+import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
+import { AssessmentCategories } from '../assessment/AssessmentTypes';
 
 /**
  * Deprecated, check backend for roles
@@ -8,7 +9,7 @@ export enum Roles {
   trainer = 'trainer',
   admin = 'admin'
 }
-export type Role = keyof typeof Roles; // TODO: Duplicate at ApplicationTypes.ts
+export type Role = keyof typeof Roles;
 
 /**
  * Mock for fetching a role, given an access token. A null
@@ -62,51 +63,58 @@ export const mockFetchStudentInfo = (accessToken: string): StudentInfo[] | null 
 export const mockNotifications: Notification[] = [
   {
     id: 1,
-    type: 'new',
-    assessment_id: 2,
-    assessment_type: 'Mission',
+    type: NotificationTypes.deadline,
+    assessment_id: 3,
+    assessment_type: AssessmentCategories.Sidequest,
     assessment_title: 'The Secret to Streams'
   },
   {
     id: 2,
-    type: 'new',
-    assessment_id: 3,
-    assessment_type: 'Sidequest',
-    assessment_title: 'A sample Sidequest'
+    type: NotificationTypes.autograded,
+    assessment_id: 4,
+    assessment_type: AssessmentCategories.Mission,
+    assessment_title: 'A Closed Mission'
   },
   {
     id: 3,
-    type: 'autograded',
+    type: NotificationTypes.graded,
     assessment_id: 4,
-    assessment_type: 'Mission',
+    assessment_type: AssessmentCategories.Mission,
     assessment_title: 'A Closed Mission'
   },
   {
     id: 4,
-    type: 'graded',
-    assessment_id: 4,
-    assessment_type: 'Mission',
-    assessment_title: 'A Closed Mission'
+    type: NotificationTypes.new,
+    assessment_id: 6,
+    assessment_type: AssessmentCategories.Path,
+    assessment_title: 'Basic Logic'
   },
   {
     id: 5,
-    type: 'submitted',
-    submission_id: 1,
-    assessment_type: 'Mission',
-    assessment_title: 'Mission 0'
+    type: NotificationTypes.new,
+    assessment_id: 7,
+    assessment_type: AssessmentCategories.Mission,
+    assessment_title: 'Symphony of the Winds'
   },
   {
     id: 6,
-    type: 'submitted',
-    submission_id: 2,
-    assessment_type: 'Mission',
-    assessment_title: 'Mission 1'
+    type: NotificationTypes.submitted,
+    submission_id: 1,
+    assessment_type: AssessmentCategories.Mission,
+    assessment_title: 'Mission 0'
   },
   {
     id: 7,
-    type: 'submitted',
+    type: NotificationTypes.submitted,
+    submission_id: 2,
+    assessment_type: AssessmentCategories.Mission,
+    assessment_title: 'Mission 1'
+  },
+  {
+    id: 8,
+    type: NotificationTypes.submitted,
     submission_id: 3,
-    assessment_type: 'Mission',
+    assessment_type: AssessmentCategories.Mission,
     assessment_title: 'Mission 0'
   }
 ];

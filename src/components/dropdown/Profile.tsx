@@ -175,8 +175,6 @@ class Profile extends React.Component<ProfileProps, {}> {
     return (
       <Drawer
         className="profile"
-        canEscapeKeyClose={true}
-        canOutsideClickClose={true}
         icon={IconNames.USER}
         isCloseButtonShown={true}
         isOpen={this.props.isOpen}
