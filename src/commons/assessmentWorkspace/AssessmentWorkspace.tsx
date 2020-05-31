@@ -175,6 +175,7 @@ class AssessmentWorkspace extends React.Component<
         />
       );
     }
+
     const overlay = (
       <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
         <Card>
@@ -189,12 +190,14 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
+    const closeOverlay = () => this.setState({ showResetTemplateOverlay: false });
     const resetTemplateOverlay = (
       <Dialog
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={true}
         isOpen={this.state.showResetTemplateOverlay}
+        onClose={closeOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -203,19 +206,14 @@ class AssessmentWorkspace extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
-            {controlButton(
-              'Cancel',
-              null,
-              () => this.setState({ showResetTemplateOverlay: false }),
-              {
-                minimal: false
-              }
-            )}
+            {controlButton('Cancel', null, closeOverlay, {
+              minimal: false
+            })} 
             {controlButton(
               'Confirm',
               null,
               () => {
-                this.setState({ showResetTemplateOverlay: false });
+                closeOverlay();
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -228,6 +226,7 @@ class AssessmentWorkspace extends React.Component<
         </div>
       </Dialog>
     );
+    
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
