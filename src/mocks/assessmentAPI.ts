@@ -17,14 +17,14 @@ const mockUnopenedAssessmentsOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 1,
+    grade: 0,
     id: 1,
-    maxGrade: 3000,
+    maxGrade: 12,
     maxXp: 1000,
     openAt: '2038-06-18T05:24:26.026Z',
-    title: 'An Odessey to Runes (Duplicate)',
+    title: 'An Odyssey to Runes Redux',
     shortSummary:
-      'This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0',
+      'This is a test for the UI of the unopened assessment overview. This links to mock Mission 1 in an unattempted state.',
     status: AssessmentStatuses.not_attempted,
     story: 'mission-1',
     xp: 0,
@@ -37,63 +37,60 @@ const mockOpenedAssessmentsOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/300/',
-    grade: 2,
+    grade: 0,
     id: 1,
-    maxGrade: 3000,
-    maxXp: 1000,
+    maxGrade: 9,
+    maxXp: 400,
     openAt: '2018-06-18T05:24:26.026Z',
-    title: 'An Odessey to Runes',
-    shortSummary: `
-*Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-incididunt ut labore et dolore magna aliqua.
+    title: 'An Odyssey to Runes',
+    shortSummary: `This shows the UI of an opened assessment overview, with a long assessment summary using Markdown for formatting. This links to mock Mission 1 in a completed state.
 
-\`\`\`
-const a = 5;
-\`\`\`
+**NOTE**:
+- Please refer to the following [link](https://www.google.com) for help.
+- The **actual submission deadline** of this mission is __tomorrow__, unless you have *previously requested* for an extension.
+- To submit, please make sure you have saved your work for every task/question, and then click \`Finalize Submission\` on this page.
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium
-_doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
-[veritatis et quasi architecto](google.com) beatae vitae dicta sunt
-\`explicabo\`.
-
-`,
+##### The following hint may be useful:
+\`\`\`javascript
+const identity = x => x;
+\`\`\``,
     status: AssessmentStatuses.attempted,
     story: 'mission-1',
-    xp: 1,
+    xp: 0,
     gradingStatus: GradingStatuses.none
   },
   {
-    category: AssessmentCategories.Mission,
+    category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
-    grade: 3,
+    grade: 0,
     id: 2,
-    maxGrade: 3000,
-    maxXp: 1000,
+    maxGrade: 11,
+    maxXp: 1050,
     openAt: '2018-07-18T05:24:26.026Z',
     title: 'The Secret to Streams',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This shows the UI of an opened assessment overview. This links to mock Sidequest 3 in an attempted state, **thus the sidequest briefing is not displayed**.',
     status: AssessmentStatuses.attempting,
     story: 'mission-2',
-    xp: 2,
+    xp: 0,
     gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
+    grade: 0,
     id: 3,
-    maxGrade: 3000,
-    maxXp: 1000,
+    maxGrade: 7,
+    maxXp: 725,
     openAt: '2018-07-18T05:24:26.026Z',
-    title: 'A sample Sidequest',
+    title: 'A Sample Sidequest',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This is a placeholder quest summary. This links to mock Sidequest 3 in an unattempted state, **thus the sidequest briefing is displayed**.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
-    xp: 3,
+    xp: 0,
     gradingStatus: GradingStatuses.none
   },
   {
@@ -103,11 +100,11 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     grade: 0,
     id: 6,
     maxGrade: 0,
-    maxXp: 200,
+    maxXp: 0,
     openAt: '2018-01-01T00:00:00.000Z',
-    title: 'Basic logic gates',
+    title: 'Basic Logic',
     shortSummary:
-      'This mock path serves as a demonstration of the support provided for mock programming path functionality.',
+      'This mock path serves as a demonstration of the support provided for mock programming path functionality. This links to mock Path 6 in an unattempted state, **thus the path briefing is displayed**.',
     status: AssessmentStatuses.not_attempted,
     story: null,
     xp: 0,
@@ -117,19 +114,36 @@ _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore
     category: AssessmentCategories.Practical,
     closeAt: '2048-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/?text=Hello',
-    grade: 4,
-    id: 5,
-    maxGrade: 3000,
-    maxXp: 1000,
+    grade: 0,
+    id: 8,
+    maxGrade: 48,
+    maxXp: 0,
     openAt: '2018-07-18T05:24:26.026Z',
-    title: 'A sample Practical',
+    title: 'A Sample Practical',
     shortSummary:
-      'Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.',
+      'This is a placeholder summary for a practical assessment. This links to mock Practical 4 in an unattempted state.',
     status: AssessmentStatuses.not_attempted,
     story: 'sidequest-2.1',
-    xp: 3,
+    xp: 0,
     gradingStatus: GradingStatuses.none,
     private: true
+  },
+  {
+    category: AssessmentCategories.Mission,
+    closeAt: '2069-04-20T23:59:59.999Z',
+    coverImage: 'https://fakeimg.pl/350x200/?text=World&font=lobster',
+    grade: 0,
+    id: 7,
+    maxGrade: 0,
+    maxXp: 666,
+    openAt: '2020-03-21T00:00:00.000Z',
+    title: 'Symphony of the Winds',
+    shortSummary:
+      'This shows the UI of an opened assessment overview. This links to mock Mission 7 in an unattempted state, **thus the mission briefing is displayed**.',
+    status: AssessmentStatuses.not_attempted,
+    story: null,
+    xp: 0,
+    gradingStatus: GradingStatuses.none
   }
 ];
 
@@ -138,55 +152,55 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     category: AssessmentCategories.Mission,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
-    grade: 2700,
+    grade: 9,
     id: 4,
-    maxGrade: 3000,
-    maxXp: 1000,
+    maxGrade: 11,
+    maxXp: 420,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'A closed Mission',
+    title: 'A Closed Mission',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock.',
+      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This links to the mock Mission 2 in a completed state.',
     status: AssessmentStatuses.submitted,
-    story: 'mission-3',
-    xp: 800,
-    gradingStatus: GradingStatuses.grading
+    story: null,
+    xp: 468,
+    gradingStatus: GradingStatuses.graded
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 1950,
+    grade: 0,
     id: 5,
-    maxGrade: 3000,
-    maxXp: 1000,
+    maxGrade: 13,
+    maxXp: 850,
     openAt: '2007-07-18T05:24:26.026Z',
     title: 'Closed (not graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross.',
+      'This is a test for the grading status tooltip when the assessment is not graded. It should render as a red cross. This links to the mock Sidequest 5 in a completed state.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 500,
+    xp: 0,
     gradingStatus: GradingStatuses.none
   },
   {
     category: AssessmentCategories.Sidequest,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000,128/000,255',
-    grade: 300,
+    grade: 6,
     id: 5,
-    maxGrade: 700,
-    maxXp: 500,
+    maxGrade: 14,
+    maxXp: 1100,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'Closed (fully graded) Sidequest',
+    title: 'Closed (partially graded) Sidequest',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment is fully graded. It should render as a green tick. This sidequest links to the mock Sidequest 4.',
+      'This is a test for the grading status tooltip when the assessment is partially graded (undergoing manual grading). It should render as an orange clock. This links to the mock Sidequest 5 in a completed state.',
     status: AssessmentStatuses.submitted,
     story: null,
-    xp: 150,
-    gradingStatus: GradingStatuses.graded
+    xp: 471,
+    gradingStatus: GradingStatuses.grading
   },
   {
-    category: AssessmentCategories.Sidequest,
+    category: AssessmentCategories.Path,
     closeAt: '2008-06-18T05:24:26.026Z',
     coverImage: 'https://fakeimg.pl/350x200/ff0000/000',
     grade: 0,
@@ -194,9 +208,9 @@ const mockClosedAssessmentOverviews: IAssessmentOverview[] = [
     maxGrade: 0,
     maxXp: 0,
     openAt: '2007-07-18T05:24:26.026Z',
-    title: 'Ungraded assessment',
+    title: 'Ungraded Assessment',
     shortSummary:
-      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This sidequest links to the mock Sidequest 4.',
+      'This is a test for the grading status tooltip when the assessment does not require manual grading (e.g. paths and contests). It should render as a blue disable sign. This links to the mock Sidequest 5 in a completed state.',
     status: AssessmentStatuses.submitted,
     story: null,
     xp: 100,
@@ -844,7 +858,7 @@ const __NOR_AND = (x, y) => {
  */
 export const mockAssessments: IAssessment[] = [
   {
-    category: 'Mission',
+    category: AssessmentCategories.Mission,
     id: 1,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -853,7 +867,7 @@ export const mockAssessments: IAssessment[] = [
     title: 'An Odessey to Runes'
   },
   {
-    category: 'Mission',
+    category: AssessmentCategories.Mission,
     id: 2,
     longSummary:
       'This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
@@ -885,13 +899,12 @@ sapien
 \`\`\``,
     missionPDF: 'www.google.com',
     questions: mockAssessmentQuestions,
-    title: 'A sample Sidequest'
+    title: 'A Sample Sidequest'
   },
   {
     category: AssessmentCategories.Mission,
     id: 4,
-    longSummary:
-      'This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
+    longSummary: 'This is a closed mission. The save button should not be rendered.',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Mission'
@@ -900,7 +913,7 @@ sapien
     category: AssessmentCategories.Sidequest,
     id: 5,
     longSummary:
-      'This is the closed sidequest briefing. The save button should not exist. This is a placeholder sidequest for testing rendering of grading statuses.',
+      'This is the closed sidequest briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. ',
     missionPDF: 'www.google.com',
     questions: mockClosedAssessmentQuestions,
     title: 'A Closed Sidequest'
@@ -908,13 +921,39 @@ sapien
   {
     category: AssessmentCategories.Path,
     id: 6,
-    longSummary: `### Basic logic gates
+    longSummary: `### Basic Logic Gates
 
 This path is intended to demonstrate concepts from the lecture **Logic Circuits**. You are strongly encouraged to attempt this path to check your understanding, prior to the next Studio session. For this, you will be granted a small amount of XP!
 
 The path comprises 4 questions and is fully autograded and guided, and there are **no private test cases** - there will be no manual review by default. Please consult your Avenger if you require assistance!</TEXT>`,
     missionPDF: 'www.google.com',
     questions: mockPathQuestions,
-    title: 'A sample guided path'
+    title: 'A Sample Guided Path'
+  },
+  {
+    category: AssessmentCategories.Mission,
+    id: 7,
+    longSummary: `###This is a long sidequest briefing for testing purposes!
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Metus aliquam eleifend mi in. Enim nulla aliquet porttitor lacus luctus accumsan tortor. Vitae purus faucibus ornare suspendisse sed nisi lacus sed viverra. Neque volutpat ac tincidunt vitae semper quis lectus nulla. In hac habitasse platea dictumst vestibulum rhoncus. Nisl vel pretium lectus quam id leo in. Diam donec adipiscing tristique risus. Accumsan tortor posuere ac ut consequat. Felis bibendum ut tristique et egestas quis ipsum. Mi eget mauris pharetra et ultrices. Ornare aenean euismod elementum nisi. Sem viverra aliquet eget sit amet tellus. Massa enim nec dui nunc mattis enim ut tellus elementum. Venenatis cras sed felis eget velit aliquet sagittis id. Placerat duis ultricies lacus sed turpis tincidunt id. Eu lobortis elementum nibh tellus molestie nunc.
+
+Enim eu turpis egestas pretium. Pharetra convallis posuere morbi leo urna molestie at elementum eu. Sed enim ut sem viverra aliquet eget sit amet. Ligula ullamcorper malesuada proin libero nunc consequat interdum. Dignissim suspendisse in est ante in nibh mauris. Urna id volutpat lacus laoreet non curabitur gravida arcu ac. Nibh mauris cursus mattis molestie a iaculis at. Elit at imperdiet dui accumsan sit. Nibh venenatis cras sed felis. Ut tristique et egestas quis ipsum suspendisse ultrices gravida. Natoque penatibus et magnis dis parturient montes nascetur ridiculus. Eget aliquet nibh praesent tristique magna sit amet purus gravida. Pretium nibh ipsum consequat nisl vel pretium. Mattis vulputate enim nulla aliquet porttitor lacus. Quis varius quam quisque id diam. Ut sem viverra aliquet eget sit amet tellus. Purus non enim praesent elementum facilisis leo vel fringilla est. Tellus id interdum velit laoreet. Sed felis eget velit aliquet sagittis id consectetur.
+
+Facilisi etiam dignissim diam quis enim lobortis scelerisque fermentum. Mi tempus imperdiet nulla malesuada. Sagittis aliquam malesuada bibendum arcu. Lobortis feugiat vivamus at augue eget arcu. Urna neque viverra justo nec ultrices dui sapien eget mi. Quisque non tellus orci ac auctor augue mauris augue neque. Bibendum neque egestas congue quisque egestas diam in arcu cursus. Posuere sollicitudin aliquam ultrices sagittis orci a scelerisque. Etiam dignissim diam quis enim lobortis scelerisque fermentum dui. Nunc sed blandit libero volutpat sed cras ornare arcu. Aenean euismod elementum nisi quis. Duis at consectetur lorem donec massa sapien faucibus. Justo donec enim diam vulputate. Velit ut tortor pretium viverra suspendisse. Tellus rutrum tellus pellentesque eu. Phasellus egestas tellus rutrum tellus pellentesque eu tincidunt.
+
+Pellentesque habitant morbi tristique senectus et netus et malesuada. Ut placerat orci nulla pellentesque dignissim. Vitae tempus quam pellentesque nec nam aliquam sem et. Praesent semper feugiat nibh sed pulvinar. Netus et malesuada fames ac turpis egestas maecenas. Nisi lacus sed viverra tellus. Pharetra vel turpis nunc eget lorem dolor sed viverra ipsum. Dui sapien eget mi proin sed libero. Habitant morbi tristique senectus et netus et malesuada. In hendrerit gravida rutrum quisque. Nisi quis eleifend quam adipiscing vitae proin sagittis nisl rhoncus.`,
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'Symphony of the Winds'
+  },
+  {
+    category: AssessmentCategories.Practical,
+    id: 8,
+    longSummary: `### Instructions (please read carefully)
+- You are allowed X minutes for this Practical Assessment.
+- This is an open-book assessment. Any written or printed material, or material and programs stored on the Source Academy may be used as reference material.`,
+    missionPDF: 'www.google.com',
+    questions: mockAssessmentQuestions,
+    title: 'A Sample Practical'
   }
 ];
