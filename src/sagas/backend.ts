@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { MaterialData } from 'src/components/storySimulator/subcomponents/storyShape';
+import { MaterialData } from 'src/components/storySimulator/features/StorySimulatorTypes';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';

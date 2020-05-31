@@ -1,5 +1,8 @@
 import * as React from 'react';
+import AceEditor from 'react-ace';
+
 import { overrideSessionData } from '../../academy/game/backend/gameState';
+import { defaultGameStateText } from '../features/StorySimulatorConstants';
 
 class JsonUpload extends React.Component {
   private static onFormSubmit(e: { preventDefault: () => void }) {
@@ -15,10 +18,16 @@ class JsonUpload extends React.Component {
 
   public render() {
     return (
-      <form onSubmit={JsonUpload.onFormSubmit} id="json-upload">
-        <h3>Game State Loader</h3>
-        <input type="file" onChange={this.onChange} style={{ width: '250px' }} />
-      </form>
+      <div className="VerticalStack">
+        <form onSubmit={JsonUpload.onFormSubmit} id="json-upload">
+          <h3>Game State Loader</h3>
+          <input type="file" onChange={this.onChange} style={{ width: '250px' }} />
+
+          <div className="AceEditor">
+            <AceEditor value={defaultGameStateText} theme="source" />
+          </div>
+        </form>
+      </div>
     );
   }
   private onChange(e: { target: any }) {

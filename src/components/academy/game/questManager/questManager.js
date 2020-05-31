@@ -3,7 +3,7 @@ import Constants from '../constants/constants';
 var LocationManager = require('../locationManager/locationManager.js');
 var DialogManager = require('../dialogManager/dialogManager.js');
 var MapManager = require('../mapManager/mapManager.js');
-var StoryManager = require('../storyManager/storyManager.js');
+var StoryManager = require('../preloadManager/storyManager.js');
 var SaveManager = require('../saveManager/saveManager.js');
 var Utils = require('../utils/utils.js');
 var ExternalManager = require('../externalManager/externalManager.js');

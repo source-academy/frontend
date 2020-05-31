@@ -1,0 +1,20 @@
+.StoryItems {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 200px;
+  width: 80%;
+  overflow: scroll;
+  border-style: inset;
+  border-radius: 3px;
+}
+
+.Column {
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.AceEditor {
+  max-height: 400px;
+  overflow: scroll;
+}

@@ -1,12 +1,11 @@
 import * as PIXI from 'pixi.js';
 
 import Constants from './constants/constants';
-
 import LocationManager from './locationManager/locationManager';
 import ObjectManager from './objectManager/objectManager';
 import DialogManager from './dialogManager/dialogManager';
 import QuestManager from './questManager/questManager';
-import StoryManager from './storyManager/storyManager';
+import StoryManager from './preloadManager/storyManager';
 import SaveManager from './saveManager/saveManager';
 import ExternalManager from './externalManager/externalManager';
 import BlackOverlay from './blackOverlay/blackOverlay';
@@ -77,6 +76,6 @@ export {
   gotoStartLocation,
   gotoLocation
 } from './locationManager/locationManager.js';
-export { loadStoryWithoutFirstQuest } from './storyManager/storyManager.js';
+export { loadStoryWithoutFirstQuest } from './preloadManager/storyManager.js';
 export { unlockQuest, completeQuest, unlockLastQuest } from './questManager/questManager.js';
 export { sendNotification, changeWristDeviceFunction } from './mapOverlay/mapOverlay.js';

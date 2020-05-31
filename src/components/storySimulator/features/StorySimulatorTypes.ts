@@ -15,3 +15,7 @@ export type DirectoryData = {
   id: number;
   title: string;
 };
+
+export type StoryDetail = {
+  Key: string;
+};

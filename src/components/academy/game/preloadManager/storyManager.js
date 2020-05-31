@@ -39,10 +39,11 @@ export function unlockFirstQuest(storyId, callback) {
   }
 }
 
-export function loadStory(storyId) {
+export function loadStoryById(storyId) {
   if (g_loadedStories[storyId]) {
     return;
   }
+
   loadStoryXML([storyId], true, function() {
     unlockFirstQuest(storyId, LocationManager.verifyGotoStart());
   });
