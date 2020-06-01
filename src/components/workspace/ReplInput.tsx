@@ -9,7 +9,6 @@ export interface IReplInputProps {
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
-  isGreen?: boolean;
 }
 
 class ReplInput extends React.PureComponent<IReplInputProps, {}> {
