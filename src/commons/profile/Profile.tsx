@@ -69,11 +69,13 @@ class Profile extends React.Component<ProfileProps, {}> {
         );
       } else {
         // Compute the user's current total grade and XP from submitted assessments
+        // For missions, only include those with max grade > 0 into grade component
         const [currentGrade, currentXp, maxGrade, maxXp] = this.props.assessmentOverviews!.reduce(
           (acc, item) =>
             item.status === AssessmentStatuses.submitted
               ? item.category === AssessmentCategories.Mission &&
-                item.gradingStatus === GradingStatuses.graded
+                item.gradingStatus === GradingStatuses.graded &&
+                item.maxGrade > 0
                 ? [
                     acc[0] + item.grade / item.maxGrade,
                     acc[1] + item.xp,
