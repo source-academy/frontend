@@ -128,7 +128,7 @@
     "local-cors-proxy": "^1.0.2",
     "prettier": "^1.18.2",
     "react-scripts-ts": "^2.16.0",
-    "react-test-renderer": "^16.3.1",
+    "react-test-renderer": "^16.13.0",
     "redux-saga-test-plan": "^4.0.0-beta.3",
     "typescript": "3.5.2"
   }
