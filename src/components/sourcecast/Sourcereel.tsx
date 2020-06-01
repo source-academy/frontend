@@ -167,6 +167,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         handleChapterSelect={chapterSelectHandler}
         sourceChapter={this.props.sourceChapter}
         sourceVariant={this.props.sourceVariant}
+        isClickable={true}
         key="chapter"
       />
     );

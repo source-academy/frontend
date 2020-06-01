@@ -14,7 +14,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
-import { USE_CHATKIT } from '../../utils/constants';
+import { DEFAULT_SOURCE_VARIANT, USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { showWarningMessage } from '../../utils/notification';
@@ -24,6 +24,7 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
+  ChapterSelect,
   ClearButton,
   EvalButton,
   NextButton,
@@ -535,8 +536,20 @@ class AssessmentWorkspace extends React.Component<
         />
       ) : null;
 
+    const handleChapterSelect = () => {};
+
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={handleChapterSelect}
+        sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
+        sourceVariant={DEFAULT_SOURCE_VARIANT}
+        isClickable={false}
+        key="chapter"
+      />
+    );
+
     return {
-      editorButtons: [runButton, saveButton, resetButton],
+      editorButtons: [runButton, saveButton, resetButton, chapterSelect],
       flowButtons: [previousButton, questionView, nextButton],
       replButtons: [evalButton, clearButton]
     };
