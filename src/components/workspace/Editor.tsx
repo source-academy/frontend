@@ -35,7 +35,6 @@ export interface IEditorProps {
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
-  isGreen?: boolean;
   isEditorAutorun: boolean;
   newCursorPosition?: IPosition;
   sharedbAceInitValue?: string;
@@ -221,7 +220,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
-            className={this.props.isGreen ? "react-ace-green" : "react-ace" }
+            className={"react-ace" }
             commands={[
               {
                 name: 'evaluate',

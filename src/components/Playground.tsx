@@ -291,7 +291,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleSendReplInputToOutput: this.props.handleSendReplInputToOutput,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
-        isGreen: this.state.isGreen, 
         sharedbAceInitValue: this.props.sharedbAceInitValue,
         sharedbAceIsInviting: this.props.sharedbAceIsInviting,
         isEditorAutorun: this.props.isEditorAutorun,
@@ -336,7 +335,6 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
-        isGreen: this.state.isGreen, 
         sourceChapter: this.props.sourceChapter,
         sourceVariant: this.props.sourceVariant,
         output: this.props.output,
