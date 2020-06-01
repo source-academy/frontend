@@ -1,5 +1,6 @@
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
+import { SideContentType } from '../../commons/sideContent/SideContentTypes';
 
 export const SAVE_SOURCECAST_DATA = 'SAVE_SOURCECAST_DATA';
 export const SET_CURRENT_PLAYER_TIME = 'SET_CURRENT_PLAYER_TIME';
@@ -10,6 +11,7 @@ export const SET_SOURCECAST_PLAYBACK_DURATION = 'SET_SOURCECAST_PLAYBACK_DURATIO
 export const SET_SOURCECAST_PLAYBACK_STATUS = 'SET_SOURCECAST_PLAYBACK_STATUS';
 
 export type InputTypeShape = {
+  activeTabChange: SideContentType;
   chapterSelect: number;
   cursorPositionChange: Position;
   codeDelta: CodeDelta;

@@ -74,6 +74,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   playbackData: state.workspaces.sourcecast.playbackData,
   playbackStatus: state.workspaces.sourcecast.playbackStatus,
   replValue: state.workspaces.sourcecast.replValue,
+  sideContentActiveTab: state.workspaces.sourcecast.sideContentActiveTab,
   sideContentHeight: state.workspaces.sourcecast.sideContentHeight,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcecast.context.chapter,

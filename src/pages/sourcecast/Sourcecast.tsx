@@ -96,6 +96,7 @@ export type StateProps = {
   playbackData: PlaybackData;
   playbackStatus: PlaybackStatus;
   replValue: string;
+  sideContentActiveTab: SideContentType;
   sideContentHeight?: number;
   sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
@@ -115,6 +116,9 @@ class Sourcecast extends React.Component<SourcecastProps> {
     }
 
     switch (inputToApply.type) {
+      case 'activeTabChange':
+        this.props.handleActiveTabChange(inputToApply.data);
+        break;
       case 'chapterSelect':
         this.props.handleChapterSelect(inputToApply.data);
         break;
@@ -216,9 +220,10 @@ class Sourcecast extends React.Component<SourcecastProps> {
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
         handleActiveTabChange: this.props.handleActiveTabChange,
+        selectedTabId: this.props.sideContentActiveTab,
         tabs: [
           {
-            label: 'Introduction',
+            label: 'Sourcecast Table',
             iconName: IconNames.COMPASS,
             body: (
               <div>
