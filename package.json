@@ -64,7 +64,7 @@
     "re-resizable": "^4.4.8",
     "react": "^16.8.6",
     "react-ace": "^8.1.0",
-    "react-copy-to-clipboard": "^5.0.1",
+    "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.8.6",
     "react-dom-factories": "^1.0.2",
     "react-dropzone": "^10.1.5",
