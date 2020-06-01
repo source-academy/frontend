@@ -2,6 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
+import { GameState } from 'src/reducers/states';
 import * as actions from '../actions';
 import {
   Grading,
@@ -100,6 +101,23 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
     return null;
   }
   return await resp.json();
+}
+
+/**
+ * PUT /user/game_states/
+ */
+export async function putUserGameState(
+  gameStates: GameState,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request('user/game_states/save', 'PUT', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      gameStates: JSON.stringify(gameStates)
+    }
+  });
+  return resp;
 }
 
 /**
@@ -594,6 +612,62 @@ export const postMaterialFolder = async (title: string, parentId: number, tokens
   return resp;
 };
 
+export async function changeDateAssessment(
+  id: number,
+  closeAt: string,
+  openAt: string,
+  tokens: Tokens
+) {
+  const resp = await request(`assessments/update/${id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { closeAt, openAt },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp ? await resp.text() : null;
+}
+
+export async function deleteAssessment(id: number, tokens: Tokens) {
+  const resp = await request(`assessments/${id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
+
+export async function publishAssessment(id: number, togglePublishTo: boolean, tokens: Tokens) {
+  const resp = await request(`assessments/publish/${id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { togglePublishTo },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
+}
+
+export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: boolean) => {
+  const formData = new FormData();
+  formData.append('assessment[file]', file);
+  formData.append('forceUpdate', String(forceUpdate));
+  const resp = await request(`assessments`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: formData,
+    noContentType: true,
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp ? await resp.text() : null;
+};
+
 export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[] | null> {
   const resp = await request('groups', 'GET', {
     accessToken: tokens.accessToken,
@@ -609,6 +683,38 @@ export async function getGroupOverviews(tokens: Tokens): Promise<IGroupOverview[
   return groupOverviews.map((overview: any) => {
     return overview as IGroupOverview;
   });
+}
+
+/**
+ * GET /chapter
+ */
+export async function fetchChapter(): Promise<Response | null> {
+  const resp = await request('chapter', 'GET', {
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  return await resp.json();
+}
+
+/**
+ * POST /chapter/update/1
+ */
+export async function changeChapter(chapterno: number, variant: string, tokens: Tokens) {
+  const resp = await request(`chapter/update/1`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { chapterno, variant },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return resp;
 }
 
 /**

@@ -4,6 +4,7 @@ import { ActionType } from 'typesafe-actions';
 import * as actions from '../actions';
 import {
   LOG_OUT,
+  SET_GAME_STATE,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -87,6 +88,11 @@ export const reducer: Reducer<ISessionState> = (
       return {
         ...state,
         notifications: action.payload
+      };
+    case SET_GAME_STATE:
+      return {
+        ...state,
+        gameState: action.payload
       };
     default:
       return state;

@@ -1,13 +1,13 @@
 name: Build source-academy.github.io
 on:
-  push:	
-    branches:	
+  push:
+    branches:
       - sa_2021
 
 jobs:
   deploy:
     name: Deploy to GitHub Pages
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
     - name: Use Node.js
@@ -18,6 +18,9 @@ jobs:
       run: |
         npm install
         npm run build
+      env:
+        REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
+        REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
 
     - name: Deploy
       uses: s0/git-publish-subdir-action@master

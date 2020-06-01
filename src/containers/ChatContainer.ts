@@ -22,7 +22,7 @@ const mapStateToProps: MapStateToProps<{}, OwnProps, IState> = (state, props) =>
   submissionId: props.submissionId
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, OwnProps> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleNotifyUsers: notifyChatUsers

@@ -62,8 +62,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, IState> = (state, p
 
 const workspaceLocation: WorkspaceLocation = 'assessment';
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
-  bindActionCreators<DispatchProps>(
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
+  bindActionCreators(
     {
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),

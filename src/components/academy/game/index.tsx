@@ -1,18 +1,24 @@
 import * as React from 'react';
-
-import { store } from '../../../createStore';
-import { Story } from '../../../reducers/states';
+import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
+import { GameState, Role, Story } from '../../../reducers/states';
+import { setSaveHandler } from './backend/game-state';
+import { setUserRole } from './backend/user';
 
 type GameProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleSaveCanvas: (c: HTMLCanvasElement) => void;
+  handleSaveData: (s: GameState) => void;
+  handleAssessmentOverviewFetch: () => void;
 };
 
 export type StateProps = {
   canvas?: HTMLCanvasElement;
-  name: string;
-  story?: Story;
+  name?: string;
+  story: Story;
+  gameState: GameState;
+  role?: Role;
+  assessmentOverviews?: IAssessmentOverview[];
 };
 
 export class Game extends React.Component<GameProps, {}> {
@@ -36,15 +42,40 @@ export class Game extends React.Component<GameProps, {}> {
    * backend sends us 'playStory', which is the negation (!) of `attemptedAll`.
    */
   public async componentDidMount() {
-    const story: any = (await import('./game.js')).default;
-    if (this.props.canvas === undefined) {
-      const storyOpts = await this.getStoryOpts();
-      story(this.div, this.canvas, this.props.name, ...storyOpts);
+    if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
+      // If assessment overviews are not loaded, fetch them
+      this.props.handleAssessmentOverviewFetch();
+      const loadingScreen: any = (await import('./story-xml-player.js')).loadingScreen;
+      loadingScreen(this.div, this.canvas);
       this.props.handleSaveCanvas(this.canvas);
-    } else {
+    }
+    if (this.props.canvas !== undefined) {
       // This browser window has loaded the Game component & canvas before
+      this.canvas = this.props.canvas;
       this.div.innerHTML = '';
       this.div.appendChild(this.props.canvas);
+    }
+  }
+
+  public async componentDidUpdate(prevProps: Readonly<GameProps>) {
+    // loads only once after assessmentOverviews are up
+    const isLoaded =
+      this.props.name && this.props.role && this.props.assessmentOverviews && this.props.canvas;
+    const prevLoaded =
+      prevProps.name && prevProps.role && prevProps.assessmentOverviews && prevProps.canvas;
+    if (isLoaded && isLoaded !== prevLoaded) {
+      const story: any = (await import('./game.js')).default;
+      setUserRole(this.props.role);
+      setSaveHandler((gameState: GameState) => this.props.handleSaveData(gameState));
+      story(
+        this.div,
+        this.canvas,
+        this.props.name,
+        this.props.story,
+        this.props.gameState,
+        this.props.assessmentOverviews
+      );
+      this.props.handleSaveCanvas(this.canvas);
     }
   }
 
@@ -54,29 +85,6 @@ export class Game extends React.Component<GameProps, {}> {
         <canvas ref={e => (this.canvas = e!)} />
       </div>
     );
-  }
-
-  private async getStoryOpts() {
-    if (this.props.story) {
-      // no missions, no story from backend, just play intro
-      return this.props.story.story
-        ? [this.props.story.story, !this.props.story.playStory]
-        : ['mission-1', true];
-    } else {
-      // this.props.story is null if creating 'fresh' store from localStorage
-      const state = store.getState();
-      if (state.session.story) {
-        // no missions, no story from backend, just play intro
-        return state.session.story.story
-          ? [state.session.story.story, !state.session.story.playStory]
-          : ['mission-1', true];
-      } else {
-        // if user is null, actions.logOut is called anyways; nonetheless we
-        // return a storyOpts, otherwise typescript complains about using storyOpts
-        // before assignment in story/4 below
-        return ['mission-1', true];
-      }
-    }
   }
 }
 

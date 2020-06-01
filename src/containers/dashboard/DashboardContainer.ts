@@ -12,7 +12,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   groupOverviews: state.dashboard.groupOverviews
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleFetchGradingOverviews: fetchGradingOverviews,

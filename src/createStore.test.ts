@@ -41,19 +41,29 @@ const mockChangedState: IState = {
   }
 };
 
+const defaultRouter = {
+  action: 'POP',
+  location: {
+    hash: '',
+    pathname: '/',
+    query: {},
+    search: '',
+    state: undefined
+  }
+};
 describe('createStore() function', () => {
   test('has defaultState when initialised', () => {
     localStorage.removeItem('storedState');
     expect(createStore(history).getState()).toEqual({
       ...defaultState,
-      router: { location: null }
+      router: defaultRouter
     });
   });
   test('has correct getState() when called with storedState', () => {
     localStorage.setItem('storedState', compressToUTF16(JSON.stringify(mockChangedStoredState)));
     expect(createStore(history).getState()).toEqual({
       ...mockChangedState,
-      router: { location: null }
+      router: defaultRouter
     });
     localStorage.removeItem('storedState');
   });

@@ -19,6 +19,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
+  fetchChapter,
   finishInvite,
   generateLzString,
   initInvite,
@@ -29,11 +30,13 @@ import {
   setEditorBreakpoint,
   setEditorSessionId,
   setWebsocketStatus,
+  shortenURL,
   toggleEditorAutorun,
   toggleUsingSubst,
   updateActiveTab,
   updateEditorValue,
   updateReplValue,
+  updateShortURL,
   WorkspaceLocation,
   WorkspaceLocations
 } from '../actions';
@@ -56,6 +59,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   newCursorPosition: state.workspaces.playground.newCursorPosition,
   output: state.workspaces.playground.output,
   queryString: state.playground.queryString,
+  shortURL: state.playground.shortURL,
   replValue: state.workspaces.playground.replValue,
   sharedbAceIsInviting: state.workspaces.playground.sharedbAceIsInviting,
   sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
@@ -69,7 +73,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleActiveTabChange: (activeTab: SideContentType) =>
@@ -91,6 +95,8 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
         setEditorBreakpoint(breakpoints, workspaceLocation),
       handleFinishInvite: () => finishInvite(workspaceLocation),
       handleGenerateLz: generateLzString,
+      handleShortenURL: (s: string) => shortenURL(s),
+      handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
@@ -111,6 +117,7 @@ const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Di
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
+      handleFetchChapter: () => fetchChapter(),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback)
     },

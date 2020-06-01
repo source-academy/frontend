@@ -80,6 +80,13 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
+    <withRouter(Connect(DefaultChapter)) />
+    <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"satellite\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Ground Control
+      </div>
+    </NavLink>
     <NavLink to=\\"/academy/dashboard\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"globe\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
@@ -104,6 +111,12 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
         Grading
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+    </NavLink>
+    <NavLink to=\\"/academy/gamedev\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"crown\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Game Dev
+      </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"
@@ -148,6 +161,13 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
+    <withRouter(Connect(DefaultChapter)) />
+    <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"satellite\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Ground Control
+      </div>
+    </NavLink>
     <NavLink to=\\"/academy/dashboard\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"globe\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
@@ -172,6 +192,12 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
         Grading
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+    </NavLink>
+    <NavLink to=\\"/academy/gamedev\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+      <Blueprint3.Icon icon=\\"crown\\" />
+      <div className=\\"navbar-button-text hidden-xs\\">
+        Game Dev
+      </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
 </Blueprint3.Navbar>"

@@ -16,7 +16,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
   role: state.session.role
 });
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,

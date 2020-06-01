@@ -35,7 +35,7 @@ const mapStateToProps: MapStateToProps<IStateProps, {}, IState> = state => ({
 
 const workspaceLocation = WorkspaceLocations.playground;
 
-const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<IDispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleClearContext: (

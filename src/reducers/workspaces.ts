@@ -38,6 +38,7 @@ import {
   SET_WEBSOCKET_STATUS,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
+  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -656,6 +657,19 @@ export const reducer: Reducer<IWorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
+    case UPDATE_CHAPTER:
+      return {
+        ...state,
+        playground: {
+          ...state.playground,
+          context: {
+            ...state.playground.context,
+            chapter: action.payload.chapter,
+            variant: action.payload.variant
+          }
+        }
+      };
+
     default:
       return state;
   }

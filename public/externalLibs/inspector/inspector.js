@@ -2,7 +2,6 @@
   var container = document.createElement('div');
   container.id = 'inspector-container';
 
-  const maxImplStrLength = 100;
   const builtins = [
     'Infinity',
     'NaN',
@@ -163,7 +162,7 @@
     function drawOutput() {
       var frames = context.context.runtime.environments;
       container.innerHTML = '';
-      for (var frame = frames[0]; frame != null; frame = frame.tail) {
+      for (var frame of frames) {
         var envtoString = dumpTable(frame.head);
         if (envtoString == undefined) {
           // skipping either empty frame or perhaps the global
@@ -183,20 +182,15 @@
     // icon to blink
     const icon = document.getElementById('inspector-icon');
 
-    if (!context && icon) {
+    if (context) {
+      drawOutput();
+      if (icon) {
+        icon.classList.add('side-content-tab-alert'); // this blinks the icon
+      }
+    } else if (icon) {  // here we have no context! don't alert the inspector...
       document.getElementById('inspector-default-text').hidden = false;
       icon.classList.remove('side-content-tab-alert');
       container.innerHTML = '';
-      return;
-    }
-
-    try {
-      drawOutput();
-      if (icon) {
-        icon.classList.add('side-content-tab-alert');
-      }
-    } catch (e) {
-      container.innerHTML = e;
     }
   }
 

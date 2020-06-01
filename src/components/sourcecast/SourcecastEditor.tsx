@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import AceEditor, { IAnnotation } from 'react-ace';
+import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import 'ace-builds/src-noconflict/ext-searchbox';
@@ -45,7 +45,6 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   public ShareAce: any;
   public AceEditor: React.RefObject<AceEditor>;
   private onChangeMethod: (newCode: string, delta: ICodeDelta) => void;
-  private onValidateMethod: (annotations: IAnnotation[]) => void;
   private onCursorChange: (selecction: any) => void;
   private onSelectionChange: (selection: any) => void;
 
@@ -65,8 +64,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
           data: delta
         });
       }
-    };
-    this.onValidateMethod = (annotations: IAnnotation[]) => {
+      const annotations = this.AceEditor.current!.editor.getSession().getAnnotations();
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
@@ -102,8 +100,8 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
     const { codeDeltasToApply, inputToApply, newCursorPosition } = this.props;
 
     if (codeDeltasToApply && codeDeltasToApply !== prevProps.codeDeltasToApply) {
-      (this.AceEditor.current as any).editor.session.getDocument().applyDeltas(codeDeltasToApply);
-      (this.AceEditor.current as any).editor.selection.clearSelection();
+      this.AceEditor.current!.editor.session.getDocument().applyDeltas(codeDeltasToApply);
+      this.AceEditor.current!.editor.selection.clearSelection();
     }
 
     if (newCursorPosition && newCursorPosition !== prevProps.newCursorPosition) {
@@ -116,15 +114,15 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
 
     switch (inputToApply.type) {
       case 'codeDelta':
-        (this.AceEditor.current as any).editor.session.getDocument().applyDelta(inputToApply.data);
-        (this.AceEditor.current as any).editor.selection.clearSelection();
+        this.AceEditor.current!.editor.session.getDocument().applyDelta(inputToApply.data);
+        this.AceEditor.current!.editor.selection.clearSelection();
         break;
       case 'cursorPositionChange':
         this.moveCursor(inputToApply.data);
         break;
       case 'selectionRangeData':
         const { range, isBackwards } = inputToApply.data;
-        (this.AceEditor.current as any).editor.selection.setSelectionRange(range, isBackwards);
+        this.AceEditor.current!.editor.selection.setSelectionRange(range, isBackwards);
         break;
       case 'keyboardCommand':
         const keyboardCommand = inputToApply.data;
@@ -138,7 +136,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
   }
 
   public getBreakpoints() {
-    const breakpoints = (this.AceEditor.current as any).editor.session.$breakpoints;
+    const breakpoints = this.AceEditor.current!.editor.session.$breakpoints;
     const res = [];
     for (let i = 0; i < breakpoints.length; i++) {
       if (breakpoints[i] != null) {
@@ -152,7 +150,7 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
     if (!this.AceEditor.current) {
       return;
     }
-    const editor = (this.AceEditor.current as any).editor;
+    const editor = this.AceEditor.current!.editor;
     const session = editor.getSession();
 
     editor.on('gutterclick', this.handleGutterClick);
@@ -220,13 +218,12 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
             onChange={this.onChangeMethod}
             onCursorChange={this.onCursorChange}
             onSelectionChange={this.onSelectionChange}
-            onValidate={this.onValidateMethod}
             readOnly={this.props.editorReadonly ? this.props.editorReadonly : false}
             theme="source"
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', monospace"
             }}
           />
         </div>
@@ -290,16 +287,14 @@ class SourcecastEditor extends React.PureComponent<ISourcecastEditorProps, {}> {
 
   // Used in navigating from occurence to navigation
   private moveCursor = (position: IPosition) => {
-    (this.AceEditor.current as any).editor.selection.clearSelection();
-    (this.AceEditor.current as any).editor.moveCursorToPosition(position);
-    (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
-    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(position, 0.5);
+    this.AceEditor.current!.editor.selection.clearSelection();
+    this.AceEditor.current!.editor.moveCursorToPosition(position);
+    this.AceEditor.current!.editor.renderer.$cursorLayer.showCursor();
+    this.AceEditor.current!.editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 
   private handleDeclarationNavigate = () => {
-    this.props.handleDeclarationNavigate(
-      (this.AceEditor.current as any).editor.getCursorPosition()
-    );
+    this.props.handleDeclarationNavigate(this.AceEditor.current!.editor.getCursorPosition());
   };
 }
 

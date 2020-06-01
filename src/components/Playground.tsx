@@ -48,6 +48,7 @@ export interface IStateProps {
   newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   queryString?: string;
+  shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
   sharedbAceInitValue: string;
@@ -73,6 +74,8 @@ export interface IDispatchProps {
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite: () => void;
   handleGenerateLz: () => void;
+  handleShortenURL: (s: string) => void;
+  handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
@@ -89,6 +92,7 @@ export interface IDispatchProps {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handleToggleEditorAutorun: () => void;
+  handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
 }
 
@@ -111,6 +115,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     };
     this.handlers.goGreen = this.toggleIsGreen.bind(this);
     (window as any).thePlayground = this;
+    this.props.handleFetchChapter();
   }
 
   public render() {
@@ -204,7 +209,10 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
     const shareButton = (
       <ShareButton
         handleGenerateLz={this.props.handleGenerateLz}
+        handleShortenURL={this.props.handleShortenURL}
+        handleUpdateShortURL={this.props.handleUpdateShortURL}
         queryString={this.props.queryString}
+        shortURL={this.props.shortURL}
         key="share"
       />
     );
@@ -283,6 +291,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
         handleSendReplInputToOutput: this.props.handleSendReplInputToOutput,
         handlePromptAutocomplete: this.props.handlePromptAutocomplete,
         handleFinishInvite: this.props.handleFinishInvite,
+        isGreen: this.state.isGreen, 
         sharedbAceInitValue: this.props.sharedbAceInitValue,
         sharedbAceIsInviting: this.props.sharedbAceIsInviting,
         isEditorAutorun: this.props.isEditorAutorun,
@@ -327,6 +336,7 @@ class Playground extends React.Component<IPlaygroundProps, PlaygroundState> {
       handleEditorWidthChange: this.props.handleEditorWidthChange,
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       replProps: {
+        isGreen: this.state.isGreen, 
         sourceChapter: this.props.sourceChapter,
         sourceVariant: this.props.sourceVariant,
         output: this.props.output,
