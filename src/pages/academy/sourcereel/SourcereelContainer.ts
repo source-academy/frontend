@@ -85,6 +85,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   recordingStatus: state.workspaces.sourcereel.recordingStatus,
   replValue: state.workspaces.sourcereel.replValue,
   sideContentHeight: state.workspaces.sourcereel.sideContentHeight,
+  sideContentActiveTab: state.workspaces.sourcereel.sideContentActiveTab,
   sourcecastIndex: state.workspaces.sourcecast.sourcecastIndex,
   sourceChapter: state.workspaces.sourcereel.context.chapter,
   sourceVariant: state.workspaces.sourcereel.context.variant,
