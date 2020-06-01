@@ -48,7 +48,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
     return (
       <>
         <AceEditor
-          className={ "repl-react-ace react-ace"}
+          className={'repl-react-ace react-ace'}
           mode={`source${this.props.sourceChapter || 1}defaultNONE`}
           theme="source"
           height="1px"

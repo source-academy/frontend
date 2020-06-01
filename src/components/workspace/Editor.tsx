@@ -220,7 +220,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
-            className={"react-ace" }
+            className={'react-ace'}
             commands={[
               {
                 name: 'evaluate',
