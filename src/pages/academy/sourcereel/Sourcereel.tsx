@@ -35,6 +35,7 @@ import {
   SourcecastData
 } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
+import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 type SourcereelProps = DispatchProps & StateProps;
 
@@ -338,7 +339,8 @@ class Sourcereel extends React.Component<SourcereelProps> {
           listVisualizerTab,
           inspectorTab,
           envVisualizerTab
-        ]
+        ], 
+        location : WorkspaceLocations.sourcereel
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {

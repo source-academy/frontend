@@ -27,7 +27,7 @@ import SideContentToneMatrix from '../../../../commons/sideContent/SideContentTo
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceState, WorkspaceLocations } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -341,7 +341,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     const sideContentProps: SideContentProps = {
       handleActiveTabChange: props.handleActiveTabChange,
-      tabs
+      tabs, location: WorkspaceLocations.grading
     };
 
     return sideContentProps;

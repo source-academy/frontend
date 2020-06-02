@@ -213,7 +213,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isEditorAutorun: false,
   isRunning: false,
   isDebugging: false,
-  enableDebugging: true
+  enableDebugging: true,
+  sideContentDynamicTabs: []
 });
 
 export const defaultRoomId = null;

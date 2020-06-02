@@ -1,6 +1,7 @@
 import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
 
+import { WorkspaceLocations } from '../workspace/WorkspaceTypes';
 import { sampleTab } from './SideContentSampleTab';
 import { dynamicTabUpdateInterval, SideContentTab, SideContentType } from './SideContentTypes';
 
@@ -46,6 +47,7 @@ type StateProps = {
   defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
+  location?: WorkspaceLocations;
 };
 
 const SideContent = (props: SideContentProps) => {

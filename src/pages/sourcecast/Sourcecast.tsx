@@ -32,6 +32,7 @@ import {
   PlaybackStatus,
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 export type SourcecastProps = DispatchProps & StateProps;
 
@@ -249,7 +250,8 @@ class Sourcecast extends React.Component<SourcecastProps> {
           listVisualizerTab,
           inspectorTab,
           envVisualizerTab
-        ]
+        ],
+        location: WorkspaceLocations.sourcecast
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {

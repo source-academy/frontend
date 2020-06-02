@@ -47,7 +47,7 @@ import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
+import { WorkspaceState, WorkspaceLocations } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
@@ -419,7 +419,7 @@ class AssessmentWorkspace extends React.Component<
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
-      tabs
+      tabs, location: WorkspaceLocations.assessment
     };
   };
 

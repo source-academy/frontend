@@ -32,6 +32,7 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -361,7 +362,8 @@ class Playground extends React.Component<PlaygroundProps, State> {
         defaultSelectedTabId: this.state.selectedTab,
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
-        tabs
+        tabs, 
+        location: WorkspaceLocations.playground
       },
       sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
     };
