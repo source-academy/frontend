@@ -4,32 +4,31 @@ import * as React from 'react';
 
 import { SideContentTab } from './SideContentTypes';
 
-const SideContentSampleTab = (props : any) => {
-    return (
-        <div>
-            <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
-                The environmental visualizer generates the environmental model diagram based on
-                breakpoints set in the editor.
-          </p>
-        </div>
-    );
+const SideContentSampleTab = (props: any) => {
+  return (
+    <div>
+      <p id="env-visualizer-default-text" className={Classes.RUNNING_TEXT}>
+        The environmental visualizer generates the environmental model diagram based on breakpoints
+        set in the editor.
+      </p>
+    </div>
+  );
 };
 
 const toSpawnSideContentSampleTab = () => {
-    return Math.random() >= 0.5;
+  return Math.random() >= 0.5;
 };
 
 const toDespawnSideContentSampleTab = () => {
-    return !toSpawnSideContentSampleTab();
+  return !toSpawnSideContentSampleTab();
 };
 
 export const sampleTab: SideContentTab = {
-    label: 'Sample',
-    iconName: IconNames.ASTERISK,
-    body: <SideContentSampleTab />,
-    isVisible: false,
-    toSpawn: toSpawnSideContentSampleTab,
-    toDespawn: toDespawnSideContentSampleTab
+  label: 'Sample',
+  iconName: IconNames.ASTERISK,
+  body: <SideContentSampleTab />,
+  toSpawn: toSpawnSideContentSampleTab,
+  toDespawn: toDespawnSideContentSampleTab
 };
 
 export default SideContentSampleTab;

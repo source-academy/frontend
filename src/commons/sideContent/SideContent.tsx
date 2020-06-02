@@ -52,7 +52,6 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
-
   const getDynamicTabs = (): SideContentTab[] => {
     const workspace = useSelector((state: OverallState) => state.workspaces);
 
@@ -145,7 +144,6 @@ const SideContent = (props: SideContentProps) => {
       props.defaultSelectedTabId ? props.defaultSelectedTabId : props.tabs[0].id!
     );
   }, []);
-
 
   return (
     <div className="side-content">

@@ -1,16 +1,21 @@
 import { OverallState } from '../application/ApplicationTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { sampleTab } from './SideContentSampleTab';
 import { SideContentTab } from './SideContentTypes';
-import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const getDynamicTabs = (
-    location: WorkspaceLocation,
-    overallState: OverallState
+  activeTabsLabel: string[],
+  location: WorkspaceLocation,
+  overallState: OverallState
 ): SideContentTab[] => {
+  // TODO: Make use of activeTabsLabel to help deciding toSpawn or not
 
-    // TODO: Change so it is extendable + consider to be async
-    const toSpawn = sampleTab.toSpawn(location, overallState)
-        && !sampleTab.toDespawn(location, overallState);
+  // TODO: Make each check to separate library are sync
+  // TODO: Make each toSpawn() and toDeSpawn() sync
 
-    return toSpawn ? [sampleTab] : [] as SideContentTab[];
+  // TODO: Change so it is extendable + ensure it is async (toSpawn and toDespawn might take long)
+  const toSpawn =
+    sampleTab.toSpawn(location, overallState) && !sampleTab.toDespawn(location, overallState);
+
+  return toSpawn ? [sampleTab] : ([] as SideContentTab[]);
 };

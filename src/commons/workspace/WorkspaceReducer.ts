@@ -662,7 +662,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         }
       };
     case NOTIFY_PROGRAM_EVALUATED:
-      const newSideContentDynamicTabs = getDynamicTabs(workspaceLocation, action.payload.overallState);
+      const currentActiveTabsLabel = state[workspaceLocation].sideContentDynamicTabs.map(
+        tab => tab.label
+      );
+      // TODO: Need to wait until getDynamicTabs is completely finished
+      const newSideContentDynamicTabs = getDynamicTabs(
+        currentActiveTabsLabel,
+        workspaceLocation,
+        action.payload.overallState
+      );
       return {
         ...state,
         [workspaceLocation]: {

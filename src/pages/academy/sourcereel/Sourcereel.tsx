@@ -25,6 +25,7 @@ import SourcecastEditor, {
 } from '../../../commons/sourceRecorder/SourceRecorderEditor';
 import SourcecastTable from '../../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../../commons/workspace/Workspace';
+import { WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -35,7 +36,6 @@ import {
   SourcecastData
 } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import SourcereelControlbar from './subcomponents/SourcereelControlbar';
-import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 type SourcereelProps = DispatchProps & StateProps;
 
@@ -315,7 +315,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
               </div>
             ),
             id: SideContentType.sourcereel,
-            isVisible: true,
             toSpawn: () => true,
             toDespawn: () => false
           },
@@ -332,15 +331,14 @@ class Sourcereel extends React.Component<SourcereelProps> {
               </div>
             ),
             id: SideContentType.introduction,
-            isVisible: true,
             toSpawn: () => true,
             toDespawn: () => false
           },
           listVisualizerTab,
           inspectorTab,
           envVisualizerTab
-        ], 
-        location : WorkspaceLocations.sourcereel
+        ],
+        location: WorkspaceLocations.sourcereel
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {
@@ -390,7 +388,6 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -400,7 +397,6 @@ const inspectorTab: SideContentTab = {
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
   id: SideContentType.inspector,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -410,7 +406,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };

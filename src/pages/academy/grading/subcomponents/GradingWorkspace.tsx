@@ -27,7 +27,7 @@ import SideContentToneMatrix from '../../../../commons/sideContent/SideContentTo
 import { SideContentTab, SideContentType } from '../../../../commons/sideContent/SideContentTypes';
 import { history } from '../../../../commons/utils/HistoryHelper';
 import Workspace, { WorkspaceProps } from '../../../../commons/workspace/Workspace';
-import { WorkspaceState, WorkspaceLocations } from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocations, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 import { AnsweredQuestion, Grading } from '../../../../features/grading/GradingTypes';
 import GradingEditor from './GradingEditorContainer';
 
@@ -296,7 +296,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           />
         ),
         id: SideContentType.grading,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       },
@@ -305,7 +304,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
         id: SideContentType.questionOverview,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       },
@@ -320,7 +318,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
           />
         ),
         id: SideContentType.autograder,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       }
@@ -333,7 +330,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       });
@@ -341,7 +337,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     const sideContentProps: SideContentProps = {
       handleActiveTabChange: props.handleActiveTabChange,
-      tabs, location: WorkspaceLocations.grading
+      tabs,
+      location: WorkspaceLocations.grading
     };
 
     return sideContentProps;

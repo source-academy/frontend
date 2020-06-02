@@ -47,7 +47,7 @@ import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
-import { WorkspaceState, WorkspaceLocations } from '../workspace/WorkspaceTypes';
+import { WorkspaceLocations, WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
 
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
@@ -352,7 +352,6 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
         id: SideContentType.questionOverview,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       },
@@ -361,7 +360,6 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
         id: SideContentType.briefing,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       },
@@ -376,7 +374,6 @@ class AssessmentWorkspace extends React.Component<
           />
         ),
         id: SideContentType.autograder,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       }
@@ -398,7 +395,6 @@ class AssessmentWorkspace extends React.Component<
           />
         ),
         id: SideContentType.grading,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       });
@@ -411,7 +407,6 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       });
@@ -419,7 +414,8 @@ class AssessmentWorkspace extends React.Component<
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
-      tabs, location: WorkspaceLocations.assessment
+      tabs,
+      location: WorkspaceLocations.assessment
     };
   };
 

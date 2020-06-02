@@ -460,7 +460,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorQuestionOverview,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -469,7 +468,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
           id: SideContentType.editorQuestionTemplate,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -487,7 +485,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorLocalDeployment,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -506,7 +503,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorLocalGraderDeployment,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -521,7 +517,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGrading,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         }
@@ -539,7 +534,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorAutograder,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         });
@@ -551,7 +545,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
           id: SideContentType.toneMatrix,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         });
@@ -569,7 +562,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorBriefing,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -585,7 +577,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorManageQuestion,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -603,7 +594,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGlobalDeployment,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         },
@@ -621,7 +611,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             />
           ),
           id: SideContentType.editorGlobalGraderDeployment,
-          isVisible: true,
           toSpawn: () => true,
           toDespawn: () => false
         }

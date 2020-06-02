@@ -25,6 +25,7 @@ import SourceRecorderEditor, {
 } from '../../commons/sourceRecorder/SourceRecorderEditor';
 import SourceRecorderTable from '../../commons/sourceRecorder/SourceRecorderTable';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
 import {
   CodeDelta,
   Input,
@@ -32,7 +33,6 @@ import {
   PlaybackStatus,
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
 
 export type SourcecastProps = DispatchProps & StateProps;
 
@@ -243,7 +243,6 @@ class Sourcecast extends React.Component<SourcecastProps> {
               </div>
             ),
             id: SideContentType.introduction,
-            isVisible: true,
             toSpawn: () => true,
             toDespawn: () => false
           },
@@ -287,7 +286,6 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -297,7 +295,6 @@ const inspectorTab: SideContentTab = {
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
   id: SideContentType.inspector,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -307,7 +304,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };

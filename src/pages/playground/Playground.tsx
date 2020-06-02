@@ -32,7 +32,7 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { WorkspaceLocations } from 'src/commons/workspace/WorkspaceTypes';
+import { WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -232,7 +232,6 @@ class Playground extends React.Component<PlaygroundProps, State> {
         />
       ),
       id: SideContentType.introduction,
-      isVisible: true,
       toSpawn: () => true,
       toDespawn: () => false
     };
@@ -272,7 +271,6 @@ class Playground extends React.Component<PlaygroundProps, State> {
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={this.processStepperOutput(this.props.output)} />,
         id: SideContentType.substVisualizer,
-        isVisible: true,
         toSpawn: () => true,
         toDespawn: () => false
       });
@@ -362,7 +360,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
         defaultSelectedTabId: this.state.selectedTab,
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
-        tabs, 
+        tabs,
         location: WorkspaceLocations.playground
       },
       sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
@@ -435,7 +433,6 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -444,7 +441,6 @@ const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
   body: <SideContentVideoDisplay />,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -453,7 +449,6 @@ const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
   body: <SideContentFaceapiDisplay />,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -463,7 +458,6 @@ const inspectorTab: SideContentTab = {
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
   id: SideContentType.inspector,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };
@@ -473,7 +467,6 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
-  isVisible: true,
   toSpawn: () => true,
   toDespawn: () => false
 };

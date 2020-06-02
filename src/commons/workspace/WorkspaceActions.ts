@@ -3,6 +3,7 @@ import { action } from 'typesafe-actions';
 import { Variant } from 'js-slang/dist/types';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -48,7 +49,6 @@ import {
   WorkspaceLocation,
   WorkspaceState
 } from './WorkspaceTypes';
-import { OverallState } from '../application/ApplicationTypes';
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
   action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
@@ -261,5 +261,7 @@ export const promptAutocomplete = (
     callback
   });
 
-export const notifyProgramEvaluated = (workspaceLocation: WorkspaceLocation, overallState : OverallState) =>
-  action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, overallState });
+export const notifyProgramEvaluated = (
+  workspaceLocation: WorkspaceLocation,
+  overallState: OverallState
+) => action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, overallState });
