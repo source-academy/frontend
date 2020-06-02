@@ -208,7 +208,7 @@ class AssessmentWorkspace extends React.Component<
           <ButtonGroup>
             {controlButton('Cancel', null, closeOverlay, {
               minimal: false
-            })} 
+            })}
             {controlButton(
               'Confirm',
               null,
@@ -226,7 +226,7 @@ class AssessmentWorkspace extends React.Component<
         </div>
       </Dialog>
     );
-    
+
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length

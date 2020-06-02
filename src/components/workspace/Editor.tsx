@@ -221,7 +221,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
-            className={this.props.isGreen ? "react-ace-green" : "react-ace" }
+            className={this.props.isGreen ? 'react-ace-green' : 'react-ace'}
             commands={[
               {
                 name: 'evaluate',
