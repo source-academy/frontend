@@ -543,7 +543,7 @@ class AssessmentWorkspace extends React.Component<
         handleChapterSelect={handleChapterSelect}
         sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
         sourceVariant={DEFAULT_SOURCE_VARIANT}
-        isClickable={false}
+        disabled={true}
         key="chapter"
       />
     );
