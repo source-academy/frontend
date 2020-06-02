@@ -459,13 +459,19 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorQuestionOverview
+          id: SideContentType.editorQuestionOverview,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: SideContentType.editorQuestionTemplate
+          id: SideContentType.editorQuestionTemplate,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Manage Local Deployment`,
@@ -480,7 +486,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalDeployment
+          id: SideContentType.editorLocalDeployment,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -496,7 +505,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalGraderDeployment
+          id: SideContentType.editorLocalGraderDeployment,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Grading`,
@@ -508,7 +520,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorGrading
+          id: SideContentType.editorGrading,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         }
       ];
       if (qnType === 'programming') {
@@ -523,7 +538,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorAutograder
+          id: SideContentType.editorAutograder,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         });
       }
       const functionsAttached = assessment!.globalDeployment!.external.symbols;
@@ -532,7 +550,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix
+          id: SideContentType.toneMatrix,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         });
       }
     } else {
@@ -547,7 +568,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorBriefing
+          id: SideContentType.editorBriefing,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Manage Question`,
@@ -560,7 +584,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateAndSaveAssessment}
             />
           ),
-          id: SideContentType.editorManageQuestion
+          id: SideContentType.editorManageQuestion,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Manage Global Deployment`,
@@ -575,7 +602,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={false}
             />
           ),
-          id: SideContentType.editorGlobalDeployment
+          id: SideContentType.editorGlobalDeployment,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -590,7 +620,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorGlobalGraderDeployment
+          id: SideContentType.editorGlobalGraderDeployment,
+          isVisible: true,
+          toSpawn: () => true,
+          toDespawn: () => false
         }
       ];
     }

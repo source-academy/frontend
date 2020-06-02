@@ -295,13 +295,19 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             }
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
+        isVisible: true,
+        toSpawn: () => true,
+        toDespawn: () => false
       },
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.grading![questionId].question.content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
+        isVisible: true,
+        toSpawn: () => true,
+        toDespawn: () => false
       },
       {
         label: `Autograder`,
@@ -313,7 +319,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder
+        id: SideContentType.autograder,
+        isVisible: true,
+        toSpawn: () => true,
+        toDespawn: () => false
       }
     ];
 
@@ -323,7 +332,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
+        isVisible: true,
+        toSpawn: () => true,
+        toDespawn: () => false
       });
     }
 

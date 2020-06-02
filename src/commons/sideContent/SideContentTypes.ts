@@ -1,5 +1,7 @@
 import { IconName } from '@blueprintjs/core';
 
+export const dynamicTabUpdateInterval = 1000;
+
 export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
@@ -44,6 +46,9 @@ export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: JSX.Element;
+  isVisible: boolean;
+  toSpawn: () => boolean;
+  toDespawn: () => boolean;
   id?: SideContentType;
   disabled?: boolean;
 };

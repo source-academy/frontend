@@ -1,6 +1,8 @@
 import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
-import { SideContentTab, SideContentType } from './SideContentTypes';
+
+import { sampleTab } from './SideContentSampleTab';
+import { dynamicTabUpdateInterval, SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
  * @property animate Set this to false to disable the movement
@@ -47,6 +49,31 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
+
+  const [dynamicTabs, setDynamicTabs] = React.useState([sampleTab, sampleTab, sampleTab]);
+
+  const visibleTabs = dynamicTabs.filter(tab => tab.isVisible);
+
+  // Include props.tabs for backward compability
+  const activeTabs = [...props.tabs, ...visibleTabs];
+
+  /**
+   * Update dynamic tabs visibility by invoking their methods.
+   */
+  const updateTabsVisiblity = () => {
+    const areTabsVisible = dynamicTabs.map(tab => tab.toSpawn() && !tab.toDespawn());
+  
+    const newDynamicTabs = [] as SideContentTab[];
+    for (let i = 0; i < dynamicTabs.length; i++) {
+      newDynamicTabs.push({...dynamicTabs[i], 
+        isVisible : areTabsVisible[i]});
+    }
+
+    if (newDynamicTabs !== dynamicTabs) {
+      setDynamicTabs(newDynamicTabs);
+    }
+  };
+
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
    * To be run when tabs are changed.
@@ -94,7 +121,7 @@ const SideContent = (props: SideContentProps) => {
     );
   };
 
-  const tabs = props.tabs.map(renderTab);
+  const renderedTabs = activeTabs.map(renderTab);
 
   const changeTabsCallback = (
     newTabId: SideContentType,
@@ -117,6 +144,13 @@ const SideContent = (props: SideContentProps) => {
     );
   }, []);
 
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      updateTabsVisiblity();
+    }, dynamicTabUpdateInterval);
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <div className="side-content">
       <Card>
@@ -128,7 +162,7 @@ const SideContent = (props: SideContentProps) => {
             renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
             selectedTabId={props.selectedTabId}
           >
-            {tabs}
+            {renderedTabs}
           </Tabs>
         </div>
       </Card>
