@@ -10,7 +10,7 @@ export type ChapterSelectProps = {
   handleChapterSelect?: (i: IChapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
   sourceChapter: number;
   sourceVariant: Variant;
-  disabled: boolean;
+  disabled?: boolean;
   key: string;
 };
 
@@ -46,7 +46,7 @@ export function ChapterSelect(props: ChapterSelectProps) {
           className={Classes.MINIMAL}
           text={styliseChapter(currentChap, currentVariant)}
           rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
-          disabled={disabled}
+          disabled={disabled || false}
         />
       </div>
     );
@@ -64,7 +64,7 @@ export function ChapterSelect(props: ChapterSelectProps) {
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
       filterable={false}
-      disabled={disabled}
+      disabled={disabled || false}
     >
       {chapterSelector(currentChap, currentVariant, disabled)}
     </ChapterSelectComponent>
@@ -74,6 +74,6 @@ export function ChapterSelect(props: ChapterSelectProps) {
     props.sourceChapter,
     props.sourceVariant,
     props.handleChapterSelect,
-    props.disabled
+    props.disabled || false
   );
 }
