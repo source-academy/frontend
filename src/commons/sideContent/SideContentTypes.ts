@@ -39,10 +39,6 @@ export enum SideContentType {
  * @property disabled Set this property to true to disable a tab. The
  * corresponding tab label will still be rendered on hover, but the
  * tab will be greyed out and cannot be selected. Default value: false.
- * 
- * @property isVisible Set this property to true to hide a tab. The 
- * corresponding tab will not be rendered at all, and not included 
- * within the tabs. Default value: false.
  */
 export type SideContentTab = {
   label: string;
@@ -50,5 +46,4 @@ export type SideContentTab = {
   body: JSX.Element;
   id?: SideContentType;
   disabled?: boolean;
-  isVisible?: boolean;
 };

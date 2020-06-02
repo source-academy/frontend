@@ -351,15 +351,13 @@ class AssessmentWorkspace extends React.Component<
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: SideContentType.questionOverview,
-        isVisible: true
+        id: SideContentType.questionOverview
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing,
-        isVisible: true
+        id: SideContentType.briefing
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -371,8 +369,7 @@ class AssessmentWorkspace extends React.Component<
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder,
-        isVisible: true
+        id: SideContentType.autograder
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
@@ -391,8 +388,7 @@ class AssessmentWorkspace extends React.Component<
             comments={props.assessment!.questions[questionId].comments}
           />
         ),
-        id: SideContentType.grading,
-        isVisible: true
+        id: SideContentType.grading
       });
     }
 
@@ -402,8 +398,7 @@ class AssessmentWorkspace extends React.Component<
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix,
-        isVisible: true
+        id: SideContentType.toneMatrix
       });
     }
     return {
