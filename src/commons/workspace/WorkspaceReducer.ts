@@ -31,6 +31,8 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
+import { getDynamicTabs } from '../sideContent/SideContentHelper';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -657,6 +659,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             chapter: action.payload.chapter,
             variant: action.payload.variant
           }
+        }
+      };
+    case NOTIFY_PROGRAM_EVALUATED:
+      const newSideContentDynamicTabs = getDynamicTabs(workspaceLocation, action.payload.overallState);
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          sideContentDynamicTabs: newSideContentDynamicTabs
         }
       };
 

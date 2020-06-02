@@ -1,6 +1,9 @@
 import { IconName } from '@blueprintjs/core';
 
-export const dynamicTabUpdateInterval = 1000;
+import { OverallState } from '../application/ApplicationTypes';
+import { WorkspaceLocation } from 'src/actions';
+
+export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
 
 export enum SideContentType {
   autograder = 'autograder',
@@ -47,8 +50,8 @@ export type SideContentTab = {
   iconName: IconName;
   body: JSX.Element;
   isVisible: boolean;
-  toSpawn: () => boolean;
-  toDespawn: () => boolean;
+  toSpawn: (location?: WorkspaceLocation, state?: OverallState) => boolean;
+  toDespawn: (location?: WorkspaceLocation, state?: OverallState) => boolean;
   id?: SideContentType;
   disabled?: boolean;
 };

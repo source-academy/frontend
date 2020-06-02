@@ -7,7 +7,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED, SideContentType } from '../sideContent/SideContentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -48,6 +48,7 @@ import {
   WorkspaceLocation,
   WorkspaceState
 } from './WorkspaceTypes';
+import { OverallState } from '../application/ApplicationTypes';
 
 export const browseReplHistoryDown = (workspaceLocation: WorkspaceLocation) =>
   action(BROWSE_REPL_HISTORY_DOWN, { workspaceLocation });
@@ -259,3 +260,6 @@ export const promptAutocomplete = (
     column,
     callback
   });
+
+export const notifyProgramEvaluated = (workspaceLocation: WorkspaceLocation, overallState : OverallState) =>
+  action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, overallState });

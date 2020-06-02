@@ -1,9 +1,10 @@
 import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 
+import { OverallState } from '../application/ApplicationTypes';
 import { WorkspaceLocations } from '../workspace/WorkspaceTypes';
-import { sampleTab } from './SideContentSampleTab';
-import { dynamicTabUpdateInterval, SideContentTab, SideContentType } from './SideContentTypes';
+import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**
  * @property animate Set this to false to disable the movement
@@ -52,29 +53,28 @@ type StateProps = {
 
 const SideContent = (props: SideContentProps) => {
 
-  const [dynamicTabs, setDynamicTabs] = React.useState([sampleTab, sampleTab, sampleTab]);
+  const getDynamicTabs = (): SideContentTab[] => {
+    const workspace = useSelector((state: OverallState) => state.workspaces);
 
-  const visibleTabs = dynamicTabs.filter(tab => tab.isVisible);
-
-  // Include props.tabs for backward compability
-  const activeTabs = [...props.tabs, ...visibleTabs];
-
-  /**
-   * Update dynamic tabs visibility by invoking their methods.
-   */
-  const updateTabsVisiblity = () => {
-    const areTabsVisible = dynamicTabs.map(tab => tab.toSpawn() && !tab.toDespawn());
-  
-    const newDynamicTabs = [] as SideContentTab[];
-    for (let i = 0; i < dynamicTabs.length; i++) {
-      newDynamicTabs.push({...dynamicTabs[i], 
-        isVisible : areTabsVisible[i]});
+    if (!props.location) {
+      return [] as SideContentTab[];
     }
 
-    if (newDynamicTabs !== dynamicTabs) {
-      setDynamicTabs(newDynamicTabs);
+    switch (props.location) {
+      case WorkspaceLocations.assessment:
+        return workspace.assessment.sideContentDynamicTabs;
+      case WorkspaceLocations.grading:
+        return workspace.grading.sideContentDynamicTabs;
+      case WorkspaceLocations.playground:
+        return workspace.playground.sideContentDynamicTabs;
+      case WorkspaceLocations.sourcecast:
+        return workspace.sourcecast.sideContentDynamicTabs;
+      case WorkspaceLocations.sourcereel:
+        return workspace.sourcereel.sideContentDynamicTabs;
     }
   };
+
+  const activeTabs = [...props.tabs, ...getDynamicTabs()];
 
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
@@ -146,12 +146,6 @@ const SideContent = (props: SideContentProps) => {
     );
   }, []);
 
-  React.useEffect(() => {
-    const interval = setInterval(() => {
-      updateTabsVisiblity();
-    }, dynamicTabUpdateInterval);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="side-content">
@@ -172,4 +166,4 @@ const SideContent = (props: SideContentProps) => {
   );
 };
 
-export default SideContent;
+export default React.memo(SideContent);
