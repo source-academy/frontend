@@ -47,6 +47,13 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
+
+  // For dynamically spawning tabs
+  const [dynamicTabs, setDynamicTabs] = React.useState([]);
+  
+  // Include old hardwired tabs, for backward compability
+  const activeTabs = { ...props.tabs, ...dynamicTabs };
+
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
    * To be run when tabs are changed.
@@ -94,7 +101,7 @@ const SideContent = (props: SideContentProps) => {
     );
   };
 
-  const tabs = props.tabs.map(renderTab);
+  const renderedTabs = activeTabs.map(renderTab);
 
   const changeTabsCallback = (
     newTabId: SideContentType,
@@ -113,7 +120,7 @@ const SideContent = (props: SideContentProps) => {
   React.useEffect(() => {
     // Set initial sideContentActiveTab for this workspace
     props.handleActiveTabChange(
-      props.defaultSelectedTabId ? props.defaultSelectedTabId : props.tabs[0].id!
+      props.defaultSelectedTabId ? props.defaultSelectedTabId : activeTabs[0].id!
     );
   }, []);
 
@@ -128,7 +135,7 @@ const SideContent = (props: SideContentProps) => {
             renderActiveTabPanelOnly={props.renderActiveTabPanelOnly}
             selectedTabId={props.selectedTabId}
           >
-            {tabs}
+            {renderedTabs}
           </Tabs>
         </div>
       </Card>

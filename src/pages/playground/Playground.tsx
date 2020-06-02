@@ -230,7 +230,8 @@ class Playground extends React.Component<PlaygroundProps, State> {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction
+      id: SideContentType.introduction,
+      isVisible: true
     };
 
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -426,33 +427,38 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
+  isVisible: true
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />
+  body: <SideContentVideoDisplay />,
+  isVisible: true
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <SideContentFaceapiDisplay />
+  body: <SideContentFaceapiDisplay />,
+  isVisible: true
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
+  isVisible: true
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
+  isVisible: true
 };
 
 export default Playground;
