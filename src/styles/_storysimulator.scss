@@ -5,7 +5,8 @@
   max-height: 200px;
   width: 80%;
   overflow: scroll;
-  border-style: inset;
+  background-color: #eeeeee;
+  padding: 10px;
   border-radius: 3px;
 }
 
@@ -15,6 +16,10 @@
 }
 
 .AceEditor {
-  max-height: 400px;
+  max-height: 300px;
   overflow: scroll;
+}
+
+.JsonUpload {
+  width: 80%;
 }

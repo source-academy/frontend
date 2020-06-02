@@ -1,48 +1,39 @@
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { overrideSessionData } from '../../academy/game/backend/gameState';
 import { defaultGameStateText } from '../features/StorySimulatorConstants';
+import { overrideSessionData } from '../features/StorySimulatorServices';
 
-class JsonUpload extends React.Component {
-  private static onFormSubmit(e: { preventDefault: () => void }) {
-    e.preventDefault(); // Stop form submit
-  }
+function JsonUpload() {
+  const [editorContent, setEditorContent] = React.useState(defaultGameStateText);
 
-  constructor(props: Readonly<{}>) {
-    super(props);
-    overrideSessionData(undefined);
-    JsonUpload.onFormSubmit = JsonUpload.onFormSubmit.bind(this);
-    this.onChange = this.onChange.bind(this);
-  }
-
-  public render() {
-    return (
-      <div className="VerticalStack">
-        <form onSubmit={JsonUpload.onFormSubmit} id="json-upload">
-          <h3>Game State Loader</h3>
-          <input type="file" onChange={this.onChange} style={{ width: '250px' }} />
-
-          <div className="AceEditor">
-            <AceEditor value={defaultGameStateText} theme="source" />
-          </div>
-        </form>
+  return (
+    <div className="Vertical">
+      <div className="JsonUpload VerticalStack">
+        <h3>Game State Loader</h3>
+        <input type="file" onChange={onUpload} style={{ width: '250px' }} />
+        <div className="AceEditor">
+          <AceEditor value={editorContent} theme="source" onChange={onEdit} />
+        </div>
       </div>
-    );
-  }
-  private onChange(e: { target: any }) {
+    </div>
+  );
+
+  function onUpload(e: { target: any }) {
     const reader = new FileReader();
-    reader.onloadend = (event: Event) => {
+    reader.readAsText(e.target.files[0]);
+    reader.onloadend = _ => {
       if (typeof reader.result === 'string') {
         overrideSessionData(JSON.parse(reader.result));
+        setEditorContent(reader.result);
       }
     };
-    if (e.target.files && e.target.files[0] instanceof Blob) {
-      reader.readAsText(e.target.files[0]);
-    } else {
-      overrideSessionData(undefined);
-      e.target.value = null;
-    }
+  }
+
+  function onEdit(newCode: string) {
+    try {
+      overrideSessionData(JSON.parse(newCode));
+    } catch (e) {}
   }
 }
 

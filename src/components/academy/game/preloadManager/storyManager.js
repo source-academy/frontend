@@ -40,11 +40,21 @@ export function unlockFirstQuest(storyId, callback) {
 }
 
 export function loadStoryById(storyId) {
-  if (g_loadedStories[storyId]) {
-    return;
-  }
-
-  loadStoryXML([storyId], true, function() {
+  // load quests and assets
+  var assetsToLoadTable = {};
+  PIXI.loader.reset();
+  sorted.forEach(function(storyId) {
+    processStory(downloaded[storyId]);
+    markAssetsToLoad(downloaded[storyId], assetsToLoadTable);
+    SoundManager.markSoundsToLoad(downloaded[storyId]);
+  });
+  preloadAssets(assetsToLoadTable, function() {
+    SoundManager.preloadSounds();
+    if (willSave) {
+      SaveManager.saveLoadStories(sorted);
+    }
+    SaveManager.updateGameMap();
+    g_loadingOverlay.visible = false;
     unlockFirstQuest(storyId, LocationManager.verifyGotoStart());
   });
 }

@@ -1,3 +1,5 @@
+import { GameSessionData } from 'src/components/academy/game/gameTypes';
+
 export type MaterialData = {
   title: string;
   description: string;
@@ -18,4 +20,10 @@ export type DirectoryData = {
 
 export type StoryDetail = {
   Key: string;
+};
+
+export type GameSessionOverride = {
+  sessionData: GameSessionData;
+  overridePublish?: boolean;
+  overrideDates?: boolean;
 };

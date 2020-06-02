@@ -1,5 +1,5 @@
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
-import { Story } from '../../../reducers/states';
+import { GameState, Story } from '../../../reducers/states';
 import { LINKS } from '../../../utils/constants';
 import { fetchGameData } from './backend/gameState';
 import Constants from './constants/constants';
@@ -20,7 +20,7 @@ async function startGame(
   canvas: HTMLCanvasElement,
   username: string | undefined,
   userStory: Story | undefined,
-  gameState: object,
+  gameState: GameState,
   missions: IAssessmentOverview[] | undefined
 ) {
   const storyId: string = await fetchGameData(userStory, gameState, missions);

@@ -1,11 +1,10 @@
 import { isStudent } from './user';
+import { hasBeenFetched, SESSION_DATA_KEY } from './gameState';
+import SaveManager from '../saveManager/saveManager.js';
 import {
   OVERRIDE_DATES_KEY,
-  OVERRIDE_PUBLISH_KEY,
-  SESSION_DATA_KEY,
-  hasBeenFetched
-} from './gameState';
-import SaveManager from '../saveManager/saveManager.js';
+  OVERRIDE_PUBLISH_KEY
+} from 'src/components/storySimulator/features/StorySimulatorConstants';
 
 function getSessionData() {
   return JSON.parse(sessionStorage.getItem(SESSION_DATA_KEY));
