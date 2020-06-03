@@ -198,8 +198,9 @@ ToneMatrix.initialise_matrix = initialise_matrix;
 function bind_events_to_rect(c) {
   c.addEventListener('click', function (event) {
     // calculate the x, y coordinates of the click event
-    var offset_left = $(this).offset().left;
-    var offset_top = $(this).offset().top;
+    var rect = c.getBoundingClientRect();
+    var offset_top = rect.top + document.documentElement.scrollTop;
+    var offset_left = rect.left + document.documentElement.scrollLeft;
     var x = event.pageX - offset_left;
     var y = event.pageY - offset_top;
 
@@ -297,26 +298,10 @@ function randomise_matrix() {
 ToneMatrix.randomise_matrix = randomise_matrix;
 
 function bindMatrixButtons() {
-  $("#clear-matrix").on("click", function () {
+  document.getElementById('clear-matrix').addEventListener('click', function () {
     clear_matrix();
-    // stop_matrix();
-    $("#play-matrix").attr("value", "Play");
-  });
-
-  // $("#play-matrix").on("click", function () {
-  //     if ($(this).attr("value") == "Play") {
-  //         $(this).attr("value", "Stop");
-  //         play_matrix_continuously();
-  //     } else {
-  //         $(this).attr("value", "Play");
-  //         // stop_matrix();
-  //         redraw_matrix();
-  //     }
-  // });
-
-  // $("#random-matrix").on("click", function () {
-  //     randomise_matrix();
-  // });
+    document.getElementById("play-matrix").setAttribute("value", "Play");
+  })
 };
 ToneMatrix.bindMatrixButtons = bindMatrixButtons;
 
