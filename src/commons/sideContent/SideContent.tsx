@@ -57,14 +57,17 @@ const SideContent = (props: SideContentProps) => {
     if (!props.location) {
       return {} as DebuggerContext;
     }
-
-    const overallState = useSelector((state: OverallState) => state);
-    return overallState[props.location].debuggerContext;
+    const workspaces = useSelector((state: OverallState) => state.workspaces);
+    return workspaces.playground.debuggerContext;
   };
 
   const debuggerContext = getDebuggerContext();
+  const isEmptyDebuggerContext = Object.keys(debuggerContext).length === 0;
 
-  const activeTabs = [...props.tabs, ...getDynamicTabs(debuggerContext)];
+  let activeTabs = [...props.tabs];
+  if (isEmptyDebuggerContext) {
+    activeTabs = activeTabs.concat(...getDynamicTabs(debuggerContext));
+  }
 
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.

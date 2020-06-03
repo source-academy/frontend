@@ -16,20 +16,20 @@ const SideContentSampleTab = (props: any) => {
   );
 };
 
-const toSpawnSideContentSampleTab = (debuggerContext: DebuggerContext) => {
-  return Math.random() >= 0.5;
+const toSpawnSampleTab = (debuggerContext: DebuggerContext) => {
+  return true;
 };
 
-const toDespawnSideContentSampleTab = (debuggerContext: DebuggerContext) => {
-  return !toSpawnSideContentSampleTab(debuggerContext);
+const toDespawnSampleTab = (debuggerContext: DebuggerContext) => {
+  return !toSpawnSampleTab(debuggerContext);
 };
 
 export const sampleTab: SideContentTab = {
   label: 'Sample',
   iconName: IconNames.ASTERISK,
   body: <SideContentSampleTab />,
-  toSpawn: toSpawnSideContentSampleTab,
-  toDespawn: toDespawnSideContentSampleTab
+  toSpawn: toSpawnSampleTab,
+  toDespawn: toDespawnSampleTab
 };
 
 export default SideContentSampleTab;

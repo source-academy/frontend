@@ -132,7 +132,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
 
     yield* evalCode(value, context, execTime, workspaceLocation, EVAL_EDITOR);
-    yield put(notifyProgramEvaluated(lastDebuggerResult, code, context, workspaceLocation));
   });
 
   yield takeEvery(PROMPT_AUTOCOMPLETE, function*(
@@ -234,7 +233,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
     );
     yield* evalCode(code, context, execTime, workspaceLocation, EVAL_REPL);
-    yield put(notifyProgramEvaluated(lastDebuggerResult, code, context, workspaceLocation));
   });
 
   yield takeEvery(DEBUG_RESUME, function*(action: ReturnType<typeof actions.debuggerResume>) {
@@ -721,6 +719,10 @@ export function* evalCode(
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+  }
+
+  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 
   /** If successful, then continue to run all testcases IFF evalCode was triggered from
