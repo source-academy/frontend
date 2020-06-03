@@ -58,7 +58,7 @@ const SideContent = (props: SideContentProps) => {
       return {} as DebuggerContext;
     }
     const workspaces = useSelector((state: OverallState) => state.workspaces);
-    return workspaces.playground.debuggerContext;
+    return workspaces[props.location].debuggerContext;
   };
 
   const debuggerContext = getDebuggerContext();
