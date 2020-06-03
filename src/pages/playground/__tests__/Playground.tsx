@@ -2,6 +2,7 @@ import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
+import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   ExternalLibraryName,
   ExternalLibraryNames
@@ -64,7 +65,8 @@ const baseProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handleFetchChapter: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handleProgramEval: (overallState : OverallState) => {}
 };
 
 const testValueProps: PlaygroundProps = {

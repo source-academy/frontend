@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
+import { OverallState } from '../../application/ApplicationTypes';
 import { Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
@@ -46,6 +47,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handleProgramEval: (overallState : OverallState) => {},
   isRunning: false,
   isDebugging: false,
   enableDebugging: false,

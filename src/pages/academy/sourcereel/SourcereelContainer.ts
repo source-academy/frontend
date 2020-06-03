@@ -23,13 +23,14 @@ import {
   evalRepl,
   externalLibrarySelect,
   navigateToDeclaration,
+  notifyProgramEvaluated,
   promptAutocomplete,
   setEditorBreakpoint,
   setEditorReadonly,
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
-  updateReplValue
+  updateReplValue,
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from '../../../features/sourceRecorder/sourcecast/SourcecastActions';
@@ -156,7 +157,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(location, row, col, callback)
+        promptAutocomplete(location, row, col, callback),
+      handleProgramEval: (overallState : OverallState) => notifyProgramEvaluated(location, overallState)
     },
     dispatch
   );

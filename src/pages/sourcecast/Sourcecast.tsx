@@ -2,10 +2,11 @@ import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
@@ -71,6 +72,7 @@ export type DispatchProps = {
   handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleToggleEditorAutorun: () => void;
+  handleProgramEval: (overallState : OverallState) => void;
 };
 
 export type StateProps = {
@@ -130,6 +132,8 @@ class Sourcecast extends React.Component<SourcecastProps> {
   }
 
   public render() {
+    const overallState = useSelector((state: OverallState) => state);
+    
     const autorunButtons = (
       <ControlBarAutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
@@ -166,8 +170,10 @@ class Sourcecast extends React.Component<SourcecastProps> {
 
     const evalButton = (
       <ControlBarEvalButton
+        handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
+        overallState={overallState}
         key="eval_repl"
       />
     );

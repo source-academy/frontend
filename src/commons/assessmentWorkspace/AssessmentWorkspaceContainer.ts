@@ -25,6 +25,7 @@ import {
   evalRepl,
   evalTestcase,
   navigateToDeclaration,
+  notifyProgramEvaluated,
   promptAutocomplete,
   resetWorkspace,
   setEditorBreakpoint,
@@ -101,7 +102,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
+      handleProgramEval: (overallState : OverallState) => notifyProgramEvaluated(workspaceLocation, overallState)
     },
     dispatch
   );

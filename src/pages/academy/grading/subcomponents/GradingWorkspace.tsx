@@ -2,8 +2,9 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 
-import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -59,6 +60,7 @@ export type DispatchProps = {
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleProgramEval: (overallState : OverallState) => void;
 };
 
 export type OwnProps = {
@@ -169,18 +171,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorSessionId: '',
-              editorValue: this.props.editorValue!,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
+            editorSessionId: '',
+            editorValue: this.props.editorValue!,
+            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+            handleEditorEval: this.props.handleEditorEval,
+            handleEditorValueChange: this.props.handleEditorValueChange,
+            breakpoints: this.props.breakpoints,
+            highlightedLines: this.props.highlightedLines,
+            newCursorPosition: this.props.newCursorPosition,
+            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+            isEditorAutorun: false
+          }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -189,7 +191,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
         mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => {}
+        handleMCQSubmit: (i: number) => { }
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),
@@ -349,6 +351,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const listingPath = `/academy/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
     const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
+    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -365,8 +368,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     const evalButton = (
       <ControlBarEvalButton
+        handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
+        overallState={overallState}
         key="eval_repl"
       />
     );

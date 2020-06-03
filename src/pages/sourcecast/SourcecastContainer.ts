@@ -24,6 +24,7 @@ import {
   evalRepl,
   externalLibrarySelect,
   navigateToDeclaration,
+  notifyProgramEvaluated,
   promptAutocomplete,
   setEditorBreakpoint,
   setEditorReadonly,
@@ -128,7 +129,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(location),
       handleDebuggerReset: () => debuggerReset(location),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(location, row, col, callback)
+        promptAutocomplete(location, row, col, callback),
+      handleProgramEval: (overallState : OverallState) => notifyProgramEvaluated(location, overallState)
     },
     dispatch
   );

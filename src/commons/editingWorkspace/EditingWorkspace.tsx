@@ -2,8 +2,9 @@ import { ButtonGroup, Classes, Dialog, Intent, NonIdealState, Spinner } from '@b
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -74,6 +75,7 @@ export type DispatchProps = {
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleProgramEval: (overallState : OverallState) => void;
 };
 
 export type OwnProps = {
@@ -168,22 +170,22 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-              editorSessionId: '',
-              editorValue:
-                this.props.editorValue ||
-                question.editorValue ||
-                (question as IProgrammingQuestion).solutionTemplate,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
+            editorSessionId: '',
+            editorValue:
+              this.props.editorValue ||
+              question.editorValue ||
+              (question as IProgrammingQuestion).solutionTemplate,
+            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+            handleEditorEval: this.props.handleEditorEval,
+            handleEditorValueChange: this.props.handleEditorValueChange,
+            breakpoints: this.props.breakpoints,
+            highlightedLines: this.props.highlightedLines,
+            newCursorPosition: this.props.newCursorPosition,
+            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+            isEditorAutorun: false
+          }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -438,15 +440,15 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             updateAssessment={this.updateEditAssessmentState}
           />
         ) : (
-          <ProgrammingQuestionTemplateTab
-            assessment={assessment}
-            questionId={questionId}
-            updateAssessment={this.updateEditAssessmentState}
-            editorValue={this.props.editorValue}
-            handleEditorValueChange={this.props.handleEditorValueChange}
-            handleUpdateWorkspace={this.props.handleUpdateWorkspace}
-          />
-        );
+            <ProgrammingQuestionTemplateTab
+              assessment={assessment}
+              questionId={questionId}
+              updateAssessment={this.updateEditAssessmentState}
+              editorValue={this.props.editorValue}
+              handleEditorValueChange={this.props.handleEditorValueChange}
+              handleUpdateWorkspace={this.props.handleUpdateWorkspace}
+            />
+          );
 
       tabs = [
         {
@@ -628,6 +630,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       questionId + 1,
       this.state.assessment!.questions.length
     ];
+    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -653,8 +656,10 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
 
     const evalButton = (
       <ControlBarEvalButton
+        handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
+        overallState={overallState}
         key="eval_repl"
       />
     );

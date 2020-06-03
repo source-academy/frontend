@@ -11,10 +11,11 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput } from '../application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -79,6 +80,7 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleProgramEval: (overallState : OverallState) => void;
 };
 
 export type OwnProps = {
@@ -427,6 +429,7 @@ class AssessmentWorkspace extends React.Component<
       questionId + 1,
       this.props.assessment!.questions.length
     ];
+    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -483,8 +486,10 @@ class AssessmentWorkspace extends React.Component<
 
     const evalButton = (
       <ControlBarEvalButton
+        handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
+        overallState={overallState}
         key="eval_repl"
       />
     );

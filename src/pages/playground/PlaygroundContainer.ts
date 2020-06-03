@@ -35,6 +35,7 @@ import {
   externalLibrarySelect,
   fetchChapter,
   navigateToDeclaration,
+  notifyProgramEvaluated,
   promptAutocomplete,
   sendReplInputToOutput,
   setEditorBreakpoint,
@@ -126,7 +127,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handleFetchChapter: () => fetchChapter(),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
+      handleProgramEval: (overallState: OverallState) => notifyProgramEvaluated(workspaceLocation, overallState)
     },
     dispatch
   );

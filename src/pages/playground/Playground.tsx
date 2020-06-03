@@ -3,12 +3,13 @@ import { IconNames } from '@blueprintjs/icons';
 import * as classNames from 'classnames';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput, OverallState } from '../../commons/application/ApplicationTypes';
 import {
   ExternalLibraryName,
   ExternalLibraryNames
@@ -70,6 +71,7 @@ export type DispatchProps = {
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleProgramEval: (overallState : OverallState) => void;
 };
 
 export type StateProps = {
@@ -107,7 +109,7 @@ type State = {
 
 class Playground extends React.Component<PlaygroundProps, State> {
   private keyMap = { goGreen: 'h u l k' };
-  private handlers = { goGreen: () => {} };
+  private handlers = { goGreen: () => { } };
 
   constructor(props: PlaygroundProps) {
     super(props);
@@ -122,6 +124,8 @@ class Playground extends React.Component<PlaygroundProps, State> {
   }
 
   public render() {
+    const overallState = useSelector((state: OverallState) => state);
+    
     const autorunButtons = (
       <ControlBarAutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
@@ -173,8 +177,10 @@ class Playground extends React.Component<PlaygroundProps, State> {
     const evalButton =
       this.state.selectedTab === SideContentType.substVisualizer ? null : (
         <ControlBarEvalButton
+          handleProgramEval={this.props.handleProgramEval}
           handleReplEval={this.props.handleReplEval}
           isRunning={this.props.isRunning}
+          overallState={overallState}
           key="eval_repl"
         />
       );
