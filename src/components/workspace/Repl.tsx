@@ -17,7 +17,7 @@ export interface IReplProps {
   handleBrowseHistoryUp: () => void;
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
-  isGreen?: boolean; 
+  isGreen?: boolean;
   hidden?: boolean;
   usingSubst?: boolean;
   sourceChapter?: number;

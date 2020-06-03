@@ -37,8 +37,8 @@ exports[`Assessment page "loading" content renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -843,8 +843,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -890,8 +890,8 @@ exports[`Assessment page with 0 missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>
@@ -1726,8 +1726,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
               </div>
             </div>
           </ContentDisplay>
-          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
-            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+          <Blueprint3.Dialog className=\\"betcha-dialog\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true}>
+            <Blueprint3.Overlay className=\\"bp3-overlay-scroll-container\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function]} title=\\"Betcha: Early Submission\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
           </Blueprint3.Dialog>
         </div>
       </Assessment>

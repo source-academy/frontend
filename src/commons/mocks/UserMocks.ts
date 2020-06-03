@@ -1,5 +1,5 @@
-import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
 import { AssessmentCategories } from '../assessment/AssessmentTypes';
+import { Notification, NotificationTypes } from '../notificationBadge/NotificationBadgeTypes';
 
 /**
  * Deprecated, check backend for roles

@@ -10,14 +10,14 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
-  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
+  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
       <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
         <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
@@ -38,14 +38,14 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
-  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
+  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
       <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
         <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
@@ -66,14 +66,14 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
-  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
+  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
       <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
         <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
@@ -94,14 +94,14 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
-  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
+  <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
       <Markdown content=\\"Are you sure you want to reset the template?\\" />
       <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
         <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
