@@ -18,7 +18,6 @@ type StateProps = {
 };
 
 export function ControlBarEvalButton(props: ControlBarEvalButtonProps) {
-  
   const combineDispatchFunctions = () => {
     props.handleReplEval();
     props.handleProgramEval(props.selector);

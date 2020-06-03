@@ -367,8 +367,8 @@ class Sourcereel extends React.Component<SourcereelProps> {
         {this.props.recordingStatus === RecordingStatus.paused ? (
           <SourceRecorderControlBar {...sourcecastControlbarProps} />
         ) : (
-            undefined
-          )}
+          undefined
+        )}
         <Workspace {...workspaceProps} />
       </div>
     );

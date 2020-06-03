@@ -260,7 +260,5 @@ export const promptAutocomplete = (
     callback
   });
 
-export const notifyProgramEvaluated = (
-  workspaceLocation: WorkspaceLocation,
-  selector: any
-) => action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, selector });
+export const notifyProgramEvaluated = (workspaceLocation: WorkspaceLocation, selector: any) =>
+  action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, selector });

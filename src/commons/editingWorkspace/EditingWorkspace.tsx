@@ -170,22 +170,22 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-            editorSessionId: '',
-            editorValue:
-              this.props.editorValue ||
-              question.editorValue ||
-              (question as IProgrammingQuestion).solutionTemplate,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false
-          }
+              editorSessionId: '',
+              editorValue:
+                this.props.editorValue ||
+                question.editorValue ||
+                (question as IProgrammingQuestion).solutionTemplate,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+              handleEditorEval: this.props.handleEditorEval,
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+              isEditorAutorun: false
+            }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -440,15 +440,15 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
             updateAssessment={this.updateEditAssessmentState}
           />
         ) : (
-            <ProgrammingQuestionTemplateTab
-              assessment={assessment}
-              questionId={questionId}
-              updateAssessment={this.updateEditAssessmentState}
-              editorValue={this.props.editorValue}
-              handleEditorValueChange={this.props.handleEditorValueChange}
-              handleUpdateWorkspace={this.props.handleUpdateWorkspace}
-            />
-          );
+          <ProgrammingQuestionTemplateTab
+            assessment={assessment}
+            questionId={questionId}
+            updateAssessment={this.updateEditAssessmentState}
+            editorValue={this.props.editorValue}
+            handleEditorValueChange={this.props.handleEditorValueChange}
+            handleUpdateWorkspace={this.props.handleUpdateWorkspace}
+          />
+        );
 
       tabs = [
         {

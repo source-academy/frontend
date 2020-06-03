@@ -30,7 +30,7 @@ import {
   toggleEditorAutorun,
   updateActiveTab,
   updateEditorValue,
-  updateReplValue,
+  updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from '../../../features/sourceRecorder/sourcecast/SourcecastActions';

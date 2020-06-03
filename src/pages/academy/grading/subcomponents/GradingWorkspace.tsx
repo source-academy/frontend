@@ -171,18 +171,18 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorProps:
         question.type === QuestionTypes.programming
           ? {
-            editorSessionId: '',
-            editorValue: this.props.editorValue!,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false
-          }
+              editorSessionId: '',
+              editorValue: this.props.editorValue!,
+              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+              handleEditorEval: this.props.handleEditorEval,
+              handleEditorValueChange: this.props.handleEditorValueChange,
+              breakpoints: this.props.breakpoints,
+              highlightedLines: this.props.highlightedLines,
+              newCursorPosition: this.props.newCursorPosition,
+              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+              isEditorAutorun: false
+            }
           : undefined,
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
@@ -191,7 +191,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       handleSideContentHeightChange: this.props.handleSideContentHeightChange,
       mcqProps: {
         mcq: question as IMCQQuestion,
-        handleMCQSubmit: (i: number) => { }
+        handleMCQSubmit: (i: number) => {}
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: this.sideContentProps(this.props, questionId),

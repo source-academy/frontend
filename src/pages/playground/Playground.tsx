@@ -109,7 +109,7 @@ type State = {
 
 class Playground extends React.Component<PlaygroundProps, State> {
   private keyMap = { goGreen: 'h u l k' };
-  private handlers = { goGreen: () => { } };
+  private handlers = { goGreen: () => {} };
 
   constructor(props: PlaygroundProps) {
     super(props);
