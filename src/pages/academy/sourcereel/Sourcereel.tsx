@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput, OverallState } from '../../../commons/application/ApplicationTypes';
+import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../../commons/controlBar/ControlBarChapterSelect';
@@ -90,7 +90,7 @@ export type DispatchProps = {
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
-  handleProgramEval: (overallState : OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 export type StateProps = {
@@ -151,8 +151,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
   }
 
   public render() {
-    const overallState = useSelector((state: OverallState) => state);
-    
     const editorEvalHandler = () => {
       this.props.handleEditorEval();
       if (this.props.recordingStatus !== RecordingStatus.recording) {
@@ -212,7 +210,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
         handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
-        overallState={overallState}
+        selector={useSelector}
         key="eval_repl"
       />
     );

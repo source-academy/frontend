@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { InterpreterOutput, OverallState } from '../application/ApplicationTypes';
+import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -75,7 +75,7 @@ export type DispatchProps = {
   handleUpdateCurrentAssessmentId: (assessmentId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleProgramEval: (overallState : OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 export type OwnProps = {
@@ -630,7 +630,6 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       questionId + 1,
       this.state.assessment!.questions.length
     ];
-    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -659,7 +658,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
-        overallState={overallState}
+        selector={useSelector}
         key="eval_repl"
       />
     );

@@ -128,7 +128,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleFetchChapter: () => fetchChapter(),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
-      handleProgramEval: (overallState: OverallState) => notifyProgramEvaluated(workspaceLocation, overallState)
+      handleProgramEval: (selector: any) => notifyProgramEvaluated(workspaceLocation, selector)
     },
     dispatch
   );

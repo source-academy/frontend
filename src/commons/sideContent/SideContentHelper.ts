@@ -1,4 +1,3 @@
-import { OverallState } from '../application/ApplicationTypes';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { sampleTab } from './SideContentSampleTab';
 import { SideContentTab } from './SideContentTypes';
@@ -6,7 +5,7 @@ import { SideContentTab } from './SideContentTypes';
 export const getDynamicTabs = (
   activeTabsLabel: string[],
   location: WorkspaceLocation,
-  overallState: OverallState
+  selector: any
 ): SideContentTab[] => {
   // TODO: Make use of activeTabsLabel to help deciding toSpawn or not
 
@@ -15,7 +14,7 @@ export const getDynamicTabs = (
 
   // TODO: Change so it is extendable + ensure it is async (toSpawn and toDespawn might take long)
   const toSpawn =
-    sampleTab.toSpawn(location, overallState) && !sampleTab.toDespawn(location, overallState);
+    sampleTab.toSpawn(location, selector) && !sampleTab.toDespawn(location, selector);
 
   return toSpawn ? [sampleTab] : ([] as SideContentTab[]);
 };

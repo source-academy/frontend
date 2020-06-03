@@ -1,6 +1,5 @@
 import { IconName } from '@blueprintjs/core';
 
-import { OverallState } from '../application/ApplicationTypes';
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 
 export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
@@ -49,8 +48,8 @@ export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: JSX.Element;
-  toSpawn: (location?: WorkspaceLocation, state?: OverallState) => boolean;
-  toDespawn: (location?: WorkspaceLocation, state?: OverallState) => boolean;
+  toSpawn: (location?: WorkspaceLocation, selector?: any) => boolean;
+  toDespawn: (location?: WorkspaceLocation, selector?: any) => boolean;
   id?: SideContentType;
   disabled?: boolean;
 };

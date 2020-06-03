@@ -2,27 +2,26 @@ import { Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { OverallState } from '../application/ApplicationTypes';
 import controlButton from '../ControlButton';
 
 type ControlBarEvalButtonProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleReplEval: () => void;
-  handleProgramEval: (overallState: OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 type StateProps = {
   isRunning: boolean;
   key: string;
-  overallState: OverallState;
+  selector: any;
 };
 
 export function ControlBarEvalButton(props: ControlBarEvalButtonProps) {
   
   const combineDispatchFunctions = () => {
     props.handleReplEval();
-    props.handleProgramEval(props.overallState);
+    props.handleProgramEval(props.selector);
   };
 
   return props.isRunning ? null : (

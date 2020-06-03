@@ -669,7 +669,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
       const newSideContentDynamicTabs = getDynamicTabs(
         currentActiveTabsLabel,
         workspaceLocation,
-        action.payload.overallState
+        action.payload.selector
       );
       return {
         ...state,

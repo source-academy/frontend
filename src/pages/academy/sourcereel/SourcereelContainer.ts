@@ -158,7 +158,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerReset: () => debuggerReset(location),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(location, row, col, callback),
-      handleProgramEval: (overallState : OverallState) => notifyProgramEvaluated(location, overallState)
+      handleProgramEval: (selector: any) => notifyProgramEvaluated(location, selector)
     },
     dispatch
   );

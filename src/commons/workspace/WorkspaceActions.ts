@@ -3,7 +3,6 @@ import { action } from 'typesafe-actions';
 import { Variant } from 'js-slang/dist/types';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -263,5 +262,5 @@ export const promptAutocomplete = (
 
 export const notifyProgramEvaluated = (
   workspaceLocation: WorkspaceLocation,
-  overallState: OverallState
-) => action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, overallState });
+  selector: any
+) => action(NOTIFY_PROGRAM_EVALUATED, { workspaceLocation, selector });

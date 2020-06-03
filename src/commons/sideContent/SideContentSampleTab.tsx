@@ -2,6 +2,8 @@ import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { OverallState } from '../application/ApplicationTypes';
+import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
@@ -15,7 +17,10 @@ const SideContentSampleTab = (props: any) => {
   );
 };
 
-const toSpawnSideContentSampleTab = () => {
+const toSpawnSideContentSampleTab = (location?: WorkspaceLocation, selector?: any) => {
+  if (selector) {
+    selector((state: OverallState) => state);
+  }
   return Math.random() >= 0.5;
 };
 

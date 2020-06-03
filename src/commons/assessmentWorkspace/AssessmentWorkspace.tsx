@@ -15,7 +15,7 @@ import { useSelector } from 'react-redux';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
-import { InterpreterOutput, OverallState } from '../application/ApplicationTypes';
+import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -80,7 +80,7 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleProgramEval: (overallState : OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 export type OwnProps = {
@@ -429,7 +429,6 @@ class AssessmentWorkspace extends React.Component<
       questionId + 1,
       this.props.assessment!.questions.length
     ];
-    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -489,7 +488,7 @@ class AssessmentWorkspace extends React.Component<
         handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
-        overallState={overallState}
+        selector={useSelector}
         key="eval_repl"
       />
     );

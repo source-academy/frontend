@@ -9,7 +9,7 @@ import { RouteComponentProps } from 'react-router';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
-import { InterpreterOutput, OverallState } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import {
   ExternalLibraryName,
   ExternalLibraryNames
@@ -71,7 +71,7 @@ export type DispatchProps = {
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleProgramEval: (overallState : OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 export type StateProps = {
@@ -124,8 +124,6 @@ class Playground extends React.Component<PlaygroundProps, State> {
   }
 
   public render() {
-    const overallState = useSelector((state: OverallState) => state);
-    
     const autorunButtons = (
       <ControlBarAutorunButtons
         handleDebuggerPause={this.props.handleDebuggerPause}
@@ -180,7 +178,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
           handleProgramEval={this.props.handleProgramEval}
           handleReplEval={this.props.handleReplEval}
           isRunning={this.props.isRunning}
-          overallState={overallState}
+          selector={useSelector}
           key="eval_repl"
         />
       );

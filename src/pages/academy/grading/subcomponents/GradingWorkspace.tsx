@@ -4,7 +4,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 
-import { InterpreterOutput, OverallState } from '../../../../commons/application/ApplicationTypes';
+import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
 import {
   AutogradingResult,
   IMCQQuestion,
@@ -60,7 +60,7 @@ export type DispatchProps = {
   handleUpdateCurrentSubmissionId: (submissionId: number, questionId: number) => void;
   handleUpdateHasUnsavedChanges: (hasUnsavedChanges: boolean) => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleProgramEval: (overallState : OverallState) => void;
+  handleProgramEval: (selector: any) => void;
 };
 
 export type OwnProps = {
@@ -351,7 +351,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const listingPath = `/academy/grading`;
     const gradingWorkspacePath = listingPath + `/${this.props.submissionId}`;
     const questionProgress: [number, number] = [questionId + 1, this.props.grading!.length];
-    const overallState = useSelector((state: OverallState) => state);
 
     const onClickPrevious = () =>
       history.push(gradingWorkspacePath + `/${(questionId - 1).toString()}`);
@@ -371,7 +370,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         handleProgramEval={this.props.handleProgramEval}
         handleReplEval={this.props.handleReplEval}
         isRunning={this.props.isRunning}
-        overallState={overallState}
+        selector={useSelector}
         key="eval_repl"
       />
     );
