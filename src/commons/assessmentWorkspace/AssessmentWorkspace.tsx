@@ -15,6 +15,7 @@ import { useSelector } from 'react-redux';
 
 import { stringify } from 'js-slang/dist/utils/stringify';
 
+import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -28,6 +29,7 @@ import {
   Testcase
 } from '../assessment/AssessmentTypes';
 import { ControlBarProps } from '../controlBar/ControlBar';
+import { ControlBarChapterSelect } from '../controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../controlBar/ControlBarEvalButton';
 import { ControlBarNextButton } from '../controlBar/ControlBarNextButton';
@@ -43,6 +45,7 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import Constants from '../utils/Constants';
 import { beforeNow } from '../utils/DateHelper';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
@@ -541,8 +544,20 @@ class AssessmentWorkspace extends React.Component<
         />
       ) : null;
 
+    const handleChapterSelect = () => {};
+
+    const chapterSelect = (
+      <ControlBarChapterSelect
+        handleChapterSelect={handleChapterSelect}
+        sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
+        sourceVariant={Constants.defaultSourceVariant as Variant}
+        disabled={true}
+        key="chapter"
+      />
+    );
+
     return {
-      editorButtons: [runButton, saveButton, resetButton],
+      editorButtons: [runButton, saveButton, resetButton, chapterSelect],
       flowButtons: [previousButton, questionView, nextButton],
       replButtons: [evalButton, clearButton]
     };

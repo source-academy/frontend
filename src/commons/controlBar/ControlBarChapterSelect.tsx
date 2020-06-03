@@ -17,6 +17,7 @@ type DispatchProps = {
 type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
+  disabled?: boolean;
   key: string;
 };
 
@@ -39,10 +40,24 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   );
   const ChapterSelectComponent = Select.ofType<Chapter>();
 
+  const chapterSelector = (currentChap: number, currentVariant: Variant, disabled: boolean) => {
+    return (
+      <div>
+        <Button
+          className={Classes.MINIMAL}
+          text={styliseChapter(currentChap, currentVariant)}
+          rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+          disabled={disabled || false}
+        />
+      </div>
+    );
+  };
+
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
+    handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {},
+    disabled: boolean
   ) => (
     <ChapterSelectComponent
       className={Classes.MINIMAL}
@@ -50,14 +65,16 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
       filterable={false}
+      disabled={disabled || false}
     >
-      <Button
-        className={Classes.MINIMAL}
-        text={styliseChapter(currentChap, currentVariant)}
-        rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-      />
+      {chapterSelector(currentChap, currentVariant, disabled)}
     </ChapterSelectComponent>
   );
 
-  return chapSelect(props.sourceChapter, props.sourceVariant, props.handleChapterSelect);
+  return chapSelect(
+    props.sourceChapter,
+    props.sourceVariant,
+    props.handleChapterSelect,
+    props.disabled || false
+  );
 }
