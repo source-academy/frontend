@@ -48,6 +48,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
@@ -131,6 +132,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
 
     yield* evalCode(value, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield put(notifyProgramEvaluated(lastDebuggerResult, code, context, workspaceLocation));
   });
 
   yield takeEvery(PROMPT_AUTOCOMPLETE, function*(
@@ -232,6 +234,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
     );
     yield* evalCode(code, context, execTime, workspaceLocation, EVAL_REPL);
+    yield put(notifyProgramEvaluated(lastDebuggerResult, code, context, workspaceLocation));
   });
 
   yield takeEvery(DEBUG_RESUME, function*(action: ReturnType<typeof actions.debuggerResume>) {

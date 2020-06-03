@@ -32,6 +32,7 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -230,7 +231,9 @@ class Playground extends React.Component<PlaygroundProps, State> {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction
+      id: SideContentType.introduction,
+      toSpawn: () => true,
+      toDespawn: () => false
     };
 
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -267,7 +270,9 @@ class Playground extends React.Component<PlaygroundProps, State> {
         label: 'Substituter',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={this.processStepperOutput(this.props.output)} />,
-        id: SideContentType.substVisualizer
+        id: SideContentType.substVisualizer,
+        toSpawn: () => true,
+        toDespawn: () => false
       });
     }
 
@@ -355,7 +360,8 @@ class Playground extends React.Component<PlaygroundProps, State> {
         defaultSelectedTabId: this.state.selectedTab,
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
-        tabs
+        tabs,
+        location: WorkspaceLocations.playground
       },
       sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
     };
@@ -426,33 +432,43 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
+  toSpawn: () => true,
+  toDespawn: () => false
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />
+  body: <SideContentVideoDisplay />,
+  toSpawn: () => true,
+  toDespawn: () => false
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <SideContentFaceapiDisplay />
+  body: <SideContentFaceapiDisplay />,
+  toSpawn: () => true,
+  toDespawn: () => false
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
+  toSpawn: () => true,
+  toDespawn: () => false
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
+  toSpawn: () => true,
+  toDespawn: () => false
 };
 
 export default Playground;

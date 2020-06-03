@@ -1,5 +1,9 @@
 import { IconName } from '@blueprintjs/core';
 
+import { DebuggerContext } from '../workspace/WorkspaceTypes';
+
+export const NOTIFY_PROGRAM_EVALUATED = 'NOTIFY_PROGRAM_EVALUATED';
+
 export enum SideContentType {
   autograder = 'autograder',
   briefing = 'briefing',
@@ -44,6 +48,8 @@ export type SideContentTab = {
   label: string;
   iconName: IconName;
   body: JSX.Element;
+  toSpawn: (context: DebuggerContext) => boolean;
+  toDespawn: (context: DebuggerContext) => boolean;
   id?: SideContentType;
   disabled?: boolean;
 };
