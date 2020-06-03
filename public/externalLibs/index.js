@@ -79,7 +79,6 @@ function loadLib(externalLibraryName) {
       case 'MACHINELEARNING':
       files = [
         // faceAPI
-        '/externalLibs/faceapi/face-api_last_version.min.js',
         '/externalLibs/faceapi/faceapi.js',
       ]
       break
