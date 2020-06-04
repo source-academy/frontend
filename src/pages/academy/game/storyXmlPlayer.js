@@ -76,6 +76,5 @@ export {
   gotoStartLocation,
   gotoLocation
 } from './locationManager/locationManager.js';
-export { loadStoryWithoutFirstQuest } from './preloadManager/storyManager.js';
 export { unlockQuest, completeQuest, unlockLastQuest } from './questManager/questManager.js';
 export { sendNotification, changeWristDeviceFunction } from './mapOverlay/mapOverlay.js';

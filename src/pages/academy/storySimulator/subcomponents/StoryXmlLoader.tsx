@@ -3,31 +3,30 @@ import * as React from 'react';
 
 import { fetchStories } from '../features/StorySimulatorServices';
 import StoryItems from './StoryItems';
+import { StoryDetail } from '../features/StorySimulatorTypes';
 
 type OwnProps = {
   setIncludedStoryIds: any;
 };
 
 function StoryXmlLoader({ setIncludedStoryIds }: OwnProps) {
-  const [storyListLoaded, setStoryListLoaded] = React.useState<string[]>([]);
-  const [storyListBucket, setStoryListBucket] = React.useState<string[]>([]);
+  const [storyListLoaded, setStoryListLoaded] = React.useState<StoryDetail[]>([]);
+  const [storyListBucket, setStoryListBucket] = React.useState<StoryDetail[]>([]);
 
   React.useEffect(() => {
     (async () => {
       const stories = await fetchStories();
-      const storyIds = stories.map(story => story.filename);
-      setStoryListBucket(storyIds);
+      setStoryListBucket(stories);
     })();
   }, []);
 
   function onChange(e: { target: any }) {
     const files = Object.values(e.target.files);
     files.map(loadFileLocally);
-    setStoryListLoaded(files.map((file: File) => file.name));
+    setStoryListLoaded(files.map(createStoryDetailFromFile));
   }
 
   function includeStory(storyId: string) {
-    console.log(storyId);
     setIncludedStoryIds((x: Set<string>) => x.add(storyId));
   }
 
@@ -57,6 +56,14 @@ function loadFileLocally(xmlFile: File) {
       return;
     }
     sessionStorage.setItem(`storyXml${xmlFile.name}`, reader.result.toString());
+  };
+}
+
+function createStoryDetailFromFile(filename: string) {
+  return {
+    filename,
+    openAt: '',
+    closeAt: ''
   };
 }
 

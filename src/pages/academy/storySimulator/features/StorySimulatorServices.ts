@@ -11,7 +11,10 @@ import { GameSessionOverride, StoryDetail } from './StorySimulatorTypes';
  * Fetches stories from Backend
  */
 export async function fetchStories() {
-  const stories = [{ filename: 'mission-1' }, { filename: 'mission-2' }];
+  const stories = [
+    { filename: 'mission-1', openAt: '', closeAt: '' },
+    { filename: 'mission-1', openAt: '', closeAt: '' }
+  ];
   return (stories as any) as StoryDetail[];
 }
 

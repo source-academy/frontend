@@ -39,7 +39,6 @@ export function unlockFirstQuest(storyId, callback) {
   }
 }
 
-
 export function loadStory(storyXML, callback, startLocation) {
   if (g_loadedStories[storyXML]) {
     return;
@@ -49,18 +48,6 @@ export function loadStory(storyXML, callback, startLocation) {
       LocationManager.changeStartLocation(startLocation);
     }
     unlockFirstQuest(storyXML, LocationManager.verifyGotoStart(callback));
-  });
-}
-
-export function loadStoryWithoutFirstQuest(storyXML, callback, startLocation) {
-  if (g_loadedStories[storyXML]) {
-    return;
-  }
-  loadStoryXML([storyXML], true, function() {
-    if (startLocation) {
-      LocationManager.changeStartLocation(startLocation);
-    }
-    LocationManager.verifyGotoStart(callback)();
   });
 }
 
@@ -87,7 +74,6 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     }
     // check whether this story has been downloaded or will be downloaded
     var curId = storyXMLs[i];
-    console.log(curId)
     if (g_loadedStories[curId] || downloadRequestSent[curId]) {
       download(i + 1, storyXMLs, callback);
       // } else if (loadingStories.indexOf(curId) !== -1) {
@@ -97,7 +83,10 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
       downloadRequestSent[curId] = true;
       const makeAjax = isTest => {
         const xhr = new XMLHttpRequest();
-        xhr.open('GET', `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`);
+        xhr.open(
+          'GET',
+          `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`
+        );
         xhr.addEventListener('load', () => {
           var xml = xhr.responseXML;
           var story = xml.children[0];
@@ -121,24 +110,25 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
             var allRequestSent = willBeDownloaded.reduce(function(prev, cur) {
               return prev && downloadRequestSent[cur];
             }, true);
-            if (
-              allRequestSent &&
-              Object.keys(downloaded).length == willBeDownloaded.length
-            ) {
+            if (allRequestSent && Object.keys(downloaded).length == willBeDownloaded.length) {
               callback();
             }
           }
         });
-        xhr.addEventListener('error', isTest ? () => {
-          console.log('Trying on live...');
-          makeAjax(false);
-        }
-          : () => {
-          g_loadingOverlay.visible = false;
-          console.error('Cannot find story ' + curId);
-        });
+        xhr.addEventListener(
+          'error',
+          isTest
+            ? () => {
+                console.log('Trying on live...');
+                makeAjax(false);
+              }
+            : () => {
+                g_loadingOverlay.visible = false;
+                console.error('Cannot find story ' + curId);
+              }
+        );
         xhr.send();
-      }
+      };
       makeAjax(!isStudent());
       download(i + 1, storyXMLs, callback);
     }
