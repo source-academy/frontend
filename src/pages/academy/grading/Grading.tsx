@@ -38,6 +38,8 @@ import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWor
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import GradingXPCell from './subcomponents/GradingXPCell';
 
+import { Provider } from 'react-redux';
+import { store } from 'src/createStore';
 import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
 type GradingProps = DispatchProps & StateProps & RouteComponentProps<GradingWorkspaceParams>;
@@ -344,9 +346,11 @@ class Grading extends React.Component<GradingProps, State> {
 
   private NotificationBadgeCell = (props: GradingNavLinkProps) => {
     return (
-      <NotificationBadge
-        notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
-      />
+      <Provider store={store}>
+        <NotificationBadge
+          notificationFilter={filterNotificationsBySubmission(props.data.submissionId)}
+        />
+      </Provider>
     );
   };
 
