@@ -65,18 +65,12 @@ const SideContent = (props: SideContentProps) => {
     debuggerContext = {} as DebuggerContext;
   }
 
-  const updateTabs = async () => {
+  React.useEffect(() => {
     getDynamicTabs(debuggerContext).then(newDynamicTabs => {
       const allActiveTabs = props.tabs.concat(newDynamicTabs);
       setDynamicTabs(allActiveTabs);
     });
-  };
-
-  React.useEffect(() => {
-    updateTabs();
   }, [debuggerContext]);
-
-  // const activeTabs = [...props.tabs].concat(...getDynamicTabs(debuggerContext));
 
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
