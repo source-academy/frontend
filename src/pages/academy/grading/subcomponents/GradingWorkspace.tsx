@@ -338,7 +338,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
     const sideContentProps: SideContentProps = {
       handleActiveTabChange: props.handleActiveTabChange,
       tabs,
-      location: WorkspaceLocations.grading
+      workspaceLocation: WorkspaceLocations.grading
     };
 
     return sideContentProps;

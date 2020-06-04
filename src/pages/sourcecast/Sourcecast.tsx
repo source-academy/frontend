@@ -250,7 +250,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
           inspectorTab,
           envVisualizerTab
         ],
-        location: WorkspaceLocations.sourcecast
+        workspaceLocation: WorkspaceLocations.sourcecast
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {

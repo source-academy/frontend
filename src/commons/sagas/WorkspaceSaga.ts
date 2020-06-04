@@ -721,6 +721,7 @@ export function* evalCode(
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
   }
 
+  // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
   if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
     yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }

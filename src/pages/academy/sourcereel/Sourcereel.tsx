@@ -338,7 +338,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
           inspectorTab,
           envVisualizerTab
         ],
-        location: WorkspaceLocations.sourcereel
+        workspaceLocation: WorkspaceLocations.sourcereel
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {

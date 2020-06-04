@@ -666,11 +666,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         [workspaceLocation]: {
           ...state[workspaceLocation],
           debuggerContext: {
+            ...state[workspaceLocation].debuggerContext,
             result: action.payload.result,
             lastDebuggerResult: action.payload.lastDebuggerResult,
             code: action.payload.code,
             context: action.payload.context,
-            location: action.payload.location
+            workspaceLocation: action.payload.workspaceLocation
           }
         }
       };

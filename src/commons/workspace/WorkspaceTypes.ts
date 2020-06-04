@@ -136,5 +136,5 @@ export type DebuggerContext = {
   lastDebuggerResult: any;
   code: string;
   context: Context;
-  location?: WorkspaceLocation;
+  workspaceLocation?: WorkspaceLocation;
 };

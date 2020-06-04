@@ -266,12 +266,12 @@ export const notifyProgramEvaluated = (
   lastDebuggerResult: any,
   code: string,
   context: Context,
-  location?: WorkspaceLocation
+  workspaceLocation?: WorkspaceLocation
 ) =>
   action(NOTIFY_PROGRAM_EVALUATED, {
     result,
     lastDebuggerResult,
     code,
     context,
-    location
+    workspaceLocation
   });

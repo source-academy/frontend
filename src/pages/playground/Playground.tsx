@@ -361,7 +361,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
         handleActiveTabChange: this.props.handleActiveTabChange,
         onChange: this.onChangeTabs,
         tabs,
-        location: WorkspaceLocations.playground
+        workspaceLocation: WorkspaceLocations.playground
       },
       sideContentIsResizeable: this.state.selectedTab !== SideContentType.substVisualizer
     };

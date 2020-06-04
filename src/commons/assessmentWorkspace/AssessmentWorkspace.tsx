@@ -418,7 +418,7 @@ class AssessmentWorkspace extends React.Component<
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
       tabs,
-      location: WorkspaceLocations.assessment
+      workspaceLocation: WorkspaceLocations.assessment
     };
   };
 

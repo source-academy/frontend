@@ -49,23 +49,24 @@ type StateProps = {
   defaultSelectedTabId?: SideContentType;
   renderActiveTabPanelOnly?: boolean;
   tabs: SideContentTab[];
-  location?: WorkspaceLocation;
+  workspaceLocation?: WorkspaceLocation;
 };
 
 const SideContent = (props: SideContentProps) => {
   const getDebuggerContext = (): DebuggerContext => {
-    if (!props.location) {
+    // debuggerContext.workspaceLocation is defaulted to 'assessment', so we need to handle this using props
+    if (!props.workspaceLocation) {
       return {} as DebuggerContext;
     }
     const workspaces = useSelector((state: OverallState) => state.workspaces);
-    return workspaces[props.location].debuggerContext;
+    return workspaces[props.workspaceLocation].debuggerContext;
   };
 
   const debuggerContext = getDebuggerContext();
   const isEmptyDebuggerContext = Object.keys(debuggerContext).length === 0;
 
   let activeTabs = [...props.tabs];
-  if (isEmptyDebuggerContext) {
+  if (!isEmptyDebuggerContext) {
     activeTabs = activeTabs.concat(...getDynamicTabs(debuggerContext));
   }
 
