@@ -34,30 +34,23 @@
 }
 
 /*
-  Force Blueprint Dialog to scroll on focus
+  Breaks IE11 compatability to address inaccessible scrollbar issue
+  of the BlueprintJS Dialog component at:
+  https://github.com/palantir/blueprint/issues/1008
 
-  Note: there should exist a better fix, as the Blueprint Dialog behaves
-  properly on the official demo/documentation website
-  https://blueprintjs.com/docs/#core/components/dialog
+  Follows a working recommendation proposed by a PR in that thread at:
+  https://github.com/palantir/blueprint/pull/3403
 */
-.#{$ns}-dialog-container {
-  pointer-events: all;
-}
+.#{$ns}-overlay {
+  .#{$ns}-overlay-backdrop {
+    position: sticky;
+    height: 100%;
+    width: 100%;
+  }
 
-/*
-  Temporary fix for this issue: https://github.com/palantir/blueprint/issues/1008
-
-  (when Blueprint Dialog is open, browser scroll bar is not clickable)
-*/
-.#{$ns}-overlay-backdrop {
-  display: none;
-}
-
-.#{$ns}-overlay-open {
-  background-color: rgba(16, 22, 26, 0.7);
-
-  &.#{$ns}-toast-container {
-    background-color: unset;
+  .#{$ns}-dialog-container {
+    position: absolute;
+    top: 0;
   }
 }
 

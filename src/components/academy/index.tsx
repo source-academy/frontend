@@ -13,7 +13,7 @@ import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
-import StorySimulator from '../storySimulator/StorySimulator';
+import StorySimulator from '../../pages/academy/storySimulator/StorySimulator';
 import AcademyNavigationBar from './NavigationBar';
 
 interface IAcademyProps extends IOwnProps, IStateProps, IDispatchProps, RouteComponentProps<{}> {}
@@ -84,7 +84,7 @@ class Academy extends React.Component<IAcademyProps> {
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path={'/academy/material'} component={MaterialUpload} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
-          <Route path={'/academy/gamedev'} component={StorySimulator} />
+          <Route path={'/academy/storysimulator'} component={StorySimulator} />
           <Route exact={true} path="/academy" component={dynamicRedirect(this.props)} />
           <Route component={redirectTo404} />
         </Switch>

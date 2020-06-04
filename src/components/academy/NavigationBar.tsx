@@ -135,7 +135,7 @@ const NavigationBar: React.SFC<OwnProps> = props => (
         </NavLink>
 
         <NavLink
-          to={'/academy/gamedev'}
+          to={'/academy/storysimulator'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >

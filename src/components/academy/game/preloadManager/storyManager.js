@@ -39,23 +39,16 @@ export function unlockFirstQuest(storyId, callback) {
   }
 }
 
-export function loadStoryById(storyId) {
-  // load quests and assets
-  var assetsToLoadTable = {};
-  PIXI.loader.reset();
-  sorted.forEach(function(storyId) {
-    processStory(downloaded[storyId]);
-    markAssetsToLoad(downloaded[storyId], assetsToLoadTable);
-    SoundManager.markSoundsToLoad(downloaded[storyId]);
-  });
-  preloadAssets(assetsToLoadTable, function() {
-    SoundManager.preloadSounds();
-    if (willSave) {
-      SaveManager.saveLoadStories(sorted);
+
+export function loadStory(storyXML, callback, startLocation) {
+  if (g_loadedStories[storyXML]) {
+    return;
+  }
+  loadStoryXML([storyXML], true, function() {
+    if (startLocation) {
+      LocationManager.changeStartLocation(startLocation);
     }
-    SaveManager.updateGameMap();
-    g_loadingOverlay.visible = false;
-    unlockFirstQuest(storyId, LocationManager.verifyGotoStart());
+    unlockFirstQuest(storyXML, LocationManager.verifyGotoStart(callback));
   });
 }
 
@@ -94,6 +87,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     }
     // check whether this story has been downloaded or will be downloaded
     var curId = storyXMLs[i];
+    console.log(curId)
     if (g_loadedStories[curId] || downloadRequestSent[curId]) {
       download(i + 1, storyXMLs, callback);
       // } else if (loadingStories.indexOf(curId) !== -1) {
@@ -103,10 +97,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
       downloadRequestSent[curId] = true;
       const makeAjax = isTest => {
         const xhr = new XMLHttpRequest();
-        xhr.open(
-          'GET',
-          `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`
-        );
+        xhr.open('GET', `${isTest ? Constants.storyXMLPathTest : Constants.storyXMLPathLive}${curId}.story.xml`);
         xhr.addEventListener('load', () => {
           var xml = xhr.responseXML;
           var story = xml.children[0];
@@ -117,7 +108,7 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
           if (dependencies) {
             storyDependencies[curId] = dependencies.split(' ');
             notDownloading = storyDependencies[curId].filter(function(id) {
-              return !loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
+              return !g_loadedStories[id] && willBeDownloaded.indexOf(id) === -1;
             });
           } else {
             storyDependencies[curId] = [];
@@ -130,25 +121,24 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
             var allRequestSent = willBeDownloaded.reduce(function(prev, cur) {
               return prev && downloadRequestSent[cur];
             }, true);
-            if (allRequestSent && Object.keys(downloaded).length == willBeDownloaded.length) {
+            if (
+              allRequestSent &&
+              Object.keys(downloaded).length == willBeDownloaded.length
+            ) {
               callback();
             }
           }
         });
-        xhr.addEventListener(
-          'error',
-          isTest
-            ? () => {
-                console.log('Trying on live...');
-                makeAjax(false);
-              }
-            : () => {
-                loadingOverlay.visible = false;
-                console.error('Cannot find story ' + curId);
-              }
-        );
+        xhr.addEventListener('error', isTest ? () => {
+          console.log('Trying on live...');
+          makeAjax(false);
+        }
+          : () => {
+          g_loadingOverlay.visible = false;
+          console.error('Cannot find story ' + curId);
+        });
         xhr.send();
-      };
+      }
       makeAjax(!isStudent());
       download(i + 1, storyXMLs, callback);
     }
@@ -195,7 +185,6 @@ export function loadStoryXML(storyXMLs, willSave, callback) {
     });
   });
 }
-
 export function closeStory(storyId, callback) {
   if (!g_loadedStories[storyId]) {
     return;

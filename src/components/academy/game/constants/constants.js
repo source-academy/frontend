@@ -16,6 +16,8 @@ const Constants = {
   playerAvatarOffset: 40,
   glowDistance: 30,
   textSpeed: 0.002,
+  storyXMLPathLive: LIVE_STORIES_HOST,
+  storyXMLPathTest: TEST_STORIES_HOST,
   locationPath: ASSETS_HOST + 'locations/',
   objectPath: ASSETS_HOST + 'objects/',
   imgPath: ASSETS_HOST + 'images/',

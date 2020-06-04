@@ -753,6 +753,11 @@ $code-color-error: #ff4444;
     .repl-react-ace {
       margin: 0.4rem 0.6rem 0.4rem 0.6rem;
     }
+
+    .repl-react-ace-green {
+      background: $pure-green !important;
+      margin: 0.4rem 0.6rem 0.4rem 0.6rem;
+    }
   }
 
   .react-ace {
@@ -760,6 +765,15 @@ $code-color-error: #ff4444;
     border-radius: 3px;
     .ace_gutter {
       background: $cadet-color-3;
+      color: rgb(128, 145, 160);
+    }
+  }
+
+  .react-ace-green {
+    background-color: $pure-green !important;
+    border-radius: 3px;
+    .ace_gutter {
+      background: $dark-green;
       color: rgb(128, 145, 160);
     }
   }

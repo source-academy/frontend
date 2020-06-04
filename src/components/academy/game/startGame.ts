@@ -3,7 +3,7 @@ import { GameState, Story } from '../../../reducers/states';
 import { LINKS } from '../../../utils/constants';
 import { fetchGameData } from './backend/gameState';
 import Constants from './constants/constants';
-import { loadStoryById } from './preloadManager/storyManager';
+import { loadStory } from './preloadManager/storyManager';
 import { initStage } from './storyXmlPlayer';
 import hookHandlers from './utils/hookHandlers';
 
@@ -25,7 +25,7 @@ async function startGame(
 ) {
   const storyId: string = await fetchGameData(userStory, gameState, missions);
   initStage(div, canvas, { ...config, playerName: username });
-  loadStoryById(storyId);
+  loadStory(storyId);
 }
 
 export default startGame;
