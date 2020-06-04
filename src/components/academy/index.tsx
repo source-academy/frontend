@@ -4,16 +4,16 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import Grading from '../../containers/academy/grading';
 import AssessmentContainer from '../../containers/assessment';
 import Dashboard from '../../containers/dashboard/DashboardContainer';
-import Game from '../../containers/GameContainer';
+import Game from '../../pages/academy/game/GameContainer';
 import GroundControl from '../../containers/groundControl/GroundControlContainer';
 import MaterialUpload from '../../containers/material/MaterialUploadContainer';
 import Sourcereel from '../../containers/sourcecast/SourcereelContainer';
+import StorySimulator from '../../pages/academy/storySimulator/StorySimulator';
 import { isAcademyRe } from '../../reducers/session';
 import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
 import { assessmentCategoryLink } from '../../utils/paramParseHelpers';
 import { AssessmentCategories, AssessmentCategory } from '../assessment/assessmentShape';
-import StorySimulator from '../../pages/academy/storySimulator/StorySimulator';
 import AcademyNavigationBar from './NavigationBar';
 
 interface IAcademyProps extends IOwnProps, IStateProps, IDispatchProps, RouteComponentProps<{}> {}

@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 
-import { createBlackOverlay } from './effects.js';
+import { createBlackOverlay } from './effects.js.js';
 import { defaultText } from '../constants/styles.js';
 
 export function createLoadingScreen() {

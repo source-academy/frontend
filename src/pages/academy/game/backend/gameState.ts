@@ -4,7 +4,7 @@ import { GameSessionData } from '../gameTypes';
 import { getMissionPointer } from './missionPointer';
 import { isStudent } from './user';
 
-let SaveManager = require('../saveManager/saveManager.js');
+const SaveManager = require('../saveManager/saveManager.js');
 
 /**
  * Handles data regarding the game state.

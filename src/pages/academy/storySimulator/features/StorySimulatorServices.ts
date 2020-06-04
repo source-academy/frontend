@@ -1,6 +1,6 @@
 import * as AWS from 'aws-sdk';
 
-import { SESSION_DATA_KEY } from 'src/components/academy/game/backend/gameState';
+import { SESSION_DATA_KEY } from 'src/pages/academy/game/backend/gameState';
 import {
   accessKeyId,
   OVERRIDE_DATES_KEY,
