@@ -53,22 +53,30 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
-  const getDebuggerContext = (): DebuggerContext => {
-    // debuggerContext.workspaceLocation is defaulted to 'assessment', so we need to handle this using props
-    if (!props.workspaceLocation) {
-      return {} as DebuggerContext;
-    }
+
+  const [dynamicTabs, setDynamicTabs] = React.useState(props.tabs);
+
+  // Fetch debuggerContext from store
+  let debuggerContext: DebuggerContext;
+  if (props.workspaceLocation) {
     const workspaces = useSelector((state: OverallState) => state.workspaces);
-    return workspaces[props.workspaceLocation].debuggerContext;
+    debuggerContext = workspaces[props.workspaceLocation].debuggerContext;
+  } else {
+    debuggerContext = {} as DebuggerContext;
+  }
+
+  const updateTabs = async () => {
+    getDynamicTabs(debuggerContext).then(newDynamicTabs => {
+      const allActiveTabs = props.tabs.concat(newDynamicTabs);
+      setDynamicTabs(allActiveTabs);
+    });
   };
 
-  const debuggerContext = getDebuggerContext();
-  const isEmptyDebuggerContext = Object.keys(debuggerContext).length === 0;
+  React.useEffect(() => {
+    updateTabs();
+  }, [debuggerContext]);
 
-  let activeTabs = [...props.tabs];
-  if (!isEmptyDebuggerContext) {
-    activeTabs = activeTabs.concat(...getDynamicTabs(debuggerContext));
-  }
+  // const activeTabs = [...props.tabs].concat(...getDynamicTabs(debuggerContext));
 
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
@@ -117,7 +125,7 @@ const SideContent = (props: SideContentProps) => {
     );
   };
 
-  const renderedTabs = activeTabs.map(renderTab);
+  const renderedTabs = dynamicTabs.map(renderTab);
 
   const changeTabsCallback = (
     newTabId: SideContentType,

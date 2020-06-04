@@ -2,7 +2,12 @@ import { DebuggerContext } from '../workspace/WorkspaceTypes';
 import { sampleTab } from './SideContentSampleTab';
 import { SideContentTab } from './SideContentTypes';
 
-export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
+export const getDynamicTabs = async (debuggerContext: DebuggerContext): Promise<SideContentTab[]> => {
+  const isEmptyDebuggerContext = Object.keys(debuggerContext).length === 0;
+
+  if (isEmptyDebuggerContext) {
+    return [] as SideContentTab[];
+  }
   // TODO: Make use of activeTabsLabel to help deciding toSpawn or not
 
   // TODO: Make each check to separate library are sync
