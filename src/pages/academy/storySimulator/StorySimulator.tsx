@@ -8,8 +8,7 @@ import JsonUpload from './subcomponents/JsonUpload';
 import StoryXmlLoader from './subcomponents/StoryXmlLoader';
 
 function StorySimulator() {
-  const [includedStoryIds, setIncludedStoryIds] = React.useState<Set<string>>(new Set([]));
-  console.log(includedStoryIds);
+  const [includedStoryIds, setIncludedStoryIds] = React.useState(new Set([]));
   const handleTest = React.useCallback(() => {
     window.open('/academy/game');
   }, []);
