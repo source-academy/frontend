@@ -41,7 +41,6 @@
     "ag-grid": "^18.0.1",
     "ag-grid-react": "^18.0.0",
     "astring": "^1.3.0",
-    "aws-sdk": "^2.686.0",
     "classnames": "^2.2.6",
     "common-tags": "^1.7.2",
     "connected-react-router": "^6.8.0",
