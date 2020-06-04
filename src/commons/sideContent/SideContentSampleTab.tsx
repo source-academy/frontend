@@ -5,14 +5,14 @@ import { useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext } from '../workspace/WorkspaceTypes';
-import { getLastWorkspaceLocation } from './SideContentHelper';
+import { getLastWorkspaceLocation, isCurrentlyActive } from './SideContentHelper';
 import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
-
   const workspaceLocation = getLastWorkspaceLocation();
-  const debuggerContext = useSelector((state: OverallState) =>
-    state.workspaces[workspaceLocation].debuggerContext);
+  const debuggerContext = useSelector(
+    (state: OverallState) => state.workspaces[workspaceLocation].debuggerContext
+  );
 
   let replOutput = 'Your output is ';
   if (Object.keys(debuggerContext).length === 0) {
@@ -31,7 +31,10 @@ const SideContentSampleTab = (props: any) => {
 };
 
 const toSpawnSampleTab = (debuggerContext: DebuggerContext) => {
-  return true;
+  if (debuggerContext.result.value === 'unsample') {
+    return false;
+  }
+  return isCurrentlyActive('Sample') || debuggerContext.result.value === 'sample';
 };
 
 export const sampleTab: SideContentTab = {
