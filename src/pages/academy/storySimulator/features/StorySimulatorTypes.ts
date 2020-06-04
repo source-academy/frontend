@@ -19,7 +19,7 @@ export type DirectoryData = {
 };
 
 export type StoryDetail = {
-  Key: string;
+  filename: string;
 };
 
 export type GameSessionOverride = {

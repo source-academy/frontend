@@ -1,7 +1,6 @@
 import 'ace-builds/webpack-resolver';
 import * as React from 'react';
 
-import { s3Folder } from '../features/StorySimulatorConstants';
 import { fetchStories } from '../features/StorySimulatorServices';
 import StoryItems from './StoryItems';
 
@@ -16,10 +15,7 @@ function StoryXmlLoader({ setIncludedStoryIds }: OwnProps) {
   React.useEffect(() => {
     (async () => {
       const stories = await fetchStories();
-      const storyIds = Object.values(stories)
-        .map(story => story.Key)
-        .map(storyId => storyId.slice(s3Folder.length))
-        .filter(storyId => !!storyId);
+      const storyIds = stories.map(story => story.filename);
       setStoryListBucket(storyIds);
     })();
   }, []);
@@ -41,10 +37,14 @@ function StoryXmlLoader({ setIncludedStoryIds }: OwnProps) {
       <input multiple={true} type="file" onChange={onChange} style={{ width: '250px' }} />
 
       <h4>Uploaded Files</h4>
-      {storyListLoaded && <StoryItems storyList={storyListLoaded} includeStory={includeStory} />}
+      {storyListLoaded && (
+        <StoryItems key={'upload'} storyList={storyListLoaded} includeStory={includeStory} />
+      )}
 
       <h4>S3 Bucket Files</h4>
-      {storyListBucket && <StoryItems storyList={storyListBucket} includeStory={includeStory} />}
+      {storyListBucket && (
+        <StoryItems key={'S3'} storyList={storyListBucket} includeStory={includeStory} />
+      )}
     </div>
   );
 }

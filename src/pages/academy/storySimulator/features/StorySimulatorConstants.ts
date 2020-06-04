@@ -1,8 +1,3 @@
-export const accessKeyId = 'AKIAYNU6ZMFN7QDGAIQB';
-export const secretAccessKey = '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';
-export const region = 'ap-southeast-1';
-export const s3Folder = 'stories/';
-
 export const defaultGameStateText = `{
   "sessionData": {
     "story": {
