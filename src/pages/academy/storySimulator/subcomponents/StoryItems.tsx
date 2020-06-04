@@ -19,8 +19,6 @@ function StoryItems({ storyList, includeStory }: OwnProps) {
     { headerName: 'Close Date', field: 'closeAt' }
   ];
 
-  console.log(storyList);
-
   return (
     <>
       <AgGridReact columnDefs={columnDefs} rowData={storyList}></AgGridReact>
