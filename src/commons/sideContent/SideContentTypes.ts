@@ -49,7 +49,6 @@ export type SideContentTab = {
   iconName: IconName;
   body: JSX.Element;
   toSpawn: (context: DebuggerContext) => boolean;
-  toDespawn: (context: DebuggerContext) => boolean;
   id?: SideContentType;
   disabled?: boolean;
 };

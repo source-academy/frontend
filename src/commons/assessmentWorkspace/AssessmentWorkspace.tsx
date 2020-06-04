@@ -355,16 +355,14 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
         id: SideContentType.questionOverview,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
         id: SideContentType.briefing,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -377,8 +375,7 @@ class AssessmentWorkspace extends React.Component<
           />
         ),
         id: SideContentType.autograder,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
@@ -398,8 +395,7 @@ class AssessmentWorkspace extends React.Component<
           />
         ),
         id: SideContentType.grading,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       });
     }
 
@@ -410,8 +406,7 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       });
     }
     return {

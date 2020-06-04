@@ -20,16 +20,11 @@ const toSpawnSampleTab = (debuggerContext: DebuggerContext) => {
   return true;
 };
 
-const toDespawnSampleTab = (debuggerContext: DebuggerContext) => {
-  return !toSpawnSampleTab(debuggerContext);
-};
-
 export const sampleTab: SideContentTab = {
   label: 'Sample',
   iconName: IconNames.ASTERISK,
   body: <SideContentSampleTab />,
-  toSpawn: toSpawnSampleTab,
-  toDespawn: toDespawnSampleTab
+  toSpawn: toSpawnSampleTab
 };
 
 export default SideContentSampleTab;

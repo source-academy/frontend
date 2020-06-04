@@ -232,8 +232,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
         />
       ),
       id: SideContentType.introduction,
-      toSpawn: () => true,
-      toDespawn: () => false
+      toSpawn: () => true
     };
 
     const tabs: SideContentTab[] = [playgroundIntroductionTab];
@@ -271,8 +270,7 @@ class Playground extends React.Component<PlaygroundProps, State> {
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={this.processStepperOutput(this.props.output)} />,
         id: SideContentType.substVisualizer,
-        toSpawn: () => true,
-        toDespawn: () => false
+        toSpawn: () => true
       });
     }
 
@@ -433,24 +431,21 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  toSpawn: () => true,
-  toDespawn: () => false
+  toSpawn: () => true
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
   body: <SideContentVideoDisplay />,
-  toSpawn: () => true,
-  toDespawn: () => false
+  toSpawn: () => true
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
   body: <SideContentFaceapiDisplay />,
-  toSpawn: () => true,
-  toDespawn: () => false
+  toSpawn: () => true
 };
 
 const inspectorTab: SideContentTab = {
@@ -458,8 +453,7 @@ const inspectorTab: SideContentTab = {
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
   id: SideContentType.inspector,
-  toSpawn: () => true,
-  toDespawn: () => false
+  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
@@ -467,8 +461,7 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
-  toSpawn: () => true,
-  toDespawn: () => false
+  toSpawn: () => true
 };
 
 export default Playground;
