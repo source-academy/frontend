@@ -53,7 +53,6 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
-
   const [dynamicTabs, setDynamicTabs] = React.useState(props.tabs);
 
   // Fetch debuggerContext from store
@@ -66,10 +65,8 @@ const SideContent = (props: SideContentProps) => {
   }
 
   React.useEffect(() => {
-    getDynamicTabs(debuggerContext).then(newDynamicTabs => {
-      const allActiveTabs = props.tabs.concat(newDynamicTabs);
-      setDynamicTabs(allActiveTabs);
-    });
+    const allActiveTabs = props.tabs.concat(getDynamicTabs(debuggerContext));
+    setDynamicTabs(allActiveTabs);
   }, [debuggerContext]);
 
   /**
