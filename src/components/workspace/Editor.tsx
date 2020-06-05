@@ -35,6 +35,7 @@ export interface IEditorProps {
   editorSessionId: string;
   editorValue: string;
   highlightedLines: number[][];
+  isGreen?: boolean;
   isEditorAutorun: boolean;
   newCursorPosition?: IPosition;
   sharedbAceInitValue?: string;
@@ -220,7 +221,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
-            className="react-ace"
+            className={this.props.isGreen ? 'react-ace-green' : 'react-ace'}
             commands={[
               {
                 name: 'evaluate',
@@ -403,10 +404,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
-      if (!this.AceEditor.current) {
+      if (!this.AceEditor || !this.AceEditor.current || !this.AceEditor.current.editor) {
         return;
       }
-      const editor = this.AceEditor.current.editor;
+      const editor = (this.AceEditor.current as any).editor;
       const session = editor.session;
       const code = this.props.editorValue;
       const chapterNumber = this.props.sourceChapter;
