@@ -123,7 +123,7 @@
     "typescript": "3.5.2"
   },
   "browserslist": {
-    "production": [">0.2%", "not dead", "not op_mini all"],
+    "production": ["Firefox ESR", "last 2 chrome versions", "last 2 safari versions"],
     "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
   }
 }
