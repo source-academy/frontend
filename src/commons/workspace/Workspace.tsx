@@ -32,10 +32,10 @@ type StateProps = {
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
-  private editorDividerDiv: HTMLDivElement;
-  private leftParentResizable: Resizable;
-  private maxDividerHeight: number;
-  private sideDividerDiv: HTMLDivElement;
+  private editorDividerDiv?: HTMLDivElement = undefined;
+  private leftParentResizable?: Resizable = undefined;
+  private maxDividerHeight?: number = undefined;
+  private sideDividerDiv?: HTMLDivElement = undefined;
   private editorRef: React.RefObject<Editor>;
 
   public constructor(props: WorkspaceProps) {
@@ -44,7 +44,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   public componentDidMount() {
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight;
+    this.maxDividerHeight = this.sideDividerDiv!.clientHeight;
   }
 
   /**
@@ -139,15 +139,15 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
-      this.leftParentResizable.updateSize({ width: '100%', height: '100%' });
+      this.leftParentResizable!.updateSize({ width: '100%', height: '100%' });
     } else if (editorWidthPercentage < leftThreshold) {
-      this.leftParentResizable.updateSize({ width: '0%', height: '100%' });
+      this.leftParentResizable!.updateSize({ width: '0%', height: '100%' });
     }
     // Update divider margin
     if (editorWidthPercentage < leftThreshold) {
-      this.editorDividerDiv.style.marginRight = '0.6rem';
+      this.editorDividerDiv!.style.marginRight = '0.6rem';
     } else {
-      this.editorDividerDiv.style.marginRight = '0';
+      this.editorDividerDiv!.style.marginRight = '0';
     }
   };
 
@@ -158,15 +158,15 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private toggleDividerDisplay: ResizeCallback = ({}, {}, ref) => {
     /* This is actually broken... */
     this.maxDividerHeight =
-      this.sideDividerDiv.clientHeight > this.maxDividerHeight
-        ? this.sideDividerDiv.clientHeight
+      this.sideDividerDiv!.clientHeight > this.maxDividerHeight!
+        ? this.sideDividerDiv!.clientHeight
         : this.maxDividerHeight;
     const resizableHeight = (ref as HTMLDivElement).clientHeight;
     const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight;
-    if (resizableHeight + this.maxDividerHeight + 2 > rightParentHeight) {
-      this.sideDividerDiv.style.display = 'none';
+    if (resizableHeight + this.maxDividerHeight! + 2 > rightParentHeight) {
+      this.sideDividerDiv!.style.display = 'none';
     } else {
-      this.sideDividerDiv.style.display = 'initial';
+      this.sideDividerDiv!.style.display = 'initial';
     }
   };
 

@@ -17,7 +17,7 @@ type StateProps = {
 };
 
 class ReplInput extends React.PureComponent<ReplInputProps, {}> {
-  private replInputBottom: HTMLDivElement;
+  private replInputBottom?: HTMLDivElement;
   private execBrowseHistoryDown: () => void;
   private execBrowseHistoryUp: () => void;
   private execEvaluate: () => void;
@@ -27,12 +27,18 @@ class ReplInput extends React.PureComponent<ReplInputProps, {}> {
     this.execBrowseHistoryDown = props.handleBrowseHistoryDown;
     this.execBrowseHistoryUp = props.handleBrowseHistoryUp;
     this.execEvaluate = () => {
+      if (!this.replInputBottom) {
+        return;
+      }
       this.replInputBottom.scrollIntoView();
       this.props.handleReplEval();
     };
   }
 
   public componentDidUpdate() {
+    if (!this.replInputBottom) {
+      return;
+    }
     if (this.replInputBottom.clientWidth >= window.innerWidth - 50) {
       /* There is a bug where
        *   if the workspace has been resized via re-resizable such that the

@@ -11,7 +11,7 @@ import { Chapter } from '../application/types/ChapterTypes';
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChapterSelect?: (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => void;
 };
 
 type StateProps = {
@@ -56,7 +56,7 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {},
+    handleSelect = (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => {},
     disabled: boolean
   ) => (
     <ChapterSelectComponent

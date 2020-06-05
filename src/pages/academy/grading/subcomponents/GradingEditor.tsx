@@ -347,7 +347,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * will overwrite any unsaved changes
    */
   private discardChanges = (): void => {
-    if (!this.hasUnsavedChanges() || confirm('This will reset the editor. Are you sure?')) {
+    if (!this.hasUnsavedChanges() || window.confirm('This will reset the editor. Are you sure?')) {
       this.setState(
         {
           ...this.state,

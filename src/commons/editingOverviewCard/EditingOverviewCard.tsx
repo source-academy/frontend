@@ -274,7 +274,7 @@ const assessmentCategoriesArr = [
 
 const categorySelect = (
   category: AssessmentCategory,
-  handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
+  handleSelect = (i: AssessmentCategory, e?: React.SyntheticEvent<HTMLElement>) => {}
 ) => (
   <CategorySelectComponent
     className={Classes.MINIMAL}

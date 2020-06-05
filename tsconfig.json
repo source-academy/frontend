@@ -4,10 +4,18 @@
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es2016",
-    "lib": ["es6", "dom", "es2015", "es2017"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext",
+      "es6",
+      "es2015",
+      "es2017"
+    ],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
+    "strict": true,
     "moduleResolution": "node",
     "rootDir": "src",
     "forceConsistentCasingInFileNames": true,
@@ -17,17 +25,17 @@
     "strictNullChecks": true,
     "skipLibCheck": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true
+    "noUnusedLocals": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": false,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true
   },
+  "include": [
+    "src"
+  ],
   "exclude": [
-    "node_modules",
-    "public/externalLibs",
-    "public/modules",
-    "build",
-    "scripts",
-    "acceptance-tests",
-    "webpack",
-    "jest",
     "src/setupTests.ts"
   ]
 }

@@ -194,14 +194,14 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
     this.props.updateAssessment(assessment);
   };
 
-  private handleChapterSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleChapterSelect = (i: Chapter, _e?: React.SyntheticEvent<HTMLElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.chapter = i.chapter;
     this.props.updateAssessment(assessment);
   };
 
-  private handleExternalSelect = (i: External, e: React.ChangeEvent<HTMLSelectElement>) => {
+  private handleExternalSelect = (i: External, _e?: React.SyntheticEvent<HTMLElement>) => {
     const assessment = this.props.assessment;
     const deployment = getValueFromPath(this.props.pathToLibrary, assessment) as Library;
     deployment.external.name = i.name;
@@ -232,8 +232,8 @@ export class DeploymentTab extends React.Component<DeploymentTabProps, {}> {
   };
 }
 
-const removeSpaces = (str: string) => {
-  return str.replace(/\s+/g, '');
+const removeSpaces = (str: string | number) => {
+  return typeof str === 'string' ? str.replace(/\s+/g, '') : str;
 };
 
 const altEval = (str: string): any => {
@@ -249,7 +249,7 @@ const chapters = sourceLanguages.map(lang => ({
 const chapterSelect = (
   currentChap: number,
   variant: Variant = 'default',
-  handleSelect = (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => {}
+  handleSelect = (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => {}
 ) => (
   <ChapterSelectComponent
     className={Classes.MINIMAL}
@@ -280,7 +280,7 @@ const iExternals = Array.from(externalLibraries.entries()).map((entry, index) =>
 
 const externalSelect = (
   currentExternal: string,
-  handleSelect: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void
+  handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
 ) => (
   <ExternalSelectComponent
     className={Classes.MINIMAL}

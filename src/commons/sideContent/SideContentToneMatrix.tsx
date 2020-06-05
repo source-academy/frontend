@@ -3,7 +3,7 @@ import * as classNames from 'classnames';
 import * as React from 'react';
 
 class SideContentToneMatrix extends React.Component<{}, {}> {
-  private $container: HTMLElement | null;
+  private $container: HTMLElement | null = null;
 
   public shouldComponentUpdate() {
     return false;

@@ -218,13 +218,18 @@ describe('Test FETCH_ASSESSMENT Action', () => {
 
 describe('Test SUBMIT_ANSWER Action', () => {
   test('when response is ok', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    const mockNewQuestions = mockAssessment.questions.slice().map((question: Question) => {
-      if (question.id === mockAnsweredAssessmentQuestion.id) {
-        return { ...question, answer: mockAnsweredAssessmentQuestion.answer };
+    const mockAnsweredAssessmentQuestion: Question =
+      mockAssessmentQuestion.type === 'mcq'
+        ? { ...mockAssessmentQuestion, answer: 42 }
+        : { ...mockAssessmentQuestion, answer: '42' };
+    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+      (question: Question): Question => {
+        if (question.id === mockAnsweredAssessmentQuestion.id) {
+          return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
+        }
+        return question;
       }
-      return question;
-    });
+    );
     const mockNewAssessment = {
       ...mockAssessment,
       questions: mockNewQuestions
@@ -236,7 +241,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
           call(
             postAnswer,
             mockAnsweredAssessmentQuestion.id,
-            mockAnsweredAssessmentQuestion.answer,
+            mockAnsweredAssessmentQuestion.answer || '',
             mockTokens
           ),
           okResp

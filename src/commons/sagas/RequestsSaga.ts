@@ -156,7 +156,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<Assessm
     const input = window.prompt('Please enter password.', '');
     if (!input) {
       resp = null;
-      history.back();
+      window.history.back();
       return null;
     }
 

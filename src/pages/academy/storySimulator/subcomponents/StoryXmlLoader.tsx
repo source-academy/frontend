@@ -15,8 +15,8 @@ function StoryXmlLoader() {
     })();
   }, []);
 
-  function onChange(e: { target: any }) {
-    const files = Object.values(e.target.files);
+  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Object.values(e.target.files || []);
     files.map(loadFileLocally);
     setStoryListLoaded(files.map(createStoryDetailFromFile));
   }
@@ -46,9 +46,9 @@ function loadFileLocally(xmlFile: File) {
   };
 }
 
-function createStoryDetailFromFile(filename: string) {
+function createStoryDetailFromFile(file: File) {
   return {
-    filename,
+    filename: file.name,
     openAt: '',
     closeAt: ''
   };
