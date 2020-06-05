@@ -34,7 +34,7 @@ const toSpawnSampleTab = (debuggerContext: DebuggerContext) => {
   if (debuggerContext.result.value === 'unsample') {
     return false;
   }
-  return isCurrentlyActive('Sample') || debuggerContext.result.value === 'sample';
+  return isCurrentlyActive('Sample', debuggerContext.workspaceLocation) || debuggerContext.result.value === 'sample';
 };
 
 export const sampleTab: SideContentTab = {
