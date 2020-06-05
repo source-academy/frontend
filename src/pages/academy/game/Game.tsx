@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
 import { GameState, Role, Story } from '../../../reducers/states';
-import { setSaveHandler } from './backend/gameState';
-import { setUserRole } from './backend/user';
-import startGame from './startGame';
+import { setSaveHandler } from './subcomponents/backend/gameState';
+import { setUserRole } from './subcomponents/backend/user';
+import startGame from './subcomponents/startGame';
 
 type GameProps = DispatchProps & StateProps;
 
@@ -46,7 +46,7 @@ export class Game extends React.Component<GameProps, {}> {
     if (this.props.name && this.props.role && !this.props.assessmentOverviews) {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
-      const loadingScreen: any = (await import('./storyXmlPlayer.js')).loadingScreen;
+      const loadingScreen: any = (await import('./subcomponents/storyXmlPlayer.js')).loadingScreen;
       loadingScreen(this.div, this.canvas);
       this.props.handleSaveCanvas(this.canvas);
     }

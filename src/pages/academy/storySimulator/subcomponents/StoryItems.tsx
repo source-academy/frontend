@@ -1,7 +1,7 @@
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
 import * as React from 'react';
 
-import { StoryDetail } from '../../../../features/academy/StorySimulator/StorySimulatorTypes';
+import { StoryDetail } from '../../../../features/storySimulator/StorySimulatorTypes';
 
 type OwnProps = {
   storyList: StoryDetail[];

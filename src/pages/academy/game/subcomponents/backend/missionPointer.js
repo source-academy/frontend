@@ -4,7 +4,7 @@ import SaveManager from '../saveManager/saveManager.js';
 import {
   OVERRIDE_DATES_KEY,
   OVERRIDE_PUBLISH_KEY
-} from 'src/features/academy/StorySimulator/StorySimulatorConstants';
+} from 'src/features/storySimulator/StorySimulatorTypes';
 
 function getSessionData() {
   return JSON.parse(sessionStorage.getItem(SESSION_DATA_KEY));

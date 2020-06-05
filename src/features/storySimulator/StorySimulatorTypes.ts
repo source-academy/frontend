@@ -1,3 +1,33 @@
+import { GameSessionData } from 'src/pages/academy/game/subcomponents/gameTypes';
+
+export type MaterialData = {
+  title: string;
+  description: string;
+  inserted_at: string;
+  updated_at: string;
+  id: number;
+  uploader: {
+    id: number;
+    name: string;
+  };
+  url: string;
+};
+
+export type DirectoryData = {
+  id: number;
+  title: string;
+};
+
+export type StoryDetail = {
+  filename: string;
+};
+
+export type GameSessionOverride = {
+  sessionData: GameSessionData;
+  overridePublish?: boolean;
+  overrideDates?: boolean;
+};
+
 export const defaultGameStateText = `{
   "sessionData": {
     "story": {

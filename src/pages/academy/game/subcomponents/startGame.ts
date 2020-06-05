@@ -1,6 +1,6 @@
 import { IAssessmentOverview } from 'src/components/assessment/assessmentShape';
-import { GameState, Story } from '../../../reducers/states';
-import { LINKS } from '../../../utils/constants';
+import { GameState, Story } from '../../../../reducers/states';
+import { LINKS } from '../../../../utils/constants';
 import { fetchGameData } from './backend/gameState';
 import Constants from './constants/constants';
 import { loadStory } from './preloadManager/storyManager';

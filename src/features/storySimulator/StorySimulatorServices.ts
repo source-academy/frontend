@@ -1,10 +1,10 @@
-import { SESSION_DATA_KEY } from 'src/pages/academy/game/backend/gameState';
+import { SESSION_DATA_KEY } from 'src/pages/academy/game/subcomponents/backend/gameState';
 import {
   OVERRIDE_DATES_KEY,
   OVERRIDE_KEY,
   OVERRIDE_PUBLISH_KEY,
   STORY_ID
-} from './StorySimulatorConstants';
+} from './StorySimulatorTypes';
 import { GameSessionOverride, StoryDetail } from './StorySimulatorTypes';
 
 /**

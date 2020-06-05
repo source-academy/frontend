@@ -2,8 +2,8 @@ import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import chooseStory from '../game/backend/chooseStory';
-import { setStoryId } from '../../../features/academy/StorySimulator/StorySimulatorServices';
+import chooseStory from '../game/subcomponents/backend/chooseStory';
+import { setStoryId } from '../../../features/storySimulator/StorySimulatorServices';
 import JsonUpload from './subcomponents/JsonUpload';
 import StoryXmlLoader from './subcomponents/StoryXmlLoader';
 
