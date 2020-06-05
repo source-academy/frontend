@@ -1,5 +1,5 @@
-import * as React from 'react';
 import { AgGridReact } from 'ag-grid-react/lib/agGridReact';
+import * as React from 'react';
 
 import { StoryDetail } from '../features/StorySimulatorTypes';
 

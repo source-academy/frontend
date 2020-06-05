@@ -1,9 +1,9 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { fetchAssessmentOverviews, saveCanvas, saveUserData } from '../../../actions';
-import { IState } from '../../../reducers/states';
-import Game, { DispatchProps, StateProps } from './Game';
+import { fetchAssessmentOverviews, saveCanvas, saveUserData } from '../actions';
+import Game, { DispatchProps, StateProps } from '../components/academy/game';
+import { IState } from '../reducers/states';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

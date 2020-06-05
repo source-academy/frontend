@@ -2,8 +2,8 @@ import 'ace-builds/webpack-resolver';
 import * as React from 'react';
 
 import { fetchStories } from '../features/StorySimulatorServices';
-import StoryItems from './StoryItems';
 import { StoryDetail } from '../features/StorySimulatorTypes';
+import StoryItems from './StoryItems';
 
 type OwnProps = {
   setIncludedStoryIds: any;

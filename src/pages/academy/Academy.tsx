@@ -13,8 +13,8 @@ import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
-import Game from './game/GameContainer';
 import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
+import Game from './game/GameContainer';
 import StorySimulator from './storySimulator/StorySimulator';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;

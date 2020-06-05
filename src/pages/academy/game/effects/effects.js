@@ -30,7 +30,7 @@ export function createLoadingScreen() {
 }
 
 function fadeOut(displayObject, cb) {
-  if (tween) tween.progress(1).kill();
+  if (tween) { tween.progress(1).kill(); }
   tween = TweenLite.to(displayObject, Constants.fadeTime, {
     alpha: 0,
     ease: Power1.easeInOut,
@@ -43,7 +43,7 @@ function fadeOut(displayObject, cb) {
 
 function fadeIn(displayObject, cb) {
   displayObject.visible = true;
-  if (tween) tween.progress(1).kill();
+  if (tween) { tween.progress(1).kill(); }
   tween = TweenLite.to(displayObject, Constants.fadeTime, {
     alpha: 1,
     ease: Power1.easeInOut,
