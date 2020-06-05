@@ -92,7 +92,7 @@ const SideContent = (props: SideContentProps) => {
     return `${tabId}-icon`;
   };
 
-  const renderTab = (tab: SideContentTab) => {
+  const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
     const iconSize = 20;
     const tabId = tab.id === undefined ? tab.label : tab.id;
     const tabTitle: JSX.Element = (
@@ -102,7 +102,16 @@ const SideContent = (props: SideContentProps) => {
         </div>
       </Tooltip>
     );
-    const tabPanel: JSX.Element = <div className="side-content-text">{tab.body}</div>;
+
+    const tabBody: JSX.Element = workspaceLocation ?
+      {
+        ...tab.body,
+        props: {
+          ...tab.body.props,
+          workspaceLocation
+        }
+      } : tab.body;
+    const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
     return (
       <Tab
@@ -116,7 +125,7 @@ const SideContent = (props: SideContentProps) => {
     );
   };
 
-  const renderedTabs = dynamicTabs.map(renderTab);
+  const renderedTabs = dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
 
   const changeTabsCallback = (
     newTabId: SideContentType,

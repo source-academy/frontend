@@ -1,23 +1,17 @@
 import {
   DebuggerContext,
-  WorkspaceLocation,
-  WorkspaceLocations
+  WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
 import { sampleTab } from './SideContentSampleTab';
 import { SideContentTab } from './SideContentTypes';
 
 const potentialTabs: SideContentTab[] = [sampleTab];
 
-let lastWorkspaceLocation: WorkspaceLocation = WorkspaceLocations.assessment;
 const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map;
 
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   if (isEmptyDebuggerContext(debuggerContext)) {
     return [] as SideContentTab[];
-  }
-
-  if (debuggerContext.workspaceLocation) {
-    lastWorkspaceLocation = debuggerContext.workspaceLocation;
   }
 
   const spawnedTabs = potentialTabs.filter(tab => tab.toSpawn(debuggerContext));
@@ -29,18 +23,14 @@ export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab
   return spawnedTabs;
 };
 
-export const getLastWorkspaceLocation = (): WorkspaceLocation => {
-  return lastWorkspaceLocation;
-};
-
-export const getCurrentlyActiveTabs = (workspaceLocation: WorkspaceLocation | undefined): string[] | undefined => {
+export const getCurrentlyActiveTabs = (workspaceLocation?: WorkspaceLocation): string[] | undefined => {
   if (workspaceLocation) {
     return currentlyActiveTabsLabel.get(workspaceLocation);
   }
   return undefined;
 };
 
-export const isCurrentlyActive = (label: string, workspaceLocation: WorkspaceLocation | undefined): boolean => {
+export const isCurrentlyActive = (label: string, workspaceLocation?: WorkspaceLocation): boolean => {
   const activeTabs = getCurrentlyActiveTabs(workspaceLocation);
   return activeTabs
     ? activeTabs.findIndex((activeTabLabel: string) => activeTabLabel === label) !== -1

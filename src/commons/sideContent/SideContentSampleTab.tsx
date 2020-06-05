@@ -5,16 +5,20 @@ import { useSelector } from 'react-redux';
 
 import { OverallState } from '../application/ApplicationTypes';
 import { DebuggerContext } from '../workspace/WorkspaceTypes';
-import { getLastWorkspaceLocation, isCurrentlyActive } from './SideContentHelper';
+import { isCurrentlyActive } from './SideContentHelper';
 import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
-  const workspaceLocation = getLastWorkspaceLocation();
-  const debuggerContext = useSelector(
-    (state: OverallState) => state.workspaces[workspaceLocation].debuggerContext
-  );
+  // Require workspace location
+  if (!props.workspaceLocation) {
+    return <></>;
+  }
 
   let replOutput = 'Your output is ';
+  const debuggerContext = useSelector(
+    (state: OverallState) => state.workspaces[props.workspaceLocation].debuggerContext
+  );
+
   if (Object.keys(debuggerContext).length === 0) {
     replOutput = '';
   } else {
