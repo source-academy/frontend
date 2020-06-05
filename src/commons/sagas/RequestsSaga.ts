@@ -2,7 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-import { GameState } from 'src/reducers/states';
+// import { GameState } from 'src/reducers/states';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -12,10 +12,10 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
-import { store } from '../../createStore';
 import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { store } from '../../pages/createStore';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
@@ -101,19 +101,19 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 /**
  * PUT /user/game_states/
  */
-export async function putUserGameState(
-  gameStates: GameState,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request('user/game_states/save', 'PUT', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    body: {
-      gameStates: JSON.stringify(gameStates)
-    }
-  });
-  return resp;
-}
+// export async function putUserGameState(
+//   gameStates: GameState,
+//   tokens: Tokens
+// ): Promise<Response | null> {
+//   const resp = await request('user/game_states/save', 'PUT', {
+//     accessToken: tokens.accessToken,
+//     refreshToken: tokens.refreshToken,
+//     body: {
+//       gameStates: JSON.stringify(gameStates)
+//     }
+//   });
+//   return resp;
+// }
 
 /**
  * GET /assessments

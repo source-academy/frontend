@@ -13,7 +13,7 @@ import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
-import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
+// import GroundControl from '../../containers/groundControl/GroundControlContainer';
 import Game from './game/Game';
 import StorySimulator from './storySimulator/StorySimulator';
 
@@ -74,7 +74,7 @@ class Academy extends React.Component<AcademyProps> {
             )}/${assessmentRegExp}`}
             render={this.assessmentRenderFactory(AssessmentCategories.Practical)}
           />
-          <Route path="/academy/groundcontrol" component={GroundControl} />
+          {/* <Route path="/academy/groundcontrol" component={GroundControl} /> */}
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path="/academy/sourcereel" component={Sourcereel} />

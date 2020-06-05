@@ -7,8 +7,8 @@ import {
   ExternalLibraryNames
 } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
+import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import { mockRouterProps } from '../../../mocks/components';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {

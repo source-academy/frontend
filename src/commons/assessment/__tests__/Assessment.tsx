@@ -4,7 +4,7 @@ import { MemoryRouter } from 'react-router';
 
 import { Provider } from 'react-redux';
 
-import { store } from '../../../createStore';
+import { store } from '../../../pages/createStore';
 import { mockAssessmentOverviews } from '../../mocks/AssessmentMocks';
 import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Assessment, { AssessmentProps } from '../Assessment';
