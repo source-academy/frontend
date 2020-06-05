@@ -1,7 +1,8 @@
-class ChapterSelect extends Phaser.Scene {
+class StoryChapterSelect extends Phaser.Scene {
   constructor() {
-    super('startGame'); /* Replace with scene key */
+    super('storyChapterSelect');
   }
+
   public preload() {}
   public create() {
     const textSprite = this.add.text(400, 300, 'Hello World in Phaser 3!', {
@@ -12,4 +13,4 @@ class ChapterSelect extends Phaser.Scene {
     textSprite.setOrigin(0.5, 0);
   }
 }
-export default ChapterSelect;
+export default StoryChapterSelect;

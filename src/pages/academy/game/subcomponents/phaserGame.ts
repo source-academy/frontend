@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import StoryChapterSelect from './storyChapterSelect';
+import StoryChapterSelect from './scenes/storyChapterSelect';
 
 const phaserGame = {
   type: Phaser.CANVAS,
@@ -12,7 +12,7 @@ const phaserGame = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [StoryChapterSelect] /* Replace with scene objects that you imported */
+  scene: [StoryChapterSelect]
 };
 
 export default phaserGame;
