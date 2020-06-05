@@ -8,7 +8,7 @@ before_install:
   - export TZ=Asia/Singapore
   - export NODE_OPTIONS=--max_old_space_size=8192
 script:
-  - npm run format:ci
-  - npm run build
-  - npm run tslint
-  - npm run test-coveralls
+  - yarn run format:ci
+  - yarn run build
+  - yarn run tslint
+  - yarn run test-coveralls

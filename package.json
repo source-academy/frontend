@@ -17,7 +17,7 @@
     "format": "tslint -p . --fix && prettier --write \"src/**/*.{ts,tsx}\" \"externalLibs/**/*.js\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
-    "format:ci": "npm run format:tsx && npm run format:scss",
+    "format:ci": "yarn run format:tsx && yarn run format:scss",
     "start-js": "cross-env BROWSER=none PORT=8075 react-scripts-ts start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "react-scripts-ts test --env=jsdom",
