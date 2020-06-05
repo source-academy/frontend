@@ -47,18 +47,8 @@ test('Profile renders correctly when there are no closed assessments', () => {
     'There are no closed assessments to render grade and XP of.'
   );
   // Expect none of the other wrapper HTML <div> elements to be rendered
-  expect(
-    tree
-      .find('.profile-progress')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
-  expect(
-    tree
-      .find('.profile-callouts')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
+  expect(tree.find('.profile-progress').hostNodes().exists()).toEqual(false);
+  expect(tree.find('.profile-callouts').hostNodes().exists()).toEqual(false);
 });
 
 test('Profile renders correctly when there are closed assessments', () => {
@@ -77,12 +67,7 @@ test('Profile renders correctly when there are closed assessments', () => {
   );
   expect(tree.debug()).toMatchSnapshot();
   // Expect the placeholder <div> to NOT be rendered
-  expect(
-    tree
-      .find('.profile-placeholder')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
+  expect(tree.find('.profile-placeholder').hostNodes().exists()).toEqual(false);
 
   // Expect the correct number of each of the other HTML elements to be rendered
   ['.profile-spinner', '.type', '.total-value', '.percentage'].forEach(className => {

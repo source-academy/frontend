@@ -113,7 +113,10 @@ describe('Test FETCH_AUTH Action', () => {
       .call(getUser, mockTokens)
       .put(setTokens(mockTokens))
       .put(setUser(user))
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), user]
+      ])
       .dispatch({ type: FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
@@ -135,7 +138,10 @@ describe('Test FETCH_AUTH Action', () => {
       } as GameState
     };
     return expectSaga(BackendSaga)
-      .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), null],
+        [call(getUser, mockTokens), user]
+      ])
       .call(postAuth, luminusCode)
       .not.call.fn(getUser)
       .not.put.actionType(SET_TOKENS)
@@ -148,7 +154,10 @@ describe('Test FETCH_AUTH Action', () => {
     const luminusCode = 'luminusCode';
     const nullUser = null;
     return expectSaga(BackendSaga)
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), nullUser]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), nullUser]
+      ])
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
       .not.put.actionType(SET_TOKENS)
@@ -420,9 +429,7 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
 
 describe('Test FETCH_CHAPTER Action', () => {
   test('when chapter is obtained', () => {
-    return expectSaga(BackendSaga)
-      .dispatch({ type: FETCH_CHAPTER })
-      .silentRun();
+    return expectSaga(BackendSaga).dispatch({ type: FETCH_CHAPTER }).silentRun();
   });
 });
 

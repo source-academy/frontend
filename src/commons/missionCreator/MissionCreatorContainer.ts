@@ -15,9 +15,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const MissionCreatorContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(MissionCreator);
+const MissionCreatorContainer = connect(mapStateToProps, mapDispatchToProps)(MissionCreator);
 
 export default MissionCreatorContainer;

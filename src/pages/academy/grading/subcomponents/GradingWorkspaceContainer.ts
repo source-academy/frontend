@@ -110,9 +110,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const GradingWorkspaceContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GradingWorkspace);
+const GradingWorkspaceContainer = connect(mapStateToProps, mapDispatchToProps)(GradingWorkspace);
 
 export default GradingWorkspaceContainer;

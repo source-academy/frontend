@@ -16,9 +16,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const GradingEditorContainer = connect(
-  null,
-  mapDispatchToProps
-)(GradingEditor);
+const GradingEditorContainer = connect(null, mapDispatchToProps)(GradingEditor);
 
 export default GradingEditorContainer;

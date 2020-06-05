@@ -2,5 +2,7 @@
   "semi": true,
   "singleQuote": true,
   "printWidth": 100,
-  "parser": "typescript"
+  "parser": "typescript",
+  "arrowParens": "avoid",
+  "trailingComma": "none"
 }

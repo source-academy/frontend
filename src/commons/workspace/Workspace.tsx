@@ -1,4 +1,4 @@
-import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
+import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
@@ -101,7 +101,8 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResize: this.toggleEditorDividerDisplay,
       onResizeStop,
       ref,
-      size: { width: this.props.editorWidth, height: '100%' }
+      size: { width: this.props.editorWidth, height: '100%' },
+      as: undefined as any // re-resizable bug - wrong typedef
     } as ResizableProps;
   }
 
@@ -116,7 +117,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResizeStop,
       size:
         /* It will always be undefined...
-          Default workspace state does not have sideContentHeight... 
+          Default workspace state does not have sideContentHeight...
         */
         this.props.sideContentHeight === undefined
           ? undefined

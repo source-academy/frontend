@@ -1,5 +1,4 @@
 import { decompressFromEncodedURIComponent } from 'lz-string';
-import * as qs from 'query-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
@@ -14,6 +13,7 @@ import Playground from '../../pages/playground/PlaygroundContainer';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import { stringParamToInt } from '../utils/ParamParseHelper';
+import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
 
@@ -89,7 +89,7 @@ const toAcademy = (props: ApplicationProps) =>
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
 const toLogin = (props: ApplicationProps) => () => (
-  <Login luminusCode={qs.parse(props.location.search).code} />
+  <Login luminusCode={parseQuery(props.location.search).code} />
 );
 
 const parsePlayground = (props: ApplicationProps) => {
@@ -110,28 +110,18 @@ const parsePlayground = (props: ApplicationProps) => {
 const toIncubator = (routerProps: RouteComponentProps<any>) => <MissionControlContainer />;
 
 const parsePrgrm = (props: RouteComponentProps<{}>) => {
-  const qsParsed = qs.parse(props.location.hash);
+  const qsParsed = parseQuery(props.location.hash);
   // legacy support
   const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm;
   return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined;
 };
 
 const parseChapter = (props: RouteComponentProps<{}>) => {
-  const chapQuery = qs.parse(props.location.hash).chap;
-  // find a language with this chapter (if any)
-  const langWithMatchingChapter = sourceLanguages.find(language => language.chapter === chapQuery);
-
-  const chap: number = langWithMatchingChapter
-    ? langWithMatchingChapter.chapter
-    : chapQuery === undefined
-    ? NaN
-    : parseInt(chapQuery, 10);
-
-  return chap ? chap : undefined;
+  return stringParamToInt(parseQuery(props.location.hash).chap) || undefined;
 };
 
 const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
-  const variantQuery = qs.parse(props.location.hash).variant;
+  const variantQuery = parseQuery(props.location.hash).variant;
   // find a language with this variant and chapter (if any)
   const matchingLang = sourceLanguages.find(
     language => language.chapter === chap && language.variant === variantQuery
@@ -143,12 +133,14 @@ const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
 };
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = qs.parse(props.location.hash).ext || '';
-  return Object.values(ExternalLibraryNames).includes(ext) ? ext : ExternalLibraryNames.NONE;
+  const ext = parseQuery(props.location.hash).ext || '';
+  return Object.values(ExternalLibraryNames).includes(ext)
+    ? (ext as ExternalLibraryNames)
+    : ExternalLibraryNames.NONE;
 };
 
 const parseExecTime = (props: RouteComponentProps<{}>) => {
-  const time = qs.parse(props.location.hash).exec || '1000';
+  const time = parseQuery(props.location.hash).exec || '1000';
   // Parse the time string to a number, defaulting execTime to 1000
   const execTime = stringParamToInt(time) || 1000;
   return `${execTime < 1000 ? 1000 : execTime}`;

@@ -19,7 +19,7 @@ export enum ExternalLibraryNames {
   ALL = 'ALL'
 }
 
-export type ExternalLibraryName = (typeof ExternalLibraryNames)[keyof typeof ExternalLibraryNames];
+export type ExternalLibraryName = typeof ExternalLibraryNames[keyof typeof ExternalLibraryNames];
 
 export type ExternalLibrary = {
   name: ExternalLibraryName;
