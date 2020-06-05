@@ -4,11 +4,11 @@ import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import Grading from '../../containers/academy/grading';
 import AssessmentContainer from '../../containers/assessment';
 import Dashboard from '../../containers/dashboard/DashboardContainer';
-import Game from '../../pages/academy/game/GameContainer';
+import StoryUpload from '../../containers/game-dev/StoryUploadContainer';
+import Game from '../../containers/GameContainer';
 import GroundControl from '../../containers/groundControl/GroundControlContainer';
 import MaterialUpload from '../../containers/material/MaterialUploadContainer';
 import Sourcereel from '../../containers/sourcecast/SourcereelContainer';
-import StorySimulator from '../../pages/academy/storySimulator/StorySimulator';
 import { isAcademyRe } from '../../reducers/session';
 import { Role } from '../../reducers/states';
 import { HistoryHelper } from '../../utils/history';
@@ -84,7 +84,7 @@ class Academy extends React.Component<IAcademyProps> {
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path={'/academy/material'} component={MaterialUpload} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
-          <Route path={'/academy/storysimulator'} component={StorySimulator} />
+          <Route path={'/academy/gamedev'} component={StoryUpload} />
           <Route exact={true} path="/academy" component={dynamicRedirect(this.props)} />
           <Route component={redirectTo404} />
         </Switch>
