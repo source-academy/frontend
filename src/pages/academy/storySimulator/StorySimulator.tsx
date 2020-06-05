@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import chooseStory from '../game/backend/chooseStory';
-import { setStoryId } from './features/StorySimulatorServices';
+import { setStoryId } from '../../../features/academy/StorySimulator/StorySimulatorServices';
 import JsonUpload from './subcomponents/JsonUpload';
 import StoryXmlLoader from './subcomponents/StoryXmlLoader';
 

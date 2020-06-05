@@ -9,7 +9,6 @@ export interface IReplInputProps {
   handleBrowseHistoryUp: () => void;
   handleReplValueChange: (newCode: string) => void;
   handleReplEval: () => void;
-  isGreen?: boolean;
 }
 
 class ReplInput extends React.PureComponent<IReplInputProps, {}> {
@@ -48,9 +47,7 @@ class ReplInput extends React.PureComponent<IReplInputProps, {}> {
     return (
       <>
         <AceEditor
-          className={
-            this.props.isGreen ? 'repl-react-ace-green react-ace-green' : 'repl-react-ace react-ace'
-          }
+          className="repl-react-ace react-ace"
           mode={`source${this.props.sourceChapter || 1}defaultNONE`}
           theme="source"
           height="1px"

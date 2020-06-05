@@ -1,8 +1,8 @@
 import * as React from 'react';
 import AceEditor from 'react-ace';
 
-import { defaultGameStateText } from '../features/StorySimulatorConstants';
-import { overrideSessionData } from '../features/StorySimulatorServices';
+import { defaultGameStateText } from '../../../../features/academy/StorySimulator/StorySimulatorConstants';
+import { overrideSessionData } from '../../../../features/academy/StorySimulator/StorySimulatorServices';
 
 function JsonUpload() {
   const [editorContent, setEditorContent] = React.useState(defaultGameStateText);
