@@ -2,19 +2,13 @@ import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import chooseStory from '../game/subcomponents/backend/chooseStory';
-import { setStoryId } from '../../../features/storySimulator/StorySimulatorServices';
 import JsonUpload from './subcomponents/JsonUpload';
 import StoryXmlLoader from './subcomponents/StoryXmlLoader';
 
 function StorySimulator() {
-  const [includedStoryIds, setIncludedStoryIds] = React.useState(new Set([]));
   const handleTest = React.useCallback(() => {
     window.open('/academy/game');
   }, []);
-
-  const storyId: string = chooseStory(includedStoryIds);
-  setStoryId(storyId);
 
   return (
     <div className="ContentDisplay row center-xs ">
@@ -24,7 +18,7 @@ function StorySimulator() {
 
           <div className="Horizontal">
             <div className="Column">
-              <StoryXmlLoader setIncludedStoryIds={setIncludedStoryIds} />
+              <StoryXmlLoader />
             </div>
             <div className="Column">
               <JsonUpload />
@@ -33,7 +27,7 @@ function StorySimulator() {
 
           <div>
             <h3>XML to be loaded</h3>
-            {storyId}
+            {'mission-1'}
           </div>
           <Button icon={IconNames.MOUNTAIN} onClick={handleTest}>
             <div className="ag-grid-button-text hidden-xs">Play Story</div>

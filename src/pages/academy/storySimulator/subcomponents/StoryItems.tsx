@@ -5,10 +5,9 @@ import { StoryDetail } from '../../../../features/storySimulator/StorySimulatorT
 
 type OwnProps = {
   storyList: StoryDetail[];
-  includeStory: (storyId: string) => void;
 };
 
-function StoryItems({ storyList, includeStory }: OwnProps) {
+function StoryItems({ storyList }: OwnProps) {
   const [gridApi, setGridApi] = React.useState<any>();
 
   if (!storyList.length) {

@@ -5,11 +5,7 @@ import { fetchStories } from '../../../../features/storySimulator/StorySimulator
 import { StoryDetail } from '../../../../features/storySimulator/StorySimulatorTypes';
 import StoryItems from './StoryItems';
 
-type OwnProps = {
-  setIncludedStoryIds: any;
-};
-
-function StoryXmlLoader({ setIncludedStoryIds }: OwnProps) {
+function StoryXmlLoader() {
   const [storyListLoaded, setStoryListLoaded] = React.useState<StoryDetail[]>([]);
   const [storyListBucket, setStoryListBucket] = React.useState<StoryDetail[]>([]);
 
@@ -26,24 +22,16 @@ function StoryXmlLoader({ setIncludedStoryIds }: OwnProps) {
     setStoryListLoaded(files.map(createStoryDetailFromFile));
   }
 
-  function includeStory(storyId: string) {
-    setIncludedStoryIds((x: Set<string>) => x.add(storyId));
-  }
-
   return (
     <div className="Vertical AlignCenter">
       <h3>Story XML Loader</h3>
       <input multiple={true} type="file" onChange={onChange} style={{ width: '250px' }} />
 
       <h4>Uploaded Files</h4>
-      {storyListLoaded && (
-        <StoryItems key={'upload'} storyList={storyListLoaded} includeStory={includeStory} />
-      )}
+      {storyListLoaded && <StoryItems key={'upload'} storyList={storyListLoaded} />}
 
       <h4>S3 Bucket Files</h4>
-      {storyListBucket && (
-        <StoryItems key={'S3'} storyList={storyListBucket} includeStory={includeStory} />
-      )}
+      {storyListBucket && <StoryItems key={'S3'} storyList={storyListBucket} />}
     </div>
   );
 }

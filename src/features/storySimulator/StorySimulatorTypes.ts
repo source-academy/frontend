@@ -1,4 +1,4 @@
-import { GameSessionData } from 'src/pages/academy/game/subcomponents/gameTypes';
+import { GameSessionData } from '../../pages/academy/game/legacy/gameTypes';
 
 export type MaterialData = {
   title: string;

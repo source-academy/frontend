@@ -1,4 +1,3 @@
-import { SESSION_DATA_KEY } from 'src/pages/academy/game/subcomponents/backend/gameState';
 import {
   OVERRIDE_DATES_KEY,
   OVERRIDE_KEY,
@@ -6,6 +5,7 @@ import {
   STORY_ID
 } from './StorySimulatorTypes';
 import { GameSessionOverride, StoryDetail } from './StorySimulatorTypes';
+import { SESSION_DATA_KEY } from '../../pages/academy/game/legacy/backend/gameState';
 
 /**
  * Fetches stories from Backend
