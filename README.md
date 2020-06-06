@@ -53,20 +53,17 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 
 ## Application Structure
 
-1. `actions` contains action creators, one file per reducer, combined in index.
-2. `assets` contains static assets.
-3. `components` contains all react components.
-4. `containers` contains HOC that inject react components with Redux state.
-5. `mocks` contains mock data structures for testing
-6. `reducers` contains all Redux reducers and their state, combined in index.
-7. `sagas` contains all Redux sagas, combined in index.
-8. `slang` contains the source interpreter.
-9. `styles` contains all SCSS styles.
-10. `utils` contains utility modules.
+1. `assets` contains static assets.
+1. `commons` contains components or other code common to more than one page.
+1. `features` contains action creators, reducers and type declarations for specific functions.
+1. `pages` contains pages and components used only in one page; its layout should mirror the actual routes.
+1. `styles` contains all SCSS styles.
 
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+See also the [this standard in the wiki](https://github.com/source-academy/cadet-frontend/wiki/Coding-Standard).
 
 ### Projects
 
