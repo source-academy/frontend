@@ -1,0 +1,25 @@
+.StoryItems {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-height: 200px;
+  width: 80%;
+  overflow: scroll;
+  background-color: #eeeeee;
+  padding: 10px;
+  border-radius: 3px;
+}
+
+.Column {
+  flex-basis: 100%;
+  flex: 1;
+}
+
+.AceEditor {
+  max-height: 300px;
+  overflow: scroll;
+}
+
+.JsonUpload {
+  width: 80%;
+}
