@@ -9,7 +9,7 @@ export function mockRouterProps<P>(path: string, params: P): RouteComponentProps
       isExact: true,
       params,
       path,
-      url: location.host + path
+      url: window.location.host + path
     },
     location: history.location,
     history,

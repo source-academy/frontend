@@ -112,6 +112,7 @@ const makeAssessment = (result: any): [Assessment, number, number] => {
 };
 
 const altEval = (str: string): any => {
+  // eslint-disable-next-line no-new-func
   return Function('"use strict";return (' + str + ')')();
 };
 

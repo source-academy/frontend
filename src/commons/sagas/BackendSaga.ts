@@ -332,7 +332,7 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push('/academy/grading' + `/${submissionId}` + `/${(currentQuestion || 0) + 1}`);
+    yield history.push(`/academy/grading/${submissionId}/${(currentQuestion || 0) + 1}`);
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);

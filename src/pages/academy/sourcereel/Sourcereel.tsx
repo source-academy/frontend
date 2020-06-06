@@ -123,10 +123,6 @@ export type StateProps = {
 };
 
 class Sourcereel extends React.Component<SourcereelProps> {
-  constructor(props: SourcereelProps) {
-    super(props);
-  }
-
   public componentDidUpdate(prevProps: SourcereelProps) {
     const { inputToApply } = this.props;
 

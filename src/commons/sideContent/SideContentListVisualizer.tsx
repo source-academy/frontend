@@ -33,7 +33,7 @@ class SideContentListVisualizer extends React.Component<{}, State> {
           <br />
           <br />
           The data visualizer uses box-and-pointer diagrams, as introduced in{' '}
-          <a href={Links.sourceDocsChapter2_2} target="_blank">
+          <a href={Links.sourceDocsChapter2_2} rel="noopener noreferrer" target="_blank">
             <i>
               Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 2,
               Section 2

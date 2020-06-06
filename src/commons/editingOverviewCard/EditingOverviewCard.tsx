@@ -123,6 +123,7 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
             this.makeEditingOverviewTextarea('coverImage')
           ) : (
             <img
+              alt="Assessment cover"
               className={`cover-image-${overview.status}`}
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />

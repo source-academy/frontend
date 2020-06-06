@@ -91,7 +91,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private editorResizableProps() {
-    const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
+    const onResizeStop: ResizeCallback = (_a, _b, _c, diff) =>
       this.props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
     return {
@@ -107,7 +107,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private sideContentResizableProps() {
-    const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
+    const onResizeStop: ResizeCallback = (_a, _b, ref, _c) =>
       this.props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
@@ -133,7 +133,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * above 95% or below 5% respectively. Also changes the editor divider width
    * in the case of < 5%.
    */
-  private toggleEditorDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     const leftThreshold = 2;
     const rightThreshold = 95;
     const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
@@ -155,7 +155,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * Hides the side-content-divider div when side-content is resized downwards
    * so that it's bottom border snaps flush with editor's bottom border
    */
-  private toggleDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     /* This is actually broken... */
     this.maxDividerHeight =
       this.sideDividerDiv!.clientHeight > this.maxDividerHeight!

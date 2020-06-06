@@ -367,7 +367,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
     });
 
     if (ranges.length !== 0) {
-      ranges.map(range => {
+      ranges.forEach(range => {
         // Highlight the scope ranges
         this.markerIds.push(
           editor.session.addMarker(

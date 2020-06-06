@@ -104,10 +104,6 @@ export type StateProps = {
 };
 
 class Sourcecast extends React.Component<SourcecastProps> {
-  constructor(props: SourcecastProps) {
-    super(props);
-  }
-
   public componentDidUpdate(prevProps: SourcecastProps) {
     const { inputToApply } = this.props;
 
