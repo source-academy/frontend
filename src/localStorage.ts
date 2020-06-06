@@ -2,12 +2,13 @@ import { Variant } from 'js-slang/dist/types';
 
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { ExternalLibraryName } from './components/assessment/assessmentShape';
-import { ISessionState, IState } from './reducers/states';
-import { showWarningMessage } from './utils/notification';
+import { OverallState } from './commons/application/ApplicationTypes';
+import { ExternalLibraryName } from './commons/application/types/ExternalTypes';
+import { SessionState } from './commons/application/types/SessionTypes';
+import { showWarningMessage } from './commons/utils/NotificationsHelper';
 
-export type ISavedState = {
-  session: Partial<ISessionState>;
+export type SavedState = {
+  session: Partial<SessionState>;
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
@@ -15,22 +16,22 @@ export type ISavedState = {
   playgroundExternalLibrary: ExternalLibraryName;
 };
 
-export const loadStoredState = (): ISavedState | undefined => {
+export const loadStoredState = (): SavedState | undefined => {
   try {
     const serializedState = localStorage.getItem('storedState');
     if (!serializedState) {
       return undefined;
     }
-    return JSON.parse(decompressFromUTF16(serializedState)) as ISavedState;
+    return JSON.parse(decompressFromUTF16(serializedState)) as SavedState;
   } catch (err) {
     showWarningMessage('Error loading from local storage');
     return undefined;
   }
 };
 
-export const saveState = (state: IState) => {
+export const saveState = (state: OverallState) => {
   try {
-    const stateToBeSaved: ISavedState = {
+    const stateToBeSaved: SavedState = {
       session: {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,

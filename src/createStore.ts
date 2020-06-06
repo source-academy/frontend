@@ -1,15 +1,14 @@
 import { routerMiddleware } from 'connected-react-router';
 import { History } from 'history';
 import { throttle } from 'lodash';
-
 import { applyMiddleware, compose, createStore as _createStore } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
-import { ISavedState, loadStoredState, saveState } from './localStorage';
-import createRootReducer from './reducers';
-import { defaultState } from './reducers/states';
-import mainSaga from './sagas';
-import { history as appHistory } from './utils/history';
+import { defaultState } from './commons/application/ApplicationTypes';
+import createRootReducer from './commons/application/reducers/RootReducer';
+import MainSaga from './commons/sagas/MainSaga';
+import { history as appHistory } from './commons/utils/HistoryHelper';
+import { loadStoredState, SavedState, saveState } from './localStorage';
 
 export const store = createStore(appHistory);
 
@@ -29,7 +28,7 @@ export function createStore(history: History) {
   const enhancers = composeEnhancers(applyMiddleware(...middleware));
 
   const createdStore = _createStore(createRootReducer(history), initialStore, enhancers);
-  sagaMiddleware.run(mainSaga);
+  sagaMiddleware.run(MainSaga);
 
   createdStore.subscribe(
     throttle(() => {
@@ -40,7 +39,7 @@ export function createStore(history: History) {
   return createdStore;
 }
 
-function loadStore(loadedStore: ISavedState | undefined) {
+function loadStore(loadedStore: SavedState | undefined) {
   if (!loadedStore) {
     return undefined;
   }

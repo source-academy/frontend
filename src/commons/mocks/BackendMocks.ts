@@ -1,9 +1,9 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
+import { store } from '../../createStore';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { store } from '../../pages/createStore';
 import { GameState, OverallState, Role } from '../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
