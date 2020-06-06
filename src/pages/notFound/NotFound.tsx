@@ -1,6 +1,6 @@
 import { Classes, NonIdealState } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 const NotFound: React.SFC<{}> = () => (

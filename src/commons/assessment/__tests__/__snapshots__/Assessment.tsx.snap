@@ -276,10 +276,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
+                                      <NavLink to=\\"/academy/paths/6/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -302,8 +302,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -420,10 +420,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                      <NavLink to=\\"/academy/practicals/5/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -446,8 +446,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -537,10 +537,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
+                                      <NavLink to=\\"/academy/quests/3/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -563,8 +563,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -654,10 +654,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
+                                      <NavLink to=\\"/academy/missions/2/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -682,8 +682,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -773,10 +773,10 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"edit\\">
@@ -801,8 +801,8 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1016,10 +1016,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1042,8 +1042,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1159,10 +1159,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/paths/6/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/paths\\\\\\\\/6\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/paths/6/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/paths/6/0\\">
+                                      <NavLink to=\\"/academy/paths/6/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/paths/6/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1185,8 +1185,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1303,10 +1303,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/practicals/5/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/practicals\\\\\\\\/5\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/practicals/5/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/practicals/5/0\\">
+                                      <NavLink to=\\"/academy/practicals/5/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/practicals/5/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1329,8 +1329,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1420,10 +1420,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/quests/3/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/quests\\\\\\\\/3\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/quests/3/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/quests/3/0\\">
+                                      <NavLink to=\\"/academy/quests/3/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/quests/3/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1446,8 +1446,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1537,10 +1537,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/missions/2/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/2\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/missions/2/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/2/0\\">
+                                      <NavLink to=\\"/academy/missions/2/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/2/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"play\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"play\\">
@@ -1565,8 +1565,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>
@@ -1656,10 +1656,10 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                       </div>
                                     </Blueprint3.Text>
                                     <div className=\\"listing-button\\">
-                                      <NavLink to=\\"/academy/missions/1/0\\" activeClassName=\\"active\\" aria-current=\\"page\\">
-                                        <Route path=\\"\\\\\\\\/academy\\\\\\\\/missions\\\\\\\\/1\\\\\\\\/0\\" exact={[undefined]} strict={[undefined]} location={[undefined]}>
-                                          <Link to=\\"/academy/missions/1/0\\" className={[undefined]} style={[undefined]} aria-current={{...}} replace={false}>
-                                            <a className={[undefined]} style={[undefined]} aria-current={{...}} onClick={[Function]} href=\\"/academy/missions/1/0\\">
+                                      <NavLink to=\\"/academy/missions/1/0\\">
+                                        <Link aria-current={{...}} className={[undefined]} style={[undefined]} to={{...}}>
+                                          <LinkAnchor aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" navigate={[Function: navigate]}>
+                                            <a aria-current={{...}} className={[undefined]} style={[undefined]} href=\\"/academy/missions/1/0\\" onClick={[Function: onClick]}>
                                               <Blueprint3.Button icon=\\"edit\\" minimal={true} onClick={[Function: onClick]}>
                                                 <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
                                                   <Blueprint3.Icon icon=\\"edit\\">
@@ -1684,8 +1684,8 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                                 </button>
                                               </Blueprint3.Button>
                                             </a>
-                                          </Link>
-                                        </Route>
+                                          </LinkAnchor>
+                                        </Link>
                                       </NavLink>
                                     </div>
                                   </div>

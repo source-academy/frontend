@@ -24,7 +24,7 @@ exports[`Login renders correctly 1`] = `
         <Blueprint3.Button className=\\"bp3-large\\" rightIcon=\\"log-in\\" onClick={[Function: handleLogin]}>
           Log in with LumiNUS
         </Blueprint3.Button>
-        <NavLink to=\\"/playground\\" activeClassName=\\"active\\" aria-current=\\"page\\">
+        <NavLink to=\\"/playground\\">
           <Blueprint3.Button className=\\"bp3-large\\" rightIcon=\\"code\\">
             Try out the playground
           </Blueprint3.Button>

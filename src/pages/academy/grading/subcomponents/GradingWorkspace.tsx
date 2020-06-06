@@ -1,6 +1,6 @@
 import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';

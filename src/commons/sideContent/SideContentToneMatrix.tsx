@@ -1,5 +1,5 @@
 import { Button, Classes } from '@blueprintjs/core';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 class SideContentToneMatrix extends React.Component<{}, {}> {
