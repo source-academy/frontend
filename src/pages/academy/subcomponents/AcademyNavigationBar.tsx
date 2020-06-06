@@ -124,12 +124,12 @@ const AcademyNavigationBar: React.SFC<OwnProps> = props => (
         </NavLink>
 
         <NavLink
-          to={'/academy/gamedev'}
+          to={'/academy/storysimulator'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CROWN} />
-          <div className="navbar-button-text hidden-xs">Game Dev</div>
+          <div className="navbar-button-text hidden-xs">Story Simulator</div>
         </NavLink>
       </NavbarGroup>
     ) : null}

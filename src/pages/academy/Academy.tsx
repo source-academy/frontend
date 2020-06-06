@@ -13,9 +13,9 @@ import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
-import StoryUpload from '../../containers/game-dev/StoryUploadContainer'; // TODO: Fix
-import Game from '../../containers/GameContainer'; // TODO: Fix
 import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
+import Game from './game/Game';
+import StorySimulator from './storySimulator/StorySimulator';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
@@ -78,7 +78,7 @@ class Academy extends React.Component<AcademyProps> {
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
-          <Route path={'/academy/gamedev'} component={StoryUpload} />
+          <Route path={'/academy/storysimulator'} component={StorySimulator} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           <Route component={this.redirectTo404} />
         </Switch>

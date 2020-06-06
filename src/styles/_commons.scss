@@ -53,3 +53,28 @@
     top: 0;
   }
 }
+
+.WhiteBackground {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.Horizontal {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+.Vertical {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.VerticalStack {
+  > * + * {
+    margin-top: 10px;
+  }
+}

@@ -36,6 +36,7 @@
   },
   "dependencies": {
     "@blueprintjs/datetime": "^3.15.2",
+    "@ion-phaser/react": "^1.2.2",
     "ace-builds": "^1.4.8",
     "acorn": "^5.7.4",
     "ag-grid": "^18.0.1",
@@ -57,6 +58,7 @@
     "node-sass-chokidar": "^1.4.0",
     "normalize.css": "^8.0.1",
     "npm-run-all": "^4.1.5",
+    "phaser": "^3.23.0",
     "pixi-filters": "^2.6.1",
     "pixi.js": "^4.8.0",
     "query-string": "^6.1.0",
