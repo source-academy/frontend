@@ -3,8 +3,8 @@ import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import controlButton from '../../../commons/ControlButton';
-import { GroundControlAssessmentOverview } from '../GroundControl';
+import controlButton from '../../../../commons/ControlButton';
+import { GroundControlAssessmentOverview } from '../../../../features/groundControl/GroundControlTypes';
 
 interface IEditCellProps {
   data: GroundControlAssessmentOverview;

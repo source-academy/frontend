@@ -13,7 +13,7 @@ import Grading from './grading/GradingContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
-import GroundControl from '../../containers/groundControl/GroundControlContainer'; // TODO: Fix
+import GroundControl from './groundControl/GroundControlContainer'; 
 import Game from './game/Game';
 import StorySimulator from './storySimulator/StorySimulator';
 

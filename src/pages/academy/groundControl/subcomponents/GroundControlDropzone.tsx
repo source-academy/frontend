@@ -4,7 +4,7 @@ import { FlexDirectionProperty } from 'csstype';
 import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
-import controlButton from '../../../commons/ControlButton';
+import controlButton from '../../../../commons/ControlButton';
 
 interface IDispatchProps {
   handleUploadAssessment: (file: File) => void;

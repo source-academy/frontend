@@ -1,18 +1,18 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { fetchAssessmentOverviews } from '../../../commons/application/actions/SessionActions';
 import {
   changeDateAssessment,
   deleteAssessment,
   publishAssessment,
   uploadAssessment
-} from '../../features/groundControl/GroundControlActions';
-import { fetchAssessmentOverviews } from '../../commons/application/actions/SessionActions';
+} from '../../../features/groundControl/GroundControlActions';
 import GroundControl, {
   DispatchProps,
   StateProps
 } from './GroundControl';
-import { OverallState } from '../../commons/application/ApplicationTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews ? state.session.assessmentOverviews : []

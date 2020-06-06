@@ -2,8 +2,8 @@ import { Classes, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
-import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
-import controlButton from '../../../commons/ControlButton';
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
+import controlButton from '../../../../commons/ControlButton';
 
 interface IDeleteCellProps {
   data: AssessmentOverview;

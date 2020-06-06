@@ -5,15 +5,14 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { getPrettyDate } from '../../commons/utils/DateHelper';
-import { AssessmentOverview } from '../../commons/assessment/AssessmentTypes';
-
-import ContentDisplay from '../../commons/ContentDisplay';
+import { getPrettyDate } from '../../../commons/utils/DateHelper';
+import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
+import ContentDisplay from '../../../commons/ContentDisplay';
+import { GroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes'
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
 import PublishCell from './subcomponents/GroundControlPublishCell';
-import { GroundControlAssessmentOverview } from '../../features/groundControl/GroundControlTypes'
 
 export type GroundControlProps = DispatchProps & StateProps;
 
