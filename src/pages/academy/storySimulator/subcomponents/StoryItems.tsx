@@ -9,6 +9,15 @@ type OwnProps = {
 
 function StoryItems({ storyList }: OwnProps) {
   const [gridApi, setGridApi] = React.useState<any>();
+  function setParams(params: any) {
+    setGridApi(params.api);
+  }
+
+  function onSelectChange() {
+    const selectedNodes = gridApi.getSelectedNodes();
+    const selectedData = selectedNodes!.map((node: any) => node.data);
+    return selectedData;
+  }
 
   if (!storyList.length) {
     return <div className="VerticalStack StoryItems">No Stories Loaded</div>;
@@ -20,23 +29,16 @@ function StoryItems({ storyList }: OwnProps) {
     { headerName: 'Close Date', field: 'closeAt' }
   ];
 
-  const onButtonClick = (_: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    const selectedNodes = gridApi.getSelectedNodes();
-    const selectedData = selectedNodes!.map((node: any) => node.data);
-    console.log(selectedData);
-  };
-
   return (
     <>
       <div className="ag-theme-alpine" style={{ height: '200px', width: '600px' }}>
-        <button onClick={onButtonClick}>Get selected rows</button>
         <AgGridReact
-          onGridReady={(params: any) => setGridApi(params.api)}
+          onGridReady={setParams}
           rowSelection={'multiple'}
           columnDefs={columnDefs}
           rowData={storyList}
-          onSelectionChanged={onButtonClick}
-        ></AgGridReact>
+          onSelectionChanged={onSelectChange}
+        />
       </div>
     </>
   );

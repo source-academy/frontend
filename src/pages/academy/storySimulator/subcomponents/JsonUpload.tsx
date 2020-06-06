@@ -2,7 +2,6 @@ import * as React from 'react';
 import AceEditor from 'react-ace';
 
 import { defaultGameStateText } from '../../../../features/storySimulator/StorySimulatorTypes';
-import { overrideSessionData } from '../../../../features/storySimulator/StorySimulatorServices';
 
 function JsonUpload() {
   const [editorContent, setEditorContent] = React.useState(defaultGameStateText);
@@ -36,5 +35,7 @@ function JsonUpload() {
     } catch (e) {}
   }
 }
+
+function overrideSessionData(data: object | undefined) {}
 
 export default JsonUpload;

@@ -1,7 +1,6 @@
 import 'ace-builds/webpack-resolver';
 import * as React from 'react';
 
-import { fetchStories } from '../../../../features/storySimulator/StorySimulatorServices';
 import { StoryDetail } from '../../../../features/storySimulator/StorySimulatorTypes';
 import StoryItems from './StoryItems';
 
@@ -11,7 +10,7 @@ function StoryXmlLoader() {
 
   React.useEffect(() => {
     (async () => {
-      const stories = await fetchStories();
+      const stories: StoryDetail[] = [];
       setStoryListBucket(stories);
     })();
   }, []);
