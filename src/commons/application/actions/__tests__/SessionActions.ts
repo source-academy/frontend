@@ -1,4 +1,4 @@
-import { Notification } from '../../../../components/notification/notificationShape';
+import { Notification } from '../../../../commons/notificationBadge/NotificationBadgeTypes';
 import { Grading, GradingOverview } from '../../../../features/grading/GradingTypes';
 import { Assessment, AssessmentOverview } from '../../../assessment/AssessmentTypes';
 import { GameState, Role, Story } from '../../ApplicationTypes';

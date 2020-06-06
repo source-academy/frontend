@@ -12,8 +12,8 @@ import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/Sou
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 
-import * as GameActions from '../../actions/game';
-import * as MaterialActions from '../../actions/material';
+// import * as GameActions from '../../actions/game';
+// import * as MaterialActions from '../../actions/material';
 
 export const actions = {
   ...CommonsActions,
@@ -26,10 +26,10 @@ export const actions = {
   ...SourceRecorderActions,
   ...SourcereelActions,
   ...WorkspaceActions,
-  ...GroundControlActions,
+  ...GroundControlActions
 
-  ...MaterialActions,
-  ...GameActions
+  // ...MaterialActions,
+  // ...GameActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

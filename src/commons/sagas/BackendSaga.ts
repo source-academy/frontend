@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { GameState, OverallState, Role } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -28,7 +28,6 @@ import {
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-import { SAVE_USER_STATE } from '../application/types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -66,7 +65,6 @@ import {
   postSourcecast,
   postUnsubmit,
   publishAssessment,
-  putUserGameState,
   uploadAssessment
 } from './RequestsSaga';
 
@@ -582,6 +580,8 @@ function* BackendSaga(): SagaIterator {
     // TODO: implement when stories backend is implemented
   }); */
 
+  // Related to game, disabled for now
+  /*
   yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
@@ -595,6 +595,7 @@ function* BackendSaga(): SagaIterator {
     }
     yield put(actions.setGameState(gameState));
   });
+  */
 }
 
 export default BackendSaga;

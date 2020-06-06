@@ -2,7 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-import { GameState } from 'src/reducers/states';
+import { GameState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,

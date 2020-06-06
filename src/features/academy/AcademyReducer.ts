@@ -4,7 +4,7 @@ import { defaultAcademy } from '../../commons/application/ApplicationTypes';
 import { LOG_OUT } from '../../commons/application/types/CommonsTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 
-import { AcademyState, SAVE_CANVAS } from './AcademyTypes';
+import { AcademyState } from './AcademyTypes';
 
 export const AcademyReducer: Reducer<AcademyState> = (
   state = defaultAcademy,
@@ -13,11 +13,14 @@ export const AcademyReducer: Reducer<AcademyState> = (
   switch (action.type) {
     case LOG_OUT:
       return defaultAcademy;
+    // Related to game, disabled for now
+    /*
     case SAVE_CANVAS:
       return {
         ...state,
         gameCanvas: action.payload
       };
+    */
     default:
       return state;
   }
