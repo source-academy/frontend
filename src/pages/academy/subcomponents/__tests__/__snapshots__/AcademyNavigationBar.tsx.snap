@@ -106,10 +106,10 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/academy/gamedev\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+    <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"crown\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Game Dev
+        Story Simulator
       </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
@@ -181,10 +181,10 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
       </div>
       <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
     </NavLink>
-    <NavLink to=\\"/academy/gamedev\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
+    <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" aria-current=\\"page\\">
       <Blueprint3.Icon icon=\\"crown\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
-        Game Dev
+        Story Simulator
       </div>
     </NavLink>
   </Blueprint3.NavbarGroup>

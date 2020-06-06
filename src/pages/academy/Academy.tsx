@@ -14,7 +14,7 @@ import Sourcereel from './sourcereel/SourcereelContainer';
 import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
 import Game from './game/Game';
-import GroundControl from './groundControl/GroundControlContainer'; 
+import GroundControl from './groundControl/GroundControlContainer';
 import StorySimulator from './storySimulator/StorySimulator';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;

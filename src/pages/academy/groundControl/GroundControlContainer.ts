@@ -9,10 +9,7 @@ import {
   publishAssessment,
   uploadAssessment
 } from '../../../features/groundControl/GroundControlActions';
-import GroundControl, {
-  DispatchProps,
-  StateProps
-} from './GroundControl';
+import GroundControl, { DispatchProps, StateProps } from './GroundControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   assessmentOverviews: state.session.assessmentOverviews ? state.session.assessmentOverviews : []
