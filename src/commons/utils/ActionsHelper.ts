@@ -5,6 +5,7 @@ import * as InterpreterActions from '../../commons/application/actions/Interpret
 import * as SessionActions from '../../commons/application/actions/SessionActions';
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
+import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
@@ -23,7 +24,8 @@ export const actions = {
   ...SourceRecorderActions,
   ...SourcereelActions,
   ...WorkspaceActions,
-  ...GroundControlActions
+  ...GroundControlActions,
+  ...AcademyActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

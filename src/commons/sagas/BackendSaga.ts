@@ -484,7 +484,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(CHANGE_DATE_ASSESSMENT, function*(
+  yield takeEvery(CHANGE_DATE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.changeDateAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -507,7 +507,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
-  yield takeEvery(DELETE_ASSESSMENT, function*(
+  yield takeEvery(DELETE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.deleteAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -526,7 +526,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-  yield takeEvery(PUBLISH_ASSESSMENT, function*(
+  yield takeEvery(PUBLISH_ASSESSMENT, function* (
     action: ReturnType<typeof actions.publishAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -551,7 +551,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(UPLOAD_ASSESSMENT, function*(
+  yield takeEvery(UPLOAD_ASSESSMENT, function* (
     action: ReturnType<typeof actions.uploadAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
