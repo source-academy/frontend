@@ -1,4 +1,4 @@
-import { Ace } from 'react-ace/node_modules/ace-builds/ace';
+import { Ace } from 'ace-builds/ace';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
