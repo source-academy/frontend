@@ -23,13 +23,12 @@ import { Grading, GradingOverview, GradingQuestion } from '../../features/gradin
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
-// import {
-//   CHANGE_DATE_ASSESSMENT,
-//   DELETE_ASSESSMENT,
-//   PUBLISH_ASSESSMENT,
-//   SAVE_USER_STATE,
-//   UPLOAD_ASSESSMENT
-// } from '../application/types/ActionTypes';
+import {
+  CHANGE_DATE_ASSESSMENT,
+  DELETE_ASSESSMENT,
+  PUBLISH_ASSESSMENT,
+  UPLOAD_ASSESSMENT
+} from '../../features/groundControl/GroundControlTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -46,8 +45,8 @@ import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
   changeChapter,
-  // changeDateAssessment,
-  // deleteAssessment,
+  changeDateAssessment,
+  deleteAssessment,
   deleteSourcecastEntry,
   getAssessment,
   getAssessmentOverviews,
@@ -64,10 +63,9 @@ import {
   postAuth,
   postGrading,
   postSourcecast,
-  postUnsubmit
-  // publishAssessment,
-  // putUserGameState,
-  // uploadAssessment
+  postUnsubmit,
+  publishAssessment,
+  uploadAssessment
 } from './RequestsSaga';
 
 function* BackendSaga(): SagaIterator {
@@ -486,95 +484,95 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  // yield takeEvery(CHANGE_DATE_ASSESSMENT, function*(
-  //   action: ReturnType<typeof actions.changeDateAssessment>
-  // ) {
-  //   const tokens = yield select((state: OverallState) => ({
-  //     accessToken: state.session.accessToken,
-  //     refreshToken: state.session.refreshToken
-  //   }));
-  //   const id = action.payload.id;
-  //   const closeAt = action.payload.closeAt;
-  //   const openAt = action.payload.openAt;
-  //   const respMsg: string | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
-  //   if (respMsg == null) {
-  //     yield handleResponseError(respMsg);
-  //     return;
-  //   } else if (respMsg !== 'OK') {
-  //     yield call(showWarningMessage, respMsg, 5000);
-  //     return;
-  //   }
+  yield takeEvery(CHANGE_DATE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.changeDateAssessment>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const closeAt = action.payload.closeAt;
+    const openAt = action.payload.openAt;
+    const respMsg: string | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
+    if (respMsg == null) {
+      yield handleResponseError(respMsg);
+      return;
+    } else if (respMsg !== 'OK') {
+      yield call(showWarningMessage, respMsg, 5000);
+      return;
+    }
 
-  //   yield put(actions.fetchAssessmentOverviews());
-  //   yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  // });
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
 
-  // yield takeEvery(DELETE_ASSESSMENT, function*(
-  //   action: ReturnType<typeof actions.deleteAssessment>
-  // ) {
-  //   const tokens = yield select((state: OverallState) => ({
-  //     accessToken: state.session.accessToken,
-  //     refreshToken: state.session.refreshToken
-  //   }));
-  //   const id = action.payload;
-  //   const resp: Response = yield deleteAssessment(id, tokens);
+  yield takeEvery(DELETE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.deleteAssessment>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload;
+    const resp: Response = yield deleteAssessment(id, tokens);
 
-  //   if (!resp || !resp.ok) {
-  //     yield handleResponseError(resp);
-  //     return;
-  //   }
+    if (!resp || !resp.ok) {
+      yield handleResponseError(resp);
+      return;
+    }
 
-  //   yield put(actions.fetchAssessmentOverviews());
-  //   yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  // });
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
 
-  // yield takeEvery(PUBLISH_ASSESSMENT, function*(
-  //   action: ReturnType<typeof actions.publishAssessment>
-  // ) {
-  //   const tokens = yield select((state: OverallState) => ({
-  //     accessToken: state.session.accessToken,
-  //     refreshToken: state.session.refreshToken
-  //   }));
-  //   const id = action.payload.id;
-  //   const togglePublishTo = action.payload.togglePublishTo;
-  //   const resp: Response = yield publishAssessment(id, togglePublishTo, tokens);
+  yield takeEvery(PUBLISH_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.publishAssessment>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const togglePublishTo = action.payload.togglePublishTo;
+    const resp: Response = yield publishAssessment(id, togglePublishTo, tokens);
 
-  //   if (!resp || !resp.ok) {
-  //     yield handleResponseError(resp);
-  //     return;
-  //   }
+    if (!resp || !resp.ok) {
+      yield handleResponseError(resp);
+      return;
+    }
 
-  //   yield put(actions.fetchAssessmentOverviews());
+    yield put(actions.fetchAssessmentOverviews());
 
-  //   if (togglePublishTo) {
-  //     yield call(showSuccessMessage, 'Published successfully!', 1000);
-  //   } else {
-  //     yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
-  //   }
-  // });
+    if (togglePublishTo) {
+      yield call(showSuccessMessage, 'Published successfully!', 1000);
+    } else {
+      yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
+    }
+  });
 
-  // yield takeEvery(UPLOAD_ASSESSMENT, function*(
-  //   action: ReturnType<typeof actions.uploadAssessment>
-  // ) {
-  //   const tokens = yield select((state: OverallState) => ({
-  //     accessToken: state.session.accessToken,
-  //     refreshToken: state.session.refreshToken
-  //   }));
-  //   const file = action.payload.file;
-  //   const forceUpdate = action.payload.forceUpdate;
-  //   const respMsg = yield uploadAssessment(file, tokens, forceUpdate);
-  //   if (!respMsg) {
-  //     yield handleResponseError(respMsg);
-  //   } else if (respMsg === 'OK') {
-  //     yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
-  //   } else if (respMsg === 'Force Update OK') {
-  //     yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
-  //   } else {
-  //     yield call(showWarningMessage, respMsg, 10000);
-  //     return;
-  //   }
-  //   yield put(actions.fetchAssessmentOverviews());
-  // });
+  yield takeEvery(UPLOAD_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.uploadAssessment>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const file = action.payload.file;
+    const forceUpdate = action.payload.forceUpdate;
+    const respMsg = yield uploadAssessment(file, tokens, forceUpdate);
+    if (!respMsg) {
+      yield handleResponseError(respMsg);
+    } else if (respMsg === 'OK') {
+      yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
+    } else if (respMsg === 'Force Update OK') {
+      yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+    } else {
+      yield call(showWarningMessage, respMsg, 10000);
+      return;
+    }
+    yield put(actions.fetchAssessmentOverviews());
+  });
 
   /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
     action: ReturnType<typeof actions.fetchTestStories>
@@ -582,19 +580,22 @@ function* BackendSaga(): SagaIterator {
     // TODO: implement when stories backend is implemented
   }); */
 
-  // yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
-  //   const tokens = yield select((state: OverallState) => ({
-  //     accessToken: state.session.accessToken,
-  //     refreshToken: state.session.refreshToken
-  //   }));
-  //   const gameState: GameState = action.payload;
-  //   const resp = yield putUserGameState(gameState, tokens);
-  //   if (!resp || !resp.ok) {
-  //     yield handleResponseError(resp);
-  //     return;
-  //   }
-  //   yield put(actions.setGameState(gameState));
-  // });
+  // Related to game, disabled for now
+  /*
+  yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const gameState: GameState = action.payload;
+    const resp = yield putUserGameState(gameState, tokens);
+    if (!resp || !resp.ok) {
+      yield handleResponseError(resp);
+      return;
+    }
+    yield put(actions.setGameState(gameState));
+  });
+  */
 }
 
 export default BackendSaga;

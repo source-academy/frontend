@@ -6,6 +6,7 @@ import * as SessionActions from '../../commons/application/actions/SessionAction
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
+import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
@@ -21,7 +22,8 @@ export const actions = {
   ...SourcecastActions,
   ...SourceRecorderActions,
   ...SourcereelActions,
-  ...WorkspaceActions
+  ...WorkspaceActions,
+  ...GroundControlActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;
