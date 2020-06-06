@@ -2,7 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-// import { GameState } from 'src/reducers/states';
+import { GameState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -101,19 +101,19 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 /**
  * PUT /user/game_states/
  */
-// export async function putUserGameState(
-//   gameStates: GameState,
-//   tokens: Tokens
-// ): Promise<Response | null> {
-//   const resp = await request('user/game_states/save', 'PUT', {
-//     accessToken: tokens.accessToken,
-//     refreshToken: tokens.refreshToken,
-//     body: {
-//       gameStates: JSON.stringify(gameStates)
-//     }
-//   });
-//   return resp;
-// }
+export async function putUserGameState(
+  gameStates: GameState,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request('user/game_states/save', 'PUT', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    body: {
+      gameStates: JSON.stringify(gameStates)
+    }
+  });
+  return resp;
+}
 
 /**
  * GET /assessments

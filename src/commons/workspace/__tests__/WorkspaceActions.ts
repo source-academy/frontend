@@ -1,7 +1,7 @@
-import { Library } from '../..//assessment/AssessmentTypes';
 import { createDefaultWorkspace } from '../../application/ApplicationTypes';
 import { ExternalLibraryNames } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
+import { Library } from '../../assessment/AssessmentTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import {
   beginClearContext,

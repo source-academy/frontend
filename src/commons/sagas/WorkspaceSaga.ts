@@ -20,7 +20,6 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror-driver';
 
-import { actions } from '../../commons/utils/ActionsHelper';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
@@ -37,6 +36,7 @@ import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentT
 import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import { actions } from '../utils/ActionsHelper';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
