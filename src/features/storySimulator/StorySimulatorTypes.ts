@@ -1,5 +1,3 @@
-// import { GameSessionData } from '../../pages/academy/game/legacy/gameTypes';
-
 export type MaterialData = {
   title: string;
   description: string;
