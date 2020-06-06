@@ -1,5 +1,3 @@
-import { GameSessionData } from '../../pages/academy/game/legacy/gameTypes';
-
 export type MaterialData = {
   title: string;
   description: string;
@@ -22,12 +20,6 @@ export type StoryDetail = {
   filename: string;
 };
 
-export type GameSessionOverride = {
-  sessionData: GameSessionData;
-  overridePublish?: boolean;
-  overrideDates?: boolean;
-};
-
 export const defaultGameStateText = `{
   "sessionData": {
     "story": {
@@ -44,7 +36,7 @@ export const defaultGameStateText = `{
   "overridePublish": "true"
 }`;
 
-export const OVERRIDE_KEY = 'source_academy_override',
-  OVERRIDE_DATES_KEY = 'source_academy_override_dates',
-  OVERRIDE_PUBLISH_KEY = 'source_academy_override_publish',
-  STORY_ID = 'source_academy_story_id';
+export const OVERRIDE_KEY = 'source_academy_override';
+export const OVERRIDE_DATES_KEY = 'source_academy_override_dates';
+export const OVERRIDE_PUBLISH_KEY = 'source_academy_override_publish';
+export const STORY_ID = 'source_academy_story_id';
