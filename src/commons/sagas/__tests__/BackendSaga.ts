@@ -41,7 +41,7 @@ import {
 import { mockGroupOverviews } from '../../mocks/GroupMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { updateChapter, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_CHAPTER,
   FETCH_CHAPTER,
@@ -50,6 +50,7 @@ import {
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
+  changeChapter,
   getAssessment,
   getAssessmentOverviews,
   getGroupOverviews,
@@ -441,8 +442,11 @@ describe('Test FETCH_CHAPTER Action', () => {
 describe('Test CHANGE_CHAPTER Action', () => {
   test('when chapter is changed', () => {
     return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .dispatch({ type: CHANGE_CHAPTER, payload: { chapterNo: 1, variant: 'default' } })
+      .withState({ session: { role: Role.Staff, ...mockTokens } })
+      .call(changeChapter, 1, 'default', mockTokens)
+      .put(updateChapter(1, 'default'))
+      .provide([[call(changeChapter, 1, 'default', mockTokens), { ok: true }]])
+      .dispatch({ type: CHANGE_CHAPTER, payload: { chapter: 1, variant: 'default' } })
       .silentRun();
   });
 });

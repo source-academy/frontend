@@ -462,7 +462,7 @@ function* BackendSaga(): SagaIterator {
     }));
 
     const chapter = action.payload;
-    const resp: Response = yield changeChapter(chapter.chapter, chapter.variant, tokens);
+    const resp: Response = yield call(changeChapter, chapter.chapter, chapter.variant, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp);
