@@ -3,7 +3,6 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import * as actions from '../../actions'; // TODO: Fix after implementing GroundControlActions and GameActions
 import { GameState, OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
@@ -20,16 +19,16 @@ import {
 import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
-  SAVE_USER_STATE,
   UPLOAD_ASSESSMENT
-} from '../application/types/ActionTypes';
+} from '../../features/groundControl/GroundControlTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
+import { SAVE_USER_STATE } from '../application/types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -42,6 +41,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
+import { actions } from '../utils/ActionsHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {

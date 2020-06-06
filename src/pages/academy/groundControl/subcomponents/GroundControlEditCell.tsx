@@ -4,10 +4,10 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import controlButton from '../../../../commons/ControlButton';
-import { GroundControlAssessmentOverview } from '../../../../features/groundControl/GroundControlTypes';
+import { IGroundControlAssessmentOverview } from '../../../../features/groundControl/GroundControlTypes';
 
 interface IEditCellProps {
-  data: GroundControlAssessmentOverview;
+  data: IGroundControlAssessmentOverview;
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
   forOpenDate: boolean;
 }

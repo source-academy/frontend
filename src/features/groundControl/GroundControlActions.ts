@@ -5,7 +5,7 @@ import {
     DELETE_ASSESSMENT,
     PUBLISH_ASSESSMENT,
     UPLOAD_ASSESSMENT
-} from './GroundControlTypes'
+} from './GroundControlTypes';
 
 export const changeDateAssessment = (id: number, openAt: string, closeAt: string) =>
     action(CHANGE_DATE_ASSESSMENT, { id, openAt, closeAt });

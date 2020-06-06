@@ -5,10 +5,10 @@ import 'ag-grid/dist/styles/ag-theme-balham.css';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 
-import { getPrettyDate } from '../../../commons/utils/DateHelper';
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import { GroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes'
+import { getPrettyDate } from '../../../commons/utils/DateHelper';
+import { IGroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -181,10 +181,10 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       return [];
     }
 
-    const overview: GroundControlAssessmentOverview[] = this.props.assessmentOverviews
+    const overview: IGroundControlAssessmentOverview[] = this.props.assessmentOverviews
       .slice()
       .map(assessmentOverview => {
-        const clone: GroundControlAssessmentOverview = JSON.parse(
+        const clone: IGroundControlAssessmentOverview = JSON.parse(
           JSON.stringify(assessmentOverview)
         );
         clone.prettyCloseAt = getPrettyDate(clone.closeAt);
