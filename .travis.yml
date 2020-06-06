@@ -10,5 +10,5 @@ before_install:
 script:
   - yarn run format:ci
   - yarn run build
-  - yarn run tslint
+  - yarn run eslint
   - yarn run test-coveralls

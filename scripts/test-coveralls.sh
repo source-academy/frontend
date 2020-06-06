@@ -3,5 +3,5 @@
 set -euo pipefail
 
 ./scripts/coverage-fix.sh do && \
-  react-scripts test --coverage --coverageReporters=text-lcov | \
+  craco test --coverage --coverageReporters=text-lcov | \
   coveralls
