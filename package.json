@@ -59,6 +59,7 @@
     "react-ace": "^9.0.0",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
+    "react-dropzone": "^11.0.1",
     "react-hotkeys": "^2.0.0",
     "react-mde": "^10.0.3",
     "react-redux": "^7.2.0",
@@ -123,7 +124,15 @@
     "typescript": "3.5.2"
   },
   "browserslist": {
-    "production": ["Firefox ESR", "last 2 chrome versions", "last 2 safari versions"],
-    "development": ["last 1 chrome version", "last 1 firefox version", "last 1 safari version"]
+    "production": [
+      "Firefox ESR",
+      "last 2 chrome versions",
+      "last 2 safari versions"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }
