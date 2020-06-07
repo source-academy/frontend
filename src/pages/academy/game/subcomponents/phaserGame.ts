@@ -1,8 +1,12 @@
 import * as Phaser from 'phaser';
-import StoryChapterSelect from './scenes/storyChapterSelect';
+import { Constants as c } from './utils/constants';
+import { PhaserGame } from './utils/extendedPhaser';
+import StoryChapterSelect from './scenes/StoryChapterSelect';
 
-const phaserGame = {
-  height: 1080,
+const config = {
+  type: Phaser.CANVAS,
+  width: c.screenWidth,
+  height: c.screenHeight,
   physics: {
     default: 'arcade'
   },
@@ -10,9 +14,11 @@ const phaserGame = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [StoryChapterSelect] /* Replace with scene objects that you imported */,
-  type: Phaser.CANVAS,
-  width: 1920
+  dom: {
+    createContainer: true
+  }
 };
 
-export default phaserGame;
+const game = new PhaserGame(config);
+game.sceneAdd(() => console.log('hello'), 'storyChapterSelect', StoryChapterSelect, true);
+export default game;

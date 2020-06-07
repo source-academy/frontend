@@ -1,32 +1,25 @@
 import { Constants as c } from '../utils/constants';
 import { PhaserScene } from '../utils/extendedPhaser';
 
-class StoryChapterSelect extends PhaserScene {
-  func: any;
+class PlayGame extends PhaserScene {
   constructor() {
     super('storyChapterSelect');
   }
 
-  public init(data: any & { func: any }) {
-    data.func();
-  }
+  public init() {}
 
   public preload() {
     this.load.text('assets', c.repoAssetsFolder + 'assets.txt');
     this.load.on('filecomplete', (key: string, file: File) => this.loadAssets(key, file), this);
-
-    this.load.html('assetList', c.repoAssetsFolder + 'shops.html');
   }
 
   public loadAssets(key: string, file: File) {
     if (key !== 'assets') return;
-    const assets = this.cache.text.get('assets').split('\n');
-    console.log(assets[0]);
-
-    const jpgAssets = ['background'];
-    this.load.image('bg', c.assetsFolder + 'locations/yourRoom-dim/normal.png');
-    jpgAssets.forEach(asset => this.load.image(asset, c.repoAssetsFolder + asset + '.jpg'));
-    this.load.script('hello', c.repoAssetsFolder + 'hello.js');
+    // const assets = this.cache.text.get('assets').split('\n');
+    // const jpgAssets = ['background'];
+    // this.load.image('bg', c.assetsFolder + 'locations/yourRoom-dim/normal.png');
+    // jpgAssets.forEach(asset => this.load.image(asset, c.repoAssetsFolder + asset + '.jpg'));
+    // this.load.script('hello', c.repoAssetsFolder + 'hello.js');
   }
 
   public create() {
@@ -34,4 +27,4 @@ class StoryChapterSelect extends PhaserScene {
     this.addImage(c.centerX, c.centerY, 'bg').resize(c.screenWidth, c.screenHeight);
   }
 }
-export default StoryChapterSelect;
+export default PlayGame;

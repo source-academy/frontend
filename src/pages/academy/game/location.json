@@ -1,0 +1,10 @@
+{
+  "room": [
+    { "item": "dog", "x": 200, "y": 300 },
+    { "item": "clock", "x": 200, "y": 300 }
+  ],
+  "livingRoom": [
+    { "item": "dog", "x": 200, "y": 300 },
+    { "item": "clock", "x": 200, "y": 300 }
+  ]
+}

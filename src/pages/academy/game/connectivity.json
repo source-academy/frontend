@@ -1,0 +1,5 @@
+{
+  "room": ["crashsite", "spaceship"],
+  "livingRoom": ["crashsite", "hallway"],
+  "spaceship": ["crashsite", "spaceship"]
+}
