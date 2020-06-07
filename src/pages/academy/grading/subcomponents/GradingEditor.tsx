@@ -137,8 +137,9 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     const gradePlaceholder = `${this.props.initialGrade > 0 ? '-' : ''}${
       this.props.initialGrade
     } to ${this.props.maxGrade - this.props.initialGrade}`;
-    const xpPlaceholder = `${this.props.initialXp > 0 ? '-' : ''}${this.props.initialXp} to ${this
-      .props.maxXp - this.props.initialXp}`;
+    const xpPlaceholder = `${this.props.initialXp > 0 ? '-' : ''}${this.props.initialXp} to ${
+      this.props.maxXp - this.props.initialXp
+    }`;
 
     return (
       <div className="GradingEditor">
@@ -346,7 +347,7 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
    * will overwrite any unsaved changes
    */
   private discardChanges = (): void => {
-    if (!this.hasUnsavedChanges() || confirm('This will reset the editor. Are you sure?')) {
+    if (!this.hasUnsavedChanges() || window.confirm('This will reset the editor. Are you sure?')) {
       this.setState(
         {
           ...this.state,

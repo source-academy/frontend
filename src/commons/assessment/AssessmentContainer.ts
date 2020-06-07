@@ -1,5 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { RouteComponentProps, withRouter } from 'react-router';
+import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '../application/actions/SessionActions';
 import { OverallState, Role } from '../application/ApplicationTypes';
 import Assessment, { DispatchProps, OwnProps, StateProps } from './Assessment';
-import { AssessmentOverview, AssessmentWorkspaceParams } from './AssessmentTypes';
+import { AssessmentOverview } from './AssessmentTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   const categoryFilter = (overview: AssessmentOverview) =>
@@ -33,13 +33,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-type PropType = OwnProps & RouteComponentProps<AssessmentWorkspaceParams>;
-
-const AssessmentContainer = withRouter<PropType>(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Assessment)
-);
+const AssessmentContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Assessment));
 
 export default AssessmentContainer;

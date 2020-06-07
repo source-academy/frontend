@@ -40,13 +40,13 @@ exports[`Error output (with consoleLogs) renders correctly 1`] = `
 exports[`Repl renders correctly 1`] = `
 "<div className=\\"Repl\\" style={{...}}>
   <div className=\\"repl-output-parent\\">
-    <Component output={{...}} usingSubst={false} />
-    <Component output={{...}} usingSubst={false} />
-    <Component output={{...}} usingSubst={false} />
-    <Component output={{...}} usingSubst={false} />
-    <HotKeys className=\\"repl-input-parent row bp3-card bp3-elevation-0\\" handlers={{...}}>
+    <Output output={{...}} usingSubst={false} />
+    <Output output={{...}} usingSubst={false} />
+    <Output output={{...}} usingSubst={false} />
+    <Output output={{...}} usingSubst={false} />
+    <HotKeysEnabled className=\\"repl-input-parent row bp3-card bp3-elevation-0\\" handlers={{...}}>
       <ReplInput handleBrowseHistoryDown={[Function: handleBrowseHistoryDown]} handleBrowseHistoryUp={[Function: handleBrowseHistoryUp]} handleReplValueChange={[Function: handleReplValueChange]} handleReplEval={[Function: handleReplEval]} handleReplOutputClear={[Function: handleReplOutputClear]} output={{...}} replValue=\\"\\" />
-    </HotKeys>
+    </HotKeysEnabled>
   </div>
 </div>"
 `;

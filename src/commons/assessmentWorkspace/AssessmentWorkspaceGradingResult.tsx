@@ -20,10 +20,6 @@ class AssessmentWorkspaceGradingResult extends React.Component<
   AssessmentWorkspaceGradingResultProps,
   {}
 > {
-  constructor(props: AssessmentWorkspaceGradingResultProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <div className="GradingResult">

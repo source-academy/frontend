@@ -26,10 +26,6 @@ type StateProps = {
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
 class GradingEditGradingCell extends React.Component<EditGradingCellProps, {}> {
-  constructor(props: EditGradingCellProps) {
-    super(props);
-  }
-
   public render() {
     return (
       <NavLink

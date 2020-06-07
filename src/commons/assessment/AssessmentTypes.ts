@@ -94,7 +94,7 @@ export type Assessment = {
   questions: Question[];
 };
 
-export interface IProgrammingQuestion extends Question {
+export interface IProgrammingQuestion extends BaseQuestion {
   answer: string | null;
   autogradingResults: AutogradingResult[];
   graderTemplate?: string;
@@ -106,14 +106,14 @@ export interface IProgrammingQuestion extends Question {
   type: 'programming';
 }
 
-export interface IMCQQuestion extends Question {
+export interface IMCQQuestion extends BaseQuestion {
   answer: number | null;
   choices: MCQChoice[];
   solution: number | null;
   type: 'mcq';
 }
 
-export type Question = {
+export type BaseQuestion = {
   answer: string | number | null;
   comments?: string;
   content: string;
@@ -133,6 +133,8 @@ export type Question = {
   type: QuestionType;
   xp: number;
 };
+
+export type Question = IProgrammingQuestion | IMCQQuestion;
 
 export type Library = {
   chapter: number;

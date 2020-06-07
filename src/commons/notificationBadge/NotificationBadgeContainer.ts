@@ -17,9 +17,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const NotificationBadgeContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(NotificationBadge);
+const NotificationBadgeContainer = connect(mapStateToProps, mapDispatchToProps)(NotificationBadge);
 
 export default NotificationBadgeContainer;

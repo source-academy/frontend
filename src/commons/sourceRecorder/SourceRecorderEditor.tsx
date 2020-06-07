@@ -1,6 +1,6 @@
 import { isEqual } from 'lodash';
 import * as React from 'react';
-import AceEditor from 'react-ace';
+import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
 import 'ace-builds/src-noconflict/ext-searchbox';
@@ -134,7 +134,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
         break;
       case 'selectionRangeData':
         const { range, isBackwards } = inputToApply.data;
-        this.AceEditor.current!.editor.selection.setSelectionRange(range, isBackwards);
+        this.AceEditor.current!.editor.selection.setRange(range, isBackwards);
         break;
       case 'keyboardCommand':
         const keyboardCommand = inputToApply.data;
@@ -148,14 +148,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
   }
 
   public getBreakpoints() {
-    const breakpoints = this.AceEditor.current!.editor.session.$breakpoints;
-    const res = [];
-    for (let i = 0; i < breakpoints.length; i++) {
-      if (breakpoints[i] != null) {
-        res.push(i);
-      }
-    }
-    return res;
+    return this.AceEditor.current!.editor.session.getBreakpoints().filter(x => x != null);
   }
 
   public componentDidMount() {
@@ -165,10 +158,10 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
     const editor = this.AceEditor.current!.editor;
     const session = editor.getSession();
 
-    editor.on('gutterclick', this.handleGutterClick);
+    editor.on('gutterclick' as any, this.handleGutterClick);
 
     // Change all info annotations to error annotations
-    session.on('changeAnnotation', this.handleAnnotationChange(session));
+    session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
   }
 
   public componentWillUnmount() {
@@ -180,7 +173,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
   }
 
   public getMarkers = () => {
-    const markerProps = [];
+    const markerProps: IAceEditorProps['markers'] = [];
     for (const lineNum of this.props.highlightedLines) {
       markerProps.push({
         startRow: lineNum[0],
@@ -301,7 +294,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
   private moveCursor = (position: Position) => {
     this.AceEditor.current!.editor.selection.clearSelection();
     this.AceEditor.current!.editor.moveCursorToPosition(position);
-    this.AceEditor.current!.editor.renderer.$cursorLayer.showCursor();
+    this.AceEditor.current!.editor.renderer.showCursor();
     this.AceEditor.current!.editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 

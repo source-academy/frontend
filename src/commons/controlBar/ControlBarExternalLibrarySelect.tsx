@@ -12,7 +12,7 @@ import {
 type ControlBarExternalLibrarySelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleExternalSelect?: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleExternalSelect?: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void;
 };
 
 type StateProps = {
@@ -36,7 +36,7 @@ export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrary
 
   const externalSelect = (
     currentExternal: string,
-    handleSelect: (i: External, e: React.ChangeEvent<HTMLSelectElement>) => void
+    handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
   ) => (
     <ExternalSelectComponent
       className={Classes.MINIMAL}

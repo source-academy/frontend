@@ -2,7 +2,7 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-import { GameState } from 'src/reducers/states';
+import { GameState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -12,10 +12,10 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
-import { store } from '../../createStore';
 import { GroupOverview } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { store } from '../../pages/createStore';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
@@ -156,7 +156,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<Assessm
     const input = window.prompt('Please enter password.', '');
     if (!input) {
       resp = null;
-      history.back();
+      window.history.back();
       return null;
     }
 

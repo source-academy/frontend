@@ -1,6 +1,6 @@
 import { Alignment, Classes, Icon, Navbar, NavbarGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 

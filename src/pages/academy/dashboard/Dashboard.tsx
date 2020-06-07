@@ -1,7 +1,7 @@
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid/dist/styles/ag-grid.css';
-import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 
 import ContentDisplay from '../../../commons/ContentDisplay';

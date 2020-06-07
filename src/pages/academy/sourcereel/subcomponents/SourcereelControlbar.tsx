@@ -52,7 +52,7 @@ type State = {
 };
 
 class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps, State> {
-  private recorder: Recorder;
+  private recorder?: Recorder = undefined;
 
   constructor(props: SourcereelControlbarProps) {
     super(props);
@@ -162,6 +162,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   };
 
   private handleRecorderPausing = () => {
+    if (!this.recorder) {
+      return;
+    }
     const { handleSetEditorReadonly, handleSetSourcecastData, handleTimerPause } = this.props;
     clearInterval(this.state.updater!);
     handleSetEditorReadonly(true);
@@ -190,6 +193,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   };
 
   private handleRecorderResuming = () => {
+    if (!this.recorder) {
+      return;
+    }
     const { handleSetEditorReadonly, handleTimerResume } = this.props;
     handleSetEditorReadonly(false);
     // -1 means resume from the end
@@ -200,6 +206,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   };
 
   private handleRecorderResumingFromCurrent = () => {
+    if (!this.recorder) {
+      return;
+    }
     const { currentPlayerTime, handleSetEditorReadonly, handleTimerResume } = this.props;
     this.handleTruncatePlaybackData();
     handleSetEditorReadonly(false);
@@ -210,6 +219,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   };
 
   private handleRecorderStopping = () => {
+    if (!this.recorder) {
+      return;
+    }
     const { handleSetEditorReadonly, handleTimerStop } = this.props;
     handleSetEditorReadonly(false);
     handleTimerStop();

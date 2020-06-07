@@ -95,18 +95,8 @@ test('Autograder renders placeholders correctly when testcases and results are e
   // Both noResults <div>s are rendered (one under 'Testcases', other under 'Autograder Results')
   expect(tree.find('.noResults').hostNodes()).toHaveLength(2);
   // Both header <div>s should not be rendered
-  expect(
-    tree
-      .find('.testcases-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
-  expect(
-    tree
-      .find('.results-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
+  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(false);
+  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
   // No testcase or autograder result Card components should be rendered
   expect(tree.find('.AutograderCard')).toHaveLength(0);
   expect(tree.find('.ResultCard')).toHaveLength(0);
@@ -122,18 +112,8 @@ test('Autograder renders public testcases with different statuses correctly', ()
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect only the header <div> for testcases section to be rendered
-  expect(
-    tree
-      .find('.testcases-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(true);
-  expect(
-    tree
-      .find('.results-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
+  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(true);
+  expect(tree.find('.results-header').hostNodes().exists()).toEqual(false);
   // No autograder result Card components should be rendered
   expect(tree.find('.ResultCard')).toHaveLength(0);
   // Expect each of the five testcases to have:
@@ -143,10 +123,7 @@ test('Autograder renders public testcases with different statuses correctly', ()
   expect(cards).toHaveLength(5);
   expect(cards.map(node => node.getDOMNode().className)).toEqual(publicTestcaseCardClasses);
   const resultCells = cards.map(card => {
-    return card
-      .find('.testcase-actual')
-      .hostNodes()
-      .getDOMNode();
+    return card.find('.testcase-actual').hostNodes().getDOMNode();
   });
   // textContent returns the value wrapped by the opening and closing tags of the
   // enclosing HTML node as a string: this means the
@@ -183,10 +160,7 @@ test('Autograder renders hidden testcases with different statuses correctly', ()
   expect(cards).toHaveLength(4);
   expect(cards.map(node => node.getDOMNode().className)).toEqual(hiddenTestcaseCardClasses);
   cards.forEach(card => {
-    const placeholder = card
-      .find('.testcase-placeholder')
-      .hostNodes()
-      .getDOMNode();
+    const placeholder = card.find('.testcase-placeholder').hostNodes().getDOMNode();
     expect(placeholder.textContent).toEqual('Hidden testcase');
   });
 });
@@ -201,18 +175,8 @@ test('Autograder renders autograder results with different statuses correctly', 
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
   // Expect only the header <div> for autograder results section to be rendered
-  expect(
-    tree
-      .find('.testcases-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(false);
-  expect(
-    tree
-      .find('.results-header')
-      .hostNodes()
-      .exists()
-  ).toEqual(true);
+  expect(tree.find('.testcases-header').hostNodes().exists()).toEqual(false);
+  expect(tree.find('.results-header').hostNodes().exists()).toEqual(true);
   // No testcase Card components should be rendered
   expect(tree.find('.AutograderCard')).toHaveLength(0);
   // Expect each of the three autograder results to have:
@@ -224,10 +188,7 @@ test('Autograder renders autograder results with different statuses correctly', 
   // Extract the text contained within the cells: see above comment for textContent
   const resultCellsValues = cards.map(card => {
     return ['.result-idx', '.result-status', '.result-expected', '.result-actual'].map(id => {
-      return card
-        .find(id)
-        .hostNodes()
-        .getDOMNode().textContent;
+      return card.find(id).hostNodes().getDOMNode().textContent;
     });
   });
   expect(resultCellsValues).toEqual([

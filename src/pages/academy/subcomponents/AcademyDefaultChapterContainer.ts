@@ -23,10 +23,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   );
 
 const AcademyDefaultChapterContainer = withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(DefaultChapter)
+  connect(mapStateToProps, mapDispatchToProps)(DefaultChapter)
 );
 
 export default AcademyDefaultChapterContainer;

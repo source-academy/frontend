@@ -18,7 +18,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);
 
-  yield takeEvery(SHORTEN_URL, function*(action: ReturnType<typeof shortenURL>) {
+  yield takeEvery(SHORTEN_URL, function* (action: ReturnType<typeof shortenURL>) {
     const queryString = yield select((state: OverallState) => state.playground.queryString);
     const keyword = action.payload;
     const errorMsg = 'ERROR';

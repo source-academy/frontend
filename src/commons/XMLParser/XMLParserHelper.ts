@@ -6,6 +6,7 @@ import {
   AssessmentCategories,
   AssessmentOverview,
   AssessmentStatuses,
+  BaseQuestion,
   GradingStatuses,
   IMCQQuestion,
   IProgrammingQuestion,
@@ -111,6 +112,7 @@ const makeAssessment = (result: any): [Assessment, number, number] => {
 };
 
 const altEval = (str: string): any => {
+  // eslint-disable-next-line no-new-func
   return Function('"use strict";return (' + str + ')')();
 };
 
@@ -151,7 +153,7 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
   const questions: Array<IProgrammingQuestion | IMCQQuestion> = [];
   task.PROBLEMS[0].PROBLEM.forEach((problem: XmlParseStrProblem, curId: number) => {
     const localMaxXp = problem.$.maxxp ? parseInt(problem.$.maxxp, 10) : 0;
-    const question: Question = {
+    const question: BaseQuestion = {
       answer: null,
       roomId: null,
       content: problem.TEXT[0],
@@ -176,7 +178,7 @@ const makeQuestions = (task: XmlParseStrTask): [Question[], number, number] => {
   return [questions, maxGrade, maxXp];
 };
 
-const makeMCQ = (problem: XmlParseStrCProblem, question: Question): IMCQQuestion => {
+const makeMCQ = (problem: XmlParseStrCProblem, question: BaseQuestion): IMCQQuestion => {
   const choicesVal: MCQChoice[] = [];
   const solution = problem.SNIPPET ? problem.SNIPPET[0].SOLUTION : undefined;
   let solutionVal = 0;
@@ -198,7 +200,7 @@ const makeMCQ = (problem: XmlParseStrCProblem, question: Question): IMCQQuestion
 
 const makeProgramming = (
   problem: XmlParseStrPProblem,
-  question: Question
+  question: BaseQuestion
 ): IProgrammingQuestion => {
   const testcases = problem.SNIPPET[0].TESTCASES;
   const publicTestcases = testcases ? testcases[0].PUBLIC || [] : [];

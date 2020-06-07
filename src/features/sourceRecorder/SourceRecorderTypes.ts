@@ -1,3 +1,4 @@
+import { Ace } from 'ace-builds/ace';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -29,17 +30,9 @@ export enum PlaybackStatus {
   paused = 'paused'
 }
 
-export type CodeDelta = {
-  start: Position;
-  end: Position;
-  action: string;
-  lines: string[];
-};
+export type CodeDelta = Ace.Delta;
 
-export type SelectionRange = {
-  start: Position;
-  end: Position;
-};
+export type SelectionRange = Ace.Range;
 
 export type SelectionData = {
   range: SelectionRange;

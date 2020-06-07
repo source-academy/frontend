@@ -9,11 +9,11 @@ import {
   Spinner
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid';
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { ValueFormatterParams } from 'ag-grid-community/dist/lib/entities/colDef';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { AgGridReact } from 'ag-grid-react';
-import { ValueFormatterParams } from 'ag-grid/dist/lib/entities/colDef';
-import 'ag-grid/dist/styles/ag-grid.css';
-import 'ag-grid/dist/styles/ag-theme-balham.css';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
 

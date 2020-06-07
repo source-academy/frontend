@@ -14,8 +14,9 @@ export const assignToPath = (path: Array<string | number>, value: any, obj: any)
 };
 
 export const limitNumberRange = (min: number | null = 0, max: number | null = null) => (
-  value: number
+  value: number | string
 ): number => {
+  value = typeof value === 'string' ? parseInt(value, 10) : value;
   let result;
   if (min !== null && value < min) {
     result = min;

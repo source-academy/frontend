@@ -6,6 +6,7 @@ const luminusClientID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
 const sourceAcademyVersion = process.env.REACT_APP_VERSION;
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const useBackend =
+  process.env.NODE_ENV !== 'test' &&
   process.env.REACT_APP_USE_BACKEND !== undefined &&
   process.env.REACT_APP_USE_BACKEND !== '' &&
   process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';

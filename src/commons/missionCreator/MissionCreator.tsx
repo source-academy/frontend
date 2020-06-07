@@ -32,7 +32,7 @@ type State = {
 };
 
 class MissionCreator extends React.Component<MissionCreatorProps, State> {
-  private fileReader: FileReader;
+  private fileReader?: FileReader = undefined;
   public constructor(props: any) {
     super(props);
     this.handleFileRead = this.handleFileRead.bind(this);
@@ -67,6 +67,9 @@ class MissionCreator extends React.Component<MissionCreatorProps, State> {
   }
 
   private handleFileRead = (file: any) => (e: any) => {
+    if (!this.fileReader) {
+      return;
+    }
     const content = this.fileReader.result;
     if (content) {
       parseString(content, (err: any, result: any) => {

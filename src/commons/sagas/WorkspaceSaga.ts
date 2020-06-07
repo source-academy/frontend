@@ -20,7 +20,6 @@ import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror-driver';
 
-import * as actions from '../../actions'; // TODO: Fix
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
@@ -37,6 +36,7 @@ import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentT
 import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
+import { actions } from '../utils/ActionsHelper';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -71,7 +71,7 @@ let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
   let context: Context;
 
-  yield takeEvery(EVAL_EDITOR, function*(action: ReturnType<typeof actions.evalEditor>) {
+  yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select((state: OverallState) => {
       const prependCode = (state.workspaces[workspaceLocation] as WorkspaceState).editorPrepend;
@@ -134,7 +134,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield* evalCode(value, context, execTime, workspaceLocation, EVAL_EDITOR);
   });
 
-  yield takeEvery(PROMPT_AUTOCOMPLETE, function*(
+  yield takeEvery(PROMPT_AUTOCOMPLETE, function* (
     action: ReturnType<typeof actions.promptAutocomplete>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -201,7 +201,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     );
   });
 
-  yield takeEvery(TOGGLE_EDITOR_AUTORUN, function*(
+  yield takeEvery(TOGGLE_EDITOR_AUTORUN, function* (
     action: ReturnType<typeof actions.toggleEditorAutorun>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -212,13 +212,13 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
 
-  yield takeEvery(INVALID_EDITOR_SESSION_ID, function*(
+  yield takeEvery(INVALID_EDITOR_SESSION_ID, function* (
     action: ReturnType<typeof actions.invalidEditorSessionId>
   ) {
     yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
-  yield takeEvery(EVAL_REPL, function*(action: ReturnType<typeof actions.evalRepl>) {
+  yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).replValue
@@ -235,7 +235,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, EVAL_REPL);
   });
 
-  yield takeEvery(DEBUG_RESUME, function*(action: ReturnType<typeof actions.debuggerResume>) {
+  yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).editorValue
@@ -253,7 +253,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield* evalCode(code, context, execTime, workspaceLocation, DEBUG_RESUME);
   });
 
-  yield takeEvery(DEBUG_RESET, function*(action: ReturnType<typeof actions.debuggerReset>) {
+  yield takeEvery(DEBUG_RESET, function* (action: ReturnType<typeof actions.debuggerReset>) {
     const workspaceLocation = action.payload.workspaceLocation;
     context = yield select(
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
@@ -266,7 +266,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     lastDebuggerResult = undefined;
   });
 
-  yield takeEvery(HIGHLIGHT_LINE, function*(
+  yield takeEvery(HIGHLIGHT_LINE, function* (
     action: ReturnType<typeof actions.highlightEditorLine>
   ) {
     const workspaceLocation = action.payload.highlightedLines;
@@ -274,14 +274,14 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield;
   });
 
-  yield takeEvery(UPDATE_EDITOR_BREAKPOINTS, function*(
+  yield takeEvery(UPDATE_EDITOR_BREAKPOINTS, function* (
     action: ReturnType<typeof actions.setEditorBreakpoint>
   ) {
     breakpoints = action.payload.breakpoints;
     yield;
   });
 
-  yield takeEvery(EVAL_TESTCASE, function*(action: ReturnType<typeof actions.evalTestcase>) {
+  yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
@@ -345,7 +345,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield* evalTestCode(testcase, elevatedContext, execTime, workspaceLocation, index, type);
   });
 
-  yield takeEvery(CHAPTER_SELECT, function*(action: ReturnType<typeof actions.chapterSelect>) {
+  yield takeEvery(CHAPTER_SELECT, function* (action: ReturnType<typeof actions.chapterSelect>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
     const oldVariant = yield select(
@@ -393,7 +393,7 @@ export default function* WorkspaceSaga(): SagaIterator {
    *
    * @see IWorkspaceManagerState @see WorkspaceState
    */
-  yield takeEvery(PLAYGROUND_EXTERNAL_SELECT, function*(
+  yield takeEvery(PLAYGROUND_EXTERNAL_SELECT, function* (
     action: ReturnType<typeof actions.externalLibrarySelect>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -470,7 +470,7 @@ export default function* WorkspaceSaga(): SagaIterator {
    * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
    * To abstract this to other libraries, add a call to the all() effect.
    */
-  yield takeEvery(ENSURE_LIBRARIES_LOADED, function*(
+  yield takeEvery(ENSURE_LIBRARIES_LOADED, function* (
     action: ReturnType<typeof actions.ensureLibrariesLoaded>
   ) {
     yield* checkWebGLAvailable();
@@ -482,7 +482,7 @@ export default function* WorkspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
-  yield takeEvery(BEGIN_CLEAR_CONTEXT, function*(
+  yield takeEvery(BEGIN_CLEAR_CONTEXT, function* (
     action: ReturnType<typeof actions.beginClearContext>
   ) {
     yield* checkWebGLAvailable();
@@ -508,7 +508,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield undefined;
   });
 
-  yield takeEvery(NAV_DECLARATION, function*(
+  yield takeEvery(NAV_DECLARATION, function* (
     action: ReturnType<typeof actions.navigateToDeclaration>
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
