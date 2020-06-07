@@ -54,11 +54,11 @@ type StateProps = {
 
 const SideContent = (props: SideContentProps) => {
   const [dynamicTabs, setDynamicTabs] = React.useState(props.tabs);
+  const workspaces = useSelector((state: OverallState) => state.workspaces);
 
   // Fetch debuggerContext from store
   let debuggerContext: DebuggerContext;
   if (props.workspaceLocation) {
-    const workspaces = useSelector((state: OverallState) => state.workspaces);
     debuggerContext = workspaces[props.workspaceLocation].debuggerContext;
   } else {
     debuggerContext = {} as DebuggerContext;
@@ -67,7 +67,7 @@ const SideContent = (props: SideContentProps) => {
   React.useEffect(() => {
     const allActiveTabs = props.tabs.concat(getDynamicTabs(debuggerContext));
     setDynamicTabs(allActiveTabs);
-  }, [debuggerContext]);
+  }, [props, debuggerContext]);
 
   /**
    * Remove the 'side-content-tab-alert' class that causes tabs flash.
@@ -146,7 +146,7 @@ const SideContent = (props: SideContentProps) => {
     props.handleActiveTabChange(
       props.defaultSelectedTabId ? props.defaultSelectedTabId : props.tabs[0].id!
     );
-  }, []);
+  }, [props]);
 
   return (
     <div className="side-content">

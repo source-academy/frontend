@@ -9,15 +9,15 @@ import { isCurrentlyActive } from './SideContentHelper';
 import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
+  let workspaces = useSelector((state: OverallState) => state.workspaces);
+  
   // Require workspace location
   if (!props.workspaceLocation) {
     return <></>;
   }
-
+  
   let replOutput = 'Your output is ';
-  const debuggerContext = useSelector(
-    (state: OverallState) => state.workspaces[props.workspaceLocation].debuggerContext
-  );
+  const debuggerContext = workspaces[props.workspaceLocation].debuggerContext;
 
   if (Object.keys(debuggerContext).length === 0) {
     replOutput = '';

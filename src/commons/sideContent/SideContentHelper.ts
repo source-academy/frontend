@@ -7,7 +7,7 @@ import { SideContentTab } from './SideContentTypes';
 
 const potentialTabs: SideContentTab[] = [sampleTab];
 
-const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map;
+const currentlyActiveTabsLabel: Map<WorkspaceLocation, string[]> = new Map<WorkspaceLocation, string[]>();
 
 export const getDynamicTabs = (debuggerContext: DebuggerContext): SideContentTab[] => {
   if (isEmptyDebuggerContext(debuggerContext)) {
