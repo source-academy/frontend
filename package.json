@@ -18,7 +18,7 @@
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
     "format:scss": "prettier --list-different --parser scss \"src/**/*.scss\"",
     "format:ci": "yarn run format:tsx && yarn run format:scss",
-    "start-js": "cross-env BROWSER=none PORT=8075 craco start",
+    "start-js": "cross-env BROWSER=none PORT=8000 craco start",
     "start": "npm-run-all -p watch-css start-js",
     "test": "craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
