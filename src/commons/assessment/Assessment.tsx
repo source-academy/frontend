@@ -349,6 +349,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
             large={true}
           />
           <img
+            alt="Assessment"
             className={`cover-image-${overview.status}`}
             src={overview.coverImage ? overview.coverImage : defaultCoverImage}
           />

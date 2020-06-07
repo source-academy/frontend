@@ -13,10 +13,6 @@ import { GradingCellProps } from '../../../../features/grading/GradingTypes';
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
 class GradingStatusCell extends React.Component<GradingCellProps, {}> {
-  constructor(props: GradingCellProps) {
-    super(props);
-  }
-
   /** Component to render in table - grading status */
   public render() {
     const gradingStatus = this.props.data.gradingStatus;
@@ -27,19 +23,19 @@ class GradingStatusCell extends React.Component<GradingCellProps, {}> {
     switch (gradingStatus) {
       case GradingStatuses.graded:
         iconName = IconNames.TICK;
-        tooltip = `Fully graded: ${this.props.data.gradedCount} of 
+        tooltip = `Fully graded: ${this.props.data.gradedCount} of
           ${this.props.data.questionCount}`;
         intent = Intent.SUCCESS;
         break;
       case GradingStatuses.grading:
         iconName = IconNames.TIME;
-        tooltip = `Partially graded: ${this.props.data.gradedCount} of 
+        tooltip = `Partially graded: ${this.props.data.gradedCount} of
           ${this.props.data.questionCount}`;
         intent = Intent.WARNING;
         break;
       case GradingStatuses.none:
         iconName = IconNames.CROSS;
-        tooltip = `Not graded: ${this.props.data.gradedCount} of 
+        tooltip = `Not graded: ${this.props.data.gradedCount} of
           ${this.props.data.questionCount}`;
         intent = Intent.DANGER;
         break;

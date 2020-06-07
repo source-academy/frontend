@@ -99,9 +99,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const EditingWorkspaceContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(EditingWorkspace);
+const EditingWorkspaceContainer = connect(mapStateToProps, mapDispatchToProps)(EditingWorkspace);
 
 export default EditingWorkspaceContainer;

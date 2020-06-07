@@ -2,7 +2,7 @@ import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import * as React from 'react';
-import AceEditor from 'react-ace';
+import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
@@ -98,14 +98,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
   }
 
   public getBreakpoints() {
-    const breakpoints = this.AceEditor.current!.editor.session.$breakpoints;
-    const res = [];
-    for (let i = 0; i < breakpoints.length; i++) {
-      if (breakpoints[i] != null) {
-        res.push(i);
-      }
-    }
-    return res;
+    return this.AceEditor.current!.editor.session.getBreakpoints().filter(x => x != null);
   }
 
   public componentDidMount() {
@@ -117,7 +110,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
 
     // TODO: Removal
     /* disable error threshold incrementer
-    
+
     const jshintOptions = {
       // undef: true,
       // unused: true,
@@ -137,13 +130,15 @@ class Editor extends React.PureComponent<EditorProps, {}> {
       globalstrict: true
     };
     session.$worker.send('setOptions', [jshintOptions]);
-    
+
     */
 
-    editor.on('gutterclick', this.handleGutterClick);
+    // NOTE: the two `any`s below are because the Ace editor typedefs are
+    // hopelessly incomplete
+    editor.on('gutterclick' as any, this.handleGutterClick);
 
     // Change all info annotations to error annotations
-    session.on('changeAnnotation', this.handleAnnotationChange(session));
+    session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
 
     // Start autocompletion
     acequire('ace/ext/language_tools').setCompleters([this.completer]);
@@ -172,7 +167,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
   }
 
   public getMarkers = () => {
-    const markerProps = [];
+    const markerProps: IAceEditorProps['markers'] = [];
     for (const lineNum of this.props.highlightedLines) {
       markerProps.push({
         startRow: lineNum[0],
@@ -283,7 +278,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
   private moveCursor = (position: Position) => {
     this.AceEditor.current!.editor.selection.clearSelection();
     this.AceEditor.current!.editor.moveCursorToPosition(position);
-    this.AceEditor.current!.editor.renderer.$cursorLayer.showCursor();
+    this.AceEditor.current!.editor.renderer.showCursor();
     this.AceEditor.current!.editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 
@@ -317,7 +312,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
       return;
     }
 
-    if (ext.some((node: { caption: string }) => node.caption === token.value)) {
+    if (ext.some((node: { caption: string }) => node.caption === (token && token.value))) {
       if (
         token !== null &&
         (/\bsupport.function\b/.test(token.type) || /\bbuiltinConsts\b/.test(token.type))
@@ -372,7 +367,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
     });
 
     if (ranges.length !== 0) {
-      ranges.map(range => {
+      ranges.forEach(range => {
         // Highlight the scope ranges
         this.markerIds.push(
           editor.session.addMarker(

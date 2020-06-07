@@ -19,9 +19,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const ProfileContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Profile);
+const ProfileContainer = connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 export default ProfileContainer;

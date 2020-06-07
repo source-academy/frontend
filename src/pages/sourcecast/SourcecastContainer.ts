@@ -1,5 +1,4 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
@@ -133,11 +132,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const SourcecastContainer = withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Sourcecast)
-);
+const SourcecastContainer = connect(mapStateToProps, mapDispatchToProps)(Sourcecast);
 
 export default SourcecastContainer;

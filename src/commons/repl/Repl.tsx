@@ -1,5 +1,5 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 

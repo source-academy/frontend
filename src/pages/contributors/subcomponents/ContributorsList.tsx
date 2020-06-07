@@ -44,9 +44,9 @@ class ContributorsList extends React.Component<{}, ContributorsState> {
         const arrayMapped = array.map((contributor: Contributor) => {
           return (
             <div key={contributor.key}>
-              <img src={contributor.photo} alt="Image" />
+              <img src={contributor.photo} alt="Contributor" />
               <p>
-                <a href={contributor.githubPage} target="_blank">
+                <a href={contributor.githubPage} rel="noopener noreferrer" target="_blank">
                   {contributor.githubName}
                 </a>
               </p>

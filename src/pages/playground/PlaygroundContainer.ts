@@ -131,11 +131,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const PlaygroundContainer = withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Playground)
-);
+const PlaygroundContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Playground));
 
 export default PlaygroundContainer;

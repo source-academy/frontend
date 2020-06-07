@@ -26,10 +26,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   );
 
 const MissionControlContainer = withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(MissionControl)
+  connect(mapStateToProps, mapDispatchToProps)(MissionControl)
 );
 
 export default MissionControlContainer;

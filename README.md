@@ -1,4 +1,4 @@
-# Cadet Frontend 
+# Cadet Frontend
 
 [![Build Status](https://travis-ci.org/source-academy/cadet-frontend.svg?branch=master)](https://travis-ci.org/source-academy/cadet-frontend)
 [![Coverage Status](https://coveralls.io/repos/github/source-academy/cadet-frontend/badge.svg?branch=master)](https://coveralls.io/github/source-academy/cadet-frontend?branch=master)
@@ -15,30 +15,27 @@ The Source Academy is a gamified platform designed to teach students coding whil
 
 ## Getting Started
 
-### Installation 
-1. Install a stable version of NodeJS (tested: Node 10.15.0).
+### Installation
+1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
-3. Run `npm install` to install dependencies. (Running `audit fix` may prevent server from starting)
+3. Run `yarn install` to install dependencies.
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `npm start` to start the server at `localhost:8075`.
+5. Run `yarn run start` to start the server at `localhost:8075`.
 
 ### Setting up your environment
 
 The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set-up:
 
-1. **REACT_APP_LUMINUS_CLIENT_ID** : This is needed for the login to work at the moment.*
-2. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
+1. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
 
- \*If you require access to Luminus keys please email Prof Henz at henz@comp.nus.edu.sg to request for a with the email subject heading "Request for Luminus API Keys".
- 
 ## Development
-  
-### Running the tests 
+
+### Running the tests
 
 Before pushing to Github, ensure that your code is formatted and your tests are passing. These two commands should help with that:
 
-- `npm run format` : formats your code
-- `npm run test`: runs the tests and prints the output
+- `yarn run format` : formats your code
+- `yarn run test`: runs the tests and prints the output
 
 ### Running your own js-slang
 
@@ -56,20 +53,17 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 
 ## Application Structure
 
-1. `actions` contains action creators, one file per reducer, combined in index.
-2. `assets` contains static assets.
-3. `components` contains all react components.
-4. `containers` contains HOC that inject react components with Redux state.
-5. `mocks` contains mock data structures for testing
-6. `reducers` contains all Redux reducers and their state, combined in index.
-7. `sagas` contains all Redux sagas, combined in index.
-8. `slang` contains the source interpreter.
-9. `styles` contains all SCSS styles.
-10. `utils` contains utility modules.
+1. `assets` contains static assets.
+1. `commons` contains components or other code common to more than one page.
+1. `features` contains action creators, reducers and type declarations for specific functions.
+1. `pages` contains pages and components used only in one page; its layout should mirror the actual routes.
+1. `styles` contains all SCSS styles.
 
 ## TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
+
+See also the [this standard in the wiki](https://github.com/source-academy/cadet-frontend/wiki/Coding-Standard).
 
 ### Projects
 

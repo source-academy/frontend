@@ -26,9 +26,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const GradingContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Grading);
+const GradingContainer = connect(mapStateToProps, mapDispatchToProps)(Grading);
 
 export default GradingContainer;

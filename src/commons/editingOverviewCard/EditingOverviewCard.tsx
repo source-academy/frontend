@@ -123,6 +123,7 @@ export class EditingOverviewCard extends React.Component<EditingOverviewCardProp
             this.makeEditingOverviewTextarea('coverImage')
           ) : (
             <img
+              alt="Assessment cover"
               className={`cover-image-${overview.status}`}
               src={overview.coverImage ? overview.coverImage : defaultCoverImage}
             />
@@ -274,7 +275,7 @@ const assessmentCategoriesArr = [
 
 const categorySelect = (
   category: AssessmentCategory,
-  handleSelect = (i: AssessmentCategory, e: React.ChangeEvent<HTMLSelectElement>) => {}
+  handleSelect = (i: AssessmentCategory, e?: React.SyntheticEvent<HTMLElement>) => {}
 ) => (
   <CategorySelectComponent
     className={Classes.MINIMAL}

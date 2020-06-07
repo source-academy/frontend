@@ -1041,7 +1041,15 @@ describe('evalTestCode', () => {
 
   describe('on interrupt', () => {
     test('puts endInterruptExecution and calls showWarningMessage', () => {
-      return expectSaga(evalTestCode, code, context, execTime, workspaceLocation, index)
+      return expectSaga(
+        evalTestCode,
+        code,
+        context,
+        execTime,
+        workspaceLocation,
+        index,
+        TestcaseTypes.public
+      )
         .withState(state)
         .provide({
           race: () => ({

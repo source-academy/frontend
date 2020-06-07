@@ -3,8 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import * as actions from '../../actions'; // TODO: Fix after implementing GroundControlActions and GameActions
-import { GameState, OverallState, Role } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -20,16 +19,15 @@ import {
 import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
-import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
   DELETE_ASSESSMENT,
   PUBLISH_ASSESSMENT,
-  SAVE_USER_STATE,
   UPLOAD_ASSESSMENT
-} from '../application/types/ActionTypes';
+} from '../../features/groundControl/GroundControlTypes';
+import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -42,6 +40,7 @@ import {
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
+import { actions } from '../utils/ActionsHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
@@ -66,12 +65,11 @@ import {
   postSourcecast,
   postUnsubmit,
   publishAssessment,
-  putUserGameState,
   uploadAssessment
 } from './RequestsSaga';
 
 function* BackendSaga(): SagaIterator {
-  yield takeEvery(FETCH_AUTH, function*(action: ReturnType<typeof actions.fetchAuth>) {
+  yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
     const luminusCode = action.payload;
     const tokens = yield call(postAuth, luminusCode);
     if (!tokens) {
@@ -91,7 +89,7 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/academy');
   });
 
-  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function*() {
+  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -102,7 +100,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(FETCH_ASSESSMENT, function*(action: ReturnType<typeof actions.fetchAssessment>) {
+  yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -114,7 +112,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SUBMIT_ANSWER, function*(action: ReturnType<typeof actions.submitAnswer>) {
+  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
     const role = yield select((state: OverallState) => state.session.role!);
     if (role !== Role.Student) {
       return yield call(showWarningMessage, 'Answer rejected - only students can submit answers.');
@@ -159,7 +157,7 @@ function* BackendSaga(): SagaIterator {
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
-  yield takeEvery(SUBMIT_ASSESSMENT, function*(
+  yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
     const role = yield select((state: OverallState) => state.session.role!);
@@ -200,7 +198,7 @@ function* BackendSaga(): SagaIterator {
     return yield put(actions.updateAssessmentOverviews(newOverviews));
   });
 
-  yield takeEvery(FETCH_GRADING_OVERVIEWS, function*(
+  yield takeEvery(FETCH_GRADING_OVERVIEWS, function* (
     action: ReturnType<typeof actions.fetchGradingOverviews>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -216,7 +214,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(FETCH_GRADING, function*(action: ReturnType<typeof actions.fetchGrading>) {
+  yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -231,7 +229,7 @@ function* BackendSaga(): SagaIterator {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(UNSUBMIT_SUBMISSION, function*(
+  yield takeEvery(UNSUBMIT_SUBMISSION, function* (
     action: ReturnType<typeof actions.unsubmitSubmission>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -262,7 +260,7 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  const sendGrade = function*(
+  const sendGrade = function* (
     action:
       | ReturnType<typeof actions.submitGrading>
       | ReturnType<typeof actions.submitGradingAndContinue>
@@ -315,7 +313,7 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.updateGrading(submissionId, newGrading));
   };
 
-  const sendGradeAndContinue = function*(
+  const sendGradeAndContinue = function* (
     action: ReturnType<typeof actions.submitGradingAndContinue>
   ) {
     const { submissionId } = action.payload;
@@ -332,14 +330,14 @@ function* BackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push('/academy/grading' + `/${submissionId}` + `/${(currentQuestion || 0) + 1}`);
+    yield history.push(`/academy/grading/${submissionId}/${(currentQuestion || 0) + 1}`);
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
-  yield takeEvery(FETCH_NOTIFICATIONS, function*(
+  yield takeEvery(FETCH_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -352,7 +350,7 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.updateNotifications(notifications));
   });
 
-  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function*(
+  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.acknowledgeNotifications>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -392,7 +390,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(DELETE_SOURCECAST_ENTRY, function*(
+  yield takeEvery(DELETE_SOURCECAST_ENTRY, function* (
     action: ReturnType<typeof actions.deleteSourcecastEntry>
   ) {
     const role = yield select((state: OverallState) => state.session.role!);
@@ -419,7 +417,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-  yield takeEvery(FETCH_SOURCECAST_INDEX, function*(
+  yield takeEvery(FETCH_SOURCECAST_INDEX, function* (
     action: ReturnType<typeof actions.fetchSourcecastIndex>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -432,7 +430,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SAVE_SOURCECAST_DATA, function*(
+  yield takeEvery(SAVE_SOURCECAST_DATA, function* (
     action: ReturnType<typeof actions.saveSourcecastData>
   ) {
     const role = yield select((state: OverallState) => state.session.role!);
@@ -455,14 +453,14 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/sourcecast');
   });
 
-  yield takeEvery(CHANGE_CHAPTER, function*(action: ReturnType<typeof actions.changeChapter>) {
+  yield takeEvery(CHANGE_CHAPTER, function* (action: ReturnType<typeof actions.changeChapter>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
     const chapter = action.payload;
-    const resp: Response = yield changeChapter(chapter.chapter, chapter.variant, tokens);
+    const resp: Response = yield call(changeChapter, chapter.chapter, chapter.variant, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp);
@@ -473,7 +471,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
-  yield takeEvery(FETCH_GROUP_OVERVIEWS, function*(
+  yield takeEvery(FETCH_GROUP_OVERVIEWS, function* (
     action: ReturnType<typeof actions.fetchGroupOverviews>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -486,7 +484,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(CHANGE_DATE_ASSESSMENT, function*(
+  yield takeEvery(CHANGE_DATE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.changeDateAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -509,7 +507,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
-  yield takeEvery(DELETE_ASSESSMENT, function*(
+  yield takeEvery(DELETE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.deleteAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -528,7 +526,7 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
-  yield takeEvery(PUBLISH_ASSESSMENT, function*(
+  yield takeEvery(PUBLISH_ASSESSMENT, function* (
     action: ReturnType<typeof actions.publishAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -553,7 +551,7 @@ function* BackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(UPLOAD_ASSESSMENT, function*(
+  yield takeEvery(UPLOAD_ASSESSMENT, function* (
     action: ReturnType<typeof actions.uploadAssessment>
   ) {
     const tokens = yield select((state: OverallState) => ({
@@ -582,6 +580,8 @@ function* BackendSaga(): SagaIterator {
     // TODO: implement when stories backend is implemented
   }); */
 
+  // Related to game, disabled for now
+  /*
   yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
@@ -595,6 +595,7 @@ function* BackendSaga(): SagaIterator {
     }
     yield put(actions.setGameState(gameState));
   });
+  */
 }
 
 export default BackendSaga;

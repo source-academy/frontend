@@ -1,6 +1,6 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
@@ -123,10 +123,6 @@ export type StateProps = {
 };
 
 class Sourcereel extends React.Component<SourcereelProps> {
-  constructor(props: SourcereelProps) {
-    super(props);
-  }
-
   public componentDidUpdate(prevProps: SourcereelProps) {
     const { inputToApply } = this.props;
 
@@ -356,9 +352,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
       <div className={classNames('Sourcereel', Classes.DARK)}>
         {this.props.recordingStatus === RecordingStatus.paused ? (
           <SourceRecorderControlBar {...sourcecastControlbarProps} />
-        ) : (
-          undefined
-        )}
+        ) : undefined}
         <Workspace {...workspaceProps} />
       </div>
     );

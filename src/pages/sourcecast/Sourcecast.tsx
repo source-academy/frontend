@@ -1,6 +1,6 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import * as classNames from 'classnames';
+import classNames from 'classnames';
 import * as React from 'react';
 
 import { Variant } from 'js-slang/dist/types';
@@ -104,10 +104,6 @@ export type StateProps = {
 };
 
 class Sourcecast extends React.Component<SourcecastProps> {
-  constructor(props: SourcecastProps) {
-    super(props);
-  }
-
   public componentDidUpdate(prevProps: SourcecastProps) {
     const { inputToApply } = this.props;
 

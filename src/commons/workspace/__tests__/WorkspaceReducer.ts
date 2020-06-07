@@ -1063,7 +1063,10 @@ describe('LOG_OUT', () => {
       ...createDefaultWorkspace(WorkspaceLocations.playground),
       editorHeight: 200,
       editorValue: 'test program here',
-      highlightedLines: [[1, 2], [3, 4]],
+      highlightedLines: [
+        [1, 2],
+        [3, 4]
+      ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
       websocketStatus: 0,

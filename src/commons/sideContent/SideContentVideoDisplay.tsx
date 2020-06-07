@@ -11,8 +11,8 @@ type State = {
 };
 
 class SideContentVideoDisplay extends React.Component<{}, State> {
-  private $video: HTMLElement | null;
-  private $canvas: HTMLElement | null;
+  private $video: HTMLElement | null = null;
+  private $canvas: HTMLElement | null = null;
   constructor(props: any) {
     super(props);
     this.state = {

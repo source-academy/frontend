@@ -11,7 +11,7 @@ type StateProps = {
  * and makes it into a new <canvas> output for viewing.
  */
 class SideContentCanvasOutput extends React.Component<SideContentCanvasOutputProps, {}> {
-  private $parent: HTMLElement | null;
+  private $parent: HTMLElement | null = null;
 
   public componentDidMount() {
     this.$parent!.appendChild(this.props.canvas);

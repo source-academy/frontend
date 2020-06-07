@@ -41,7 +41,7 @@ import {
 import { mockGroupOverviews } from '../../mocks/GroupMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { updateChapter, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_CHAPTER,
   FETCH_CHAPTER,
@@ -50,6 +50,7 @@ import {
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
+  changeChapter,
   getAssessment,
   getAssessmentOverviews,
   getGroupOverviews,
@@ -113,7 +114,10 @@ describe('Test FETCH_AUTH Action', () => {
       .call(getUser, mockTokens)
       .put(setTokens(mockTokens))
       .put(setUser(user))
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), user]
+      ])
       .dispatch({ type: FETCH_AUTH, payload: luminusCode })
       .silentRun();
   });
@@ -135,7 +139,10 @@ describe('Test FETCH_AUTH Action', () => {
       } as GameState
     };
     return expectSaga(BackendSaga)
-      .provide([[call(postAuth, luminusCode), null], [call(getUser, mockTokens), user]])
+      .provide([
+        [call(postAuth, luminusCode), null],
+        [call(getUser, mockTokens), user]
+      ])
       .call(postAuth, luminusCode)
       .not.call.fn(getUser)
       .not.put.actionType(SET_TOKENS)
@@ -148,7 +155,10 @@ describe('Test FETCH_AUTH Action', () => {
     const luminusCode = 'luminusCode';
     const nullUser = null;
     return expectSaga(BackendSaga)
-      .provide([[call(postAuth, luminusCode), mockTokens], [call(getUser, mockTokens), nullUser]])
+      .provide([
+        [call(postAuth, luminusCode), mockTokens],
+        [call(getUser, mockTokens), nullUser]
+      ])
       .call(postAuth, luminusCode)
       .call(getUser, mockTokens)
       .not.put.actionType(SET_TOKENS)
@@ -209,13 +219,18 @@ describe('Test FETCH_ASSESSMENT Action', () => {
 
 describe('Test SUBMIT_ANSWER Action', () => {
   test('when response is ok', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    const mockNewQuestions = mockAssessment.questions.slice().map((question: Question) => {
-      if (question.id === mockAnsweredAssessmentQuestion.id) {
-        return { ...question, answer: mockAnsweredAssessmentQuestion.answer };
+    const mockAnsweredAssessmentQuestion: Question =
+      mockAssessmentQuestion.type === 'mcq'
+        ? { ...mockAssessmentQuestion, answer: 42 }
+        : { ...mockAssessmentQuestion, answer: '42' };
+    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+      (question: Question): Question => {
+        if (question.id === mockAnsweredAssessmentQuestion.id) {
+          return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
+        }
+        return question;
       }
-      return question;
-    });
+    );
     const mockNewAssessment = {
       ...mockAssessment,
       questions: mockNewQuestions
@@ -227,7 +242,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
           call(
             postAnswer,
             mockAnsweredAssessmentQuestion.id,
-            mockAnsweredAssessmentQuestion.answer,
+            mockAnsweredAssessmentQuestion.answer || '',
             mockTokens
           ),
           okResp
@@ -420,17 +435,18 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
 
 describe('Test FETCH_CHAPTER Action', () => {
   test('when chapter is obtained', () => {
-    return expectSaga(BackendSaga)
-      .dispatch({ type: FETCH_CHAPTER })
-      .silentRun();
+    return expectSaga(BackendSaga).dispatch({ type: FETCH_CHAPTER }).silentRun();
   });
 });
 
 describe('Test CHANGE_CHAPTER Action', () => {
   test('when chapter is changed', () => {
     return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .dispatch({ type: CHANGE_CHAPTER, payload: { chapterNo: 1, variant: 'default' } })
+      .withState({ session: { role: Role.Staff, ...mockTokens } })
+      .call(changeChapter, 1, 'default', mockTokens)
+      .put(updateChapter(1, 'default'))
+      .provide([[call(changeChapter, 1, 'default', mockTokens), { ok: true }]])
+      .dispatch({ type: CHANGE_CHAPTER, payload: { chapter: 1, variant: 'default' } })
       .silentRun();
   });
 });

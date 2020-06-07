@@ -32,7 +32,7 @@ import { mockGroupOverviews } from './GroupMocks';
 import { mockNotifications } from './UserMocks';
 
 export function* mockBackendSaga(): SagaIterator {
-  yield takeEvery(FETCH_AUTH, function*(action: ReturnType<typeof actions.fetchAuth>) {
+  yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
     const tokens = {
       accessToken: 'accessToken',
       refreshToken: 'refreshToken'
@@ -53,17 +53,17 @@ export function* mockBackendSaga(): SagaIterator {
     yield history.push('/academy');
   });
 
-  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function*() {
+  yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
     yield put(actions.updateAssessmentOverviews([...mockAssessmentOverviews]));
   });
 
-  yield takeEvery(FETCH_ASSESSMENT, function*(action: ReturnType<typeof actions.fetchAssessment>) {
+  yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
     const id = action.payload;
     const assessment = mockAssessments[id - 1];
     yield put(actions.updateAssessment({ ...assessment }));
   });
 
-  yield takeEvery(FETCH_GRADING_OVERVIEWS, function*(
+  yield takeEvery(FETCH_GRADING_OVERVIEWS, function* (
     action: ReturnType<typeof actions.fetchGradingOverviews>
   ) {
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
@@ -74,7 +74,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(FETCH_GRADING, function*(action: ReturnType<typeof actions.fetchGrading>) {
+  yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const submissionId = action.payload;
     const accessToken = yield select((state: OverallState) => state.session.accessToken);
     const grading = yield call(() => mockFetchGrading(accessToken, submissionId));
@@ -83,7 +83,7 @@ export function* mockBackendSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(SUBMIT_ANSWER, function*(action: ReturnType<typeof actions.submitAnswer>) {
+  yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     // Now, update the answer for the question in the assessment in the store
@@ -108,7 +108,7 @@ export function* mockBackendSaga(): SagaIterator {
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
-  yield takeEvery(UNSUBMIT_SUBMISSION, function*(
+  yield takeEvery(UNSUBMIT_SUBMISSION, function* (
     action: ReturnType<typeof actions.unsubmitSubmission>
   ) {
     const { submissionId } = action.payload;
@@ -133,7 +133,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateGradingOverviews(newOverviews));
   });
 
-  const sendGrade = function*(
+  const sendGrade = function* (
     action: ReturnType<typeof actions.submitGrading | typeof actions.submitGradingAndContinue>
   ) {
     const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
@@ -158,7 +158,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Submitted!', 1000);
   };
 
-  const sendGradeAndContinue = function*(
+  const sendGradeAndContinue = function* (
     action: ReturnType<typeof actions.submitGradingAndContinue>
   ) {
     const { submissionId } = action.payload;
@@ -175,14 +175,14 @@ export function* mockBackendSaga(): SagaIterator {
      * If the questionId is out of bounds, the componentDidUpdate callback of
      * GradingWorkspace will cause a redirect back to '/academy/grading'
      */
-    yield history.push('/academy/grading' + `/${submissionId}` + `/${(currentQuestion || 0) + 1}`);
+    yield history.push(`/academy/grading/${submissionId}/${(currentQuestion || 0) + 1}`);
   };
 
   yield takeEvery(SUBMIT_GRADING, sendGrade);
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
-  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function*(
+  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.acknowledgeNotifications>
   ) {
     const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
@@ -210,13 +210,13 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateNotifications(newNotifications));
   });
 
-  yield takeEvery(FETCH_NOTIFICATIONS, function*(
+  yield takeEvery(FETCH_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
     yield put(actions.updateNotifications(mockNotifications));
   });
 
-  yield takeEvery(FETCH_GROUP_OVERVIEWS, function*() {
+  yield takeEvery(FETCH_GROUP_OVERVIEWS, function* () {
     yield put(actions.updateGroupOverviews([...mockGroupOverviews]));
   });
 }

@@ -1,4 +1,4 @@
-import Resizable, { ResizableProps, ResizeCallback } from 're-resizable';
+import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
 
@@ -32,10 +32,10 @@ type StateProps = {
 };
 
 class Workspace extends React.Component<WorkspaceProps, {}> {
-  private editorDividerDiv: HTMLDivElement;
-  private leftParentResizable: Resizable;
-  private maxDividerHeight: number;
-  private sideDividerDiv: HTMLDivElement;
+  private editorDividerDiv?: HTMLDivElement = undefined;
+  private leftParentResizable?: Resizable = undefined;
+  private maxDividerHeight?: number = undefined;
+  private sideDividerDiv?: HTMLDivElement = undefined;
   private editorRef: React.RefObject<Editor>;
 
   public constructor(props: WorkspaceProps) {
@@ -44,7 +44,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   public componentDidMount() {
-    this.maxDividerHeight = this.sideDividerDiv.clientHeight;
+    this.maxDividerHeight = this.sideDividerDiv!.clientHeight;
   }
 
   /**
@@ -91,7 +91,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   }
 
   private editorResizableProps() {
-    const onResizeStop: ResizeCallback = ({}, {}, {}, diff) =>
+    const onResizeStop: ResizeCallback = (_a, _b, _c, diff) =>
       this.props.handleEditorWidthChange((diff.width * 100) / window.innerWidth);
     const ref = (e: Resizable) => (this.leftParentResizable = e as Resizable);
     return {
@@ -101,12 +101,13 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResize: this.toggleEditorDividerDisplay,
       onResizeStop,
       ref,
-      size: { width: this.props.editorWidth, height: '100%' }
+      size: { width: this.props.editorWidth, height: '100%' },
+      as: undefined as any // re-resizable bug - wrong typedef
     } as ResizableProps;
   }
 
   private sideContentResizableProps() {
-    const onResizeStop: ResizeCallback = ({}, {}, ref, {}) =>
+    const onResizeStop: ResizeCallback = (_a, _b, ref, _c) =>
       this.props.handleSideContentHeightChange(ref.clientHeight);
     return {
       bounds: 'parent',
@@ -116,7 +117,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
       onResizeStop,
       size:
         /* It will always be undefined...
-          Default workspace state does not have sideContentHeight... 
+          Default workspace state does not have sideContentHeight...
         */
         this.props.sideContentHeight === undefined
           ? undefined
@@ -132,21 +133,21 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * above 95% or below 5% respectively. Also changes the editor divider width
    * in the case of < 5%.
    */
-  private toggleEditorDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleEditorDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     const leftThreshold = 2;
     const rightThreshold = 95;
     const editorWidthPercentage = ((ref as HTMLDivElement).clientWidth / window.innerWidth) * 100;
     // update resizable size
     if (editorWidthPercentage > rightThreshold) {
-      this.leftParentResizable.updateSize({ width: '100%', height: '100%' });
+      this.leftParentResizable!.updateSize({ width: '100%', height: '100%' });
     } else if (editorWidthPercentage < leftThreshold) {
-      this.leftParentResizable.updateSize({ width: '0%', height: '100%' });
+      this.leftParentResizable!.updateSize({ width: '0%', height: '100%' });
     }
     // Update divider margin
     if (editorWidthPercentage < leftThreshold) {
-      this.editorDividerDiv.style.marginRight = '0.6rem';
+      this.editorDividerDiv!.style.marginRight = '0.6rem';
     } else {
-      this.editorDividerDiv.style.marginRight = '0';
+      this.editorDividerDiv!.style.marginRight = '0';
     }
   };
 
@@ -154,18 +155,18 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
    * Hides the side-content-divider div when side-content is resized downwards
    * so that it's bottom border snaps flush with editor's bottom border
    */
-  private toggleDividerDisplay: ResizeCallback = ({}, {}, ref) => {
+  private toggleDividerDisplay: ResizeCallback = (_a, _b, ref) => {
     /* This is actually broken... */
     this.maxDividerHeight =
-      this.sideDividerDiv.clientHeight > this.maxDividerHeight
-        ? this.sideDividerDiv.clientHeight
+      this.sideDividerDiv!.clientHeight > this.maxDividerHeight!
+        ? this.sideDividerDiv!.clientHeight
         : this.maxDividerHeight;
     const resizableHeight = (ref as HTMLDivElement).clientHeight;
     const rightParentHeight = (ref.parentNode as HTMLDivElement).clientHeight;
-    if (resizableHeight + this.maxDividerHeight + 2 > rightParentHeight) {
-      this.sideDividerDiv.style.display = 'none';
+    if (resizableHeight + this.maxDividerHeight! + 2 > rightParentHeight) {
+      this.sideDividerDiv!.style.display = 'none';
     } else {
-      this.sideDividerDiv.style.display = 'initial';
+      this.sideDividerDiv!.style.display = 'initial';
     }
   };
 

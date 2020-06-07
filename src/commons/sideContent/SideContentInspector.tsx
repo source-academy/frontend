@@ -6,7 +6,7 @@ type State = {
 };
 
 class SideContentInspector extends React.Component<{}, State> {
-  private $parent: HTMLElement | null;
+  private $parent: HTMLElement | null = null;
 
   constructor(props: any) {
     super(props);

@@ -1,5 +1,3 @@
-import { Reducer } from 'redux';
-
 import { SourceActionType } from '../../../commons/utils/ActionsHelper';
 import { RecordingStatus } from '../SourceRecorderTypes';
 
@@ -15,10 +13,7 @@ import {
   TIMER_STOP
 } from './SourcereelTypes';
 
-export const SourcereelReducer: Reducer<SourcereelWorkspaceState> = (
-  state: SourcereelWorkspaceState,
-  action: SourceActionType
-) => {
+export const SourcereelReducer = (state: SourcereelWorkspaceState, action: SourceActionType) => {
   switch (action.type) {
     case RECORD_INIT:
       return {

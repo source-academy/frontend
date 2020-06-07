@@ -72,11 +72,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const ApplicationContainer = withRouter(
-  connect(
-    mapStateToProps,
-    mapDispatchToProps
-  )(Application)
-);
+const ApplicationContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Application));
 
 export default ApplicationContainer;

@@ -15,13 +15,7 @@ import {
 } from '../../SourceRecorderTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
-
-function generateAction(type: string, payload: any = {}) {
-  return {
-    type,
-    payload
-  };
-}
+import { action as generateAction } from 'typesafe-actions';
 
 describe('SAVE_SOURCECAST_DATA', () => {
   test('saves sourcecastData correctly', () => {
@@ -55,7 +49,9 @@ describe('SAVE_SOURCECAST_DATA', () => {
       title: 'Test Title',
       description: 'Test Description',
       audioUrl: 'someUrl.com',
-      playbackData
+      playbackData,
+      workspaceLocation: undefined!,
+      audio: undefined!
     };
 
     const action = generateAction(SAVE_SOURCECAST_DATA, payload);
@@ -95,7 +91,10 @@ describe('SET_CODE_DELTAS_TO_APPLY', () => {
         lines: ['b']
       }
     ];
-    const action = generateAction(SET_CODE_DELTAS_TO_APPLY, { deltas });
+    const action = generateAction(SET_CODE_DELTAS_TO_APPLY, {
+      deltas,
+      workspaceLocation: undefined!
+    });
     const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
@@ -125,7 +124,10 @@ describe('SET_INPUT_TO_APPLY', () => {
       data: delta
     };
 
-    const action = generateAction(SET_INPUT_TO_APPLY, { inputToApply });
+    const action = generateAction(SET_INPUT_TO_APPLY, {
+      inputToApply,
+      workspaceLocation: undefined!
+    });
     const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
       ...defaultWorkspaceManager.sourcecast,
@@ -166,7 +168,8 @@ describe('SET_SOURCECAST_DATA', () => {
       title: 'Test Title',
       description: 'Test Description',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
-      playbackData
+      playbackData,
+      workspaceLocation: undefined!
     };
 
     const action = generateAction(SET_SOURCECAST_DATA, payload);
@@ -182,7 +185,10 @@ describe('SET_SOURCECAST_DATA', () => {
 describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
   test('sets sourcecastPlaybackDuration correctly', () => {
     const duration = 5;
-    const action = generateAction(SET_SOURCECAST_PLAYBACK_DURATION, { duration });
+    const action = generateAction(SET_SOURCECAST_PLAYBACK_DURATION, {
+      duration,
+      workspaceLocation: undefined!
+    });
 
     const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
@@ -195,7 +201,10 @@ describe('SET_SOURCECAST_PLAYBACK_DURATION', () => {
 describe('SET_SOURCECAST_PLAYBACK_STATUS', () => {
   test('sets sourcecastPlaybackStatus correctly', () => {
     const playbackStatus = PlaybackStatus.paused;
-    const action = generateAction(SET_SOURCECAST_PLAYBACK_STATUS, { playbackStatus });
+    const action = generateAction(SET_SOURCECAST_PLAYBACK_STATUS, {
+      playbackStatus,
+      workspaceLocation: undefined!
+    });
 
     const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);
     expect(result).toEqual({
@@ -224,7 +233,8 @@ describe('UPDATE_SOURCECAST_INDEX', () => {
     ];
 
     const action = generateAction(UPDATE_SOURCECAST_INDEX, {
-      index: sourcecastData
+      index: sourcecastData,
+      workspaceLocation: undefined!
     });
 
     const result = SourcecastReducer(defaultWorkspaceManager.sourcecast, action);

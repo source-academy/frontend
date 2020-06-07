@@ -10,10 +10,6 @@ import { GradingCellProps } from '../../../../features/grading/GradingTypes';
  * See {@link https://www.ag-grid.com/example-react-dynamic}
  */
 class GradingGradeCell extends React.Component<GradingCellProps, {}> {
-  constructor(props: GradingCellProps) {
-    super(props);
-  }
-
   /** Component to render in table - marks */
   public render() {
     if (this.props.data.maxGrade) {

@@ -161,9 +161,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const SourcereelContainer = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Sourcereel);
+const SourcereelContainer = connect(mapStateToProps, mapDispatchToProps)(Sourcereel);
 
 export default SourcereelContainer;

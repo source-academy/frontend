@@ -22,7 +22,11 @@ export const loadStoredState = (): SavedState | undefined => {
     if (!serializedState) {
       return undefined;
     }
-    return JSON.parse(decompressFromUTF16(serializedState)) as SavedState;
+    const decompressed = decompressFromUTF16(serializedState);
+    if (!decompressed) {
+      return undefined;
+    }
+    return JSON.parse(decompressed) as SavedState;
   } catch (err) {
     showWarningMessage('Error loading from local storage');
     return undefined;
