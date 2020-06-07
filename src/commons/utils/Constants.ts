@@ -16,9 +16,10 @@ const maxBrowseIndex = 50;
 const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl =
-  process.env.MODULE_BACKEND_URL === undefined || process.env.MODULE_BACKEND_URL === ''
+  process.env.REACT_APP_MODULE_BACKEND_URL === undefined ||
+  process.env.REACT_APP_MODULE_BACKEND_URL === ''
     ? 'modules'
-    : process.env.MODULE_BACKEND_URL;
+    : process.env.REACT_APP_MODULE_BACKEND_URL;
 
 const authProviders: Map<
   string,
