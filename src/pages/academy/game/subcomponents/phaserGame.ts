@@ -1,4 +1,5 @@
 import * as Phaser from 'phaser';
+
 import StoryChapterSelect from './scenes/storyChapterSelect';
 
 const phaserGame = {
