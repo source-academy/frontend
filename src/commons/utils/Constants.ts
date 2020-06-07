@@ -2,7 +2,6 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
-const luminusClientID = process.env.REACT_APP_LUMINUS_CLIENT_ID;
 const sourceAcademyVersion = process.env.REACT_APP_VERSION;
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const useBackend =
@@ -20,6 +19,23 @@ const moduleBackendUrl =
   process.env.MODULE_BACKEND_URL === undefined || process.env.MODULE_BACKEND_URL === ''
     ? 'modules'
     : process.env.MODULE_BACKEND_URL;
+
+const authProviders: Map<
+  string,
+  { name: string; endpoint: string; isDefault: boolean }
+> = new Map();
+
+for (let i = 1; ; ++i) {
+  const id = process.env[`REACT_APP_OAUTH2_PROVIDER${i}`];
+  if (!id) {
+    break;
+  }
+
+  const name = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_NAME`] || 'Unnamed provider';
+  const endpoint = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_ENDPOINT`] || '';
+
+  authProviders.set(id, { name, endpoint, isDefault: i === 1 });
+}
 
 export enum Links {
   githubIssues = 'https://github.com/source-academy/cadet-frontend/issues',
@@ -51,7 +67,6 @@ export enum Links {
 }
 
 const Constants = {
-  luminusClientID,
   sourceAcademyVersion,
   backendUrl,
   useBackend,
@@ -61,7 +76,8 @@ const Constants = {
   maxBrowseIndex,
   urlShortener,
   urlShortenerSignature,
-  moduleBackendUrl
+  moduleBackendUrl,
+  authProviders
 };
 
 export default Constants;

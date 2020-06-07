@@ -51,9 +51,19 @@ type Tokens = {
 /**
  * POST /auth
  */
-export async function postAuth(luminusCode: string): Promise<Tokens | null> {
+export async function postAuth(
+  code: string,
+  providerId: string,
+  clientId?: string,
+  redirectUri?: string
+): Promise<Tokens | null> {
   const resp = await request('auth', 'POST', {
-    body: { login: { luminus_code: luminusCode } },
+    body: {
+      code,
+      provider: providerId,
+      ...(clientId ? { client_id: clientId } : {}),
+      ...(redirectUri ? { redirect_uri: redirectUri } : {})
+    },
     errorMessage: 'Could not login. Please contact the module administrator.'
   });
   if (!resp) {

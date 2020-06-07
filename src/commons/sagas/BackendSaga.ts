@@ -41,6 +41,7 @@ import {
   UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
+import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
@@ -70,8 +71,18 @@ import {
 
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
-    const luminusCode = action.payload;
-    const tokens = yield call(postAuth, luminusCode);
+    const { code, providerId: payloadProviderId } = action.payload;
+    const providerId = payloadProviderId || (getDefaultProvider() || [null])[0];
+    if (!providerId) {
+      yield call(
+        showWarningMessage,
+        'Could not log in; invalid provider or no providers configured.'
+      );
+      return yield history.push('/');
+    }
+    const clientId = getClientId(providerId);
+    const redirectUrl = computeRedirectUri(providerId);
+    const tokens = yield call(postAuth, code, providerId, clientId, redirectUrl);
     if (!tokens) {
       return yield history.push('/');
     }

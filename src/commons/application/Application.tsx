@@ -12,6 +12,7 @@ import NotFound from '../../pages/notFound/NotFound';
 import Playground from '../../pages/playground/PlaygroundContainer';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
+import Constants from '../utils/Constants';
 import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
@@ -88,9 +89,20 @@ const toAcademy = (props: ApplicationProps) =>
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
-const toLogin = (props: ApplicationProps) => () => (
-  <Login luminusCode={parseQuery(props.location.search).code} />
-);
+const toLogin = (props: ApplicationProps) => () => {
+  const qstr = parseQuery(props.location.search);
+
+  return (
+    <Login
+      code={qstr.code}
+      providerId={qstr.provider}
+      providers={[...Constants.authProviders.entries()].map(([id, { name }]) => ({
+        id,
+        name
+      }))}
+    />
+  );
+};
 
 const parsePlayground = (props: ApplicationProps) => {
   const prgrm = parsePrgrm(props);
