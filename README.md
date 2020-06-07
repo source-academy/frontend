@@ -20,13 +20,33 @@ The Source Academy is a gamified platform designed to teach students coding whil
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Copy the `.env.example` file as `.env` and set the necessary variables (refer below for more information)
-5. Run `yarn run start` to start the server at `localhost:8075`.
+5. Run `yarn run start` to start the server at `localhost:8000`.
 
 ### Setting up your environment
 
-The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set-up:
+The project requires some environment variables to be set to work properly. In the `.env` file a few things need to be set up:
 
-1. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet). Take note that CORs has to be handled if running with the backend
+#### Backend configuration
+
+1. **REACT_APP_BACKEND_URL**: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
+1. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+
+#### URL shortener configuration
+
+Unless you need to use the shortener locally, you can leave these values blank. Otherwise, ask your backend engineer.
+
+1. **REACT_APP_URL_SHORTENER_SIGNATURE**: The API key for the YOURLS URL shortener.
+1. **REACT_APP_URL_SHORTENER_DOMAIN**: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
+
+#### Authentication provider configuration
+
+If you are testing with a local backend, the values in `.env.example` match the default development configuration of the backend. Otherwise, your backend engineer should provide you with the configuration for the staging and/or production backend.
+
+**n** is an integer starting from 1. The numbers must be consecutive i.e. if you have 5 authentication providers, the numbers must be 1, 2, 3, 4, and 5.
+
+1. **REACT_APP_OAUTH2_PROVIDERn**: The provider ID of the nth authentication provider. This must match the backend configuration.
+1. **REACT_APP_OAUTH2_PROVIDERn_NAME**: The name of the nth authentication provider shown on the login screen.
+1. **REACT_APP_OAUTH2_PROVIDERn_ENDPOINT**: The authentication endpoint of the nth authentication provider.
 
 ## Development
 
