@@ -167,4 +167,4 @@ const SideContent = (props: SideContentProps) => {
   );
 };
 
-export default React.memo(SideContent);
+export default SideContent;
