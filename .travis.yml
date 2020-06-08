@@ -1,6 +1,9 @@
+dist: bionic
 language: node_js
+cache:
+  yarn: true
 node_js:
-  - 10
+  - 14
 branches:
   except:
     - /^no-ci.*$/
@@ -9,6 +12,6 @@ before_install:
   - export NODE_OPTIONS=--max_old_space_size=8192
 script:
   - yarn run format:ci
-  - yarn run build
   - yarn run eslint
+  - travis_wait 30 yarn run build
   - yarn run test-coveralls
