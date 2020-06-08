@@ -1,5 +1,6 @@
 export enum GameMode {
   Move = 'Move',
   Explore = 'Explore',
-  Talk = 'Talk'
+  Talk = 'Talk',
+  Menu = 'Menu'
 }

@@ -7,19 +7,27 @@ import {
   modeButtonYPos,
   modeButtonStyle
 } from 'src/features/game/modeMenu/GameModeMenuTypes';
+import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 
 class GameModeMenuManager {
-  static processModeMenus(chapter: GameChapter): Map<string, GameModeMenu> {
+  static processModeMenus(
+    gameManager: GameManager,
+    chapter: GameChapter
+  ): Map<string, GameModeMenu> {
     const mapModeMenus = new Map<string, GameModeMenu>();
     chapter.map.getLocations().forEach(location => {
       const modeMenus = new GameModeMenu();
 
       if (location.modes) {
-        location.modes.forEach(mode => GameModeMenuManager.addModeButton(modeMenus, mode));
+        location.modes.forEach(mode => {
+          const callback = this.getModeButtonCallback(gameManager, mode);
+          GameModeMenuManager.addModeButton(modeMenus, mode, callback);
+        });
       }
 
       // By default, we include Move mode
-      GameModeMenuManager.addModeButton(modeMenus, GameMode.Move);
+      const moveCallback = this.getModeButtonCallback(gameManager, GameMode.Move);
+      GameModeMenuManager.addModeButton(modeMenus, GameMode.Move, moveCallback);
 
       mapModeMenus.set(location.name, modeMenus);
     });
@@ -27,8 +35,11 @@ class GameModeMenuManager {
     return mapModeMenus;
   }
 
-  // TODO: Consider functional form, no mutation
-  static addModeButton(modeMenu: GameModeMenu, modeName: GameMode) {
+  static getModeButtonCallback(gameManager: GameManager, mode: GameMode) {
+    return () => gameManager.changeModeTo(mode);
+  }
+
+  static addModeButton(modeMenu: GameModeMenu, modeName: GameMode, callback: any) {
     const newNumberOfButtons = modeMenu.modeButtons.length + 1;
     const partitionSize = screenSize.x / newNumberOfButtons;
 
@@ -47,8 +58,11 @@ class GameModeMenuManager {
       style: modeButtonStyle,
       assetKey: modeButton.key,
       assetXPos: newXPos + modeMenu.modeButtons.length * partitionSize,
-      assetYPos: modeButtonYPos
+      assetYPos: modeButtonYPos,
+      isInteractive: true,
+      onInteract: callback
     };
+
     modeMenu.modeButtons.push(newModeButton);
   }
 }
