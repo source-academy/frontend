@@ -10,12 +10,12 @@ import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
   let workspaces = useSelector((state: OverallState) => state.workspaces);
-  
+
   // Require workspace location
   if (!props.workspaceLocation) {
     return <></>;
   }
-  
+
   let replOutput = 'Your output is ';
   const debuggerContext = workspaces[props.workspaceLocation].debuggerContext;
 
@@ -38,7 +38,10 @@ const toSpawnSampleTab = (debuggerContext: DebuggerContext) => {
   if (debuggerContext.result.value === 'unsample') {
     return false;
   }
-  return isCurrentlyActive('Sample', debuggerContext.workspaceLocation) || debuggerContext.result.value === 'sample';
+  return (
+    isCurrentlyActive('Sample', debuggerContext.workspaceLocation) ||
+    debuggerContext.result.value === 'sample'
+  );
 };
 
 export const sampleTab: SideContentTab = {

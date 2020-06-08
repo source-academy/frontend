@@ -103,14 +103,15 @@ const SideContent = (props: SideContentProps) => {
       </Tooltip>
     );
 
-    const tabBody: JSX.Element = workspaceLocation ?
-      {
-        ...tab.body,
-        props: {
-          ...tab.body.props,
-          workspaceLocation
+    const tabBody: JSX.Element = workspaceLocation
+      ? {
+          ...tab.body,
+          props: {
+            ...tab.body.props,
+            workspaceLocation
+          }
         }
-      } : tab.body;
+      : tab.body;
     const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
 
     return (
