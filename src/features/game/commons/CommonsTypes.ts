@@ -11,3 +11,10 @@ export type GameImage = {
     imageWidth: number;
     imageHeight: number;
 }
+
+export type GameButton = {
+    text?: string;
+    assetKey: string;
+    assetXPos: number;
+    assetYPos: number;
+}

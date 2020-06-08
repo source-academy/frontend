@@ -2,13 +2,15 @@ import { GameImage, screenSize } from '../commons/CommonsTypes';
 import { GameMode } from '../mode/GameModeTypes';
 
 export type GameLocation = {
-    key: string,
-    backgroundImage: GameImage,
-    mode?: GameMode[]
+    name: string,
+    assetKey: string,
+    assetXPos: number,
+    assetYPos: number,
+    modes?: GameMode[]
 }
 
 export const crashSiteImg: GameImage = {
-    key: 'Crash Site',
+    key: 'crash-site',
     path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/crashSite/normal.png',
     xPos: screenSize.x/2,
     yPos: screenSize.y/2,
@@ -17,7 +19,7 @@ export const crashSiteImg: GameImage = {
 };
 
 export const classRoomImg: GameImage = {
-    key: 'Class Room',
+    key: 'class-room',
     path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/classOn.png',
     xPos: screenSize.x/2,
     yPos: screenSize.y/2,
@@ -26,7 +28,7 @@ export const classRoomImg: GameImage = {
 };
 
 export const emergencyImg: GameImage = {
-    key: 'Emergency',
+    key: 'emergency',
     path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/emergency.png',
     xPos: screenSize.x/2,
     yPos: screenSize.y/2,
@@ -35,7 +37,7 @@ export const emergencyImg: GameImage = {
 };
 
 export const hallwayImg: GameImage = {
-    key: 'Hallway',
+    key: 'hallway',
     path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/hallway/normal.png',
     xPos: screenSize.x/2,
     yPos: screenSize.y/2,
@@ -44,7 +46,7 @@ export const hallwayImg: GameImage = {
 };
 
 export const studentRoomImg: GameImage = {
-    key: 'Student Room',
+    key: 'student-room',
     path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/yourRoom-dim/normal.png',
     xPos: screenSize.x/2,
     yPos: screenSize.y/2,
