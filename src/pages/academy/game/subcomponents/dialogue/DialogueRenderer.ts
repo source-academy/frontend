@@ -2,8 +2,14 @@ import { PhaserScene, PhaserImage } from '../utils/extendedPhaser';
 import { Color, hex } from '../utils/styles';
 import { Constants as c, Keys as k } from '../utils/constants';
 import { dialogueGenerator } from './DialogueManager';
-import { DialogueObject, SpeakerDetail, GameObject } from './DialogueTypes';
+import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { avatarKey } from './DialogueHelper';
+import { fadeIn, fadeAndDestroy } from '../utils/effects';
+
+type Rectangle = Phaser.GameObjects.Rectangle;
+type DialogueGenerator = () => [SpeakerDetail | null, DialogueString];
+type LineChangeFn = (line: string) => void;
+type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null) => void;
 
 const margin = 20;
 const xOffset = margin;
@@ -27,16 +33,27 @@ const typeWriterText = {
 type Deleter = () => void;
 
 export function renderDialogue(scene: PhaserScene, dialogueObject: DialogueObject) {
-  const dialogueBox = drawDialogueBox(scene);
+  // const container = new PhaserContainer(scene, 0, 0);
+  const dialogueBox = drawDialogueBox(scene).setInteractive({ useHandCursor: true });
   const generateDialogue = dialogueGenerator(dialogueObject);
   const changeSpeaker = avatarManager(scene);
   const changeLine = typeWriterManager(scene);
-  dialogueBox.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
-    const [speakerDetail, line] = generateDialogue();
-    changeLine(line);
-    changeSpeaker(speakerDetail);
-    if (!line) fadeAndDestroy(scene, dialogueBox);
-  });
+  dialogueBox.on('pointerdown', () =>
+    updateDialogue(scene, dialogueBox, generateDialogue, changeSpeaker, changeLine)
+  );
+}
+
+function updateDialogue(
+  scene: PhaserScene,
+  dialogueBox: Rectangle,
+  generateDialogue: DialogueGenerator,
+  changeSpeaker: SpeakerChangeFn,
+  changeLine: LineChangeFn
+) {
+  const [speakerDetail, line] = generateDialogue();
+  changeLine(line);
+  changeSpeaker(speakerDetail);
+  if (!line) fadeAndDestroy(scene, dialogueBox);
 }
 
 function typeWriterManager(scene: PhaserScene) {
@@ -56,11 +73,6 @@ function avatarManager(scene: PhaserScene) {
     avatar = addAvatar(scene, speakerDetail);
   };
   return changeSpeaker;
-}
-
-function fadeAndDestroy(scene: PhaserScene, object: GameObject) {
-  scene.add.tween(fadeOut([object], c.fadeDuration));
-  setTimeout(() => object.destroy(), c.fadeDuration);
 }
 
 function addAvatar(scene: PhaserScene, speakerDetail: SpeakerDetail) {
@@ -100,14 +112,3 @@ function createTypeWriter(scene: PhaserScene, line: string = ' '): Deleter {
 
   return typeWriterDeleter;
 }
-
-const fadeOut = (targets: GameObject[], duration: number) => ({
-  alpha: 0,
-  targets,
-  duration
-});
-const fadeIn = (targets: GameObject[], duration: number) => ({
-  alpha: 1,
-  targets,
-  duration
-});

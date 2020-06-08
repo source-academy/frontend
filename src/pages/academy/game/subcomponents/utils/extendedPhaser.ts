@@ -21,7 +21,7 @@ export class PhaserImage extends Phaser.GameObjects.Image {
   }
 }
 
-class PhaserContainer extends Phaser.GameObjects.Container {
+export class PhaserContainer extends Phaser.GameObjects.Container {
   resize(width: number, height: number) {
     this.list.map(child => (child as any).setSize(width, height));
     this.setSize(width, height || width);
