@@ -43,21 +43,22 @@ class GameManager extends Phaser.Scene {
   }
 
   private renderLocation(map: GameMap, location: GameLocation) {
-    
     // Render background of the location
     const asset = map.getLocationAsset(location);
     if (asset) {
       this.add.image(location.assetXPos, location.assetYPos, location.assetKey);
     }
-    
+
     // Render mode menu
     const modeUI = this.locationModeMenus.get(location.name);
     if (modeUI) {
       modeUI.getModeButtons().forEach(button => {
         this.add.image(button.assetXPos, button.assetYPos, button.assetKey);
-        
+
         const text = button.text ? button.text : '';
-        this.add.text(button.assetXPos, button.assetYPos, text, modeButtonStyle).setOrigin(0.5, 0.25);
+        this.add
+          .text(button.assetXPos, button.assetYPos, text, modeButtonStyle)
+          .setOrigin(0.5, 0.25);
       });
     }
   }
@@ -74,7 +75,7 @@ class GameManager extends Phaser.Scene {
     chapter.map.getLocations().forEach(location => {
       const modeMenus = new GameModeMenu();
 
-      if (location.modes) { 
+      if (location.modes) {
         location.modes.forEach(mode => modeMenus.addModeButton(mode));
       }
 
@@ -84,6 +85,5 @@ class GameManager extends Phaser.Scene {
       this.locationModeMenus.set(location.name, modeMenus);
     });
   }
-
 }
 export default GameManager;
