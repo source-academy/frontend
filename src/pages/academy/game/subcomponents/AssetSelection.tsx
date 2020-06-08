@@ -18,10 +18,11 @@ function AssetSelection({ assetPaths }: OwnProps) {
   }, [assetPaths]);
 
   const handleNodeClick = React.useCallback(
-    (nodeData: ITreeNode) => {
+    (nodeData: ITreeNode, levels: number[]) => {
       treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
+      sessionStorage.setItem('selectedAsset', getFilePath(assetTree.nodes, levels));
       setAssetTree({ ...assetTree });
     },
     [assetTree]
@@ -68,4 +69,17 @@ function listToTree(assetPaths: string[]): ITreeNode[] {
     });
   }
   return helper(assetObj);
+}
+
+function getFilePath(assetTree: ITreeNode[], levels: number[]) {
+  var filePath = '';
+  for (const [levelNumber, level] of levels.entries()) {
+    const node = assetTree[level];
+    filePath += '/' + node.label.toString();
+    if (!node.childNodes || levelNumber === levels.length - 1) {
+      return filePath;
+    }
+    assetTree = node.childNodes;
+  }
+  return '';
 }

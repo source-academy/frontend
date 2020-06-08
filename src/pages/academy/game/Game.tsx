@@ -19,8 +19,10 @@ function Game() {
           <div id="phaser-div" />
         </div>
         {true && (
-          <div className="FileMenu">
-            <AssetSelection assetPaths={assetPaths} />
+          <div className="Centered">
+            <div className="FileMenu">
+              <AssetSelection assetPaths={assetPaths} />
+            </div>
           </div>
         )}
       </>

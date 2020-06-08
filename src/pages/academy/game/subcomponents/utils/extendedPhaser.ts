@@ -1,9 +1,16 @@
 import * as Phaser from 'phaser';
 
-class PhaserImage extends Phaser.GameObjects.Image {
-  resize(width: number, height: number) {
+export class PhaserImage extends Phaser.GameObjects.Image {
+  resizeSquare(width: number, height?: number) {
     this.displayWidth = width;
     this.displayHeight = height || width;
+    return this;
+  }
+
+  resize(width: number, height?: number) {
+    const ratio = this.displayHeight / this.displayWidth;
+    this.displayWidth = width;
+    this.displayHeight = width * ratio;
     return this;
   }
 
@@ -33,11 +40,6 @@ class PhaserContainer extends Phaser.GameObjects.Container {
 }
 
 export class PhaserScene extends Phaser.Scene {
-  gameFunc: any;
-  constructor(config: any & { func: any }) {
-    super(config);
-    this.gameFunc = config.func;
-  }
   addImage(x: number, y: number, texture: string, frame?: string | number | undefined) {
     const image = new PhaserImage(this, x, y, texture, frame);
     this.add.existing(image);
@@ -48,21 +50,5 @@ export class PhaserScene extends Phaser.Scene {
     const container = new PhaserContainer(this, x, y, children);
     this.add.existing(container);
     return container;
-  }
-}
-
-export class PhaserGame extends Phaser.Game {
-  sceneAdd(
-    func: any,
-    key: string,
-    sceneConfig:
-      | Function
-      | Phaser.Scene
-      | Phaser.Types.Scenes.SettingsConfig
-      | Phaser.Types.Scenes.CreateSceneFromObjectConfig,
-    autoStart?: boolean | undefined,
-    data?: object | undefined
-  ) {
-    this.scene.add(key, sceneConfig, autoStart, { ...data, func });
   }
 }

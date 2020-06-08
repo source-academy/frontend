@@ -1,19 +1,17 @@
 import { Constants as c } from '../utils/constants';
 import { PhaserScene } from '../utils/extendedPhaser';
 
-class StoryChapterSelect extends PhaserScene {
-  func: any;
+type Props = {};
+class Scratch extends PhaserScene {
   constructor() {
-    super('storyChapterSelect');
+    super('StoryChapterSelect');
   }
 
-  public init(data: any & { func: any }) {
-    data.func();
-  }
+  public init(data: Props) {}
 
   public preload() {
     this.load.text('assets', c.repoAssetsFolder + 'assets.txt');
-    this.load.on('filecomplete', (key: string, file: File) => this.loadAssets(key, file), this);
+    this.load.on('filecomplete', (key: string, file: File) => this.loadAssets(key, file));
 
     this.load.html('assetList', c.repoAssetsFolder + 'shops.html');
   }
@@ -34,4 +32,4 @@ class StoryChapterSelect extends PhaserScene {
     this.addImage(c.centerX, c.centerY, 'bg').resize(c.screenWidth, c.screenHeight);
   }
 }
-export default StoryChapterSelect;
+export default Scratch;
