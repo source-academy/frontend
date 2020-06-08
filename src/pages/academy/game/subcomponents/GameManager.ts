@@ -2,9 +2,9 @@ import LocationSelectChapter from './scenes/LocationSelectChapter';
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
-import GameModeMenu from 'src/features/game/UI/GameModeMenu';
-import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import modeUIAssets, { modeButtonStyle } from 'src/features/game/UI/GameModeMenuTypes';
+import GameModeMenu from 'src/features/game/modeMenu/GameModeMenu';
+import modeUIAssets from 'src/features/game/modeMenu/GameModeMenuTypes';
+import GameModeMenuManager from 'src/features/game/modeMenu/GameModeMenuManager';
 
 class GameManager extends Phaser.Scene {
   private locationModeMenus: Map<string, GameModeMenu>;
@@ -18,8 +18,7 @@ class GameManager extends Phaser.Scene {
   public preload() {
     this.preloadLocationsAssets(LocationSelectChapter);
     this.preloadUIAssets();
-
-    this.processModeMenus(LocationSelectChapter);
+    this.locationModeMenus = GameModeMenuManager.processModeMenus(LocationSelectChapter);
   }
 
   public create() {
@@ -52,14 +51,7 @@ class GameManager extends Phaser.Scene {
     // Render mode menu
     const modeUI = this.locationModeMenus.get(location.name);
     if (modeUI) {
-      modeUI.getModeButtons().forEach(button => {
-        this.add.image(button.assetXPos, button.assetYPos, button.assetKey);
-
-        const text = button.text ? button.text : '';
-        this.add
-          .text(button.assetXPos, button.assetYPos, text, modeButtonStyle)
-          .setOrigin(0.5, 0.25);
-      });
+      modeUI.renderUI(this);
     }
   }
 
@@ -70,20 +62,6 @@ class GameManager extends Phaser.Scene {
   private preloadUIAssets() {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
   }
-
-  private processModeMenus(chapter: GameChapter) {
-    chapter.map.getLocations().forEach(location => {
-      const modeMenus = new GameModeMenu();
-
-      if (location.modes) {
-        location.modes.forEach(mode => modeMenus.addModeButton(mode));
-      }
-
-      // By default, we include Move mode
-      modeMenus.addModeButton(GameMode.Move);
-
-      this.locationModeMenus.set(location.name, modeMenus);
-    });
-  }
 }
+
 export default GameManager;

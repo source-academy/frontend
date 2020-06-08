@@ -1,5 +1,7 @@
 import { GameImage, screenSize } from '../commons/CommonsTypes';
 
+export const modeButtonYPos = screenSize.y * 0.8;
+
 export const modeButtonStyle = {
   fontFamily: 'Helvetica',
   fontSize: '45px',

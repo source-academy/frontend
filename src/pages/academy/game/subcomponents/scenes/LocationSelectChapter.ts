@@ -21,6 +21,7 @@ const locationImages: GameImage[] = [
   hallwayImg,
   studentRoomImg
 ];
+
 const locationNames: string[] = [
   'Crash Site',
   'Class Room',
@@ -28,6 +29,7 @@ const locationNames: string[] = [
   'Hallway',
   'Student Room'
 ];
+
 const locationModes: GameMode[][] = [
   [GameMode.Talk],
   [GameMode.Explore, GameMode.Talk],
@@ -35,6 +37,7 @@ const locationModes: GameMode[][] = [
   [],
   [GameMode.Explore]
 ];
+
 const locations: GameLocation[] = new Array<GameLocation>();
 for (let i = 0; i < locationImages.length; i++) {
   locations.push({

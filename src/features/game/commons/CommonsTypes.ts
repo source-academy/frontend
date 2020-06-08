@@ -12,9 +12,24 @@ export type GameImage = {
   imageHeight: number;
 };
 
-export type GameButton = {
-  text?: string;
+export type GameSprite = {
   assetKey: string;
   assetXPos: number;
   assetYPos: number;
 };
+
+export type GameText = {
+  text?: string;
+  style?: any;
+};
+
+export type GameButton = GameText & GameSprite;
+
+export interface IGameInteractive {
+  isInteractive: boolean;
+  onInteract: () => void;
+}
+
+export interface IGameUI {
+  renderUI: (scene: Phaser.Scene) => void;
+}
