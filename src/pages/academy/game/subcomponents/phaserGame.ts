@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
-import StoryChapterSelect from './scenes/storyChapterSelect';
+
+import GameManager from './GameManager';
 
 const phaserGame = {
   height: 1080,
@@ -10,7 +11,7 @@ const phaserGame = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [StoryChapterSelect] /* Replace with scene objects that you imported */,
+  scene: [GameManager],
   type: Phaser.CANVAS,
   width: 1920
 };
