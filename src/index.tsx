@@ -10,7 +10,7 @@ import Constants, { Links } from 'src/commons/utils/Constants';
 import { history } from 'src/commons/utils/HistoryHelper';
 import registerServiceWorker from 'src/commons/utils/RegisterServiceWorker';
 import { store } from 'src/pages/createStore';
-import 'src/styles/index.css';
+import 'src/styles/index.scss';
 
 const rootContainer = document.getElementById('root') as HTMLElement;
 (window as any).__REDUX_STORE__ = store; // need this for slang's display
