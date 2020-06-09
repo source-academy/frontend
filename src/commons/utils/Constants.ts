@@ -2,13 +2,15 @@ import * as dotenv from 'dotenv';
 
 dotenv.config();
 
+function isTrue(value?: string): boolean {
+  return typeof value === 'string' && value.toUpperCase() === 'TRUE';
+}
+
+const isTest = process.env.NODE_ENV === 'test';
+
 const sourceAcademyVersion = process.env.REACT_APP_VERSION;
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const useBackend =
-  process.env.NODE_ENV !== 'test' &&
-  process.env.REACT_APP_USE_BACKEND !== undefined &&
-  process.env.REACT_APP_USE_BACKEND !== '' &&
-  process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
+const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
 const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
@@ -20,6 +22,7 @@ const moduleBackendUrl =
   process.env.REACT_APP_MODULE_BACKEND_URL === ''
     ? 'modules'
     : process.env.REACT_APP_MODULE_BACKEND_URL;
+const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
 
 const authProviders: Map<
   string,
@@ -78,7 +81,8 @@ const Constants = {
   urlShortener,
   urlShortenerSignature,
   moduleBackendUrl,
-  authProviders
+  authProviders,
+  playgroundOnly
 };
 
 export default Constants;
