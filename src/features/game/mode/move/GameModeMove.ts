@@ -2,6 +2,7 @@ import { IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { GameButton } from 'src/features/game/commons/CommonsTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import { defaultLocationImg, moveEntryTweenProps, moveExitTweenProps } from './GameModeMoveTypes';
+import { sleep } from 'src/features/game/util/GameUtils';
 
 class GameModeMove implements IGameUI {
   public currentLocationSprite: GameSprite;
@@ -57,7 +58,7 @@ class GameModeMove implements IGameUI {
     return moveMenuContainer;
   }
 
-  public activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): void {
+  public async activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, -screenSize.y);
@@ -68,7 +69,7 @@ class GameModeMove implements IGameUI {
     });
   }
 
-  public deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): void {
+  public async deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({
@@ -76,6 +77,7 @@ class GameModeMove implements IGameUI {
       ...moveExitTweenProps
     });
 
+    await sleep(500);
     container.setVisible(false);
     container.setActive(false);
   }

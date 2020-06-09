@@ -9,7 +9,7 @@ export const menuEntryTweenProps = {
 };
 
 export const menuExitTweenProps = {
-  y: -screenSize.y * 0.4,
+  y: screenSize.y * 0.4,
   duration: 500,
   ease: 'Power2'
 };

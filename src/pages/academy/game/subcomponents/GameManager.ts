@@ -80,7 +80,7 @@ class GameManager extends Phaser.Scene {
     this.getUIContainers(location);
 
     // By default, activate Menu mode
-    this.changeModeTo(GameMode.Menu, true);
+    this.changeModeTo(GameMode.Menu, true, true);
 
     // Update
     this.currentLocationName = location.name;
@@ -138,7 +138,7 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  public changeModeTo(newMode: GameMode, refresh?: boolean) {
+  public changeModeTo(newMode: GameMode, refresh?: boolean, skipDeactivate?: boolean) {
     if (!refresh && this.currentActiveMode === newMode) {
       return;
     }
@@ -147,11 +147,13 @@ class GameManager extends Phaser.Scene {
     const locationMode = this.getLocationMode(newMode);
 
     if (locationMode && modeContainer) {
-      // Deactivate previous UI
-      const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
-      const prevLocationMode = this.getLocationMode(this.currentActiveMode);
-      if (prevLocationMode && prevContainer) {
-        prevLocationMode.deactivateUI(this, prevContainer);
+      if (!skipDeactivate) {
+        // Deactivate previous UI
+        const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
+        const prevLocationMode = this.getLocationMode(this.currentActiveMode);
+        if (prevLocationMode && prevContainer) {
+          prevLocationMode.deactivateUI(this, prevContainer);
+        }
       }
 
       // Activate new UI

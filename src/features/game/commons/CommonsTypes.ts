@@ -34,8 +34,8 @@ export interface IGameInteractive {
 
 export interface IGameUI {
   getUIContainer: (gameManager: GameManager) => Phaser.GameObjects.Container;
-  activateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => void;
-  deactivateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => void;
+  activateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => Promise<void>;
+  deactivateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => Promise<void>;
 }
 
 export const shortButton: GameImage = {
