@@ -16,7 +16,7 @@ import Constants from '../utils/Constants';
 import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
-import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
+import { ExternalLibraryName } from './types/ExternalTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -146,9 +146,7 @@ const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
   const ext = parseQuery(props.location.hash).ext || '';
-  return Object.values(ExternalLibraryNames).includes(ext)
-    ? (ext as ExternalLibraryNames)
-    : ExternalLibraryNames.NONE;
+  return Object.values(ExternalLibraryName).find(v => v === ext) || ExternalLibraryName.NONE;
 };
 
 const parseExecTime = (props: RouteComponentProps<{}>) => {

@@ -2,10 +2,7 @@ import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import {
-  ExternalLibraryName,
-  ExternalLibraryNames
-} from '../../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
@@ -27,7 +24,7 @@ const baseProps = {
   sideContentHeight: 40,
   sourceChapter: 2,
   sourceVariant: 'default' as Variant,
-  externalLibraryName: ExternalLibraryNames.NONE,
+  externalLibraryName: ExternalLibraryName.NONE,
   output: [],
   replValue: '',
   websocketStatus: 0,
