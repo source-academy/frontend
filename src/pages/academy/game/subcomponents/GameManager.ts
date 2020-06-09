@@ -88,11 +88,8 @@ class GameManager extends Phaser.Scene {
 
   public changeLocationTo(locationName: string): void {
     // Deactive current UI
-
     // Black fade in
-
     // this.renderLocation()
-
     // Black fade out
   }
 

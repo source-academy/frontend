@@ -1,9 +1,14 @@
 import { GameImage, screenSize, longButton } from '../../commons/CommonsTypes';
 
 export const moveButtonXPos = screenSize.x * 0.75;
-export const previewXPos = screenSize.x * 0.30;
+export const previewXPos = screenSize.x * 0.3;
 export const previewScale = 0.8;
-export const cropPos = [530 * previewScale, 225 * previewScale, 905 / previewScale, 605 / previewScale];
+export const cropPos = [
+  530 * previewScale,
+  225 * previewScale,
+  905 / previewScale,
+  605 / previewScale
+];
 
 export const moveEntryTweenProps = {
   y: -screenSize.y * 0.01,

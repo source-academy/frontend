@@ -60,7 +60,10 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
-  public async activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, screenSize.y);
@@ -71,9 +74,12 @@ class GameModeMenu implements IGameUI {
     });
   }
 
-  public async deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     // tslint:disable-next-line
-    console.log("Deactivating: Mode Menu");
+    console.log('Deactivating: Mode Menu');
 
     container.setPosition(container.x, 0);
 

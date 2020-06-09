@@ -87,21 +87,18 @@ class GameModeMove implements IGameUI {
           Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
           locationButton.onInteract
         );
-        buttonSprite.addListener(
-          Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
-          () => {
-            // Preview Location
-            const assetKey = this.locationAssetKeys.get(text);
-            if (!assetKey || this.currentLocationAssetKey === assetKey) {
-              return;
-            }
-            previewFill
-              .setTexture(assetKey)
-              .setScale(previewScale)
-              .setCrop(cropPos[0], cropPos[1], cropPos[2], cropPos[3]);
-            this.currentLocationAssetKey = assetKey;
+        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+          // Preview Location
+          const assetKey = this.locationAssetKeys.get(text);
+          if (!assetKey || this.currentLocationAssetKey === assetKey) {
+            return;
           }
-        );
+          previewFill
+            .setTexture(assetKey)
+            .setScale(previewScale)
+            .setCrop(cropPos[0], cropPos[1], cropPos[2], cropPos[3]);
+          this.currentLocationAssetKey = assetKey;
+        });
       }
 
       moveMenuContainer.add(buttonSprite);
@@ -111,7 +108,10 @@ class GameModeMove implements IGameUI {
     return moveMenuContainer;
   }
 
-  public async activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, -screenSize.y);
@@ -122,7 +122,10 @@ class GameModeMove implements IGameUI {
     });
   }
 
-  public async deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({
