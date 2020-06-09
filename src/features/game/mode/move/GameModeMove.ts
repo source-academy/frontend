@@ -2,14 +2,16 @@ import { IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { GameButton } from 'src/features/game/commons/CommonsTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import {
-  cropPos,
   defaultLocationImg,
   locationPreviewFrame,
   locationPreviewFill,
   moveEntryTweenProps,
   moveExitTweenProps,
+  previewFrameXPos,
   previewXPos,
-  previewScale
+  previewYPos,
+  previewHeight,
+  previewWidth
 } from './GameModeMoveTypes';
 import { sleep } from 'src/features/game/util/GameUtils';
 
@@ -45,7 +47,7 @@ class GameModeMove implements IGameUI {
 
     const previewFrame = new Phaser.GameObjects.Image(
       gameManager,
-      previewXPos,
+      previewFrameXPos,
       this.previewFrame.assetYPos,
       this.previewFrame.assetKey
     );
@@ -53,14 +55,12 @@ class GameModeMove implements IGameUI {
 
     const previewFill = new Phaser.GameObjects.Sprite(
       gameManager,
-      previewXPos,
+      this.previewFill.assetXPos,
       this.previewFill.assetYPos,
       this.previewFill.assetKey
     );
-    previewFill
-      .setTexture(this.currentLocationAssetKey)
-      .setScale(previewScale)
-      .setCrop(cropPos[0], cropPos[1], cropPos[2], cropPos[3]);
+
+    this.setPreview(previewFill, this.currentLocationAssetKey);
     moveMenuContainer.add(previewFill);
 
     this.possibleLocations.forEach(locationButton => {
@@ -88,16 +88,16 @@ class GameModeMove implements IGameUI {
           locationButton.onInteract
         );
         buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-          // Preview Location
+          // Preview location
           const assetKey = this.locationAssetKeys.get(text);
           if (!assetKey || this.currentLocationAssetKey === assetKey) {
             return;
           }
-          previewFill
-            .setTexture(assetKey)
-            .setScale(previewScale)
-            .setCrop(cropPos[0], cropPos[1], cropPos[2], cropPos[3]);
-          this.currentLocationAssetKey = assetKey;
+          this.setPreview(previewFill, assetKey);
+        });
+        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+          // Reset preview
+          this.setPreview(previewFill, defaultLocationImg.key);
         });
       }
 
@@ -106,6 +106,16 @@ class GameModeMove implements IGameUI {
     });
 
     return moveMenuContainer;
+  }
+
+  private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
+    sprite
+      .setTexture(assetKey)
+      .setDisplaySize(previewWidth, previewHeight)
+      .setPosition(previewXPos, previewYPos);
+
+    // Update
+    this.currentLocationAssetKey = assetKey;
   }
 
   public async activateUI(

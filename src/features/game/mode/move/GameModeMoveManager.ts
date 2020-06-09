@@ -27,8 +27,7 @@ class GameModeMoveManager {
         const location = chapter.map.getLocation(locationName);
         if (location) {
           GameModeMoveManager.addMoveOptionButton(moveMenu, location, () => {
-            // tslint:disable-next-line
-            console.log('Moving to ', locationName);
+            gameManager.changeLocationTo(locationName);
           });
           moveMenu.locationAssetKeys.set(locationName, location.assetKey);
         }

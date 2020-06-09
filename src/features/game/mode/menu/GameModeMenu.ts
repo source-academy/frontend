@@ -78,9 +78,6 @@ class GameModeMenu implements IGameUI {
     gameManager: GameManager,
     container: Phaser.GameObjects.Container
   ): Promise<void> {
-    // tslint:disable-next-line
-    console.log('Deactivating: Mode Menu');
-
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({

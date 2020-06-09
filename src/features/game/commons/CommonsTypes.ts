@@ -58,3 +58,12 @@ export const longButton: GameImage = {
   imageWidth: screenSize.x,
   imageHeight: screenSize.y
 };
+
+export const blackScreen: GameImage = {
+  key: 'black-screen',
+  path: '../assets/blackScreen.png',
+  xPos: screenSize.x / 2,
+  yPos: screenSize.y / 2,
+  imageWidth: screenSize.x,
+  imageHeight: screenSize.y
+};
