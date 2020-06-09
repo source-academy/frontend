@@ -1,6 +1,6 @@
-import { GameObject } from './types';
 import { Constants as c } from './constants';
-import { PhaserScene } from './extendedPhaser';
+
+type GameObject = Phaser.GameObjects.GameObject | Phaser.GameObjects.Text;
 
 export const fadeOut = (targets: GameObject[], duration: number) => ({
   alpha: 0,
@@ -13,7 +13,7 @@ export const fadeIn = (targets: GameObject[], duration: number) => ({
   duration
 });
 
-export function fadeAndDestroy(scene: PhaserScene, object: GameObject) {
+export function fadeAndDestroy(scene: Phaser.Scene, object: GameObject) {
   scene.add.tween(fadeOut([object], c.fadeDuration));
   setTimeout(() => object.destroy(), c.fadeDuration);
 }

@@ -1,5 +1,3 @@
-import { PhaserScene } from '../utils/extendedPhaser';
-
 type ColorString = string;
 
 export const Color = {
@@ -30,7 +28,7 @@ export const funText = (fill: ColorString, size = 32) => ({
 });
 
 export function addText(
-  scene: PhaserScene,
+  scene: Phaser.Scene,
   x: number,
   y: number,
   message: string,
@@ -59,7 +57,7 @@ const buttonH = 70;
 type ButtonConfig = { x: number; y: number; fontSize?: number };
 
 export function addButton(
-  scene: PhaserScene,
+  scene: Phaser.Scene,
   message: string,
   callback: () => void,
   { x, y, fontSize }: ButtonConfig

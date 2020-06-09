@@ -18,7 +18,7 @@ function Game() {
         <div id="game-display">
           <div id="phaser-div" />
         </div>
-        {true && (
+        {false && (
           <div className="Centered">
             <div className="FileMenu">
               <AssetSelection assetPaths={assetPaths} />

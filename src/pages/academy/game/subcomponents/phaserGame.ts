@@ -52,6 +52,7 @@ Neat! Better start unpacking and settling in!
 `;
 
 const config = {
+  debug: true,
   type: Phaser.CANVAS,
   width: c.screenWidth,
   height: c.screenHeight,

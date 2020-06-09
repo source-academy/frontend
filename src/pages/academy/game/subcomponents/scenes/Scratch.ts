@@ -1,8 +1,8 @@
 import { Constants as c } from '../utils/constants';
-import { PhaserScene } from '../utils/extendedPhaser';
+import { resize } from '../utils/spriteUtils';
 
 type Props = {};
-class Scratch extends PhaserScene {
+class Scratch extends Phaser.Scene {
   constructor() {
     super('StoryChapterSelect');
   }
@@ -29,7 +29,8 @@ class Scratch extends PhaserScene {
 
   public create() {
     this.add.dom(0, 0).createFromCache('assetList');
-    this.addImage(c.centerX, c.centerY, 'bg').resize(c.screenWidth, c.screenHeight);
+    const background = this.add.image(c.centerX, c.centerY, 'bg');
+    resize(background, c.screenWidth, c.screenHeight);
   }
 }
 export default Scratch;

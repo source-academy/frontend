@@ -20,3 +20,4 @@ export const getSpeakerDetails = (line: string): SpeakerDetail => {
   const [speaker, expression] = line.slice(1).split(', ');
   return [speaker, expression];
 };
+export const caps = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
