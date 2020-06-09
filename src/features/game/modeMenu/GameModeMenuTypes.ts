@@ -1,4 +1,4 @@
-import { GameImage, screenSize } from '../commons/CommonsTypes';
+import { GameImage, screenSize, shortButton } from '../commons/CommonsTypes';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 
@@ -29,15 +29,6 @@ export const modeMenuBanner: GameImage = {
   imageHeight: screenSize.y
 };
 
-export const modeButton: GameImage = {
-  key: 'mode-button',
-  path: '../assets/modeButton.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-const modeUIAssets = [modeMenuBanner, modeButton];
+const modeUIAssets = [modeMenuBanner, shortButton];
 
 export default modeUIAssets;

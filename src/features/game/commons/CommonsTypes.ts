@@ -37,3 +37,21 @@ export interface IGameUI {
   activateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => void;
   deactivateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => void;
 }
+
+export const shortButton: GameImage = {
+  key: 'short-button',
+  path: '../assets/shortButton.png',
+  xPos: screenSize.x / 2,
+  yPos: screenSize.y / 2,
+  imageWidth: screenSize.x,
+  imageHeight: screenSize.y
+};
+
+export const longButton: GameImage = {
+  key: 'long-button',
+  path: '../assets/longButton.png',
+  xPos: screenSize.x / 2,
+  yPos: screenSize.y / 2,
+  imageWidth: screenSize.x,
+  imageHeight: screenSize.y
+};

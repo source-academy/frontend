@@ -7,14 +7,15 @@ class GameModeMenu implements IGameUI {
   public modeButtons: Array<GameButton>;
 
   constructor() {
-    this.modeButtons = new Array<GameButton>();
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: modeMenuBanner.xPos,
       assetYPos: modeMenuBanner.yPos,
       isInteractive: false
     } as GameSprite;
+
     this.modeBanner = banner;
+    this.modeButtons = new Array<GameButton>();
   }
 
   public getUIContainer(gameManager: GameManager): Phaser.GameObjects.Container {

@@ -1,12 +1,8 @@
-import { GameButton, screenSize } from 'src/features/game/commons/CommonsTypes';
+import { GameButton, screenSize, shortButton } from 'src/features/game/commons/CommonsTypes';
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMenu from 'src/features/game/modeMenu/GameModeMenu';
-import {
-  modeButton,
-  modeButtonYPos,
-  modeButtonStyle
-} from 'src/features/game/modeMenu/GameModeMenuTypes';
+import { modeButtonYPos, modeButtonStyle } from 'src/features/game/modeMenu/GameModeMenuTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 
 class GameModeMenuManager {
@@ -45,6 +41,7 @@ class GameModeMenuManager {
 
     const newXPos = partitionSize / 2;
 
+    // Rearrange existing buttons
     for (let i = 0; i < modeMenu.modeButtons.length; i++) {
       modeMenu.modeButtons[i] = {
         ...modeMenu.modeButtons[i],
@@ -56,13 +53,14 @@ class GameModeMenuManager {
     const newModeButton: GameButton = {
       text: modeName,
       style: modeButtonStyle,
-      assetKey: modeButton.key,
+      assetKey: shortButton.key,
       assetXPos: newXPos + modeMenu.modeButtons.length * partitionSize,
       assetYPos: modeButtonYPos,
       isInteractive: true,
       onInteract: callback
     };
 
+    // Update
     modeMenu.modeButtons.push(newModeButton);
   }
 }
