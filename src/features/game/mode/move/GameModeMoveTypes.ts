@@ -1,5 +1,6 @@
 import { GameImage, screenSize, longButton } from '../../commons/CommonsTypes';
 
+export const backText = 'Back';
 export const moveButtonXPos = screenSize.x * 0.75;
 export const previewFrameXPos = screenSize.x * 0.3;
 export const previewWidth = screenSize.x * 0.473;
@@ -8,13 +9,13 @@ export const previewXPos = screenSize.x * 0.3125;
 export const previewYPos = screenSize.y * 0.515;
 
 export const moveEntryTweenProps = {
-  y: -screenSize.y * 0.01,
+  y: 0,
   duration: 800,
   ease: 'Power2'
 };
 
 export const moveExitTweenProps = {
-  y: -screenSize.y * 0.4,
+  y: -screenSize.y,
   duration: 500,
   ease: 'Power2'
 };

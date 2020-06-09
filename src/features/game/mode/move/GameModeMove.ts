@@ -104,7 +104,6 @@ class GameModeMove implements IGameUI {
       moveMenuContainer.add(buttonSprite);
       moveMenuContainer.add(locationButtonText);
     });
-
     return moveMenuContainer;
   }
 
