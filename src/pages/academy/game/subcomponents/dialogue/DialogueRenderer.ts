@@ -19,7 +19,7 @@ type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null) => void;
 
 const margin = 10;
 const xOffset = margin;
-const yOffset = 750;
+const yOffset = 730;
 const boxWidth = c.screenWidth - margin * 2;
 const boxHeight = 400;
 
@@ -32,10 +32,11 @@ const nameYOffset = yOffset + 45;
 
 const textWidth = boxWidth - textXPadding * 2;
 
-const avatarY = c.centerY + 40;
+const avatarX = 350;
+const avatarY = 900;
 
 const typeWriterText = {
-  fontFamily: 'Roboto',
+  fontFamily: 'Courier',
   fontSize: '36px',
   fill: Color.white,
   align: 'left',
@@ -49,19 +50,20 @@ const speakerTextStyle = {
 };
 
 export function createDialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
-  const container = new Container(scene, 0, 0);
+  const container = new Container(scene, 0, 0).setAlpha(0);
   const dialogueBox = createDialogueBox(scene);
   const generateDialogue = dialogueGenerator(dialogueObject);
   const [avatarSprite, speakerSprite, changeSpeaker] = avatarManager(scene);
   const [typeWriterSprite, changeLine] = typeWriterManager(scene);
+  container.add([avatarSprite, dialogueBox, speakerSprite, typeWriterSprite]);
 
   const destroyContainer = () => {
     fadeAndDestroy(scene, container);
   };
 
   const activateContainer = () => {
-    container.add([avatarSprite, dialogueBox, speakerSprite, typeWriterSprite]);
     scene.add.existing(container);
+    scene.add.tween(fadeIn([container], c.fadeDuration * 2));
     dialogueBox
       .setInteractive({ useHandCursor: true, pixelPerfect: true })
       .on('pointerdown', () =>
@@ -124,8 +126,10 @@ function avatarManager(scene: Phaser.Scene): [Container, Text, SpeakerChangeFn] 
 function createAvatar(scene: Phaser.Scene, speakerDetail: SpeakerDetail) {
   const [speaker, expression] = speakerDetail;
   if (speaker === k.narrator) return null;
-  const avatar = new Image(scene, c.centerX, avatarY, avatarKey(speaker, expression)).setAlpha(0);
-  resize(avatar, c.screenWidth / 3);
+  const avatar = new Image(scene, avatarX, avatarY, avatarKey(speaker, expression))
+    .setAlpha(0)
+    .setOrigin(0.5, 1);
+  resize(avatar, 0, c.screenWidth * 0.3);
   scene.add.tween(fadeIn([avatar], c.fadeDuration));
   return avatar;
 }
@@ -133,6 +137,5 @@ function createAvatar(scene: Phaser.Scene, speakerDetail: SpeakerDetail) {
 function createDialogueBox(scene: Phaser.Scene) {
   const dialogueBox = new Image(scene, xOffset, yOffset, 'speechBox').setOrigin(0);
   resize(dialogueBox, boxWidth, boxHeight);
-  scene.add.tween(fadeIn([dialogueBox], c.fadeDuration));
   return dialogueBox;
 }

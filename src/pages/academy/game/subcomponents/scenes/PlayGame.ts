@@ -33,6 +33,7 @@ class PlayGame extends Phaser.Scene {
 
     const dialogueText = this.cache.text.get('dialogueText');
     const [activateContainer] = createDialogue(this, parseDialogue(dialogueText));
+
     activateContainer();
   }
 
