@@ -23,6 +23,7 @@ const moduleBackendUrl =
     ? 'modules'
     : process.env.REACT_APP_MODULE_BACKEND_URL;
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
+const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 
 const authProviders: Map<
   string,
@@ -82,7 +83,8 @@ const Constants = {
   urlShortenerSignature,
   moduleBackendUrl,
   authProviders,
-  playgroundOnly
+  playgroundOnly,
+  sentryDsn
 };
 
 export default Constants;
