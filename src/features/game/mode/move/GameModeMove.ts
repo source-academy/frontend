@@ -1,7 +1,7 @@
-import { IGameUI, GameSprite } from '../../commons/CommonsTypes';
+import { IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { GameButton } from 'src/features/game/commons/CommonsTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
-import { defaultLocationImg } from './GameModeMoveTypes';
+import { defaultLocationImg, moveEntryTweenProps, moveExitTweenProps } from './GameModeMoveTypes';
 
 class GameModeMove implements IGameUI {
   public currentLocationSprite: GameSprite;
@@ -60,9 +60,22 @@ class GameModeMove implements IGameUI {
   public activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): void {
     container.setActive(true);
     container.setVisible(true);
+    container.setPosition(container.x, -screenSize.y);
+
+    gameManager.tweens.add({
+      targets: container,
+      ...moveEntryTweenProps
+    });
   }
 
   public deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container): void {
+    container.setPosition(container.x, 0);
+
+    gameManager.tweens.add({
+      targets: container,
+      ...moveExitTweenProps
+    });
+
     container.setVisible(false);
     container.setActive(false);
   }

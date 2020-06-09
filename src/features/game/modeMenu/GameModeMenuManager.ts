@@ -21,10 +21,6 @@ class GameModeMenuManager {
         });
       }
 
-      // By default, we include Move mode
-      const moveCallback = this.getModeButtonCallback(gameManager, GameMode.Move);
-      GameModeMenuManager.addModeButton(modeMenus, GameMode.Move, moveCallback);
-
       mapModeMenus.set(location.name, modeMenus);
     });
 

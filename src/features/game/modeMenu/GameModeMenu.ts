@@ -71,6 +71,8 @@ class GameModeMenu implements IGameUI {
   }
 
   public deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container) {
+    container.setPosition(container.x, 0);
+
     gameManager.tweens.add({
       targets: container,
       ...menuExitTweenProps

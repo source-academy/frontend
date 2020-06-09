@@ -3,13 +3,13 @@ import { GameImage, screenSize, shortButton } from '../commons/CommonsTypes';
 export const modeButtonYPos = screenSize.y * 0.8;
 
 export const menuEntryTweenProps = {
-  y: -screenSize.y * 0.01,
+  y: 0,
   duration: 800,
   ease: 'Power2'
 };
 
 export const menuExitTweenProps = {
-  y: screenSize.y * 0.4,
+  y: -screenSize.y * 0.4,
   duration: 500,
   ease: 'Power2'
 };

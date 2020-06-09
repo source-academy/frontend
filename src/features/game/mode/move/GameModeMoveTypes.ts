@@ -1,10 +1,22 @@
-import { GameImage, screenSize } from '../../commons/CommonsTypes';
+import { GameImage, screenSize, longButton } from '../../commons/CommonsTypes';
 
-export const moveButtonXPos = screenSize.x * 0.8;
+export const moveButtonXPos = screenSize.x * 0.75;
+
+export const moveEntryTweenProps = {
+  y: -screenSize.y * 0.01,
+  duration: 800,
+  ease: 'Power2'
+};
+
+export const moveExitTweenProps = {
+  y: -screenSize.y * 0.4,
+  duration: 500,
+  ease: 'Power2'
+};
 
 export const moveButtonStyle = {
   fontFamily: 'Helvetica',
-  fontSize: '30px',
+  fontSize: '35px',
   fill: '#abd4c6'
 };
 
@@ -17,15 +29,6 @@ export const defaultLocationImg: GameImage = {
   imageHeight: screenSize.y
 };
 
-export const modeButton: GameImage = {
-  key: 'loct-opt',
-  path: '../assets/modeButton.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-const moveUIAssets = [defaultLocationImg];
+const moveUIAssets = [defaultLocationImg, longButton];
 
 export default moveUIAssets;

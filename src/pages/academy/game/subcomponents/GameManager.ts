@@ -8,28 +8,32 @@ import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMoveManager from 'src/features/game/mode/move/GameModeMoveManager';
 import GameModeMove from 'src/features/game/mode/move/GameModeMove';
 import LocationSelectChapter from './scenes/LocationSelectChapter';
+import { IGameUI } from 'src/features/game/commons/CommonsTypes';
+import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
+  public currentLocationName: string;
 
   // Limited to current chapter
   private locationModeMenus: Map<string, GameModeMenu>;
-  private locationMoveMenus: Map<string, GameModeMove>;
+  private locationModeMoves: Map<string, GameModeMove>;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
-  private currentActiveUI: GameMode;
+  private currentActiveMode: GameMode;
 
   constructor() {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
+    this.currentLocationName = this.currentChapter.startingLoc;
 
     this.locationModeMenus = new Map<string, GameModeMenu>();
-    this.locationMoveMenus = new Map<string, GameModeMove>();
+    this.locationModeMoves = new Map<string, GameModeMove>();
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
-    this.currentActiveUI = GameMode.Menu;
+    this.currentActiveMode = GameMode.Menu;
   }
 
   public preload() {
@@ -37,7 +41,7 @@ class GameManager extends Phaser.Scene {
     this.preloadUIAssets();
 
     this.locationModeMenus = GameModeMenuManager.processModeMenus(this, this.currentChapter);
-    this.locationMoveMenus = GameModeMoveManager.processMoveMenus(this, this.currentChapter);
+    this.locationModeMoves = GameModeMoveManager.processMoveMenus(this, this.currentChapter);
   }
 
   public create() {
@@ -76,12 +80,10 @@ class GameManager extends Phaser.Scene {
     this.getUIContainers(location);
 
     // By default, activate Menu mode
-    const locationModeMenu = this.locationModeMenus.get(location.name);
-    const modeMenuContainer = this.currentUIContainers.get(GameMode.Menu);
-    if (locationModeMenu && modeMenuContainer) {
-      locationModeMenu.activateUI(this, modeMenuContainer);
-      this.currentActiveUI = GameMode.Menu;
-    }
+    this.changeModeTo(GameMode.Menu, true);
+
+    // Update
+    this.currentLocationName = location.name;
   }
 
   //////////////////////
@@ -90,6 +92,7 @@ class GameManager extends Phaser.Scene {
 
   private preloadUIAssets() {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
+    moveUIAssets.forEach(moveUIAsset => this.load.image(moveUIAsset.key, moveUIAsset.path));
   }
 
   private getUIContainers(location: GameLocation) {
@@ -101,7 +104,7 @@ class GameManager extends Phaser.Scene {
     }
 
     // Get Move Menu
-    const locationMoveMenu = this.locationMoveMenus.get(location.name);
+    const locationMoveMenu = this.locationModeMoves.get(location.name);
     if (locationMoveMenu) {
       const moveMenuContainer = locationMoveMenu.getUIContainer(this);
       this.currentUIContainers.set(GameMode.Move, moveMenuContainer);
@@ -121,12 +124,40 @@ class GameManager extends Phaser.Scene {
   //   Mode Callback  //
   //////////////////////
 
+  private getLocationMode(mode: GameMode): IGameUI | undefined {
+    switch (mode) {
+      case GameMode.Menu:
+        return this.locationModeMenus.get(this.currentLocationName);
+      case GameMode.Move:
+        return this.locationModeMoves.get(this.currentLocationName);
+      default:
+        // TODO: Handle
+        // tslint:disable-next-line
+        console.log('Not implemented yet: ', mode, ' , returning mode menu instead');
+        return this.locationModeMenus.get(this.currentLocationName);
+    }
+  }
+
   public changeModeTo(newMode: GameMode, refresh?: boolean) {
-    if (!refresh && this.currentActiveUI === newMode) {
+    if (!refresh && this.currentActiveMode === newMode) {
       return;
     }
-    // tslint:disable-next-line
-    console.log('Handling callback: ', newMode);
+
+    const modeContainer = this.currentUIContainers.get(newMode);
+    const locationMode = this.getLocationMode(newMode);
+
+    if (locationMode && modeContainer) {
+      // Deactivate previous UI
+      const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
+      const prevLocationMode = this.getLocationMode(this.currentActiveMode);
+      if (prevLocationMode && prevContainer) {
+        prevLocationMode.deactivateUI(this, prevContainer);
+      }
+
+      // Activate new UI
+      locationMode.activateUI(this, modeContainer);
+      this.currentActiveMode = newMode;
+    }
   }
 }
 

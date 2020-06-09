@@ -31,11 +31,11 @@ const locationNames: string[] = [
 ];
 
 const locationModes: GameMode[][] = [
-  [GameMode.Talk],
-  [GameMode.Explore, GameMode.Talk],
-  [GameMode.Talk],
-  [],
-  [GameMode.Explore]
+  [GameMode.Talk, GameMode.Move],
+  [GameMode.Explore, GameMode.Talk, GameMode.Move],
+  [GameMode.Talk, GameMode.Move],
+  [GameMode.Move],
+  [GameMode.Explore, GameMode.Move]
 ];
 
 const locations: GameLocation[] = new Array<GameLocation>();
