@@ -2,7 +2,7 @@ name: Build source-academy.github.io
 on:
   push:
     branches:
-      - sa_2021
+      - sa_2021_refactor
 
 jobs:
   deploy:
@@ -21,6 +21,7 @@ jobs:
       env:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
+        REACT_APP_PLAYGROUND_ONLY: "TRUE"
 
     - name: Deploy
       uses: s0/git-publish-subdir-action@master
