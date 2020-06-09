@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Icon } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { Icon, Card, Button } from '@blueprintjs/core';
+import { IconNames, IconName } from '@blueprintjs/icons';
 
 export type DispatchProps = {};
 
@@ -17,13 +17,21 @@ function Achievement() {
           <AchievementCategory icon={IconNames.LOCATE} category={'ACTIVE'} missions={15} />
           <AchievementCategory icon={IconNames.ENDORSED} category={'COMPLETED'} missions={7} />
         </div>
+
+        <div className="cards">
+          <ul>
+            <AchievementTask hasDropdown={true} icon={IconNames.PREDICTIVE_ANALYSIS} />
+
+            <AchievementTask hasDropdown={false} icon={IconNames.PREDICTIVE_ANALYSIS} />
+          </ul>
+        </div>
       </div>
     </div>
   );
 }
 
 type AchievementCategoryProps = {
-  icon: any;
+  icon: IconName;
   category: string;
   missions: number;
 };
@@ -39,6 +47,60 @@ function AchievementCategory(props: AchievementCategoryProps) {
       </div>
     </div>
   );
+}
+
+type AchievementTaskProps = {
+  hasDropdown: boolean;
+  icon: IconName;
+};
+
+function AchievementTask(props: AchievementTaskProps) {
+  const { hasDropdown, icon } = props;
+  const [isDropdown, setIsDropdown] = useState<boolean>(false);
+
+  const toggleSubAchievementDropdown = () => {
+    setIsDropdown(!isDropdown);
+  };
+
+  return (
+    <li>
+      <AchievementCard
+        hasDropdown={hasDropdown}
+        icon={icon}
+        toggleDropdown={toggleSubAchievementDropdown}
+      />
+      {isDropdown ? <SubAchievementCard /> : <div></div>}
+    </li>
+  );
+}
+
+type AchievementCardProps = {
+  hasDropdown: boolean;
+  icon: IconName;
+  toggleDropdown: any;
+};
+
+function AchievementCard(props: AchievementCardProps) {
+  const { hasDropdown, icon, toggleDropdown } = props;
+
+  return (
+    <Card className="achievement">
+      {hasDropdown ? (
+        <div className="dropdown">
+          <Button minimal={true} icon={IconNames.CARET_RIGHT} onClick={toggleDropdown} />
+        </div>
+      ) : (
+        <div className="dropdown"></div>
+      )}
+      <div className="icon">
+        <Icon iconSize={28} icon={icon} />
+      </div>
+    </Card>
+  );
+}
+
+function SubAchievementCard() {
+  return <Card className="subachievement"></Card>;
 }
 
 export default Achievement;

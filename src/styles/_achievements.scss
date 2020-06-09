@@ -1,56 +1,95 @@
 .Achievements {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 100%;
-    background-size: cover;
-    background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.6),
-        rgba(0, 0, 0, 0.3)
-      ),
-      url('#{$images-path}/not_found_background.jpg');
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 100%;
+  background-size: cover;
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.3)
+    ),
+    url('#{$images-path}/not_found_background.jpg');
 
-    .achievement-main {
+  .achievement-main {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    flex: 1 1 100%;
+    text-align: justify;
+
+    & > * {
+      overflow-wrap: break-word;
+    }
+
+    .icons {
+      width: 15%;
+      flex-direction: column;
+
+      div {
+        &:nth-child(1) {
+          height: 5%;
+        }
+
+        &:nth-child(2),
+        &:nth-child(3),
+        &:nth-child(4) {
+          display: flex;
+          flex-grow: 3;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          text-align: center;
+
+          height: 20%;
+          color: #ffffff;
+        }
+      }
+    }
+
+    .cards {
+      width: 35%;
+
+      ul {
+        overflow: hidden;
+        overflow-y: scroll;
+        height: 80%;
+        list-style: none;
+      }
+
+      .achievement {
+        width: 90%;
+        background-color: #d9d9d9;
+
+        height: 20%;
+        margin-bottom: 10px;
+
         display: flex;
         flex-direction: row;
-        flex-wrap: wrap; 
-        flex: 1 1 100%;
-        text-align: justify;
-    
-        & > * {
-          overflow-wrap: break-word;
+
+        .dropdown {
+          flex-basis: 10%;
         }
 
-        .icons {
-            width: 15%;
-            flex-direction: column;;
-
-            div {
-                &:nth-child(1) {
-                    height: 5%;
-                }
-
-                &:nth-child(2), &:nth-child(3), &:nth-child(4) {
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                    align-items: center;
-                    text-align: center;
-
-                    height: 20%; 
-                    color: #ffffff;
-                }
-            }
-        }
-
-        .cards {
-            width: 35%;
-        }
-
-        .modal {
-            width: 50%;
+        .icom {
+          flex-basis: 10%;
         }
       }
 
+      .subachievement {
+        width: 81%;
+        background-color: #333e50;
+
+        margin-bottom: 10px;
+        margin-left: 9%;
+
+        display: flex;
+        flex-direction: row;
+      }
+    }
+
+    .modal {
+      width: 50%;
+    }
+  }
 }
