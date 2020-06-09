@@ -14,9 +14,6 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  dom: {
-    createContainer: true
-  },
   scene: [PlayGame]
 };
 
