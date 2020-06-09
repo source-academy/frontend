@@ -30,6 +30,7 @@ class GameModeMoveManager {
             // tslint:disable-next-line
             console.log('Moving to ', locationName);
           });
+          moveMenu.locationAssetKeys.set(locationName, location.assetKey);
         }
       });
 

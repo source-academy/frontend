@@ -86,6 +86,16 @@ class GameManager extends Phaser.Scene {
     this.currentLocationName = location.name;
   }
 
+  public changeLocationTo(locationName: string): void {
+    // Deactive current UI
+
+    // Black fade in
+
+    // this.renderLocation()
+
+    // Black fade out
+  }
+
   //////////////////////
   //   Menu Helpers   //
   //////////////////////
