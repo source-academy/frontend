@@ -3,36 +3,58 @@ import React, { useState } from 'react';
 import { Icon, Card, Button } from '@blueprintjs/core';
 import { IconNames, IconName } from '@blueprintjs/icons';
 
+import defaultCoverImage from '../../../assets/default_cover_image.jpg';
+
 export type DispatchProps = {};
 
 export type StateProps = {};
 
 function Achievement() {
+  const [achievementModal, setAchievementModal] = useState(null);
+
+  const resetModal = () => {
+    setAchievementModal(null);
+  };
+
   return (
     <div className="Achievements">
       <div className="achievement-main">
         <div className="icons">
           <div></div>
-          <AchievementCategory icon={IconNames.GLOBE} category={'ALL'} missions={22} />
-          <AchievementCategory icon={IconNames.LOCATE} category={'ACTIVE'} missions={15} />
-          <AchievementCategory icon={IconNames.ENDORSED} category={'COMPLETED'} missions={7} />
+          <AchievementCategory category={'ALL'} icon={IconNames.GLOBE} missions={22} />
+          <AchievementCategory category={'ACTIVE'} icon={IconNames.LOCATE} missions={15} />
+          <AchievementCategory category={'COMPLETED'} icon={IconNames.ENDORSED} missions={7} />
         </div>
 
         <div className="cards">
           <ul>
-            <AchievementTask hasDropdown={true} icon={IconNames.PREDICTIVE_ANALYSIS} />
+            <AchievementTask
+              hasDropdown={true}
+              icon={IconNames.PREDICTIVE_ANALYSIS}
+              modalImageURL={defaultCoverImage}
+              resetModal={resetModal}
+              setModal={setAchievementModal}
+            />
 
-            <AchievementTask hasDropdown={false} icon={IconNames.PREDICTIVE_ANALYSIS} />
+            <AchievementTask
+              hasDropdown={false}
+              icon={IconNames.PREDICTIVE_ANALYSIS}
+              modalImageURL={'http://robohash.org/set_set3/bgset_bg2/bWYZFB0dVgz'}
+              resetModal={resetModal}
+              setModal={setAchievementModal}
+            />
           </ul>
         </div>
+
+        {achievementModal}
       </div>
     </div>
   );
 }
 
 type AchievementCategoryProps = {
-  icon: IconName;
   category: string;
+  icon: IconName;
   missions: number;
 };
 
@@ -52,14 +74,21 @@ function AchievementCategory(props: AchievementCategoryProps) {
 type AchievementTaskProps = {
   hasDropdown: boolean;
   icon: IconName;
+  modalImageURL: string;
+  resetModal: any;
+  setModal: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { hasDropdown, icon } = props;
+  const { hasDropdown, icon, setModal, resetModal, modalImageURL } = props;
   const [isDropdown, setIsDropdown] = useState<boolean>(false);
 
   const toggleSubAchievementDropdown = () => {
     setIsDropdown(!isDropdown);
+  };
+
+  const toggelModalPopup = () => {
+    setModal(<AchievementModal modalImageURL={modalImageURL} resetModal={resetModal} />);
   };
 
   return (
@@ -67,7 +96,9 @@ function AchievementTask(props: AchievementTaskProps) {
       <AchievementCard
         hasDropdown={hasDropdown}
         icon={icon}
+        isDropdown={isDropdown}
         toggleDropdown={toggleSubAchievementDropdown}
+        toggleModal={toggelModalPopup}
       />
       {isDropdown ? <SubAchievementCard /> : <div></div>}
     </li>
@@ -77,23 +108,29 @@ function AchievementTask(props: AchievementTaskProps) {
 type AchievementCardProps = {
   hasDropdown: boolean;
   icon: IconName;
+  isDropdown: boolean;
   toggleDropdown: any;
+  toggleModal: any;
 };
 
 function AchievementCard(props: AchievementCardProps) {
-  const { hasDropdown, icon, toggleDropdown } = props;
+  const { hasDropdown, isDropdown, icon, toggleDropdown, toggleModal } = props;
 
   return (
     <Card className="achievement">
       {hasDropdown ? (
         <div className="dropdown">
-          <Button minimal={true} icon={IconNames.CARET_RIGHT} onClick={toggleDropdown} />
+          <Button
+            icon={isDropdown ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+            minimal={true}
+            onClick={toggleDropdown}
+          />
         </div>
       ) : (
         <div className="dropdown"></div>
       )}
       <div className="icon">
-        <Icon iconSize={28} icon={icon} />
+        <Icon icon={icon} iconSize={28} onClick={toggleModal} />
       </div>
     </Card>
   );
@@ -101,6 +138,23 @@ function AchievementCard(props: AchievementCardProps) {
 
 function SubAchievementCard() {
   return <Card className="subachievement"></Card>;
+}
+
+type AchievementModalProps = {
+  modalImageURL: string;
+  resetModal: any;
+};
+
+function AchievementModal(props: AchievementModalProps) {
+  const { resetModal, modalImageURL } = props;
+
+  return (
+    <div className="modal">
+      <Card className="modal-container" onClick={resetModal}>
+        <img src={modalImageURL} />
+      </Card>
+    </div>
+  );
 }
 
 export default Achievement;

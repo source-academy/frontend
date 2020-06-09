@@ -34,9 +34,9 @@
         &:nth-child(2),
         &:nth-child(3),
         &:nth-child(4) {
-          display: flex;
           flex-grow: 3;
           flex-direction: column;
+          display: flex;
           justify-content: center;
           align-items: center;
           text-align: center;
@@ -90,6 +90,22 @@
 
     .modal {
       width: 50%;
+      height: 90%;
+      display: flex;
+      justify-content: center;
+      text-align: center;
+
+      .modal-container {
+        width: 60%;
+        border: solid white;
+        background-color: #333e50;
+        text-align: center;
+
+        img {
+          max-height: 40%;
+          max-width: 80%;
+        }
+      }
     }
   }
 }
