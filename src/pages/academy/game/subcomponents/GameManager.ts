@@ -1,9 +1,9 @@
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
-import GameModeMenu from 'src/features/game/modeMenu/GameModeMenu';
-import modeUIAssets from 'src/features/game/modeMenu/GameModeMenuTypes';
-import GameModeMenuManager from 'src/features/game/modeMenu/GameModeMenuManager';
+import GameModeMenu from 'src/features/game/mode/menu/GameModeMenu';
+import modeUIAssets from 'src/features/game/mode/menu/GameModeMenuTypes';
+import GameModeMenuManager from 'src/features/game/mode/menu/GameModeMenuManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMoveManager from 'src/features/game/mode/move/GameModeMoveManager';
 import GameModeMove from 'src/features/game/mode/move/GameModeMove';

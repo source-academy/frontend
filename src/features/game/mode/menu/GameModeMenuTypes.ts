@@ -1,4 +1,4 @@
-import { GameImage, screenSize, shortButton } from '../commons/CommonsTypes';
+import { GameImage, screenSize, shortButton } from '../../commons/CommonsTypes';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 

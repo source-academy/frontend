@@ -1,4 +1,4 @@
-import { GameButton, IGameUI, GameSprite, screenSize } from '../commons/CommonsTypes';
+import { GameButton, IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { modeMenuBanner, menuEntryTweenProps, menuExitTweenProps } from './GameModeMenuTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import { sleep } from 'src/features/game/util/GameUtils';
