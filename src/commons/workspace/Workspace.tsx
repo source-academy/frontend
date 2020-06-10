@@ -36,7 +36,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private leftParentResizable?: Resizable = undefined;
   private maxDividerHeight?: number = undefined;
   private sideDividerDiv?: HTMLDivElement = undefined;
-  private editorRef: React.RefObject<Editor>;
+  private editorRef: React.RefObject<typeof Editor>;
 
   public constructor(props: WorkspaceProps) {
     super(props);
@@ -182,6 +182,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
         <Editor
           {...props.editorProps}
           key={props.editorProps.editorSessionId}
+          // @ts-ignore TODO: figure out how to fix this type (related to higher order classes for Editor). It's definitely correct though.
           ref={this.editorRef}
         />
       );
