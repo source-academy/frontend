@@ -1,40 +1,45 @@
 import React, { useState } from 'react';
 
-import { IconName } from '@blueprintjs/core';
-import AchievementModal from './AchievementModal';
-import SubAchievementCard from './SubAchievementCard';
+import SubAchievementCard from './SubachievementCard';
 import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {
-  hasDropdown: boolean;
-  icon: IconName;
-  modalImageURL: string;
-  resetModal: any;
+  title: string;
+  subachievements: any[];
   setModal: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { hasDropdown, icon, setModal, resetModal, modalImageURL } = props;
-  const [isDropdown, setIsDropdown] = useState<boolean>(false);
+  const { title, subachievements, setModal } = props;
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const toggleSubAchievementDropdown = () => {
-    setIsDropdown(!isDropdown);
+  const toggleSubachievementDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const toggelModalPopup = () => {
-    setModal(<AchievementModal modalImageURL={modalImageURL} resetModal={resetModal} />);
+  const displayModal = (title: string) => {
+    return () => setModal(title);
   };
 
   return (
     <li>
       <AchievementCard
-        hasDropdown={hasDropdown}
-        icon={icon}
-        isDropdown={isDropdown}
-        toggleDropdown={toggleSubAchievementDropdown}
-        toggleModal={toggelModalPopup}
+        title={title}
+        subachievements={subachievements}
+        isDropdownOpen={isDropdownOpen}
+        toggleDropdown={toggleSubachievementDropdown}
+        displayModal={displayModal}
       />
-      {isDropdown ? <SubAchievementCard /> : <div></div>}
+      <ul>
+        {isDropdownOpen 
+          ? subachievements.map(subachievement => 
+              <SubAchievementCard 
+                subachievement={subachievement}
+                displayModal={displayModal}
+              />)
+          : <div></div>}
+      </ul>
+      
     </li>
   );
 }

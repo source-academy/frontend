@@ -2,8 +2,20 @@ import React from 'react';
 
 import { Card } from '@blueprintjs/core';
 
-function SubAchievementCard() {
-  return <Card className="subachievement"></Card>;
+type SubachievementCardProps = {
+  subachievement: any;
+  displayModal: any;
 }
 
-export default SubAchievementCard;
+function SubachievementCard(props: SubachievementCardProps) {
+  const { subachievement, displayModal } = props;
+  const [{ title }] = subachievement;
+
+  return (
+    <Card className="subachievement" onClick={displayModal(title)}>
+      <h3>{title}</h3>
+    </Card>
+  );
+}
+
+export default SubachievementCard;
