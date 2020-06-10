@@ -1,6 +1,5 @@
 import { IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { GameButton } from 'src/features/game/commons/CommonsTypes';
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import {
   defaultLocationImg,
   locationPreviewFrame,
@@ -14,6 +13,7 @@ import {
   previewWidth
 } from './GameModeMoveTypes';
 import { sleep } from 'src/features/game/util/GameUtils';
+import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMove implements IGameUI {
   public currentLocationAssetKey: string;
@@ -42,9 +42,13 @@ class GameModeMove implements IGameUI {
     this.previewFrame = previewFrame;
   }
 
-  public getUIContainer(gameManager: GameManager): Phaser.GameObjects.Container {
-    const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+  public getUIContainer(): Phaser.GameObjects.Container {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('GetUIContainer: Game Manager is not defined!');
+    }
 
+    const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     const previewFrame = new Phaser.GameObjects.Image(
       gameManager,
       previewFrameXPos,
@@ -117,10 +121,12 @@ class GameModeMove implements IGameUI {
     this.currentLocationAssetKey = assetKey;
   }
 
-  public async activateUI(
-    gameManager: GameManager,
-    container: Phaser.GameObjects.Container
-  ): Promise<void> {
+  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('ActivateUI: Game Manager is not defined!');
+    }
+
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, -screenSize.y);
@@ -131,10 +137,11 @@ class GameModeMove implements IGameUI {
     });
   }
 
-  public async deactivateUI(
-    gameManager: GameManager,
-    container: Phaser.GameObjects.Container
-  ): Promise<void> {
+  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('DeactivateUI: Game Manager is not defined!');
+    }
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({

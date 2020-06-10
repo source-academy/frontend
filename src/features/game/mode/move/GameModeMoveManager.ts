@@ -1,15 +1,12 @@
 import { GameMode } from '../GameModeTypes';
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import GameModeMove from './GameModeMove';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { GameButton, screenSize, longButton } from '../../commons/CommonsTypes';
-import { moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
+import { moveButtonYSpace, moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
+import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMoveManager {
-  static processMoveMenus(
-    gameManager: GameManager,
-    chapter: GameChapter
-  ): Map<string, GameModeMove> {
+  static processMoveMenus(chapter: GameChapter): Map<string, GameModeMove> {
     const mapMoveMenus = new Map<string, GameModeMove>();
     chapter.map.getLocations().forEach(location => {
       if (!location.modes || !location.modes.find(mode => mode === GameMode.Move)) {
@@ -26,7 +23,7 @@ class GameModeMoveManager {
         const location = chapter.map.getLocation(locationName);
         if (location) {
           GameModeMoveManager.addMoveOptionButton(moveMenu, location.name, () => {
-            gameManager.changeLocationTo(locationName);
+            GameActionManager.getInstance().changeLocationTo(locationName);
           });
           moveMenu.locationAssetKeys.set(locationName, location.assetKey);
         }
@@ -34,7 +31,7 @@ class GameModeMoveManager {
 
       // Add a back button
       GameModeMoveManager.addMoveOptionButton(moveMenu, backText, () => {
-        gameManager.changeModeTo(GameMode.Menu);
+        GameActionManager.getInstance().changeModeTo(GameMode.Menu);
       });
       mapMoveMenus.set(location.name, moveMenu);
     });
@@ -44,9 +41,9 @@ class GameModeMoveManager {
 
   static addMoveOptionButton(moveMenu: GameModeMove, name: string, callback: any) {
     const newNumberOfButtons = moveMenu.possibleLocations.length + 1;
-    const partitionSize = screenSize.y / newNumberOfButtons;
+    const partitionSize = moveButtonYSpace / newNumberOfButtons;
 
-    const newYPos = partitionSize / 2;
+    const newYPos = (screenSize.y - moveButtonYSpace) / 2 + partitionSize / 2;
 
     // Rearrange existing buttons
     for (let i = 0; i < moveMenu.possibleLocations.length; i++) {

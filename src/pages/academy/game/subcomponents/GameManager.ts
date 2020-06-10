@@ -10,6 +10,7 @@ import GameModeMove from 'src/features/game/mode/move/GameModeMove';
 import LocationSelectChapter from './scenes/LocationSelectChapter';
 import { IGameUI, screenSize } from 'src/features/game/commons/CommonsTypes';
 import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
+import GameActionManager from './GameActionManager';
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -34,14 +35,16 @@ class GameManager extends Phaser.Scene {
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
+
+    GameActionManager.getInstance().setGameManager(this);
   }
 
   public preload() {
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadAssets();
 
-    this.locationModeMenus = GameModeMenuManager.processModeMenus(this, this.currentChapter);
-    this.locationModeMoves = GameModeMoveManager.processMoveMenus(this, this.currentChapter);
+    this.locationModeMenus = GameModeMenuManager.processModeMenus(this.currentChapter);
+    this.locationModeMoves = GameModeMoveManager.processMoveMenus(this.currentChapter);
   }
 
   public create() {
@@ -115,14 +118,14 @@ class GameManager extends Phaser.Scene {
     // Get Mode Menu
     const locationModeMenu = this.locationModeMenus.get(location.name);
     if (locationModeMenu) {
-      const modeMenuContainer = locationModeMenu.getUIContainer(this);
+      const modeMenuContainer = locationModeMenu.getUIContainer();
       this.currentUIContainers.set(GameMode.Menu, modeMenuContainer);
     }
 
     // Get Move Menu
     const locationMoveMenu = this.locationModeMoves.get(location.name);
     if (locationMoveMenu) {
-      const moveMenuContainer = locationMoveMenu.getUIContainer(this);
+      const moveMenuContainer = locationMoveMenu.getUIContainer();
       this.currentUIContainers.set(GameMode.Move, moveMenuContainer);
     }
 
@@ -157,7 +160,7 @@ class GameManager extends Phaser.Scene {
     const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
     const prevLocationMode = this.getLocationMode(this.currentActiveMode);
     if (prevLocationMode && prevContainer) {
-      prevLocationMode.deactivateUI(this, prevContainer);
+      prevLocationMode.deactivateUI(prevContainer);
     }
   }
 
@@ -175,7 +178,7 @@ class GameManager extends Phaser.Scene {
       }
 
       // Activate new UI
-      locationMode.activateUI(this, modeContainer);
+      locationMode.activateUI(modeContainer);
       this.currentActiveMode = newMode;
     }
   }
