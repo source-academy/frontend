@@ -1,14 +1,12 @@
-module.exports = {
+const cracoConfig = (module.exports = {
   webpack: {
     configure: webpackConfig => {
-      // disable source maps to speed up CI build
-      // note: if we ever start deploying from CI, this must be undone in
-      // deployment builds
-      if (process.env.CI && !process.env.DEPLOY_CI) {
-        webpackConfig.devtool = false;
-        webpackConfig.optimization.minimizer.find(
-          p => p.constructor.name === 'TerserPlugin'
-        ).options.sourceMap = false;
+      // modify Workbox configuration
+      if (cracoConfig.workbox) {
+        const workboxPlugin = webpackConfig.plugins.find(
+          plugin => plugin.constructor.name === 'GenerateSW'
+        );
+        workboxPlugin.config = cracoConfig.workbox(workboxPlugin.config);
       }
 
       // workaround .mjs files by Acorn
@@ -29,5 +27,13 @@ module.exports = {
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
       return jestConfig;
     }
+  },
+  workbox: workboxConfig => {
+    if (process.env.SW_EXCLUDE_REGEXES) {
+      workboxConfig.navigateFallbackBlacklist.push(
+        ...JSON.parse(process.env.SW_EXCLUDE_REGEXES).map(str => new RegExp(str))
+      );
+    }
+    return workboxConfig;
   }
-};
+});

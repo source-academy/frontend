@@ -28,25 +28,30 @@ The project requires some environment variables to be set to work properly. In t
 
 #### Backend configuration
 
-1. **REACT_APP_BACKEND_URL**: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
-1. **REACT_APP_USE_BACKEND**: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+1. `REACT_APP_BACKEND_URL`: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
+1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can leave this blank in development.
 
 #### URL shortener configuration
 
 Unless you need to use the shortener locally, you can leave these values blank. Otherwise, ask your backend engineer.
 
-1. **REACT_APP_URL_SHORTENER_SIGNATURE**: The API key for the YOURLS URL shortener.
-1. **REACT_APP_URL_SHORTENER_DOMAIN**: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
+1. `REACT_APP_URL_SHORTENER_SIGNATURE`: The API key for the YOURLS URL shortener.
+1. `REACT_APP_URL_SHORTENER_DOMAIN`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
 
 #### Authentication provider configuration
 
 If you are testing with a local backend, the values in `.env.example` match the default development configuration of the backend. Otherwise, your backend engineer should provide you with the configuration for the staging and/or production backend.
 
-**n** is an integer starting from 1. The numbers must be consecutive i.e. if you have 5 authentication providers, the numbers must be 1, 2, 3, 4, and 5.
+`n` is an integer starting from 1. The numbers must be consecutive i.e. if you have 5 authentication providers, the numbers must be 1, 2, 3, 4, and 5.
 
-1. **REACT_APP_OAUTH2_PROVIDERn**: The provider ID of the nth authentication provider. This must match the backend configuration.
-1. **REACT_APP_OAUTH2_PROVIDERn_NAME**: The name of the nth authentication provider shown on the login screen.
-1. **REACT_APP_OAUTH2_PROVIDERn_ENDPOINT**: The authentication endpoint of the nth authentication provider.
+1. `REACT_APP_OAUTH2_PROVIDERn`: The provider ID of the nth authentication provider. This must match the backend configuration.
+1. `REACT_APP_OAUTH2_PROVIDERn_NAME`: The name of the nth authentication provider shown on the login screen.
+1. `REACT_APP_OAUTH2_PROVIDERn_ENDPOINT`: The authentication endpoint of the nth authentication provider.
+
+#### Other configuration
+
+1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
 
 ## Development
 
@@ -61,17 +66,13 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 
 See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
 
-### Development of Source Academy 2021
-
-The development of Source Academy 2021 is on-going. Use the branch `sa_2021` in this repository for your pull requests. The tip of branch `sa_2021` in `cadet-frontend` is automatically deployed as [https://source-academy.github.io/](https://source-academy.github.io/).
-
 ### Contribution Guidelines
 
 Refer to our issue tracker and contribute to any open issues you are able to spot there. If you have any new issues, please do post there as well. We welcome any form of contribution and are open to any new ideas you may have for the project!
 
 To start contributing, create a fork from our repo and send a PR. Refer to [this article](https://help.github.com/en/articles/fork-a-repo) for more information.
 
-## Application Structure
+### Application Structure
 
 1. `assets` contains static assets.
 1. `commons` contains components or other code common to more than one page.
@@ -79,12 +80,19 @@ To start contributing, create a fork from our repo and send a PR. Refer to [this
 1. `pages` contains pages and components used only in one page; its layout should mirror the actual routes.
 1. `styles` contains all SCSS styles.
 
-## TypeScript Coding Conventions
+### TypeScript Coding Conventions
 
 We reference [this guide](https://github.com/piotrwitek/react-redux-typescript-guide).
 
 See also the [this standard in the wiki](https://github.com/source-academy/cadet-frontend/wiki/Coding-Standard).
 
-### Projects
+## Projects
 
 For more info on specific frontend projects, please consult [our wiki](https://github.com/source-academy/cadet-frontend/wiki).
+
+## Build and deployment
+
+There are a few additional environment variables that are used when building and deploying for production.
+
+- `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
+- `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
