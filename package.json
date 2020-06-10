@@ -79,7 +79,7 @@
     "@types/draft-js": "^0.10.40",
     "@types/enzyme": "3.10.5",
     "@types/enzyme-adapter-react-16": "^1.0.6",
-    "@types/estree": "0.0.39",
+    "@types/estree": "0.0.44",
     "@types/invariant": "^2.2.33",
     "@types/jest": "^26.0.0",
     "@types/jwt-decode": "^2.2.1",
