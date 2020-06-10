@@ -37,6 +37,11 @@ jobs:
       run: |
         yarn install
         yarn run build
+        ln -s index.html build/playground
+        ln -s index.html build/contributors
+        ln -s index.html build/sourcecast
+      # the `ln`s above are a hack to make GitHub Pages route /playground
+      # and /contributors etc to index, instead of 404-ing.
       env:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
