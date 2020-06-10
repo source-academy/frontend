@@ -1,4 +1,4 @@
-import { GameImage, screenSize, shortButton } from '../commons/CommonsTypes';
+import { GameImage, screenSize, shortButton } from '../../commons/CommonsTypes';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 
@@ -9,7 +9,7 @@ export const menuEntryTweenProps = {
 };
 
 export const menuExitTweenProps = {
-  y: -screenSize.y * 0.4,
+  y: screenSize.y * 0.4,
   duration: 500,
   ease: 'Power2'
 };

@@ -2,9 +2,8 @@ import { GameMode } from '../GameModeTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import GameModeMove from './GameModeMove';
 import { GameChapter } from '../../chapter/GameChapterTypes';
-import { GameLocation } from '../../location/GameMapTypes';
 import { GameButton, screenSize, longButton } from '../../commons/CommonsTypes';
-import { moveButtonStyle, moveButtonXPos } from './GameModeMoveTypes';
+import { moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
 
 class GameModeMoveManager {
   static processMoveMenus(
@@ -26,20 +25,24 @@ class GameModeMoveManager {
       possibleLocations.forEach(locationName => {
         const location = chapter.map.getLocation(locationName);
         if (location) {
-          GameModeMoveManager.addMoveOptionButton(moveMenu, location, () => {
-            // tslint:disable-next-line
-            console.log('Moving to ', locationName);
+          GameModeMoveManager.addMoveOptionButton(moveMenu, location.name, () => {
+            gameManager.changeLocationTo(locationName);
           });
+          moveMenu.locationAssetKeys.set(locationName, location.assetKey);
         }
       });
 
+      // Add a back button
+      GameModeMoveManager.addMoveOptionButton(moveMenu, backText, () => {
+        gameManager.changeModeTo(GameMode.Menu);
+      });
       mapMoveMenus.set(location.name, moveMenu);
     });
 
     return mapMoveMenus;
   }
 
-  static addMoveOptionButton(moveMenu: GameModeMove, location: GameLocation, callback: any) {
+  static addMoveOptionButton(moveMenu: GameModeMove, name: string, callback: any) {
     const newNumberOfButtons = moveMenu.possibleLocations.length + 1;
     const partitionSize = screenSize.y / newNumberOfButtons;
 
@@ -55,7 +58,7 @@ class GameModeMoveManager {
 
     // Add the new button
     const newModeButton: GameButton = {
-      text: location.name,
+      text: name,
       style: moveButtonStyle,
       assetKey: longButton.key,
       assetXPos: moveButtonXPos,

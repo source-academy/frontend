@@ -1,6 +1,7 @@
-import { GameButton, IGameUI, GameSprite, screenSize } from '../commons/CommonsTypes';
+import { GameButton, IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { modeMenuBanner, menuEntryTweenProps, menuExitTweenProps } from './GameModeMenuTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
+import { sleep } from 'src/features/game/util/GameUtils';
 
 class GameModeMenu implements IGameUI {
   public modeBanner: GameSprite;
@@ -59,7 +60,10 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
-  public activateUI(gameManager: GameManager, container: Phaser.GameObjects.Container) {
+  public async activateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, screenSize.y);
@@ -70,7 +74,10 @@ class GameModeMenu implements IGameUI {
     });
   }
 
-  public deactivateUI(gameManager: GameManager, container: Phaser.GameObjects.Container) {
+  public async deactivateUI(
+    gameManager: GameManager,
+    container: Phaser.GameObjects.Container
+  ): Promise<void> {
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({
@@ -78,6 +85,7 @@ class GameModeMenu implements IGameUI {
       ...menuExitTweenProps
     });
 
+    await sleep(500);
     container.setVisible(false);
     container.setActive(false);
   }

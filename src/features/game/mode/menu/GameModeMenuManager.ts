@@ -1,8 +1,8 @@
 import { GameButton, screenSize, shortButton } from 'src/features/game/commons/CommonsTypes';
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import GameModeMenu from 'src/features/game/modeMenu/GameModeMenu';
-import { modeButtonYPos, modeButtonStyle } from 'src/features/game/modeMenu/GameModeMenuTypes';
+import GameModeMenu from 'src/features/game/mode/menu/GameModeMenu';
+import { modeButtonYPos, modeButtonStyle } from 'src/features/game/mode/menu/GameModeMenuTypes';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 
 class GameModeMenuManager {
