@@ -5,18 +5,28 @@ import { IconNames } from '@blueprintjs/icons';
 import AchievementCategory from './subcomponents/AchievementCategory';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
+import { AchievementOverview, AchievementStatus } from 'src/commons/achievements/AchievementTypes';
 
 export type DispatchProps = {};
 
 export type StateProps = {};
 
-const achievementOverview = [
+const achievementOverview: AchievementOverview[] = [
   {
     title: 'Rune Master',
-    subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet']
+    subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
+    status: AchievementStatus.PENDING
   },
-  { title: 'Keyboard Warrior', subachievementTitles: ['Keyboard Warrior: Gold Tier'] },
-  { title: 'Adventure Time', subachievementTitles: [] }
+  {
+    title: 'Keyboard Warrior',
+    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
+    status: AchievementStatus.ACTIVE
+  },
+  {
+    title: 'Adventure Time',
+    subachievementTitles: [],
+    status: AchievementStatus.COMPLETED
+  }
 ];
 
 const subachievementOverview = [
@@ -67,32 +77,62 @@ const modalOverview = [
 
 function Achievement() {
   const [modal, setModal] = useState('');
+  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>(
+    AchievementStatus.PENDING
+  );
 
   const mapTitlesToSubachievements = (titles: string[]) =>
     titles.map(target =>
       subachievementOverview.filter(subachievement => subachievement.title === target)
     );
 
+  const filterAchievementsByStatus = (achievementOverview: AchievementOverview[]) => {
+    if (filteredStatus === AchievementStatus.PENDING) {
+      return achievementOverview;
+    }
+
+    return achievementOverview.filter(
+      achievementOverview => achievementOverview.status === filteredStatus
+    );
+  };
+
+  const getAchievementTasks = (achievementOverview: AchievementOverview[]) => {
+    return filterAchievementsByStatus(achievementOverview).map(achievement => (
+      <AchievementTask
+        title={achievement.title}
+        subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
+        setModal={setModal}
+      />
+    ));
+  };
+
   return (
     <div className="Achievements">
       <div className="achievement-main">
         <div className="icons">
           <div></div>
-          <AchievementCategory category={'ALL'} icon={IconNames.GLOBE} count={22} />
-          <AchievementCategory category={'ACTIVE'} icon={IconNames.LOCATE} count={15} />
-          <AchievementCategory category={'COMPLETED'} icon={IconNames.ENDORSED} count={7} />
+          <AchievementCategory
+            status={AchievementStatus.PENDING}
+            setFilteredStatus={setFilteredStatus}
+            icon={IconNames.GLOBE}
+            count={22}
+          />
+          <AchievementCategory
+            status={AchievementStatus.ACTIVE}
+            setFilteredStatus={setFilteredStatus}
+            icon={IconNames.LOCATE}
+            count={15}
+          />
+          <AchievementCategory
+            status={AchievementStatus.COMPLETED}
+            setFilteredStatus={setFilteredStatus}
+            icon={IconNames.ENDORSED}
+            count={7}
+          />
         </div>
 
         <div className="cards">
-          <ul>
-            {achievementOverview.map(achievement => (
-              <AchievementTask
-                title={achievement.title}
-                subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
-                setModal={setModal}
-              />
-            ))}
-          </ul>
+          <ul>{getAchievementTasks(achievementOverview)}</ul>
         </div>
 
         <AchievementModal title={modal} modalOverview={modalOverview} />
