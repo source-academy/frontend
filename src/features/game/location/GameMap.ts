@@ -5,11 +5,13 @@ class GameMap {
   private locationAssets: Map<string, GameImage>;
   private navigation: Map<string, string[]>;
   private locations: Map<string, GameLocation>;
+  private talkTopics: Map<string, string[]>;
 
   constructor() {
     this.locationAssets = new Map<string, GameImage>();
     this.navigation = new Map<string, string[]>();
     this.locations = new Map<string, GameLocation>();
+    this.talkTopics = new Map<string, string[]>();
   }
 
   public addLocationAsset(asset: GameImage) {
@@ -42,6 +44,14 @@ class GameMap {
 
   public getLocations(): Map<string, GameLocation> {
     return this.locations;
+  }
+
+  public setTalkTopicsAt(id: string, topics: string[]) {
+    this.talkTopics.set(id, topics);
+  }
+
+  public getTalkTopicsAt(id: string): string[] | undefined {
+    return this.talkTopics.get(id);
   }
 }
 

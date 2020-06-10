@@ -54,11 +54,16 @@ locations.forEach(location => LocationSelectMap.setLocation(location));
 locationImages.forEach(asset => LocationSelectMap.addLocationAsset(asset));
 
 // Register navigation
-LocationSelectMap.setNavigationFrom('Class Room', ['Crash Site', 'Hallway']);
 LocationSelectMap.setNavigationFrom('Crash Site', ['Class Room']);
+LocationSelectMap.setNavigationFrom('Class Room', ['Crash Site', 'Hallway']);
+LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 LocationSelectMap.setNavigationFrom('Hallway', ['Class Room', 'Student Room', 'Emergency']);
 LocationSelectMap.setNavigationFrom('Student Room', ['Hallway']);
-LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
+
+// Set talk topics
+LocationSelectMap.setTalkTopicsAt('Crash Site', ['What happened', 'Planet XAE-12']);
+LocationSelectMap.setTalkTopicsAt('Class Room', ["Today's lesson"]);
+LocationSelectMap.setTalkTopicsAt('Emergency', ["Where's everyone", 'Any idea?']);
 
 const LocationSelectChapter: GameChapter = {
   map: LocationSelectMap,
