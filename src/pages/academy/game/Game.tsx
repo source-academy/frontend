@@ -12,6 +12,9 @@ function Game() {
       setAssetPaths(paths);
     })();
   }, []);
+  // React.useEffect(() => {
+  //   game.sceneAdd(() => console.log('hello'), 'StoryChapterSelect', StoryChapterSelect, true);
+  // }, []);
 
   return (
     game && (

@@ -1,6 +1,7 @@
 import { GameButton, IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { modeMenuBanner, menuEntryTweenProps, menuExitTweenProps } from './GameModeMenuTypes';
-import { sleep } from 'src/features/game/util/GameUtils';
+import { sleep } from '../../utils/GameUtils';
+
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMenu implements IGameUI {
