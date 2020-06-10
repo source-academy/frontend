@@ -1,7 +1,7 @@
 import { isSpeaker, avatarKey, avatarAssetPath, getSpeakerDetails } from './DialogueHelper';
-import { Constants as c } from '../utils/constants';
+import { Constants as c } from '../commons/CommonConstants';
 import PlayGame from '../scenes/PlayGame';
-import { splitToLines } from '../utils/stringUtils';
+import { splitToLines } from '../utils/StringUtils';
 
 export async function preloadDialogue(scene: PlayGame, url: string) {
   scene.load.text(`#D${url}`, url);

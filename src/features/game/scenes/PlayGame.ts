@@ -1,10 +1,10 @@
-import { Constants as c, Keys as k } from '../utils/constants';
+import { Constants as c, Keys as k } from '../commons/CommonConstants';
 import { addButton } from '../utils/styles';
 import { createDialogue } from '../dialogue/DialogueRenderer';
 import { parseDialogue } from '../dialogue/DialogueManager';
 import { preloadDialogue, loadDialogueAssets } from '../dialogue/DialoguePreloader';
 import { preloadObjects, loadObjectsAssets } from '../objects/ObjectsPreloader';
-import { resize } from '../utils/spriteUtils';
+import { resize } from '../utils/SpriteUtils';
 import { parseObjects } from '../objects/ObjectsManager';
 import { createObjectsLayer } from '../objects/ObjectsRenderer';
 

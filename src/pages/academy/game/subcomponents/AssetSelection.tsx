@@ -58,7 +58,7 @@ function pathToObj(assetPaths: string[]): object {
 }
 
 function listToTree(assetPaths: string[]): ITreeNode[] {
-  var assetCounter = 0;
+  let assetCounter = 0;
   const assetObj = pathToObj(assetPaths);
   function helper(assetObj: object | Array<string>): ITreeNode[] {
     if (Array.isArray(assetObj)) {
@@ -72,7 +72,7 @@ function listToTree(assetPaths: string[]): ITreeNode[] {
 }
 
 function getFilePath(assetTree: ITreeNode[], levels: number[]) {
-  var filePath = '';
+  let filePath = '';
   for (const [levelNumber, level] of levels.entries()) {
     const node = assetTree[level];
     filePath += '/' + node.label.toString();
