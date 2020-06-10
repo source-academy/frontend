@@ -20,9 +20,7 @@
     "test": "craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
-    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
-    "postinstall": "node ./scripts/SourcerorPostInstall.js",
-    "preuninstall": "node ./scripts/SourcerorPreUninstall.js"
+    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src"
   },
   "husky": {
     "hooks": {
@@ -68,7 +66,7 @@
     "redux-saga": "^1.1.3",
     "sharedb-ace": "^1.0.9",
     "showdown": "^1.9.1",
-    "sourceror-driver": "^1.0.5",
+    "sourceror": "^0.6.1",
     "typesafe-actions": "^5.1.0",
     "xml2js": "^0.4.23",
     "yareco": "^0.1.5"

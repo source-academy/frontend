@@ -11,6 +11,20 @@ const cracoConfig = (module.exports = {
         }
       }
 
+      // add rules to pack WASM (for Sourceror)
+      // adapted from https://prestonrichey.com/blog/react-rust-wasm/
+      const wasmExtensionRegExp = /\.wasm$/;
+      webpackConfig.resolve.extensions.push('.wasm');
+      webpackConfig.module.rules.forEach(rule => {
+        (rule.oneOf || []).forEach(oneOf => {
+          if (oneOf.loader && oneOf.loader.indexOf('file-loader') >= 0) {
+            // Make file-loader ignore WASM files
+            oneOf.exclude.push(wasmExtensionRegExp);
+          }
+        });
+      });
+      webpackConfig.output.webassemblyModuleFilename = "static/[hash].module.wasm";
+
       // workaround .mjs files by Acorn
       webpackConfig.module.rules.push({
         test: /\.mjs$/,
