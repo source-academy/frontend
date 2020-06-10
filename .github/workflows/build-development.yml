@@ -2,7 +2,7 @@ name: Build source-academy.github.io
 on:
   push:
     branches:
-      - sa_2021
+      - sa_2021_refactor
 
 jobs:
   deploy:
@@ -11,16 +11,39 @@ jobs:
     steps:
     - uses: actions/checkout@master
     - name: Use Node.js
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2-beta
       with:
-        node-version: 12.x
-    - name: npm install and build
+        node-version: '14'
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - id: get-time
+      run: echo "::set-output name=time::$(date -Iseconds)"
+    - uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - uses: actions/cache@v2
+      id: build-cache
+      with:
+        path: node_modules/.cache
+        key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+    - name: yarn install and build
       run: |
-        npm install
-        npm run build
+        yarn install
+        yarn run build
       env:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
+        REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+        REACT_APP_PLAYGROUND_ONLY: "TRUE"
+        REACT_APP_VERSION: ${{ format('pages-{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        DEPLOY_CI: "TRUE"
 
     - name: Deploy
       uses: s0/git-publish-subdir-action@master

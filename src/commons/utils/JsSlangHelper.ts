@@ -146,6 +146,7 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
   ProxyFrame.prototype = context.runtime.environments[0].head;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
   // @ts-ignore
   const fakeFrame: { [key: string]: any } = new ProxyFrame();
   // Explanation: Proxy doesn't work for defineProperty in use-strict.
@@ -214,7 +215,7 @@ export function getRestoreExtraMethodsString(removed: string[], unblockKey: stri
     .join('\n');
 }
 
-export function getBlockExtraMethodsString(toRemove: String[]) {
+export function getBlockExtraMethodsString(toRemove: string[]) {
   return toRemove
     .map(x =>
       x === 'makeUndefinedErrorFunction' ? '' : `const ${x} = makeUndefinedErrorFunction('${x}');`

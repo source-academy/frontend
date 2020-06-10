@@ -171,7 +171,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
-    const role = yield select((state: OverallState) => state.session.role!);
+    const role: Role = yield select((state: OverallState) => state.session.role);
     if (role !== Role.Student) {
       return yield call(
         showWarningMessage,
@@ -404,7 +404,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(DELETE_SOURCECAST_ENTRY, function* (
     action: ReturnType<typeof actions.deleteSourcecastEntry>
   ) {
-    const role = yield select((state: OverallState) => state.session.role!);
+    const role: Role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
     }

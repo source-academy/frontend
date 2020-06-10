@@ -9,10 +9,7 @@ import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
-import {
-  ExternalLibraryName,
-  ExternalLibraryNames
-} from '../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -237,13 +234,13 @@ class Playground extends React.Component<PlaygroundProps, State> {
 
     // Conditional logic for tab rendering
     if (
-      this.props.externalLibraryName === ExternalLibraryNames.PIXNFLIX ||
-      this.props.externalLibraryName === ExternalLibraryNames.ALL
+      this.props.externalLibraryName === ExternalLibraryName.PIXNFLIX ||
+      this.props.externalLibraryName === ExternalLibraryName.ALL
     ) {
       // Enable video tab only when 'PIX&FLIX' is selected
       tabs.push(videoDisplayTab);
     }
-    if (this.props.externalLibraryName === ExternalLibraryNames.MACHINELEARNING) {
+    if (this.props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
       tabs.push(FaceapiDisplayTab);
     }

@@ -1,5 +1,5 @@
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
 import { SourcereelReducer } from '../SourcereelReducer';
 import {
@@ -18,7 +18,7 @@ describe('RECORD_INIT', () => {
     const initData: PlaybackData['init'] = {
       editorValue: 'test init value',
       chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE
+      externalLibrary: ExternalLibraryName.NONE
     };
     const action = generateAction(RECORD_INIT, { initData, workspaceLocation: undefined! });
     const result = SourcereelReducer(defaultWorkspaceManager.sourcereel, action);
