@@ -5,7 +5,7 @@ import { Card } from '@blueprintjs/core';
 type SubachievementCardProps = {
   subachievement: any;
   displayModal: any;
-}
+};
 
 function SubachievementCard(props: SubachievementCardProps) {
   const { subachievement, displayModal } = props;

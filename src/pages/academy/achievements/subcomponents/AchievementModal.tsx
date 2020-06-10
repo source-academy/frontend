@@ -19,7 +19,7 @@ function AchievementModal(props: AchievementModalProps) {
     <div className="modal">
       <Card className="modal-container">
         <h1>{title}</h1>
-        <img src={modalImageUrl} alt={title}/>
+        <img src={modalImageUrl} alt={title} />
         <p>{description}</p>
       </Card>
     </div>

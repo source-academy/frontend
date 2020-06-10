@@ -17,14 +17,16 @@ function AchievementCard(props: AchievementCardProps) {
 
   return (
     <Card className="achievement" onClick={displayModal(title)} onClickCapture={toggleDropdown}>
-      {hasDropdown 
-        ? <div className="dropdown">
-            <Button
-              icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-              minimal={true}
-            />
-          </div>
-        : <div className="dropdown"></div>}
+      {hasDropdown ? (
+        <div className="dropdown">
+          <Button
+            icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+            minimal={true}
+          />
+        </div>
+      ) : (
+        <div className="dropdown"></div>
+      )}
       <div className="icon">
         <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
       </div>
