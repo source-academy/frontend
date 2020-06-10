@@ -13,11 +13,7 @@ const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
-const moduleBackendUrl =
-  process.env.REACT_APP_MODULE_BACKEND_URL === undefined ||
-  process.env.REACT_APP_MODULE_BACKEND_URL === ''
-    ? 'modules'
-    : process.env.REACT_APP_MODULE_BACKEND_URL;
+const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 

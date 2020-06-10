@@ -43,7 +43,7 @@ jobs:
         REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
         REACT_APP_PLAYGROUND_ONLY: "TRUE"
         REACT_APP_VERSION: ${{ format('pages-{0}-{1}', github.sha, steps.get-time.outputs.time) }}
-        SW_EXCLUDE_REGEXES: '["^/source", "^/sicp"]'
+        SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules"]'
         PUBLIC_URL: "https://source-academy.github.io"
 
     - name: Deploy
