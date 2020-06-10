@@ -1,7 +1,7 @@
 import { IGameUI, GameButton, screenSize } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { talkEntryTweenProps, talkExitTweenProps } from './GameModeTalkTypes';
-import { sleep } from '../../util/GameUtils';
+import { sleep } from '../../utils/GameUtils';
 
 class GameModeTalk implements IGameUI {
   public possibleTopics: Array<GameButton>;
