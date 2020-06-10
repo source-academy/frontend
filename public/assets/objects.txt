@@ -6,10 +6,10 @@ door4, hallway-greatHall, 178, 173
 door5, hallway-classroom, 1465, 225
 
 [room]
-yourCarpet, yourCarpet, normal, 640, 667
+yourCarpet, yourCarpet, 640, 667
 yourChair, yourChair, 932, 549
-door6, door, 831, 270
-yourBed, normal, 372, 514
+door6, door/yourRoom-dim, 831, 270
+yourBed, yourHeadphones, 372, 514
 $
 yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
 yourCarpet, collectible: yourCarpet

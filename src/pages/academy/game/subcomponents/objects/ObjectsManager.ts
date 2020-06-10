@@ -22,17 +22,20 @@ function objPropertyMapper(objectsList: string[]): ObjectPropertyMap {
 
   const objectPropertyMap = {};
   const objectDetails = objectsList.slice(0, separatorIndex);
-  const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length - 1);
 
   objectDetails.forEach(objectDetail => {
     const [objectId, texture, xCoord, yCoord] = objectDetail.split(', ');
-    objectPropertyMap[objectId]['details'] = [texture, parseInt(xCoord), parseInt(yCoord)];
+    _.set(objectPropertyMap, [objectId, 'details'], [texture, parseInt(xCoord), parseInt(yCoord)]);
   });
 
-  objectActions.forEach(objectDetail => {
-    const [objectId, ...actions] = objectDetail.split(', ');
-    objectPropertyMap[objectId]['actions'] = actions;
-  });
+  if (separatorIndex !== -1) {
+    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length - 1);
+
+    objectActions.forEach(objectDetail => {
+      const [objectId, ...actions] = objectDetail.split(', ');
+      _.set(objectPropertyMap, [objectId, 'actions'], actions);
+    });
+  }
 
   return objectPropertyMap;
 }

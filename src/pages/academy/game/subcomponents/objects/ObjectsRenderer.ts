@@ -1,31 +1,32 @@
-import { LocationObjectsMap, ObjectProperty, ObjectAction } from './ObjectsTypes';
+import * as _ from 'lodash';
+import { ObjectProperty, ObjectAction, ObjectPropertyMap, SpriteMap } from './ObjectsTypes';
 
 type Container = Phaser.GameObjects.Container;
-const { Container, Image } = Phaser.GameObjects;
+const { Image, Container } = Phaser.GameObjects;
 
 export function createObjectsLayer(
   scene: Phaser.Scene,
-  currLocation: string,
-  locationObjectsMap: string
-): LocationObjectsMap {
-  const objectPropertyMap = locationObjectsMap[currLocation];
-  const objectRenderMap = {};
-
+  objectPropertyMap: ObjectPropertyMap
+): [SpriteMap, Container] {
   const container = new Container(scene, 0, 0);
 
-  _.forOwn(objectPropertyMap, renderObject);
-  return {};
+  const objectSpriteMap = _.mapValues(objectPropertyMap, createInteractiveObject(scene));
+  container.add(Object.values(objectSpriteMap));
+
+  return [objectSpriteMap, container];
 }
 
-function renderObject(objectProperty: ObjectProperty, objectId: string) {
+const createInteractiveObject = (scene: Phaser.Scene) => (objectProperty: ObjectProperty) => {
   const { details, actions } = objectProperty;
   const [texture, xCoord, yCoord] = details;
-  const objectSprite = new Image(scene, xCoord, yCoord, texture);
-  container.add(objectSprite);
+  const objectSprite = new Image(scene, xCoord, yCoord, texture).setInteractive({
+    useHandCursor: true,
+    pixelPerfect: true
+  });
 
-  objectRenderMap[objectId]['sprite'] = objectSprite;
   objectSprite.on('pointerdown', onClick(actions));
-}
+  return objectSprite;
+};
 
 function onClick(actions: ObjectAction[]) {
   return () => console.log(actions);

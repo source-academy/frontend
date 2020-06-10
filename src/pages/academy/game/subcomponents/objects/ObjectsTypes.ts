@@ -5,7 +5,7 @@ type ObjectDetail = [ObjectTexture, XCoord, YCoord];
 
 type ActionName = string;
 type ActionParams = Array<any>;
-type ObjectAction = [ActionName, ActionParams];
+export type ObjectAction = [ActionName, ActionParams];
 
 export type LocationRawObjectsMap = {
   [location: string]: string[];
@@ -22,4 +22,8 @@ export type ObjectPropertyMap = {
 
 export type LocationObjectsMap = {
   [location: string]: ObjectPropertyMap;
+};
+
+export type SpriteMap = {
+  [objectId: string]: Phaser.GameObjects.Image;
 };

@@ -35,13 +35,14 @@ class PlayGame extends Phaser.Scene {
       x: c.screenWidth * 0.5,
       y: c.screenHeight * 0.9
     });
-
     const dialogueText = this.cache.text.get('#D../assets/dialogue.txt');
     const [activateDialogueLayer] = createDialogue(this, parseDialogue(dialogueText));
     activateDialogueLayer();
 
     const objectText = this.cache.text.get('#O../assets/objects.txt');
-    const [activateObjectsLayer] = createObjectsLayer(this, currLocation, parseObjects(objectText));
+    const objectPropertyMap = parseObjects(objectText)['room'];
+    const [, container] = createObjectsLayer(this, objectPropertyMap);
+    this.add.existing(container);
   }
 
   private addAssetToScene() {
