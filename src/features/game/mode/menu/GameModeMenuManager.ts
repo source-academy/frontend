@@ -3,20 +3,17 @@ import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMenu from 'src/features/game/mode/menu/GameModeMenu';
 import { modeButtonYPos, modeButtonStyle } from 'src/features/game/mode/menu/GameModeMenuTypes';
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
+import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMenuManager {
-  static processModeMenus(
-    gameManager: GameManager,
-    chapter: GameChapter
-  ): Map<string, GameModeMenu> {
+  static processModeMenus(chapter: GameChapter): Map<string, GameModeMenu> {
     const mapModeMenus = new Map<string, GameModeMenu>();
     chapter.map.getLocations().forEach(location => {
       const modeMenus = new GameModeMenu();
 
       if (location.modes) {
         location.modes.forEach(mode => {
-          const callback = this.getModeButtonCallback(gameManager, mode);
+          const callback = this.getModeButtonCallback(mode);
           GameModeMenuManager.addModeButton(modeMenus, mode, callback);
         });
       }
@@ -27,8 +24,8 @@ class GameModeMenuManager {
     return mapModeMenus;
   }
 
-  static getModeButtonCallback(gameManager: GameManager, mode: GameMode) {
-    return () => gameManager.changeModeTo(mode);
+  static getModeButtonCallback(mode: GameMode) {
+    return () => GameActionManager.getInstance().changeModeTo(mode);
   }
 
   static addModeButton(modeMenu: GameModeMenu, modeName: GameMode, callback: any) {

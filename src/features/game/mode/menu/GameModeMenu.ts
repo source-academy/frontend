@@ -1,7 +1,7 @@
 import { GameButton, IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
 import { modeMenuBanner, menuEntryTweenProps, menuExitTweenProps } from './GameModeMenuTypes';
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import { sleep } from 'src/features/game/util/GameUtils';
+import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMenu implements IGameUI {
   public modeBanner: GameSprite;
@@ -19,7 +19,12 @@ class GameModeMenu implements IGameUI {
     this.modeButtons = new Array<GameButton>();
   }
 
-  public getUIContainer(gameManager: GameManager): Phaser.GameObjects.Container {
+  public getUIContainer(): Phaser.GameObjects.Container {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('GetUIContainer: Game Manager is not defined!');
+    }
+
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const modeBanner = new Phaser.GameObjects.Image(
@@ -60,10 +65,12 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
-  public async activateUI(
-    gameManager: GameManager,
-    container: Phaser.GameObjects.Container
-  ): Promise<void> {
+  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('ActivateUI: Game Manager is not defined!');
+    }
+
     container.setActive(true);
     container.setVisible(true);
     container.setPosition(container.x, screenSize.y);
@@ -74,10 +81,12 @@ class GameModeMenu implements IGameUI {
     });
   }
 
-  public async deactivateUI(
-    gameManager: GameManager,
-    container: Phaser.GameObjects.Container
-  ): Promise<void> {
+  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('DeactivateUI: Game Manager is not defined!');
+    }
+
     container.setPosition(container.x, 0);
 
     gameManager.tweens.add({

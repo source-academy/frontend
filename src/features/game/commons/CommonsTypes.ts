@@ -1,5 +1,3 @@
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
-
 export const screenSize = {
   x: 1920,
   y: 1080
@@ -33,12 +31,9 @@ export interface IGameInteractive {
 }
 
 export interface IGameUI {
-  getUIContainer: (gameManager: GameManager) => Phaser.GameObjects.Container;
-  activateUI: (gameManager: GameManager, container: Phaser.GameObjects.Container) => Promise<void>;
-  deactivateUI: (
-    gameManager: GameManager,
-    container: Phaser.GameObjects.Container
-  ) => Promise<void>;
+  getUIContainer: () => Phaser.GameObjects.Container;
+  activateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
+  deactivateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
 }
 
 export const shortButton: GameImage = {

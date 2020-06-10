@@ -1,7 +1,7 @@
 import { GameImage, screenSize, longButton } from '../../commons/CommonsTypes';
 
 export const backText = 'Back';
-export const moveButtonYSpace = screenSize.y * 0.80; 
+export const moveButtonYSpace = screenSize.y * 0.8;
 export const moveButtonXPos = screenSize.x * 0.75;
 export const previewFrameXPos = screenSize.x * 0.3;
 export const previewWidth = screenSize.x * 0.473;
