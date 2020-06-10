@@ -3,7 +3,7 @@ import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import GameModeMove from './GameModeMove';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { GameButton, screenSize, longButton } from '../../commons/CommonsTypes';
-import { moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
+import { moveButtonYSpace, moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
 
 class GameModeMoveManager {
   static processMoveMenus(
@@ -44,9 +44,9 @@ class GameModeMoveManager {
 
   static addMoveOptionButton(moveMenu: GameModeMove, name: string, callback: any) {
     const newNumberOfButtons = moveMenu.possibleLocations.length + 1;
-    const partitionSize = screenSize.y / newNumberOfButtons;
+    const partitionSize = moveButtonYSpace / newNumberOfButtons;
 
-    const newYPos = partitionSize / 2;
+    const newYPos = (screenSize.y - moveButtonYSpace) / 2 + partitionSize / 2;
 
     // Rearrange existing buttons
     for (let i = 0; i < moveMenu.possibleLocations.length; i++) {
