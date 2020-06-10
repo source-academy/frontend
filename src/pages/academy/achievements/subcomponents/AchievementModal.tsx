@@ -14,6 +14,7 @@ function AchievementModal(props: AchievementModalProps) {
   if (title === '') return null;
 
   const result = modalOverviews.filter(modal => modal.title === title);
+  if (result.length === 0) return null;
   const { modalImageUrl, description } = result[0];
 
   return (
