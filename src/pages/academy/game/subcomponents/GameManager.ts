@@ -9,7 +9,10 @@ import GameModeMoveManager from 'src/features/game/mode/move/GameModeMoveManager
 import GameModeMove from 'src/features/game/mode/move/GameModeMove';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import { IGameUI, screenSize } from 'src/features/game/commons/CommonsTypes';
+import GameModeExploreManager from 'src/features/game/mode/explore/GameModeExploreManager';
+import GameModeExplore from 'src/features/game/mode/explore/GameModeExplore';
 import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
+import exploreUIAssets from 'src/features/game/mode/explore/GameModeExploreTypes';
 import GameActionManager from './GameActionManager';
 import GameModeTalk from 'src/features/game/mode/talk/GameModeTalk';
 import GameModeTalkManager from 'src/features/game/mode/talk/GameModeTalkManager';
@@ -23,6 +26,7 @@ class GameManager extends Phaser.Scene {
   private locationModeMenus: Map<string, GameModeMenu>;
   private locationModeMoves: Map<string, GameModeMove>;
   private locationModeTalks: Map<string, GameModeTalk>;
+  private locationModeExplore: Map<string, GameModeExplore>;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
@@ -37,6 +41,7 @@ class GameManager extends Phaser.Scene {
     this.locationModeMenus = new Map<string, GameModeMenu>();
     this.locationModeMoves = new Map<string, GameModeMove>();
     this.locationModeTalks = new Map<string, GameModeTalk>();
+    this.locationModeExplore = new Map<string, GameModeExplore>();
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -51,6 +56,7 @@ class GameManager extends Phaser.Scene {
     this.locationModeMenus = GameModeMenuManager.processModeMenus(this.currentChapter);
     this.locationModeMoves = GameModeMoveManager.processMoveMenus(this.currentChapter);
     this.locationModeTalks = GameModeTalkManager.processTalkMenus(this.currentChapter);
+    this.locationModeExplore = GameModeExploreManager.processExploreMenus(this.currentChapter);
   }
 
   public create() {
@@ -119,6 +125,9 @@ class GameManager extends Phaser.Scene {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
     moveUIAssets.forEach(moveUIAsset => this.load.image(moveUIAsset.key, moveUIAsset.path));
     talkUIAssets.forEach(talkUIAsset => this.load.image(talkUIAsset.key, talkUIAsset.path));
+    exploreUIAssets.forEach(exploreUIAsset =>
+      this.load.image(exploreUIAsset.key, exploreUIAsset.path)
+    );
   }
 
   private getUIContainers(location: GameLocation) {
@@ -144,6 +153,12 @@ class GameManager extends Phaser.Scene {
     }
 
     // TODO: Fetch remaining UIContainers
+    // Get Move Menu
+    const locationModeExplore = this.locationModeExplore.get(location.name);
+    if (locationModeExplore) {
+      const moveMenuContainer = locationModeExplore.getUIContainer();
+      this.currentUIContainers.set(GameMode.Move, moveMenuContainer);
+    }
 
     // Disable all UI at first
     this.currentUIContainers.forEach(container => {
@@ -165,6 +180,8 @@ class GameManager extends Phaser.Scene {
         return this.locationModeMoves.get(this.currentLocationName);
       case GameMode.Talk:
         return this.locationModeTalks.get(this.currentLocationName);
+      case GameMode.Explore:
+        return this.locationModeMoves.get(this.currentLocationName);
       default:
         // tslint:disable-next-line
         console.log('Not implemented yet: ', mode, ' , returning mode menu instead');
