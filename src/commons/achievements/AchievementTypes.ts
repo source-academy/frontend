@@ -1,11 +1,13 @@
 export enum AchievementStatus {
-  PENDING = 'ALL',
-  ACTIVE = 'ACTIVE',
-  COMPLETED = 'COMPLETED'
+  ACTIVE = 'ACTIVE',       // deadline not over and not completed
+  COMPLETED = 'COMPLETED', // completed, regardless of deadline
+  EXPIRED = 'EXPIRED'      // deadline over and not completed
 }
 
-export enum AchievementPath {
+export enum AchievementAbility {
   ACADEMIC = 'Academic',
+  COMMUNITY = 'Community',
+  EFFORT = 'Effort',
   EXPLORATION = 'Exploration'
 }
 
@@ -13,7 +15,7 @@ export type AchievementOverview = {
   title: string;
   subachievementTitles: string[];
   status: AchievementStatus;
-  path: AchievementPath;
+  ability: AchievementAbility;
   exp: number;
   deadline: Date | undefined;
 };

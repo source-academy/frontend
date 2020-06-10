@@ -10,7 +10,7 @@ import {
   AchievementStatus,
   SubAchivementOverview,
   AchievementModalOverview,
-  AchievementPath
+  AchievementAbility
 } from '../../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {};
@@ -21,8 +21,8 @@ const achievementOverviews: AchievementOverview[] = [
   {
     title: 'Rune Master',
     subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
-    status: AchievementStatus.PENDING,
-    path: AchievementPath.ACADEMIC,
+    status: AchievementStatus.ACTIVE,
+    ability: AchievementAbility.ACADEMIC,
     exp: 100,
     deadline: new Date(2020, 5, 1, 6, 0, 0)
   },
@@ -30,7 +30,7 @@ const achievementOverviews: AchievementOverview[] = [
     title: 'Keyboard Warrior',
     subachievementTitles: ['Keyboard Warrior: Gold Tier'],
     status: AchievementStatus.ACTIVE,
-    path: AchievementPath.ACADEMIC,
+    ability: AchievementAbility.COMMUNITY,
     exp: 100,
     deadline: undefined
   },
@@ -38,7 +38,7 @@ const achievementOverviews: AchievementOverview[] = [
     title: 'Adventure Time',
     subachievementTitles: [],
     status: AchievementStatus.COMPLETED,
-    path: AchievementPath.ACADEMIC,
+    ability: AchievementAbility.EXPLORATION,
     exp: 100,
     deadline: new Date(2020, 5, 11, 6, 0, 0)
   },
@@ -46,7 +46,7 @@ const achievementOverviews: AchievementOverview[] = [
     title: 'Keyboard Warrior',
     subachievementTitles: ['Keyboard Warrior: Gold Tier'],
     status: AchievementStatus.ACTIVE,
-    path: AchievementPath.ACADEMIC,
+    ability: AchievementAbility.EXPLORATION,
     exp: 100,
     deadline: undefined
   },
@@ -54,7 +54,7 @@ const achievementOverviews: AchievementOverview[] = [
     title: 'Keyboard Warrior',
     subachievementTitles: ['Keyboard Warrior: Gold Tier'],
     status: AchievementStatus.ACTIVE,
-    path: AchievementPath.ACADEMIC,
+    ability: AchievementAbility.EXPLORATION,
     exp: 100,
     deadline: undefined
   }
@@ -120,20 +120,20 @@ const modalOverviews: AchievementModalOverview[] = [
 
 function Achievement() {
   const [modal, setModal] = useState('');
-  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>(
-    AchievementStatus.PENDING
+  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>(  // change to filterStatus
+    AchievementStatus.EXPIRED
   );
 
   const mapTitlesToSubachievements = (titles: string[]) =>
     titles.map(target =>
-      subachievementOverviews.filter(subachievement => subachievement.title === target)
+      subachievementOverviews.filter(subachievement => subachievement.title === target) // change to uppercase A
     );
 
   const filterAchievementsByStatus = (
     achievementOverviews: AchievementOverview[],
     status: AchievementStatus
   ) => {
-    if (status === AchievementStatus.PENDING) {
+    if (status === AchievementStatus.EXPIRED) {   // change to filterStatus
       return achievementOverviews;
     }
 
@@ -142,11 +142,11 @@ function Achievement() {
     );
   };
 
-  const getAchievementTasks = (achievementOverviews: AchievementOverview[]) => {
+  const mapAchievementOverviewToTasks = (achievementOverviews: AchievementOverview[]) => {
     return filterAchievementsByStatus(achievementOverviews, filteredStatus).map(achievement => (
       <AchievementTask
         title={achievement.title}
-        path={achievement.path}
+        ability={achievement.ability}
         exp={achievement.exp}
         deadline={achievement.deadline}
         subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
@@ -155,12 +155,12 @@ function Achievement() {
     ));
   };
 
-  const getTasksCountByStatus = (
+  const getTasksCountByStatus = (   // change to get every tasks instead
     achievementOverviews: AchievementOverview[],
     status: AchievementStatus
   ) => {
     switch (status) {
-      case AchievementStatus.PENDING:
+      case AchievementStatus.EXPIRED:   // change to filterStatus.ALL
         return achievementOverviews.length;
       default:
         console.log(filterAchievementsByStatus(achievementOverviews, status));
@@ -174,10 +174,10 @@ function Achievement() {
         <div className="icons">
           <div></div>
           <AchievementCategory
-            status={AchievementStatus.PENDING}
+            status={AchievementStatus.EXPIRED}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.GLOBE}
-            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.PENDING)}
+            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.EXPIRED)}
           />
           <AchievementCategory
             status={AchievementStatus.ACTIVE}
@@ -194,7 +194,7 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul className="display-list">{getAchievementTasks(achievementOverviews)}</ul>
+          <ul className="display-list">{mapAchievementOverviewToTasks(achievementOverviews)}</ul>
         </div>
 
         <AchievementModal title={modal} modalOverviews={modalOverviews} />

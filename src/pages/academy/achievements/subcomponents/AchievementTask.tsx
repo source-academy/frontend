@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 
 import SubAchievementCard from './SubAchievementCard';
 import AchievementCard from './AchievementCard';
-import { AchievementPath } from 'src/commons/achievements/AchievementTypes';
+import { AchievementAbility } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementTaskProps = {
   title: string;
   subachievements: any[];
   setModal: any;
-  path: AchievementPath;
+  ability: AchievementAbility;
   exp: number;
   deadline: Date | undefined;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { title, subachievements, setModal, path, exp, deadline } = props;
+  const { title, subachievements, setModal, ability, exp, deadline } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const toggleSubachievementDropdown = () => {
@@ -26,12 +26,12 @@ function AchievementTask(props: AchievementTaskProps) {
   };
 
   return (
-    <li>
+    <li key={title}>
       <AchievementCard
         title={title}
         subachievements={subachievements}
         isDropdownOpen={isDropdownOpen}
-        path={path}
+        ability={ability}
         exp={exp}
         deadline={deadline}
         toggleDropdown={toggleSubachievementDropdown}

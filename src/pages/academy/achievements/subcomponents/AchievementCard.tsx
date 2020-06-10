@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { AchievementPath } from 'src/commons/achievements/AchievementTypes';
+import { AchievementAbility } from 'src/commons/achievements/AchievementTypes';
 import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
 
@@ -11,7 +11,7 @@ type AchievementCardProps = {
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
-  path: AchievementPath;
+  ability: AchievementAbility;
   exp: number;
   deadline: Date | undefined;
 };
@@ -23,7 +23,7 @@ function AchievementCard(props: AchievementCardProps) {
     isDropdownOpen,
     toggleDropdown,
     displayModal,
-    path,
+    ability,
     exp,
     deadline
   } = props;
@@ -48,8 +48,8 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
 
         <div className="details">
-          <div className="path">
-            <p>{path}</p>
+          <div className="ability">
+            <p>{ability}</p>
           </div>
 
           <AchievementDeadline deadline={deadline} />
