@@ -6,7 +6,9 @@ const cracoConfig = (module.exports = {
         const workboxPlugin = webpackConfig.plugins.find(
           plugin => plugin.constructor.name === 'GenerateSW'
         );
-        workboxPlugin.config = cracoConfig.workbox(workboxPlugin.config);
+        if (workboxPlugin) {
+          workboxPlugin.config = cracoConfig.workbox(workboxPlugin.config);
+        }
       }
 
       // workaround .mjs files by Acorn
