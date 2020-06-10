@@ -43,14 +43,6 @@ const achievementOverviews: AchievementOverview[] = [
     deadline: new Date(2020, 5, 11, 6, 0, 0)
   },
   {
-    title: 'Warrior Warrior',
-    subachievementTitles: [],
-    status: AchievementStatus.COMPLETED,
-    path: AchievementPath.EXPLORATION,
-    exp: 100,
-    deadline: undefined
-  },
-  {
     title: 'Keyboard Warrior',
     subachievementTitles: ['Keyboard Warrior: Gold Tier'],
     status: AchievementStatus.ACTIVE,
