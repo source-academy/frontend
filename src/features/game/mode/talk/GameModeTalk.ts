@@ -4,23 +4,20 @@ import {
   talkEntryTweenProps,
   talkExitTweenProps,
   talkButtonYSpace,
-  Callback,
   talkButtonStyle,
   talkOptButton,
   TalkButtonType,
-  TalkButton,
-  nullFunction
+  TalkButton
 } from './GameModeTalkTypes';
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { backText, GameMode } from '../GameModeTypes';
-import { createDialogue } from '../../dialogue/DialogueRenderer';
 import { sleep } from '../../utils/GameUtils';
 
 class GameModeTalk implements IGameUI {
   private dialogues: Dialogue[];
   private gameButtons: TalkButton[];
 
-  constructor(dialogues: Dialogue[], backButtonCallback: Callback) {
+  constructor(dialogues: Dialogue[]) {
     this.dialogues = dialogues;
     this.gameButtons = [];
     this.createGameButtons();
@@ -54,19 +51,19 @@ class GameModeTalk implements IGameUI {
       if (topicButton.isInteractive) {
         buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
 
-        let callBack = nullFunction;
+        let callback;
 
         if (topicButton.type === TalkButtonType.Dialogue) {
-          callBack = async () => {
+          callback = async () => {
             gameManager.tweens.add({ targets: [talkMenuContainer], ...talkExitTweenProps });
             await topicButton.onInteract();
             gameManager.tweens.add({ targets: [talkMenuContainer], ...talkEntryTweenProps });
           };
         } else {
-          callBack = topicButton.onInteract;
+          callback = topicButton.onInteract;
         }
 
-        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callBack);
+        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
       }
 
       talkMenuContainer.add(buttonSprite);
@@ -77,17 +74,12 @@ class GameModeTalk implements IGameUI {
 
   createGameButtons() {
     this.dialogues.forEach(dialogue => {
-      this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, async () => {
-        const gameManager = GameActionManager.getInstance().getGameManager();
-        if (!gameManager) {
-          return;
-        }
-        const [activateDialogue] = createDialogue(gameManager, dialogue.content);
-        await activateDialogue;
-      });
+      this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
+        GameActionManager.getInstance().bringUpDialogue(dialogue.content)
+      );
 
-      this.addTopicOptionButton(TalkButtonType.Other, backText, () => {
-        GameActionManager.getInstance().changeModeTo(GameMode.Menu);
+      this.addTopicOptionButton(TalkButtonType.Other, backText, async () => {
+        await GameActionManager.getInstance().changeModeTo(GameMode.Menu);
       });
     });
   }

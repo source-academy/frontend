@@ -49,7 +49,4 @@ export type TalkButton = GameButton & {
   type: TalkButtonType;
 };
 
-export type Callback = () => void;
-export const nullFunction = () => {};
-
 export default talkUIAssets;
