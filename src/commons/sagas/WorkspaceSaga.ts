@@ -696,8 +696,8 @@ export function* evalCode(
     const oldErrors = context.errors;
     context.errors = [];
     const parsed = parse(code, context);
-    context.errors = oldErrors;
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
+    context.errors = oldErrors;
     if (typeErrors && typeErrors.length > 0) {
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)
