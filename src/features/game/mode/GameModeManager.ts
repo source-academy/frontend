@@ -1,0 +1,63 @@
+import { IGameUI } from '../commons/CommonsTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { GameChapter } from '../chapter/GameChapterTypes';
+import GameModeMenuManager from './menu/GameModeMenuManager';
+import GameModeTalkManager from './talk/GameModeTalkManager';
+import GameModeMoveManager from './move/GameModeMoveManager';
+import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import modeUIAssets from './menu/GameModeMenuTypes';
+import moveUIAssets from './move/GameModeMoveTypes';
+import talkUIAssets from './talk/GameModeTalkTypes';
+
+class GameModeManager {
+  private gameModes: Map<string, Map<GameMode, IGameUI>>;
+
+  constructor() {
+    this.gameModes = new Map<string, Map<GameMode, IGameUI>>();
+  }
+
+  public processModes(chapter: GameChapter) {
+    const locationModes = new Map<GameMode, Map<string, IGameUI>>();
+    locationModes.set(GameMode.Menu, GameModeMenuManager.processModeMenus(chapter));
+    locationModes.set(GameMode.Talk, GameModeTalkManager.processTalkMenus(chapter));
+    locationModes.set(GameMode.Move, GameModeMoveManager.processMoveMenus(chapter));
+
+    locationModes.forEach((locToUI, mode, map) => {
+      locToUI.forEach((gameUI, locationName, map) => {
+        if (!this.gameModes.get(locationName)) {
+          this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
+        }
+        this.gameModes.get(locationName)!.set(mode, gameUI);
+      });
+    });
+  }
+
+  public preloadModeBaseAssets() {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('Unable to preload mode base assets');
+    }
+    const modeAssets = [modeUIAssets, moveUIAssets, talkUIAssets];
+    modeAssets.forEach(assets =>
+      assets.forEach(asset => gameManager.load.image(asset.key, asset.path))
+    );
+  }
+
+  public getModeContainers(locationName: string): Map<GameMode, Phaser.GameObjects.Container> {
+    const modeContainers = new Map<GameMode, Phaser.GameObjects.Container>();
+    const locationModes = this.gameModes.get(locationName);
+    if (locationModes) {
+      locationModes.forEach((value, key, map) => {
+        const modeContainer = value.getUIContainer();
+        modeContainers.set(key, modeContainer);
+      });
+    }
+    return modeContainers;
+  }
+
+  public getLocationMode(mode: GameMode, locationName: string): IGameUI | undefined {
+    return this.gameModes.get(locationName)!.get(mode);
+  }
+}
+
+export default GameModeManager;
