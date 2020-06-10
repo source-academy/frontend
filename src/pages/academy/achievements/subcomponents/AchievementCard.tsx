@@ -2,6 +2,8 @@ import React from 'react';
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { AchievementPath } from 'src/commons/achievements/AchievementTypes';
+import AchievementDeadline from './AchievementDeadline';
+import AchievementExp from './AchievementExp';
 
 type AchievementCardProps = {
   title: string;
@@ -28,21 +30,6 @@ function AchievementCard(props: AchievementCardProps) {
 
   const hasDropdown = subachievements.length > 0;
 
-  const getTimeRemaining = () => {
-    if (deadline) {
-      if (deadline.getTime() >= new Date().getTime()) {
-        const hoursLeft = Math.floor(
-          (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60)
-        );
-        return `${hoursLeft} hours`;
-      }
-
-      return 'Expired';
-    }
-
-    return '';
-  };
-
   return (
     <Card className="achievement" onClick={displayModal(title)} onClickCapture={toggleDropdown}>
       {hasDropdown ? (
@@ -61,17 +48,13 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
 
         <div className="details">
-          <div>
+          <div className="path">
             <p>{path}</p>
           </div>
 
-          <div>
-            <p>{getTimeRemaining()}</p>
-          </div>
+          <AchievementDeadline deadline={deadline} />
 
-          <div>
-            <p>{`${exp} XP`}</p>
-          </div>
+          <AchievementExp exp={exp} />
         </div>
       </div>
     </Card>

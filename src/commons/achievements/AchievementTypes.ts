@@ -20,6 +20,8 @@ export type AchievementOverview = {
 
 export type SubAchivementOverview = {
   title: string;
+  exp: number;
+  deadline: Date | undefined;
 };
 
 export type AchievementModalOverview = {

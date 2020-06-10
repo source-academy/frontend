@@ -61,9 +61,21 @@ const achievementOverviews: AchievementOverview[] = [
 ];
 
 const subachievementOverviews: SubAchivementOverview[] = [
-  { title: 'Beyond the Second Dimension' },
-  { title: 'Colorful Carpet' },
-  { title: 'Keyboard Warrior: Gold Tier' }
+  {
+    title: 'Beyond the Second Dimension',
+    exp: 200,
+    deadline: undefined
+  },
+  {
+    title: 'Colorful Carpet',
+    exp: 100,
+    deadline: new Date(2020, 5, 1, 6, 0, 0)
+  },
+  {
+    title: 'Keyboard Warrior: Gold Tier',
+    exp: 200,
+    deadline: new Date(2020, 4, 1, 6, 0, 0)
+  }
 ];
 
 const modalOverviews: AchievementModalOverview[] = [
