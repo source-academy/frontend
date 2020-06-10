@@ -1,0 +1,20 @@
+[hallway]
+door1, hallway-telebay, 1015, 478
+door2, hallway-LKoffice, 632, 369
+door3, hallway-cmdCenter, 1122, 407
+door4, hallway-greatHall, 178, 173
+door5, hallway-classroom, 1465, 225
+
+[room]
+yourCarpet, yourCarpet, normal, 640, 667
+yourChair, yourChair, 932, 549
+door6, door, 831, 270
+yourBed, normal, 372, 514
+$
+yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
+yourCarpet, collectible: yourCarpet
+door7, move: [door6, 7, 18], appear: apple
+
+[office]
+door7, door.HMoffice, 1499, 87
+yourBed1, yourBed, 372, 514

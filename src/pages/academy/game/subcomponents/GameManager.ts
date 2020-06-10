@@ -1,14 +1,14 @@
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
-import GameModeMenu from 'src/features/game/modeMenu/GameModeMenu';
-import modeUIAssets from 'src/features/game/modeMenu/GameModeMenuTypes';
-import GameModeMenuManager from 'src/features/game/modeMenu/GameModeMenuManager';
+import GameModeMenu from 'src/features/game/mode/menu/GameModeMenu';
+import modeUIAssets from 'src/features/game/mode/menu/GameModeMenuTypes';
+import GameModeMenuManager from 'src/features/game/mode/menu/GameModeMenuManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMoveManager from 'src/features/game/mode/move/GameModeMoveManager';
 import GameModeMove from 'src/features/game/mode/move/GameModeMove';
 import LocationSelectChapter from './scenes/LocationSelectChapter';
-import { IGameUI } from 'src/features/game/commons/CommonsTypes';
+import { IGameUI, screenSize } from 'src/features/game/commons/CommonsTypes';
 import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
 
 class GameManager extends Phaser.Scene {
@@ -38,7 +38,7 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     this.preloadLocationsAssets(this.currentChapter);
-    this.preloadUIAssets();
+    this.preloadAssets();
 
     this.locationModeMenus = GameModeMenuManager.processModeMenus(this, this.currentChapter);
     this.locationModeMoves = GameModeMoveManager.processMoveMenus(this, this.currentChapter);
@@ -53,7 +53,9 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   private preloadLocationsAssets(chapter: GameChapter) {
-    chapter.map.getLocationAssets().forEach(asset => this.load.image(asset.key, asset.path));
+    chapter.map.getLocationAssets().forEach(asset => {
+      this.load.image(asset.key, asset.path);
+    });
   }
 
   private renderStartingLocation(chapter: GameChapter) {
@@ -65,32 +67,46 @@ class GameManager extends Phaser.Scene {
   }
 
   private renderLocation(map: GameMap, location: GameLocation) {
-    // Clean up canvas
-
     // Render background of the location
     const asset = map.getLocationAsset(location);
     if (asset) {
-      this.add.image(location.assetXPos, location.assetYPos, location.assetKey);
+      const backgroundAsset = this.add.image(
+        location.assetXPos,
+        location.assetYPos,
+        location.assetKey
+      );
+      backgroundAsset.setDisplaySize(screenSize.x, screenSize.y);
     }
-
-    // Reset UI Containers on new location
-    this.currentUIContainers.clear();
 
     // Get all necessary UI containers
     this.getUIContainers(location);
 
     // By default, activate Menu mode
-    this.changeModeTo(GameMode.Menu, true);
+    this.changeModeTo(GameMode.Menu, true, true);
 
     // Update
     this.currentLocationName = location.name;
+  }
+
+  public changeLocationTo(locationName: string): void {
+    const location = this.currentChapter.map.getLocation(locationName);
+    if (location) {
+      // Deactive current UI
+      this.deactivateCurrentUI();
+
+      // Reset UI Containers on new location
+      this.currentUIContainers.clear();
+
+      // Render new location
+      this.renderLocation(this.currentChapter.map, location);
+    }
   }
 
   //////////////////////
   //   Menu Helpers   //
   //////////////////////
 
-  private preloadUIAssets() {
+  private preloadAssets() {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
     moveUIAssets.forEach(moveUIAsset => this.load.image(moveUIAsset.key, moveUIAsset.path));
   }
@@ -131,14 +147,21 @@ class GameManager extends Phaser.Scene {
       case GameMode.Move:
         return this.locationModeMoves.get(this.currentLocationName);
       default:
-        // TODO: Handle
         // tslint:disable-next-line
         console.log('Not implemented yet: ', mode, ' , returning mode menu instead');
         return this.locationModeMenus.get(this.currentLocationName);
     }
   }
 
-  public changeModeTo(newMode: GameMode, refresh?: boolean) {
+  private deactivateCurrentUI() {
+    const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
+    const prevLocationMode = this.getLocationMode(this.currentActiveMode);
+    if (prevLocationMode && prevContainer) {
+      prevLocationMode.deactivateUI(this, prevContainer);
+    }
+  }
+
+  public changeModeTo(newMode: GameMode, refresh?: boolean, skipDeactivate?: boolean) {
     if (!refresh && this.currentActiveMode === newMode) {
       return;
     }
@@ -147,11 +170,8 @@ class GameManager extends Phaser.Scene {
     const locationMode = this.getLocationMode(newMode);
 
     if (locationMode && modeContainer) {
-      // Deactivate previous UI
-      const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
-      const prevLocationMode = this.getLocationMode(this.currentActiveMode);
-      if (prevLocationMode && prevContainer) {
-        prevLocationMode.deactivateUI(this, prevContainer);
+      if (!skipDeactivate) {
+        this.deactivateCurrentUI();
       }
 
       // Activate new UI

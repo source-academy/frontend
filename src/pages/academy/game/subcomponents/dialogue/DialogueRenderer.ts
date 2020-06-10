@@ -135,7 +135,6 @@ function avatarManager(scene: Phaser.Scene): [Container, Text, SpeakerChangeFn] 
     avatar && container.add(avatar);
     speakerText.text = caps(speakerDetail[0]);
   };
-
   return [container, speakerText, changeSpeaker];
 }
 
