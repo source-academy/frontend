@@ -1,4 +1,7 @@
+import { screenSize } from "../commons/CommonsTypes";
+
 export const backText = 'Back';
+export const backTextYPos = screenSize.y * 0.11;
 
 export enum GameMode {
   Move = 'Move',

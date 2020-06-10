@@ -1,5 +1,4 @@
-import { screenSize } from '../commons/CommonsTypes';
-import { backText, GameMode, backButtonStyle } from './GameModeTypes';
+import { backText, GameMode, backButtonStyle, backTextYPos } from './GameModeTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { topButton } from '../commons/CommonsTypes';
 
@@ -13,7 +12,7 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
   const backButtonText = new Phaser.GameObjects.Text(
     gameManager,
     topButton.xPos,
-    screenSize.y * 0.011,
+    backTextYPos,
     backText,
     backButtonStyle
   ).setOrigin(0.5, 0.25);
