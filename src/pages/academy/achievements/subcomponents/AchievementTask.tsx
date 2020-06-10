@@ -40,7 +40,9 @@ function AchievementTask(props: AchievementTaskProps) {
       <ul>
         {isDropdownOpen ? (
           subachievements.map(subachievement => (
-            <SubAchievementCard subachievement={subachievement} displayModal={displayModal} />
+            <div className="node">
+              <SubAchievementCard subachievement={subachievement} displayModal={displayModal} />
+            </div>
           ))
         ) : (
           <div></div>

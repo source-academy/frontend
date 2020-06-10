@@ -41,6 +41,30 @@ const achievementOverviews: AchievementOverview[] = [
     path: AchievementPath.ACADEMIC,
     exp: 100,
     deadline: new Date(2020, 5, 11, 6, 0, 0)
+  },
+  {
+    title: 'Warrior Warrior',
+    subachievementTitles: [],
+    status: AchievementStatus.COMPLETED,
+    path: AchievementPath.EXPLORATION,
+    exp: 100,
+    deadline: undefined
+  },
+  {
+    title: 'Keyboard Warrior',
+    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
+    status: AchievementStatus.ACTIVE,
+    path: AchievementPath.ACADEMIC,
+    exp: 100,
+    deadline: undefined
+  },
+  {
+    title: 'Keyboard Warrior',
+    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
+    status: AchievementStatus.ACTIVE,
+    path: AchievementPath.ACADEMIC,
+    exp: 100,
+    deadline: undefined
   }
 ];
 
@@ -110,7 +134,7 @@ function Achievement() {
     }
 
     return achievementOverviews.filter(
-      achievementOverview => achievementOverview.status === filteredStatus
+      achievementOverview => achievementOverview.status === status
     );
   };
 
@@ -135,6 +159,7 @@ function Achievement() {
       case AchievementStatus.PENDING:
         return achievementOverviews.length;
       default:
+        console.log(filterAchievementsByStatus(achievementOverviews, status));
         return filterAchievementsByStatus(achievementOverviews, status).length;
     }
   };
@@ -165,7 +190,7 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul>{getAchievementTasks(achievementOverviews)}</ul>
+          <ul className="display-list">{getAchievementTasks(achievementOverviews)}</ul>
         </div>
 
         <AchievementModal title={modal} modalOverviews={modalOverviews} />
