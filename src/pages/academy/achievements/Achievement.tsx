@@ -78,9 +78,9 @@ function Achievement() {
       <div className="achievement-main">
         <div className="icons">
           <div></div>
-          <AchievementCategory category={'ALL'} icon={IconNames.GLOBE} missions={22} />
-          <AchievementCategory category={'ACTIVE'} icon={IconNames.LOCATE} missions={15} />
-          <AchievementCategory category={'COMPLETED'} icon={IconNames.ENDORSED} missions={7} />
+          <AchievementCategory category={'ALL'} icon={IconNames.GLOBE} count={22} />
+          <AchievementCategory category={'ACTIVE'} icon={IconNames.LOCATE} count={15} />
+          <AchievementCategory category={'COMPLETED'} icon={IconNames.ENDORSED} count={7} />
         </div>
 
         <div className="cards">

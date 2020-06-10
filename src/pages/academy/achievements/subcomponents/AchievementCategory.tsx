@@ -5,17 +5,17 @@ import { IconName, Icon } from '@blueprintjs/core';
 type AchievementCategoryProps = {
   category: string;
   icon: IconName;
-  missions: number;
+  count: number;
 };
 
 function AchievementCategory(props: AchievementCategoryProps) {
-  const { icon, category, missions } = props;
+  const { icon, category, count } = props;
   return (
     <div>
       <div>
         <Icon color={'#ffffff'} iconSize={44} icon={icon} />
         <br />
-        {category} ({missions})
+        {category} ({count})
       </div>
     </div>
   );
