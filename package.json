@@ -35,7 +35,7 @@
     "@ion-phaser/react": "^1.2.2",
     "@sentry/browser": "^5.17.0",
     "ace-builds": "^1.4.11",
-    "acorn": "^6.4.1",
+    "acorn": "^7.2.0",
     "ag-grid-community": "^23.2.0",
     "ag-grid-react": "^23.2.0",
     "classnames": "^2.2.6",
