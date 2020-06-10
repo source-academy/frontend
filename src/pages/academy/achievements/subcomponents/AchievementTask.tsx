@@ -6,7 +6,7 @@ import { AchievementAbility } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementTaskProps = {
   title: string;
-  subachievements: any[];
+  subAchievement: any[];
   setModal: any;
   ability: AchievementAbility;
   exp: number;
@@ -14,10 +14,10 @@ type AchievementTaskProps = {
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { title, subachievements, setModal, ability, exp, deadline } = props;
+  const { title, subAchievement, setModal, ability, exp, deadline } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const toggleSubachievementDropdown = () => {
+  const toggleSubAchievementDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
@@ -26,27 +26,27 @@ function AchievementTask(props: AchievementTaskProps) {
   };
 
   return (
-    <li key={title}>
+    <li>
       <AchievementCard
         title={title}
-        subachievements={subachievements}
+        subAchievements={subAchievement}
         isDropdownOpen={isDropdownOpen}
         ability={ability}
         exp={exp}
         deadline={deadline}
-        toggleDropdown={toggleSubachievementDropdown}
+        toggleDropdown={toggleSubAchievementDropdown}
         displayModal={displayModal}
       />
       <ul>
-        {isDropdownOpen ? (
-          subachievements.map(subachievement => (
-            <div className="node">
-              <SubAchievementCard subachievement={subachievement} displayModal={displayModal} />
-            </div>
-          ))
-        ) : (
-          <div></div>
-        )}
+        {isDropdownOpen
+          ? subAchievement.map(subAchievement => (
+              <li>
+                <div className="node">
+                  <SubAchievementCard subAchievement={subAchievement} displayModal={displayModal} />
+                </div>
+              </li>
+            ))
+          : null}
       </ul>
     </li>
   );

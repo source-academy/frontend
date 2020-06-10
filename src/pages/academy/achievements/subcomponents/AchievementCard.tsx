@@ -7,7 +7,7 @@ import AchievementExp from './AchievementExp';
 
 type AchievementCardProps = {
   title: string;
-  subachievements: any[];
+  subAchievements: any[];
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
@@ -19,7 +19,7 @@ type AchievementCardProps = {
 function AchievementCard(props: AchievementCardProps) {
   const {
     title,
-    subachievements,
+    subAchievements,
     isDropdownOpen,
     toggleDropdown,
     displayModal,
@@ -28,7 +28,7 @@ function AchievementCard(props: AchievementCardProps) {
     deadline
   } = props;
 
-  const hasDropdown = subachievements.length > 0;
+  const hasDropdown = subAchievements.length > 0;
 
   return (
     <Card className="achievement" onClick={displayModal(title)} onClickCapture={toggleDropdown}>

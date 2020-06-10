@@ -5,16 +5,16 @@ import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
 
 type SubAchievementCardProps = {
-  subachievement: any;
+  subAchievement: any;
   displayModal: any;
 };
 
 function SubAchievementCard(props: SubAchievementCardProps) {
-  const { subachievement, displayModal } = props;
-  const [{ title, deadline, exp }] = subachievement;
+  const { subAchievement, displayModal } = props;
+  const [{ title, deadline, exp }] = subAchievement;
 
   return (
-    <Card className="subachievement" onClick={displayModal(title)}>
+    <Card className="subAchievement" onClick={displayModal(title)}>
       <div className="display">
         <div>
           <h3>{title}</h3>

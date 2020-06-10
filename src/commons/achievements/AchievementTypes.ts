@@ -1,7 +1,7 @@
 export enum AchievementStatus {
-  ACTIVE = 'ACTIVE',       // deadline not over and not completed
+  ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
-  EXPIRED = 'EXPIRED'      // deadline over and not completed
+  EXPIRED = 'EXPIRED' // deadline over and not completed
 }
 
 export enum AchievementAbility {
@@ -13,7 +13,7 @@ export enum AchievementAbility {
 
 export type AchievementOverview = {
   title: string;
-  subachievementTitles: string[];
+  subAchievementTitles: string[];
   status: AchievementStatus;
   ability: AchievementAbility;
   exp: number;

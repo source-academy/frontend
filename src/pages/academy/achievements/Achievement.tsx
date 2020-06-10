@@ -20,7 +20,7 @@ export type StateProps = {};
 const achievementOverviews: AchievementOverview[] = [
   {
     title: 'Rune Master',
-    subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
+    subAchievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
     status: AchievementStatus.ACTIVE,
     ability: AchievementAbility.ACADEMIC,
     exp: 100,
@@ -28,7 +28,11 @@ const achievementOverviews: AchievementOverview[] = [
   },
   {
     title: 'Keyboard Warrior',
-    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
+    subAchievementTitles: [
+      'Keyboard Warrior: Bronze Tier',
+      'Keyboard Warrior: Silver Tier',
+      'Keyboard Warrior: Gold Tier'
+    ],
     status: AchievementStatus.ACTIVE,
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
@@ -36,23 +40,15 @@ const achievementOverviews: AchievementOverview[] = [
   },
   {
     title: 'Adventure Time',
-    subachievementTitles: [],
+    subAchievementTitles: [],
     status: AchievementStatus.COMPLETED,
     ability: AchievementAbility.EXPLORATION,
     exp: 100,
     deadline: new Date(2020, 5, 11, 6, 0, 0)
   },
   {
-    title: 'Keyboard Warrior',
-    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
-    status: AchievementStatus.ACTIVE,
-    ability: AchievementAbility.EXPLORATION,
-    exp: 100,
-    deadline: undefined
-  },
-  {
-    title: 'Keyboard Warrior',
-    subachievementTitles: ['Keyboard Warrior: Gold Tier'],
+    title: "Sort'a Easy",
+    subAchievementTitles: [],
     status: AchievementStatus.ACTIVE,
     ability: AchievementAbility.EXPLORATION,
     exp: 100,
@@ -60,7 +56,7 @@ const achievementOverviews: AchievementOverview[] = [
   }
 ];
 
-const subachievementOverviews: SubAchivementOverview[] = [
+const subAchievementOverviews: SubAchivementOverview[] = [
   {
     title: 'Beyond the Second Dimension',
     exp: 200,
@@ -70,6 +66,16 @@ const subachievementOverviews: SubAchivementOverview[] = [
     title: 'Colorful Carpet',
     exp: 100,
     deadline: new Date(2020, 5, 1, 6, 0, 0)
+  },
+  {
+    title: 'Keyboard Warrior: Bronze Tier',
+    exp: 200,
+    deadline: new Date(2020, 4, 1, 6, 0, 0)
+  },
+  {
+    title: 'Keyboard Warrior: Silver Tier',
+    exp: 200,
+    deadline: new Date(2020, 4, 1, 6, 0, 0)
   },
   {
     title: 'Keyboard Warrior: Gold Tier',
@@ -120,20 +126,21 @@ const modalOverviews: AchievementModalOverview[] = [
 
 function Achievement() {
   const [modal, setModal] = useState('');
-  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>(  // change to filterStatus
+  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>( // change to filterStatus
     AchievementStatus.EXPIRED
   );
 
-  const mapTitlesToSubachievements = (titles: string[]) =>
-    titles.map(target =>
-      subachievementOverviews.filter(subachievement => subachievement.title === target) // change to uppercase A
+  const mapTitlesToSubAchievements = (titles: string[]) =>
+    titles.map(
+      target => subAchievementOverviews.filter(subAchievement => subAchievement.title === target) // change to uppercase A
     );
 
   const filterAchievementsByStatus = (
     achievementOverviews: AchievementOverview[],
     status: AchievementStatus
   ) => {
-    if (status === AchievementStatus.EXPIRED) {   // change to filterStatus
+    if (status === AchievementStatus.EXPIRED) {
+      // change to filterStatus
       return achievementOverviews;
     }
 
@@ -142,25 +149,26 @@ function Achievement() {
     );
   };
 
-  const mapAchievementOverviewToTasks = (achievementOverviews: AchievementOverview[]) => {
+  const mapAchievementOverviewsToTasks = (achievementOverviews: AchievementOverview[]) => {
     return filterAchievementsByStatus(achievementOverviews, filteredStatus).map(achievement => (
       <AchievementTask
         title={achievement.title}
         ability={achievement.ability}
         exp={achievement.exp}
         deadline={achievement.deadline}
-        subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
+        subAchievement={mapTitlesToSubAchievements(achievement.subAchievementTitles)}
         setModal={setModal}
       />
     ));
   };
 
-  const getTasksCountByStatus = (   // change to get every tasks instead
+  const getTasksCountByStatus = (
+    // change to get every tasks instead
     achievementOverviews: AchievementOverview[],
     status: AchievementStatus
   ) => {
     switch (status) {
-      case AchievementStatus.EXPIRED:   // change to filterStatus.ALL
+      case AchievementStatus.EXPIRED: // change to filterStatus.ALL
         return achievementOverviews.length;
       default:
         console.log(filterAchievementsByStatus(achievementOverviews, status));
@@ -194,7 +202,7 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementOverviewToTasks(achievementOverviews)}</ul>
+          <ul className="display-list">{mapAchievementOverviewsToTasks(achievementOverviews)}</ul>
         </div>
 
         <AchievementModal title={modal} modalOverviews={modalOverviews} />
