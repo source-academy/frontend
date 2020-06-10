@@ -11,6 +11,9 @@ import LocationSelectChapter from '../../../../features/game/scenes/LocationSele
 import { IGameUI, screenSize } from 'src/features/game/commons/CommonsTypes';
 import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
 import GameActionManager from './GameActionManager';
+import GameModeTalk from 'src/features/game/mode/talk/GameModeTalk';
+import GameModeTalkManager from 'src/features/game/mode/talk/GameModeTalkManager';
+import talkUIAssets from 'src/features/game/mode/talk/GameModeTalkTypes';
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -19,6 +22,7 @@ class GameManager extends Phaser.Scene {
   // Limited to current chapter
   private locationModeMenus: Map<string, GameModeMenu>;
   private locationModeMoves: Map<string, GameModeMove>;
+  private locationModeTalks: Map<string, GameModeTalk>;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
@@ -32,6 +36,7 @@ class GameManager extends Phaser.Scene {
 
     this.locationModeMenus = new Map<string, GameModeMenu>();
     this.locationModeMoves = new Map<string, GameModeMove>();
+    this.locationModeTalks = new Map<string, GameModeTalk>();
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -45,6 +50,7 @@ class GameManager extends Phaser.Scene {
 
     this.locationModeMenus = GameModeMenuManager.processModeMenus(this.currentChapter);
     this.locationModeMoves = GameModeMoveManager.processMoveMenus(this.currentChapter);
+    this.locationModeTalks = GameModeTalkManager.processTalkMenus(this.currentChapter);
   }
 
   public create() {
@@ -112,6 +118,7 @@ class GameManager extends Phaser.Scene {
   private preloadAssets() {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
     moveUIAssets.forEach(moveUIAsset => this.load.image(moveUIAsset.key, moveUIAsset.path));
+    talkUIAssets.forEach(talkUIAsset => this.load.image(talkUIAsset.key, talkUIAsset.path));
   }
 
   private getUIContainers(location: GameLocation) {
@@ -127,6 +134,13 @@ class GameManager extends Phaser.Scene {
     if (locationMoveMenu) {
       const moveMenuContainer = locationMoveMenu.getUIContainer();
       this.currentUIContainers.set(GameMode.Move, moveMenuContainer);
+    }
+
+    // Get Talk Menu
+    const locationTalkMenu = this.locationModeTalks.get(location.name);
+    if (locationTalkMenu) {
+      const talkMenuContainer = locationTalkMenu.getUIContainer();
+      this.currentUIContainers.set(GameMode.Talk, talkMenuContainer);
     }
 
     // TODO: Fetch remaining UIContainers
@@ -149,6 +163,8 @@ class GameManager extends Phaser.Scene {
         return this.locationModeMenus.get(this.currentLocationName);
       case GameMode.Move:
         return this.locationModeMoves.get(this.currentLocationName);
+      case GameMode.Talk:
+        return this.locationModeTalks.get(this.currentLocationName);
       default:
         // tslint:disable-next-line
         console.log('Not implemented yet: ', mode, ' , returning mode menu instead');

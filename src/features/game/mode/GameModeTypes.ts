@@ -1,3 +1,5 @@
+export const backText = 'Back';
+
 export enum GameMode {
   Move = 'Move',
   Explore = 'Explore',

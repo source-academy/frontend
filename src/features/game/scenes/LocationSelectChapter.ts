@@ -60,6 +60,11 @@ LocationSelectMap.setNavigationFrom('Hallway', ['Class Room', 'Student Room', 'E
 LocationSelectMap.setNavigationFrom('Student Room', ['Hallway']);
 LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 
+// Set talk topics
+LocationSelectMap.setTalkTopicsAt('Crash Site', ['What happened', 'Planet XAE-12']);
+LocationSelectMap.setTalkTopicsAt('Class Room', ["Today's lesson"]);
+LocationSelectMap.setTalkTopicsAt('Emergency', ["Where's everyone", 'Any idea?']);
+
 const LocationSelectChapter: GameChapter = {
   map: LocationSelectMap,
   startingLoc: 'Student Room'

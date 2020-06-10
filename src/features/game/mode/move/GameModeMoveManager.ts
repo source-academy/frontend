@@ -1,8 +1,8 @@
-import { GameMode } from '../GameModeTypes';
+import { GameMode, backText } from '../GameModeTypes';
 import GameModeMove from './GameModeMove';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { GameButton, screenSize, longButton } from '../../commons/CommonsTypes';
-import { moveButtonYSpace, moveButtonStyle, moveButtonXPos, backText } from './GameModeMoveTypes';
+import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 
 class GameModeMoveManager {
