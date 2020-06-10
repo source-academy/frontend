@@ -37,9 +37,9 @@ jobs:
       run: |
         yarn install
         yarn run build
-        ln -s index.html build/playground
-        ln -s index.html build/contributors
-        ln -s index.html build/sourcecast
+        ln -s index.html build/playground.html
+        ln -s index.html build/contributors.html
+        ln -s index.html build/sourcecast.html
       # the `ln`s above are a hack to make GitHub Pages route /playground
       # and /contributors etc to index, instead of 404-ing.
       env:
