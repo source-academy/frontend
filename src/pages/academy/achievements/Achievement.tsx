@@ -91,8 +91,8 @@ function Achievement() {
       subachievementOverviews.filter(subachievement => subachievement.title === target)
     );
 
-  const filterAchievementsByStatus = (achievementOverviews: AchievementOverview[]) => {
-    if (filteredStatus === AchievementStatus.PENDING) {
+  const filterAchievementsByStatus = (achievementOverviews: AchievementOverview[], status: AchievementStatus) => {
+    if (status === AchievementStatus.PENDING) {
       return achievementOverviews;
     }
 
@@ -102,7 +102,7 @@ function Achievement() {
   };
 
   const getAchievementTasks = (achievementOverviews: AchievementOverview[]) => {
-    return filterAchievementsByStatus(achievementOverviews).map(achievement => (
+    return filterAchievementsByStatus(achievementOverviews, filteredStatus).map(achievement => (
       <AchievementTask
         title={achievement.title}
         subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
@@ -110,6 +110,15 @@ function Achievement() {
       />
     ));
   };
+
+  const getTasksCountByStatus = (achievementOverviews: AchievementOverview[], status: AchievementStatus) => {
+    switch(status) {
+      case AchievementStatus.PENDING: 
+        return achievementOverviews.length;
+      default:
+        return filterAchievementsByStatus(achievementOverviews, status).length; 
+    }
+  }
 
   return (
     <div className="Achievements">
@@ -120,19 +129,19 @@ function Achievement() {
             status={AchievementStatus.PENDING}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.GLOBE}
-            count={22}
+            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.PENDING)}
           />
           <AchievementCategory
             status={AchievementStatus.ACTIVE}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.LOCATE}
-            count={15}
+            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.ACTIVE)}
           />
           <AchievementCategory
             status={AchievementStatus.COMPLETED}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.ENDORSED}
-            count={7}
+            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.COMPLETED)}
           />
         </div>
 
