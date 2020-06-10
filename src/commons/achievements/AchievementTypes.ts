@@ -9,3 +9,13 @@ export type AchievementOverview = {
   subachievementTitles: string[];
   status: AchievementStatus;
 };
+
+export type SubAchivementOverview = {
+  title: string;
+};
+
+export type AchievementModalOverview = {
+  title: string;
+  modalImageUrl: string;
+  description: string;
+};

@@ -5,13 +5,18 @@ import { IconNames } from '@blueprintjs/icons';
 import AchievementCategory from './subcomponents/AchievementCategory';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
-import { AchievementOverview, AchievementStatus } from 'src/commons/achievements/AchievementTypes';
+import {
+  AchievementOverview,
+  AchievementStatus,
+  SubAchivementOverview,
+  AchievementModalOverview
+} from '../../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {};
 
 export type StateProps = {};
 
-const achievementOverview: AchievementOverview[] = [
+const achievementOverviews: AchievementOverview[] = [
   {
     title: 'Rune Master',
     subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
@@ -29,13 +34,13 @@ const achievementOverview: AchievementOverview[] = [
   }
 ];
 
-const subachievementOverview = [
+const subachievementOverviews: SubAchivementOverview[] = [
   { title: 'Beyond the Second Dimension' },
   { title: 'Colorful Carpet' },
   { title: 'Keyboard Warrior: Gold Tier' }
 ];
 
-const modalOverview = [
+const modalOverviews: AchievementModalOverview[] = [
   {
     title: 'Rune Master',
     modalImageUrl:
@@ -83,21 +88,21 @@ function Achievement() {
 
   const mapTitlesToSubachievements = (titles: string[]) =>
     titles.map(target =>
-      subachievementOverview.filter(subachievement => subachievement.title === target)
+      subachievementOverviews.filter(subachievement => subachievement.title === target)
     );
 
-  const filterAchievementsByStatus = (achievementOverview: AchievementOverview[]) => {
+  const filterAchievementsByStatus = (achievementOverviews: AchievementOverview[]) => {
     if (filteredStatus === AchievementStatus.PENDING) {
-      return achievementOverview;
+      return achievementOverviews;
     }
 
-    return achievementOverview.filter(
+    return achievementOverviews.filter(
       achievementOverview => achievementOverview.status === filteredStatus
     );
   };
 
-  const getAchievementTasks = (achievementOverview: AchievementOverview[]) => {
-    return filterAchievementsByStatus(achievementOverview).map(achievement => (
+  const getAchievementTasks = (achievementOverviews: AchievementOverview[]) => {
+    return filterAchievementsByStatus(achievementOverviews).map(achievement => (
       <AchievementTask
         title={achievement.title}
         subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
@@ -132,10 +137,10 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul>{getAchievementTasks(achievementOverview)}</ul>
+          <ul>{getAchievementTasks(achievementOverviews)}</ul>
         </div>
 
-        <AchievementModal title={modal} modalOverview={modalOverview} />
+        <AchievementModal title={modal} modalOverviews={modalOverviews} />
       </div>
     </div>
   );
