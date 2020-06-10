@@ -1,7 +1,3 @@
-import * as dotenv from 'dotenv';
-
-dotenv.config();
-
 function isTrue(value?: string): boolean {
   return typeof value === 'string' && value.toUpperCase() === 'TRUE';
 }
