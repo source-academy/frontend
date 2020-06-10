@@ -1,9 +1,13 @@
 import * as Phaser from 'phaser';
-
+import { Constants as c } from './utils/constants';
+// import PlayGame from './scenes/PlayGame';
 import GameManager from './GameManager';
 
-const phaserGame = {
-  height: 1080,
+const config = {
+  debug: true,
+  type: Phaser.CANVAS,
+  width: c.screenWidth,
+  height: c.screenHeight,
   physics: {
     default: 'arcade'
   },
@@ -11,9 +15,8 @@ const phaserGame = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [GameManager],
-  type: Phaser.CANVAS,
-  width: 1920
+  scene: [GameManager]
 };
 
+const phaserGame = new Phaser.Game(config);
 export default phaserGame;

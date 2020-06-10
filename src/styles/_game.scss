@@ -3,5 +3,18 @@
   flex-direction: column;
   width: 100%;
   align-items: center;
+}
+
+.Centered {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
   justify-content: space-evenly;
+}
+
+.FileMenu {
+  background-color: white;
+  width: 300px;
+  height: 150px;
+  overflow: scroll;
 }
