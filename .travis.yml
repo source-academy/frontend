@@ -10,6 +10,7 @@ branches:
 before_install:
   - export TZ=Asia/Singapore
   - export NODE_OPTIONS=--max_old_space_size=8192
+  - export GENERATE_SOURCEMAP=false
 script:
   - yarn run format:ci
   - yarn run eslint
