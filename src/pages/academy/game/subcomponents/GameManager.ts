@@ -7,7 +7,7 @@ import GameModeMenuManager from 'src/features/game/mode/menu/GameModeMenuManager
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import GameModeMoveManager from 'src/features/game/mode/move/GameModeMoveManager';
 import GameModeMove from 'src/features/game/mode/move/GameModeMove';
-import LocationSelectChapter from './scenes/LocationSelectChapter';
+import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import { IGameUI, screenSize } from 'src/features/game/commons/CommonsTypes';
 import moveUIAssets from 'src/features/game/mode/move/GameModeMoveTypes';
 import GameActionManager from './GameActionManager';

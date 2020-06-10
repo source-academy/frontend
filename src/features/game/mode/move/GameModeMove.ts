@@ -12,8 +12,8 @@ import {
   previewHeight,
   previewWidth
 } from './GameModeMoveTypes';
-import { sleep } from 'src/features/game/util/GameUtils';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import { sleep } from '../../utils/GameUtils';
 
 class GameModeMove implements IGameUI {
   public currentLocationAssetKey: string;

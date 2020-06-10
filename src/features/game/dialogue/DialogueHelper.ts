@@ -1,4 +1,4 @@
-import { Constants as c, Keys as k } from '../utils/constants';
+import { Constants as c, Keys as k } from '../commons/CommonConstants';
 import { SpeakerDetail } from './DialogueTypes';
 
 /* Parsing dialogue */

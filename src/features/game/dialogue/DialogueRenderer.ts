@@ -1,11 +1,11 @@
 import { Color } from '../utils/styles';
-import { Constants as c, Keys as k } from '../utils/constants';
-import { fadeIn, fadeAndDestroy } from '../utils/effects';
+import { Constants as c, Keys as k } from '../commons/CommonConstants';
+import { fadeIn, fadeAndDestroy } from '../utils/GameEffects';
 
 import { dialogueGenerator } from './DialogueManager';
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { avatarKey, caps } from './DialogueHelper';
-import { resize } from '../utils/spriteUtils';
+import { resize } from '../utils/SpriteUtils';
 
 type Container = Phaser.GameObjects.Container;
 type Image = Phaser.GameObjects.Image;
