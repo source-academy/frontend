@@ -47,9 +47,9 @@ class GameModeManager {
     const modeContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     const locationModes = this.gameModes.get(locationName);
     if (locationModes) {
-      locationModes.forEach((value, key, map) => {
-        const modeContainer = value.getUIContainer();
-        modeContainers.set(key, modeContainer);
+      locationModes.forEach((modeUI, mode, map) => {
+        const modeContainer = modeUI.getUIContainer();
+        modeContainers.set(mode, modeContainer);
       });
     }
     return modeContainers;
