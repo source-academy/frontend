@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Icon } from '@blueprintjs/core';
+import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 type AchievementCardProps = {
@@ -19,9 +19,8 @@ function AchievementCard(props: AchievementCardProps) {
     <Card className="achievement" onClick={displayModal(title)} onClickCapture={toggleDropdown}>
       {hasDropdown ? (
         <div className="dropdown">
-          <Button
+          <Icon
             icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
-            minimal={true}
           />
         </div>
       ) : (
