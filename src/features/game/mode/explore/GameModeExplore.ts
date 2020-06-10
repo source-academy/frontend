@@ -8,13 +8,15 @@ class GameModeExplore implements IGameUI {
     this.location = location;
   }
   public getUIContainer(): Phaser.GameObjects.Container {
-    console.log(this.location);
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('GetUIContainer: Game Manager is not defined!');
     }
 
+    console.log(this.location);
+
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
     return modeMenuContainer;
   }
 

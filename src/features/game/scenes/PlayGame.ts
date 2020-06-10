@@ -1,12 +1,12 @@
 import { Constants as c, Keys as k } from '../commons/CommonConstants';
 import { addButton } from '../utils/styles';
 import { createDialogue } from '../dialogue/DialogueRenderer';
-import { parseDialogue } from '../dialogue/DialogueManager';
 import { preloadDialogue, loadDialogueAssets } from '../dialogue/DialoguePreloader';
 import { preloadObjects, loadObjectsAssets } from '../objects/ObjectsPreloader';
 import { resize } from '../utils/SpriteUtils';
-import { parseObjects } from '../objects/ObjectsManager';
+import { parseObjects } from '../parser/ObjectsParser';
 import { createObjectsLayer } from '../objects/ObjectsRenderer';
+import { parseDialogue } from '../parser/DialogueParser';
 
 class PlayGame extends Phaser.Scene {
   constructor() {
@@ -27,7 +27,7 @@ class PlayGame extends Phaser.Scene {
     this.addElementsToScene();
   }
 
-  private addElementsToScene() {
+  private async addElementsToScene() {
     const background = this.add.image(c.centerX, c.centerY, 'bg');
     resize(background, c.screenWidth, c.screenHeight);
 
@@ -37,7 +37,7 @@ class PlayGame extends Phaser.Scene {
     });
     const dialogueText = this.cache.text.get('#D../assets/dialogue.txt');
     const [activateDialogueLayer] = createDialogue(this, parseDialogue(dialogueText));
-    activateDialogueLayer();
+    await activateDialogueLayer;
 
     const objectText = this.cache.text.get('#O../assets/objects.txt');
     const objectPropertyMap = parseObjects(objectText)['room'];

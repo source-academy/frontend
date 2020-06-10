@@ -1,4 +1,4 @@
-import { mapObjectsByLocation } from './ObjectsManager';
+import { mapObjectsByLocation } from '../parser/ObjectsParser';
 import { Constants as c } from '../commons/CommonConstants';
 
 export async function preloadObjects(scene: Phaser.Scene, url: string) {

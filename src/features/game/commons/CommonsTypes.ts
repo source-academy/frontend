@@ -62,3 +62,7 @@ export const blackScreen: GameImage = {
   imageWidth: screenSize.x,
   imageHeight: screenSize.y
 };
+
+export type ObjectId = string;
+export type DialogueId = string;
+export type LocationId = string;

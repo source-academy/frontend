@@ -17,6 +17,8 @@ import GameActionManager from './GameActionManager';
 import GameModeTalk from 'src/features/game/mode/talk/GameModeTalk';
 import GameModeTalkManager from 'src/features/game/mode/talk/GameModeTalkManager';
 import talkUIAssets from 'src/features/game/mode/talk/GameModeTalkTypes';
+import { preloadDialogue, loadDialogueAssets } from 'src/features/game/dialogue/DialoguePreloader';
+import { preloadObjects, loadObjectsAssets } from 'src/features/game/objects/ObjectsPreloader';
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -36,6 +38,7 @@ class GameManager extends Phaser.Scene {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
+
     this.currentLocationName = this.currentChapter.startingLoc;
 
     this.locationModeMenus = new Map<string, GameModeMenu>();
@@ -50,8 +53,9 @@ class GameManager extends Phaser.Scene {
   }
 
   public preload() {
+    this.preloadPermanentAssets();
     this.preloadLocationsAssets(this.currentChapter);
-    this.preloadAssets();
+    this.preloadChapterAssets();
 
     this.locationModeMenus = GameModeMenuManager.processModeMenus(this.currentChapter);
     this.locationModeMoves = GameModeMoveManager.processMoveMenus(this.currentChapter);
@@ -61,6 +65,26 @@ class GameManager extends Phaser.Scene {
 
   public create() {
     this.renderStartingLocation(this.currentChapter);
+  }
+
+  private preloadChapterAssets() {
+    preloadDialogue(this, '../assets/dialogue.txt');
+    preloadObjects(this, '../assets/objects.txt');
+    this.load.on('filecomplete', (key: string) => this.handleLoadComplete(key));
+  }
+
+  public handleLoadComplete(key: string) {
+    if (key[0] === '#') {
+      switch (key[1]) {
+        case 'D':
+          console.log(key);
+          loadDialogueAssets(this, key);
+          break;
+        case 'O':
+          loadObjectsAssets(this, key);
+          break;
+      }
+    }
   }
 
   //////////////////////
@@ -121,7 +145,7 @@ class GameManager extends Phaser.Scene {
   //   Menu Helpers   //
   //////////////////////
 
-  private preloadAssets() {
+  private preloadPermanentAssets() {
     modeUIAssets.forEach(modeUIAsset => this.load.image(modeUIAsset.key, modeUIAsset.path));
     moveUIAssets.forEach(moveUIAsset => this.load.image(moveUIAsset.key, moveUIAsset.path));
     talkUIAssets.forEach(talkUIAsset => this.load.image(talkUIAsset.key, talkUIAsset.path));
@@ -152,8 +176,7 @@ class GameManager extends Phaser.Scene {
       this.currentUIContainers.set(GameMode.Talk, talkMenuContainer);
     }
 
-    // TODO: Fetch remaining UIContainers
-    // Get Move Menu
+    // Get Explore Menu
     const locationModeExplore = this.locationModeExplore.get(location.name);
     if (locationModeExplore) {
       const moveMenuContainer = locationModeExplore.getUIContainer();

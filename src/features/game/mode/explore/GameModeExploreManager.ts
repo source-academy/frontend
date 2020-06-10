@@ -13,8 +13,6 @@ class GameModeExploreManager {
     if (!location.modes || !location.modes.find(mode => mode === GameMode.Explore)) {
       return;
     }
-    const exploreMenu = new GameModeExplore(location);
-    return exploreMenu;
   }
 }
 

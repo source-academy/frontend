@@ -1,7 +1,7 @@
 type StringFilterFn = (line: string) => boolean;
-type StringMap = {
-  [headerName: string]: string[];
-};
+
+type Header = string;
+type StringMap = Map<Header, string[]>;
 
 // Splits text into string array, removes newlines and whitespaces
 export function splitToLines(text: string): string[] {
@@ -17,7 +17,7 @@ export function splitToLines(text: string): string[] {
  * and the value are the lines below each heading.
  */
 export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): StringMap {
-  const map = {};
+  const map = new Map<Header, string[]>();
   let currHeader = '';
   lines.forEach(line => {
     if (isHeaderFunction(line)) {

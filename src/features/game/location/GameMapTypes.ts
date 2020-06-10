@@ -1,4 +1,4 @@
-import { GameImage, screenSize } from '../commons/CommonsTypes';
+import { GameImage, screenSize, DialogueId, ObjectId } from '../commons/CommonsTypes';
 import { GameMode } from '../mode/GameModeTypes';
 
 export type GameLocation = {
@@ -7,6 +7,8 @@ export type GameLocation = {
   assetXPos: number;
   assetYPos: number;
   modes?: GameMode[];
+  talkTopics?: DialogueId[];
+  objects?: ObjectId[];
 };
 
 export const crashSiteImg: GameImage = {

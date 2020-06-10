@@ -1,6 +1,5 @@
 import { Keys as k } from '../commons/CommonConstants';
 import {
-  isPartLabel,
   isGotoLabel,
   getPartToJump,
   isSpeaker,
@@ -9,13 +8,6 @@ import {
 } from './DialogueHelper';
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
-import { splitToLines, mapByHeader } from '../utils/StringUtils';
-
-// Split to line
-export function parseDialogue(text: string): DialogueObject {
-  const lines = splitToLines(text);
-  return mapByHeader(lines, isPartLabel);
-}
 
 // Generates next line in dialogue based on Dialogue Object
 export function dialogueGenerator(dialogueObject: DialogueObject) {

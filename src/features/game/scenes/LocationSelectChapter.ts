@@ -10,6 +10,8 @@ import {
 } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameImage } from 'src/features/game/commons/CommonsTypes';
+import { parseDialogue } from '../parser/DialogueParser';
+import { SampleDialogue } from './LocationAssets';
 
 const LocationSelectMap = new GameMap();
 
@@ -35,7 +37,7 @@ const locationModes: GameMode[][] = [
   [GameMode.Explore, GameMode.Talk, GameMode.Move],
   [GameMode.Talk, GameMode.Move],
   [GameMode.Move],
-  [GameMode.Explore, GameMode.Move]
+  [GameMode.Explore, GameMode.Move, GameMode.Talk]
 ];
 
 const locations: GameLocation[] = new Array<GameLocation>();
@@ -60,10 +62,29 @@ LocationSelectMap.setNavigationFrom('Hallway', ['Class Room', 'Student Room', 'E
 LocationSelectMap.setNavigationFrom('Student Room', ['Hallway']);
 LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 
+const sampleDialogueObject = parseDialogue(SampleDialogue);
+
 // Set talk topics
-LocationSelectMap.setTalkTopicsAt('Crash Site', ['What happened', 'Planet XAE-12']);
-LocationSelectMap.setTalkTopicsAt('Class Room', ["Today's lesson"]);
-LocationSelectMap.setTalkTopicsAt('Emergency', ["Where's everyone", 'Any idea?']);
+LocationSelectMap.setTalkTopicAt('Student Room', 'dialogue1', {
+  title: 'What happened',
+  content: sampleDialogueObject
+});
+LocationSelectMap.setTalkTopicAt('Crash Site', 'dialogue2', {
+  title: 'Planet XAE-12',
+  content: sampleDialogueObject
+});
+LocationSelectMap.setTalkTopicAt('Class Room', 'dialogue3', {
+  title: "Today's Lesson",
+  content: sampleDialogueObject
+});
+LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue4', {
+  title: "Where's Everyone",
+  content: sampleDialogueObject
+});
+LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue5', {
+  title: 'Any Idea?',
+  content: sampleDialogueObject
+});
 
 const LocationSelectChapter: GameChapter = {
   map: LocationSelectMap,
