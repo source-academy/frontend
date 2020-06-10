@@ -71,8 +71,20 @@
           flex-basis: 10%;
         }
 
-        .icom {
+        .icon {
           flex-basis: 10%;
+        }
+
+        .display {
+          display: flex;
+          width: 100%;
+          flex-direction: column;
+
+          .details {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+          }
         }
       }
 

@@ -9,7 +9,8 @@ import {
   AchievementOverview,
   AchievementStatus,
   SubAchivementOverview,
-  AchievementModalOverview
+  AchievementModalOverview,
+  AchievementPath
 } from '../../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {};
@@ -20,17 +21,26 @@ const achievementOverviews: AchievementOverview[] = [
   {
     title: 'Rune Master',
     subachievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
-    status: AchievementStatus.PENDING
+    status: AchievementStatus.PENDING,
+    path: AchievementPath.ACADEMIC,
+    exp: 100,
+    deadline: new Date(2020, 5, 1, 6, 0, 0)
   },
   {
     title: 'Keyboard Warrior',
     subachievementTitles: ['Keyboard Warrior: Gold Tier'],
-    status: AchievementStatus.ACTIVE
+    status: AchievementStatus.ACTIVE,
+    path: AchievementPath.ACADEMIC,
+    exp: 100,
+    deadline: undefined
   },
   {
     title: 'Adventure Time',
     subachievementTitles: [],
-    status: AchievementStatus.COMPLETED
+    status: AchievementStatus.COMPLETED,
+    path: AchievementPath.ACADEMIC,
+    exp: 100,
+    deadline: new Date(2020, 5, 11, 6, 0, 0)
   }
 ];
 
@@ -91,7 +101,10 @@ function Achievement() {
       subachievementOverviews.filter(subachievement => subachievement.title === target)
     );
 
-  const filterAchievementsByStatus = (achievementOverviews: AchievementOverview[], status: AchievementStatus) => {
+  const filterAchievementsByStatus = (
+    achievementOverviews: AchievementOverview[],
+    status: AchievementStatus
+  ) => {
     if (status === AchievementStatus.PENDING) {
       return achievementOverviews;
     }
@@ -105,20 +118,26 @@ function Achievement() {
     return filterAchievementsByStatus(achievementOverviews, filteredStatus).map(achievement => (
       <AchievementTask
         title={achievement.title}
+        path={achievement.path}
+        exp={achievement.exp}
+        deadline={achievement.deadline}
         subachievements={mapTitlesToSubachievements(achievement.subachievementTitles)}
         setModal={setModal}
       />
     ));
   };
 
-  const getTasksCountByStatus = (achievementOverviews: AchievementOverview[], status: AchievementStatus) => {
-    switch(status) {
-      case AchievementStatus.PENDING: 
+  const getTasksCountByStatus = (
+    achievementOverviews: AchievementOverview[],
+    status: AchievementStatus
+  ) => {
+    switch (status) {
+      case AchievementStatus.PENDING:
         return achievementOverviews.length;
       default:
-        return filterAchievementsByStatus(achievementOverviews, status).length; 
+        return filterAchievementsByStatus(achievementOverviews, status).length;
     }
-  }
+  };
 
   return (
     <div className="Achievements">

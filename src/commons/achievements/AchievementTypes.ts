@@ -4,10 +4,18 @@ export enum AchievementStatus {
   COMPLETED = 'COMPLETED'
 }
 
+export enum AchievementPath {
+  ACADEMIC = 'Academic',
+  EXPLORATION = 'Exploration'
+}
+
 export type AchievementOverview = {
   title: string;
   subachievementTitles: string[];
   status: AchievementStatus;
+  path: AchievementPath;
+  exp: number;
+  deadline: Date | undefined;
 };
 
 export type SubAchivementOverview = {
