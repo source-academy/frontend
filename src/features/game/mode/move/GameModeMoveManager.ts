@@ -1,4 +1,4 @@
-import { GameMode, backText } from '../GameModeTypes';
+import { GameMode } from '../GameModeTypes';
 import GameModeMove from './GameModeMove';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { GameButton, screenSize, longButton } from '../../commons/CommonsTypes';
@@ -29,10 +29,6 @@ class GameModeMoveManager {
         }
       });
 
-      // Add a back button
-      GameModeMoveManager.addMoveOptionButton(moveMenu, backText, () => {
-        GameActionManager.getInstance().changeModeTo(GameMode.Menu);
-      });
       mapMoveMenus.set(location.name, moveMenu);
     });
 

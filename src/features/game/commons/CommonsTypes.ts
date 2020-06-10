@@ -62,3 +62,12 @@ export const blackScreen: GameImage = {
   imageWidth: screenSize.x,
   imageHeight: screenSize.y
 };
+
+export const topButton: GameImage = {
+  key: 'top-button',
+  path: '../assets/topButton.png',
+  xPos: screenSize.x / 2,
+  yPos: screenSize.y / 2,
+  imageWidth: screenSize.x,
+  imageHeight: screenSize.y
+};

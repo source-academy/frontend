@@ -6,3 +6,9 @@ export enum GameMode {
   Talk = 'Talk',
   Menu = 'Menu'
 }
+
+export const backButtonStyle = {
+  fontFamily: 'Helvetica',
+  fontSize: '25px',
+  fill: '#0d2440'
+};
