@@ -11,7 +11,7 @@ export const Constants = {
   typeWriterInterval: 1,
   fadeDuration: 100,
   speechBoxPath: '../assets/speechbox.png',
-  typeSoundPath: '../assets/type.mp3'
+  objectActionSeparator: '$'
 };
 
 export const Keys = {

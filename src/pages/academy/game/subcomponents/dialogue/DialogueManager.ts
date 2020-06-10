@@ -5,46 +5,46 @@ import {
   getPartToJump,
   isSpeaker,
   getSpeakerDetails,
-  strip
+  showDialogueError
 } from './DialogueHelper';
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
+import { hasDevAccess } from '../utils/access';
+import { splitToLines, mapByHeader } from '../utils/stringUtils';
 
-export function parseDialogue(text: string) {
-  const dialogueObject = {};
-  var currPart = '';
-  text
-    .split('\n')
-    .map(line => line.trim())
-    .filter(line => line !== '')
-    .forEach(message => {
-      if (isPartLabel(message)) {
-        currPart = strip(message);
-        dialogueObject[currPart] = [];
-      } else {
-        dialogueObject[currPart].push(message);
-      }
-    });
-  return dialogueObject;
+// Split to line
+export function parseDialogue(text: string): DialogueObject {
+  const lines = splitToLines(text);
+  return mapByHeader(lines, isPartLabel);
 }
 
+// Generates next line in dialogue based on Dialogue Object
 export function dialogueGenerator(dialogueObject: DialogueObject) {
   let currPartNum = k.initialPart;
   let currLineNum = -1;
   function generateDialogue(): [SpeakerDetail | null, DialogueString] {
-    currLineNum++;
-    let line = dialogueObject[currPartNum][currLineNum];
-    let speakerDetail = null;
-    if (isGotoLabel(line)) {
-      currPartNum = getPartToJump(line);
-      currLineNum = 0;
-      line = dialogueObject[currPartNum][currLineNum];
-    }
-    if (isSpeaker(line)) {
-      speakerDetail = getSpeakerDetails(line);
+    try {
       currLineNum++;
-      line = dialogueObject[currPartNum][currLineNum];
+      let line = dialogueObject[currPartNum][currLineNum];
+      let speakerDetail = null;
+
+      if (isGotoLabel(line)) {
+        currPartNum = getPartToJump(line);
+        currLineNum = 0;
+        line = dialogueObject[currPartNum][currLineNum];
+      }
+      if (isSpeaker(line)) {
+        speakerDetail = getSpeakerDetails(line);
+        currLineNum++;
+        line = dialogueObject[currPartNum][currLineNum];
+      }
+
+      return [speakerDetail, line];
+    } catch (e) {
+      if (hasDevAccess()) {
+        showDialogueError(currPartNum, currLineNum);
+      }
+      return [null, ''];
     }
-    return [speakerDetail, line];
   }
   return generateDialogue;
 }

@@ -1,5 +1,7 @@
+type Lines = string;
+
 export type DialogueObject = {
-  string?: string[];
+  [partName: string]: Lines[];
 };
 
 type Speaker = string;

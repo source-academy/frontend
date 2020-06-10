@@ -13,7 +13,8 @@ export const fadeIn = (targets: GameObject[], duration: number) => ({
   duration
 });
 
-export function fadeAndDestroy(scene: Phaser.Scene, object: GameObject) {
+export function fadeAndDestroy(scene: Phaser.Scene, object: GameObject | null) {
+  if (!object) return;
   scene.add.tween(fadeOut([object], c.fadeDuration));
   setTimeout(() => object.destroy(), c.fadeDuration);
 }

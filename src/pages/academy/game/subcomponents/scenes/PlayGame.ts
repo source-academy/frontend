@@ -2,8 +2,11 @@ import { Constants as c, Keys as k } from '../utils/constants';
 import { addButton } from '../utils/styles';
 import { createDialogue } from '../dialogue/DialogueRenderer';
 import { parseDialogue } from '../dialogue/DialogueManager';
-import { preloadDialogue } from '../dialogue/DialoguePreloader';
+import { preloadDialogue, loadDialogueAssets } from '../dialogue/DialoguePreloader';
+import { preloadObjects, loadObjectsAssets } from '../objects/ObjectsPreloader';
 import { resize } from '../utils/spriteUtils';
+import { parseObjects } from '../objects/ObjectsManager';
+import { createObjectsLayer } from '../objects/ObjectsRenderer';
 
 class PlayGame extends Phaser.Scene {
   constructor() {
@@ -14,6 +17,8 @@ class PlayGame extends Phaser.Scene {
 
   public preload() {
     preloadDialogue(this, '../assets/dialogue.txt');
+    preloadObjects(this, '../assets/objects.txt');
+
     this.load.image('bg', c.assetsFolder + '/locations/yourRoom-dim/normal.png');
     this.load.on('filecomplete', (key: string) => this.handleLoadComplete(key));
   }
@@ -31,25 +36,39 @@ class PlayGame extends Phaser.Scene {
       y: c.screenHeight * 0.9
     });
 
-    const dialogueText = this.cache.text.get('dialogueText');
-    const [activateContainer] = createDialogue(this, parseDialogue(dialogueText));
+    const dialogueText = this.cache.text.get('#D../assets/dialogue.txt');
+    const [activateDialogueLayer] = createDialogue(this, parseDialogue(dialogueText));
+    activateDialogueLayer();
 
-    activateContainer();
+    const objectText = this.cache.text.get('#O../assets/objects.txt');
+    const [activateObjectsLayer] = createObjectsLayer(this, currLocation, parseObjects(objectText));
   }
 
   private addAssetToScene() {
     const selectedAsset = sessionStorage.getItem(k.selectedAsset) || '';
     this.load.image('$' + selectedAsset, c.assetsFolder + selectedAsset);
-    this.load.start();
   }
 
-  private handleLoadComplete(key: string) {
-    switch (true) {
-      case key[0] === '$':
+  public handleLoadComplete(key: string) {
+    switch (key[0]) {
+      case '$':
         const imageSprite = this.add
           .image(c.centerX, c.centerY, key)
           .setInteractive({ pixelPerfect: true, useHandCursor: true });
         resize(imageSprite, c.screenWidth / 4);
+        break;
+      case '#':
+        switch (key[1]) {
+          case 'D':
+            console.log(key);
+            loadDialogueAssets(this, key);
+            break;
+          case 'O':
+            loadObjectsAssets(this, key);
+            break;
+        }
+        break;
+      default:
         break;
     }
   }
