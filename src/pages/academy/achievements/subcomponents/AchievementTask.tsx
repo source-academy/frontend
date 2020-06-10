@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import SubAchievementCard from './SubachievementCard';
+import SubAchievementCard from './SubAchievementCard';
 import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {
