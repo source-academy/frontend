@@ -4,10 +4,12 @@ import { GameChapter } from '../chapter/GameChapterTypes';
 import GameModeMenuManager from './menu/GameModeMenuManager';
 import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
+import GameModeExploreManager from './explore/GameModeExploreManager';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import modeUIAssets from './menu/GameModeMenuTypes';
 import moveUIAssets from './move/GameModeMoveTypes';
 import talkUIAssets from './talk/GameModeTalkTypes';
+import exploreUIAssets from './explore/GameModeExploreTypes';
 
 class GameModeManager {
   private gameModes: Map<string, Map<GameMode, IGameUI>>;
@@ -21,13 +23,16 @@ class GameModeManager {
     locationModes.set(GameMode.Menu, GameModeMenuManager.processModeMenus(chapter));
     locationModes.set(GameMode.Talk, GameModeTalkManager.processTalkMenus(chapter));
     locationModes.set(GameMode.Move, GameModeMoveManager.processMoveMenus(chapter));
+    locationModes.set(GameMode.Explore, GameModeExploreManager.processExploreMenus(chapter));
 
     locationModes.forEach((locToUI, mode, map) => {
       locToUI.forEach((gameUI, locationName, map) => {
         if (!this.gameModes.get(locationName)) {
           this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
         }
-        this.gameModes.get(locationName)!.set(mode, gameUI);
+        if (gameUI) {
+          this.gameModes.get(locationName)!.set(mode, gameUI);
+        }
       });
     });
   }
@@ -37,7 +42,7 @@ class GameModeManager {
     if (!gameManager) {
       throw console.error('Unable to preload mode base assets');
     }
-    const modeAssets = [modeUIAssets, moveUIAssets, talkUIAssets];
+    const modeAssets = [modeUIAssets, moveUIAssets, talkUIAssets, exploreUIAssets];
     modeAssets.forEach(assets =>
       assets.forEach(asset => gameManager.load.image(asset.key, asset.path))
     );

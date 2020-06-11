@@ -10,8 +10,8 @@ import {
   TalkButton
 } from './GameModeTalkTypes';
 import { Dialogue } from '../../dialogue/DialogueTypes';
-import { backText, GameMode } from '../GameModeTypes';
 import { sleep } from '../../utils/GameUtils';
+import { getBackToMenuContainer } from '../GameModeHelper';
 
 class GameModeTalk implements IGameUI {
   private dialogues: Dialogue[];
@@ -69,6 +69,8 @@ class GameModeTalk implements IGameUI {
       talkMenuContainer.add(buttonSprite);
       talkMenuContainer.add(topicButtonText);
     });
+
+    talkMenuContainer.add(getBackToMenuContainer());
     return talkMenuContainer;
   }
 
@@ -77,10 +79,6 @@ class GameModeTalk implements IGameUI {
       this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
         GameActionManager.getInstance().bringUpDialogue(dialogue.content)
       );
-
-      this.addTopicOptionButton(TalkButtonType.Other, backText, async () => {
-        await GameActionManager.getInstance().changeModeTo(GameMode.Menu);
-      });
     });
   }
 
