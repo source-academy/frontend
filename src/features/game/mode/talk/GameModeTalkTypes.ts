@@ -38,7 +38,16 @@ export const talkOptCheck: GameImage = {
   imageHeight: screenSize.y
 };
 
-const talkUIAssets = [talkOptButton, talkOptCheck];
+export const dialogueBox: GameImage = {
+  key: 'speechBox',
+  path: '../assets/speechbox.png',
+  xPos: 0,
+  yPos: 0,
+  imageWidth: 0,
+  imageHeight: 0
+};
+
+const talkUIAssets = [talkOptButton, talkOptCheck, dialogueBox];
 
 export enum TalkButtonType {
   Dialogue = 'Dialogue',

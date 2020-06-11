@@ -4,6 +4,7 @@ import { ObjectProperty } from '../../objects/ObjectsTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import { createObjectsLayer } from '../../objects/ObjectsRenderer';
 import { sleep } from '../../utils/GameUtils';
+import { magnifyingGlass } from './GameModeExploreTypes';
 
 class GameModeExplore implements IGameUI {
   private objects: Map<ObjectId, ObjectProperty>;
@@ -20,10 +21,10 @@ class GameModeExplore implements IGameUI {
       throw console.error('GetUIContainer: Game Manager is not defined!');
     }
 
-    // gameManager.input.setDefaultCursor('url(assets/input/cursors/blue.cur), pointer');
-
     console.log(this.boundingBoxes);
-    const [, modeExploreContainer] = createObjectsLayer(gameManager, this.objects);
+    const [, modeExploreContainer] = createObjectsLayer(gameManager, this.objects, {
+      cursor: magnifyingGlass
+    });
 
     return modeExploreContainer;
   }
@@ -33,6 +34,8 @@ class GameModeExplore implements IGameUI {
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
+
+    gameManager.input.setDefaultCursor(magnifyingGlass);
 
     gameManager.add.existing(container);
     container.setActive(true);

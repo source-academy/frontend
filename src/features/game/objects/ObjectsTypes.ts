@@ -9,3 +9,7 @@ export type ObjectProperty = {
   actions?: string[];
   visibility?: true;
 };
+
+export type ObjectLayerProps = {
+  cursor?: string;
+};

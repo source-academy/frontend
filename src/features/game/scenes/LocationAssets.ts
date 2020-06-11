@@ -1,5 +1,4 @@
-export const SampleDialogue = `
-[part0]
+export const SampleDialogue = `[part0]
 $narrator
 The year is 1101 A.E.
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.

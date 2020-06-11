@@ -7,6 +7,8 @@ export type BoundingBox = {
   height: number;
 };
 
+export const magnifyingGlass = 'url(../assets/magnifying_glass.ico), pointer';
+
 export const defaultLocationImg: GameImage = {
   key: 'loc-default',
   path: '../assets/defaultLocation.jpg',

@@ -16,18 +16,18 @@ export function dialogueGenerator(dialogueObject: DialogueObject) {
   function generateDialogue(): [SpeakerDetail | null, DialogueString] {
     try {
       currLineNum++;
-      let line = dialogueObject[currPartNum][currLineNum];
+      let line = dialogueObject.get(currPartNum)![currLineNum];
       let speakerDetail = null;
 
       if (isGotoLabel(line)) {
         currPartNum = getPartToJump(line);
         currLineNum = 0;
-        line = dialogueObject[currPartNum][currLineNum];
+        line = dialogueObject.get(currPartNum)![currLineNum];
       }
       if (isSpeaker(line)) {
         speakerDetail = getSpeakerDetails(line);
         currLineNum++;
-        line = dialogueObject[currPartNum][currLineNum];
+        line = dialogueObject.get(currPartNum)![currLineNum];
       }
 
       return [speakerDetail, line];

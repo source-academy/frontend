@@ -54,6 +54,7 @@ export function createDialogue(scene: Phaser.Scene, dialogueObject: DialogueObje
   const dialogueBox = createDialogueBox(scene);
   const [avatarContainer, speakerText, changeSpeaker] = avatarManager(scene);
   const [typeWriterSprite, changeLine] = typeWriterManager(scene);
+
   const generateDialogue = dialogueGenerator(dialogueObject);
 
   const container = new Container(scene, 0, 0).setAlpha(0);
