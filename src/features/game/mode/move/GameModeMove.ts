@@ -1,5 +1,10 @@
-import { IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
-import { GameButton } from 'src/features/game/commons/CommonsTypes';
+import {
+  IGameUI,
+  GameSprite,
+  screenSize,
+  GameButton,
+  longButton
+} from '../../commons/CommonsTypes';
 import {
   defaultLocationImg,
   locationPreviewFrame,
@@ -15,15 +20,19 @@ import {
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
+import { GameLocation } from '../../location/GameMapTypes';
+import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveTypes';
 
 class GameModeMove implements IGameUI {
-  public currentLocationAssetKey: string;
-  public locationAssetKeys: Map<string, string>;
-  public possibleLocations: Array<GameButton>;
-  public previewFill: GameSprite;
-  public previewFrame: GameSprite;
+  private currentLocationAssetKey: string;
+  private locationAssetKeys: Map<string, string>;
+  private previewFill: GameSprite;
+  private previewFrame: GameSprite;
+  private navigation: string[];
+  private locations: Map<string, GameLocation>;
+  private gameButtons: GameButton[];
 
-  constructor() {
+  constructor(navigation: string[], locations: Map<string, GameLocation>) {
     const previewFill = {
       assetKey: locationPreviewFill.key,
       assetXPos: locationPreviewFill.xPos,
@@ -37,10 +46,13 @@ class GameModeMove implements IGameUI {
     } as GameSprite;
 
     this.currentLocationAssetKey = defaultLocationImg.key;
-    this.possibleLocations = new Array<GameButton>();
     this.locationAssetKeys = new Map<string, string>();
     this.previewFill = previewFill;
     this.previewFrame = previewFrame;
+    this.navigation = navigation;
+    this.locations = locations;
+    this.gameButtons = [];
+    this.createGameButtons();
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
@@ -68,7 +80,7 @@ class GameModeMove implements IGameUI {
     this.setPreview(previewFill, this.currentLocationAssetKey);
     moveMenuContainer.add(previewFill);
 
-    this.possibleLocations.forEach(locationButton => {
+    this.gameButtons.forEach(locationButton => {
       const text = locationButton.text ? locationButton.text : '';
       const style = locationButton.style ? locationButton.style : {};
       const locationButtonText = new Phaser.GameObjects.Text(
@@ -113,6 +125,47 @@ class GameModeMove implements IGameUI {
     // Add back button
     moveMenuContainer.add(getBackToMenuContainer());
     return moveMenuContainer;
+  }
+
+  private createGameButtons() {
+    this.navigation.forEach(locationName => {
+      const location = this.locations.get(locationName);
+      if (location) {
+        this.addMoveOptionButton(location.name, () => {
+          GameActionManager.getInstance().changeLocationTo(locationName);
+        });
+        this.locationAssetKeys.set(locationName, location.assetKey);
+      }
+    });
+  }
+
+  private addMoveOptionButton(name: string, callback: any) {
+    const newNumberOfButtons = this.gameButtons.length + 1;
+    const partitionSize = moveButtonYSpace / newNumberOfButtons;
+
+    const newYPos = (screenSize.y - moveButtonYSpace) / 2 + partitionSize / 2;
+
+    // Rearrange existing buttons
+    for (let i = 0; i < this.gameButtons.length; i++) {
+      this.gameButtons[i] = {
+        ...this.gameButtons[i],
+        assetYPos: newYPos + i * partitionSize
+      };
+    }
+
+    // Add the new button
+    const newModeButton: GameButton = {
+      text: name,
+      style: moveButtonStyle,
+      assetKey: longButton.key,
+      assetXPos: moveButtonXPos,
+      assetYPos: newYPos + this.gameButtons.length * partitionSize,
+      isInteractive: true,
+      onInteract: callback
+    };
+
+    // Update
+    this.gameButtons.push(newModeButton);
   }
 
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {

@@ -74,7 +74,7 @@ class GameModeTalk implements IGameUI {
     return talkMenuContainer;
   }
 
-  createGameButtons() {
+  private createGameButtons() {
     this.dialogues.forEach(dialogue => {
       this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
         GameActionManager.getInstance().bringUpDialogue(dialogue.content)
@@ -82,7 +82,7 @@ class GameModeTalk implements IGameUI {
     });
   }
 
-  addTopicOptionButton(type: TalkButtonType, name: string, callback: any) {
+  private addTopicOptionButton(type: TalkButtonType, name: string, callback: any) {
     const newNumberOfButtons = this.gameButtons.length + 1;
     const partitionSize = talkButtonYSpace / newNumberOfButtons;
     const newYPos = (screenSize.y - talkButtonYSpace) / 2 + partitionSize / 2;
