@@ -16,11 +16,7 @@ import {
   evalTestcaseSuccess
 } from '../../application/actions/InterpreterActions';
 import { defaultState, OverallState } from '../../application/ApplicationTypes';
-import {
-  externalLibraries,
-  ExternalLibraryName,
-  ExternalLibraryNames
-} from '../../application/types/ExternalTypes';
+import { externalLibraries, ExternalLibraryName } from '../../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -106,7 +102,7 @@ describe('EVAL_EDITOR', () => {
       chapter: context.chapter,
       variant,
       external: {
-        name: ExternalLibraryNames.NONE,
+        name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
       globals
@@ -239,7 +235,6 @@ describe('DEBUG_RESUME', () => {
   let execTime: number;
   let context: Context;
   let state: OverallState;
-  const status = { status: 'error' };
 
   beforeEach(() => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
@@ -273,7 +268,10 @@ describe('DEBUG_RESUME', () => {
         .put(clearReplOutput(workspaceLocation))
         .put(highlightEditorLine([], workspaceLocation))
         // also calls evalCode here
-        .call(resume, status)
+        .call.like({
+          fn: evalCode,
+          args: [editorValue, {}, execTime, workspaceLocation, DEBUG_RESUME]
+        })
         .dispatch({
           type: DEBUG_RESUME,
           payload: { workspaceLocation }
@@ -330,7 +328,7 @@ describe('EVAL_TESTCASE', () => {
     const library = {
       chapter: context.chapter,
       external: {
-        name: ExternalLibraryNames.NONE,
+        name: ExternalLibraryName.NONE,
         symbols: context.externalSymbols
       },
       globals
@@ -491,8 +489,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('puts changeExternalLibrary, beginClearContext, clearReplOutput and calls showSuccessMessage correctly', () => {
-    const oldExternalLibraryName = ExternalLibraryNames.SOUNDS;
-    const newExternalLibraryName = ExternalLibraryNames.RUNES;
+    const oldExternalLibraryName = ExternalLibraryName.SOUNDS;
+    const newExternalLibraryName = ExternalLibraryName.RUNES;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
@@ -527,8 +525,8 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   });
 
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
-    const oldExternalLibraryName = ExternalLibraryNames.RUNES;
-    const newExternalLibraryName = ExternalLibraryNames.RUNES;
+    const oldExternalLibraryName = ExternalLibraryName.RUNES;
+    const newExternalLibraryName = ExternalLibraryName.RUNES;
 
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
@@ -615,7 +613,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   });
 
   test('loads RUNES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryNames.RUNES;
+    const newExternalLibraryName = ExternalLibraryName.RUNES;
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {
@@ -644,7 +642,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   });
 
   test('loads CURVES library correctly', () => {
-    const newExternalLibraryName = ExternalLibraryNames.CURVES;
+    const newExternalLibraryName = ExternalLibraryName.CURVES;
 
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library: Library = {

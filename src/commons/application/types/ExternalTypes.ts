@@ -8,7 +8,7 @@ export type External = {
   symbols: string[];
 };
 
-export enum ExternalLibraryNames {
+export enum ExternalLibraryName {
   NONE = 'NONE',
   RUNES = 'RUNES',
   CURVES = 'CURVES',
@@ -18,8 +18,6 @@ export enum ExternalLibraryNames {
   MACHINELEARNING = 'MACHINELEARNING',
   ALL = 'ALL'
 }
-
-export type ExternalLibraryName = typeof ExternalLibraryNames[keyof typeof ExternalLibraryNames];
 
 export type ExternalLibrary = {
   name: ExternalLibraryName;
@@ -185,15 +183,15 @@ const machineLearningLibrary = [
  */
 
 const libEntries: Array<[ExternalLibraryName, string[]]> = [
-  [ExternalLibraryNames.NONE, []],
-  [ExternalLibraryNames.RUNES, runesLibrary],
-  [ExternalLibraryNames.CURVES, curvesLibrary],
-  [ExternalLibraryNames.SOUNDS, soundsLibrary],
-  [ExternalLibraryNames.BINARYTREES, binaryTreesLibrary],
-  [ExternalLibraryNames.PIXNFLIX, videoLibrary],
-  [ExternalLibraryNames.MACHINELEARNING, machineLearningLibrary],
+  [ExternalLibraryName.NONE, []],
+  [ExternalLibraryName.RUNES, runesLibrary],
+  [ExternalLibraryName.CURVES, curvesLibrary],
+  [ExternalLibraryName.SOUNDS, soundsLibrary],
+  [ExternalLibraryName.BINARYTREES, binaryTreesLibrary],
+  [ExternalLibraryName.PIXNFLIX, videoLibrary],
+  [ExternalLibraryName.MACHINELEARNING, machineLearningLibrary],
   [
-    ExternalLibraryNames.ALL,
+    ExternalLibraryName.ALL,
     runesLibrary.concat(curvesLibrary, soundsLibrary, binaryTreesLibrary, videoLibrary)
   ]
 ];
