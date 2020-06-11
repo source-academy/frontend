@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import AchievementCard from './AchievementCard';
-import SubAchievementCard from './SubAchievementCard';
+import PrerequisiteCard from './PrerequisiteCard';
 import {
   AchievementItem,
   FilterStatus,
@@ -79,7 +79,7 @@ function AchievementTask(props: AchievementTaskProps) {
               {getPrerequisites().map(prerequisite => (
                 <li key={prerequisite.id}>
                   <div className="node">
-                    <SubAchievementCard
+                    <PrerequisiteCard
                       achievement={prerequisite}
                       displayModal={displayModal}
                       isTranslucent={!shouldRender(prerequisite)}

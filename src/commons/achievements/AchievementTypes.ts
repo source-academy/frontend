@@ -19,12 +19,17 @@ export enum FilterStatus {
 }
 
 /**
- * Information of a main achievement item
+ * Information of an achievement item
  *
- * title: unique string, used to identify the achievement
- * details: more information of the achievement
- * subAchievementTitles: array of sub achievement titles
- * status: student's achievement status
+ * id: unique id, primary key of the achievement item
+ * exp: exp that the achievement item grants
+ *    (Note: UI displays the sum of exp and all prerequisite exp)
+ * deadline: deadline of the achievement item
+ *    (Note: UI displays the furthest deadline of all prerequisite)
+ * isTask: the achievement item is rendered as an achievement task if true
+ * prerequisites: an array of the prerequisites id
+ * completionGoal: achievement is marked as complete if
+ *    user's completionProgress >= completionGoal
  */
 export type AchievementItem = {
   id: number;

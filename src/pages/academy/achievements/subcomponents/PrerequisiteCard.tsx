@@ -5,19 +5,19 @@ import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
 import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
 
-type SubAchievementCardProps = {
+type PrerequisiteCardProps = {
   achievement: AchievementItem;
   isTranslucent: boolean;
   displayModal: any;
 };
 
-function SubAchievementCard(props: SubAchievementCardProps) {
+function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { achievement, isTranslucent, displayModal } = props;
   const { title, deadline, exp } = achievement;
 
   return (
     <Card
-      className="subAchievement"
+      className="prerequisite"
       style={{ opacity: isTranslucent ? '40%' : '100%' }}
       onClick={displayModal(title)}
     >
@@ -40,4 +40,4 @@ function SubAchievementCard(props: SubAchievementCardProps) {
   );
 }
 
-export default SubAchievementCard;
+export default PrerequisiteCard;
