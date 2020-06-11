@@ -1,27 +1,37 @@
 /* tslint-disable no-unused-vars */
-import { require as acequire, Ace } from 'ace-builds';
+import { require as acequire, Ace /*, Range*/ } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import { createContext, getAllOccurrencesInScope } from 'js-slang';
+// import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
 
 import { Documentation } from '../documentation/Documentation';
-import AceRange from './EditorAceRange';
+import { useMergedRef } from '../utils/Hooks';
 import { AceMouseEvent, Position } from './EditorTypes';
-import { defaultKeyBindings as keyBindings, KeyBinding } from './HotkeyBindings';
+import { keyBindings, KeyFunction } from './EditorHotkeys';
+
+import useHighlighting from './UseHighlighting';
 
 // =============== Mixins ===============
-import WithShareAce from './WithShareAce';
+/* import WithShareAce from './WithShareAce';
 import WithHighlighting from './WithHighlighting';
 import WithNavigation from './WithNavigation';
 import WithTypeInference from './WithTypeInference';
-export type Constructor<T> = new (...args: any[]) => T;
+export type Constructor<T> = new (...args: any[]) => T; */
+
+export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
+export type EditorHook = (
+  inProps: Readonly<EditorProps>,
+  outProps: IAceEditorProps,
+  keyBindings: EditorKeyBindingHandlers,
+  reactAceRef: React.MutableRefObject<AceEditor | null>
+) => void;
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -50,7 +60,7 @@ type StateProps = {
   breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
-  highlightedLines: number[][];
+  highlightedLines: number[][]; // FIXME type this better??
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
   sharedbAceInitValue?: string;
@@ -58,255 +68,237 @@ type StateProps = {
   sourceChapter?: number;
   externalLibraryName?: string;
   sourceVariant?: Variant;
+  hooks?: EditorHook[];
 };
 
-export class EditorBase extends React.PureComponent<EditorProps, {}> {
-  public AceEditor: React.RefObject<AceEditor>;
-  // HOC: These props will be injected into AceEditor on render
-  // Use this to pass any values/callbacks into it.
-  protected injectedRenderProps: { [key: string]: any } = {};
-  private completer: {};
-
-  constructor(props: EditorProps) {
-    super(props);
-    this.AceEditor = React.createRef();
-
-    this.completer = {
-      getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
-        // Don't prompt if prefix starts with number
-        if (prefix && /\d/.test(prefix.charAt(0))) {
-          callback();
-          return;
-        }
-        // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
-        this.props.handlePromptAutocomplete(pos.row + 1, pos.column, callback);
-      }
-    };
-  }
-
-  public get editor() {
-    return this.AceEditor.current!.editor;
-  }
-
-  public getBreakpoints() {
-    return this.editor.session.getBreakpoints().filter(x => x != null);
-  }
-
-  public componentDidMount() {
-    if (!this.AceEditor.current) {
-      return;
-    }
-    const editor = this.editor;
-    const session = editor.getSession();
-
-    // TODO: Removal
-    /* disable error threshold incrementer
-
-    const jshintOptions = {
-      // undef: true,
-      // unused: true,
-      esnext: true,
-      moz: true,
-      devel: true,
-      browser: true,
-      node: true,
-      laxcomma: true,
-      laxbreak: true,
-      lastsemic: true,
-      onevar: false,
-      passfail: false,
-      maxerr: 1000,
-      expr: true,
-      multistr: true,
-      globalstrict: true
-    };
-    session.$worker.send('setOptions', [jshintOptions]);
-
-    */
-
-    // NOTE: the two `any`s below are because the Ace editor typedefs are
-    // hopelessly incomplete
-    editor.on('gutterclick' as any, this.handleGutterClick as any);
-
-    // Change all info annotations to error annotations
-    session.on('changeAnnotation' as any, this.handleAnnotationChange(session));
-
-    // Start autocompletion
-    acequire('ace/ext/language_tools').setCompleters([this.completer]);
-  }
-
-  public componentDidUpdate(prevProps: EditorProps) {
-    const newCursorPosition = this.props.newCursorPosition;
-    if (newCursorPosition && newCursorPosition !== prevProps.newCursorPosition) {
-      this.moveCursor(newCursorPosition);
-    }
-  }
-
-  public getMarkers = () => {
-    const markerProps: IAceEditorProps['markers'] = [];
-    for (const lineNum of this.props.highlightedLines) {
-      markerProps.push({
-        startRow: lineNum[0],
-        startCol: 0,
-        endRow: lineNum[1],
-        endCol: 1,
-        className: 'myMarker',
-        type: 'fullLine'
-      });
-    }
-    return markerProps;
-  };
-
-  // chapter selector used to choose the correct source mode
-  public chapterNo = () => {
-    let chapter = this.props.sourceChapter || 1;
-    let variant = this.props.sourceVariant || 'default';
-    let external = this.props.externalLibraryName || 'NONE';
-
-    HighlightRulesSelector(chapter, variant, external, Documentation.externalLibraries[external]);
-    ModeSelector(chapter, variant, external);
-    return 'source' + chapter.toString() + variant + external;
-  };
-
-  public render() {
-    return (
-      <HotKeys className="Editor" handlers={handlers}>
-        <div className="row editor-react-ace">
-          <AceEditor
-            className="react-ace"
-            commands={this.generateKeyBindings(keyBindings)}
-            editorProps={{
-              $blockScrolling: Infinity
-            }}
-            ref={this.AceEditor}
-            markers={this.getMarkers()}
-            fontSize={17}
-            height="100%"
-            highlightActiveLine={false}
-            mode={this.chapterNo()} // select according to props.sourceChapter
-            onChange={this.onChange.bind(this)}
-            theme="source"
-            value={this.props.editorValue}
-            width="100%"
-            setOptions={{
-              enableBasicAutocompletion: true,
-              enableLiveAutocompletion: true,
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
-            }}
-            {...this.injectedRenderProps}
-          />
-        </div>
-      </HotKeys>
-    );
-  }
-
-  protected onChange(newCode: string, delta: Ace.Delta) {
-    console.log('Change', newCode, delta);
-    if (this.props.handleUpdateHasUnsavedChanges) {
-      this.props.handleUpdateHasUnsavedChanges(true);
-    }
-    this.props.handleEditorValueChange(newCode);
-    const annotations = this.AceEditor.current!.editor.getSession().getAnnotations();
-    if (this.props.isEditorAutorun && annotations.length === 0) {
-      this.props.handleEditorEval();
-    }
-  }
-
-  // Used in navigating from occurence to navigation
-  private moveCursor = (position: Position) => {
-    this.AceEditor.current!.editor.selection.clearSelection();
-    this.AceEditor.current!.editor.moveCursorToPosition(position);
-    this.AceEditor.current!.editor.renderer.showCursor();
-    this.AceEditor.current!.editor.renderer.scrollCursorIntoView(position, 0.5);
-  };
-
-  private generateKeyBindings = (bindings: KeyBinding[]) => {
-    return bindings.map(cmd => {
-      const exec = typeof cmd.exec === 'function' ? cmd.exec : this[cmd.exec];
-      if (typeof exec !== 'function') {
-        console.error('Editor: Command cannot be bound due to invalid exec function', cmd, this);
-        throw new Error('Invalid Editor Command');
-      }
-      return { ...cmd, exec };
+const getMarkers = (highlightedLines: StateProps['highlightedLines']) => {
+  const markerProps: IAceEditorProps['markers'] = [];
+  for (const lineNum of highlightedLines) {
+    markerProps.push({
+      startRow: lineNum[0],
+      startCol: 0,
+      endRow: lineNum[1],
+      endCol: 1,
+      className: 'myMarker',
+      type: 'fullLine'
     });
-  };
+  }
+  return markerProps;
+};
 
-  // @ts-ignore. This is used by generateKeyBindings
-  public handleEditorEval = () => {
-    return this.props.handleEditorEval();
-  };
+const getModeString = (chapter: number, variant: Variant, library: string) =>
+  'source' + chapter.toString() + variant + library;
 
-  // @ts-ignore. This is used by generateKeyBindings
-  public handleRefactor = () => {
-    const editor = (this.AceEditor.current as any).editor;
+/**
+ * This _modifies global state_ and defines a new Ace mode globally.
+ *
+ * Don't call this directly in render functions!
+ */
+const selectMode = (chapter: number, variant: Variant, library: string) => {
+  HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
+  ModeSelector(chapter, variant, library);
+};
 
-    if (!editor) {
+const makeHandleGutterClick = (
+  handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']
+) => (e: AceMouseEvent) => {
+  const target = e.domEvent.target! as HTMLDivElement;
+  if (
+    target.className.indexOf('ace_gutter-cell') === -1 ||
+    !e.editor.isFocused() ||
+    e.clientX > 35 + target.getBoundingClientRect().left
+  ) {
+    return;
+  }
+
+  // Breakpoint related.
+  const row = e.getDocumentPosition().row;
+  const content = e.editor.session.getLine(row);
+  const breakpoints = e.editor.session.getBreakpoints();
+  if (
+    breakpoints[row] === undefined &&
+    content.length !== 0 &&
+    !content.includes('//') &&
+    !content.includes('debugger;')
+  ) {
+    e.editor.session.setBreakpoint(row, undefined!);
+  } else {
+    e.editor.session.clearBreakpoint(row);
+  }
+  e.stop();
+  handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
+};
+
+const makeHandleAnnotationChange = (session: any) => () => {
+  const annotations = session.getAnnotations();
+  let count = 0;
+  for (const anno of annotations) {
+    if (anno.type === 'info') {
+      anno.type = 'error';
+      anno.className = 'ace_error';
+      count++;
+    }
+  }
+  if (count !== 0) {
+    session.setAnnotations(annotations);
+  }
+};
+
+const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAutocomplete']) => ({
+  getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
+    // Don't prompt if prefix starts with number
+    if (prefix && /\d/.test(prefix.charAt(0))) {
+      callback();
       return;
     }
-    const code = this.props.editorValue;
-    const chapter = this.props.sourceChapter;
-    const position = editor.getCursorPosition();
+    // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
+    handlePromptAutocomplete(pos.row + 1, pos.column, callback);
+  }
+});
 
-    const sourceLocations = getAllOccurrencesInScope(code, createContext(chapter), {
-      line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
-      column: position.column
-    });
-
-    const selection = editor.getSelection();
-    const ranges = sourceLocations.map(
-      loc => new AceRange(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
-    );
-    ranges.forEach(range => selection.addRange(range));
-  };
-
-  private handleGutterClick = (e: AceMouseEvent) => {
-    const target = e.domEvent.target! as HTMLDivElement;
-    if (
-      target.className.indexOf('ace_gutter-cell') === -1 ||
-      !e.editor.isFocused() ||
-      e.clientX > 35 + target.getBoundingClientRect().left
-    ) {
-      return;
-    }
-
-    // Breakpoint related.
-    const row = e.getDocumentPosition().row;
-    const content = e.editor.session.getLine(row);
-    const breakpoints = e.editor.session.getBreakpoints();
-    if (
-      breakpoints[row] === undefined &&
-      content.length !== 0 &&
-      !content.includes('//') &&
-      !content.includes('debugger;')
-    ) {
-      // @ts-ignore: If breakpoint class not provided, it will be ace_breakpoint.
-      e.editor.session.setBreakpoint(row);
-    } else {
-      e.editor.session.clearBreakpoint(row);
-    }
-    e.stop();
-    this.props.handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
-  };
-
-  private handleAnnotationChange = (session: any) => () => {
-    const annotations = session.getAnnotations();
-    let count = 0;
-    for (const anno of annotations) {
-      if (anno.type === 'info') {
-        anno.type = 'error';
-        anno.className = 'ace_error';
-        count++;
-      }
-    }
-    if (count !== 0) {
-      session.setAnnotations(annotations);
-    }
-  };
-}
+const moveCursor = (editor: AceEditor['editor'], position: Position) => {
+  editor.selection.clearSelection();
+  editor.moveCursorToPosition(position);
+  editor.renderer.showCursor();
+  editor.renderer.scrollCursorIntoView(position, 0.5);
+};
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
   goGreen: () => {}
 };
 
-export default WithTypeInference(WithNavigation(WithShareAce(WithHighlighting(EditorBase))));
+const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
+  props,
+  forwardedRef
+) {
+  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+
+  const [sourceChapter, sourceVariant, externalLibraryName] = [
+    props.sourceChapter || 1,
+    props.sourceVariant || 'default',
+    props.externalLibraryName || 'NONE'
+  ];
+
+  React.useEffect(() => {
+    selectMode(sourceChapter, sourceVariant, externalLibraryName);
+  }, [sourceChapter, sourceVariant, externalLibraryName]);
+
+  React.useLayoutEffect(() => {
+    if (!reactAceRef.current) {
+      return;
+    }
+    const editor = reactAceRef.current.editor;
+    const session = editor.getSession();
+
+    // NOTE: the two `any`s below are because the Ace editor typedefs are
+    // hopelessly incomplete
+    editor.on(
+      'gutterclick' as any,
+      makeHandleGutterClick(props.handleEditorUpdateBreakpoints) as any
+    );
+
+    // Change all info annotations to error annotations
+    session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
+
+    // Start autocompletion
+    acequire('ace/ext/language_tools').setCompleters([
+      makeCompleter(props.handlePromptAutocomplete)
+    ]);
+  }, [reactAceRef, props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
+
+  React.useLayoutEffect(() => {
+    if (!reactAceRef.current) {
+      return;
+    }
+    const newCursorPosition = props.newCursorPosition;
+    if (newCursorPosition) {
+      moveCursor(reactAceRef.current.editor, newCursorPosition);
+    }
+  }, [reactAceRef, props.newCursorPosition]);
+
+  const {
+    handleUpdateHasUnsavedChanges,
+    handleEditorValueChange,
+    isEditorAutorun,
+    handleEditorEval
+  } = props;
+  const onChange = React.useCallback(
+    (newCode: string, delta: Ace.Delta) => {
+      if (!reactAceRef.current) {
+        return;
+      }
+      if (handleUpdateHasUnsavedChanges) {
+        handleUpdateHasUnsavedChanges(true);
+      }
+      handleEditorValueChange(newCode);
+      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
+      if (isEditorAutorun && annotations.length === 0) {
+        handleEditorEval();
+      }
+    },
+    [
+      reactAceRef,
+      handleUpdateHasUnsavedChanges,
+      handleEditorValueChange,
+      handleEditorEval,
+      isEditorAutorun
+    ]
+  );
+
+  const keyHandlers: EditorKeyBindingHandlers = {
+    evaluate: handleEditorEval
+  };
+
+  const aceEditorProps: IAceEditorProps = {
+    className: 'react-ace',
+    editorProps: {
+      $blockScrolling: Infinity
+    },
+    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+    fontSize: 17,
+    height: '100%',
+    highlightActiveLine: false,
+    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+    theme: 'source',
+    value: props.editorValue,
+    width: '100%',
+    setOptions: {
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      fontFamily: "'Inconsolata', 'Consolas', monospace"
+    },
+    onChange
+  };
+
+  // Hooks must not change after an editor is instantiated, so to prevent that
+  // we store the original value and always use that only
+  const [hooks] = React.useState(props.hooks);
+  if (hooks) {
+    // Note: the following is extremely non-standard use of hooks
+    // DO NOT refactor this into any form where the hook is called from a lambda
+    for (const hook of hooks) {
+      hook(props, aceEditorProps, keyHandlers, reactAceRef);
+    }
+  }
+
+  aceEditorProps.commands = Object.entries(keyHandlers)
+    .filter(([_, exec]) => exec)
+    .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+
+  return (
+    <HotKeys className="Editor" handlers={handlers}>
+      <div className="row editor-react-ace">
+        <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
+      </div>
+    </HotKeys>
+  );
+});
+
+// in a real usage, hooks would be specified by the parent component
+export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
+  <EditorBase {...props} hooks={[useHighlighting]} ref={ref} />
+));
+
+// real export
+// export default EditorBase;

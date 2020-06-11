@@ -36,11 +36,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   private leftParentResizable?: Resizable = undefined;
   private maxDividerHeight?: number = undefined;
   private sideDividerDiv?: HTMLDivElement = undefined;
-  private editorRef: React.RefObject<typeof Editor>;
 
   public constructor(props: WorkspaceProps) {
     super(props);
-    this.editorRef = React.createRef();
   }
 
   public componentDidMount() {
@@ -178,14 +176,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.customEditor) {
       return props.customEditor;
     } else if (props.editorProps) {
-      return (
-        <Editor
-          {...props.editorProps}
-          key={props.editorProps.editorSessionId}
-          // @ts-ignore TODO: figure out how to fix this type (related to higher order classes for Editor). It's definitely correct though.
-          ref={this.editorRef}
-        />
-      );
+      return <Editor {...props.editorProps} key={props.editorProps.editorSessionId} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }
