@@ -1,9 +1,8 @@
 import { isSpeaker, avatarKey, avatarAssetPath, getSpeakerDetails } from './DialogueHelper';
 import { Constants as c } from '../commons/CommonConstants';
-import PlayGame from '../scenes/PlayGame';
-import { splitToLines } from '../utils/StringUtils';
+import { splitToLines } from '../parser/StringUtils';
 
-export async function preloadDialogue(scene: PlayGame, url: string) {
+export async function preloadDialogue(scene: Phaser.Scene, url: string) {
   scene.load.text(`#D${url}`, url);
   scene.load.image('speechBox', c.speechBoxPath);
 }

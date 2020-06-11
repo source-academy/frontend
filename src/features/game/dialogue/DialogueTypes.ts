@@ -1,8 +1,12 @@
 type Lines = string;
+type PartName = string;
 
-export type DialogueObject = {
-  [partName: string]: Lines[];
+export type Dialogue = {
+  title: string;
+  content: DialogueObject;
 };
+
+export type DialogueObject = Map<PartName, Lines[]>;
 
 type Speaker = string;
 type Expression = string;

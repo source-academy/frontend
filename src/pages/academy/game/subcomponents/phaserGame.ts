@@ -1,6 +1,5 @@
 import * as Phaser from 'phaser';
 import { Constants as c } from '../../../../features/game/commons/CommonConstants';
-// import PlayGame from '../../../../features/game/scenes/PlayGame';
 import GameManager from './GameManager';
 
 const config = {

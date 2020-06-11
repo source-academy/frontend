@@ -1,5 +1,7 @@
 import GameManager from './GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
+import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -34,6 +36,13 @@ class GameActionManager {
 
   public getGameManager(): GameManager | undefined {
     return this.gameManager;
+  }
+
+  public async bringUpDialogue(dialogueObject: DialogueObject) {
+    if (this.gameManager) {
+      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
+      await activateDialogue;
+    }
   }
 }
 

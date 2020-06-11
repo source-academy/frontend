@@ -3,17 +3,15 @@ import { Constants as c, Keys as k } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../utils/GameEffects';
 
 import { dialogueGenerator } from './DialogueManager';
-import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
+import { DialogueObject, SpeakerDetail } from './DialogueTypes';
 import { avatarKey, caps } from './DialogueHelper';
 import { resize } from '../utils/SpriteUtils';
 
 type Container = Phaser.GameObjects.Container;
 type Image = Phaser.GameObjects.Image;
 type Text = Phaser.GameObjects.Text;
-type Callback = () => void;
 const { Container, Image, Text } = Phaser.GameObjects;
 
-type DialogueGenerator = () => [SpeakerDetail | null, DialogueString];
 type LineChangeFn = (line: string) => void;
 type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null) => void;
 
@@ -67,30 +65,23 @@ export function createDialogue(scene: Phaser.Scene, dialogueObject: DialogueObje
   };
 
   // Create function
-  const activateContainer = () => {
+  const activateContainer = new Promise(res => {
     scene.add.existing(container);
     scene.add.tween(fadeIn([container], c.fadeDuration * 2));
     dialogueBox
       .setInteractive({ useHandCursor: true, pixelPerfect: true })
-      .on('pointerdown', () =>
-        onClick(generateDialogue, changeSpeaker, changeLine, destroyContainer)
-      );
-  };
+      .on('pointerdown', () => {
+        const [speakerDetail, line] = generateDialogue();
+        changeLine(line);
+        changeSpeaker(speakerDetail);
+        if (!line) {
+          res('done');
+          destroyContainer();
+        }
+      });
+  });
 
   return [activateContainer, destroyContainer];
-}
-
-/* Render next line on click */
-function onClick(
-  generateDialogue: DialogueGenerator,
-  changeSpeaker: SpeakerChangeFn,
-  changeLine: LineChangeFn,
-  destroyContainer: Callback
-) {
-  const [speakerDetail, line] = generateDialogue();
-  changeLine(line);
-  changeSpeaker(speakerDetail);
-  if (!line) destroyContainer();
 }
 
 /* Text sprite manager to produce typewriter effect */
