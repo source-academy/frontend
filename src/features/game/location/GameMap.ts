@@ -1,7 +1,7 @@
-import { GameLocation } from '../location/GameMapTypes';
-import { GameImage, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
+import { GameLocation, GameMapItemType } from '../location/GameMapTypes';
+import { GameImage, DialogueId, ObjectId, BBoxId, GameMapItem } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
-import { ObjectProperty, emptyObjectPropertyMap } from '../objects/ObjectsTypes';
+import { ObjectProperty } from '../objects/ObjectsTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
@@ -9,12 +9,16 @@ class GameMap {
   private navigation: Map<string, string[]>;
   private locations: Map<string, GameLocation>;
   private talkTopics: Map<DialogueId, Dialogue>;
+  private objects: Map<ObjectId, ObjectProperty>;
+  private boundingBoxes: Map<BBoxId, BBoxProperty>;
 
   constructor() {
     this.locationAssets = new Map<string, GameImage>();
     this.navigation = new Map<string, string[]>();
     this.locations = new Map<string, GameLocation>();
     this.talkTopics = new Map<DialogueId, Dialogue>();
+    this.objects = new Map<ObjectId, ObjectProperty>();
+    this.boundingBoxes = new Map<BBoxId, BBoxProperty>();
   }
 
   public addLocationAsset(asset: GameImage) {
@@ -49,59 +53,36 @@ class GameMap {
     return this.locations;
   }
 
-  public setTalkTopicAt(locationId: string, dialogueId: DialogueId, dialogueObject: Dialogue) {
-    this.talkTopics.set(dialogueId, dialogueObject);
+  public useGameMapItems() {
+    // Escape typescript warnings
+    console.log(this.talkTopics && this.objects && this.boundingBoxes);
+  }
+
+  public setItemAt(locationId: string, type: GameMapItemType, itemId: string, item: GameMapItem) {
+    // Escape typescript warnings
+    this[type + ''].set(itemId, item);
 
     const location = this.locations.get(locationId);
     if (!location) return;
-
-    if (!location.talkTopics) {
-      location.talkTopics = [];
+    if (!location[type]) {
+      location[type] = [];
     }
 
-    location.talkTopics.push(dialogueId);
+    location[type].push(itemId);
   }
 
-  public getTalkTopicsAt(locationId: string): Dialogue[] {
+  public getItemAt(locationId: string, type: GameMapItemType): GameMapItem[] {
     const location = this.locations.get(locationId);
-    if (!location || !location.talkTopics) {
+    if (!location || !location[type]) {
       return [];
     }
-    const dialogueIds = location.talkTopics;
-    const dialogues = [];
-    for (const dialogueId of dialogueIds) {
-      const dialogue = this.talkTopics.get(dialogueId);
-      dialogue && dialogues.push(dialogue);
+    const itemIds = location[type];
+    const items: GameMapItem[] = [];
+    for (const itemId of itemIds) {
+      const item = this[type + ''].get(itemId);
+      item && item.push(item);
     }
-    return dialogues;
-  }
-
-  public setObjectsAt(locationId: string, objectPropertyMap: Map<ObjectId, ObjectProperty>) {
-    const location = this.locations.get(locationId);
-    if (!location) {
-      return;
-    }
-
-    location.objects = objectPropertyMap;
-  }
-
-  public getObjectsAt(locationId: string): Map<ObjectId, ObjectProperty> {
-    const location = this.locations.get(locationId);
-    if (!location || !location.objects) {
-      return emptyObjectPropertyMap;
-    }
-    return location.objects;
-  }
-
-  public setBoundingBoxes(locationId: string, bboxId: BBoxId, bboxProperty: BBoxProperty) {
-    const location = this.locations.get(locationId);
-    if (!location) return;
-
-    if (!location.boundingBoxes) {
-      location.boundingBoxes = new Map<BBoxId, BBoxProperty>();
-    }
-
-    location.boundingBoxes.set(bboxId, bboxProperty);
+    return items;
   }
 }
 

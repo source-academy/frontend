@@ -1,7 +1,11 @@
-import { GameImage, screenSize, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
+import { GameImage, screenSize, DialogueId } from '../commons/CommonsTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { ObjectProperty } from '../objects/ObjectsTypes';
-import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+
+export enum GameMapItemType {
+  Dialogue = 'talkTopics',
+  Object = 'objects',
+  BBox = 'boundingBoxes'
+}
 
 export type GameLocation = {
   name: string;
@@ -10,8 +14,6 @@ export type GameLocation = {
   assetYPos: number;
   modes?: GameMode[];
   talkTopics?: DialogueId[];
-  objects?: Map<ObjectId, ObjectProperty>;
-  boundingBoxes?: Map<BBoxId, BBoxProperty>;
 };
 
 export const crashSiteImg: GameImage = {

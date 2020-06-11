@@ -1,3 +1,7 @@
+import { ObjectProperty } from '../objects/ObjectsTypes';
+import { Dialogue } from '../dialogue/DialogueTypes';
+import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+
 export const screenSize = {
   x: 1920,
   y: 1080
@@ -22,6 +26,8 @@ export type GameText = {
   text?: string;
   style?: any;
 };
+
+export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
 
 export type GameButton = GameText & GameSprite & IGameInteractive;
 
