@@ -1,14 +1,13 @@
-import * as _ from 'lodash';
-
 import { splitToLines, mapByHeader } from './StringUtils';
 import { isLabel } from '../objects/ObjectsHelper';
-import { ObjectPropertyMap, ObjectProperty } from '../objects/ObjectsTypes';
+import { ObjectProperty } from '../objects/ObjectsTypes';
 import { Constants as c } from '../commons/CommonConstants';
 import { mapValues } from '../utils/GameUtils';
+import { ObjectId, LocationId } from '../commons/CommonsTypes';
 
 type LocationRawObjectsMap = Map<string, string[]>;
 
-export function parseObjects(text: string) {
+export function parseObjects(text: string): Map<LocationId, Map<ObjectId, ObjectProperty>> {
   const locationRawObjectsMap = mapObjectsByLocation(text);
   const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
   return objectsMap;
@@ -20,14 +19,14 @@ export function mapObjectsByLocation(text: string): LocationRawObjectsMap {
   return locationRawObjectsMap;
 }
 
-function objPropertyMapper(objectsList: string[]): ObjectPropertyMap {
+function objPropertyMapper(objectsList: string[]): Map<ObjectId, ObjectProperty> {
   const separatorIndex = objectsList.findIndex(object => object === c.objectActionSeparator);
-  const objectPropertyMap = new Map<string, ObjectProperty>();
   const objectDetails = objectsList.slice(0, separatorIndex);
 
+  const objectPropertyMap = new Map<ObjectId, ObjectProperty>();
   objectDetails.forEach(objectDetail => {
-    const [objectId, texture, xCoord, yCoord] = objectDetail.split(', ');
-    _.set(objectPropertyMap, [objectId, 'details'], [texture, parseInt(xCoord), parseInt(yCoord)]);
+    const [objectId, texture, x, y] = objectDetail.split(', ');
+    objectPropertyMap.set(objectId, { texture, x: parseInt(x), y: parseInt(y) });
   });
 
   if (separatorIndex !== -1) {
@@ -35,7 +34,8 @@ function objPropertyMapper(objectsList: string[]): ObjectPropertyMap {
 
     objectActions.forEach(objectDetail => {
       const [objectId, ...actions] = objectDetail.split(', ');
-      _.set(objectPropertyMap, [objectId, 'actions'], actions);
+      const objectProperty = objectPropertyMap.get(objectId);
+      objectProperty && (objectProperty.actions = actions);
     });
   }
 

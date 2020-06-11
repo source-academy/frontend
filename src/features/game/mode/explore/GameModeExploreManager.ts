@@ -7,11 +7,10 @@ class GameModeExploreManager {
   static processExploreMenus(chapter: GameChapter): Map<string, GameModeExplore> {
     return mapValues(chapter.map.getLocations(), location => {
       const objects = chapter.map.getObjectsAt(location.name);
-      const boundingBoxes = chapter.map.getBoundingBoxesAt(location.name);
-      if (!location.modes || !location.modes.includes(GameMode.Talk) || !objects.size) {
+      if (!location.modes || !location.modes.includes(GameMode.Explore)) {
         return;
       }
-      return new GameModeExplore(objects, boundingBoxes);
+      return new GameModeExplore(objects, undefined);
     });
   }
 }

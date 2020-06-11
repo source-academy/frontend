@@ -1,7 +1,8 @@
 import { GameLocation } from '../location/GameMapTypes';
 import { GameImage, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
-import { ObjectProperty, ObjectPropertyMap } from '../objects/ObjectsTypes';
+import { ObjectProperty } from '../objects/ObjectsTypes';
+import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
   private locationAssets: Map<string, GameImage>;
@@ -75,18 +76,16 @@ class GameMap {
     return dialogues;
   }
 
-  public setObjectAt(locationId: string, objectId: ObjectId, objectProperty: ObjectProperty) {
+  public setObjectsAt(locationId: string, objectPropertyMap: Map<ObjectId, ObjectProperty>) {
     const location = this.locations.get(locationId);
-    if (!location) return;
-
-    if (!location.objects) {
-      location.objects = new Map<ObjectId, ObjectProperty>();
+    if (!location) {
+      return;
     }
 
-    location.objects.set(objectId, objectProperty);
+    location.objects = objectPropertyMap;
   }
 
-  public getObjectsAt(locationId: string): ObjectPropertyMap | undefined {
+  public getObjectsAt(locationId: string): Map<ObjectId, ObjectProperty> | undefined {
     const location = this.locations.get(locationId);
     if (!location) {
       return;
@@ -98,19 +97,11 @@ class GameMap {
     const location = this.locations.get(locationId);
     if (!location) return;
 
-    if (!location.objects) {
-      location.objects = new Map<ObjectId, ObjectProperty>();
+    if (!location.boundingBoxes) {
+      location.boundingBoxes = new Map<BBoxId, BBoxProperty>();
     }
 
-    location.objects.set(objectId, objectProperty);
-  }
-
-  public getObjectsAt(locationId: string): ObjectPropertyMap | undefined {
-    const location = this.locations.get(locationId);
-    if (!location) {
-      return;
-    }
-    return location.objects;
+    location.boundingBoxes.set(bboxId, bboxProperty);
   }
 }
 

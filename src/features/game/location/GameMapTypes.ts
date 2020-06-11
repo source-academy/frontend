@@ -1,6 +1,7 @@
 import { GameImage, screenSize, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/ObjectsTypes';
+import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 export type GameLocation = {
   name: string;

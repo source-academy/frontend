@@ -4,7 +4,7 @@ export function sleep(ms: number) {
 
 export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V) => R) {
   const newMap = new Map<K, any>();
-  map.forEach((value, key) => {
+  map.forEach((value: V, key: K) => {
     const result: R = fn(value);
     newMap.set(key, result);
   });
@@ -13,7 +13,7 @@ export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V) => R) {
 
 export function mapValuesK<K, V, R>(map: Map<K, V>, fn: (value: V, key: K) => R) {
   const newMap = new Map<K, any>();
-  newMap.forEach((value, key) => {
+  map.forEach((value, key) => {
     const result: R = fn(value, key);
     newMap.set(key, result);
   });

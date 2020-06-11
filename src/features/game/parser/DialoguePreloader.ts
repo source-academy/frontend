@@ -1,6 +1,11 @@
-import { isSpeaker, avatarKey, avatarAssetPath, getSpeakerDetails } from './DialogueHelper';
+import {
+  isSpeaker,
+  avatarKey,
+  avatarAssetPath,
+  getSpeakerDetails
+} from '../dialogue/DialogueHelper';
 import { Constants as c } from '../commons/CommonConstants';
-import { splitToLines } from '../parser/StringUtils';
+import { splitToLines } from './StringUtils';
 
 export async function preloadDialogue(scene: Phaser.Scene, url: string) {
   scene.load.text(`#D${url}`, url);
@@ -9,6 +14,10 @@ export async function preloadDialogue(scene: Phaser.Scene, url: string) {
 
 export function loadDialogueAssets(scene: Phaser.Scene, key: string) {
   const text = scene.cache.text.get(key);
+  loadDialogueAssetsFromText(scene, text);
+}
+
+export function loadDialogueAssetsFromText(scene: Phaser.Scene, text: string) {
   splitToLines(text)
     .filter(isSpeaker)
     .forEach(line => loadAvatar(scene, line));

@@ -11,7 +11,8 @@ import {
 import { GameMode } from '../mode/GameModeTypes';
 import { GameImage } from 'src/features/game/commons/CommonsTypes';
 import { parseDialogue } from '../parser/DialogueParser';
-import { SampleDialogue } from './LocationAssets';
+import { SampleDialogue, SampleObjects } from './LocationAssets';
+import { parseObjects } from '../parser/ObjectsParser';
 
 const LocationSelectMap = new GameMap();
 
@@ -84,6 +85,12 @@ LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue4', {
 LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue5', {
   title: 'Any Idea?',
   content: sampleDialogueObject
+});
+
+const sampleObjectProperties = parseObjects(SampleObjects);
+
+sampleObjectProperties.forEach((objects, locationId) => {
+  LocationSelectMap.setObjectsAt(locationId, objects);
 });
 
 const LocationSelectChapter: GameChapter = {
