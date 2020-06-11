@@ -1,3 +1,4 @@
+/* tslint:disable */
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
@@ -9,6 +10,12 @@ import { loadDialogueAssetsFromText } from 'src/features/game/parser/DialoguePre
 import { loadObjectsAssetsFromText } from 'src/features/game/parser/ObjectsPreloader';
 import { SampleDialogue, SampleObjects } from 'src/features/game/scenes/LocationAssets';
 import GameModeManager from 'src/features/game/mode/GameModeManager';
+import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
+import { emptyObjectPropertyMap } from 'src/features/game/objects/ObjectsTypes';
+import LayerManager from 'src/features/game/layer/LayerManager';
+import { LayerType } from 'src/features/game/layer/LayerTypes';
+
+const { Image } = Phaser.GameObjects;
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -16,6 +23,7 @@ class GameManager extends Phaser.Scene {
 
   // Limited to current chapter
   private gameModeManager: GameModeManager;
+  private layerManager: LayerManager;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
@@ -29,6 +37,8 @@ class GameManager extends Phaser.Scene {
     this.currentLocationName = this.currentChapter.startingLoc;
 
     this.gameModeManager = new GameModeManager();
+    this.layerManager = new LayerManager();
+    console.log(this.layerManager);
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -37,6 +47,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public preload() {
+    this.layerManager.initialiseMainLayer(this);
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadChapterAssets();
 
@@ -71,17 +82,25 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  private renderLocation(map: GameMap, location: GameLocation) {
+  private async renderLocation(map: GameMap, location: GameLocation) {
     // Render background of the location
     const asset = map.getLocationAsset(location);
     if (asset) {
-      const backgroundAsset = this.add.image(
+      const backgroundAsset = new Image(
+        this,
         location.assetXPos,
         location.assetYPos,
         location.assetKey
-      );
-      backgroundAsset.setDisplaySize(screenSize.x, screenSize.y);
+      ).setDisplaySize(screenSize.x, screenSize.y);
+      this.layerManager.addToLayer(LayerType.Background, backgroundAsset);
     }
+
+    // Render objects in the location
+    const [, objectLayerContainer] = createObjectsLayer(
+      this,
+      location.objects || emptyObjectPropertyMap
+    );
+    this.layerManager.addToLayer(LayerType.Background, objectLayerContainer);
 
     // Get all necessary UI containers
     this.getUIContainers(location);

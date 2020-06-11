@@ -24,10 +24,11 @@ class GameModeExplore implements IGameUI {
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    console.log(this.boundingBoxes);
     const [, objectLayerContainer] = createObjectsLayer(gameManager, this.objects, {
       cursor: magnifyingGlass
     });
+
+    console.log(this.boundingBoxes);
 
     exploreMenuContainer.add(objectLayerContainer);
     exploreMenuContainer.add(getBackToMenuContainer());
@@ -53,6 +54,8 @@ class GameModeExplore implements IGameUI {
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');
     }
+
+    gameManager.input.setDefaultCursor('');
     container.setPosition(container.x, 0);
 
     await sleep(500);

@@ -9,12 +9,12 @@ const { Image, Container } = Phaser.GameObjects;
 export function createObjectsLayer(
   scene: Phaser.Scene,
   objectPropertyMap: Map<ObjectId, ObjectProperty>,
-  props: ObjectLayerProps
+  props?: ObjectLayerProps
 ): [Map<ObjectId, Image>, Container] {
   const container = new Container(scene, 0, 0);
 
   const objectSpriteMap = mapValues(objectPropertyMap, objectProperty =>
-    createInteractiveObject(scene, objectProperty, props)
+    createInteractiveObject(scene, objectProperty, props || {})
   );
   container.add(Array.from(objectSpriteMap.values()));
 
