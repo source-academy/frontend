@@ -1,4 +1,4 @@
-import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
+import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -223,8 +223,8 @@ const mockGlobals: Array<[string, any]> = [
 const mockSoundLibrary: Library = {
   chapter: 4,
   external: {
-    name: ExternalLibraryNames.SOUNDS,
-    symbols: externalLibraries.get(ExternalLibraryNames.SOUNDS)!
+    name: ExternalLibraryName.SOUNDS,
+    symbols: externalLibraries.get(ExternalLibraryName.SOUNDS)!
   },
   globals: mockGlobals
 };
@@ -232,8 +232,8 @@ const mockSoundLibrary: Library = {
 export const mockRuneLibrary: Library = {
   chapter: 1,
   external: {
-    name: ExternalLibraryNames.RUNES,
-    symbols: externalLibraries.get(ExternalLibraryNames.RUNES)!
+    name: ExternalLibraryName.RUNES,
+    symbols: externalLibraries.get(ExternalLibraryName.RUNES)!
   },
   globals: mockGlobals
 };
@@ -241,8 +241,8 @@ export const mockRuneLibrary: Library = {
 const mockCurveLibrary: Library = {
   chapter: 4,
   external: {
-    name: ExternalLibraryNames.CURVES,
-    symbols: externalLibraries.get(ExternalLibraryNames.CURVES)!
+    name: ExternalLibraryName.CURVES,
+    symbols: externalLibraries.get(ExternalLibraryName.CURVES)!
   },
   globals: mockGlobals
 };
@@ -250,7 +250,7 @@ const mockCurveLibrary: Library = {
 const mockToneMatrixLibrary: Library = {
   chapter: 4,
   external: {
-    name: ExternalLibraryNames.SOUNDS,
+    name: ExternalLibraryName.SOUNDS,
     symbols: ['get_matrix']
   },
   globals: mockGlobals

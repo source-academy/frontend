@@ -13,20 +13,29 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-type LoginProps = DispatchProps & OwnProps;
+export type LoginProps = DispatchProps & OwnProps;
 
 export type DispatchProps = {
-  handleFetchAuth: (luminusCode: string) => void;
-  handleLogin: () => void;
+  handleFetchAuth: (code: string, providerId?: string) => void;
+  handleLogin: (providerId: string) => void;
 };
 
 export type OwnProps = {
-  luminusCode?: string;
+  providers: Array<{ id: string; name: string }>;
+  code?: string;
+  providerId?: string;
 };
 
-const Login: React.SFC<LoginProps> = props => {
-  if (props.luminusCode) {
-    startFetchAuth(props.luminusCode, props.handleFetchAuth);
+const Login: React.FunctionComponent<LoginProps> = props => {
+  const { code, providerId, handleFetchAuth } = props;
+
+  React.useEffect(() => {
+    if (code) {
+      handleFetchAuth(code, providerId);
+    }
+  }, [code, providerId, handleFetchAuth]);
+
+  if (code) {
     return (
       <div className={classNames('Login', Classes.DARK)}>
         <Card className={classNames('login-card', Classes.ELEVATION_4)}>
@@ -39,36 +48,49 @@ const Login: React.SFC<LoginProps> = props => {
         </Card>
       </div>
     );
-  } else {
-    return (
-      <div className={classNames('Login', Classes.DARK)}>
-        <Card className={classNames('login-card', Classes.ELEVATION_4)}>
-          <div className="login-header">
-            <H4>
-              <Icon icon={IconNames.LOCK} />
-              LOGIN
-            </H4>
-          </div>
-          <div className="login-body">
-            <ButtonGroup fill={true} vertical={true}>
-              {loginButton(props.handleLogin)}
-              {playgroundButton}
-            </ButtonGroup>
-          </div>
-        </Card>
-      </div>
-    );
   }
+
+  return (
+    <div className={classNames('Login', Classes.DARK)}>
+      <Card className={classNames('login-card', Classes.ELEVATION_4)}>
+        <div className="login-header">
+          <H4>
+            <Icon icon={IconNames.LOCK} />
+            LOGIN
+          </H4>
+        </div>
+        <div className="login-body">
+          <ButtonGroup fill={true} vertical={true}>
+            {props.providers.map(({ id, name }) => (
+              <LoginButton handleClick={props.handleLogin} name={name} id={id} key={id} />
+            ))}
+            {playgroundButton}
+          </ButtonGroup>
+        </div>
+      </Card>
+    </div>
+  );
 };
 
-const startFetchAuth = (luminusCode: string, handleFetchAuth: DispatchProps['handleFetchAuth']) =>
-  handleFetchAuth(luminusCode);
-
-const loginButton = (handleClick: () => void) => (
-  <Button className={Classes.LARGE} rightIcon={IconNames.LOG_IN} onClick={handleClick}>
-    Log in with LumiNUS
-  </Button>
-);
+const LoginButton = ({
+  handleClick,
+  id,
+  name
+}: {
+  handleClick: (id: string) => void;
+  id: string;
+  name: string;
+}) => {
+  return (
+    <Button
+      className={Classes.LARGE}
+      rightIcon={IconNames.LOG_IN}
+      onClick={React.useCallback(() => handleClick(id), [handleClick, id])}
+    >
+      {`Log in with ${name}`}
+    </Button>
+  );
+};
 
 const playgroundButton = (
   <NavLink to="/playground">

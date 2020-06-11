@@ -13,7 +13,7 @@ import {
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
-import { ExternalLibraryNames } from './types/ExternalTypes';
+import { ExternalLibraryName } from './types/ExternalTypes';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
 import { DashBoardState } from '../../features/dashboard/DashboardTypes';
@@ -196,7 +196,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   editorTestcases: [],
   editorHeight: 150,
   editorWidth: '50%',
-  externalLibrary: ExternalLibraryNames.NONE,
+  externalLibrary: ExternalLibraryName.NONE,
   execTime: 1000,
   highlightedLines: [],
   output: [],
@@ -245,7 +245,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     description: null,
     inputToApply: null,
     playbackData: {
-      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
       inputs: []
     },
     playbackDuration: 0,
@@ -256,7 +256,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
   sourcereel: {
     ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
     playbackData: {
-      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryNames.NONE },
+      init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
       inputs: []
     },
     recordingStatus: RecordingStatus.notStarted,

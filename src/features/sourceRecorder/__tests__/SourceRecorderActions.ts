@@ -1,4 +1,4 @@
-import { ExternalLibraryNames } from '../../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
 import {
   saveSourcecastData,
@@ -35,7 +35,7 @@ test('saveSourcecastData generates correct action object', () => {
     init: {
       editorValue: 'Editor Init Value',
       chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE
+      externalLibrary: ExternalLibraryName.NONE
     },
     inputs: []
   };
@@ -127,7 +127,7 @@ test('setSourcecastData generates correct action object', () => {
   const playbackData: PlaybackData = {
     init: {
       chapter: 1,
-      externalLibrary: ExternalLibraryNames.NONE,
+      externalLibrary: ExternalLibraryName.NONE,
       editorValue: ''
     },
     inputs: [input]
