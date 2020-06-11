@@ -1,1 +1,2 @@
-export const isLabel = (line: string) => new RegExp(/\[.+\]/).test(line);
+import { matchExact } from '../parser/StringUtils';
+export const isLabel = (line: string) => matchExact(/\[.+\]/, line);

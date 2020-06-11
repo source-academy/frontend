@@ -17,8 +17,9 @@ import GameActionManager from './GameActionManager';
 import GameModeTalk from 'src/features/game/mode/talk/GameModeTalk';
 import GameModeTalkManager from 'src/features/game/mode/talk/GameModeTalkManager';
 import talkUIAssets from 'src/features/game/mode/talk/GameModeTalkTypes';
-import { preloadDialogue, loadDialogueAssets } from 'src/features/game/dialogue/DialoguePreloader';
-import { preloadObjects, loadObjectsAssets } from 'src/features/game/objects/ObjectsPreloader';
+import { loadDialogueAssetsFromText } from 'src/features/game/parser/DialoguePreloader';
+import { loadObjectsAssetsFromText } from 'src/features/game/parser/ObjectsPreloader';
+import { SampleDialogue, SampleObjects } from 'src/features/game/scenes/LocationAssets';
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -64,27 +65,12 @@ class GameManager extends Phaser.Scene {
   }
 
   public create() {
-    this.renderStartingLocation(this.currentChapter);
+    this.renderStartingLocation();
   }
 
   private preloadChapterAssets() {
-    preloadDialogue(this, '../assets/dialogue.txt');
-    preloadObjects(this, '../assets/objects.txt');
-    this.load.on('filecomplete', (key: string) => this.handleLoadComplete(key));
-  }
-
-  public handleLoadComplete(key: string) {
-    if (key[0] === '#') {
-      switch (key[1]) {
-        case 'D':
-          console.log(key);
-          loadDialogueAssets(this, key);
-          break;
-        case 'O':
-          loadObjectsAssets(this, key);
-          break;
-      }
-    }
+    loadDialogueAssetsFromText(this, SampleDialogue);
+    loadObjectsAssetsFromText(this, SampleObjects);
   }
 
   //////////////////////
@@ -97,7 +83,7 @@ class GameManager extends Phaser.Scene {
     });
   }
 
-  private renderStartingLocation(chapter: GameChapter) {
+  private renderStartingLocation() {
     const startingLoc = this.currentChapter.startingLoc;
     const location = this.currentChapter.map.getLocation(startingLoc);
     if (location) {
@@ -179,8 +165,8 @@ class GameManager extends Phaser.Scene {
     // Get Explore Menu
     const locationModeExplore = this.locationModeExplore.get(location.name);
     if (locationModeExplore) {
-      const moveMenuContainer = locationModeExplore.getUIContainer();
-      this.currentUIContainers.set(GameMode.Move, moveMenuContainer);
+      const exploreMenuContainer = locationModeExplore.getUIContainer();
+      this.currentUIContainers.set(GameMode.Explore, exploreMenuContainer);
     }
 
     // Disable all UI at first
@@ -204,7 +190,7 @@ class GameManager extends Phaser.Scene {
       case GameMode.Talk:
         return this.locationModeTalks.get(this.currentLocationName);
       case GameMode.Explore:
-        return this.locationModeMoves.get(this.currentLocationName);
+        return this.locationModeExplore.get(this.currentLocationName);
       default:
         // tslint:disable-next-line
         console.log('Not implemented yet: ', mode, ' , returning mode menu instead');

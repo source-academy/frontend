@@ -1,28 +1,55 @@
-import { GameLocation } from '../../location/GameMapTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
-import { IGameUI } from '../../commons/CommonsTypes';
+import { IGameUI, ObjectId, BBoxId } from '../../commons/CommonsTypes';
+import { ObjectProperty } from '../../objects/ObjectsTypes';
+import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
+import { createObjectsLayer } from '../../objects/ObjectsRenderer';
+import { sleep } from '../../utils/GameUtils';
 
 class GameModeExplore implements IGameUI {
-  private location: GameLocation;
-  constructor(location: GameLocation) {
-    this.location = location;
+  private objects: Map<ObjectId, ObjectProperty>;
+  private boundingBoxes?: Map<BBoxId, BBoxProperty>;
+
+  constructor(objects?: Map<ObjectId, ObjectProperty>, boundingBoxes?: Map<BBoxId, BBoxProperty>) {
+    this.objects = objects || new Map<ObjectId, ObjectProperty>();
+    this.boundingBoxes = boundingBoxes || new Map<BBoxId, BBoxProperty>();
   }
+
   public getUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('GetUIContainer: Game Manager is not defined!');
     }
 
-    console.log(this.location);
+    // gameManager.input.setDefaultCursor('url(assets/input/cursors/blue.cur), pointer');
 
-    const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    console.log(this.boundingBoxes);
+    const [, modeExploreContainer] = createObjectsLayer(gameManager, this.objects);
 
-    return modeMenuContainer;
+    return modeExploreContainer;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {}
+  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('ActivateUI: Game Manager is not defined!');
+    }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {}
+    gameManager.add.existing(container);
+    container.setActive(true);
+    container.setVisible(true);
+  }
+
+  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!gameManager) {
+      throw console.error('DeactivateUI: Game Manager is not defined!');
+    }
+    container.setPosition(container.x, 0);
+
+    await sleep(500);
+    container.setVisible(false);
+    container.setActive(false);
+  }
 }
 
 export default GameModeExplore;

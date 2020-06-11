@@ -3,6 +3,11 @@ type StringFilterFn = (line: string) => boolean;
 type Header = string;
 type StringMap = Map<Header, string[]>;
 
+export function matchExact(r: RegExp, str: string) {
+  let match = str.match(r);
+  return !!(match && str === match[0]);
+}
+
 // Splits text into string array, removes newlines and whitespaces
 export function splitToLines(text: string): string[] {
   return text
@@ -22,9 +27,9 @@ export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): 
   lines.forEach(line => {
     if (isHeaderFunction(line)) {
       currHeader = stripEnclosing(line);
-      map[currHeader] = [];
+      map.set(currHeader, []);
     } else {
-      map[currHeader].push(line);
+      map.get(currHeader)!.push(line);
     }
   });
   return map;

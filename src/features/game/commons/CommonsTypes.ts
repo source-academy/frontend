@@ -66,6 +66,7 @@ export const blackScreen: GameImage = {
 export type ObjectId = string;
 export type DialogueId = string;
 export type LocationId = string;
+export type BBoxId = string;
 
 export const topButton: GameImage = {
   key: 'top-button',
