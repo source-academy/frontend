@@ -1,8 +1,10 @@
-import { sleep } from './GameUtils';
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
-import { blackScreen } from '../commons/CommonsTypes';
+import { blackScreen, screenSize } from '../commons/CommonsTypes';
 import { Constants as c } from '../commons/CommonConstants';
+import { Layer } from '../layer/LayerTypes';
+import { sleep } from './GameUtils';
 
+const { Rectangle } = Phaser.GameObjects;
 type GameObject = Phaser.GameObjects.GameObject | Phaser.GameObjects.Text;
 
 export const fadeOut = (targets: GameObject[], duration: number) => ({
@@ -28,7 +30,15 @@ export const blackFade = async (
   delay: number,
   callback: any
 ) => {
-  const fadeBlack = gameManager.add.image(blackScreen.xPos, blackScreen.yPos, blackScreen.key);
+  const fadeBlack = new Rectangle(
+    gameManager,
+    screenSize.x / 2,
+    screenSize.y / 2,
+    screenSize.x,
+    screenSize.y,
+    0
+  );
+  gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
 
   // Fade in
   fadeBlack.setAlpha(0);

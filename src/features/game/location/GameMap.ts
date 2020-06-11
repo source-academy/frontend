@@ -1,7 +1,7 @@
 import { GameLocation } from '../location/GameMapTypes';
 import { GameImage, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
-import { ObjectProperty } from '../objects/ObjectsTypes';
+import { ObjectProperty, emptyObjectPropertyMap } from '../objects/ObjectsTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
@@ -85,10 +85,10 @@ class GameMap {
     location.objects = objectPropertyMap;
   }
 
-  public getObjectsAt(locationId: string): Map<ObjectId, ObjectProperty> | undefined {
+  public getObjectsAt(locationId: string): Map<ObjectId, ObjectProperty> {
     const location = this.locations.get(locationId);
-    if (!location) {
-      return;
+    if (!location || !location.objects) {
+      return emptyObjectPropertyMap;
     }
     return location.objects;
   }

@@ -28,10 +28,11 @@ class GameActionManager {
     }
   }
 
-  public changeLocationTo(locationName: string): void {
+  public changeLocationTo(locationName: string) {
     if (this.gameManager) {
       return this.gameManager.changeLocationTo(locationName);
     }
+    return;
   }
 
   public getGameManager(): GameManager | undefined {

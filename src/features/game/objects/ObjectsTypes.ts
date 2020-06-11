@@ -13,3 +13,5 @@ export type ObjectProperty = {
 export type ObjectLayerProps = {
   cursor?: string;
 };
+
+export const emptyObjectPropertyMap = new Map<string, ObjectProperty>();
