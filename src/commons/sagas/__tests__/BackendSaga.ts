@@ -40,6 +40,8 @@ import {
 } from '../../mocks/AssessmentMocks';
 import { mockGroupOverviews } from '../../mocks/GroupMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
+import { computeRedirectUri } from '../../utils/AuthHelper';
+import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import { updateChapter, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
 import {
@@ -93,77 +95,71 @@ const errorResp = { ok: false };
 // ----------------------------------------
 
 describe('Test FETCH_AUTH Action', () => {
+  const code = 'luminusCode';
+  const providerId = 'provider';
+  const clientId = 'clientId';
+  Constants.authProviders.set(providerId, {
+    name: providerId,
+    endpoint: `https://test/?client_id=${clientId}`,
+    isDefault: true
+  });
+  const redirectUrl = computeRedirectUri(providerId);
+
+  const user = {
+    name: 'user',
+    role: 'student' as Role,
+    group: '42D',
+    story: {
+      story: '',
+      playStory: false
+    } as Story,
+    grade: 1,
+    gameState: {
+      collectibles: {},
+      completed_quests: []
+    } as GameState
+  };
+
   test('when tokens and user obtained', () => {
-    const luminusCode = 'luminusCode';
-    const user = {
-      name: 'user',
-      role: 'student' as Role,
-      group: '42D',
-      story: {
-        story: '',
-        playStory: false
-      } as Story,
-      grade: 1,
-      gameState: {
-        collectibles: {},
-        completed_quests: []
-      } as GameState
-    };
     return expectSaga(BackendSaga)
-      .call(postAuth, luminusCode)
+      .call(postAuth, code, providerId, clientId, redirectUrl)
       .call(getUser, mockTokens)
       .put(setTokens(mockTokens))
       .put(setUser(user))
       .provide([
-        [call(postAuth, luminusCode), mockTokens],
+        [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [call(getUser, mockTokens), user]
       ])
-      .dispatch({ type: FETCH_AUTH, payload: luminusCode })
+      .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
 
   test('when tokens is null', () => {
-    const luminusCode = 'luminusCode';
-    const user = {
-      name: 'user',
-      role: 'student' as Role,
-      group: '42D',
-      story: {
-        story: '',
-        playStory: false
-      } as Story,
-      grade: 1,
-      gameState: {
-        collectibles: {},
-        completed_quests: []
-      } as GameState
-    };
     return expectSaga(BackendSaga)
       .provide([
-        [call(postAuth, luminusCode), null],
+        [call(postAuth, code, providerId, clientId, redirectUrl), null],
         [call(getUser, mockTokens), user]
       ])
-      .call(postAuth, luminusCode)
+      .call(postAuth, code, providerId, clientId, redirectUrl)
       .not.call.fn(getUser)
       .not.put.actionType(SET_TOKENS)
       .not.put.actionType(SET_USER)
-      .dispatch({ type: FETCH_AUTH, payload: luminusCode })
+      .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
 
   test('when user is null', () => {
-    const luminusCode = 'luminusCode';
     const nullUser = null;
     return expectSaga(BackendSaga)
       .provide([
-        [call(postAuth, luminusCode), mockTokens],
+        [call(postAuth, code, providerId, clientId, redirectUrl), mockTokens],
         [call(getUser, mockTokens), nullUser]
       ])
-      .call(postAuth, luminusCode)
+      .call(postAuth, code, providerId, clientId, redirectUrl)
       .call(getUser, mockTokens)
       .not.put.actionType(SET_TOKENS)
       .not.put.actionType(SET_USER)
-      .dispatch({ type: FETCH_AUTH, payload: luminusCode })
+      .dispatch({ type: FETCH_AUTH, payload: { code, providerId } })
       .silentRun();
   });
 });

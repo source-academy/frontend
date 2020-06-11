@@ -4,7 +4,7 @@ type Header = string;
 type StringMap = Map<Header, string[]>;
 
 export function matchExact(r: RegExp, str: string) {
-  let match = str.match(r);
+  const match = str.match(r);
   return !!(match && str === match[0]);
 }
 

@@ -4,7 +4,7 @@ import * as React from 'react';
 
 import { mockRouterProps } from '../../mocks/ComponentMocks';
 import Application, { ApplicationProps } from '../Application';
-import { ExternalLibraryName, ExternalLibraryNames } from '../types/ExternalTypes';
+import { ExternalLibraryName } from '../types/ExternalTypes';
 
 test('Application renders correctly', () => {
   const props: ApplicationProps = {
@@ -13,7 +13,7 @@ test('Application renders correctly', () => {
     currentPlaygroundChapter: 2,
     currentPlaygroundVariant: 'default',
     handleLogOut: () => {},
-    currentExternalLibrary: ExternalLibraryNames.NONE,
+    currentExternalLibrary: ExternalLibraryName.NONE,
     handleClearContext: (
       chapter: number,
       variant: Variant,

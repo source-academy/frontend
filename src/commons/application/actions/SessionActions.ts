@@ -32,7 +32,8 @@ import {
   UPDATE_NOTIFICATIONS
 } from '../types/SessionTypes';
 
-export const fetchAuth = (luminusCode: string) => action(FETCH_AUTH, luminusCode);
+export const fetchAuth = (code: string, providerId?: string) =>
+  action(FETCH_AUTH, { code, providerId });
 
 export const fetchAssessment = (id: number) => action(FETCH_ASSESSMENT, id);
 
@@ -47,7 +48,7 @@ export const fetchGrading = (submissionId: number) => action(FETCH_GRADING, subm
 export const fetchGradingOverviews = (filterToGroup = true) =>
   action(FETCH_GRADING_OVERVIEWS, filterToGroup);
 
-export const login = () => action(LOGIN);
+export const login = (providerId: string) => action(LOGIN, providerId);
 
 export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
 

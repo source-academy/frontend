@@ -6,7 +6,13 @@ import Login from '../Login';
 test('Login renders correctly', () => {
   const props = {
     handleLogin: () => {},
-    handleFetchAuth: (luminusCode: string) => {}
+    handleFetchAuth: (code: string, providerId?: string) => {},
+    providers: [
+      {
+        id: 'nusnet_id',
+        name: 'LumiNUS'
+      }
+    ]
   };
   const app = <Login {...props} />;
   const tree = shallow(app);
@@ -16,8 +22,9 @@ test('Login renders correctly', () => {
 test('Loading login renders correctly', () => {
   const props = {
     handleLogin: () => {},
-    handleFetchAuth: (luminusCode: string) => {},
-    luminusCode: 'Luminus Code'
+    handleFetchAuth: (code: string, providerId?: string) => {},
+    code: 'Luminus Code',
+    providers: []
   };
   const app = <Login {...props} />;
   const tree = shallow(app);
