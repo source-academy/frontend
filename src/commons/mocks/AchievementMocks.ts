@@ -1,124 +1,132 @@
 import {
   AchievementAbility,
-  AchievementModalItem,
   AchievementItem,
-  AchievementStatus,
-  SubAchievementItem
+  AchievementModalItem,
+  AchievementStatus
 } from '../achievements/AchievementTypes';
 
-export const achievementList: AchievementItem[] = [
-  {
-    title: 'Rune Master',
-    details: {
-      ability: AchievementAbility.ACADEMIC,
-      deadline: new Date(2020, 5, 1, 6, 0, 0)
-    },
-    subAchievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
-    status: AchievementStatus.ACTIVE
+export const achievementDict: { [id: number]: AchievementItem } = {
+  1: {
+    id: 1,
+    title: 'Rune Master [ACTIVE]',
+    ability: AchievementAbility.ACADEMIC,
+    isTask: true,
+    prerequisites: [2, 3],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 3
   },
-  {
-    title: 'Keyboard Warrior',
-    details: {
-      ability: AchievementAbility.COMMUNITY,
-      exp: 100,
-      deadline: undefined
-    },
-    subAchievementTitles: [
-      'Keyboard Warrior: Bronze Tier',
-      'Keyboard Warrior: Silver Tier',
-      'Keyboard Warrior: Gold Tier'
-    ],
-    status: AchievementStatus.ACTIVE
+  2: {
+    id: 2,
+    title: 'Beyond the Second Dimension [ACTIVE]',
+    ability: AchievementAbility.ACADEMIC,
+    exp: 250,
+    deadline: new Date(2020, 7, 1, 0, 0, 0),
+    isTask: false,
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 100
   },
-  {
-    title: 'Adventure Time',
-    details: {
-      ability: AchievementAbility.EXPLORATION,
-      exp: 100,
-      deadline: new Date(2020, 5, 11, 6, 0, 0)
-    },
-    subAchievementTitles: [],
-    status: AchievementStatus.COMPLETED
+  3: {
+    id: 3,
+    title: 'Colorful Carpet [ACTIVE]',
+    ability: AchievementAbility.ACADEMIC,
+    exp: 250,
+    deadline: new Date(2020, 7, 3, 0, 0, 0),
+    isTask: false,
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 100
   },
-  {
-    title: "Sort'a Easy",
-    details: {
-      ability: AchievementAbility.EXPLORATION,
-      exp: 100,
-      deadline: undefined
-    },
-    subAchievementTitles: [],
-    status: AchievementStatus.ACTIVE
-  }
-];
-
-export const subAchievementList: SubAchievementItem[] = [
-  {
-    title: 'Beyond the Second Dimension',
-    exp: 200,
-    deadline: undefined,
-    status: AchievementStatus.ACTIVE
+  4: {
+    id: 4,
+    title: 'Keyboard Warrior [ACTIVE]',
+    ability: AchievementAbility.COMMUNITY,
+    isTask: true,
+    prerequisites: [5, 6, 7],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 3
   },
-  {
-    title: 'Colorful Carpet',
-    exp: 100,
-    deadline: new Date(2020, 5, 1, 6, 0, 0),
-    status: AchievementStatus.ACTIVE
-  },
-  {
-    title: 'Keyboard Warrior: Bronze Tier',
+  5: {
+    id: 5,
+    title: 'Keyboard Warrior - Bronze Tier [COMPLETED]',
+    ability: AchievementAbility.COMMUNITY,
     exp: 50,
-    deadline: new Date(2020, 4, 1, 6, 0, 0),
-    status: AchievementStatus.COMPLETED
+    isTask: false,
+    status: AchievementStatus.COMPLETED,
+    completionGoal: 10
   },
-  {
-    title: 'Keyboard Warrior: Silver Tier',
+  6: {
+    id: 6,
+    title: 'Keyboard Warrior - Silver Tier [COMPLETED]',
+    ability: AchievementAbility.COMMUNITY,
     exp: 100,
-    deadline: new Date(2020, 4, 1, 6, 0, 0),
-    status: AchievementStatus.ACTIVE
+    isTask: false,
+    status: AchievementStatus.COMPLETED,
+    completionGoal: 50
   },
-  {
-    title: 'Keyboard Warrior: Gold Tier',
+  7: {
+    id: 7,
+    title: 'Keyboard Warrior - Gold Tier [ACTIVE]',
+    ability: AchievementAbility.COMMUNITY,
     exp: 200,
-    deadline: new Date(2020, 4, 1, 6, 0, 0),
-    status: AchievementStatus.ACTIVE
+    isTask: false,
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 100
+  },
+  8: {
+    id: 8,
+    title: "That was Sort'a Easy [EXPIRED]",
+    ability: AchievementAbility.ACADEMIC,
+    exp: 250,
+    deadline: new Date(2020, 6, 4, 0, 0, 0),
+    isTask: true,
+    status: AchievementStatus.EXPIRED,
+    completionGoal: 100
+  },
+  9: {
+    id: 9,
+    title: 'Mission Master [ACTIVE]',
+    ability: AchievementAbility.EFFORT,
+    exp: 80,
+    isTask: true,
+    prerequisites: [1, 8],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 2
   }
-];
+};
 
 export const achievementModalList: AchievementModalItem[] = [
   {
-    title: 'Rune Master',
+    title: 'Rune Master [ACTIVE]',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
     description: 'Cookies!'
   },
   {
-    title: 'Keyboard Warrior',
+    title: 'Beyond the Second Dimension [ACTIVE]',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
     description: 'Huehuehuehuehuehuehuehue'
   },
   {
-    title: 'Adventure Time',
+    title: 'Colorful Carpet [ACTIVE]',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
     description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas'
   },
   {
-    title: 'Beyond the Second Dimension',
+    title: 'Keyboard Warrior [ACTIVE]',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
     description:
       'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.'
   },
   {
-    title: 'Colorful Carpet',
+    title: "That was Sort'a Easy [EXPIRED]",
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
     description: 'description'
   },
   {
-    title: 'Keyboard Warrior: Gold Tier',
+    title: 'Mission Master [ACTIVE]',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/messyClassroom%40x2.png',
     description: '?'

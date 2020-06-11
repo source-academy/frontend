@@ -4,20 +4,20 @@ import { IconName, Icon } from '@blueprintjs/core';
 import { FilterStatus } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementFilterProps = {
-  status: FilterStatus;
-  setFilteredStatus: any;
+  filterStatus: FilterStatus;
+  setFilterStatus: any;
   icon: IconName;
   count: number;
 };
 
 function AchievementFilter(props: AchievementFilterProps) {
-  const { icon, status, setFilteredStatus, count } = props;
+  const { icon, filterStatus, setFilterStatus, count } = props;
 
   /**
    * Changes the filter status for the main achievement page.
    */
   const changeFilterStatus = () => {
-    setFilteredStatus(status);
+    setFilterStatus(filterStatus);
   };
 
   return (
@@ -25,7 +25,7 @@ function AchievementFilter(props: AchievementFilterProps) {
       <div onClick={changeFilterStatus}>
         <Icon color={'#ffffff'} iconSize={44} icon={icon} />
         <br />
-        {status} ({count})
+        {filterStatus} ({count})
       </div>
     </div>
   );

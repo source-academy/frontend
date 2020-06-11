@@ -11,10 +11,16 @@ function AchievementExp(props: AchievementExpProps) {
   const { exp } = props;
 
   return (
-    <div className="exp">
-      <Icon icon={IconNames.BANK_ACCOUNT} />
-      <p>{`${exp} XP`}</p>
-    </div>
+    <>
+      {exp === undefined ? (
+        <div className="exp"></div>
+      ) : (
+        <div className="exp">
+          <Icon icon={IconNames.BANK_ACCOUNT} />
+          <p>{`${exp} XP`}</p>
+        </div>
+      )}
+    </>
   );
 }
 

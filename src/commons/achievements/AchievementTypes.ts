@@ -27,41 +27,15 @@ export enum FilterStatus {
  * status: student's achievement status
  */
 export type AchievementItem = {
+  id: number;
   title: string;
-  details: AchievementDetails;
-  subAchievementTitles: string[];
-  status: AchievementStatus;
-};
-
-/**
- * More information of a main achievement
- *
- * ability: ability group of the achievement
- * exp: amount of exp the achievement grants, optional
- *  (UI displays the sum of main & sub achievements exp)
- * deadline: deadline of the achievement, optional
- *  (UI displays the furthest deadline of all main & sub achievement deadlines)
- */
-export type AchievementDetails = {
   ability: AchievementAbility;
   exp?: number;
   deadline?: Date;
-};
-
-/**
- * Information of a sub achievement item
- *
- * title: unique string, used to identify the sub achievement
- * exp: amount of exp the subachivement grants
- *   (UI displays the sub achievement exp)
- * deadline: deadline of the sub achievement
- *   (UI displays the deadline of the sub achievement)
- */
-export type SubAchievementItem = {
-  title: string;
-  exp: number;
-  deadline?: Date;
+  isTask: boolean;
+  prerequisites?: number[];
   status: AchievementStatus;
+  completionGoal: number;
 };
 
 /**
