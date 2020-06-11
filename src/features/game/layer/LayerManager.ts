@@ -1,4 +1,4 @@
-import { defaultLayerSequence, LayerType } from './LayerTypes';
+import { defaultLayerSequence, Layer } from './LayerTypes';
 import { fadeIn, fadeAndDestroy } from '../utils/GameEffects';
 import { Constants as c } from '../commons/CommonConstants';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
@@ -10,11 +10,11 @@ const { Container } = Phaser.GameObjects;
 
 class LayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;
-  private layers: Map<LayerType, Container>;
+  private layers: Map<Layer, Container>;
 
   constructor() {
     this.mainLayer = undefined;
-    this.layers = new Map<LayerType, Container>();
+    this.layers = new Map<Layer, Container>();
   }
 
   public initialiseMainLayer(scene: Phaser.Scene) {
@@ -27,21 +27,21 @@ class LayerManager {
     }
   }
 
-  public getLayer(layerType: LayerType) {
+  public getLayer(layerType: Layer) {
     return this.layers.get(layerType);
   }
 
-  public hideLayer(layerType: LayerType) {
+  public hideLayer(layerType: Layer) {
     const layerToHide = this.layers.get(layerType);
     layerToHide && layerToHide.setVisible(false);
   }
 
-  public showLayer(layerType: LayerType) {
+  public showLayer(layerType: Layer) {
     const layerToHide = this.layers.get(layerType);
     layerToHide && layerToHide.setVisible(true);
   }
 
-  public async fadeInLayer(layerType: LayerType, fadeDuration = c.fadeDuration) {
+  public async fadeInLayer(layerType: Layer, fadeDuration = c.fadeDuration) {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       return;
@@ -56,7 +56,7 @@ class LayerManager {
     sleep(fadeDuration);
   }
 
-  public addToLayer(layerType: LayerType, gameObject: GameObject) {
+  public addToLayer(layerType: Layer, gameObject: GameObject) {
     const layerContainer = this.layers.get(layerType);
     if (!layerContainer) {
       return;
@@ -64,7 +64,11 @@ class LayerManager {
     layerContainer.add(gameObject);
   }
 
-  public clearLayerContents(layerType: LayerType, withFade = false) {
+  public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
+    layerTypes.forEach(layerType => this.clearLayerContents(layerType, withFade));
+  }
+
+  public clearLayerContents(layerType: Layer, withFade = false) {
     const layerContainer = this.layers.get(layerType);
     if (!layerContainer) {
       return;

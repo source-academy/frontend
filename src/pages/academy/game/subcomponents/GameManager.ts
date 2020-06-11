@@ -13,7 +13,8 @@ import GameModeManager from 'src/features/game/mode/GameModeManager';
 import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
 import { emptyObjectPropertyMap } from 'src/features/game/objects/ObjectsTypes';
 import LayerManager from 'src/features/game/layer/LayerManager';
-import { LayerType } from 'src/features/game/layer/LayerTypes';
+import { Layer } from 'src/features/game/layer/LayerTypes';
+import { blackFade } from 'src/features/game/utils/GameEffects';
 
 const { Image } = Phaser.GameObjects;
 
@@ -23,7 +24,7 @@ class GameManager extends Phaser.Scene {
 
   // Limited to current chapter
   private gameModeManager: GameModeManager;
-  private layerManager: LayerManager;
+  public layerManager: LayerManager;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
@@ -83,6 +84,7 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(map: GameMap, location: GameLocation) {
+    this.layerManager.clearSeveralLayers([Layer.Background, Layer.Objects]);
     // Render background of the location
     const asset = map.getLocationAsset(location);
     if (asset) {
@@ -92,7 +94,7 @@ class GameManager extends Phaser.Scene {
         location.assetYPos,
         location.assetKey
       ).setDisplaySize(screenSize.x, screenSize.y);
-      this.layerManager.addToLayer(LayerType.Background, backgroundAsset);
+      this.layerManager.addToLayer(Layer.Background, backgroundAsset);
     }
 
     // Render objects in the location
@@ -100,7 +102,7 @@ class GameManager extends Phaser.Scene {
       this,
       location.objects || emptyObjectPropertyMap
     );
-    this.layerManager.addToLayer(LayerType.Background, objectLayerContainer);
+    this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
 
     // Get all necessary UI containers
     this.getUIContainers(location);
@@ -112,7 +114,7 @@ class GameManager extends Phaser.Scene {
     this.currentLocationName = location.name;
   }
 
-  public changeLocationTo(locationName: string): void {
+  public async changeLocationTo(locationName: string) {
     const location = this.currentChapter.map.getLocation(locationName);
     if (location) {
       // Deactive current UI
@@ -122,7 +124,7 @@ class GameManager extends Phaser.Scene {
       this.currentUIContainers.clear();
 
       // Render new location
-      this.renderLocation(this.currentChapter.map, location);
+      await blackFade(this, 500, 500, () => this.renderLocation(this.currentChapter.map, location));
     }
   }
 
@@ -135,7 +137,7 @@ class GameManager extends Phaser.Scene {
 
     // Disable all UI at first
     this.currentUIContainers.forEach(container => {
-      this.add.existing(container);
+      this.layerManager.addToLayer(Layer.UI, container);
       container.setVisible(false);
       container.setActive(false);
     });
