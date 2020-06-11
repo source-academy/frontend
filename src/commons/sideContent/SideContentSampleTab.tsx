@@ -9,7 +9,7 @@ import { isCurrentlyActive } from './SideContentHelper';
 import { SideContentTab } from './SideContentTypes';
 
 const SideContentSampleTab = (props: any) => {
-  let workspaces = useSelector((state: OverallState) => state.workspaces);
+  const workspaces = useSelector((state: OverallState) => state.workspaces);
 
   // Require workspace location
   if (!props.workspaceLocation) {
