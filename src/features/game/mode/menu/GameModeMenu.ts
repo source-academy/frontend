@@ -1,14 +1,27 @@
-import { GameButton, IGameUI, GameSprite, screenSize } from '../../commons/CommonsTypes';
-import { modeMenuBanner, menuEntryTweenProps, menuExitTweenProps } from './GameModeMenuTypes';
+import {
+  GameButton,
+  IGameUI,
+  GameSprite,
+  screenSize,
+  shortButton
+} from '../../commons/CommonsTypes';
+import {
+  modeMenuBanner,
+  menuEntryTweenProps,
+  menuExitTweenProps,
+  modeButtonYPos,
+  modeButtonStyle
+} from './GameModeMenuTypes';
 import { sleep } from '../../utils/GameUtils';
-
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import { GameMode } from '../GameModeTypes';
 
 class GameModeMenu implements IGameUI {
-  public modeBanner: GameSprite;
-  public modeButtons: Array<GameButton>;
+  private modes: GameMode[];
+  private modeBanner: GameSprite;
+  private gameButtons: GameButton[];
 
-  constructor() {
+  constructor(modes?: GameMode[]) {
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: modeMenuBanner.xPos,
@@ -16,8 +29,45 @@ class GameModeMenu implements IGameUI {
       isInteractive: false
     } as GameSprite;
 
+    this.modes = modes ? modes : [];
     this.modeBanner = banner;
-    this.modeButtons = new Array<GameButton>();
+    this.gameButtons = [];
+    this.createGameButtons();
+  }
+
+  private createGameButtons() {
+    this.modes.forEach(mode => {
+      this.addModeButton(mode, () => GameActionManager.getInstance().changeModeTo(mode));
+    });
+  }
+
+  private addModeButton(modeName: GameMode, callback: any) {
+    const newNumberOfButtons = this.gameButtons.length + 1;
+    const partitionSize = screenSize.x / newNumberOfButtons;
+
+    const newXPos = partitionSize / 2;
+
+    // Rearrange existing buttons
+    for (let i = 0; i < this.gameButtons.length; i++) {
+      this.gameButtons[i] = {
+        ...this.gameButtons[i],
+        assetXPos: newXPos + i * partitionSize
+      };
+    }
+
+    // Add the new button
+    const newModeButton: GameButton = {
+      text: modeName,
+      style: modeButtonStyle,
+      assetKey: shortButton.key,
+      assetXPos: newXPos + this.gameButtons.length * partitionSize,
+      assetYPos: modeButtonYPos,
+      isInteractive: true,
+      onInteract: callback
+    };
+
+    // Update
+    this.gameButtons.push(newModeButton);
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
@@ -36,7 +86,7 @@ class GameModeMenu implements IGameUI {
     );
     modeMenuContainer.add(modeBanner);
 
-    this.modeButtons.forEach(button => {
+    this.gameButtons.forEach(button => {
       const buttonSprite = new Phaser.GameObjects.Sprite(
         gameManager,
         button.assetXPos,
