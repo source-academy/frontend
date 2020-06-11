@@ -1,4 +1,4 @@
-import { ObjectProperty } from './ObjectsTypes';
+import { ObjectProperty, ObjectLayerProps } from './ObjectsTypes';
 import { mapValues } from '../utils/GameUtils';
 import { ObjectId } from '../commons/CommonsTypes';
 
@@ -8,22 +8,27 @@ const { Image, Container } = Phaser.GameObjects;
 
 export function createObjectsLayer(
   scene: Phaser.Scene,
-  objectPropertyMap: Map<ObjectId, ObjectProperty>
+  objectPropertyMap: Map<ObjectId, ObjectProperty>,
+  props: ObjectLayerProps
 ): [Map<ObjectId, Image>, Container] {
   const container = new Container(scene, 0, 0);
 
   const objectSpriteMap = mapValues(objectPropertyMap, objectProperty =>
-    createInteractiveObject(scene, objectProperty)
+    createInteractiveObject(scene, objectProperty, props)
   );
   container.add(Array.from(objectSpriteMap.values()));
 
   return [objectSpriteMap, container];
 }
 
-function createInteractiveObject(scene: Phaser.Scene, objectProperty: ObjectProperty): Image {
+function createInteractiveObject(
+  scene: Phaser.Scene,
+  objectProperty: ObjectProperty,
+  { cursor }: ObjectLayerProps
+): Image {
   const { texture, x, y, actions } = objectProperty;
   const objectSprite = new Image(scene, x, y, texture).setInteractive({
-    useHandCursor: true,
+    cursor,
     pixelPerfect: true
   });
 
