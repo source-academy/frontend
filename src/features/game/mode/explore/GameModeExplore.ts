@@ -5,6 +5,7 @@ import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import { createObjectsLayer } from '../../objects/ObjectsRenderer';
 import { sleep } from '../../utils/GameUtils';
 import { magnifyingGlass } from './GameModeExploreTypes';
+import { getBackToMenuContainer } from '../GameModeHelper';
 
 class GameModeExplore implements IGameUI {
   private objects: Map<ObjectId, ObjectProperty>;
@@ -21,12 +22,17 @@ class GameModeExplore implements IGameUI {
       throw console.error('GetUIContainer: Game Manager is not defined!');
     }
 
+    const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
     console.log(this.boundingBoxes);
-    const [, modeExploreContainer] = createObjectsLayer(gameManager, this.objects, {
+    const [, objectLayerContainer] = createObjectsLayer(gameManager, this.objects, {
       cursor: magnifyingGlass
     });
 
-    return modeExploreContainer;
+    exploreMenuContainer.add(objectLayerContainer);
+    exploreMenuContainer.add(getBackToMenuContainer());
+
+    return exploreMenuContainer;
   }
 
   public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
