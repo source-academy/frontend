@@ -1,79 +1,91 @@
 import {
   AchievementAbility,
-  AchievementModalOverview,
-  AchievementOverview,
+  AchievementModalItem,
+  AchievementItem,
   AchievementStatus,
-  SubAchivementOverview
+  SubAchievementItem
 } from '../achievements/AchievementTypes';
 
-export const achievementOverviews: AchievementOverview[] = [
+export const achievementList: AchievementItem[] = [
   {
     title: 'Rune Master',
+    details: {
+      ability: AchievementAbility.ACADEMIC,
+      deadline: new Date(2020, 5, 1, 6, 0, 0)
+    },
     subAchievementTitles: ['Beyond the Second Dimension', 'Colorful Carpet'],
-    status: AchievementStatus.ACTIVE,
-    ability: AchievementAbility.ACADEMIC,
-    exp: 100,
-    deadline: new Date(2020, 5, 1, 6, 0, 0)
+    status: AchievementStatus.ACTIVE
   },
   {
     title: 'Keyboard Warrior',
+    details: {
+      ability: AchievementAbility.COMMUNITY,
+      exp: 100,
+      deadline: undefined
+    },
     subAchievementTitles: [
       'Keyboard Warrior: Bronze Tier',
       'Keyboard Warrior: Silver Tier',
       'Keyboard Warrior: Gold Tier'
     ],
-    status: AchievementStatus.ACTIVE,
-    ability: AchievementAbility.COMMUNITY,
-    exp: 100,
-    deadline: undefined
+    status: AchievementStatus.ACTIVE
   },
   {
     title: 'Adventure Time',
+    details: {
+      ability: AchievementAbility.EXPLORATION,
+      exp: 100,
+      deadline: new Date(2020, 5, 11, 6, 0, 0)
+    },
     subAchievementTitles: [],
-    status: AchievementStatus.COMPLETED,
-    ability: AchievementAbility.EXPLORATION,
-    exp: 100,
-    deadline: new Date(2020, 5, 11, 6, 0, 0)
+    status: AchievementStatus.COMPLETED
   },
   {
     title: "Sort'a Easy",
+    details: {
+      ability: AchievementAbility.EXPLORATION,
+      exp: 100,
+      deadline: undefined
+    },
     subAchievementTitles: [],
-    status: AchievementStatus.ACTIVE,
-    ability: AchievementAbility.EXPLORATION,
-    exp: 100,
-    deadline: undefined
+    status: AchievementStatus.ACTIVE
   }
 ];
 
-export const subAchievementOverviews: SubAchivementOverview[] = [
+export const subAchievementList: SubAchievementItem[] = [
   {
     title: 'Beyond the Second Dimension',
     exp: 200,
-    deadline: undefined
+    deadline: undefined,
+    status: AchievementStatus.ACTIVE
   },
   {
     title: 'Colorful Carpet',
     exp: 100,
-    deadline: new Date(2020, 5, 1, 6, 0, 0)
+    deadline: new Date(2020, 5, 1, 6, 0, 0),
+    status: AchievementStatus.ACTIVE
   },
   {
     title: 'Keyboard Warrior: Bronze Tier',
-    exp: 200,
-    deadline: new Date(2020, 4, 1, 6, 0, 0)
+    exp: 50,
+    deadline: new Date(2020, 4, 1, 6, 0, 0),
+    status: AchievementStatus.COMPLETED
   },
   {
     title: 'Keyboard Warrior: Silver Tier',
-    exp: 200,
-    deadline: new Date(2020, 4, 1, 6, 0, 0)
+    exp: 100,
+    deadline: new Date(2020, 4, 1, 6, 0, 0),
+    status: AchievementStatus.ACTIVE
   },
   {
     title: 'Keyboard Warrior: Gold Tier',
     exp: 200,
-    deadline: new Date(2020, 4, 1, 6, 0, 0)
+    deadline: new Date(2020, 4, 1, 6, 0, 0),
+    status: AchievementStatus.ACTIVE
   }
 ];
 
-export const modalOverviews: AchievementModalOverview[] = [
+export const achievementModalList: AchievementModalItem[] = [
   {
     title: 'Rune Master',
     modalImageUrl:

@@ -1,19 +1,19 @@
 import React from 'react';
 
 import { Card } from '@blueprintjs/core';
-import { AchievementModalOverview } from '../../../../commons/achievements/AchievementTypes';
+import { AchievementModalItem } from '../../../../commons/achievements/AchievementTypes';
 
 type AchievementModalProps = {
   title: string;
-  modalOverviews: AchievementModalOverview[];
+  achievementModalList: AchievementModalItem[];
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { title, modalOverviews } = props;
+  const { title, achievementModalList } = props;
 
   if (title === '') return null;
 
-  const result = modalOverviews.filter(modal => modal.title === title);
+  const result = achievementModalList.filter(modal => modal.title === title);
   if (result.length === 0) return null;
   const { modalImageUrl, description } = result[0];
 

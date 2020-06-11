@@ -1,34 +1,23 @@
 import React from 'react';
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { AchievementAbility } from 'src/commons/achievements/AchievementTypes';
+import { AchievementDetails } from '../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
 
 type AchievementCardProps = {
   title: string;
-  subAchievements: any[];
+  details: AchievementDetails;
+  subAchievements?: any[];
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
-  ability: AchievementAbility;
-  exp: number;
-  deadline: Date | undefined;
 };
 
 function AchievementCard(props: AchievementCardProps) {
-  const {
-    title,
-    subAchievements,
-    isDropdownOpen,
-    toggleDropdown,
-    displayModal,
-    ability,
-    exp,
-    deadline
-  } = props;
+  const { details, subAchievements, isDropdownOpen, toggleDropdown, title, displayModal } = props;
 
-  const hasDropdown = subAchievements.length > 0;
+  const hasDropdown = subAchievements !== undefined && subAchievements.length > 0;
 
   return (
     <Card className="achievement" onClick={displayModal(title)} onClickCapture={toggleDropdown}>
@@ -49,12 +38,12 @@ function AchievementCard(props: AchievementCardProps) {
 
         <div className="details">
           <div className="ability">
-            <p>{ability}</p>
+            <p>{details.ability}</p>
           </div>
 
-          <AchievementDeadline deadline={deadline} />
+          <AchievementDeadline deadline={details.deadline} />
 
-          <AchievementExp exp={exp} />
+          <AchievementExp exp={details.exp} />
         </div>
       </div>
     </Card>

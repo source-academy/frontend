@@ -2,17 +2,19 @@ import React, { useState } from 'react';
 
 import { IconNames } from '@blueprintjs/icons';
 
-import AchievementCategory from './subcomponents/AchievementCategory';
+import AchievementFilter from './subcomponents/AchievementFilter';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
 import {
-  AchievementOverview,
-  AchievementStatus
+  AchievementStatus,
+  FilterStatus,
+  AchievementItem,
+  SubAchievementItem
 } from '../../../commons/achievements/AchievementTypes';
 import {
-  subAchievementOverviews,
-  achievementOverviews,
-  modalOverviews
+  subAchievementList,
+  achievementList,
+  achievementModalList
 } from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {};
@@ -21,54 +23,92 @@ export type StateProps = {};
 
 function Achievement() {
   const [modal, setModal] = useState('');
-  const [filteredStatus, setFilteredStatus] = useState<AchievementStatus>( // change to filterStatus
-    AchievementStatus.EXPIRED
-  );
+  const [filteredStatus, setFilteredStatus] = useState<FilterStatus>(FilterStatus.ALL);
 
+  /**
+   * Maps an array of sub achievement titles to their corresponding sub achievement item
+   *
+   * @param titles An array of titles
+   * @returns An array of sub achievement items
+   */
   const mapTitlesToSubAchievements = (titles: string[]) =>
-    titles.map(
-      target => subAchievementOverviews.filter(subAchievement => subAchievement.title === target) // change to uppercase A
+    titles.map(targetTitle =>
+      subAchievementList.filter(subAchievement => subAchievement.title === targetTitle)
     );
 
-  const filterAchievementsByStatus = (
-    achievementOverviews: AchievementOverview[],
-    status: AchievementStatus
+  /**
+   * Filters an array of achievement items by filterStatus
+   *
+   * @param achievementList An array of achievement items
+   * @param filterStatus The filterStatus used to filter the achievement list
+   * @returns An array of achievement items
+   */
+  const filterAchievementsByFilterStatus = (
+    achievementList: AchievementItem[],
+    filterStatus: FilterStatus
   ) => {
-    if (status === AchievementStatus.EXPIRED) {
-      // change to filterStatus
-      return achievementOverviews;
+    switch (filterStatus) {
+      case FilterStatus.ALL:
+        return achievementList;
+      case FilterStatus.ACTIVE:
+        return achievementList.filter(
+          achievement => achievement.status === AchievementStatus.ACTIVE
+        );
+      case FilterStatus.COMPLETED:
+        return achievementList.filter(
+          achievement => achievement.status === AchievementStatus.COMPLETED
+        );
+      default:
+        return [];
     }
-
-    return achievementOverviews.filter(
-      achievementOverview => achievementOverview.status === status
-    );
   };
 
-  const mapAchievementOverviewsToTasks = (achievementOverviews: AchievementOverview[]) => {
-    return filterAchievementsByStatus(achievementOverviews, filteredStatus).map(achievement => (
+  /**
+   * Count the number of achievement items by filterStatus
+   *
+   * @param achievementList An array of achievement items
+   * @param subAchievementList An array of sub achievement items
+   * @param filterStatus The filterStatus used to filter the achievement list
+   * @returns The number of items
+   */
+  const countItemByFilterStatus = (
+    achievementList: AchievementItem[],
+    subAchievementList: SubAchievementItem[],
+    filterStatus: FilterStatus
+  ) => {
+    switch (filterStatus) {
+      case FilterStatus.ALL:
+        return achievementList.length + subAchievementList.length;
+      case FilterStatus.ACTIVE:
+        return (
+          achievementList.filter(item => item.status === AchievementStatus.ACTIVE).length +
+          subAchievementList.filter(item => item.status === AchievementStatus.ACTIVE).length
+        );
+      case FilterStatus.COMPLETED:
+        return (
+          achievementList.filter(item => item.status === AchievementStatus.COMPLETED).length +
+          subAchievementList.filter(item => item.status === AchievementStatus.COMPLETED).length
+        );
+      default:
+        return 0;
+    }
+  };
+
+  /**
+   * Maps the achievement list to their corresponding AchievementTask Elements
+   *
+   * @param achievementList An array of achievement items
+   * @returns AchievementTask Elements
+   */
+  const mapAchievementListToTasks = (achievementList: AchievementItem[]) => {
+    return achievementList.map(achievement => (
       <AchievementTask
         title={achievement.title}
-        ability={achievement.ability}
-        exp={achievement.exp}
-        deadline={achievement.deadline}
-        subAchievement={mapTitlesToSubAchievements(achievement.subAchievementTitles)}
+        details={achievement.details}
+        subAchievementList={mapTitlesToSubAchievements(achievement.subAchievementTitles)}
         setModal={setModal}
       />
     ));
-  };
-
-  const getTasksCountByStatus = (
-    // change to get every tasks instead
-    achievementOverviews: AchievementOverview[],
-    status: AchievementStatus
-  ) => {
-    switch (status) {
-      case AchievementStatus.EXPIRED: // change to filterStatus.ALL
-        return achievementOverviews.length;
-      default:
-        console.log(filterAchievementsByStatus(achievementOverviews, status));
-        return filterAchievementsByStatus(achievementOverviews, status).length;
-    }
   };
 
   return (
@@ -76,31 +116,43 @@ function Achievement() {
       <div className="achievement-main">
         <div className="icons">
           <div></div>
-          <AchievementCategory
-            status={AchievementStatus.EXPIRED}
+          <AchievementFilter
+            status={FilterStatus.ALL}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.GLOBE}
-            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.EXPIRED)}
+            count={countItemByFilterStatus(achievementList, subAchievementList, FilterStatus.ALL)}
           />
-          <AchievementCategory
-            status={AchievementStatus.ACTIVE}
+          <AchievementFilter
+            status={FilterStatus.ACTIVE}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.LOCATE}
-            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.ACTIVE)}
+            count={countItemByFilterStatus(
+              achievementList,
+              subAchievementList,
+              FilterStatus.ACTIVE
+            )}
           />
-          <AchievementCategory
-            status={AchievementStatus.COMPLETED}
+          <AchievementFilter
+            status={FilterStatus.COMPLETED}
             setFilteredStatus={setFilteredStatus}
             icon={IconNames.ENDORSED}
-            count={getTasksCountByStatus(achievementOverviews, AchievementStatus.COMPLETED)}
+            count={countItemByFilterStatus(
+              achievementList,
+              subAchievementList,
+              FilterStatus.COMPLETED
+            )}
           />
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementOverviewsToTasks(achievementOverviews)}</ul>
+          <ul className="display-list">
+            {mapAchievementListToTasks(
+              filterAchievementsByFilterStatus(achievementList, filteredStatus)
+            )}
+          </ul>
         </div>
 
-        <AchievementModal title={modal} modalOverviews={modalOverviews} />
+        <AchievementModal title={modal} achievementModalList={achievementModalList} />
       </div>
     </div>
   );

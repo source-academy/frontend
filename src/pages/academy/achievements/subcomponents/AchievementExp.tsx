@@ -4,7 +4,7 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 type AchievementExpProps = {
-  exp: number;
+  exp?: number;
 };
 
 function AchievementExp(props: AchievementExpProps) {

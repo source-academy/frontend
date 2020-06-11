@@ -3,11 +3,17 @@ import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 type AchievementDeadlineProps = {
-  deadline: Date | undefined;
+  deadline?: Date;
 };
 
 function AchievementDeadline(props: AchievementDeadlineProps) {
   const { deadline } = props;
+
+  /**
+   * Gets the Time Remaining for the particular achievement
+   *
+   * @returns a JSX.Element which displays the time remaining
+   */
 
   const getTimeRemaining = () => {
     if (deadline) {
