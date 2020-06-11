@@ -1,5 +1,5 @@
 import { GameLocation } from '../location/GameMapTypes';
-import { GameImage, DialogueId, ObjectId } from '../commons/CommonsTypes';
+import { GameImage, DialogueId, ObjectId, BBoxId } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
 import { ObjectProperty, ObjectPropertyMap } from '../objects/ObjectsTypes';
 
@@ -8,16 +8,12 @@ class GameMap {
   private navigation: Map<string, string[]>;
   private locations: Map<string, GameLocation>;
   private talkTopics: Map<DialogueId, Dialogue>;
-  private objects: Map<ObjectId, ObjectProperty>;
-  private boundingBoxes: Map<BoxId, BoundingBox>;
 
   constructor() {
     this.locationAssets = new Map<string, GameImage>();
     this.navigation = new Map<string, string[]>();
     this.locations = new Map<string, GameLocation>();
     this.talkTopics = new Map<DialogueId, Dialogue>();
-    this.objects = new Map<ObjectId, ObjectProperty>();
-    this.boundingBoxes = new Map<BoxId, BoundingBox>();
   }
 
   public addLocationAsset(asset: GameImage) {
@@ -80,30 +76,41 @@ class GameMap {
   }
 
   public setObjectAt(locationId: string, objectId: ObjectId, objectProperty: ObjectProperty) {
-    this.objects.set(objectId, objectProperty);
-
     const location = this.locations.get(locationId);
     if (!location) return;
 
     if (!location.objects) {
-      location.objects = [];
+      location.objects = new Map<ObjectId, ObjectProperty>();
     }
 
-    location.objects.push(objectId);
+    location.objects.set(objectId, objectProperty);
   }
 
-  public getObjectsAt(locationId: string): ObjectPropertyMap {
+  public getObjectsAt(locationId: string): ObjectPropertyMap | undefined {
     const location = this.locations.get(locationId);
-    let objectPropertyMap = new Map<ObjectId, ObjectProperty>();
-    if (!location || !location.objects) {
-      return objectPropertyMap;
+    if (!location) {
+      return;
     }
-    const objectIds = location.objects;
-    for (const objectId of objectIds) {
-      const object = this.objects.get(objectId);
-      object && objectPropertyMap.set(objectId, object);
+    return location.objects;
+  }
+
+  public setBoundingBoxes(locationId: string, bboxId: BBoxId, bboxProperty: BBoxProperty) {
+    const location = this.locations.get(locationId);
+    if (!location) return;
+
+    if (!location.objects) {
+      location.objects = new Map<ObjectId, ObjectProperty>();
     }
-    return objectPropertyMap;
+
+    location.objects.set(objectId, objectProperty);
+  }
+
+  public getObjectsAt(locationId: string): ObjectPropertyMap | undefined {
+    const location = this.locations.get(locationId);
+    if (!location) {
+      return;
+    }
+    return location.objects;
   }
 }
 

@@ -1,4 +1,7 @@
+import { screenSize } from '../commons/CommonsTypes';
+
 export const backText = 'Back';
+export const backTextYPos = screenSize.y * 0.11;
 
 export enum GameMode {
   Move = 'Move',
@@ -6,3 +9,9 @@ export enum GameMode {
   Talk = 'Talk',
   Menu = 'Menu'
 }
+
+export const backButtonStyle = {
+  fontFamily: 'Helvetica',
+  fontSize: '25px',
+  fill: '#0d2440'
+};

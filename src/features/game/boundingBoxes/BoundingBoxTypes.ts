@@ -1,10 +1,10 @@
-type ObjectId = string;
+import { BBoxId } from '../commons/CommonsTypes';
 
 type ActionName = string;
 type ActionParams = Array<any>;
 export type ObjectAction = [ActionName, ActionParams];
 
-export type ObjectProperty = {
+export type BBoxProperty = {
   x: number;
   y: number;
   width: number;
@@ -13,6 +13,4 @@ export type ObjectProperty = {
   visibility?: true;
 };
 
-export type ObjectPropertyMap = Map<ObjectId, ObjectProperty>;
-
-export type SpriteMap = Map<ObjectId, Phaser.GameObjects.Image>;
+export type BBoxPropertyMap = Map<BBoxId, BBoxProperty>;

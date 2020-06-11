@@ -1,4 +1,4 @@
-type ObjectId = string;
+import { ObjectId } from '../commons/CommonsTypes';
 
 type ObjectTexture = string;
 type XCoord = number;

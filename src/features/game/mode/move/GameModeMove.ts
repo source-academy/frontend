@@ -14,6 +14,7 @@ import {
 } from './GameModeMoveTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
+import { getBackToMenuContainer } from '../GameModeHelper';
 
 class GameModeMove implements IGameUI {
   public currentLocationAssetKey: string;
@@ -108,6 +109,9 @@ class GameModeMove implements IGameUI {
       moveMenuContainer.add(buttonSprite);
       moveMenuContainer.add(locationButtonText);
     });
+
+    // Add back button
+    moveMenuContainer.add(getBackToMenuContainer());
     return moveMenuContainer;
   }
 
@@ -135,6 +139,8 @@ class GameModeMove implements IGameUI {
       targets: container,
       ...moveEntryTweenProps
     });
+
+    await sleep(800);
   }
 
   public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
