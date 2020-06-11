@@ -128,7 +128,10 @@ class GameManager extends Phaser.Scene {
 
   private deactivateCurrentUI() {
     const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
-    const prevLocationMode = this.gameModeManager.getLocationMode(this.currentActiveMode, this.currentLocationName);
+    const prevLocationMode = this.gameModeManager.getLocationMode(
+      this.currentActiveMode,
+      this.currentLocationName
+    );
     if (prevLocationMode && prevContainer) {
       prevLocationMode.deactivateUI(prevContainer);
     }

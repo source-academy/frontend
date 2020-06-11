@@ -68,7 +68,7 @@ class GameMap {
       return [];
     }
     const dialogueIds = location.talkTopics;
-    let dialogues = [];
+    const dialogues = [];
     for (const dialogueId of dialogueIds) {
       const dialogue = this.talkTopics.get(dialogueId);
       dialogue && dialogues.push(dialogue);
