@@ -15,6 +15,7 @@ import LayerManager from 'src/features/game/layer/LayerManager';
 import { Layer } from 'src/features/game/layer/LayerTypes';
 import { blackFade } from 'src/features/game/utils/GameEffects';
 import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants';
+import GameStateManager from 'src/features/game/state/GameStateManager';
 
 const { Image } = Phaser.GameObjects;
 
@@ -23,8 +24,9 @@ class GameManager extends Phaser.Scene {
   public currentLocationName: string;
 
   // Limited to current chapter
-  private gameModeManager: GameModeManager;
+  public modeManager: GameModeManager;
   public layerManager: LayerManager;
+  public stateManager: GameStateManager;
 
   // Limited to current location
   private currentUIContainers: Map<GameMode, Phaser.GameObjects.Container>;
@@ -34,11 +36,11 @@ class GameManager extends Phaser.Scene {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
-
     this.currentLocationName = this.currentChapter.startingLoc;
 
-    this.gameModeManager = new GameModeManager();
+    this.modeManager = new GameModeManager();
     this.layerManager = new LayerManager();
+    this.stateManager = new GameStateManager();    
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -47,12 +49,13 @@ class GameManager extends Phaser.Scene {
   }
 
   public preload() {
-    this.layerManager.initialiseMainLayer(this);
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadChapterAssets();
-
-    this.gameModeManager.preloadModeBaseAssets();
-    this.gameModeManager.processModes(this.currentChapter);
+    
+    this.modeManager.preloadModeBaseAssets();
+    this.modeManager.processModes(this.currentChapter);
+    this.layerManager.initialiseMainLayer(this);
+    this.stateManager.processChapter(this.currentChapter);
   }
 
   public create() {
@@ -132,7 +135,7 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   private getUIContainers(location: GameLocation) {
-    this.currentUIContainers = this.gameModeManager.getModeContainers(location.name);
+    this.currentUIContainers = this.modeManager.getModeContainers(location.name);
 
     // Disable all UI at first
     this.currentUIContainers.forEach(container => {
@@ -148,7 +151,7 @@ class GameManager extends Phaser.Scene {
 
   private deactivateCurrentUI() {
     const prevContainer = this.currentUIContainers.get(this.currentActiveMode);
-    const prevLocationMode = this.gameModeManager.getLocationMode(
+    const prevLocationMode = this.modeManager.getLocationMode(
       this.currentActiveMode,
       this.currentLocationName
     );
@@ -163,7 +166,7 @@ class GameManager extends Phaser.Scene {
     }
 
     const modeContainer = this.currentUIContainers.get(newMode);
-    const locationMode = this.gameModeManager.getLocationMode(newMode, this.currentLocationName);
+    const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationName);
 
     if (locationMode && modeContainer) {
       if (!skipDeactivate) {

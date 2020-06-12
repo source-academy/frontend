@@ -17,3 +17,10 @@ export type GameLocation = {
   objects?: ObjectId[];
   boundingBoxes?: BBoxId[];
 };
+
+export enum GameLocationAttr {
+  navigation = 'navigation',
+  talkTopics = 'talkTopics',
+  objects = 'objects',
+  boundingBoxes = 'boundingBoxes'
+}
