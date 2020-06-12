@@ -11,7 +11,7 @@ class GameModeMoveManager {
       if (!location.modes || !location.modes.includes(GameMode.Move) || !navigation) {
         return;
       }
-      return new GameModeMove(navigation, locations);
+      return new GameModeMove(location.name, navigation, locations);
     });
   }
 }
