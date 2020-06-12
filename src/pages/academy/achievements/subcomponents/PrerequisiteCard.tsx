@@ -15,13 +15,13 @@ type PrerequisiteCardProps = {
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { achievement, deadline, isTranslucent, displayModal } = props;
-  const { title, exp, status } = achievement;
+  const { id, title, exp, status } = achievement;
 
   return (
     <Card
       className="prerequisite"
       style={{ opacity: isTranslucent ? '20%' : '100%' }}
-      onClick={displayModal(title)}
+      onClick={displayModal(id)}
     >
       <AchievementHints status={status} />
 

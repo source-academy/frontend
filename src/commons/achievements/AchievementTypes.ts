@@ -21,14 +21,14 @@ export enum FilterStatus {
 /**
  * Information of an achievement item
  *
- * id: unique id, primary key of the achievement item
- * exp: exp that the achievement item grants
+ * @param {number} id unique id, primary key of the achievement item
+ * @param {number} exp amount of exp that the achievement item grants
  *    (Note: UI displays the sum of exp and all prerequisite exp)
- * deadline: deadline of the achievement item
+ * @param {Date} deadline the deadline of the achievement item
  *    (Note: UI displays the furthest deadline of all prerequisite)
- * isTask: the achievement item is rendered as an achievement task if true
- * prerequisites: an array of the prerequisites id
- * completionGoal: achievement is marked as complete if
+ * @param {boolean} isTask the achievement item is rendered as an achievement task if true
+ * @param {number[]} prerequisites an array of the prerequisites id
+ * @param {number} completionGoal achievement is marked as complete if
  *    user's completionProgress >= completionGoal
  */
 export type AchievementItem = {
@@ -46,12 +46,18 @@ export type AchievementItem = {
 /**
  * Information of an achievement in a modal
  *
- * title: unique string, used to identify the achievement / sub achievement
- * modalImageUrl: URL of the image to show on the modal
- * description: expectations to hit the particular achievement.
+ * @param {number} id unique id, primary key of the modal
+ * @param {string} modalImageUrl URL of the modal image
+ * @param {string} description fixed text that displays under title
+ * @param {string} goal describes the achievement requirement
+ * @param {string} completionText text that displays after student completes the achievement
  */
 export type AchievementModalItem = {
+  id: number;
   title: string;
   modalImageUrl: string;
   description: string;
+  exp: number;
+  goal: string;
+  completionText: string;
 };

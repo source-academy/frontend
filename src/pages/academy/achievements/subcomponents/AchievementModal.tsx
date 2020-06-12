@@ -4,18 +4,16 @@ import { Card } from '@blueprintjs/core';
 import { AchievementModalItem } from '../../../../commons/achievements/AchievementTypes';
 
 type AchievementModalProps = {
-  title: string;
-  achievementModalList: AchievementModalItem[];
+  modalID: number;
+  achievementModalDict: { [id: number]: AchievementModalItem };
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { title, achievementModalList } = props;
+  const { modalID, achievementModalDict } = props;
 
-  if (title === '') return null;
-
-  const result = achievementModalList.filter(modal => modal.title === title);
-  if (result.length === 0) return null;
-  const { modalImageUrl, description } = result[0];
+  const modal = achievementModalDict[modalID];
+  if (modal === undefined) return null;
+  const { title, modalImageUrl, description, exp, goal, completionText } = modal;
 
   return (
     <div className="modal">
@@ -23,6 +21,9 @@ function AchievementModal(props: AchievementModalProps) {
         <h1>{title}</h1>
         <img src={modalImageUrl} alt={title} />
         <p>{description}</p>
+        <p>{exp}</p>
+        <p>{goal}</p>
+        <p>{completionText}</p>
       </Card>
     </div>
   );

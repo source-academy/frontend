@@ -26,13 +26,13 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown,
     displayModal
   } = props;
-  const { title, ability, exp, status } = achievement;
+  const { id, title, ability, exp, status } = achievement;
 
   return (
     <Card
       className="achievement"
       style={{ opacity: isTranslucent ? '20%' : '100%' }}
-      onClick={displayModal(title)}
+      onClick={displayModal(id)}
       onClickCapture={toggleDropdown}
     >
       <AchievementHints status={status} />

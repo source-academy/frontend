@@ -10,14 +10,14 @@ import {
   FilterStatus,
   AchievementItem
 } from '../../../commons/achievements/AchievementTypes';
-import { achievementDict, achievementModalList } from 'src/commons/mocks/AchievementMocks';
+import { achievementDict, achievementModalDict } from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {};
 
 export type StateProps = {};
 
 function Achievement() {
-  const [modal, setModal] = useState('');
+  const [modalID, setModalID] = useState(-1);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
 
   /**
@@ -64,7 +64,7 @@ function Achievement() {
           achievement={achievement}
           achievementDict={achievementDict}
           filterStatus={filterStatus}
-          setModal={setModal}
+          setModalID={setModalID}
         />
       ));
   };
@@ -98,7 +98,7 @@ function Achievement() {
           <ul className="display-list">{mapAchievementDictToTasks(achievementDict)}</ul>
         </div>
 
-        <AchievementModal title={modal} achievementModalList={achievementModalList} />
+        <AchievementModal modalID={modalID} achievementModalDict={achievementModalDict} />
       </div>
     </div>
   );

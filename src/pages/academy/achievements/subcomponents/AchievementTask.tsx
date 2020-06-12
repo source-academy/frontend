@@ -12,11 +12,11 @@ type AchievementTaskProps = {
   achievement: AchievementItem;
   achievementDict: { [id: number]: AchievementItem };
   filterStatus: FilterStatus;
-  setModal: any;
+  setModalID: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { achievement, achievementDict, filterStatus, setModal } = props;
+  const { achievement, achievementDict, filterStatus, setModalID } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
@@ -88,7 +88,7 @@ function AchievementTask(props: AchievementTaskProps) {
       }
     );
 
-    console.log(`${achievement.title} : ${achievement.deadline} : ${latestDeadline}`);
+    // console.log(`${achievement.title} : ${achievement.deadline} : ${latestDeadline}`);
 
     if (latestDeadline && !achievement.deadline) {
       return latestDeadline;
@@ -101,8 +101,8 @@ function AchievementTask(props: AchievementTaskProps) {
     return getPrerequisites(achievement).length > 0;
   };
 
-  const displayModal = (title: string) => {
-    return () => setModal(title);
+  const displayModal = (modalID: number) => {
+    return () => setModalID(modalID);
   };
 
   // if the main achievement or any of the prerequisites need to be rendered,
