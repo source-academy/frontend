@@ -26,7 +26,7 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
 
   backButtonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
   backButtonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
-    GameActionManager.getInstance().changeModeTo(GameMode.Menu)
+    GameActionManager.getInstance().changeLocationModeTo(GameMode.Menu)
   );
 
   backToMenuContainer.add(backButtonSprite);

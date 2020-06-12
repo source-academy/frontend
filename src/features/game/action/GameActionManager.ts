@@ -18,15 +18,57 @@ class GameActionManager {
     return GameActionManager.instance;
   }
 
+  /////////////////////
+  //   Game Manager  //
+  /////////////////////
+
+  public getGameManager(): GameManager | undefined {
+    return this.gameManager;
+  }
+
   public setGameManager(gameManagerRef: GameManager): void {
     this.gameManager = gameManagerRef;
   }
 
-  public changeModeTo(newMode: GameMode, refresh?: boolean, skipDeactivate?: boolean): void {
+  /////////////////////
+  //    Game Mode    //
+  /////////////////////
+
+  public getLocationMode(locationName: string): GameMode[] | undefined {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.getLocationMode(locationName);
+    }
+    return undefined;
+  }
+
+  public addLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.addLocationMode(currLocName, locationName, mode);
+    }
+    return;
+  }
+
+  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode) {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
+    }
+    return;
+  }
+
+  public changeLocationModeTo(
+    newMode: GameMode,
+    refresh?: boolean,
+    skipDeactivate?: boolean
+  ): void {
     if (this.gameManager) {
       return this.gameManager.changeModeTo(newMode, refresh, skipDeactivate);
     }
+    return;
   }
+
+  /////////////////////
+  //  Game Locations //
+  /////////////////////
 
   public changeLocationTo(locationName: string) {
     if (this.gameManager) {
@@ -35,9 +77,9 @@ class GameActionManager {
     return;
   }
 
-  public getGameManager(): GameManager | undefined {
-    return this.gameManager;
-  }
+  /////////////////////
+  //     Dialogue    //
+  /////////////////////
 
   public async bringUpDialogue(dialogueObject: DialogueObject) {
     if (this.gameManager) {

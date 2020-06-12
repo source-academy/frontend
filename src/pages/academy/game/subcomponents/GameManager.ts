@@ -127,6 +127,9 @@ class GameManager extends Phaser.Scene {
 
       // Render new location
       await blackFade(this, 500, 500, () => this.renderLocation(this.currentChapter.map, location));
+
+      // Update state
+      this.stateManager.visitedLocation(locationName);
     }
   }
 

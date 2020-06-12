@@ -37,7 +37,7 @@ class GameModeMenu implements IGameUI {
 
   private createGameButtons() {
     this.modes.forEach(mode => {
-      this.addModeButton(mode, () => GameActionManager.getInstance().changeModeTo(mode));
+      this.addModeButton(mode, () => GameActionManager.getInstance().changeLocationModeTo(mode));
     });
   }
 
