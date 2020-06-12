@@ -1,0 +1,24 @@
+<<chapter.txt>>
+startingLoc: 
+
+<<objects.txt>>
+
+[room]
+yourCarpet, yourCarpet, 640, 667
+yourChair, yourChair, 932, 549
+door6, door/yourRoom-dim, 831, 270
+yourBed, yourHeadphones, 372, 514
+$
+yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
+yourCarpet, collectible: yourCarpet
+door7, move: [door6, 7, 18], appear: apple
+
+[office]
+door7, door.HMoffice, 1499, 87
+yourBed1, yourBed, 372, 514
+
+<<dialogue1.txt>>
+
+[part0]
+$narrator
+The year is 1101 A.E.

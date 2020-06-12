@@ -1,37 +1,30 @@
-<<configuration>>
-startingLoc: room
+<<config>>
+startingLoc: Your Room
 
-<<location>>
-1, crashSite, crashSite, "Crash Site"
-2, classroom, classroom/classOn, "Class Room"
-3, emergency, classroom/emergency, "Emergency"
-4, hallway, hallway, "Hallway"
-5, room, yourRoom-dim, "Student Room"
-
-<<modes>>
-1, [talk move]
-2, [explore talk move]
-3, [talk move]
-4, [move]
-5, [explore move talk]
-
-<<connectivity>>
-classroom: crashSite, hallway
-crashSite: classroom
-hallway: classroom, room, emergency
-room: hallway
-emergency: hallway
 
 <<objects>>
+[hallway]
+door1, hallway-telebay, 1015, 478
+door2, hallway-LKoffice, 632, 369
+door3, hallway-cmdCenter, 1122, 407
+door4, hallway-greatHall, 178, 173
+door5, hallway-classroom, 1465, 225
+
 [room]
 yourCarpet, yourCarpet, 640, 667
 yourChair, yourChair, 932, 549
 door6, door/yourRoom-dim, 831, 270
 yourBed, yourHeadphones, 372, 514
+$
+yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
+yourCarpet, collectible: yourCarpet
+door7, move: [door6, 7, 18], appear: apple
+
+[office]
+door7, door.HMoffice, 1499, 87
+yourBed1, yourBed, 372, 514
 
 <<dialogue1>>
-title: "What happened"
-
 [part0]
 $narrator
 The year is 1101 A.E.
@@ -78,3 +71,4 @@ $narrator
 Sensing your presence via face and voice-recognition, the door opens smoothly...
 ..revealing your room inside
 Neat! Better start unpacking and settling in!
+

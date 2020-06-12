@@ -1,4 +1,4 @@
-import { screenSize } from '../commons/CommonsTypes';
+import { screenSize } from '../commons/CommonConstants';
 
 export const backText = 'Back';
 export const backTextYPos = screenSize.y * 0.012;

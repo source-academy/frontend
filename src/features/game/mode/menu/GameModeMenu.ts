@@ -1,10 +1,4 @@
-import {
-  GameButton,
-  IGameUI,
-  GameSprite,
-  screenSize,
-  shortButton
-} from '../../commons/CommonsTypes';
+import { GameButton, IGameUI, GameSprite } from '../../commons/CommonsTypes';
 import {
   modeMenuBanner,
   menuEntryTweenProps,
@@ -15,6 +9,8 @@ import {
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
+import { screenSize } from '../../commons/CommonConstants';
+import { shortButton } from '../../commons/CommonAssets';
 
 class GameModeMenu implements IGameUI {
   private locationName: string;

@@ -2,9 +2,9 @@ import { ObjectProperty } from '../objects/ObjectsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
-export const screenSize = {
-  x: 1920,
-  y: 1080
+export type ImageAsset = {
+  key: string;
+  path: string;
 };
 
 export type GameImage = {
@@ -44,43 +44,7 @@ export interface IGameUI {
   deactivateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
 }
 
-export const shortButton: GameImage = {
-  key: 'short-button',
-  path: '../assets/shortButton.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-export const longButton: GameImage = {
-  key: 'long-button',
-  path: '../assets/longButton.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-export const blackScreen: GameImage = {
-  key: 'black-screen',
-  path: '../assets/blackScreen.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
 export type ObjectId = string;
 export type DialogueId = string;
 export type LocationId = string;
 export type BBoxId = string;
-
-export const topButton: GameImage = {
-  key: 'top-button',
-  path: '../assets/topButton.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};

@@ -1,4 +1,5 @@
-import { GameImage, screenSize, longButton, topButton } from '../../commons/CommonsTypes';
+import { GameImage } from '../../commons/CommonsTypes';
+import { screenSize } from '../../commons/CommonConstants';
 
 export const moveButtonYSpace = screenSize.y * 0.8;
 export const moveButtonXPos = screenSize.x * 0.75;
@@ -53,12 +54,6 @@ export const locationPreviewFill: GameImage = {
   imageHeight: screenSize.y
 };
 
-const moveUIAssets = [
-  defaultLocationImg,
-  topButton,
-  longButton,
-  locationPreviewFrame,
-  locationPreviewFill
-];
+const moveUIAssets = [defaultLocationImg, locationPreviewFrame, locationPreviewFill];
 
 export default moveUIAssets;

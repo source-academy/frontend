@@ -11,7 +11,7 @@ export function createObjectsLayer(
   idsToRender: ObjectId[],
   objectPropertyMap: Map<ObjectId, ObjectProperty>,
   props?: ObjectLayerProps
-): [Map<ObjectId, Image>, Container] {
+): [Container, Map<ObjectId, Image>] {
   const container = new Container(scene, 0, 0);
 
   const objectsToRender = new Map<ObjectId, ObjectProperty>();
@@ -28,7 +28,7 @@ export function createObjectsLayer(
   );
   container.add(Array.from(objectSpriteMap.values()));
 
-  return [objectSpriteMap, container];
+  return [container, objectSpriteMap];
 }
 
 function createInteractiveObject(

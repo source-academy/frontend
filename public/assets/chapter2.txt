@@ -1,0 +1,16 @@
+<<chapter.txt>>
+
+<<objects.txt>>
+
+<<dialogue1.txt>>
+
+[part3]
+$narrator
+After navigating through long hallways and twisty corridors, you find yourself in front of a room inscribed with your full name.
+$you
+Oh, here it is!
+$narrator
+Sensing your presence via face and voice-recognition, the door opens smoothly...
+..revealing your room inside
+Neat! Better start unpacking and settling in!
+

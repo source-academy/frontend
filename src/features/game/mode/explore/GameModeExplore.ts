@@ -59,12 +59,12 @@ class GameModeExplore implements IGameUI {
       this.fetchLatestState();
     }
 
-    const [, objectLayerContainer] = createObjectsLayer(gameManager, this.objectIds, this.objects, {
+    const [objectLayerContainer] = createObjectsLayer(gameManager, this.objectIds, this.objects, {
       cursor: magnifyingGlass
     });
 
-    console.log(this.boundingBoxes);
-    console.log(this.bboxIds);
+    console.log(this.boundingBoxes?.size);
+    console.log(this.bboxIds.length);
 
     exploreMenuContainer.add(objectLayerContainer);
     exploreMenuContainer.add(getBackToMenuContainer());

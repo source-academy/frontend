@@ -1,7 +1,7 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
-import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
+import { Dialogue } from 'src/features/game/dialogue/DialogueRenderer';
 import { GameLocationAttr } from '../location/GameMapTypes';
 
 class GameActionManager {
@@ -136,7 +136,7 @@ class GameActionManager {
 
   public async bringUpDialogue(dialogueObject: DialogueObject) {
     if (this.gameManager) {
-      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
+      const [activateDialogue] = Dialogue(this.gameManager, dialogueObject);
       await activateDialogue;
     }
   }
