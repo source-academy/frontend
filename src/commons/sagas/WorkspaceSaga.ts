@@ -18,11 +18,11 @@ import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
-import * as Sourceror from 'sourceror-driver';
+import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
-import { externalLibraries, ExternalLibraryNames } from '../application/types/ExternalTypes';
+import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -108,7 +108,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       chapter,
       variant,
       external: {
-        name: ExternalLibraryNames.NONE,
+        name: ExternalLibraryName.NONE,
         symbols
       },
       globals
@@ -125,12 +125,12 @@ export default function* WorkspaceSaga(): SagaIterator {
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
       const elevatedContext = makeElevatedContext(context);
-      yield* evalCode(prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+      yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
       // Block use of methods from privileged context
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
     }
 
-    yield* evalCode(value, context, execTime, workspaceLocation, EVAL_EDITOR);
+    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
   });
 
   yield takeEvery(PROMPT_AUTOCOMPLETE, function* (
@@ -231,7 +231,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     context = yield select(
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
     );
-    yield* evalCode(code, context, execTime, workspaceLocation, EVAL_REPL);
+    yield call(evalCode, code, context, execTime, workspaceLocation, EVAL_REPL);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
@@ -249,7 +249,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
     );
     yield put(actions.highlightEditorLine([], workspaceLocation));
-    yield* evalCode(code, context, execTime, workspaceLocation, DEBUG_RESUME);
+    yield call(evalCode, code, context, execTime, workspaceLocation, DEBUG_RESUME);
   });
 
   yield takeEvery(DEBUG_RESET, function* (action: ReturnType<typeof actions.debuggerReset>) {
@@ -319,13 +319,13 @@ export default function* WorkspaceSaga(): SagaIterator {
 
     // Execute prepend silently in privileged context
     const elevatedContext = makeElevatedContext(context);
-    yield* evalCode(prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+    yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
 
     // Block use of methods from privileged context using a randomly generated blocking key
     // Then execute student program silently in the original workspace context
     const blockKey = String(random(1048576, 68719476736));
     yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-    yield* evalCode(value, context, execTime, workspaceLocation, EVAL_SILENT);
+    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_SILENT);
 
     // Halt execution if the student's code in the editor results in an error
     if (context.errors.length) {
@@ -337,7 +337,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       // TODO: consider doing a swap. If the user has modified any of the variables,
       // i.e. reusing any of the "reserved" names, prevent it from being accessed in the REPL.
       yield* restoreExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
-      yield* evalCode(postpend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+      yield call(evalCode, postpend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
       yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation, blockKey);
     }
     // Finally execute the testcase function call in the privileged context
@@ -369,7 +369,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         chapter: newChapter,
         variant: newVariant,
         external: {
-          name: ExternalLibraryNames.NONE,
+          name: ExternalLibraryName.NONE,
           symbols
         },
         globals
@@ -487,15 +487,15 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield* checkWebGLAvailable();
     const externalLibraryName = action.payload.library.external.name;
     switch (externalLibraryName) {
-      case ExternalLibraryNames.RUNES:
+      case ExternalLibraryName.RUNES:
         (window as any).loadLib('RUNES');
         (window as any).getReadyWebGLForCanvas('3d');
         break;
-      case ExternalLibraryNames.CURVES:
+      case ExternalLibraryName.CURVES:
         (window as any).loadLib('CURVES');
         (window as any).getReadyWebGLForCanvas('curve');
         break;
-      case ExternalLibraryNames.MACHINELEARNING:
+      case ExternalLibraryName.MACHINELEARNING:
         (window as any).loadLib('MACHINELEARNING');
         break;
     }
@@ -535,7 +535,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
 let lastDebuggerResult: any;
 let lastNonDetResult: Result;
-function* updateInspector(workspaceLocation: WorkspaceLocation) {
+function* updateInspector(workspaceLocation: WorkspaceLocation): SagaIterator {
   try {
     const start = lastDebuggerResult.context.runtime.nodes[0].loc.start.line - 1;
     const end = lastDebuggerResult.context.runtime.nodes[0].loc.end.line - 1;
@@ -543,7 +543,7 @@ function* updateInspector(workspaceLocation: WorkspaceLocation) {
     inspectorUpdate(lastDebuggerResult);
     visualiseEnv(lastDebuggerResult);
   } catch (e) {
-    put(actions.highlightEditorLine([], workspaceLocation));
+    yield put(actions.highlightEditorLine([], workspaceLocation));
     // most likely harmless, we can pretty much ignore this.
     // half of the time this comes from execution ending or a stack overflow and
     // the context goes missing.
@@ -561,11 +561,11 @@ export function* blockExtraMethods(
   const toBeBlocked = getDifferenceInMethods(elevatedContext, context);
   if (unblockKey) {
     const storeValues = getStoreExtraMethodsString(toBeBlocked, unblockKey);
-    yield* evalCode(storeValues, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+    yield call(evalCode, storeValues, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
   }
 
   const nullifier = getBlockExtraMethodsString(toBeBlocked);
-  yield* evalCode(nullifier, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+  yield call(evalCode, nullifier, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
 }
 
 export function* restoreExtraMethods(
@@ -577,7 +577,7 @@ export function* restoreExtraMethods(
 ) {
   const toUnblock = getDifferenceInMethods(elevatedContext, context);
   const restorer = getRestoreExtraMethodsString(toUnblock, unblockKey);
-  yield* evalCode(restorer, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+  yield call(evalCode, restorer, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
 }
 
 export function* evalCode(
@@ -586,7 +586,7 @@ export function* evalCode(
   execTime: number,
   workspaceLocation: WorkspaceLocation,
   actionType: string
-) {
+): SagaIterator {
   context.runtime.debuggerOn =
     (actionType === EVAL_EDITOR || actionType === DEBUG_RESUME) && context.chapter > 2;
   if (!context.runtime.debuggerOn && context.chapter > 2 && actionType !== EVAL_SILENT) {
@@ -675,7 +675,7 @@ export function* evalCode(
   if (paused) {
     yield put(actions.endDebuggerPause(workspaceLocation));
     lastDebuggerResult = manualToggleDebugger(context);
-    yield updateInspector(workspaceLocation);
+    yield call(updateInspector, workspaceLocation);
     yield call(showWarningMessage, 'Execution paused', 750);
     return;
   }
@@ -683,7 +683,7 @@ export function* evalCode(
   if (actionType === EVAL_EDITOR) {
     lastDebuggerResult = result;
   }
-  yield updateInspector(workspaceLocation);
+  yield call(updateInspector, workspaceLocation);
 
   if (
     result.status !== 'suspended' &&
@@ -696,8 +696,8 @@ export function* evalCode(
     const oldErrors = context.errors;
     context.errors = [];
     const parsed = parse(code, context);
-    context.errors = oldErrors;
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
+    context.errors = oldErrors;
     if (typeErrors && typeErrors.length > 0) {
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)

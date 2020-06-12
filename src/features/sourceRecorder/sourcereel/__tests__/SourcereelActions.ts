@@ -1,4 +1,4 @@
-import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import {
   WorkspaceLocation,
   WorkspaceLocations
@@ -33,7 +33,7 @@ test('recordInit generates correct action object', () => {
   const initData: PlaybackData['init'] = {
     editorValue: 'Init Value',
     chapter: 1,
-    externalLibrary: ExternalLibraryNames.NONE
+    externalLibrary: ExternalLibraryName.NONE
   };
   const action = recordInit(initData, sourcereelWorkspace);
   expect(action).toEqual({

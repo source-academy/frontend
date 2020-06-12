@@ -16,7 +16,7 @@ import Constants from '../utils/Constants';
 import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
-import { ExternalLibraryName, ExternalLibraryNames } from './types/ExternalTypes';
+import { ExternalLibraryName } from './types/ExternalTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -61,22 +61,34 @@ class Application extends React.Component<ApplicationProps, {}> {
           title={this.props.title}
         />
         <div className="Application__main">
-          <Switch>
-            <Route path="/academy" component={toAcademy(this.props)} />
-            <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
-            <Route path="/playground" component={Playground} />
-            <Route path="/login" render={toLogin(this.props)} />
-            <Route path="/contributors" component={Contributors} />
-            <Route path="/sourcecast" component={SourcecastContainer} />
-            <Route exact={true} path="/" render={this.redirectToPlayground} />
-            <Route component={NotFound} />
-          </Switch>
+          {/* Unfortunately Switches cannot contain fragments :( */}
+          {Constants.playgroundOnly ? (
+            <Switch>
+              <Route path="/playground" component={Playground} />
+              <Route path="/contributors" component={Contributors} />
+              <Route path="/sourcecast" component={SourcecastContainer} />
+              <Route exact={true} path="/" render={this.redirectToPlayground} />
+              <Route component={NotFound} />
+            </Switch>
+          ) : (
+            <Switch>
+              <Route path="/academy" component={toAcademy(this.props)} />
+              <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
+              <Route path="/playground" component={Playground} />
+              <Route path="/login" render={toLogin(this.props)} />
+              <Route path="/contributors" component={Contributors} />
+              <Route path="/sourcecast" component={SourcecastContainer} />
+              <Route exact={true} path="/" render={this.redirectToAcademy} />
+              <Route component={NotFound} />
+            </Switch>
+          )}
         </div>
       </div>
     );
   }
 
   private redirectToPlayground = () => <Redirect to="/playground" />;
+  private redirectToAcademy = () => <Redirect to="/academy" />;
 }
 
 /**
@@ -146,9 +158,7 @@ const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
 
 const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
   const ext = parseQuery(props.location.hash).ext || '';
-  return Object.values(ExternalLibraryNames).includes(ext)
-    ? (ext as ExternalLibraryNames)
-    : ExternalLibraryNames.NONE;
+  return Object.values(ExternalLibraryName).find(v => v === ext) || ExternalLibraryName.NONE;
 };
 
 const parseExecTime = (props: RouteComponentProps<{}>) => {

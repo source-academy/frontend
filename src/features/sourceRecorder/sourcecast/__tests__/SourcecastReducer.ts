@@ -1,5 +1,5 @@
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
-import { ExternalLibraryNames } from '../../../../commons/application/types/ExternalTypes';
+import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import {
   CodeDelta,
   Input,
@@ -39,7 +39,7 @@ describe('SAVE_SOURCECAST_DATA', () => {
     const playbackData: PlaybackData = {
       init: {
         chapter: 1,
-        externalLibrary: ExternalLibraryNames.NONE,
+        externalLibrary: ExternalLibraryName.NONE,
         editorValue: ''
       },
       inputs: [input]
@@ -158,7 +158,7 @@ describe('SET_SOURCECAST_DATA', () => {
     const playbackData: PlaybackData = {
       init: {
         chapter: 1,
-        externalLibrary: ExternalLibraryNames.NONE,
+        externalLibrary: ExternalLibraryName.NONE,
         editorValue: ''
       },
       inputs: [input]

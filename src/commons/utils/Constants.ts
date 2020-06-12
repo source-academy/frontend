@@ -1,24 +1,21 @@
-import * as dotenv from 'dotenv';
+function isTrue(value?: string): boolean {
+  return typeof value === 'string' && value.toUpperCase() === 'TRUE';
+}
 
-dotenv.config();
+const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION;
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const useBackend =
-  process.env.NODE_ENV !== 'test' &&
-  process.env.REACT_APP_USE_BACKEND !== undefined &&
-  process.env.REACT_APP_USE_BACKEND !== '' &&
-  process.env.REACT_APP_USE_BACKEND!.toUpperCase() === 'TRUE';
+const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
 const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
 const defaultQuestionId = 0;
 const maxBrowseIndex = 50;
 const urlShortener = process.env.REACT_APP_URL_SHORTENER_DOMAIN;
 const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
-const moduleBackendUrl =
-  process.env.MODULE_BACKEND_URL === undefined || process.env.MODULE_BACKEND_URL === ''
-    ? 'modules'
-    : process.env.MODULE_BACKEND_URL;
+const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
+const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
+const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
 
 const authProviders: Map<
   string,
@@ -77,7 +74,9 @@ const Constants = {
   urlShortener,
   urlShortenerSignature,
   moduleBackendUrl,
-  authProviders
+  authProviders,
+  playgroundOnly,
+  sentryDsn
 };
 
 export default Constants;

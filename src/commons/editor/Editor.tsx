@@ -529,7 +529,6 @@ class Editor extends React.PureComponent<EditorProps, {}> {
 
     // WebSocket connection status detection logic
     const WS = ShareAce.WS;
-    let interval: any;
     const sessionIdNotFound = () => {
       clearInterval(interval);
       WS.close();
@@ -549,7 +548,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
       );
     };
     // Checks connection status every 5sec
-    interval = setInterval(checkStatus, 5000);
+    const interval = setInterval(checkStatus, 5000);
 
     WS.addEventListener('open', (event: Event) => {
       this.props.handleSetWebsocketStatus!(1);
