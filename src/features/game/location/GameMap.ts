@@ -13,7 +13,7 @@ import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
   private locations: Map<string, GameLocation>;
-  
+
   private locationAssets: Map<string, GameImage>;
   private talkTopics: Map<DialogueId, Dialogue>;
   private objects: Map<ObjectId, ObjectProperty>;
