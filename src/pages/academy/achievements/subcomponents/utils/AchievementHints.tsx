@@ -2,7 +2,7 @@ import React from 'react';
 import { IconNames } from '@blueprintjs/icons';
 import { Icon } from '@blueprintjs/core';
 
-import { AchievementStatus } from '../../../../commons/achievements/AchievementTypes';
+import { AchievementStatus } from '../../../../../commons/achievements/AchievementTypes';
 
 type AchievementHintsProps = {
   status: AchievementStatus;

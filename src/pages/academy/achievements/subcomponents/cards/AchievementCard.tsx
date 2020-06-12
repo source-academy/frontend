@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
-import AchievementDeadline from './AchievementDeadline';
-import AchievementExp from './AchievementExp';
-import AchievementHints from './AchievementHints';
+import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
+import AchievementDeadline from '../utils/AchievementDeadline';
+import AchievementExp from '../utils/AchievementExp';
+import AchievementHints from '../utils/AchievementHints';
 
 type AchievementCardProps = {
   achievement: AchievementItem;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import AchievementCard from './AchievementCard';
-import PrerequisiteCard from './PrerequisiteCard';
+import AchievementCard from './cards/AchievementCard';
+import PrerequisiteCard from './cards/PrerequisiteCard';
 import {
   AchievementItem,
   FilterStatus,

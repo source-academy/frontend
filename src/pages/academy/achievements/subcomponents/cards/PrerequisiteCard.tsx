@@ -1,10 +1,10 @@
 import React from 'react';
 
 import { Card } from '@blueprintjs/core';
-import AchievementDeadline from './AchievementDeadline';
-import AchievementExp from './AchievementExp';
-import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
-import AchievementHints from './AchievementHints';
+import AchievementDeadline from '../utils/AchievementDeadline';
+import AchievementExp from '../utils/AchievementExp';
+import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
+import AchievementHints from '../utils/AchievementHints';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
