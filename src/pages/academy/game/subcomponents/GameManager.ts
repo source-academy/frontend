@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
-import { GameLocation } from 'src/features/game/location/GameMapTypes';
+import { GameLocation, GameItemTypeDetails } from 'src/features/game/location/GameMapTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import { screenSize } from 'src/features/game/commons/CommonsTypes';
@@ -11,7 +11,6 @@ import { loadObjectsAssetsFromText } from 'src/features/game/parser/ObjectsPrelo
 import { SampleDialogue, SampleObjects } from 'src/features/game/scenes/LocationAssets';
 import GameModeManager from 'src/features/game/mode/GameModeManager';
 import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
-import { emptyObjectPropertyMap } from 'src/features/game/objects/ObjectsTypes';
 import LayerManager from 'src/features/game/layer/LayerManager';
 import { Layer } from 'src/features/game/layer/LayerTypes';
 import { blackFade } from 'src/features/game/utils/GameEffects';
@@ -39,7 +38,6 @@ class GameManager extends Phaser.Scene {
 
     this.gameModeManager = new GameModeManager();
     this.layerManager = new LayerManager();
-    console.log(this.layerManager);
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -100,7 +98,7 @@ class GameManager extends Phaser.Scene {
     // Render objects in the location
     const [, objectLayerContainer] = createObjectsLayer(
       this,
-      location.objects || emptyObjectPropertyMap
+      map.getItemAt(location.name, GameItemTypeDetails.Object)
     );
     this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
 

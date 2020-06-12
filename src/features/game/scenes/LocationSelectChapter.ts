@@ -6,7 +6,8 @@ import {
   emergencyImg,
   hallwayImg,
   studentRoomImg,
-  GameLocation
+  GameLocation,
+  GameItemTypeDetails
 } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameImage } from 'src/features/game/commons/CommonsTypes';
@@ -66,23 +67,23 @@ LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 const sampleDialogueObject = parseDialogue(SampleDialogue);
 
 // Set talk topics
-LocationSelectMap.setTalkTopicAt('Student Room', 'dialogue1', {
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Dialogue, 'dialogue1', {
   title: 'What happened',
   content: sampleDialogueObject
 });
-LocationSelectMap.setTalkTopicAt('Crash Site', 'dialogue2', {
+LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue2', {
   title: 'Planet XAE-12',
   content: sampleDialogueObject
 });
-LocationSelectMap.setTalkTopicAt('Class Room', 'dialogue3', {
+LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue3', {
   title: "Today's Lesson",
   content: sampleDialogueObject
 });
-LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue4', {
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue4', {
   title: "Where's Everyone",
   content: sampleDialogueObject
 });
-LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue5', {
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue5', {
   title: 'Any Idea?',
   content: sampleDialogueObject
 });
@@ -90,7 +91,9 @@ LocationSelectMap.setTalkTopicAt('Emergency', 'dialogue5', {
 const sampleObjectProperties = parseObjects(SampleObjects);
 
 sampleObjectProperties.forEach((objects, locationId) => {
-  LocationSelectMap.setObjectsAt(locationId, objects);
+  objects.forEach((objectProperty, objectId) => {
+    LocationSelectMap.setItemAt(locationId, GameItemTypeDetails.Object, objectId, objectProperty);
+  });
 });
 
 const LocationSelectChapter: GameChapter = {

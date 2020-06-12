@@ -14,3 +14,4 @@ export type BBoxProperty = {
 };
 
 export type BBoxPropertyMap = Map<BBoxId, BBoxProperty>;
+export const emptyBBoxPropertyMap = new Map<BBoxId, BBoxProperty>();
