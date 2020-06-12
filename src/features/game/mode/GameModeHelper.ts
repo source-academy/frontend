@@ -1,6 +1,6 @@
 import { backText, GameMode, backButtonStyle, backTextYPos } from './GameModeTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { topButton } from '../commons/CommonsTypes';
+import { topButton, screenCenter } from '../commons/CommonConstants';
 
 export function getBackToMenuContainer(): Phaser.GameObjects.Container {
   const gameManager = GameActionManager.getInstance().getGameManager();
@@ -11,7 +11,7 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
 
   const backButtonText = new Phaser.GameObjects.Text(
     gameManager,
-    topButton.xPos,
+    screenCenter.x,
     backTextYPos,
     backText,
     backButtonStyle
@@ -19,8 +19,8 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
 
   const backButtonSprite = new Phaser.GameObjects.Sprite(
     gameManager,
-    topButton.xPos,
-    topButton.yPos,
+    screenCenter.x,
+    screenCenter.y,
     topButton.key
   );
 

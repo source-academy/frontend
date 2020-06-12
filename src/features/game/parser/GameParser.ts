@@ -9,6 +9,9 @@ export class GameParser {
     //   map: new GameMap(),
     //   startingLoc: ''
     // };
+    const two = /<<.+>>/.exec(text);
+    // console.log(files);
+    console.log(two);
 
     return LocationSelectChapter;
   }

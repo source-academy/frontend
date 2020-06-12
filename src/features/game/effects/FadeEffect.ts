@@ -1,8 +1,7 @@
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
-import { blackScreen, screenSize } from '../commons/CommonsTypes';
-import { Constants as c } from '../commons/CommonConstants';
 import { Layer } from '../layer/LayerTypes';
-import { sleep } from './GameUtils';
+import { sleep } from '../utils/GameUtils';
+import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
 
 const { Rectangle } = Phaser.GameObjects;
 type GameObject = Phaser.GameObjects.GameObject | Phaser.GameObjects.Text;
@@ -28,19 +27,16 @@ export function fadeAndDestroy(
   { fadeDuration }: FadeProps = {}
 ) {
   if (!object) return;
-  scene.add.tween(fadeOut([object], fadeDuration || c.fadeDuration));
-  setTimeout(() => object.destroy(), fadeDuration || c.fadeDuration);
+  scene.add.tween(fadeOut([object], fadeDuration || Constants.fadeDuration));
+  setTimeout(() => object.destroy(), fadeDuration || Constants.fadeDuration);
+}
+
+function blackScreen(scene: Phaser.Scene) {
+  return new Rectangle(scene, screenCenter.x, screenCenter.y, screenSize.x, screenSize.y, 0);
 }
 
 export function blackFadeIn(gameManager: GameManager, { fadeDuration }: FadeProps = {}) {
-  const fadeBlack = new Rectangle(
-    gameManager,
-    screenSize.x / 2,
-    screenSize.y / 2,
-    screenSize.x,
-    screenSize.y,
-    0
-  );
+  const fadeBlack = blackScreen(gameManager);
   gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
   fadeAndDestroy(gameManager, fadeBlack, { fadeDuration });
 }
@@ -51,14 +47,7 @@ export const blackFade = async (
   delay: number,
   callback: any
 ) => {
-  const fadeBlack = new Rectangle(
-    gameManager,
-    screenSize.x / 2,
-    screenSize.y / 2,
-    screenSize.x,
-    screenSize.y,
-    0
-  );
+  const fadeBlack = blackScreen(gameManager);
   gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
 
   // Fade in
@@ -86,7 +75,3 @@ export const blackFade = async (
 
   fadeBlack.destroy();
 };
-
-const effectAssets = [blackScreen];
-
-export default effectAssets;

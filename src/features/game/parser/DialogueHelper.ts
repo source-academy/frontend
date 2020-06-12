@@ -1,5 +1,5 @@
-import { Constants as c, Keys as k } from '../commons/CommonConstants';
-import { SpeakerDetail } from './DialogueTypes';
+import { Constants } from '../commons/CommonConstants';
+import { SpeakerDetail } from '../dialogue/DialogueTypes';
 
 /* Parsing dialogue */
 export const isPartLabel = (line: string) => new RegExp(/\[part[0-9]+\]/).test(line);
@@ -10,10 +10,10 @@ export const isSpeaker = (line: string) => line && line[0] === '$';
 /* Speaker details */
 export const avatarKey = (speaker: string, expression: string) => `${speaker}-${expression}`;
 export const avatarAssetPath = (speaker: string, expression: string) => {
-  if (speaker === k.you) {
-    return `${c.assetsFolder}/avatars/beat/beat.happy.png`;
+  if (speaker === 'you') {
+    return `${Constants.assetsFolder}/avatars/beat/beat.happy.png`;
   }
-  return `${c.assetsFolder}/avatars/${speaker}/${speaker}.${expression || 'normal'}.png`;
+  return `${Constants.assetsFolder}/avatars/${speaker}/${speaker}.${expression || 'normal'}.png`;
 };
 export const getSpeakerDetails = (line: string): SpeakerDetail => {
   const [speaker, expression] = line.slice(1).split(', ');

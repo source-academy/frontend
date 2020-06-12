@@ -1,17 +1,16 @@
-import { Keys as k } from '../commons/CommonConstants';
 import {
   isGotoLabel,
   getPartToJump,
   isSpeaker,
   getSpeakerDetails,
   showDialogueError
-} from './DialogueHelper';
+} from '../parser/DialogueHelper';
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
 
 // Generates next line in dialogue based on Dialogue Object
-export function dialogueGenerator(dialogueObject: DialogueObject) {
-  let currPartNum = k.initialPart;
+export function DialogueGenerator(dialogueObject: DialogueObject) {
+  let currPartNum = 'part0';
   let currLineNum = -1;
   function generateDialogue(): [SpeakerDetail | null, DialogueString] {
     try {

@@ -1,4 +1,4 @@
-import { Constants as c } from '../commons/CommonConstants';
+import { screenCenter } from '../commons/CommonConstants';
 
 const barWidth = 320;
 const barHeight = 50;
@@ -6,8 +6,8 @@ const padding = 10;
 
 const innerWidth = barWidth - padding * 2;
 const innerHeight = barHeight - padding * 2;
-const barX = c.centerX - barWidth / 2;
-const barY = c.centerY;
+const barX = screenCenter.x - barWidth / 2;
+const barY = screenCenter.y;
 const innerBarX = barX + padding;
 const innerBarY = barY + padding;
 

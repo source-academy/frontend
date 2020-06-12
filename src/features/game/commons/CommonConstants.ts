@@ -1,22 +1,32 @@
-const screenHeight = 1080;
-const screenWidth = 1920;
+import { ImageAsset } from './CommonsTypes';
 
 export const Constants = {
-  screenHeight,
-  screenWidth,
-  centerX: screenWidth / 2,
-  centerY: screenHeight / 2,
   repoAssetsFolder: '../../../assets',
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
-  typeWriterInterval: 1,
-  fadeDuration: 100,
-  speechBoxPath: '../assets/speechbox.png',
-  objectActionSeparator: '$'
+  fadeDuration: 100
 };
 
-export const Keys = {
-  selectedAsset: 'selectedAsset',
-  initialPart: 'part0',
-  narrator: 'narrator',
-  you: 'you'
+export const screenSize = {
+  x: 1920,
+  y: 1080
+};
+
+export const screenCenter = {
+  x: screenSize.x / 2,
+  y: screenSize.y / 2
+};
+
+export const shortButton: ImageAsset = {
+  key: 'short-button',
+  path: '../assets/shortButton.png'
+};
+
+export const longButton: ImageAsset = {
+  key: 'long-button',
+  path: '../assets/longButton.png'
+};
+
+export const topButton: ImageAsset = {
+  key: 'top-button',
+  path: '../assets/topButton.png'
 };

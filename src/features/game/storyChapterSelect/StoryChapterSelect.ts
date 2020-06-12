@@ -1,9 +1,9 @@
 import { Constants as c } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
 import { backgroundImageUrl } from 'src/features/game/storyChapterSelect/StoryChapterSelectConstants';
-import { addLoadingScreen } from './LoadingScreen';
+import { addLoadingScreen } from '../utils/LoadingScreen';
 import { Color } from '../utils/styles';
-import { fadeOut } from '../utils/GameEffects';
+import { fadeOut } from '../effects/FadeEffect';
 import { ChapterDetail, SampleChapters } from './SampleChapters';
 
 const marginX = 300;

@@ -59,7 +59,7 @@ class GameModeExplore implements IGameUI {
       this.fetchLatestState();
     }
 
-    const [, objectLayerContainer] = createObjectsLayer(gameManager, this.objectIds, this.objects, {
+    const [objectLayerContainer] = createObjectsLayer(gameManager, this.objectIds, this.objects, {
       cursor: magnifyingGlass
     });
 

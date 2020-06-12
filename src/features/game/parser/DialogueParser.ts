@@ -1,5 +1,5 @@
 import { mapByHeader, splitToLines } from './StringUtils';
-import { isPartLabel } from '../dialogue/DialogueHelper';
+import { isPartLabel } from './DialogueHelper';
 import { DialogueObject } from '../dialogue/DialogueTypes';
 
 // Split to line

@@ -1,5 +1,5 @@
 import { defaultLayerSequence, Layer } from './LayerTypes';
-import { fadeIn, fadeAndDestroy } from '../utils/GameEffects';
+import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import { Constants as c } from '../commons/CommonConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';

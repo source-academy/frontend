@@ -1,9 +1,4 @@
-import {
-  isSpeaker,
-  avatarKey,
-  avatarAssetPath,
-  getSpeakerDetails
-} from '../dialogue/DialogueHelper';
+import { isSpeaker, avatarKey, avatarAssetPath, getSpeakerDetails } from './DialogueHelper';
 import { splitToLines } from './StringUtils';
 
 export function loadDialogueAssetsFromText(scene: Phaser.Scene, text: string) {

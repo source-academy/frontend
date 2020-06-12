@@ -13,9 +13,9 @@ import GameModeManager from 'src/features/game/mode/GameModeManager';
 import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
 import LayerManager from 'src/features/game/layer/LayerManager';
 import { Layer } from 'src/features/game/layer/LayerTypes';
-import { blackFade, blackFadeIn } from 'src/features/game/utils/GameEffects';
+import { blackFade, blackFadeIn } from 'src/features/game/effects/FadeEffect';
 import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants';
-import { addLoadingScreen } from 'src/features/game/storyChapterSelect/LoadingScreen';
+import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
 import { GameParser } from 'src/features/game/parser/GameParser';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 
@@ -54,7 +54,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ fileName }: GameManagerProps) {
-    const text = this.cache.text.get(fileName);
+    const text = this.cache.text.get('../assets/chapter1.txt');
     this.currentChapter = GameParser.parse(text);
   }
 
@@ -106,7 +106,7 @@ class GameManager extends Phaser.Scene {
 
     // Render objects in the location
     const objectIdsToRender = location.objects || [];
-    const [, objectLayerContainer] = createObjectsLayer(
+    const [objectLayerContainer] = createObjectsLayer(
       this,
       objectIdsToRender,
       map.getItemAt(location.name, GameItemTypeDetails.Object)
