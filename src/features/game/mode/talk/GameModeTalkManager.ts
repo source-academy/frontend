@@ -9,10 +9,15 @@ class GameModeTalkManager {
   static processTalkMenus(chapter: GameChapter): Map<LocationId, GameModeTalk> {
     return mapValues(chapter.map.getLocations(), location => {
       const possibleDialogues = chapter.map.getItemAt(location.name, GameItemTypeDetails.Dialogue);
-      if (!location.modes || !location.modes.includes(GameMode.Talk) || !possibleDialogues.size) {
+      if (
+        !location.modes ||
+        !location.modes.includes(GameMode.Talk) ||
+        !possibleDialogues.size ||
+        !location.talkTopics
+      ) {
         return;
       }
-      return new GameModeTalk(possibleDialogues);
+      return new GameModeTalk(location.name, location.talkTopics, possibleDialogues);
     });
   }
 }

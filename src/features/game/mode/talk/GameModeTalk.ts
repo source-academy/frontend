@@ -12,13 +12,65 @@ import {
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
+import { GameLocationAttr } from '../../location/GameMapTypes';
 
 class GameModeTalk implements IGameUI {
+  private locationName: string;
+  private dialogues: Map<DialogueId, Dialogue>;
   private gameButtons: TalkButton[];
 
-  constructor(dialogues: Map<DialogueId, Dialogue>) {
+  constructor(
+    locationName: string,
+    talkTopics: DialogueId[],
+    dialogues: Map<DialogueId, Dialogue>
+  ) {
+    this.locationName = locationName;
     this.gameButtons = [];
-    this.createGameButtons(dialogues);
+    this.dialogues = dialogues;
+    this.createGameButtons(talkTopics);
+  }
+
+  private async createGameButtons(dialogueIds: DialogueId[]) {
+    // Refresh Buttons
+    this.gameButtons = [];
+
+    await dialogueIds.forEach(dialogueId => {
+      const dialogue = this.dialogues.get(dialogueId);
+      if (dialogue) {
+        this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
+          GameActionManager.getInstance().bringUpDialogue(dialogue.content)
+        );
+      }
+    });
+  }
+
+  private addTopicOptionButton(type: TalkButtonType, name: string, callback: any) {
+    const newNumberOfButtons = this.gameButtons.length + 1;
+    const partitionSize = talkButtonYSpace / newNumberOfButtons;
+    const newYPos = (screenSize.y - talkButtonYSpace) / 2 + partitionSize / 2;
+
+    // Rearrange existing buttons
+    for (let i = 0; i < this.gameButtons.length; i++) {
+      this.gameButtons[i] = {
+        ...this.gameButtons[i],
+        assetYPos: newYPos + i * partitionSize
+      };
+    }
+
+    // Add the new button
+    const newModeButton: TalkButton = {
+      text: name,
+      style: talkButtonStyle,
+      assetKey: talkOptButton.key,
+      assetXPos: talkOptButton.xPos,
+      assetYPos: newYPos + this.gameButtons.length * partitionSize,
+      isInteractive: true,
+      onInteract: callback,
+      type
+    };
+
+    // Update
+    this.gameButtons.push(newModeButton);
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
@@ -27,6 +79,20 @@ class GameModeTalk implements IGameUI {
       throw console.error('GetUIContainer: Game Manager is not defined!');
     }
     const talkMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
+    // Fetch latest state if location is not yet visited
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+
+    if (hasUpdates) {
+      const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
+        GameLocationAttr.talkTopics,
+        this.locationName
+      );
+      if (!latestTalkTopics) {
+        return talkMenuContainer;
+      }
+      this.createGameButtons(latestTalkTopics);
+    }
 
     this.gameButtons.forEach((topicButton: TalkButton) => {
       const text = topicButton.text ? topicButton.text : '';
@@ -70,43 +136,6 @@ class GameModeTalk implements IGameUI {
 
     talkMenuContainer.add(getBackToMenuContainer());
     return talkMenuContainer;
-  }
-
-  private createGameButtons(dialogues: Map<DialogueId, Dialogue>) {
-    dialogues.forEach(dialogue => {
-      this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
-        GameActionManager.getInstance().bringUpDialogue(dialogue.content)
-      );
-    });
-  }
-
-  private addTopicOptionButton(type: TalkButtonType, name: string, callback: any) {
-    const newNumberOfButtons = this.gameButtons.length + 1;
-    const partitionSize = talkButtonYSpace / newNumberOfButtons;
-    const newYPos = (screenSize.y - talkButtonYSpace) / 2 + partitionSize / 2;
-
-    // Rearrange existing buttons
-    for (let i = 0; i < this.gameButtons.length; i++) {
-      this.gameButtons[i] = {
-        ...this.gameButtons[i],
-        assetYPos: newYPos + i * partitionSize
-      };
-    }
-
-    // Add the new button
-    const newModeButton: TalkButton = {
-      text: name,
-      style: talkButtonStyle,
-      assetKey: talkOptButton.key,
-      assetXPos: talkOptButton.xPos,
-      assetYPos: newYPos + this.gameButtons.length * partitionSize,
-      isInteractive: true,
-      onInteract: callback,
-      type
-    };
-
-    // Update
-    this.gameButtons.push(newModeButton);
   }
 
   public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
