@@ -1,5 +1,6 @@
 import { GameButton, ImageAsset } from '../../commons/CommonsTypes';
 import { screenSize } from '../../commons/CommonConstants';
+import { DialogueObject } from '../../dialogue/DialogueTypes';
 
 export const talkButtonYSpace = screenSize.y * 0.7;
 
@@ -30,7 +31,7 @@ export enum TalkButtonType {
 }
 
 export type TalkButton = GameButton & {
-  type: TalkButtonType;
+  content: DialogueObject;
 };
 
 const talkUIAssets = [talkOptButton, talkOptCheck, dialogueBox];
