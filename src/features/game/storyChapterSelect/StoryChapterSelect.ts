@@ -45,8 +45,8 @@ class StoryChapterSelect extends Phaser.Scene {
   public preload() {
     this.load.image('bg', backgroundImageUrl);
 
-    this.chapterDetails.forEach((_, index) => {
-      this.load.image(`chapterImage${index}`, 'https://picsum.photos/400/600');
+    this.chapterDetails.forEach((chapter, index) => {
+      this.load.image(`chapterImage${index}`, chapter.url);
     });
     addLoadingScreen(this);
   }
