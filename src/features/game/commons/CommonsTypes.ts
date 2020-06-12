@@ -28,6 +28,8 @@ export type GameText = {
 };
 
 export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
+export type ItemId = DialogueId | ObjectId | BBoxId;
+export const emptyGameItemMap = new Map<string, GameMapItem>();
 
 export type GameButton = GameText & GameSprite & IGameInteractive;
 

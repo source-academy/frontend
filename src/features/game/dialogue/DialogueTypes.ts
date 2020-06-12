@@ -1,3 +1,5 @@
+import { DialogueId } from '../commons/CommonsTypes';
+
 type Lines = string;
 type PartName = string;
 
@@ -12,3 +14,5 @@ type Speaker = string;
 type Expression = string;
 export type SpeakerDetail = [Speaker, Expression];
 export type DialogueString = string;
+
+export const emptyDialogueMap = new Map<DialogueId, Dialogue>();

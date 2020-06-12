@@ -1,4 +1,4 @@
-import { IGameUI, screenSize } from '../../commons/CommonsTypes';
+import { IGameUI, screenSize, DialogueId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import {
   talkEntryTweenProps,
@@ -14,13 +14,11 @@ import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 
 class GameModeTalk implements IGameUI {
-  private dialogues: Dialogue[];
   private gameButtons: TalkButton[];
 
-  constructor(dialogues: Dialogue[]) {
-    this.dialogues = dialogues;
+  constructor(dialogues: Map<DialogueId, Dialogue>) {
     this.gameButtons = [];
-    this.createGameButtons();
+    this.createGameButtons(dialogues);
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
@@ -74,8 +72,8 @@ class GameModeTalk implements IGameUI {
     return talkMenuContainer;
   }
 
-  private createGameButtons() {
-    this.dialogues.forEach(dialogue => {
+  private createGameButtons(dialogues: Map<DialogueId, Dialogue>) {
+    dialogues.forEach(dialogue => {
       this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
         GameActionManager.getInstance().bringUpDialogue(dialogue.content)
       );
