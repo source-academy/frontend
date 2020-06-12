@@ -1,7 +1,7 @@
 import { defaultLayerSequence, Layer } from './LayerTypes';
 import { fadeIn, fadeAndDestroy } from '../utils/GameEffects';
 import { Constants as c } from '../commons/CommonConstants';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 
 type Container = Phaser.GameObjects.Container;

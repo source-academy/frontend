@@ -11,8 +11,29 @@ class GameModeExploreManager {
       if (!location.modes || !location.modes.includes(GameMode.Explore)) {
         return;
       }
-      return new GameModeExplore(objects, undefined);
+      return new GameModeExplore(
+        location.name,
+        location.objects,
+        location.boundingBoxes,
+        objects,
+        undefined
+      );
     });
+  }
+
+  static processLocation(chapter: GameChapter, locationName: string): GameModeExplore {
+    const location = chapter.map.getLocation(locationName);
+    if (!location) {
+      throw console.error('Location does not exist ', locationName);
+    }
+    const objects = chapter.map.getItemAt(location.name, GameItemTypeDetails.Object);
+    return new GameModeExplore(
+      location.name,
+      location.objects,
+      location.boundingBoxes,
+      objects,
+      undefined
+    );
   }
 }
 

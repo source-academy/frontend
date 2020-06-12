@@ -12,7 +12,15 @@ export type GameLocation = {
   assetXPos: number;
   assetYPos: number;
   modes?: GameMode[];
+  navigation?: string[];
   talkTopics?: DialogueId[];
   objects?: ObjectId[];
   boundingBoxes?: BBoxId[];
 };
+
+export enum GameLocationAttr {
+  navigation = 'navigation',
+  talkTopics = 'talkTopics',
+  objects = 'objects',
+  boundingBoxes = 'boundingBoxes'
+}

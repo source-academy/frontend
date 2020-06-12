@@ -8,12 +8,22 @@ const { Image, Container } = Phaser.GameObjects;
 
 export function createObjectsLayer(
   scene: Phaser.Scene,
+  idsToRender: ObjectId[],
   objectPropertyMap: Map<ObjectId, ObjectProperty>,
   props?: ObjectLayerProps
 ): [Map<ObjectId, Image>, Container] {
   const container = new Container(scene, 0, 0);
 
-  const objectSpriteMap = mapValues(objectPropertyMap, objectProperty =>
+  const objectsToRender = new Map<ObjectId, ObjectProperty>();
+
+  idsToRender.forEach(id => {
+    const renderObjProperty = objectPropertyMap.get(id);
+    if (renderObjProperty) {
+      objectsToRender.set(id, renderObjProperty);
+    }
+  });
+
+  const objectSpriteMap = mapValues(objectsToRender, objectProperty =>
     createInteractiveObject(scene, objectProperty, props || {})
   );
   container.add(Array.from(objectSpriteMap.values()));

@@ -12,17 +12,15 @@ import { ObjectProperty } from '../objects/ObjectsTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
-  private locationAssets: Map<string, GameImage>;
-  private navigation: Map<string, string[]>;
   private locations: Map<string, GameLocation>;
 
+  private locationAssets: Map<string, GameImage>;
   private talkTopics: Map<DialogueId, Dialogue>;
   private objects: Map<ObjectId, ObjectProperty>;
   private boundingBoxes: Map<BBoxId, BBoxProperty>;
 
   constructor() {
     this.locationAssets = new Map<string, GameImage>();
-    this.navigation = new Map<string, string[]>();
     this.locations = new Map<string, GameLocation>();
 
     this.talkTopics = new Map<DialogueId, Dialogue>();
@@ -43,11 +41,18 @@ class GameMap {
   }
 
   public setNavigationFrom(id: string, destination: string[]) {
-    this.navigation.set(id, destination);
+    const location = this.locations.get(id);
+    if (!location) return;
+
+    location.navigation = destination;
   }
 
   public getNavigationFrom(id: string): string[] | undefined {
-    return this.navigation.get(id);
+    const location = this.locations.get(id);
+    if (!location || !location.navigation) {
+      return undefined;
+    }
+    return location.navigation;
   }
 
   public setLocation(location: GameLocation): void {

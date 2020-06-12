@@ -5,7 +5,7 @@ import GameModeMenuManager from './menu/GameModeMenuManager';
 import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
 import GameModeExploreManager from './explore/GameModeExploreManager';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import modeUIAssets from './menu/GameModeMenuConstants';
 import moveUIAssets from './move/GameModeMoveConstants';
 import talkUIAssets from './talk/GameModeTalkTypes';
@@ -35,6 +35,32 @@ class GameModeManager {
         }
       });
     });
+  }
+
+  public addMode(mode: GameMode, locationName: string) {
+    if (!this.gameModes.get(locationName)) {
+      this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
+    }
+    const chapter = GameActionManager.getInstance().getGameManager()!.currentChapter;
+    if (!chapter) return;
+
+    let gameUI: IGameUI;
+    if (mode === GameMode.Menu) {
+      gameUI = GameModeMenuManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Talk) {
+      gameUI = GameModeTalkManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Move) {
+      gameUI = GameModeMoveManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Explore) {
+      gameUI = GameModeExploreManager.processLocation(chapter, locationName);
+    } else {
+      return;
+    }
+    this.gameModes.get(locationName)!.set(mode, gameUI);
+  }
+
+  public removeMode(mode: GameMode, locationName: string) {
+    this.gameModes.get(locationName)!.delete(mode);
   }
 
   public preloadModeBaseAssets() {
