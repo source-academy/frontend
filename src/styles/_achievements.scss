@@ -91,9 +91,8 @@
           display: flex;
           flex-direction: row;
           justify-content: space-between;
-
         }
-        
+
         .main {
           display: flex;
           flex-direction: row;
@@ -105,36 +104,36 @@
             align-items: center;
             flex-basis: 10%;
           }
-  
+
           .icon {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-basis: 10%;
           }
-  
+
           .display {
             display: flex;
             justify-content: center;
             margin-left: 10%;
             width: 100%;
             flex-direction: column;
-  
+
             .details {
               display: flex;
               flex-direction: row;
               justify-content: space-evenly;
-  
+
               .ability {
                 flex-basis: 40%;
               }
-  
+
               .deadline {
                 display: flex;
                 flex-direction: row;
                 flex-basis: 30%;
               }
-  
+
               .exp {
                 display: flex;
                 margin-left: 5%;
@@ -164,13 +163,12 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-  
           }
-          
+
           .main {
             display: flex;
             flex-direction: row;
-            flex-basis: 80%;  
+            flex-basis: 80%;
 
             .display {
               display: flex;
@@ -178,22 +176,22 @@
               margin-left: 10%;
               width: 100%;
               flex-direction: column;
-  
+
               .details {
                 display: flex;
                 flex-direction: row;
                 justify-content: space-evenly;
-  
+
                 .path {
                   flex-basis: 40%;
                 }
-  
+
                 .deadline {
                   display: flex;
                   flex-direction: row;
                   flex-basis: 30%;
                 }
-  
+
                 .exp {
                   display: flex;
                   margin-left: 5%;
