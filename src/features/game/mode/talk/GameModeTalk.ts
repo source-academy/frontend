@@ -1,18 +1,18 @@
-import { IGameUI, screenSize, DialogueId } from '../../commons/CommonsTypes';
+import { IGameUI, DialogueId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import {
-  talkEntryTweenProps,
-  talkExitTweenProps,
   talkButtonYSpace,
   talkButtonStyle,
   talkOptButton,
   TalkButtonType,
   TalkButton
-} from './GameModeTalkTypes';
+} from './GameModeTalkConstants';
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
+import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 
 class GameModeTalk implements IGameUI {
   private locationName: string;
@@ -30,11 +30,11 @@ class GameModeTalk implements IGameUI {
     this.createGameButtons(talkTopics);
   }
 
-  private async createGameButtons(dialogueIds: DialogueId[]) {
+  private createGameButtons(dialogueIds: DialogueId[]) {
     // Refresh Buttons
     this.gameButtons = [];
 
-    await dialogueIds.forEach(dialogueId => {
+    dialogueIds.forEach(dialogueId => {
       const dialogue = this.dialogues.get(dialogueId);
       if (dialogue) {
         this.addTopicOptionButton(TalkButtonType.Dialogue, dialogue.title, () =>
@@ -62,7 +62,7 @@ class GameModeTalk implements IGameUI {
       text: name,
       style: talkButtonStyle,
       assetKey: talkOptButton.key,
-      assetXPos: talkOptButton.xPos,
+      assetXPos: screenCenter.x,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
       onInteract: callback,
@@ -122,9 +122,9 @@ class GameModeTalk implements IGameUI {
 
         if (topicButton.type === TalkButtonType.Dialogue) {
           callback = async () => {
-            gameManager.tweens.add({ targets: [talkMenuContainer], ...talkExitTweenProps });
+            gameManager.tweens.add({ targets: [talkMenuContainer], ...exitTweenProps });
             await topicButton.onInteract();
-            gameManager.tweens.add({ targets: [talkMenuContainer], ...talkEntryTweenProps });
+            gameManager.tweens.add({ targets: [talkMenuContainer], ...entryTweenProps });
           };
         } else {
           callback = topicButton.onInteract;
@@ -153,7 +153,7 @@ class GameModeTalk implements IGameUI {
 
     gameManager.tweens.add({
       targets: container,
-      ...talkEntryTweenProps
+      ...entryTweenProps
     });
   }
 
@@ -166,7 +166,7 @@ class GameModeTalk implements IGameUI {
 
     gameManager.tweens.add({
       targets: container,
-      ...talkExitTweenProps
+      ...exitTweenProps
     });
 
     await sleep(500);

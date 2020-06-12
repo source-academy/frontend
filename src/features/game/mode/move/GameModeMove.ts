@@ -1,10 +1,4 @@
-import {
-  IGameUI,
-  GameSprite,
-  screenSize,
-  GameButton,
-  longButton
-} from '../../commons/CommonsTypes';
+import { IGameUI, GameSprite, GameButton } from '../../commons/CommonsTypes';
 import {
   defaultLocationImg,
   locationPreviewFrame,
@@ -22,6 +16,8 @@ import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocation, GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
+import { screenSize } from '../../commons/CommonConstants';
+import { longButton } from '../../commons/CommonAssets';
 
 class GameModeMove implements IGameUI {
   private currentLocationAssetKey: string;

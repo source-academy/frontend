@@ -3,18 +3,18 @@ import { Layer } from '../layer/LayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
 
-const { Rectangle } = Phaser.GameObjects;
-type GameObject = Phaser.GameObjects.GameObject | Phaser.GameObjects.Text;
-
-export const fadeOut = (targets: GameObject[], duration: number) => ({
+export const fadeOut = (targets: Phaser.GameObjects.GameObject[], duration: number) => ({
   alpha: 0,
   targets,
-  duration
+  duration,
+  ease: 'Power2'
 });
-export const fadeIn = (targets: GameObject[], duration: number) => ({
+
+export const fadeIn = (targets: Phaser.GameObjects.GameObject[], duration: number) => ({
   alpha: 1,
   targets,
-  duration
+  duration,
+  ease: 'Power2'
 });
 
 type FadeProps = {
@@ -23,7 +23,7 @@ type FadeProps = {
 
 export function fadeAndDestroy(
   scene: Phaser.Scene,
-  object: GameObject | null,
+  object: Phaser.GameObjects.GameObject | null,
   { fadeDuration }: FadeProps = {}
 ) {
   if (!object) return;
@@ -32,7 +32,14 @@ export function fadeAndDestroy(
 }
 
 function blackScreen(scene: Phaser.Scene) {
-  return new Rectangle(scene, screenCenter.x, screenCenter.y, screenSize.x, screenSize.y, 0);
+  return new Phaser.GameObjects.Rectangle(
+    scene,
+    screenCenter.x,
+    screenCenter.y,
+    screenSize.x,
+    screenSize.y,
+    0
+  );
 }
 
 export function blackFadeIn(gameManager: GameManager, { fadeDuration }: FadeProps = {}) {
@@ -50,27 +57,15 @@ export const blackFade = async (
   const fadeBlack = blackScreen(gameManager);
   gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
 
-  // Fade in
   fadeBlack.setAlpha(0);
-  gameManager.tweens.add({
-    targets: fadeBlack,
-    alpha: 1,
-    duration: fadeDuration,
-    ease: 'Power2'
-  });
+  gameManager.tweens.add(fadeIn([fadeBlack], fadeDuration));
   await sleep(fadeDuration);
 
   callback();
   await sleep(delay);
 
-  // Fade out
   fadeBlack.setAlpha(1);
-  gameManager.tweens.add({
-    targets: fadeBlack,
-    alpha: 0,
-    duration: fadeDuration,
-    ease: 'Power2'
-  });
+  gameManager.tweens.add(fadeOut([fadeBlack], fadeDuration));
   await sleep(fadeDuration);
 
   fadeBlack.destroy();

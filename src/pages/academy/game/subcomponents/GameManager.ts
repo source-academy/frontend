@@ -4,7 +4,6 @@ import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
-import { screenSize } from 'src/features/game/commons/CommonsTypes';
 import GameActionManager from '../../../../features/game/action/GameActionManager';
 import { loadDialogueAssetsFromText } from 'src/features/game/parser/DialoguePreloader';
 import { loadObjectsAssetsFromText } from 'src/features/game/parser/ObjectsPreloader';
@@ -18,6 +17,8 @@ import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
 import { GameParser } from 'src/features/game/parser/GameParser';
 import GameStateManager from 'src/features/game/state/GameStateManager';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import commonAssets from 'src/features/game/commons/CommonAssets';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -63,6 +64,7 @@ class GameManager extends Phaser.Scene {
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadChapterAssets();
 
+    this.preloadBaseAssets();
     this.modeManager.preloadModeBaseAssets();
     this.modeManager.processModes(this.currentChapter);
     this.layerManager.initialiseMainLayer(this);
@@ -71,6 +73,12 @@ class GameManager extends Phaser.Scene {
 
   public create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
+  }
+
+  preloadBaseAssets() {
+    commonAssets.forEach(asset => {
+      this.load.image(asset.key, asset.path);
+    });
   }
 
   private preloadChapterAssets() {

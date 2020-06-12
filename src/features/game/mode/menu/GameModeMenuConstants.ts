@@ -1,4 +1,5 @@
-import { GameImage, screenSize, shortButton } from '../../commons/CommonsTypes';
+import { GameImage } from '../../commons/CommonsTypes';
+import { screenSize } from '../../commons/CommonConstants';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 
@@ -29,6 +30,6 @@ export const modeMenuBanner: GameImage = {
   imageHeight: screenSize.y
 };
 
-const modeUIAssets = [modeMenuBanner, shortButton];
+const modeUIAssets = [modeMenuBanner];
 
 export default modeUIAssets;

@@ -1,7 +1,8 @@
-import { screenSize, GameImage } from '../commons/CommonsTypes';
+import { GameImage } from '../commons/CommonsTypes';
 import { emptyObjectPropertyMap } from '../objects/ObjectsTypes';
 import { emptyDialogueMap } from '../dialogue/DialogueTypes';
 import { emptyBBoxPropertyMap } from '../boundingBoxes/BoundingBoxTypes';
+import { screenSize } from '../commons/CommonConstants';
 
 export const GameItemTypeDetails = {
   Dialogue: { listName: 'talkTopics', emptyMap: emptyDialogueMap },

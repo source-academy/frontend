@@ -1,12 +1,9 @@
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import { resize } from '../utils/SpriteUtils';
 import { avatarKey } from '../parser/DialogueHelper';
-import { screenSize, Constants } from '../commons/CommonConstants';
+import { Constants } from '../commons/CommonConstants';
 import { SpeakerDetail } from '../dialogue/DialogueTypes';
-
-const avatarX = 350;
-const avatarY = 800;
-const avatarHeight = screenSize.y * 0.4;
+import { charRect } from './CharacterConstants';
 
 export function CharacterManager(scene: Phaser.Scene) {
   let avatar: Phaser.GameObjects.Image | null;
@@ -27,14 +24,14 @@ export function createAvatar(scene: Phaser.Scene, speakerDetail: SpeakerDetail) 
 
   const avatar = new Phaser.GameObjects.Image(
     scene,
-    avatarX,
-    avatarY,
+    charRect.x.left,
+    charRect.y,
     avatarKey(speaker, expression)
   )
     .setAlpha(0)
     .setOrigin(0.5, 1);
 
-  resize(avatar, 0, avatarHeight);
+  resize(avatar, 0, charRect.height);
   scene.add.tween(fadeIn([avatar], Constants.fadeDuration));
   return avatar;
 }

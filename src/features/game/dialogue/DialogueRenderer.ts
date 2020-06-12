@@ -1,4 +1,4 @@
-import { Constants as c, screenSize } from '../commons/CommonConstants';
+import { Constants, screenSize } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 
 import { DialogueGenerator } from './DialogueGenerator';
@@ -6,24 +6,27 @@ import { DialogueObject } from './DialogueTypes';
 import { DialogueSpeakerBox } from './DialogueSpeakerBox';
 import Typewriter from '../effects/Typewriter';
 import { Color } from '../utils/styles';
+import { speechBox } from '../commons/CommonAssets';
 
 const boxMargin = 10;
-const textPadding = 10;
-
 const dialogueRect = {
   x: boxMargin,
-  y: 730,
+  y: 760,
   width: screenSize.x - boxMargin * 2,
-  height: 400
+  height: 320
 };
 
+const textPadding = {
+  x: 60,
+  y: 90
+};
 const typeWriterTextStyle = {
   fontFamily: 'Arial',
   fontSize: '36px',
   fill: Color.white,
   align: 'left',
   lineSpacing: 10,
-  wordWrap: { width: dialogueRect.width - textPadding }
+  wordWrap: { width: dialogueRect.width - textPadding.x * 2 - boxMargin * 2 }
 };
 
 /* Dialogue Box Container */
@@ -31,8 +34,8 @@ export function Dialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
   // Preload contents
   const dialogueBox = createDialogueBox(scene);
   const [typeWriterSprite, changeLine] = Typewriter(scene, {
-    x: dialogueRect.x + textPadding,
-    y: dialogueRect.y + textPadding,
+    x: dialogueRect.x + textPadding.x,
+    y: dialogueRect.y + textPadding.y,
     textStyle: typeWriterTextStyle
   });
 
@@ -50,7 +53,7 @@ export function Dialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
   // Create function
   const activateContainer = new Promise(res => {
     scene.add.existing(container);
-    scene.add.tween(fadeIn([container], c.fadeDuration * 2));
+    scene.add.tween(fadeIn([container], Constants.fadeDuration * 2));
     dialogueBox
       .setInteractive({ useHandCursor: true, pixelPerfect: true })
       .on('pointerdown', () => {
@@ -67,10 +70,17 @@ export function Dialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
   return [activateContainer, destroyContainer];
 }
 
-/* Dialogue Box */
+/* Speech Box */
 function createDialogueBox(scene: Phaser.Scene) {
-  const dialogueBox = new Phaser.GameObjects.Image(scene, dialogueRect.x, dialogueRect.y, 'button')
+  const dialogueBox = new Phaser.GameObjects.Image(
+    scene,
+    dialogueRect.x,
+    dialogueRect.y,
+    speechBox.key
+  )
     .setOrigin(0)
-    .setDisplaySize(dialogueRect.width, dialogueRect.height);
+    .setDisplaySize(dialogueRect.width, dialogueRect.height)
+    .setAlpha(0.8);
+
   return dialogueBox;
 }

@@ -1,13 +1,13 @@
 import * as Phaser from 'phaser';
-import { Constants as c } from '../../../../features/game/commons/CommonConstants';
+import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import GameManager from './GameManager';
 // import StoryChapterSelect from '../../../../features/game/storyChapterSelect/StoryChapterSelect';
 
 const config = {
   debug: true,
   type: Phaser.WEBGL,
-  width: c.screenWidth,
-  height: c.screenHeight,
+  width: screenSize.x,
+  height: screenSize.y,
   physics: {
     default: 'arcade'
   },

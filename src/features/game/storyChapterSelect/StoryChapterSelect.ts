@@ -1,4 +1,4 @@
-import { Constants as c } from 'src/features/game/commons/CommonConstants';
+import { screenCenter, screenSize, Constants } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
 import { backgroundImageUrl } from 'src/features/game/storyChapterSelect/StoryChapterSelectConstants';
 import { addLoadingScreen } from '../utils/LoadingScreen';
@@ -8,17 +8,21 @@ import { ChapterDetail, SampleChapters } from './SampleChapters';
 
 const marginX = 300;
 const marginY = 100;
-
-const maskX = -c.centerX + marginX;
-const maskY = -c.centerY + marginY;
-const maskWidth = c.screenWidth - marginX * 2;
-const maskHeight = c.screenHeight - marginY * 2;
-
-const imageWidth = 500;
-const imageHeight = 700;
-
-const horizontalDist = imageWidth + 150;
 const blackTintAlpha = 0.8;
+
+const maskRect = {
+  x: -screenCenter.x + marginX,
+  y: -screenCenter.y + marginY,
+  width: screenSize.x - marginX * 2,
+  height: screenSize.y - marginY * 2
+};
+
+const imageRect = {
+  width: 500,
+  height: 700
+};
+
+const imageDist = imageRect.width + 150;
 
 const textStyle = {
   fontFamily: 'Arial',
@@ -61,14 +65,14 @@ class StoryChapterSelect extends Phaser.Scene {
   }
 
   private addBackground() {
-    this.add.image(c.centerX, c.centerY, 'bg');
+    this.add.image(screenCenter.x, screenCenter.y, 'bg');
   }
 
   private createMask() {
     const graphics = this.add.graphics();
     const mask = graphics
-      .fillRect(maskX, maskY, maskWidth, maskHeight)
-      .setPosition(c.centerX, c.centerY);
+      .fillRect(maskRect.x, maskRect.y, maskRect.width, maskRect.height)
+      .setPosition(screenCenter.x, screenCenter.y);
     mask.alpha = 0;
     return mask;
   }
@@ -84,13 +88,13 @@ class StoryChapterSelect extends Phaser.Scene {
 
   public update() {
     if (!this.chapterContainer) return;
-    let xOffset = this.input.x - c.centerX;
+    let xOffset = this.input.x - screenCenter.x;
     if (Math.abs(xOffset) < 100) {
       xOffset = 0;
     }
     this.scrollSpeed = limitNumber(-100, xOffset, 100) * 0.2;
     this.chapterContainer.x = limitNumber(
-      -horizontalDist * (this.chapterDetails.length - 1),
+      -imageDist * (this.chapterDetails.length - 1),
       this.chapterContainer.x - this.scrollSpeed,
       0
     );
@@ -116,28 +120,30 @@ function createChapter(
 ) {
   const [x, y] = getCoorByChapter(index);
   const image = new Image(scene, 0, 0, `chapterImage${index}`).setDisplaySize(
-    imageWidth,
-    imageHeight
+    imageRect.width,
+    imageRect.height
   );
-  const blackTint = new Rectangle(scene, 0, 0, imageWidth, imageHeight, 0).setAlpha(blackTintAlpha);
+  const blackTint = new Rectangle(scene, 0, 0, imageRect.width, imageRect.height, 0).setAlpha(
+    blackTintAlpha
+  );
 
   const chapterText = `Chapter ${index}\n${title}`;
   const text = new Text(scene, 0, 0, chapterText, textStyle).setOrigin(0.5);
   const container = new Container(scene, x, y, [image, blackTint, text]);
-  container.setSize(imageWidth, imageHeight);
+  container.setSize(imageRect.width, imageRect.height);
   container.setInteractive({
     useHandCursor: true
   });
 
   container.on('pointerover', () => {
-    scene.add.tween(fadeOut([blackTint], c.fadeDuration * 2));
+    scene.add.tween(fadeOut([blackTint], Constants.fadeDuration * 2));
   });
 
   container.on('pointerout', () => {
     scene.add.tween({
       alpha: blackTintAlpha,
       targets: blackTint,
-      duration: c.fadeDuration * 2
+      duration: Constants.fadeDuration * 2
     });
   });
 
@@ -149,8 +155,8 @@ function createChapter(
 }
 
 function getCoorByChapter(chapterNum: number) {
-  const x = c.centerX + horizontalDist * chapterNum;
-  const y = c.centerY;
+  const x = screenCenter.x + imageDist * chapterNum;
+  const y = screenCenter.y;
   return [x, y];
 }
 

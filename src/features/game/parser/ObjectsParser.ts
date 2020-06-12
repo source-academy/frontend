@@ -1,7 +1,6 @@
 import { splitToLines, mapByHeader } from './StringUtils';
 import { isLabel } from '../objects/ObjectsHelper';
 import { ObjectProperty } from '../objects/ObjectsTypes';
-import { Constants as c } from '../commons/CommonConstants';
 import { mapValues } from '../utils/GameUtils';
 import { ObjectId, LocationId } from '../commons/CommonsTypes';
 
@@ -20,7 +19,7 @@ export function mapObjectsByLocation(text: string): LocationRawObjectsMap {
 }
 
 function objPropertyMapper(objectsList: string[]): Map<ObjectId, ObjectProperty> {
-  const separatorIndex = objectsList.findIndex(object => object === c.objectActionSeparator);
+  const separatorIndex = objectsList.findIndex(object => object === '$');
   const objectDetails = objectsList.slice(0, separatorIndex);
 
   const objectPropertyMap = new Map<ObjectId, ObjectProperty>();

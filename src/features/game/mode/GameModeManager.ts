@@ -8,7 +8,7 @@ import GameModeExploreManager from './explore/GameModeExploreManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import modeUIAssets from './menu/GameModeMenuConstants';
 import moveUIAssets from './move/GameModeMoveConstants';
-import talkUIAssets from './talk/GameModeTalkTypes';
+import talkUIAssets from './talk/GameModeTalkConstants';
 import exploreUIAssets from './explore/GameModeExploreConstants';
 
 class GameModeManager {

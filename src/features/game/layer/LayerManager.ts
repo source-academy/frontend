@@ -1,6 +1,6 @@
 import { defaultLayerSequence, Layer } from './LayerTypes';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
-import { Constants as c } from '../commons/CommonConstants';
+import { Constants } from '../commons/CommonConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 
@@ -41,7 +41,7 @@ class LayerManager {
     layerToHide && layerToHide.setVisible(true);
   }
 
-  public async fadeInLayer(layerType: Layer, fadeDuration = c.fadeDuration) {
+  public async fadeInLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       return;
