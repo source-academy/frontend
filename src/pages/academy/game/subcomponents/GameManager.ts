@@ -13,10 +13,15 @@ import GameModeManager from 'src/features/game/mode/GameModeManager';
 import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
 import LayerManager from 'src/features/game/layer/LayerManager';
 import { Layer } from 'src/features/game/layer/LayerTypes';
-import { blackFade } from 'src/features/game/utils/GameEffects';
+import { blackFade, blackFadeIn } from 'src/features/game/utils/GameEffects';
 import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants';
+import { addLoadingScreen } from 'src/features/game/storyChapterSelect/LoadingScreen';
+import { GameParser } from 'src/features/game/parser/GameParser';
 
 const { Image } = Phaser.GameObjects;
+type GameManagerProps = {
+  fileName: string;
+};
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
@@ -46,7 +51,13 @@ class GameManager extends Phaser.Scene {
     GameActionManager.getInstance().setGameManager(this);
   }
 
+  init({ fileName }: GameManagerProps) {
+    const text = this.cache.text.get(fileName);
+    this.currentChapter = GameParser.parse(text);
+  }
+
   public preload() {
+    addLoadingScreen(this);
     this.layerManager.initialiseMainLayer(this);
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadChapterAssets();
@@ -84,6 +95,8 @@ class GameManager extends Phaser.Scene {
 
   private async renderLocation(map: GameMap, location: GameLocation) {
     this.layerManager.clearSeveralLayers([Layer.Background, Layer.Objects]);
+    blackFadeIn(this, { fadeDuration: 1000 });
+
     // Render background of the location
     const asset = map.getLocationAsset(location);
     if (asset) {

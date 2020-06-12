@@ -1,10 +1,11 @@
 import * as Phaser from 'phaser';
 import { Constants as c } from '../../../../features/game/commons/CommonConstants';
 import GameManager from './GameManager';
+import StoryChapterSelect from '../../../../features/game/storyChapterSelect/StoryChapterSelect';
 
 const config = {
   debug: true,
-  type: Phaser.CANVAS,
+  type: Phaser.WEBGL,
   width: c.screenWidth,
   height: c.screenHeight,
   physics: {
@@ -14,7 +15,7 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [GameManager]
+  scene: [StoryChapterSelect, GameManager]
 };
 
 const phaserGame = new Phaser.Game(config);
