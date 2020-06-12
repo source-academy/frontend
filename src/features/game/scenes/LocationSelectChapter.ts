@@ -6,14 +6,14 @@ import {
   emergencyImg,
   hallwayImg,
   studentRoomImg,
-  GameLocation,
   GameItemTypeDetails
-} from '../location/GameMapTypes';
+} from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameImage } from 'src/features/game/commons/CommonsTypes';
 import { parseDialogue } from '../parser/DialogueParser';
 import { SampleDialogue, SampleObjects } from './LocationAssets';
 import { parseObjects } from '../parser/ObjectsParser';
+import { GameLocation } from '../location/GameMapTypes';
 
 const LocationSelectMap = new GameMap();
 

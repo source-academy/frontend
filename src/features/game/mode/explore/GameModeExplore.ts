@@ -4,7 +4,7 @@ import { ObjectProperty } from '../../objects/ObjectsTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import { createObjectsLayer } from '../../objects/ObjectsRenderer';
 import { sleep } from '../../utils/GameUtils';
-import { magnifyingGlass } from './GameModeExploreTypes';
+import { magnifyingGlass } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 
 class GameModeExplore implements IGameUI {
