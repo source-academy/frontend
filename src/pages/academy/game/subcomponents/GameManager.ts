@@ -15,7 +15,7 @@ import { Layer } from 'src/features/game/layer/LayerTypes';
 import { blackFade, blackFadeIn } from 'src/features/game/effects/FadeEffect';
 import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants';
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
-import { GameParser } from 'src/features/game/parser/GameParser';
+import Parser from 'src/features/game/parser/Parser';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
@@ -55,8 +55,8 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ fileName }: GameManagerProps) {
-    const text = this.cache.text.get('../assets/chapter1.txt');
-    this.currentChapter = GameParser.parse(text);
+    const text = this.cache.text.get(fileName);
+    this.currentChapter = Parser.parse(text);
   }
 
   public preload() {

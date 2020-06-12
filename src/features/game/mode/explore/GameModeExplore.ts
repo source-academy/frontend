@@ -63,8 +63,8 @@ class GameModeExplore implements IGameUI {
       cursor: magnifyingGlass
     });
 
-    console.log(this.boundingBoxes);
-    console.log(this.bboxIds);
+    console.log(this.boundingBoxes?.size);
+    console.log(this.bboxIds.length);
 
     exploreMenuContainer.add(objectLayerContainer);
     exploreMenuContainer.add(getBackToMenuContainer());

@@ -1,15 +1,36 @@
-<<chapter.txt>>
-startingLoc: 
+<<configuration>>
+startingLoc: room
 
-<<objects.txt>>
+<<location>>
+1, crashSite, crashSite, "Crash Site"
+2, classroom, classroom/classOn, "Class Room"
+3, emergency, classroom/emergency, "Emergency"
+4, hallway, hallway, "Hallway"
+5, room, yourRoom-dim, "Student Room"
 
+<<modes>>
+1, [talk move]
+2, [explore talk move]
+3, [talk move]
+4, [move]
+5, [explore move talk]
+
+<<connectivity>>
+classroom: crashSite, hallway
+crashSite: classroom
+hallway: classroom, room, emergency
+room: hallway
+emergency: hallway
+
+<<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
 yourChair, yourChair, 932, 549
 door6, door/yourRoom-dim, 831, 270
 yourBed, yourHeadphones, 372, 514
 
-<<dialogue1.txt>>
+<<dialogue1>>
+title: "What happened"
 
 [part0]
 $narrator
@@ -57,4 +78,3 @@ $narrator
 Sensing your presence via face and voice-recognition, the door opens smoothly...
 ..revealing your room inside
 Neat! Better start unpacking and settling in!
-

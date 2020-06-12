@@ -107,6 +107,7 @@ class StoryChapterSelect extends Phaser.Scene {
   }
 
   private callGameManager(key: string) {
+    console.log(key);
     if (key[0] === '#') {
       this.scene.start('GameManager', { fileName: key });
     }
