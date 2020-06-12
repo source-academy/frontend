@@ -93,14 +93,14 @@ class GameStateManager {
     attr: GameLocationAttr,
     currLocName: string,
     locationName: string,
-    attrKey: string
+    attrElem: string
   ) {
     this.checkLocationsExist([currLocName, locationName]);
 
     if (this.locationStates.get(locationName)![attr]) {
       this.locationStates.get(locationName)![attr] = [];
     }
-    this.locationStates.get(locationName)![attr]!.push(attrKey);
+    this.locationStates.get(locationName)![attr]!.push(attrElem);
     this.updateLocationUpdateState(currLocName, locationName);
   }
 
@@ -108,7 +108,7 @@ class GameStateManager {
     attr: GameLocationAttr,
     currLocName: string,
     locationName: string,
-    attrKey: string
+    attrElem: string
   ) {
     this.checkLocationsExist([currLocName, locationName]);
 
@@ -117,7 +117,7 @@ class GameStateManager {
     }
     const newAttr = this.locationStates
       .get(locationName)!
-      [attr]!.filter((oldAttr: string) => oldAttr !== attrKey);
+      [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationName)![attr] = newAttr;
     this.updateLocationUpdateState(currLocName, locationName);
   }

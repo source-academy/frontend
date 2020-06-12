@@ -2,6 +2,7 @@ import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
 import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
+import { GameLocationAttr } from '../location/GameMapTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -48,7 +49,7 @@ class GameActionManager {
     return;
   }
 
-  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode) {
+  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
     if (this.gameManager) {
       return this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
     }
@@ -80,6 +81,51 @@ class GameActionManager {
   public changeLocationTo(locationName: string) {
     if (this.gameManager) {
       return this.gameManager.changeLocationTo(locationName);
+    }
+    return;
+  }
+
+  /////////////////////
+  //   Game States   //
+  /////////////////////
+
+  public getLocationAttr(attr: GameLocationAttr, locationName: string) {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.getLocationAttr(attr, locationName);
+    }
+    return undefined;
+  }
+
+  public addLocationAttr(
+    attr: GameLocationAttr,
+    currLocName: string,
+    locationName: string,
+    attrElem: string
+  ): void {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.addLocationAttr(
+        attr,
+        currLocName,
+        locationName,
+        attrElem
+      );
+    }
+    return;
+  }
+
+  public removeLocationAttr(
+    attr: GameLocationAttr,
+    currLocName: string,
+    locationName: string,
+    attrElem: string
+  ): void {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.removeLocationAttr(
+        attr,
+        currLocName,
+        locationName,
+        attrElem
+      );
     }
     return;
   }
