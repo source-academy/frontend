@@ -14,7 +14,6 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
    *
    * @returns a JSX.Element which displays the time remaining
    */
-
   const getTimeRemaining = () => {
     if (deadline) {
       if (deadline.getTime() >= new Date().getTime()) {

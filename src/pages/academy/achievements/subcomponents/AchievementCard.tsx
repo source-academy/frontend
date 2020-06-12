@@ -7,6 +7,7 @@ import AchievementExp from './AchievementExp';
 
 type AchievementCardProps = {
   achievement: AchievementItem;
+  deadline: Date | undefined;
   hasDropdown: boolean;
   isTranslucent: boolean;
   isDropdownOpen: boolean;
@@ -17,13 +18,14 @@ type AchievementCardProps = {
 function AchievementCard(props: AchievementCardProps) {
   const {
     achievement,
+    deadline,
     isTranslucent,
     hasDropdown,
     isDropdownOpen,
     toggleDropdown,
     displayModal
   } = props;
-  const { title, ability, deadline, exp } = achievement;
+  const { title, ability, exp } = achievement;
 
   return (
     <Card

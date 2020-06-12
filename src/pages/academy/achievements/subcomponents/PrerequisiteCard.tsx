@@ -7,13 +7,14 @@ import { AchievementItem } from '../../../../commons/achievements/AchievementTyp
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
+  deadline: Date | undefined;
   isTranslucent: boolean;
   displayModal: any;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { achievement, isTranslucent, displayModal } = props;
-  const { title, deadline, exp } = achievement;
+  const { achievement, deadline, isTranslucent, displayModal } = props;
+  const { title, exp } = achievement;
 
   return (
     <Card
