@@ -59,7 +59,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public create() {
-    this.renderStartingLocation();
+    this.changeLocationTo(this.currentChapter.startingLoc);
   }
 
   private preloadChapterAssets() {
@@ -75,14 +75,6 @@ class GameManager extends Phaser.Scene {
     chapter.map.getLocationAssets().forEach(asset => {
       this.load.image(asset.key, asset.path);
     });
-  }
-
-  private renderStartingLocation() {
-    const startingLoc = this.currentChapter.startingLoc;
-    const location = this.currentChapter.map.getLocation(startingLoc);
-    if (location) {
-      this.renderLocation(this.currentChapter.map, location);
-    }
   }
 
   private async renderLocation(map: GameMap, location: GameLocation) {
