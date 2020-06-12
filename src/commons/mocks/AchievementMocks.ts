@@ -8,7 +8,7 @@ import {
 export const achievementDict: { [id: number]: AchievementItem } = {
   1: {
     id: 1,
-    title: 'Rune Master [ACTIVE]',
+    title: 'Rune Master ',
     ability: AchievementAbility.ACADEMIC,
     isTask: true,
     prerequisites: [2, 3],
@@ -17,7 +17,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   2: {
     id: 2,
-    title: 'Beyond the Second Dimension [ACTIVE]',
+    title: 'Beyond the Second Dimension ',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 7, 1, 0, 0, 0),
@@ -27,7 +27,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   3: {
     id: 3,
-    title: 'Colorful Carpet [ACTIVE]',
+    title: 'Colorful Carpet ',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 7, 3, 0, 0, 0),
@@ -37,7 +37,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   4: {
     id: 4,
-    title: 'Keyboard Warrior [ACTIVE]',
+    title: 'Keyboard Warrior ',
     ability: AchievementAbility.COMMUNITY,
     isTask: true,
     prerequisites: [5, 6, 7],
@@ -46,7 +46,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   5: {
     id: 5,
-    title: 'Keyboard Warrior - Bronze Tier [COMPLETED]',
+    title: 'Keyboard Warrior - Bronze Tier ',
     ability: AchievementAbility.COMMUNITY,
     exp: 50,
     isTask: false,
@@ -55,7 +55,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   6: {
     id: 6,
-    title: 'Keyboard Warrior - Silver Tier [COMPLETED]',
+    title: 'Keyboard Warrior - Silver Tier ',
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
     isTask: false,
@@ -64,7 +64,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   7: {
     id: 7,
-    title: 'Keyboard Warrior - Gold Tier [ACTIVE]',
+    title: 'Keyboard Warrior - Gold Tier ',
     ability: AchievementAbility.COMMUNITY,
     exp: 200,
     isTask: false,
@@ -73,7 +73,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   8: {
     id: 8,
-    title: "That was Sort'a Easy [EXPIRED]",
+    title: "That was Sort'a Easy",
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 6, 4, 0, 0, 0),
@@ -83,7 +83,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
   },
   9: {
     id: 9,
-    title: 'Mission Master [ACTIVE]',
+    title: 'Mission Master ',
     ability: AchievementAbility.EFFORT,
     exp: 80,
     isTask: true,
@@ -95,38 +95,38 @@ export const achievementDict: { [id: number]: AchievementItem } = {
 
 export const achievementModalList: AchievementModalItem[] = [
   {
-    title: 'Rune Master [ACTIVE]',
+    title: 'Rune Master ',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
     description: 'Cookies!'
   },
   {
-    title: 'Beyond the Second Dimension [ACTIVE]',
+    title: 'Beyond the Second Dimension ',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
     description: 'Huehuehuehuehuehuehuehue'
   },
   {
-    title: 'Colorful Carpet [ACTIVE]',
+    title: 'Colorful Carpet ',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
     description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas'
   },
   {
-    title: 'Keyboard Warrior [ACTIVE]',
+    title: 'Keyboard Warrior ',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
     description:
       'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.'
   },
   {
-    title: "That was Sort'a Easy [EXPIRED]",
+    title: "That was Sort'a Easy",
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
     description: 'description'
   },
   {
-    title: 'Mission Master [ACTIVE]',
+    title: 'Mission Master ',
     modalImageUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/messyClassroom%40x2.png',
     description: '?'

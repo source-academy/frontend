@@ -48,7 +48,7 @@
     }
 
     .cards {
-      width: 35%;
+      width: 45%;
       display: table;
 
       ::-webkit-scrollbar {
@@ -84,49 +84,63 @@
         margin-bottom: 10px;
 
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
-        .dropdown {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .icon {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .display {
-          display: flex;
-          justify-content: center;
-          margin-left: 10%;
+        .hints {
           width: 100%;
-          flex-direction: column;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
 
-          .details {
+        }
+        
+        .main {
+          display: flex;
+          flex-direction: row;
+          flex-basis: 80%;
+
+          .dropdown {
             display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-
-            .ability {
-              flex-basis: 40%;
-            }
-
-            .deadline {
+            justify-content: center;
+            align-items: center;
+            flex-basis: 10%;
+          }
+  
+          .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 10%;
+          }
+  
+          .display {
+            display: flex;
+            justify-content: center;
+            margin-left: 10%;
+            width: 100%;
+            flex-direction: column;
+  
+            .details {
               display: flex;
               flex-direction: row;
-              flex-basis: 30%;
-            }
-
-            .exp {
-              display: flex;
-              margin-left: 5%;
-              flex-direction: row;
-              flex-basis: 30%;
+              justify-content: space-evenly;
+  
+              .ability {
+                flex-basis: 40%;
+              }
+  
+              .deadline {
+                display: flex;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
+  
+              .exp {
+                display: flex;
+                margin-left: 5%;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
             }
           }
         }
@@ -143,35 +157,49 @@
           margin-bottom: 10px;
 
           display: flex;
-          flex-direction: row;
+          flex-direction: column;
 
-          .display {
-            display: flex;
-            justify-content: center;
-            margin-left: 10%;
+          .hints {
             width: 100%;
-            flex-direction: column;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+  
+          }
+          
+          .main {
+            display: flex;
+            flex-direction: row;
+            flex-basis: 80%;  
 
-            .details {
+            .display {
               display: flex;
-              flex-direction: row;
-              justify-content: space-evenly;
-
-              .path {
-                flex-basis: 40%;
-              }
-
-              .deadline {
+              justify-content: center;
+              margin-left: 10%;
+              width: 100%;
+              flex-direction: column;
+  
+              .details {
                 display: flex;
                 flex-direction: row;
-                flex-basis: 30%;
-              }
-
-              .exp {
-                display: flex;
-                margin-left: 5%;
-                flex-direction: row;
-                flex-basis: 30%;
+                justify-content: space-evenly;
+  
+                .path {
+                  flex-basis: 40%;
+                }
+  
+                .deadline {
+                  display: flex;
+                  flex-direction: row;
+                  flex-basis: 30%;
+                }
+  
+                .exp {
+                  display: flex;
+                  margin-left: 5%;
+                  flex-direction: row;
+                  flex-basis: 30%;
+                }
               }
             }
           }
@@ -180,7 +208,7 @@
     }
 
     .modal {
-      width: 50%;
+      width: 40%;
       height: 800px;
       max-height: 800px;
       display: flex;
@@ -188,7 +216,7 @@
       text-align: center;
 
       .modal-container {
-        width: 60%;
+        width: 80%;
         border: solid white;
         background-color: #333e50;
         text-align: center;
