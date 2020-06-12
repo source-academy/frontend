@@ -11,7 +11,7 @@ import {
   menuExitTweenProps,
   modeButtonYPos,
   modeButtonStyle
-} from './GameModeMenuTypes';
+} from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { GameMode } from '../GameModeTypes';

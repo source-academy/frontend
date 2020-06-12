@@ -16,12 +16,12 @@ import {
   previewYPos,
   previewHeight,
   previewWidth
-} from './GameModeMoveTypes';
+} from './GameModeMoveConstants';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocation } from '../../location/GameMapTypes';
-import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveTypes';
+import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 
 class GameModeMove implements IGameUI {
   private currentLocationAssetKey: string;

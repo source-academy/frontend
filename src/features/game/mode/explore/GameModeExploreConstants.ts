@@ -1,12 +1,5 @@
 import { screenSize, GameImage } from '../../commons/CommonsTypes';
 
-export type BoundingBox = {
-  x: number;
-  y: number;
-  width: number;
-  height: number;
-};
-
 export const magnifyingGlass = 'url(../assets/magnifying_glass.ico), pointer';
 
 export const defaultLocationImg: GameImage = {

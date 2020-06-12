@@ -3,7 +3,7 @@ import GameModeTalk from './GameModeTalk';
 import { GameMode } from '../GameModeTypes';
 import { mapValues } from '../../utils/GameUtils';
 import { LocationId } from '../../commons/CommonsTypes';
-import { GameItemTypeDetails } from '../../location/GameMapTypes';
+import { GameItemTypeDetails } from '../../location/GameMapConstants';
 
 class GameModeTalkManager {
   static processTalkMenus(chapter: GameChapter): Map<LocationId, GameModeTalk> {

@@ -1,7 +1,7 @@
 /* tslint:disable */
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
-import { GameLocation, GameItemTypeDetails } from 'src/features/game/location/GameMapTypes';
+import { GameLocation } from 'src/features/game/location/GameMapTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import { screenSize } from 'src/features/game/commons/CommonsTypes';
@@ -14,6 +14,7 @@ import { createObjectsLayer } from 'src/features/game/objects/ObjectsRenderer';
 import LayerManager from 'src/features/game/layer/LayerManager';
 import { Layer } from 'src/features/game/layer/LayerTypes';
 import { blackFade } from 'src/features/game/utils/GameEffects';
+import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants';
 
 const { Image } = Phaser.GameObjects;
 
