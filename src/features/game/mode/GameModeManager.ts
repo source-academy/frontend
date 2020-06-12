@@ -37,6 +37,32 @@ class GameModeManager {
     });
   }
 
+  public addMode(mode: GameMode, locationName: string) {
+    if (!this.gameModes.get(locationName)) {
+      this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
+    }
+    const chapter = GameActionManager.getInstance().getGameManager()!.currentChapter;
+    if (!chapter) return;
+
+    let gameUI: IGameUI;
+    if (mode === GameMode.Menu) {
+      gameUI = GameModeMenuManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Talk) {
+      gameUI = GameModeTalkManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Move) {
+      gameUI = GameModeMoveManager.processLocation(chapter, locationName);
+    } else if (mode === GameMode.Explore) {
+      gameUI = GameModeExploreManager.processLocation(chapter, locationName);
+    } else {
+      return;
+    }
+    this.gameModes.get(locationName)!.set(mode, gameUI);
+  }
+
+  public removeMode(mode: GameMode, locationName: string) {
+    this.gameModes.get(locationName)!.delete(mode);
+  }
+
   public preloadModeBaseAssets() {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {

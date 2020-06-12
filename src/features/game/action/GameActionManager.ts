@@ -44,16 +44,16 @@ class GameActionManager {
 
   public addLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.addLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.addMode(mode, locationName);
+      this.gameManager.stateManager.addLocationMode(currLocName, locationName, mode);
     }
-    return;
   }
 
   public removeLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.removeMode(mode, locationName);
+      this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
     }
-    return;
   }
 
   public changeLocationModeTo(

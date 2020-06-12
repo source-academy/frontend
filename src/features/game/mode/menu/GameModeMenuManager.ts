@@ -11,6 +11,14 @@ class GameModeMenuManager {
       return new GameModeMenu(location.name, location.modes);
     });
   }
+
+  static processLocation(chapter: GameChapter, locationName: string): GameModeMenu {
+    const location = chapter.map.getLocation(locationName);
+    if (!location) {
+      throw console.error('Location does not exist ', locationName);
+    }
+    return new GameModeMenu(location.name, location.modes);
+  }
 }
 
 export default GameModeMenuManager;

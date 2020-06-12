@@ -20,6 +20,16 @@ class GameModeTalkManager {
       return new GameModeTalk(location.name, location.talkTopics, possibleDialogues);
     });
   }
+
+  static processLocation(chapter: GameChapter, locationName: string): GameModeTalk {
+    const location = chapter.map.getLocation(locationName);
+    if (!location) {
+      throw console.error('Location does not exist ', locationName);
+    }
+    const possibleDialogues = chapter.map.getItemAt(location.name, GameItemTypeDetails.Dialogue);
+    const talkTopics = location.talkTopics || [];
+    return new GameModeTalk(location.name, talkTopics, possibleDialogues);
+  }
 }
 
 export default GameModeTalkManager;
