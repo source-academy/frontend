@@ -99,6 +99,17 @@ class GameModeMove implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
+  private fetchLatestState() {
+    const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.navigation,
+      this.locationName
+    );
+    if (!latestLocationNav) {
+      return;
+    }
+    this.createGameButtons(latestLocationNav);
+  }
+
   public getUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
@@ -109,16 +120,8 @@ class GameModeMove implements IGameUI {
 
     // Fetch latest state if location is not yet visited
     const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-
     if (hasUpdates) {
-      const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
-        GameLocationAttr.navigation,
-        this.locationName
-      );
-      if (!latestLocationNav) {
-        return moveMenuContainer;
-      }
-      this.createGameButtons(latestLocationNav);
+      this.fetchLatestState();
     }
 
     const previewFrame = new Phaser.GameObjects.Image(

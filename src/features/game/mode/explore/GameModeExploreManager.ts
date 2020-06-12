@@ -11,7 +11,13 @@ class GameModeExploreManager {
       if (!location.modes || !location.modes.includes(GameMode.Explore)) {
         return;
       }
-      return new GameModeExplore(objects, undefined);
+      return new GameModeExplore(
+        location.name,
+        location.objects,
+        location.boundingBoxes,
+        objects,
+        undefined
+      );
     });
   }
 }

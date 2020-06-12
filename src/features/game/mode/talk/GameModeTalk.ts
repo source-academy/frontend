@@ -73,6 +73,17 @@ class GameModeTalk implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
+  private fetchLatestState() {
+    const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.talkTopics,
+      this.locationName
+    );
+    if (!latestTalkTopics) {
+      return;
+    }
+    this.createGameButtons(latestTalkTopics);
+  }
+
   public getUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
@@ -82,16 +93,8 @@ class GameModeTalk implements IGameUI {
 
     // Fetch latest state if location is not yet visited
     const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-
     if (hasUpdates) {
-      const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
-        GameLocationAttr.talkTopics,
-        this.locationName
-      );
-      if (!latestTalkTopics) {
-        return talkMenuContainer;
-      }
-      this.createGameButtons(latestTalkTopics);
+      this.fetchLatestState();
     }
 
     this.gameButtons.forEach((topicButton: TalkButton) => {

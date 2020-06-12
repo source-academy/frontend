@@ -92,8 +92,10 @@ class GameManager extends Phaser.Scene {
     }
 
     // Render objects in the location
+    const objectIdsToRender = location.objects || [];
     const [, objectLayerContainer] = createObjectsLayer(
       this,
+      objectIdsToRender,
       map.getItemAt(location.name, GameItemTypeDetails.Object)
     );
     this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
@@ -118,7 +120,7 @@ class GameManager extends Phaser.Scene {
       this.currentUIContainers.clear();
 
       // Render new location
-      await blackFade(this, 500, 500, () => this.renderLocation(this.currentChapter.map, location));
+      await blackFade(this, 300, 300, () => this.renderLocation(this.currentChapter.map, location));
 
       // Update state
       this.stateManager.visitedLocation(locationName);
