@@ -32,10 +32,12 @@ type State = {
 
 class Dashboard extends React.Component<DashboardProps, State> {
   private columnDefs: ColDef[];
+  private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: DashboardProps) {
     super(props);
+
     this.columnDefs = [
       {
         headerName: 'Avenger',
@@ -59,6 +61,12 @@ class Dashboard extends React.Component<DashboardProps, State> {
         field: 'totalNumOfQuests'
       }
     ];
+
+    this.defaultColumnDefs = {
+      filter: true,
+      resizable: true,
+      sortable: true
+    };
   }
 
   public componentDidMount() {
@@ -81,11 +89,9 @@ class Dashboard extends React.Component<DashboardProps, State> {
       <div className="GradingContainer">
         <div className="Grading ag-grid-parent ag-theme-balham">
           <AgGridReact
-            gridAutoHeight={true}
-            enableColResize={true}
-            enableSorting={true}
-            enableFilter={true}
+            domLayout={'autoHeight'}
             columnDefs={this.columnDefs}
+            defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
             onGridSizeChanged={this.resizeGrid}
             rowData={data}
