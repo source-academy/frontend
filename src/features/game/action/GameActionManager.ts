@@ -70,6 +70,13 @@ class GameActionManager {
   //  Game Locations //
   /////////////////////
 
+  public hasVisitedLocation(locationName: string): boolean | undefined {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.hasVisitedLocation(locationName);
+    }
+    return false;
+  }
+
   public changeLocationTo(locationName: string) {
     if (this.gameManager) {
       return this.gameManager.changeLocationTo(locationName);

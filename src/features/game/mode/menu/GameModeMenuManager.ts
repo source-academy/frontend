@@ -8,7 +8,7 @@ class GameModeMenuManager {
       if (!location.modes) {
         return;
       }
-      return new GameModeMenu(location.modes);
+      return new GameModeMenu(location.name, location.modes);
     });
   }
 }

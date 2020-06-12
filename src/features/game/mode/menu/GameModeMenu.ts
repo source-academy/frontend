@@ -17,11 +17,11 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
 
 class GameModeMenu implements IGameUI {
-  private modes: GameMode[];
+  private locationName: string;
   private modeBanner: GameSprite;
   private gameButtons: GameButton[];
 
-  constructor(modes?: GameMode[]) {
+  constructor(locationName: string, modes?: GameMode[]) {
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: modeMenuBanner.xPos,
@@ -29,16 +29,20 @@ class GameModeMenu implements IGameUI {
       isInteractive: false
     } as GameSprite;
 
-    this.modes = modes ? modes : [];
+    this.locationName = locationName;
     this.modeBanner = banner;
     this.gameButtons = [];
-    this.createGameButtons();
+    this.createGameButtons(modes);
   }
 
-  private createGameButtons() {
-    this.modes.forEach(mode => {
-      this.addModeButton(mode, () => GameActionManager.getInstance().changeLocationModeTo(mode));
-    });
+  private async createGameButtons(modes?: GameMode[]) {
+    if (modes) {
+      // Refresh Buttons
+      this.gameButtons = [];
+      await modes.forEach(mode => {
+        this.addModeButton(mode, () => GameActionManager.getInstance().changeLocationModeTo(mode));
+      });
+    }
   }
 
   private addModeButton(modeName: GameMode, callback: any) {
@@ -77,6 +81,17 @@ class GameModeMenu implements IGameUI {
     }
 
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
+    // Fetch latest state if location is not yet visited
+    const hasVisited = GameActionManager.getInstance().hasVisitedLocation(this.locationName);
+
+    if (!hasVisited) {
+      const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationName);
+      if (!latestLocationMode) {
+        return modeMenuContainer;
+      }
+      this.createGameButtons(latestLocationMode);
+    }
 
     const modeBanner = new Phaser.GameObjects.Image(
       gameManager,
