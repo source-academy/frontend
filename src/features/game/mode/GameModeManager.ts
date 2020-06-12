@@ -6,10 +6,10 @@ import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
 import GameModeExploreManager from './explore/GameModeExploreManager';
 import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
-import modeUIAssets from './menu/GameModeMenuTypes';
-import moveUIAssets from './move/GameModeMoveTypes';
+import modeUIAssets from './menu/GameModeMenuConstants';
+import moveUIAssets from './move/GameModeMoveConstants';
 import talkUIAssets from './talk/GameModeTalkTypes';
-import exploreUIAssets from './explore/GameModeExploreTypes';
+import exploreUIAssets from './explore/GameModeExploreConstants';
 
 class GameModeManager {
   private gameModes: Map<string, Map<GameMode, IGameUI>>;
