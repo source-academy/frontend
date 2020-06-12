@@ -1,13 +1,10 @@
 import React from 'react';
 
-import { Card, Icon } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
-import {
-  AchievementItem,
-  AchievementStatus
-} from '../../../../commons/achievements/AchievementTypes';
-import { IconNames } from '@blueprintjs/icons';
+import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
+import AchievementHints from './AchievementHints';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
@@ -20,31 +17,13 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { achievement, deadline, isTranslucent, displayModal } = props;
   const { title, exp, status } = achievement;
 
-  const getIndicatorIconName = () => {
-    switch (status) {
-      case AchievementStatus.ACTIVE:
-        return IconNames.LOCATE;
-      case AchievementStatus.COMPLETED:
-        return IconNames.ENDORSED;
-      case AchievementStatus.EXPIRED:
-        return IconNames.DELETE;
-      default:
-        return IconNames.HELP;
-    }
-  };
-
   return (
     <Card
       className="prerequisite"
       style={{ opacity: isTranslucent ? '20%' : '100%' }}
       onClick={displayModal(title)}
     >
-      <div className="hints">
-        <div>
-          <Icon icon={getIndicatorIconName()} />
-        </div>
-        <div>{status}</div>
-      </div>
+      <AchievementHints status={status} />
 
       <div className="main">
         <div className="display">

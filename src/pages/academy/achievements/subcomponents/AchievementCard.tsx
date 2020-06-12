@@ -1,12 +1,10 @@
 import React from 'react';
 import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import {
-  AchievementItem,
-  AchievementStatus
-} from '../../../../commons/achievements/AchievementTypes';
+import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
+import AchievementHints from './AchievementHints';
 
 type AchievementCardProps = {
   achievement: AchievementItem;
@@ -30,19 +28,6 @@ function AchievementCard(props: AchievementCardProps) {
   } = props;
   const { title, ability, exp, status } = achievement;
 
-  const getIndicatorIconName = () => {
-    switch (status) {
-      case AchievementStatus.ACTIVE:
-        return IconNames.LOCATE;
-      case AchievementStatus.COMPLETED:
-        return IconNames.ENDORSED;
-      case AchievementStatus.EXPIRED:
-        return IconNames.DELETE;
-      default:
-        return IconNames.HELP;
-    }
-  };
-
   return (
     <Card
       className="achievement"
@@ -50,12 +35,7 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={displayModal(title)}
       onClickCapture={toggleDropdown}
     >
-      <div className="hints">
-        <div>
-          <Icon icon={getIndicatorIconName()} />
-        </div>
-        <div>{status}</div>
-      </div>
+      <AchievementHints status={status} />
 
       <div className="main">
         {hasDropdown ? (
