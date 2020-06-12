@@ -4,18 +4,18 @@ import { GameMode } from '../mode/GameModeTypes';
 
 class GameStateManager {
   private chapter: GameChapter;
-  private visitedLocations: Map<string, boolean>;
+  private locationHasUpdate: Map<string, boolean>;
   private locationStates: Map<string, GameLocation>;
 
   constructor() {
-    this.visitedLocations = new Map<string, boolean>();
+    this.locationHasUpdate = new Map<string, boolean>();
     this.locationStates = new Map<string, GameLocation>();
     this.chapter = {} as GameChapter;
   }
 
-  private updateLocationVisitState(currLocName: string, targetLocName: string): void {
+  private updateLocationUpdateState(currLocName: string, targetLocName: string): void {
     if (currLocName !== targetLocName) {
-      this.visitedLocations.set(targetLocName, false);
+      this.locationHasUpdate.set(targetLocName, true);
     }
   }
 
@@ -31,7 +31,7 @@ class GameStateManager {
     this.chapter = chapter;
     this.locationStates = this.chapter.map.getLocations();
     this.locationStates.forEach((location, locationName, map) => {
-      this.visitedLocations.set(locationName, false);
+      this.locationHasUpdate.set(locationName, true);
     });
   }
 
@@ -41,11 +41,11 @@ class GameStateManager {
 
   public visitedLocation(locationName: string): void {
     this.checkLocationsExist([locationName]);
-    this.visitedLocations.set(locationName, true);
+    this.locationHasUpdate.set(locationName, false);
   }
 
-  public hasVisitedLocation(locationName: string): boolean | undefined {
-    return this.visitedLocations.get(locationName);
+  public hasLocationUpdate(locationName: string): boolean | undefined {
+    return this.locationHasUpdate.get(locationName);
   }
 
   ///////////////////////////////
@@ -64,7 +64,7 @@ class GameStateManager {
       this.locationStates.get(locationName)!.modes = [];
     }
     this.locationStates.get(locationName)!.modes!.push(mode);
-    this.updateLocationVisitState(currLocName, locationName);
+    this.updateLocationUpdateState(currLocName, locationName);
   }
 
   public removeLocationMode(currLocName: string, locationName: string, mode: GameMode) {
@@ -77,7 +77,7 @@ class GameStateManager {
       .get(locationName)!
       .modes!.filter((oldAttr: string) => oldAttr !== mode);
     this.locationStates.get(locationName)!.modes = newAttr;
-    this.updateLocationVisitState(currLocName, locationName);
+    this.updateLocationUpdateState(currLocName, locationName);
   }
 
   ///////////////////////////////
@@ -101,7 +101,7 @@ class GameStateManager {
       this.locationStates.get(locationName)![attr] = [];
     }
     this.locationStates.get(locationName)![attr]!.push(attrKey);
-    this.updateLocationVisitState(currLocName, locationName);
+    this.updateLocationUpdateState(currLocName, locationName);
   }
 
   public removeLocationAttr(
@@ -119,7 +119,7 @@ class GameStateManager {
       .get(locationName)!
       [attr]!.filter((oldAttr: string) => oldAttr !== attrKey);
     this.locationStates.get(locationName)![attr] = newAttr;
-    this.updateLocationVisitState(currLocName, locationName);
+    this.updateLocationUpdateState(currLocName, locationName);
   }
 }
 

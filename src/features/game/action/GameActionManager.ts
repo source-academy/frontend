@@ -70,9 +70,9 @@ class GameActionManager {
   //  Game Locations //
   /////////////////////
 
-  public hasVisitedLocation(locationName: string): boolean | undefined {
+  public hasLocationUpdate(locationName: string): boolean | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.hasVisitedLocation(locationName);
+      return this.gameManager.stateManager.hasLocationUpdate(locationName);
     }
     return false;
   }

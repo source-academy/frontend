@@ -83,9 +83,9 @@ class GameModeMenu implements IGameUI {
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     // Fetch latest state if location is not yet visited
-    const hasVisited = GameActionManager.getInstance().hasVisitedLocation(this.locationName);
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
 
-    if (!hasVisited) {
+    if (hasUpdates) {
       const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationName);
       if (!latestLocationMode) {
         return modeMenuContainer;
