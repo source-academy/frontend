@@ -28,6 +28,7 @@ export type GameLocation = {
   assetXPos: number;
   assetYPos: number;
   modes?: GameMode[];
+  navigation?: string[];
   talkTopics?: DialogueId[];
   objects?: ObjectId[];
   boundingBoxes?: BBoxId[];
