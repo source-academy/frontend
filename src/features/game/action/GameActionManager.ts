@@ -1,4 +1,4 @@
-import GameManager from './GameManager';
+import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
 import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';

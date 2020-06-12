@@ -17,7 +17,7 @@ import {
   previewHeight,
   previewWidth
 } from './GameModeMoveConstants';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocation } from '../../location/GameMapTypes';

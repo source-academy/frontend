@@ -13,7 +13,7 @@ import {
   modeButtonStyle
 } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
 
 class GameModeMenu implements IGameUI {

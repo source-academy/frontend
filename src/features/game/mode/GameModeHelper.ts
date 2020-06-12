@@ -1,5 +1,5 @@
 import { backText, GameMode, backButtonStyle, backTextYPos } from './GameModeTypes';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import { topButton } from '../commons/CommonsTypes';
 
 export function getBackToMenuContainer(): Phaser.GameObjects.Container {

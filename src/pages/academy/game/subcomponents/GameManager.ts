@@ -5,7 +5,7 @@ import { GameLocation } from 'src/features/game/location/GameMapTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import { screenSize } from 'src/features/game/commons/CommonsTypes';
-import GameActionManager from './GameActionManager';
+import GameActionManager from '../../../../features/game/action/GameActionManager';
 import { loadDialogueAssetsFromText } from 'src/features/game/parser/DialoguePreloader';
 import { loadObjectsAssetsFromText } from 'src/features/game/parser/ObjectsPreloader';
 import { SampleDialogue, SampleObjects } from 'src/features/game/scenes/LocationAssets';

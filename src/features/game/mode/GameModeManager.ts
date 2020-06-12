@@ -5,7 +5,7 @@ import GameModeMenuManager from './menu/GameModeMenuManager';
 import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
 import GameModeExploreManager from './explore/GameModeExploreManager';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import modeUIAssets from './menu/GameModeMenuConstants';
 import moveUIAssets from './move/GameModeMoveConstants';
 import talkUIAssets from './talk/GameModeTalkTypes';

@@ -1,4 +1,4 @@
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ObjectId, BBoxId } from '../../commons/CommonsTypes';
 import { ObjectProperty } from '../../objects/ObjectsTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';

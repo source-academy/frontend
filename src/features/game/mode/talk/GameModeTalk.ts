@@ -1,5 +1,5 @@
 import { IGameUI, screenSize, DialogueId } from '../../commons/CommonsTypes';
-import GameActionManager from 'src/pages/academy/game/subcomponents/GameActionManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import {
   talkEntryTweenProps,
   talkExitTweenProps,
