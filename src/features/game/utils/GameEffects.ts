@@ -18,10 +18,31 @@ export const fadeIn = (targets: GameObject[], duration: number) => ({
   duration
 });
 
-export function fadeAndDestroy(scene: Phaser.Scene, object: GameObject | null) {
+type FadeProps = {
+  fadeDuration?: number;
+};
+
+export function fadeAndDestroy(
+  scene: Phaser.Scene,
+  object: GameObject | null,
+  { fadeDuration }: FadeProps = {}
+) {
   if (!object) return;
-  scene.add.tween(fadeOut([object], c.fadeDuration));
-  setTimeout(() => object.destroy(), c.fadeDuration);
+  scene.add.tween(fadeOut([object], fadeDuration || c.fadeDuration));
+  setTimeout(() => object.destroy(), fadeDuration || c.fadeDuration);
+}
+
+export function blackFadeIn(gameManager: GameManager, { fadeDuration }: FadeProps = {}) {
+  const fadeBlack = new Rectangle(
+    gameManager,
+    screenSize.x / 2,
+    screenSize.y / 2,
+    screenSize.x,
+    screenSize.y,
+    0
+  );
+  gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
+  fadeAndDestroy(gameManager, fadeBlack, { fadeDuration });
 }
 
 export const blackFade = async (

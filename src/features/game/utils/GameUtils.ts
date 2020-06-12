@@ -10,3 +10,7 @@ export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R)
   });
   return newMap;
 }
+
+export function limitNumber(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}

@@ -32,7 +32,6 @@
     "@blueprintjs/datetime": "^3.18.1",
     "@blueprintjs/icons": "^3.18.0",
     "@blueprintjs/select": "^3.13.2",
-    "@ion-phaser/react": "^1.2.2",
     "@sentry/browser": "^5.17.0",
     "ace-builds": "^1.4.11",
     "acorn": "^6.4.1",
