@@ -40,7 +40,7 @@ class GameManager extends Phaser.Scene {
 
     this.modeManager = new GameModeManager();
     this.layerManager = new LayerManager();
-    this.stateManager = new GameStateManager();    
+    this.stateManager = new GameStateManager();
 
     this.currentUIContainers = new Map<GameMode, Phaser.GameObjects.Container>();
     this.currentActiveMode = GameMode.Menu;
@@ -51,7 +51,7 @@ class GameManager extends Phaser.Scene {
   public preload() {
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadChapterAssets();
-    
+
     this.modeManager.preloadModeBaseAssets();
     this.modeManager.processModes(this.currentChapter);
     this.layerManager.initialiseMainLayer(this);
