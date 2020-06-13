@@ -11,8 +11,9 @@ type AchievementCardProps = {
   achievement: AchievementItem;
   exp: number | undefined;
   deadline: Date | undefined;
+  progress: number;
   hasDropdown: boolean;
-  isTranslucent: boolean;
+  shouldPartiallyRender: boolean;
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
@@ -23,7 +24,8 @@ function AchievementCard(props: AchievementCardProps) {
     achievement,
     exp,
     deadline,
-    isTranslucent,
+    progress,
+    shouldPartiallyRender,
     hasDropdown,
     isDropdownOpen,
     toggleDropdown,
@@ -34,7 +36,7 @@ function AchievementCard(props: AchievementCardProps) {
   return (
     <Card
       className="achievement"
-      style={{ opacity: isTranslucent ? '20%' : '100%' }}
+      style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
       onClick={displayModal(id)}
       onClickCapture={toggleDropdown}
     >
@@ -68,7 +70,7 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
       </div>
 
-      <AchievementProgressBar value={0.8} />
+      <AchievementProgressBar value={progress} shouldAnimate={!shouldPartiallyRender} />
     </Card>
   );
 }

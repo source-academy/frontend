@@ -2,8 +2,48 @@ import {
   AchievementAbility,
   AchievementItem,
   AchievementModalItem,
-  AchievementStatus
+  AchievementStatus,
+  AchievementProgress
 } from '../achievements/AchievementTypes';
+
+export const studentProgress: { [id: number]: AchievementProgress } = {
+  1: {
+    id: 1,
+    completionProgress: 0
+  },
+  2: {
+    id: 2,
+    completionProgress: 77
+  },
+  3: {
+    id: 3,
+    completionProgress: 23
+  },
+  4: {
+    id: 4,
+    completionProgress: 2
+  },
+  5: {
+    id: 5,
+    completionProgress: 92
+  },
+  6: {
+    id: 6,
+    completionProgress: 92
+  },
+  7: {
+    id: 7,
+    completionProgress: 92
+  },
+  8: {
+    id: 8,
+    completionProgress: 22
+  },
+  9: {
+    id: 9,
+    completionProgress: 0
+  }
+};
 
 export const achievementDict: { [id: number]: AchievementItem } = {
   1: {
@@ -13,7 +53,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     isTask: true,
     prerequisiteIDs: [2, 3],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 3
+    completionGoal: 2
   },
   2: {
     id: 2,
@@ -79,7 +119,6 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     exp: 250,
     deadline: new Date(2020, 6, 4, 0, 0, 0),
     isTask: true,
-    prerequisiteIDs: [6],
     status: AchievementStatus.EXPIRED,
     completionGoal: 100
   },
@@ -90,17 +129,6 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     exp: 80,
     isTask: true,
     prerequisiteIDs: [1, 8],
-    status: AchievementStatus.ACTIVE,
-    completionGoal: 2
-  },
-  10: {
-    id: 10,
-    title: 'Assessment Master',
-    ability: AchievementAbility.EFFORT,
-    exp: 80,
-    deadline: new Date(2020, 10, 1, 0, 0, 0),
-    isTask: true,
-    prerequisiteIDs: [9],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2
   }
@@ -114,7 +142,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
     description: 'Cookies!',
     exp: 200,
-    goal: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
+    goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
     completionText: 'Cooooookiess!!!'
   },
   2: {
@@ -124,7 +152,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
     description: 'Huehuehuehuehuehuehuehue',
     exp: 100,
-    goal: 'Complete Beyond the Second Dimension mission.',
+    goalText: 'Complete Beyond the Second Dimension mission.',
     completionText: 'BTSD'
   },
   3: {
@@ -134,7 +162,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
     description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas',
     exp: 100,
-    goal: 'Complete Colorful Carpet mission.',
+    goalText: 'Complete Colorful Carpet mission.',
     completionText: 'CC'
   },
   4: {
@@ -145,7 +173,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     description:
       'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.',
     exp: 350,
-    goal: 'Reach Gold Tier in Keyboard Warrior achievements.',
+    goalText: 'Reach Gold Tier in Keyboard Warrior achievements.',
     completionText: 'YOU DA KEYBOARD WARRIOR'
   },
   8: {
@@ -155,7 +183,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
     description: 'description',
     exp: 250,
-    goal: 'Complete Sorting mission.',
+    goalText: 'Complete Sorting mission.',
     completionText: 'Good job!'
   },
   9: {
@@ -165,7 +193,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/messyClassroom%40x2.png',
     description: '?',
     exp: 80,
-    goal: "Complete Rune Master & That was Sort'a Easy achievement.",
+    goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
     completionText: 'Such wow. Mission Master.'
   }
 };

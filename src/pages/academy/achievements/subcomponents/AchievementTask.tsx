@@ -5,18 +5,20 @@ import PrerequisiteCard from './cards/PrerequisiteCard';
 import {
   AchievementItem,
   FilterStatus,
-  AchievementStatus
+  AchievementStatus,
+  AchievementProgress
 } from '../../../../commons/achievements/AchievementTypes';
 
 type AchievementTaskProps = {
   achievement: AchievementItem;
   achievementDict: { [id: number]: AchievementItem };
+  studentProgress: { [id: number]: AchievementProgress };
   filterStatus: FilterStatus;
   setModalID: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { achievement, achievementDict, filterStatus, setModalID } = props;
+  const { achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
@@ -73,8 +75,6 @@ function AchievementTask(props: AchievementTaskProps) {
     return getPrerequisites(achievement).length > 0;
   };
 
-  /* -------- Helper for Progress -------- */
-
   /* -------- Helper for Deadlines -------- */
 
   // Maps the prerequisites of the achievement to their furthest deadlines
@@ -105,19 +105,19 @@ function AchievementTask(props: AchievementTaskProps) {
 
   /* ----------- Helper for EXP ----------- */
 
-  // Maps the prerequisites of the achievement to their furthest deadlines
+  // Maps the prerequisites of the achievement to their total EXP
   const mapPrerequisitesToEXPs = (achievement: AchievementItem): (number | undefined)[] => {
     const prerequisites = getPrerequisites(achievement);
     return prerequisites.map(prerequisite => getTotalEXP(prerequisite));
   };
 
-  // Gets the furthest deadline of the achievement item, including its prerequisites
+  // Gets the total EXP of the achievement item, including its prerequisites
   const getTotalEXP = (achievement: AchievementItem): number | undefined => {
     const prerequisiteEXPs = mapPrerequisitesToEXPs(achievement);
     return prerequisiteEXPs.reduce(combineEXPs, achievement.exp);
   };
 
-  // Comparator of two deadlines
+  // Sum of two EXP
   const combineEXPs = (accumulateEXP: number | undefined, currentEXP: number | undefined) => {
     if (currentEXP === undefined) {
       return accumulateEXP;
@@ -126,6 +126,16 @@ function AchievementTask(props: AchievementTaskProps) {
     } else {
       return accumulateEXP + currentEXP;
     }
+  };
+
+  /* -------- Helper for Progress -------- */
+
+  // Returns the achievement progress in decimal (e.g. 0.5)
+  const getAchievementProgress = (achievement: AchievementItem): number => {
+    // we have separate completionProgress for main achievements, so dont need do this
+    // just treat main achievements the same way as prerequisites. psps shouldve told u earlier
+    const progress = studentProgress[achievement.id];
+    return Math.min(progress.completionProgress / achievement.completionGoal, 1);
   };
 
   // if the main achievement or any of the prerequisites need to be rendered,
@@ -138,7 +148,8 @@ function AchievementTask(props: AchievementTaskProps) {
             achievement={achievement}
             exp={getTotalEXP(achievement)}
             deadline={getFurthestDeadline(achievement)}
-            isTranslucent={!shouldRender(achievement)}
+            progress={getAchievementProgress(achievement)}
+            shouldPartiallyRender={!shouldRender(achievement)}
             hasDropdown={hasPrerequisites(achievement)}
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={togglePrerequisitesDropdown}
@@ -153,8 +164,9 @@ function AchievementTask(props: AchievementTaskProps) {
                       achievement={prerequisite}
                       exp={getTotalEXP(prerequisite)}
                       deadline={getFurthestDeadline(prerequisite)}
+                      progress={getAchievementProgress(prerequisite)}
                       displayModal={displayModal}
-                      isTranslucent={!shouldRender(prerequisite)}
+                      shouldPartiallyRender={!shouldRender(prerequisite)}
                     />
                   </div>
                 </li>

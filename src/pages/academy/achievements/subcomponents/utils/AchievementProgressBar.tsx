@@ -3,14 +3,19 @@ import { ProgressBar } from '@blueprintjs/core';
 
 type AchievementProgressBarProps = {
   value: number;
+  shouldAnimate: boolean;
 };
 
 function AchievementProgressBar(props: AchievementProgressBarProps) {
-  const { value } = props;
+  const { value, shouldAnimate } = props;
 
   return (
     <div>
-      <ProgressBar value={value} />
+      <ProgressBar
+        intent={value == 1 ? 'success' : undefined}
+        value={value}
+        animate={shouldAnimate}
+      />
     </div>
   );
 }

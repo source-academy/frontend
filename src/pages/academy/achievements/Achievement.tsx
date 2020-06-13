@@ -10,7 +10,11 @@ import {
   FilterStatus,
   AchievementItem
 } from '../../../commons/achievements/AchievementTypes';
-import { achievementDict, achievementModalDict } from 'src/commons/mocks/AchievementMocks';
+import {
+  achievementDict,
+  achievementModalDict,
+  studentProgress
+} from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {};
 
@@ -61,6 +65,7 @@ function Achievement() {
       .filter(achievement => achievement.isTask)
       .map(achievement => (
         <AchievementTask
+          studentProgress={studentProgress}
           achievement={achievement}
           achievementDict={achievementDict}
           filterStatus={filterStatus}

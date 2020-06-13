@@ -19,6 +19,19 @@ export enum FilterStatus {
 }
 
 /**
+ * Information of a Student's Achievement Progress
+ *
+ * @param {number} id unique id, primary key of the achievement item
+ * @param {number} completionProgress progress of the student's achievement
+ *
+ */
+
+export type AchievementProgress = {
+  id: number;
+  completionProgress: number;
+};
+
+/**
  * Information of an achievement item
  *
  * @param {number} id unique id, primary key of the achievement item
@@ -58,6 +71,6 @@ export type AchievementModalItem = {
   modalImageUrl: string;
   description: string;
   exp: number;
-  goal: string;
+  goalText: string;
   completionText: string;
 };

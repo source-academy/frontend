@@ -5,23 +5,25 @@ import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementHints from '../utils/AchievementHints';
+import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
   exp: number | undefined;
   deadline: Date | undefined;
-  isTranslucent: boolean;
+  progress: number;
+  shouldPartiallyRender: boolean;
   displayModal: any;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { achievement, exp, deadline, isTranslucent, displayModal } = props;
+  const { achievement, exp, deadline, progress, shouldPartiallyRender, displayModal } = props;
   const { id, title, status } = achievement;
 
   return (
     <Card
       className="prerequisite"
-      style={{ opacity: isTranslucent ? '20%' : '100%' }}
+      style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
       onClick={displayModal(id)}
     >
       <AchievementHints status={status} />
@@ -43,6 +45,8 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           </div>
         </div>
       </div>
+
+      <AchievementProgressBar value={progress} shouldAnimate={!shouldPartiallyRender} />
     </Card>
   );
 }
