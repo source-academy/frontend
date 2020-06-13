@@ -1,6 +1,11 @@
 import { IGameUI, DialogueId, GameButton } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { talkButtonYSpace, talkButtonStyle, talkOptButton } from './GameModeTalkConstants';
+import {
+  talkButtonYSpace,
+  talkButtonStyle,
+  talkOptButton,
+  talkOptCheck
+} from './GameModeTalkConstants';
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
@@ -33,17 +38,21 @@ class GameModeTalk implements IGameUI {
     await dialogueIds.forEach(dialogueId => {
       const dialogue = this.dialogues.get(dialogueId);
       if (dialogue) {
-        this.addTalkOptionButton(dialogue.title, async () => {
-          this.deactivateUI();
-          GameActionManager.getInstance().triggerInteraction(dialogueId);
-          await GameActionManager.getInstance().bringUpDialogue(dialogue.content);
-          this.activateUI();
-        });
+        this.addTalkOptionButton(
+          dialogue.title,
+          async () => {
+            this.deactivateUI();
+            GameActionManager.getInstance().triggerInteraction(dialogueId);
+            await GameActionManager.getInstance().bringUpDialogue(dialogue.content);
+            this.activateUI();
+          },
+          dialogueId
+        );
       }
     });
   }
 
-  private addTalkOptionButton(name: string, callback: any) {
+  private addTalkOptionButton(name: string, callback: any, interactionId: string) {
     const newNumberOfButtons = this.gameButtons.length + 1;
     const partitionSize = talkButtonYSpace / newNumberOfButtons;
 
@@ -65,7 +74,8 @@ class GameModeTalk implements IGameUI {
       assetXPos: screenSize.x / 2,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
-      onInteract: callback
+      onInteract: callback,
+      interactionId: interactionId
     };
 
     // Update
@@ -101,6 +111,13 @@ class GameModeTalk implements IGameUI {
         style
       ).setOrigin(0.5, 0.25);
 
+      const checkedSprite = new Phaser.GameObjects.Sprite(
+        gameManager,
+        topicButton.assetXPos,
+        topicButton.assetYPos,
+        talkOptCheck.key
+      );
+
       const buttonSprite = new Phaser.GameObjects.Sprite(
         gameManager,
         topicButton.assetXPos,
@@ -112,6 +129,13 @@ class GameModeTalk implements IGameUI {
 
       talkMenuContainer.add(buttonSprite);
       talkMenuContainer.add(topicButtonText);
+
+      const isTriggeredTopic =
+        !!topicButton.interactionId &&
+        GameActionManager.getInstance().hasTriggeredInteraction(topicButton.interactionId);
+      if (isTriggeredTopic) {
+        talkMenuContainer.add(checkedSprite);
+      }
     });
 
     talkMenuContainer.add(getBackToMenuContainer());

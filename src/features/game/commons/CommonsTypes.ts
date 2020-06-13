@@ -36,6 +36,7 @@ export type GameButton = GameText & GameSprite & IGameInteractive;
 export interface IGameInteractive {
   isInteractive: boolean;
   onInteract: () => void;
+  interactionId?: string;
 }
 
 export interface IGameUI {
