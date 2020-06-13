@@ -9,8 +9,8 @@ import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
-  exp: number | undefined;
-  deadline: Date | undefined;
+  exp?: number;
+  deadline?: Date;
   progress: number;
   shouldPartiallyRender: boolean;
   displayModal: any;

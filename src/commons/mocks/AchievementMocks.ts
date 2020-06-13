@@ -60,7 +60,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 7, 1, 0, 0, 0),
+    deadline: new Date(2020, 5, 16, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.ACTIVE,
     completionGoal: 100
@@ -70,7 +70,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Colorful Carpet',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 7, 3, 0, 0, 0),
+    deadline: new Date(2020, 5, 15, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.ACTIVE,
     completionGoal: 100
@@ -98,7 +98,6 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Keyboard Warrior - Silver Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
-    deadline: new Date(2020, 8, 3, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.COMPLETED,
     completionGoal: 50
@@ -117,7 +116,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: "That was Sort'a Easy",
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 6, 4, 0, 0, 0),
+    deadline: new Date(2020, 6, 14, 0, 0, 0),
     isTask: true,
     status: AchievementStatus.EXPIRED,
     completionGoal: 100

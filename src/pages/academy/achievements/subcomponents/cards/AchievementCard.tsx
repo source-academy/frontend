@@ -9,8 +9,8 @@ import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type AchievementCardProps = {
   achievement: AchievementItem;
-  exp: number | undefined;
-  deadline: Date | undefined;
+  exp?: number;
+  deadline?: Date;
   progress: number;
   hasDropdown: boolean;
   shouldPartiallyRender: boolean;
@@ -47,12 +47,12 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="dropdown">
             <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
           </div>
-        ) : (
-          <div className="dropdown"></div>
-        )}
+        ) : null}
+
         <div className="icon">
           <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
         </div>
+
         <div className="display">
           <div>
             <h1>{title}</h1>

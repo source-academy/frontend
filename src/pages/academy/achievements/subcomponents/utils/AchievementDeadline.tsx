@@ -9,37 +9,51 @@ type AchievementDeadlineProps = {
 function AchievementDeadline(props: AchievementDeadlineProps) {
   const { deadline } = props;
 
-  /**
-   * Gets the Time Remaining for the particular achievement
-   *
-   * @returns a JSX.Element which displays the time remaining
-   */
-  const getTimeRemaining = () => {
-    if (deadline) {
-      if (deadline.getTime() >= new Date().getTime()) {
-        const hoursLeft = Math.floor(
-          (deadline.getTime() - new Date().getTime()) / (1000 * 60 * 60)
-        );
-        return (
-          <div className="deadline">
-            <Icon icon={IconNames.STOPWATCH} />
-            <p>{`${hoursLeft} hours`}</p>
-          </div>
-        );
-      }
+  /* ---------- Date constants ---------- */
+  const daysPerWeek = 7;
+  const hoursPerDay = 24;
+  const millisecondsPerHour = 3600000;
 
-      return (
-        <div className="deadline">
-          <Icon icon={IconNames.STOPWATCH} />
-          <p>{`Expired`}</p>
-        </div>
-      );
+  /* -------- Helper for Deadline -------- */
+  const isExpired = (deadline: Date): boolean => deadline.getTime() < new Date().getTime();
+  const getHoursAway = (deadline: Date): number =>
+    (deadline.getTime() - new Date().getTime()) / millisecondsPerHour;
+  const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;
+  const getWeeksAway = (deadline: Date): number => getDaysAway(deadline) / daysPerWeek;
+
+  // Converts Date to user friendly date string
+  const prettifyDeadline = (deadline: Date | undefined) => {
+    if (deadline === undefined) {
+      return '';
+    } else if (isExpired(deadline)) {
+      return 'Expired';
     }
 
-    return <div className="deadline"></div>;
+    const weeksAway = Math.ceil(getWeeksAway(deadline));
+    const daysAway = Math.ceil(getDaysAway(deadline));
+    const hoursAway = Math.ceil(getHoursAway(deadline));
+
+    if (weeksAway > 1) {
+      return weeksAway + ' Weeks';
+    } else if (daysAway > 1) {
+      return daysAway + ' Days';
+    } else if (hoursAway > 1) {
+      return hoursAway + ' Hours';
+    } else {
+      return 'Less than 1 hour';
+    }
   };
 
-  return <>{getTimeRemaining()}</>;
+  return (
+    <>
+      {deadline === undefined ? null : (
+        <div className="deadline">
+          <Icon icon={IconNames.STOPWATCH} />
+          <p>{prettifyDeadline(deadline)}</p>
+        </div>
+      )}
+    </>
+  );
 }
 
 export default AchievementDeadline;
