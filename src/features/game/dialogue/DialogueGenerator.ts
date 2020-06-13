@@ -1,15 +1,11 @@
-import {
-  isGotoLabel,
-  getPartToJump,
-  isSpeaker,
-  getSpeakerDetails,
-  showDialogueError
-} from '../dialogue/DialogueHelper';
+import { isGotoLabel, getPartToJump, isSpeaker, showDialogueError } from './DialogueHelper';
+import { getSpeakerDetails } from '../character/CharacterHelper';
+
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
 
 // Generates next line in dialogue based on Dialogue Object
-export function DialogueGenerator(dialogueObject: DialogueObject) {
+export function dialogueGenerator(dialogueObject: DialogueObject) {
   let currPartNum = 'part0';
   let currLineNum = -1;
   function generateDialogue(): [SpeakerDetail | null, DialogueString] {

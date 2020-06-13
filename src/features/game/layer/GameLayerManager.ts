@@ -1,4 +1,4 @@
-import { defaultLayerSequence, Layer } from './LayerTypes';
+import { defaultLayerSequence, Layer } from './GameLayerTypes';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
@@ -8,7 +8,7 @@ type Container = Phaser.GameObjects.Container;
 type GameObject = Phaser.GameObjects.GameObject;
 const { Container } = Phaser.GameObjects;
 
-class LayerManager {
+class GameLayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;
   private layers: Map<Layer, Container>;
 
@@ -85,4 +85,4 @@ class LayerManager {
   }
 }
 
-export default LayerManager;
+export default GameLayerManager;

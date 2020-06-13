@@ -1,7 +1,7 @@
 import { GameLocation, GameItemType, LocationId } from '../location/GameMapTypes';
 import { GameMapItem, ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
-import { ObjectProperty } from '../objects/ObjectsTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
@@ -54,6 +54,10 @@ class GameMap {
 
   public getLocations(): Map<string, GameLocation> {
     return this.locations;
+  }
+
+  public getObjects(): Map<ItemId, ObjectProperty> {
+    return this.objects;
   }
 
   public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: GameMapItem) {

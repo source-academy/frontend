@@ -1,10 +1,5 @@
 import * as _ from 'lodash';
 
-type StringFilterFn = (line: string) => boolean;
-
-type Header = string;
-type StringMap = Map<Header, string[]>;
-
 export function matchExact(r: RegExp, str: string) {
   const match = str.match(r);
   return !!(match && str === match[0]);
@@ -23,8 +18,11 @@ export function splitToLines(text: string): string[] {
  * without enclosing brackets `[]` e.g. part1, room, crashsite
  * and the value are the lines below each heading.
  */
-export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): StringMap {
-  const map = new Map<Header, string[]>();
+export function mapByHeader(
+  lines: string[],
+  isHeaderFunction: (line: string) => boolean
+): Map<string, string[]> {
+  const map = new Map<string, string[]>();
   let currHeader = '';
   lines.forEach(line => {
     if (isHeaderFunction(line)) {

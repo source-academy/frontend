@@ -1,4 +1,4 @@
-import { emptyObjectPropertyMap } from '../objects/ObjectsTypes';
+import { emptyObjectPropertyMap } from '../objects/GameObjectTypes';
 import { emptyDialogueMap } from '../dialogue/DialogueTypes';
 import { emptyBBoxPropertyMap } from '../boundingBoxes/BoundingBoxTypes';
 import { ImageAsset } from '../commons/CommonsTypes';

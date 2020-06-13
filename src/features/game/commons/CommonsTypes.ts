@@ -1,4 +1,4 @@
-import { ObjectProperty } from '../objects/ObjectsTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 

@@ -17,7 +17,7 @@ export default function LocationParser(
   fileContent: string
 ) {
   const gameMap = chapter.map;
-  const [locationAssets, locationModes, connectivity] = fileContent.split('$');
+  const [locationAssets, locationModes, connectivity] = fileContent.split('\n$\n');
 
   const locationIds: string[] = [];
 

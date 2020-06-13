@@ -1,8 +1,5 @@
 import { IGameUI, GameSprite, GameButton } from '../../commons/CommonsTypes';
 import {
-  defaultLocationImg,
-  locationPreviewFrame,
-  locationPreviewFill,
   previewFrameXPos,
   previewXPos,
   previewYPos,
@@ -14,8 +11,13 @@ import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocation, GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
-import { screenSize } from '../../commons/CommonConstants';
-import { longButton } from '../../commons/CommonAssets';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
+import {
+  longButton,
+  locationPreviewFill,
+  locationPreviewFrame,
+  defaultLocationImg
+} from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 
 class GameModeMove implements IGameUI {
@@ -31,14 +33,14 @@ class GameModeMove implements IGameUI {
   constructor(locationName: string, navigation: string[], locations: Map<string, GameLocation>) {
     const previewFill = {
       assetKey: locationPreviewFill.key,
-      assetXPos: locationPreviewFill.xPos,
-      assetYPos: locationPreviewFill.yPos
+      assetXPos: screenCenter.x,
+      assetYPos: screenCenter.y
     } as GameSprite;
 
     const previewFrame = {
       assetKey: locationPreviewFrame.key,
-      assetXPos: locationPreviewFrame.xPos,
-      assetYPos: locationPreviewFrame.yPos
+      assetXPos: screenCenter.x,
+      assetYPos: screenCenter.y
     } as GameSprite;
 
     this.uiContainer = undefined;

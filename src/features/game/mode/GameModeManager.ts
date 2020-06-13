@@ -6,10 +6,6 @@ import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
 import GameModeExploreManager from './explore/GameModeExploreManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import modeUIAssets from './menu/GameModeMenuConstants';
-import moveUIAssets from './move/GameModeMoveConstants';
-import talkUIAssets from './talk/GameModeTalkConstants';
-import exploreUIAssets from './explore/GameModeExploreConstants';
 
 class GameModeManager {
   private gameModes: Map<string, Map<GameMode, IGameUI>>;
@@ -61,17 +57,6 @@ class GameModeManager {
 
   public removeMode(mode: GameMode, locationName: string) {
     this.gameModes.get(locationName)!.delete(mode);
-  }
-
-  public preloadModeBaseAssets() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('Unable to preload mode base assets');
-    }
-    const modeAssets = [modeUIAssets, moveUIAssets, talkUIAssets, exploreUIAssets];
-    modeAssets.forEach(assets =>
-      assets.forEach(asset => gameManager.load.image(asset.key, asset.path))
-    );
   }
 
   public getLocationMode(mode: GameMode, locationName: string): IGameUI | undefined {

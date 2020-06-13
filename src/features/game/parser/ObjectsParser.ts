@@ -1,12 +1,12 @@
 import { splitToLines, mapByHeader } from './StringUtils';
-import { isLabel } from '../objects/ObjectsHelper';
-import { ObjectProperty } from '../objects/ObjectsTypes';
 import { mapValues } from '../utils/GameUtils';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
+import { GameChapter } from '../chapter/GameChapterTypes';
 
-export default function ObjectParser(text: string) {
-  const lines = splitToLines(text);
-  const locationRawObjectsMap = mapByHeader(lines, isLabel);
+export default function ObjectParser(chapter: GameChapter, fileName: string, fileContent: string) {
+  const lines = splitToLines(fileContent);
+  const locationRawObjectsMap = mapByHeader(lines, (str: string) => true);
   const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
   return objectsMap;
 }
@@ -34,20 +34,20 @@ function objPropertyMapper(objectsList: string[]): Map<ItemId, ObjectProperty> {
   return objectPropertyMap;
 }
 
-function loadObjectsAssetsFromText(scene: Phaser.Scene, text: string) {
-  const locationObjectsMap = mapObjectsByLocation(text);
-  locationObjectsMap.forEach(objectList => {
-    for (const objectDetail of objectList) {
-      if (objectDetail === '$') break;
+// function loadObjectsAssetsFromText(scene: Phaser.Scene, text: string) {
+//   const locationObjectsMap = mapObjectsByLocation(text);
+//   locationObjectsMap.forEach(objectList => {
+//     for (const objectDetail of objectList) {
+//       if (objectDetail === '$') break;
 
-      const [, texture] = objectDetail.split(', ');
-      loadObject(scene, texture);
-    }
-  });
-}
+//       const [, texture] = objectDetail.split(', ');
+//       loadObject(scene, texture);
+//     }
+//   });
+// }
 
-const loadObject = (scene: Phaser.Scene, imagePath: string) => {
-  const [texture, skin] = imagePath.split('/');
-  const fullObjectPath = `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
-  scene.load.image(imagePath, fullObjectPath);
-};
+// const loadObject = (scene: Phaser.Scene, imagePath: string) => {
+//   const [texture, skin] = imagePath.split('/');
+//   const fullObjectPath = `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
+//   scene.load.image(imagePath, fullObjectPath);
+// };
