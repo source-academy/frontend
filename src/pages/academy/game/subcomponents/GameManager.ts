@@ -10,7 +10,6 @@ import GameCharacterManager from 'src/features/game/character/GameCharacterManag
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
-import Parser from 'src/features/game/parser/Parser';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
@@ -29,7 +28,6 @@ class GameManager extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public stateManager: GameStateManager;
   public objectManager: GameObjectManager;
-  // public dialogueManager: GameDialogueManager;
   public characterManager: GameCharacterManager;
 
   // Limited to current location
@@ -45,7 +43,6 @@ class GameManager extends Phaser.Scene {
     this.modeManager = new GameModeManager();
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
-    // this.dialogueManager = new GameDialogueManager();
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
 
@@ -55,8 +52,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ fileName }: GameManagerProps) {
-    const text = this.cache.text.get(fileName);
-    this.currentChapter = Parser.parse(text);
+    this.currentChapter = LocationSelectChapter;
   }
 
   public preload() {

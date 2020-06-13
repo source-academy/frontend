@@ -3,31 +3,32 @@ import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
 import { SpeakerDetail } from '../dialogue/DialogueTypes';
 import { charRect } from './CharacterConstants';
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
 import { avatarKey } from 'src/features/game/character/CharacterHelper';
 
 export default class CharacterManager {
   private currentAvatar: Phaser.GameObjects.Image | undefined;
-  private container: Phaser.GameObjects.Container;
-  private gameManager: GameManager;
+  private container: Phaser.GameObjects.Container | undefined;
 
   constructor() {
-    this.gameManager = GameActionManager.getInstance().getGameManager();
-    this.container = new Phaser.GameObjects.Container(this.gameManager, 0, 0, []);
+    this.container = undefined;
   }
 
   public changeCharacter(speakerDetail: SpeakerDetail) {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    if (!this.container) {
+      this.container = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    }
     if (!speakerDetail || !this.currentAvatar) {
       return;
     }
-    fadeAndDestroy(this.gameManager, this.currentAvatar);
+    fadeAndDestroy(gameManager, this.currentAvatar);
 
     const [speaker, expression] = speakerDetail;
     if (speaker === 'narrator') {
       return null;
     }
     const avatar = new Phaser.GameObjects.Image(
-      this.gameManager,
+      gameManager,
       charRect.x.left,
       charRect.y,
       avatarKey(speaker, expression)
@@ -37,7 +38,7 @@ export default class CharacterManager {
       .setDisplaySize(0, charRect.height);
 
     this.container.add([avatar]);
-    this.gameManager.add.tween(fadeIn([avatar], Constants.fadeDuration));
+    gameManager.add.tween(fadeIn([avatar], Constants.fadeDuration));
     return avatar;
   }
 }

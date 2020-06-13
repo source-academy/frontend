@@ -5,7 +5,7 @@ import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
 
 // Generates next line in dialogue based on Dialogue Object
-export function dialogueGenerator(dialogueObject: DialogueObject) {
+function DialogueGenerator(dialogueObject: DialogueObject) {
   let currPartNum = 'part0';
   let currLineNum = -1;
   function generateDialogue(): [SpeakerDetail | null, DialogueString] {
@@ -35,3 +35,5 @@ export function dialogueGenerator(dialogueObject: DialogueObject) {
   }
   return generateDialogue;
 }
+
+export default DialogueGenerator;

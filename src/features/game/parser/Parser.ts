@@ -5,6 +5,7 @@ import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
+import GameObjective from '../objective/GameObjective';
 
 class Parser {
   private static parserMap: object;
@@ -17,7 +18,12 @@ class Parser {
       dialogue: DialogueParser
     };
 
-    const chapter = { configuration: '', map: new GameMap(), startingLoc: '' };
+    const chapter = {
+      configuration: '',
+      map: new GameMap(),
+      startingLoc: '',
+      objectives: new GameObjective()
+    };
     splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
       if (!fileName || !fileContent) {
         return;
