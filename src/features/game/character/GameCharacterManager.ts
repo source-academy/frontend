@@ -1,44 +1,76 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
-import { Constants } from '../commons/CommonConstants';
+import { screenCenter } from '../commons/CommonConstants';
 import { charRect } from './CharacterConstants';
-import { avatarKey } from 'src/features/game/character/CharacterHelper';
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonsTypes';
+import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
+import { Character } from './CharacterTypes';
+import { GameChapter } from '../chapter/GameChapterTypes';
+// import { resize } from '../utils/SpriteUtils';
+// import { Layer } from '../layer/GameLayerTypes';
 
 export default class CharacterManager {
-  private currentAvatar: Phaser.GameObjects.Image | undefined;
-  private container: Phaser.GameObjects.Container | undefined;
+  private characterContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
+  private characterMap: Map<ItemId, Character>;
 
   constructor() {
-    this.container = undefined;
+    this.characterContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
+    this.characterMap = new Map<ItemId, Character>();
   }
 
-  public changeCharacter(speakerDetail: SpeakerDetail) {
+  public processCharacter(chapter: GameChapter) {
+    this.characterMap = chapter.map.getCharacters();
+    const locations = chapter.map.getLocations();
+
+    locations.forEach(location => {
+      const gameManager = GameActionManager.getInstance().getGameManager();
+      const characterContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+      this.characterContainerMap.set(location.name, characterContainer);
+      gameManager.add.existing(characterContainer);
+    });
+  }
+
+  public getCharacterLayerContainer(locationId: LocationId) {
+    const idsToRender =
+      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.characters, locationId) ||
+      [];
+
+    const characterLayer = this.renderCharactersInLoc(idsToRender, locationId);
+    this.characterContainerMap.set(locationId, characterLayer);
+    return this.characterContainerMap.get(locationId)!;
+  }
+
+  public renderCharactersInLoc(
+    idsToRender: ItemId[],
+    locationName: LocationId
+  ): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!this.container) {
-      this.container = new Phaser.GameObjects.Container(gameManager, 0, 0);
-    }
-    if (!speakerDetail || !this.currentAvatar) {
-      return;
-    }
-    fadeAndDestroy(gameManager, this.currentAvatar);
 
-    const [speaker, expression] = speakerDetail;
-    if (speaker === 'narrator') {
-      return null;
-    }
-    const avatar = new Phaser.GameObjects.Image(
+    this.characterContainerMap.get(locationName)!.destroy();
+
+    const characterContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    idsToRender.forEach(id => {
+      const characterToRender = this.characterMap.get(id);
+      if (characterToRender) {
+        characterContainer.add(this.createCharacter(characterToRender));
+      }
+    });
+
+    return characterContainer;
+  }
+
+  public createCharacter({ defaultPosition, defaultExpression, expressions }: Character) {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+
+    const characterXPosition = charRect.x[defaultPosition];
+    const assetKey = expressions.get(defaultExpression)!;
+
+    const character = new Phaser.GameObjects.Image(
       gameManager,
-      charRect.x.left,
-      charRect.y,
-      avatarKey(speaker, expression)
-    )
-      .setAlpha(0)
-      .setOrigin(0.5, 1)
-      .setDisplaySize(0, charRect.height);
+      characterXPosition,
+      screenCenter.y,
+      assetKey
+    );
 
-    this.container.add([avatar]);
-    gameManager.add.tween(fadeIn([avatar], Constants.fadeDuration));
-    return avatar;
+    return character;
   }
 }

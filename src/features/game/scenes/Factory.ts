@@ -11,8 +11,19 @@ $you, tired
 Whew... That was a long trip. It feels like I was on that shuttle for a thousand years.
 `;
 
-function createDialogueObject(text: string) {
+const text2 = `[part0]
+$narrator
+When you were about to take a nap, you received a new notification o
+[Goto part3]
+
+[part3]
+$you, tired
+Grandmaster's hologram is so realistic, his voice sends shiver down your spine`;
+
+function createDialogueObject(title: string, text: string) {
   const lines = splitToLines(text);
-  return { title: 'Random Title', content: mapByHeader(lines, isPartLabel) };
+  return { title, content: mapByHeader(lines, isPartLabel) };
 }
-export const dialogue1 = createDialogueObject(text1);
+
+export const dialogue1 = createDialogueObject('Random Title', text1);
+export const dialogue2 = createDialogueObject('What happened?', text2);

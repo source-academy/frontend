@@ -5,6 +5,7 @@ import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { showLocationError } from '../utils/Error';
+import { Character } from '../character/CharacterTypes';
 
 class GameMap {
   private mapAssets: Map<AssetKey, AssetPath>;
@@ -13,6 +14,7 @@ class GameMap {
   private talkTopics: Map<ItemId, Dialogue>;
   private objects: Map<ItemId, ObjectProperty>;
   private boundingBoxes: Map<ItemId, BBoxProperty>;
+  private characters: Map<ItemId, Character>;
 
   constructor() {
     this.mapAssets = new Map<AssetKey, AssetPath>();
@@ -21,6 +23,7 @@ class GameMap {
     this.talkTopics = new Map<ItemId, Dialogue>();
     this.objects = new Map<ItemId, ObjectProperty>();
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
+    this.characters = new Map<ItemId, Character>();
   }
 
   public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {
@@ -76,6 +79,14 @@ class GameMap {
     return this.objects;
   }
 
+  public getDialogues(): Map<ItemId, Dialogue> {
+    return this.talkTopics;
+  }
+
+  public getCharacters(): Map<ItemId, Character> {
+    return this.characters;
+  }
+
   public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: T) {
     this[itemType.listName].set(itemId, item);
   }
@@ -114,7 +125,7 @@ class GameMap {
 
   public useGameMapItems() {
     // Escape typescript warnings
-    console.log(this.talkTopics && this.objects && this.boundingBoxes);
+    console.log(this.talkTopics && this.objects && this.boundingBoxes && this.characters);
   }
 }
 
