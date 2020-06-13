@@ -5,9 +5,11 @@ import { AchievementItem } from '../../../../../commons/achievements/Achievement
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import AchievementHints from '../utils/AchievementHints';
+import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type AchievementCardProps = {
   achievement: AchievementItem;
+  exp: number | undefined;
   deadline: Date | undefined;
   hasDropdown: boolean;
   isTranslucent: boolean;
@@ -19,6 +21,7 @@ type AchievementCardProps = {
 function AchievementCard(props: AchievementCardProps) {
   const {
     achievement,
+    exp,
     deadline,
     isTranslucent,
     hasDropdown,
@@ -26,7 +29,7 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown,
     displayModal
   } = props;
-  const { id, title, ability, exp, status } = achievement;
+  const { id, title, ability, status } = achievement;
 
   return (
     <Card
@@ -64,6 +67,8 @@ function AchievementCard(props: AchievementCardProps) {
           </div>
         </div>
       </div>
+
+      <AchievementProgressBar value={0.8} />
     </Card>
   );
 }

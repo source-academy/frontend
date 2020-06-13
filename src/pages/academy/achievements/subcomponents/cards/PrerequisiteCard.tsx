@@ -8,14 +8,15 @@ import AchievementHints from '../utils/AchievementHints';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
+  exp: number | undefined;
   deadline: Date | undefined;
   isTranslucent: boolean;
   displayModal: any;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { achievement, deadline, isTranslucent, displayModal } = props;
-  const { id, title, exp, status } = achievement;
+  const { achievement, exp, deadline, isTranslucent, displayModal } = props;
+  const { id, title, status } = achievement;
 
   return (
     <Card

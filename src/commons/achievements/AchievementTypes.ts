@@ -38,7 +38,7 @@ export type AchievementItem = {
   exp?: number;
   deadline?: Date;
   isTask: boolean;
-  prerequisites?: number[];
+  prerequisiteIDs?: number[];
   status: AchievementStatus;
   completionGoal: number;
 };
