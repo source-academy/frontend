@@ -8,6 +8,7 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
+  GradingStatus,
   IProgrammingQuestion,
   QuestionType,
   QuestionTypes
@@ -146,6 +147,15 @@ export async function getAssessmentOverviews(tokens: Tokens): Promise<Assessment
     overview.category = capitalise(overview.type);
     delete overview.type;
 
+    overview.gradingStatus = computeGradingStatus(
+      overview.category,
+      overview.status,
+      overview.gradedCount,
+      overview.questionCount
+    );
+    delete overview.gradedCount;
+    delete overview.questionCount;
+
     return overview as AssessmentOverview;
   });
 }
@@ -282,14 +292,14 @@ export async function getGradingOverviews(
         studentName: overview.student.name,
         submissionId: overview.id,
         submissionStatus: overview.status,
-        groupName: overview.groupName,
+        groupName: overview.student.groupName,
         // Grade
         initialGrade: overview.grade,
         gradeAdjustment: overview.adjustment,
         currentGrade: overview.grade + overview.adjustment,
         maxGrade: overview.assessment.maxGrade,
-        gradingStatus: overview.gradingStatus,
-        questionCount: overview.questionCount,
+        gradingStatus: 'none',
+        questionCount: overview.assessment.questionCount,
         gradedCount: overview.gradedCount,
         // XP
         initialXp: overview.xp,
@@ -298,6 +308,12 @@ export async function getGradingOverviews(
         maxXp: overview.assessment.maxXp,
         xpBonus: overview.xpBonus
       };
+      gradingOverview.gradingStatus = computeGradingStatus(
+        gradingOverview.assessmentCategory,
+        gradingOverview.submissionStatus,
+        gradingOverview.gradedCount,
+        gradingOverview.questionCount
+      );
       return gradingOverview;
     })
     .sort((subX: GradingOverview, subY: GradingOverview) =>
@@ -718,3 +734,17 @@ export function* handleResponseError(resp: Response | null, codes?: Map<number, 
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
+const computeGradingStatus = (
+  category: AssessmentCategory,
+  submissionStatus: any,
+  numGraded: number,
+  numQuestions: number
+): GradingStatus =>
+  ['Mission', 'Sidequest', 'Practical'].includes(category) && submissionStatus === 'submitted'
+    ? numGraded === 0
+      ? 'none'
+      : numGraded === numQuestions
+      ? 'graded'
+      : 'grading'
+    : 'excluded';
