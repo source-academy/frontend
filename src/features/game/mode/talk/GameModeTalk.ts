@@ -1,23 +1,18 @@
-import { IGameUI, DialogueId } from '../../commons/CommonsTypes';
+import { IGameUI, DialogueId, GameButton } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import {
-  talkButtonYSpace,
-  talkButtonStyle,
-  talkOptButton,
-  TalkButton
-} from './GameModeTalkConstants';
+import { talkButtonYSpace, talkButtonStyle, talkOptButton } from './GameModeTalkConstants';
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize, screenCenter, nullFunction } from '../../commons/CommonConstants';
+import { screenSize } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
   private dialogues: Map<DialogueId, Dialogue>;
-  private gameButtons: TalkButton[];
+  private gameButtons: GameButton[];
 
   constructor(
     locationName: string,
@@ -31,23 +26,50 @@ class GameModeTalk implements IGameUI {
     this.createGameButtons(talkTopics);
   }
 
-  private createGameButtons(dialogueIds: DialogueId[]) {
-    const dialogues = dialogueIds
-      .map(dialogueId => this.dialogues.get(dialogueId))
-      .filter(dialogue => !!dialogue) as Dialogue[];
+  private async createGameButtons(dialogueIds: DialogueId[]) {
+    // Refresh Buttons
+    this.gameButtons = [];
 
-    this.gameButtons = dialogues.map(({ title, content }: Dialogue, dialogueIndex: number) => {
-      return {
-        text: title,
-        style: talkButtonStyle,
-        assetKey: talkOptButton.key,
-        assetXPos: screenCenter.x,
-        assetYPos: getButtonYPos(dialogueIndex, dialogues.length),
-        isInteractive: true,
-        onInteract: nullFunction,
-        content
-      };
+    await dialogueIds.forEach(dialogueId => {
+      const dialogue = this.dialogues.get(dialogueId);
+      if (dialogue) {
+        this.addTalkOptionButton(dialogue.title, async () => {
+          this.deactivateUI();
+          GameActionManager.getInstance().triggerInteraction(dialogueId);
+          await GameActionManager.getInstance().bringUpDialogue(dialogue.content);
+          this.activateUI();
+        });
+      }
     });
+  }
+
+  private addTalkOptionButton(name: string, callback: any) {
+    const newNumberOfButtons = this.gameButtons.length + 1;
+    const partitionSize = talkButtonYSpace / newNumberOfButtons;
+
+    const newYPos = (screenSize.y - talkButtonYSpace + partitionSize) / 2;
+
+    // Rearrange existing buttons
+    for (let i = 0; i < this.gameButtons.length; i++) {
+      this.gameButtons[i] = {
+        ...this.gameButtons[i],
+        assetYPos: newYPos + i * partitionSize
+      };
+    }
+
+    // Add the new button
+    const newTalkButton: GameButton = {
+      text: name,
+      style: talkButtonStyle,
+      assetKey: talkOptButton.key,
+      assetXPos: screenSize.x / 2,
+      assetYPos: newYPos + this.gameButtons.length * partitionSize,
+      isInteractive: true,
+      onInteract: callback
+    };
+
+    // Update
+    this.gameButtons.push(newTalkButton);
   }
 
   public fetchLatestState(): void {
@@ -68,7 +90,7 @@ class GameModeTalk implements IGameUI {
     }
     const talkMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    this.gameButtons.forEach((topicButton: TalkButton) => {
+    this.gameButtons.forEach((topicButton: GameButton) => {
       const text = topicButton.text || '';
       const style = topicButton.style || {};
       const topicButtonText = new Phaser.GameObjects.Text(
@@ -86,13 +108,7 @@ class GameModeTalk implements IGameUI {
         topicButton.assetKey
       ).setInteractive({ pixelPerfect: true, useHandCursor: true });
 
-      const callback = async () => {
-        gameManager.tweens.add({ targets: [talkMenuContainer], ...exitTweenProps });
-        await GameActionManager.getInstance().bringUpDialogue(topicButton.content);
-        gameManager.tweens.add({ targets: [talkMenuContainer], ...entryTweenProps });
-      };
-
-      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
+      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, topicButton.onInteract);
 
       talkMenuContainer.add(buttonSprite);
       talkMenuContainer.add(topicButtonText);
@@ -153,10 +169,3 @@ class GameModeTalk implements IGameUI {
 }
 
 export default GameModeTalk;
-
-function getButtonYPos(dialogueIndex: number, numberOfDialogues: number) {
-  const partitionSize = talkButtonYSpace / numberOfDialogues;
-  const newYPos = (screenSize.y - talkButtonYSpace + partitionSize) / 2;
-
-  return newYPos + dialogueIndex * partitionSize;
-}
