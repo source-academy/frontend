@@ -38,6 +38,5 @@ export const speakerTextStyle = {
   fontSize: '36px',
   fill: Color.white,
   align: 'left',
-  lineSpacing: 10,
-  wordWrap: { width: dialogueRect.width - textPadding.x * 2 - dialogueRectMargin * 2 }
+  lineSpacing: 10
 };

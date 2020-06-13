@@ -113,7 +113,8 @@ class GameManager extends Phaser.Scene {
       // Deactive current UI of previous location
       this.deactivateCurrentUI();
 
-      // Clear layers;
+      // Clear all layers;
+      this.layerManager.clearAllLayers();
 
       // Update location
       this.currentLocationName = locationName;
