@@ -132,8 +132,6 @@ function AchievementTask(props: AchievementTaskProps) {
 
   // Returns the achievement progress in decimal (e.g. 0.5)
   const getAchievementProgress = (achievement: AchievementItem): number => {
-    // we have separate completionProgress for main achievements, so dont need do this
-    // just treat main achievements the same way as prerequisites. psps shouldve told u earlier
     const progress = studentProgress[achievement.id];
     return Math.min(progress.completionProgress / achievement.completionGoal, 1);
   };
