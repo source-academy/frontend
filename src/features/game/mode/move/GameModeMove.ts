@@ -3,8 +3,6 @@ import {
   defaultLocationImg,
   locationPreviewFrame,
   locationPreviewFill,
-  moveEntryTweenProps,
-  moveExitTweenProps,
   previewFrameXPos,
   previewXPos,
   previewYPos,
@@ -18,8 +16,10 @@ import { GameLocation, GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize } from '../../commons/CommonConstants';
 import { longButton } from '../../commons/CommonAssets';
+import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 
 class GameModeMove implements IGameUI {
+  private uiContainer: Phaser.GameObjects.Container | undefined;
   private currentLocationAssetKey: string;
   private locationAssetKeys: Map<string, string>;
   private previewFill: GameSprite;
@@ -41,6 +41,7 @@ class GameModeMove implements IGameUI {
       assetYPos: locationPreviewFrame.yPos
     } as GameSprite;
 
+    this.uiContainer = undefined;
     this.currentLocationAssetKey = defaultLocationImg.key;
     this.locationAssetKeys = new Map<string, string>();
     this.previewFill = previewFill;
@@ -95,7 +96,7 @@ class GameModeMove implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
       this.locationName
@@ -113,12 +114,6 @@ class GameModeMove implements IGameUI {
     }
 
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-    if (hasUpdates) {
-      this.fetchLatestState();
-    }
 
     const previewFrame = new Phaser.GameObjects.Image(
       gameManager,
@@ -195,39 +190,53 @@ class GameModeMove implements IGameUI {
     this.currentLocationAssetKey = assetKey;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
 
-    container.setActive(true);
-    container.setVisible(true);
-    container.setPosition(container.x, -screenSize.y);
+    // Fetch latest state if location is not yet visited
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    if (hasUpdates || !this.uiContainer) {
+      if (this.uiContainer) {
+        this.uiContainer.destroy();
+      }
+      this.fetchLatestState();
+      this.uiContainer = await this.getUIContainer();
+      gameManager.add.existing(this.uiContainer);
+    }
 
-    gameManager.tweens.add({
-      targets: container,
-      ...moveEntryTweenProps
-    });
+    if (this.uiContainer) {
+      this.uiContainer.setActive(true);
+      this.uiContainer.setVisible(true);
+      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
-    await sleep(800);
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...entryTweenProps
+      });
+    }
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');
     }
-    container.setPosition(container.x, 0);
 
-    gameManager.tweens.add({
-      targets: container,
-      ...moveExitTweenProps
-    });
+    if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-    await sleep(500);
-    container.setVisible(false);
-    container.setActive(false);
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(500);
+      this.uiContainer.setVisible(false);
+      this.uiContainer.setActive(false);
+    }
   }
 }
 

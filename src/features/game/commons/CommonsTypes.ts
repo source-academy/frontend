@@ -36,12 +36,14 @@ export type GameButton = GameText & GameSprite & IGameInteractive;
 export interface IGameInteractive {
   isInteractive: boolean;
   onInteract: () => void;
+  interactionId?: string;
 }
 
 export interface IGameUI {
+  fetchLatestState: () => void;
   getUIContainer: () => Phaser.GameObjects.Container;
-  activateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
-  deactivateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
+  activateUI: () => Promise<void>;
+  deactivateUI: () => Promise<void>;
 }
 
 export type ObjectId = string;

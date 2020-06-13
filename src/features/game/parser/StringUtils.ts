@@ -1,3 +1,5 @@
+import * as _ from 'lodash';
+
 type StringFilterFn = (line: string) => boolean;
 
 type Header = string;
@@ -35,5 +37,14 @@ export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): 
   return map;
 }
 
-// Removes
+// Removes enclosing characters, e.g. `[]`
 const stripEnclosing = (str: string) => str.slice(1, str.length - 1);
+
+/* Given the header's regexp, splits a text into arrays of
+ *[ [header, contents], [header, contents], [header, contents] ]
+ */
+export function splitByHeader(text: string, regexString: RegExp) {
+  const header = text.match(new RegExp(regexString, 'g'));
+  const contents = text.split(new RegExp(regexString)).slice(1);
+  return _.zip(header, contents);
+}

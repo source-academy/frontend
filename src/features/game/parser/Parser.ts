@@ -1,41 +1,44 @@
-import * as _ from 'lodash';
-
 import { GameChapter } from '../chapter/GameChapterTypes';
 import LocationSelectChapter from '../scenes/LocationSelectChapter';
 import GameMap from '../location/GameMap';
+import { splitToLines, splitByHeader } from './StringUtils';
+import { ParserType } from './ParserTypes';
 
 class Parser {
-  public static parse(text: string): GameChapter {
+  private parserMap = Map<ParserType, ParseFunction>
+
+  public static parse(chapterText: string): GameChapter {
     const gameMap = new GameMap();
-    const chapter = { configuration: null, map: gameMap, startingLoc: null };
-    console.log(chapter);
+    const chapter = { configuration: '', map: gameMap, startingLoc: '' };
 
-    const fileNames = text.match(/<<.+>>/g);
-    const contents = text.split(/<<.+>>/).slice(1);
-    const files = _.zip(fileNames, contents);
+    this.parserMap = {
+      'configuration': this.configParser
+      
+    }
 
-    files.forEach(([fileName, fileContent]) => {
+    splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
       if (!fileName || !fileContent) {
         return;
       }
+
       switch (true) {
         case fileName.startsWith('configuration'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.configParser(chapter, fileName, fileContent);
           break;
         case fileName.startsWith('location'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.locationParser(gameMap, fileName, fileContent);
           break;
         case fileName.startsWith('modes'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.modeParser(gameMap, fileName, fileContent);
           break;
         case fileName.startsWith('connectivity'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.connectivityParser(gameMap, fileName, fileContent);
           break;
         case fileName.startsWith('objects'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.objectParser(gameMap, fileName, fileContent);
           break;
         case fileName.startsWith('dialogue'):
-          this.configParser(gameMap, fileName, fileContent);
+          this.dialogueParser(gameMap, fileName, fileContent);
           break;
       }
     });
@@ -43,7 +46,12 @@ class Parser {
     return LocationSelectChapter;
   }
 
-  public static configParser(gameMap: GameMap, fileName: string, fileContent: string) {}
+  public static configParser(chapter: GameChapter, fileName: string, fileContent: string) {
+    const textFile = splitToLines(fileContent);
+    const [, startingLoc] = textFile[0].split(': ');
+    chapter.startingLoc = startingLoc;
+  }
+
   public static locationParser(gameMap: GameMap, fileName: string, fileContent: string) {}
   public static modeParser(gameMap: GameMap, fileName: string, fileContent: string) {}
   public static connectivityParser(gameMap: GameMap, fileName: string, fileContent: string) {}
@@ -52,3 +60,4 @@ class Parser {
 }
 
 export default Parser;
+we do the Game

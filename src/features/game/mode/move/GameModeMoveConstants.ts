@@ -9,18 +9,6 @@ export const previewHeight = screenSize.y * 0.56;
 export const previewXPos = screenSize.x * 0.3125;
 export const previewYPos = screenSize.y * 0.515;
 
-export const moveEntryTweenProps = {
-  y: 0,
-  duration: 800,
-  ease: 'Power2'
-};
-
-export const moveExitTweenProps = {
-  y: -screenSize.y,
-  duration: 500,
-  ease: 'Power2'
-};
-
 export const moveButtonStyle = {
   fontFamily: 'Helvetica',
   fontSize: '35px',

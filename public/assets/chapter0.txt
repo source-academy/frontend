@@ -30,8 +30,7 @@ door6, door/yourRoom-dim, 831, 270
 yourBed, yourHeadphones, 372, 514
 
 <<dialogue1>>
-title: "What happened"
-
+title: What happened
 [part0]
 $narrator
 The year is 1101 A.E.

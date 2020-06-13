@@ -13,6 +13,7 @@ import { screenSize } from '../../commons/CommonConstants';
 import { shortButton } from '../../commons/CommonAssets';
 
 class GameModeMenu implements IGameUI {
+  private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
   private modeBanner: GameSprite;
   private gameButtons: GameButton[];
@@ -25,6 +26,7 @@ class GameModeMenu implements IGameUI {
       isInteractive: false
     } as GameSprite;
 
+    this.uiContainer = undefined;
     this.locationName = locationName;
     this.modeBanner = banner;
     this.gameButtons = [];
@@ -70,7 +72,7 @@ class GameModeMenu implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationName);
     if (!latestLocationMode) {
       return;
@@ -85,12 +87,6 @@ class GameModeMenu implements IGameUI {
     }
 
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-    if (hasUpdates) {
-      this.fetchLatestState();
-    }
 
     const modeBanner = new Phaser.GameObjects.Image(
       gameManager,
@@ -130,38 +126,53 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
 
-    container.setActive(true);
-    container.setVisible(true);
-    container.setPosition(container.x, screenSize.y);
+    // Fetch latest state if location is not yet visited
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    if (hasUpdates || !this.uiContainer) {
+      if (this.uiContainer) {
+        this.uiContainer.destroy();
+      }
+      this.fetchLatestState();
+      this.uiContainer = await this.getUIContainer();
+      gameManager.add.existing(this.uiContainer);
+    }
 
-    gameManager.tweens.add({
-      targets: container,
-      ...menuEntryTweenProps
-    });
+    if (this.uiContainer) {
+      this.uiContainer.setActive(true);
+      this.uiContainer.setVisible(true);
+      this.uiContainer.setPosition(this.uiContainer.x, screenSize.y);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...menuEntryTweenProps
+      });
+    }
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');
     }
 
-    container.setPosition(container.x, 0);
+    if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-    gameManager.tweens.add({
-      targets: container,
-      ...menuExitTweenProps
-    });
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...menuExitTweenProps
+      });
 
-    await sleep(500);
-    container.setVisible(false);
-    container.setActive(false);
+      await sleep(500);
+      this.uiContainer.setVisible(false);
+      this.uiContainer.setActive(false);
+    }
   }
 }
 
