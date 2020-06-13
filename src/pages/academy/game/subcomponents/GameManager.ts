@@ -1,4 +1,3 @@
-/* tslint:disable */
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
@@ -17,7 +16,7 @@ import { GameItemTypeDetails } from 'src/features/game/location/GameMapConstants
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
 import Parser from 'src/features/game/parser/Parser';
 import GameStateManager from 'src/features/game/state/GameStateManager';
-import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
 
 const { Image } = Phaser.GameObjects;
@@ -89,8 +88,8 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   private preloadLocationsAssets(chapter: GameChapter) {
-    chapter.map.getLocationAssets().forEach(asset => {
-      this.load.image(asset.key, asset.path);
+    chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
+      this.load.image(assetKey, assetPath);
     });
   }
 
@@ -99,16 +98,13 @@ class GameManager extends Phaser.Scene {
     blackFadeIn(this, { fadeDuration: 1000 });
 
     // Render background of the location
-    const asset = map.getLocationAsset(location);
-    if (asset) {
-      const backgroundAsset = new Image(
-        this,
-        location.assetXPos,
-        location.assetYPos,
-        location.assetKey
-      ).setDisplaySize(screenSize.x, screenSize.y);
-      this.layerManager.addToLayer(Layer.Background, backgroundAsset);
-    }
+    const backgroundAsset = new Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      location.assetKey
+    ).setDisplaySize(screenSize.x, screenSize.y);
+    this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
     // Render objects in the location
     const objectIdsToRender = location.objects || [];

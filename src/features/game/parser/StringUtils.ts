@@ -28,7 +28,7 @@ export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): 
   let currHeader = '';
   lines.forEach(line => {
     if (isHeaderFunction(line)) {
-      currHeader = stripEnclosing(line);
+      currHeader = stripEnclosingChars(line);
       map.set(currHeader, []);
     } else {
       map.get(currHeader)!.push(line);
@@ -38,7 +38,13 @@ export function mapByHeader(lines: string[], isHeaderFunction: StringFilterFn): 
 }
 
 // Removes enclosing characters, e.g. `[]`
-const stripEnclosing = (str: string) => str.slice(1, str.length - 1);
+export const stripEnclosingChars = (str: string, numCharsToRemove = 1) => {
+  if (str.length < numCharsToRemove++) {
+    return '';
+  }
+  numCharsToRemove -= 1;
+  return str.slice(numCharsToRemove, str.length - numCharsToRemove);
+};
 
 /* Given the header's regexp, splits a text into arrays of
  *[ [header, contents], [header, contents], [header, contents] ]
@@ -47,4 +53,9 @@ export function splitByHeader(text: string, regexString: RegExp) {
   const header = text.match(new RegExp(regexString, 'g'));
   const contents = text.split(new RegExp(regexString)).slice(1);
   return _.zip(header, contents);
+}
+
+// Match starting
+export function matchStartingKey(object: object, string: string) {
+  return Object.keys(object).filter(key => string.startsWith(key))[0];
 }

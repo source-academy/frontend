@@ -2,30 +2,23 @@ import { splitToLines, mapByHeader } from './StringUtils';
 import { isLabel } from '../objects/ObjectsHelper';
 import { ObjectProperty } from '../objects/ObjectsTypes';
 import { mapValues } from '../utils/GameUtils';
-import { ObjectId, LocationId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonsTypes';
 
-type LocationRawObjectsMap = Map<string, string[]>;
-
-export function parseObjects(text: string): Map<LocationId, Map<ObjectId, ObjectProperty>> {
-  const locationRawObjectsMap = mapObjectsByLocation(text);
+export default function ObjectParser(text: string) {
+  const lines = splitToLines(text);
+  const locationRawObjectsMap = mapByHeader(lines, isLabel);
   const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
   return objectsMap;
 }
 
-export function mapObjectsByLocation(text: string): LocationRawObjectsMap {
-  const lines = splitToLines(text);
-  const locationRawObjectsMap = mapByHeader(lines, isLabel);
-  return locationRawObjectsMap;
-}
-
-function objPropertyMapper(objectsList: string[]): Map<ObjectId, ObjectProperty> {
+function objPropertyMapper(objectsList: string[]): Map<ItemId, ObjectProperty> {
   const separatorIndex = objectsList.findIndex(object => object === '$');
   const objectDetails = objectsList.slice(0, separatorIndex);
 
-  const objectPropertyMap = new Map<ObjectId, ObjectProperty>();
+  const objectPropertyMap = new Map<ItemId, ObjectProperty>();
   objectDetails.forEach(objectDetail => {
-    const [objectId, texture, x, y] = objectDetail.split(', ');
-    objectPropertyMap.set(objectId, { texture, x: parseInt(x), y: parseInt(y) });
+    const [objectId, assetKey, x, y] = objectDetail.split(', ');
+    objectPropertyMap.set(objectId, { assetKey, x: parseInt(x), y: parseInt(y) });
   });
 
   if (separatorIndex !== -1) {
@@ -40,3 +33,21 @@ function objPropertyMapper(objectsList: string[]): Map<ObjectId, ObjectProperty>
 
   return objectPropertyMap;
 }
+
+function loadObjectsAssetsFromText(scene: Phaser.Scene, text: string) {
+  const locationObjectsMap = mapObjectsByLocation(text);
+  locationObjectsMap.forEach(objectList => {
+    for (const objectDetail of objectList) {
+      if (objectDetail === '$') break;
+
+      const [, texture] = objectDetail.split(', ');
+      loadObject(scene, texture);
+    }
+  });
+}
+
+const loadObject = (scene: Phaser.Scene, imagePath: string) => {
+  const [texture, skin] = imagePath.split('/');
+  const fullObjectPath = `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
+  scene.load.image(imagePath, fullObjectPath);
+};

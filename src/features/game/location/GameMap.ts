@@ -1,43 +1,36 @@
-import { GameLocation, GameItemType } from '../location/GameMapTypes';
-import {
-  GameImage,
-  DialogueId,
-  ObjectId,
-  BBoxId,
-  GameMapItem,
-  ItemId
-} from '../commons/CommonsTypes';
+import { GameLocation, GameItemType, LocationId } from '../location/GameMapTypes';
+import { GameMapItem, ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
 import { ObjectProperty } from '../objects/ObjectsTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 class GameMap {
-  private locations: Map<string, GameLocation>;
+  private mapAssets: Map<AssetKey, AssetPath>;
 
-  private locationAssets: Map<string, GameImage>;
-  private talkTopics: Map<DialogueId, Dialogue>;
-  private objects: Map<ObjectId, ObjectProperty>;
-  private boundingBoxes: Map<BBoxId, BBoxProperty>;
+  private locations: Map<LocationId, GameLocation>;
+  private talkTopics: Map<ItemId, Dialogue>;
+  private objects: Map<ItemId, ObjectProperty>;
+  private boundingBoxes: Map<ItemId, BBoxProperty>;
 
   constructor() {
-    this.locationAssets = new Map<string, GameImage>();
-    this.locations = new Map<string, GameLocation>();
+    this.mapAssets = new Map<AssetKey, AssetPath>();
 
-    this.talkTopics = new Map<DialogueId, Dialogue>();
-    this.objects = new Map<ObjectId, ObjectProperty>();
-    this.boundingBoxes = new Map<BBoxId, BBoxProperty>();
+    this.locations = new Map<LocationId, GameLocation>();
+    this.talkTopics = new Map<ItemId, Dialogue>();
+    this.objects = new Map<ItemId, ObjectProperty>();
+    this.boundingBoxes = new Map<ItemId, BBoxProperty>();
   }
 
-  public addLocationAsset(asset: GameImage) {
-    this.locationAssets.set(asset.key, asset);
+  public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {
+    this.mapAssets.set(assetKey, assetPath);
   }
 
-  public getLocationAsset(location: GameLocation): GameImage | undefined {
-    return this.locationAssets.get(location.assetKey);
+  public getMapAssets(): Map<AssetKey, AssetPath> {
+    return this.mapAssets;
   }
 
-  public getLocationAssets(): Map<string, GameImage> {
-    return this.locationAssets;
+  public addLocation(locationId: string, location: GameLocation): void {
+    this.locations.set(locationId, location);
   }
 
   public setNavigationFrom(id: string, destination: string[]) {
@@ -55,10 +48,6 @@ class GameMap {
     return location.navigation;
   }
 
-  public setLocation(location: GameLocation): void {
-    this.locations.set(location.name, location);
-  }
-
   public getLocation(id: string): GameLocation | undefined {
     return this.locations.get(id);
   }
@@ -67,21 +56,11 @@ class GameMap {
     return this.locations;
   }
 
-  public useGameMapItems() {
-    // Escape typescript warnings
-    console.log(this.talkTopics && this.objects && this.boundingBoxes);
+  public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: GameMapItem) {
+    this[itemType.listName].set(itemId, item);
   }
 
-  public setItemAt<T>(
-    locationId: string,
-    itemType: GameItemType<T>,
-    itemId: string,
-    item: GameMapItem
-  ) {
-    // Add item to Map
-    this[itemType.listName].set(itemId, item);
-
-    // Add item to location
+  public setItemAt<T>(locationId: string, itemType: GameItemType<T>, itemId: string) {
     const location = this.locations.get(locationId);
     if (!location) return;
 
@@ -91,7 +70,7 @@ class GameMap {
     location[itemType.listName].push(itemId);
   }
 
-  public getItemAt<T>(locationId: string, itemType: GameItemType<T>) {
+  public getItemAt<T>(locationId: string, itemType: GameItemType<T>): Map<ItemId, T> {
     const location = this.locations.get(locationId);
     if (!location || !location[itemType.listName]) {
       return itemType.emptyMap;
@@ -104,6 +83,11 @@ class GameMap {
       items.set(itemId, item);
     });
     return items;
+  }
+
+  public useGameMapItems() {
+    // Escape typescript warnings
+    console.log(this.talkTopics && this.objects && this.boundingBoxes);
   }
 }
 

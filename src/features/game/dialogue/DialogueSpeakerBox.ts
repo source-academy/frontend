@@ -1,7 +1,7 @@
 import { SpeakerDetail } from './DialogueTypes';
 import { Color } from '../utils/styles';
-import { caps } from '../parser/DialogueHelper';
 import { speechBox } from '../commons/CommonAssets';
+import { caps } from './DialogueHelper';
 
 const textPadding = 10;
 

@@ -7,15 +7,6 @@ export type ImageAsset = {
   path: string;
 };
 
-export type GameImage = {
-  key: string;
-  path: string;
-  xPos: number;
-  yPos: number;
-  imageWidth: number;
-  imageHeight: number;
-};
-
 export type GameSprite = {
   assetKey: string;
   assetXPos: number;
@@ -27,9 +18,12 @@ export type GameText = {
   style?: any;
 };
 
+export type ItemId = string;
+export type AssetKey = string;
+export type AssetPath = string;
+
 export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
-export type ItemId = DialogueId | ObjectId | BBoxId;
-export const emptyGameItemMap = new Map<string, GameMapItem>();
+export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
 
 export type GameButton = GameText & GameSprite & IGameInteractive;
 
@@ -45,8 +39,3 @@ export interface IGameUI {
   activateUI: () => Promise<void>;
   deactivateUI: () => Promise<void>;
 }
-
-export type ObjectId = string;
-export type DialogueId = string;
-export type LocationId = string;
-export type BBoxId = string;

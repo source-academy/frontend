@@ -2,20 +2,18 @@
 startingLoc: room
 
 <<location>>
-1, crashSite, crashSite, "Crash Site"
-2, classroom, classroom/classOn, "Class Room"
-3, emergency, classroom/emergency, "Emergency"
-4, hallway, hallway, "Hallway"
-5, room, yourRoom-dim, "Student Room"
-
-<<modes>>
-1, [talk move]
-2, [explore talk move]
-3, [talk move]
-4, [move]
-5, [explore move talk]
-
-<<connectivity>>
+crashSite, crashSite, "Crash Site"
+classroom, classroom/classOn, "Class Room"
+emergency, classroom/emergency, "Emergency"
+hallway, hallway, "Hallway"
+room, yourRoom-dim, "Student Room"
+$
+[talk move]
+[explore talk move]
+[talk move]
+[move]
+[explore move talk]
+$
 classroom: crashSite, hallway
 crashSite: classroom
 hallway: classroom, room, emergency
@@ -28,6 +26,15 @@ yourCarpet, yourCarpet, 640, 667
 yourChair, yourChair, 932, 549
 door6, door/yourRoom-dim, 831, 270
 yourBed, yourHeadphones, 372, 514
+$
+yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
+yourCarpet, collectible: yourCarpet
+door7, move: [door6, 7, 18], appear: apple
+
+<<dialogueLocation>>
+classroom: dialogue1, dialogue1, dialogue1
+crashSite: dialogue1, dialogue1
+room: dialogue1
 
 <<dialogue1>>
 title: What happened

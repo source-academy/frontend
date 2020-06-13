@@ -4,7 +4,7 @@ import {
   isSpeaker,
   getSpeakerDetails,
   showDialogueError
-} from '../parser/DialogueHelper';
+} from '../dialogue/DialogueHelper';
 import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
 

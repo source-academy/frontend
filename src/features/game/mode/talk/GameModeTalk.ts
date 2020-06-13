@@ -193,10 +193,3 @@ class GameModeTalk implements IGameUI {
 }
 
 export default GameModeTalk;
-
-function getButtonYPos(dialogueIndex: number, numberOfDialogues: number) {
-  const partitionSize = talkButtonYSpace / numberOfDialogues;
-  const newYPos = (screenSize.y - talkButtonYSpace + partitionSize) / 2;
-
-  return newYPos + dialogueIndex * partitionSize;
-}

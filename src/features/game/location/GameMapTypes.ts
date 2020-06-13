@@ -1,21 +1,21 @@
-import { DialogueId, BBoxId, ObjectId, ItemId } from '../commons/CommonsTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import { ItemId } from '../commons/CommonsTypes';
 
 export type GameItemType<T> = {
   listName: string;
   emptyMap: Map<ItemId, T>;
 };
 
+export type LocationId = string;
+
 export type GameLocation = {
   name: string;
   assetKey: string;
-  assetXPos: number;
-  assetYPos: number;
   modes?: GameMode[];
-  navigation?: string[];
-  talkTopics?: DialogueId[];
-  objects?: ObjectId[];
-  boundingBoxes?: BBoxId[];
+  navigation?: LocationId[];
+  talkTopics?: ItemId[];
+  objects?: ItemId[];
+  boundingBoxes?: ItemId[];
 };
 
 export enum GameLocationAttr {
