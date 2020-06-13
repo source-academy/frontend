@@ -79,6 +79,14 @@ class GameMap {
     return this.objects;
   }
 
+  public getDialogues(): Map<ItemId, Dialogue> {
+    return this.talkTopics;
+  }
+
+  public getCharacters(): Map<ItemId, Character> {
+    return this.characters;
+  }
+
   public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: T) {
     this[itemType.listName].set(itemId, item);
   }

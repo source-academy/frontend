@@ -10,9 +10,12 @@ import {
 } from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameLocation } from '../location/GameMapTypes';
-import { ImageAsset } from '../commons/CommonsTypes';
+import { ImageAsset, AssetKey } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
-import { dialogue1 } from './Factory';
+import { dialogue1, dialogue2 } from './Factory';
+import { Character } from '../character/CharacterTypes';
+import { Constants } from '../commons/CommonConstants';
+import { CharacterPosition } from '../character/CharacterConstants';
 
 const LocationSelectMap = new GameMap();
 
@@ -61,15 +64,60 @@ LocationSelectMap.setNavigationFrom('Hallway', ['Class Room', 'Student Room', 'E
 LocationSelectMap.setNavigationFrom('Student Room', ['Hallway']);
 LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 
-// Set talk topics
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
-
 // Add dialogues
 LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue1', dialogue1);
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue2', dialogue2);
+
+// Set talk topics
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue2');
+LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue2');
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
+
+//Preload assets
+LocationSelectMap.addMapAsset('beathappy', Constants.assetsFolder + '/avatars/beat/beat.happy.png');
+LocationSelectMap.addMapAsset('beatsad', Constants.assetsFolder + '/avatars/beat/beat.sad.png');
+
+LocationSelectMap.addMapAsset(
+  'scottsad',
+  Constants.assetsFolder + '/avatars/scottie/scottie.sad.png'
+);
+LocationSelectMap.addMapAsset(
+  'scotthappy',
+  Constants.assetsFolder + '/avatars/scottie/scottie.happy.png'
+);
+
+// Add characters
+const beatExpressionMap = new Map<string, AssetKey>();
+beatExpressionMap.set('sad', 'beatsad');
+beatExpressionMap.set('happy', 'beathappy');
+const beat: Character = {
+  name: 'beat',
+  expressions: beatExpressionMap,
+  actions: [''],
+  defaultPosition: CharacterPosition.Right,
+  defaultExpression: 'sad'
+};
+
+const scottExpressionMap = new Map<string, AssetKey>();
+scottExpressionMap.set('sad', 'scottsad');
+scottExpressionMap.set('happy', 'scotthappy');
+
+const scottie: Character = {
+  name: 'scottie',
+  expressions: scottExpressionMap,
+  actions: [''],
+  defaultPosition: CharacterPosition.Middle,
+  defaultExpression: 'happy'
+};
+
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, 'beat', beat);
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, 'scottie', scottie);
+
+// Set characters
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, 'beat');
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, 'scottie');
 
 // Set Objectives
 const objectives = new GameObjective();

@@ -14,7 +14,6 @@ import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
-import Parser from 'src/features/game/parser/Parser';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -53,7 +52,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = Parser.parse(text);
+    this.currentChapter = LocationSelectChapter;
   }
 
   public preload() {
@@ -65,6 +64,7 @@ class GameManager extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
+    this.characterManager.processCharacter(this.currentChapter);
   }
 
   public create() {
@@ -88,8 +88,6 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(map: GameMap, location: GameLocation) {
-    this.layerManager.clearSeveralLayers([Layer.Background, Layer.Objects]);
-
     // Render background of the location
     const backgroundAsset = new Image(
       this,
@@ -102,6 +100,10 @@ class GameManager extends Phaser.Scene {
     // Render objects in the location
     const objectLayerContainer = this.objectManager.getObjectsLayerContainer(location.name);
     this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
+
+    // Render characters in the location
+    const characterLayerContainer = this.characterManager.getCharacterLayerContainer(location.name);
+    this.layerManager.addToLayer(Layer.Character, characterLayerContainer);
 
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);

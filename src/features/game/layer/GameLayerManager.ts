@@ -4,24 +4,20 @@ import { Constants } from '../commons/CommonConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 
-type Container = Phaser.GameObjects.Container;
-type GameObject = Phaser.GameObjects.GameObject;
-const { Container } = Phaser.GameObjects;
-
 class GameLayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;
-  private layers: Map<Layer, Container>;
+  private layers: Map<Layer, Phaser.GameObjects.Container>;
 
   constructor() {
     this.mainLayer = undefined;
-    this.layers = new Map<Layer, Container>();
+    this.layers = new Map<Layer, Phaser.GameObjects.Container>();
   }
 
   public initialiseMainLayer(scene: Phaser.Scene) {
     this.mainLayer = new Phaser.GameObjects.Container(scene, 0, 0);
     scene.add.existing(this.mainLayer);
     for (const layerType of defaultLayerSequence) {
-      const layerContainer = new Container(scene, 0, 0);
+      const layerContainer = new Phaser.GameObjects.Container(scene, 0, 0);
       this.layers.set(layerType, layerContainer);
       this.mainLayer.add(layerContainer);
     }
@@ -56,7 +52,7 @@ class GameLayerManager {
     sleep(fadeDuration);
   }
 
-  public addToLayer(layerType: Layer, gameObject: GameObject) {
+  public addToLayer(layerType: Layer, gameObject: Phaser.GameObjects.GameObject) {
     const layerContainer = this.layers.get(layerType);
     if (!layerContainer) {
       return;
@@ -77,7 +73,7 @@ class GameLayerManager {
     if (!layerContainer) {
       return;
     }
-    layerContainer.list.map((gameObject: GameObject) => gameObject.destroy());
+    layerContainer.list.map((gameObject: Phaser.GameObjects.GameObject) => gameObject.destroy());
   }
 }
 
