@@ -3,19 +3,53 @@ import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 
 class GameStateManager {
+  // Game State
   private chapter: GameChapter;
-  private locationHasUpdate: Map<string, boolean>;
+  private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
 
+  // Triggered Interactions
+  private triggeredInteractions: Map<string, boolean>;
+
   constructor() {
-    this.locationHasUpdate = new Map<string, boolean>();
-    this.locationStates = new Map<string, GameLocation>();
     this.chapter = {} as GameChapter;
+    this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
+    this.locationStates = new Map<string, GameLocation>();
+    this.triggeredInteractions = new Map<string, boolean>();
   }
 
-  private updateLocationUpdateState(currLocName: string, targetLocName: string): void {
+  ///////////////////////////////
+  //          Helpers          //
+  ///////////////////////////////
+
+  private updateLocationStateMode(
+    currLocName: string,
+    targetLocName: string,
+    mode: GameMode
+  ): void {
+    this.locationHasUpdate.get(targetLocName)!.set(mode, true);
+
+    // Location has an update to its state, reset its interaction back to not triggered
     if (currLocName !== targetLocName) {
-      this.locationHasUpdate.set(targetLocName, true);
+      this.triggeredInteractions.set(targetLocName, false);
+    }
+  }
+
+  private updateLocationStateAttr(
+    currLocName: string,
+    targetLocName: string,
+    attr: GameLocationAttr
+  ): void {
+    switch (attr) {
+      case GameLocationAttr.navigation:
+        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Move);
+      case GameLocationAttr.talkTopics:
+        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Talk);
+      case GameLocationAttr.boundingBoxes:
+      case GameLocationAttr.objects:
+        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Explore);
+      default:
+        return;
     }
   }
 
@@ -30,22 +64,42 @@ class GameStateManager {
   public processChapter(chapter: GameChapter): void {
     this.chapter = chapter;
     this.locationStates = this.chapter.map.getLocations();
+
+    // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationName, map) => {
-      this.locationHasUpdate.set(locationName, true);
+      this.locationHasUpdate.set(locationName, new Map<GameMode, boolean>());
+      if (location.modes) {
+        location.modes.forEach(mode => this.locationHasUpdate.get(locationName)?.set(mode, true));
+      }
     });
   }
 
   ///////////////////////////////
-  //   Location Visit State    //
+  //       Update State        //
   ///////////////////////////////
 
-  public visitedLocation(locationName: string): void {
-    this.checkLocationsExist([locationName]);
-    // this.locationHasUpdate.set(locationName, false);
+  public triggerInteraction(id: string): void {
+    this.triggeredInteractions.set(id, true);
   }
 
-  public hasLocationUpdate(locationName: string): boolean | undefined {
-    return this.locationHasUpdate.get(locationName);
+  ///////////////////////////////
+  //       State Check         //
+  ///////////////////////////////
+
+  public hasLocationUpdate(locationName: string, mode?: GameMode): boolean | undefined {
+    this.checkLocationsExist([locationName]);
+    if (mode) {
+      return this.locationHasUpdate.get(locationName)!.get(mode);
+    }
+
+    let result = false;
+    const locationModeState = this.locationHasUpdate.get(locationName);
+    locationModeState!.forEach((hasUpdate, mode, map) => (result = result || hasUpdate));
+    return result;
+  }
+
+  public hasTriggeredInteraction(id: string): boolean | undefined {
+    return this.triggeredInteractions.get(id);
   }
 
   ///////////////////////////////
@@ -64,7 +118,7 @@ class GameStateManager {
       this.locationStates.get(locationName)!.modes = [];
     }
     this.locationStates.get(locationName)!.modes!.push(mode);
-    this.updateLocationUpdateState(currLocName, locationName);
+    this.updateLocationStateMode(currLocName, locationName, GameMode.Menu);
   }
 
   public removeLocationMode(currLocName: string, locationName: string, mode: GameMode) {
@@ -77,7 +131,7 @@ class GameStateManager {
       .get(locationName)!
       .modes!.filter((oldAttr: string) => oldAttr !== mode);
     this.locationStates.get(locationName)!.modes = newAttr;
-    this.updateLocationUpdateState(currLocName, locationName);
+    this.updateLocationStateMode(currLocName, locationName, GameMode.Menu);
   }
 
   ///////////////////////////////
@@ -101,7 +155,7 @@ class GameStateManager {
       this.locationStates.get(locationName)![attr] = [];
     }
     this.locationStates.get(locationName)![attr]!.push(attrElem);
-    this.updateLocationUpdateState(currLocName, locationName);
+    this.updateLocationStateAttr(currLocName, locationName, attr);
   }
 
   public removeLocationAttr(
@@ -119,7 +173,7 @@ class GameStateManager {
       .get(locationName)!
       [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationName)![attr] = newAttr;
-    this.updateLocationUpdateState(currLocName, locationName);
+    this.updateLocationStateAttr(currLocName, locationName, attr);
   }
 }
 

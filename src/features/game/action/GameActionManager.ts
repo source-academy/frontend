@@ -71,9 +71,9 @@ class GameActionManager {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdate(locationName: string): boolean | undefined {
+  public hasLocationUpdate(locationName: string, mode?: GameMode): boolean | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.hasLocationUpdate(locationName);
+      return this.gameManager.stateManager.hasLocationUpdate(locationName, mode);
     }
     return false;
   }
@@ -86,7 +86,25 @@ class GameActionManager {
   }
 
   /////////////////////
-  //   Game States   //
+  //Game Interaction //
+  /////////////////////
+
+  public hasTriggeredInteraction(id: string): boolean | undefined {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.hasTriggeredInteraction(id);
+    }
+    return undefined;
+  }
+
+  public triggerInteraction(id: string): void {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.triggerInteraction(id);
+    }
+    return undefined;
+  }
+
+  /////////////////////
+  //    Game Attr    //
   /////////////////////
 
   public getLocationAttr(attr: GameLocationAttr, locationName: string) {
