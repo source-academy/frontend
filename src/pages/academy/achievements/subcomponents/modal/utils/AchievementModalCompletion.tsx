@@ -1,17 +1,17 @@
 import React from 'react';
 
 type AchievementModalCompletionProps = {
-    completionText: string;
+  completionText: string;
 };
 
 function AchievementModalCompletion(props: AchievementModalCompletionProps) {
-    const { completionText } = props;
+  const { completionText } = props;
 
-    return (
-        <div>
-            <p>{completionText}</p>
-        </div>
-    );
+  return (
+    <div>
+      <p>{completionText}</p>
+    </div>
+  );
 }
 
 export default AchievementModalCompletion;

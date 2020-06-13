@@ -23,13 +23,12 @@ function AchievementModal(props: AchievementModalProps) {
     <div className="modal">
       <Card className="modal-container">
         <h1>{title}</h1>
-        
 
         <div>
-         <img src={modalImageUrl} alt={title} />
+          <img src={modalImageUrl} alt={title} />
         </div>
         <AchievementModalExp exp={exp} />
-        <AchievementModalDescription  description={description} />
+        <AchievementModalDescription description={description} />
         <AchievementModalGoal goalText={goalText} />
         <AchievementModalCompletion completionText={completionText} />
       </Card>
