@@ -207,8 +207,7 @@
 
     .modal {
       width: 40%;
-      height: 800px;
-      max-height: 800px;
+      height: 80%;
       display: flex;
       justify-content: center;
       text-align: center;
@@ -221,7 +220,13 @@
 
         img {
           max-height: 40%;
-          max-width: 80%;
+          max-width: 100%;
+        }
+
+        .modal-exp {
+          justify-content: center;
+          display: flex; 
+          flex-direction: row;
         }
       }
     }

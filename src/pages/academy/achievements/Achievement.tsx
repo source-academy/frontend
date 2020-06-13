@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { IconNames } from '@blueprintjs/icons';
 
 import AchievementFilter from './subcomponents/AchievementFilter';
-import AchievementModal from './subcomponents/AchievementModal';
+import AchievementModal from './subcomponents/modal/AchievementModal';
 import AchievementTask from './subcomponents/AchievementTask';
 import {
   AchievementStatus,
