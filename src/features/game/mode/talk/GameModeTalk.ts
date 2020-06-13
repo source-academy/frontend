@@ -14,6 +14,7 @@ import { screenSize, screenCenter, nullFunction } from '../../commons/CommonCons
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 
 class GameModeTalk implements IGameUI {
+  private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
   private dialogues: Map<DialogueId, Dialogue>;
   private gameButtons: TalkButton[];
@@ -23,6 +24,7 @@ class GameModeTalk implements IGameUI {
     talkTopics: DialogueId[],
     dialogues: Map<DialogueId, Dialogue>
   ) {
+    this.uiContainer = undefined;
     this.locationName = locationName;
     this.dialogues = dialogues;
     this.gameButtons = [];
@@ -66,12 +68,6 @@ class GameModeTalk implements IGameUI {
     }
     const talkMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-    if (hasUpdates) {
-      this.fetchLatestState();
-    }
-
     this.gameButtons.forEach((topicButton: TalkButton) => {
       const text = topicButton.text || '';
       const style = topicButton.style || {};
@@ -112,14 +108,27 @@ class GameModeTalk implements IGameUI {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
 
-    container.setActive(true);
-    container.setVisible(true);
-    container.setPosition(container.x, -screenSize.y);
+    // Fetch latest state if location is not yet visited
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    if (hasUpdates) {
+      if (this.uiContainer) {
+        this.uiContainer.destroy();
+      }
+      this.fetchLatestState();
+      this.uiContainer = await this.getUIContainer();
+      gameManager.add.existing(this.uiContainer);
+    }
 
-    gameManager.tweens.add({
-      targets: container,
-      ...entryTweenProps
-    });
+    if (this.uiContainer) {
+      this.uiContainer.setActive(true);
+      this.uiContainer.setVisible(true);
+      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...entryTweenProps
+      });
+    }
   }
 
   public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
@@ -127,16 +136,19 @@ class GameModeTalk implements IGameUI {
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');
     }
-    container.setPosition(container.x, 0);
 
-    gameManager.tweens.add({
-      targets: container,
-      ...exitTweenProps
-    });
+    if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-    await sleep(500);
-    container.setVisible(false);
-    container.setActive(false);
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(500);
+      this.uiContainer.setVisible(false);
+      this.uiContainer.setActive(false);
+    }
   }
 }
 

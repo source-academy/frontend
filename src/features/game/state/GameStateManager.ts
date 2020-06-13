@@ -41,7 +41,7 @@ class GameStateManager {
 
   public visitedLocation(locationName: string): void {
     this.checkLocationsExist([locationName]);
-    this.locationHasUpdate.set(locationName, false);
+    // this.locationHasUpdate.set(locationName, false);
   }
 
   public hasLocationUpdate(locationName: string): boolean | undefined {

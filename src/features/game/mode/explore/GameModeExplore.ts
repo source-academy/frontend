@@ -3,12 +3,15 @@ import { IGameUI, ObjectId, BBoxId } from '../../commons/CommonsTypes';
 import { ObjectProperty } from '../../objects/ObjectsTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import { createObjectsLayer } from '../../objects/ObjectsRenderer';
-import { sleep } from '../../utils/GameUtils';
+// import { sleep } from '../../utils/GameUtils';
 import { magnifyingGlass } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+// import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+// import { screenSize } from '../../commons/CommonConstants';
 
 class GameModeExplore implements IGameUI {
+  private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
   private objectIds: ObjectId[];
   private bboxIds: BBoxId[];
@@ -22,6 +25,7 @@ class GameModeExplore implements IGameUI {
     objects?: Map<ObjectId, ObjectProperty>,
     boundingBoxes?: Map<BBoxId, BBoxProperty>
   ) {
+    this.uiContainer = undefined;
     this.locationName = locationName;
     this.objects = objects || new Map<ObjectId, ObjectProperty>();
     this.boundingBoxes = boundingBoxes || new Map<BBoxId, BBoxProperty>();
@@ -78,11 +82,23 @@ class GameModeExplore implements IGameUI {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
 
-    gameManager.input.setDefaultCursor(magnifyingGlass);
+    // Fetch latest state if location is not yet visited
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    if (hasUpdates) {
+      if (this.uiContainer) {
+        this.uiContainer.destroy();
+      }
+      this.fetchLatestState();
+      this.uiContainer = await this.getUIContainer();
+      gameManager.add.existing(this.uiContainer);
+    }
 
-    gameManager.add.existing(container);
-    container.setActive(true);
-    container.setVisible(true);
+    if (this.uiContainer) {
+      this.uiContainer.setActive(true);
+      this.uiContainer.setVisible(true);
+    }
+
+    gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
   public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
@@ -92,11 +108,11 @@ class GameModeExplore implements IGameUI {
     }
 
     gameManager.input.setDefaultCursor('');
-    container.setPosition(container.x, 0);
 
-    await sleep(500);
-    container.setVisible(false);
-    container.setActive(false);
+    if (this.uiContainer) {
+      this.uiContainer.setVisible(false);
+      this.uiContainer.setActive(false);
+    }
   }
 }
 
