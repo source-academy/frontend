@@ -1,5 +1,5 @@
 import { defaultLayerSequence, Layer } from './GameLayerTypes';
-import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
+import { fadeIn } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
@@ -65,23 +65,19 @@ class GameLayerManager {
   }
 
   public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
-    layerTypes.forEach(layerType => this.clearLayerContents(layerType, withFade));
+    layerTypes.forEach(layerType => this.clearLayerContents(layerType));
   }
 
-  public clearLayerContents(layerType: Layer, withFade = false) {
+  public clearAllLayers() {
+    this.layers.forEach((_, layerType) => this.clearLayerContents(layerType));
+  }
+
+  public clearLayerContents(layerType: Layer) {
     const layerContainer = this.layers.get(layerType);
     if (!layerContainer) {
       return;
     }
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      return;
-    }
-    if (withFade) {
-      layerContainer.list.map((gameObject: GameObject) => fadeAndDestroy(gameManager, gameObject));
-    } else {
-      layerContainer.list.map((gameObject: GameObject) => gameObject.destroy());
-    }
+    layerContainer.list.map((gameObject: GameObject) => gameObject.destroy());
   }
 }
 

@@ -1,5 +1,5 @@
-import { mapByHeader } from './StringUtils';
-import { splitToLines } from './StringUtils';
+import { mapByHeader } from './ParserHelper';
+import { splitToLines } from './ParserHelper';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import { GameItemTypeDetails } from '../location/GameMapConstants';
 import { isPartLabel } from '../dialogue/DialogueHelper';
@@ -9,9 +9,12 @@ export default function DialogueParser(
   fileName: string,
   fileContent: string
 ) {
+  console.log('Parsing dialogue...');
+
   if (fileName === 'dialogueLocation') {
     splitToLines(fileContent).forEach(line => {
       const [locationId, dialogueIds] = line.split(': ');
+
       dialogueIds.split(', ').forEach(dialogueId => {
         chapter.map.setItemAt(locationId, GameItemTypeDetails.Dialogue, dialogueId);
       });
@@ -21,7 +24,7 @@ export default function DialogueParser(
 
   const lines = splitToLines(fileContent);
   const [titleWithLabel, ...restOfLines] = lines;
-  const [, title] = titleWithLabel.split(', ');
+  const [, title] = titleWithLabel.split(': ');
 
   const dialogueObject = mapByHeader(restOfLines, isPartLabel);
   const dialogue = { title: title, content: dialogueObject };

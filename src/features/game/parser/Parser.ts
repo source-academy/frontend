@@ -1,11 +1,12 @@
 import GameMap from '../location/GameMap';
-import { splitByHeader, matchStartingKey, stripEnclosingChars } from './StringUtils';
+import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
 import GameObjective from '../objective/GameObjective';
+import LocationSelectChapter from '../scenes/LocationSelectChapter';
 
 class Parser {
   private static parserMap: object;
@@ -24,12 +25,14 @@ class Parser {
       startingLoc: '',
       objectives: new GameObjective()
     };
+
+    // Split files by the <<>>
     splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
       if (!fileName || !fileContent) {
         return;
       }
-
-      const parserType = matchStartingKey(Parser.parserMap, stripEnclosingChars(fileName, 2));
+      fileName = stripEnclosingChars(fileName, 2);
+      const parserType = matchStartingKey(Parser.parserMap, fileName);
       if (!parserType) {
         throw new Error('Unknown parser type');
       }
@@ -37,6 +40,8 @@ class Parser {
       parserFunction(chapter, fileName, fileContent);
     });
 
+    console.log(chapter);
+    console.log(LocationSelectChapter);
     return chapter;
   }
 }

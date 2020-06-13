@@ -12,6 +12,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import { GameLocation } from '../location/GameMapTypes';
 import { ImageAsset } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
+import { dialogue1 } from './Factory';
 
 const LocationSelectMap = new GameMap();
 
@@ -62,10 +63,13 @@ LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
 
 // Set talk topics
 LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue2');
-LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue3');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue4');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue5');
+LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
+
+// Add dialogues
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue1', dialogue1);
 
 // Set Objectives
 const objectives = new GameObjective();

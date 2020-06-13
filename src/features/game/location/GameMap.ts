@@ -1,8 +1,10 @@
 import { GameLocation, GameItemType, LocationId } from '../location/GameMapTypes';
-import { GameMapItem, ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
+import { ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/DialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+import { GameMode } from '../mode/GameModeTypes';
+import { showLocationError } from '../utils/Error';
 
 class GameMap {
   private mapAssets: Map<AssetKey, AssetPath>;
@@ -33,9 +35,22 @@ class GameMap {
     this.locations.set(locationId, location);
   }
 
+  public setModesAt(id: LocationId, modes: GameMode[]) {
+    const location = this.locations.get(id);
+    if (!location) {
+      showLocationError(id);
+      return;
+    }
+
+    location.modes = modes;
+  }
+
   public setNavigationFrom(id: string, destination: string[]) {
     const location = this.locations.get(id);
-    if (!location) return;
+    if (!location) {
+      showLocationError(id);
+      return;
+    }
 
     location.navigation = destination;
   }
@@ -43,7 +58,8 @@ class GameMap {
   public getNavigationFrom(id: string): string[] | undefined {
     const location = this.locations.get(id);
     if (!location || !location.navigation) {
-      return undefined;
+      showLocationError(id);
+      return;
     }
     return location.navigation;
   }
@@ -60,13 +76,16 @@ class GameMap {
     return this.objects;
   }
 
-  public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: GameMapItem) {
+  public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: T) {
     this[itemType.listName].set(itemId, item);
   }
 
   public setItemAt<T>(locationId: string, itemType: GameItemType<T>, itemId: string) {
     const location = this.locations.get(locationId);
-    if (!location) return;
+    if (!location) {
+      showLocationError(locationId);
+      return;
+    }
 
     if (!location[itemType.listName]) {
       location[itemType.listName] = [];
@@ -76,7 +95,11 @@ class GameMap {
 
   public getItemAt<T>(locationId: string, itemType: GameItemType<T>): Map<ItemId, T> {
     const location = this.locations.get(locationId);
-    if (!location || !location[itemType.listName]) {
+    if (!location) {
+      showLocationError(locationId);
+      return itemType.emptyMap;
+    }
+    if (!location[itemType.listName]) {
       return itemType.emptyMap;
     }
 

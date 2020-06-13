@@ -1,8 +1,14 @@
-import { isGotoLabel, getPartToJump, isSpeaker, showDialogueError } from './DialogueHelper';
-import { getSpeakerDetails } from '../character/CharacterHelper';
+import {
+  isGotoLabel,
+  getPartToJump,
+  isSpeaker,
+  showDialogueError,
+  getSpeakerDetails
+} from './DialogueHelper';
 
-import { DialogueObject, SpeakerDetail, DialogueString } from './DialogueTypes';
+import { DialogueObject, DialogueString } from './DialogueTypes';
 import { hasDevAccess } from '../utils/GameAccess';
+import { SpeakerDetail } from '../commons/CommonsTypes';
 
 // Generates next line in dialogue based on Dialogue Object
 function DialogueGenerator(dialogueObject: DialogueObject) {

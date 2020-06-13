@@ -2,8 +2,8 @@ import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
 import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
-import { SpeakerDetail } from 'src/features/game/dialogue/DialogueTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
+import { SpeakerDetail } from '../commons/CommonsTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;

@@ -1,12 +1,12 @@
 <<configuration>>
-startingLoc: room
+startingLoc: Student Room
 
 <<location>>
-crashSite, crashSite, "Crash Site"
-classroom, classroom/classOn, "Class Room"
-emergency, classroom/emergency, "Emergency"
-hallway, hallway, "Hallway"
-room, yourRoom-dim, "Student Room"
+Crash Site, crashSite, "Crash Site"
+Class Room, classroom/classOn, "Class Room"
+Emergency, classroom/emergency, "Emergency"
+Hallway, hallway, "Hallway"
+Student Room, yourRoom-dim, "Student Room"
 $
 [talk move]
 [explore talk move]
@@ -14,11 +14,11 @@ $
 [move]
 [explore move talk]
 $
-classroom: crashSite, hallway
-crashSite: classroom
-hallway: classroom, room, emergency
-room: hallway
-emergency: hallway
+Class Room: Crash Site, Hallway
+Crash Site: Class Room
+Hallway: Class Room, Class Room, Emergency
+Student Room: Hallway
+Emergency: Hallway
 
 <<objects>>
 [room]
@@ -32,12 +32,12 @@ yourCarpet, collectible: yourCarpet
 door7, move: [door6, 7, 18], appear: apple
 
 <<dialogueLocation>>
-classroom: dialogue1, dialogue1, dialogue1
-crashSite: dialogue1, dialogue1
-room: dialogue1
+Class Room: dialogue1, dialogue1
+Crash Site: dialogue1, dialogue1
+Student Room: dialogue1
 
 <<dialogue1>>
-title: What happened
+title: What happened?
 [part0]
 $narrator
 The year is 1101 A.E.
