@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { Card } from '@blueprintjs/core';
-import { AchievementModalItem } from '../../../../../commons/achievements/AchievementTypes';
-import AchievementModalDescription from './utils/AchievementModalDescription';
-import AchievementModalExp from './utils/AchievementModalExp';
-import AchievementModalGoal from './utils/AchievementModalGoal';
-import AchievementModalCompletion from './utils/AchievementModalCompletion';
+import { AchievementModalItem } from '../../../../commons/achievements/AchievementTypes';
+import AchievementModalDescription from './modal/AchievementModalDescription';
+import AchievementModalGoal from './modal/AchievementModalGoal';
+import AchievementModalCompletion from './modal/AchievementModalCompletion';
+import AchievementExp from './utils/AchievementExp';
 
 type AchievementModalProps = {
   modalID: number;
@@ -27,7 +27,7 @@ function AchievementModal(props: AchievementModalProps) {
         <div>
           <img src={modalImageUrl} alt={title} />
         </div>
-        <AchievementModalExp exp={exp} />
+        <AchievementExp exp={exp} />
         <AchievementModalDescription description={description} />
         <AchievementModalGoal goalText={goalText} />
         <AchievementModalCompletion completionText={completionText} />
