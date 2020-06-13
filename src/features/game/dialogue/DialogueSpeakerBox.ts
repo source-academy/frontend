@@ -1,7 +1,7 @@
-import { SpeakerDetail } from './DialogueTypes';
 import { Color } from '../utils/styles';
-import { caps } from '../character/CharacterHelper';
+import { capitalise } from '../parser/ParserHelper';
 import { speechBox } from '../commons/CommonAssets';
+import { SpeakerDetail } from '../commons/CommonsTypes';
 
 const textPadding = 10;
 
@@ -43,7 +43,7 @@ function DialogueSpeakerBox(scene: Phaser.Scene): [Phaser.GameObjects.Container,
     if (!speakerDetail) {
       return;
     }
-    speakerText.text = caps(speakerDetail[0]);
+    speakerText.text = capitalise(speakerDetail[0]);
   }
 
   return [container, changeSpeaker];

@@ -27,6 +27,10 @@ export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
 
 export type GameButton = GameText & GameSprite & IGameInteractive;
 
+type Speaker = string;
+type Expression = string;
+export type SpeakerDetail = [Speaker, Expression];
+
 export interface IGameInteractive {
   isInteractive: boolean;
   onInteract: () => void;

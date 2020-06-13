@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
 
+export const capitalise = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
+
 export function matchExact(r: RegExp, str: string) {
   const match = str.match(r);
   return !!(match && str === match[0]);

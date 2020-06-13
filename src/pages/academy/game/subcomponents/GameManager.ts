@@ -14,10 +14,11 @@ import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
+import Parser from 'src/features/game/parser/Parser';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
-  fileName: string;
+  text: string;
 };
 
 class GameManager extends Phaser.Scene {
@@ -51,8 +52,8 @@ class GameManager extends Phaser.Scene {
     GameActionManager.getInstance().setGameManager(this);
   }
 
-  init({ fileName }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
+  init({ text }: GameManagerProps) {
+    this.currentChapter = Parser.parse(text);
   }
 
   public preload() {

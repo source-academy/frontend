@@ -1,9 +1,9 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
-import { SpeakerDetail } from '../dialogue/DialogueTypes';
 import { charRect } from './CharacterConstants';
 import { avatarKey } from 'src/features/game/character/CharacterHelper';
+import { SpeakerDetail } from '../commons/CommonsTypes';
 
 export default class CharacterManager {
   private currentAvatar: Phaser.GameObjects.Image | undefined;
