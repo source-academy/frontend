@@ -17,15 +17,15 @@ export type DispatchProps = {};
 export type StateProps = {};
 
 function Achievement() {
-  const [modalID, setModalID] = useState(-1);
+  const [modalID, setModalID] = useState<number>(-1);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
 
   /**
    * Count the number of achievement items by filterStatus
    *
-   * @param achievementDict A Dictionary of Achievement IDs and their Items
-   * @param filterStatus The filterStatus used to filter the achievement dict
-   * @returns The number of items
+   * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
+   * @param {FilterStatus} filterStatus The filterStatus used to filter the achievement dict
+   * @returns {number} The number of items
    */
   const countItemByFilterStatus = (
     achievementDict: { [id: number]: AchievementItem },
@@ -50,13 +50,13 @@ function Achievement() {
   /**
    * Maps the achievement dict to AchievementTask Elements
    *
-   * This function creates an AchievementTask for achievement items that
+   * This function creates an AchievementTask for each achievement item that
    * has isTask=true.
    *
-   * @param achievementDict A Dictionary of Achievement IDs and their Items
+   * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
    * @returns AchievementTask Elements
    */
-  const mapAchievementDictToTasks = (achievementDict: { [id: number]: AchievementItem }) => {
+  const mapAchievementDictToTask = (achievementDict: { [id: number]: AchievementItem }) => {
     return Object.values(achievementDict)
       .filter(achievement => achievement.isTask)
       .map(achievement => (
@@ -95,7 +95,7 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementDictToTasks(achievementDict)}</ul>
+          <ul className="display-list">{mapAchievementDictToTask(achievementDict)}</ul>
         </div>
 
         <AchievementModal modalID={modalID} achievementModalDict={achievementModalDict} />

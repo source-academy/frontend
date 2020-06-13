@@ -23,8 +23,12 @@ function AchievementTask(props: AchievementTaskProps) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // AchievementTask decides whether the items should be rendered based on
-  // the filterStatus state
+  /**
+   * Checks whether the AchievementItem should be rendered based on
+   * the achivement page filterStatus.
+   *
+   * @param {AchievementItem} achievement The achievement item
+   */
   const shouldRender = (achievement: AchievementItem) => {
     switch (filterStatus) {
       case FilterStatus.ALL:
@@ -38,18 +42,32 @@ function AchievementTask(props: AchievementTaskProps) {
     }
   };
 
+  /**
+   * Checks whether the achievement item has any prerequisite item that
+   * should be rendered based on the achievement page filterStatus.
+   *
+   * If there is at least 1 prerequisite that needs to be rendered,
+   * the whole AchievementTask will be rendered together.
+   *
+   * @param {AchievementItem} achievement The achievement item
+   */
   const shouldRenderPrerequisites = (achievement: AchievementItem) => {
     return getPrerequisites(achievement).reduce((canRender, prerequisite) => {
       return shouldRender(prerequisite) || canRender;
     }, false);
   };
 
+  // Returns an array of prerequisites of the AchievementItem
   const getPrerequisites = (achievement: AchievementItem) => {
     if (achievement.prerequisites === undefined) {
       return [];
     }
 
     return achievement.prerequisites.map(prerequisiteID => achievementDict[prerequisiteID]);
+  };
+
+  const hasPrerequisites = (achievement: AchievementItem) => {
+    return getPrerequisites(achievement).length > 0;
   };
 
   // TODO: Put these helper functions in a separate file.
@@ -95,10 +113,6 @@ function AchievementTask(props: AchievementTaskProps) {
     }
 
     return achievement.deadline;
-  };
-
-  const hasPrerequisites = (achievement: AchievementItem) => {
-    return getPrerequisites(achievement).length > 0;
   };
 
   const displayModal = (modalID: number) => {
