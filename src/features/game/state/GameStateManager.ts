@@ -1,18 +1,20 @@
 import { GameChapter } from '../chapter/GameChapterTypes';
 import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import GameObjective from '../objective/GameObjective';
 
 class GameStateManager {
   // Game State
   private chapter: GameChapter;
+  private chapterObjective: GameObjective;
   private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
-
   // Triggered Interactions
   private triggeredInteractions: Map<string, boolean>;
 
   constructor() {
     this.chapter = {} as GameChapter;
+    this.chapterObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
     this.triggeredInteractions = new Map<string, boolean>();
@@ -61,9 +63,14 @@ class GameStateManager {
     });
   }
 
+  ///////////////////////////////
+  //        Preprocess         //
+  ///////////////////////////////
+
   public processChapter(chapter: GameChapter): void {
     this.chapter = chapter;
     this.locationStates = this.chapter.map.getLocations();
+    this.chapterObjective = this.chapter.objectives;
 
     // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationName, map) => {
@@ -174,6 +181,29 @@ class GameStateManager {
       [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationName)![attr] = newAttr;
     this.updateLocationStateAttr(currLocName, locationName, attr);
+  }
+
+  ///////////////////////////////
+  //    Chapter Objectives     //
+  ///////////////////////////////
+
+  public isAllComplete(): boolean {
+    return this.chapterObjective.isAllComplete();
+  }
+
+  public isObjectiveComplete(key: string): boolean {
+    const isComplete = this.chapterObjective.getObjectiveState(key);
+    return isComplete || true;
+  }
+
+  public areObjectivesComplete(keys: string[]): boolean {
+    let result = true;
+    keys.forEach(key => (result = result && this.isObjectiveComplete(key)));
+    return result;
+  }
+
+  public completeObjective(key: string): void {
+    return this.chapterObjective.setObjective(key, true);
   }
 }
 

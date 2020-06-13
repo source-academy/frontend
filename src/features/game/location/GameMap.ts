@@ -13,12 +13,13 @@ class GameMap {
   private boundingBoxes: Map<ItemId, BBoxProperty>;
 
   constructor() {
-    this.mapAssets = new Map<AssetKey, AssetPath>();
-
     this.locations = new Map<LocationId, GameLocation>();
+
+    this.mapAssets = new Map<AssetKey, AssetPath>();
     this.talkTopics = new Map<ItemId, Dialogue>();
-    this.objects = new Map<ItemId, ObjectProperty>();
+    this.talkTopics = new Map<ItemId, Dialogue>();
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
+    
   }
 
   public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {

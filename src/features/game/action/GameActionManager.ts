@@ -154,6 +154,37 @@ class GameActionManager {
   }
 
   /////////////////////
+  //  Game Objective //
+  /////////////////////
+
+  public isAllComplete(): boolean {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.isAllComplete();
+    }
+    return false;
+  }
+
+  public isObjectiveComplete(key: string): boolean {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.isObjectiveComplete(key);
+    }
+    return false;
+  }
+
+  public areObjectivesComplete(keys: string[]): boolean {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.areObjectivesComplete(keys);
+    }
+    return false;
+  }
+
+  public completeObjective(key: string): void {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.completeObjective(key);
+    }
+  }
+
+  /////////////////////
   //     Dialogue    //
   /////////////////////
 
