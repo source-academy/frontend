@@ -126,9 +126,6 @@ class GameManager extends Phaser.Scene {
 
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);
-
-    // Update
-    this.currentLocationName = location.name;
   }
 
   public async changeLocationTo(locationName: string) {
@@ -136,6 +133,9 @@ class GameManager extends Phaser.Scene {
     if (location) {
       // Deactive current UI
       this.deactivateCurrentUI();
+
+      // Update
+      this.currentLocationName = locationName;
 
       // Reset UI Containers on new location
       this.currentUIContainers.clear();
