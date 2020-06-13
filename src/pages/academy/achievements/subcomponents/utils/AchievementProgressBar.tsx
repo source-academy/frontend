@@ -12,7 +12,7 @@ function AchievementProgressBar(props: AchievementProgressBarProps) {
   return (
     <div>
       <ProgressBar
-        intent={value == 1 ? 'success' : undefined}
+        intent={value === 1 ? 'success' : undefined}
         value={value}
         animate={shouldAnimate}
       />

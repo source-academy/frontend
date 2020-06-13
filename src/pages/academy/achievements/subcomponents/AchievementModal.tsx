@@ -13,7 +13,7 @@ function AchievementModal(props: AchievementModalProps) {
 
   const modal = achievementModalDict[modalID];
   if (modal === undefined) return null;
-  const { title, modalImageUrl, description, exp, goal, completionText } = modal;
+  const { title, modalImageUrl, description, exp, goalText, completionText } = modal;
 
   return (
     <div className="modal">
@@ -22,7 +22,7 @@ function AchievementModal(props: AchievementModalProps) {
         <img src={modalImageUrl} alt={title} />
         <p>{description}</p>
         <p>{exp}</p>
-        <p>{goal}</p>
+        <p>{goalText}</p>
         <p>{completionText}</p>
       </Card>
     </div>
