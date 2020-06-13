@@ -96,7 +96,7 @@ class GameModeMove implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
       this.locationName
@@ -190,7 +190,7 @@ class GameModeMove implements IGameUI {
     this.currentLocationAssetKey = assetKey;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
@@ -219,7 +219,7 @@ class GameModeMove implements IGameUI {
     }
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');

@@ -50,7 +50,7 @@ class GameModeTalk implements IGameUI {
     });
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.talkTopics,
       this.locationName
@@ -102,7 +102,7 @@ class GameModeTalk implements IGameUI {
     return talkMenuContainer;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
@@ -131,7 +131,7 @@ class GameModeTalk implements IGameUI {
     }
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');

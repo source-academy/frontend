@@ -72,7 +72,7 @@ class GameModeMenu implements IGameUI {
     this.gameButtons.push(newModeButton);
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationName);
     if (!latestLocationMode) {
       return;
@@ -87,7 +87,6 @@ class GameModeMenu implements IGameUI {
     }
 
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
 
     const modeBanner = new Phaser.GameObjects.Image(
       gameManager,
@@ -127,7 +126,7 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
@@ -157,7 +156,7 @@ class GameModeMenu implements IGameUI {
     }
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');

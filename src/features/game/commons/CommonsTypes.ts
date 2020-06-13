@@ -39,9 +39,10 @@ export interface IGameInteractive {
 }
 
 export interface IGameUI {
+  fetchLatestState: () => void;
   getUIContainer: () => Phaser.GameObjects.Container;
-  activateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
-  deactivateUI: (container: Phaser.GameObjects.Container) => Promise<void>;
+  activateUI: () => Promise<void>;
+  deactivateUI: () => Promise<void>;
 }
 
 export type ObjectId = string;

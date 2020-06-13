@@ -3,12 +3,9 @@ import { IGameUI, ObjectId, BBoxId } from '../../commons/CommonsTypes';
 import { ObjectProperty } from '../../objects/ObjectsTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import { createObjectsLayer } from '../../objects/ObjectsRenderer';
-// import { sleep } from '../../utils/GameUtils';
 import { magnifyingGlass } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-// import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
-// import { screenSize } from '../../commons/CommonConstants';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -33,7 +30,7 @@ class GameModeExplore implements IGameUI {
     this.bboxIds = bboxIds || [];
   }
 
-  private fetchLatestState() {
+  public fetchLatestState(): void {
     const latestObjIds = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.objects,
       this.locationName
@@ -70,7 +67,7 @@ class GameModeExplore implements IGameUI {
     return exploreMenuContainer;
   }
 
-  public async activateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('ActivateUI: Game Manager is not defined!');
@@ -95,7 +92,7 @@ class GameModeExplore implements IGameUI {
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
-  public async deactivateUI(container: Phaser.GameObjects.Container): Promise<void> {
+  public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     if (!gameManager) {
       throw console.error('DeactivateUI: Game Manager is not defined!');
