@@ -12,6 +12,7 @@ class GameObjective {
   public setObjective(key: string, value: boolean): void {
     const prevState = this.objective.get(key);
     this.objective.set(key, value);
+    // Handle repeated calls
     if (prevState !== undefined && prevState === value) {
       this.numOfCompletedObjectives++;
     }
@@ -20,6 +21,10 @@ class GameObjective {
   public addObjective(key: string): void {
     this.objective.set(key, false);
     this.totalNumOfObjectives++;
+  }
+
+  public addObjectives(keys: string[]): void {
+    keys.forEach(key => this.addObjective(key));
   }
 
   public isAllComplete(): boolean {

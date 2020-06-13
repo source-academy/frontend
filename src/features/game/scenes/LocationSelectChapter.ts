@@ -14,6 +14,7 @@ import { parseDialogue } from '../parser/DialogueParser';
 import { SampleDialogue, SampleObjects } from './LocationAssets';
 import { parseObjects } from '../parser/ObjectsParser';
 import { GameLocation } from '../location/GameMapTypes';
+import GameObjective from '../objective/GameObjective';
 
 const LocationSelectMap = new GameMap();
 
@@ -96,9 +97,14 @@ sampleObjectProperties.forEach((objects, locationId) => {
   });
 });
 
+// Set Objectives
+const objectives = new GameObjective();
+objectives.addObjectives(['Visit Hallway', 'Talk At Classroom']);
+
 const LocationSelectChapter: GameChapter = {
   map: LocationSelectMap,
-  startingLoc: 'Student Room'
+  startingLoc: 'Student Room',
+  objectives: objectives
 };
 
 export default LocationSelectChapter;

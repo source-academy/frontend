@@ -20,9 +20,9 @@ class GameMap {
   private boundingBoxes: Map<BBoxId, BBoxProperty>;
 
   constructor() {
-    this.locationAssets = new Map<string, GameImage>();
     this.locations = new Map<string, GameLocation>();
 
+    this.locationAssets = new Map<string, GameImage>();
     this.talkTopics = new Map<DialogueId, Dialogue>();
     this.objects = new Map<ObjectId, ObjectProperty>();
     this.boundingBoxes = new Map<BBoxId, BBoxProperty>();
