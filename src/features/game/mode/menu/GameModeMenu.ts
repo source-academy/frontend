@@ -135,7 +135,7 @@ class GameModeMenu implements IGameUI {
     // Fetch latest state if location is not yet visited
     const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
     if (hasUpdates || !this.uiContainer) {
-      console.log("Menu: Location has update ", this.locationName);
+      console.log('Menu: Location has update ', this.locationName);
       if (this.uiContainer) {
         this.uiContainer.destroy();
       }
@@ -163,8 +163,8 @@ class GameModeMenu implements IGameUI {
     }
 
     if (this.uiContainer) {
-      console.log("Deactivating UI: UI Container is defined");
-      console.log("Deactivating UI: Location ", this.locationName);
+      console.log('Deactivating UI: UI Container is defined');
+      console.log('Deactivating UI: Location ', this.locationName);
 
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 

@@ -75,7 +75,7 @@ class GameModeExplore implements IGameUI {
 
     // Fetch latest state if location is not yet visited
     const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-    if (hasUpdates|| !this.uiContainer) {
+    if (hasUpdates || !this.uiContainer) {
       if (this.uiContainer) {
         this.uiContainer.destroy();
       }

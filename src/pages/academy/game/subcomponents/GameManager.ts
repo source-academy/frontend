@@ -27,12 +27,12 @@ type GameManagerProps = {
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
-  
+
   // Limited to current chapter
   public modeManager: GameModeManager;
   public layerManager: LayerManager;
   public stateManager: GameStateManager;
-  
+
   // Limited to current location
   public currentLocationName: string;
   private currentActiveMode: GameMode;
