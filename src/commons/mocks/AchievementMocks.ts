@@ -58,6 +58,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Keyboard Warrior - Silver Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
+    deadline: new Date(2020, 8, 3, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.COMPLETED,
     completionGoal: 50
@@ -78,6 +79,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     exp: 250,
     deadline: new Date(2020, 6, 4, 0, 0, 0),
     isTask: true,
+    prerequisites: [6],
     status: AchievementStatus.EXPIRED,
     completionGoal: 100
   },
@@ -88,6 +90,17 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     exp: 80,
     isTask: true,
     prerequisites: [1, 8],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 2
+  },
+  10: {
+    id: 10,
+    title: 'Assessment Master',
+    ability: AchievementAbility.EFFORT,
+    exp: 80,
+    deadline: new Date(2020, 10, 1, 0, 0, 0),
+    isTask: true,
+    prerequisites: [9],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2
   }

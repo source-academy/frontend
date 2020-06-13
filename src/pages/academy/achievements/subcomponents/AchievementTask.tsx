@@ -23,13 +23,19 @@ function AchievementTask(props: AchievementTaskProps) {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const displayModal = (modalID: number) => {
+    return () => setModalID(modalID);
+  };
+
+  /* -------- Helper for Renderer -------- */
+
   /**
    * Checks whether the AchievementItem should be rendered based on
    * the achivement page filterStatus.
    *
    * @param {AchievementItem} achievement The achievement item
    */
-  const shouldRender = (achievement: AchievementItem) => {
+  const shouldRender = (achievement: AchievementItem): boolean => {
     switch (filterStatus) {
       case FilterStatus.ALL:
         return true;
@@ -57,8 +63,10 @@ function AchievementTask(props: AchievementTaskProps) {
     }, false);
   };
 
+  /* ------ Helper for Prerequisites ------ */
+
   // Returns an array of prerequisites of the AchievementItem
-  const getPrerequisites = (achievement: AchievementItem) => {
+  const getPrerequisites = (achievement: AchievementItem): AchievementItem[] => {
     if (achievement.prerequisites === undefined) {
       return [];
     }
@@ -66,57 +74,36 @@ function AchievementTask(props: AchievementTaskProps) {
     return achievement.prerequisites.map(prerequisiteID => achievementDict[prerequisiteID]);
   };
 
-  const hasPrerequisites = (achievement: AchievementItem) => {
+  const hasPrerequisites = (achievement: AchievementItem): boolean => {
     return getPrerequisites(achievement).length > 0;
   };
 
-  // TODO: Put these helper functions in a separate file.
-  const mapPrerequisitesToDeadlines = (
-    achievement: AchievementItem,
-    prerequisites: AchievementItem[]
+  /* -------- Helper for Deadlines -------- */
+
+  // Maps the prerequisites of the achievement to their furthest deadlines
+  const mapPrerequisitesToDeadlines = (achievement: AchievementItem): (Date | undefined)[] => {
+    const prerequisites = getPrerequisites(achievement);
+    return prerequisites.map(prerequisite => getFurthestDeadline(prerequisite));
+  };
+
+  // Gets the furthest deadline of the achievement item, including its prerequisites
+  const getFurthestDeadline = (achievement: AchievementItem): Date | undefined => {
+    const prerequisiteDeadlines = mapPrerequisitesToDeadlines(achievement);
+    return prerequisiteDeadlines.reduce(compareDeadlines, achievement.deadline);
+  };
+
+  // Comparator of two deadlines
+  const compareDeadlines = (
+    furthestDeadline: Date | undefined,
+    currentDeadline: Date | undefined
   ) => {
-    return prerequisites.map(prerequisite => {
-      if (hasPrerequisites(prerequisite)) {
-        return calculatLatesteDeadline(achievement, getPrerequisites(prerequisite));
-      }
-
-      return prerequisite.deadline;
-    });
-  };
-
-  const calculatLatesteDeadline = (
-    achievement: AchievementItem,
-    prerequisites: AchievementItem[]
-  ): Date | undefined => {
-    if (prerequisites.length === 0) {
-      return achievement.deadline;
+    if (currentDeadline === undefined) {
+      return furthestDeadline;
+    } else if (furthestDeadline === undefined) {
+      return currentDeadline;
+    } else {
+      return furthestDeadline >= currentDeadline ? furthestDeadline : currentDeadline;
     }
-
-    const latestDeadline = mapPrerequisitesToDeadlines(achievement, prerequisites).reduce(
-      (latestDate, deadline) => {
-        if (deadline === undefined) {
-          return latestDate;
-        }
-
-        if (latestDate === undefined) {
-          return deadline;
-        }
-
-        return deadline.getTime() > latestDate.getTime() ? deadline : latestDate;
-      }
-    );
-
-    // console.log(`${achievement.title} : ${achievement.deadline} : ${latestDeadline}`);
-
-    if (latestDeadline && !achievement.deadline) {
-      return latestDeadline;
-    }
-
-    return achievement.deadline;
-  };
-
-  const displayModal = (modalID: number) => {
-    return () => setModalID(modalID);
   };
 
   // if the main achievement or any of the prerequisites need to be rendered,
@@ -127,7 +114,7 @@ function AchievementTask(props: AchievementTaskProps) {
         <li key={achievement.id}>
           <AchievementCard
             achievement={achievement}
-            deadline={calculatLatesteDeadline(achievement, getPrerequisites(achievement))}
+            deadline={getFurthestDeadline(achievement)}
             isTranslucent={!shouldRender(achievement)}
             hasDropdown={hasPrerequisites(achievement)}
             isDropdownOpen={isDropdownOpen}
@@ -141,10 +128,7 @@ function AchievementTask(props: AchievementTaskProps) {
                   <div className="node">
                     <PrerequisiteCard
                       achievement={prerequisite}
-                      deadline={calculatLatesteDeadline(
-                        prerequisite,
-                        getPrerequisites(prerequisite)
-                      )}
+                      deadline={getFurthestDeadline(prerequisite)}
                       displayModal={displayModal}
                       isTranslucent={!shouldRender(prerequisite)}
                     />
