@@ -1,4 +1,3 @@
-import { GameImage } from '../../commons/CommonsTypes';
 import { screenSize } from '../../commons/CommonConstants';
 
 export const moveButtonYSpace = screenSize.y * 0.8;
@@ -14,34 +13,3 @@ export const moveButtonStyle = {
   fontSize: '35px',
   fill: '#abd4c6'
 };
-
-export const defaultLocationImg: GameImage = {
-  key: 'loc-default',
-  path: '../assets/defaultLocation.jpg',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-export const locationPreviewFrame: GameImage = {
-  key: 'loc-preview-frame',
-  path: '../assets/locationPreviewFrame.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-export const locationPreviewFill: GameImage = {
-  key: 'loc-preview-fill',
-  path: '../assets/locationPreviewFill.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
-};
-
-const moveUIAssets = [defaultLocationImg, locationPreviewFrame, locationPreviewFill];
-
-export default moveUIAssets;

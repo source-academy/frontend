@@ -1,5 +1,5 @@
 import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
-import { Layer } from '../layer/LayerTypes';
+import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
 

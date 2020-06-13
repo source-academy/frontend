@@ -1,9 +1,9 @@
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 
-import { DialogueGenerator } from './DialogueGenerator';
+import { dialogueGenerator } from './DialogueGenerator';
 import { DialogueObject } from './DialogueTypes';
-import { DialogueSpeakerBox } from './DialogueSpeakerBox';
+import dialogueSpeakerBox from './DialogueSpeakerBox';
 import Typewriter from '../effects/Typewriter';
 import { Color } from '../utils/styles';
 import { speechBox } from '../commons/CommonAssets';
@@ -30,7 +30,7 @@ const typeWriterTextStyle = {
 };
 
 /* Dialogue Box Container */
-export function Dialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
+export function createDialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
   // Preload contents
   const dialogueBox = createDialogueBox(scene);
   const [typeWriterSprite, changeLine] = Typewriter(scene, {
@@ -39,8 +39,8 @@ export function Dialogue(scene: Phaser.Scene, dialogueObject: DialogueObject) {
     textStyle: typeWriterTextStyle
   });
 
-  const [speakerBox, changeSpeaker] = DialogueSpeakerBox(scene);
-  const generateDialogue = DialogueGenerator(dialogueObject);
+  const [speakerBox, changeSpeaker] = dialogueSpeakerBox(scene);
+  const generateDialogue = dialogueGenerator(dialogueObject);
 
   const container = new Phaser.GameObjects.Container(scene, 0, 0).setAlpha(0);
   container.add([dialogueBox, speakerBox, typeWriterSprite]);

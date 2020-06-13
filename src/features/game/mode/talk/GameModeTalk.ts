@@ -1,29 +1,21 @@
-import { IGameUI, DialogueId, GameButton } from '../../commons/CommonsTypes';
+import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import {
-  talkButtonYSpace,
-  talkButtonStyle,
-  talkOptButton,
-  talkOptCheck
-} from './GameModeTalkConstants';
+import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { Dialogue } from '../../dialogue/DialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
-  private dialogues: Map<DialogueId, Dialogue>;
+  private dialogues: Map<ItemId, Dialogue>;
   private gameButtons: GameButton[];
 
-  constructor(
-    locationName: string,
-    talkTopics: DialogueId[],
-    dialogues: Map<DialogueId, Dialogue>
-  ) {
+  constructor(locationName: string, talkTopics: ItemId[], dialogues: Map<ItemId, Dialogue>) {
     this.uiContainer = undefined;
     this.locationName = locationName;
     this.dialogues = dialogues;
@@ -31,7 +23,7 @@ class GameModeTalk implements IGameUI {
     this.createGameButtons(talkTopics);
   }
 
-  private async createGameButtons(dialogueIds: DialogueId[]) {
+  private async createGameButtons(dialogueIds: ItemId[]) {
     // Refresh Buttons
     this.gameButtons = [];
 

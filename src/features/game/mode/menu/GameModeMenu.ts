@@ -1,6 +1,5 @@
 import { GameButton, IGameUI, GameSprite } from '../../commons/CommonsTypes';
 import {
-  modeMenuBanner,
   menuEntryTweenProps,
   menuExitTweenProps,
   modeButtonYPos,
@@ -9,8 +8,8 @@ import {
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
-import { screenSize } from '../../commons/CommonConstants';
-import { shortButton } from '../../commons/CommonAssets';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
+import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -21,8 +20,8 @@ class GameModeMenu implements IGameUI {
   constructor(locationName: string, modes?: GameMode[]) {
     const banner = {
       assetKey: modeMenuBanner.key,
-      assetXPos: modeMenuBanner.xPos,
-      assetYPos: modeMenuBanner.yPos,
+      assetXPos: screenCenter.x,
+      assetYPos: screenCenter.y,
       isInteractive: false
     } as GameSprite;
 

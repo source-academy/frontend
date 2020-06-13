@@ -5,21 +5,17 @@ import {
   classRoomImg,
   emergencyImg,
   hallwayImg,
-  studentRoomImg,
-  GameItemTypeDetails
+  studentRoomImg
 } from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameImage } from 'src/features/game/commons/CommonsTypes';
-import { parseDialogue } from '../parser/DialogueParser';
-import { SampleDialogue, SampleObjects } from './LocationAssets';
-import { parseObjects } from '../parser/ObjectsParser';
 import { GameLocation } from '../location/GameMapTypes';
+import { ImageAsset } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
 
 const LocationSelectMap = new GameMap();
 
 // Sample Map, arbritary set up
-const locationImages: GameImage[] = [
+const locationImages: ImageAsset[] = [
   crashSiteImg,
   classRoomImg,
   emergencyImg,
@@ -48,15 +44,13 @@ for (let i = 0; i < locationImages.length; i++) {
   locations.push({
     name: locationNames[i],
     assetKey: locationImages[i].key,
-    assetXPos: locationImages[i].xPos,
-    assetYPos: locationImages[i].yPos,
     modes: locationModes[i]
   });
 }
 
 // Register mapping and assets
-locations.forEach(location => LocationSelectMap.setLocation(location));
-locationImages.forEach(asset => LocationSelectMap.addLocationAsset(asset));
+locations.forEach(location => LocationSelectMap.addLocation(location.name, location));
+locationImages.forEach(asset => LocationSelectMap.addMapAsset(asset.key, asset.path));
 
 // Register navigation
 LocationSelectMap.setNavigationFrom('Class Room', ['Crash Site', 'Hallway']);

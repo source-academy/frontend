@@ -3,7 +3,7 @@ type ActionParams = Array<any>;
 export type ObjectAction = [ActionName, ActionParams];
 
 export type ObjectProperty = {
-  texture: string;
+  assetKey: string;
   x: number;
   y: number;
   actions?: string[];

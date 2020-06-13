@@ -1,4 +1,4 @@
-import { BBoxId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonsTypes';
 
 type ActionName = string;
 type ActionParams = Array<any>;
@@ -13,5 +13,5 @@ export type BBoxProperty = {
   visibility?: true;
 };
 
-export type BBoxPropertyMap = Map<BBoxId, BBoxProperty>;
-export const emptyBBoxPropertyMap = new Map<BBoxId, BBoxProperty>();
+export type BBoxPropertyMap = Map<ItemId, BBoxProperty>;
+export const emptyBBoxPropertyMap = new Map<ItemId, BBoxProperty>();

@@ -1,11 +1,13 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
-import { Dialogue } from 'src/features/game/dialogue/DialogueRenderer';
+import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
+import { SpeakerDetail } from 'src/features/game/dialogue/DialogueTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
+
   static instance: GameActionManager;
 
   private constructor() {
@@ -23,7 +25,10 @@ class GameActionManager {
   //   Game Manager  //
   /////////////////////
 
-  public getGameManager(): GameManager | undefined {
+  public getGameManager(): GameManager {
+    if (!this.gameManager) {
+      throw new Error('Game Manager not found');
+    }
     return this.gameManager;
   }
 
@@ -185,8 +190,14 @@ class GameActionManager {
 
   public async bringUpDialogue(dialogueObject: DialogueObject) {
     if (this.gameManager) {
-      const [activateDialogue] = Dialogue(this.gameManager, dialogueObject);
+      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
       await activateDialogue;
+    }
+  }
+
+  public async changeCharacter(speakerDetail: SpeakerDetail) {
+    if (this.gameManager) {
+      // this.characterManager.changeCharacter(speakerDetail);
     }
   }
 }

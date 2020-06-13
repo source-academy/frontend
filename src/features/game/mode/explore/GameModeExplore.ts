@@ -1,8 +1,7 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { IGameUI, ObjectId, BBoxId } from '../../commons/CommonsTypes';
-import { ObjectProperty } from '../../objects/ObjectsTypes';
+import { IGameUI, ItemId } from '../../commons/CommonsTypes';
+import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
-import { createObjectsLayer } from '../../objects/ObjectsRenderer';
 import { magnifyingGlass } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
@@ -10,39 +9,30 @@ import { GameLocationAttr } from '../../location/GameMapTypes';
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
-  private objectIds: ObjectId[];
-  private bboxIds: BBoxId[];
-  private objects: Map<ObjectId, ObjectProperty>;
-  private boundingBoxes?: Map<BBoxId, BBoxProperty>;
+  private bboxIds: ItemId[];
+  private boundingBoxes: Map<ItemId, BBoxProperty>;
 
   constructor(
     locationName: string,
-    objectIds?: ObjectId[],
-    bboxIds?: BBoxId[],
-    objects?: Map<ObjectId, ObjectProperty>,
-    boundingBoxes?: Map<BBoxId, BBoxProperty>
+    objectIds?: ItemId[],
+    bboxIds?: ItemId[],
+    objects?: Map<ItemId, ObjectProperty>,
+    boundingBoxes?: Map<ItemId, BBoxProperty>
   ) {
     this.uiContainer = undefined;
     this.locationName = locationName;
-    this.objects = objects || new Map<ObjectId, ObjectProperty>();
-    this.boundingBoxes = boundingBoxes || new Map<BBoxId, BBoxProperty>();
-    this.objectIds = objectIds || [];
+    this.boundingBoxes = boundingBoxes || new Map<ItemId, BBoxProperty>();
     this.bboxIds = bboxIds || [];
   }
 
   public fetchLatestState(): void {
-    const latestObjIds = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.objects,
-      this.locationName
-    );
     const latestBBoxIds = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.boundingBoxes,
       this.locationName
     );
-    if (!latestObjIds || !latestBBoxIds) {
+    if (!latestBBoxIds) {
       return;
     }
-    this.objectIds = latestObjIds;
     this.bboxIds = latestBBoxIds;
   }
 
@@ -54,14 +44,23 @@ class GameModeExplore implements IGameUI {
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    const [objectLayerContainer] = createObjectsLayer(gameManager, this.objectIds, this.objects, {
-      cursor: magnifyingGlass
+    // Register boundingBoxes
+    this.bboxIds.forEach(bboxId => {
+      const bbox = this.boundingBoxes.get(bboxId);
+      if (bbox) {
+        const newBBox = new Phaser.GameObjects.Rectangle(
+          gameManager,
+          bbox.x,
+          bbox.y,
+          bbox.width,
+          bbox.height,
+          0,
+          0
+        );
+        exploreMenuContainer.add(newBBox);
+      }
     });
 
-    console.log(this.boundingBoxes?.size);
-    console.log(this.bboxIds.length);
-
-    exploreMenuContainer.add(objectLayerContainer);
     exploreMenuContainer.add(getBackToMenuContainer());
 
     return exploreMenuContainer;

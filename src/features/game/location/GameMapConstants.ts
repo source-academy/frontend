@@ -1,8 +1,7 @@
-import { GameImage } from '../commons/CommonsTypes';
-import { emptyObjectPropertyMap } from '../objects/ObjectsTypes';
+import { emptyObjectPropertyMap } from '../objects/GameObjectTypes';
 import { emptyDialogueMap } from '../dialogue/DialogueTypes';
 import { emptyBBoxPropertyMap } from '../boundingBoxes/BoundingBoxTypes';
-import { screenSize } from '../commons/CommonConstants';
+import { ImageAsset } from '../commons/CommonsTypes';
 
 export const GameItemTypeDetails = {
   Dialogue: { listName: 'talkTopics', emptyMap: emptyDialogueMap },
@@ -10,52 +9,31 @@ export const GameItemTypeDetails = {
   BBox: { listName: 'boundingBoxes', emptyMap: emptyBBoxPropertyMap }
 };
 
-export const crashSiteImg: GameImage = {
+export const crashSiteImg: ImageAsset = {
   key: 'crash-site',
   path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/crashSite/normal.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
+    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/crashSite/normal.png'
 };
 
-export const classRoomImg: GameImage = {
+export const classRoomImg: ImageAsset = {
   key: 'class-room',
   path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/classOn.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
+    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/classOn.png'
 };
 
-export const emergencyImg: GameImage = {
+export const emergencyImg: ImageAsset = {
   key: 'emergency',
   path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/emergency.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
+    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/classroom/emergency.png'
 };
 
-export const hallwayImg: GameImage = {
+export const hallwayImg: ImageAsset = {
   key: 'hallway',
-  path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/hallway/normal.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
+  path: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/hallway/normal.png'
 };
 
-export const studentRoomImg: GameImage = {
+export const studentRoomImg: ImageAsset = {
   key: 'student-room',
   path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/yourRoom-dim/normal.png',
-  xPos: screenSize.x / 2,
-  yPos: screenSize.y / 2,
-  imageWidth: screenSize.x,
-  imageHeight: screenSize.y
+    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/yourRoom-dim/normal.png'
 };
