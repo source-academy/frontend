@@ -8,6 +8,9 @@ import {
 } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { screenSize } from '../../commons/CommonConstants';
+import { sleep } from '../../utils/GameUtils';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -53,8 +56,7 @@ class GameModeExplore implements IGameUI {
           bbox.height,
           0,
           0
-        );
-
+        ).setInteractive();
         newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
           const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(bboxId);
           if (hasTriggered) {
@@ -99,6 +101,12 @@ class GameModeExplore implements IGameUI {
     if (this.uiContainer) {
       this.uiContainer.setActive(true);
       this.uiContainer.setVisible(true);
+      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...entryTweenProps
+      });
     }
 
     gameManager.input.setDefaultCursor(magnifyingGlass);
@@ -113,6 +121,14 @@ class GameModeExplore implements IGameUI {
     gameManager.input.setDefaultCursor('');
 
     if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, 0);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(500);
       this.uiContainer.setVisible(false);
       this.uiContainer.setActive(false);
     }
