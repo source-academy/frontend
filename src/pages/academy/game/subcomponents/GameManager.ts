@@ -7,6 +7,7 @@ import GameActionManager from '../../../../features/game/action/GameActionManage
 import GameModeManager from 'src/features/game/mode/GameModeManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
+import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
@@ -29,6 +30,7 @@ class GameManager extends Phaser.Scene {
   public stateManager: GameStateManager;
   public objectManager: GameObjectManager;
   public characterManager: GameCharacterManager;
+  public dialogueManager: GameDialogueManager;
 
   // Limited to current location
   public currentLocationName: string;
@@ -45,6 +47,7 @@ class GameManager extends Phaser.Scene {
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
+    this.dialogueManager = new GameDialogueManager();
 
     this.currentActiveMode = GameMode.Menu;
 
@@ -65,6 +68,7 @@ class GameManager extends Phaser.Scene {
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
     this.characterManager.processCharacter(this.currentChapter);
+    this.dialogueManager.processDialogues(this.currentChapter);
   }
 
   public create() {

@@ -1,7 +1,7 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { screenSize } from '../commons/CommonConstants';
-import { charRect, charWidth } from './GameCharacterConstants';
-import { ItemId } from '../commons/CommonsTypes';
+import { charRect, charWidth, CharacterPosition } from './GameCharacterConstants';
+import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character } from './GameCharacterTypes';
 import { GameChapter } from '../chapter/GameChapterTypes';
@@ -59,11 +59,15 @@ export default class CharacterManager {
     return characterContainer;
   }
 
-  public createCharacter({ defaultPosition, defaultExpression, expressions }: Character) {
+  public createCharacter(
+    { defaultPosition, defaultExpression, expressions }: Character,
+    overrideExpression?: string,
+    overridePosition?: CharacterPosition
+  ) {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    const characterXPosition = charRect.x[defaultPosition];
-    const assetKey = expressions.get(defaultExpression)!;
+    const characterXPosition = charRect.x[overridePosition || defaultPosition];
+    const assetKey = expressions.get(overrideExpression || defaultExpression)!;
 
     const character = new Phaser.GameObjects.Image(
       gameManager,
@@ -73,5 +77,22 @@ export default class CharacterManager {
     ).setOrigin(0.5, 1);
 
     return resize(character, charWidth);
+  }
+
+  public changeSpeaker(speakerDetail: SpeakerDetail | undefined) {
+    if (!speakerDetail) {
+      return;
+    }
+
+    const [characterId, expression, position] = speakerDetail;
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    gameManager.layerManager.clearLayerContents(Layer.Speaker);
+
+    this.characterMap.forEach(character => {
+      if (character.name === characterId) {
+        const characterSprite = this.createCharacter(character, expression, position);
+        gameManager.layerManager.addToLayer(Layer.Speaker, characterSprite);
+      }
+    });
   }
 }

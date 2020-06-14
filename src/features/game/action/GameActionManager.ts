@@ -1,9 +1,7 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
-import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
 import { GameLocationAttr } from '../location/GameMapTypes';
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 class GameActionManager {
@@ -199,16 +197,15 @@ class GameActionManager {
   //     Dialogue    //
   /////////////////////
 
-  public async bringUpDialogue(dialogueObject: DialogueObject) {
+  public async bringUpDialogue(dialogueId: ItemId) {
     if (this.gameManager) {
-      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
-      await activateDialogue;
+      await this.gameManager.dialogueManager.playDialogue(dialogueId);
     }
   }
 
-  public async changeCharacter(speakerDetail: SpeakerDetail) {
+  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined) {
     if (this.gameManager) {
-      // this.characterManager.changeCharacter(speakerDetail);
+      this.gameManager.characterManager.changeSpeaker(speakerDetail);
     }
   }
 }
