@@ -1,5 +1,6 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 
+export const charWidth = 900;
 const charXOffset = 350;
 
 export const charRect = {

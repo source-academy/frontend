@@ -9,8 +9,7 @@ export type BBoxProperty = {
   y: number;
   width: number;
   height: number;
-  actions: ObjectAction[];
-  visibility?: true;
+  interactionId: string;
 };
 
 export type BBoxPropertyMap = Map<ItemId, BBoxProperty>;

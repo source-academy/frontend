@@ -4,6 +4,7 @@ import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
 import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import { SpeakerDetail } from '../commons/CommonsTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -181,6 +182,16 @@ class GameActionManager {
   public completeObjective(key: string): void {
     if (this.gameManager) {
       return this.gameManager.stateManager.completeObjective(key);
+    }
+  }
+
+  /////////////////////
+  //   Game Layer    //
+  /////////////////////
+
+  public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
+    if (this.gameManager) {
+      this.gameManager.layerManager.addToLayer(layer, gameObj);
     }
   }
 

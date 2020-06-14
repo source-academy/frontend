@@ -98,8 +98,10 @@ class GameManager extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
     // Render objects in the location
-    const objectLayerContainer = this.objectManager.getObjectsLayerContainer(location.name);
-    this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
+    this.objectManager.renderObjectsLayerContainer(location.name);
+
+    // Render characters in the location
+    this.characterManager.renderCharacterLayerContainer(location.name);
 
     // Render characters in the location
     const characterLayerContainer = this.characterManager.getCharacterLayerContainer(location.name);
@@ -150,6 +152,12 @@ class GameManager extends Phaser.Scene {
     }
 
     const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationName);
+
+    if (newMode === GameMode.Menu || newMode === GameMode.Talk) {
+      this.layerManager.fadeInLayer(Layer.Character, 300);
+    } else {
+      this.layerManager.fadeOutLayer(Layer.Character, 300);
+    }
 
     if (locationMode) {
       if (!skipDeactivate) {
