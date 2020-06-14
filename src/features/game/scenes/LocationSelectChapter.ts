@@ -13,9 +13,9 @@ import { GameLocation } from '../location/GameMapTypes';
 import { ImageAsset, AssetKey } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
 import { dialogue1, dialogue2 } from './Factory';
-import { Character } from '../character/CharacterTypes';
+import { Character } from '../character/GameCharacterTypes';
 import { Constants } from '../commons/CommonConstants';
-import { CharacterPosition } from '../character/CharacterConstants';
+import { CharacterPosition } from '../character/GameCharacterConstants';
 
 const LocationSelectMap = new GameMap();
 

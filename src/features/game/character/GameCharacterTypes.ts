@@ -1,5 +1,5 @@
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
-import { CharacterPosition } from './CharacterConstants';
+import { CharacterPosition } from './GameCharacterConstants';
 
 export type Character = {
   name: string;

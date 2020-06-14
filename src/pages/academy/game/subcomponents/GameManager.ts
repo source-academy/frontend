@@ -149,10 +149,10 @@ class GameManager extends Phaser.Scene {
 
     const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationName);
 
-    if (newMode !== GameMode.Menu) {
-      this.layerManager.fadeOutLayer(Layer.Character, 300);
-    } else {
+    if (newMode == GameMode.Menu || newMode == GameMode.Talk) {
       this.layerManager.fadeInLayer(Layer.Character, 300);
+    } else {
+      this.layerManager.fadeOutLayer(Layer.Character, 300);
     }
 
     if (locationMode) {

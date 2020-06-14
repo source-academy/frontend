@@ -1,9 +1,9 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { screenSize } from '../commons/CommonConstants';
-import { charRect, charWidth } from './CharacterConstants';
+import { charRect, charWidth } from './GameCharacterConstants';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { Character } from './CharacterTypes';
+import { Character } from './GameCharacterTypes';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';

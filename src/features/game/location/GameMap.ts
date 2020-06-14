@@ -5,7 +5,7 @@ import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { showLocationError } from '../utils/Error';
-import { Character } from '../character/CharacterTypes';
+import { Character } from '../character/GameCharacterTypes';
 
 class GameMap {
   private mapAssets: Map<AssetKey, AssetPath>;
