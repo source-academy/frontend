@@ -7,9 +7,9 @@ DialogueObject1.set('part1', [
   {
     line: "How's it going?",
     speakerDetail: createSpeaker('beat', 'happy', 'right'),
-    action: [
-      createGameAction('collectible', ['trophy']),
-      createGameAction('removeObject', ['yourCarpet'])
+    actions: [
+      createGameAction('collectible', { id: 'trophy' }),
+      createGameAction('obtainObject', { id: 'yourCarpet' })
     ]
   },
   {
@@ -18,7 +18,7 @@ DialogueObject1.set('part1', [
   {
     line: 'How many years was it because it certainly feels like a thousand years',
     speakerDetail: null,
-    action: [createGameAction('collectible', ['years'])]
+    actions: [createGameAction('collectible', { id: 'years' })]
   },
   {
     line: 'How many years was it because it certainly feels like a thousand years'
@@ -39,15 +39,11 @@ DialogueObject1.set('part2', [
   },
   {
     line: "Here's a jar of cookies to help you feel better",
-    action: [createGameAction('collectible', ['years'])]
+    actions: [createGameAction('collectible', { id: 'cookies' })]
   },
   {
-    line: 'How many years was it because it certainly feels like a thousand years'
-  },
-  {
-    line: "Hi, I'm Scottie, the Scottish alien",
-    speakerDetail: createSpeaker('scottie', 'sad', 'left'),
-    goto: 'part3'
+    line: 'Let me lead you to the classroom',
+    actions: [createGameAction('locationChange', { id: 'Emergency' })]
   }
 ]);
 

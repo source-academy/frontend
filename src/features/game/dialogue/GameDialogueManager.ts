@@ -72,12 +72,14 @@ export default class DialogueManager {
       gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
       dialogueBox
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
-        .on('pointerdown', () => {
-          const { line, speakerDetail, action } = generateDialogue();
+        .on('pointerdown', async () => {
+          const { line, speakerDetail, actions } = generateDialogue();
           typewriterChangeLine(line);
           changeSpeaker(speakerDetail);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);
-          console.log('action', action);
+          if (actions) {
+            await GameActionManager.getInstance().executeSafeAction(actions);
+          }
           if (!line) {
             res('done');
             GameActionManager.getInstance().changeSpeaker(null);
