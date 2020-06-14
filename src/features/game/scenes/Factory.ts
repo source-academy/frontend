@@ -7,8 +7,11 @@ The year is 1101 A.E.
 [Goto part2]
 
 [part2]
-$you, tired
+$beat, happy
 Whew... That was a long trip. It feels like I was on that shuttle for a thousand years.
+$none
+That I like.
+Hello what?
 `;
 
 const text2 = `[part0]

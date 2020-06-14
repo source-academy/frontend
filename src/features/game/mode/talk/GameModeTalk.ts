@@ -35,7 +35,7 @@ class GameModeTalk implements IGameUI {
           async () => {
             this.deactivateUI();
             GameActionManager.getInstance().triggerInteraction(dialogueId);
-            await GameActionManager.getInstance().bringUpDialogue(dialogue.content);
+            await GameActionManager.getInstance().bringUpDialogue(dialogueId);
             this.activateUI();
           },
           dialogueId
