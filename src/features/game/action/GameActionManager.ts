@@ -3,6 +3,8 @@ import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameAction } from './GameActionTypes';
+import { sleep } from '../utils/GameUtils';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -207,6 +209,17 @@ class GameActionManager {
     if (this.gameManager) {
       this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }
+  }
+
+  public async executeSafeAction(actions: GameAction[]) {
+    if (this.gameManager) {
+      await this.gameManager.actionExecuter.executeSafeActions(actions);
+    }
+  }
+
+  public async obtainCollectible(collectibleId: string) {
+    console.log(`Obtained a collectible! ${collectibleId}`);
+    sleep(5000);
   }
 }
 

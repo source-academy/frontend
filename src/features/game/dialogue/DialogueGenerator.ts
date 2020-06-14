@@ -3,7 +3,6 @@ import { DialogueLine, Dialogue } from './GameDialogueTypes';
 // Generates next line in dialogue based on Dialogue Object
 function dialogueGenerator(dialogue: Dialogue) {
   const { content, startPart } = dialogue;
-  console.log(content);
   let currPart = startPart;
   let currLineNum = 0;
   function generateDialogue(): DialogueLine {

@@ -6,7 +6,7 @@ export type PartName = string;
 export type DialogueLine = {
   line: string;
   speakerDetail?: SpeakerDetail | null;
-  action?: GameAction[];
+  actions?: GameAction[];
   goto?: PartName;
 };
 

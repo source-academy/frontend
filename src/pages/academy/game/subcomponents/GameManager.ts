@@ -15,6 +15,7 @@ import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
+import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -31,6 +32,7 @@ class GameManager extends Phaser.Scene {
   public objectManager: GameObjectManager;
   public characterManager: GameCharacterManager;
   public dialogueManager: GameDialogueManager;
+  public actionExecuter: GameActionExecuter;
 
   // Limited to current location
   public currentLocationName: string;
@@ -48,6 +50,7 @@ class GameManager extends Phaser.Scene {
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
+    this.actionExecuter = new GameActionExecuter();
 
     this.currentActiveMode = GameMode.Menu;
 
