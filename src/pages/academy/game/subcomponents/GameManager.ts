@@ -14,6 +14,7 @@ import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
+import Parser from 'src/features/game/parser/Parser';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -52,7 +53,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
+    this.currentChapter = Parser.parse(text);
   }
 
   public preload() {
@@ -102,10 +103,6 @@ class GameManager extends Phaser.Scene {
 
     // Render characters in the location
     this.characterManager.renderCharacterLayerContainer(location.name);
-
-    // Render characters in the location
-    const characterLayerContainer = this.characterManager.getCharacterLayerContainer(location.name);
-    this.layerManager.addToLayer(Layer.Character, characterLayerContainer);
 
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);
