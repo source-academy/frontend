@@ -1,12 +1,12 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { screenCenter } from '../commons/CommonConstants';
-import { charRect } from './CharacterConstants';
+import { screenSize } from '../commons/CommonConstants';
+import { charRect, charWidth } from './CharacterConstants';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character } from './CharacterTypes';
 import { GameChapter } from '../chapter/GameChapterTypes';
-// import { resize } from '../utils/SpriteUtils';
-// import { Layer } from '../layer/GameLayerTypes';
+import { Layer } from '../layer/GameLayerTypes';
+import { resize } from '../utils/SpriteUtils';
 
 export default class CharacterManager {
   private characterContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
@@ -29,14 +29,15 @@ export default class CharacterManager {
     });
   }
 
-  public getCharacterLayerContainer(locationId: LocationId) {
+  public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender =
       GameActionManager.getInstance().getLocationAttr(GameLocationAttr.characters, locationId) ||
       [];
 
     const characterLayer = this.renderCharactersInLoc(idsToRender, locationId);
     this.characterContainerMap.set(locationId, characterLayer);
-    return this.characterContainerMap.get(locationId)!;
+
+    GameActionManager.getInstance().addContainerToLayer(Layer.Character, characterLayer);
   }
 
   public renderCharactersInLoc(
@@ -67,10 +68,10 @@ export default class CharacterManager {
     const character = new Phaser.GameObjects.Image(
       gameManager,
       characterXPosition,
-      screenCenter.y,
+      screenSize.y,
       assetKey
-    );
+    ).setOrigin(0.5, 1);
 
-    return character;
+    return resize(character, charWidth);
   }
 }
