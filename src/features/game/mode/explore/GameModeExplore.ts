@@ -58,7 +58,9 @@ class GameModeExplore implements IGameUI {
           0
         ).setInteractive();
         newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-          const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(bboxId);
+          const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(
+            bbox.interactionId
+          );
           if (hasTriggered) {
             gameManager.input.setDefaultCursor(magnifyingGlassChecked);
           } else {
@@ -70,7 +72,7 @@ class GameModeExplore implements IGameUI {
         });
         newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
           // Trigger action here
-          GameActionManager.getInstance().triggerInteraction(bboxId);
+          GameActionManager.getInstance().triggerInteraction(bbox.interactionId);
         });
         exploreMenuContainer.add(newBBox);
       }
