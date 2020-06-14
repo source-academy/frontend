@@ -1,5 +1,4 @@
 import { ItemId } from '../commons/CommonsTypes';
-import { GameChapter } from '../chapter/GameChapterTypes';
 import { Dialogue } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
@@ -17,8 +16,8 @@ export default class DialogueManager {
     this.dialogueMap = new Map<ItemId, Dialogue>();
   }
 
-  public processDialogues(chapter: GameChapter) {
-    this.dialogueMap = chapter.map.getDialogues();
+  public initialise(dialogueMap: Map<ItemId, Dialogue>) {
+    this.dialogueMap = dialogueMap;
   }
 
   public async playDialogue(dialogueId: ItemId) {
