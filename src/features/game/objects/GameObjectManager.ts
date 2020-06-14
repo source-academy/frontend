@@ -5,6 +5,7 @@ import { ObjectProperty } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 class GameObjectManager {
   private objectContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
@@ -51,7 +52,7 @@ class GameObjectManager {
     return objectContainer;
   }
 
-  public getObjectsLayerContainer(locationName: LocationId): Phaser.GameObjects.Container {
+  public renderObjectsLayerContainer(locationName: LocationId): void {
     const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
       locationName,
       GameMode.Explore
@@ -66,7 +67,8 @@ class GameObjectManager {
       objectContainer = this.createObjectsLayerContainer(idsToRender, locationName);
       this.objectContainerMap.set(locationName, objectContainer);
     }
-    return objectContainer;
+
+    GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
   private createObject(

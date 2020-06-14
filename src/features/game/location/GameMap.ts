@@ -82,7 +82,7 @@ class GameMap {
   public getBBox(): Map<ItemId, BBoxProperty> {
     return this.boundingBoxes;
   }
-  
+
   public getDialogues(): Map<ItemId, Dialogue> {
     return this.talkTopics;
   }

@@ -194,7 +194,7 @@ class GameActionManager {
       this.gameManager.layerManager.addToLayer(layer, gameObj);
     }
   }
-  
+
   /////////////////////
   //     Dialogue    //
   /////////////////////
