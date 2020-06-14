@@ -7,17 +7,11 @@ import { GameItemTypeDetails } from '../../location/GameMapConstants';
 class GameModeExploreManager {
   static processExploreMenus(chapter: GameChapter): Map<string, GameModeExplore> {
     return mapValues(chapter.map.getLocations(), location => {
-      const objects = chapter.map.getItemAt(location.name, GameItemTypeDetails.Object);
+      const boundingBoxes = chapter.map.getItemAt(location.name, GameItemTypeDetails.BBox);
       if (!location.modes || !location.modes.includes(GameMode.Explore)) {
         return;
       }
-      return new GameModeExplore(
-        location.name,
-        location.objects,
-        location.boundingBoxes,
-        objects,
-        undefined
-      );
+      return new GameModeExplore(location.name, location.boundingBoxes, boundingBoxes);
     });
   }
 
@@ -26,14 +20,8 @@ class GameModeExploreManager {
     if (!location) {
       throw console.error('Location does not exist ', locationName);
     }
-    const objects = chapter.map.getItemAt(location.name, GameItemTypeDetails.Object);
-    return new GameModeExplore(
-      location.name,
-      location.objects,
-      location.boundingBoxes,
-      objects,
-      undefined
-    );
+    const boundingBoxes = chapter.map.getItemAt(location.name, GameItemTypeDetails.BBox);
+    return new GameModeExplore(location.name, location.boundingBoxes, boundingBoxes);
   }
 }
 

@@ -1,10 +1,16 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ItemId } from '../../commons/CommonsTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
-import { magnifyingGlass } from './GameModeExploreConstants';
+import {
+  magnifyingGlass,
+  magnifyingGlassChecked,
+  magnifyingGlassHighlight
+} from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { screenSize } from '../../commons/CommonConstants';
+import { sleep } from '../../utils/GameUtils';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -12,13 +18,7 @@ class GameModeExplore implements IGameUI {
   private bboxIds: ItemId[];
   private boundingBoxes: Map<ItemId, BBoxProperty>;
 
-  constructor(
-    locationName: string,
-    objectIds?: ItemId[],
-    bboxIds?: ItemId[],
-    objects?: Map<ItemId, ObjectProperty>,
-    boundingBoxes?: Map<ItemId, BBoxProperty>
-  ) {
+  constructor(locationName: string, bboxIds?: ItemId[], boundingBoxes?: Map<ItemId, BBoxProperty>) {
     this.uiContainer = undefined;
     this.locationName = locationName;
     this.boundingBoxes = boundingBoxes || new Map<ItemId, BBoxProperty>();
@@ -56,7 +56,24 @@ class GameModeExplore implements IGameUI {
           bbox.height,
           0,
           0
-        );
+        ).setInteractive();
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+          const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(
+            bbox.interactionId
+          );
+          if (hasTriggered) {
+            gameManager.input.setDefaultCursor(magnifyingGlassChecked);
+          } else {
+            gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
+          }
+        });
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+          gameManager.input.setDefaultCursor(magnifyingGlass);
+        });
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+          // Trigger action here
+          GameActionManager.getInstance().triggerInteraction(bbox.interactionId);
+        });
         exploreMenuContainer.add(newBBox);
       }
     });
@@ -86,6 +103,12 @@ class GameModeExplore implements IGameUI {
     if (this.uiContainer) {
       this.uiContainer.setActive(true);
       this.uiContainer.setVisible(true);
+      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...entryTweenProps
+      });
     }
 
     gameManager.input.setDefaultCursor(magnifyingGlass);
@@ -100,6 +123,14 @@ class GameModeExplore implements IGameUI {
     gameManager.input.setDefaultCursor('');
 
     if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, 0);
+
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(500);
       this.uiContainer.setVisible(false);
       this.uiContainer.setActive(false);
     }

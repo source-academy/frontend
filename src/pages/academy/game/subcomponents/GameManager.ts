@@ -7,6 +7,7 @@ import GameActionManager from '../../../../features/game/action/GameActionManage
 import GameModeManager from 'src/features/game/mode/GameModeManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
+import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
@@ -14,7 +15,6 @@ import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
-import Parser from 'src/features/game/parser/Parser';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -30,6 +30,7 @@ class GameManager extends Phaser.Scene {
   public stateManager: GameStateManager;
   public objectManager: GameObjectManager;
   public characterManager: GameCharacterManager;
+  public dialogueManager: GameDialogueManager;
 
   // Limited to current location
   public currentLocationName: string;
@@ -46,6 +47,7 @@ class GameManager extends Phaser.Scene {
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
+    this.dialogueManager = new GameDialogueManager();
 
     this.currentActiveMode = GameMode.Menu;
 
@@ -53,7 +55,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = Parser.parse(text);
+    this.currentChapter = LocationSelectChapter;
   }
 
   public preload() {
@@ -65,6 +67,8 @@ class GameManager extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
+    this.characterManager.processCharacter(this.currentChapter);
+    this.dialogueManager.processDialogues(this.currentChapter);
   }
 
   public create() {
@@ -88,8 +92,6 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(map: GameMap, location: GameLocation) {
-    this.layerManager.clearSeveralLayers([Layer.Background, Layer.Objects]);
-
     // Render background of the location
     const backgroundAsset = new Image(
       this,
@@ -100,8 +102,10 @@ class GameManager extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
     // Render objects in the location
-    const objectLayerContainer = this.objectManager.getObjectsLayerContainer(location.name);
-    this.layerManager.addToLayer(Layer.Objects, objectLayerContainer);
+    this.objectManager.renderObjectsLayerContainer(location.name);
+
+    // Render characters in the location
+    this.characterManager.renderCharacterLayerContainer(location.name);
 
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);
@@ -113,7 +117,8 @@ class GameManager extends Phaser.Scene {
       // Deactive current UI of previous location
       this.deactivateCurrentUI();
 
-      // Clear layers;
+      // Clear all layers;
+      this.layerManager.clearAllLayers();
 
       // Update location
       this.currentLocationName = locationName;
@@ -147,6 +152,12 @@ class GameManager extends Phaser.Scene {
     }
 
     const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationName);
+
+    if (newMode === GameMode.Menu || newMode === GameMode.Talk) {
+      this.layerManager.fadeInLayer(Layer.Character, 300);
+    } else {
+      this.layerManager.fadeOutLayer(Layer.Character, 300);
+    }
 
     if (locationMode) {
       if (!skipDeactivate) {

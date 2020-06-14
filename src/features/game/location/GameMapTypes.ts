@@ -22,5 +22,6 @@ export enum GameLocationAttr {
   navigation = 'navigation',
   talkTopics = 'talkTopics',
   objects = 'objects',
-  boundingBoxes = 'boundingBoxes'
+  boundingBoxes = 'boundingBoxes',
+  characters = 'characters'
 }

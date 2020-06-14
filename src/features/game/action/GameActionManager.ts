@@ -1,9 +1,8 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
-import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
 import { GameLocationAttr } from '../location/GameMapTypes';
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -185,19 +184,28 @@ class GameActionManager {
   }
 
   /////////////////////
-  //     Dialogue    //
+  //   Game Layer    //
   /////////////////////
 
-  public async bringUpDialogue(dialogueObject: DialogueObject) {
+  public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
     if (this.gameManager) {
-      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
-      await activateDialogue;
+      this.gameManager.layerManager.addToLayer(layer, gameObj);
     }
   }
 
-  public async changeCharacter(speakerDetail: SpeakerDetail) {
+  /////////////////////
+  //     Dialogue    //
+  /////////////////////
+
+  public async bringUpDialogue(dialogueId: ItemId) {
     if (this.gameManager) {
-      // this.characterManager.changeCharacter(speakerDetail);
+      await this.gameManager.dialogueManager.playDialogue(dialogueId);
+    }
+  }
+
+  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined | null) {
+    if (this.gameManager) {
+      this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }
   }
 }

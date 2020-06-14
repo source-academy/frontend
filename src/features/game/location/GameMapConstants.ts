@@ -1,12 +1,14 @@
 import { emptyObjectPropertyMap } from '../objects/GameObjectTypes';
-import { emptyDialogueMap } from '../dialogue/DialogueTypes';
+import { emptyDialogueMap } from '../dialogue/GameDialogueTypes';
 import { emptyBBoxPropertyMap } from '../boundingBoxes/BoundingBoxTypes';
 import { ImageAsset } from '../commons/CommonsTypes';
+import { emptyCharacterMap } from '../character/GameCharacterTypes';
 
 export const GameItemTypeDetails = {
   Dialogue: { listName: 'talkTopics', emptyMap: emptyDialogueMap },
   Object: { listName: 'objects', emptyMap: emptyObjectPropertyMap },
-  BBox: { listName: 'boundingBoxes', emptyMap: emptyBBoxPropertyMap }
+  BBox: { listName: 'boundingBoxes', emptyMap: emptyBBoxPropertyMap },
+  Character: { listName: 'characters', emptyMap: emptyCharacterMap }
 };
 
 export const crashSiteImg: ImageAsset = {

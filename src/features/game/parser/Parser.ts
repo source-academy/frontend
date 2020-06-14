@@ -6,7 +6,7 @@ import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
 import GameObjective from '../objective/GameObjective';
-import LocationSelectChapter from '../scenes/LocationSelectChapter';
+// import LocationSelectChapter from '../scenes/LocationSelectChapter';
 
 class Parser {
   private static parserMap: object;
@@ -40,8 +40,6 @@ class Parser {
       parserFunction(chapter, fileName, fileContent);
     });
 
-    console.log(chapter);
-    console.log(LocationSelectChapter);
     return chapter;
   }
 }

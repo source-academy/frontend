@@ -2,6 +2,7 @@ import { GameChapter } from '../chapter/GameChapterTypes';
 import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
+import { ItemId } from '../commons/CommonsTypes';
 
 class GameStateManager {
   // Game State
@@ -9,15 +10,16 @@ class GameStateManager {
   private chapterObjective: GameObjective;
   private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
+
   // Triggered Interactions
-  private triggeredInteractions: Map<string, boolean>;
+  private triggeredInteractions: Map<ItemId, boolean>;
 
   constructor() {
     this.chapter = {} as GameChapter;
     this.chapterObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
-    this.triggeredInteractions = new Map<string, boolean>();
+    this.triggeredInteractions = new Map<ItemId, boolean>();
   }
 
   ///////////////////////////////

@@ -1,14 +1,18 @@
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { CharacterPosition } from '../character/GameCharacterConstants';
 
-/* Parsing dialogue */
-export const isPartLabel = (line: string) => new RegExp(/\[part[0-9]+\]/).test(line);
-export const isGotoLabel = (line: string) => new RegExp(/\[Goto part[0-9]+\]/).test(line);
-export const getPartToJump = (line: string) => line.match(/\[Goto (part[0-9]+)\]/)![1];
-export const isSpeaker = (line: string) => line && line[0] === '$';
-export const getSpeakerDetails = (line: string): SpeakerDetail => {
-  const [speaker, expression] = line.slice(1).split(', ');
-  return [speaker, expression];
+const characterPositionMap = {
+  left: CharacterPosition.Left,
+  middle: CharacterPosition.Middle,
+  right: CharacterPosition.Right
 };
+
+export function createSpeaker(speakerId: string, expression: string, position: string) {
+  return {
+    speakerId,
+    expression,
+    speakerPosition: characterPositionMap[position]
+  };
+}
 
 /* Error handling */
 export const showDialogueError = (partNum: string, lineNum: number) => {
