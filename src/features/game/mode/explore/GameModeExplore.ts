@@ -1,8 +1,11 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ItemId } from '../../commons/CommonsTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
-import { magnifyingGlass } from './GameModeExploreConstants';
+import {
+  magnifyingGlass,
+  magnifyingGlassChecked,
+  magnifyingGlassHighlight
+} from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 
@@ -12,13 +15,7 @@ class GameModeExplore implements IGameUI {
   private bboxIds: ItemId[];
   private boundingBoxes: Map<ItemId, BBoxProperty>;
 
-  constructor(
-    locationName: string,
-    objectIds?: ItemId[],
-    bboxIds?: ItemId[],
-    objects?: Map<ItemId, ObjectProperty>,
-    boundingBoxes?: Map<ItemId, BBoxProperty>
-  ) {
+  constructor(locationName: string, bboxIds?: ItemId[], boundingBoxes?: Map<ItemId, BBoxProperty>) {
     this.uiContainer = undefined;
     this.locationName = locationName;
     this.boundingBoxes = boundingBoxes || new Map<ItemId, BBoxProperty>();
@@ -57,6 +54,22 @@ class GameModeExplore implements IGameUI {
           0,
           0
         );
+
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+          const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(bboxId);
+          if (hasTriggered) {
+            gameManager.input.setDefaultCursor(magnifyingGlassChecked);
+          } else {
+            gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
+          }
+        });
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+          gameManager.input.setDefaultCursor(magnifyingGlass);
+        });
+        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+          // Trigger action here
+          GameActionManager.getInstance().triggerInteraction(bboxId);
+        });
         exploreMenuContainer.add(newBBox);
       }
     });
