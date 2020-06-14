@@ -1,8 +1,3 @@
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
-import { CharacterPosition } from '../character/GameCharacterConstants';
-
 export type ImageAsset = {
   key: string;
   path: string;
@@ -23,16 +18,7 @@ export type ItemId = string;
 export type AssetKey = string;
 export type AssetPath = string;
 
-export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
-export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
-
 export type GameButton = GameText & GameSprite & IGameInteractive;
-
-export type SpeakerDetail = {
-  speakerId: ItemId;
-  expression: string;
-  speakerPosition?: CharacterPosition;
-};
 
 export interface IGameInteractive {
   isInteractive: boolean;

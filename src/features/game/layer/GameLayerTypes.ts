@@ -4,6 +4,7 @@ export enum Layer {
   Character = 'Character',
   Speaker = 'Speaker',
   Dialogue = 'Dialogue',
+  DialogueLabel = 'DialogueLabel',
   UI = 'UI',
   Objects = 'Objects'
 }
@@ -15,6 +16,7 @@ export const defaultLayerSequence = [
   Layer.Character,
   Layer.Speaker,
   Layer.Dialogue,
+  Layer.DialogueLabel,
   Layer.UI,
   Layer.Effects
 ];

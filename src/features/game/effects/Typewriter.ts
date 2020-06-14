@@ -1,5 +1,3 @@
-import { LineChangeFn } from '../dialogue/GameDialogueTypes';
-
 type TypewriterProps = {
   x?: number;
   y?: number;
@@ -11,7 +9,7 @@ type TypewriterProps = {
 export function Typewriter(
   scene: Phaser.Scene,
   { x = 0, y = 0, textStyle = {}, typeWriterInterval = 1 }: TypewriterProps
-): [Phaser.GameObjects.Text, LineChangeFn] {
+) {
   const textSprite = new Phaser.GameObjects.Text(scene, x, y, '', textStyle);
 
   let line = '';
@@ -35,7 +33,7 @@ export function Typewriter(
     }, typeWriterInterval);
   };
 
-  return [textSprite, changeLine];
+  return { container: textSprite, changeLine };
 }
 
 export default Typewriter;

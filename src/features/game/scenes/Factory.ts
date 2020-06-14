@@ -1,6 +1,6 @@
 import { PartName, DialogueLine } from '../dialogue/GameDialogueTypes';
 import { createGameAction } from '../action/GameActionTypes';
-import { createSpeaker } from '../dialogue/DialogueHelper';
+import { createSpeaker } from '../character/GameCharacterTypes';
 
 const DialogueObject1 = new Map<PartName, DialogueLine[]>();
 DialogueObject1.set('part1', [
