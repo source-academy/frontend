@@ -100,25 +100,33 @@ export default class CharacterManager {
     }
   }
 
-  public changeSpeakerTo(speakerDetail: SpeakerDetail | undefined) {
-    if (!speakerDetail) {
+  public changeSpeakerTo(speakerDetail: SpeakerDetail | undefined | null) {
+    if (speakerDetail === undefined) {
       return;
     }
-
-    const [speakerId, expression, position] = speakerDetail;
-    const gameManager = GameActionManager.getInstance().getGameManager();
 
     // delete previous speaker and restore his character on map
     if (this.currentSpeakerId) {
       this.showCharacterOnMap(this.currentSpeakerId);
     }
+    const gameManager = GameActionManager.getInstance().getGameManager();
     gameManager.layerManager.clearLayerContents(Layer.Speaker);
 
-    // show new speaker and hide character
+    if (speakerDetail === null) {
+      return;
+    }
+
+    // show new speaker and hide speaker's character on map
+    const { speakerId, expression, speakerPosition } = speakerDetail;
+
     this.hideCharacterFromMap(speakerId);
     const speakerToShow = this.characterMap.get(speakerId);
     if (speakerToShow) {
-      const characterSprite = this.createCharacterSprite(speakerToShow, expression, position);
+      const characterSprite = this.createCharacterSprite(
+        speakerToShow,
+        expression,
+        speakerPosition
+      );
       gameManager.layerManager.addToLayer(Layer.Speaker, characterSprite);
       this.currentSpeakerId = speakerId;
     }

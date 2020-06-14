@@ -203,7 +203,7 @@ class GameActionManager {
     }
   }
 
-  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined) {
+  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined | null) {
     if (this.gameManager) {
       this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }

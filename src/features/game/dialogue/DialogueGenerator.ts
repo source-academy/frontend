@@ -1,45 +1,34 @@
-import {
-  isGotoLabel,
-  getPartToJump,
-  isSpeaker,
-  showDialogueError,
-  getSpeakerDetails
-} from './DialogueHelper';
-
-import { DialogueObject, DialogueString } from './DialogueTypes';
-import { hasDevAccess } from '../utils/GameAccess';
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { DialogueLine, Dialogue } from './GameDialogueTypes';
 
 // Generates next line in dialogue based on Dialogue Object
-function DialogueGenerator(dialogueObject: DialogueObject) {
-  let currPartNum = 'part0';
-  let currLineNum = -1;
-  function generateDialogue(): [SpeakerDetail | null, DialogueString] {
-    try {
-      currLineNum++;
-      let line = dialogueObject.get(currPartNum)![currLineNum];
-      let speakerDetail = null;
+function dialogueGenerator(dialogue: Dialogue) {
+  const { content, startPart } = dialogue;
+  console.log(content);
+  let currPart = startPart;
+  let currLineNum = 0;
+  function generateDialogue(): DialogueLine {
+    // Get line
+    const line = content.get(currPart)![currLineNum];
 
-      if (isGotoLabel(line)) {
-        currPartNum = getPartToJump(line);
-        currLineNum = 0;
-        line = dialogueObject.get(currPartNum)![currLineNum];
-      }
-      if (isSpeaker(line)) {
-        speakerDetail = getSpeakerDetails(line);
-        currLineNum++;
-        line = dialogueObject.get(currPartNum)![currLineNum];
-      }
-
-      return [speakerDetail, line];
-    } catch (e) {
-      if (hasDevAccess()) {
-        showDialogueError(currPartNum, currLineNum);
-      }
-      return [null, ''];
+    if (!line) {
+      return { line: '' };
     }
+
+    // Advance pointer for next line
+    if (line.goto) {
+      if (content.get(line.goto)) {
+        currPart = line.goto;
+        currLineNum = 0;
+      } else {
+        return { line: '' };
+      }
+    } else {
+      currLineNum++;
+    }
+
+    return line;
   }
   return generateDialogue;
 }
 
-export default DialogueGenerator;
+export default dialogueGenerator;

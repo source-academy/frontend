@@ -1,6 +1,6 @@
 import { ItemId } from '../commons/CommonsTypes';
 import { GameChapter } from '../chapter/GameChapterTypes';
-import { Dialogue } from './DialogueTypes';
+import { Dialogue } from './GameDialogueTypes';
 
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
@@ -55,14 +55,14 @@ export default class DialogueManager {
     const gameManager = GameActionManager.getInstance().getGameManager();
     // Preload contents
     const dialogueBox = this.createDialogueBox(gameManager);
-    const [typeWriterSprite, changeLine] = Typewriter(gameManager, {
+    const [typeWriterSprite, typewriterChangeLine] = Typewriter(gameManager, {
       x: dialogueRect.x + textPadding.x,
       y: dialogueRect.y + textPadding.y,
       textStyle: typeWriterTextStyle
     });
 
     const [speakerBox, changeSpeaker] = DialogueSpeakerBox(gameManager);
-    const generateDialogue = DialogueGenerator(dialogue.content);
+    const generateDialogue = DialogueGenerator(dialogue);
 
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0).setAlpha(0);
     container.add([dialogueBox, speakerBox, typeWriterSprite]);
@@ -73,14 +73,14 @@ export default class DialogueManager {
       dialogueBox
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
         .on('pointerdown', () => {
-          const [speakerDetail, line] = generateDialogue();
-          changeLine(line);
-          if (speakerDetail) {
-            changeSpeaker(speakerDetail);
-            GameActionManager.getInstance().changeSpeaker(speakerDetail);
-          }
+          const { line, speakerDetail, action } = generateDialogue();
+          typewriterChangeLine(line);
+          changeSpeaker(speakerDetail);
+          GameActionManager.getInstance().changeSpeaker(speakerDetail);
+          console.log('action', action);
           if (!line) {
             res('done');
+            GameActionManager.getInstance().changeSpeaker(null);
             fadeAndDestroy(gameManager, container);
           }
         });
