@@ -1,10 +1,11 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
-import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameAction } from './GameActionTypes';
 import { sleep } from '../utils/GameUtils';
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;

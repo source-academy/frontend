@@ -1,5 +1,11 @@
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
-import { CharacterPosition } from './GameCharacterConstants';
+import { CharacterPosition, characterPositionMap } from './GameCharacterConstants';
+
+export type SpeakerDetail = {
+  speakerId: ItemId;
+  expression: string;
+  speakerPosition: CharacterPosition;
+};
 
 export type Character = {
   id: ItemId;
@@ -10,4 +16,10 @@ export type Character = {
   actions?: string[];
 };
 
-export const emptyCharacterMap = new Map<ItemId, Character>();
+export function createSpeaker(speakerId: string, expression: string, position: string) {
+  return {
+    speakerId,
+    expression,
+    speakerPosition: characterPositionMap[position]
+  };
+}
