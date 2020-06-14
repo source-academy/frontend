@@ -1,5 +1,5 @@
-import { ItemId, SpeakerDetail } from '../commons/CommonsTypes';
 import { GameAction } from '../action/GameActionTypes';
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 export type PartName = string;
 
@@ -17,9 +17,4 @@ export type Dialogue = {
 };
 
 export type DialogueObject = Map<PartName, DialogueLine[]>;
-
-export type LineChangeFn = (message: string) => void;
-export type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null) => void;
-
 export type DialogueString = string;
-export const emptyDialogueMap = new Map<ItemId, Dialogue>();

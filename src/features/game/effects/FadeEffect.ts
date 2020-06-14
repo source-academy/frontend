@@ -3,14 +3,20 @@ import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
 
-export const fadeOut = (targets: Phaser.GameObjects.GameObject[], duration: number) => ({
+export const fadeOut = (
+  targets: Phaser.GameObjects.GameObject[],
+  duration = Constants.fadeDuration
+) => ({
   alpha: 0,
   targets,
   duration,
   ease: 'Power2'
 });
 
-export const fadeIn = (targets: Phaser.GameObjects.GameObject[], duration: number) => ({
+export const fadeIn = (
+  targets: Phaser.GameObjects.GameObject[],
+  duration = Constants.fadeDuration
+) => ({
   alpha: 1,
   targets,
   duration,
