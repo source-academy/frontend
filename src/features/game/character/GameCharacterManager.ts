@@ -11,10 +11,13 @@ import { resize } from '../utils/SpriteUtils';
 export default class CharacterManager {
   private characterContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
   private characterMap: Map<ItemId, Character>;
+  private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
+  private currentSpeakerId: ItemId | undefined;
 
   constructor() {
     this.characterContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
     this.characterMap = new Map<ItemId, Character>();
+    this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
   }
 
   public processCharacter(chapter: GameChapter) {
@@ -52,47 +55,72 @@ export default class CharacterManager {
     idsToRender.forEach(id => {
       const characterToRender = this.characterMap.get(id);
       if (characterToRender) {
-        characterContainer.add(this.createCharacter(characterToRender));
+        const characterSprite = this.createCharacterSprite(characterToRender);
+        characterContainer.add(characterSprite);
+        this.characterSpriteMap.set(id, characterSprite);
       }
     });
 
     return characterContainer;
   }
 
-  public createCharacter(
-    { defaultPosition, defaultExpression, expressions }: Character,
+  private createCharacterSprite(
+    character: Character,
     overrideExpression?: string,
     overridePosition?: CharacterPosition
   ) {
+    const { defaultPosition, defaultExpression, expressions } = character;
+
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     const characterXPosition = charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
 
-    const character = new Phaser.GameObjects.Image(
+    const characterSprite = new Phaser.GameObjects.Image(
       gameManager,
       characterXPosition,
       screenSize.y,
       assetKey
     ).setOrigin(0.5, 1);
 
-    return resize(character, charWidth);
+    return resize(characterSprite, charWidth);
   }
 
-  public changeSpeaker(speakerDetail: SpeakerDetail | undefined) {
+  public showCharacterOnMap(characterId: ItemId) {
+    const characterSprite = this.characterSpriteMap.get(characterId);
+    if (characterSprite) {
+      characterSprite.alpha = 1;
+    }
+  }
+
+  public hideCharacterFromMap(characterId: ItemId) {
+    const characterSprite = this.characterSpriteMap.get(characterId);
+    if (characterSprite) {
+      characterSprite.alpha = 0;
+    }
+  }
+
+  public changeSpeakerTo(speakerDetail: SpeakerDetail | undefined) {
     if (!speakerDetail) {
       return;
     }
 
-    const [characterId, expression, position] = speakerDetail;
+    const [speakerId, expression, position] = speakerDetail;
     const gameManager = GameActionManager.getInstance().getGameManager();
+
+    // delete previous speaker and restore his character on map
+    if (this.currentSpeakerId) {
+      this.showCharacterOnMap(this.currentSpeakerId);
+    }
     gameManager.layerManager.clearLayerContents(Layer.Speaker);
 
-    this.characterMap.forEach(character => {
-      if (character.name === characterId) {
-        const characterSprite = this.createCharacter(character, expression, position);
-        gameManager.layerManager.addToLayer(Layer.Speaker, characterSprite);
-      }
-    });
+    // show new speaker and hide character
+    this.hideCharacterFromMap(speakerId);
+    const speakerToShow = this.characterMap.get(speakerId);
+    if (speakerToShow) {
+      const characterSprite = this.createCharacterSprite(speakerToShow, expression, position);
+      gameManager.layerManager.addToLayer(Layer.Speaker, characterSprite);
+      this.currentSpeakerId = speakerId;
+    }
   }
 }
