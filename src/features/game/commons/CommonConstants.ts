@@ -1,7 +1,7 @@
 export const Constants = {
   repoAssetsFolder: '../../../assets',
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
-  fadeDuration: 100
+  fadeDuration: 300
 };
 
 export const screenSize = {
