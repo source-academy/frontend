@@ -9,7 +9,7 @@ export type BBoxProperty = {
   y: number;
   width: number;
   height: number;
-  actions: ObjectAction[];
+  actions?: ObjectAction[];
   visibility?: true;
 };
 
