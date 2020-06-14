@@ -11,7 +11,6 @@ import {
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail } from './GameCharacterTypes';
-import { GameChapter } from '../chapter/GameChapterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { speechBox } from '../commons/CommonAssets';
@@ -19,28 +18,18 @@ import { capitalise } from '../parser/ParserHelper';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 
 export default class CharacterManager {
-  private characterContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
   private characterMap: Map<ItemId, Character>;
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
 
   private currentSpeakerId: ItemId | undefined;
 
   constructor() {
-    this.characterContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
     this.characterMap = new Map<ItemId, Character>();
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
   }
 
-  public processCharacter(chapter: GameChapter) {
-    this.characterMap = chapter.map.getCharacters();
-    const locations = chapter.map.getLocations();
-
-    locations.forEach(location => {
-      const gameManager = GameActionManager.getInstance().getGameManager();
-      const characterContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-      this.characterContainerMap.set(location.name, characterContainer);
-      gameManager.add.existing(characterContainer);
-    });
+  public initialise(characterMap: Map<ItemId, Character>) {
+    this.characterMap = characterMap;
   }
 
   public renderCharacterLayerContainer(locationId: LocationId): void {
@@ -48,19 +37,12 @@ export default class CharacterManager {
       GameActionManager.getInstance().getLocationAttr(GameLocationAttr.characters, locationId) ||
       [];
 
-    const characterLayer = this.renderCharactersInLoc(idsToRender, locationId);
-    this.characterContainerMap.set(locationId, characterLayer);
-
+    const characterLayer = this.renderCharactersInLoc(idsToRender);
     GameActionManager.getInstance().addContainerToLayer(Layer.Character, characterLayer);
   }
 
-  public renderCharactersInLoc(
-    idsToRender: ItemId[],
-    locationName: LocationId
-  ): Phaser.GameObjects.Container {
+  public renderCharactersInLoc(idsToRender: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
-
-    this.characterContainerMap.get(locationName)!.destroy();
 
     const characterContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     idsToRender.forEach(id => {

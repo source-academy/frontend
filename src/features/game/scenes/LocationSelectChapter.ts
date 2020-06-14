@@ -131,7 +131,7 @@ beatExpressionMap.set('sad', 'beatsad');
 beatExpressionMap.set('happy', 'beathappy');
 const beat: Character = {
   id: 'beat',
-  name: 'beat',
+  name: 'Beat Ya',
   expressions: beatExpressionMap,
   actions: [''],
   defaultPosition: CharacterPosition.Right,
@@ -144,7 +144,7 @@ scottExpressionMap.set('happy', 'scotthappy');
 
 const scottie: Character = {
   id: 'scottie',
-  name: 'scottie',
+  name: 'Scottie Boi',
   expressions: scottExpressionMap,
   actions: [''],
   defaultPosition: CharacterPosition.Middle,
@@ -155,7 +155,7 @@ LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, beat.id, beat);
 LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, scottie.id, scottie);
 
 // Set characters
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, beat.id);
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Character, beat.id);
 LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, scottie.id);
 
 // Set Objectives
