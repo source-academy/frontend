@@ -1,4 +1,4 @@
-import { LineChangeFn } from '../dialogue/DialogueTypes';
+import { LineChangeFn } from '../dialogue/GameDialogueTypes';
 
 type TypewriterProps = {
   x?: number;

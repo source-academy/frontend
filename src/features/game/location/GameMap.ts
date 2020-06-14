@@ -1,6 +1,6 @@
 import { GameLocation, GameItemType, LocationId } from '../location/GameMapTypes';
 import { ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
-import { Dialogue } from '../dialogue/DialogueTypes';
+import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';

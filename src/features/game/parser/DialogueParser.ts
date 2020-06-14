@@ -2,7 +2,6 @@ import { mapByHeader } from './ParserHelper';
 import { splitToLines } from './ParserHelper';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import { GameItemTypeDetails } from '../location/GameMapConstants';
-import { isPartLabel } from '../dialogue/DialogueHelper';
 
 export default function DialogueParser(
   chapter: GameChapter,
@@ -29,5 +28,13 @@ export default function DialogueParser(
   const dialogueObject = mapByHeader(restOfLines, isPartLabel);
   const dialogue = { title: title, content: dialogueObject };
 
-  chapter.map.addItemToMap(GameItemTypeDetails.Dialogue, fileName, dialogue);
+  console.log(dialogue);
+
+  // chapter.map.addItemToMap(GameItemTypeDetails.Dialogue, fileName, dialogue);
 }
+
+/* Parsing dialogue */
+export const isPartLabel = (line: string) => new RegExp(/\[part[0-9]+\]/).test(line);
+export const isGotoLabel = (line: string) => new RegExp(/\[Goto part[0-9]+\]/).test(line);
+export const getPartToJump = (line: string) => line.match(/\[Goto (part[0-9]+)\]/)![1];
+export const isSpeaker = (line: string) => line && line[0] === '$';

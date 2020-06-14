@@ -20,7 +20,7 @@ const speakerTextStyle = {
   lineSpacing: 10
 };
 
-type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null) => void;
+type SpeakerChangeFn = (speakerDetail: SpeakerDetail | null | undefined) => void;
 
 function DialogueSpeakerBox(scene: Phaser.Scene): [Phaser.GameObjects.Container, SpeakerChangeFn] {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
@@ -39,11 +39,11 @@ function DialogueSpeakerBox(scene: Phaser.Scene): [Phaser.GameObjects.Container,
 
   container.add([rectangle, speakerText]);
 
-  function changeSpeaker(speakerDetail: SpeakerDetail | null) {
+  function changeSpeaker(speakerDetail: SpeakerDetail | null | undefined) {
     if (!speakerDetail) {
       return;
     }
-    speakerText.text = capitalise(speakerDetail[0]);
+    speakerText.text = capitalise(speakerDetail.speakerId);
   }
 
   return [container, changeSpeaker];

@@ -1,5 +1,5 @@
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import { Dialogue } from '../dialogue/DialogueTypes';
+import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 import { CharacterPosition } from '../character/GameCharacterConstants';
 
@@ -28,9 +28,11 @@ export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
 
 export type GameButton = GameText & GameSprite & IGameInteractive;
 
-type Speaker = string;
-type Expression = string;
-export type SpeakerDetail = [Speaker, Expression, CharacterPosition];
+export type SpeakerDetail = {
+  speakerId: ItemId;
+  expression: string;
+  speakerPosition?: CharacterPosition;
+};
 
 export interface IGameInteractive {
   isInteractive: boolean;

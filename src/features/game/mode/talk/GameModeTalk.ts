@@ -1,7 +1,7 @@
 import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
-import { Dialogue } from '../../dialogue/DialogueTypes';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
