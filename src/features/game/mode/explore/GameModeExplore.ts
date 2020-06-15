@@ -1,13 +1,11 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ItemId } from '../../commons/CommonsTypes';
-import { BBoxProperty } from '../../boundingBoxes/BoundingBoxTypes';
 import {
   magnifyingGlass,
   magnifyingGlassChecked,
   magnifyingGlassHighlight
 } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocationAttr } from '../../location/GameMapTypes';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
@@ -15,69 +13,19 @@ import { sleep } from '../../utils/GameUtils';
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationName: string;
-  private bboxIds: ItemId[];
-  private boundingBoxes: Map<ItemId, BBoxProperty>;
 
-  constructor(locationName: string, bboxIds?: ItemId[], boundingBoxes?: Map<ItemId, BBoxProperty>) {
+  constructor(locationName: string) {
     this.uiContainer = undefined;
     this.locationName = locationName;
-    this.boundingBoxes = boundingBoxes || new Map<ItemId, BBoxProperty>();
-    this.bboxIds = bboxIds || [];
   }
 
-  public fetchLatestState(): void {
-    const latestBBoxIds = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.boundingBoxes,
-      this.locationName
-    );
-    if (!latestBBoxIds) {
-      return;
-    }
-    this.bboxIds = latestBBoxIds;
-  }
+  // Explore Mode does not require states
+  public fetchLatestState(): void {}
 
   public getUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('GetUIContainer: Game Manager is not defined!');
-    }
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    // Register boundingBoxes
-    this.bboxIds.forEach(bboxId => {
-      const bbox = this.boundingBoxes.get(bboxId);
-      if (bbox) {
-        const newBBox = new Phaser.GameObjects.Rectangle(
-          gameManager,
-          bbox.x,
-          bbox.y,
-          bbox.width,
-          bbox.height,
-          0,
-          0
-        ).setInteractive();
-        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-          const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(
-            bbox.interactionId
-          );
-          if (hasTriggered) {
-            gameManager.input.setDefaultCursor(magnifyingGlassChecked);
-          } else {
-            gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
-          }
-        });
-        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-          gameManager.input.setDefaultCursor(magnifyingGlass);
-        });
-        newBBox.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-          // Trigger action here
-          GameActionManager.getInstance().triggerInteraction(bbox.interactionId);
-        });
-        exploreMenuContainer.add(newBBox);
-      }
-    });
-
     exploreMenuContainer.add(getBackToMenuContainer());
 
     return exploreMenuContainer;
@@ -85,17 +33,9 @@ class GameModeExplore implements IGameUI {
 
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('ActivateUI: Game Manager is not defined!');
-    }
 
-    // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
-    if (hasUpdates || !this.uiContainer) {
-      if (this.uiContainer) {
-        this.uiContainer.destroy();
-      }
-      this.fetchLatestState();
+    // Attach container
+    if (!this.uiContainer) {
       this.uiContainer = await this.getUIContainer();
       gameManager.add.existing(this.uiContainer);
     }
@@ -111,16 +51,15 @@ class GameModeExplore implements IGameUI {
       });
     }
 
+    this.attachExploreModeCallbacks();
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('DeactivateUI: Game Manager is not defined!');
-    }
 
     gameManager.input.setDefaultCursor('');
+    this.removeExploreModeCallbacks();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -134,6 +73,59 @@ class GameModeExplore implements IGameUI {
       this.uiContainer.setVisible(false);
       this.uiContainer.setActive(false);
     }
+  }
+
+  private attachExploreModeCallbacks() {
+    GameActionManager.getInstance().addInteractiveObjectsListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
+      this.explorePointerOver
+    );
+    GameActionManager.getInstance().addInteractiveObjectsListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
+      this.explorePointerOut
+    );
+    GameActionManager.getInstance().addInteractiveObjectsListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
+      this.explorePointerUp
+    );
+  }
+
+  private removeExploreModeCallbacks() {
+    GameActionManager.getInstance().removeInteractiveObjectListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
+    );
+    GameActionManager.getInstance().removeInteractiveObjectListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
+    );
+    GameActionManager.getInstance().removeInteractiveObjectListeners(
+      this.locationName,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_UP
+    );
+  }
+
+  private explorePointerOver(id: ItemId) {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(id);
+    if (hasTriggered) {
+      gameManager.input.setDefaultCursor(magnifyingGlassChecked);
+    } else {
+      gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
+    }
+  }
+
+  private explorePointerOut() {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    gameManager.input.setDefaultCursor(magnifyingGlass);
+  }
+
+  private async explorePointerUp(id: string) {
+    // Trigger action here
+    GameActionManager.getInstance().triggerInteraction(id);
   }
 }
 

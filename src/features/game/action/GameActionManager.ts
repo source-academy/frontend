@@ -1,11 +1,12 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameAction } from './GameActionTypes';
 import { sleep } from '../utils/GameUtils';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -93,7 +94,7 @@ class GameActionManager {
   }
 
   /////////////////////
-  //Game Interaction //
+  //   Interaction   //
   /////////////////////
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
@@ -153,6 +154,39 @@ class GameActionManager {
       );
     }
     return;
+  }
+
+  /////////////////////
+  //  Game Objects   //
+  /////////////////////
+
+  public addInteractiveObjectsListeners(
+    locationId: LocationId,
+    event: string | symbol,
+    fn: (id: ItemId) => void
+  ) {
+    if (this.gameManager) {
+      this.gameManager.objectManager.addInteractiveObjectsListeners(locationId, event, fn);
+    }
+  }
+
+  public removeInteractiveObjectListeners(locationId: LocationId, event: string | symbol) {
+    if (this.gameManager) {
+      this.gameManager.objectManager.removeInteractiveObjectListeners(locationId, event);
+    }
+  }
+
+  public getObjPropertyMap() {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.getObjPropertyMap();
+    }
+    return new Map<ItemId, ObjectProperty>();
+  }
+
+  public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
+    if (this.gameManager) {
+      this.gameManager.stateManager.setObjProperty(id, newObjProp);
+    }
   }
 
   /////////////////////

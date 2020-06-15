@@ -8,22 +8,18 @@ import { GameMode } from '../mode/GameModeTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 class GameObjectManager {
+  private objectIdMap: Map<ItemId, Phaser.GameObjects.GameObject>;
   private objectContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
-  private objectPropertyMap: Map<ItemId, ObjectProperty>;
 
   constructor() {
+    this.objectIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
     this.objectContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
-    this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
   }
 
   public processObjects(chapter: GameChapter) {
-    this.objectPropertyMap = chapter.map.getObjects();
     const locations = chapter.map.getLocations();
 
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('GetUIContainer: Game Manager is not defined!');
-    }
 
     locations.forEach(location => {
       const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -33,7 +29,7 @@ class GameObjectManager {
   }
 
   public createObjectsLayerContainer(
-    idsToRender: ItemId[],
+    objectIds: ItemId[],
     locationName: LocationId
   ): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
@@ -41,14 +37,16 @@ class GameObjectManager {
     // Destroy the old container
     this.objectContainerMap.get(locationName)!.destroy();
 
+    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-    idsToRender.forEach(id => {
-      const toRenderObjProperty = this.objectPropertyMap.get(id);
+    objectIds.forEach(id => {
+      const toRenderObjProperty = objectPropMap.get(id);
       if (toRenderObjProperty) {
-        objectContainer.add(this.createObject(gameManager, toRenderObjProperty));
+        const object = this.createObject(gameManager, toRenderObjProperty);
+        this.objectIdMap.set(id, object);
+        objectContainer.add(object);
       }
     });
-
     return objectContainer;
   }
 
@@ -56,19 +54,81 @@ class GameObjectManager {
     const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
       locationName,
       GameMode.Explore
-    ); // TODO: Ask Specifically based on Objects Attr
+    );
     let objectContainer = this.objectContainerMap.get(locationName);
 
     // If update, create new object Container
     if (hasUpdate || !objectContainer) {
-      const idsToRender =
+      const objIdsToRender =
         GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationName) ||
         [];
-      objectContainer = this.createObjectsLayerContainer(idsToRender, locationName);
+      objectContainer = this.createObjectsLayerContainer(objIdsToRender, locationName);
       this.objectContainerMap.set(locationName, objectContainer);
     }
-
     GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
+  }
+
+  public setObjectInteractivity(id: ItemId, isInteractable: boolean, shape?: any) {
+    // Update its property
+    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
+    const objectProp = objectPropMap.get(id);
+    if (objectProp) {
+      GameActionManager.getInstance().setObjProperty(id, {
+        ...objectProp,
+        isInteractable: isInteractable
+      });
+    }
+
+    // Update corresponding object
+    const object = this.objectIdMap.get(id);
+    if (object) {
+      if (isInteractable) object.setInteractive(shape);
+      else object.setInteractive(false);
+    }
+  }
+
+  public addInteractiveObjectsListeners(
+    locationId: LocationId,
+    event: string | symbol,
+    fn: (id: ItemId) => void
+  ) {
+    const objectIds = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.objects,
+      locationId
+    );
+    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
+    if (objectIds) {
+      objectIds.forEach((id: ItemId) => {
+        const objectProp = objectPropMap.get(id);
+        if (objectProp && objectProp.isInteractable) {
+          this.addObjectListener(id, event, () => fn(id));
+        }
+      });
+    }
+  }
+
+  public removeInteractiveObjectListeners(locationId: LocationId, event: string | symbol) {
+    const objectIds = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.objects,
+      locationId
+    );
+    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
+    if (objectIds) {
+      objectIds.forEach((id: ItemId) => {
+        const objectProp = objectPropMap.get(id);
+        if (objectProp && objectProp.isInteractable) this.removeObjectListener(id, event);
+      });
+    }
+  }
+
+  private addObjectListener(id: ItemId, event: string | symbol, fn: () => void) {
+    const object = this.objectIdMap.get(id);
+    if (object) object.addListener(event, fn);
+  }
+
+  private removeObjectListener(id: ItemId, event: string | symbol) {
+    const object = this.objectIdMap.get(id);
+    if (object) object.removeListener(event);
   }
 
   private createObject(
@@ -77,6 +137,9 @@ class GameObjectManager {
   ): Phaser.GameObjects.Image {
     const { assetKey, x, y } = objectProperty;
     const objectSprite = new Phaser.GameObjects.Image(gameManager, x, y, assetKey);
+    if (objectProperty.isInteractable) {
+      objectSprite.setInteractive({ pixelPerfect: true });
+    }
     return objectSprite;
   }
 }

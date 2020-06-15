@@ -3,6 +3,7 @@ import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonsTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 
 class GameStateManager {
   // Game State
@@ -10,6 +11,7 @@ class GameStateManager {
   private chapterObjective: GameObjective;
   private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
+  private objectPropertyMap: Map<ItemId, ObjectProperty>;
 
   // Triggered Interactions
   private triggeredInteractions: Map<ItemId, boolean>;
@@ -19,6 +21,8 @@ class GameStateManager {
     this.chapterObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
+    this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
+
     this.triggeredInteractions = new Map<ItemId, boolean>();
   }
 
@@ -71,8 +75,9 @@ class GameStateManager {
 
   public processChapter(chapter: GameChapter): void {
     this.chapter = chapter;
-    this.locationStates = this.chapter.map.getLocations();
     this.chapterObjective = this.chapter.objectives;
+    this.locationStates = this.chapter.map.getLocations();
+    this.objectPropertyMap = this.chapter.map.getObjects();
 
     // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationName, map) => {
@@ -84,11 +89,15 @@ class GameStateManager {
   }
 
   ///////////////////////////////
-  //       Update State        //
+  //        Interaction        //
   ///////////////////////////////
 
   public triggerInteraction(id: string): void {
     this.triggeredInteractions.set(id, true);
+  }
+
+  public hasTriggeredInteraction(id: string): boolean | undefined {
+    return this.triggeredInteractions.get(id);
   }
 
   ///////////////////////////////
@@ -105,10 +114,6 @@ class GameStateManager {
     const locationModeState = this.locationHasUpdate.get(locationName);
     locationModeState!.forEach((hasUpdate, mode, map) => (result = result || hasUpdate));
     return result;
-  }
-
-  public hasTriggeredInteraction(id: string): boolean | undefined {
-    return this.triggeredInteractions.get(id);
   }
 
   ///////////////////////////////
@@ -206,6 +211,18 @@ class GameStateManager {
 
   public completeObjective(key: string): void {
     return this.chapterObjective.setObjective(key, true);
+  }
+
+  ///////////////////////////////
+  //  Obj Property Objectives  //
+  ///////////////////////////////
+
+  public getObjPropertyMap() {
+    return this.objectPropertyMap;
+  }
+
+  public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
+    this.objectPropertyMap.set(id, newObjProp);
   }
 }
 

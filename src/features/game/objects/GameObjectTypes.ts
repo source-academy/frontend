@@ -8,6 +8,7 @@ export type ObjectProperty = {
   y: number;
   actions?: string[];
   visibility?: true;
+  isInteractable: boolean;
 };
 
 export type ObjectLayerProps = {

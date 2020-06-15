@@ -20,7 +20,12 @@ function objPropertyMapper(objectsList: string[]): Map<ItemId, ObjectProperty> {
   const objectPropertyMap = new Map<ItemId, ObjectProperty>();
   objectDetails.forEach(objectDetail => {
     const [objectId, assetKey, x, y] = objectDetail.split(', ');
-    objectPropertyMap.set(objectId, { assetKey, x: parseInt(x), y: parseInt(y) });
+    objectPropertyMap.set(objectId, {
+      assetKey,
+      x: parseInt(x),
+      y: parseInt(y),
+      isInteractable: false
+    });
   });
 
   if (separatorIndex !== -1) {
