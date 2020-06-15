@@ -1,3 +1,4 @@
+
 import { splitToLines, mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
 import { LocationId } from '../location/GameMapTypes';
 import Parser from './Parser';

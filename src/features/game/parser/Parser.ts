@@ -14,7 +14,7 @@ class Parser {
   private static parserMap: object;
   public static chapter: GameChapter;
 
-  public static parse(chapterText: string): GameChapter {
+  constructor() {
     Parser.parserMap = {
       configuration: ConfigParser,
       location: LocationParser,
@@ -31,6 +31,9 @@ class Parser {
       startingLoc: '',
       objectives: new GameObjective()
     };
+  }
+
+  public static parse(chapterText: string): GameChapter {
     // Split files by the <<>>
     splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
       if (!fileName || !fileContent) {

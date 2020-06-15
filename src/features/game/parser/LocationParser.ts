@@ -21,6 +21,7 @@ export default function LocationParser(fileName: string, fileContent: string): v
 
   // Parse and load location assets
   splitToLines(locationAssets).forEach(locationAsset => {
+
     const [id, shortPath, name] = splitByChar(locationAsset, ',');
 
     locationIds.push(id);

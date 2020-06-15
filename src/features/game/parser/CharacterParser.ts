@@ -77,4 +77,5 @@ export function addCharacterExprToMap(charId: string, expression: string) {
     characterAssetKey(charId, expression),
     characterAssetValue(charId, expression)
   );
+
 }

@@ -284,9 +284,11 @@ class GameActionManager {
 
   public async bringUpDialogue(dialogueId: ItemId) {
     if (this.gameManager) {
+      this.deactivateCurrentUI();
       this.gameManager.setActivePhase(GamePhase.Dialogue);
       await this.gameManager.dialogueManager.playDialogue(dialogueId);
       this.gameManager.setActivePhase(GamePhase.Standard);
+      this.activateCurrentUI();
     }
   }
 
