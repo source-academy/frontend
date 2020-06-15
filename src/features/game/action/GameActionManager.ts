@@ -1,6 +1,6 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameAction } from './GameActionTypes';
@@ -41,24 +41,24 @@ class GameActionManager {
   //    Game Mode    //
   /////////////////////
 
-  public getLocationMode(locationName: string): GameMode[] | undefined {
+  public getLocationMode(locationId: LocationId): GameMode[] | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationMode(locationName);
+      return this.gameManager.stateManager.getLocationMode(locationId);
     }
     return undefined;
   }
 
-  public addLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
+  public addLocationMode(currLocName: string, locationId: string, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.addMode(mode, locationName);
-      this.gameManager.stateManager.addLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.addMode(mode, locationId);
+      this.gameManager.stateManager.addLocationMode(currLocName, locationId, mode);
     }
   }
 
-  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
+  public removeLocationMode(currLocName: string, locationId: string, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.removeMode(mode, locationName);
-      this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.removeMode(mode, locationId);
+      this.gameManager.stateManager.removeLocationMode(currLocName, locationId, mode);
     }
   }
 
@@ -77,16 +77,16 @@ class GameActionManager {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdate(locationName: string, mode?: GameMode): boolean | undefined {
+  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.hasLocationUpdate(locationName, mode);
+      return this.gameManager.stateManager.hasLocationUpdate(locationId, mode);
     }
     return false;
   }
 
-  public changeLocationTo(locationName: string) {
+  public changeLocationTo(locationId: LocationId) {
     if (this.gameManager) {
-      return this.gameManager.changeLocationTo(locationName);
+      return this.gameManager.changeLocationTo(locationId);
     }
     return;
   }
@@ -113,23 +113,27 @@ class GameActionManager {
   //    Game Attr    //
   /////////////////////
 
-  public getLocationAttr(attr: GameLocationAttr, locationName: string) {
+  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId) {
     if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationAttr(attr, locationName);
+      return this.gameManager.stateManager.getLocationAttr(attr, locationId);
     }
     return undefined;
   }
 
-  public addLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
+  public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.addLocationAttr(attr, locationName, attrElem);
+      return this.gameManager.stateManager.addLocationAttr(attr, locationId, attrElem);
     }
     return;
   }
 
-  public removeLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
+  public removeLocationAttr(
+    attr: GameLocationAttr,
+    locationId: LocationId,
+    attrElem: string
+  ): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.removeLocationAttr(attr, locationName, attrElem);
+      return this.gameManager.stateManager.removeLocationAttr(attr, locationId, attrElem);
     }
     return;
   }

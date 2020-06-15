@@ -34,7 +34,7 @@ class GameMap {
     return this.mapAssets;
   }
 
-  public addLocation(locationId: string, location: GameLocation): void {
+  public addLocation(locationId: LocationId, location: GameLocation): void {
     this.locations.set(locationId, location);
   }
 
@@ -48,7 +48,7 @@ class GameMap {
     location.modes = modes;
   }
 
-  public setNavigationFrom(id: string, destination: string[]) {
+  public setNavigationFrom(id: LocationId, destination: LocationId[]) {
     const location = this.locations.get(id);
     if (!location) {
       showLocationError(id);
@@ -58,7 +58,7 @@ class GameMap {
     location.navigation = destination;
   }
 
-  public getNavigationFrom(id: string): string[] | undefined {
+  public getNavigationFrom(id: LocationId): LocationId[] | undefined {
     const location = this.locations.get(id);
     if (!location || !location.navigation) {
       showLocationError(id);
@@ -67,11 +67,11 @@ class GameMap {
     return location.navigation;
   }
 
-  public getLocation(id: string): GameLocation | undefined {
+  public getLocation(id: LocationId): GameLocation | undefined {
     return this.locations.get(id);
   }
 
-  public getLocations(): Map<string, GameLocation> {
+  public getLocations(): Map<LocationId, GameLocation> {
     return this.locations;
   }
 
@@ -95,7 +95,7 @@ class GameMap {
     this[itemType.listName].set(itemId, item);
   }
 
-  public setItemAt<T>(locationId: string, itemType: GameItemType<T>, itemId: string) {
+  public setItemAt<T>(locationId: LocationId, itemType: GameItemType<T>, itemId: string) {
     const location = this.locations.get(locationId);
     if (!location) {
       showLocationError(locationId);
@@ -108,7 +108,7 @@ class GameMap {
     location[itemType.listName].push(itemId);
   }
 
-  public getItemAt<T>(locationId: string, itemType: GameItemType<T>): Map<ItemId, T> {
+  public getItemAt<T>(locationId: LocationId, itemType: GameItemType<T>): Map<ItemId, T> {
     const location = this.locations.get(locationId);
     if (!location) {
       showLocationError(locationId);

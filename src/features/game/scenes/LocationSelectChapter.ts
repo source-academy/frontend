@@ -10,7 +10,7 @@ import {
 } from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameLocation } from '../location/GameMapTypes';
-import { ImageAsset, AssetKey } from '../commons/CommonsTypes';
+import { AssetKey, ImageAsset } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
 import { dialogue1, dialogue2 } from './Factory';
 import { Character } from '../character/GameCharacterTypes';
@@ -20,7 +20,39 @@ import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
 
 const LocationSelectMap = new GameMap();
 
-// Sample Map, arbritary set up
+const gameLocations: GameLocation[] = [
+  {
+    id: 'crashsite',
+    name: 'Crash Site',
+    modes: [GameMode.Talk, GameMode.Move],
+    assetKey: crashSiteImg.key
+  },
+  {
+    id: 'classroom',
+    name: 'Class Room',
+    modes: [GameMode.Explore, GameMode.Talk, GameMode.Move],
+    assetKey: classRoomImg.key
+  },
+  {
+    id: 'emergency',
+    name: 'Emergency',
+    modes: [GameMode.Talk, GameMode.Move],
+    assetKey: emergencyImg.key
+  },
+  {
+    id: 'hallway',
+    name: 'Hallway',
+    modes: [GameMode.Move],
+    assetKey: hallwayImg.key
+  },
+  {
+    id: 'room',
+    name: 'Student Room',
+    modes: [GameMode.Explore, GameMode.Move, GameMode.Talk],
+    assetKey: studentRoomImg.key
+  }
+];
+
 const locationImages: ImageAsset[] = [
   crashSiteImg,
   classRoomImg,
@@ -29,30 +61,7 @@ const locationImages: ImageAsset[] = [
   studentRoomImg
 ];
 
-const locationNames: string[] = [
-  'Crash Site',
-  'Class Room',
-  'Emergency',
-  'Hallway',
-  'Student Room'
-];
-
-const locationModes: GameMode[][] = [
-  [GameMode.Talk, GameMode.Move],
-  [GameMode.Explore, GameMode.Talk, GameMode.Move],
-  [GameMode.Talk, GameMode.Move],
-  [GameMode.Move],
-  [GameMode.Explore, GameMode.Move, GameMode.Talk]
-];
-
-const locations: GameLocation[] = new Array<GameLocation>();
-for (let i = 0; i < locationImages.length; i++) {
-  locations.push({
-    name: locationNames[i],
-    assetKey: locationImages[i].key,
-    modes: locationModes[i]
-  });
-}
+gameLocations.forEach(location => LocationSelectMap.addLocation(location.id, location));
 
 const bboxStudentRoom: BBoxProperty = {
   x: 300,
@@ -71,15 +80,14 @@ const bboxClassRoom: BBoxProperty = {
 };
 
 // Register mapping and assets
-locations.forEach(location => LocationSelectMap.addLocation(location.name, location));
 locationImages.forEach(asset => LocationSelectMap.addMapAsset(asset.key, asset.path));
 
 // Register navigation
-LocationSelectMap.setNavigationFrom('Class Room', ['Crash Site', 'Hallway']);
-LocationSelectMap.setNavigationFrom('Crash Site', ['Class Room']);
-LocationSelectMap.setNavigationFrom('Hallway', ['Class Room', 'Student Room', 'Emergency']);
-LocationSelectMap.setNavigationFrom('Student Room', ['Hallway']);
-LocationSelectMap.setNavigationFrom('Emergency', ['Hallway']);
+LocationSelectMap.setNavigationFrom('classroom', ['crashsite', 'hallway']);
+LocationSelectMap.setNavigationFrom('crashsite', ['classroom']);
+LocationSelectMap.setNavigationFrom('hallway', ['classRoom', 'room', 'emergency']);
+LocationSelectMap.setNavigationFrom('room', ['hallway']);
+LocationSelectMap.setNavigationFrom('emergency', ['hallway']);
 
 // Add dialogues
 LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue1', dialogue1);
@@ -98,19 +106,15 @@ LocationSelectMap.addItemToMap(
 );
 
 // Set explore bounding boxes
-LocationSelectMap.setItemAt(
-  'Student Room',
-  GameItemTypeDetails.BBox,
-  bboxStudentRoom.interactionId
-);
-LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.BBox, bboxClassRoom.interactionId);
+LocationSelectMap.setItemAt('room', GameItemTypeDetails.BBox, bboxStudentRoom.interactionId);
+LocationSelectMap.setItemAt('classroom', GameItemTypeDetails.BBox, bboxClassRoom.interactionId);
 
 // Set talk topics
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Crash Site', GameItemTypeDetails.Dialogue, 'dialogue2');
-LocationSelectMap.setItemAt('Class Room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue2');
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('room', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('crashsite', GameItemTypeDetails.Dialogue, 'dialogue2');
+LocationSelectMap.setItemAt('classroom', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Dialogue, 'dialogue2');
+LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
 
 //Preload assets
 LocationSelectMap.addMapAsset('beathappy', Constants.assetsFolder + '/avatars/beat/beat.happy.png');
@@ -153,8 +157,8 @@ LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, beat.id, beat);
 LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, scottie.id, scottie);
 
 // Set characters
-LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Character, beat.id);
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, scottie.id);
+LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Character, beat.id);
+LocationSelectMap.setItemAt('room', GameItemTypeDetails.Character, scottie.id);
 
 // Set Objectives
 const objectives = new GameObjective();
@@ -162,7 +166,7 @@ objectives.addObjectives(['Visit Hallway', 'Talk At Classroom']);
 
 const LocationSelectChapter: GameChapter = {
   map: LocationSelectMap,
-  startingLoc: 'Student Room',
+  startingLoc: 'room',
   objectives: objectives
 };
 

@@ -1,6 +1,6 @@
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
-import { GameLocation } from 'src/features/game/location/GameMapTypes';
+import { GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
 import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import GameActionManager from '../../../../features/game/action/GameActionManager';
@@ -17,6 +17,8 @@ import { screenSize, screenCenter } from 'src/features/game/commons/CommonConsta
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
+import Parser from 'src/features/game/parser/Parser';
+import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -37,7 +39,7 @@ class GameManager extends Phaser.Scene {
   public userStateManager: GameUserStateManager;
 
   // Limited to current location
-  public currentLocationName: string;
+  public currentlocationId: LocationId;
   private currentActiveMode: GameMode;
   private currentActivePhase: GamePhase;
 
@@ -45,7 +47,7 @@ class GameManager extends Phaser.Scene {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
-    this.currentLocationName = this.currentChapter.startingLoc;
+    this.currentlocationId = this.currentChapter.startingLoc;
 
     this.modeManager = new GameModeManager();
     this.layerManager = new GameLayerManager();
@@ -63,7 +65,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
+    this.currentChapter = Parser.parse(text);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.userStateManager.initialise();
@@ -111,33 +113,39 @@ class GameManager extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
     // Render objects in the location
-    this.objectManager.renderObjectsLayerContainer(location.name);
+    this.objectManager.renderObjectsLayerContainer(location.id);
 
     // Render characters in the location
-    this.characterManager.renderCharacterLayerContainer(location.name);
+    this.characterManager.renderCharacterLayerContainer(location.id);
 
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);
   }
 
-  public async changeLocationTo(locationName: string) {
-    const location = this.currentChapter.map.getLocation(locationName);
-    if (location) {
-      // Deactive current UI of previous location
-      this.deactivateCurrentUI();
+  public async changeLocationTo(locationId: LocationId) {
+    const location = this.currentChapter.map.getLocation(locationId);
 
-      // Clear all layers;
-      this.layerManager.clearAllLayers();
-
-      // Update location
-      this.currentLocationName = locationName;
-
-      // Render new location
-      await blackFade(this, 300, 300, () => this.renderLocation(this.currentChapter.map, location));
-
-      // Update state after location is fully rendered
-      this.stateManager.triggerInteraction(locationName);
+    if (!location) {
+      if (hasDevAccess()) {
+        throw new Error(`Location ${locationId} not found`);
+      }
+      return;
     }
+
+    // Deactive current UI of previous location
+    this.deactivateCurrentUI();
+
+    // Clear all layers;
+    this.layerManager.clearAllLayers();
+
+    // Update location
+    this.currentlocationId = locationId;
+
+    // Render new location
+    await blackFade(this, 300, 300, () => this.renderLocation(this.currentChapter.map, location));
+
+    // Update state after location is fully rendered
+    this.stateManager.triggerInteraction(locationId);
   }
 
   //////////////////////
@@ -147,7 +155,7 @@ class GameManager extends Phaser.Scene {
   private deactivateCurrentUI() {
     const prevLocationMode = this.modeManager.getLocationMode(
       this.currentActiveMode,
-      this.currentLocationName
+      this.currentlocationId
     );
 
     if (prevLocationMode) {
@@ -168,7 +176,7 @@ class GameManager extends Phaser.Scene {
       return;
     }
 
-    const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationName);
+    const locationMode = this.modeManager.getLocationMode(newMode, this.currentlocationId);
 
     if (newMode === GameMode.Menu || newMode === GameMode.Talk) {
       this.layerManager.fadeInLayer(Layer.Character, 300);

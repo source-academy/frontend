@@ -27,19 +27,19 @@ class GameObjectManager {
 
     locations.forEach(location => {
       const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-      this.objectContainerMap.set(location.name, objectContainer);
+      this.objectContainerMap.set(location.id, objectContainer);
       gameManager.add.existing(objectContainer);
     });
   }
 
   public createObjectsLayerContainer(
     idsToRender: ItemId[],
-    locationName: LocationId
+    locationId: LocationId
   ): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     // Destroy the old container
-    this.objectContainerMap.get(locationName)!.destroy();
+    this.objectContainerMap.get(locationId)!.destroy();
 
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     idsToRender.forEach(id => {
@@ -52,20 +52,19 @@ class GameObjectManager {
     return objectContainer;
   }
 
-  public renderObjectsLayerContainer(locationName: LocationId): void {
+  public renderObjectsLayerContainer(locationId: LocationId): void {
     const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationName,
+      locationId,
       GameMode.Explore
     ); // TODO: Ask Specifically based on Objects Attr
-    let objectContainer = this.objectContainerMap.get(locationName);
+    let objectContainer = this.objectContainerMap.get(locationId);
 
     // If update, create new object Container
     if (hasUpdate || !objectContainer) {
       const idsToRender =
-        GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationName) ||
-        [];
-      objectContainer = this.createObjectsLayerContainer(idsToRender, locationName);
-      this.objectContainerMap.set(locationName, objectContainer);
+        GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
+      objectContainer = this.createObjectsLayerContainer(idsToRender, locationId);
+      this.objectContainerMap.set(locationId, objectContainer);
     }
 
     GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);

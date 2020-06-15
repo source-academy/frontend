@@ -10,14 +10,15 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
 import { screenSize, screenCenter, nullInteractionId } from '../../commons/CommonConstants';
 import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
+import { LocationId } from '../../location/GameMapTypes';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationName: string;
+  private locationId: LocationId;
   private modeBanner: GameSprite;
   private gameButtons: GameButton[];
 
-  constructor(locationName: string, modes?: GameMode[]) {
+  constructor(locationId: string, modes?: GameMode[]) {
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: screenCenter.x,
@@ -26,7 +27,7 @@ class GameModeMenu implements IGameUI {
     } as GameSprite;
 
     this.uiContainer = undefined;
-    this.locationName = locationName;
+    this.locationId = locationId;
     this.modeBanner = banner;
     this.gameButtons = [];
     this.createGameButtons(modes);
@@ -73,7 +74,7 @@ class GameModeMenu implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationName);
+    const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationId);
     if (!latestLocationMode) {
       return;
     }
@@ -133,7 +134,7 @@ class GameModeMenu implements IGameUI {
     }
 
     // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
     if (hasUpdates || !this.uiContainer) {
       if (this.uiContainer) {
         this.uiContainer.destroy();

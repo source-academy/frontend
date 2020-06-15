@@ -8,7 +8,7 @@ import { LocationId } from '../../location/GameMapTypes';
 class GameModeTalkManager {
   static processTalkMenus(chapter: GameChapter): Map<LocationId, GameModeTalk> {
     return mapValues(chapter.map.getLocations(), location => {
-      const possibleDialogues = chapter.map.getItemAt(location.name, GameItemTypeDetails.Dialogue);
+      const possibleDialogues = chapter.map.getItemAt(location.id, GameItemTypeDetails.Dialogue);
       if (
         !location.modes ||
         !location.modes.includes(GameMode.Talk) ||
@@ -17,18 +17,18 @@ class GameModeTalkManager {
       ) {
         return;
       }
-      return new GameModeTalk(location.name, location.talkTopics, possibleDialogues);
+      return new GameModeTalk(location.id, location.talkTopics, possibleDialogues);
     });
   }
 
-  static processLocation(chapter: GameChapter, locationName: string): GameModeTalk {
-    const location = chapter.map.getLocation(locationName);
+  static processLocation(chapter: GameChapter, locationId: LocationId): GameModeTalk {
+    const location = chapter.map.getLocation(locationId);
     if (!location) {
-      throw console.error('Location does not exist ', locationName);
+      throw console.error('Location does not exist ', locationId);
     }
-    const possibleDialogues = chapter.map.getItemAt(location.name, GameItemTypeDetails.Dialogue);
+    const possibleDialogues = chapter.map.getItemAt(location.id, GameItemTypeDetails.Dialogue);
     const talkTopics = location.talkTopics || [];
-    return new GameModeTalk(location.name, talkTopics, possibleDialogues);
+    return new GameModeTalk(location.id, talkTopics, possibleDialogues);
   }
 }
 

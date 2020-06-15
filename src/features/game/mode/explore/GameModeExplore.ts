@@ -7,20 +7,24 @@ import {
   magnifyingGlassHighlight
 } from './GameModeExploreConstants';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationName: string;
+  private locationId: LocationId;
   private bboxIds: ItemId[];
   private boundingBoxes: Map<ItemId, BBoxProperty>;
 
-  constructor(locationName: string, bboxIds?: ItemId[], boundingBoxes?: Map<ItemId, BBoxProperty>) {
+  constructor(
+    locationId: LocationId,
+    bboxIds?: ItemId[],
+    boundingBoxes?: Map<ItemId, BBoxProperty>
+  ) {
     this.uiContainer = undefined;
-    this.locationName = locationName;
+    this.locationId = locationId;
     this.boundingBoxes = boundingBoxes || new Map<ItemId, BBoxProperty>();
     this.bboxIds = bboxIds || [];
   }
@@ -28,7 +32,7 @@ class GameModeExplore implements IGameUI {
   public fetchLatestState(): void {
     const latestBBoxIds = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.boundingBoxes,
-      this.locationName
+      this.locationId
     );
     if (!latestBBoxIds) {
       return;
@@ -90,7 +94,7 @@ class GameModeExplore implements IGameUI {
     }
 
     // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
     if (hasUpdates || !this.uiContainer) {
       if (this.uiContainer) {
         this.uiContainer.destroy();

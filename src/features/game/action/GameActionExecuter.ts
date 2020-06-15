@@ -38,14 +38,14 @@ export default class GameActionExecuter {
       case GameActionType.AddItem:
         actionManager.addLocationAttr(
           actionParams.id,
-          actionParams.locationName,
+          actionParams.locationId,
           actionParams.attrName
         );
         return;
       case GameActionType.RemoveItem:
         actionManager.addLocationAttr(
           actionParams.id,
-          actionParams.locationName,
+          actionParams.locationId,
           actionParams.attrName
         );
         return;
