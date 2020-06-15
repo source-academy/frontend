@@ -19,6 +19,7 @@ import {
   defaultLocationImg
 } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -64,7 +65,7 @@ class GameModeMove implements IGameUI {
         this.addMoveOptionButton(location.name, () => {
           GameActionManager.getInstance().changeLocationTo(locationId);
         });
-        this.locationAssetKeys.set(locationId, location.assetKey);
+        this.locationAssetKeys.set(location.name, location.assetKey);
       }
     });
   }
@@ -207,7 +208,7 @@ class GameModeMove implements IGameUI {
       }
       this.fetchLatestState();
       this.uiContainer = await this.getUIContainer();
-      gameManager.add.existing(this.uiContainer);
+      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
     }
 
     if (this.uiContainer) {

@@ -36,18 +36,10 @@ export default class GameActionExecuter {
         actionManager.completeObjective(actionParams.id);
         return;
       case GameActionType.AddItem:
-        actionManager.addLocationAttr(
-          actionParams.id,
-          actionParams.locationId,
-          actionParams.attrName
-        );
+        actionManager.addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.RemoveItem:
-        actionManager.addLocationAttr(
-          actionParams.id,
-          actionParams.locationId,
-          actionParams.attrName
-        );
+        actionManager.addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.BringUpDialogue:
         if (actionManager.getGameManager().getActivePhase() === GamePhase.Dialogue) {

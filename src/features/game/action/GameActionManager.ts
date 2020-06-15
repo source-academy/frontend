@@ -6,6 +6,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameAction } from './GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -174,6 +175,40 @@ class GameActionManager {
   }
 
   /////////////////////
+  //    Game BBox    //
+  /////////////////////
+
+  public addInteractiveBBoxListeners(
+    locationId: LocationId,
+    event: string | symbol,
+    fn: (id: ItemId) => void
+  ) {
+    if (this.gameManager) {
+      this.gameManager.boundingBoxManager.addInteractiveBBoxListeners(locationId, event, fn);
+    }
+  }
+
+  public removeInteractiveBBoxListeners(locationId: LocationId, event: string | symbol) {
+    if (this.gameManager) {
+      this.gameManager.boundingBoxManager.removeInteractiveBBoxListeners(locationId, event);
+    }
+  }
+
+  public getBBoxPropertyMap() {
+    if (this.gameManager) {
+      return this.gameManager.stateManager.getBBoxPropertyMap();
+    }
+    return new Map<ItemId, BBoxProperty>();
+  }
+
+  public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
+    if (this.gameManager) {
+      const currLocName = this.gameManager.currentLocationId;
+      this.gameManager.stateManager.setBBoxProperty(currLocName, id, newBBoxProp);
+    }
+  }
+
+  /////////////////////
   //  Game Objective //
   /////////////////////
 
@@ -231,6 +266,18 @@ class GameActionManager {
     }
   }
 
+  public deactivateCurrentUI() {
+    if (this.gameManager) {
+      this.gameManager.deactivateCurrentUI();
+    }
+  }
+
+  public activateCurrentUI() {
+    if (this.gameManager) {
+      this.gameManager.activateCurrentUI();
+    }
+  }
+
   /////////////////////
   //     Dialogue    //
   /////////////////////
@@ -252,12 +299,6 @@ class GameActionManager {
       this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }
   }
-
-  /////////////////////
-  //  Runtime Action //
-  /////////////////////
-
-  public async executeRuntimeActions(ids: string[]) {}
 
   /////////////////////
   //   Story Action  //

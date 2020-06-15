@@ -17,10 +17,10 @@ import { screenSize, screenCenter } from 'src/features/game/commons/CommonConsta
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-// import Parser from 'src/features/game/parser/Parser';
+import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
+import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 
-const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
   text: string;
 };
@@ -37,6 +37,7 @@ class GameManager extends Phaser.Scene {
   public dialogueManager: GameDialogueManager;
   public actionExecuter: GameActionExecuter;
   public userStateManager: GameUserStateManager;
+  public boundingBoxManager: GameBBoxManager;
 
   // Limited to current location
   public currentLocationId: LocationId;
@@ -57,6 +58,7 @@ class GameManager extends Phaser.Scene {
     this.dialogueManager = new GameDialogueManager();
     this.actionExecuter = new GameActionExecuter();
     this.userStateManager = new GameUserStateManager();
+    this.boundingBoxManager = new GameBBoxManager();
 
     this.currentActiveMode = GameMode.Menu;
     this.currentActivePhase = GamePhase.Standard;
@@ -65,7 +67,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
+    this.currentChapter = Parser.parse(text);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.userStateManager.initialise();
@@ -80,6 +82,7 @@ class GameManager extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
+    this.boundingBoxManager.processBBox(this.currentChapter);
   }
 
   public create() {
@@ -104,7 +107,7 @@ class GameManager extends Phaser.Scene {
 
   private async renderLocation(map: GameMap, location: GameLocation) {
     // Render background of the location
-    const backgroundAsset = new Image(
+    const backgroundAsset = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
@@ -112,8 +115,9 @@ class GameManager extends Phaser.Scene {
     ).setDisplaySize(screenSize.x, screenSize.y);
     this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
-    // Render objects in the location
+    // Render objects & bbox in the location
     this.objectManager.renderObjectsLayerContainer(location.id);
+    this.boundingBoxManager.renderBBoxLayerContainer(location.id);
 
     // Render characters in the location
     this.characterManager.renderCharacterLayerContainer(location.id);
@@ -134,14 +138,14 @@ class GameManager extends Phaser.Scene {
     // Deactive current UI of previous location
     this.deactivateCurrentUI();
 
-    // Clear all layers;
-    this.layerManager.clearAllLayers();
-
     // Update location
     this.currentLocationId = locationId;
 
     // Render new location
-    await blackFade(this, 300, 300, () => this.renderLocation(this.currentChapter.map, location));
+    await blackFade(this, 300, 300, () => {
+      this.layerManager.clearAllLayers();
+      this.renderLocation(this.currentChapter.map, location);
+    });
 
     // Update state after location is fully rendered
     this.stateManager.triggerInteraction(locationId);
@@ -151,15 +155,20 @@ class GameManager extends Phaser.Scene {
   //   Mode Callback  //
   //////////////////////
 
-  private deactivateCurrentUI() {
-    const prevLocationMode = this.modeManager.getLocationMode(
+  public deactivateCurrentUI() {
+    const currentLocationMode = this.modeManager.getLocationMode(
       this.currentActiveMode,
       this.currentLocationId
     );
+    if (currentLocationMode) currentLocationMode.deactivateUI();
+  }
 
-    if (prevLocationMode) {
-      prevLocationMode.deactivateUI();
-    }
+  public activateCurrentUI() {
+    const currentLocationMode = this.modeManager.getLocationMode(
+      this.currentActiveMode,
+      this.currentLocationId
+    );
+    if (currentLocationMode) currentLocationMode.activateUI();
   }
 
   public setActivePhase(gamePhase: GamePhase) {

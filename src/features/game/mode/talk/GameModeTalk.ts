@@ -8,6 +8,7 @@ import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
+import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -33,10 +34,10 @@ class GameModeTalk implements IGameUI {
         this.addTalkOptionButton(
           dialogue.title,
           async () => {
-            this.deactivateUI();
+            GameActionManager.getInstance().deactivateCurrentUI();
             GameActionManager.getInstance().triggerInteraction(dialogueId);
             await GameActionManager.getInstance().bringUpDialogue(dialogueId);
-            this.activateUI();
+            GameActionManager.getInstance().activateCurrentUI();
           },
           dialogueId
         );
@@ -148,7 +149,7 @@ class GameModeTalk implements IGameUI {
       }
       this.fetchLatestState();
       this.uiContainer = await this.getUIContainer();
-      gameManager.add.existing(this.uiContainer);
+      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
     }
 
     if (this.uiContainer) {

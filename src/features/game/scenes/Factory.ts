@@ -1,7 +1,7 @@
 import { PartName, DialogueLine } from '../dialogue/GameDialogueTypes';
 import { createGameAction, createCondition, GameActionType } from '../action/GameActionTypes';
-import { createSpeaker } from '../character/GameCharacterTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
+import { createSpeaker } from '../character/GameCharacterHelper';
 
 const DialogueObject1 = new Map<PartName, DialogueLine[]>();
 DialogueObject1.set('part1', [

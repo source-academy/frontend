@@ -10,6 +10,7 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { LocationId } from '../../location/GameMapTypes';
+import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -38,7 +39,7 @@ class GameModeExplore implements IGameUI {
     // Attach container
     if (!this.uiContainer) {
       this.uiContainer = await this.getUIContainer();
-      gameManager.add.existing(this.uiContainer);
+      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
     }
 
     if (this.uiContainer) {
@@ -77,6 +78,7 @@ class GameModeExplore implements IGameUI {
   }
 
   private attachExploreModeCallbacks() {
+    // Objects
     GameActionManager.getInstance().addInteractiveObjectsListeners(
       this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
@@ -92,9 +94,27 @@ class GameModeExplore implements IGameUI {
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
       this.explorePointerUp
     );
+
+    // BBoxes
+    GameActionManager.getInstance().addInteractiveBBoxListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
+      this.explorePointerOver
+    );
+    GameActionManager.getInstance().addInteractiveBBoxListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
+      this.explorePointerOut
+    );
+    GameActionManager.getInstance().addInteractiveBBoxListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
+      this.explorePointerUp
+    );
   }
 
   private removeExploreModeCallbacks() {
+    // Objects
     GameActionManager.getInstance().removeInteractiveObjectListeners(
       this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
@@ -104,6 +124,20 @@ class GameModeExplore implements IGameUI {
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
     );
     GameActionManager.getInstance().removeInteractiveObjectListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_UP
+    );
+
+    // BBoxes
+    GameActionManager.getInstance().removeInteractiveBBoxListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
+    );
+    GameActionManager.getInstance().removeInteractiveBBoxListeners(
+      this.locationId,
+      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
+    );
+    GameActionManager.getInstance().removeInteractiveBBoxListeners(
       this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP
     );

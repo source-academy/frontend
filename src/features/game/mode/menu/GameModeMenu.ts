@@ -11,6 +11,7 @@ import { GameMode } from '../GameModeTypes';
 import { screenSize, screenCenter, nullInteractionId } from '../../commons/CommonConstants';
 import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
 import { LocationId } from '../../location/GameMapTypes';
+import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -141,7 +142,7 @@ class GameModeMenu implements IGameUI {
       }
       this.fetchLatestState();
       this.uiContainer = await this.getUIContainer();
-      gameManager.add.existing(this.uiContainer);
+      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
     }
 
     if (this.uiContainer) {
