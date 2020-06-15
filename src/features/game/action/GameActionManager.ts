@@ -266,6 +266,18 @@ class GameActionManager {
     }
   }
 
+  public deactivateCurrentUI() {
+    if (this.gameManager) {
+      this.gameManager.deactivateCurrentUI();
+    }
+  }
+
+  public activateCurrentUI() {
+    if (this.gameManager) {
+      this.gameManager.activateCurrentUI();
+    }
+  }
+
   /////////////////////
   //     Dialogue    //
   /////////////////////

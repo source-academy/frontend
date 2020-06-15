@@ -10,6 +10,7 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { LocationId } from '../../location/GameMapTypes';
+import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -38,7 +39,7 @@ class GameModeExplore implements IGameUI {
     // Attach container
     if (!this.uiContainer) {
       this.uiContainer = await this.getUIContainer();
-      gameManager.add.existing(this.uiContainer);
+      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
     }
 
     if (this.uiContainer) {
