@@ -13,9 +13,8 @@ import { GameLocation } from '../location/GameMapTypes';
 import { AssetKey, ImageAsset } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
 import { dialogue1, dialogue2 } from './Factory';
-import { Character } from '../character/GameCharacterTypes';
+import { Character, CharacterPosition } from '../character/GameCharacterTypes';
 import { Constants, screenSize } from '../commons/CommonConstants';
-import { CharacterPosition } from '../character/GameCharacterConstants';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 

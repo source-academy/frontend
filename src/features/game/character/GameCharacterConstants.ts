@@ -10,18 +10,6 @@ export const charRect = {
   height: screenSize.y * 0.4
 };
 
-export enum CharacterPosition {
-  Left = 'Left',
-  Middle = 'Middle',
-  Right = 'Right'
-}
-
-export const characterPositionMap = {
-  left: CharacterPosition.Left,
-  middle: CharacterPosition.Middle,
-  right: CharacterPosition.Right
-};
-
 export const textPadding = 10;
 
 export const speakerRect = {

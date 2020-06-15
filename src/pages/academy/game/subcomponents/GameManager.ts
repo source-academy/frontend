@@ -17,10 +17,9 @@ import { screenSize, screenCenter } from 'src/features/game/commons/CommonConsta
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-// import Parser from 'src/features/game/parser/Parser';
+import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 
-const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
   text: string;
 };
@@ -65,7 +64,7 @@ class GameManager extends Phaser.Scene {
   }
 
   init({ text }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
+    this.currentChapter = Parser.parse(text);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.userStateManager.initialise();
@@ -104,7 +103,7 @@ class GameManager extends Phaser.Scene {
 
   private async renderLocation(map: GameMap, location: GameLocation) {
     // Render background of the location
-    const backgroundAsset = new Image(
+    const backgroundAsset = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,

@@ -1,7 +1,5 @@
 import * as _ from 'lodash';
 
-export const capitalise = (word: string) => word.charAt(0).toUpperCase() + word.slice(1);
-
 export function matchExact(r: RegExp, str: string) {
   const match = str.match(r);
   return !!(match && str === match[0]);
@@ -64,3 +62,5 @@ export function matchStartingKey(object: object, string: string) {
 export function splitByChar(line: string, splitCharacter: string) {
   return line.split(splitCharacter).map(phrase => phrase.trim());
 }
+
+export const enclosedBySquareBrackets = (line: string) => new RegExp(/\[.+\]/).test(line);
