@@ -21,11 +21,11 @@ export type AssetPath = string;
 export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
 
 export interface IGameInteractive {
-  isInteractive: boolean;
   onInteract: () => void;
 }
 
 export type TrackInteraction = {
+  isInteractive: boolean;
   interactionId: string;
 };
 

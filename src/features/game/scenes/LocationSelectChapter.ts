@@ -14,9 +14,10 @@ import { ImageAsset, AssetKey } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
 import { dialogue1, dialogue2 } from './Factory';
 import { Character } from '../character/GameCharacterTypes';
-import { Constants } from '../commons/CommonConstants';
+import { Constants, screenSize } from '../commons/CommonConstants';
 import { CharacterPosition } from '../character/GameCharacterConstants';
-import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 
 const LocationSelectMap = new GameMap();
 
@@ -59,7 +60,8 @@ const bboxStudentRoom: BBoxProperty = {
   y: 300,
   width: 200,
   height: 200,
-  interactionId: 'bboxStudentClassRoom'
+  interactionId: 'bboxStudentClassRoom',
+  isInteractive: true
 };
 
 const bboxClassRoom: BBoxProperty = {
@@ -67,7 +69,16 @@ const bboxClassRoom: BBoxProperty = {
   y: 540,
   width: 200,
   height: 100,
-  interactionId: 'bboxClassRoom'
+  interactionId: 'bboxClassRoom',
+  isInteractive: true
+};
+
+const doorObjProp: ObjectProperty = {
+  assetKey: 'door',
+  x: screenSize.x / 2,
+  y: screenSize.y / 2,
+  isInteractive: true,
+  interactionId: 'doorStudentRoom'
 };
 
 // Register mapping and assets
@@ -97,6 +108,12 @@ LocationSelectMap.addItemToMap(
   bboxClassRoom
 );
 
+// Add object
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Object, doorObjProp.interactionId, doorObjProp);
+
+// Set object
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Object, doorObjProp.interactionId);
+
 // Set explore bounding boxes
 LocationSelectMap.setItemAt(
   'Student Room',
@@ -115,7 +132,6 @@ LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Dialogue, 'dialogue
 //Preload assets
 LocationSelectMap.addMapAsset('beathappy', Constants.assetsFolder + '/avatars/beat/beat.happy.png');
 LocationSelectMap.addMapAsset('beatsad', Constants.assetsFolder + '/avatars/beat/beat.sad.png');
-
 LocationSelectMap.addMapAsset(
   'scottsad',
   Constants.assetsFolder + '/avatars/scottie/scottie.sad.png'
@@ -123,6 +139,10 @@ LocationSelectMap.addMapAsset(
 LocationSelectMap.addMapAsset(
   'scotthappy',
   Constants.assetsFolder + '/avatars/scottie/scottie.happy.png'
+);
+LocationSelectMap.addMapAsset(
+  doorObjProp.assetKey,
+  Constants.assetsFolder + '/avatars/door/door.normal.png'
 );
 
 // Add characters

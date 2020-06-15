@@ -68,25 +68,6 @@ class GameObjectManager {
     GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
-  public setObjectInteractivity(id: ItemId, isInteractable: boolean, shape?: any) {
-    // Update its property
-    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
-    const objectProp = objectPropMap.get(id);
-    if (objectProp) {
-      GameActionManager.getInstance().setObjProperty(id, {
-        ...objectProp,
-        isInteractable: isInteractable
-      });
-    }
-
-    // Update corresponding object
-    const object = this.objectIdMap.get(id);
-    if (object) {
-      if (isInteractable) object.setInteractive(shape);
-      else object.setInteractive(false);
-    }
-  }
-
   public addInteractiveObjectsListeners(
     locationId: LocationId,
     event: string | symbol,
@@ -100,7 +81,7 @@ class GameObjectManager {
     if (objectIds) {
       objectIds.forEach((id: ItemId) => {
         const objectProp = objectPropMap.get(id);
-        if (objectProp && objectProp.isInteractable) {
+        if (objectProp && objectProp.isInteractive) {
           this.addObjectListener(id, event, () => fn(id));
         }
       });
@@ -116,7 +97,7 @@ class GameObjectManager {
     if (objectIds) {
       objectIds.forEach((id: ItemId) => {
         const objectProp = objectPropMap.get(id);
-        if (objectProp && objectProp.isInteractable) this.removeObjectListener(id, event);
+        if (objectProp && objectProp.isInteractive) this.removeObjectListener(id, event);
       });
     }
   }
@@ -137,7 +118,7 @@ class GameObjectManager {
   ): Phaser.GameObjects.Image {
     const { assetKey, x, y } = objectProperty;
     const objectSprite = new Phaser.GameObjects.Image(gameManager, x, y, assetKey);
-    if (objectProperty.isInteractable) {
+    if (objectProperty.isInteractive) {
       objectSprite.setInteractive({ pixelPerfect: true });
     }
     return objectSprite;

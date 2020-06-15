@@ -1,7 +1,7 @@
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { ImageAsset, ItemId } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
 
 export const emptyDialogueMap = new Map<ItemId, Dialogue>();

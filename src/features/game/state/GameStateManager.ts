@@ -1,5 +1,5 @@
 import { GameChapter } from '../chapter/GameChapterTypes';
-import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
+import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonsTypes';
@@ -221,8 +221,15 @@ class GameStateManager {
     return this.objectPropertyMap;
   }
 
-  public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
+  public setObjProperty(currLocName: LocationId, id: ItemId, newObjProp: ObjectProperty) {
     this.objectPropertyMap.set(id, newObjProp);
+
+    // Update every location that uses it
+    this.locationStates.forEach((location, locationName, map) => {
+      if (location.objects && location.objects.find(objId => objId === id)) {
+        this.updateLocationStateAttr(currLocName, locationName, GameLocationAttr.objects);
+      }
+    });
   }
 }
 

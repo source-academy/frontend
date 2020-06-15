@@ -24,7 +24,8 @@ function objPropertyMapper(objectsList: string[]): Map<ItemId, ObjectProperty> {
       assetKey,
       x: parseInt(x),
       y: parseInt(y),
-      isInteractable: false
+      isInteractive: false,
+      interactionId: objectId
     });
   });
 

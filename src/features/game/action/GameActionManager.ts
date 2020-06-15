@@ -185,7 +185,8 @@ class GameActionManager {
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     if (this.gameManager) {
-      this.gameManager.stateManager.setObjProperty(id, newObjProp);
+      const currLocName = this.gameManager.currentLocationName;
+      this.gameManager.stateManager.setObjProperty(currLocName, id, newObjProp);
     }
   }
 
