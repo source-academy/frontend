@@ -1,16 +1,13 @@
 import { mapByHeader, stripEnclosingChars, splitToLines, splitByChar } from './ParserHelper';
-import { GameChapter } from '../chapter/GameChapterTypes';
 import { GameItemTypeDetails } from '../location/GameMapConstants';
-import { DialogueLine, Dialogue } from '../dialogue/GameDialogueTypes';
+import { DialogueLine, Dialogue, PartName } from '../dialogue/GameDialogueTypes';
 import { mapValues } from '../utils/GameUtils';
 import ActionParser from './ActionParser';
 import { SpeakerDetail, CharacterPosition } from '../character/GameCharacterTypes';
+import Parser from './Parser';
+import { ItemId } from '../commons/CommonsTypes';
 
-export default function DialogueParser(
-  chapter: GameChapter,
-  fileName: string,
-  fileContent: string
-) {
+export default function DialogueParser(fileName: string, fileContent: string): void {
   // Parse locations per dialogue
   if (fileName === 'dialogueLocation') {
     splitToLines(fileContent).forEach(line => {
@@ -18,23 +15,27 @@ export default function DialogueParser(
 
       dialogueIds.split(', ').forEach(dialogueId => {
         if (dialogueId[0] === '+') {
-          chapter.map.setItemAt(locationId, GameItemTypeDetails.Dialogue, dialogueId.slice(1));
+          Parser.chapter.map.setItemAt(
+            locationId,
+            GameItemTypeDetails.Dialogue,
+            dialogueId.slice(1)
+          );
         }
       });
     });
     return;
   }
 
-  const lines = splitToLines(fileContent);
+  const lines: string[] = splitToLines(fileContent);
   const [titleWithLabel, ...restOfLines] = lines;
   const [, title] = splitByChar(titleWithLabel, ':');
-  const dialogueId = fileName;
+  const dialogueId: ItemId = fileName;
 
-  const partToRawDialogueLines = mapByHeader(restOfLines, isPartLabel);
-  const dialogueObject = mapValues(partToRawDialogueLines, createDialogueLines);
+  const rawlines: Map<PartName, string[]> = mapByHeader(restOfLines, isPartLabel);
+  const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(rawlines, createDialogueLines);
   const dialogue: Dialogue = { title: title, content: dialogueObject };
 
-  chapter.map.addItemToMap(GameItemTypeDetails.Dialogue, dialogueId, dialogue);
+  Parser.chapter.map.addItemToMap(GameItemTypeDetails.Dialogue, dialogueId, dialogue);
 }
 
 function createDialogueLines(lines: string[]): DialogueLine[] {

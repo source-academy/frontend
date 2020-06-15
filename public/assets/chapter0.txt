@@ -2,11 +2,11 @@
 startingLoc: room
 
 <<location>>
-crashsite, crashSite, "Crash Site"
-classroom, classroom/classOn, "Class Room"
-emergency, classroom/emergency, "Emergency"
-hallway, hallway, "Hallway"
-room, yourRoom-dim, "Student Room"
+crashsite, crashSite, Crash Site
+classroom, classroom/classOn, Class Room
+emergency, classroom/emergency, Emergency
+hallway, hallway, Hallway
+room, yourRoom-dim, Student Room
 $
 [talk move]
 [explore talk move]
@@ -22,10 +22,11 @@ emergency: hallway
 
 <<characters>>
 [room]
-+scottie, "Scottie", sad, left
++scottie, Scottie, sad, left
 
 [hallway]
-+beat, "Beat", happy, right
++beat, Beat, happy, right
++hartin, Hartin Menz, happy, middle
 
 <<objectives>>
 visit, "Visit Hallway"
@@ -72,7 +73,7 @@ The Source Academy!
 [Goto part2]
 
 [part2]
-$you, tired
+$you tired
 Whew... That was a long trip. It feels like I was on that shuttle for a thousand years.
 I guess this is the Source Academy. It’s much bigger than my high school back on Earth. It’s hard to believe this is a space station.
 $narrator
@@ -85,7 +86,7 @@ Now, the message I got last week says I’m supposed to find my dorm room the mi
 Oh hi, you must be our last recruit! Everyone else is already getting settled in.
 $narrator
 The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
-$scottie
+$scottie happy
 If you exit through that door, the elevator will take you up to the hallway. From there you can access the rest of the ship. Follow the sign at the end of the corridor and you'll find the student quarters. Off you go now!
 $you
 Oh, um, thanks!

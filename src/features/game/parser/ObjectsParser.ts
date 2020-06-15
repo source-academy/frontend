@@ -1,12 +1,11 @@
-import { splitToLines, mapByHeader } from './ParserHelper';
+import { splitToLines, mapByHeader, isEnclosedBySquareBrackets } from './ParserHelper';
 import { mapValues } from '../utils/GameUtils';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
-import { GameChapter } from '../chapter/GameChapterTypes';
 
-export default function ObjectParser(chapter: GameChapter, fileName: string, fileContent: string) {
+export default function ObjectParser(fileName: string, fileContent: string) {
   const lines = splitToLines(fileContent);
-  const locationRawObjectsMap = mapByHeader(lines, (str: string) => true);
+  const locationRawObjectsMap = mapByHeader(lines, isEnclosedBySquareBrackets);
   const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
   return objectsMap;
 }
