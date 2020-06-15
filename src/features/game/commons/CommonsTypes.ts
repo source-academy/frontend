@@ -25,7 +25,7 @@ export type AssetPath = string;
 export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
 export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
 
-export type GameButton = GameText & GameSprite & IGameInteractive;
+export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
 
 type Speaker = string;
 type Expression = string;
@@ -34,8 +34,11 @@ export type SpeakerDetail = [Speaker, Expression];
 export interface IGameInteractive {
   isInteractive: boolean;
   onInteract: () => void;
-  interactionId?: string;
 }
+
+export type TrackInteraction = {
+  interactionId: string;
+};
 
 export interface IGameUI {
   fetchLatestState: () => void;

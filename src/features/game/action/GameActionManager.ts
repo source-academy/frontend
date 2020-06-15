@@ -206,11 +206,21 @@ class GameActionManager {
     }
   }
 
+  /////////////////////
+  //    Character    //
+  /////////////////////
+
   public async changeCharacter(speakerDetail: SpeakerDetail) {
     if (this.gameManager) {
       // this.characterManager.changeCharacter(speakerDetail);
     }
   }
+
+  /////////////////////
+  //  Runtime Action //
+  /////////////////////
+
+  public async executeRuntimeActions(ids: string[]) {}
 }
 
 export default GameActionManager;

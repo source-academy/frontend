@@ -1,15 +1,14 @@
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId, TrackInteraction } from '../commons/CommonsTypes';
 
 type ActionName = string;
 type ActionParams = Array<any>;
 export type ObjectAction = [ActionName, ActionParams];
 
-export type BBoxProperty = {
+export type BBoxProperty = TrackInteraction & {
   x: number;
   y: number;
   width: number;
   height: number;
-  interactionId: string;
 };
 
 export type BBoxPropertyMap = Map<ItemId, BBoxProperty>;
