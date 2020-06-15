@@ -1,8 +1,13 @@
-import { emptyObjectPropertyMap } from '../objects/GameObjectTypes';
-import { emptyDialogueMap } from '../dialogue/DialogueTypes';
-import { emptyBBoxPropertyMap } from '../boundingBoxes/BoundingBoxTypes';
-import { ImageAsset } from '../commons/CommonsTypes';
-import { emptyCharacterMap } from '../character/GameCharacterTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
+import { ImageAsset, ItemId } from '../commons/CommonsTypes';
+import { Dialogue } from '../dialogue/GameDialogueTypes';
+import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
+import { Character } from '../character/GameCharacterTypes';
+
+export const emptyDialogueMap = new Map<ItemId, Dialogue>();
+export const emptyObjectPropertyMap = new Map<string, ObjectProperty>();
+export const emptyBBoxPropertyMap = new Map<ItemId, BBoxProperty>();
+export const emptyCharacterMap = new Map<ItemId, Character>();
 
 export const GameItemTypeDetails = {
   Dialogue: { listName: 'talkTopics', emptyMap: emptyDialogueMap },

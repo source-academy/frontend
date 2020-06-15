@@ -1,8 +1,4 @@
-import { ItemId, TrackInteraction } from '../commons/CommonsTypes';
-
-type ActionName = string;
-type ActionParams = Array<any>;
-export type ObjectAction = [ActionName, ActionParams];
+import { TrackInteraction } from '../commons/CommonsTypes';
 
 export type BBoxProperty = TrackInteraction & {
   x: number;
@@ -10,6 +6,3 @@ export type BBoxProperty = TrackInteraction & {
   width: number;
   height: number;
 };
-
-export type BBoxPropertyMap = Map<ItemId, BBoxProperty>;
-export const emptyBBoxPropertyMap = new Map<ItemId, BBoxProperty>();

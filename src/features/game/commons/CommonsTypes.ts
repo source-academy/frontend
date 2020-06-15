@@ -1,7 +1,3 @@
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { Dialogue } from '../dialogue/DialogueTypes';
-import { BBoxProperty } from '../boundingBoxes/BoundingBoxTypes';
-
 export type ImageAsset = {
   key: string;
   path: string;
@@ -22,14 +18,7 @@ export type ItemId = string;
 export type AssetKey = string;
 export type AssetPath = string;
 
-export type GameMapItem = Dialogue | ObjectProperty | BBoxProperty;
-export const emptyGameItemMap = new Map<ItemId, GameMapItem>();
-
 export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
-
-type Speaker = string;
-type Expression = string;
-export type SpeakerDetail = [Speaker, Expression];
 
 export interface IGameInteractive {
   isInteractive: boolean;

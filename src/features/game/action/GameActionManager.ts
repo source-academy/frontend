@@ -1,10 +1,11 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import { DialogueObject } from 'src/features/game/dialogue/DialogueTypes';
-import { createDialogue } from 'src/features/game/dialogue/DialogueRenderer';
 import { GameLocationAttr } from '../location/GameMapTypes';
-import { SpeakerDetail } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { GameAction } from './GameActionTypes';
+import { sleep } from '../utils/GameUtils';
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -199,20 +200,19 @@ class GameActionManager {
   //     Dialogue    //
   /////////////////////
 
-  public async bringUpDialogue(dialogueObject: DialogueObject) {
+  public async bringUpDialogue(dialogueId: ItemId) {
     if (this.gameManager) {
-      const [activateDialogue] = createDialogue(this.gameManager, dialogueObject);
-      await activateDialogue;
+      await this.gameManager.dialogueManager.playDialogue(dialogueId);
     }
   }
 
   /////////////////////
-  //    Character    //
+  //     Speaker     //
   /////////////////////
 
-  public async changeCharacter(speakerDetail: SpeakerDetail) {
+  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined | null) {
     if (this.gameManager) {
-      // this.characterManager.changeCharacter(speakerDetail);
+      this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }
   }
 
@@ -221,6 +221,21 @@ class GameActionManager {
   /////////////////////
 
   public async executeRuntimeActions(ids: string[]) {}
+
+  /////////////////////
+  //   Safe Action   //
+  /////////////////////
+
+  public async executeSafeAction(actions: GameAction[]) {
+    if (this.gameManager) {
+      await this.gameManager.actionExecuter.executeSafeActions(actions);
+    }
+  }
+
+  public async obtainCollectible(collectibleId: string) {
+    console.log(`Obtained a collectible! ${collectibleId}`);
+    sleep(5000);
+  }
 }
 
 export default GameActionManager;

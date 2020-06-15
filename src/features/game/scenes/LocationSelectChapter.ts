@@ -130,7 +130,8 @@ const beatExpressionMap = new Map<string, AssetKey>();
 beatExpressionMap.set('sad', 'beatsad');
 beatExpressionMap.set('happy', 'beathappy');
 const beat: Character = {
-  name: 'beat',
+  id: 'beat',
+  name: 'Beat Ya',
   expressions: beatExpressionMap,
   actions: [''],
   defaultPosition: CharacterPosition.Right,
@@ -142,19 +143,20 @@ scottExpressionMap.set('sad', 'scottsad');
 scottExpressionMap.set('happy', 'scotthappy');
 
 const scottie: Character = {
-  name: 'scottie',
+  id: 'scottie',
+  name: 'Scottie Boi',
   expressions: scottExpressionMap,
   actions: [''],
   defaultPosition: CharacterPosition.Middle,
   defaultExpression: 'happy'
 };
 
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, beat.name, beat);
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, scottie.name, scottie);
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, beat.id, beat);
+LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, scottie.id, scottie);
 
 // Set characters
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, beat.name);
-LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, scottie.name);
+LocationSelectMap.setItemAt('Emergency', GameItemTypeDetails.Character, beat.id);
+LocationSelectMap.setItemAt('Student Room', GameItemTypeDetails.Character, scottie.id);
 
 // Set Objectives
 const objectives = new GameObjective();

@@ -1,7 +1,7 @@
 import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
-import { Dialogue } from '../../dialogue/DialogueTypes';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
@@ -35,7 +35,7 @@ class GameModeTalk implements IGameUI {
           async () => {
             this.deactivateUI();
             GameActionManager.getInstance().triggerInteraction(dialogueId);
-            await GameActionManager.getInstance().bringUpDialogue(dialogue.content);
+            await GameActionManager.getInstance().bringUpDialogue(dialogueId);
             this.activateUI();
           },
           dialogueId
