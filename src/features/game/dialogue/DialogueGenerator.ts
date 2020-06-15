@@ -12,7 +12,7 @@ function dialogueGenerator(dialogue: Dialogue) {
     // Get line
     const dialogueLine = content.get(currPart)![currLineNum];
 
-    if (!dialogueLine.line) {
+    if (!dialogueLine || !dialogueLine.line) {
       return { line: '' };
     }
 

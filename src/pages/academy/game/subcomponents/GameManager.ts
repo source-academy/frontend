@@ -139,14 +139,14 @@ class GameManager extends Phaser.Scene {
     // Deactive current UI of previous location
     this.deactivateCurrentUI();
 
-    // Clear all layers;
-    this.layerManager.clearAllLayers();
-
     // Update location
     this.currentLocationId = locationId;
-
+    
     // Render new location
-    await blackFade(this, 300, 300, () => this.renderLocation(this.currentChapter.map, location));
+    await blackFade(this, 300, 300, () => {
+      this.layerManager.clearAllLayers();
+      this.renderLocation(this.currentChapter.map, location)
+    });
 
     // Update state after location is fully rendered
     this.stateManager.triggerInteraction(locationId);
