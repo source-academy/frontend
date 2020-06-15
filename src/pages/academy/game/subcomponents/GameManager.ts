@@ -1,7 +1,7 @@
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation } from 'src/features/game/location/GameMapTypes';
-import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
 import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
 import GameActionManager from '../../../../features/game/action/GameActionManager';
 import GameModeManager from 'src/features/game/mode/GameModeManager';
@@ -16,6 +16,7 @@ import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
+import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 
 const { Image } = Phaser.GameObjects;
 type GameManagerProps = {
@@ -33,10 +34,12 @@ class GameManager extends Phaser.Scene {
   public characterManager: GameCharacterManager;
   public dialogueManager: GameDialogueManager;
   public actionExecuter: GameActionExecuter;
+  public userStateManager: GameUserStateManager;
 
   // Limited to current location
   public currentLocationName: string;
   private currentActiveMode: GameMode;
+  private currentActivePhase: GamePhase;
 
   constructor() {
     super('GameManager');
@@ -51,8 +54,10 @@ class GameManager extends Phaser.Scene {
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
     this.actionExecuter = new GameActionExecuter();
+    this.userStateManager = new GameUserStateManager();
 
     this.currentActiveMode = GameMode.Menu;
+    this.currentActivePhase = GamePhase.Standard;
 
     GameActionManager.getInstance().setGameManager(this);
   }
@@ -61,6 +66,7 @@ class GameManager extends Phaser.Scene {
     this.currentChapter = LocationSelectChapter;
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
+    this.userStateManager.initialise();
   }
 
   public preload() {
@@ -147,6 +153,14 @@ class GameManager extends Phaser.Scene {
     if (prevLocationMode) {
       prevLocationMode.deactivateUI();
     }
+  }
+
+  public setActivePhase(gamePhase: GamePhase) {
+    this.currentActivePhase = gamePhase;
+  }
+
+  public getActivePhase(): GamePhase {
+    return this.currentActivePhase;
   }
 
   public changeModeTo(newMode: GameMode, refresh?: boolean, skipDeactivate?: boolean) {

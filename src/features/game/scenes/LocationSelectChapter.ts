@@ -133,7 +133,6 @@ const beat: Character = {
   id: 'beat',
   name: 'Beat Ya',
   expressions: beatExpressionMap,
-  actions: [''],
   defaultPosition: CharacterPosition.Right,
   defaultExpression: 'sad'
 };
@@ -146,7 +145,6 @@ const scottie: Character = {
   id: 'scottie',
   name: 'Scottie Boi',
   expressions: scottExpressionMap,
-  actions: [''],
   defaultPosition: CharacterPosition.Middle,
   defaultExpression: 'happy'
 };

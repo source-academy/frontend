@@ -44,6 +44,9 @@ DialogueObject1.set('part2', [
   {
     line: 'Let me lead you to the classroom',
     actions: [createGameAction('locationChange', { id: 'Emergency' })]
+  },
+  {
+    line: 'Here we are the classroom!'
   }
 ]);
 

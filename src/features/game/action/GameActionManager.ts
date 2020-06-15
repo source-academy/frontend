@@ -1,10 +1,9 @@
 import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
-import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameAction } from './GameActionTypes';
-import { sleep } from '../utils/GameUtils';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 class GameActionManager {
@@ -121,36 +120,16 @@ class GameActionManager {
     return undefined;
   }
 
-  public addLocationAttr(
-    attr: GameLocationAttr,
-    currLocName: string,
-    locationName: string,
-    attrElem: string
-  ): void {
+  public addLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.addLocationAttr(
-        attr,
-        currLocName,
-        locationName,
-        attrElem
-      );
+      return this.gameManager.stateManager.addLocationAttr(attr, locationName, attrElem);
     }
     return;
   }
 
-  public removeLocationAttr(
-    attr: GameLocationAttr,
-    currLocName: string,
-    locationName: string,
-    attrElem: string
-  ): void {
+  public removeLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.removeLocationAttr(
-        attr,
-        currLocName,
-        locationName,
-        attrElem
-      );
+      return this.gameManager.stateManager.removeLocationAttr(attr, locationName, attrElem);
     }
     return;
   }
@@ -187,6 +166,23 @@ class GameActionManager {
   }
 
   /////////////////////
+  //   User State    //
+  /////////////////////
+
+  public addToUserStateList(listName: string, id: string): void {
+    if (this.gameManager) {
+      return this.gameManager.userStateManager.addToList(listName, id);
+    }
+  }
+
+  public existsInUserStateList(listName: string, id: string): boolean {
+    if (this.gameManager) {
+      return this.gameManager.userStateManager.doesIdExistInList(listName, id);
+    }
+    return false;
+  }
+
+  /////////////////////
   //   Game Layer    //
   /////////////////////
 
@@ -202,7 +198,9 @@ class GameActionManager {
 
   public async bringUpDialogue(dialogueId: ItemId) {
     if (this.gameManager) {
+      this.gameManager.setActivePhase(GamePhase.Dialogue);
       await this.gameManager.dialogueManager.playDialogue(dialogueId);
+      this.gameManager.setActivePhase(GamePhase.Standard);
     }
   }
 
@@ -223,18 +221,21 @@ class GameActionManager {
   public async executeRuntimeActions(ids: string[]) {}
 
   /////////////////////
-  //   Safe Action   //
+  //   Story Action  //
   /////////////////////
 
-  public async executeSafeAction(actions: GameAction[]) {
+  public async executeStoryAction(actions: GameAction[]) {
     if (this.gameManager) {
-      await this.gameManager.actionExecuter.executeSafeActions(actions);
+      await this.gameManager.actionExecuter.executeStoryActions(actions);
     }
   }
 
+  /////////////////////
+  //   Collectible   //
+  /////////////////////
+
   public async obtainCollectible(collectibleId: string) {
     console.log(`Obtained a collectible! ${collectibleId}`);
-    sleep(5000);
   }
 }
 
