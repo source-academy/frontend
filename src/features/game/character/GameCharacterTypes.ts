@@ -13,7 +13,6 @@ export type Character = {
   expressions: Map<string, AssetKey>;
   defaultExpression: string;
   defaultPosition: CharacterPosition;
-  actions?: string[];
 };
 
 export function createSpeaker(speakerId: string, expression: string, position: string) {

@@ -4,6 +4,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
+import GameActionManager from '../action/GameActionManager';
 
 class GameStateManager {
   // Game State
@@ -157,13 +158,9 @@ class GameStateManager {
     return location ? location[attr] : undefined;
   }
 
-  public addLocationAttr(
-    attr: GameLocationAttr,
-    currLocName: string,
-    locationName: string,
-    attrElem: string
-  ) {
-    this.checkLocationsExist([currLocName, locationName]);
+  public addLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string) {
+    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationName;
+    this.checkLocationsExist([locationName]);
 
     if (this.locationStates.get(locationName)![attr]) {
       this.locationStates.get(locationName)![attr] = [];
@@ -172,13 +169,9 @@ class GameStateManager {
     this.updateLocationStateAttr(currLocName, locationName, attr);
   }
 
-  public removeLocationAttr(
-    attr: GameLocationAttr,
-    currLocName: string,
-    locationName: string,
-    attrElem: string
-  ) {
-    this.checkLocationsExist([currLocName, locationName]);
+  public removeLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string) {
+    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationName;
+    this.checkLocationsExist([locationName]);
 
     if (this.locationStates.get(locationName)![attr]) {
       return;
