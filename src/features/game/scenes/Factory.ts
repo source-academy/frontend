@@ -1,4 +1,4 @@
-import { PartName, DialogueLine } from '../dialogue/GameDialogueTypes';
+import { PartName, DialogueLine, Dialogue } from '../dialogue/GameDialogueTypes';
 import { createGameAction, createCondition, GameActionType } from '../action/GameActionTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { createSpeaker } from '../character/GameCharacterHelper';
@@ -53,14 +53,12 @@ DialogueObject1.set('part2', [
   }
 ]);
 
-export const dialogue1 = {
+export const dialogue1: Dialogue = {
   title: 'What happened?',
-  content: DialogueObject1,
-  startPart: 'part1'
+  content: DialogueObject1
 };
 
-export const dialogue2 = {
+export const dialogue2: Dialogue = {
   title: 'Are you sure?',
-  content: DialogueObject1,
-  startPart: 'part2'
+  content: DialogueObject1
 };

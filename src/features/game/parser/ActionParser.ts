@@ -5,7 +5,7 @@ import {
   ActionCondition,
   GameActionType
 } from '../action/GameActionTypes';
-import { splitByChar, stripEnclosingChars, enclosedBySquareBrackets } from './ParserHelper';
+import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from './ParserHelper';
 import { GameStateStorage } from '../state/GameStateTypes';
 
 export default function ActionParser(actionText: string): GameAction[] {
@@ -33,7 +33,7 @@ function strToAction(actionString: string): GameAction {
   const actionType = stringToActionType[action];
 
   let actionParams;
-  if (enclosedBySquareBrackets(actionParamString)) {
+  if (isEnclosedBySquareBrackets(actionParamString)) {
     actionParams = splitByChar(stripEnclosingChars(actionParamString), ' ');
   } else {
     actionParams = [actionParamString];
