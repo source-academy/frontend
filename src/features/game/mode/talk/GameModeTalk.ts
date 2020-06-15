@@ -4,20 +4,20 @@ import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationName: string;
+  private locationId: LocationId;
   private dialogues: Map<ItemId, Dialogue>;
   private gameButtons: GameButton[];
 
-  constructor(locationName: string, talkTopics: ItemId[], dialogues: Map<ItemId, Dialogue>) {
+  constructor(locationId: LocationId, talkTopics: ItemId[], dialogues: Map<ItemId, Dialogue>) {
     this.uiContainer = undefined;
-    this.locationName = locationName;
+    this.locationId = locationId;
     this.dialogues = dialogues;
     this.gameButtons = [];
     this.createGameButtons(talkTopics);
@@ -77,7 +77,7 @@ class GameModeTalk implements IGameUI {
   public fetchLatestState(): void {
     const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.talkTopics,
-      this.locationName
+      this.locationId
     );
     if (!latestTalkTopics) {
       return;
@@ -141,7 +141,7 @@ class GameModeTalk implements IGameUI {
     }
 
     // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
     if (hasUpdates || !this.uiContainer) {
       if (this.uiContainer) {
         this.uiContainer.destroy();

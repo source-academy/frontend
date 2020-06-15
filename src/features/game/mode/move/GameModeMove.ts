@@ -9,7 +9,7 @@ import {
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocation, GameLocationAttr } from '../../location/GameMapTypes';
+import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import {
@@ -26,11 +26,11 @@ class GameModeMove implements IGameUI {
   private locationAssetKeys: Map<string, string>;
   private previewFill: GameSprite;
   private previewFrame: GameSprite;
-  private locationName: string;
+  private locationId: LocationId;
   private locations: Map<string, GameLocation>;
   private gameButtons: GameButton[];
 
-  constructor(locationName: string, navigation: string[], locations: Map<string, GameLocation>) {
+  constructor(locationId: LocationId, navigation: string[], locations: Map<string, GameLocation>) {
     const previewFill = {
       assetKey: locationPreviewFill.key,
       assetXPos: screenCenter.x,
@@ -48,7 +48,7 @@ class GameModeMove implements IGameUI {
     this.locationAssetKeys = new Map<string, string>();
     this.previewFill = previewFill;
     this.previewFrame = previewFrame;
-    this.locationName = locationName;
+    this.locationId = locationId;
     this.locations = locations;
     this.gameButtons = [];
     this.createGameButtons(navigation);
@@ -58,13 +58,13 @@ class GameModeMove implements IGameUI {
     // Refresh Buttons
     this.gameButtons = [];
 
-    await navigation.forEach(locationName => {
-      const location = this.locations.get(locationName);
+    await navigation.forEach(locationId => {
+      const location = this.locations.get(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, () => {
-          GameActionManager.getInstance().changeLocationTo(locationName);
+          GameActionManager.getInstance().changeLocationTo(locationId);
         });
-        this.locationAssetKeys.set(locationName, location.assetKey);
+        this.locationAssetKeys.set(locationId, location.assetKey);
       }
     });
   }
@@ -102,7 +102,7 @@ class GameModeMove implements IGameUI {
   public fetchLatestState(): void {
     const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
-      this.locationName
+      this.locationId
     );
     if (!latestLocationNav) {
       return;
@@ -200,7 +200,7 @@ class GameModeMove implements IGameUI {
     }
 
     // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationName);
+    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
     if (hasUpdates || !this.uiContainer) {
       if (this.uiContainer) {
         this.uiContainer.destroy();

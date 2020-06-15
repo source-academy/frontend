@@ -6,7 +6,10 @@ import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
 import GameObjective from '../objective/GameObjective';
-// import LocationSelectChapter from '../scenes/LocationSelectChapter';
+import CharacterParser from './CharacterParser';
+import BoundingBoxParser from './BoundingBoxParser';
+import ObjectiveParser from './ObjectiveParser';
+import LocationSelectChapter from '../scenes/LocationSelectChapter';
 
 class Parser {
   private static parserMap: object;
@@ -16,7 +19,10 @@ class Parser {
       configuration: ConfigParser,
       location: LocationParser,
       objects: ObjectParser,
-      dialogue: DialogueParser
+      dialogue: DialogueParser,
+      characters: CharacterParser,
+      boundingBoxes: BoundingBoxParser,
+      objectives: ObjectiveParser
     };
 
     const chapter = {
@@ -40,6 +46,8 @@ class Parser {
       parserFunction(chapter, fileName, fileContent);
     });
 
+    console.log(chapter);
+    console.log(LocationSelectChapter);
     return chapter;
   }
 }

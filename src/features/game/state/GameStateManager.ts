@@ -62,10 +62,10 @@ class GameStateManager {
     }
   }
 
-  private checkLocationsExist(locationNames: string[]): void {
-    locationNames.forEach(locationName => {
-      if (!this.locationStates.get(locationName)) {
-        throw console.error('Location ', locationName, ' does not exist!');
+  private checkLocationsExist(locationIds: string[]): void {
+    locationIds.forEach(locationId => {
+      if (!this.locationStates.get(locationId)) {
+        throw console.error('Location ', locationId, ' does not exist!');
       }
     });
   }
@@ -81,10 +81,10 @@ class GameStateManager {
     this.objectPropertyMap = this.chapter.map.getObjects();
 
     // Register every mode of each location under the chapter
-    this.locationStates.forEach((location, locationName, map) => {
-      this.locationHasUpdate.set(locationName, new Map<GameMode, boolean>());
+    this.locationStates.forEach((location, locationId, map) => {
+      this.locationHasUpdate.set(locationId, new Map<GameMode, boolean>());
       if (location.modes) {
-        location.modes.forEach(mode => this.locationHasUpdate.get(locationName)?.set(mode, true));
+        location.modes.forEach(mode => this.locationHasUpdate.get(locationId)!.set(mode, true));
       }
     });
   }
@@ -105,14 +105,14 @@ class GameStateManager {
   //       State Check         //
   ///////////////////////////////
 
-  public hasLocationUpdate(locationName: string, mode?: GameMode): boolean | undefined {
-    this.checkLocationsExist([locationName]);
+  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
+    this.checkLocationsExist([locationId]);
     if (mode) {
-      return this.locationHasUpdate.get(locationName)!.get(mode);
+      return this.locationHasUpdate.get(locationId)!.get(mode);
     }
 
     let result = false;
-    const locationModeState = this.locationHasUpdate.get(locationName);
+    const locationModeState = this.locationHasUpdate.get(locationId);
     locationModeState!.forEach((hasUpdate, mode, map) => (result = result || hasUpdate));
     return result;
   }
@@ -121,66 +121,66 @@ class GameStateManager {
   //    Location Mode State    //
   ///////////////////////////////
 
-  public getLocationMode(locationName: string) {
-    const location = this.locationStates.get(locationName);
+  public getLocationMode(locationId: LocationId) {
+    const location = this.locationStates.get(locationId);
     return location ? location.modes : undefined;
   }
 
-  public addLocationMode(currLocName: string, locationName: string, mode: GameMode) {
-    this.checkLocationsExist([currLocName, locationName]);
+  public addLocationMode(currLocName: string, locationId: LocationId, mode: GameMode) {
+    this.checkLocationsExist([currLocName, locationId]);
 
-    if (this.locationStates.get(locationName)!.modes) {
-      this.locationStates.get(locationName)!.modes = [];
+    if (this.locationStates.get(locationId)!.modes) {
+      this.locationStates.get(locationId)!.modes = [];
     }
-    this.locationStates.get(locationName)!.modes!.push(mode);
-    this.updateLocationStateMode(currLocName, locationName, GameMode.Menu);
+    this.locationStates.get(locationId)!.modes!.push(mode);
+    this.updateLocationStateMode(currLocName, locationId, GameMode.Menu);
   }
 
-  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode) {
-    this.checkLocationsExist([currLocName, locationName]);
+  public removeLocationMode(currLocName: string, locationId: LocationId, mode: GameMode) {
+    this.checkLocationsExist([currLocName, locationId]);
 
-    if (this.locationStates.get(locationName)!.modes) {
+    if (this.locationStates.get(locationId)!.modes) {
       return;
     }
     const newAttr = this.locationStates
-      .get(locationName)!
+      .get(locationId)!
       .modes!.filter((oldAttr: string) => oldAttr !== mode);
-    this.locationStates.get(locationName)!.modes = newAttr;
-    this.updateLocationStateMode(currLocName, locationName, GameMode.Menu);
+    this.locationStates.get(locationId)!.modes = newAttr;
+    this.updateLocationStateMode(currLocName, locationId, GameMode.Menu);
   }
 
   ///////////////////////////////
   //    Location Attr State    //
   ///////////////////////////////
 
-  public getLocationAttr(attr: GameLocationAttr, locationName: string) {
-    const location = this.locationStates.get(locationName);
+  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId) {
+    const location = this.locationStates.get(locationId);
     return location ? location[attr] : undefined;
   }
 
-  public addLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string) {
-    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationName;
-    this.checkLocationsExist([locationName]);
+  public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
+    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
+    this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationName)![attr]) {
-      this.locationStates.get(locationName)![attr] = [];
+    if (this.locationStates.get(locationId)![attr]) {
+      this.locationStates.get(locationId)![attr] = [];
     }
-    this.locationStates.get(locationName)![attr]!.push(attrElem);
-    this.updateLocationStateAttr(currLocName, locationName, attr);
+    this.locationStates.get(locationId)![attr]!.push(attrElem);
+    this.updateLocationStateAttr(currLocName, locationId, attr);
   }
 
-  public removeLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string) {
-    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationName;
-    this.checkLocationsExist([locationName]);
+  public removeLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
+    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
+    this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationName)![attr]) {
+    if (this.locationStates.get(locationId)![attr]) {
       return;
     }
     const newAttr = this.locationStates
-      .get(locationName)!
+      .get(locationId)!
       [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
-    this.locationStates.get(locationName)![attr] = newAttr;
-    this.updateLocationStateAttr(currLocName, locationName, attr);
+    this.locationStates.get(locationId)![attr] = newAttr;
+    this.updateLocationStateAttr(currLocName, locationId, attr);
   }
 
   ///////////////////////////////
@@ -218,9 +218,9 @@ class GameStateManager {
     this.objectPropertyMap.set(id, newObjProp);
 
     // Update every location that uses it
-    this.locationStates.forEach((location, locationName, map) => {
+    this.locationStates.forEach((location, locationId, map) => {
       if (location.objects && location.objects.find(objId => objId === id)) {
-        this.updateLocationStateAttr(currLocName, locationName, GameLocationAttr.objects);
+        this.updateLocationStateAttr(currLocName, locationId, GameLocationAttr.objects);
       }
     });
   }

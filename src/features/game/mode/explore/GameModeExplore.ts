@@ -9,14 +9,15 @@ import { getBackToMenuContainer } from '../GameModeHelper';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
+import { LocationId } from '../../location/GameMapTypes';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationName: string;
+  private locationId: LocationId;
 
-  constructor(locationName: string) {
+  constructor(locationId: LocationId) {
     this.uiContainer = undefined;
-    this.locationName = locationName;
+    this.locationId = locationId;
   }
 
   // Explore Mode does not require states
@@ -77,17 +78,17 @@ class GameModeExplore implements IGameUI {
 
   private attachExploreModeCallbacks() {
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
       this.explorePointerOver
     );
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
       this.explorePointerOut
     );
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
       this.explorePointerUp
     );
@@ -95,15 +96,15 @@ class GameModeExplore implements IGameUI {
 
   private removeExploreModeCallbacks() {
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
     );
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
     );
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationName,
+      this.locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP
     );
   }
