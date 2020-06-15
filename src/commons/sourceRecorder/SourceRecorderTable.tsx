@@ -35,6 +35,7 @@ type State = {
 };
 
 class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
+  private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: SourceRecorderTableProps) {
@@ -91,7 +92,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           },
           width: 100,
           maxWidth: 100,
-          suppressSorting: true,
+          sortable: false,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -108,6 +109,12 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
       ],
       filterValue: '',
       groupFilterEnabled: false
+    };
+
+    this.defaultColumnDefs = {
+      filter: true,
+      resizable: true,
+      sortable: true
     };
   }
 
@@ -145,11 +152,9 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         <div className="SourcecastTable">
           <div className="ag-grid-parent">
             <AgGridReact
-              gridAutoHeight={true}
-              enableColResize={true}
-              enableSorting={true}
-              enableFilter={true}
+              domLayout={'autoHeight'}
               columnDefs={this.state.columnDefs}
+              defaultColDef={this.defaultColumnDefs}
               onGridReady={this.onGridReady}
               rowData={data}
               rowHeight={30}
