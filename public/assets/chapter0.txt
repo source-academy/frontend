@@ -26,7 +26,7 @@ emergency: hallway
 
 [hallway]
 +beat, Beat, happy, right
-+hartin, Hartin Menz, happy, middle
++hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
 visit, "Visit Hallway"

@@ -60,3 +60,21 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
     Parser.chapter.map.setItemAt(locationId, GameItemTypeDetails.Character, id);
   }
 }
+
+export function addCharacterExprToMap(charId: string, expression: string) {
+  if (charId === 'you' || charId === 'narrator') {
+    return;
+  }
+  const character = Parser.chapter.map.getCharacters().get(charId);
+
+  if (!character) {
+    throw new Error(`Character ${charId} not in map!`);
+  }
+
+  character.expressions.set(expression, characterAssetKey(charId, expression));
+
+  Parser.chapter.map.addMapAsset(
+    characterAssetKey(charId, expression),
+    characterAssetValue(charId, expression)
+  );
+}

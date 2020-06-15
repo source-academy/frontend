@@ -21,13 +21,12 @@ export default function LocationParser(fileName: string, fileContent: string): v
 
   // Parse and load location assets
   splitToLines(locationAssets).forEach(locationAsset => {
-    const [locationId, shortPath, fullLocationName] = splitByChar(locationAsset, ',');
-    const locationName = stripEnclosingChars(fullLocationName);
+    const [id, shortPath, name] = splitByChar(locationAsset, ',');
 
-    locationIds.push(locationId);
-    gameMap.addLocation(locationId, {
-      id: locationId,
-      name: locationName,
+    locationIds.push(id);
+    gameMap.addLocation(id, {
+      id,
+      name,
       assetKey: locationAssetKey(shortPath)
     });
     gameMap.addMapAsset(locationAssetKey(shortPath), locationAssetValue(shortPath));

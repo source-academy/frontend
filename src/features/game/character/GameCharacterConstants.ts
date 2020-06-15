@@ -1,7 +1,7 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { Color } from '../utils/styles';
 
-export const charWidth = 900;
+export const charWidth = 700;
 const charXOffset = 350;
 
 export const charRect = {
