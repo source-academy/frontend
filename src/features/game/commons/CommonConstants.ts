@@ -15,3 +15,4 @@ export const screenCenter = {
 };
 
 export const nullFunction = () => {};
+export const nullInteractionId = '';

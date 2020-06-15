@@ -91,7 +91,8 @@ class GameModeMove implements IGameUI {
       assetXPos: moveButtonXPos,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
-      onInteract: callback
+      onInteract: callback,
+      interactionId: name
     };
 
     // Update

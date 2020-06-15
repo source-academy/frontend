@@ -18,13 +18,16 @@ export type ItemId = string;
 export type AssetKey = string;
 export type AssetPath = string;
 
-export type GameButton = GameText & GameSprite & IGameInteractive;
+export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
 
 export interface IGameInteractive {
   isInteractive: boolean;
   onInteract: () => void;
-  interactionId?: string;
 }
+
+export type TrackInteraction = {
+  interactionId: string;
+};
 
 export interface IGameUI {
   fetchLatestState: () => void;
