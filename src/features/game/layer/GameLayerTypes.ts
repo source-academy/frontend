@@ -6,13 +6,15 @@ export enum Layer {
   Dialogue = 'Dialogue',
   DialogueLabel = 'DialogueLabel',
   UI = 'UI',
-  Objects = 'Objects'
+  Objects = 'Objects',
+  BBox = 'BBox'
 }
 
 // Back to Front
 export const defaultLayerSequence = [
   Layer.Background,
   Layer.Objects,
+  Layer.BBox,
   Layer.Character,
   Layer.Speaker,
   Layer.Dialogue,

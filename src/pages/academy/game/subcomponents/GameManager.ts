@@ -19,6 +19,7 @@ import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
+import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 
 type GameManagerProps = {
   text: string;
@@ -36,6 +37,7 @@ class GameManager extends Phaser.Scene {
   public dialogueManager: GameDialogueManager;
   public actionExecuter: GameActionExecuter;
   public userStateManager: GameUserStateManager;
+  public boundingBoxManager: GameBBoxManager;
 
   // Limited to current location
   public currentLocationId: LocationId;
@@ -56,6 +58,7 @@ class GameManager extends Phaser.Scene {
     this.dialogueManager = new GameDialogueManager();
     this.actionExecuter = new GameActionExecuter();
     this.userStateManager = new GameUserStateManager();
+    this.boundingBoxManager = new GameBBoxManager();
 
     this.currentActiveMode = GameMode.Menu;
     this.currentActivePhase = GamePhase.Standard;
@@ -79,6 +82,7 @@ class GameManager extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
+    this.boundingBoxManager.processBBox(this.currentChapter);
   }
 
   public create() {
@@ -111,8 +115,9 @@ class GameManager extends Phaser.Scene {
     ).setDisplaySize(screenSize.x, screenSize.y);
     this.layerManager.addToLayer(Layer.Background, backgroundAsset);
 
-    // Render objects in the location
+    // Render objects & bbox in the location
     this.objectManager.renderObjectsLayerContainer(location.id);
+    this.boundingBoxManager.renderBBoxLayerContainer(location.id);
 
     // Render characters in the location
     this.characterManager.renderCharacterLayerContainer(location.id);

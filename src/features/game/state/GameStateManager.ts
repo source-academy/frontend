@@ -5,6 +5,7 @@ import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 
 class GameStateManager {
   // Game State
@@ -13,6 +14,7 @@ class GameStateManager {
   private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
+  private bboxPropertyMap: Map<ItemId, BBoxProperty>;
 
   // Triggered Interactions
   private triggeredInteractions: Map<ItemId, boolean>;
@@ -23,6 +25,7 @@ class GameStateManager {
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
     this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
+    this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
 
     this.triggeredInteractions = new Map<ItemId, boolean>();
   }
@@ -79,6 +82,7 @@ class GameStateManager {
     this.chapterObjective = this.chapter.objectives;
     this.locationStates = this.chapter.map.getLocations();
     this.objectPropertyMap = this.chapter.map.getObjects();
+    this.bboxPropertyMap = this.chapter.map.getBBox();
 
     // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationId, map) => {
@@ -207,7 +211,7 @@ class GameStateManager {
   }
 
   ///////////////////////////////
-  //  Obj Property Objectives  //
+  //       Obj Property        //
   ///////////////////////////////
 
   public getObjPropertyMap() {
@@ -221,6 +225,25 @@ class GameStateManager {
     this.locationStates.forEach((location, locationId, map) => {
       if (location.objects && location.objects.find(objId => objId === id)) {
         this.updateLocationStateAttr(currLocName, locationId, GameLocationAttr.objects);
+      }
+    });
+  }
+
+  ///////////////////////////////
+  //       BBox Property       //
+  ///////////////////////////////
+
+  public getBBoxPropertyMap() {
+    return this.bboxPropertyMap;
+  }
+
+  public setBBoxProperty(currLocName: LocationId, id: ItemId, newBBoxProp: BBoxProperty) {
+    this.bboxPropertyMap.set(id, newBBoxProp);
+
+    // Update every location that uses it
+    this.locationStates.forEach((location, locationId, map) => {
+      if (location.boundingBoxes && location.boundingBoxes.find(bboxId => bboxId === id)) {
+        this.updateLocationStateAttr(currLocName, locationId, GameLocationAttr.boundingBoxes);
       }
     });
   }

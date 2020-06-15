@@ -94,7 +94,7 @@ locationImages.forEach(asset => LocationSelectMap.addMapAsset(asset.key, asset.p
 // Register navigation
 LocationSelectMap.setNavigationFrom('classroom', ['crashsite', 'hallway']);
 LocationSelectMap.setNavigationFrom('crashsite', ['classroom']);
-LocationSelectMap.setNavigationFrom('hallway', ['classRoom', 'room', 'emergency']);
+LocationSelectMap.setNavigationFrom('hallway', ['classroom', 'room', 'emergency']);
 LocationSelectMap.setNavigationFrom('room', ['hallway']);
 LocationSelectMap.setNavigationFrom('emergency', ['hallway']);
 
