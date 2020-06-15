@@ -20,6 +20,8 @@ export default class DialogueManager {
     this.dialogueMap = dialogueMap;
   }
 
+  public async destroyDialogue() {}
+
   public async playDialogue(dialogueId: ItemId) {
     const dialogue = this.dialogueMap.get(dialogueId);
 
@@ -51,10 +53,10 @@ export default class DialogueManager {
           typewriter.changeLine(line);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);
           if (actions) {
-            await GameActionManager.getInstance().executeSafeAction(actions);
+            await GameActionManager.getInstance().executeStoryAction(actions);
           }
           if (!line) {
-            res('done');
+            res();
             GameActionManager.getInstance().changeSpeaker(null);
             fadeAndDestroy(gameManager, container);
           }

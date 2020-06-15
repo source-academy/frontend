@@ -10,6 +10,11 @@ export enum GameMode {
   Menu = 'Menu'
 }
 
+export enum GamePhase {
+  Standard = 'Standard',
+  Dialogue = 'Dialogue'
+}
+
 export const backButtonStyle = {
   fontFamily: 'Helvetica',
   fontSize: '25px',

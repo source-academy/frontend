@@ -5,7 +5,7 @@ import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize } from '../../commons/CommonConstants';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 
@@ -63,7 +63,7 @@ class GameModeTalk implements IGameUI {
       text: name,
       style: talkButtonStyle,
       assetKey: talkOptButton.key,
-      assetXPos: screenSize.x / 2,
+      assetXPos: screenCenter.x,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
       onInteract: callback,
