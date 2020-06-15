@@ -141,11 +141,11 @@ class GameManager extends Phaser.Scene {
 
     // Update location
     this.currentLocationId = locationId;
-    
+
     // Render new location
     await blackFade(this, 300, 300, () => {
       this.layerManager.clearAllLayers();
-      this.renderLocation(this.currentChapter.map, location)
+      this.renderLocation(this.currentChapter.map, location);
     });
 
     // Update state after location is fully rendered
@@ -156,15 +156,20 @@ class GameManager extends Phaser.Scene {
   //   Mode Callback  //
   //////////////////////
 
-  private deactivateCurrentUI() {
-    const prevLocationMode = this.modeManager.getLocationMode(
+  public deactivateCurrentUI() {
+    const currentLocationMode = this.modeManager.getLocationMode(
       this.currentActiveMode,
       this.currentLocationId
     );
+    if (currentLocationMode) currentLocationMode.deactivateUI();
+  }
 
-    if (prevLocationMode) {
-      prevLocationMode.deactivateUI();
-    }
+  public activateCurrentUI() {
+    const currentLocationMode = this.modeManager.getLocationMode(
+      this.currentActiveMode,
+      this.currentLocationId
+    );
+    if (currentLocationMode) currentLocationMode.activateUI();
   }
 
   public setActivePhase(gamePhase: GamePhase) {
