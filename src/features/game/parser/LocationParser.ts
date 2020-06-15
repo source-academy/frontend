@@ -1,5 +1,5 @@
 import { GameChapter } from '../chapter/GameChapterTypes';
-import { splitToLines, stripEnclosingChars, capitalise } from './ParserHelper';
+import { splitToLines, stripEnclosingChars, capitalise, splitByChar } from './ParserHelper';
 import { Constants } from '../commons/CommonConstants';
 import { textToGameModeMap } from './ParserConstants';
 
@@ -17,14 +17,13 @@ export default function LocationParser(
   fileName: string,
   fileContent: string
 ) {
-  console.log('Parsing location...');
   const gameMap = chapter.map;
   const [locationAssets, locationModes, connectivity] = fileContent.split('\n$\n');
 
   const locationIds: string[] = [];
 
   splitToLines(locationAssets).forEach(locationAsset => {
-    const [locationId, shortPath, fullLocationName] = locationAsset.split(', ');
+    const [locationId, shortPath, fullLocationName] = splitByChar(locationAsset, ',');
     const locationName = stripEnclosingChars(fullLocationName);
 
     locationIds.push(locationId);

@@ -2,21 +2,24 @@ import { DialogueLine, Dialogue } from './GameDialogueTypes';
 
 // Generates next line in dialogue based on Dialogue Object
 function dialogueGenerator(dialogue: Dialogue) {
-  const { content, startPart } = dialogue;
-  let currPart = startPart;
+  const { content } = dialogue;
+
+  // first item in the map
+  let currPart = content.keys().next().value;
   let currLineNum = 0;
+
   function generateDialogue(): DialogueLine {
     // Get line
-    const line = content.get(currPart)![currLineNum];
+    const dialogueLine = content.get(currPart)![currLineNum];
 
-    if (!line) {
+    if (!dialogueLine.line) {
       return { line: '' };
     }
 
     // Advance pointer for next line
-    if (line.goto) {
-      if (content.get(line.goto)) {
-        currPart = line.goto;
+    if (dialogueLine.goto) {
+      if (content.get(dialogueLine.goto)) {
+        currPart = dialogueLine.goto;
         currLineNum = 0;
       } else {
         return { line: '' };
@@ -25,7 +28,7 @@ function dialogueGenerator(dialogue: Dialogue) {
       currLineNum++;
     }
 
-    return line;
+    return dialogueLine;
   }
   return generateDialogue;
 }
