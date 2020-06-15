@@ -1,27 +1,60 @@
+import { GameStateStorage } from '../state/GameStateTypes';
+
 export enum GameActionType {
   MoveCharacter = 'MoveCharacter',
   UpdateCharacter = 'UpdateCharacter',
   Collectible = 'Collectible',
-  ObtainObject = 'ObtainObject',
-  LocationChange = 'LocationChange'
+  UpdateChecklist = 'UpdateChecklist',
+  LocationChange = 'LocationChange',
+  AddItem = 'AddItem',
+  RemoveItem = 'RemoveItem',
+  BringUpDialogue = 'BringUpDialogue',
+  ChangeBackground = 'ChangeBackground'
 }
 
 export const stringToActionType = {
   moveCharacter: GameActionType.MoveCharacter,
   updateCharacter: GameActionType.UpdateCharacter,
   collectible: GameActionType.Collectible,
-  obtainObject: GameActionType.ObtainObject,
-  locationChange: GameActionType.LocationChange
+  updateChecklist: GameActionType.UpdateChecklist,
+  locationChange: GameActionType.LocationChange,
+  addItem: GameActionType.AddItem,
+  removeItem: GameActionType.RemoveItem,
+  changeBackground: GameActionType.ChangeBackground
+};
+
+export interface IGameActionable {
+  actions: GameAction[];
+}
+
+export type ActionCondition = {
+  state: GameStateStorage;
+  conditionParams: any;
+  boolean?: boolean;
 };
 
 export type GameAction = {
   actionType: GameActionType;
   actionParams: any;
+  conditionals?: ActionCondition[];
 };
 
-export function createGameAction(action: string, actionParams: any) {
+export function createGameAction(
+  action: string,
+  actionParams: any,
+  actionCondition?: ActionCondition[]
+) {
   return {
     actionType: stringToActionType[action],
-    actionParams
+    actionParams,
+    actionCondition: actionCondition || []
+  };
+}
+
+export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
+  return {
+    state,
+    conditionParams,
+    boolean
   };
 }
