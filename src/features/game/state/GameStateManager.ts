@@ -166,7 +166,7 @@ class GameStateManager {
     const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationId)![attr]) {
+    if (!this.locationStates.get(locationId)![attr]) {
       this.locationStates.get(locationId)![attr] = [];
     }
     this.locationStates.get(locationId)![attr]!.push(attrElem);
@@ -177,7 +177,7 @@ class GameStateManager {
     const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationId)![attr]) {
+    if (!this.locationStates.get(locationId)![attr]) {
       return;
     }
     const newAttr = this.locationStates

@@ -1,5 +1,4 @@
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
-import { CharacterPosition, characterPositionMap } from './GameCharacterConstants';
 
 export type SpeakerDetail = {
   speakerId: ItemId;
@@ -15,10 +14,8 @@ export type Character = {
   defaultPosition: CharacterPosition;
 };
 
-export function createSpeaker(speakerId: string, expression: string, position: string) {
-  return {
-    speakerId,
-    expression,
-    speakerPosition: characterPositionMap[position]
-  };
+export enum CharacterPosition {
+  Left = 'Left',
+  Middle = 'Middle',
+  Right = 'Right'
 }

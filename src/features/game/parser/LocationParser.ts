@@ -1,7 +1,8 @@
 import { GameChapter } from '../chapter/GameChapterTypes';
-import { splitToLines, stripEnclosingChars, capitalise, splitByChar } from './ParserHelper';
+import { splitToLines, stripEnclosingChars, splitByChar } from './ParserHelper';
 import { Constants } from '../commons/CommonConstants';
 import { textToGameModeMap } from './ParserConstants';
+import { capitalise } from '../utils/StringUtils';
 
 function locationKey(shortPath: string) {
   return shortPath;
@@ -18,10 +19,11 @@ export default function LocationParser(
   fileContent: string
 ) {
   const gameMap = chapter.map;
-  const [locationAssets, locationModes, connectivity] = fileContent.split('\n$\n');
+  const [locationAssets, locationModes, navigation] = fileContent.split('\n$\n');
 
   const locationIds: string[] = [];
 
+  // Parse and load location assets
   splitToLines(locationAssets).forEach(locationAsset => {
     const [locationId, shortPath, fullLocationName] = splitByChar(locationAsset, ',');
     const locationName = stripEnclosingChars(fullLocationName);
@@ -35,6 +37,7 @@ export default function LocationParser(
     gameMap.addMapAsset(locationKey(shortPath), locationLongPath(shortPath));
   });
 
+  // Parse modes per location
   splitToLines(locationModes).forEach((modes, modeIndex) => {
     const formattedModeNames = stripEnclosingChars(modes)
       .split(' ')
@@ -42,7 +45,8 @@ export default function LocationParser(
     gameMap.setModesAt(locationIds[modeIndex], formattedModeNames);
   });
 
-  splitToLines(connectivity).forEach(location => {
+  // Parse which locations can be visited from one location
+  splitToLines(navigation).forEach(location => {
     const [locationId, connectedTo] = location.split(': ');
     gameMap.setNavigationFrom(locationId, connectedTo.split(', '));
   });

@@ -39,7 +39,7 @@ yourCarpet, yourCarpet, 640, 667
 +yourBed, yourHeadphones, 372, 514
 +apple, door/yourRoom-dim, 0, 0
 $
-#yourChair, addItem: yourCarpet if visit, bringUpDialogue: dialogue1
+#yourChair, addItem: [room yourCarpet] if checklist.visit, bringUpDialogue: dialogue1
 #yourCarpet, collectible: cookies
 #door7, move: [door6, 7, 18], addItem: apple
 
@@ -48,12 +48,12 @@ $
 topLeft, 0, 0, 100, 100
 middleBB, 100, 100, 200, 200
 $
-#collectible: goodStuff
+#topLeft, collectible: goodStuff
 
 <<dialogueLocation>>
-classroom: dialogue1, dialogue1
-crashsite: dialogue1, dialogue1
-room: dialogue1
+classroom: +dialogue1, dialogue1
+crashsite: +dialogue1, +dialogue1
+room: +dialogue1
 
 <<dialogue1>>
 title: What happened?
@@ -63,10 +63,10 @@ The year is 1101 A.E.
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
 As Earth’s population reached a breaking point, humans began to migrate across the galaxy, colonizing planets once thought uninhabitable, as well as making settlements on those with amicable alien life.
 To supplement this rapid expansion, large space stations scattered throughout the solar systems began to emerge, serving as hubs for different human needs.
-#addItem: yourChair, collectible: cookies
+#addItem: [objects room yourChair], collectible: cookies
 Nestled deep in the Kepler-62 system, a prestigious facility of learning exists, claiming fame as perhaps the most rigorous inter-galactic educational institute in the universe.
 Here, students learn how to harness the power of an invisible force known as the Source, a hidden energy that lets one manipulate the things around them and perform great feats.
-#addItem: yourChair, collectible: cookies
+#addItem: [objects room yourChair], collectible: cookies
 Today, you have enrolled in...
 The Source Academy!
 [Goto part2]

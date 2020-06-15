@@ -5,7 +5,7 @@ import {
   ActionCondition,
   GameActionType
 } from '../action/GameActionTypes';
-import { splitByChar, stripEnclosingChars } from './ParserHelper';
+import { splitByChar, stripEnclosingChars, enclosedBySquareBrackets } from './ParserHelper';
 import { GameStateStorage } from '../state/GameStateTypes';
 
 export default function ActionParser(actionText: string): GameAction[] {
@@ -32,17 +32,26 @@ function strToAction(actionString: string): GameAction {
   const [action, actionParamString] = splitByChar(actionString, ':');
   const actionType = stringToActionType[action];
 
-  const actionParams = splitByChar(stripEnclosingChars(actionParamString), ' ');
+  let actionParams;
+  if (enclosedBySquareBrackets(actionParamString)) {
+    actionParams = splitByChar(stripEnclosingChars(actionParamString), ' ');
+  } else {
+    actionParams = [actionParamString];
+  }
   const actionParamObj: any = {};
   switch (actionType) {
     case GameActionType.Collectible:
     case GameActionType.UpdateChecklist:
     case GameActionType.LocationChange:
-    case GameActionType.AddItem:
-    case GameActionType.RemoveItem:
     case GameActionType.ChangeBackground:
     case GameActionType.BringUpDialogue:
       actionParamObj.id = actionParams[0];
+      break;
+    case GameActionType.AddItem:
+    case GameActionType.RemoveItem:
+      actionParamObj.attr = actionParams[0];
+      actionParamObj.locationId = actionParams[1];
+      actionParamObj.id = actionParams[2];
   }
 
   return createGameAction(actionType, actionParamObj);

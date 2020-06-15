@@ -3,18 +3,17 @@ import { screenSize } from '../commons/CommonConstants';
 import {
   charRect,
   charWidth,
-  CharacterPosition,
   speakerRect,
   textPadding,
   speakerTextStyle
 } from './GameCharacterConstants';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { Character, SpeakerDetail } from './GameCharacterTypes';
+import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { speechBox } from '../commons/CommonAssets';
-import { capitalise } from '../parser/ParserHelper';
+import { capitalise } from '../utils/StringUtils';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 
 export default class CharacterManager {
