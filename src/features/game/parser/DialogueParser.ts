@@ -51,7 +51,8 @@ function createDialogueLines(lines: string[]): DialogueLine[] {
         dialogueLines[dialogueLines.length - 1].goto = stripEnclosingChars(rawStr).split(' ')[1];
         break;
       case isActionLabel(rawStr):
-        dialogueLines[dialogueLines.length - 1].actions = ActionParser(rawStr.slice(1));
+        const rawActions: string[] = splitByChar(rawStr.slice(1), ',');
+        dialogueLines[dialogueLines.length - 1].actions = ActionParser(rawActions);
         break;
       case isSpeaker(rawStr):
         currLinePointer++;

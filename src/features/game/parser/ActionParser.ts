@@ -8,8 +8,8 @@ import {
 import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from './ParserHelper';
 import { GameStateStorage } from '../state/GameStateTypes';
 
-export default function ActionParser(actionText: string): GameAction[] {
-  return actionText.split(',').map(parseAction);
+export default function ActionParser(actionText: string[]): GameAction[] {
+  return actionText.map(parseAction);
 }
 
 // converts full action string (with conditions) to action object

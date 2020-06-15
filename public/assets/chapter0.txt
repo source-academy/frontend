@@ -40,9 +40,9 @@ yourCarpet, yourCarpet, 640, 667
 +yourBed, yourHeadphones, 372, 514
 +apple, door/yourRoom-dim, 0, 0
 $
-#yourChair, addItem: [room yourCarpet] if checklist.visit, bringUpDialogue: dialogue1
-#yourCarpet, collectible: cookies
-#door7, move: [door6, 7, 18], addItem: apple
+yourChair, addItem: [room yourCarpet] if checklist.visit, bringUpDialogue: dialogue1
+yourCarpet, collectible: cookies
+door7, move: [door6, 7, 18], addItem: apple
 
 <<boundingBoxes>>
 [room]
