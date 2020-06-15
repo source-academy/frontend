@@ -9,7 +9,7 @@
       rgba(0, 0, 0, 0.6),
       rgba(0, 0, 0, 0.3)
     ),
-    url('#{$images-path}/not_found_background.jpg');
+    url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
 
   .achievement-main {
     display: flex;
@@ -93,6 +93,14 @@
           justify-content: space-between;
         }
 
+        .delete {
+          width: 10%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
         .main {
           display: flex;
           flex-direction: row;
@@ -157,6 +165,14 @@
 
           display: flex;
           flex-direction: column;
+
+          .delete {
+            width: 10%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 10%;
+          }
 
           .hints {
             width: 100%;

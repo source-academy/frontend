@@ -1,6 +1,7 @@
 import React from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
+import { achievementDict } from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {};
 
@@ -8,11 +9,11 @@ export type StateProps = {};
 
 function AchievementControl() {
   return (
-    <div className="Achievements">
-      <div className="achievement-main">
-        <AchievementControlPanel />
+    <div className="AchievementControl">
+      <AchievementControlPanel />
 
-        <AchievementEditor />
+      <div className="editor-cards">
+        <AchievementEditor achievementDict={achievementDict} />
       </div>
     </div>
   );

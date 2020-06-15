@@ -15,10 +15,20 @@ type AchievementTaskProps = {
   studentProgress: { [id: number]: AchievementProgress };
   filterStatus: FilterStatus;
   setModalID: any;
+  removeItem: any;
+  isEditable: boolean;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
+  const {
+    achievement,
+    achievementDict,
+    filterStatus,
+    setModalID,
+    studentProgress,
+    isEditable,
+    removeItem
+  } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
@@ -66,7 +76,7 @@ function AchievementTask(props: AchievementTaskProps) {
 
   // Returns an array of prerequisites of the AchievementItem
   const getPrerequisites = (achievement: AchievementItem): AchievementItem[] => {
-    return achievement.prerequisiteIDs === undefined
+    return achievement === undefined || achievement.prerequisiteIDs === undefined
       ? []
       : achievement.prerequisiteIDs.map(prerequisiteID => achievementDict[prerequisiteID]);
   };
@@ -85,6 +95,10 @@ function AchievementTask(props: AchievementTaskProps) {
 
   // Gets the furthest deadline of the achievement item, including its prerequisites
   const getFurthestDeadline = (achievement: AchievementItem): Date | undefined => {
+    if (achievement === undefined) {
+      return undefined;
+    }
+
     const prerequisiteDeadlines = mapPrerequisitesToDeadlines(achievement);
     return prerequisiteDeadlines.reduce(compareDeadlines, achievement.deadline);
   };
@@ -113,6 +127,10 @@ function AchievementTask(props: AchievementTaskProps) {
 
   // Gets the total EXP of the achievement item, including its prerequisites
   const getTotalEXP = (achievement: AchievementItem): number | undefined => {
+    if (achievement === undefined) {
+      return undefined;
+    }
+
     const prerequisiteEXPs = mapPrerequisitesToEXPs(achievement);
     return prerequisiteEXPs.reduce(combineEXPs, achievement.exp);
   };
@@ -152,6 +170,8 @@ function AchievementTask(props: AchievementTaskProps) {
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={togglePrerequisitesDropdown}
             displayModal={displayModal}
+            removeItem={removeItem}
+            isEditable={isEditable}
           />
           {isDropdownOpen ? (
             <ul>
@@ -165,6 +185,7 @@ function AchievementTask(props: AchievementTaskProps) {
                       progress={getAchievementProgress(prerequisite)}
                       displayModal={displayModal}
                       shouldPartiallyRender={!shouldRender(prerequisite)}
+                      isEditable={isEditable}
                     />
                   </div>
                 </li>

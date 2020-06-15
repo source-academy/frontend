@@ -8,7 +8,8 @@ import AchievementTask from './subcomponents/AchievementTask';
 import {
   AchievementStatus,
   FilterStatus,
-  AchievementItem
+  AchievementItem,
+  AchievementProgress
 } from '../../../commons/achievements/AchievementTypes';
 import {
   achievementDict,
@@ -20,59 +21,71 @@ export type DispatchProps = {};
 
 export type StateProps = {};
 
+/**
+ * Count the number of achievement items by filterStatus
+ *
+ * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
+ * @param {FilterStatus} filterStatus The filterStatus used to filter the achievement dict
+ * @returns {number} The number of items
+ */
+const countItemByFilterStatus = (
+  achievementDict: { [id: number]: AchievementItem },
+  filterStatus: FilterStatus
+) => {
+  switch (filterStatus) {
+    case FilterStatus.ALL:
+      return Object.keys(achievementDict).length;
+    case FilterStatus.ACTIVE:
+      return Object.values(achievementDict).filter(
+        achievement => achievement.status === AchievementStatus.ACTIVE
+      ).length;
+    case FilterStatus.COMPLETED:
+      return Object.values(achievementDict).filter(
+        achievement => achievement.status === AchievementStatus.COMPLETED
+      ).length;
+    default:
+      return 0;
+  }
+};
+
+const removeItem = (achievementID: number) => {
+  delete achievementDict[achievementID];
+};
+
+/**
+ * Maps the achievement dict to AchievementTask Elements
+ *
+ * This function creates an AchievementTask for each achievement item that
+ * has isTask=true.
+ *
+ * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
+ * @returns AchievementTask Elements
+ */
+export const mapAchievementDictToTask = (
+  achievementDict: { [id: number]: AchievementItem },
+  filterStatus: FilterStatus,
+  setModalID: any,
+  studentProgress: { [id: number]: AchievementProgress },
+  isEditable: boolean
+) => {
+  return Object.values(achievementDict)
+    .filter(achievement => achievement.isTask)
+    .map(achievement => (
+      <AchievementTask
+        studentProgress={studentProgress}
+        achievement={achievement}
+        achievementDict={achievementDict}
+        filterStatus={filterStatus}
+        setModalID={setModalID}
+        removeItem={removeItem}
+        isEditable={isEditable}
+      />
+    ));
+};
+
 function Achievement() {
   const [modalID, setModalID] = useState<number>(-1);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
-
-  /**
-   * Count the number of achievement items by filterStatus
-   *
-   * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
-   * @param {FilterStatus} filterStatus The filterStatus used to filter the achievement dict
-   * @returns {number} The number of items
-   */
-  const countItemByFilterStatus = (
-    achievementDict: { [id: number]: AchievementItem },
-    filterStatus: FilterStatus
-  ) => {
-    switch (filterStatus) {
-      case FilterStatus.ALL:
-        return Object.keys(achievementDict).length;
-      case FilterStatus.ACTIVE:
-        return Object.values(achievementDict).filter(
-          achievement => achievement.status === AchievementStatus.ACTIVE
-        ).length;
-      case FilterStatus.COMPLETED:
-        return Object.values(achievementDict).filter(
-          achievement => achievement.status === AchievementStatus.COMPLETED
-        ).length;
-      default:
-        return 0;
-    }
-  };
-
-  /**
-   * Maps the achievement dict to AchievementTask Elements
-   *
-   * This function creates an AchievementTask for each achievement item that
-   * has isTask=true.
-   *
-   * @param {{ [id: number]: AchievementItem }} achievementDict A Dictionary of Achievement IDs and their Items
-   * @returns AchievementTask Elements
-   */
-  const mapAchievementDictToTask = (achievementDict: { [id: number]: AchievementItem }) => {
-    return Object.values(achievementDict)
-      .filter(achievement => achievement.isTask)
-      .map(achievement => (
-        <AchievementTask
-          studentProgress={studentProgress}
-          achievement={achievement}
-          achievementDict={achievementDict}
-          filterStatus={filterStatus}
-          setModalID={setModalID}
-        />
-      ));
-  };
 
   return (
     <div className="Achievements">
@@ -100,7 +113,15 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementDictToTask(achievementDict)}</ul>
+          <ul className="display-list">
+            {mapAchievementDictToTask(
+              achievementDict,
+              filterStatus,
+              setModalID,
+              studentProgress,
+              false
+            )}
+          </ul>
         </div>
 
         <AchievementModal modalID={modalID} achievementModalDict={achievementModalDict} />

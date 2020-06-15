@@ -1,0 +1,281 @@
+.AchievementControl {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 100%;
+  background-size: cover;
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.3)
+    ),
+    url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
+
+  .sample-cards {
+    width: 50%;
+    display: table;
+
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .display-list {
+      overflow: hidden;
+      overflow-y: scroll;
+      height: 800px;
+      max-height: 800px;
+      list-style: none;
+    }
+
+    .achievement {
+      width: 90%;
+      //background-color: #d9d9d9;
+      background-color: lightblue;
+
+      height: 20%;
+      margin-bottom: 10px;
+
+      display: flex;
+      flex-direction: column;
+
+      .hints {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .delete {
+        width: 10%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-basis: 10%;
+      }
+
+      .main {
+        display: flex;
+        flex-direction: row;
+        flex-basis: 80%;
+
+        .dropdown {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
+        .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
+        .display {
+          display: flex;
+          justify-content: center;
+          margin-left: 10%;
+          width: 100%;
+          flex-direction: column;
+
+          .details {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+
+            .ability {
+              flex-basis: 40%;
+            }
+
+            .deadline {
+              display: flex;
+              flex-direction: row;
+              flex-basis: 30%;
+            }
+
+            .exp {
+              display: flex;
+              margin-left: 5%;
+              flex-direction: row;
+              flex-basis: 30%;
+            }
+          }
+        }
+      }
+    }
+
+    .node {
+      display: flex;
+      flex-direction: row;
+
+      .prerequisite {
+        width: 81%;
+        background-color: #333e50;
+
+        margin-bottom: 10px;
+
+        display: flex;
+        flex-direction: column;
+
+        .delete {
+          width: 10%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
+        .hints {
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+        .main {
+          display: flex;
+          flex-direction: row;
+          flex-basis: 80%;
+
+          .display {
+            display: flex;
+            justify-content: center;
+            margin-left: 10%;
+            width: 100%;
+            flex-direction: column;
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-evenly;
+
+              .path {
+                flex-basis: 40%;
+              }
+
+              .deadline {
+                display: flex;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
+
+              .exp {
+                display: flex;
+                margin-left: 5%;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .editor-cards {
+    width: 50%;
+    display: table;
+
+    ::-webkit-scrollbar {
+      width: 12px;
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 1);
+    }
+
+    .display-list {
+      overflow: hidden;
+      overflow-y: scroll;
+      height: 800px;
+      max-height: 800px;
+      list-style: none;
+    }
+
+    .achievement {
+      width: 90%;
+      //background-color: #d9d9d9;
+      background-color: lightcoral;
+
+      height: 20%;
+      margin-bottom: 10px;
+
+      display: flex;
+      flex-direction: column;
+
+      .main {
+        display: flex;
+        flex-direction: row;
+        flex-basis: 80%;
+
+        .dropdown {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
+        .icon {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-basis: 10%;
+        }
+
+        .display {
+          display: flex;
+          justify-content: center;
+          margin-left: 10%;
+          width: 100%;
+          flex-direction: column;
+
+          .details {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+
+            .ability {
+              flex-basis: 40%;
+            }
+
+            .deadline {
+              display: flex;
+              flex-direction: row;
+              flex-basis: 30%;
+            }
+
+            .exp {
+              display: flex;
+              margin-left: 5%;
+              flex-direction: row;
+              flex-basis: 30%;
+            }
+          }
+        }
+      }
+    }
+  }
+}
