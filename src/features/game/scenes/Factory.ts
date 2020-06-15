@@ -62,5 +62,5 @@ export const dialogue1 = {
 export const dialogue2 = {
   title: 'Are you sure?',
   content: DialogueObject1,
-  startPart: 'part1'
+  startPart: 'part2'
 };

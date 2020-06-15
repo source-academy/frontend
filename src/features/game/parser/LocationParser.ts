@@ -28,7 +28,11 @@ export default function LocationParser(
     const locationName = stripEnclosingChars(fullLocationName);
 
     locationIds.push(locationId);
-    gameMap.addLocation(locationId, { name: locationName, assetKey: locationKey(shortPath) });
+    gameMap.addLocation(locationId, {
+      id: locationId,
+      name: locationName,
+      assetKey: locationKey(shortPath)
+    });
     gameMap.addMapAsset(locationKey(shortPath), locationLongPath(shortPath));
   });
 

@@ -9,6 +9,7 @@ export type GameItemType<T> = {
 export type LocationId = string;
 
 export type GameLocation = {
+  id: LocationId;
   name: string;
   assetKey: string;
   modes?: GameMode[];

@@ -6,6 +6,7 @@ import GameModeTalkManager from './talk/GameModeTalkManager';
 import GameModeMoveManager from './move/GameModeMoveManager';
 import GameModeExploreManager from './explore/GameModeExploreManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
+import { LocationId } from '../location/GameMapTypes';
 
 class GameModeManager {
   private gameModes: Map<string, Map<GameMode, IGameUI>>;
@@ -22,45 +23,45 @@ class GameModeManager {
     locationModes.set(GameMode.Explore, GameModeExploreManager.processExploreMenus(chapter));
 
     locationModes.forEach((locToUI, mode, map) => {
-      locToUI.forEach((gameUI, locationName, map) => {
-        if (!this.gameModes.get(locationName)) {
-          this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
+      locToUI.forEach((gameUI, locationId, map) => {
+        if (!this.gameModes.get(locationId)) {
+          this.gameModes.set(locationId, new Map<GameMode, IGameUI>());
         }
         if (gameUI) {
-          this.gameModes.get(locationName)!.set(mode, gameUI);
+          this.gameModes.get(locationId)!.set(mode, gameUI);
         }
       });
     });
   }
 
-  public addMode(mode: GameMode, locationName: string) {
-    if (!this.gameModes.get(locationName)) {
-      this.gameModes.set(locationName, new Map<GameMode, IGameUI>());
+  public addMode(mode: GameMode, locationId: LocationId) {
+    if (!this.gameModes.get(locationId)) {
+      this.gameModes.set(locationId, new Map<GameMode, IGameUI>());
     }
     const chapter = GameActionManager.getInstance().getGameManager()!.currentChapter;
     if (!chapter) return;
 
     let gameUI: IGameUI;
     if (mode === GameMode.Menu) {
-      gameUI = GameModeMenuManager.processLocation(chapter, locationName);
+      gameUI = GameModeMenuManager.processLocation(chapter, locationId);
     } else if (mode === GameMode.Talk) {
-      gameUI = GameModeTalkManager.processLocation(chapter, locationName);
+      gameUI = GameModeTalkManager.processLocation(chapter, locationId);
     } else if (mode === GameMode.Move) {
-      gameUI = GameModeMoveManager.processLocation(chapter, locationName);
+      gameUI = GameModeMoveManager.processLocation(chapter, locationId);
     } else if (mode === GameMode.Explore) {
-      gameUI = GameModeExploreManager.processLocation(chapter, locationName);
+      gameUI = GameModeExploreManager.processLocation(chapter, locationId);
     } else {
       return;
     }
-    this.gameModes.get(locationName)!.set(mode, gameUI);
+    this.gameModes.get(locationId)!.set(mode, gameUI);
   }
 
-  public removeMode(mode: GameMode, locationName: string) {
-    this.gameModes.get(locationName)!.delete(mode);
+  public removeMode(mode: GameMode, locationId: LocationId) {
+    this.gameModes.get(locationId)!.delete(mode);
   }
 
-  public getLocationMode(mode: GameMode, locationName: string): IGameUI | undefined {
-    return this.gameModes.get(locationName)!.get(mode);
+  public getLocationMode(mode: GameMode, locationId: LocationId): IGameUI | undefined {
+    return this.gameModes.get(locationId)!.get(mode);
   }
 }
 

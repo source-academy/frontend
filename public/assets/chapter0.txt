@@ -1,12 +1,12 @@
 <<configuration>>
-startingLoc: Student Room
+startingLoc: room
 
 <<location>>
-Crash Site, crashSite, "Crash Site"
-Class Room, classroom/classOn, "Class Room"
-Emergency, classroom/emergency, "Emergency"
-Hallway, hallway, "Hallway"
-Student Room, yourRoom-dim, "Student Room"
+crashsite, crashSite, "Crash Site"
+classroom, classroom/classOn, "Class Room"
+emergency, classroom/emergency, "Emergency"
+hallway, hallway, "Hallway"
+room, yourRoom-dim, "Student Room"
 $
 [talk move]
 [explore talk move]
@@ -14,27 +14,46 @@ $
 [move]
 [explore move talk]
 $
-Class Room: Crash Site, Hallway
-Crash Site: Class Room
-Hallway: Class Room, Class Room, Emergency
-Student Room: Hallway
-Emergency: Hallway
+classroom: crashsite, hallway
+crashsite: classroom
+hallway: classroom, classroom, emergency
+room: hallway
+emergency: hallway
+
+<<characters>>
+[room]
++scottie, "Scottie", sad, left
+
+[hallway]
++beat, "Beat", happy, right
+
+<<objectives>>
+visit, "Visit Hallway"
+talk, "Talk at Classroom"
 
 <<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
-yourChair, yourChair, 932, 549
-door6, door/yourRoom-dim, 831, 270
-yourBed, yourHeadphones, 372, 514
++yourChair, yourChair, 932, 549
++door6, door/yourRoom-dim, 831, 270
++yourBed, yourHeadphones, 372, 514
++apple, door/yourRoom-dim, 0, 0
 $
-yourChair, appear: yourCarpet, dialogue: dialogue1, sound: yes
-yourCarpet, collectible: yourCarpet
-door7, move: [door6, 7, 18], appear: apple
+#yourChair, addItem: yourCarpet, bringUpDialogue: dialogue1
+#yourCarpet, collectible: cookies
+#door7, move: [door6, 7, 18], addItem: apple
+
+<<boundingBoxes>>
+[room]
+topLeft, 0, 0, 100, 100
+middleBB, 100, 100, 200, 200
+$
+#collectible: goodStuff
 
 <<dialogueLocation>>
-Class Room: dialogue1, dialogue1
-Crash Site: dialogue1, dialogue1
-Student Room: dialogue1
+classroom: dialogue1, dialogue1
+crashsite: dialogue1, dialogue1
+room: dialogue1
 
 <<dialogue1>>
 title: What happened?
@@ -44,8 +63,10 @@ The year is 1101 A.E.
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
 As Earth’s population reached a breaking point, humans began to migrate across the galaxy, colonizing planets once thought uninhabitable, as well as making settlements on those with amicable alien life.
 To supplement this rapid expansion, large space stations scattered throughout the solar systems began to emerge, serving as hubs for different human needs.
+#addItem: yourChair, collectible: cookies
 Nestled deep in the Kepler-62 system, a prestigious facility of learning exists, claiming fame as perhaps the most rigorous inter-galactic educational institute in the universe.
 Here, students learn how to harness the power of an invisible force known as the Source, a hidden energy that lets one manipulate the things around them and perform great feats.
+#addItem: yourChair, collectible: cookies
 Today, you have enrolled in...
 The Source Academy!
 [Goto part2]

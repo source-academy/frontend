@@ -42,24 +42,24 @@ class GameActionManager {
   //    Game Mode    //
   /////////////////////
 
-  public getLocationMode(locationName: string): GameMode[] | undefined {
+  public getLocationMode(locationId: LocationId): GameMode[] | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationMode(locationName);
+      return this.gameManager.stateManager.getLocationMode(locationId);
     }
     return undefined;
   }
 
-  public addLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
+  public addLocationMode(currLocName: string, locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.addMode(mode, locationName);
-      this.gameManager.stateManager.addLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.addMode(mode, locationId);
+      this.gameManager.stateManager.addLocationMode(currLocName, locationId, mode);
     }
   }
 
-  public removeLocationMode(currLocName: string, locationName: string, mode: GameMode): void {
+  public removeLocationMode(currLocName: string, locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.removeMode(mode, locationName);
-      this.gameManager.stateManager.removeLocationMode(currLocName, locationName, mode);
+      this.gameManager.modeManager.removeMode(mode, locationId);
+      this.gameManager.stateManager.removeLocationMode(currLocName, locationId, mode);
     }
   }
 
@@ -78,9 +78,9 @@ class GameActionManager {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdate(locationName: string, mode?: GameMode): boolean | undefined {
+  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
     if (this.gameManager) {
-      return this.gameManager.stateManager.hasLocationUpdate(locationName, mode);
+      return this.gameManager.stateManager.hasLocationUpdate(locationId, mode);
     }
     return false;
   }
@@ -114,23 +114,27 @@ class GameActionManager {
   //    Game Attr    //
   /////////////////////
 
-  public getLocationAttr(attr: GameLocationAttr, locationName: string) {
+  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId) {
     if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationAttr(attr, locationName);
+      return this.gameManager.stateManager.getLocationAttr(attr, locationId);
     }
     return undefined;
   }
 
-  public addLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
+  public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.addLocationAttr(attr, locationName, attrElem);
+      return this.gameManager.stateManager.addLocationAttr(attr, locationId, attrElem);
     }
     return;
   }
 
-  public removeLocationAttr(attr: GameLocationAttr, locationName: string, attrElem: string): void {
+  public removeLocationAttr(
+    attr: GameLocationAttr,
+    locationId: LocationId,
+    attrElem: string
+  ): void {
     if (this.gameManager) {
-      return this.gameManager.stateManager.removeLocationAttr(attr, locationName, attrElem);
+      return this.gameManager.stateManager.removeLocationAttr(attr, locationId, attrElem);
     }
     return;
   }
@@ -164,7 +168,7 @@ class GameActionManager {
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     if (this.gameManager) {
-      const currLocName = this.gameManager.currentLocationName;
+      const currLocName = this.gameManager.currentLocationId;
       this.gameManager.stateManager.setObjProperty(currLocName, id, newObjProp);
     }
   }
