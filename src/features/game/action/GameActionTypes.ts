@@ -1,3 +1,5 @@
+import { GameStateStorage } from '../state/GameStateTypes';
+
 export enum GameActionType {
   MoveCharacter = 'MoveCharacter',
   UpdateCharacter = 'UpdateCharacter',
@@ -26,7 +28,7 @@ export interface IGameActionable {
 }
 
 export type ActionCondition = {
-  state: string;
+  state: GameStateStorage;
   conditionParams: any;
   boolean?: boolean;
 };
@@ -46,5 +48,13 @@ export function createGameAction(
     actionType: stringToActionType[action],
     actionParams,
     actionCondition: actionCondition || []
+  };
+}
+
+export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
+  return {
+    state,
+    conditionParams,
+    boolean
   };
 }

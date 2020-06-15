@@ -235,7 +235,9 @@ class GameActionManager {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    console.log(`Obtained a collectible! ${collectibleId}`);
+    if (this.gameManager) {
+      this.gameManager.userStateManager.addToList('collectibles', collectibleId);
+    }
   }
 }
 

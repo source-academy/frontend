@@ -33,7 +33,7 @@ export default class GameActionExecuter {
         actionManager.obtainCollectible(actionParams.id);
         return;
       case GameActionType.UpdateChecklist:
-        actionManager.isObjectiveComplete(actionParams.id);
+        actionManager.completeObjective(actionParams.id);
         return;
       case GameActionType.AddItem:
         actionManager.addLocationAttr(
@@ -50,6 +50,9 @@ export default class GameActionExecuter {
         );
         return;
       case GameActionType.BringUpDialogue:
+        if (actionManager.getGameManager().getActivePhase() === GamePhase.Dialogue) {
+          return;
+        }
         actionManager.bringUpDialogue(actionParams.id);
         return;
     }

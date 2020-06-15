@@ -1,16 +1,14 @@
 import { PartName, DialogueLine } from '../dialogue/GameDialogueTypes';
-import { createGameAction } from '../action/GameActionTypes';
+import { createGameAction, createCondition } from '../action/GameActionTypes';
 import { createSpeaker } from '../character/GameCharacterTypes';
+import { GameStateStorage } from '../state/GameStateTypes';
 
 const DialogueObject1 = new Map<PartName, DialogueLine[]>();
 DialogueObject1.set('part1', [
   {
     line: "How's it going?",
     speakerDetail: createSpeaker('beat', 'happy', 'right'),
-    actions: [
-      createGameAction('collectible', { id: 'trophy' }),
-      createGameAction('obtainObject', { id: 'yourCarpet' })
-    ]
+    actions: [createGameAction('collectible', { id: 'trophy' })]
   },
   {
     line: 'It is time for Kepler'
@@ -18,7 +16,12 @@ DialogueObject1.set('part1', [
   {
     line: 'How many years was it because it certainly feels like a thousand years',
     speakerDetail: null,
-    actions: [createGameAction('collectible', { id: 'years' })]
+    actions: [
+      createGameAction('collectible', { id: 'hartin poster' }, [
+        createCondition(GameStateStorage.UserState, { listName: 'collectibles', id: 'trophy' })
+      ]),
+      createGameAction('updateChecklist', { id: 'yourCarpet' })
+    ]
   },
   {
     line: 'How many years was it because it certainly feels like a thousand years'
