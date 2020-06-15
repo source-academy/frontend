@@ -6,7 +6,5 @@ export default function CharacterParser(
   fileName: string,
   fileContent: string
 ) {
-  console.log('Parsing characters...');
-
   splitToLines(fileContent);
 }

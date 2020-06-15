@@ -6,7 +6,5 @@ export default function CharacterParser(
   fileName: string,
   fileContent: string
 ) {
-  console.log('Parsing bounding boxes...');
-
   splitToLines(fileContent);
 }

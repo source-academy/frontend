@@ -2,9 +2,12 @@ import { DialogueLine, Dialogue } from './GameDialogueTypes';
 
 // Generates next line in dialogue based on Dialogue Object
 function dialogueGenerator(dialogue: Dialogue) {
-  const { content, startPart } = dialogue;
-  let currPart = startPart;
+  const { content } = dialogue;
+
+  // first item in the map
+  let currPart = content.keys().next().value;
   let currLineNum = 0;
+
   function generateDialogue(): DialogueLine {
     // Get line
     const line = content.get(currPart)![currLineNum];

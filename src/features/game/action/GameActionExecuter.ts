@@ -11,11 +11,11 @@ export default class GameActionExecuter {
   }
 
   private async executeStoryAction(action: GameAction) {
-    const { actionType, actionParams, conditionals } = action;
+    const { actionType, actionParams, actionConditions } = action;
 
-    if (conditionals) {
-      for (const conditional of conditionals) {
-        if (!this.checkCondition(conditional)) {
+    if (actionConditions) {
+      for (const actionCondition of actionConditions) {
+        if (!this.checkCondition(actionCondition)) {
           return;
         }
       }

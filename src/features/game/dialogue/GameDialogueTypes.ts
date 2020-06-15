@@ -1,19 +1,17 @@
-import { GameAction } from '../action/GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
+import { IGameActionable } from '../action/GameActionTypes';
 
 export type PartName = string;
 
-export type DialogueLine = {
+export type DialogueLine = IGameActionable & {
   line: string;
   speakerDetail?: SpeakerDetail | null;
-  actions?: GameAction[];
   goto?: PartName;
 };
 
 export type Dialogue = {
   title: string;
   content: DialogueObject;
-  startPart: PartName;
 };
 
 export type DialogueObject = Map<PartName, DialogueLine[]>;

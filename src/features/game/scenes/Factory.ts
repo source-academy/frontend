@@ -1,5 +1,5 @@
 import { PartName, DialogueLine } from '../dialogue/GameDialogueTypes';
-import { createGameAction, createCondition } from '../action/GameActionTypes';
+import { createGameAction, createCondition, GameActionType } from '../action/GameActionTypes';
 import { createSpeaker } from '../character/GameCharacterTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 
@@ -8,7 +8,7 @@ DialogueObject1.set('part1', [
   {
     line: "How's it going?",
     speakerDetail: createSpeaker('beat', 'happy', 'right'),
-    actions: [createGameAction('collectible', { id: 'trophy' })]
+    actions: [createGameAction(GameActionType.Collectible, { id: 'trophy' })]
   },
   {
     line: 'It is time for Kepler'
@@ -17,10 +17,10 @@ DialogueObject1.set('part1', [
     line: 'How many years was it because it certainly feels like a thousand years',
     speakerDetail: null,
     actions: [
-      createGameAction('collectible', { id: 'hartin poster' }, [
+      createGameAction(GameActionType.Collectible, { id: 'hartin poster' }, [
         createCondition(GameStateStorage.UserState, { listName: 'collectibles', id: 'trophy' })
       ]),
-      createGameAction('updateChecklist', { id: 'yourCarpet' })
+      createGameAction(GameActionType.UpdateChecklist, { id: 'yourCarpet' })
     ]
   },
   {
@@ -42,11 +42,11 @@ DialogueObject1.set('part2', [
   },
   {
     line: "Here's a jar of cookies to help you feel better",
-    actions: [createGameAction('collectible', { id: 'cookies' })]
+    actions: [createGameAction(GameActionType.Collectible, { id: 'cookies' })]
   },
   {
     line: 'Let me lead you to the classroom',
-    actions: [createGameAction('locationChange', { id: 'Emergency' })]
+    actions: [createGameAction(GameActionType.LocationChange, { id: 'Emergency' })]
   },
   {
     line: 'Here we are the classroom!'

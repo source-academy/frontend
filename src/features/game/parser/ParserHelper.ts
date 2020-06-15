@@ -59,3 +59,8 @@ export function splitByHeader(text: string, regexString: RegExp) {
 export function matchStartingKey(object: object, string: string) {
   return Object.keys(object).filter(key => string.startsWith(key))[0];
 }
+
+// Split "cat,dog,   cow, goat" -> ["cat", "dog", "cow", "goat"]
+export function splitByChar(line: string, splitCharacter: string) {
+  return line.split(splitCharacter).map(phrase => phrase.trim());
+}

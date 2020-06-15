@@ -9,7 +9,6 @@ import GameObjective from '../objective/GameObjective';
 import CharacterParser from './CharacterParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import ObjectiveParser from './ObjectiveParser';
-import LocationSelectChapter from '../scenes/LocationSelectChapter';
 
 class Parser {
   private static parserMap: object;
@@ -40,14 +39,12 @@ class Parser {
       fileName = stripEnclosingChars(fileName, 2);
       const parserType = matchStartingKey(Parser.parserMap, fileName);
       if (!parserType) {
-        throw new Error('Unknown parser type');
+        throw new Error(`Unknown parser type ${fileName}`);
       }
       const parserFunction = Parser.parserMap[parserType];
       parserFunction(chapter, fileName, fileContent);
     });
 
-    console.log(chapter);
-    console.log(LocationSelectChapter);
     return chapter;
   }
 }

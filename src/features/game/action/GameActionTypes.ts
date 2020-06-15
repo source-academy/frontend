@@ -12,19 +12,8 @@ export enum GameActionType {
   ChangeBackground = 'ChangeBackground'
 }
 
-export const stringToActionType = {
-  moveCharacter: GameActionType.MoveCharacter,
-  updateCharacter: GameActionType.UpdateCharacter,
-  collectible: GameActionType.Collectible,
-  updateChecklist: GameActionType.UpdateChecklist,
-  locationChange: GameActionType.LocationChange,
-  addItem: GameActionType.AddItem,
-  removeItem: GameActionType.RemoveItem,
-  changeBackground: GameActionType.ChangeBackground
-};
-
 export interface IGameActionable {
-  actions: GameAction[];
+  actions?: GameAction[];
 }
 
 export type ActionCondition = {
@@ -36,18 +25,18 @@ export type ActionCondition = {
 export type GameAction = {
   actionType: GameActionType;
   actionParams: any;
-  conditionals?: ActionCondition[];
+  actionConditions?: ActionCondition[];
 };
 
 export function createGameAction(
-  action: string,
+  actionType: GameActionType,
   actionParams: any,
-  actionCondition?: ActionCondition[]
-) {
+  actionConditions?: ActionCondition[]
+): GameAction {
   return {
-    actionType: stringToActionType[action],
+    actionType: actionType,
     actionParams,
-    actionCondition: actionCondition || []
+    actionConditions: actionConditions || []
   };
 }
 

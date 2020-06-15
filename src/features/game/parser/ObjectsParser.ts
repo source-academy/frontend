@@ -5,8 +5,6 @@ import { ItemId } from '../commons/CommonsTypes';
 import { GameChapter } from '../chapter/GameChapterTypes';
 
 export default function ObjectParser(chapter: GameChapter, fileName: string, fileContent: string) {
-  console.log('Parsing objects...');
-
   const lines = splitToLines(fileContent);
   const locationRawObjectsMap = mapByHeader(lines, (str: string) => true);
   const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
