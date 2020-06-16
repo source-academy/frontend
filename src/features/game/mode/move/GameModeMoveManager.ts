@@ -23,7 +23,7 @@ class GameModeMoveManager {
     }
     const navigation = chapter.map.getNavigationFrom(locationId) || [];
     const locations = chapter.map.getLocations();
-    return new GameModeMove(location.name, navigation, locations);
+    return new GameModeMove(location.id, navigation, locations);
   }
 }
 

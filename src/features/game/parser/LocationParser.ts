@@ -1,47 +1,41 @@
-import { GameChapter } from '../chapter/GameChapterTypes';
+import Parser from './Parser';
 import { splitToLines, stripEnclosingChars, splitByChar } from './ParserHelper';
 import { Constants } from '../commons/CommonConstants';
-import { textToGameModeMap } from './ParserConstants';
-import { capitalise } from '../utils/StringUtils';
+import { GameMode } from '../mode/GameModeTypes';
 
-function locationKey(shortPath: string) {
+function locationAssetKey(shortPath: string) {
   return shortPath;
 }
 
-function locationLongPath(shortPath: string) {
+function locationAssetValue(shortPath: string) {
   const [location, skin] = shortPath.split('/');
   return Constants.assetsFolder + '/locations/' + location + '/' + (skin || 'normal') + '.png';
 }
 
-export default function LocationParser(
-  chapter: GameChapter,
-  fileName: string,
-  fileContent: string
-) {
-  const gameMap = chapter.map;
+export default function LocationParser(fileName: string, fileContent: string): void {
+  const gameMap = Parser.chapter.map;
   const [locationAssets, locationModes, navigation] = fileContent.split('\n$\n');
 
   const locationIds: string[] = [];
 
   // Parse and load location assets
   splitToLines(locationAssets).forEach(locationAsset => {
-    const [locationId, shortPath, fullLocationName] = splitByChar(locationAsset, ',');
-    const locationName = stripEnclosingChars(fullLocationName);
+    const [id, shortPath, name] = splitByChar(locationAsset, ',');
 
-    locationIds.push(locationId);
-    gameMap.addLocation(locationId, {
-      id: locationId,
-      name: locationName,
-      assetKey: locationKey(shortPath)
+    locationIds.push(id);
+    gameMap.addLocation(id, {
+      id,
+      name,
+      assetKey: locationAssetKey(shortPath)
     });
-    gameMap.addMapAsset(locationKey(shortPath), locationLongPath(shortPath));
+    gameMap.addMapAsset(locationAssetKey(shortPath), locationAssetValue(shortPath));
   });
 
   // Parse modes per location
   splitToLines(locationModes).forEach((modes, modeIndex) => {
     const formattedModeNames = stripEnclosingChars(modes)
       .split(' ')
-      .map(mode => textToGameModeMap[capitalise(mode)]);
+      .map(mode => textToGameModeMap[mode]);
     gameMap.setModesAt(locationIds[modeIndex], formattedModeNames);
   });
 
@@ -51,3 +45,10 @@ export default function LocationParser(
     gameMap.setNavigationFrom(locationId, connectedTo.split(', '));
   });
 }
+
+export const textToGameModeMap = {
+  talk: GameMode.Talk,
+  explore: GameMode.Explore,
+  move: GameMode.Move,
+  menu: GameMode.Menu
+};

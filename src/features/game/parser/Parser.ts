@@ -1,17 +1,18 @@
-import GameMap from '../location/GameMap';
 import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
-import GameObjective from '../objective/GameObjective';
 import CharacterParser from './CharacterParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import ObjectiveParser from './ObjectiveParser';
+import GameMap from '../location/GameMap';
+import GameObjective from '../objective/GameObjective';
 
 class Parser {
   private static parserMap: object;
+  public static chapter: GameChapter;
 
   public static parse(chapterText: string): GameChapter {
     Parser.parserMap = {
@@ -24,7 +25,7 @@ class Parser {
       objectives: ObjectiveParser
     };
 
-    const chapter = {
+    Parser.chapter = {
       configuration: '',
       map: new GameMap(),
       startingLoc: '',
@@ -42,10 +43,10 @@ class Parser {
         throw new Error(`Unknown parser type ${fileName}`);
       }
       const parserFunction = Parser.parserMap[parserType];
-      parserFunction(chapter, fileName, fileContent);
+      parserFunction(fileName, fileContent);
     });
 
-    return chapter;
+    return this.chapter;
   }
 }
 

@@ -5,11 +5,12 @@ import {
   ActionCondition,
   GameActionType
 } from '../action/GameActionTypes';
-import { splitByChar, stripEnclosingChars, enclosedBySquareBrackets } from './ParserHelper';
+import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from './ParserHelper';
 import { GameStateStorage } from '../state/GameStateTypes';
+import { textToGameModeMap } from './LocationParser';
 
-export default function ActionParser(actionText: string): GameAction[] {
-  return actionText.split(',').map(parseAction);
+export default function ActionParser(actionText: string[]): GameAction[] {
+  return actionText.map(parseAction);
 }
 
 // converts full action string (with conditions) to action object
@@ -33,7 +34,7 @@ function strToAction(actionString: string): GameAction {
   const actionType = stringToActionType[action];
 
   let actionParams;
-  if (enclosedBySquareBrackets(actionParamString)) {
+  if (isEnclosedBySquareBrackets(actionParamString)) {
     actionParams = splitByChar(stripEnclosingChars(actionParamString), ' ');
   } else {
     actionParams = [actionParamString];
@@ -52,6 +53,12 @@ function strToAction(actionString: string): GameAction {
       actionParamObj.attr = actionParams[0];
       actionParamObj.locationId = actionParams[1];
       actionParamObj.id = actionParams[2];
+      break;
+    case GameActionType.AddLocationMode:
+    case GameActionType.RemoveLocationMode:
+      actionParamObj.locationId = actionParams[0];
+      actionParamObj.mode = textToGameModeMap[actionParams[1]];
+      break;
   }
 
   return createGameAction(actionType, actionParamObj);
@@ -66,7 +73,9 @@ export const stringToActionType = {
   addItem: GameActionType.AddItem,
   removeItem: GameActionType.RemoveItem,
   changeBackground: GameActionType.ChangeBackground,
-  bringUpDialogue: GameActionType.BringUpDialogue
+  bringUpDialogue: GameActionType.BringUpDialogue,
+  addLocationMode: GameActionType.AddLocationMode,
+  removeLocationMode: GameActionType.RemoveLocationMode
 };
 
 /*

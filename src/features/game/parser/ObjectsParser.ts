@@ -1,59 +1,72 @@
-import { splitToLines, mapByHeader } from './ParserHelper';
-import { mapValues } from '../utils/GameUtils';
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { ItemId } from '../commons/CommonsTypes';
-import { GameChapter } from '../chapter/GameChapterTypes';
+import { splitToLines, mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
+import { LocationId } from '../location/GameMapTypes';
+import Parser from './Parser';
+import { GameItemTypeDetails } from '../location/GameMapConstants';
+import { Constants } from '../commons/CommonConstants';
+import ActionParser from './ActionParser';
 
-export default function ObjectParser(chapter: GameChapter, fileName: string, fileContent: string) {
-  const lines = splitToLines(fileContent);
-  const locationRawObjectsMap = mapByHeader(lines, (str: string) => true);
-  const objectsMap = mapValues(locationRawObjectsMap, objPropertyMapper);
-  return objectsMap;
+function objectAssetKey(shortPath: string) {
+  return shortPath;
 }
 
-function objPropertyMapper(objectsList: string[]): Map<ItemId, ObjectProperty> {
+function objectAssetValue(shortPath: string) {
+  const [texture, skin] = shortPath.split('/');
+  return `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
+}
+
+export default function ObjectParser(fileName: string, fileContent: string) {
+  const lines: string[] = splitToLines(fileContent);
+  const locationRawObjectsMap: Map<LocationId, string[]> = mapByHeader(
+    lines,
+    isEnclosedBySquareBrackets
+  );
+
+  locationRawObjectsMap.forEach(addObjectListToLoc);
+}
+
+function addObjectListToLoc(objectsList: string[], locationId: LocationId): void {
   const separatorIndex = objectsList.findIndex(object => object === '$');
   const objectDetails = objectsList.slice(0, separatorIndex);
 
-  const objectPropertyMap = new Map<ItemId, ObjectProperty>();
+  // Parse basic object
   objectDetails.forEach(objectDetail => {
-    const [objectId, assetKey, x, y] = objectDetail.split(', ');
-    objectPropertyMap.set(objectId, {
-      assetKey,
+    const toAddToMap = objectDetail && objectDetail[0] === '+';
+    if (toAddToMap) {
+      objectDetail = objectDetail.slice(1);
+    }
+
+    const [objectId, shortPath, x, y, width, height] = splitByChar(objectDetail, ',');
+
+    const object = {
+      assetKey: objectAssetKey(shortPath),
       x: parseInt(x),
       y: parseInt(y),
+      width: parseInt(width) || undefined,
+      height: parseInt(height) || undefined,
       isInteractive: false,
       interactionId: objectId
-    });
+    };
+
+    Parser.chapter.map.addItemToMap(GameItemTypeDetails.Object, objectId, object);
+
+    Parser.chapter.map.addMapAsset(objectAssetKey(shortPath), objectAssetValue(shortPath));
+
+    if (toAddToMap) {
+      Parser.chapter.map.setItemAt(locationId, GameItemTypeDetails.Object, objectId);
+    }
   });
 
+  // Parse actions
   if (separatorIndex !== -1) {
-    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length - 1);
-
+    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length);
     objectActions.forEach(objectDetail => {
       const [objectId, ...actions] = objectDetail.split(', ');
-      const objectProperty = objectPropertyMap.get(objectId);
-      objectProperty && (objectProperty.actions = actions);
+
+      const objectProperty = Parser.chapter.map.getObjects().get(objectId);
+      if (objectProperty) {
+        objectProperty.actions = ActionParser(actions);
+        objectProperty.isInteractive = true;
+      }
     });
   }
-
-  return objectPropertyMap;
 }
-
-// function loadObjectsAssetsFromText(scene: Phaser.Scene, text: string) {
-//   const locationObjectsMap = mapObjectsByLocation(text);
-//   locationObjectsMap.forEach(objectList => {
-//     for (const objectDetail of objectList) {
-//       if (objectDetail === '$') break;
-
-//       const [, texture] = objectDetail.split(', ');
-//       loadObject(scene, texture);
-//     }
-//   });
-// }
-
-// const loadObject = (scene: Phaser.Scene, imagePath: string) => {
-//   const [texture, skin] = imagePath.split('/');
-//   const fullObjectPath = `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
-//   scene.load.image(imagePath, fullObjectPath);
-// };

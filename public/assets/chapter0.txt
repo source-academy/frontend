@@ -2,11 +2,11 @@
 startingLoc: room
 
 <<location>>
-crashsite, crashSite, "Crash Site"
-classroom, classroom/classOn, "Class Room"
-emergency, classroom/emergency, "Emergency"
-hallway, hallway, "Hallway"
-room, yourRoom-dim, "Student Room"
+crashsite, crashSite, Crash Site
+classroom, classroom/classOn, Class Room
+emergency, classroom/emergency, Emergency
+hallway, hallway, Hallway
+room, yourRoom-dim, Student Room
 $
 [talk move]
 [explore talk move]
@@ -16,16 +16,17 @@ $
 $
 classroom: crashsite, hallway
 crashsite: classroom
-hallway: classroom, classroom, emergency
+hallway: classroom, room, emergency
 room: hallway
 emergency: hallway
 
 <<characters>>
 [room]
-+scottie, "Scottie", sad, left
++scottie, Scottie, sad, left
 
 [hallway]
-+beat, "Beat", happy, right
++beat, Beat, happy, right
+hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
 visit, "Visit Hallway"
@@ -34,14 +35,14 @@ talk, "Talk at Classroom"
 <<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
-+yourChair, yourChair, 932, 549
++yourChair, yourChair, 932, 549, 30, 30
 +door6, door/yourRoom-dim, 831, 270
 +yourBed, yourHeadphones, 372, 514
-+apple, door/yourRoom-dim, 0, 0
+yourOtherDoor, door/yourRoom-dim, 0, 0
 $
-#yourChair, addItem: [room yourCarpet] if checklist.visit, bringUpDialogue: dialogue1
-#yourCarpet, collectible: cookies
-#door7, move: [door6, 7, 18], addItem: apple
+yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
+yourCarpet, collectible: cookies if checklist.visit
+door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, addLocationMode: [hallway talk], addItem: [talkTopics hallway dialogue4]
 
 <<boundingBoxes>>
 [room]
@@ -54,6 +55,22 @@ $
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
 room: +dialogue1
+
+
+<<dialogue4>>
+title: You found me
+[part0]
+Wow, I see you've used the power of source and found me
+
+<<dialogue3>>
+title: Carpet
+[part0]
+Hartin Menz is now standing outside the hallway
+
+<<dialogue2>>
+title: Carpet
+[part0]
+You found the other carpet! Go out and come back to see it :)
 
 <<dialogue1>>
 title: What happened?
@@ -72,7 +89,7 @@ The Source Academy!
 [Goto part2]
 
 [part2]
-$you, tired
+$you tired
 Whew... That was a long trip. It feels like I was on that shuttle for a thousand years.
 I guess this is the Source Academy. It’s much bigger than my high school back on Earth. It’s hard to believe this is a space station.
 $narrator
@@ -85,7 +102,7 @@ Now, the message I got last week says I’m supposed to find my dorm room the mi
 Oh hi, you must be our last recruit! Everyone else is already getting settled in.
 $narrator
 The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
-$scottie
+$scottie happy
 If you exit through that door, the elevator will take you up to the hallway. From there you can access the rest of the ship. Follow the sign at the end of the corridor and you'll find the student quarters. Off you go now!
 $you
 Oh, um, thanks!

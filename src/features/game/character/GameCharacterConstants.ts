@@ -1,7 +1,7 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { Color } from '../utils/styles';
 
-export const charWidth = 900;
+export const charWidth = 700;
 const charXOffset = 350;
 
 export const charRect = {
@@ -13,16 +13,14 @@ export const charRect = {
 export const textPadding = 10;
 
 export const speakerRect = {
-  x: 220,
-  y: 750,
-  width: 300,
-  height: 50
+  x: 300,
+  y: 730
 };
 
 export const speakerTextStyle = {
-  fontFamily: 'Arial',
+  fontFamily: 'Helvetica',
   fontSize: '36px',
-  fill: Color.white,
+  fill: Color.lightBlue,
   align: 'left',
   lineSpacing: 10
 };

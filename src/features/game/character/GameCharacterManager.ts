@@ -1,5 +1,5 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { screenSize } from '../commons/CommonConstants';
+import { screenSize, screenCenter } from '../commons/CommonConstants';
 import {
   charRect,
   charWidth,
@@ -12,7 +12,7 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
-import { speechBox } from '../commons/CommonAssets';
+import { speakerBox } from '../commons/CommonAssets';
 import { capitalise } from '../utils/StringUtils';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 
@@ -100,12 +100,10 @@ export default class CharacterManager {
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
     const rectangle = new Phaser.GameObjects.Image(
       gameManager,
-      speakerRect.x,
-      speakerRect.y,
-      speechBox.key
-    )
-      .setDisplaySize(speakerRect.width, speakerRect.height)
-      .setAlpha(0.8);
+      screenCenter.x,
+      screenCenter.y,
+      speakerBox.key
+    ).setAlpha(0.8);
 
     const speakerText = new Phaser.GameObjects.Text(
       gameManager,

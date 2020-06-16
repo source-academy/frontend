@@ -12,31 +12,15 @@ export const dialogueRect = {
 };
 
 export const textPadding = {
-  x: 60,
-  y: 90
-};
-
-export const speakerRect = {
-  x: 120,
-  y: 100,
-  width: 300,
-  height: 100,
-  assetKey: 'speechbox'
+  x: 100,
+  y: 70
 };
 
 export const typeWriterTextStyle = {
-  fontFamily: 'Arial',
+  fontFamily: 'Helvetica',
   fontSize: '36px',
-  fill: Color.white,
+  fill: Color.lightBlue,
   align: 'left',
   lineSpacing: 10,
   wordWrap: { width: dialogueRect.width - textPadding.x * 2 - dialogueRectMargin * 2 }
-};
-
-export const speakerTextStyle = {
-  fontFamily: 'Arial',
-  fontSize: '36px',
-  fill: Color.white,
-  align: 'left',
-  lineSpacing: 10
 };

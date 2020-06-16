@@ -1,8 +1,8 @@
-import { GameChapter } from '../chapter/GameChapterTypes';
 import { splitToLines } from './ParserHelper';
+import Parser from './Parser';
 
-export default function ConfigParser(chapter: GameChapter, fileName: string, fileContent: string) {
+export default function ConfigParser(fileName: string, fileContent: string): void {
   const textFile = splitToLines(fileContent);
   const [, startingLoc] = textFile[0].split(': ');
-  chapter.startingLoc = startingLoc;
+  Parser.chapter.startingLoc = startingLoc;
 }

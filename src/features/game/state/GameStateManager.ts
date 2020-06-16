@@ -130,18 +130,20 @@ class GameStateManager {
     return location ? location.modes : undefined;
   }
 
-  public addLocationMode(currLocName: string, locationId: LocationId, mode: GameMode) {
-    this.checkLocationsExist([currLocName, locationId]);
+  public addLocationMode(locationId: LocationId, mode: GameMode) {
+    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    this.checkLocationsExist([locationId]);
 
     if (this.locationStates.get(locationId)!.modes) {
       this.locationStates.get(locationId)!.modes = [];
     }
     this.locationStates.get(locationId)!.modes!.push(mode);
-    this.updateLocationStateMode(currLocName, locationId, GameMode.Menu);
+    this.updateLocationStateMode(currLocId, locationId, GameMode.Menu);
   }
 
-  public removeLocationMode(currLocName: string, locationId: LocationId, mode: GameMode) {
-    this.checkLocationsExist([currLocName, locationId]);
+  public removeLocationMode(locationId: LocationId, mode: GameMode) {
+    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    this.checkLocationsExist([locationId]);
 
     if (this.locationStates.get(locationId)!.modes) {
       return;
@@ -150,7 +152,7 @@ class GameStateManager {
       .get(locationId)!
       .modes!.filter((oldAttr: string) => oldAttr !== mode);
     this.locationStates.get(locationId)!.modes = newAttr;
-    this.updateLocationStateMode(currLocName, locationId, GameMode.Menu);
+    this.updateLocationStateMode(currLocId, locationId, GameMode.Menu);
   }
 
   ///////////////////////////////
@@ -169,6 +171,7 @@ class GameStateManager {
     if (!this.locationStates.get(locationId)![attr]) {
       this.locationStates.get(locationId)![attr] = [];
     }
+
     this.locationStates.get(locationId)![attr]!.push(attrElem);
     this.updateLocationStateAttr(currLocName, locationId, attr);
   }
