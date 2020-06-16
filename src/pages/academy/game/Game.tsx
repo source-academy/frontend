@@ -6,7 +6,7 @@ import StoryChapterSelect from 'src/features/game/storyChapterSelect/StoryChapte
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import GameManager from './subcomponents/GameManager';
-import MainMenu from 'src/features/game/storyChapterSelect/StoryChapterSelect';
+import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
