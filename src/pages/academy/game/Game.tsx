@@ -29,8 +29,8 @@ function Game() {
       return;
     }
 
-    game.scene.add('MainMenu', MainMenu);
-    game.scene.add('StoryChapterSelect', StoryChapterSelect, true, {
+    game.scene.add('MainMenu', MainMenu, true);
+    game.scene.add('StoryChapterSelect', StoryChapterSelect, false, {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken
     });
