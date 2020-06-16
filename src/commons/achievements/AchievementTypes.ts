@@ -6,6 +6,13 @@ export enum AchievementAbility {
   EXPLORATION = 'Exploration'
 }
 
+export const achievementAbilities = [
+  AchievementAbility.ACADEMIC,
+  AchievementAbility.COMMUNITY,
+  AchievementAbility.EFFORT,
+  AchievementAbility.EXPLORATION
+];
+
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline

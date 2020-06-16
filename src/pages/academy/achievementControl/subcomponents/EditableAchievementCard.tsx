@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 
-import { Card, Icon, EditableText } from '@blueprintjs/core';
+import { Card, Icon, EditableText, MenuItem, Button, Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
-import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
+import {
+  AchievementItem,
+  AchievementAbility,
+  achievementAbilities
+} from '../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from '../../achievements/subcomponents/utils/AchievementDeadline';
 import AchievementExp from '../../achievements/subcomponents/utils/AchievementExp';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -42,6 +47,39 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
   };
 
+  const abilityRenderer: ItemRenderer<AchievementAbility> = (ability, { handleClick }) => (
+    <MenuItem active={false} key={ability.toString()} onClick={handleClick} text={ability} />
+  );
+
+  const AbilitySelectComponent = Select.ofType<AchievementAbility>();
+
+  const abilitySelector = (currentAbility: AchievementAbility) => {
+    return (
+      <div>
+        <Button className={Classes.MINIMAL} text={currentAbility} />
+      </div>
+    );
+  };
+
+  const handleAbilitySelect = (ability: AchievementAbility, e: any) => {
+    setAchievementData({
+      ...achievementData,
+      ability: ability
+    });
+  };
+
+  const abilitySelect = () => (
+    <AbilitySelectComponent
+      className={Classes.MINIMAL}
+      items={achievementAbilities}
+      onItemSelect={handleAbilitySelect}
+      itemRenderer={abilityRenderer}
+      filterable={false}
+    >
+      {abilitySelector(ability)}
+    </AbilitySelectComponent>
+  );
+
   return (
     <Card className="achievement">
       <div className="main">
@@ -55,9 +93,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           </div>
 
           <div className="details">
-            <div className="ability">
-              <p>{ability}</p>
-            </div>
+            <div className="ability">{abilitySelect()}</div>
 
             <AchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
 
