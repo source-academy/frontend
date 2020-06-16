@@ -1,12 +1,11 @@
 import React from 'react';
 
-import { Card, Button } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementHints from '../utils/AchievementHints';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
-import { IconNames } from '@blueprintjs/icons';
 
 type PrerequisiteCardProps = {
   achievement: AchievementItem;
@@ -15,19 +14,10 @@ type PrerequisiteCardProps = {
   progress: number;
   shouldPartiallyRender: boolean;
   displayModal: any;
-  isEditable: boolean;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const {
-    achievement,
-    exp,
-    deadline,
-    progress,
-    shouldPartiallyRender,
-    displayModal,
-    isEditable
-  } = props;
+  const { achievement, exp, deadline, progress, shouldPartiallyRender, displayModal } = props;
   const { id, title, status } = achievement;
 
   return (
@@ -36,8 +26,6 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
       style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
       onClick={displayModal(id)}
     >
-      {isEditable ? <Button minimal={true} className="delete" icon={IconNames.CROSS} /> : <></>}
-
       <AchievementHints status={status} />
 
       <div className="main">

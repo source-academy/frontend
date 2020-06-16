@@ -16,7 +16,6 @@ type AchievementTaskProps = {
   filterStatus: FilterStatus;
   setModalID: any;
   removeItem: any;
-  isEditable: boolean;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
@@ -26,7 +25,6 @@ function AchievementTask(props: AchievementTaskProps) {
     filterStatus,
     setModalID,
     studentProgress,
-    isEditable,
     removeItem
   } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
@@ -171,7 +169,6 @@ function AchievementTask(props: AchievementTaskProps) {
             toggleDropdown={togglePrerequisitesDropdown}
             displayModal={displayModal}
             removeItem={removeItem}
-            isEditable={isEditable}
           />
           {isDropdownOpen ? (
             <ul>
@@ -185,7 +182,6 @@ function AchievementTask(props: AchievementTaskProps) {
                       progress={getAchievementProgress(prerequisite)}
                       displayModal={displayModal}
                       shouldPartiallyRender={!shouldRender(prerequisite)}
-                      isEditable={isEditable}
                     />
                   </div>
                 </li>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Card, Icon, Button } from '@blueprintjs/core';
+import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from '../utils/AchievementDeadline';
@@ -18,7 +18,6 @@ type AchievementCardProps = {
   toggleDropdown: any;
   displayModal: any;
   removeItem: any;
-  isEditable: boolean;
 };
 
 function AchievementCard(props: AchievementCardProps) {
@@ -31,12 +30,9 @@ function AchievementCard(props: AchievementCardProps) {
     hasDropdown,
     isDropdownOpen,
     toggleDropdown,
-    displayModal,
-    isEditable
+    displayModal
   } = props;
   const { id, title, ability, status } = achievement;
-
-  const hack = () => {};
 
   return (
     <Card
@@ -45,12 +41,6 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      {isEditable ? (
-        <Button minimal={true} className="delete" icon={IconNames.CROSS} onClick={hack} />
-      ) : (
-        <></>
-      )}
-
       <AchievementHints status={status} />
 
       <div className="main">

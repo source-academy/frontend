@@ -78,7 +78,6 @@ export const mapAchievementDictToTask = (
         filterStatus={filterStatus}
         setModalID={setModalID}
         removeItem={removeItem}
-        isEditable={isEditable}
       />
     ));
 };
