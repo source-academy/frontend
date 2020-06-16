@@ -1,4 +1,4 @@
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';

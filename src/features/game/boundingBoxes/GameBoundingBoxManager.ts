@@ -1,4 +1,4 @@
-import GameManager from 'src/pages/academy/game/subcomponents/GameManager';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';

@@ -1,9 +1,9 @@
 import { screenCenter, screenSize, Constants } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
-import { backgroundImageUrl } from 'src/features/game/storyChapterSelect/StoryChapterSelectConstants';
-import { addLoadingScreen } from '../utils/LoadingScreen';
-import { Color } from '../utils/styles';
-import { fadeOut } from '../effects/FadeEffect';
+import { backgroundImageUrl } from 'src/features/game/scenes/chapterSelect/ChapterSelectConstants';
+import { addLoadingScreen } from '../../utils/LoadingScreen';
+import { Color } from '../../utils/styles';
+import { fadeOut } from '../../effects/FadeEffect';
 import { ChapterDetail, SampleChapters } from './SampleChapters';
 import { RequestOptions } from 'https';
 
@@ -47,7 +47,7 @@ export type RequestFn = (
   opts: RequestOptions
 ) => Promise<Response | null>;
 
-class StoryChapterSelect extends Phaser.Scene {
+class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Container | undefined;
   private scrollSpeed: number;
   private chapterDetails: ChapterDetail[];
@@ -55,7 +55,7 @@ class StoryChapterSelect extends Phaser.Scene {
   private accountInfo: AccountInfo | undefined;
 
   constructor() {
-    super('StoryChapterSelect');
+    super('ChapterSelect');
     this.scrollSpeed = 10;
     this.chapterDetails = SampleChapters;
   }
@@ -132,11 +132,7 @@ class StoryChapterSelect extends Phaser.Scene {
   }
 }
 
-function createChapter(
-  scene: StoryChapterSelect,
-  { title, fileName }: ChapterDetail,
-  index: number
-) {
+function createChapter(scene: ChapterSelect, { title, fileName }: ChapterDetail, index: number) {
   const [x, y] = getCoorByChapter(index);
   const image = new Image(scene, 0, 0, `chapterImage${index}`).setDisplaySize(
     imageRect.width,
@@ -179,4 +175,4 @@ function getCoorByChapter(chapterNum: number) {
   return [x, y];
 }
 
-export default StoryChapterSelect;
+export default ChapterSelect;

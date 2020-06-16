@@ -2,8 +2,8 @@ import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import GameMap from 'src/features/game/location/GameMap';
 import { GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
 import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
-import LocationSelectChapter from '../../../../features/game/scenes/LocationSelectChapter';
-import GameActionManager from '../../../../features/game/action/GameActionManager';
+import LocationSelectChapter from '../LocationSelectChapter';
+import GameActionManager from '../../action/GameActionManager';
 import GameModeManager from 'src/features/game/mode/GameModeManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
@@ -21,7 +21,7 @@ import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
-import { AccountInfo } from 'src/features/game/storyChapterSelect/StoryChapterSelect';
+import { AccountInfo } from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;

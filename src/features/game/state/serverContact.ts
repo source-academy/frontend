@@ -1,4 +1,4 @@
-import { AccountInfo } from '../storyChapterSelect/StoryChapterSelect';
+import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
 import Constants from 'src/commons/utils/Constants';
 
 export async function saveData(

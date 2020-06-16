@@ -1,4 +1,4 @@
-import GameManager from '../../../pages/academy/game/subcomponents/GameManager';
+import GameManager from '../scenes/gameManager/GameManager';
 import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';

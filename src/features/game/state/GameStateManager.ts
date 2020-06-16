@@ -6,7 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { AccountInfo } from '../storyChapterSelect/StoryChapterSelect';
+import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
 import { saveData } from './serverContact';
 
 class GameStateManager {

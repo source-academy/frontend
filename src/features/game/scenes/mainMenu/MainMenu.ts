@@ -13,6 +13,7 @@ import {
   onFocusOptTween,
   outFocusOptTween
 } from './MainMenuConstants';
+import { addLoadingScreen } from '../../utils/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -29,6 +30,7 @@ class MainMenu extends Phaser.Scene {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.createOptionButtons();
+    addLoadingScreen(this);
   }
 
   public create() {
@@ -100,7 +102,7 @@ class MainMenu extends Phaser.Scene {
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
-        this.scene.start('StoryChapterSelect');
+        this.scene.start('ChapterSelect');
       },
       nullInteractionId
     );
