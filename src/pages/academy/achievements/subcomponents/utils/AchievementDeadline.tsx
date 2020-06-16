@@ -1,33 +1,31 @@
-import React, { useState } from 'react';
-import { Icon, Button, Dialog } from '@blueprintjs/core';
+import React from 'react';
+import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { DatePicker } from '@blueprintjs/datetime';
 
 type AchievementDeadlineProps = {
   deadline?: Date;
-  changeDeadline?: any;
 };
 
 function AchievementDeadline(props: AchievementDeadlineProps) {
-  const { deadline, changeDeadline } = props;
-  const [isOpen, setOpen] = useState<boolean>(false);
-
-  /* ---------- Date constants ---------- */
-  const daysPerWeek = 7;
-  const hoursPerDay = 24;
-  const millisecondsPerHour = 3600000;
-
-  /* -------- Helper for Deadline -------- */
-  const isExpired = (deadline: Date): boolean => deadline.getTime() < new Date().getTime();
-  const getHoursAway = (deadline: Date): number =>
-    (deadline.getTime() - new Date().getTime()) / millisecondsPerHour;
-  const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;
-  const getWeeksAway = (deadline: Date): number => getDaysAway(deadline) / daysPerWeek;
+  const { deadline } = props;
 
   // Converts Date to user friendly date string
   const prettifyDeadline = (deadline: Date | undefined) => {
+    /* ---------- Date constants ---------- */
+    const daysPerWeek = 7;
+    const hoursPerDay = 24;
+    const millisecondsPerHour = 3600000;
+
+    /* -------- Helper for Deadline -------- */
+    const isExpired = (deadline: Date): boolean => deadline.getTime() < new Date().getTime();
+    const getHoursAway = (deadline: Date): number =>
+      (deadline.getTime() - new Date().getTime()) / millisecondsPerHour;
+    const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;
+    const getWeeksAway = (deadline: Date): number => getDaysAway(deadline) / daysPerWeek;
+
+    /* -------- Prettifies Deadline -------- */
     if (deadline === undefined) {
-      return '';
+      return 'Unlimited';
     } else if (isExpired(deadline)) {
       return 'Expired';
     }
@@ -36,73 +34,26 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
     const daysAway = Math.ceil(getDaysAway(deadline));
     const hoursAway = Math.ceil(getHoursAway(deadline));
 
+    let prettifiedDeadline = '';
     if (weeksAway > 1) {
-      return weeksAway + ' Weeks';
+      prettifiedDeadline = weeksAway + ' Weeks';
     } else if (daysAway > 1) {
-      return daysAway + ' Days';
+      prettifiedDeadline = daysAway + ' Days';
     } else if (hoursAway > 1) {
-      return hoursAway + ' Hours';
+      prettifiedDeadline = hoursAway + ' Hours';
     } else {
-      return 'Less than 1 hour';
+      prettifiedDeadline = 'Less than 1 hour';
     }
+
+    return prettifiedDeadline;
   };
 
   return (
-    <>
-      {deadline === undefined ? null : (
-        <div className="deadline">
-          {changeDeadline === undefined ? (
-            <>
-              <Icon icon={IconNames.STOPWATCH} />
-              <p>{prettifyDeadline(deadline)}</p>
-            </>
-          ) : (
-            <>
-              <div>
-                <Button onClick={() => setOpen(!isOpen)}>
-                  <Icon icon={IconNames.STOPWATCH} />
-                  <p>{prettifyDeadline(deadline)}</p>
-                </Button>
-              </div>
-              <div>
-                <Dialog
-                  onClose={() => setOpen(!isOpen)}
-                  isOpen={isOpen}
-                  title="Edit Achievement Deadline"
-                >
-                  <DatePicker
-                    timePickerProps={{ showArrowButtons: true }}
-                    value={deadline}
-                    onChange={changeDeadline}
-                  />
-                </Dialog>
-              </div>
-            </>
-          )}
-        </div>
-      )}
-    </>
+    <div className="deadline">
+      <Icon icon={IconNames.STOPWATCH} />
+      <p>{prettifyDeadline(deadline)}</p>
+    </div>
   );
 }
 
 export default AchievementDeadline;
-
-/*
-   <div>
-          <Button onClick={() => setOpen(!isOpen)} text={isOpen.toString()}> </Button>
-        </div>
-        <div>
-          <Dialog 
-            onClose={() => setOpen(!isOpen)} 
-            isOpen={isOpen} 
-            title="About"
-          >
-            <DatePicker
-              timePickerProps={{ showArrowButtons: true }}
-              value={deadline}
-              onChange={changeDeadline}
-            />
-
-          </Dialog>
-        </div>
-*/

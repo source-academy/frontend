@@ -60,8 +60,8 @@ const countItemByFilterStatus = (
 export const mapAchievementDictToTask = (
   achievementDict: { [id: number]: AchievementItem },
   filterStatus: FilterStatus,
-  setModalID: any,
-  studentProgress: { [id: number]: AchievementProgress }
+  studentProgress: { [id: number]: AchievementProgress },
+  setModalID?: any | undefined
 ) => {
   return Object.values(achievementDict)
     .filter(achievement => achievement.isTask)
@@ -107,7 +107,8 @@ function Achievement() {
 
         <div className="cards">
           <ul className="display-list">
-            {mapAchievementDictToTask(achievementDict, filterStatus, setModalID, studentProgress)}
+            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, setModalID)}{' '}
+            // this is what the achievement page looks like
           </ul>
         </div>
 

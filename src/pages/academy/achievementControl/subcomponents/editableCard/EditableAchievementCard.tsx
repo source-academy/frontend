@@ -6,11 +6,11 @@ import { IconNames } from '@blueprintjs/icons';
 import {
   AchievementItem,
   AchievementAbility
-} from '../../../../commons/achievements/AchievementTypes';
-import AchievementDeadline from '../../achievements/subcomponents/utils/AchievementDeadline';
-import AchievementExp from '../../achievements/subcomponents/utils/AchievementExp';
+} from '../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementTitle from './EditableAchievementTitle';
-import AchievementAbilitySelect from './AchievementAbilitySelect';
+import EditableAchievementAbility from './EditableAchievementAbility';
+import EditableAchievementDeadline from './EditableAchievementDeadline';
+import EditableAchievementExp from './EditableAchievementExp';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -29,10 +29,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
   };
 
-  const changeExpValue = (expValue: number) => {
+  const changeExp = (exp: number) => {
     setAchievementData({
       ...achievementData,
-      exp: expValue
+      exp: exp
     });
   };
 
@@ -61,11 +61,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           <EditableAchievementTitle title={title} changeTitle={changeTitle} />
 
           <div className="details">
-            <AchievementAbilitySelect ability={ability} changeAbility={changeAbility} />
+            <EditableAchievementAbility ability={ability} changeAbility={changeAbility} />
 
-            <AchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
+            <EditableAchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
 
-            <AchievementExp exp={exp} changeExpValue={changeExpValue} />
+            <EditableAchievementExp exp={exp} changeExp={changeExp} />
           </div>
         </div>
       </div>

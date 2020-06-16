@@ -12,13 +12,7 @@ function EditableAchievementTitle(props: EditableAchievementTitleProps) {
   return (
     <div>
       <h1>
-        <EditableText
-          placeholder={`Enter your title here`}
-          value={title}
-          onChange={value => {
-            changeTitle(value);
-          }}
-        />
+        <EditableText placeholder={`Enter your title here`} value={title} onChange={changeTitle} />
       </h1>
     </div>
   );

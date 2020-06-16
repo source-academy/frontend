@@ -6,14 +6,14 @@ import { MenuItem, Button, Classes } from '@blueprintjs/core';
 import {
   AchievementAbility,
   achievementAbilities
-} from '../../../../commons/achievements/AchievementTypes';
+} from '../../../../../commons/achievements/AchievementTypes';
 
-type AchievementAbilitySelectProps = {
+type EditableAchievementAbilityProps = {
   ability: AchievementAbility;
   changeAbility: any;
 };
 
-function AchievementAbilitySelect(props: AchievementAbilitySelectProps) {
+function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
   const { ability, changeAbility } = props;
 
   const abilityRenderer: ItemRenderer<AchievementAbility> = (ability, { handleClick }) => (
@@ -45,4 +45,4 @@ function AchievementAbilitySelect(props: AchievementAbilitySelectProps) {
   );
 }
 
-export default AchievementAbilitySelect;
+export default EditableAchievementAbility;

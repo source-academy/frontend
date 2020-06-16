@@ -48,21 +48,24 @@
 
     .edit-container {
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
 
       .main-cards {
-        flex-basis: 60%;
+        flex-basis: 90%;
+        height: 100%;
       }
 
       .editor-buttons {
-        flex-basis: 40%;
-        padding-bottom: 10px;
+        flex-basis: 10%;
+        height: 100%;
+
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
+
+        justify-content: center;
+        align-items: center;
 
         .editor-button {
-          width: 33.3%;
-          justify-content: center;
           text-align: center;
         }
       }
@@ -245,8 +248,7 @@
 
     .achievement {
       width: 90%;
-      //background-color: #d9d9d9;
-      background-color: lightcoral;
+      background-color: #d9d9d9;
 
       height: 20%;
       margin-bottom: 10px;

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import EditableAchievementCard from './EditableAchievementCard';
+import EditableAchievementCard from './editableCard/EditableAchievementCard';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementEditorProps = {
@@ -13,11 +13,11 @@ function AchievementEditor(props: AchievementEditorProps) {
   return (
     <div className="main">
       <ul className="display-list">
-        <li>
-          {Object.values(achievementDict).map(achievement => (
+        {Object.values(achievementDict).map(achievement => (
+          <li>
             <EditableAchievementCard achievement={achievement} />
-          ))}
-        </li>
+          </li>
+        ))}
       </ul>
     </div>
   );

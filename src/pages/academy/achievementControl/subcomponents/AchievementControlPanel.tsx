@@ -1,29 +1,29 @@
-import React from 'react';
-import { mapAchievementDictToTask } from '../../achievements/Achievement';
-import { achievementDict, studentProgress } from '../../../../commons/mocks/AchievementMocks';
-import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
-import EditableAchievementTask from './EditableAchievementTask';
+import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
+import EditableAchievementTask from './EditableAchievementTask';
+import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 
-type AchievementControlPanelProps = {};
-
-const hack = () => {};
-
-const achievementTasks: JSX.Element[] = mapAchievementDictToTask(
-  achievementDict,
-  FilterStatus.ALL,
-  hack,
-  studentProgress
-);
-
-const mapTasksToEditableTasks = achievementTasks.map(task => (
-  <EditableAchievementTask task={task} />
-));
+type AchievementControlPanelProps = {
+  achievementDict: { [id: number]: AchievementItem };
+  achievementTasks: any[];
+};
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
+  const { achievementDict, achievementTasks } = props;
+
+  const [currentTasks, setCurrentTasks] = useState<JSX.Element[]>(achievementTasks);
+  const editableTasks = currentTasks.map(task => (
+    <EditableAchievementTask
+      achievementDict={achievementDict}
+      setCurrentTasks={setCurrentTasks}
+      currentTasks={currentTasks}
+      task={task}
+    />
+  ));
+
   return (
     <div className="sample-cards">
-      <ul className="display-list">{mapTasksToEditableTasks}</ul>
+      <ul className="display-list">{editableTasks}</ul>
 
       <div>
         <Button className="main-adder" text={'Add New Task'} />

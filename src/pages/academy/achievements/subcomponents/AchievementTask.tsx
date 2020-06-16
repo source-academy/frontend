@@ -14,7 +14,26 @@ type AchievementTaskProps = {
   achievementDict: { [id: number]: AchievementItem };
   studentProgress: { [id: number]: AchievementProgress };
   filterStatus: FilterStatus;
-  setModalID: any;
+  setModalID?: any;
+};
+
+/* ------ Helper for Prerequisites ------ */
+
+// Returns an array of prerequisites of the AchievementItem
+export const getPrerequisites = (
+  achievement: AchievementItem,
+  achievementDict: { [id: number]: AchievementItem }
+): AchievementItem[] => {
+  return achievement === undefined || achievement.prerequisiteIDs === undefined
+    ? []
+    : achievement.prerequisiteIDs.map(prerequisiteID => achievementDict[prerequisiteID]);
+};
+
+const hasPrerequisites = (
+  achievement: AchievementItem,
+  achievementDict: { [id: number]: AchievementItem }
+): boolean => {
+  return getPrerequisites(achievement, achievementDict).length > 0;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
@@ -26,7 +45,11 @@ function AchievementTask(props: AchievementTaskProps) {
   };
 
   const displayModal = (modalID: number) => {
-    return () => setModalID(modalID);
+    if (setModalID) {
+      return () => setModalID(modalID);
+    }
+
+    return () => {};
   };
 
   /* -------- Helper for Renderer -------- */
@@ -57,29 +80,16 @@ function AchievementTask(props: AchievementTaskProps) {
    * the whole AchievementTask will be rendered together.
    */
   const shouldRenderPrerequisites = (achievement: AchievementItem) => {
-    return getPrerequisites(achievement).reduce((canRender, prerequisite) => {
+    return getPrerequisites(achievement, achievementDict).reduce((canRender, prerequisite) => {
       return shouldRender(prerequisite) || canRender;
     }, false);
-  };
-
-  /* ------ Helper for Prerequisites ------ */
-
-  // Returns an array of prerequisites of the AchievementItem
-  const getPrerequisites = (achievement: AchievementItem): AchievementItem[] => {
-    return achievement === undefined || achievement.prerequisiteIDs === undefined
-      ? []
-      : achievement.prerequisiteIDs.map(prerequisiteID => achievementDict[prerequisiteID]);
-  };
-
-  const hasPrerequisites = (achievement: AchievementItem): boolean => {
-    return getPrerequisites(achievement).length > 0;
   };
 
   /* -------- Helper for Deadlines -------- */
 
   // Maps the prerequisites of the achievement to their furthest deadlines
   const mapPrerequisitesToDeadlines = (achievement: AchievementItem): (Date | undefined)[] => {
-    const prerequisites = getPrerequisites(achievement);
+    const prerequisites = getPrerequisites(achievement, achievementDict);
     return prerequisites.map(prerequisite => getFurthestDeadline(prerequisite));
   };
 
@@ -111,7 +121,7 @@ function AchievementTask(props: AchievementTaskProps) {
 
   // Maps the prerequisites of the achievement to their total EXP
   const mapPrerequisitesToEXPs = (achievement: AchievementItem): (number | undefined)[] => {
-    const prerequisites = getPrerequisites(achievement);
+    const prerequisites = getPrerequisites(achievement, achievementDict);
     return prerequisites.map(prerequisite => getTotalEXP(prerequisite));
   };
 
@@ -156,14 +166,14 @@ function AchievementTask(props: AchievementTaskProps) {
             deadline={getFurthestDeadline(achievement)}
             progress={getAchievementProgress(achievement)}
             shouldPartiallyRender={!shouldRender(achievement)}
-            hasDropdown={hasPrerequisites(achievement)}
+            hasDropdown={hasPrerequisites(achievement, achievementDict)}
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={togglePrerequisitesDropdown}
             displayModal={displayModal}
           />
           {isDropdownOpen ? (
             <ul>
-              {getPrerequisites(achievement).map(prerequisite => (
+              {getPrerequisites(achievement, achievementDict).map(prerequisite => (
                 <li key={prerequisite.id}>
                   <div className="node">
                     <PrerequisiteCard

@@ -1,23 +1,46 @@
 import React from 'react';
-import { Card, Button } from '@blueprintjs/core';
+import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
+import AchievementControlPanelTools from './controlPanelTools/AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {
-  task: JSX.Element;
+  achievementDict: { [id: number]: AchievementItem };
+  setCurrentTasks?: any;
+  currentTasks: any[];
+  task: any;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { task } = props;
+  const { achievementDict, setCurrentTasks, currentTasks, task } = props;
+
+  console.log(achievementDict);
+
+  const addPrerequisite = () => {
+    // TODO: Implemenet
+  };
+
+  const deletePrerequisite = () => {
+    // TODO: Implemenet
+  };
+
+  const deleteTask = () => {
+    for (let i = 0; i < currentTasks.length; i++) {
+      if (currentTasks[i].props.achievement.id === task.props.achievement.id) {
+        currentTasks.splice(i, 1);
+      }
+    }
+    setCurrentTasks(currentTasks);
+  };
 
   return (
     <div className="edit-container">
-      <div className="main-cards">
-        <Card>{task}</Card>
-      </div>
+      <div className="main-cards">{task}</div>
 
       <div className="editor-buttons">
-        <Button className="editor-button" text={'Add New Prerequisite'} />
-        <Button className="editor-button" text={'Delete A Prerequisite'} />
-        <Button className="editor-button" text={'Delete This Task'} />
+        <AchievementControlPanelTools
+          addPrerequisite={addPrerequisite}
+          deletePrerequisite={deletePrerequisite}
+          deleteTask={deleteTask}
+        />
       </div>
     </div>
   );
