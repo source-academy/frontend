@@ -6,7 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameStoryState, jsObjectToMap } from '../save/JsonifyGameState';
+import { GameStoryState, jsObjectToMap } from '../save/GameSaveHelper';
 
 class GameStateManager {
   // Game State

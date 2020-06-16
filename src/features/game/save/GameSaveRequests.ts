@@ -1,6 +1,6 @@
 import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
 import Constants from 'src/commons/utils/Constants';
-import { FullGameState } from './JsonifyGameState';
+import { FullGameState } from './GameSaveHelper';
 
 export async function saveData(accountInfo: AccountInfo, gameState: FullGameState) {
   const options = {
@@ -13,8 +13,6 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullGameStat
       }
     })
   };
-
-  console.log(gameState);
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/save`, options);
   if (resp && resp.ok) {

@@ -107,7 +107,7 @@ class GameActionManager {
 
   public triggerInteraction(id: string): void {
     if (this.gameManager) {
-      this.gameManager.stateManager.triggerInteraction(id);
+      return this.gameManager.stateManager.triggerInteraction(id);
     }
     return undefined;
   }
@@ -150,6 +150,7 @@ class GameActionManager {
     event: string | symbol,
     fn: (id: ItemId) => void
   ) {
+    console.log('here');
     if (this.gameManager) {
       this.gameManager.objectManager.addInteractiveObjectsListeners(locationId, event, fn);
     }

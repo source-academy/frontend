@@ -1,6 +1,6 @@
-import { saveData, loadData } from './serverContact';
+import { saveData, loadData } from './GameSaveRequests';
 import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
-import { gameStateToJson, FullGameState } from './JsonifyGameState';
+import { gameStateToJson, FullGameState } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
 
 export class GameSaveManager {
