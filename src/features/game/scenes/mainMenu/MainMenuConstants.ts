@@ -4,12 +4,14 @@ const playText = 'Play';
 const continueText = 'Continue';
 const studentRoomText = 'Go to My Room';
 const chapterSelectText = 'Select Chapter';
+const settingsText = 'Settings';
 
 export const optionsText = {
   play: playText,
   continue: continueText,
   chapterSelect: chapterSelectText,
-  studentRoom: studentRoomText
+  studentRoom: studentRoomText,
+  settings: settingsText
 };
 
 export const mainMenuYSpace = screenSize.y * 0.7;

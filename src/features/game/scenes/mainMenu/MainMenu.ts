@@ -107,6 +107,7 @@ class MainMenu extends Phaser.Scene {
       nullInteractionId
     );
     this.addOptionButton(optionsText.studentRoom, () => {}, nullInteractionId);
+    this.addOptionButton(optionsText.settings, () => {}, nullInteractionId);
   }
 
   private addOptionButton(name: string, callback: any, interactionId: string) {
