@@ -3,6 +3,11 @@ export type ImageAsset = {
   path: string;
 };
 
+export type SoundAsset = {
+  key: string;
+  path: string;
+};
+
 export type GameSprite = {
   assetKey: string;
   assetXPos: number;
