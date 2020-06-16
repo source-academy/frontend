@@ -7,27 +7,58 @@ type EditableAchievementTaskProps = {
   setCurrentTasks?: any;
   currentTasks: any[];
   task: any;
+  id: number;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { achievementDict, setCurrentTasks, currentTasks, task } = props;
+  const { achievementDict, setCurrentTasks, currentTasks, task, id } = props;
 
-  console.log(achievementDict);
+  const mapPrerequisiteIDsToAchievements = (prereqIDs: number[] | undefined) => {
+    if (prereqIDs === undefined) {
+      return [];
+    }
+
+    return prereqIDs.map(prereqId => achievementDict[prereqId]);
+  };
+
+  const getAllAchievementIDs = () => {
+    return Object.values(achievementDict).map(achievement => achievement.id);
+  };
+
+  const getPrerequisiteIDs = () => {
+    if (achievementDict[id] === undefined || achievementDict[id].prerequisiteIDs === undefined) {
+      return [];
+    }
+
+    return achievementDict[id].prerequisiteIDs;
+  };
+
+  const getNonPrerequisitesIDs = () => {
+    const prerequisiteIDs = getPrerequisiteIDs();
+    const achievementIDs = getAllAchievementIDs();
+
+    if (prerequisiteIDs === undefined) {
+      return achievementIDs;
+    }
+
+    return achievementIDs.filter(achievementID => !prerequisiteIDs.includes(achievementID));
+  };
 
   const addPrerequisite = () => {
-    // TODO: Implemenet
+    console.log(id);
   };
 
   const deletePrerequisite = () => {
-    // TODO: Implemenet
+    console.log(mapPrerequisiteIDsToAchievements(getNonPrerequisitesIDs()));
   };
 
   const deleteTask = () => {
     for (let i = 0; i < currentTasks.length; i++) {
-      if (currentTasks[i].props.achievement.id === task.props.achievement.id) {
+      if (currentTasks[i].props.achievement.id === id) {
         currentTasks.splice(i, 1);
       }
     }
+
     setCurrentTasks(currentTasks);
   };
 

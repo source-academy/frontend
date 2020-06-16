@@ -8,28 +8,50 @@ type AchievementControlPanelToolsProps = {
   deleteTask: any;
 };
 
+type AchievementDialogFlags = {
+  addition: boolean;
+  deletion: boolean;
+};
+
 function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) {
   const { addPrerequisite, deletePrerequisite, deleteTask } = props;
+  const [dialogFlags, setDialogFlags] = useState<AchievementDialogFlags>({
+    addition: false,
+    deletion: false
+  });
 
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleDialogFlag = (flag: keyof AchievementDialogFlags) => {
+    setDialogFlags({
+      ...dialogFlags,
+      [flag]: !dialogFlags[flag]
+    });
+  };
 
   return (
     <>
       <Button
         className="editor-button"
-        onClick={() => setOpen(true)}
+        onClick={() => toggleDialogFlag('addition')}
         text={'Add New Prerequisite'}
       />
-      <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title="Add Prerequisite">
+      <Dialog
+        onClose={() => toggleDialogFlag('addition')}
+        isOpen={dialogFlags['addition']}
+        title="Add Prerequisite"
+      >
         <Button className="editor-button" onClick={addPrerequisite} text={'Add'} />
       </Dialog>
 
       <Button
         className="editor-button"
-        onClick={() => setOpen(true)}
+        onClick={() => toggleDialogFlag('deletion')}
         text={'Delete A Prerequisite'}
       />
-      <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title="Delete Prerequisite">
+      <Dialog
+        onClose={() => toggleDialogFlag('deletion')}
+        isOpen={dialogFlags['deletion']}
+        title="Delete Prerequisite"
+      >
         <Button className="editor-button" onClick={deletePrerequisite} text={'Delete'} />
       </Dialog>
 

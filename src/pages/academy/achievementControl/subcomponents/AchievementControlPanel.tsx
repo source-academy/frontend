@@ -18,6 +18,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       setCurrentTasks={setCurrentTasks}
       currentTasks={currentTasks}
       task={task}
+      id={task.props.achievement.id}
     />
   ));
 
