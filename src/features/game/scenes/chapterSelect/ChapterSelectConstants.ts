@@ -4,6 +4,9 @@ import { screenCenter, screenSize } from '../../commons/CommonConstants';
 export const defaultScrollSpeed = 10;
 export const chapterButtonsYOffset = 200;
 export const chapterButtonsXOffset = 100;
+export const chapterFrameXOffset = 15;
+export const chapterFrameYOffset = -10;
+export const chapterTextYOffset = -125;
 
 const marginX = 300;
 const marginY = 100;

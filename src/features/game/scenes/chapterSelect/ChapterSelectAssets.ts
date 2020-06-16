@@ -16,8 +16,14 @@ export const chapterContinueButton: ImageAsset = {
   path: '../assets/chapterContinue.png'
 };
 
+export const chapterSelectFrame: ImageAsset = {
+  key: 'chapter-select-frame',
+  path: '../assets/chapterSelectionFrame.png'
+};
+
 export const chapterSelectAssets = [
   chapterSelectBackground,
   chapterRepeatButton,
-  chapterContinueButton
+  chapterContinueButton,
+  chapterSelectFrame
 ];

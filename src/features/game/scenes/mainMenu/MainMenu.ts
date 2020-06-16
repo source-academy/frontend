@@ -67,7 +67,7 @@ class MainMenu extends Phaser.Scene {
         text,
         style
       )
-        .setOrigin(1.0, 0.2)
+        .setOrigin(1.0, 0.15)
         .setAlign('right');
       const buttonSprite = new Phaser.GameObjects.Sprite(
         this,

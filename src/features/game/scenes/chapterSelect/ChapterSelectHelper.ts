@@ -3,12 +3,19 @@ import {
   chapterSelectStyle,
   imageDist,
   chapterButtonsYOffset,
-  chapterButtonsXOffset
+  chapterButtonsXOffset,
+  chapterFrameXOffset,
+  chapterFrameYOffset,
+  chapterTextYOffset
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { ChapterDetail } from './ChapterSelectTypes';
-import { chapterContinueButton, chapterRepeatButton } from './ChapterSelectAssets';
+import {
+  chapterContinueButton,
+  chapterRepeatButton,
+  chapterSelectFrame
+} from './ChapterSelectAssets';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -26,13 +33,22 @@ export function createChapter(
     `chapterImage${index}`
   ).setDisplaySize(imageRect.width, imageRect.height);
 
+  // Chapter Frame
+  const chapterFrame = new Phaser.GameObjects.Sprite(
+    scene,
+    chapterFrameXOffset,
+    chapterFrameYOffset,
+    chapterSelectFrame.key
+  );
+
   // Chapter Actions
   const chapterRepeat = new Phaser.GameObjects.Sprite(
     scene,
     -chapterButtonsXOffset,
     chapterButtonsYOffset,
     chapterRepeatButton.key
-  ).setInteractive({ pixelPerfect: true, useHandCursor: true })
+  )
+    .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       scene.loadFile(fileName);
     });
@@ -42,19 +58,24 @@ export function createChapter(
     chapterButtonsXOffset,
     chapterButtonsYOffset,
     chapterContinueButton.key
-  ).setInteractive({ pixelPerfect: true, useHandCursor: true })
+  )
+    .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       scene.loadFile(fileName);
     });
 
   // Chapter Text
   const chapterText = `Chapter ${index}\n${title}`;
-  const text = new Phaser.GameObjects.Text(scene, 0, 0, chapterText, chapterSelectStyle).setOrigin(
-    0.5
-  );
+  const text = new Phaser.GameObjects.Text(
+    scene,
+    0,
+    chapterTextYOffset,
+    chapterText,
+    chapterSelectStyle
+  ).setOrigin(0.5);
 
-  chapterContainer.add([chapterPreview, chapterRepeat, chapterContinue, text]);
-  chapterContainer.setSize(imageRect.width, imageRect.height);
+  chapterContainer.add([chapterPreview, chapterFrame, chapterRepeat, chapterContinue, text]);
+  // chapterContainer.setSize(imageRect.width, imageRect.height);
 
   return chapterContainer;
 }
