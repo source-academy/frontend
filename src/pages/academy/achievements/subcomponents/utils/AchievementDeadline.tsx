@@ -1,13 +1,16 @@
-import React from 'react';
-import { Icon } from '@blueprintjs/core';
+import React, { useState } from 'react';
+import { Icon, Button, Dialog } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { DatePicker } from '@blueprintjs/datetime';
 
 type AchievementDeadlineProps = {
   deadline?: Date;
+  changeDeadline?: any;
 };
 
 function AchievementDeadline(props: AchievementDeadlineProps) {
-  const { deadline } = props;
+  const { deadline, changeDeadline } = props;
+  const [isOpen, setOpen] = useState<boolean>(false);
 
   /* ---------- Date constants ---------- */
   const daysPerWeek = 7;
@@ -48,8 +51,34 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
     <>
       {deadline === undefined ? null : (
         <div className="deadline">
-          <Icon icon={IconNames.STOPWATCH} />
-          <p>{prettifyDeadline(deadline)}</p>
+          {changeDeadline === undefined ? (
+            <>
+              <Icon icon={IconNames.STOPWATCH} />
+              <p>{prettifyDeadline(deadline)}</p>
+            </>
+          ) : (
+            <>
+              <div>
+                <Button onClick={() => setOpen(!isOpen)}>
+                  <Icon icon={IconNames.STOPWATCH} />
+                  <p>{prettifyDeadline(deadline)}</p>
+                </Button>
+              </div>
+              <div>
+                <Dialog
+                  onClose={() => setOpen(!isOpen)}
+                  isOpen={isOpen}
+                  title="Edit Achievement Deadline"
+                >
+                  <DatePicker
+                    timePickerProps={{ showArrowButtons: true }}
+                    value={deadline}
+                    onChange={changeDeadline}
+                  />
+                </Dialog>
+              </div>
+            </>
+          )}
         </div>
       )}
     </>
@@ -57,3 +86,23 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
 }
 
 export default AchievementDeadline;
+
+/*
+   <div>
+          <Button onClick={() => setOpen(!isOpen)} text={isOpen.toString()}> </Button>
+        </div>
+        <div>
+          <Dialog 
+            onClose={() => setOpen(!isOpen)} 
+            isOpen={isOpen} 
+            title="About"
+          >
+            <DatePicker
+              timePickerProps={{ showArrowButtons: true }}
+              value={deadline}
+              onChange={changeDeadline}
+            />
+
+          </Dialog>
+        </div>
+*/

@@ -13,26 +13,34 @@ type EditableAchievementCardProps = {
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
   const { achievement } = props;
-  const [ achievementData, setAchievementData ] = useState<AchievementItem>(achievement);
+  const [achievementData, setAchievementData] = useState<AchievementItem>(achievement);
   const { title, ability, exp, deadline } = achievementData;
 
   const makeEditableTitle = () => {
     return (
-      <EditableText 
+      <EditableText
         placeholder={`Enter your title here`}
         value={title}
-        onChange={(value) => { changeFieldTextValue(value) }}
+        onChange={value => {
+          changeFieldTextValue(value);
+        }}
       />
-    )
+    );
   };
 
   const changeFieldTextValue = (fieldValue: string) => {
     setAchievementData({
-      ...achievementData, 
-      title : fieldValue
-    })
+      ...achievementData,
+      title: fieldValue
+    });
+  };
 
-  }
+  const changeDeadline = (deadline: Date) => {
+    setAchievementData({
+      ...achievementData,
+      deadline: deadline
+    });
+  };
 
   return (
     <Card className="achievement">
@@ -48,10 +56,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
           <div className="details">
             <div className="ability">
-             <p>{ability}</p>
+              <p>{ability}</p>
             </div>
 
-            <AchievementDeadline deadline={deadline} />
+            <AchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
 
             <AchievementExp exp={exp} />
           </div>
