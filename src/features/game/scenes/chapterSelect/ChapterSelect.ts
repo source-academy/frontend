@@ -1,63 +1,34 @@
-import { screenCenter, screenSize, Constants } from 'src/features/game/commons/CommonConstants';
+import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
-import { backgroundImageUrl } from 'src/features/game/scenes/chapterSelect/ChapterSelectConstants';
 import { addLoadingScreen } from '../../utils/LoadingScreen';
-import { Color } from '../../utils/styles';
-import { fadeOut } from '../../effects/FadeEffect';
-import { ChapterDetail, SampleChapters } from './SampleChapters';
-import { RequestOptions } from 'https';
-
-const marginX = 300;
-const marginY = 100;
-const blackTintAlpha = 0.8;
-
-const maskRect = {
-  x: -screenCenter.x + marginX,
-  y: -screenCenter.y + marginY,
-  width: screenSize.x - marginX * 2,
-  height: screenSize.y - marginY * 2
-};
-
-const imageRect = {
-  width: 500,
-  height: 700
-};
-
-const imageDist = imageRect.width + 150;
-
-const textStyle = {
-  fontFamily: 'Arial',
-  fontSize: '36px',
-  fill: Color.white,
-  align: 'center',
-  lineSpacing: 10
-};
-
-type Container = Phaser.GameObjects.Container;
-const { Container, Image, Text, Rectangle } = Phaser.GameObjects;
+import { SampleChapters } from './SampleChapters';
+import { ChapterDetail } from './ChapterSelectTypes';
+import { chapterSelectAssets, chapterSelectBackground } from './ChapterSelectAssets';
+import { defaultScrollSpeed, maskRect, imageDist } from './ChapterSelectConstants';
+import { createChapter } from './ChapterSelectHelper';
+import GameLayerManager from '../../layer/GameLayerManager';
+import { Layer } from '../../layer/GameLayerTypes';
 
 export type AccountInfo = {
   accessToken: string;
   refreshToken: string;
 };
 
-export type RequestFn = (
-  path: string,
-  method: string,
-  opts: RequestOptions
-) => Promise<Response | null>;
-
 class ChapterSelect extends Phaser.Scene {
-  private chapterContainer: Container | undefined;
+  private chapterContainer: Phaser.GameObjects.Container | undefined;
   private scrollSpeed: number;
   private chapterDetails: ChapterDetail[];
-
   private accountInfo: AccountInfo | undefined;
+  private layerManager: GameLayerManager;
 
   constructor() {
     super('ChapterSelect');
-    this.scrollSpeed = 10;
+
+    this.chapterContainer = undefined;
+    this.scrollSpeed = defaultScrollSpeed;
     this.chapterDetails = SampleChapters;
+    this.accountInfo = undefined;
+    this.layerManager = new GameLayerManager();
   }
 
   init(accountInfo: AccountInfo) {
@@ -65,43 +36,14 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public preload() {
-    this.load.image('bg', backgroundImageUrl);
-
-    this.chapterDetails.forEach((chapter, index) => {
-      this.load.image(`chapterImage${index}`, chapter.url);
-    });
+    this.preloadAssets();
+    this.layerManager.initialiseMainLayer(this);
     addLoadingScreen(this);
   }
 
   public create() {
-    this.addBackground();
-    const mask = this.createMask();
-    this.chapterContainer = this.createChapterContainer();
-    this.add.existing(this.chapterContainer);
-
-    this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
-  }
-
-  private addBackground() {
-    this.add.image(screenCenter.x, screenCenter.y, 'bg');
-  }
-
-  private createMask() {
-    const graphics = this.add.graphics();
-    const mask = graphics
-      .fillRect(maskRect.x, maskRect.y, maskRect.width, maskRect.height)
-      .setPosition(screenCenter.x, screenCenter.y);
-    mask.alpha = 0;
-    return mask;
-  }
-
-  private createChapterContainer() {
-    const chapterContainer = new Container(this, 0, 0);
-    chapterContainer.add(
-      this.chapterDetails.map((chapterDetail, index) => createChapter(this, chapterDetail, index))
-    );
-
-    return chapterContainer;
+    this.renderBackground();
+    this.renderChapters();
   }
 
   public update() {
@@ -124,55 +66,54 @@ class ChapterSelect extends Phaser.Scene {
     this.load.start();
   }
 
+  private preloadAssets() {
+    chapterSelectAssets.forEach(asset => this.load.image(asset.key, asset.path));
+    this.chapterDetails.forEach((chapter, index) => {
+      this.load.image(`chapterImage${index}`, chapter.previewBgPath);
+    });
+  }
+
+  private renderBackground() {
+    const background = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      chapterSelectBackground.key
+    );
+    this.layerManager.addToLayer(Layer.Background, background);
+  }
+
+  private renderChapters() {
+    const mask = this.createMask();
+    this.chapterContainer = this.createChapterContainer();
+    this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
+
+    this.layerManager.addToLayer(Layer.UI, this.chapterContainer);
+  }
+
+  private createMask() {
+    const graphics = this.add.graphics();
+    const mask = graphics
+      .fillRect(maskRect.x, maskRect.y, maskRect.width, maskRect.height)
+      .setPosition(screenCenter.x, screenCenter.y);
+    mask.alpha = 0;
+    return mask;
+  }
+
+  private createChapterContainer() {
+    const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
+    chapterContainer.add(
+      this.chapterDetails.map((chapterDetail, index) => createChapter(this, chapterDetail, index))
+    );
+    return chapterContainer;
+  }
+
   private callGameManager(key: string) {
     if (key[0] === '#') {
       const text = this.cache.text.get(key);
       this.scene.start('GameManager', { text, accountInfo: this.accountInfo });
     }
   }
-}
-
-function createChapter(scene: ChapterSelect, { title, fileName }: ChapterDetail, index: number) {
-  const [x, y] = getCoorByChapter(index);
-  const image = new Image(scene, 0, 0, `chapterImage${index}`).setDisplaySize(
-    imageRect.width,
-    imageRect.height
-  );
-  const blackTint = new Rectangle(scene, 0, 0, imageRect.width, imageRect.height, 0).setAlpha(
-    blackTintAlpha
-  );
-
-  const chapterText = `Chapter ${index}\n${title}`;
-  const text = new Text(scene, 0, 0, chapterText, textStyle).setOrigin(0.5);
-  const container = new Container(scene, x, y, [image, blackTint, text]);
-  container.setSize(imageRect.width, imageRect.height);
-  container.setInteractive({
-    useHandCursor: true
-  });
-
-  container.on('pointerover', () => {
-    scene.add.tween(fadeOut([blackTint], Constants.fadeDuration * 2));
-  });
-
-  container.on('pointerout', () => {
-    scene.add.tween({
-      alpha: blackTintAlpha,
-      targets: blackTint,
-      duration: Constants.fadeDuration * 2
-    });
-  });
-
-  container.on('pointerdown', () => {
-    scene.loadFile(fileName);
-  });
-
-  return container;
-}
-
-function getCoorByChapter(chapterNum: number) {
-  const x = screenCenter.x + imageDist * chapterNum;
-  const y = screenCenter.y;
-  return [x, y];
 }
 
 export default ChapterSelect;
