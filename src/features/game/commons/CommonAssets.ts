@@ -55,6 +55,11 @@ export const modeMenuBanner: ImageAsset = {
   path: '../assets/modeMenuBanner.png'
 };
 
+export const popUpFrame: ImageAsset = {
+  key: 'pop-up-frame',
+  path: '../assets/popUpFrame.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
@@ -66,7 +71,8 @@ const commonAssets = [
   locationPreviewFrame,
   talkOptButton,
   talkOptCheck,
-  modeMenuBanner
+  modeMenuBanner,
+  popUpFrame
 ];
 
 export default commonAssets;

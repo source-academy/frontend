@@ -20,6 +20,7 @@ import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
+import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 
 type GameManagerProps = {
   text: string;
@@ -38,6 +39,7 @@ class GameManager extends Phaser.Scene {
   public actionExecuter: GameActionExecuter;
   public userStateManager: GameUserStateManager;
   public boundingBoxManager: GameBBoxManager;
+  public popUpManager: GamePopUpManager;
 
   // Limited to current location
   public currentLocationId: LocationId;
@@ -59,6 +61,7 @@ class GameManager extends Phaser.Scene {
     this.actionExecuter = new GameActionExecuter();
     this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
+    this.popUpManager = new GamePopUpManager();
 
     this.currentActiveMode = GameMode.Menu;
     this.currentActivePhase = GamePhase.Standard;

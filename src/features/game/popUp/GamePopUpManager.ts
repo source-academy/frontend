@@ -4,7 +4,8 @@ import { Layer } from '../layer/GameLayerTypes';
 import GameActionManager from '../action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 import { popUpFrame } from '../commons/CommonAssets';
-import { popUpPos } from './GamePopUpConstants';
+import { popUpRect, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
+import { resize } from '../utils/SpriteUtils';
 
 class GamePopUpManager {
   private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
@@ -14,12 +15,12 @@ class GamePopUpManager {
     this.currPopUp = new Map<PopUpPosition, Phaser.GameObjects.Container>();
     this.popUpFrame = {
       assetKey: popUpFrame.key,
-      assetXPos: popUpPos.x[PopUpPosition.Middle],
-      assetYPos: popUpPos.y
+      assetXPos: popUpRect.x[PopUpPosition.Middle],
+      assetYPos: popUpRect.y
     };
   }
 
-  public displayPopUp(itemId: ItemId, position: PopUpPosition) {
+  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration?: number) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
@@ -29,7 +30,7 @@ class GamePopUpManager {
     // Frame
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
-      popUpPos.x[position],
+      popUpRect.x[position],
       this.popUpFrame.assetYPos,
       this.popUpFrame.assetKey
     );
@@ -40,19 +41,30 @@ class GamePopUpManager {
 
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
-      popUpPos.x[position],
-      this.popUpFrame.assetYPos,
+      popUpRect.x[position] + popUpImgXOffset,
+      this.popUpFrame.assetYPos + popUpImgYOffset,
       assetKey
     );
 
-    container.add([popUpFrameImg, popUpImage]);
+    let resizedImage = popUpImage;
+    if (popUpImage.displayWidth > popUpImage.displayHeight) {
+      resizedImage = resize(popUpImage, popUpRect.width);
+    } else {
+      resizedImage = resize(popUpImage, 0, popUpRect.height);
+    }
+
+    container.add([popUpFrameImg, resizedImage]);
     this.currPopUp.set(position, container);
     GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
 
-    // Animate
+    // TODO: Animate
 
     container.setActive(true);
     container.setVisible(true);
+
+    if (duration) {
+      setTimeout(() => this.destroyPopUp(position), duration);
+    }
   }
 
   public destroyAllPopUps() {
@@ -65,7 +77,7 @@ class GamePopUpManager {
     const atPosContainer = this.currPopUp.get(position);
     if (!atPosContainer) return;
 
-    // Animate out
+    // TODO: Animate out
 
     await sleep(200);
     atPosContainer.setVisible(false);
