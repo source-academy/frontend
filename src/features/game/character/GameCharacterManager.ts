@@ -103,8 +103,7 @@ export default class CharacterManager {
       screenCenter.x,
       screenCenter.y,
       speakerBox.key
-    )
-      .setAlpha(0.8);
+    ).setAlpha(0.8);
 
     const speakerText = new Phaser.GameObjects.Text(
       gameManager,

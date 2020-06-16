@@ -74,8 +74,7 @@ export default class DialogueManager {
       screenCenter.x,
       screenCenter.y,
       speechBox.key
-    )
-      .setAlpha(0.8);
+    ).setAlpha(0.8);
 
     return dialogueBox;
   }

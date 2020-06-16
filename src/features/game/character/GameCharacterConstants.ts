@@ -14,7 +14,7 @@ export const textPadding = 10;
 
 export const speakerRect = {
   x: 300,
-  y: 730,
+  y: 730
 };
 
 export const speakerTextStyle = {
