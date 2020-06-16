@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import GameManager from './GameManager';
 import StoryChapterSelect from '../../../../features/game/storyChapterSelect/StoryChapterSelect';
+import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 
 const config = {
   debug: true,
@@ -15,7 +16,7 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [StoryChapterSelect, GameManager]
+  scene: [MainMenu, StoryChapterSelect, GameManager]
 };
 
 const phaserGame = new Phaser.Game(config);
