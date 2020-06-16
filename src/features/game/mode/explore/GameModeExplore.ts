@@ -54,6 +54,7 @@ class GameModeExplore implements IGameUI {
       });
     }
 
+    gameManager.objectManager.enableObjectActions(this.locationId);
     this.attachExploreModeCallbacks();
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
@@ -62,6 +63,7 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     gameManager.input.setDefaultCursor('');
+    gameManager.objectManager.disableObjectActions();
     this.removeExploreModeCallbacks();
 
     if (this.uiContainer) {
