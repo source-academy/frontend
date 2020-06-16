@@ -4,7 +4,8 @@ import { Layer } from '../layer/GameLayerTypes';
 import GameActionManager from '../action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 import { popUpFrame } from '../commons/CommonAssets';
-import { popUpPos, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
+import { popUpRect, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
+import { resize } from '../utils/SpriteUtils';
 
 class GamePopUpManager {
   private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
@@ -14,8 +15,8 @@ class GamePopUpManager {
     this.currPopUp = new Map<PopUpPosition, Phaser.GameObjects.Container>();
     this.popUpFrame = {
       assetKey: popUpFrame.key,
-      assetXPos: popUpPos.x[PopUpPosition.Middle],
-      assetYPos: popUpPos.y
+      assetXPos: popUpRect.x[PopUpPosition.Middle],
+      assetYPos: popUpRect.y
     };
   }
 
@@ -29,7 +30,7 @@ class GamePopUpManager {
     // Frame
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
-      popUpPos.x[position],
+      popUpRect.x[position],
       this.popUpFrame.assetYPos,
       this.popUpFrame.assetKey
     );
@@ -40,12 +41,19 @@ class GamePopUpManager {
 
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
-      popUpPos.x[position] + popUpImgXOffset,
+      popUpRect.x[position] + popUpImgXOffset,
       this.popUpFrame.assetYPos + popUpImgYOffset,
       assetKey
     );
 
-    container.add([popUpFrameImg, popUpImage]);
+    let resizedImage = popUpImage;
+    if (popUpImage.displayWidth > popUpImage.displayHeight) {
+      resizedImage = resize(popUpImage, popUpRect.width);
+    } else {
+      resizedImage = resize(popUpImage, 0, popUpRect.height);
+    }
+
+    container.add([popUpFrameImg, resizedImage]);
     this.currPopUp.set(position, container);
     GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
 
