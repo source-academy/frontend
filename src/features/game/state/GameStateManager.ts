@@ -6,7 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { FullGameState, GameStoryState, jsObjectToMap } from '../save/JsonifyGameState';
+import { GameStoryState, jsObjectToMap } from '../save/JsonifyGameState';
 
 class GameStateManager {
   // Game State
@@ -264,10 +264,6 @@ class GameStateManager {
 
   public getChapterObjectives() {
     return this.chapterObjective;
-  }
-
-  public setGameState(gameState: FullGameState) {
-    console.log();
   }
 }
 
