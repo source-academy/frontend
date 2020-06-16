@@ -23,7 +23,6 @@ function Game() {
     if (!session) {
       return;
     }
-    setSessionLoaded(true);
 
     if (sessionLoaded) {
       return;
@@ -34,6 +33,8 @@ function Game() {
       refreshToken: session.refreshToken
     });
     game.scene.add('GameManager', GameManager);
+
+    setSessionLoaded(true);
   }, [session, sessionLoaded]);
 
   return (

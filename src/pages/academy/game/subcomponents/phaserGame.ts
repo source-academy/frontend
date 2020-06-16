@@ -1,8 +1,5 @@
 import * as Phaser from 'phaser';
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
-// import StoryChapterSelect from 'src/features/game/storyChapterSelect/StoryChapterSelect';
-// import GameManager from './GameManager';
-// import StoryChapterSelect from '../../../../features/game/storyChapterSelect/StoryChapterSelect';
 
 const config = {
   debug: true,
