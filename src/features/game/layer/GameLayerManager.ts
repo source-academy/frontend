@@ -39,14 +39,8 @@ class GameLayerManager {
 
   public async fadeInLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      return;
-    }
-    const layerToFadeIn = this.layers.get(layerType);
+    const layerToFadeIn = this.layers.get(layerType)!;
 
-    if (!layerToFadeIn) {
-      return;
-    }
     layerToFadeIn.setAlpha(0);
     gameManager.tweens.add(fadeIn([layerToFadeIn], fadeDuration));
     sleep(fadeDuration);
@@ -54,14 +48,8 @@ class GameLayerManager {
 
   public async fadeOutLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      return;
-    }
-    const layerToFadeOut = this.layers.get(layerType);
+    const layerToFadeOut = this.layers.get(layerType)!;
 
-    if (!layerToFadeOut) {
-      return;
-    }
     layerToFadeOut.setAlpha(1);
     gameManager.tweens.add(fadeOut([layerToFadeOut], fadeDuration));
     sleep(fadeDuration);

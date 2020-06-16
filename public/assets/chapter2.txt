@@ -1,8 +1,7 @@
-<<chapter.txt>>
 
-<<objects.txt>>
+<<objects>>
 
-<<dialogue1.txt>>
+<<dialogue1>>
 
 [part3]
 $narrator
