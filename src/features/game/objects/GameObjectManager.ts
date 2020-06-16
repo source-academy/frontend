@@ -6,6 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { resize } from '../utils/SpriteUtils';
 
 class GameObjectManager {
   private objectIdMap: Map<ItemId, Phaser.GameObjects.GameObject>;
@@ -121,12 +122,13 @@ class GameObjectManager {
     gameManager: GameManager,
     objectProperty: ObjectProperty
   ): Phaser.GameObjects.Image {
-    const { assetKey, x, y } = objectProperty;
+    const { assetKey, x, y, width, height } = objectProperty;
     const objectSprite = new Phaser.GameObjects.Image(gameManager, x, y, assetKey);
     if (objectProperty.isInteractive) {
       objectSprite.setInteractive({ pixelPerfect: true });
     }
-    return objectSprite;
+    const resizedObjectSprite = width ? resize(objectSprite, width, height) : objectSprite;
+    return resizedObjectSprite;
   }
 }
 
