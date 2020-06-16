@@ -1,5 +1,5 @@
 import { UserState } from './GameStateTypes';
-import { SampleUserState, DefaultUserState } from './SampleUserState';
+import { DefaultUserState } from './SampleUserState';
 
 export default class GameUserStateManager {
   private userState: UserState;
@@ -8,19 +8,12 @@ export default class GameUserStateManager {
     this.userState = DefaultUserState;
   }
 
-  public async initialise() {
-    this.userState = await this.fetchUserStateJson();
+  public initialise(userState: UserState) {
+    this.userState = userState;
   }
-
-  private async fetchUserStateJson() {
-    return SampleUserState;
-  }
-
-  private async sendUserStateJson() {}
 
   public addToList(listName: string, id: string): void {
     this.userState[listName].push(id);
-    this.sendUserStateJson();
   }
 
   public getList(listName: string): string[] {

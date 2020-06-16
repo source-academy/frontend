@@ -6,6 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { FullGameState, GameStoryState, jsObjectToMap } from '../save/JsonifyGameState';
 
 class GameStateManager {
   // Game State
@@ -71,12 +72,15 @@ class GameStateManager {
   //        Preprocess         //
   ///////////////////////////////
 
-  public processChapter(chapter: GameChapter): void {
+  public initialise(chapter: GameChapter, gameStoryState: GameStoryState | undefined): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
-    this.locationStates = this.chapter.map.getLocations();
-    this.objectPropertyMap = this.chapter.map.getObjects();
-    this.bboxPropertyMap = this.chapter.map.getBBox();
+
+    if (gameStoryState) {
+      this.loadFromGameStoryState(gameStoryState);
+    } else {
+      this.loadNewGameStoryState();
+    }
 
     // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationId, map) => {
@@ -87,12 +91,27 @@ class GameStateManager {
     });
   }
 
+  private loadFromGameStoryState(gameStoryState: GameStoryState) {
+    this.chapterObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
+    this.locationStates = jsObjectToMap(gameStoryState.locationStates);
+    this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
+    this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
+  }
+
+  private loadNewGameStoryState() {
+    this.chapterObjective = this.chapter.objectives;
+    this.locationStates = this.chapter.map.getLocations();
+    this.objectPropertyMap = this.chapter.map.getObjects();
+    this.bboxPropertyMap = this.chapter.map.getBBox();
+  }
+
   ///////////////////////////////
   //        Interaction        //
   ///////////////////////////////
 
   public triggerInteraction(id: string): void {
     this.triggeredInteractions.set(id, true);
+    GameActionManager.getInstance().saveGame();
   }
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
@@ -236,7 +255,7 @@ class GameStateManager {
   }
 
   ///////////////////////////////
-  //          Getters          //
+  //          Saving           //
   ///////////////////////////////
 
   public getLocationStates() {
@@ -245,6 +264,10 @@ class GameStateManager {
 
   public getChapterObjectives() {
     return this.chapterObjective;
+  }
+
+  public setGameState(gameState: FullGameState) {
+    console.log();
   }
 }
 

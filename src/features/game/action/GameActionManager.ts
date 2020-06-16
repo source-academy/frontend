@@ -344,6 +344,14 @@ class GameActionManager {
       this.gameManager.popUpManager.destroyPopUp(position);
     }
   }
+
+  /////////////////////
+  //    Save Game    //
+  /////////////////////
+
+  public saveGame() {
+    this.getGameManager().saveManager.saveGame();
+  }
 }
 
 export default GameActionManager;
