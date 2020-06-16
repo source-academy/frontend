@@ -2,9 +2,11 @@ import { Color } from '../../utils/styles';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 
 export const defaultScrollSpeed = 10;
-export const marginX = 300;
-export const marginY = 100;
-export const blackTintAlpha = 0.8;
+export const chapterButtonsYOffset = 200;
+export const chapterButtonsXOffset = 100;
+
+const marginX = 300;
+const marginY = 100;
 
 export const maskRect = {
   x: -screenCenter.x + marginX,
