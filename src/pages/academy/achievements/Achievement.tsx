@@ -107,8 +107,7 @@ function Achievement() {
 
         <div className="cards">
           <ul className="display-list">
-            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, setModalID)}{' '}
-            // this is what the achievement page looks like
+            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, setModalID)}
           </ul>
         </div>
 
