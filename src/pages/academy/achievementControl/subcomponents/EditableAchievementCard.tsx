@@ -1,8 +1,10 @@
-import React from 'react';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import { Card, Icon } from '@blueprintjs/core';
-import AchievementDeadline from '../../achievements/subcomponents/utils/AchievementDeadline';
+import React, { useState } from 'react';
+
+import { Card, Icon, EditableText } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+
+import { AchievementItem } from '../../../../commons/achievements/AchievementTypes';
+import AchievementDeadline from '../../achievements/subcomponents/utils/AchievementDeadline';
 import AchievementExp from '../../achievements/subcomponents/utils/AchievementExp';
 
 type EditableAchievementCardProps = {
@@ -11,7 +13,26 @@ type EditableAchievementCardProps = {
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
   const { achievement } = props;
-  const { title, ability, exp, deadline } = achievement;
+  const [ achievementData, setAchievementData ] = useState<AchievementItem>(achievement);
+  const { title, ability, exp, deadline } = achievementData;
+
+  const makeEditableTitle = () => {
+    return (
+      <EditableText 
+        placeholder={`Enter your title here`}
+        value={title}
+        onChange={(value) => { changeFieldTextValue(value) }}
+      />
+    )
+  };
+
+  const changeFieldTextValue = (fieldValue: string) => {
+    setAchievementData({
+      ...achievementData, 
+      title : fieldValue
+    })
+
+  }
 
   return (
     <Card className="achievement">
@@ -22,12 +43,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
         <div className="display">
           <div>
-            <h1>{title}</h1>
+            <h1>{makeEditableTitle()}</h1>
           </div>
 
           <div className="details">
             <div className="ability">
-              <p>{ability}</p>
+             <p>{ability}</p>
             </div>
 
             <AchievementDeadline deadline={deadline} />
