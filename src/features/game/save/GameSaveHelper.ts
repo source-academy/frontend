@@ -40,7 +40,7 @@ export type GameStoryState = {
       interactionId: string;
     };
   };
-  // triggeredInteractions: { [interactionId: string]: boolean };
+  triggeredInteractions: { [interactionId: string]: boolean };
 };
 
 export type UserState = {
@@ -58,8 +58,8 @@ export function gameStateToJson(
     chapterObjective: mapToJsObject(gameStateManager.getChapterObjectives().getObjectives()),
     locationStates: mapToJsObject(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
-    bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap())
-    // triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions())
+    bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
+    triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions())
   };
 
   const userState: UserState = {

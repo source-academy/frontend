@@ -78,7 +78,7 @@ class GameManager extends Phaser.Scene {
 
   async init({ text, accountInfo, continueGame, chapterNum }: GameManagerProps) {
     chapterNum = 0;
-    continueGame = false;
+    continueGame = true;
     this.currentChapter = Parser.parse(text);
 
     await this.saveManager.initialise(accountInfo, chapterNum);

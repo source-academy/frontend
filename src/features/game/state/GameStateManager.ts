@@ -96,7 +96,7 @@ class GameStateManager {
     this.locationStates = jsObjectToMap(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
     this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
-    // this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
+    this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
   }
 
   private loadNewGameStoryState() {
