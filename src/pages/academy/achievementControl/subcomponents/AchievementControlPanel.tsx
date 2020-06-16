@@ -24,7 +24,9 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 
   return (
     <div className="sample-cards">
-      <ul className="display-list">{editableTasks}</ul>
+      <ul className="display-list">
+        {editableTasks}
+       </ul>
 
       <div>
         <Button className="main-adder" text={'Add New Task'} />

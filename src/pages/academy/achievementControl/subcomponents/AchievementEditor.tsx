@@ -14,7 +14,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     <div className="main">
       <ul className="display-list">
         {Object.values(achievementDict).map(achievement => (
-          <li>
+          <li key={`achievement ${achievement.id}`}>
             <EditableAchievementCard achievement={achievement} />
           </li>
         ))}
