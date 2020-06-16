@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 
-import { Card, Icon, EditableText, MenuItem, Button, Classes } from '@blueprintjs/core';
+import { Card, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
-  AchievementAbility,
-  achievementAbilities
+  AchievementAbility
 } from '../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from '../../achievements/subcomponents/utils/AchievementDeadline';
 import AchievementExp from '../../achievements/subcomponents/utils/AchievementExp';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import EditableAchievementTitle from './EditableAchievementTitle';
+import AchievementAbilitySelect from './AchievementAbilitySelect';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -21,22 +21,18 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const [achievementData, setAchievementData] = useState<AchievementItem>(achievement);
   const { title, ability, exp, deadline } = achievementData;
 
-  const makeEditableTitle = () => {
-    return (
-      <EditableText
-        placeholder={`Enter your title here`}
-        value={title}
-        onChange={value => {
-          changeFieldTextValue(value);
-        }}
-      />
-    );
-  };
-
-  const changeFieldTextValue = (fieldValue: string) => {
+  /* Handlers to Change State of Achievement Data */
+  const changeTitle = (title: string) => {
     setAchievementData({
       ...achievementData,
-      title: fieldValue
+      title: title
+    });
+  };
+
+  const changeExpValue = (expValue: number) => {
+    setAchievementData({
+      ...achievementData,
+      exp: expValue
     });
   };
 
@@ -47,38 +43,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
   };
 
-  const abilityRenderer: ItemRenderer<AchievementAbility> = (ability, { handleClick }) => (
-    <MenuItem active={false} key={ability.toString()} onClick={handleClick} text={ability} />
-  );
-
-  const AbilitySelectComponent = Select.ofType<AchievementAbility>();
-
-  const abilitySelector = (currentAbility: AchievementAbility) => {
-    return (
-      <div>
-        <Button className={Classes.MINIMAL} text={currentAbility} />
-      </div>
-    );
-  };
-
-  const handleAbilitySelect = (ability: AchievementAbility, e: any) => {
+  const changeAbility = (ability: AchievementAbility, e: any) => {
     setAchievementData({
       ...achievementData,
       ability: ability
     });
   };
-
-  const abilitySelect = () => (
-    <AbilitySelectComponent
-      className={Classes.MINIMAL}
-      items={achievementAbilities}
-      onItemSelect={handleAbilitySelect}
-      itemRenderer={abilityRenderer}
-      filterable={false}
-    >
-      {abilitySelector(ability)}
-    </AbilitySelectComponent>
-  );
 
   return (
     <Card className="achievement">
@@ -88,16 +58,14 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
         </div>
 
         <div className="display">
-          <div>
-            <h1>{makeEditableTitle()}</h1>
-          </div>
+          <EditableAchievementTitle title={title} changeTitle={changeTitle} />
 
           <div className="details">
-            <div className="ability">{abilitySelect()}</div>
+            <AchievementAbilitySelect ability={ability} changeAbility={changeAbility} />
 
             <AchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
 
-            <AchievementExp exp={exp} />
+            <AchievementExp exp={exp} changeExpValue={changeExpValue} />
           </div>
         </div>
       </div>
