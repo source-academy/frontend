@@ -85,6 +85,7 @@ class GameObjectManager {
           this.addObjectListener(id, event, () => fn(id));
 
           if (objectProp.actions) {
+            console.log(objectProp);
             this.addObjectListener(id, Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
               GameActionManager.getInstance().executeStoryAction(objectProp.actions!);
             });

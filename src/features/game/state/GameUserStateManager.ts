@@ -20,7 +20,6 @@ export default class GameUserStateManager {
 
   public addToList(listName: string, id: string): void {
     this.userState[listName].push(id);
-    console.log(`Adding ${id} to ${listName}`);
     this.sendUserStateJson();
   }
 

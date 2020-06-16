@@ -21,7 +21,7 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
   const backButtonSprite = new Phaser.GameObjects.Sprite(
     gameManager,
     screenCenter.x,
-    screenCenter.y,
+    screenCenter.y + 100,
     topButton.key
   );
 

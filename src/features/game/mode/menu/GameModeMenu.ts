@@ -12,6 +12,7 @@ import { screenSize, screenCenter, nullInteractionId } from '../../commons/Commo
 import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
 import { LocationId } from '../../location/GameMapTypes';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -19,7 +20,7 @@ class GameModeMenu implements IGameUI {
   private modeBanner: GameSprite;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId, modes?: GameMode[]) {
+  constructor(_: GameChapter, locationId: LocationId) {
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: screenCenter.x,
@@ -31,7 +32,7 @@ class GameModeMenu implements IGameUI {
     this.locationId = locationId;
     this.modeBanner = banner;
     this.gameButtons = [];
-    this.createGameButtons(modes);
+    this.fetchLatestState();
   }
 
   private async createGameButtons(modes?: GameMode[]) {
