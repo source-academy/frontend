@@ -96,6 +96,7 @@ class GameStateManager {
     this.locationStates = jsObjectToMap(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
     this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
+    // this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
   }
 
   private loadNewGameStoryState() {
@@ -109,9 +110,8 @@ class GameStateManager {
   //        Interaction        //
   ///////////////////////////////
 
-  public async triggerInteraction(id: string): Promise<void> {
+  public triggerInteraction(id: string): void {
     this.triggeredInteractions.set(id, true);
-    await GameActionManager.getInstance().saveGame();
   }
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
@@ -263,6 +263,10 @@ class GameStateManager {
 
   public getChapterObjectives() {
     return this.chapterObjective;
+  }
+
+  public getTriggeredInteractions() {
+    return this.triggeredInteractions;
   }
 }
 

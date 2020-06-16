@@ -161,9 +161,9 @@ class GameModeExplore implements IGameUI {
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
-  private async explorePointerUp(id: string) {
+  private explorePointerUp(id: string) {
     // Trigger action here
-    await GameActionManager.getInstance().triggerInteraction(id);
+    GameActionManager.getInstance().triggerInteraction(id);
   }
 }
 

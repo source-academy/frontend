@@ -14,6 +14,8 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullGameStat
     })
   };
 
+  console.log(gameState);
+
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/save`, options);
   if (resp && resp.ok) {
     console.log('Game saved!');

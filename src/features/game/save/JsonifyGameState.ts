@@ -40,6 +40,7 @@ export type GameStoryState = {
       interactionId: string;
     };
   };
+  // triggeredInteractions: { [interactionId: string]: boolean };
 };
 
 export type UserState = {
@@ -58,6 +59,7 @@ export function gameStateToJson(
     locationStates: mapToJsObject(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap())
+    // triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions())
   };
 
   const userState: UserState = {
@@ -65,7 +67,7 @@ export function gameStateToJson(
     achievements: userStateManager.getList('achievements')
   };
 
-  const newGameStoryStates = { chapterNum: gameStoryState, ...prevGameState.gameStoryStates };
+  const newGameStoryStates = { [chapterNum]: gameStoryState };
 
   const newGameState = {
     gameStoryStates: newGameStoryStates,
@@ -83,14 +85,14 @@ function mapToJsObject<K, V>(map: Map<K, V>): any {
   return jsObject;
 }
 
-export function jsObjectToMap(object: any): Map<string, any> {
+export function jsObjectToMap(obj: any): Map<string, any> {
   const map = new Map<string, any>();
 
-  Object(object)
-    .entries()
-    .forEach((value: string, key: string) => {
-      map.set(key, value);
+  if (Object.keys(obj).length) {
+    Object.keys(obj).forEach((key: string) => {
+      map.set(key, obj[key]);
     });
+  }
 
   return map;
 }

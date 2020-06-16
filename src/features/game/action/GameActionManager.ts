@@ -105,9 +105,9 @@ class GameActionManager {
     return undefined;
   }
 
-  public async triggerInteraction(id: string): Promise<void> {
+  public triggerInteraction(id: string): void {
     if (this.gameManager) {
-      await this.gameManager.stateManager.triggerInteraction(id);
+      this.gameManager.stateManager.triggerInteraction(id);
     }
     return undefined;
   }
