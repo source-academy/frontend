@@ -52,7 +52,7 @@ class ChapterSelect extends Phaser.Scene {
     if (Math.abs(xOffset) < 100) {
       xOffset = 0;
     }
-    this.scrollSpeed = limitNumber(-100, xOffset, 100) * 0.2;
+    this.scrollSpeed = limitNumber(-50, xOffset, 50) * 0.2;
     this.chapterContainer.x = limitNumber(
       -imageDist * (this.chapterDetails.length - 1),
       this.chapterContainer.x - this.scrollSpeed,

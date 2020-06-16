@@ -22,11 +22,13 @@ import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import { AccountInfo } from 'src/features/game/scenes/chapterSelect/ChapterSelect';
-import { GameSaveManager } from '../../state/GameSaveManager';
+import { GameSaveManager } from '../../save/GameSaveManager';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;
   text: string;
+  continueGame: boolean;
+  chapterNum: number;
 };
 
 class GameManager extends Phaser.Scene {
@@ -74,14 +76,21 @@ class GameManager extends Phaser.Scene {
     GameActionManager.getInstance().setGameManager(this);
   }
 
-  init({ text, accountInfo }: GameManagerProps) {
-    this.saveManager.initialise(accountInfo);
+  async init({ text, accountInfo, continueGame, chapterNum }: GameManagerProps) {
+    chapterNum = 0;
+    continueGame = true;
     this.currentChapter = Parser.parse(text);
+
+    await this.saveManager.initialise(accountInfo, chapterNum);
+    this.stateManager.initialise(
+      this.currentChapter,
+      continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
+    );
+    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
-    this.userStateManager.initialise();
     this.modeManager.initialise(this.currentChapter);
-    this.stateManager.processChapter(this.currentChapter);
   }
 
   public preload() {
@@ -96,7 +105,6 @@ class GameManager extends Phaser.Scene {
 
   public create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
-    this.saveManager.saveGame();
   }
 
   private preloadBaseAssets() {

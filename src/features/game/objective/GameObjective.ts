@@ -38,6 +38,10 @@ class GameObjective {
   public getObjectives() {
     return this.objective;
   }
+
+  public setObjectives(objective: Map<string, boolean>) {
+    this.objective = objective;
+  }
 }
 
 export default GameObjective;

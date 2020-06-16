@@ -6,6 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { GameStoryState, jsObjectToMap } from '../save/GameSaveHelper';
 
 class GameStateManager {
   // Game State
@@ -71,12 +72,15 @@ class GameStateManager {
   //        Preprocess         //
   ///////////////////////////////
 
-  public processChapter(chapter: GameChapter): void {
+  public initialise(chapter: GameChapter, gameStoryState: GameStoryState | undefined): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
-    this.locationStates = this.chapter.map.getLocations();
-    this.objectPropertyMap = this.chapter.map.getObjects();
-    this.bboxPropertyMap = this.chapter.map.getBBox();
+
+    if (gameStoryState) {
+      this.loadFromGameStoryState(gameStoryState);
+    } else {
+      this.loadNewGameStoryState();
+    }
 
     // Register every mode of each location under the chapter
     this.locationStates.forEach((location, locationId, map) => {
@@ -85,6 +89,21 @@ class GameStateManager {
         location.modes.forEach(mode => this.locationHasUpdate.get(locationId)!.set(mode, true));
       }
     });
+  }
+
+  private loadFromGameStoryState(gameStoryState: GameStoryState) {
+    this.chapterObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
+    this.locationStates = jsObjectToMap(gameStoryState.locationStates);
+    this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
+    this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
+    this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
+  }
+
+  private loadNewGameStoryState() {
+    this.chapterObjective = this.chapter.objectives;
+    this.locationStates = this.chapter.map.getLocations();
+    this.objectPropertyMap = this.chapter.map.getObjects();
+    this.bboxPropertyMap = this.chapter.map.getBBox();
   }
 
   ///////////////////////////////
@@ -156,7 +175,6 @@ class GameStateManager {
     if (!this.locationStates.get(locationId)![attr]) {
       this.locationStates.get(locationId)![attr] = [];
     }
-
     this.locationStates.get(locationId)![attr]!.push(attrElem);
     this.updateLocationStateAttr(locationId, attr);
   }
@@ -236,7 +254,7 @@ class GameStateManager {
   }
 
   ///////////////////////////////
-  //          Getters          //
+  //          Saving           //
   ///////////////////////////////
 
   public getLocationStates() {
@@ -245,6 +263,10 @@ class GameStateManager {
 
   public getChapterObjectives() {
     return this.chapterObjective;
+  }
+
+  public getTriggeredInteractions() {
+    return this.triggeredInteractions;
   }
 }
 

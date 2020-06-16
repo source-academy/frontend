@@ -80,7 +80,7 @@ class GameObjectManager {
       const objectSprite = this.objectIdMap.get(id);
 
       if (objectProp && objectProp.actions && objectSprite) {
-        objectSprite.on('pointerdown', () =>
+        objectSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
           GameActionManager.getInstance().executeStoryAction(objectProp.actions!)
         );
       }

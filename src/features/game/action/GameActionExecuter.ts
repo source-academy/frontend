@@ -8,6 +8,7 @@ export default class GameActionExecuter {
     for (const action of actions) {
       await this.executeStoryAction(action);
     }
+    await GameActionManager.getInstance().saveGame();
   }
 
   private async executeStoryAction(action: GameAction) {

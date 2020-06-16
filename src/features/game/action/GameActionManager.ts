@@ -150,6 +150,7 @@ class GameActionManager {
     event: string | symbol,
     fn: (id: ItemId) => void
   ) {
+    console.log('here');
     if (this.gameManager) {
       this.gameManager.objectManager.addInteractiveObjectsListeners(locationId, event, fn);
     }
@@ -343,6 +344,14 @@ class GameActionManager {
     if (this.gameManager) {
       this.gameManager.popUpManager.destroyPopUp(position);
     }
+  }
+
+  /////////////////////
+  //    Save Game    //
+  /////////////////////
+
+  public async saveGame() {
+    await this.getGameManager().saveManager.saveGame();
   }
 }
 
