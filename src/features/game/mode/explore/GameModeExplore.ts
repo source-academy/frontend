@@ -11,12 +11,13 @@ import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { LocationId } from '../../location/GameMapTypes';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationId: LocationId;
 
-  constructor(locationId: LocationId) {
+  constructor(chapter: GameChapter, locationId: LocationId) {
     this.uiContainer = undefined;
     this.locationId = locationId;
   }
