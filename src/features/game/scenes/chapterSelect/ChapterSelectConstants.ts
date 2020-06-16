@@ -8,7 +8,7 @@ export const chapterFrameXOffset = 15;
 export const chapterFrameYOffset = -10;
 export const chapterTextYOffset = -125;
 
-const marginX = 300;
+const marginX = 0;
 const marginY = 100;
 
 export const maskRect = {
