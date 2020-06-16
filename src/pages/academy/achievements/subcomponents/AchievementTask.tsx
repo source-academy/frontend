@@ -15,18 +15,10 @@ type AchievementTaskProps = {
   studentProgress: { [id: number]: AchievementProgress };
   filterStatus: FilterStatus;
   setModalID: any;
-  removeItem: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const {
-    achievement,
-    achievementDict,
-    filterStatus,
-    setModalID,
-    studentProgress,
-    removeItem
-  } = props;
+  const { achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
@@ -168,7 +160,6 @@ function AchievementTask(props: AchievementTaskProps) {
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={togglePrerequisitesDropdown}
             displayModal={displayModal}
-            removeItem={removeItem}
           />
           {isDropdownOpen ? (
             <ul>

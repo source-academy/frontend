@@ -48,10 +48,6 @@ const countItemByFilterStatus = (
   }
 };
 
-const removeItem = (achievementID: number) => {
-  delete achievementDict[achievementID];
-};
-
 /**
  * Maps the achievement dict to AchievementTask Elements
  *
@@ -65,8 +61,7 @@ export const mapAchievementDictToTask = (
   achievementDict: { [id: number]: AchievementItem },
   filterStatus: FilterStatus,
   setModalID: any,
-  studentProgress: { [id: number]: AchievementProgress },
-  isEditable: boolean
+  studentProgress: { [id: number]: AchievementProgress }
 ) => {
   return Object.values(achievementDict)
     .filter(achievement => achievement.isTask)
@@ -77,7 +72,6 @@ export const mapAchievementDictToTask = (
         achievementDict={achievementDict}
         filterStatus={filterStatus}
         setModalID={setModalID}
-        removeItem={removeItem}
       />
     ));
 };
@@ -113,13 +107,7 @@ function Achievement() {
 
         <div className="cards">
           <ul className="display-list">
-            {mapAchievementDictToTask(
-              achievementDict,
-              filterStatus,
-              setModalID,
-              studentProgress,
-              false
-            )}
+            {mapAchievementDictToTask(achievementDict, filterStatus, setModalID, studentProgress)}
           </ul>
         </div>
 

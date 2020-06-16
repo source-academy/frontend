@@ -17,7 +17,6 @@ type AchievementCardProps = {
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
-  removeItem: any;
 };
 
 function AchievementCard(props: AchievementCardProps) {
