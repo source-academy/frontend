@@ -1,19 +1,19 @@
 import { Reducer } from 'redux';
 
-import { defaultDashBoard } from '../../commons/application/ApplicationTypes';
+import { defaultDashboard } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
 
-import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from './DashboardTypes';
+import { DashboardState, UPDATE_GROUP_GRADING_SUMMARY } from './DashboardTypes';
 
-export const DashboardReducer: Reducer<DashBoardState> = (
-  state = defaultDashBoard,
+export const DashboardReducer: Reducer<DashboardState> = (
+  state = defaultDashboard,
   action: SourceActionType
 ) => {
   switch (action.type) {
-    case UPDATE_GROUP_OVERVIEWS:
+    case UPDATE_GROUP_GRADING_SUMMARY:
       return {
         ...state,
-        groupOverviews: action.payload
+        gradingSummary: action.payload
       };
     default:
       return state;

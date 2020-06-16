@@ -1,7 +1,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
+import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { store } from '../../pages/createStore';
 import { GameState, OverallState, Role } from '../application/ApplicationTypes';
@@ -28,7 +28,7 @@ import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHe
 import { WorkspaceLocation } from '../workspace/WorkspaceTypes';
 import { mockAssessmentOverviews, mockAssessments } from './AssessmentMocks';
 import { mockFetchGrading, mockFetchGradingOverview } from './GradingMocks';
-import { mockGroupOverviews } from './GroupMocks';
+import { mockGradingSummary } from './GroupMocks';
 import { mockNotifications } from './UserMocks';
 
 export function* mockBackendSaga(): SagaIterator {
@@ -216,7 +216,7 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateNotifications(mockNotifications));
   });
 
-  yield takeEvery(FETCH_GROUP_OVERVIEWS, function* () {
-    yield put(actions.updateGroupOverviews([...mockGroupOverviews]));
+  yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* () {
+    yield put(actions.updateGroupGradingSummary([...mockGradingSummary]));
   });
 }

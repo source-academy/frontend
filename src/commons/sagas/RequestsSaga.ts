@@ -13,7 +13,7 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
-import { GroupOverview } from '../../features/dashboard/DashboardTypes';
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
@@ -582,8 +582,8 @@ export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: 
   return resp ? await resp.text() : null;
 };
 
-export async function getGroupOverviews(tokens: Tokens): Promise<GroupOverview[] | null> {
-  const resp = await request('groups', 'GET', {
+export async function getGradingSummary(tokens: Tokens): Promise<GradingSummary | null> {
+  const resp = await request('grading/summary', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -592,11 +592,7 @@ export async function getGroupOverviews(tokens: Tokens): Promise<GroupOverview[]
     return null;
   }
 
-  const groupOverviews = await resp.json();
-
-  return groupOverviews.map((overview: any) => {
-    return overview as GroupOverview;
-  });
+  return await resp.json();
 }
 
 /**

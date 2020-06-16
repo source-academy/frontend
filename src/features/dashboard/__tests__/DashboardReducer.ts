@@ -1,54 +1,60 @@
-import { defaultDashBoard } from '../../../commons/application/ApplicationTypes';
+import { defaultDashboard } from '../../../commons/application/ApplicationTypes';
 import { DashboardReducer } from '../DashboardReducer';
-import { DashBoardState, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
-import { GroupOverview } from '../DashboardTypes';
+import { DashboardState, UPDATE_GROUP_GRADING_SUMMARY } from '../DashboardTypes';
+import { GradingSummary } from '../DashboardTypes';
 
-const groupOverviewsTest1: GroupOverview[] = [
+const gradingSummaryTest1: GradingSummary = [
   {
-    id: 1,
-    avengerName: 'Billy',
-    groupName: 'Test Group 1'
+    leaderName: 'Billy',
+    groupName: 'Test Group 1',
+    ungradedMissions: 12,
+    ungradedSidequests: 34,
+    submittedMissions: 56,
+    submittedSidequests: 78
   }
 ];
 
-const groupOverviewsTest2: GroupOverview[] = [
+const gradingSummaryTest2: GradingSummary = [
   {
-    id: 2,
-    avengerName: 'Justin',
-    groupName: 'Test Group 2'
+    leaderName: 'Justin',
+    groupName: 'Test Group 2',
+    ungradedMissions: 312,
+    ungradedSidequests: 434,
+    submittedMissions: 556,
+    submittedSidequests: 678
   }
 ];
 
-test('UPDATE_GROUP_OVERVIEWS works correctly in inserting group overviews', () => {
+test('UPDATE_GROUP_GRADING_SUMMARY initialises dashboard state', () => {
   const action = {
-    type: UPDATE_GROUP_OVERVIEWS,
-    payload: groupOverviewsTest1
+    type: UPDATE_GROUP_GRADING_SUMMARY,
+    payload: gradingSummaryTest1
   };
 
-  const result: DashBoardState = DashboardReducer(defaultDashBoard, action);
+  const result: DashboardState = DashboardReducer(defaultDashboard, action);
 
   expect(result).toEqual({
-    ...defaultDashBoard,
-    groupOverviews: groupOverviewsTest1
+    ...defaultDashboard,
+    gradingSummary: gradingSummaryTest1
   });
 });
 
-test('UPDATE_GROUP_OVERVIEWS works correctly in updating group overviews', () => {
+test('UPDATE_GROUP_GRADING_SUMMARY updates dashboard state', () => {
   const newDefaultDashBoard = {
-    ...defaultDashBoard,
-    groupOverviews: groupOverviewsTest1
+    ...defaultDashboard,
+    gradingSummary: gradingSummaryTest1
   };
 
-  const groupOverviewsPayload = [...groupOverviewsTest2, ...groupOverviewsTest1];
+  const gradingSummaryPayload = [...gradingSummaryTest1, ...gradingSummaryTest2];
   const action = {
-    type: UPDATE_GROUP_OVERVIEWS,
-    payload: groupOverviewsPayload
+    type: UPDATE_GROUP_GRADING_SUMMARY,
+    payload: gradingSummaryPayload
   };
 
-  const result: DashBoardState = DashboardReducer(newDefaultDashBoard, action);
+  const result: DashboardState = DashboardReducer(newDefaultDashBoard, action);
 
   expect(result).toEqual({
-    ...defaultDashBoard,
-    groupOverviews: groupOverviewsPayload
+    ...defaultDashboard,
+    gradingSummary: gradingSummaryPayload
   });
 });
