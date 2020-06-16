@@ -6,8 +6,6 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
-import { saveData } from './serverContact';
 
 class GameStateManager {
   // Game State
@@ -17,7 +15,6 @@ class GameStateManager {
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
   private bboxPropertyMap: Map<ItemId, BBoxProperty>;
-  private accountInfo: AccountInfo | undefined;
 
   // Triggered Interactions
   private triggeredInteractions: Map<ItemId, boolean>;
@@ -31,14 +28,6 @@ class GameStateManager {
     this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
 
     this.triggeredInteractions = new Map<ItemId, boolean>();
-  }
-
-  public saveGame() {
-    if (!this.accountInfo) {
-      console.log('account not on');
-      return;
-    }
-    saveData(this.accountInfo, { hello: 'world' });
   }
 
   ///////////////////////////////
@@ -82,8 +71,7 @@ class GameStateManager {
   //        Preprocess         //
   ///////////////////////////////
 
-  public processChapter(chapter: GameChapter, accountInfo: AccountInfo): void {
-    this.accountInfo = accountInfo;
+  public processChapter(chapter: GameChapter): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
     this.locationStates = this.chapter.map.getLocations();
@@ -245,6 +233,18 @@ class GameStateManager {
         this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes);
       }
     });
+  }
+
+  ///////////////////////////////
+  //          Getters          //
+  ///////////////////////////////
+
+  public getLocationStates() {
+    return this.locationStates;
+  }
+
+  public getChapterObjectives() {
+    return this.chapterObjective;
   }
 }
 
