@@ -34,6 +34,10 @@ class GameObjective {
   public getObjectiveState(key: string): boolean | undefined {
     return this.objective.get(key);
   }
+
+  public getObjectives() {
+    return this.objective;
+  }
 }
 
 export default GameObjective;
