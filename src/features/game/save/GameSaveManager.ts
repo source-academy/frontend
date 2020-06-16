@@ -5,11 +5,11 @@ import GameActionManager from '../action/GameActionManager';
 
 export class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
-  private fullGameState: FullGameState;
+  private loadedGameState: FullGameState;
   private chapterNum: number;
 
   constructor() {
-    this.fullGameState = {
+    this.loadedGameState = {
       gameStoryStates: {},
       userState: {
         collectibles: [],
@@ -24,24 +24,25 @@ export class GameSaveManager {
     this.accountInfo = accountInfo;
     this.chapterNum = chapterNum;
     const fullGameState = await loadData(this.getAccountInfo());
-    this.fullGameState = fullGameState;
+    this.loadedGameState = fullGameState;
   }
 
-  public saveGame() {
+  public async saveGame() {
     const gameStateManager = GameActionManager.getInstance().getGameManager().stateManager;
     const userStateManager = GameActionManager.getInstance().getGameManager().userStateManager;
-    saveData(
+
+    await saveData(
       this.getAccountInfo(),
-      gameStateToJson(this.fullGameState, this.chapterNum, gameStateManager, userStateManager)
+      gameStateToJson(this.loadedGameState, this.chapterNum, gameStateManager, userStateManager)
     );
   }
 
   public getLoadedUserState() {
-    return this.fullGameState.userState;
+    return this.loadedGameState.userState;
   }
 
   public getLoadedGameStoryState() {
-    return this.fullGameState.gameStoryStates[this.chapterNum];
+    return this.loadedGameState.gameStoryStates[this.chapterNum];
   }
 
   private getAccountInfo() {

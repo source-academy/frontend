@@ -1,4 +1,3 @@
-import produce from 'immer';
 import GameUserStateManager from '../state/GameUserStateManager';
 import GameStateManager from '../state/GameStateManager';
 
@@ -66,10 +65,12 @@ export function gameStateToJson(
     achievements: userStateManager.getList('achievements')
   };
 
-  const newGameState = produce(prevGameState, next => {
-    next.userState = userState;
-    next.gameStoryStates[chapterNum] = gameStoryState;
-  });
+  const newGameStoryStates = { chapterNum: gameStoryState, ...prevGameState.gameStoryStates };
+
+  const newGameState = {
+    gameStoryStates: newGameStoryStates,
+    userState
+  };
 
   return newGameState;
 }

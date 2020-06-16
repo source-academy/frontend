@@ -163,7 +163,7 @@ class GameModeExplore implements IGameUI {
 
   private async explorePointerUp(id: string) {
     // Trigger action here
-    GameActionManager.getInstance().triggerInteraction(id);
+    await GameActionManager.getInstance().triggerInteraction(id);
   }
 }
 

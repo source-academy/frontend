@@ -109,9 +109,9 @@ class GameStateManager {
   //        Interaction        //
   ///////////////////////////////
 
-  public triggerInteraction(id: string): void {
+  public async triggerInteraction(id: string): Promise<void> {
     this.triggeredInteractions.set(id, true);
-    GameActionManager.getInstance().saveGame();
+    await GameActionManager.getInstance().saveGame();
   }
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
@@ -175,7 +175,6 @@ class GameStateManager {
     if (!this.locationStates.get(locationId)![attr]) {
       this.locationStates.get(locationId)![attr] = [];
     }
-
     this.locationStates.get(locationId)![attr]!.push(attrElem);
     this.updateLocationStateAttr(locationId, attr);
   }

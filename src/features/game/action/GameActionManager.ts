@@ -105,9 +105,9 @@ class GameActionManager {
     return undefined;
   }
 
-  public triggerInteraction(id: string): void {
+  public async triggerInteraction(id: string): Promise<void> {
     if (this.gameManager) {
-      return this.gameManager.stateManager.triggerInteraction(id);
+      await this.gameManager.stateManager.triggerInteraction(id);
     }
     return undefined;
   }
@@ -349,8 +349,8 @@ class GameActionManager {
   //    Save Game    //
   /////////////////////
 
-  public saveGame() {
-    this.getGameManager().saveManager.saveGame();
+  public async saveGame() {
+    await this.getGameManager().saveManager.saveGame();
   }
 }
 
