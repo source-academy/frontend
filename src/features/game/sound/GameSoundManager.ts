@@ -16,9 +16,9 @@ class SoundManager {
       this.soundMap.set(asset.key, scene.sound.add(asset.key));
     });
 
-    if (bgMusicAsset) {
-      this.bgMusic = scene.sound.add(bgMusicAsset);
-    }
+    // if (bgMusicAsset) {
+    //   this.bgMusic = scene.sound.add(bgMusicAsset);
+    // }
   }
 
   playSound(assetKey: string) {
