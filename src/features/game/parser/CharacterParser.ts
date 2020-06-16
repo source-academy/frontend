@@ -27,9 +27,8 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
   let addCharacterToMap = false;
   if (rawCharacterStr[0] === '+') {
     addCharacterToMap = true;
+    rawCharacterStr = rawCharacterStr.slice(1);
   }
-
-  rawCharacterStr = rawCharacterStr.slice(1);
 
   const [id, name, defaultExpression, defaultPosition] = splitByChar(rawCharacterStr, ',');
 
@@ -77,5 +76,4 @@ export function addCharacterExprToMap(charId: string, expression: string) {
     characterAssetKey(charId, expression),
     characterAssetValue(charId, expression)
   );
-
 }

@@ -10,6 +10,8 @@ export type ObjectProperty = TrackInteraction &
     assetKey: string;
     x: number;
     y: number;
+    width?: number;
+    height?: number;
     visibility?: true;
   };
 

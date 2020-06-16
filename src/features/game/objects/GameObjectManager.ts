@@ -82,6 +82,12 @@ class GameObjectManager {
         const objectProp = objectPropMap.get(id);
         if (objectProp && objectProp.isInteractive) {
           this.addObjectListener(id, event, () => fn(id));
+
+          if (objectProp.actions) {
+            this.addObjectListener(id, Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+              GameActionManager.getInstance().executeStoryAction(objectProp.actions!);
+            });
+          }
         }
       });
     }

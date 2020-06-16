@@ -1,4 +1,3 @@
-
 import { splitToLines, mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
 import { LocationId } from '../location/GameMapTypes';
 import Parser from './Parser';
@@ -36,12 +35,14 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
       objectDetail = objectDetail.slice(1);
     }
 
-    const [objectId, shortPath, x, y] = splitByChar(objectDetail, ',');
+    const [objectId, shortPath, x, y, width, height] = splitByChar(objectDetail, ',');
 
     const object = {
       assetKey: objectAssetKey(shortPath),
       x: parseInt(x),
       y: parseInt(y),
+      width: parseInt(width) || undefined,
+      height: parseInt(height) || undefined,
       isInteractive: false,
       interactionId: objectId
     };
@@ -57,14 +58,14 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
 
   // Parse actions
   if (separatorIndex !== -1) {
-    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length - 1);
-
+    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length);
     objectActions.forEach(objectDetail => {
       const [objectId, ...actions] = objectDetail.split(', ');
 
       const objectProperty = Parser.chapter.map.getObjects().get(objectId);
       if (objectProperty) {
         objectProperty.actions = ActionParser(actions);
+        objectProperty.isInteractive = true;
       }
     });
   }
