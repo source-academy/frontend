@@ -75,7 +75,6 @@ export function createChapter(
   ).setOrigin(0.5);
 
   chapterContainer.add([chapterPreview, chapterFrame, chapterRepeat, chapterContinue, text]);
-  // chapterContainer.setSize(imageRect.width, imageRect.height);
 
   return chapterContainer;
 }
