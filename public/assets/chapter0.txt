@@ -35,7 +35,7 @@ talk, "Talk at Classroom"
 <<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
-+yourChair, yourChair, 932, 549, 30, 30
++yourChair, yourChair, 932, 549, 300, 300
 +door6, door/yourRoom-dim, 831, 270
 +yourBed, yourHeadphones, 372, 514
 yourOtherDoor, door/yourRoom-dim, 0, 0

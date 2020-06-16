@@ -68,6 +68,29 @@ class GameObjectManager {
     GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
+  public enableObjectActions(locationId: LocationId) {
+    const objectIds = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.objects,
+      locationId
+    );
+    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
+
+    objectIds.forEach((id: ItemId) => {
+      const objectProp = objectPropMap.get(id);
+      const objectSprite = this.objectIdMap.get(id);
+
+      if (objectProp && objectProp.actions && objectSprite) {
+        objectSprite.on('pointerdown', () =>
+          GameActionManager.getInstance().executeStoryAction(objectProp.actions!)
+        );
+      }
+    });
+  }
+
+  public disableObjectActions() {
+    this.objectIdMap.forEach((sprite: Phaser.GameObjects.GameObject) => sprite.off('pointerdown'));
+  }
+
   public addInteractiveObjectsListeners(
     locationId: LocationId,
     event: string | symbol,
@@ -84,12 +107,6 @@ class GameObjectManager {
         if (objectProp && objectProp.isInteractive) {
           this.addObjectListener(id, event, () => fn(id));
 
-          if (objectProp.actions) {
-            console.log(objectProp);
-            this.addObjectListener(id, Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-              GameActionManager.getInstance().executeStoryAction(objectProp.actions!);
-            });
-          }
         }
       });
     }
