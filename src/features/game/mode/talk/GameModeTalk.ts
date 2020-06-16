@@ -9,6 +9,7 @@ import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -16,11 +17,24 @@ class GameModeTalk implements IGameUI {
   private dialogues: Map<ItemId, Dialogue>;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId, talkTopics: ItemId[], dialogues: Map<ItemId, Dialogue>) {
+  constructor(chapter: GameChapter, locationId: LocationId) {
+    const dialogues = chapter.map.getDialogues();
+    this.dialogues = dialogues;
+
     this.uiContainer = undefined;
     this.locationId = locationId;
-    this.dialogues = dialogues;
     this.gameButtons = [];
+    this.fetchLatestState();
+  }
+
+  public fetchLatestState(): void {
+    const talkTopics = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.talkTopics,
+      this.locationId
+    );
+    if (!talkTopics) {
+      return;
+    }
     this.createGameButtons(talkTopics);
   }
 
@@ -28,7 +42,7 @@ class GameModeTalk implements IGameUI {
     // Refresh Buttons
     this.gameButtons = [];
 
-    await dialogueIds.forEach(dialogueId => {
+    dialogueIds.forEach(dialogueId => {
       const dialogue = this.dialogues.get(dialogueId);
       if (dialogue) {
         this.addTalkOptionButton(
@@ -71,17 +85,6 @@ class GameModeTalk implements IGameUI {
 
     // Update
     this.gameButtons.push(newTalkButton);
-  }
-
-  public fetchLatestState(): void {
-    const latestTalkTopics = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
-      this.locationId
-    );
-    if (!latestTalkTopics) {
-      return;
-    }
-    this.createGameButtons(latestTalkTopics);
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {

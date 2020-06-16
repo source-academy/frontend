@@ -1,62 +1,55 @@
 import { IGameUI } from '../commons/CommonsTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import { LocationId, GameLocation } from '../location/GameMapTypes';
+import GameModeMenu from './menu/GameModeMenu';
+import GameModeTalk from './talk/GameModeTalk';
+import GameModeMove from './move/GameModeMove';
+import GameModeExplore from './explore/GameModeExplore';
+import GameActionManager from '../action/GameActionManager';
 import { GameChapter } from '../chapter/GameChapterTypes';
-import GameModeMenuManager from './menu/GameModeMenuManager';
-import GameModeTalkManager from './talk/GameModeTalkManager';
-import GameModeMoveManager from './move/GameModeMoveManager';
-import GameModeExploreManager from './explore/GameModeExploreManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
-import { LocationId } from '../location/GameMapTypes';
 
 class GameModeManager {
-  private gameModes: Map<string, Map<GameMode, IGameUI>>;
+  private gameModes: Map<LocationId, Map<GameMode, IGameUI>>;
 
   constructor() {
-    this.gameModes = new Map<string, Map<GameMode, IGameUI>>();
+    this.gameModes = new Map<LocationId, Map<GameMode, IGameUI>>();
   }
 
-  public processModes(chapter: GameChapter) {
-    const locationModes = new Map<GameMode, Map<string, IGameUI>>();
-    locationModes.set(GameMode.Menu, GameModeMenuManager.processModeMenus(chapter));
-    locationModes.set(GameMode.Talk, GameModeTalkManager.processTalkMenus(chapter));
-    locationModes.set(GameMode.Move, GameModeMoveManager.processMoveMenus(chapter));
-    locationModes.set(GameMode.Explore, GameModeExploreManager.processExploreMenus(chapter));
+  public initialise(chapter: GameChapter) {
+    chapter.map.getLocations().forEach((location: GameLocation) => {
+      if (!location.modes) {
+        throw new Error(`Location ${location.id} does not have any modes`);
+      }
 
-    locationModes.forEach((locToUI, mode, map) => {
-      locToUI.forEach((gameUI, locationId, map) => {
-        if (!this.gameModes.get(locationId)) {
-          this.gameModes.set(locationId, new Map<GameMode, IGameUI>());
-        }
-        if (gameUI) {
-          this.gameModes.get(locationId)!.set(mode, gameUI);
-        }
+      const locationModes = new Map<GameMode, IGameUI>();
+
+      [GameMode.Menu, ...location.modes].forEach(mode => {
+        locationModes.set(mode, this.createMode(location.id, mode));
       });
+
+      this.gameModes.set(location.id, locationModes);
     });
   }
 
-  public addMode(mode: GameMode, locationId: LocationId) {
-    if (!this.gameModes.get(locationId)) {
-      this.gameModes.set(locationId, new Map<GameMode, IGameUI>());
+  private createMode(locationId: LocationId, mode: GameMode): IGameUI {
+    const chapter = GameActionManager.getInstance().getGameManager().currentChapter;
+    switch (mode) {
+      case GameMode.Menu:
+        return new GameModeMenu(chapter, locationId);
+      case GameMode.Talk:
+        return new GameModeTalk(chapter, locationId);
+      case GameMode.Move:
+        return new GameModeMove(chapter, locationId);
+      case GameMode.Explore:
+        return new GameModeExplore(chapter, locationId);
     }
-    const chapter = GameActionManager.getInstance().getGameManager()!.currentChapter;
-    if (!chapter) return;
-
-    let gameUI: IGameUI;
-    if (mode === GameMode.Menu) {
-      gameUI = GameModeMenuManager.processLocation(chapter, locationId);
-    } else if (mode === GameMode.Talk) {
-      gameUI = GameModeTalkManager.processLocation(chapter, locationId);
-    } else if (mode === GameMode.Move) {
-      gameUI = GameModeMoveManager.processLocation(chapter, locationId);
-    } else if (mode === GameMode.Explore) {
-      gameUI = GameModeExploreManager.processLocation(chapter, locationId);
-    } else {
-      return;
-    }
-    this.gameModes.get(locationId)!.set(mode, gameUI);
   }
 
-  public removeMode(mode: GameMode, locationId: LocationId) {
+  public addMode(locationId: LocationId, mode: GameMode) {
+    this.gameModes.get(locationId)!.set(mode, this.createMode(locationId, mode));
+  }
+
+  public removeMode(locationId: LocationId, mode: GameMode) {
     this.gameModes.get(locationId)!.delete(mode);
   }
 

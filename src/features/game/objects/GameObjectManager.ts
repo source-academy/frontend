@@ -106,6 +106,7 @@ class GameObjectManager {
         const objectProp = objectPropMap.get(id);
         if (objectProp && objectProp.isInteractive) {
           this.addObjectListener(id, event, () => fn(id));
+
         }
       });
     }
