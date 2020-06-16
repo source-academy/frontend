@@ -1,20 +1,20 @@
-import GameMap from '../location/GameMap';
 import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
 import DialogueParser from './DialogueParser';
-import GameObjective from '../objective/GameObjective';
 import CharacterParser from './CharacterParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import ObjectiveParser from './ObjectiveParser';
+import GameMap from '../location/GameMap';
+import GameObjective from '../objective/GameObjective';
 
 class Parser {
   private static parserMap: object;
   public static chapter: GameChapter;
 
-  constructor() {
+  public static parse(chapterText: string): GameChapter {
     Parser.parserMap = {
       configuration: ConfigParser,
       location: LocationParser,
@@ -31,9 +31,7 @@ class Parser {
       startingLoc: '',
       objectives: new GameObjective()
     };
-  }
 
-  public static parse(chapterText: string): GameChapter {
     // Split files by the <<>>
     splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
       if (!fileName || !fileContent) {

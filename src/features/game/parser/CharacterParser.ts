@@ -27,9 +27,8 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
   let addCharacterToMap = false;
   if (rawCharacterStr[0] === '+') {
     addCharacterToMap = true;
+    rawCharacterStr = rawCharacterStr.slice(1);
   }
-
-  rawCharacterStr = rawCharacterStr.slice(1);
 
   const [id, name, defaultExpression, defaultPosition] = splitByChar(rawCharacterStr, ',');
 
@@ -59,4 +58,22 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
   if (addCharacterToMap) {
     Parser.chapter.map.setItemAt(locationId, GameItemTypeDetails.Character, id);
   }
+}
+
+export function addCharacterExprToMap(charId: string, expression: string) {
+  if (charId === 'you' || charId === 'narrator') {
+    return;
+  }
+  const character = Parser.chapter.map.getCharacters().get(charId);
+
+  if (!character) {
+    throw new Error(`Character ${charId} not in map!`);
+  }
+
+  character.expressions.set(expression, characterAssetKey(charId, expression));
+
+  Parser.chapter.map.addMapAsset(
+    characterAssetKey(charId, expression),
+    characterAssetValue(charId, expression)
+  );
 }

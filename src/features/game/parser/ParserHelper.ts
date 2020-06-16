@@ -63,4 +63,4 @@ export function splitByChar(line: string, splitCharacter: string) {
   return line.split(splitCharacter).map(phrase => phrase.trim());
 }
 
-export const isEnclosedBySquareBrackets = (line: string) => new RegExp(/\[.+\]/).test(line);
+export const isEnclosedBySquareBrackets = (line: string) => new RegExp(/^\[.+\]$/).test(line);

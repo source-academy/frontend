@@ -1,15 +1,17 @@
 import { GameStateStorage } from '../state/GameStateTypes';
 
 export enum GameActionType {
-  MoveCharacter = 'MoveCharacter',
-  UpdateCharacter = 'UpdateCharacter',
-  Collectible = 'Collectible',
-  UpdateChecklist = 'UpdateChecklist',
-  LocationChange = 'LocationChange',
-  AddItem = 'AddItem',
-  RemoveItem = 'RemoveItem',
-  BringUpDialogue = 'BringUpDialogue',
-  ChangeBackground = 'ChangeBackground'
+  MoveCharacter,
+  UpdateCharacter,
+  Collectible,
+  UpdateChecklist,
+  LocationChange,
+  AddItem,
+  RemoveItem,
+  BringUpDialogue,
+  ChangeBackground,
+  RemoveLocationMode,
+  AddLocationMode
 }
 
 export interface IGameActionable {

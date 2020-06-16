@@ -6,6 +6,7 @@ import ActionParser from './ActionParser';
 import { SpeakerDetail, CharacterPosition } from '../character/GameCharacterTypes';
 import Parser from './Parser';
 import { ItemId } from '../commons/CommonsTypes';
+import { addCharacterExprToMap } from './CharacterParser';
 
 export default function DialogueParser(fileName: string, fileContent: string): void {
   // Parse locations per dialogue
@@ -47,10 +48,11 @@ function createDialogueLines(lines: string[]): DialogueLine[] {
     const rawStr = lines[currLinePointer];
     switch (true) {
       case isGotoLabel(rawStr):
-        dialogueLines[dialogueLines.length - 1].goto = stripEnclosingChars(rawStr);
+        dialogueLines[dialogueLines.length - 1].goto = stripEnclosingChars(rawStr).split(' ')[1];
         break;
       case isActionLabel(rawStr):
-        dialogueLines[dialogueLines.length - 1].actions = ActionParser(rawStr.slice(1));
+        const rawActions: string[] = splitByChar(rawStr.slice(1), ',');
+        dialogueLines[dialogueLines.length - 1].actions = ActionParser(rawActions);
         break;
       case isSpeaker(rawStr):
         currLinePointer++;
@@ -72,8 +74,10 @@ function createDialogueLines(lines: string[]): DialogueLine[] {
 }
 
 function parserSpeaker(rawStr: string): SpeakerDetail {
-  const [speakerId, expression, speakerPositionStr] = splitByChar(rawStr.slice(1), ',');
+  const [speakerId, expression, speakerPositionStr] = splitByChar(rawStr.slice(1), ' ');
   const speakerPosition = characterPositionMap[speakerPositionStr];
+
+  addCharacterExprToMap(speakerId, expression);
 
   return {
     speakerId,

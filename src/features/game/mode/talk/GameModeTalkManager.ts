@@ -26,7 +26,7 @@ class GameModeTalkManager {
     if (!location) {
       throw console.error('Location does not exist ', locationId);
     }
-    const possibleDialogues = chapter.map.getItemAt(location.name, GameItemTypeDetails.Dialogue);
+    const possibleDialogues = chapter.map.getItemAt(location.id, GameItemTypeDetails.Dialogue);
     const talkTopics = location.talkTopics || [];
     return new GameModeTalk(location.id, talkTopics, possibleDialogues);
   }

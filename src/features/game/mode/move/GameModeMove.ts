@@ -65,7 +65,7 @@ class GameModeMove implements IGameUI {
         this.addMoveOptionButton(location.name, () => {
           GameActionManager.getInstance().changeLocationTo(locationId);
         });
-        this.locationAssetKeys.set(location.name, location.assetKey);
+        this.locationAssetKeys.set(location.id, location.assetKey);
       }
     });
   }
