@@ -1,6 +1,6 @@
 import { ItemId } from '../commons/CommonsTypes';
 import { Dialogue } from './GameDialogueTypes';
-import { Constants } from '../commons/CommonConstants';
+import { Constants, screenCenter } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import DialogueGenerator from './DialogueGenerator';
 import Typewriter from '../effects/Typewriter';
@@ -71,12 +71,10 @@ export default class DialogueManager {
   private createDialogueBox(scene: Phaser.Scene) {
     const dialogueBox = new Phaser.GameObjects.Image(
       scene,
-      dialogueRect.x,
-      dialogueRect.y,
+      screenCenter.x,
+      screenCenter.y,
       speechBox.key
     )
-      .setOrigin(0)
-      .setDisplaySize(dialogueRect.width, dialogueRect.height)
       .setAlpha(0.8);
 
     return dialogueBox;

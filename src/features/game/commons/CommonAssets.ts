@@ -17,7 +17,12 @@ export const topButton: ImageAsset = {
 
 export const speechBox: ImageAsset = {
   key: 'speechBox',
-  path: '../assets/speechBox2.png'
+  path: '../assets/speechBox.png'
+};
+
+export const speakerBox: ImageAsset = {
+  key: 'speakerBox',
+  path: '../assets/speakerBox.png'
 };
 
 export const defaultLocationImg: ImageAsset = {
@@ -45,11 +50,6 @@ export const talkOptCheck: ImageAsset = {
   path: '../assets/talkOptCheck.png'
 };
 
-export const dialogueBox: ImageAsset = {
-  key: 'speechBox',
-  path: '../assets/speechbox.png'
-};
-
 export const modeMenuBanner: ImageAsset = {
   key: 'mode-banner',
   path: '../assets/modeMenuBanner.png'
@@ -60,12 +60,12 @@ const commonAssets = [
   longButton,
   topButton,
   speechBox,
+  speakerBox,
   defaultLocationImg,
   locationPreviewFill,
   locationPreviewFrame,
   talkOptButton,
   talkOptCheck,
-  dialogueBox,
   modeMenuBanner
 ];
 
