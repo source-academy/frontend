@@ -7,6 +7,7 @@ import { GameAction } from './GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { PopUpPosition } from '../popUp/GamePopUpTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -319,6 +320,28 @@ class GameActionManager {
   public async obtainCollectible(collectibleId: string) {
     if (this.gameManager) {
       this.gameManager.userStateManager.addToList('collectibles', collectibleId);
+    }
+  }
+
+  /////////////////////
+  //     Pop Up      //
+  /////////////////////
+
+  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration?: number) {
+    if (this.gameManager) {
+      this.gameManager.popUpManager.displayPopUp(itemId, position, duration);
+    }
+  }
+
+  public destroyAllPopUps() {
+    if (this.gameManager) {
+      this.gameManager.popUpManager.destroyAllPopUps();
+    }
+  }
+
+  public async destroyPopUp(position: PopUpPosition) {
+    if (this.gameManager) {
+      this.gameManager.popUpManager.destroyPopUp(position);
     }
   }
 }
