@@ -23,7 +23,7 @@ export default class GameUserStateManager {
     this.sendUserStateJson();
   }
 
-  public getList(listName: string): void {
+  public getList(listName: string): string[] {
     return this.userState[listName];
   }
 
