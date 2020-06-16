@@ -50,7 +50,7 @@ class GamePopUpManager {
     GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
 
     // Animate
-    
+
     container.setActive(true);
     container.setVisible(true);
   }
