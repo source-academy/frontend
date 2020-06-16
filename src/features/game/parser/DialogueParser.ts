@@ -8,7 +8,6 @@ import Parser from './Parser';
 import { ItemId } from '../commons/CommonsTypes';
 import { addCharacterExprToMap } from './CharacterParser';
 
-
 export default function DialogueParser(fileName: string, fileContent: string): void {
   // Parse locations per dialogue
   if (fileName === 'dialogueLocation') {
