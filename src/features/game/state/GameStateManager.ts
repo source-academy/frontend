@@ -34,32 +34,26 @@ class GameStateManager {
   //          Helpers          //
   ///////////////////////////////
 
-  private updateLocationStateMode(
-    currLocName: string,
-    targetLocName: string,
-    mode: GameMode
-  ): void {
-    this.locationHasUpdate.get(targetLocName)!.set(mode, true);
+  private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
+    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
+
+    this.locationHasUpdate.get(targetLocId)!.set(mode, true);
 
     // Location has an update to its state, reset its interaction back to not triggered
-    if (currLocName !== targetLocName) {
-      this.triggeredInteractions.set(targetLocName, false);
+    if (currLocId !== targetLocId) {
+      this.triggeredInteractions.set(targetLocId, false);
     }
   }
 
-  private updateLocationStateAttr(
-    currLocName: string,
-    targetLocName: string,
-    attr: GameLocationAttr
-  ): void {
+  private updateLocationStateAttr(targetLocName: string, attr: GameLocationAttr): void {
     switch (attr) {
       case GameLocationAttr.navigation:
-        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Move);
+        return this.updateLocationStateMode(targetLocName, GameMode.Move);
       case GameLocationAttr.talkTopics:
-        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Talk);
+        return this.updateLocationStateMode(targetLocName, GameMode.Talk);
       case GameLocationAttr.boundingBoxes:
       case GameLocationAttr.objects:
-        return this.updateLocationStateMode(currLocName, targetLocName, GameMode.Explore);
+        return this.updateLocationStateMode(targetLocName, GameMode.Explore);
       default:
         return;
     }
@@ -131,28 +125,20 @@ class GameStateManager {
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {
-    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationId)!.modes) {
-      this.locationStates.get(locationId)!.modes = [];
-    }
     this.locationStates.get(locationId)!.modes!.push(mode);
-    this.updateLocationStateMode(currLocId, locationId, GameMode.Menu);
+    this.updateLocationStateMode(locationId, GameMode.Menu);
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
-    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
-    if (this.locationStates.get(locationId)!.modes) {
-      return;
-    }
     const newAttr = this.locationStates
       .get(locationId)!
       .modes!.filter((oldAttr: string) => oldAttr !== mode);
     this.locationStates.get(locationId)!.modes = newAttr;
-    this.updateLocationStateMode(currLocId, locationId, GameMode.Menu);
+    this.updateLocationStateMode(locationId, GameMode.Menu);
   }
 
   ///////////////////////////////
@@ -165,7 +151,6 @@ class GameStateManager {
   }
 
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
     if (!this.locationStates.get(locationId)![attr]) {
@@ -173,11 +158,10 @@ class GameStateManager {
     }
 
     this.locationStates.get(locationId)![attr]!.push(attrElem);
-    this.updateLocationStateAttr(currLocName, locationId, attr);
+    this.updateLocationStateAttr(locationId, attr);
   }
 
   public removeLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    const currLocName = GameActionManager.getInstance().getGameManager().currentLocationId;
     this.checkLocationsExist([locationId]);
 
     if (!this.locationStates.get(locationId)![attr]) {
@@ -187,7 +171,7 @@ class GameStateManager {
       .get(locationId)!
       [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationId)![attr] = newAttr;
-    this.updateLocationStateAttr(currLocName, locationId, attr);
+    this.updateLocationStateAttr(locationId, attr);
   }
 
   ///////////////////////////////
@@ -227,7 +211,7 @@ class GameStateManager {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId, map) => {
       if (location.objects && location.objects.find(objId => objId === id)) {
-        this.updateLocationStateAttr(currLocName, locationId, GameLocationAttr.objects);
+        this.updateLocationStateAttr(locationId, GameLocationAttr.objects);
       }
     });
   }
@@ -246,7 +230,7 @@ class GameStateManager {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId, map) => {
       if (location.boundingBoxes && location.boundingBoxes.find(bboxId => bboxId === id)) {
-        this.updateLocationStateAttr(currLocName, locationId, GameLocationAttr.boundingBoxes);
+        this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes);
       }
     });
   }

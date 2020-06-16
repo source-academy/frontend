@@ -1,4 +1,6 @@
-import { screenSize } from '../../commons/CommonConstants';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
+import { GameSprite } from '../../commons/CommonsTypes';
+import { locationPreviewFill, locationPreviewFrame } from '../../commons/CommonAssets';
 
 export const moveButtonYSpace = screenSize.y * 0.8;
 export const moveButtonXPos = screenSize.x * 0.75;
@@ -13,3 +15,15 @@ export const moveButtonStyle = {
   fontSize: '35px',
   fill: '#abd4c6'
 };
+
+export const previewFill = {
+  assetKey: locationPreviewFill.key,
+  assetXPos: screenCenter.x,
+  assetYPos: screenCenter.y
+} as GameSprite;
+
+export const previewFrame = {
+  assetKey: locationPreviewFrame.key,
+  assetXPos: screenCenter.x,
+  assetYPos: screenCenter.y
+} as GameSprite;

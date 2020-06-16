@@ -52,14 +52,14 @@ class GameActionManager {
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.addMode(mode, locationId);
+      this.gameManager.modeManager.addMode(locationId, mode);
       this.gameManager.stateManager.addLocationMode(locationId, mode);
     }
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.removeMode(mode, locationId);
+      this.gameManager.modeManager.removeMode(locationId, mode);
       this.gameManager.stateManager.removeLocationMode(locationId, mode);
     }
   }

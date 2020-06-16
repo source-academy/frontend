@@ -4,22 +4,20 @@ import {
   previewXPos,
   previewYPos,
   previewHeight,
-  previewWidth
+  previewWidth,
+  previewFill,
+  previewFrame
 } from './GameModeMoveConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
-import { screenSize, screenCenter } from '../../commons/CommonConstants';
-import {
-  longButton,
-  locationPreviewFill,
-  locationPreviewFrame,
-  defaultLocationImg
-} from '../../commons/CommonAssets';
+import { screenSize } from '../../commons/CommonConstants';
+import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -31,18 +29,8 @@ class GameModeMove implements IGameUI {
   private locations: Map<string, GameLocation>;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId, navigation: string[], locations: Map<string, GameLocation>) {
-    const previewFill = {
-      assetKey: locationPreviewFill.key,
-      assetXPos: screenCenter.x,
-      assetYPos: screenCenter.y
-    } as GameSprite;
-
-    const previewFrame = {
-      assetKey: locationPreviewFrame.key,
-      assetXPos: screenCenter.x,
-      assetYPos: screenCenter.y
-    } as GameSprite;
+  constructor(chapter: GameChapter, locationId: LocationId) {
+    this.locations = chapter.map.getLocations();
 
     this.uiContainer = undefined;
     this.currentLocationAssetKey = defaultLocationImg.key;
@@ -50,9 +38,8 @@ class GameModeMove implements IGameUI {
     this.previewFill = previewFill;
     this.previewFrame = previewFrame;
     this.locationId = locationId;
-    this.locations = locations;
     this.gameButtons = [];
-    this.createGameButtons(navigation);
+    this.fetchLatestState();
   }
 
   private async createGameButtons(navigation: string[]) {

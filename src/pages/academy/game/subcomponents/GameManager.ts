@@ -71,6 +71,7 @@ class GameManager extends Phaser.Scene {
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.userStateManager.initialise();
+    this.modeManager.initialise(this.currentChapter);
   }
 
   public preload() {
@@ -78,7 +79,6 @@ class GameManager extends Phaser.Scene {
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadBaseAssets();
 
-    this.modeManager.processModes(this.currentChapter);
     this.layerManager.initialiseMainLayer(this);
     this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
