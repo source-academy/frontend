@@ -5,6 +5,7 @@ import { addLoadingScreen } from '../utils/LoadingScreen';
 import { Color } from '../utils/styles';
 import { fadeOut } from '../effects/FadeEffect';
 import { ChapterDetail, SampleChapters } from './SampleChapters';
+import { RequestOptions } from 'https';
 
 const marginX = 300;
 const marginY = 100;
@@ -35,15 +36,32 @@ const textStyle = {
 type Container = Phaser.GameObjects.Container;
 const { Container, Image, Text, Rectangle } = Phaser.GameObjects;
 
+export type AccountInfo = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type RequestFn = (
+  path: string,
+  method: string,
+  opts: RequestOptions
+) => Promise<Response | null>;
+
 class StoryChapterSelect extends Phaser.Scene {
   private chapterContainer: Container | undefined;
   private scrollSpeed: number;
   private chapterDetails: ChapterDetail[];
 
+  private accountInfo: AccountInfo | undefined;
+
   constructor() {
     super('StoryChapterSelect');
     this.scrollSpeed = 10;
     this.chapterDetails = SampleChapters;
+  }
+
+  init(accountInfo: AccountInfo) {
+    this.accountInfo = accountInfo;
   }
 
   public preload() {
@@ -109,7 +127,7 @@ class StoryChapterSelect extends Phaser.Scene {
   private callGameManager(key: string) {
     if (key[0] === '#') {
       const text = this.cache.text.get(key);
-      this.scene.start('GameManager', { text });
+      this.scene.start('GameManager', { text, accountInfo: this.accountInfo });
     }
   }
 }

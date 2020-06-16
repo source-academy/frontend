@@ -21,8 +21,10 @@ import Parser from 'src/features/game/parser/Parser';
 import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
+import { AccountInfo } from 'src/features/game/storyChapterSelect/StoryChapterSelect';
 
 type GameManagerProps = {
+  accountInfo: AccountInfo;
   text: string;
 };
 
@@ -69,12 +71,13 @@ class GameManager extends Phaser.Scene {
     GameActionManager.getInstance().setGameManager(this);
   }
 
-  init({ text }: GameManagerProps) {
+  init({ text, accountInfo }: GameManagerProps) {
     this.currentChapter = Parser.parse(text);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.userStateManager.initialise();
     this.modeManager.initialise(this.currentChapter);
+    this.stateManager.processChapter(this.currentChapter, accountInfo);
   }
 
   public preload() {
@@ -83,13 +86,13 @@ class GameManager extends Phaser.Scene {
     this.preloadBaseAssets();
 
     this.layerManager.initialiseMainLayer(this);
-    this.stateManager.processChapter(this.currentChapter);
     this.objectManager.processObjects(this.currentChapter);
     this.boundingBoxManager.processBBox(this.currentChapter);
   }
 
   public create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
+    this.stateManager.saveGame();
   }
 
   private preloadBaseAssets() {

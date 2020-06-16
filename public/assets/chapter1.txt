@@ -1,7 +1,5 @@
-<<chapter.txt>>
-startingLoc: 
 
-<<objects.txt>>
+<<objects>>
 
 [room]
 yourCarpet, yourCarpet, 640, 667
@@ -17,7 +15,7 @@ door7, move: [door6, 7, 18], appear: apple
 door7, door.HMoffice, 1499, 87
 yourBed1, yourBed, 372, 514
 
-<<dialogue1.txt>>
+<<dialogue1>>
 
 [part0]
 $narrator
