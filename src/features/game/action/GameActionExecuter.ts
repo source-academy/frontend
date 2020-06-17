@@ -2,11 +2,26 @@ import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { GamePhase } from '../mode/GameModeTypes';
+import { ItemId } from '../commons/CommonsTypes';
 
 export default class GameActionExecuter {
-  public async executeStoryActions(actions: GameAction[]) {
-    for (const action of actions) {
+  private actionMap: Map<ItemId, GameAction> | undefined;
+
+  public initialise(actionMap: Map<ItemId, GameAction>) {
+    this.actionMap = actionMap;
+  }
+
+  public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
+    if (!actionIds || !actionIds.length) {
+      return;
+    }
+    for (const actionId of actionIds) {
+      if (GameActionManager.getInstance().hasTriggeredInteraction(actionId)) {
+        return;
+      }
+      const action = this.getActionFromId(actionId);
       await this.executeStoryAction(action);
+      GameActionManager.getInstance().triggerInteraction(actionId);
     }
     await GameActionManager.getInstance().saveGame();
   }
@@ -73,7 +88,21 @@ export default class GameActionExecuter {
         );
       case GameStateStorage.ChecklistState:
         return GameActionManager.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
+      default:
+        return true;
     }
-    return true;
+  }
+
+  public getActionFromId(actionId: ItemId): GameAction {
+    if (!this.actionMap) {
+      throw new Error('Action map was not found');
+    }
+    const action = this.actionMap.get(actionId);
+
+    if (!action) {
+      throw new Error('Action id was not found');
+    }
+
+    return action;
   }
 }

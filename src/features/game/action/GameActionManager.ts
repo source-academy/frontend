@@ -3,7 +3,6 @@ import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { GameAction } from './GameActionTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
@@ -38,6 +37,10 @@ class GameActionManager {
 
   public setGameManager(gameManagerRef: GameManager): void {
     this.gameManager = gameManagerRef;
+  }
+
+  public getCurrLocId(): LocationId {
+    return this.getGameManager().currentLocationId;
   }
 
   /////////////////////
@@ -150,7 +153,6 @@ class GameActionManager {
     event: string | symbol,
     fn: (id: ItemId) => void
   ) {
-    console.log('here');
     if (this.gameManager) {
       this.gameManager.objectManager.addInteractiveObjectsListeners(locationId, event, fn);
     }
@@ -308,10 +310,8 @@ class GameActionManager {
   //   Story Action  //
   /////////////////////
 
-  public async executeStoryAction(actions: GameAction[]) {
-    if (this.gameManager) {
-      await this.gameManager.actionExecuter.executeStoryActions(actions);
-    }
+  public async executeStoryAction(actionIds: ItemId[] | undefined) {
+    await this.getGameManager().actionExecuter.executeStoryActions(actionIds);
   }
 
   /////////////////////

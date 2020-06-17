@@ -1,7 +1,6 @@
 import { splitToLines, mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
-import { LocationId } from '../location/GameMapTypes';
+import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
-import { GameItemTypeDetails } from '../location/GameMapConstants';
 import { Constants } from '../commons/CommonConstants';
 import ActionParser from './ActionParser';
 
@@ -47,12 +46,12 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
       interactionId: objectId
     };
 
-    Parser.chapter.map.addItemToMap(GameItemTypeDetails.Object, objectId, object);
+    Parser.chapter.map.addItemToMap(GameLocationAttr.objects, objectId, object);
 
     Parser.chapter.map.addMapAsset(objectAssetKey(shortPath), objectAssetValue(shortPath));
 
     if (toAddToMap) {
-      Parser.chapter.map.setItemAt(locationId, GameItemTypeDetails.Object, objectId);
+      Parser.chapter.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
     }
   });
 
@@ -64,7 +63,7 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
 
       const objectProperty = Parser.chapter.map.getObjects().get(objectId);
       if (objectProperty) {
-        objectProperty.actions = ActionParser(actions);
+        objectProperty.actionIds = ActionParser(actions);
         objectProperty.isInteractive = true;
       }
     });

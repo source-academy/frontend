@@ -5,18 +5,20 @@ import {
   classRoomImg,
   emergencyImg,
   hallwayImg,
-  studentRoomImg,
-  GameItemTypeDetails
+  studentRoomImg
 } from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameLocation } from '../location/GameMapTypes';
+import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import { AssetKey, ImageAsset } from '../commons/CommonsTypes';
 import GameObjective from '../objective/GameObjective';
-import { dialogue1, dialogue2 } from './Factory';
 import { Character, CharacterPosition } from '../character/GameCharacterTypes';
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
+import { createCondition, GameActionType, GameAction } from '../action/GameActionTypes';
+import { GameStateStorage } from '../state/GameStateTypes';
+import { PartName, DialogueLine, Dialogue } from '../dialogue/GameDialogueTypes';
+import { createSpeaker } from '../character/GameCharacterHelper';
 
 const LocationSelectMap = new GameMap();
 
@@ -98,38 +100,38 @@ LocationSelectMap.setNavigationFrom('hallway', ['classroom', 'room', 'emergency'
 LocationSelectMap.setNavigationFrom('room', ['hallway']);
 LocationSelectMap.setNavigationFrom('emergency', ['hallway']);
 
-// Add dialogues
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue1', dialogue1);
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Dialogue, 'dialogue2', dialogue2);
-
 // Add bounding boxes
 LocationSelectMap.addItemToMap(
-  GameItemTypeDetails.BBox,
+  GameLocationAttr.boundingBoxes,
   bboxStudentRoom.interactionId,
   bboxStudentRoom
 );
 LocationSelectMap.addItemToMap(
-  GameItemTypeDetails.BBox,
+  GameLocationAttr.boundingBoxes,
   bboxClassRoom.interactionId,
   bboxClassRoom
 );
 
 // Add object
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Object, doorObjProp.interactionId, doorObjProp);
+LocationSelectMap.addItemToMap(GameLocationAttr.objects, doorObjProp.interactionId, doorObjProp);
 
 // Set object
-LocationSelectMap.setItemAt('room', GameItemTypeDetails.Object, doorObjProp.interactionId);
+LocationSelectMap.setItemAt('room', GameLocationAttr.objects, doorObjProp.interactionId);
 
 // Set explore bounding boxes
-LocationSelectMap.setItemAt('room', GameItemTypeDetails.BBox, bboxStudentRoom.interactionId);
-LocationSelectMap.setItemAt('classroom', GameItemTypeDetails.BBox, bboxClassRoom.interactionId);
+LocationSelectMap.setItemAt('room', GameLocationAttr.boundingBoxes, bboxStudentRoom.interactionId);
+LocationSelectMap.setItemAt(
+  'classroom',
+  GameLocationAttr.boundingBoxes,
+  bboxClassRoom.interactionId
+);
 
 // Set talk topics
-LocationSelectMap.setItemAt('room', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('crashsite', GameItemTypeDetails.Dialogue, 'dialogue2');
-LocationSelectMap.setItemAt('classroom', GameItemTypeDetails.Dialogue, 'dialogue1');
-LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Dialogue, 'dialogue2');
-LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Dialogue, 'dialogue1');
+LocationSelectMap.setItemAt('room', GameLocationAttr.talkTopics, 'dialogue1');
+LocationSelectMap.setItemAt('crashsite', GameLocationAttr.talkTopics, 'dialogue2');
+LocationSelectMap.setItemAt('classroom', GameLocationAttr.talkTopics, 'dialogue1');
+LocationSelectMap.setItemAt('emergency', GameLocationAttr.talkTopics, 'dialogue2');
+LocationSelectMap.setItemAt('emergency', GameLocationAttr.talkTopics, 'dialogue1');
 
 //Preload assets
 LocationSelectMap.addMapAsset('beathappy', Constants.assetsFolder + '/avatars/beat/beat.happy.png');
@@ -171,12 +173,12 @@ const scottie: Character = {
   defaultExpression: 'happy'
 };
 
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, beat.id, beat);
-LocationSelectMap.addItemToMap(GameItemTypeDetails.Character, scottie.id, scottie);
+LocationSelectMap.addItemToMap(GameLocationAttr.characters, beat.id, beat);
+LocationSelectMap.addItemToMap(GameLocationAttr.characters, scottie.id, scottie);
 
 // Set characters
-LocationSelectMap.setItemAt('emergency', GameItemTypeDetails.Character, beat.id);
-LocationSelectMap.setItemAt('room', GameItemTypeDetails.Character, scottie.id);
+LocationSelectMap.setItemAt('emergency', GameLocationAttr.characters, beat.id);
+LocationSelectMap.setItemAt('room', GameLocationAttr.characters, scottie.id);
 
 // Set Objectives
 const objectives = new GameObjective();
@@ -187,5 +189,107 @@ const LocationSelectChapter: GameChapter = {
   startingLoc: 'room',
   objectives: objectives
 };
+
+// Create actions
+const gameActions: GameAction[] = [
+  {
+    interactionId: 'cookieAction',
+    actionType: GameActionType.Collectible,
+    actionParams: { id: 'cookies' },
+    isInteractive: false
+  },
+  {
+    interactionId: 'trophyAction',
+    actionType: GameActionType.Collectible,
+    actionParams: { id: 'cookies' },
+    isInteractive: false
+  },
+  {
+    interactionId: 'awardHartinAction',
+    actionType: GameActionType.Collectible,
+    actionParams: { id: 'hartinPoster' },
+    actionConditions: [
+      createCondition(GameStateStorage.UserState, { listName: 'collectibles', id: 'trophy' })
+    ],
+    isInteractive: false
+  },
+  {
+    interactionId: 'addCarpetAction',
+    actionType: GameActionType.UpdateChecklist,
+    actionParams: { id: 'carpet' },
+    isInteractive: false
+  },
+  {
+    interactionId: 'changeLocationAction',
+    actionType: GameActionType.LocationChange,
+    actionParams: { id: 'Emergency' },
+    isInteractive: false
+  }
+];
+
+// Add actions
+gameActions.forEach(gameAction =>
+  LocationSelectMap.addItemToMap(GameLocationAttr.actions, gameAction.interactionId, gameAction)
+);
+
+// Create Dialogues
+const DialogueObject1 = new Map<PartName, DialogueLine[]>();
+DialogueObject1.set('part1', [
+  {
+    line: "How's it going?",
+    speakerDetail: createSpeaker('beat', 'happy', 'right'),
+    actionIds: [gameActions[0].interactionId]
+  },
+  {
+    line: 'It is time for Kepler'
+  },
+  {
+    line: 'You have just completed the Carpet checklist ',
+    speakerDetail: null,
+    actionIds: [gameActions[3].interactionId]
+  },
+  {
+    line: 'How many years was it because it certainly feels like a thousand years'
+  },
+  {
+    line: "Hi, I'm Scottie, the Scottish alien",
+    speakerDetail: createSpeaker('scottie', 'happy', 'left'),
+    goto: 'part2'
+  }
+]);
+
+DialogueObject1.set('part2', [
+  {
+    line: 'Hi this is part2, are you still interested?'
+  },
+  {
+    line: "The Earth that you've inhabited has been destroyed by a comet."
+  },
+  {
+    line: "Here's a jar of cookies to help you feel better",
+    actionIds: ['11']
+  },
+  {
+    line: 'Let me lead you to the classroom',
+    actionIds: [gameActions[4].interactionId]
+  },
+  {
+    line: "Woops, I can't as we are in the middle of a dialogue"
+  }
+]);
+
+export const dialogue1: Dialogue = {
+  title: 'What happened?',
+  content: DialogueObject1
+};
+
+export const dialogue2: Dialogue = {
+  title: 'Are you sure?',
+  content: DialogueObject1
+};
+
+// Add dialogues
+LocationSelectMap.addItemToMap(GameLocationAttr.talkTopics, 'dialogue1', dialogue1);
+LocationSelectMap.addItemToMap(GameLocationAttr.talkTopics, 'dialogue2', dialogue2);
 
 export default LocationSelectChapter;
