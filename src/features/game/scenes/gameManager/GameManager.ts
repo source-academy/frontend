@@ -18,7 +18,6 @@ import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import Parser from 'src/features/game/parser/Parser';
-import { hasDevAccess } from 'src/features/game/utils/GameAccess';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import { AccountInfo } from 'src/features/game/scenes/chapterSelect/ChapterSelect';
@@ -78,7 +77,7 @@ class GameManager extends Phaser.Scene {
 
   async init({ text, accountInfo, continueGame, chapterNum }: GameManagerProps) {
     chapterNum = 0;
-    continueGame = false;
+    continueGame = true;
     this.currentChapter = Parser.parse(text);
 
     await this.saveManager.initialise(accountInfo, chapterNum);
@@ -91,6 +90,7 @@ class GameManager extends Phaser.Scene {
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.modeManager.initialise(this.currentChapter);
+    this.actionExecuter.initialise(this.currentChapter.map.getActions());
   }
 
   public preload() {
@@ -145,13 +145,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public async changeLocationTo(locationId: LocationId) {
-    const location = this.currentChapter.map.getLocation(locationId);
-    if (!location) {
-      if (hasDevAccess()) {
-        throw new Error(`Location ${locationId} not found`);
-      }
-      return;
-    }
+    const location = this.currentChapter.map.getLocationAtId(locationId);
 
     // Deactive current UI of previous location
     this.deactivateCurrentUI();

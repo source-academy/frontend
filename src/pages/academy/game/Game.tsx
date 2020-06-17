@@ -35,7 +35,6 @@ function Game() {
       refreshToken: session.refreshToken
     });
     game.scene.add('GameManager', GameManager);
-    console.log('Adding scenes');
 
     setSessionLoaded(true);
   }, [session, sessionLoaded]);

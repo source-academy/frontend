@@ -49,12 +49,10 @@ export default class DialogueManager {
       dialogueBox
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
         .on('pointerdown', async () => {
-          const { line, speakerDetail, actions } = generateDialogue();
+          const { line, speakerDetail, actionIds } = generateDialogue();
           typewriter.changeLine(line);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);
-          if (actions) {
-            await GameActionManager.getInstance().executeStoryAction(actions);
-          }
+          await GameActionManager.getInstance().executeStoryAction(actionIds);
           if (!line) {
             res();
             GameActionManager.getInstance().changeSpeaker(null);

@@ -1,9 +1,8 @@
 import { splitToLines, isEnclosedBySquareBrackets, mapByHeader, splitByChar } from './ParserHelper';
-import { LocationId } from '../location/GameMapTypes';
+import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
 import { characterPositionMap } from './DialogueParser';
-import { GameItemTypeDetails } from '../location/GameMapConstants';
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
 import { Constants } from '../commons/CommonConstants';
 
@@ -52,11 +51,11 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
   );
 
   // Add character to map
-  Parser.chapter.map.addItemToMap(GameItemTypeDetails.Character, id, character);
+  Parser.chapter.map.addItemToMap(GameLocationAttr.characters, id, character);
 
   // Add character to location
   if (addCharacterToMap) {
-    Parser.chapter.map.setItemAt(locationId, GameItemTypeDetails.Character, id);
+    Parser.chapter.map.setItemAt(locationId, GameLocationAttr.characters, id);
   }
 }
 
