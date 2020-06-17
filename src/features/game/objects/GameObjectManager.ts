@@ -91,7 +91,8 @@ class GameObjectManager {
 
   public disableObjectActions() {
     this.objectIdMap.forEach((sprite: Phaser.GameObjects.GameObject) =>
-      sprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP));
+      sprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP)
+    );
   }
 
   public addInteractiveObjectsListeners(
