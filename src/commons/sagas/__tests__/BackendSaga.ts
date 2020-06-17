@@ -2,10 +2,10 @@ import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
 
 import { Notification } from '../../../commons/notificationBadge/NotificationBadgeTypes';
-import { updateGroupOverviews } from '../../../features/dashboard/DashboardActions';
+import { updateGroupGradingSummary } from '../../../features/dashboard/DashboardActions';
 import {
-  FETCH_GROUP_OVERVIEWS,
-  UPDATE_GROUP_OVERVIEWS
+  FETCH_GROUP_GRADING_SUMMARY,
+  UPDATE_GROUP_GRADING_SUMMARY
 } from '../../../features/dashboard/DashboardTypes';
 import {
   setTokens,
@@ -38,7 +38,7 @@ import {
   mockAssessmentQuestions,
   mockAssessments
 } from '../../mocks/AssessmentMocks';
-import { mockGroupOverviews } from '../../mocks/GroupMocks';
+import { mockGradingSummary } from '../../mocks/GradingMocks';
 import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
@@ -55,7 +55,7 @@ import {
   changeChapter,
   getAssessment,
   getAssessmentOverviews,
-  getGroupOverviews,
+  getGradingSummary,
   getNotifications,
   getUser,
   postAcknowledgeNotifications,
@@ -447,25 +447,25 @@ describe('Test CHANGE_CHAPTER Action', () => {
   });
 });
 
-describe('Test FETCH_GROUP_OVERVIEWS Action', () => {
-  test('when group overviews are obtained', () => {
+describe('Test FETCH_GROUP_GRADING_SUMMARY Action', () => {
+  test('when grading summary is obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(getGroupOverviews, mockTokens), mockGroupOverviews]])
-      .put(updateGroupOverviews(mockGroupOverviews))
+      .provide([[call(getGradingSummary, mockTokens), mockGradingSummary]])
+      .put(updateGroupGradingSummary(mockGradingSummary))
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_OVERVIEWS })
+      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
       .silentRun();
   });
 
   test('when response is null', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(getGroupOverviews, mockTokens), null]])
-      .call(getGroupOverviews, mockTokens)
-      .not.put.actionType(UPDATE_GROUP_OVERVIEWS)
+      .provide([[call(getGradingSummary, mockTokens), null]])
+      .call(getGradingSummary, mockTokens)
+      .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
-      .dispatch({ type: FETCH_GROUP_OVERVIEWS })
+      .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
       .silentRun();
   });
 });

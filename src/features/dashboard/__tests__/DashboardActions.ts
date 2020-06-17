@@ -1,24 +1,31 @@
-import { fetchGroupOverviews, updateGroupOverviews } from '../DashboardActions';
-import { FETCH_GROUP_OVERVIEWS, GroupOverview, UPDATE_GROUP_OVERVIEWS } from '../DashboardTypes';
+import { fetchGroupGradingSummary, updateGroupGradingSummary } from '../DashboardActions';
+import {
+  FETCH_GROUP_GRADING_SUMMARY,
+  GradingSummary,
+  UPDATE_GROUP_GRADING_SUMMARY
+} from '../DashboardTypes';
 
-test('fetchGroupOverviews generates correct action object', () => {
-  const action = fetchGroupOverviews();
+test('fetchGroupGradingSummary generates correct action object', () => {
+  const action = fetchGroupGradingSummary();
   expect(action).toEqual({
-    type: FETCH_GROUP_OVERVIEWS
+    type: FETCH_GROUP_GRADING_SUMMARY
   });
 });
 
-test('updateGroupOverviews generates correct action object', () => {
-  const overviews: GroupOverview[] = [
+test('updateGroupGradingSummary generates correct action object', () => {
+  const overviews: GradingSummary = [
     {
-      id: 1,
-      avengerName: 'Billy',
-      groupName: 'Test Group 1'
+      leaderName: 'Billy',
+      groupName: 'Test Group 1',
+      ungradedMissions: 12,
+      ungradedSidequests: 34,
+      submittedMissions: 56,
+      submittedSidequests: 78
     }
   ];
-  const action = updateGroupOverviews(overviews);
+  const action = updateGroupGradingSummary(overviews);
   expect(action).toEqual({
-    type: UPDATE_GROUP_OVERVIEWS,
+    type: UPDATE_GROUP_GRADING_SUMMARY,
     payload: overviews
   });
 });

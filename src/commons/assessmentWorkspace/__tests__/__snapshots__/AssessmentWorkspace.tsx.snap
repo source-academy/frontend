@@ -6,14 +6,14 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
 "<div className=\\"WorkspaceParent bp3-dark\\">
   <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={false} canOutsideClickClose={true}>
     <Blueprint3.Card elevation={0} interactive={false}>
-      <Markdown content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
+      <Memo(Markdown) content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
-      <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
+      <Memo(Markdown) content=\\"Are you sure you want to reset the template?\\" />
+      <Memo(Markdown) content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
@@ -34,14 +34,14 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
 "<div className=\\"WorkspaceParent bp3-dark\\">
   <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
     <Blueprint3.Card elevation={0} interactive={false}>
-      <Markdown content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
+      <Memo(Markdown) content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
-      <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
+      <Memo(Markdown) content=\\"Are you sure you want to reset the template?\\" />
+      <Memo(Markdown) content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
@@ -62,14 +62,14 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
 "<div className=\\"WorkspaceParent bp3-dark\\">
   <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
     <Blueprint3.Card elevation={0} interactive={false}>
-      <Markdown content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
+      <Memo(Markdown) content=\\"This is the mission briefing. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
-      <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
+      <Memo(Markdown) content=\\"Are you sure you want to reset the template?\\" />
+      <Memo(Markdown) content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>
@@ -90,14 +90,14 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
 "<div className=\\"WorkspaceParent bp3-dark\\">
   <Blueprint3.Dialog className=\\"assessment-briefing\\" isOpen={true} canOutsideClickClose={true}>
     <Blueprint3.Card elevation={0} interactive={false}>
-      <Markdown content=\\"This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
+      <Memo(Markdown) content=\\"This is the closed mission briefing. The save button should not be there. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas viverra, sem scelerisque ultricies ullamcorper, sem nibh sollicitudin enim, at ultricies sem orci eget odio. Pellentesque varius et mauris quis vestibulum. Etiam in egestas dolor. Nunc consectetur, sapien sodales accumsan convallis, lectus mi tempus ipsum, vel ornare metus turpis sed justo. Vivamus at tellus sed ex convallis commodo at in lectus. Pellentesque pharetra pulvinar sapien pellentesque facilisis. Curabitur efficitur malesuada urna sed aliquam. Quisque massa metus, aliquam in sagittis non, cursus in sem. Morbi vel nunc at nunc pharetra lobortis. Aliquam feugiat ultricies ipsum vel sollicitudin. Vivamus nulla massa, hendrerit sit amet nibh quis, porttitor convallis nisi. \\" />
       <Blueprint3.Button className=\\"assessment-briefing-button\\" onClick={[Function: onClick]} text=\\"Continue\\" />
     </Blueprint3.Card>
   </Blueprint3.Dialog>
   <Blueprint3.Dialog className=\\"assessment-reset\\" icon=\\"error\\" isCloseButtonShown={true} isOpen={false} onClose={[Function: closeOverlay]} title=\\"Confirmation: Reset editor?\\" canOutsideClickClose={true}>
     <div className=\\"bp3-dialog-body\\">
-      <Markdown content=\\"Are you sure you want to reset the template?\\" />
-      <Markdown content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
+      <Memo(Markdown) content=\\"Are you sure you want to reset the template?\\" />
+      <Memo(Markdown) content=\\"*Note this will not affect the saved copy of your program, unless you save over it.*\\" />
     </div>
     <div className=\\"bp3-dialog-footer\\">
       <Blueprint3.ButtonGroup>

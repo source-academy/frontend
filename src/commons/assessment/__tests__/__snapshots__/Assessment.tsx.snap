@@ -142,9 +142,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
+                                    <Memo(Markdown) content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -255,9 +255,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
+                                    <Memo(Markdown) content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -399,9 +399,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -516,9 +516,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -633,9 +633,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -752,9 +752,9 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
+                                    <Memo(Markdown) content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -995,9 +995,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
+                                    <Memo(Markdown) content=\\"This is a test for the UI of the unopened assessment overview. It links to the mock Mission 0\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -1138,9 +1138,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
+                                    <Memo(Markdown) content=\\"This mock path serves as a demonstration of the support provided for mock programming path functionality.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -1282,9 +1282,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -1399,9 +1399,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -1516,9 +1516,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
+                                    <Memo(Markdown) content=\\"Once upon a time, Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin nec vulputate sapien. Fusce vel lacus fermentum, efficitur ipsum.\\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
@@ -1635,9 +1635,9 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                     </Component>
                                   </div>
                                   <div className=\\"listing-description\\">
-                                    <Markdown content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
+                                    <Memo(Markdown) content=\\"\\\\n  *Lorem ipsum* dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\\\\n  incididunt ut labore et dolore magna aliqua.\\\\n  \\\\n  \`\`\`\\\\n  const a = 5;\\\\n  \`\`\`\\\\n  \\\\n  Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium\\\\n  _doloremque laudantium_, totam rem aperiam, eaque ipsa quae ab illo inventore\\\\n  [veritatis et quasi architecto](google.com) beatae vitae dicta sunt\\\\n  \`explicabo\`.\\\\n  \\\\n  \\">
                                       <div className=\\"md bp3-running-text\\" dangerouslySetInnerHTML={{...}} />
-                                    </Markdown>
+                                    </Memo(Markdown)>
                                   </div>
                                   <div className=\\"listing-footer\\">
                                     <Blueprint3.Text className=\\"listing-due-date\\">
