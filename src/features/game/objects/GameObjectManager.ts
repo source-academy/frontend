@@ -75,6 +75,10 @@ class GameObjectManager {
     );
     const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
 
+    if (!objectIds) {
+      return;
+    }
+
     objectIds.forEach((id: ItemId) => {
       const objectProp = objectPropMap.get(id);
       const objectSprite = this.objectIdMap.get(id);

@@ -138,9 +138,6 @@ class GameModeTalk implements IGameUI {
 
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('ActivateUI: Game Manager is not defined!');
-    }
 
     // Fetch latest state if location is not yet visited
     const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
@@ -167,9 +164,6 @@ class GameModeTalk implements IGameUI {
 
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('DeactivateUI: Game Manager is not defined!');
-    }
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
