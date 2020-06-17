@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 
-import { Button, Dialog } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
+
+import AchievementControlPanelDeleter from './AchievementControlPanelDeleter';
+import AchievementControlPanelAdder from './AchievementControlPanelAdder';
 
 type AchievementControlPanelToolsProps = {
   addPrerequisite: any;
@@ -29,31 +32,19 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
   return (
     <>
-      <Button
-        className="editor-button"
-        onClick={() => toggleDialogFlag('addition')}
-        text={'Add New Prerequisite'}
+      <AchievementControlPanelAdder 
+          toggleDialogFlag={toggleDialogFlag}
+          addPrerequisite={addPrerequisite}
+          flag={'addition'}
+          isDialogOpen={dialogFlags['addition']}
       />
-      <Dialog
-        onClose={() => toggleDialogFlag('addition')}
-        isOpen={dialogFlags['addition']}
-        title="Add Prerequisite"
-      >
-        <Button className="editor-button" onClick={addPrerequisite} text={'Add'} />
-      </Dialog>
 
-      <Button
-        className="editor-button"
-        onClick={() => toggleDialogFlag('deletion')}
-        text={'Delete A Prerequisite'}
+      <AchievementControlPanelDeleter 
+          toggleDialogFlag={toggleDialogFlag}
+          deletePrerequisite={deletePrerequisite}
+          flag={'deletion'}
+          isDialogOpen={dialogFlags['deletion']}
       />
-      <Dialog
-        onClose={() => toggleDialogFlag('deletion')}
-        isOpen={dialogFlags['deletion']}
-        title="Delete Prerequisite"
-      >
-        <Button className="editor-button" onClick={deletePrerequisite} text={'Delete'} />
-      </Dialog>
 
       <Button className="editor-button" onClick={deleteTask} text={'Delete This Task'} />
     </>
