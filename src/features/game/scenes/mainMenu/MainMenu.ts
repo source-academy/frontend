@@ -15,7 +15,6 @@ import {
 } from './MainMenuConstants';
 import commonSoundAssets, { buttonHoverSound } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -34,7 +33,6 @@ class MainMenu extends Phaser.Scene {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.createOptionButtons();
-    addLoadingScreen(this);
   }
 
   public create() {
@@ -106,11 +104,13 @@ class MainMenu extends Phaser.Scene {
   }
 
   private createOptionButtons() {
+    this.optionButtons = [];
     this.addOptionButton(optionsText.play, () => {}, nullInteractionId);
     this.addOptionButton(optionsText.continue, () => {}, nullInteractionId);
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
+        this.layerManager.clearAllLayers();
         this.scene.start('ChapterSelect');
       },
       nullInteractionId

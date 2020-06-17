@@ -2,6 +2,7 @@ import { Color } from '../../utils/StyleUtils';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 
 export const defaultScrollSpeed = 10;
+export const scrollSpeedLimit = 100;
 export const chapterButtonsYOffset = 200;
 export const chapterButtonsXOffset = 100;
 export const chapterFrameXOffset = 15;

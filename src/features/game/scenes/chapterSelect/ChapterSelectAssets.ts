@@ -1,4 +1,5 @@
 import { ImageAsset } from '../../commons/CommonsTypes';
+import { topButton } from '../../commons/CommonAssets';
 
 export const chapterSelectBackground: ImageAsset = {
   key: 'chapter-select-bg',
@@ -25,5 +26,6 @@ export const chapterSelectAssets = [
   chapterSelectBackground,
   chapterRepeatButton,
   chapterContinueButton,
-  chapterSelectFrame
+  chapterSelectFrame,
+  topButton
 ];

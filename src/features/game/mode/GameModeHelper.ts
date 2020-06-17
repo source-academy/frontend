@@ -5,9 +5,6 @@ import { topButton } from '../commons/CommonAssets';
 
 export function getBackToMenuContainer(): Phaser.GameObjects.Container {
   const gameManager = GameActionManager.getInstance().getGameManager();
-  if (!gameManager) {
-    throw console.error('Game Manager is undefined!');
-  }
   const backToMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
   const backButtonText = new Phaser.GameObjects.Text(
