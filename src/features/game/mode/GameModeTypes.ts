@@ -11,8 +11,8 @@ export enum GameMode {
 }
 
 export enum GamePhase {
-  Standard = 'Standard',
-  Dialogue = 'Dialogue'
+  Standard,
+  Dialogue
 }
 
 export const backButtonStyle = {

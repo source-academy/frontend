@@ -1,14 +1,14 @@
 export enum Layer {
-  Effects = 'Effects',
-  Background = 'Background',
-  Character = 'Character',
-  Speaker = 'Speaker',
-  PopUp = 'PopUp',
-  Dialogue = 'Dialogue',
-  DialogueLabel = 'DialogueLabel',
-  UI = 'UI',
-  Objects = 'Objects',
-  BBox = 'BBox'
+  Effects,
+  Background,
+  Character,
+  Speaker,
+  PopUp,
+  Dialogue,
+  DialogueLabel,
+  UI,
+  Objects,
+  BBox
 }
 
 // Back to Front

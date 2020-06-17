@@ -1,5 +1,4 @@
 import { mapByHeader, stripEnclosingChars, splitToLines, splitByChar } from './ParserHelper';
-import { GameItemTypeDetails } from '../location/GameMapConstants';
 import { DialogueLine, Dialogue, PartName } from '../dialogue/GameDialogueTypes';
 import { mapValues } from '../utils/GameUtils';
 import ActionParser from './ActionParser';
@@ -7,6 +6,7 @@ import { SpeakerDetail, CharacterPosition } from '../character/GameCharacterType
 import Parser from './Parser';
 import { ItemId } from '../commons/CommonsTypes';
 import { addCharacterExprToMap } from './CharacterParser';
+import { GameLocationAttr } from '../location/GameMapTypes';
 
 export default function DialogueParser(fileName: string, fileContent: string): void {
   // Parse locations per dialogue
@@ -18,7 +18,7 @@ export default function DialogueParser(fileName: string, fileContent: string): v
         if (dialogueId[0] === '+') {
           Parser.chapter.map.setItemAt(
             locationId,
-            GameItemTypeDetails.Dialogue,
+            GameLocationAttr.talkTopics,
             dialogueId.slice(1)
           );
         }
@@ -36,7 +36,7 @@ export default function DialogueParser(fileName: string, fileContent: string): v
   const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(rawlines, createDialogueLines);
   const dialogue: Dialogue = { title: title, content: dialogueObject };
 
-  Parser.chapter.map.addItemToMap(GameItemTypeDetails.Dialogue, dialogueId, dialogue);
+  Parser.chapter.map.addItemToMap(GameLocationAttr.talkTopics, dialogueId, dialogue);
 }
 
 function createDialogueLines(lines: string[]): DialogueLine[] {
@@ -52,7 +52,7 @@ function createDialogueLines(lines: string[]): DialogueLine[] {
         break;
       case isActionLabel(rawStr):
         const rawActions: string[] = splitByChar(rawStr.slice(1), ',');
-        dialogueLines[dialogueLines.length - 1].actions = ActionParser(rawActions);
+        dialogueLines[dialogueLines.length - 1].actionIds = ActionParser(rawActions);
         break;
       case isSpeaker(rawStr):
         currLinePointer++;

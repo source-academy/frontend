@@ -13,8 +13,16 @@ import GameObjective from '../objective/GameObjective';
 class Parser {
   private static parserMap: object;
   public static chapter: GameChapter;
+  private static actionIdNum: number;
+
+  public static generateActionId() {
+    Parser.actionIdNum++;
+    return `action#${Parser.actionIdNum}`;
+  }
 
   public static parse(chapterText: string): GameChapter {
+    Parser.actionIdNum = 0;
+
     Parser.parserMap = {
       configuration: ConfigParser,
       location: LocationParser,

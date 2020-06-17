@@ -79,11 +79,13 @@ class GameObjectManager {
       const objectProp = objectPropMap.get(id);
       const objectSprite = this.objectIdMap.get(id);
 
-      if (objectProp && objectProp.actions && objectSprite) {
-        objectSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
-          GameActionManager.getInstance().executeStoryAction(objectProp.actions!)
-        );
+      if (!objectSprite || !objectProp) {
+        return;
       }
+
+      objectSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
+        GameActionManager.getInstance().executeStoryAction(objectProp.actionIds)
+      );
     });
   }
 

@@ -1,4 +1,4 @@
-import { Color } from '../../utils/styles';
+import { Color } from '../../utils/StyleUtils';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 
 export const defaultScrollSpeed = 10;
