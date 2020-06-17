@@ -10,7 +10,7 @@ import GameCharacterManager from 'src/features/game/character/GameCharacterManag
 import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
-import { addLoadingScreen } from 'src/features/game/utils/LoadingScreen';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
@@ -78,7 +78,7 @@ class GameManager extends Phaser.Scene {
 
   async init({ text, accountInfo, continueGame, chapterNum }: GameManagerProps) {
     chapterNum = 0;
-    continueGame = true;
+    continueGame = false;
     this.currentChapter = Parser.parse(text);
 
     await this.saveManager.initialise(accountInfo, chapterNum);

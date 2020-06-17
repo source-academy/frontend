@@ -4,7 +4,7 @@ import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { showLocationError } from '../utils/Error';
+import { showLocationError } from '../utils/ErrorUtils';
 import { Character } from '../character/GameCharacterTypes';
 
 class GameMap {

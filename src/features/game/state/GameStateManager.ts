@@ -6,7 +6,8 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameStoryState, jsObjectToMap } from '../save/GameSaveHelper';
+import { jsObjectToMap } from '../save/GameSaveHelper';
+import { GameSaveState } from '../save/GameSaveTypes';
 
 class GameStateManager {
   // Game State
@@ -72,7 +73,7 @@ class GameStateManager {
   //        Preprocess         //
   ///////////////////////////////
 
-  public initialise(chapter: GameChapter, gameStoryState: GameStoryState | undefined): void {
+  public initialise(chapter: GameChapter, gameStoryState: GameSaveState | undefined): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
 
@@ -91,7 +92,7 @@ class GameStateManager {
     });
   }
 
-  private loadFromGameStoryState(gameStoryState: GameStoryState) {
+  private loadFromGameStoryState(gameStoryState: GameSaveState) {
     this.chapterObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
     this.locationStates = jsObjectToMap(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);

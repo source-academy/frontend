@@ -1,21 +1,22 @@
 import { saveData, loadData } from './GameSaveRequests';
 import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
-import { gameStateToJson, FullGameState } from './GameSaveHelper';
+import { gameStateToJson } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
+import { FullSaveState } from './GameSaveTypes';
 
 export class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
-  private loadedGameState: FullGameState;
+  private loadedGameState: FullSaveState;
   private chapterNum: number;
 
   constructor() {
     this.loadedGameState = {
-      gameStoryStates: {},
+      gameSaveStates: {},
       userState: {
         collectibles: [],
         achievements: []
       }
-    } as FullGameState;
+    } as FullSaveState;
 
     this.chapterNum = -1;
   }
@@ -42,7 +43,7 @@ export class GameSaveManager {
   }
 
   public getLoadedGameStoryState() {
-    return this.loadedGameState.gameStoryStates[this.chapterNum];
+    return this.loadedGameState.gameSaveStates[this.chapterNum];
   }
 
   private getAccountInfo() {
