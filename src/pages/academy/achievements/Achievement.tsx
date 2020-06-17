@@ -67,6 +67,7 @@ export const mapAchievementDictToTask = (
     .filter(achievement => achievement.isTask)
     .map(achievement => (
       <AchievementTask
+        key={achievement.title}
         studentProgress={studentProgress}
         achievement={achievement}
         achievementDict={achievementDict}

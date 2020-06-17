@@ -159,7 +159,7 @@ function AchievementTask(props: AchievementTaskProps) {
   return (
     <>
       {shouldRender(achievement) || shouldRenderPrerequisites(achievement) ? (
-        <li key={achievement.toString()}>
+        <li key={achievement.title}>
           <AchievementCard
             achievement={achievement}
             exp={getTotalEXP(achievement)}
@@ -174,7 +174,7 @@ function AchievementTask(props: AchievementTaskProps) {
           {isDropdownOpen ? (
             <ul>
               {getPrerequisites(achievement, achievementDict).map(prerequisite => (
-                <li key={`${achievement.id} ${prerequisite.id}`}>
+                <li key={prerequisite.title}>
                   <div className="node">
                     <PrerequisiteCard
                       achievement={prerequisite}

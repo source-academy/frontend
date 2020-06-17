@@ -35,6 +35,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 
   const editableTasks = currentTasks.map(task => (
     <EditableAchievementTask
+      key={task.props.achievement.id}
       achievementItems={achievementItems}
       setAchievementItems={setAchievementItems}
       currentTasks={currentTasks}
