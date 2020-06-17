@@ -63,6 +63,10 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       return;
     }
 
+    if (achievementItems[taskID].prerequisiteIDs === undefined) {
+      achievementItems[taskID].prerequisiteIDs = [];
+    }
+
     achievementItems[taskID].prerequisiteIDs?.push(prereqID);
     setAchievementItems(achievementItems);
     resetCurrentTasks();
