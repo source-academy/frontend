@@ -13,17 +13,21 @@ import {
   onFocusOptTween,
   outFocusOptTween
 } from './MainMenuConstants';
+import commonSoundAssets, { buttonHoverSound } from '../../commons/CommonSoundAssets';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private optionButtons: GameButton[];
+  private soundManager: GameSoundManager;
 
   constructor() {
     super('MainMenu');
 
     this.layerManager = new GameLayerManager();
     this.optionButtons = [];
+    this.soundManager = new GameSoundManager();
   }
 
   public preload() {
@@ -36,10 +40,14 @@ class MainMenu extends Phaser.Scene {
   public create() {
     this.renderBackground();
     this.renderOptionButtons();
+    this.soundManager.initialise(this);
   }
 
   private preloadAssets() {
     mainMenuAssets.forEach(asset => this.load.image(asset.key, asset.path));
+    commonSoundAssets.forEach(asset => {
+      this.load.audio(asset.key, [asset.path]);
+    });
   }
 
   private renderBackground() {
@@ -78,6 +86,7 @@ class MainMenu extends Phaser.Scene {
 
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+        this.soundManager.playSound(buttonHoverSound.key);
         this.tweens.add({
           targets: buttonSprite,
           ...onFocusOptTween
