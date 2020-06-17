@@ -3,34 +3,35 @@ import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import AchievementControlPanelTools from './controlPanelTools/AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {
-  achievementDict: { [id: number]: AchievementItem };
-  setCurrentTasks?: any;
+  achievementItems: { [id: number]: AchievementItem };
+  setAchievementItems?: any;
   currentTasks: any[];
+  setCurrentTasks: any;
   task: any;
   id: number;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { achievementDict, setCurrentTasks, currentTasks, task, id } = props;
+  const { achievementItems, setAchievementItems, currentTasks, setCurrentTasks, task, id } = props;
 
   const mapPrerequisiteIDsToAchievements = (prereqIDs: number[] | undefined) => {
     if (prereqIDs === undefined) {
       return [];
     }
 
-    return prereqIDs.map(prereqId => achievementDict[prereqId]);
+    return prereqIDs.map(prereqId => achievementItems[prereqId]);
   };
 
   const getAllAchievementIDs = () => {
-    return Object.values(achievementDict).map(achievement => achievement.id);
+    return Object.values(achievementItems).map(achievement => achievement.id);
   };
 
   const getPrerequisiteIDs = () => {
-    if (achievementDict[id] === undefined || achievementDict[id].prerequisiteIDs === undefined) {
+    if (achievementItems[id] === undefined || achievementItems[id].prerequisiteIDs === undefined) {
       return [];
     }
 
-    return achievementDict[id].prerequisiteIDs;
+    return achievementItems[id].prerequisiteIDs;
   };
 
   const getNonPrerequisitesIDs = () => {
@@ -46,6 +47,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
   const addPrerequisite = () => {
     console.log(id);
+    setAchievementItems({});
   };
 
   const deletePrerequisite = () => {
@@ -55,11 +57,9 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const deleteTask = () => {
     for (let i = 0; i < currentTasks.length; i++) {
       if (currentTasks[i].props.achievement.id === id) {
-        currentTasks.splice(i, 1);
+        setCurrentTasks(currentTasks.filter(task => task.props.achievement.id !== id));
       }
     }
-
-    setCurrentTasks(currentTasks);
   };
 
   return (
