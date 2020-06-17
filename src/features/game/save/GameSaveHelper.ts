@@ -21,7 +21,7 @@ export function gameStateToJson(
     achievements: userStateManager.getList('achievements')
   };
 
-  const newGameStoryStates = { [chapterNum]: gameStoryState };
+  const newGameStoryStates = { ...prevGameState, [chapterNum]: gameStoryState };
 
   const newGameState = {
     gameSaveStates: newGameStoryStates,

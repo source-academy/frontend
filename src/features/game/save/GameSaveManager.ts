@@ -24,8 +24,8 @@ export class GameSaveManager {
   public async initialise(accountInfo: AccountInfo, chapterNum: number) {
     this.accountInfo = accountInfo;
     this.chapterNum = chapterNum;
-    const fullGameState = await loadData(this.getAccountInfo());
-    this.loadedGameState = fullGameState;
+    const loadedGameState = await loadData(this.getAccountInfo());
+    this.loadedGameState = loadedGameState;
   }
 
   public async saveGame() {
