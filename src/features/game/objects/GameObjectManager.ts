@@ -87,14 +87,16 @@ class GameObjectManager {
         return;
       }
 
-      objectSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
+      objectSprite.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
         GameActionManager.getInstance().executeStoryAction(objectProp.actionIds)
       );
     });
   }
 
   public disableObjectActions() {
-    this.objectIdMap.forEach((sprite: Phaser.GameObjects.GameObject) => sprite.off('pointerdown'));
+    this.objectIdMap.forEach((sprite: Phaser.GameObjects.GameObject) =>
+      sprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP)
+    );
   }
 
   public addInteractiveObjectsListeners(

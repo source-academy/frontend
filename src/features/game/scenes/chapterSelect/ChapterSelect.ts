@@ -60,9 +60,11 @@ class ChapterSelect extends Phaser.Scene {
     );
   }
 
-  public loadFile(fileName: string) {
+  public loadFile(fileName: string, continueGame: boolean, chapterNum: number) {
     this.load.text(`#${fileName}`, fileName);
-    this.load.once('filecomplete', (key: string) => this.callGameManager(key));
+    this.load.once('filecomplete', (key: string) =>
+      this.callGameManager(key, continueGame, chapterNum)
+    );
     this.load.start();
   }
 
@@ -108,10 +110,15 @@ class ChapterSelect extends Phaser.Scene {
     return chapterContainer;
   }
 
-  private callGameManager(key: string) {
+  private callGameManager(key: string, continueGame: boolean, chapterNum: number) {
     if (key[0] === '#') {
       const text = this.cache.text.get(key);
-      this.scene.start('GameManager', { text, accountInfo: this.accountInfo });
+      this.scene.start('GameManager', {
+        text,
+        accountInfo: this.accountInfo,
+        continueGame: continueGame,
+        chapterNum: chapterNum
+      });
     }
   }
 }
