@@ -37,11 +37,11 @@ class GameModeExplore implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    // Attach container
-    if (!this.uiContainer) {
-      this.uiContainer = await this.getUIContainer();
-      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    if (this.uiContainer) {
+      this.uiContainer.destroy();
     }
+    this.uiContainer = this.getUIContainer();
+    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     if (this.uiContainer) {
       this.uiContainer.setActive(true);
@@ -61,7 +61,6 @@ class GameModeExplore implements IGameUI {
 
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-
     gameManager.input.setDefaultCursor('');
     gameManager.objectManager.disableObjectActions();
     this.removeExploreModeCallbacks();
