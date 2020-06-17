@@ -13,7 +13,7 @@ import {
   onFocusOptTween,
   outFocusOptTween
 } from './MainMenuConstants';
-import { addLoadingScreen } from '../../utils/LoadingScreen';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;

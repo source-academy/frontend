@@ -1,5 +1,5 @@
 import { UserState } from './GameStateTypes';
-import { DefaultUserState } from './SampleUserState';
+import { DefaultUserState } from './GameStateConstants';
 
 export default class GameUserStateManager {
   private userState: UserState;

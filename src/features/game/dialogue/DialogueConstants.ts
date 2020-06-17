@@ -1,5 +1,5 @@
 import { screenSize } from '../commons/CommonConstants';
-import { Color } from '../utils/styles';
+import { Color } from '../utils/StyleUtils';
 
 const dialogueRectMargin = 10;
 

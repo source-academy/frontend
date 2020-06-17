@@ -1,5 +1,5 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
-import { Color } from '../utils/styles';
+import { Color } from '../utils/StyleUtils';
 
 export const charWidth = 700;
 const charXOffset = 350;
