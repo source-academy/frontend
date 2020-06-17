@@ -50,7 +50,7 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      scene.loadFile(fileName);
+      scene.loadFile(fileName, false, index);
     });
 
   const chapterContinue = new Phaser.GameObjects.Sprite(
@@ -61,7 +61,7 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      scene.loadFile(fileName);
+      scene.loadFile(fileName, true, index);
     });
 
   // Chapter Text
