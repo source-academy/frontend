@@ -19,12 +19,23 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
     nonPrerequisites.length === 0 ? -1 : nonPrerequisites[0].id
   );
 
+  const getNonPrerequisiteTitle = (id: number) => {
+    return nonPrerequisites.find(item => item.id === id)?.title;
+  };
+
   const changeAddedPrerequisiteID = (prerequisiteID: number, e: any) => {
     setAddedPrerequisiteID(prerequisiteID);
   };
 
-  const prerequisiteRenderer: ItemRenderer<number> = (item, { handleClick }) => {
-    return <MenuItem active={false} key={item} onClick={handleClick} text={item} />;
+  const prerequisiteRenderer: ItemRenderer<number> = (id, { handleClick }) => {
+    return (
+      <MenuItem
+        active={false}
+        key={id}
+        onClick={handleClick}
+        text={`${id} ${getNonPrerequisiteTitle(id)}`}
+      />
+    );
   };
 
   const PrerequisiteSelectComponent = Select.ofType<number>();
@@ -32,7 +43,10 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
   const prerequisiteSelector = (currentPrerequisiteID: number) => {
     return (
       <div>
-        <Button className={Classes.MINIMAL} text={currentPrerequisiteID} />
+        <Button
+          className={Classes.MINIMAL}
+          text={`${currentPrerequisiteID} ${getNonPrerequisiteTitle(currentPrerequisiteID)}`}
+        />
       </div>
     );
   };
@@ -40,6 +54,7 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
   const addingAction = (e: any) => {
     toggleDialogFlag(flag);
     addPrerequisite(taskID, addedPrerequisiteID);
+    setAddedPrerequisiteID(nonPrerequisites.length === 0 ? -1 : nonPrerequisites[0].id);
   };
 
   return (
@@ -50,23 +65,26 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
         text={'Add A Prerequisite'}
       />
       <Dialog onClose={() => toggleDialogFlag(flag)} isOpen={isDialogOpen} title="Add Prerequisite">
-        <div>
-          {nonPrerequisites.length === 0 ? (
+        {nonPrerequisites.length === 0 ? (
+          <div>
             <p>You have no prerequisites to add!</p>
-          ) : (
-            <PrerequisiteSelectComponent
-              className={Classes.MINIMAL}
-              items={nonPrerequisites.map(item => item.id)}
-              onItemSelect={changeAddedPrerequisiteID}
-              itemRenderer={prerequisiteRenderer}
-              filterable={false}
-            >
-              {prerequisiteSelector(addedPrerequisiteID)}
-            </PrerequisiteSelectComponent>
-          )}
-        </div>
-
-        <Button className="editor-button" onClick={addingAction} text={'Add'} />
+          </div>
+        ) : (
+          <>
+            <div>
+              <PrerequisiteSelectComponent
+                className={Classes.MINIMAL}
+                items={nonPrerequisites.map(item => item.id)}
+                onItemSelect={changeAddedPrerequisiteID}
+                itemRenderer={prerequisiteRenderer}
+                filterable={false}
+              >
+                {prerequisiteSelector(addedPrerequisiteID)}
+              </PrerequisiteSelectComponent>
+            </div>
+            <Button className="editor-button" onClick={addingAction} text={'Add'} />
+          </>
+        )}
       </Dialog>
     </>
   );

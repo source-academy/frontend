@@ -53,7 +53,9 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       return achievementIDs;
     }
 
-    return achievementIDs.filter(achievementID => !prerequisiteIDs.includes(achievementID));
+    return achievementIDs
+      .filter(achievementID => !prerequisiteIDs.includes(achievementID))
+      .filter(achievementID => achievementID !== id);
   };
 
   /* Functions to Modify Prerequisites */
@@ -65,6 +67,10 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
     if (achievementItems[taskID].prerequisiteIDs === undefined) {
       achievementItems[taskID].prerequisiteIDs = [];
+    }
+
+    if (achievementItems[taskID].prerequisiteIDs?.includes(prereqID)) {
+      return;
     }
 
     achievementItems[taskID].prerequisiteIDs?.push(prereqID);

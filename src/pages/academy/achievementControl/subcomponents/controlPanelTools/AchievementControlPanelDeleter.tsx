@@ -19,12 +19,23 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
     prerequisites.length === 0 ? -1 : prerequisites[0].id
   );
 
+  const getPrerequisiteTitle = (id: number) => {
+    return prerequisites.find(item => item.id === id)?.title;
+  };
+
   const changeDeletedPrerequisiteID = (prerequisiteID: number, e: any) => {
     setDeletedPrerequisiteID(prerequisiteID);
   };
 
-  const prerequisiteRenderer: ItemRenderer<number> = (item, { handleClick }) => {
-    return <MenuItem active={false} key={item} onClick={handleClick} text={item} />;
+  const prerequisiteRenderer: ItemRenderer<number> = (id, { handleClick }) => {
+    return (
+      <MenuItem
+        active={false}
+        key={id}
+        onClick={handleClick}
+        text={`${id} ${getPrerequisiteTitle(id)}`}
+      />
+    );
   };
 
   const PrerequisiteSelectComponent = Select.ofType<number>();
@@ -32,7 +43,10 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
   const prerequisiteSelector = (currentPrerequisiteID: number) => {
     return (
       <div>
-        <Button className={Classes.MINIMAL} text={currentPrerequisiteID} />
+        <Button
+          className={Classes.MINIMAL}
+          text={`${currentPrerequisiteID} ${getPrerequisiteTitle(currentPrerequisiteID)}`}
+        />
       </div>
     );
   };
@@ -40,6 +54,7 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
   const deleteAction = (e: any) => {
     toggleDialogFlag(flag);
     deletePrerequisite(taskID, deletedPrerequisiteID);
+    setDeletedPrerequisiteID(prerequisites.length === 0 ? -1 : prerequisites[0].id);
   };
 
   return (
@@ -54,23 +69,26 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
         isOpen={isDialogOpen}
         title="Delete Prerequisite"
       >
-        <div>
-          {prerequisites.length === 0 ? (
+        {prerequisites.length === 0 ? (
+          <div>
             <p>You have no prerequisites to delete!</p>
-          ) : (
-            <PrerequisiteSelectComponent
-              className={Classes.MINIMAL}
-              items={prerequisites.map(item => item.id)}
-              onItemSelect={changeDeletedPrerequisiteID}
-              itemRenderer={prerequisiteRenderer}
-              filterable={false}
-            >
-              {prerequisiteSelector(deletedPrerequisiteID)}
-            </PrerequisiteSelectComponent>
-          )}
-        </div>
-
-        <Button className="editor-button" onClick={deleteAction} text={'Delete'} />
+          </div>
+        ) : (
+          <>
+            <div>
+              <PrerequisiteSelectComponent
+                className={Classes.MINIMAL}
+                items={prerequisites.map(item => item.id)}
+                onItemSelect={changeDeletedPrerequisiteID}
+                itemRenderer={prerequisiteRenderer}
+                filterable={false}
+              >
+                {prerequisiteSelector(deletedPrerequisiteID)}
+              </PrerequisiteSelectComponent>
+            </div>
+            <Button className="editor-button" onClick={deleteAction} text={'Delete'} />
+          </>
+        )}
       </Dialog>
     </>
   );
