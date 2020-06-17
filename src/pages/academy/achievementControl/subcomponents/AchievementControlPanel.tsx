@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { Button } from '@blueprintjs/core';
 import EditableAchievementTask from './EditableAchievementTask';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import { studentProgress } from '../../../../commons/mocks/AchievementMocks';
 import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
 import { mapAchievementDictToTask } from '../../achievements/Achievement';
+import AchievementControlPanelTaskAdder from './controlPanelTools/AchievementControlPanelTaskAdder';
 
 type AchievementControlPanelProps = {
   achievementDict: { [id: number]: AchievementItem };
@@ -27,6 +27,12 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     setCurrentTasks(mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress));
   };
 
+  const currentTaskIDs = currentTasks.map(item => item.props.achievement.id);
+
+  const getPendingTasks = () => {
+    return Object.values(achievementItems).filter(item => !currentTaskIDs.includes(item.id));
+  };
+
   const editableTasks = currentTasks.map(task => (
     <EditableAchievementTask
       achievementItems={achievementItems}
@@ -44,7 +50,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       <ul className="display-list">{editableTasks}</ul>
 
       <div>
-        <Button className="main-adder" text={'Add New Task'} />
+        <AchievementControlPanelTaskAdder pendingTasks={getPendingTasks()} />
       </div>
     </div>
   );
