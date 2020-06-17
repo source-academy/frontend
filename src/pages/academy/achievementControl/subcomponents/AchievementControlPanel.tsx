@@ -6,7 +6,6 @@ import { studentProgress } from '../../../../commons/mocks/AchievementMocks';
 import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
 import { mapAchievementDictToTask } from '../../achievements/Achievement';
 
-
 type AchievementControlPanelProps = {
   achievementDict: { [id: number]: AchievementItem };
 };
@@ -14,7 +13,7 @@ type AchievementControlPanelProps = {
 function AchievementControlPanel(props: AchievementControlPanelProps) {
   const { achievementDict } = props;
 
-  const [ achievementItems, setAchievementItems ] = useState(achievementDict);
+  const [achievementItems, setAchievementItems] = useState(achievementDict);
 
   const achievementTasks = mapAchievementDictToTask(
     achievementItems,
@@ -22,13 +21,18 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     studentProgress
   );
 
-  const [ currentTasks, setCurrentTasks ] = useState(achievementTasks);
+  const [currentTasks, setCurrentTasks] = useState(achievementTasks);
+
+  const resetCurrentTasks = () => {
+    setCurrentTasks(mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress));
+  };
 
   const editableTasks = currentTasks.map(task => (
     <EditableAchievementTask
       achievementItems={achievementItems}
       setAchievementItems={setAchievementItems}
       currentTasks={currentTasks}
+      resetCurrentTasks={resetCurrentTasks}
       setCurrentTasks={setCurrentTasks}
       task={task}
       id={task.props.achievement.id}
@@ -37,9 +41,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 
   return (
     <div className="sample-cards">
-      <ul className="display-list">
-        {editableTasks}
-       </ul>
+      <ul className="display-list">{editableTasks}</ul>
 
       <div>
         <Button className="main-adder" text={'Add New Task'} />

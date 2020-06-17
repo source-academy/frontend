@@ -9,12 +9,9 @@ export type DispatchProps = {};
 export type StateProps = {};
 
 function AchievementControl() {
-
   return (
     <div className="AchievementControl">
-      <AchievementControlPanel
-        achievementDict={achievementDict}
-      />
+      <AchievementControlPanel achievementDict={achievementDict} />
 
       <div className="editor-cards">
         <AchievementEditor achievementDict={achievementDict} />

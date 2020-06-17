@@ -6,13 +6,24 @@ type EditableAchievementTaskProps = {
   achievementItems: { [id: number]: AchievementItem };
   setAchievementItems?: any;
   currentTasks: any[];
+  resetCurrentTasks: any;
   setCurrentTasks: any;
   task: any;
   id: number;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { achievementItems, setAchievementItems, currentTasks, setCurrentTasks, task, id } = props;
+  const {
+    achievementItems,
+    setAchievementItems,
+    currentTasks,
+    resetCurrentTasks,
+    setCurrentTasks,
+    task,
+    id
+  } = props;
+
+  /* Helpers to Retrieve Prerequisites */
 
   const mapPrerequisiteIDsToAchievements = (prereqIDs: number[] | undefined) => {
     if (prereqIDs === undefined) {
@@ -45,13 +56,28 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
     return achievementIDs.filter(achievementID => !prerequisiteIDs.includes(achievementID));
   };
 
-  const addPrerequisite = () => {
-    console.log(id);
-    setAchievementItems({});
+  /* Functions to Modify Prerequisites */
+
+  const addPrerequisite = (taskID: number, prereqID: number) => {
+    if (achievementItems[prereqID] === undefined) {
+      return;
+    }
+
+    achievementItems[taskID].prerequisiteIDs?.push(prereqID);
+    setAchievementItems(achievementItems);
+    resetCurrentTasks();
   };
 
-  const deletePrerequisite = () => {
-    console.log(mapPrerequisiteIDsToAchievements(getNonPrerequisitesIDs()));
+  const deletePrerequisite = (taskID: number, prereqID: number) => {
+    if (achievementItems[prereqID] === undefined) {
+      return;
+    }
+
+    achievementItems[taskID].prerequisiteIDs = achievementItems[taskID].prerequisiteIDs?.filter(
+      id => id !== prereqID
+    );
+    setAchievementItems(achievementItems);
+    resetCurrentTasks();
   };
 
   const deleteTask = () => {
@@ -70,7 +96,10 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
         <AchievementControlPanelTools
           addPrerequisite={addPrerequisite}
           deletePrerequisite={deletePrerequisite}
+          prerequisites={mapPrerequisiteIDsToAchievements(getPrerequisiteIDs())}
+          nonPrerequisites={mapPrerequisiteIDsToAchievements(getNonPrerequisitesIDs())}
           deleteTask={deleteTask}
+          taskID={id}
         />
       </div>
     </div>
