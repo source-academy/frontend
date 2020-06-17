@@ -1,60 +1,14 @@
 import GameUserStateManager from '../state/GameUserStateManager';
 import GameStateManager from '../state/GameStateManager';
-
-export type FullGameState = {
-  gameStoryStates: { [chapterNum: number]: GameStoryState };
-  userState: UserState;
-};
-
-export type GameStoryState = {
-  chapterObjective: { [objective: string]: boolean };
-  locationStates: {
-    [locationId: string]: {
-      id: string;
-      name: string;
-      assetKey: string;
-      modes?: string[];
-      navigation?: string[];
-      talkTopics?: string[];
-      objects?: string[];
-      boundingBoxes?: string[];
-    };
-  };
-  objectPropertyMap: {
-    [itemId: string]: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isInteractive: boolean;
-      interactionId: string;
-    };
-  };
-  bboxPropertyMap: {
-    [itemId: string]: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isInteractive: boolean;
-      interactionId: string;
-    };
-  };
-  triggeredInteractions: { [interactionId: string]: boolean };
-};
-
-export type UserState = {
-  collectibles: string[];
-  achievements: string[];
-};
+import { FullSaveState, GameSaveState, UserSaveState } from './GameSaveTypes';
 
 export function gameStateToJson(
-  prevGameState: FullGameState,
+  prevGameState: FullSaveState,
   chapterNum: number,
   gameStateManager: GameStateManager,
   userStateManager: GameUserStateManager
-): FullGameState {
-  const gameStoryState: GameStoryState = {
+): FullSaveState {
+  const gameStoryState: GameSaveState = {
     chapterObjective: mapToJsObject(gameStateManager.getChapterObjectives().getObjectives()),
     locationStates: mapToJsObject(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
@@ -62,7 +16,7 @@ export function gameStateToJson(
     triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions())
   };
 
-  const userState: UserState = {
+  const userState: UserSaveState = {
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
   };
@@ -70,7 +24,7 @@ export function gameStateToJson(
   const newGameStoryStates = { [chapterNum]: gameStoryState };
 
   const newGameState = {
-    gameStoryStates: newGameStoryStates,
+    gameSaveStates: newGameStoryStates,
     userState
   };
 

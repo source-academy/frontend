@@ -1,8 +1,8 @@
 import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
 import Constants from 'src/commons/utils/Constants';
-import { FullGameState } from './GameSaveHelper';
+import { FullSaveState } from './GameSaveTypes';
 
-export async function saveData(accountInfo: AccountInfo, gameState: FullGameState) {
+export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
   const options = {
     method: 'PUT',
     headers: createHeaders(accountInfo.accessToken),
@@ -16,12 +16,11 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullGameStat
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/save`, options);
   if (resp && resp.ok) {
-    console.log('Game saved!');
     return;
   }
 }
 
-export async function loadData(accountInfo: AccountInfo): Promise<FullGameState> {
+export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
   const options = {
     method: 'GET',
     headers: createHeaders(accountInfo.accessToken)

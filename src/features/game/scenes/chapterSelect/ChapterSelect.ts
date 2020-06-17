@@ -1,6 +1,6 @@
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
-import { addLoadingScreen } from '../../utils/LoadingScreen';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import { ChapterDetail } from './ChapterSelectTypes';
 import { chapterSelectAssets, chapterSelectBackground } from './ChapterSelectAssets';

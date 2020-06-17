@@ -1,20 +1,4 @@
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { ImageAsset, ItemId } from '../commons/CommonsTypes';
-import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { Character } from '../character/GameCharacterTypes';
-
-export const emptyDialogueMap = new Map<ItemId, Dialogue>();
-export const emptyObjectPropertyMap = new Map<string, ObjectProperty>();
-export const emptyBBoxPropertyMap = new Map<ItemId, BBoxProperty>();
-export const emptyCharacterMap = new Map<ItemId, Character>();
-
-export const GameItemTypeDetails = {
-  Dialogue: { listName: 'talkTopics', emptyMap: emptyDialogueMap },
-  Object: { listName: 'objects', emptyMap: emptyObjectPropertyMap },
-  BBox: { listName: 'boundingBoxes', emptyMap: emptyBBoxPropertyMap },
-  Character: { listName: 'characters', emptyMap: emptyCharacterMap }
-};
+import { ImageAsset } from '../commons/CommonsTypes';
 
 export const crashSiteImg: ImageAsset = {
   key: 'crash-site',

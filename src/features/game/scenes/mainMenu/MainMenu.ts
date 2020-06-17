@@ -13,9 +13,9 @@ import {
   onFocusOptTween,
   outFocusOptTween
 } from './MainMenuConstants';
-import { addLoadingScreen } from '../../utils/LoadingScreen';
 import commonSoundAssets, { buttonHoverSound } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;

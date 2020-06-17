@@ -1,11 +1,6 @@
 import { GameMode } from '../mode/GameModeTypes';
 import { ItemId } from '../commons/CommonsTypes';
 
-export type GameItemType<T> = {
-  listName: string;
-  emptyMap: Map<ItemId, T>;
-};
-
 export type LocationId = string;
 
 export type GameLocation = {
@@ -24,5 +19,6 @@ export enum GameLocationAttr {
   talkTopics = 'talkTopics',
   objects = 'objects',
   boundingBoxes = 'boundingBoxes',
-  characters = 'characters'
+  characters = 'characters',
+  actions = 'actions'
 }

@@ -1,4 +1,5 @@
 import { GameStateStorage } from '../state/GameStateTypes';
+import { ItemId, TrackInteraction } from '../commons/CommonsTypes';
 
 export enum GameActionType {
   MoveCharacter,
@@ -15,7 +16,7 @@ export enum GameActionType {
 }
 
 export interface IGameActionable {
-  actions?: GameAction[];
+  actionIds?: ItemId[];
 }
 
 export type ActionCondition = {
@@ -24,23 +25,11 @@ export type ActionCondition = {
   boolean?: boolean;
 };
 
-export type GameAction = {
+export type GameAction = TrackInteraction & {
   actionType: GameActionType;
   actionParams: any;
   actionConditions?: ActionCondition[];
 };
-
-export function createGameAction(
-  actionType: GameActionType,
-  actionParams: any,
-  actionConditions?: ActionCondition[]
-): GameAction {
-  return {
-    actionType: actionType,
-    actionParams,
-    actionConditions: actionConditions || []
-  };
-}
 
 export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
   return {

@@ -1,11 +1,11 @@
-import { GameLocation, GameItemType, LocationId } from '../location/GameMapTypes';
+import { GameLocation, LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { showLocationError } from '../utils/Error';
 import { Character } from '../character/GameCharacterTypes';
+import { GameAction } from '../action/GameActionTypes';
 
 class GameMap {
   private mapAssets: Map<AssetKey, AssetPath>;
@@ -15,6 +15,7 @@ class GameMap {
   private objects: Map<ItemId, ObjectProperty>;
   private boundingBoxes: Map<ItemId, BBoxProperty>;
   private characters: Map<ItemId, Character>;
+  private actions: Map<ItemId, GameAction>;
 
   constructor() {
     this.mapAssets = new Map<AssetKey, AssetPath>();
@@ -24,6 +25,7 @@ class GameMap {
     this.objects = new Map<ItemId, ObjectProperty>();
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
+    this.actions = new Map<ItemId, GameAction>();
   }
 
   public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {
@@ -39,32 +41,15 @@ class GameMap {
   }
 
   public setModesAt(id: LocationId, modes: GameMode[]) {
-    const location = this.locations.get(id);
-    if (!location) {
-      showLocationError(id);
-      return;
-    }
-
-    location.modes = modes;
+    return (this.getLocationAtId(id).modes = modes);
   }
 
-  public setNavigationFrom(id: LocationId, destination: string[]) {
-    const location = this.locations.get(id);
-    if (!location) {
-      showLocationError(id);
-      return;
-    }
-
-    location.navigation = destination;
+  public setNavigationFrom(id: LocationId, navigation: string[]) {
+    this.getLocationAtId(id).navigation = navigation;
   }
 
   public getNavigationFrom(id: LocationId): string[] | undefined {
-    const location = this.locations.get(id);
-    if (!location || !location.navigation) {
-      showLocationError(id);
-      return;
-    }
-    return location.navigation;
+    return this.getLocationAtId(id).navigation;
   }
 
   public getLocation(id: LocationId): GameLocation | undefined {
@@ -91,45 +76,29 @@ class GameMap {
     return this.characters;
   }
 
-  public addItemToMap<T>(itemType: GameItemType<T>, itemId: string, item: T) {
-    this[itemType.listName].set(itemId, item);
+  public getActions(): Map<ItemId, GameAction> {
+    return this.actions;
   }
 
-  public setItemAt<T>(locationId: LocationId, itemType: GameItemType<T>, itemId: string) {
+  public addItemToMap<T>(listName: GameLocationAttr, itemId: string, item: T) {
+    this[listName].set(itemId, item);
+  }
+
+  public setItemAt<T>(locationId: LocationId, listName: GameLocationAttr, itemId: string) {
+    const location = this.getLocationAtId(locationId);
+
+    if (!location[listName]) {
+      location[listName] = [];
+    }
+    location[listName].push(itemId);
+  }
+
+  public getLocationAtId(locationId: LocationId): GameLocation {
     const location = this.locations.get(locationId);
     if (!location) {
-      showLocationError(locationId);
-      return;
+      throw new Error(`Location ${locationId} was not found`);
     }
-
-    if (!location[itemType.listName]) {
-      location[itemType.listName] = [];
-    }
-    location[itemType.listName].push(itemId);
-  }
-
-  public getItemAt<T>(locationId: LocationId, itemType: GameItemType<T>): Map<ItemId, T> {
-    const location = this.locations.get(locationId);
-    if (!location) {
-      showLocationError(locationId);
-      return itemType.emptyMap;
-    }
-    if (!location[itemType.listName]) {
-      return itemType.emptyMap;
-    }
-
-    const itemIds = location[itemType.listName];
-    const items = new Map<ItemId, T>();
-    itemIds.forEach((itemId: ItemId) => {
-      const item = this[itemType.listName].get(itemId);
-      items.set(itemId, item);
-    });
-    return items;
-  }
-
-  public useGameMapItems() {
-    // Escape typescript warnings
-    console.log(this.talkTopics && this.objects && this.boundingBoxes && this.characters);
+    return location;
   }
 }
 
