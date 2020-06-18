@@ -13,7 +13,10 @@ import {
   onFocusOptTween,
   outFocusOptTween
 } from './MainMenuConstants';
-import commonSoundAssets, { buttonHoverSound } from '../../commons/CommonSoundAssets';
+import commonSoundAssets, {
+  buttonHoverSound,
+  galacticHarmonyBgMusic
+} from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 
 class MainMenu extends Phaser.Scene {
@@ -33,7 +36,7 @@ class MainMenu extends Phaser.Scene {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this);
-    this.soundManager.loadSounds(commonSoundAssets);
+    this.soundManager.loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
     this.createOptionButtons();
   }
 

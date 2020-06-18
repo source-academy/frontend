@@ -59,6 +59,9 @@ class GameSoundManager {
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
     if (this.scene && this.currBgMusicKey && this.currBgMusic) {
+      // If the reference to currentBgMusic survives (within the same scene)
+      // we selectively fade out the background music
+
       this.scene.tweens.add({
         targets: this.currBgMusic,
         ...musicFadeOutTween,
@@ -73,6 +76,10 @@ class GameSoundManager {
       this.currBgMusicKey = undefined;
       this.currBgMusic = undefined;
     }
+  }
+
+  public async stopAllSound() {
+    this.baseSoundManager.stopAll();
   }
 }
 
