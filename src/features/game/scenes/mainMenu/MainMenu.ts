@@ -43,6 +43,8 @@ class MainMenu extends Phaser.Scene {
   public create() {
     this.renderBackground();
     this.renderOptionButtons();
+
+    this.soundManager.playBgMusic(galacticHarmonyBgMusic.key);
   }
 
   private preloadAssets() {
@@ -111,6 +113,7 @@ class MainMenu extends Phaser.Scene {
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
+        this.soundManager.stopCurrBgMusic();
         this.layerManager.clearAllLayers();
         this.scene.start('ChapterSelect');
       },
