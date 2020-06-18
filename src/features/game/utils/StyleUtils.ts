@@ -1,4 +1,4 @@
-import { shortButton } from '../commons/CommonAssets';
+import { AssetKey } from '../commons/CommonsTypes';
 
 export const Color = {
   navy: '#03092c',
@@ -21,13 +21,22 @@ export function createButton(
   scene: Phaser.Scene,
   message: string,
   callback: () => void,
-  { x, y }: ButtonConfig
+  assetKey: AssetKey,
+  { x, y }: ButtonConfig,
+  originX?: number,
+  originY?: number,
+  textStyle?: Phaser.Types.GameObjects.Text.TextStyle
 ) {
   const container = new Phaser.GameObjects.Container(scene, x, y);
-  const button = new Phaser.GameObjects.Image(scene, 0, 0, shortButton.key);
-  button.setInteractive({ useHandCursor: true }).on('pointerdown', callback);
+  const button = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
+  button.setInteractive({ pixelPerfect: true, useHandCursor: true });
+  button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
 
-  const text = new Phaser.GameObjects.Text(scene, 0, 0, message, {});
+  const style = textStyle ? textStyle : {};
+  const text = new Phaser.GameObjects.Text(scene, 0, 0, message, style);
+  const oriX = originX ? originX : 0.25;
+  const oriY = originY ? originY : 0.7;
+  text.setOrigin(oriX, oriY);
 
   container.add([button, text]);
 

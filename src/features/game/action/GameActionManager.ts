@@ -367,6 +367,16 @@ class GameActionManager {
   }
 
   /////////////////////
+  //   Escape Menu   //
+  /////////////////////
+
+  public setEscapeMenu(active: boolean) {
+    if (this.gameManager) {
+      this.gameManager.setEscapeMenu(active);
+    }
+  }
+
+  /////////////////////
   //      Sound      //
   /////////////////////
 

@@ -8,7 +8,8 @@ export enum Layer {
   DialogueLabel,
   UI,
   Objects,
-  BBox
+  BBox,
+  Escape
 }
 
 // Back to Front
@@ -22,5 +23,6 @@ export const defaultLayerSequence = [
   Layer.Dialogue,
   Layer.DialogueLabel,
   Layer.UI,
-  Layer.Effects
+  Layer.Effects,
+  Layer.Escape
 ];

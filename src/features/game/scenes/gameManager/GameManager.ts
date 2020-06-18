@@ -23,6 +23,7 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GameSaveManager } from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { createEscapeMenu } from './GameManagerHelper';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;
@@ -33,8 +34,10 @@ type GameManagerProps = {
 
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
+  public currentLocationId: LocationId;
+  private currentActiveMode: GameMode;
+  private currentActivePhase: GamePhase;
 
-  // Limited to current chapter
   public modeManager: GameModeManager;
   public layerManager: GameLayerManager;
   public stateManager: GameStateManager;
@@ -48,16 +51,16 @@ class GameManager extends Phaser.Scene {
   public saveManager: GameSaveManager;
   public soundManager: GameSoundManager;
 
-  // Limited to current location
-  public currentLocationId: LocationId;
-  private currentActiveMode: GameMode;
-  private currentActivePhase: GamePhase;
+  private escapeMenu: Phaser.GameObjects.Container | undefined;
+  private isOnEscapeMenu: boolean;
 
   constructor() {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
     this.currentLocationId = this.currentChapter.startingLoc;
+    this.currentActiveMode = GameMode.Menu;
+    this.currentActivePhase = GamePhase.Standard;
 
     this.modeManager = new GameModeManager();
     this.layerManager = new GameLayerManager();
@@ -72,8 +75,8 @@ class GameManager extends Phaser.Scene {
     this.saveManager = new GameSaveManager();
     this.soundManager = new GameSoundManager();
 
-    this.currentActiveMode = GameMode.Menu;
-    this.currentActivePhase = GamePhase.Standard;
+    this.escapeMenu = undefined;
+    this.isOnEscapeMenu = false;
 
     GameActionManager.getInstance().setGameManager(this);
   }
@@ -107,6 +110,8 @@ class GameManager extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.objectManager.processObjects(this.currentChapter);
     this.boundingBoxManager.processBBox(this.currentChapter);
+
+    this.bindEscapeMenu();
   }
 
   public create() {
@@ -224,6 +229,27 @@ class GameManager extends Phaser.Scene {
       locationMode.activateUI();
       this.currentActiveMode = newMode;
     }
+  }
+
+  //////////////////////
+  //   Mode Callback  //
+  //////////////////////
+
+  private bindEscapeMenu() {
+    const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    escKey.on('up', () => this.setEscapeMenu(!this.isOnEscapeMenu));
+  }
+
+  public setEscapeMenu(active: boolean) {
+    if (active) {
+      this.escapeMenu = createEscapeMenu();
+      this.layerManager.addToLayer(Layer.Escape, this.escapeMenu);
+    } else if (this.escapeMenu) {
+      this.layerManager.clearSeveralLayers([Layer.Escape]);
+      this.escapeMenu!.destroy();
+      this.escapeMenu = undefined;
+    }
+    this.isOnEscapeMenu = active;
   }
 }
 

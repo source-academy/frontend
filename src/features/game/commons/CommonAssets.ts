@@ -5,6 +5,11 @@ export const shortButton: ImageAsset = {
   path: '../assets/shortButton.png'
 };
 
+export const mediumButton: ImageAsset = {
+  key: 'med-button',
+  path: '../assets/mediumButton.png'
+};
+
 export const longButton: ImageAsset = {
   key: 'long-button',
   path: '../assets/longButton.png'
@@ -60,9 +65,15 @@ export const popUpFrame: ImageAsset = {
   path: '../assets/popUpFrame.png'
 };
 
+export const escapeMenuBackground: ImageAsset = {
+  key: 'escape-bg',
+  path: '../assets/escapeMenu.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
+  mediumButton,
   topButton,
   speechBox,
   speakerBox,
@@ -72,7 +83,8 @@ const commonAssets = [
   talkOptButton,
   talkOptCheck,
   modeMenuBanner,
-  popUpFrame
+  popUpFrame,
+  escapeMenuBackground
 ];
 
 export default commonAssets;
