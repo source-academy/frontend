@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
+import AchievementTaskSelect from './AchievementTaskSelect';
 
 export type AchievementControlPanelTaskAdderProps = {
   achievementItems: { [id: number]: AchievementItem };
@@ -18,33 +18,6 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   );
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
-
-  const getTaskTitle = (id: number) => {
-    return pendingTasks.find(item => item.id === id)?.title;
-  };
-
-  const changeAddedTaskID = (prerequisiteID: number, e: any) => {
-    setAddedTaskID(prerequisiteID);
-  };
-
-  const taskRenderer: ItemRenderer<number> = (id, { handleClick }) => {
-    return (
-      <MenuItem active={false} key={id} onClick={handleClick} text={`${id} ${getTaskTitle(id)}`} />
-    );
-  };
-
-  const TaskSelectComponent = Select.ofType<number>();
-
-  const taskSelector = (currentPrerequisiteID: number) => {
-    return (
-      <div>
-        <Button
-          className={Classes.MINIMAL}
-          text={`${currentPrerequisiteID} ${getTaskTitle(currentPrerequisiteID)}`}
-        />
-      </div>
-    );
-  };
 
   const setTaskState = (taskID: number) => {
     achievementItems[taskID].isTask = true;
@@ -65,32 +38,17 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
         onClick={() => setDialogOpen(!isDialogOpen)}
         text={'Add A Task'}
       />
-      <Dialog
-        onClose={() => setDialogOpen(!isDialogOpen)}
-        isOpen={isDialogOpen}
-        title="Add A New Task"
-      >
-        {pendingTasks.length === 0 ? (
-          <div>
-            <p>You have no prerequisites to delete!</p>
-          </div>
-        ) : (
-          <>
-            <div>
-              <TaskSelectComponent
-                className={Classes.MINIMAL}
-                items={pendingTasks.map(item => item.id)}
-                onItemSelect={changeAddedTaskID}
-                itemRenderer={taskRenderer}
-                filterable={false}
-              >
-                {taskSelector(addedTaskID)}
-              </TaskSelectComponent>
-            </div>
-            <Button className="editor-button" onClick={addingAction} text={'Add'} />
-          </>
-        )}
-      </Dialog>
+      <AchievementTaskSelect
+        tasks={pendingTasks}
+        focusTaskID={addedTaskID}
+        setFocusTaskID={setAddedTaskID}
+        buttonText={'Add Task'}
+        dialogHeader={'Add A Task'}
+        emptyTasksMessage={'You have no more tasks to add'}
+        setDialogOpen={setDialogOpen}
+        isDialogOpen={isDialogOpen}
+        action={addingAction}
+      />
     </>
   );
 }

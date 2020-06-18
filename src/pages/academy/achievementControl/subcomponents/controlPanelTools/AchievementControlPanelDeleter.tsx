@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Dialog, Button, MenuItem, Classes } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import AchievementTaskSelect from './AchievementTaskSelect';
 
 type AchievementControlPanelDeleterProps = {
   toggleDialogFlag: any;
@@ -19,38 +19,6 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
     prerequisites.length === 0 ? -1 : prerequisites[0].id
   );
 
-  const getPrerequisiteTitle = (id: number) => {
-    return prerequisites.find(item => item.id === id)?.title;
-  };
-
-  const changeDeletedPrerequisiteID = (prerequisiteID: number, e: any) => {
-    setDeletedPrerequisiteID(prerequisiteID);
-  };
-
-  const prerequisiteRenderer: ItemRenderer<number> = (id, { handleClick }) => {
-    return (
-      <MenuItem
-        active={false}
-        key={id}
-        onClick={handleClick}
-        text={`${id} ${getPrerequisiteTitle(id)}`}
-      />
-    );
-  };
-
-  const PrerequisiteSelectComponent = Select.ofType<number>();
-
-  const prerequisiteSelector = (currentPrerequisiteID: number) => {
-    return (
-      <div>
-        <Button
-          className={Classes.MINIMAL}
-          text={`${currentPrerequisiteID} ${getPrerequisiteTitle(currentPrerequisiteID)}`}
-        />
-      </div>
-    );
-  };
-
   const deleteAction = (e: any) => {
     toggleDialogFlag(flag);
     deletePrerequisite(taskID, deletedPrerequisiteID);
@@ -64,32 +32,17 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
         onClick={() => toggleDialogFlag(flag)}
         text={'Delete A Prerequisite'}
       />
-      <Dialog
-        onClose={() => toggleDialogFlag(flag)}
-        isOpen={isDialogOpen}
-        title="Delete Prerequisite"
-      >
-        {prerequisites.length === 0 ? (
-          <div>
-            <p>You have no prerequisites to delete!</p>
-          </div>
-        ) : (
-          <>
-            <div>
-              <PrerequisiteSelectComponent
-                className={Classes.MINIMAL}
-                items={prerequisites.map(item => item.id)}
-                onItemSelect={changeDeletedPrerequisiteID}
-                itemRenderer={prerequisiteRenderer}
-                filterable={false}
-              >
-                {prerequisiteSelector(deletedPrerequisiteID)}
-              </PrerequisiteSelectComponent>
-            </div>
-            <Button className="editor-button" onClick={deleteAction} text={'Delete'} />
-          </>
-        )}
-      </Dialog>
+      <AchievementTaskSelect
+        tasks={prerequisites}
+        focusTaskID={deletedPrerequisiteID}
+        setFocusTaskID={setDeletedPrerequisiteID}
+        buttonText={'Delete Prerequisite'}
+        dialogHeader={'Delete A Prerequisite'}
+        emptyTasksMessage={'You have no more prerequisites to delete'}
+        setDialogOpen={toggleDialogFlag}
+        isDialogOpen={isDialogOpen}
+        action={deleteAction}
+      />
     </>
   );
 }
