@@ -45,7 +45,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
         buttonText={'Add Task'}
         dialogHeader={'Add A Task'}
         emptyTasksMessage={'You have no more tasks to add'}
-        setDialogOpen={setDialogOpen}
+        setDialogOpen={() => setDialogOpen(!isDialogOpen)}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />

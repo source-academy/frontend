@@ -39,7 +39,7 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
         buttonText={'Delete Prerequisite'}
         dialogHeader={'Delete A Prerequisite'}
         emptyTasksMessage={'You have no more prerequisites to delete'}
-        setDialogOpen={toggleDialogFlag}
+        setDialogOpen={() => toggleDialogFlag(flag)}
         isDialogOpen={isDialogOpen}
         action={deleteAction}
       />

@@ -39,7 +39,7 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
         buttonText={'Add Prerequisite'}
         dialogHeader={'Add A Prerequisite'}
         emptyTasksMessage={'You have no more prerequisites to add'}
-        setDialogOpen={toggleDialogFlag}
+        setDialogOpen={() => toggleDialogFlag(flag)}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />

@@ -63,7 +63,7 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   return (
     <>
       <Dialog
-        onClose={() => setDialogOpen(!isDialogOpen)}
+        onClose={setDialogOpen}
         isOpen={isDialogOpen}
         title={dialogHeader}
       >
