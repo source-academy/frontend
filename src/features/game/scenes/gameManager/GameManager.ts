@@ -20,7 +20,7 @@ import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import Parser from 'src/features/game/parser/Parser';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
-import { AccountInfo } from 'src/features/game/scenes/chapterSelect/ChapterSelect';
+import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GameSaveManager } from '../../save/GameSaveManager';
 
 type GameManagerProps = {
@@ -75,15 +75,19 @@ class GameManager extends Phaser.Scene {
     GameActionManager.getInstance().setGameManager(this);
   }
 
-  async init({ text, accountInfo, continueGame, chapterNum }: GameManagerProps) {
+  async init({ text, continueGame, chapterNum }: GameManagerProps) {
     this.currentChapter = Parser.parse(text);
 
-    await this.saveManager.initialise(accountInfo, chapterNum);
-    this.stateManager.initialise(
-      this.currentChapter,
-      continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
-    );
-    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+    // Load state if possible
+    const accountInfo = game.getAccountInfo();
+    if (accountInfo) {
+      await this.saveManager.initialise(accountInfo, chapterNum);
+      this.stateManager.initialise(
+        this.currentChapter,
+        continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
+      );
+      this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+    }
 
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());

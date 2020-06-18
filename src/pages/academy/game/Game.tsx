@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { fetchAssetPaths } from 'src/features/game/GameService';
-import game from './subcomponents/phaserGame';
+import game, { AccountInfo } from './subcomponents/phaserGame';
 import AssetSelection from './subcomponents/AssetSelection';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import { useSelector } from 'react-redux';
@@ -29,11 +29,13 @@ function Game() {
       return;
     }
 
-    game.scene.add('MainMenu', MainMenu, true);
-    game.scene.add('ChapterSelect', ChapterSelect, false, {
+    game.setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken
-    });
+    } as AccountInfo);
+
+    game.scene.add('MainMenu', MainMenu, true);
+    game.scene.add('ChapterSelect', ChapterSelect);
     game.scene.add('GameManager', GameManager);
 
     setSessionLoaded(true);

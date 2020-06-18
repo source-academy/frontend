@@ -17,17 +17,11 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { topButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
 
-export type AccountInfo = {
-  accessToken: string;
-  refreshToken: string;
-};
-
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
   private scrollSpeed: number;
   private chapterDetails: ChapterDetail[];
-  private accountInfo: AccountInfo | undefined;
   private layerManager: GameLayerManager;
 
   constructor() {
@@ -37,12 +31,7 @@ class ChapterSelect extends Phaser.Scene {
     this.backButtonContainer = undefined;
     this.scrollSpeed = defaultScrollSpeed;
     this.chapterDetails = SampleChapters;
-    this.accountInfo = undefined;
     this.layerManager = new GameLayerManager();
-  }
-
-  init(accountInfo: AccountInfo) {
-    this.accountInfo = accountInfo;
   }
 
   public preload() {
@@ -152,7 +141,6 @@ class ChapterSelect extends Phaser.Scene {
       const text = this.cache.text.get(key);
       this.scene.start('GameManager', {
         text,
-        accountInfo: this.accountInfo,
         continueGame: continueGame,
         chapterNum: chapterNum
       });

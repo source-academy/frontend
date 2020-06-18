@@ -1,5 +1,5 @@
 import { saveData, loadData } from './GameSaveRequests';
-import { AccountInfo } from '../scenes/chapterSelect/ChapterSelect';
+import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { gameStateToJson } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
 import { FullSaveState } from './GameSaveTypes';
