@@ -60,10 +60,17 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public loadFile(fileName: string, continueGame: boolean, chapterNum: number) {
-    this.load.text(`#${fileName}`, fileName);
-    this.load.once('filecomplete', (key: string) =>
-      this.callGameManager(key, continueGame, chapterNum)
-    );
+    const key = `#${fileName}`;
+
+    if (this.cache.text.exists(key)) {
+      this.callGameManager(key, continueGame, chapterNum);
+      return;
+    }
+
+    this.load.text(key, fileName);
+    this.load.once('filecomplete', (key: string) => {
+      this.callGameManager(key, continueGame, chapterNum);
+    });
     this.load.start();
   }
 
