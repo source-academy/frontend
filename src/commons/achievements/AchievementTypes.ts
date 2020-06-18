@@ -46,6 +46,7 @@ export type AchievementProgress = {
  *    (Note: UI displays the sum of exp and all prerequisite exp)
  * @param {Date} deadline the deadline of the achievement item
  *    (Note: UI displays the furthest deadline of all prerequisite)
+ * @param {Date} release the release of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
  * @param {number[]} prerequisites an array of the prerequisites id
  * @param {number} completionGoal achievement is marked as complete if
@@ -57,6 +58,7 @@ export type AchievementItem = {
   ability: AchievementAbility;
   exp?: number;
   deadline?: Date;
+  release?: Date;
   isTask: boolean;
   prerequisiteIDs?: number[];
   status: AchievementStatus;

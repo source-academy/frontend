@@ -61,6 +61,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 5, 16, 0, 0, 0),
+    release: new Date(2020, 5, 12, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.ACTIVE,
     completionGoal: 100
@@ -117,6 +118,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 6, 14, 0, 0, 0),
+    release: new Date(2020, 6, 8, 0, 0, 0),
     isTask: true,
     status: AchievementStatus.EXPIRED,
     completionGoal: 100
@@ -125,6 +127,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     id: 9,
     title: 'Mission Master',
     ability: AchievementAbility.EFFORT,
+    release: new Date(2020, 6, 8, 0, 0, 0),
     exp: 80,
     isTask: true,
     prerequisiteIDs: [1, 8],
@@ -196,3 +199,18 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     completionText: 'Such wow. Mission Master.'
   }
 };
+
+export const semester1Weeks = {
+  2: new Date(2020, 7, 17, 0, 0, 0), 
+  3: new Date(2020, 7, 24, 0, 0, 0), 
+  4: new Date(2020, 7, 31, 0, 0, 0), 
+  5: new Date(2020, 8, 7, 0, 0, 0), 
+  6: new Date(2020, 8, 14, 0, 0, 0), 
+  7: new Date(2020, 8, 28, 0, 0, 0), 
+  8: new Date(2020, 9, 5, 0, 0, 0), 
+  9: new Date(2020, 9, 12, 0, 0, 0), 
+  10: new Date(2020, 9, 19, 0, 0, 0), 
+  11: new Date(2020, 9, 26, 0, 0, 0), 
+  12: new Date(2020, 10, 2, 0, 0, 0), 
+  13: new Date(2020, 10, 9, 0, 0, 0), 
+}
