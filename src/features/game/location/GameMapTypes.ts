@@ -1,5 +1,5 @@
 import { GameMode } from '../mode/GameModeTypes';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId, AssetKey } from '../commons/CommonsTypes';
 
 export type LocationId = string;
 
@@ -12,6 +12,7 @@ export type GameLocation = {
   talkTopics?: ItemId[];
   objects?: ItemId[];
   boundingBoxes?: ItemId[];
+  bgmKey?: AssetKey;
 };
 
 export enum GameLocationAttr {
@@ -20,5 +21,6 @@ export enum GameLocationAttr {
   objects = 'objects',
   boundingBoxes = 'boundingBoxes',
   characters = 'characters',
-  actions = 'actions'
+  actions = 'actions',
+  bgmKey = 'bgmKey'
 }

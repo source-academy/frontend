@@ -104,6 +104,7 @@ class GameManager extends Phaser.Scene {
     this.preloadBaseAssets();
 
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.loadSounds(this.currentChapter.map.getSoundAssets());
     this.objectManager.processObjects(this.currentChapter);
     this.boundingBoxManager.processBBox(this.currentChapter);
 
@@ -146,6 +147,13 @@ class GameManager extends Phaser.Scene {
 
     // Render characters in the location
     this.characterManager.renderCharacterLayerContainer(location.id);
+
+    // Play background music at the location
+    if (location.bgmKey) {
+      this.soundManager.playBgMusic(location.bgmKey);
+    } else {
+      this.soundManager.stopCurrBgMusic();
+    }
 
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(location.id)) {

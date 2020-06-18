@@ -1,5 +1,5 @@
 import { GameLocation, LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { ItemId, AssetKey, AssetPath } from '../commons/CommonsTypes';
+import { ItemId, AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
@@ -8,6 +8,7 @@ import { Character } from '../character/GameCharacterTypes';
 import { GameAction } from '../action/GameActionTypes';
 
 class GameMap {
+  private soundAssets: SoundAsset[];
   private mapAssets: Map<AssetKey, AssetPath>;
 
   private locations: Map<LocationId, GameLocation>;
@@ -18,6 +19,7 @@ class GameMap {
   private actions: Map<ItemId, GameAction>;
 
   constructor() {
+    this.soundAssets = [];
     this.mapAssets = new Map<AssetKey, AssetPath>();
 
     this.locations = new Map<LocationId, GameLocation>();
@@ -26,6 +28,10 @@ class GameMap {
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
+  }
+
+  public addSoundAsset(soundAsset: SoundAsset) {
+    this.soundAssets.push(soundAsset);
   }
 
   public addMapAsset(assetKey: AssetKey, assetPath: AssetPath) {
@@ -80,6 +86,10 @@ class GameMap {
     return this.actions;
   }
 
+  public getSoundAssets(): SoundAsset[] {
+    return this.soundAssets;
+  }
+
   public addItemToMap<T>(listName: GameLocationAttr, itemId: string, item: T) {
     this[listName].set(itemId, item);
   }
@@ -91,6 +101,11 @@ class GameMap {
       location[listName] = [];
     }
     location[listName].push(itemId);
+  }
+
+  public setBGMusicAt(locationId: LocationId, soundKey: AssetKey) {
+    const location = this.getLocationAtId(locationId);
+    location.bgmKey = soundKey;
   }
 
   public getLocationAtId(locationId: LocationId): GameLocation {
