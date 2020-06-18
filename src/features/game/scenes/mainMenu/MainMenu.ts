@@ -18,21 +18,21 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
-  private optionButtons: GameButton[];
   private soundManager: GameSoundManager;
+  private optionButtons: GameButton[];
 
   constructor() {
     super('MainMenu');
 
     this.layerManager = new GameLayerManager();
-    this.optionButtons = [];
     this.soundManager = new GameSoundManager();
+    this.optionButtons = [];
   }
 
   public preload() {
-    this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this);
+    this.preloadAssets();
     this.createOptionButtons();
   }
 
@@ -43,9 +43,7 @@ class MainMenu extends Phaser.Scene {
 
   private preloadAssets() {
     mainMenuAssets.forEach(asset => this.load.image(asset.key, asset.path));
-    commonSoundAssets.forEach(asset => {
-      this.load.audio(asset.key, [asset.path]);
-    });
+    this.soundManager.loadSounds(commonSoundAssets);
   }
 
   private renderBackground() {

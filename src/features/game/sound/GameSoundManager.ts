@@ -5,14 +5,14 @@ import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 
 class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
-  private soundManager: Phaser.Sound.BaseSoundManager;
+  private baseSoundManager: Phaser.Sound.BaseSoundManager;
   private currBgMusicKey: AssetKey | undefined;
   private currBgMusic: Phaser.Sound.BaseSound | undefined;
   private scene: Phaser.Scene | undefined;
 
   constructor() {
     this.soundAssets = new Map<AssetKey, SoundAsset>();
-    this.soundManager = phaserGame.sound;
+    this.baseSoundManager = phaserGame.sound;
     this.currBgMusicKey = undefined;
     this.currBgMusic = undefined;
     this.scene = undefined;
@@ -34,7 +34,7 @@ class GameSoundManager {
     });
   }
 
-  public loadSound(assetKey: AssetKey, assetPath: AssetPath) {
+  private loadSound(assetKey: AssetKey, assetPath: AssetPath) {
     if (this.scene) {
       this.scene.load.audio(assetKey, assetPath);
     }
@@ -44,15 +44,18 @@ class GameSoundManager {
     if (this.scene) {
       const soundAsset = this.soundAssets.get(soundKey);
       if (soundAsset) {
-        this.soundManager.play(soundAsset.key, soundAsset.config);
+        this.baseSoundManager.play(soundAsset.key, soundAsset.config);
       }
     }
   }
 
   public playBgMusic(soundKey: AssetKey) {
     this.stopCurrBgMusic();
-    this.currBgMusic = this.soundManager.add(soundKey, { loop: true });
-    this.currBgMusicKey = soundKey;
+    const soundAsset = this.soundAssets.get(soundKey);
+    if (soundAsset) {
+      this.currBgMusic = this.baseSoundManager.add(soundAsset.key, soundAsset.config);
+      this.currBgMusicKey = soundKey;
+    }
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
@@ -62,12 +65,12 @@ class GameSoundManager {
         ...musicFadeOutTween,
         duration: fadeDuration
       });
+
+      await sleep(fadeDuration);
     }
 
-    await sleep(fadeDuration);
-
     if (this.currBgMusicKey) {
-      this.soundManager.stopByKey(this.currBgMusicKey);
+      this.baseSoundManager.stopByKey(this.currBgMusicKey);
       this.currBgMusicKey = undefined;
       this.currBgMusic = undefined;
     }
