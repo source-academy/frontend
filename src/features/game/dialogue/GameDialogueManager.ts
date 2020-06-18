@@ -40,7 +40,11 @@ export default class DialogueManager {
       dialogueRenderer
         .getDialogueBox()
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
+<<<<<<< Updated upstream
         .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+=======
+        .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+>>>>>>> Stashed changes
           const { line, speakerDetail, actionIds } = generateDialogue();
           dialogueRenderer.changeText(line);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);

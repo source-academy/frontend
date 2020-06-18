@@ -4,9 +4,6 @@ import { AssetKey } from 'src/features/game/commons/CommonsTypes';
 import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-// import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
-// import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
-// import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 export type AccountInfo = {
   accessToken: string;
