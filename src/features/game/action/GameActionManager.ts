@@ -297,6 +297,18 @@ class GameActionManager {
   }
 
   /////////////////////
+  //  Location Notif //
+  /////////////////////
+
+  public async bringUpLocationUpdateNotif(message: string) {
+    if (this.gameManager) {
+      this.deactivateCurrentUI();
+
+      this.activateCurrentUI();
+    }
+  }
+
+  /////////////////////
   //     Speaker     //
   /////////////////////
 

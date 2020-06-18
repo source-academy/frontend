@@ -1,13 +1,12 @@
 import { ItemId } from '../commons/CommonsTypes';
 import { Dialogue } from './GameDialogueTypes';
-import { Constants, screenCenter } from '../commons/CommonConstants';
+import { Constants } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import DialogueGenerator from './DialogueGenerator';
-import Typewriter from '../effects/Typewriter';
-import { speechBox } from '../commons/CommonAssets';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
-import { textPadding, dialogueRect, typeWriterTextStyle } from '../dialogue/DialogueConstants';
+import { typeWriterTextStyle } from '../dialogue/DialogueConstants';
+import DialogueRenderer from './GameDialogueRenderer';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
@@ -30,27 +29,20 @@ export default class DialogueManager {
     }
 
     const gameManager = GameActionManager.getInstance().getGameManager();
-
-    const dialogueBox = this.createDialogueBox(gameManager);
-    const typewriter = Typewriter(gameManager, {
-      x: dialogueRect.x + textPadding.x,
-      y: dialogueRect.y + textPadding.y,
-      textStyle: typeWriterTextStyle
-    });
-
     const generateDialogue = DialogueGenerator(dialogue);
 
-    const container = new Phaser.GameObjects.Container(gameManager, 0, 0).setAlpha(0);
-    container.add([dialogueBox, typewriter.container]);
+    const dialogueRenderer = new DialogueRenderer(typeWriterTextStyle);
+    const container = dialogueRenderer.getDialogueContainer();
 
     const activateContainer = new Promise(res => {
       gameManager.layerManager.addToLayer(Layer.Dialogue, container);
       gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
-      dialogueBox
+      dialogueRenderer
+        .getDialogueBox()
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
         .on('pointerdown', async () => {
           const { line, speakerDetail, actionIds } = generateDialogue();
-          typewriter.changeLine(line);
+          dialogueRenderer.changeText(line);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);
           await GameActionManager.getInstance().executeStoryAction(actionIds);
           if (!line) {
@@ -63,17 +55,5 @@ export default class DialogueManager {
 
     await activateContainer;
     return true;
-  }
-
-  /* Speech Box */
-  private createDialogueBox(scene: Phaser.Scene) {
-    const dialogueBox = new Phaser.GameObjects.Image(
-      scene,
-      screenCenter.x,
-      screenCenter.y,
-      speechBox.key
-    ).setAlpha(0.8);
-
-    return dialogueBox;
   }
 }
