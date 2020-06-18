@@ -20,7 +20,6 @@ class GameSoundManager {
 
   public initialise(scene: Phaser.Scene) {
     this.scene = scene;
-    this.clearSoundAssets();
   }
 
   public clearSoundAssets() {

@@ -30,9 +30,10 @@ class MainMenu extends Phaser.Scene {
   }
 
   public preload() {
+    this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this);
-    this.preloadAssets();
+    this.soundManager.loadSounds(commonSoundAssets);
     this.createOptionButtons();
   }
 
@@ -43,7 +44,6 @@ class MainMenu extends Phaser.Scene {
 
   private preloadAssets() {
     mainMenuAssets.forEach(asset => this.load.image(asset.key, asset.path));
-    this.soundManager.loadSounds(commonSoundAssets);
   }
 
   private renderBackground() {
