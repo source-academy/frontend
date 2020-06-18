@@ -2,11 +2,8 @@ import * as React from 'react';
 import { fetchAssetPaths } from 'src/features/game/GameService';
 import game, { AccountInfo } from './subcomponents/phaserGame';
 import AssetSelection from './subcomponents/AssetSelection';
-import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import GameManager from '../../../features/game/scenes/gameManager/GameManager';
-import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
@@ -21,11 +18,7 @@ function Game() {
   }, []);
 
   React.useEffect(() => {
-    if (!session) {
-      return;
-    }
-
-    if (sessionLoaded) {
+    if (!session || sessionLoaded) {
       return;
     }
 
@@ -33,10 +26,6 @@ function Game() {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken
     } as AccountInfo);
-
-    game.scene.add('MainMenu', MainMenu, true);
-    game.scene.add('ChapterSelect', ChapterSelect);
-    game.scene.add('GameManager', GameManager);
 
     setSessionLoaded(true);
   }, [session, sessionLoaded]);

@@ -34,7 +34,7 @@ export default class DialogueManager {
     const dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     const container = dialogueRenderer.getDialogueContainer();
 
-    const activateContainer = new Promise(res => {
+    const activateContainer = new Promise(resolve => {
       gameManager.layerManager.addToLayer(Layer.Dialogue, container);
       gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
       dialogueRenderer
@@ -46,7 +46,7 @@ export default class DialogueManager {
           GameActionManager.getInstance().changeSpeaker(speakerDetail);
           await GameActionManager.getInstance().executeStoryAction(actionIds);
           if (!line) {
-            res();
+            resolve();
             GameActionManager.getInstance().changeSpeaker(null);
             fadeAndDestroy(gameManager, container);
           }
