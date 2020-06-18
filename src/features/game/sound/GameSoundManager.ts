@@ -52,7 +52,7 @@ class GameSoundManager {
     this.stopCurrBgMusic();
     const soundAsset = this.soundAssets.get(soundKey);
     if (soundAsset) {
-      console.log("BGM Music is valid");
+      console.log('BGM Music is valid');
       this.currBgMusic = this.baseSoundManager.add(soundAsset.key, soundAsset.config);
       this.currBgMusic.play();
       this.currBgMusicKey = soundKey;
