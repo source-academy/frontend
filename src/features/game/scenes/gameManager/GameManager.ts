@@ -89,6 +89,8 @@ class GameManager extends Phaser.Scene {
         continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
       );
       this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+    } else {
+      this.stateManager.initialise(this.currentChapter, undefined);
     }
 
     this.soundManager.initialise(this);
