@@ -21,9 +21,11 @@ class GameEscapeManager {
 
   public setEscapeMenu(active: boolean) {
     if (active) {
+      GameActionManager.getInstance().deactivateCurrentUI();
       this.escapeMenuContainer = this.createEscapeMenu();
       GameActionManager.getInstance().addContainerToLayer(Layer.Escape, this.escapeMenuContainer);
     } else if (this.escapeMenuContainer) {
+      GameActionManager.getInstance().activateCurrentUI();
       GameActionManager.getInstance()
         .getGameManager()
         .layerManager.clearSeveralLayers([Layer.Escape]);
