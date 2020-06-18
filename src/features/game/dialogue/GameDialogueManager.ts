@@ -5,7 +5,7 @@ import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import DialogueGenerator from './DialogueGenerator';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
-import { typeWriterTextStyle } from '../dialogue/DialogueConstants';
+import { textTypeWriterStyle } from '../dialogue/DialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
 
 export default class DialogueManager {
@@ -31,7 +31,7 @@ export default class DialogueManager {
     const gameManager = GameActionManager.getInstance().getGameManager();
     const generateDialogue = DialogueGenerator(dialogue);
 
-    const dialogueRenderer = new DialogueRenderer(typeWriterTextStyle);
+    const dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     const container = dialogueRenderer.getDialogueContainer();
 
     const activateContainer = new Promise(res => {
@@ -40,7 +40,7 @@ export default class DialogueManager {
       dialogueRenderer
         .getDialogueBox()
         .setInteractive({ useHandCursor: true, pixelPerfect: true })
-        .on('pointerdown', async () => {
+        .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
           const { line, speakerDetail, actionIds } = generateDialogue();
           dialogueRenderer.changeText(line);
           GameActionManager.getInstance().changeSpeaker(speakerDetail);

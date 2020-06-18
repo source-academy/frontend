@@ -138,6 +138,11 @@ class GameManager extends Phaser.Scene {
     // Render characters in the location
     this.characterManager.renderCharacterLayerContainer(location.id);
 
+    // Notify players that location is not yet visited/has new update
+    if (!this.stateManager.hasTriggeredInteraction(location.id)) {
+      await GameActionManager.getInstance().bringUpUpdateNotif(location.name);
+    }
+
     // By default, activate Menu mode
     this.changeModeTo(GameMode.Menu, true, true);
   }

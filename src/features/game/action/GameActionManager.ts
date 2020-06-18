@@ -7,6 +7,7 @@ import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
+import { displayNotification } from '../effects/Notification';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -300,11 +301,9 @@ class GameActionManager {
   //  Location Notif //
   /////////////////////
 
-  public async bringUpLocationUpdateNotif(message: string) {
+  public async bringUpUpdateNotif(message: string) {
     if (this.gameManager) {
-      this.deactivateCurrentUI();
-
-      this.activateCurrentUI();
+      await displayNotification(message);
     }
   }
 

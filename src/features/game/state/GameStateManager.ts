@@ -129,6 +129,7 @@ class GameStateManager {
       return this.locationHasUpdate.get(locationId)!.get(mode);
     }
 
+    // If no mode is specified, update to any mode will return true
     let result = false;
     const locationModeState = this.locationHasUpdate.get(locationId);
     locationModeState!.forEach((hasUpdate, mode, map) => (result = result || hasUpdate));

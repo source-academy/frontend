@@ -64,7 +64,6 @@ class GameBoundingBoxManager {
           GameLocationAttr.boundingBoxes,
           locationId
         ) || [];
-      console.log('Rendering BBOX at', locationId, ', list', bboxIdsToRender);
       bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender, locationId);
       this.bboxContainerMap.set(locationId, bboxContainer);
     }
