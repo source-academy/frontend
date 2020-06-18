@@ -1,20 +1,16 @@
 import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
-import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import game from 'src/pages/academy/game/subcomponents/phaserGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 
 class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
   private baseSoundManager: Phaser.Sound.BaseSoundManager;
-  private currBgMusicKey: AssetKey | undefined;
-  private currBgMusic: Phaser.Sound.BaseSound | undefined;
   private scene: Phaser.Scene | undefined;
 
   constructor() {
     this.soundAssets = new Map<AssetKey, SoundAsset>();
-    this.baseSoundManager = phaserGame.sound;
-    this.currBgMusicKey = undefined;
-    this.currBgMusic = undefined;
+    this.baseSoundManager = game.sound;
     this.scene = undefined;
   }
 
@@ -49,33 +45,35 @@ class GameSoundManager {
   }
 
   public playBgMusic(soundKey: AssetKey) {
+    // If same music is already playing, skip
+    const currBgMusicKey = game.getCurrBgMusicKey();
+    if (currBgMusicKey && currBgMusicKey === soundKey) {
+      return;
+    }
+
     this.stopCurrBgMusic();
+
     const soundAsset = this.soundAssets.get(soundKey);
     if (soundAsset) {
-      this.currBgMusic = this.baseSoundManager.add(soundAsset.key, soundAsset.config);
-      this.currBgMusic.play();
-      this.currBgMusicKey = soundKey;
+      this.baseSoundManager.play(soundAsset.key, soundAsset.config);
+      game.setCurrBgMusicKey(soundAsset.key);
     }
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    if (this.scene && this.currBgMusicKey && this.currBgMusic) {
-      // If the reference to currentBgMusic survives (within the same scene)
-      // we selectively fade out the background music
-
+    const currBgMusicKey = game.getCurrBgMusicKey();
+    if (this.scene && currBgMusicKey) {
+      // Fade out current music
+      const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
       this.scene.tweens.add({
-        targets: this.currBgMusic,
+        targets: currBgMusic,
         ...musicFadeOutTween,
         duration: fadeDuration
       });
 
       await sleep(fadeDuration);
-    }
-
-    if (this.currBgMusicKey) {
-      this.baseSoundManager.stopByKey(this.currBgMusicKey);
-      this.currBgMusicKey = undefined;
-      this.currBgMusic = undefined;
+      this.baseSoundManager.stopByKey(currBgMusicKey);
+      game.setCurrBgMusicKey(undefined);
     }
   }
 

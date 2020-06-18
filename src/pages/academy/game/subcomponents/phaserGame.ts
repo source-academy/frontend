@@ -23,7 +23,7 @@ class SourceAcademyGame extends Phaser.Game {
     };
   }
 
-  public setCurrBgMusicKey(key: AssetKey) {
+  public setCurrBgMusicKey(key: AssetKey | undefined) {
     this.global.currBgMusicKey = key;
   }
 
@@ -31,7 +31,7 @@ class SourceAcademyGame extends Phaser.Game {
     return this.global.currBgMusicKey;
   }
 
-  public setAccountInfo(acc: AccountInfo) {
+  public setAccountInfo(acc: AccountInfo | undefined) {
     this.global.accountInfo = acc;
   }
 
