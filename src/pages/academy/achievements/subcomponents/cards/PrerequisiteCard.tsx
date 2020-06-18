@@ -11,6 +11,7 @@ type PrerequisiteCardProps = {
   achievement: AchievementItem;
   exp?: number;
   deadline?: Date;
+  release?: Date;
   progress: number;
   shouldPartiallyRender: boolean;
   displayModal: any;
@@ -18,7 +19,7 @@ type PrerequisiteCardProps = {
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { achievement, exp, deadline, progress, shouldPartiallyRender, displayModal } = props;
-  const { id, title } = achievement;
+  const { id, title, release } = achievement;
 
   return (
     <Card
@@ -26,7 +27,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
       style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
       onClick={displayModal(id)}
     >
-      <AchievementHints />
+      <AchievementHints release={release} />
 
       <div className="main">
         <div className="display">

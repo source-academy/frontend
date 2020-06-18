@@ -11,6 +11,7 @@ type AchievementCardProps = {
   achievement: AchievementItem;
   exp?: number;
   deadline?: Date;
+  release?: Date;
   progress: number;
   hasDropdown: boolean;
   shouldPartiallyRender: boolean;
@@ -31,7 +32,7 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown,
     displayModal
   } = props;
-  const { id, title, ability } = achievement;
+  const { id, title, ability, release } = achievement;
 
   return (
     <Card
@@ -40,7 +41,7 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      <AchievementHints />
+      <AchievementHints release={release} />
 
       <div className="main">
         {hasDropdown ? (

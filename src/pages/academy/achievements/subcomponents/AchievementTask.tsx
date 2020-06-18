@@ -164,6 +164,7 @@ function AchievementTask(props: AchievementTaskProps) {
             achievement={achievement}
             exp={getTotalEXP(achievement)}
             deadline={getFurthestDeadline(achievement)}
+            release={achievement.release}
             progress={getAchievementProgress(achievement)}
             shouldPartiallyRender={!shouldRender(achievement)}
             hasDropdown={hasPrerequisites(achievement, achievementDict)}
@@ -180,6 +181,7 @@ function AchievementTask(props: AchievementTaskProps) {
                       achievement={prerequisite}
                       exp={getTotalEXP(prerequisite)}
                       deadline={getFurthestDeadline(prerequisite)}
+                      release={achievement.release}
                       progress={getAchievementProgress(prerequisite)}
                       displayModal={displayModal}
                       shouldPartiallyRender={!shouldRender(prerequisite)}
