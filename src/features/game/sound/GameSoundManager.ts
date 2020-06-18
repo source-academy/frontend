@@ -19,15 +19,11 @@ class GameSoundManager {
     this.scene = scene;
   }
 
-  public addSounds(soundMap: Map<AssetKey, AssetPath>) {
-    if (this.scene) {
-      soundMap.forEach((path, key, map) => {
-        this.scene!.load.audio(key, path);
-      });
-    }
+  public loadSounds(soundMap: Map<AssetKey, AssetPath>) {
+    soundMap.forEach((path, key, map) => this.loadSound(key, path));
   }
 
-  public addSound(assetKey: AssetKey, assetPath: AssetPath) {
+  public loadSound(assetKey: AssetKey, assetPath: AssetPath) {
     if (this.scene) {
       this.scene.load.audio(assetKey, assetPath);
     }
