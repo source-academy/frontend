@@ -14,31 +14,31 @@ import {
   outFocusOptTween
 } from './MainMenuConstants';
 import commonSoundAssets, { buttonHoverSound } from '../../commons/CommonSoundAssets';
-import SoundManager from 'src/features/game/sound/SoundManager';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private optionButtons: GameButton[];
-  private soundManager: SoundManager;
+  private soundManager: GameSoundManager;
 
   constructor() {
     super('MainMenu');
 
     this.layerManager = new GameLayerManager();
     this.optionButtons = [];
-    this.soundManager = new SoundManager();
+    this.soundManager = new GameSoundManager();
   }
 
   public preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this);
     this.createOptionButtons();
   }
 
   public create() {
     this.renderBackground();
     this.renderOptionButtons();
-    this.soundManager.initialise(this);
   }
 
   private preloadAssets() {

@@ -6,6 +6,7 @@ export type ImageAsset = {
 export type SoundAsset = {
   key: string;
   path: string;
+  config: Phaser.Types.Sound.SoundConfig;
 };
 
 export type GameSprite = {
