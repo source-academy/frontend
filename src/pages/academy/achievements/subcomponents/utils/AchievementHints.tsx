@@ -1,35 +1,21 @@
 import React from 'react';
-import { IconNames } from '@blueprintjs/icons';
-import { Icon } from '@blueprintjs/core';
+import { Tag, Intent } from '@blueprintjs/core';
 
-import { AchievementStatus } from '../../../../../commons/achievements/AchievementTypes';
-
-type AchievementHintsProps = {
-  status: AchievementStatus;
-};
+type AchievementHintsProps = {};
 
 function AchievementHints(props: AchievementHintsProps) {
-  const { status } = props;
-
-  const getIndicatorIconName = () => {
-    switch (status) {
-      case AchievementStatus.ACTIVE:
-        return IconNames.LOCATE;
-      case AchievementStatus.COMPLETED:
-        return IconNames.ENDORSED;
-      case AchievementStatus.EXPIRED:
-        return IconNames.DELETE;
-      default:
-        return IconNames.HELP;
-    }
-  };
+  const {} = props;
 
   return (
     <div className="hints">
       <div>
-        <Icon icon={getIndicatorIconName()} />
+        <Tag round={true} intent={Intent.WARNING}>
+          {'NEW'}
+        </Tag>
       </div>
-      <div>{status}</div>
+      <div>
+        <Tag round={true}>{'Week 1'}</Tag>
+      </div>
     </div>
   );
 }

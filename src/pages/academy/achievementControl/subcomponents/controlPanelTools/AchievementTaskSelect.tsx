@@ -64,35 +64,35 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
     <>
       <Dialog
         onClose={setDialogOpen}
-        className={"task-selector"}
+        className={'task-selector'}
         isOpen={isDialogOpen}
         title={dialogHeader}
       >
         <div className={Classes.DIALOG_BODY}>
-        {tasks.length === 0 ? (
-          <div className="task-selector">
-            <p>{emptyTasksMessage}</p>
-          </div>
-        ) : (
-          <>
+          {tasks.length === 0 ? (
             <div className="task-selector">
-              <div>
-              <TaskSelectComponent
-                items={taskIDs}
-                onItemSelect={changeFocusTaskID}
-                itemRenderer={taskRenderer}
-                filterable={false}
-              >
-                {taskSelector(focusTaskID)}
-              </TaskSelectComponent>
-              </div>
-              <div>
-              <Button className="editor-button" onClick={action} text={buttonText} />
-              </div>
+              <p>{emptyTasksMessage}</p>
             </div>
-          </>
-        )}
+          ) : (
+            <>
+              <div className="task-selector">
+                <div>
+                  <TaskSelectComponent
+                    items={taskIDs}
+                    onItemSelect={changeFocusTaskID}
+                    itemRenderer={taskRenderer}
+                    filterable={false}
+                  >
+                    {taskSelector(focusTaskID)}
+                  </TaskSelectComponent>
+                </div>
+                <div>
+                  <Button className="editor-button" onClick={action} text={buttonText} />
+                </div>
               </div>
+            </>
+          )}
+        </div>
       </Dialog>
     </>
   );

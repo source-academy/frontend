@@ -31,7 +31,7 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown,
     displayModal
   } = props;
-  const { id, title, ability, status } = achievement;
+  const { id, title, ability } = achievement;
 
   return (
     <Card
@@ -40,7 +40,7 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      <AchievementHints status={status} />
+      <AchievementHints />
 
       <div className="main">
         {hasDropdown ? (
