@@ -1,10 +1,7 @@
 import React from 'react';
 import { Tag, Intent } from '@blueprintjs/core';
 
-type AchievementHintsProps = {};
-
-function AchievementHints(props: AchievementHintsProps) {
-  const {} = props;
+function AchievementHints() {
 
   return (
     <div className="hints">
