@@ -38,9 +38,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       key={task.props.achievement.id}
       achievementItems={achievementItems}
       setAchievementItems={setAchievementItems}
-      currentTasks={currentTasks}
       resetCurrentTasks={resetCurrentTasks}
-      setCurrentTasks={setCurrentTasks}
       task={task}
       id={task.props.achievement.id}
     />
@@ -51,7 +49,12 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       <ul className="display-list">{editableTasks}</ul>
 
       <div>
-        <AchievementControlPanelTaskAdder pendingTasks={getPendingTasks()} />
+        <AchievementControlPanelTaskAdder
+          achievementItems={achievementItems}
+          setAchievementItems={setAchievementItems}
+          resetCurrentTasks={resetCurrentTasks}
+          pendingTasks={getPendingTasks()}
+        />
       </div>
     </div>
   );

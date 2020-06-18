@@ -4,11 +4,14 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 
 export type AchievementControlPanelTaskAdderProps = {
+  achievementItems: { [id: number]: AchievementItem };
+  setAchievementItems: any;
+  resetCurrentTasks: any;
   pendingTasks: AchievementItem[];
 };
 
 function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdderProps) {
-  const { pendingTasks } = props;
+  const { achievementItems, setAchievementItems, resetCurrentTasks, pendingTasks } = props;
 
   const [addedTaskID, setAddedTaskID] = useState<number>(
     pendingTasks.length === 0 ? -1 : pendingTasks[0].id
@@ -43,8 +46,15 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
     );
   };
 
+  const setTaskState = (taskID: number) => {
+    achievementItems[taskID].isTask = true;
+    setAchievementItems(achievementItems);
+  };
+
   const addingAction = (e: any) => {
     setDialogOpen(!isDialogOpen);
+    setTaskState(addedTaskID);
+    resetCurrentTasks();
     setAddedTaskID(pendingTasks.length === 0 ? -1 : pendingTasks[0].id);
   };
 
@@ -58,7 +68,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
       <Dialog
         onClose={() => setDialogOpen(!isDialogOpen)}
         isOpen={isDialogOpen}
-        title="Delete Prerequisite"
+        title="Add A New Task"
       >
         {pendingTasks.length === 0 ? (
           <div>

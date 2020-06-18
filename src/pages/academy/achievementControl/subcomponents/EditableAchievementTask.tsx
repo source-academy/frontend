@@ -5,23 +5,13 @@ import AchievementControlPanelTools from './controlPanelTools/AchievementControl
 type EditableAchievementTaskProps = {
   achievementItems: { [id: number]: AchievementItem };
   setAchievementItems?: any;
-  currentTasks: any[];
   resetCurrentTasks: any;
-  setCurrentTasks: any;
   task: any;
   id: number;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const {
-    achievementItems,
-    setAchievementItems,
-    currentTasks,
-    resetCurrentTasks,
-    setCurrentTasks,
-    task,
-    id
-  } = props;
+  const { achievementItems, setAchievementItems, resetCurrentTasks, task, id } = props;
 
   /* Helpers to Retrieve Prerequisites */
 
@@ -91,11 +81,10 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   };
 
   const deleteTask = () => {
-    for (let i = 0; i < currentTasks.length; i++) {
-      if (currentTasks[i].props.achievement.id === id) {
-        setCurrentTasks(currentTasks.filter(task => task.props.achievement.id !== id));
-      }
-    }
+    achievementItems[id].isTask = false;
+    achievementItems[id].prerequisiteIDs = [];
+    setAchievementItems(achievementItems);
+    resetCurrentTasks();
   };
 
   return (
