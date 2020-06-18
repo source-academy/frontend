@@ -80,6 +80,22 @@ class GameSoundManager {
   public async stopAllSound() {
     this.baseSoundManager.stopAll();
   }
+
+  public pauseCurrBgMusic() {
+    const currBgMusicKey = game.getCurrBgMusicKey();
+    if (this.scene && currBgMusicKey) {
+      const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
+      if (currBgMusic.isPlaying) currBgMusic.pause();
+    }
+  }
+
+  public continueCurrBgMusic() {
+    const currBgMusicKey = game.getCurrBgMusicKey();
+    if (this.scene && currBgMusicKey) {
+      const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
+      if (currBgMusic.isPaused) currBgMusic.play();
+    }
+  }
 }
 
 export default GameSoundManager;

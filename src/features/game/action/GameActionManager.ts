@@ -8,6 +8,7 @@ import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
+import { AssetKey } from '../commons/CommonsTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -364,6 +365,47 @@ class GameActionManager {
   public async saveGame() {
     await this.getGameManager().saveManager.saveGame();
   }
+
+  /////////////////////
+  //      Sound      //
+  /////////////////////
+
+  public playSound(soundKey: AssetKey) {
+    if (this.gameManager) {
+      this.gameManager.soundManager.playSound(soundKey);
+    }
+  }
+  
+  public playBgMusic(soundKey: AssetKey) {
+    if (this.gameManager) {
+      this.gameManager.soundManager.playSound(soundKey);
+    }
+  }
+
+  public async stopCurrBgMusic(fadeDuration?: number) {
+    if (this.gameManager) {
+      this.gameManager.soundManager.stopCurrBgMusic(fadeDuration);
+    }
+  }
+
+  public async stopAllSound() {
+    if (this.gameManager) {
+      this.gameManager.soundManager.stopAllSound();
+    }
+  }
+
+  public pauseCurrBgMusic() {
+    if (this.gameManager) {
+      this.gameManager.soundManager.pauseCurrBgMusic();
+    }
+  }
+
+  public continueCurrBgMusic() {
+    if (this.gameManager) {
+      this.gameManager.soundManager.continueCurrBgMusic();
+    }
+  }
+
 }
 
 export default GameActionManager;

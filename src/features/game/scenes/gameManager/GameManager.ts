@@ -22,6 +22,7 @@ import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxMana
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GameSaveManager } from '../../save/GameSaveManager';
+import GameSoundManager from '../../sound/GameSoundManager';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;
@@ -45,6 +46,7 @@ class GameManager extends Phaser.Scene {
   public boundingBoxManager: GameBBoxManager;
   public popUpManager: GamePopUpManager;
   public saveManager: GameSaveManager;
+  public soundManager: GameSoundManager;
 
   // Limited to current location
   public currentLocationId: LocationId;
@@ -68,7 +70,8 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
-
+    this.soundManager = new GameSoundManager();
+    
     this.currentActiveMode = GameMode.Menu;
     this.currentActivePhase = GamePhase.Standard;
 
@@ -89,6 +92,7 @@ class GameManager extends Phaser.Scene {
       this.userStateManager.initialise(this.saveManager.getLoadedUserState());
     }
 
+    this.soundManager.initialise(this);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.modeManager.initialise(this.currentChapter);
