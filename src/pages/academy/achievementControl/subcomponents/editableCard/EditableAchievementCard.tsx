@@ -5,19 +5,22 @@ import { IconNames } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
-  AchievementAbility
+  AchievementAbility,
+  AchievementModalItem
 } from '../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementTitle from './EditableAchievementTitle';
 import EditableAchievementAbility from './EditableAchievementAbility';
 import EditableAchievementDeadline from './EditableAchievementDeadline';
 import EditableAchievementExp from './EditableAchievementExp';
+import EditableAchievementModal from './EditableAchievementModal';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
+  modal: AchievementModalItem;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement } = props;
+  const { achievement, modal } = props;
   const [achievementData, setAchievementData] = useState<AchievementItem>(achievement);
   const { title, ability, exp, deadline } = achievementData;
 
@@ -51,7 +54,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   return (
-    <Card className="achievement">
+    <Card className="editable-achievement">
+      <EditableAchievementModal modal={modal} />
+
       <div className="main">
         <div className="icon">
           <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
