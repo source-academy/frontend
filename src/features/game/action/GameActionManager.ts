@@ -372,7 +372,7 @@ class GameActionManager {
 
   public setEscapeMenu(active: boolean) {
     if (this.gameManager) {
-      this.gameManager.setEscapeMenu(active);
+      this.gameManager.escapeManager.setEscapeMenu(active);
     }
   }
 

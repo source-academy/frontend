@@ -23,7 +23,7 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GameSaveManager } from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
-import { createEscapeMenu } from './GameManagerHelper';
+import GameEscapeManager from '../../escape/GameEscapeManager';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;
@@ -50,9 +50,7 @@ class GameManager extends Phaser.Scene {
   public popUpManager: GamePopUpManager;
   public saveManager: GameSaveManager;
   public soundManager: GameSoundManager;
-
-  private escapeMenu: Phaser.GameObjects.Container | undefined;
-  private isOnEscapeMenu: boolean;
+  public escapeManager: GameEscapeManager;
 
   constructor() {
     super('GameManager');
@@ -74,9 +72,7 @@ class GameManager extends Phaser.Scene {
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
     this.soundManager = new GameSoundManager();
-
-    this.escapeMenu = undefined;
-    this.isOnEscapeMenu = false;
+    this.escapeManager = new GameEscapeManager();
 
     GameActionManager.getInstance().setGameManager(this);
   }
@@ -237,19 +233,7 @@ class GameManager extends Phaser.Scene {
 
   private bindEscapeMenu() {
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    escKey.on('up', () => this.setEscapeMenu(!this.isOnEscapeMenu));
-  }
-
-  public setEscapeMenu(active: boolean) {
-    if (active) {
-      this.escapeMenu = createEscapeMenu();
-      this.layerManager.addToLayer(Layer.Escape, this.escapeMenu);
-    } else if (this.escapeMenu) {
-      this.layerManager.clearSeveralLayers([Layer.Escape]);
-      this.escapeMenu!.destroy();
-      this.escapeMenu = undefined;
-    }
-    this.isOnEscapeMenu = active;
+    escKey.on('up', () => this.escapeManager.toggleEscapeMenu());
   }
 }
 
