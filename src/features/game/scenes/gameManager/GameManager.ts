@@ -71,7 +71,7 @@ class GameManager extends Phaser.Scene {
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
     this.soundManager = new GameSoundManager();
-    
+
     this.currentActiveMode = GameMode.Menu;
     this.currentActivePhase = GamePhase.Standard;
 

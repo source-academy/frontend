@@ -375,7 +375,7 @@ class GameActionManager {
       this.gameManager.soundManager.playSound(soundKey);
     }
   }
-  
+
   public playBgMusic(soundKey: AssetKey) {
     if (this.gameManager) {
       this.gameManager.soundManager.playSound(soundKey);
@@ -405,7 +405,6 @@ class GameActionManager {
       this.gameManager.soundManager.continueCurrBgMusic();
     }
   }
-
 }
 
 export default GameActionManager;
