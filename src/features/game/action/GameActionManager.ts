@@ -1,6 +1,6 @@
 import GameManager from '../scenes/gameManager/GameManager';
 import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId, GameLocation } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
@@ -46,6 +46,9 @@ class GameActionManager {
     return this.getGameManager().currentLocationId;
   }
 
+  public getLocation(locationId: LocationId): GameLocation | undefined {
+    return this.getGameManager().currentChapter.map.getLocation(locationId);
+  }
   /////////////////////
   //    Game Mode    //
   /////////////////////
@@ -315,6 +318,10 @@ class GameActionManager {
       this.gameManager.setActivePhase(GamePhase.Standard);
       this.activateCurrentUI();
     }
+  }
+
+  public getDialogue(dialogueId: ItemId) {
+    return this.getGameManager().currentChapter.map.getDialogues().get(dialogueId);
   }
 
   /////////////////////

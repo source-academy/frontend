@@ -11,13 +11,12 @@ import {
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize } from '../../commons/CommonConstants';
 import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -26,12 +25,9 @@ class GameModeMove implements IGameUI {
   private previewFill: GameSprite;
   private previewFrame: GameSprite;
   private locationId: LocationId;
-  private locations: Map<string, GameLocation>;
   private gameButtons: GameButton[];
 
-  constructor(chapter: GameChapter, locationId: LocationId) {
-    this.locations = chapter.map.getLocations();
-
+  constructor(locationId: LocationId) {
     this.uiContainer = undefined;
     this.currentLocationAssetKey = defaultLocationImg.key;
     this.locationAssetKeys = new Map<string, string>();
@@ -39,7 +35,6 @@ class GameModeMove implements IGameUI {
     this.previewFrame = previewFrame;
     this.locationId = locationId;
     this.gameButtons = [];
-    this.fetchLatestState();
   }
 
   private async createGameButtons(navigation: string[]) {
@@ -47,7 +42,7 @@ class GameModeMove implements IGameUI {
     this.gameButtons = [];
 
     await navigation.forEach(locationId => {
-      const location = this.locations.get(locationId);
+      const location = GameActionManager.getInstance().getLocation(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, () => {
           GameActionManager.getInstance().changeLocationTo(locationId);
@@ -183,9 +178,6 @@ class GameModeMove implements IGameUI {
 
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('ActivateUI: Game Manager is not defined!');
-    }
 
     this.fetchLatestState();
     this.uiContainer = await this.getUIContainer();

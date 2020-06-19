@@ -5,7 +5,6 @@ import GameModeMenu from './menu/GameModeMenu';
 import GameModeTalk from './talk/GameModeTalk';
 import GameModeMove from './move/GameModeMove';
 import GameModeExplore from './explore/GameModeExplore';
-import GameActionManager from '../action/GameActionManager';
 import { GameChapter } from '../chapter/GameChapterTypes';
 
 class GameModeManager {
@@ -32,16 +31,15 @@ class GameModeManager {
   }
 
   private createMode(locationId: LocationId, mode: GameMode): IGameUI {
-    const chapter = GameActionManager.getInstance().getGameManager().currentChapter;
     switch (mode) {
       case GameMode.Menu:
-        return new GameModeMenu(chapter, locationId);
+        return new GameModeMenu(locationId);
       case GameMode.Talk:
-        return new GameModeTalk(chapter, locationId);
+        return new GameModeTalk(locationId);
       case GameMode.Move:
-        return new GameModeMove(chapter, locationId);
+        return new GameModeMove(locationId);
       case GameMode.Explore:
-        return new GameModeExplore(chapter, locationId);
+        return new GameModeExplore(locationId);
     }
   }
 

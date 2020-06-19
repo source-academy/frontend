@@ -1,7 +1,6 @@
 import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
-import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
@@ -9,18 +8,13 @@ import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameChapter } from '../../chapter/GameChapterTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private locationId: LocationId;
-  private dialogues: Map<ItemId, Dialogue>;
   private gameButtons: GameButton[];
 
-  constructor(chapter: GameChapter, locationId: LocationId) {
-    const dialogues = chapter.map.getDialogues();
-    this.dialogues = dialogues;
-
+  constructor(locationId: LocationId) {
     this.uiContainer = undefined;
     this.locationId = locationId;
     this.gameButtons = [];
@@ -43,7 +37,7 @@ class GameModeTalk implements IGameUI {
     this.gameButtons = [];
 
     dialogueIds.forEach(dialogueId => {
-      const dialogue = this.dialogues.get(dialogueId);
+      const dialogue = GameActionManager.getInstance().getDialogue(dialogueId);
       if (dialogue) {
         this.addTalkOptionButton(
           dialogue.title,
