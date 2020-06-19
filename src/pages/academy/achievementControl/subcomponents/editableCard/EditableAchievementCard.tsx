@@ -54,7 +54,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
   };
 
-  // TODO: Implement Achievement Thumbnail
+  // TODO: Implement Achievement Thumbnail (not urgent)
   const changeThumbnail = (thumbnail: IconName) => {
     console.log('changeThumbnail not implemented');
   };

@@ -2,7 +2,7 @@ import React from 'react';
 
 import EditableAchievementCard from './editableCard/EditableAchievementCard';
 import { AchievementItem, AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
-import { modalTemplate, achievementTemplate } from './editableCard/AchievementTemplates';
+import { modalTemplate, achievementTemplate } from './editableCard/EditableTemplates';
 
 type AchievementEditorProps = {
   achievementDict: { [id: number]: AchievementItem };

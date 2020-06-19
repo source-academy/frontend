@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Card } from '@blueprintjs/core';
 import { AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
-import { modalTemplate } from './AchievementTemplates';
+import { modalTemplate } from './EditableTemplates';
 
 type EditableAchievementModalProps = {
   modal: AchievementModalItem;
@@ -29,7 +29,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
         <div
           style={{ width: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center' }} // TODO: move to css
         >
-          {/* TODO: make editable */}
+          {/* TODO: make modal editable */}
           <Card style={{ backgroundColor: '#333e50' }}>
             <h1>{title} </h1>
 
