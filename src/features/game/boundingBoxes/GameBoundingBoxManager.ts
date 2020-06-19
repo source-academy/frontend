@@ -34,10 +34,8 @@ class GameBoundingBoxManager implements StateObserver {
     GameActionManager.getInstance().subscribeState(this);
   }
 
-  public notify(locationId: LocationId) {
+  public notify(locationId: LocationId) {}
 
-  }
-  
   public createBBoxLayerContainer(
     bboxIds: ItemId[],
     locationId: LocationId

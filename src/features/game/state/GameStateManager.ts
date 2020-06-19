@@ -11,7 +11,6 @@ import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
 
 class GameStateManager implements StateSubject {
-
   // Subscribers
   public subscribers: Array<StateObserver>;
 
@@ -216,7 +215,7 @@ class GameStateManager implements StateSubject {
     }
     const newAttr = this.locationStates
       .get(locationId)!
-    [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
+      [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationId)![attr] = newAttr;
     this.updateLocationStateAttr(locationId, attr);
   }
