@@ -4,7 +4,6 @@ import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 
@@ -12,38 +11,20 @@ class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
 
   private bboxIdMap: Map<ItemId, Phaser.GameObjects.GameObject>;
-  private bboxContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
 
   constructor() {
     this.observerId = 'GameBoundingBoxManager';
     this.bboxIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
-    this.bboxContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
   }
 
   public processBBox(chapter: GameChapter) {
-    const locations = chapter.map.getLocations();
-
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
-    locations.forEach(location => {
-      const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-      this.bboxContainerMap.set(location.id, bboxContainer);
-      gameManager.add.existing(bboxContainer);
-    });
-
     GameActionManager.getInstance().subscribeState(this);
   }
 
   public notify(locationId: LocationId) {}
 
-  public createBBoxLayerContainer(
-    bboxIds: ItemId[],
-    locationId: LocationId
-  ): Phaser.GameObjects.Container {
+  public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
-
-    // Destroy the old container
-    this.bboxContainerMap.get(locationId)!.destroy();
 
     const bboxPropMap = GameActionManager.getInstance().getBBoxPropertyMap();
     const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -59,22 +40,10 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   public renderBBoxLayerContainer(locationId: LocationId): void {
-    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationId,
-      GameMode.Explore
-    );
-    let bboxContainer = this.bboxContainerMap.get(locationId);
-
-    // If update, create new bbox Container
-    if (hasUpdate || !bboxContainer) {
-      const bboxIdsToRender =
-        GameActionManager.getInstance().getLocationAttr(
-          GameLocationAttr.boundingBoxes,
-          locationId
-        ) || [];
-      bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender, locationId);
-      this.bboxContainerMap.set(locationId, bboxContainer);
-    }
+    const bboxIdsToRender =
+      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) ||
+      [];
+    const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
     GameActionManager.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
   }
 

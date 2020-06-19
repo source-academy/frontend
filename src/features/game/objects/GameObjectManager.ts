@@ -21,12 +21,9 @@ class GameObjectManager implements StateObserver {
     GameActionManager.getInstance().subscribeState(this);
   }
 
-  public notify(locationId: LocationId) { }
+  public notify(locationId: LocationId) {}
 
-  public createObjectsLayerContainer(
-    objectIds: ItemId[],
-    locationId: LocationId
-  ): Phaser.GameObjects.Container {
+  public createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
     const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
 
@@ -43,10 +40,9 @@ class GameObjectManager implements StateObserver {
   }
 
   public renderObjectsLayerContainer(locationId: LocationId): void {
-    const objIdsToRender = GameActionManager
-      .getInstance()
-      .getLocationAttr(GameLocationAttr.objects, locationId) || [];
-    const objectContainer = this.createObjectsLayerContainer(objIdsToRender, locationId);
+    const objIdsToRender =
+      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
+    const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
     GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
