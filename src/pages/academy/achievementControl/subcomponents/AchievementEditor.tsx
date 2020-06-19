@@ -1,12 +1,8 @@
 import React from 'react';
 
 import EditableAchievementCard from './editableCard/EditableAchievementCard';
-import {
-  AchievementItem,
-  AchievementAbility,
-  AchievementStatus,
-  AchievementModalItem
-} from 'src/commons/achievements/AchievementTypes';
+import { AchievementItem, AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
+import { modalTemplate, achievementTemplate } from './editableCard/AchievementTemplates';
 
 type AchievementEditorProps = {
   achievementDict: { [id: number]: AchievementItem };
@@ -15,28 +11,6 @@ type AchievementEditorProps = {
 
 function AchievementEditor(props: AchievementEditorProps) {
   const { achievementDict, achievementModalDict } = props;
-
-  // TODO: templates should be declared in some constant file
-  const newAchievement: AchievementItem = {
-    id: Object.keys(achievementDict).length,
-    title: '',
-    ability: AchievementAbility.ACADEMIC,
-    isTask: true,
-    status: AchievementStatus.ACTIVE,
-    completionGoal: 0
-  };
-
-  // TODO: templates should be declared in some constant file
-  const newModal: AchievementModalItem = {
-    id: 1,
-    title: '',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    description: 'Cookies!',
-    exp: 200,
-    goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
-    completionText: 'Cooooookiess!!!'
-  };
 
   return (
     <div className="main">
@@ -49,13 +23,13 @@ function AchievementEditor(props: AchievementEditorProps) {
               achievement={achievement}
               modal={
                 achievementModalDict[achievement.id] === undefined // TODO: logic should be done by subcomponent
-                  ? newModal
+                  ? modalTemplate
                   : achievementModalDict[achievement.id]
               }
             />
           </li>
         ))}
-        <EditableAchievementCard achievement={newAchievement} modal={newModal} />{' '}
+        <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />{' '}
         {/* TODO: create editor tool for this */}
       </ul>
     </div>
