@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
-import { Card, Icon } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { Card } from '@blueprintjs/core';
+import { IconNames, IconName } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
@@ -13,6 +13,7 @@ import EditableAchievementAbility from './EditableAchievementAbility';
 import EditableAchievementDeadline from './EditableAchievementDeadline';
 import EditableAchievementExp from './EditableAchievementExp';
 import EditableAchievementModal from './EditableAchievementModal';
+import EditableAchievementThumbnail from './EditableAchievementThumbnail';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -52,16 +53,22 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ability: ability
     });
   };
-  // TODO: EditableAchievementThumbnail
+
+  // TODO: Implement Achievement Thumbnail
+  const changeThumbnail = (thumbnail: IconName) => {
+    console.log('changeThumbnail not implemented');
+  };
+
   // TODO: Delete Achievement Item
   return (
     <Card className="editable-achievement">
       <EditableAchievementModal modal={modal} />
 
       <div className="main">
-        <div className="icon">
-          <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
-        </div>
+        <EditableAchievementThumbnail
+          thumbnail={IconNames.PREDICTIVE_ANALYSIS}
+          changeThumbnail={changeThumbnail}
+        />
 
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={changeTitle} />

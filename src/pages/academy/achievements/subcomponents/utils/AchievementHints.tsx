@@ -30,7 +30,6 @@ function AchievementHints(props: AchievementHintsProps) {
       return false;
     }
 
-    console.log(Date.now() - release.getTime() <= oneDayInMilliSeconds);
     return Date.now() - release.getTime() <= oneDayInMilliSeconds;
   };
 
