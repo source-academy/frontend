@@ -13,6 +13,40 @@ type EditableAchievementTaskProps = {
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const { achievementItems, setAchievementItems, resetCurrentTasks, task, id } = props;
 
+  /* Helpers to check validity of Prerequisites */
+
+  const checkCyclicDependent = (taskID: number, prerreqIDs: number[] | undefined): boolean => {
+    if (prerreqIDs === undefined) {
+      return false;
+    }
+
+    for (let i = 0; i < prerreqIDs.length; i++) {
+      const prereqID = prerreqIDs[i];
+      if (taskID === prereqID) {
+        return true;
+      }
+
+      if (checkCyclicDependent(taskID, achievementItems[prereqID].prerequisiteIDs)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  const isCyclicDependenent = (taskID: number, prereqID: number): boolean => {
+    const clonedTaskPrereqIDs = Object.assign(
+      [],
+      achievementItems[taskID].prerequisiteIDs === undefined
+        ? []
+        : achievementItems[taskID].prerequisiteIDs
+    );
+
+    clonedTaskPrereqIDs.push(prereqID);
+
+    return checkCyclicDependent(taskID, clonedTaskPrereqIDs);
+  };
+
   /* Helpers to Retrieve Prerequisites */
 
   const mapPrerequisiteIDsToAchievements = (prereqIDs: number[] | undefined) => {
@@ -45,7 +79,8 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
     return achievementIDs
       .filter(achievementID => !prerequisiteIDs.includes(achievementID))
-      .filter(achievementID => achievementID !== id);
+      .filter(achievementID => achievementID !== id)
+      .filter(achievementID => !isCyclicDependenent(id, achievementID));
   };
 
   /* Functions to Modify Prerequisites */
@@ -60,6 +95,10 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
     }
 
     if (achievementItems[taskID].prerequisiteIDs?.includes(prereqID)) {
+      return;
+    }
+
+    if (isCyclicDependenent(taskID, prereqID)) {
       return;
     }
 
