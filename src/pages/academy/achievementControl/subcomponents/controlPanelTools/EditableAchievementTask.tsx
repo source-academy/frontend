@@ -1,6 +1,6 @@
 import React from 'react';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import AchievementControlPanelTools from './controlPanelTools/AchievementControlPanelTools';
+import AchievementControlPanelTools from './AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {
   achievementItems: { [id: number]: AchievementItem };
@@ -15,10 +15,14 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
   /* Helpers to check validity of Prerequisites */
 
-  const checkCyclicDependent = (taskID: number, prerreqIDs: number[] | undefined): boolean => {
+  const checkCyclicDependent = (taskID: number, prerreqIDs: number[] | undefined): boolean => { 
+    /*
+      taskID: prerequisiteIDs
+    */
     if (prerreqIDs === undefined) {
       return false;
     }
+
 
     for (let i = 0; i < prerreqIDs.length; i++) {
       const prereqID = prerreqIDs[i];
@@ -50,11 +54,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   /* Helpers to Retrieve Prerequisites */
 
   const mapPrerequisiteIDsToAchievements = (prereqIDs: number[] | undefined) => {
-    if (prereqIDs === undefined) {
-      return [];
-    }
-
-    return prereqIDs.map(prereqId => achievementItems[prereqId]);
+    return prereqIDs === undefined ? [] : prereqIDs.map(prereqId => achievementItems[prereqId]);
   };
 
   const getAllAchievementIDs = () => {

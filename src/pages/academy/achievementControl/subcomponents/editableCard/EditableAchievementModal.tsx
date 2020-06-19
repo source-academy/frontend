@@ -24,8 +24,9 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
         title={'Edit Modal'}
       >
         <div
-          style={{ width: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center' }}
+          style={{ width: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center' }} // TODO: move to css
         >
+          {/* TODO: make editable */}
           <Card style={{ backgroundColor: '#333e50' }}>
             <h1>{title} </h1>
 

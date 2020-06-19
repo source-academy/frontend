@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import EditableAchievementTask from './EditableAchievementTask';
+import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import { studentProgress } from '../../../../commons/mocks/AchievementMocks';
 import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
@@ -21,7 +21,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     studentProgress
   );
 
-  const [currentTasks, setCurrentTasks] = useState(achievementTasks);
+  const [currentTasks, setCurrentTasks] = useState(achievementTasks); // Here 
 
   const resetCurrentTasks = () => {
     setCurrentTasks(mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress));

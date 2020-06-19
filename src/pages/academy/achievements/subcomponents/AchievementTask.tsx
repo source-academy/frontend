@@ -146,6 +146,12 @@ function AchievementTask(props: AchievementTaskProps) {
     }
   };
 
+  /*
+  const getDeadline(achievement: AchievementItem) => {
+    myTree[achievement].deadline;
+  } 
+  */
+
   /* -------- Helper for Progress -------- */
 
   // Returns the achievement progress in decimal (e.g. 0.5)

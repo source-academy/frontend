@@ -17,7 +17,7 @@ function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
   const { ability, changeAbility } = props;
 
   const abilityRenderer: ItemRenderer<AchievementAbility> = (ability, { handleClick }) => (
-    <MenuItem active={false} key={ability.toString()} onClick={handleClick} text={ability} />
+    <MenuItem active={false} key={ability} onClick={handleClick} text={ability} />
   );
 
   const AbilitySelectComponent = Select.ofType<AchievementAbility>();

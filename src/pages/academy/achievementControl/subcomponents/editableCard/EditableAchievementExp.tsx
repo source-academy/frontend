@@ -10,7 +10,7 @@ type EditableAchievementExpProps = {
 
 function EditableAchievementExp(props: EditableAchievementExpProps) {
   const { exp, changeExp } = props;
-
+  // TODO: add regex to only allow numeric input
   return (
     <div className="exp">
       <NumericInput

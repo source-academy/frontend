@@ -16,6 +16,7 @@ type AchievementEditorProps = {
 function AchievementEditor(props: AchievementEditorProps) {
   const { achievementDict, achievementModalDict } = props;
 
+  // TODO: templates should be declared in some constant file
   const newAchievement: AchievementItem = {
     id: Object.keys(achievementDict).length,
     title: '',
@@ -25,6 +26,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     completionGoal: 0
   };
 
+  // TODO: templates should be declared in some constant file
   const newModal: AchievementModalItem = {
     id: 1,
     title: '',
@@ -39,19 +41,19 @@ function AchievementEditor(props: AchievementEditorProps) {
   return (
     <div className="main">
       <ul className="display-list">
-        {Object.values(achievementDict).map(achievement => (
+        {Object.values(achievementDict).map(achievement => (  // TODO: write map function for this, similar to Achievement.tsx
           <li key={achievement.title}>
             <EditableAchievementCard
               achievement={achievement}
               modal={
-                achievementModalDict[achievement.id] === undefined
+                achievementModalDict[achievement.id] === undefined  // TODO: logic should be done by subcomponent
                   ? newModal
                   : achievementModalDict[achievement.id]
               }
             />
           </li>
         ))}
-        <EditableAchievementCard achievement={newAchievement} modal={newModal} />
+        <EditableAchievementCard achievement={newAchievement} modal={newModal} /> {/* TODO: create editor tool for this */}
       </ul>
     </div>
   );

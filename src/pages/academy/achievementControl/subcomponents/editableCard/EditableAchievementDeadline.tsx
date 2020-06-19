@@ -12,6 +12,8 @@ function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
   const { deadline, changeDeadline } = props;
   const [isOpen, setOpen] = useState<boolean>(false);
 
+  // TODO: show result of date picker (e.g. 1st January 2020, 23:59)
+
   return (
     <div className="deadline">
       <div>

@@ -52,7 +52,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ability: ability
     });
   };
-
+  // TODO: EditableAchievementThumbnail
+  // TODO: Delete Achievement Item
   return (
     <Card className="editable-achievement">
       <EditableAchievementModal modal={modal} />
