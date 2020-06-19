@@ -8,8 +8,13 @@ import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { jsObjectToMap } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
+import { StateSubject, StateObserver } from './GameStateTypes';
 
-class GameStateManager {
+class GameStateManager implements StateSubject {
+
+  // Subscribers
+  public subscribers: Array<StateObserver>;
+
   // Game State
   private chapter: GameChapter;
   private chapterObjective: GameObjective;
@@ -22,6 +27,8 @@ class GameStateManager {
   private triggeredInteractions: Map<ItemId, boolean>;
 
   constructor() {
+    this.subscribers = new Array<StateObserver>();
+
     this.chapter = {} as GameChapter;
     this.chapterObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
@@ -30,6 +37,22 @@ class GameStateManager {
     this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
 
     this.triggeredInteractions = new Map<ItemId, boolean>();
+  }
+
+  ///////////////////////////////
+  //        Subscribers        //
+  ///////////////////////////////
+
+  public update(locationId: LocationId) {
+    this.subscribers.forEach(observer => observer.notify(locationId));
+  }
+
+  public subscribe(observer: StateObserver) {
+    this.subscribers.push(observer);
+  }
+
+  public unsubscribe(observer: StateObserver) {
+    this.subscribers = this.subscribers.filter(obs => obs.observerId !== observer.observerId);
   }
 
   ///////////////////////////////
@@ -45,6 +68,9 @@ class GameStateManager {
     if (currLocId !== targetLocId) {
       this.triggeredInteractions.set(targetLocId, false);
     }
+
+    // Notify subscribers
+    this.update(targetLocId);
   }
 
   private updateLocationStateAttr(targetLocName: string, attr: GameLocationAttr): void {
@@ -190,7 +216,7 @@ class GameStateManager {
     }
     const newAttr = this.locationStates
       .get(locationId)!
-      [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
+    [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
     this.locationStates.get(locationId)![attr] = newAttr;
     this.updateLocationStateAttr(locationId, attr);
   }

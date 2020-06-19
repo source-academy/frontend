@@ -9,6 +9,7 @@ import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
 import { AssetKey } from '../commons/CommonsTypes';
+import { StateObserver } from '../state/GameStateTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -144,6 +145,18 @@ class GameActionManager {
       return this.gameManager.stateManager.removeLocationAttr(attr, locationId, attrElem);
     }
     return;
+  }
+
+  public subscribeState(observer: StateObserver) {
+    if (this.gameManager) {
+      this.gameManager.stateManager.subscribe(observer);
+    }
+  }
+
+  public unsubscribeState(observer: StateObserver) {
+    if (this.gameManager) {
+      this.gameManager.stateManager.unsubscribe(observer);
+    }
   }
 
   /////////////////////

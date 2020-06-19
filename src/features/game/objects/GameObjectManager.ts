@@ -7,26 +7,35 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
+import { StateObserver } from '../state/GameStateTypes';
 
-class GameObjectManager {
+class GameObjectManager implements StateObserver {
+  public observerId: string;
   private objectIdMap: Map<ItemId, Phaser.GameObjects.GameObject>;
   private objectContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
 
   constructor() {
+    this.observerId = 'GameObjectManager';
     this.objectIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
     this.objectContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
   }
 
   public processObjects(chapter: GameChapter) {
     const locations = chapter.map.getLocations();
-
+    
     const gameManager = GameActionManager.getInstance().getGameManager();
-
+    
     locations.forEach(location => {
       const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
       this.objectContainerMap.set(location.id, objectContainer);
       gameManager.add.existing(objectContainer);
     });
+    
+    GameActionManager.getInstance().subscribeState(this);
+  }
+  
+  public notify(locationId: LocationId) {
+
   }
 
   public createObjectsLayerContainer(

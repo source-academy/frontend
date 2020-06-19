@@ -6,12 +6,16 @@ import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { StateObserver } from '../state/GameStateTypes';
 
-class GameBoundingBoxManager {
+class GameBoundingBoxManager implements StateObserver {
+  public observerId: string;
+
   private bboxIdMap: Map<ItemId, Phaser.GameObjects.GameObject>;
   private bboxContainerMap: Map<LocationId, Phaser.GameObjects.Container>;
 
   constructor() {
+    this.observerId = 'GameBoundingBoxManager';
     this.bboxIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
     this.bboxContainerMap = new Map<LocationId, Phaser.GameObjects.Container>();
   }
@@ -26,8 +30,14 @@ class GameBoundingBoxManager {
       this.bboxContainerMap.set(location.id, bboxContainer);
       gameManager.add.existing(bboxContainer);
     });
+
+    GameActionManager.getInstance().subscribeState(this);
   }
 
+  public notify(locationId: LocationId) {
+
+  }
+  
   public createBBoxLayerContainer(
     bboxIds: ItemId[],
     locationId: LocationId
