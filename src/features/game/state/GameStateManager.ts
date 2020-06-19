@@ -101,7 +101,6 @@ class GameStateManager {
   }
 
   private loadNewGameStoryState() {
-    // TODO: Deep copy
     this.chapterObjective = this.chapter.objectives;
     this.locationStates = this.chapter.map.getLocations();
     this.objectPropertyMap = this.chapter.map.getObjects();
