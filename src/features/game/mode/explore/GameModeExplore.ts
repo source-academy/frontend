@@ -37,22 +37,17 @@ class GameModeExplore implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    if (this.uiContainer) {
-      this.uiContainer.destroy();
-    }
-    this.uiContainer = this.getUIContainer();
+    this.uiContainer = await this.getUIContainer();
     GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
-    if (this.uiContainer) {
-      this.uiContainer.setActive(true);
-      this.uiContainer.setVisible(true);
-      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+    this.uiContainer.setActive(true);
+    this.uiContainer.setVisible(true);
+    this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
-      gameManager.tweens.add({
-        targets: this.uiContainer,
-        ...entryTweenProps
-      });
-    }
+    gameManager.tweens.add({
+      targets: this.uiContainer,
+      ...entryTweenProps
+    });
 
     gameManager.objectManager.enableObjectActions(this.locationId);
     this.attachExploreModeCallbacks();
@@ -76,6 +71,8 @@ class GameModeExplore implements IGameUI {
       await sleep(500);
       this.uiContainer.setVisible(false);
       this.uiContainer.setActive(false);
+      this.uiContainer.destroy();
+      this.uiContainer = undefined;
     }
   }
 

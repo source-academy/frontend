@@ -187,34 +187,22 @@ class GameModeMove implements IGameUI {
       throw console.error('ActivateUI: Game Manager is not defined!');
     }
 
-    // Fetch latest state if location is not yet visited
-    const hasUpdates = GameActionManager.getInstance().hasLocationUpdate(this.locationId);
-    if (hasUpdates || !this.uiContainer) {
-      if (this.uiContainer) {
-        this.uiContainer.destroy();
-      }
-      this.fetchLatestState();
-      this.uiContainer = await this.getUIContainer();
-      GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
-    }
+    this.fetchLatestState();
+    this.uiContainer = await this.getUIContainer();
+    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
-    if (this.uiContainer) {
-      this.uiContainer.setActive(true);
-      this.uiContainer.setVisible(true);
-      this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+    this.uiContainer.setActive(true);
+    this.uiContainer.setVisible(true);
+    this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
-      gameManager.tweens.add({
-        targets: this.uiContainer,
-        ...entryTweenProps
-      });
-    }
+    gameManager.tweens.add({
+      targets: this.uiContainer,
+      ...entryTweenProps
+    });
   }
 
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
-    if (!gameManager) {
-      throw console.error('DeactivateUI: Game Manager is not defined!');
-    }
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -227,6 +215,8 @@ class GameModeMove implements IGameUI {
       await sleep(500);
       this.uiContainer.setVisible(false);
       this.uiContainer.setActive(false);
+      this.uiContainer.destroy();
+      this.uiContainer = undefined;
     }
   }
 }
