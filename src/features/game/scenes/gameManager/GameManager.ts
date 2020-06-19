@@ -98,6 +98,8 @@ class GameManager extends Phaser.Scene {
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
     this.modeManager.initialise(this.currentChapter);
     this.actionExecuter.initialise(this.currentChapter.map.getActions());
+    this.boundingBoxManager.initialise();
+    this.objectManager.initialise();
   }
 
   public preload() {
@@ -107,8 +109,6 @@ class GameManager extends Phaser.Scene {
 
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.loadSounds(this.currentChapter.map.getSoundAssets());
-    this.objectManager.processObjects(this.currentChapter);
-    this.boundingBoxManager.processBBox(this.currentChapter);
 
     this.bindEscapeMenu();
   }

@@ -1,12 +1,12 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { ObjectProperty } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { StateObserver } from '../state/GameStateTypes';
+import { GameMode } from '../mode/GameModeTypes';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
@@ -17,11 +17,20 @@ class GameObjectManager implements StateObserver {
     this.objectIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
   }
 
-  public processObjects(chapter: GameChapter) {
+  public initialise() {
     GameActionManager.getInstance().subscribeState(this);
   }
 
-  public notify(locationId: LocationId) {}
+  public notify(locationId: LocationId) {
+    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
+      locationId,
+      GameMode.Explore
+    );
+    const currLocationId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    if (hasUpdate && locationId === currLocationId) {
+      this.renderObjectsLayerContainer(locationId);
+    }
+  }
 
   public createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
@@ -40,6 +49,7 @@ class GameObjectManager implements StateObserver {
   }
 
   public renderObjectsLayerContainer(locationId: LocationId): void {
+    GameActionManager.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender =
       GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
     const objectContainer = this.createObjectsLayerContainer(objIdsToRender);

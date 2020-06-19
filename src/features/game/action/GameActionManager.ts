@@ -279,6 +279,12 @@ class GameActionManager {
   //   Game Layer    //
   /////////////////////
 
+  public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
+    if (this.gameManager) {
+      this.gameManager.layerManager.clearSeveralLayers(layerTypes, withFade);
+    }
+  }
+
   public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
     if (this.gameManager) {
       this.gameManager.layerManager.addToLayer(layer, gameObj);

@@ -1,11 +1,11 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
+import { GameMode } from '../mode/GameModeTypes';
 
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
@@ -17,11 +17,20 @@ class GameBoundingBoxManager implements StateObserver {
     this.bboxIdMap = new Map<ItemId, Phaser.GameObjects.GameObject>();
   }
 
-  public processBBox(chapter: GameChapter) {
+  public initialise() {
     GameActionManager.getInstance().subscribeState(this);
   }
 
-  public notify(locationId: LocationId) {}
+  public notify(locationId: LocationId) {
+    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
+      locationId,
+      GameMode.Explore
+    );
+    const currLocationId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    if (hasUpdate && locationId === currLocationId) {
+      this.renderBBoxLayerContainer(locationId);
+    }
+  }
 
   public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
@@ -40,6 +49,7 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   public renderBBoxLayerContainer(locationId: LocationId): void {
+    GameActionManager.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender =
       GameActionManager.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) ||
       [];
