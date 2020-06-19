@@ -12,22 +12,21 @@ type AchievementEditorProps = {
 function AchievementEditor(props: AchievementEditorProps) {
   const { achievementDict, achievementModalDict } = props;
 
+  const mapAchievementDictToEditableCard = (achievementDict: { [id: number]: AchievementItem }) => {
+    return Object.values(achievementDict).map(achievement => (
+      <EditableAchievementCard
+        key={achievement.title}
+        achievement={achievement}
+        modal={achievementModalDict[achievement.id]}
+      />
+    ));
+  };
+
   return (
     <div className="main">
-      <ul className="display-list">
-        {Object.values(achievementDict).map((
-          achievement // TODO: write map function for this, similar to Achievement.tsx
-        ) => (
-          <li key={achievement.title}>
-            <EditableAchievementCard
-              achievement={achievement}
-              modal={achievementModalDict[achievement.id]}
-            />
-          </li>
-        ))}
-        <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />{' '}
-        {/* TODO: create editor tool for this */}
-      </ul>
+      <ul className="display-list">{mapAchievementDictToEditableCard(achievementDict)}</ul>
+      <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />
+      {/* TODO: create editor tool for this */}
     </div>
   );
 }
