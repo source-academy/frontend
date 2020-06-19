@@ -372,6 +372,11 @@ class GameActionManager {
 
   public setEscapeMenu(active: boolean) {
     if (this.gameManager) {
+      if (active) {
+        this.deactivateCurrentUI();
+      } else {
+        this.activateCurrentUI();
+      }
       this.gameManager.escapeManager.setEscapeMenu(active);
     }
   }
