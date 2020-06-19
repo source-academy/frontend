@@ -16,12 +16,12 @@ export const achievementTemplate: AchievementItem = {
 };
 
 export const modalTemplate: AchievementModalItem = {
-  id: 1,
-  title: '',
+  id: 0,
+  title: 'Modal Title here',
   modalImageUrl:
-    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-  description: 'Cookies!',
-  exp: 200,
-  goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
-  completionText: 'Cooooookiess!!!'
+    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/sourceAcademy%40x2.png',
+  description: 'Modal Description here.',
+  exp: 0,
+  goalText: 'Goal Text here.',
+  completionText: 'Completion Text here.'
 };

@@ -21,11 +21,7 @@ function AchievementEditor(props: AchievementEditorProps) {
           <li key={achievement.title}>
             <EditableAchievementCard
               achievement={achievement}
-              modal={
-                achievementModalDict[achievement.id] === undefined // TODO: logic should be done by subcomponent
-                  ? modalTemplate
-                  : achievementModalDict[achievement.id]
-              }
+              modal={achievementModalDict[achievement.id]}
             />
           </li>
         ))}

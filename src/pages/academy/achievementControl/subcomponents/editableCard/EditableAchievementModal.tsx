@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Card } from '@blueprintjs/core';
 import { AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
+import { modalTemplate } from './AchievementTemplates';
 
 type EditableAchievementModalProps = {
   modal: AchievementModalItem;
@@ -9,7 +10,9 @@ type EditableAchievementModalProps = {
 function EditableAchievementModal(props: EditableAchievementModalProps) {
   const { modal } = props;
 
-  const { title, modalImageUrl, description, goalText } = modal;
+  const renderModal = modal === undefined ? modalTemplate : modal;
+
+  const { title, modalImageUrl, description, goalText } = renderModal;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
