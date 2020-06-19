@@ -49,6 +49,16 @@ If you are testing with a local backend, the values in `.env.example` match the 
 1. `REACT_APP_OAUTH2_PROVIDERn_NAME`: The name of the nth authentication provider shown on the login screen.
 1. `REACT_APP_OAUTH2_PROVIDERn_ENDPOINT`: The authentication endpoint of the nth authentication provider.
 
+#### Google API configuration
+
+The following properties are used for the Playground Google Drive integration. You can leave them blank if you are not using or testing that feature locally.
+
+1. `REACT_APP_GOOGLE_CLIENT_ID`: The OAuth2 client ID issued by Google.
+1. `REACT_APP_GOOGLE_API_KEY`: The Picker API key issued by Google.
+1. `REACT_APP_GOOGLE_APP_ID`: The project ID of the Google API project.
+
+See [here](https://github.com/source-academy/cadet-frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
+
 #### Other configuration
 
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).

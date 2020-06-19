@@ -21,6 +21,7 @@ import {
 } from '../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
+import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -44,6 +45,12 @@ import {
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation, WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
+import {
+  persistenceOpenPicker,
+  persistenceSaveFileAs,
+  persistenceSaveFile,
+  persistenceInitialise
+} from '../../features/persistence/PersistenceActions';
 import {
   generateLzString,
   shortenURL,
@@ -75,7 +82,9 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   sourceVariant: state.workspaces.playground.context.variant,
   websocketStatus: state.workspaces.playground.websocketStatus,
   externalLibraryName: state.workspaces.playground.externalLibrary,
-  usingSubst: state.playground.usingSubst
+  usingSubst: state.playground.usingSubst,
+  persistenceUser: state.session.googleUser,
+  persistenceFile: state.playground.persistenceFile
 });
 
 const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
@@ -124,9 +133,14 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: () => fetchChapter(),
+      handleFetchChapter: fetchChapter,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
+      handlePersistenceOpenPicker: persistenceOpenPicker,
+      handlePersistenceSaveFile: persistenceSaveFileAs,
+      handlePersistenceUpdateFile: persistenceSaveFile,
+      handlePersistenceInitialise: persistenceInitialise,
+      handlePersistenceLogOut: logoutGoogle
     },
     dispatch
   );
