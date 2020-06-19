@@ -29,10 +29,21 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
     nonPrerequisites,
     taskID
   } = props;
+
   const [dialogFlags, setDialogFlags] = useState<AchievementDialogFlags>({
     addition: false,
     deletion: false
   });
+
+  const findNextID = (achievements: AchievementItem[], handledTaskID: number): number => {
+    for (let i = 0; i < achievements.length; i++) {
+      if (achievements[i].id !== handledTaskID) {
+        return achievements[i].id;
+      }
+    }
+
+    return -1;
+  };
 
   const toggleDialogFlag = (flag: keyof AchievementDialogFlags) => {
     setDialogFlags({
@@ -47,6 +58,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         toggleDialogFlag={toggleDialogFlag}
         addPrerequisite={addPrerequisite}
         flag={'addition'}
+        findNextID={findNextID}
         isDialogOpen={dialogFlags['addition']}
         nonPrerequisites={nonPrerequisites}
         taskID={taskID}
@@ -56,6 +68,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         toggleDialogFlag={toggleDialogFlag}
         deletePrerequisite={deletePrerequisite}
         flag={'deletion'}
+        findNextID={findNextID}
         isDialogOpen={dialogFlags['deletion']}
         prerequisites={prerequisites}
         taskID={taskID}

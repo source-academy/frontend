@@ -7,13 +7,22 @@ type AchievementControlPanelAdderProps = {
   toggleDialogFlag: any;
   addPrerequisite: any;
   flag: string;
+  findNextID: any;
   isDialogOpen: boolean;
   nonPrerequisites: AchievementItem[];
   taskID: number;
 };
 
 function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) {
-  const { toggleDialogFlag, addPrerequisite, flag, nonPrerequisites, isDialogOpen, taskID } = props;
+  const {
+    toggleDialogFlag,
+    addPrerequisite,
+    flag,
+    findNextID,
+    nonPrerequisites,
+    isDialogOpen,
+    taskID
+  } = props;
 
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
     nonPrerequisites.length === 0 ? -1 : nonPrerequisites[0].id
@@ -22,7 +31,7 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
   const addingAction = (e: any) => {
     toggleDialogFlag(flag);
     addPrerequisite(taskID, addedPrerequisiteID);
-    setAddedPrerequisiteID(nonPrerequisites.length === 0 ? -1 : nonPrerequisites[0].id);
+    setAddedPrerequisiteID(findNextID(nonPrerequisites, addedPrerequisiteID));
   };
 
   return (

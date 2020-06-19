@@ -7,13 +7,22 @@ type AchievementControlPanelDeleterProps = {
   toggleDialogFlag: any;
   deletePrerequisite: any;
   flag: string;
+  findNextID: any;
   isDialogOpen: boolean;
   prerequisites: AchievementItem[];
   taskID: number;
 };
 
 function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterProps) {
-  const { toggleDialogFlag, deletePrerequisite, flag, isDialogOpen, prerequisites, taskID } = props;
+  const {
+    toggleDialogFlag,
+    deletePrerequisite,
+    flag,
+    findNextID,
+    isDialogOpen,
+    prerequisites,
+    taskID
+  } = props;
 
   const [deletedPrerequisiteID, setDeletedPrerequisiteID] = useState<number>(
     prerequisites.length === 0 ? -1 : prerequisites[0].id
@@ -22,7 +31,7 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
   const deleteAction = (e: any) => {
     toggleDialogFlag(flag);
     deletePrerequisite(taskID, deletedPrerequisiteID);
-    setDeletedPrerequisiteID(prerequisites.length === 0 ? -1 : prerequisites[0].id);
+    setDeletedPrerequisiteID(findNextID(prerequisites, deletedPrerequisiteID));
   };
 
   return (
