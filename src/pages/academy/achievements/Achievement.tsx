@@ -16,6 +16,7 @@ import {
   achievementModalDict,
   studentProgress
 } from 'src/commons/mocks/AchievementMocks';
+import Inferencer from './subcomponents/utils/Inferencer';
 
 export type DispatchProps = {};
 
@@ -80,6 +81,9 @@ export const mapAchievementDictToTask = (
 function Achievement() {
   const [modalID, setModalID] = useState<number>(-1);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
+
+  const inferencer = new Inferencer(achievementDict);
+  inferencer.printPrerequisiteTree();
 
   return (
     <div className="Achievements">
