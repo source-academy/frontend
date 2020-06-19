@@ -15,14 +15,13 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
   /* Helpers to check validity of Prerequisites */
 
-  const checkCyclicDependent = (taskID: number, prerreqIDs: number[] | undefined): boolean => { 
+  const checkCyclicDependent = (taskID: number, prerreqIDs: number[] | undefined): boolean => {
     /*
       taskID: prerequisiteIDs
     */
     if (prerreqIDs === undefined) {
       return false;
     }
-
 
     for (let i = 0; i < prerreqIDs.length; i++) {
       const prereqID = prerreqIDs[i];

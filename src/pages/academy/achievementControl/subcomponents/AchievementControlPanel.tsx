@@ -21,7 +21,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     studentProgress
   );
 
-  const [currentTasks, setCurrentTasks] = useState(achievementTasks); // Here 
+  const [currentTasks, setCurrentTasks] = useState(achievementTasks); // Here
 
   const resetCurrentTasks = () => {
     setCurrentTasks(mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress));

@@ -41,19 +41,22 @@ function AchievementEditor(props: AchievementEditorProps) {
   return (
     <div className="main">
       <ul className="display-list">
-        {Object.values(achievementDict).map(achievement => (  // TODO: write map function for this, similar to Achievement.tsx
+        {Object.values(achievementDict).map((
+          achievement // TODO: write map function for this, similar to Achievement.tsx
+        ) => (
           <li key={achievement.title}>
             <EditableAchievementCard
               achievement={achievement}
               modal={
-                achievementModalDict[achievement.id] === undefined  // TODO: logic should be done by subcomponent
+                achievementModalDict[achievement.id] === undefined // TODO: logic should be done by subcomponent
                   ? newModal
                   : achievementModalDict[achievement.id]
               }
             />
           </li>
         ))}
-        <EditableAchievementCard achievement={newAchievement} modal={newModal} /> {/* TODO: create editor tool for this */}
+        <EditableAchievementCard achievement={newAchievement} modal={newModal} />{' '}
+        {/* TODO: create editor tool for this */}
       </ul>
     </div>
   );
