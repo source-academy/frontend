@@ -18,7 +18,7 @@ export function gameStateToJson(
 
   const userState: UserSaveState = {
     soundConfig: { volume: 5 },
-    lastPlayedChapter: Math.max(chapterNum, prevGameState.userState.lastPlayedChapter),
+    lastPlayedChapter: chapterNum,
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
   };
