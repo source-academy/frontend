@@ -41,6 +41,7 @@ class Inferencer {
         node.descendant
       )
     );
+    console.log('ಠ_ಠ hmm...u should only see me once');
   }
 
   public getFurthestDeadline(achievementId: number) {
