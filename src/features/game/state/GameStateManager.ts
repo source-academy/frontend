@@ -129,7 +129,7 @@ class GameStateManager implements StateSubject {
     this.chapterObjective = this.chapter.objectives;
     this.locationStates = this.chapter.map.getLocations();
     this.objectPropertyMap = this.chapter.map.getObjects();
-    this.bboxPropertyMap = this.chapter.map.getBBox();
+    this.bboxPropertyMap = this.chapter.map.getBBoxes();
     this.triggeredInteractions.clear();
   }
 

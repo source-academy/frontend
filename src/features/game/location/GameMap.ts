@@ -70,7 +70,7 @@ class GameMap {
     return this.objects;
   }
 
-  public getBBox(): Map<ItemId, BBoxProperty> {
+  public getBBoxes(): Map<ItemId, BBoxProperty> {
     return this.boundingBoxes;
   }
 
