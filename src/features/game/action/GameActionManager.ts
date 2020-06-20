@@ -1,9 +1,8 @@
 import GameManager from '../scenes/gameManager/GameManager';
-import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId, GameLocation } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
@@ -46,43 +45,27 @@ class GameActionManager {
     return this.getGameManager().currentLocationId;
   }
 
-  public getLocation(locationId: LocationId): GameLocation | undefined {
-    return this.getGameManager().currentChapter.map.getLocation(locationId);
+  public getLocationAtId(locationId: LocationId): GameLocation {
+    return this.getGameManager().currentChapter.map.getLocationAtId(locationId);
   }
   /////////////////////
   //    Game Mode    //
   /////////////////////
 
-  public getLocationMode(locationId: LocationId): GameMode[] | undefined {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationMode(locationId);
-    }
-    return undefined;
+  public getModesByLocId(locationId: LocationId): GameMode[] {
+    return this.getGameManager().stateManager.getLocationMode(locationId);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.addMode(locationId, mode);
       this.gameManager.stateManager.addLocationMode(locationId, mode);
     }
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.removeMode(locationId, mode);
       this.gameManager.stateManager.removeLocationMode(locationId, mode);
     }
-  }
-
-  public changeLocationModeTo(
-    newMode: GameMode,
-    refresh?: boolean,
-    skipDeactivate?: boolean
-  ): void {
-    if (this.gameManager) {
-      return this.gameManager.changeModeTo(newMode, refresh, skipDeactivate);
-    }
-    return;
   }
 
   /////////////////////
@@ -294,32 +277,6 @@ class GameActionManager {
     }
   }
 
-  public deactivateCurrentUI() {
-    if (this.gameManager) {
-      this.gameManager.deactivateCurrentUI();
-    }
-  }
-
-  public activateCurrentUI() {
-    if (this.gameManager) {
-      this.gameManager.activateCurrentUI();
-    }
-  }
-
-  /////////////////////
-  //     Dialogue    //
-  /////////////////////
-
-  public async bringUpDialogue(dialogueId: ItemId) {
-    if (this.gameManager) {
-      this.deactivateCurrentUI();
-      this.gameManager.setActivePhase(GamePhase.Dialogue);
-      await this.gameManager.dialogueManager.playDialogue(dialogueId);
-      this.gameManager.setActivePhase(GamePhase.Standard);
-      this.activateCurrentUI();
-    }
-  }
-
   public getDialogue(dialogueId: ItemId) {
     return this.getGameManager().currentChapter.map.getDialogues().get(dialogueId);
   }
@@ -331,16 +288,6 @@ class GameActionManager {
   public async bringUpUpdateNotif(message: string) {
     if (this.gameManager) {
       await displayNotification(message);
-    }
-  }
-
-  /////////////////////
-  //     Speaker     //
-  /////////////////////
-
-  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined | null) {
-    if (this.gameManager) {
-      this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
     }
   }
 
@@ -390,21 +337,6 @@ class GameActionManager {
 
   public async saveGame() {
     await this.getGameManager().saveManager.saveGame();
-  }
-
-  /////////////////////
-  //   Escape Menu   //
-  /////////////////////
-
-  public setEscapeMenu(active: boolean) {
-    if (this.gameManager) {
-      if (active) {
-        this.deactivateCurrentUI();
-      } else {
-        this.activateCurrentUI();
-      }
-      this.gameManager.escapeManager.setEscapeMenu(active);
-    }
   }
 
   /////////////////////

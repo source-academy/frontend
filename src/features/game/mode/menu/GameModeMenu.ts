@@ -1,45 +1,35 @@
-import { GameButton, IGameUI, GameSprite } from '../../commons/CommonsTypes';
+import { GameButton, IGameUI } from '../../commons/CommonsTypes';
 import {
   menuEntryTweenProps,
   menuExitTweenProps,
   modeButtonYPos,
-  modeButtonStyle
+  modeButtonStyle,
+  modeBannerRect
 } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { GameMode } from '../GameModeTypes';
-import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
-import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
-import { LocationId } from '../../location/GameMapTypes';
+import { GameMode, gameModeToPhase } from '../GameModeTypes';
+import { screenSize, Constants } from '../../commons/CommonConstants';
+import { shortButton } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationId: LocationId;
-  private modeBanner: GameSprite;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId) {
-    const banner = {
-      assetKey: modeMenuBanner.key,
-      assetXPos: screenCenter.x,
-      assetYPos: screenCenter.y,
-      isInteractive: false
-    } as GameSprite;
-
-    this.uiContainer = undefined;
-    this.locationId = locationId;
-    this.modeBanner = banner;
+  constructor() {
     this.gameButtons = [];
-    this.fetchLatestState();
   }
 
-  private async createGameButtons(modes?: GameMode[]) {
+  private createGameButtons(modes?: GameMode[]) {
     if (modes) {
       // Refresh Buttons
-      this.gameButtons = [];
-      await modes.forEach(mode => {
-        this.addModeButton(mode, () => GameActionManager.getInstance().changeLocationModeTo(mode));
+      modes.forEach(mode => {
+        this.addModeButton(mode, () =>
+          GameActionManager.getInstance()
+            .getGameManager()
+            .phaseManager.pushPhase(gameModeToPhase[mode])
+        );
       });
     }
   }
@@ -75,11 +65,10 @@ class GameModeMenu implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const latestLocationMode = GameActionManager.getInstance().getLocationMode(this.locationId);
-    if (!latestLocationMode) {
-      return;
-    }
-    this.createGameButtons(latestLocationMode);
+    const latestModesInLoc = GameActionManager.getInstance().getModesByLocId(
+      GameActionManager.getInstance().getCurrLocId()
+    );
+    this.createGameButtons(latestModesInLoc);
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
@@ -92,9 +81,9 @@ class GameModeMenu implements IGameUI {
 
     const modeBanner = new Phaser.GameObjects.Image(
       gameManager,
-      this.modeBanner.assetXPos,
-      this.modeBanner.assetYPos,
-      this.modeBanner.assetKey
+      modeBannerRect.assetXPos,
+      modeBannerRect.assetYPos,
+      modeBannerRect.assetKey
     );
     modeMenuContainer.add(modeBanner);
 
@@ -129,9 +118,11 @@ class GameModeMenu implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
+    this.uiContainer = undefined;
+    this.gameButtons = [];
+    this.fetchLatestState();
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    this.fetchLatestState();
     this.uiContainer = await this.getUIContainer();
     GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 

@@ -58,10 +58,6 @@ class GameMap {
     return this.getLocationAtId(id).navigation;
   }
 
-  public getLocation(id: LocationId): GameLocation | undefined {
-    return this.locations.get(id);
-  }
-
   public getLocations(): Map<LocationId, GameLocation> {
     return this.locations;
   }

@@ -1,5 +1,5 @@
 import { ItemId } from '../commons/CommonsTypes';
-import { Dialogue } from './GameDialogueTypes';
+import { Dialogue, DialogueLine } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
 import DialogueGenerator from './DialogueGenerator';
@@ -7,6 +7,7 @@ import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { textTypeWriterStyle } from '../dialogue/DialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
@@ -19,41 +20,45 @@ export default class DialogueManager {
     this.dialogueMap = dialogueMap;
   }
 
-  public async destroyDialogue() {}
-
-  public async playDialogue(dialogueId: ItemId) {
+  public playDialogue(dialogueId: ItemId): void {
     const dialogue = this.dialogueMap.get(dialogueId);
 
     if (!dialogue || !dialogue.content) {
-      return undefined;
+      return;
     }
 
     const gameManager = GameActionManager.getInstance().getGameManager();
     const generateDialogue = DialogueGenerator(dialogue);
 
     const dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
-    const container = dialogueRenderer.getDialogueContainer();
+    const dialogueContainer = dialogueRenderer.getDialogueContainer();
 
-    const activateContainer = new Promise(resolve => {
-      gameManager.layerManager.addToLayer(Layer.Dialogue, container);
-      gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
-      dialogueRenderer
-        .getDialogueBox()
-        .setInteractive({ useHandCursor: true, pixelPerfect: true })
-        .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-          const { line, speakerDetail, actionIds } = generateDialogue();
-          dialogueRenderer.changeText(line);
-          GameActionManager.getInstance().changeSpeaker(speakerDetail);
-          await GameActionManager.getInstance().executeStoryAction(actionIds);
-          if (!line) {
-            resolve();
-            GameActionManager.getInstance().changeSpeaker(null);
-            fadeAndDestroy(gameManager, container);
-          }
-        });
-    });
+    gameManager.layerManager.addToLayer(Layer.Dialogue, dialogueContainer);
+    gameManager.add.tween(fadeIn([dialogueContainer], Constants.fadeDuration * 2));
 
-    await activateContainer;
-    return true;
+    dialogueRenderer
+      .getDialogueBox()
+      .setInteractive({ useHandCursor: true, pixelPerfect: true })
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
+        this.onClick(gameManager, generateDialogue, dialogueRenderer, dialogueContainer)
+      );
+  }
+
+  public async onClick(
+    gameManager: GameManager,
+    generateDialogue: () => DialogueLine,
+    dialogueRenderer: DialogueRenderer,
+    dialogueContainer: Phaser.GameObjects.Container
+  ) {
+    const { line, speakerDetail, actionIds } = generateDialogue();
+    dialogueRenderer.changeText(line);
+    gameManager.characterManager.changeSpeakerTo(speakerDetail);
+    await GameActionManager.getInstance().executeStoryAction(actionIds);
+    if (!line) {
+      dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
+      gameManager.characterManager.changeSpeakerTo(null);
+      fadeAndDestroy(gameManager, dialogueContainer);
+      gameManager.phaseManager.popPhase();
+    }
   }
 }

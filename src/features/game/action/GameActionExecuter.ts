@@ -1,9 +1,8 @@
 import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { GamePhase } from '../mode/GameModeTypes';
 import { ItemId } from '../commons/CommonsTypes';
-import { Constants } from '../commons/CommonConstants';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
@@ -41,9 +40,6 @@ export default class GameActionExecuter {
 
     switch (actionType) {
       case GameActionType.LocationChange:
-        if (actionManager.getGameManager().getActivePhase() === GamePhase.Dialogue) {
-          return;
-        }
         actionManager.changeLocationTo(actionParams.id);
         return;
       case GameActionType.Collectible:
@@ -69,13 +65,10 @@ export default class GameActionExecuter {
         actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
-        if (actionManager.getGameManager().getActivePhase() === GamePhase.Dialogue) {
-          return;
-        }
-        actionManager.bringUpDialogue(actionParams.id);
+        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Dialogue, actionParams);
         return;
       case GameActionType.AddPopup:
-        actionManager.displayPopUp(actionParams.id, actionParams.position, Constants.popupDuration);
+        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Popup, actionParams);
         return;
     }
   }

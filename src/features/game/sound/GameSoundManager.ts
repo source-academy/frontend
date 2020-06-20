@@ -2,6 +2,8 @@ import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
 import game from 'src/pages/academy/game/subcomponents/phaserGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
+import { LocationId } from '../location/GameMapTypes';
+import GameActionManager from '../action/GameActionManager';
 
 class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
@@ -16,6 +18,15 @@ class GameSoundManager {
 
   public initialise(scene: Phaser.Scene) {
     this.scene = scene;
+  }
+
+  public renderBackgroundMusic(locationId: LocationId) {
+    const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
+    if (bgmKey) {
+      this.playBgMusic(bgmKey);
+    } else {
+      this.stopCurrBgMusic();
+    }
   }
 
   public clearSoundAssets() {

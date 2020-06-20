@@ -98,12 +98,12 @@ class GameStateManager implements StateSubject {
   //        Preprocess         //
   ///////////////////////////////
 
-  public initialise(chapter: GameChapter, gameStoryState: GameSaveState | undefined): void {
+  public initialise(chapter: GameChapter, gameSaveState: GameSaveState | undefined): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
 
-    if (gameStoryState) {
-      this.loadFromGameStoryState(gameStoryState);
+    if (gameSaveState) {
+      this.loadFromGameStoryState(gameSaveState);
     } else {
       this.loadNewGameStoryState();
     }
@@ -166,9 +166,8 @@ class GameStateManager implements StateSubject {
   //    Location Mode State    //
   ///////////////////////////////
 
-  public getLocationMode(locationId: LocationId) {
-    const location = this.locationStates.get(locationId);
-    return location ? location.modes : undefined;
+  public getLocationMode(locationId: LocationId): GameMode[] {
+    return this.chapter.map.getLocationAtId(locationId).modes!;
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {

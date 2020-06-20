@@ -1,5 +1,6 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ItemId } from '../../commons/CommonsTypes';
+import { LocationId } from '../../location/GameMapTypes';
 import {
   magnifyingGlass,
   magnifyingGlassChecked,
@@ -9,17 +10,10 @@ import { getBackToMenuContainer } from '../GameModeHelper';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
-import { LocationId } from '../../location/GameMapTypes';
 import { Layer } from '../../layer/GameLayerTypes';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationId: LocationId;
-
-  constructor(locationId: LocationId) {
-    this.uiContainer = undefined;
-    this.locationId = locationId;
-  }
 
   // Explore Mode does not require states
   public fetchLatestState(): void {}
@@ -36,7 +30,7 @@ class GameModeExplore implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    this.uiContainer = await this.getUIContainer();
+    this.uiContainer = this.getUIContainer();
     GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
@@ -48,9 +42,11 @@ class GameModeExplore implements IGameUI {
       ...entryTweenProps
     });
 
-    gameManager.objectManager.enableObjectActions(this.locationId);
-    gameManager.boundingBoxManager.enableBBoxActions(this.locationId);
-    this.attachExploreModeCallbacks();
+    const locationId = GameActionManager.getInstance().getCurrLocId();
+    gameManager.objectManager.enableObjectActions(locationId);
+    gameManager.boundingBoxManager.enableBBoxActions(locationId);
+
+    this.attachExploreModeCallbacks(locationId);
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
@@ -59,7 +55,7 @@ class GameModeExplore implements IGameUI {
     gameManager.input.setDefaultCursor('');
     gameManager.objectManager.disableObjectActions();
     gameManager.boundingBoxManager.disableBBoxActions();
-    this.removeExploreModeCallbacks();
+    this.removeExploreModeCallbacks(gameManager.currentLocationId);
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -77,68 +73,68 @@ class GameModeExplore implements IGameUI {
     }
   }
 
-  private attachExploreModeCallbacks() {
+  private attachExploreModeCallbacks(locationId: LocationId) {
     // Objects
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
       this.explorePointerOver
     );
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
       this.explorePointerOut
     );
     GameActionManager.getInstance().addInteractiveObjectsListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
       this.explorePointerUp
     );
 
     // BBoxes
     GameActionManager.getInstance().addInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
       this.explorePointerOver
     );
     GameActionManager.getInstance().addInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
       this.explorePointerOut
     );
     GameActionManager.getInstance().addInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
       this.explorePointerUp
     );
   }
 
-  private removeExploreModeCallbacks() {
+  private removeExploreModeCallbacks(locationId: LocationId) {
     // Objects
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
     );
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
     );
     GameActionManager.getInstance().removeInteractiveObjectListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP
     );
 
     // BBoxes
     GameActionManager.getInstance().removeInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
     );
     GameActionManager.getInstance().removeInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
     );
     GameActionManager.getInstance().removeInteractiveBBoxListeners(
-      this.locationId,
+      locationId,
       Phaser.Input.Events.GAMEOBJECT_POINTER_UP
     );
   }

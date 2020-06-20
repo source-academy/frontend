@@ -11,7 +11,7 @@ import {
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize } from '../../commons/CommonConstants';
 import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
@@ -24,16 +24,14 @@ class GameModeMove implements IGameUI {
   private locationAssetKeys: Map<string, string>;
   private previewFill: GameSprite;
   private previewFrame: GameSprite;
-  private locationId: LocationId;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId) {
+  constructor() {
     this.uiContainer = undefined;
     this.currentLocationAssetKey = defaultLocationImg.key;
     this.locationAssetKeys = new Map<string, string>();
     this.previewFill = previewFill;
     this.previewFrame = previewFrame;
-    this.locationId = locationId;
     this.gameButtons = [];
   }
 
@@ -42,10 +40,11 @@ class GameModeMove implements IGameUI {
     this.gameButtons = [];
 
     await navigation.forEach(locationId => {
-      const location = GameActionManager.getInstance().getLocation(locationId);
+      const location = GameActionManager.getInstance().getLocationAtId(locationId);
       if (location) {
-        this.addMoveOptionButton(location.name, () => {
-          GameActionManager.getInstance().changeLocationTo(locationId);
+        this.addMoveOptionButton(location.name, async () => {
+          await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+          await GameActionManager.getInstance().getGameManager().changeLocationTo(location.id);
         });
         this.locationAssetKeys.set(location.name, location.assetKey);
       }
@@ -83,9 +82,10 @@ class GameModeMove implements IGameUI {
   }
 
   public fetchLatestState(): void {
+    const locationId = GameActionManager.getInstance().getCurrLocId();
     const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
-      this.locationId
+      locationId
     );
     if (!latestLocationNav) {
       return;

@@ -18,15 +18,12 @@ export async function displayNotification(message: string) {
   await sleep(Constants.fadeDuration * 2);
   dialogueRenderer.changeText(message);
 
-  const activateContainer = new Promise(async resolve => {
-    dialogueRenderer
-      .getDialogueBox()
-      .setInteractive({ useHandCursor: true, pixelPerfect: true })
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-        fadeAndDestroy(gameManager, container);
-        resolve();
-      });
-  });
-
-  await activateContainer;
+  dialogueRenderer
+    .getDialogueBox()
+    .setInteractive({ useHandCursor: true, pixelPerfect: true })
+    .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+      dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
+      fadeAndDestroy(gameManager, container);
+      GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+    });
 }
