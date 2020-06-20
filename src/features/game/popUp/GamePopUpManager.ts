@@ -6,6 +6,7 @@ import { sleep } from '../utils/GameUtils';
 import { popUpFrame } from '../commons/CommonAssets';
 import { popUpRect, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
 import { resize } from '../utils/SpriteUtils';
+import { Constants } from '../commons/CommonConstants';
 
 class GamePopUpManager {
   private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
@@ -20,7 +21,7 @@ class GamePopUpManager {
     };
   }
 
-  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration?: number) {
+  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration = Constants.popupDuration) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
@@ -64,6 +65,7 @@ class GamePopUpManager {
 
     if (duration) {
       setTimeout(() => this.destroyPopUp(position), duration);
+      GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
     }
   }
 

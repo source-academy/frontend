@@ -128,7 +128,6 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
-    await this.phaseManager.swapPhase(GamePhaseType.Menu);
     await GameActionManager.getInstance().saveGame();
   }
 

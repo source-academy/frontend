@@ -43,17 +43,14 @@ const gamePhases = [
   {
     gamePhaseType: GamePhaseType.Popup,
     activate: (phaseParams: any) =>
-      GameActionManager.getInstance().displayPopUp(phaseParams.id, phaseParams.position),
+      GameActionManager.getInstance()
+        .getGameManager()
+        .popUpManager.displayPopUp(phaseParams.id, phaseParams.position, phaseParams.duration),
     deactivate: Constants.nullFunction
   },
   {
     gamePhaseType: GamePhaseType.Notification,
     activate: async (phaseParams: any) => await displayNotification(phaseParams.id),
-    deactivate: Constants.nullFunction
-  },
-  {
-    gamePhaseType: GamePhaseType.None,
-    activate: Constants.nullFunction,
     deactivate: Constants.nullFunction
   },
   {

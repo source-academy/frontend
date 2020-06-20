@@ -2,7 +2,6 @@ import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { ItemId } from '../commons/CommonsTypes';
-import { Constants } from '../commons/CommonConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 export default class GameActionExecuter {
@@ -69,12 +68,10 @@ export default class GameActionExecuter {
         actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
-        actionManager
-          .getGameManager()
-          .phaseManager.pushPhase(GamePhaseType.Dialogue, { id: actionParams.id });
+        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Dialogue, actionParams);
         return;
       case GameActionType.AddPopup:
-        actionManager.displayPopUp(actionParams.id, actionParams.position, Constants.popupDuration);
+        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Popup, actionParams);
         return;
     }
   }

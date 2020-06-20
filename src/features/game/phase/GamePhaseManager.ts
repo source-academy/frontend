@@ -6,7 +6,7 @@ export default class GamePhaseManager {
   private currentPhase: GamePhaseType;
 
   constructor() {
-    this.currentPhase = GamePhaseType.None;
+    this.currentPhase = GamePhaseType.Menu;
     this.phaseStack = [this.currentPhase];
   }
 
@@ -27,15 +27,16 @@ export default class GamePhaseManager {
     await this.phaseTransitionFrom(prevPhase, newPhaseParams);
   }
 
-  public getCurrentPhase(): GamePhaseType {
+  private async phaseTransitionFrom(prevPhase: GamePhaseType, newPhaseParams: any) {
+    console.log(this.phaseStack);
+    if (prevPhase) await gamePhaseMap.get(prevPhase).deactivate();
+    await gamePhaseMap.get(this.getCurrentPhase()).activate(newPhaseParams);
+  }
+
+  private getCurrentPhase(): GamePhaseType {
     if (!this.phaseStack.length) {
       throw Error('No more states');
     }
     return this.phaseStack[this.phaseStack.length - 1];
-  }
-
-  private async phaseTransitionFrom(prevPhase: GamePhaseType, newPhaseParams: any) {
-    if (prevPhase) await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(this.getCurrentPhase()).activate(newPhaseParams);
   }
 }
