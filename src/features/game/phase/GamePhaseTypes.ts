@@ -13,6 +13,7 @@ export enum GamePhaseType {
 
 export type GamePhase = {
   type: GamePhaseType;
-  activate: Function;
-  deactivate: Function;
+  activate: (phaseParams?: any) => void | Promise<void>;
+  reactivate: () => void | Promise<void>;
+  deactivate: () => void | Promise<void>;
 };

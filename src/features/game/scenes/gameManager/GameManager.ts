@@ -131,10 +131,6 @@ class GameManager extends Phaser.Scene {
     await GameActionManager.getInstance().saveGame();
   }
 
-  private setLocation(locationId: LocationId) {
-    this.currentLocationId = locationId;
-  }
-
   private async renderLocation(locationId: LocationId) {
     // draw layers
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
@@ -152,7 +148,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public async changeLocationTo(locationId: LocationId) {
-    this.setLocation(locationId);
+    this.currentLocationId = locationId;
 
     await blackFade(this, 300, 300, () => {
       this.layerManager.clearAllLayers();

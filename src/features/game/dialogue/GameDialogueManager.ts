@@ -20,11 +20,11 @@ export default class DialogueManager {
     this.dialogueMap = dialogueMap;
   }
 
-  public playDialogue(dialogueId: ItemId) {
+  public playDialogue(dialogueId: ItemId): void {
     const dialogue = this.dialogueMap.get(dialogueId);
 
     if (!dialogue || !dialogue.content) {
-      return undefined;
+      return;
     }
 
     const gameManager = GameActionManager.getInstance().getGameManager();
@@ -42,8 +42,6 @@ export default class DialogueManager {
       .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
         this.onClick(gameManager, generateDialogue, dialogueRenderer, dialogueContainer)
       );
-
-    return true;
   }
 
   public async onClick(

@@ -11,19 +11,6 @@ import {
 import { Layer } from '../layer/GameLayerTypes';
 
 class GameEscapeManager {
-  // public setEscapeMenu(active: boolean) {
-  //   if (active) {
-  //     this.escapeMenuContainer = this.createEscapeMenu();
-  //     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, this.escapeMenuContainer);
-  //   } else if (this.escapeMenuContainer) {
-  //     GameActionManager.getInstance()
-  //       .getGameManager()
-  //       .layerManager.clearSeveralLayers([Layer.Escape]);
-  //     this.escapeMenuContainer.destroy();
-  //     this.escapeMenuContainer = undefined;
-  //   }
-  // }
-
   public createEscapeMenu() {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
@@ -54,7 +41,7 @@ class GameEscapeManager {
     const continueButton = createButton(
       gameManager,
       'Continue',
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      () => this.destroyEscapeMenu(escapeMenuContainer),
       mediumButton.key,
       { x: screenSize.x * 0.5, y: escapeButtonYPos },
       escapeTextOriX,
@@ -75,6 +62,14 @@ class GameEscapeManager {
 
     escapeMenuContainer.add([escapeMenuBg, mainMenuButton, continueButton, saveSettingsButton]);
     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
+  }
+
+  private destroyEscapeMenu(escapeMenuContainer: Phaser.GameObjects.Container) {
+    GameActionManager.getInstance()
+      .getGameManager()
+      .layerManager.clearSeveralLayers([Layer.Escape]);
+    escapeMenuContainer.destroy();
+    GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
   }
 }
 

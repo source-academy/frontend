@@ -3,16 +3,15 @@ import { gamePhaseMap } from './GamePhaseConstants';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
-  private currentPhase: GamePhaseType;
 
   constructor() {
-    this.currentPhase = GamePhaseType.Menu;
-    this.phaseStack = [this.currentPhase];
+    this.phaseStack = [GamePhaseType.Menu];
   }
 
   public async popPhase(newPhaseParams?: any): Promise<void> {
     const prevPhase = this.phaseStack.pop()!;
-    await this.performPhaseTransition(prevPhase, newPhaseParams);
+    await gamePhaseMap.get(prevPhase).deactivate();
+    await gamePhaseMap.get(this.getCurrentPhase()).reactivate(newPhaseParams);
   }
 
   public async pushPhase(phase: GamePhaseType, newPhaseParams?: any): Promise<void> {
@@ -34,7 +33,7 @@ export default class GamePhaseManager {
 
   private getCurrentPhase(): GamePhaseType {
     if (!this.phaseStack.length) {
-      throw Error('No more states');
+      this.phaseStack = [GamePhaseType.Menu];
     }
     return this.phaseStack[this.phaseStack.length - 1];
   }

@@ -40,9 +40,6 @@ export default class GameActionExecuter {
 
     switch (actionType) {
       case GameActionType.LocationChange:
-        // if (actionManager.getGameManager().getActivePhase() === GamePhase.Dialogue) {
-        //   return;
-        // }
         actionManager.changeLocationTo(actionParams.id);
         return;
       case GameActionType.Collectible:

@@ -22,6 +22,7 @@ export async function displayNotification(message: string) {
     .getDialogueBox()
     .setInteractive({ useHandCursor: true, pixelPerfect: true })
     .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+      dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
       fadeAndDestroy(gameManager, container);
       GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
     });
