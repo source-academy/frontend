@@ -55,6 +55,7 @@ export default class DialogueManager {
     gameManager.characterManager.changeSpeakerTo(speakerDetail);
     await GameActionManager.getInstance().executeStoryAction(actionIds);
     if (!line) {
+      dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
       gameManager.characterManager.changeSpeakerTo(null);
       fadeAndDestroy(gameManager, dialogueContainer);
       gameManager.phaseManager.popPhase();
