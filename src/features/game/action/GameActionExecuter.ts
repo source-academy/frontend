@@ -3,6 +3,7 @@ import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { GamePhase } from '../mode/GameModeTypes';
 import { ItemId } from '../commons/CommonsTypes';
+import { Constants } from '../commons/CommonConstants';
 
 export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
@@ -28,6 +29,8 @@ export default class GameActionExecuter {
 
   private async executeStoryAction(action: GameAction) {
     const { actionType, actionParams, actionConditions } = action;
+
+    console.log(action);
 
     if (actionConditions) {
       for (const actionCondition of actionConditions) {
@@ -72,6 +75,9 @@ export default class GameActionExecuter {
           return;
         }
         actionManager.bringUpDialogue(actionParams.id);
+        return;
+      case GameActionType.AddPopup:
+        actionManager.displayPopUp(actionParams.id, actionParams.position, Constants.popupDuration);
         return;
     }
   }

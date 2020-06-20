@@ -75,7 +75,7 @@ function createDialogueLines(lines: string[]): DialogueLine[] {
 
 function parserSpeaker(rawStr: string): SpeakerDetail {
   const [speakerId, expression, speakerPositionStr] = splitByChar(rawStr.slice(1), ' ');
-  const speakerPosition = characterPositionMap[speakerPositionStr];
+  const speakerPosition = textToPositionMap[speakerPositionStr];
 
   addCharacterExprToMap(speakerId, expression);
 
@@ -86,7 +86,7 @@ function parserSpeaker(rawStr: string): SpeakerDetail {
   };
 }
 
-export const characterPositionMap = {
+export const textToPositionMap = {
   left: CharacterPosition.Left,
   middle: CharacterPosition.Middle,
   right: CharacterPosition.Right

@@ -12,7 +12,8 @@ export enum GameActionType {
   BringUpDialogue,
   ChangeBackground,
   RemoveLocationMode,
-  AddLocationMode
+  AddLocationMode,
+  AddPopup
 }
 
 export interface IGameActionable {
