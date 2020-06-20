@@ -30,8 +30,6 @@ export default class GameActionExecuter {
   private async executeStoryAction(action: GameAction) {
     const { actionType, actionParams, actionConditions } = action;
 
-    console.log(action);
-
     if (actionConditions) {
       for (const actionCondition of actionConditions) {
         if (!this.checkCondition(actionCondition)) {

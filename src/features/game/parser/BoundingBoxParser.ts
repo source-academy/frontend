@@ -17,7 +17,6 @@ export default function BoundingBoxParser(fileName: string, fileContent: string)
 }
 
 function addBBoxToLoc(bboxList: string[], locationId: LocationId): void {
-  console.log();
   const separatorIndex = bboxList.findIndex(bbox => bbox === '$');
   const bboxDetails = bboxList.slice(0, separatorIndex);
 
