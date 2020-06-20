@@ -51,6 +51,7 @@ middleBB, 100, 100, 200, 200
 $
 topLeft, collectible: goodStuff
 
+
 <<dialogueLocation>>
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
