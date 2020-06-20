@@ -14,7 +14,9 @@ export class GameSaveManager {
       gameSaveStates: {},
       userState: {
         collectibles: [],
-        achievements: []
+        achievements: [],
+        soundConfig: { volume: 0 },
+        lastPlayedChapter: -1
       }
     } as FullSaveState;
 
