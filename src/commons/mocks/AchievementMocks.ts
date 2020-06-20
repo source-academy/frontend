@@ -42,6 +42,10 @@ export const studentProgress: { [id: number]: AchievementProgress } = {
   9: {
     id: 9,
     completionProgress: 0
+  },
+  10: {
+    id: 10,
+    completionProgress: 0
   }
 };
 
@@ -60,7 +64,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 5, 16, 0, 0, 0),
+    deadline: new Date(2020, 5, 24, 0, 0, 0),
     release: new Date(2020, 5, 12, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.ACTIVE,
@@ -71,7 +75,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: 'Colorful Carpet',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 5, 15, 0, 0, 0),
+    deadline: new Date(2020, 5, 23, 0, 0, 0),
     isTask: false,
     status: AchievementStatus.ACTIVE,
     completionGoal: 100
@@ -117,7 +121,7 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     title: "That was Sort'a Easy",
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 6, 14, 0, 0, 0),
+    deadline: new Date(2020, 6, 22, 0, 0, 0),
     release: new Date(2020, 6, 8, 0, 0, 0),
     isTask: true,
     status: AchievementStatus.EXPIRED,
@@ -127,10 +131,19 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     id: 9,
     title: 'Mission Master',
     ability: AchievementAbility.EFFORT,
-    release: new Date(2020, 6, 8, 0, 0, 0),
     exp: 80,
     isTask: true,
     prerequisiteIDs: [1, 8],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 2
+  },
+  10: {
+    id: 10,
+    title: 'Mission Grandmaster',
+    ability: AchievementAbility.EFFORT,
+    exp: 80,
+    isTask: true,
+    prerequisiteIDs: [4, 9],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2
   }

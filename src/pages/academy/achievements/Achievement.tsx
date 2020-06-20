@@ -83,7 +83,7 @@ function Achievement() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
 
   const inferencer = new Inferencer(achievementDict);
-  inferencer.printPrerequisiteTree();
+  inferencer.logInfo();
 
   return (
     <div className="Achievements">
