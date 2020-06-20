@@ -12,23 +12,22 @@ export default class GamePhaseManager {
 
   public async popPhase(newPhaseParams?: any): Promise<void> {
     const prevPhase = this.phaseStack.pop()!;
-    await this.phaseTransitionFrom(prevPhase, newPhaseParams);
+    await this.performPhaseTransition(prevPhase, newPhaseParams);
   }
 
   public async pushPhase(phase: GamePhaseType, newPhaseParams?: any): Promise<void> {
     const prevPhase = this.getCurrentPhase();
     this.phaseStack.push(phase);
-    await this.phaseTransitionFrom(prevPhase, newPhaseParams);
+    await this.performPhaseTransition(prevPhase, newPhaseParams);
   }
 
   public async swapPhase(phase: GamePhaseType, newPhaseParams?: any): Promise<void> {
     const prevPhase = this.phaseStack.pop()!;
     this.phaseStack.push(phase);
-    await this.phaseTransitionFrom(prevPhase, newPhaseParams);
+    await this.performPhaseTransition(prevPhase, newPhaseParams);
   }
 
-  private async phaseTransitionFrom(prevPhase: GamePhaseType, newPhaseParams: any) {
-    console.log(this.phaseStack);
+  private async performPhaseTransition(prevPhase: GamePhaseType, newPhaseParams: any) {
     if (prevPhase) await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(this.getCurrentPhase()).activate(newPhaseParams);
   }
