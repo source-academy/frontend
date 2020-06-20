@@ -80,7 +80,7 @@ class GameEscapeManager {
     const saveSettingsButton = createButton(
       gameManager,
       'Save Settings',
-      () => GameActionManager.getInstance().saveGame();
+      () => GameActionManager.getInstance().saveGame(),
       mediumButton.key,
       { x: screenSize.x * 0.75, y: escapeButtonYPos },
       escapeTextOriX,
