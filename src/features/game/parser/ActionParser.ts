@@ -10,6 +10,7 @@ import { textToGameModeMap } from './LocationParser';
 import { ItemId } from '../commons/CommonsTypes';
 import Parser from './Parser';
 import { GameLocationAttr } from '../location/GameMapTypes';
+import { textToPositionMap } from './DialogueParser';
 
 export default function ActionParser(actionText: string[]): ItemId[] {
   return actionText.map(parseAction);
@@ -35,6 +36,10 @@ function parseAction(fullActionString: string): ItemId {
 function strToAction(actionString: string): GameAction {
   const [action, actionParamString] = splitByChar(actionString, ':');
   const actionType = stringToActionType[action];
+
+  if (!actionType) {
+    throw new Error(`Action ${action} is not found`);
+  }
 
   let actionParams;
   if (isEnclosedBySquareBrackets(actionParamString)) {
@@ -62,6 +67,10 @@ function strToAction(actionString: string): GameAction {
       actionParamObj.locationId = actionParams[0];
       actionParamObj.mode = textToGameModeMap[actionParams[1]];
       break;
+    case GameActionType.AddPopup:
+      actionParamObj.id = actionParams[0];
+      actionParamObj.position = textToPositionMap[actionParams[1]];
+      break;
   }
 
   const actionId = Parser.generateActionId();
@@ -84,7 +93,8 @@ export const stringToActionType = {
   changeBackground: GameActionType.ChangeBackground,
   bringUpDialogue: GameActionType.BringUpDialogue,
   addLocationMode: GameActionType.AddLocationMode,
-  removeLocationMode: GameActionType.RemoveLocationMode
+  removeLocationMode: GameActionType.RemoveLocationMode,
+  addPopup: GameActionType.AddPopup
 };
 
 /*

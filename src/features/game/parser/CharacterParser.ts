@@ -2,7 +2,7 @@ import { splitToLines, isEnclosedBySquareBrackets, mapByHeader, splitByChar } fr
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
-import { characterPositionMap } from './DialogueParser';
+import { textToPositionMap } from './DialogueParser';
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
 import { Constants } from '../commons/CommonConstants';
 
@@ -38,7 +38,7 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
     name,
     expressions,
     defaultExpression,
-    defaultPosition: characterPositionMap[defaultPosition]
+    defaultPosition: textToPositionMap[defaultPosition]
   };
 
   // Add asset key to expression map

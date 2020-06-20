@@ -3,7 +3,8 @@ export const Constants = {
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
   fadeDuration: 300,
   nullFunction: () => {},
-  nullInteractionId: ''
+  nullInteractionId: '',
+  popupDuration: 1000
 };
 
 export const screenSize = {

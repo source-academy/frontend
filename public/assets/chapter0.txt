@@ -90,6 +90,7 @@ Here, students learn how to harness the power of an invisible force known as the
 #addItem: [objects room yourChair], collectible: cookies
 Today, you have enrolled in...
 The Source Academy!
+#addPopup: [yourChair middle]
 [Goto part2]
 
 [part2]
