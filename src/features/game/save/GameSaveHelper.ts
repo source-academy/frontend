@@ -17,11 +17,13 @@ export function gameStateToJson(
   };
 
   const userState: UserSaveState = {
+    soundConfig: { volume: 5 },
+    lastPlayedChapter: Math.max(chapterNum, prevGameState.userState.lastPlayedChapter),
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
   };
 
-  const newGameStoryStates = { ...prevGameState, [chapterNum]: gameStoryState };
+  const newGameStoryStates = { ...prevGameState.gameSaveStates, [chapterNum]: gameStoryState };
 
   const newGameState = {
     gameSaveStates: newGameStoryStates,

@@ -1,13 +1,13 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 
-const playText = 'Play';
+const newGameText = 'New Game';
 const continueText = 'Continue';
 const studentRoomText = 'Go to My Room';
 const chapterSelectText = 'Select Chapter';
 const settingsText = 'Settings';
 
 export const optionsText = {
-  play: playText,
+  play: newGameText,
   continue: continueText,
   chapterSelect: chapterSelectText,
   studentRoom: studentRoomText,

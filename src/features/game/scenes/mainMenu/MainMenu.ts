@@ -1,6 +1,6 @@
 import { mainMenuAssets, mainMenuOptBanner } from './MainMenuAssets';
 import { studentRoomImg } from '../../location/GameMapConstants';
-import { screenCenter, screenSize, nullInteractionId } from '../../commons/CommonConstants';
+import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameButton } from '../../commons/CommonsTypes';
@@ -18,11 +18,16 @@ import commonSoundAssets, {
   galacticHarmonyBgMusic
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import { loadData } from '../../save/GameSaveRequests';
+import game from 'src/pages/academy/game/subcomponents/phaserGame';
+import { FullSaveState } from '../../save/GameSaveTypes';
+import { SampleChapters } from '../chapterSelect/SampleChapters';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;
   private optionButtons: GameButton[];
+  private loadedGameState: FullSaveState | undefined;
 
   constructor() {
     super('MainMenu');
@@ -32,7 +37,7 @@ class MainMenu extends Phaser.Scene {
     this.optionButtons = [];
   }
 
-  public preload() {
+  public async preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this);
@@ -40,7 +45,8 @@ class MainMenu extends Phaser.Scene {
     this.createOptionButtons();
   }
 
-  public create() {
+  public async create() {
+    this.loadedGameState = await loadData(this.getAccountInfo()!);
     this.renderBackground();
     this.renderOptionButtons();
 
@@ -108,18 +114,26 @@ class MainMenu extends Phaser.Scene {
 
   private createOptionButtons() {
     this.optionButtons = [];
-    this.addOptionButton(optionsText.play, () => {}, nullInteractionId);
-    this.addOptionButton(optionsText.continue, () => {}, nullInteractionId);
+    this.addOptionButton(optionsText.play, () => this.newGame(), Constants.nullInteractionId);
+    this.addOptionButton(
+      optionsText.continue,
+      () => this.continueGame(),
+      Constants.nullInteractionId
+    );
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('ChapterSelect');
       },
-      nullInteractionId
+      Constants.nullInteractionId
     );
-    this.addOptionButton(optionsText.studentRoom, () => {}, nullInteractionId);
-    this.addOptionButton(optionsText.settings, () => {}, nullInteractionId);
+    this.addOptionButton(
+      optionsText.studentRoom,
+      Constants.nullFunction,
+      Constants.nullInteractionId
+    );
+    this.addOptionButton(optionsText.settings, Constants.nullFunction, Constants.nullInteractionId);
   }
 
   private addOptionButton(name: string, callback: any, interactionId: string) {
@@ -150,6 +164,69 @@ class MainMenu extends Phaser.Scene {
 
     // Update
     this.optionButtons.push(newTalkButton);
+  }
+
+  private newGame() {
+    const chapterNum = this.getUnplayedChapter();
+    const fileName = SampleChapters[chapterNum].fileName;
+    this.loadFile(fileName, true, chapterNum);
+  }
+
+  private getUnplayedChapter() {
+    return Math.max(
+      Object.keys(this.getLoadedGameState().gameSaveStates).length - 1,
+      SampleChapters.length - 1
+    );
+  }
+
+  private continueGame() {
+    const chapterNum = this.getLastPlayedChapter();
+    const fileName = SampleChapters[chapterNum].fileName;
+    this.loadFile(fileName, true, chapterNum);
+  }
+
+  private getLastPlayedChapter() {
+    return this.getLoadedGameState().userState.lastPlayedChapter;
+  }
+
+  private getLoadedGameState() {
+    if (!this.loadedGameState) {
+      throw new Error('Cannot load game');
+    }
+    return this.loadedGameState;
+  }
+
+  public loadFile(fileName: string, continueGame: boolean, chapterNum: number) {
+    const key = `#${fileName}`;
+
+    if (this.cache.text.exists(key)) {
+      this.callGameManager(key, continueGame, chapterNum);
+      return;
+    }
+
+    this.load.text(key, fileName);
+    this.load.once('filecomplete', (key: string) => {
+      this.callGameManager(key, continueGame, chapterNum);
+    });
+    this.load.start();
+  }
+
+  private callGameManager(key: string, continueGame: boolean, chapterNum: number) {
+    if (key[0] === '#') {
+      const text = this.cache.text.get(key);
+      this.scene.start('GameManager', {
+        text,
+        continueGame: continueGame,
+        chapterNum: chapterNum
+      });
+    }
+  }
+
+  private getAccountInfo() {
+    if (!game.getAccountInfo()) {
+      throw new Error('No account info');
+    }
+    return game.getAccountInfo();
   }
 }
 

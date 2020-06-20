@@ -88,7 +88,6 @@ class GameManager extends Phaser.Scene {
         this.currentChapter,
         continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
       );
-      this.userStateManager.initialise(this.saveManager.getLoadedUserState());
     } else {
       this.stateManager.initialise(this.currentChapter, undefined);
     }
@@ -113,8 +112,9 @@ class GameManager extends Phaser.Scene {
     this.bindEscapeMenu();
   }
 
-  public create() {
+  public async create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
+    await GameActionManager.getInstance().saveGame();
   }
 
   private preloadBaseAssets() {

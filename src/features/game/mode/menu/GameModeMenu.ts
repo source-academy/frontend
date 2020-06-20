@@ -8,7 +8,7 @@ import {
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode } from '../GameModeTypes';
-import { screenSize, screenCenter, nullInteractionId } from '../../commons/CommonConstants';
+import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
 import { shortButton, modeMenuBanner } from '../../commons/CommonAssets';
 import { LocationId } from '../../location/GameMapTypes';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -67,7 +67,7 @@ class GameModeMenu implements IGameUI {
       assetYPos: modeButtonYPos,
       isInteractive: true,
       onInteract: callback,
-      interactionId: nullInteractionId
+      interactionId: Constants.nullInteractionId
     };
 
     // Update
