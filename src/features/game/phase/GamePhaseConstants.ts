@@ -8,51 +8,58 @@ import GameActionManager from '../action/GameActionManager';
 import { Constants } from '../commons/CommonConstants';
 import { displayNotification } from '../effects/Notification';
 
-const gameModeMenu = new GameModeMenu('room');
-const gameModeTalk = new GameModeTalk('room');
-const gameModeExplore = new GameModeExplore('room');
-const gameModeMove = new GameModeMove('room');
+const gameModeMenu = new GameModeMenu();
+const gameModeTalk = new GameModeTalk();
+const gameModeExplore = new GameModeExplore();
+const gameModeMove = new GameModeMove();
 
 const gamePhases = [
   {
     gamePhaseType: GamePhaseType.Menu,
-    activate: () => gameModeMenu.activate(),
+    activate: async () => await gameModeMenu.activateUI(),
     deactivate: () => gameModeMenu.deactivateUI()
   },
   {
     gamePhaseType: GamePhaseType.Talk,
-    activate: () => gameModeTalk.activate(),
+    activate: async () => await gameModeTalk.activateUI(),
     deactivate: () => gameModeTalk.deactivateUI()
   },
   {
     gamePhaseType: GamePhaseType.Explore,
-    activate: () => gameModeExplore.activate(),
+    activate: async () => await gameModeExplore.activateUI(),
     deactivate: () => gameModeExplore.deactivateUI()
   },
   {
     gamePhaseType: GamePhaseType.Move,
-    activate: () => gameModeMove.activate(),
-    deactivate: () => gameModeMove.deactivateUI()
+    activate: async () => await gameModeMove.activateUI(),
+    deactivate: async () => await gameModeMove.deactivateUI()
   },
   {
     gamePhaseType: GamePhaseType.Dialogue,
-    activate: ({ id }: any) =>
-      GameActionManager.getInstance().getGameManager().dialogueManager.playDialogue(id),
+    activate: (phaseParams: any) =>
+      GameActionManager.getInstance().getGameManager().dialogueManager.playDialogue(phaseParams.id),
     deactivate: Constants.nullFunction
   },
   {
     gamePhaseType: GamePhaseType.Popup,
-    activate: ({ id, position }: any) => GameActionManager.getInstance().displayPopUp(id, position),
+    activate: (phaseParams: any) =>
+      GameActionManager.getInstance().displayPopUp(phaseParams.id, phaseParams.position),
     deactivate: Constants.nullFunction
   },
   {
     gamePhaseType: GamePhaseType.Notification,
-    activate: ({ id }: any) => displayNotification(id),
+    activate: async (phaseParams: any) => await displayNotification(phaseParams.id),
     deactivate: Constants.nullFunction
   },
   {
     gamePhaseType: GamePhaseType.None,
     activate: Constants.nullFunction,
+    deactivate: Constants.nullFunction
+  },
+  {
+    gamePhaseType: GamePhaseType.EscapeMenu,
+    activate: () =>
+      GameActionManager.getInstance().getGameManager().escapeManager.createEscapeMenu(),
     deactivate: Constants.nullFunction
   }
 ];

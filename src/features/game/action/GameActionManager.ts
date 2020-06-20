@@ -3,14 +3,12 @@ import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId, GameLocation } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
 import { AssetKey } from '../commons/CommonsTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -54,36 +52,20 @@ class GameActionManager {
   //    Game Mode    //
   /////////////////////
 
-  public getLocationMode(locationId: LocationId): GameMode[] | undefined {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationMode(locationId);
-    }
-    return undefined;
+  public getModesByLocId(locationId: LocationId): GameMode[] {
+    return this.getGameManager().stateManager.getLocationMode(locationId);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.addMode(locationId, mode);
       this.gameManager.stateManager.addLocationMode(locationId, mode);
     }
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
     if (this.gameManager) {
-      this.gameManager.modeManager.removeMode(locationId, mode);
       this.gameManager.stateManager.removeLocationMode(locationId, mode);
     }
-  }
-
-  public changeLocationModeTo(
-    newMode: GameMode,
-    refresh?: boolean,
-    skipDeactivate?: boolean
-  ): void {
-    if (this.gameManager) {
-      return this.gameManager.changeModeTo(newMode);
-    }
-    return;
   }
 
   /////////////////////
@@ -310,16 +292,6 @@ class GameActionManager {
   }
 
   /////////////////////
-  //     Speaker     //
-  /////////////////////
-
-  public async changeSpeaker(speakerDetail: SpeakerDetail | undefined | null) {
-    if (this.gameManager) {
-      this.gameManager.characterManager.changeSpeakerTo(speakerDetail);
-    }
-  }
-
-  /////////////////////
   //   Story Action  //
   /////////////////////
 
@@ -365,16 +337,6 @@ class GameActionManager {
 
   public async saveGame() {
     await this.getGameManager().saveManager.saveGame();
-  }
-
-  /////////////////////
-  //   Escape Menu   //
-  /////////////////////
-
-  public async setEscapeMenu(active: boolean) {
-    await GameActionManager.getInstance()
-      .getGameManager()
-      .phaseManager.pushPhase(GamePhaseType.EscapeMenu);
   }
 
   /////////////////////

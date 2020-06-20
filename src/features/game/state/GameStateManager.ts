@@ -166,9 +166,8 @@ class GameStateManager implements StateSubject {
   //    Location Mode State    //
   ///////////////////////////////
 
-  public getLocationMode(locationId: LocationId) {
-    const location = this.locationStates.get(locationId);
-    return location ? location.modes : undefined;
+  public getLocationMode(locationId: LocationId): GameMode[] {
+    return this.chapter.map.getLocationAtId(locationId).modes!;
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {

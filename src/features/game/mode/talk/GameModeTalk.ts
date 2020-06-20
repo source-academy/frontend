@@ -3,7 +3,7 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';
 import { getBackToMenuContainer } from '../GameModeHelper';
-import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
@@ -12,20 +12,16 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private locationId: LocationId;
   private gameButtons: GameButton[];
 
-  constructor(locationId: LocationId) {
-    this.uiContainer = undefined;
-    this.locationId = locationId;
+  constructor() {
     this.gameButtons = [];
-    this.fetchLatestState();
   }
 
   public fetchLatestState(): void {
     const talkTopics = GameActionManager.getInstance().getLocationAttr(
       GameLocationAttr.talkTopics,
-      this.locationId
+      GameActionManager.getInstance().getCurrLocId()
     );
     if (!talkTopics) {
       return;
@@ -131,14 +127,9 @@ class GameModeTalk implements IGameUI {
     return talkMenuContainer;
   }
 
-  public async activate() {
-    this.locationId = GameActionManager.getInstance().getCurrLocId();
+  public async activateUI(): Promise<void> {
     this.gameButtons = [];
     this.fetchLatestState();
-    this.activateUI();
-  }
-
-  public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     this.fetchLatestState();

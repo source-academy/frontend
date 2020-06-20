@@ -42,10 +42,10 @@ export default class DialogueManager {
       .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
         const { line, speakerDetail, actionIds } = generateDialogue();
         dialogueRenderer.changeText(line);
-        GameActionManager.getInstance().changeSpeaker(speakerDetail);
+        gameManager.characterManager.changeSpeakerTo(speakerDetail);
         await GameActionManager.getInstance().executeStoryAction(actionIds);
         if (!line) {
-          GameActionManager.getInstance().changeSpeaker(null);
+          gameManager.characterManager.changeSpeakerTo(null);
           fadeAndDestroy(gameManager, container);
           gameManager.phaseManager.popPhase();
         }

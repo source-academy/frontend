@@ -1,6 +1,5 @@
 import Parser from 'src/features/game/parser/Parser';
 import GameActionManager from '../../action/GameActionManager';
-import GameModeManager from 'src/features/game/mode/GameModeManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
 import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
@@ -23,7 +22,6 @@ import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
-import { GameMode, gameModeToPhase } from '../../mode/GameModeTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 type GameManagerProps = {
@@ -37,7 +35,6 @@ class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
   public currentLocationId: LocationId;
 
-  public modeManager: GameModeManager;
   public layerManager: GameLayerManager;
   public stateManager: GameStateManager;
   public objectManager: GameObjectManager;
@@ -59,7 +56,6 @@ class GameManager extends Phaser.Scene {
     this.currentChapter = LocationSelectChapter;
     this.currentLocationId = this.currentChapter.startingLoc;
 
-    this.modeManager = new GameModeManager();
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
@@ -85,7 +81,6 @@ class GameManager extends Phaser.Scene {
     this.soundManager.initialise(this);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
     this.characterManager.initialise(this.currentChapter.map.getCharacters());
-    this.modeManager.initialise(this.currentChapter);
     this.actionExecuter.initialise(this.currentChapter.map.getActions());
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
@@ -133,6 +128,7 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     this.changeLocationTo(this.currentChapter.startingLoc);
+    await this.phaseManager.swapPhase(GamePhaseType.Menu);
     await GameActionManager.getInstance().saveGame();
   }
 
@@ -150,14 +146,13 @@ class GameManager extends Phaser.Scene {
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       const locationName = this.currentChapter.map.getLocationAtId(locationId).name;
-      this.phaseManager.pushPhase(GamePhaseType.Notification, { id: locationName });
+      await this.phaseManager.pushPhase(GamePhaseType.Notification, { id: locationName });
+    } else {
+      await this.phaseManager.swapPhase(GamePhaseType.Menu);
     }
   }
 
   public async changeLocationTo(locationId: LocationId) {
-    this.setLocation(locationId);
-    this.phaseManager.swapPhase(GamePhaseType.Menu);
-
     this.setLocation(locationId);
 
     await blackFade(this, 300, 300, () => {
@@ -169,14 +164,9 @@ class GameManager extends Phaser.Scene {
     this.stateManager.triggerInteraction(locationId);
   }
 
-  public changeModeTo(newMode: GameMode) {
-    const gamePhase: GamePhaseType = gameModeToPhase[newMode];
-    this.phaseManager.pushPhase(gamePhase, { id: this.currentLocationId });
-  }
-
   private bindEscapeMenu() {
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    escKey.on('up', () => this.escapeManager.toggleEscapeMenu());
+    escKey.on('up', () => this.phaseManager.pushPhase(GamePhaseType.EscapeMenu));
   }
 }
 

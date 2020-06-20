@@ -35,8 +35,7 @@ export default class GamePhaseManager {
   }
 
   private async phaseTransitionFrom(prevPhase: GamePhaseType, newPhaseParams: any) {
-    console.log(this.phaseStack);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(this.getCurrentPhase())!.activate(newPhaseParams);
+    if (prevPhase) await gamePhaseMap.get(prevPhase).deactivate();
+    await gamePhaseMap.get(this.getCurrentPhase()).activate(newPhaseParams);
   }
 }

@@ -22,7 +22,7 @@ export const modeButtonStyle = {
   fill: '#abd4c6'
 };
 
-export const banner = {
+export const modeBannerRect = {
   assetKey: modeMenuBanner.key,
   assetXPos: screenCenter.x,
   assetYPos: screenCenter.y,
