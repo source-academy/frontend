@@ -8,6 +8,7 @@ import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -42,8 +43,11 @@ class GameModeTalk implements IGameUI {
         this.addTalkOptionButton(
           dialogue.title,
           async () => {
+            // console.log('TRIGGER');
             GameActionManager.getInstance().triggerInteraction(dialogueId);
-            await GameActionManager.getInstance().bringUpDialogue(dialogueId);
+            await GameActionManager.getInstance()
+              .getGameManager()
+              .phaseManager.pushPhase(GamePhaseType.Dialogue, { id: dialogueId });
           },
           dialogueId
         );
@@ -125,6 +129,13 @@ class GameModeTalk implements IGameUI {
 
     talkMenuContainer.add(getBackToMenuContainer());
     return talkMenuContainer;
+  }
+
+  public async activate() {
+    this.locationId = GameActionManager.getInstance().getCurrLocId();
+    this.gameButtons = [];
+    this.fetchLatestState();
+    this.activateUI();
   }
 
   public async activateUI(): Promise<void> {

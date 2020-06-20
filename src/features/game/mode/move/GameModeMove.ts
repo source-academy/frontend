@@ -37,15 +37,21 @@ class GameModeMove implements IGameUI {
     this.gameButtons = [];
   }
 
+  public activate() {
+    this.locationId = GameActionManager.getInstance().getCurrLocId();
+    this.activateUI();
+  }
+
   private async createGameButtons(navigation: string[]) {
     // Refresh Buttons
     this.gameButtons = [];
 
     await navigation.forEach(locationId => {
-      const location = GameActionManager.getInstance().getLocation(locationId);
+      const location = GameActionManager.getInstance().getLocationAtId(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, () => {
-          GameActionManager.getInstance().changeLocationTo(locationId);
+          GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+          GameActionManager.getInstance().getGameManager().changeLocationTo(location.id);
         });
         this.locationAssetKeys.set(location.name, location.assetKey);
       }

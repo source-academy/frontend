@@ -3,7 +3,8 @@ import {
   menuEntryTweenProps,
   menuExitTweenProps,
   modeButtonYPos,
-  modeButtonStyle
+  modeButtonStyle,
+  banner
 } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
@@ -20,6 +21,7 @@ class GameModeMenu implements IGameUI {
   private gameButtons: GameButton[];
 
   constructor(locationId: LocationId) {
+    this.locationId = locationId;
     const banner = {
       assetKey: modeMenuBanner.key,
       assetXPos: screenCenter.x,
@@ -28,7 +30,6 @@ class GameModeMenu implements IGameUI {
     } as GameSprite;
 
     this.uiContainer = undefined;
-    this.locationId = locationId;
     this.modeBanner = banner;
     this.gameButtons = [];
     this.fetchLatestState();
@@ -126,6 +127,16 @@ class GameModeMenu implements IGameUI {
     });
 
     return modeMenuContainer;
+  }
+
+  public async activate() {
+    this.locationId = GameActionManager.getInstance().getCurrLocId();
+
+    this.uiContainer = undefined;
+    this.modeBanner = banner;
+    this.gameButtons = [];
+    this.fetchLatestState();
+    await this.activateUI();
   }
 
   public async activateUI(): Promise<void> {

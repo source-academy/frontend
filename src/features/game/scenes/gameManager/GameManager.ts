@@ -1,29 +1,30 @@
-import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
-import GameMap from 'src/features/game/location/GameMap';
-import { GameLocation, LocationId } from 'src/features/game/location/GameMapTypes';
-import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
-import LocationSelectChapter from '../LocationSelectChapter';
+import Parser from 'src/features/game/parser/Parser';
 import GameActionManager from '../../action/GameActionManager';
 import GameModeManager from 'src/features/game/mode/GameModeManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
 import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
-import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { blackFade } from 'src/features/game/effects/FadeEffect';
-import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
-import { screenSize, screenCenter } from 'src/features/game/commons/CommonConstants';
-import commonAssets from 'src/features/game/commons/CommonAssets';
 import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-import Parser from 'src/features/game/parser/Parser';
+import GameEscapeManager from '../../escape/GameEscapeManager';
+import GamePhaseManager from '../../phase/GamePhaseManager';
 import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
-import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
-import { GameSaveManager } from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
-import GameEscapeManager from '../../escape/GameEscapeManager';
+import GameSaveManager from '../../save/GameSaveManager';
+import GameBackgroundManager from '../../background/GameBackgroundManager';
+
+import LocationSelectChapter from '../LocationSelectChapter';
+import commonAssets from 'src/features/game/commons/CommonAssets';
+import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
+import { LocationId } from 'src/features/game/location/GameMapTypes';
+import { blackFade } from 'src/features/game/effects/FadeEffect';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { GameMode, gameModeToPhase } from '../../mode/GameModeTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 type GameManagerProps = {
   accountInfo: AccountInfo;
@@ -35,8 +36,6 @@ type GameManagerProps = {
 class GameManager extends Phaser.Scene {
   public currentChapter: GameChapter;
   public currentLocationId: LocationId;
-  private currentActiveMode: GameMode;
-  private currentActivePhase: GamePhase;
 
   public modeManager: GameModeManager;
   public layerManager: GameLayerManager;
@@ -51,14 +50,14 @@ class GameManager extends Phaser.Scene {
   public saveManager: GameSaveManager;
   public soundManager: GameSoundManager;
   public escapeManager: GameEscapeManager;
+  public phaseManager: GamePhaseManager;
+  public backgroundManager: GameBackgroundManager;
 
   constructor() {
     super('GameManager');
 
     this.currentChapter = LocationSelectChapter;
     this.currentLocationId = this.currentChapter.startingLoc;
-    this.currentActiveMode = GameMode.Menu;
-    this.currentActivePhase = GamePhase.Standard;
 
     this.modeManager = new GameModeManager();
     this.layerManager = new GameLayerManager();
@@ -73,24 +72,15 @@ class GameManager extends Phaser.Scene {
     this.saveManager = new GameSaveManager();
     this.soundManager = new GameSoundManager();
     this.escapeManager = new GameEscapeManager();
+    this.phaseManager = new GamePhaseManager();
+    this.backgroundManager = new GameBackgroundManager();
 
     GameActionManager.getInstance().setGameManager(this);
   }
 
   async init({ text, continueGame, chapterNum }: GameManagerProps) {
     this.currentChapter = Parser.parse(text);
-
-    // Load state if possible
-    const accountInfo = game.getAccountInfo();
-    if (accountInfo) {
-      await this.saveManager.initialise(accountInfo, chapterNum);
-      this.stateManager.initialise(
-        this.currentChapter,
-        continueGame ? this.saveManager.getLoadedGameStoryState() : undefined
-      );
-    } else {
-      this.stateManager.initialise(this.currentChapter, undefined);
-    }
+    await this.loadGameState(continueGame, chapterNum);
 
     this.soundManager.initialise(this);
     this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
@@ -99,22 +89,30 @@ class GameManager extends Phaser.Scene {
     this.actionExecuter.initialise(this.currentChapter.map.getActions());
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
+    this.layerManager.initialiseMainLayer(this);
+    this.soundManager.loadSounds(this.currentChapter.map.getSoundAssets());
+    this.bindEscapeMenu();
   }
+
+  public async loadGameState(continueGame: boolean, chapterNum: number) {
+    const accountInfo = game.getAccountInfo();
+    if (accountInfo) {
+      await this.saveManager.initialise(accountInfo, chapterNum);
+      this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+    }
+    const startingGameState =
+      continueGame && accountInfo ? this.saveManager.getLoadedGameStoryState() : undefined;
+    this.stateManager.initialise(this.currentChapter, startingGameState);
+  }
+
+  //////////////////////
+  //    Preload       //
+  //////////////////////
 
   public preload() {
     addLoadingScreen(this);
     this.preloadLocationsAssets(this.currentChapter);
     this.preloadBaseAssets();
-
-    this.layerManager.initialiseMainLayer(this);
-    this.soundManager.loadSounds(this.currentChapter.map.getSoundAssets());
-
-    this.bindEscapeMenu();
-  }
-
-  public async create() {
-    this.changeLocationTo(this.currentChapter.startingLoc);
-    await GameActionManager.getInstance().saveGame();
   }
 
   private preloadBaseAssets() {
@@ -123,123 +121,58 @@ class GameManager extends Phaser.Scene {
     });
   }
 
-  //////////////////////
-  // Location Helpers //
-  //////////////////////
-
   private preloadLocationsAssets(chapter: GameChapter) {
     chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
       this.load.image(assetKey, assetPath);
     });
   }
 
-  private async renderLocation(map: GameMap, location: GameLocation) {
-    // Render background of the location
-    const backgroundAsset = new Phaser.GameObjects.Image(
-      this,
-      screenCenter.x,
-      screenCenter.y,
-      location.assetKey
-    ).setDisplaySize(screenSize.x, screenSize.y);
-    this.layerManager.addToLayer(Layer.Background, backgroundAsset);
+  //////////////////////
+  // Location Helpers //
+  //////////////////////
 
-    // Render objects & bbox in the location
-    this.objectManager.renderObjectsLayerContainer(location.id);
-    this.boundingBoxManager.renderBBoxLayerContainer(location.id);
+  public async create() {
+    this.changeLocationTo(this.currentChapter.startingLoc);
+    await GameActionManager.getInstance().saveGame();
+  }
 
-    // Render characters in the location
-    this.characterManager.renderCharacterLayerContainer(location.id);
+  private setLocation(locationId: LocationId) {
+    this.currentLocationId = locationId;
+  }
 
-    // Play background music at the location
-    if (location.bgmKey) {
-      this.soundManager.playBgMusic(location.bgmKey);
-    } else {
-      this.soundManager.stopCurrBgMusic();
-    }
+  private async renderLocation(locationId: LocationId) {
+    // draw layers
+    this.backgroundManager.renderBackgroundLayerContainer(locationId);
+    this.objectManager.renderObjectsLayerContainer(locationId);
+    this.boundingBoxManager.renderBBoxLayerContainer(locationId);
+    this.characterManager.renderCharacterLayerContainer(locationId);
 
     // Notify players that location is not yet visited/has new update
-    if (!this.stateManager.hasTriggeredInteraction(location.id)) {
-      await GameActionManager.getInstance().bringUpUpdateNotif(location.name);
+    if (!this.stateManager.hasTriggeredInteraction(locationId)) {
+      const locationName = this.currentChapter.map.getLocationAtId(locationId).name;
+      this.phaseManager.pushPhase(GamePhaseType.Notification, { id: locationName });
     }
-
-    // By default, activate Menu mode
-    this.changeModeTo(GameMode.Menu, true, true);
   }
 
   public async changeLocationTo(locationId: LocationId) {
-    const location = this.currentChapter.map.getLocationAtId(locationId);
+    this.setLocation(locationId);
+    this.phaseManager.swapPhase(GamePhaseType.Menu);
 
-    // Deactive current UI of previous location
-    this.deactivateCurrentUI();
+    this.setLocation(locationId);
 
-    // Update location
-    this.currentLocationId = locationId;
-
-    // Render new location
     await blackFade(this, 300, 300, () => {
       this.layerManager.clearAllLayers();
-      this.renderLocation(this.currentChapter.map, location);
+      this.renderLocation(locationId);
     });
 
     // Update state after location is fully rendered
     this.stateManager.triggerInteraction(locationId);
   }
 
-  //////////////////////
-  //   Mode Callback  //
-  //////////////////////
-
-  public deactivateCurrentUI() {
-    const currentLocationMode = this.modeManager.getLocationMode(
-      this.currentActiveMode,
-      this.currentLocationId
-    );
-    if (currentLocationMode) currentLocationMode.deactivateUI();
+  public changeModeTo(newMode: GameMode) {
+    const gamePhase: GamePhaseType = gameModeToPhase[newMode];
+    this.phaseManager.pushPhase(gamePhase, { id: this.currentLocationId });
   }
-
-  public activateCurrentUI() {
-    const currentLocationMode = this.modeManager.getLocationMode(
-      this.currentActiveMode,
-      this.currentLocationId
-    );
-    if (currentLocationMode) currentLocationMode.activateUI();
-  }
-
-  public setActivePhase(gamePhase: GamePhase) {
-    this.currentActivePhase = gamePhase;
-  }
-
-  public getActivePhase(): GamePhase {
-    return this.currentActivePhase;
-  }
-
-  public changeModeTo(newMode: GameMode, refresh?: boolean, skipDeactivate?: boolean) {
-    if (!refresh && this.currentActiveMode === newMode) {
-      return;
-    }
-
-    const locationMode = this.modeManager.getLocationMode(newMode, this.currentLocationId);
-
-    if (newMode === GameMode.Menu || newMode === GameMode.Talk) {
-      this.layerManager.fadeInLayer(Layer.Character, 300);
-    } else {
-      this.layerManager.fadeOutLayer(Layer.Character, 300);
-    }
-
-    if (locationMode) {
-      if (!skipDeactivate) {
-        this.deactivateCurrentUI();
-      }
-
-      // Activate new UI
-      locationMode.activateUI();
-      this.currentActiveMode = newMode;
-    }
-  }
-
-  //////////////////////
-  //   Mode Callback  //
-  //////////////////////
 
   private bindEscapeMenu() {
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);

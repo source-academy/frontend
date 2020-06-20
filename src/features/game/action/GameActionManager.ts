@@ -1,5 +1,5 @@
 import GameManager from '../scenes/gameManager/GameManager';
-import { GameMode, GamePhase } from 'src/features/game/mode/GameModeTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId, GameLocation } from '../location/GameMapTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
@@ -10,6 +10,7 @@ import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
 import { AssetKey } from '../commons/CommonsTypes';
 import { StateObserver } from '../state/GameStateTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -46,8 +47,8 @@ class GameActionManager {
     return this.getGameManager().currentLocationId;
   }
 
-  public getLocation(locationId: LocationId): GameLocation | undefined {
-    return this.getGameManager().currentChapter.map.getLocation(locationId);
+  public getLocationAtId(locationId: LocationId): GameLocation {
+    return this.getGameManager().currentChapter.map.getLocationAtId(locationId);
   }
   /////////////////////
   //    Game Mode    //
@@ -80,7 +81,7 @@ class GameActionManager {
     skipDeactivate?: boolean
   ): void {
     if (this.gameManager) {
-      return this.gameManager.changeModeTo(newMode, refresh, skipDeactivate);
+      return this.gameManager.changeModeTo(newMode);
     }
     return;
   }
@@ -294,32 +295,6 @@ class GameActionManager {
     }
   }
 
-  public deactivateCurrentUI() {
-    if (this.gameManager) {
-      this.gameManager.deactivateCurrentUI();
-    }
-  }
-
-  public activateCurrentUI() {
-    if (this.gameManager) {
-      this.gameManager.activateCurrentUI();
-    }
-  }
-
-  /////////////////////
-  //     Dialogue    //
-  /////////////////////
-
-  public async bringUpDialogue(dialogueId: ItemId) {
-    if (this.gameManager) {
-      this.deactivateCurrentUI();
-      this.gameManager.setActivePhase(GamePhase.Dialogue);
-      await this.gameManager.dialogueManager.playDialogue(dialogueId);
-      this.gameManager.setActivePhase(GamePhase.Standard);
-      this.activateCurrentUI();
-    }
-  }
-
   public getDialogue(dialogueId: ItemId) {
     return this.getGameManager().currentChapter.map.getDialogues().get(dialogueId);
   }
@@ -396,15 +371,10 @@ class GameActionManager {
   //   Escape Menu   //
   /////////////////////
 
-  public setEscapeMenu(active: boolean) {
-    if (this.gameManager) {
-      if (active) {
-        this.deactivateCurrentUI();
-      } else {
-        this.activateCurrentUI();
-      }
-      this.gameManager.escapeManager.setEscapeMenu(active);
-    }
+  public async setEscapeMenu(active: boolean) {
+    await GameActionManager.getInstance()
+      .getGameManager()
+      .phaseManager.pushPhase(GamePhaseType.EscapeMenu);
   }
 
   /////////////////////

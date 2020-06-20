@@ -33,10 +33,15 @@ class GameModeExplore implements IGameUI {
     return exploreMenuContainer;
   }
 
+  public activate() {
+    this.locationId = GameActionManager.getInstance().getCurrLocId();
+    this.activateUI();
+  }
+
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    this.uiContainer = await this.getUIContainer();
+    this.uiContainer = this.getUIContainer();
     GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);

@@ -98,12 +98,12 @@ class GameStateManager implements StateSubject {
   //        Preprocess         //
   ///////////////////////////////
 
-  public initialise(chapter: GameChapter, gameStoryState: GameSaveState | undefined): void {
+  public initialise(chapter: GameChapter, gameSaveState: GameSaveState | undefined): void {
     this.chapter = chapter;
     this.chapterObjective = this.chapter.objectives;
 
-    if (gameStoryState) {
-      this.loadFromGameStoryState(gameStoryState);
+    if (gameSaveState) {
+      this.loadFromGameStoryState(gameSaveState);
     } else {
       this.loadNewGameStoryState();
     }

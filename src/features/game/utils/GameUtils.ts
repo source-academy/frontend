@@ -14,3 +14,13 @@ export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R)
 export function limitNumber(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
 }
+
+export function createMapWithKey<K, V>(list: any[], id: string) {
+  const newMap = new Map<K, any>();
+
+  list.forEach(object => {
+    newMap.set(object[id], object);
+  });
+
+  return newMap;
+}

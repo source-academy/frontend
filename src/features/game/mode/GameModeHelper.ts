@@ -1,4 +1,4 @@
-import { backText, GameMode, backButtonStyle, backTextYPos } from './GameModeTypes';
+import { backText, backButtonStyle, backTextYPos } from './GameModeTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { screenCenter } from '../commons/CommonConstants';
 import { topButton } from '../commons/CommonAssets';
@@ -24,7 +24,7 @@ export function getBackToMenuContainer(): Phaser.GameObjects.Container {
 
   backButtonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
   backButtonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
-    GameActionManager.getInstance().changeLocationModeTo(GameMode.Menu)
+    GameActionManager.getInstance().getGameManager().phaseManager.popPhase()
   );
 
   backToMenuContainer.add(backButtonSprite);

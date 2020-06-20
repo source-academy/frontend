@@ -4,7 +4,7 @@ import { gameStateToJson } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
 import { FullSaveState } from './GameSaveTypes';
 
-export class GameSaveManager {
+export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
   private loadedGameState: FullSaveState;
   private chapterNum: number;
