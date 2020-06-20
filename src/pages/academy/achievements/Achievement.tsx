@@ -114,7 +114,13 @@ function Achievement() {
 
         <div className="cards">
           <ul className="display-list">
-            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, _inferencer, setModalID)}
+            {mapAchievementDictToTask(
+              achievementDict,
+              filterStatus,
+              studentProgress,
+              _inferencer,
+              setModalID
+            )}
           </ul>
         </div>
 

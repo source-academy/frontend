@@ -28,7 +28,9 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
   const [currentTasks, setCurrentTasks] = useState(achievementTasks); // Here
 
   const resetCurrentTasks = () => {
-    setCurrentTasks(mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress, _inferencer));
+    setCurrentTasks(
+      mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress, _inferencer)
+    );
   };
 
   const currentTaskIDs = currentTasks.map(item => item.props.achievement.id);

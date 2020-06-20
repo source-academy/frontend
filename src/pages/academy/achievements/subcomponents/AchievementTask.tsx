@@ -39,7 +39,14 @@ const hasPrerequisites = (
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { inferencer, achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
+  const {
+    inferencer,
+    achievement,
+    achievementDict,
+    filterStatus,
+    setModalID,
+    studentProgress
+  } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
