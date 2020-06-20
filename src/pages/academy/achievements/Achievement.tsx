@@ -62,13 +62,15 @@ export const mapAchievementDictToTask = (
   achievementDict: { [id: number]: AchievementItem },
   filterStatus: FilterStatus,
   studentProgress: { [id: number]: AchievementProgress },
-  setModalID?: any | undefined
+  inferencer: Inferencer,
+  setModalID?: any
 ) => {
   return Object.values(achievementDict)
     .filter(achievement => achievement.isTask)
     .map(achievement => (
       <AchievementTask
         key={achievement.title}
+        inferencer={inferencer}
         studentProgress={studentProgress}
         achievement={achievement}
         achievementDict={achievementDict}
@@ -82,8 +84,8 @@ function Achievement() {
   const [modalID, setModalID] = useState<number>(-1);
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
 
-  const inferencer = new Inferencer(achievementDict);
-  inferencer.logInfo();
+  const _inferencer = new Inferencer(achievementDict);
+  _inferencer.logInfo();
 
   return (
     <div className="Achievements">
@@ -112,7 +114,7 @@ function Achievement() {
 
         <div className="cards">
           <ul className="display-list">
-            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, setModalID)}
+            {mapAchievementDictToTask(achievementDict, filterStatus, studentProgress, _inferencer, setModalID)}
           </ul>
         </div>
 

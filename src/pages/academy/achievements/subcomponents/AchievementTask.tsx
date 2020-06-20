@@ -8,8 +8,10 @@ import {
   AchievementStatus,
   AchievementProgress
 } from '../../../../commons/achievements/AchievementTypes';
+import Inferencer from './utils/Inferencer';
 
 type AchievementTaskProps = {
+  inferencer: Inferencer;
   achievement: AchievementItem;
   achievementDict: { [id: number]: AchievementItem };
   studentProgress: { [id: number]: AchievementProgress };
@@ -37,7 +39,7 @@ const hasPrerequisites = (
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
+  const { inferencer, achievement, achievementDict, filterStatus, setModalID, studentProgress } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const togglePrerequisitesDropdown = () => {
@@ -85,7 +87,7 @@ function AchievementTask(props: AchievementTaskProps) {
     }, false);
   };
 
-  /* -------- Helper for Deadlines -------- */
+  /* -------- Helper for Deadlines --------
 
   // Maps the prerequisites of the achievement to their furthest deadlines
   const mapPrerequisitesToDeadlines = (achievement: AchievementItem): (Date | undefined)[] => {
@@ -146,12 +148,6 @@ function AchievementTask(props: AchievementTaskProps) {
     }
   };
 
-  /*
-  const getDeadline(achievement: AchievementItem) => {
-    myTree[achievement].deadline;
-  } 
-  */
-
   /* -------- Helper for Progress -------- */
 
   // Returns the achievement progress in decimal (e.g. 0.5)
@@ -169,7 +165,7 @@ function AchievementTask(props: AchievementTaskProps) {
           <AchievementCard
             achievement={achievement}
             exp={getTotalEXP(achievement)}
-            deadline={getFurthestDeadline(achievement)}
+            deadline={inferencer.getFurthestDeadline(achievement.id)}
             release={achievement.release}
             progress={getAchievementProgress(achievement)}
             shouldPartiallyRender={!shouldRender(achievement)}
@@ -186,7 +182,7 @@ function AchievementTask(props: AchievementTaskProps) {
                     <PrerequisiteCard
                       achievement={prerequisite}
                       exp={getTotalEXP(prerequisite)}
-                      deadline={getFurthestDeadline(prerequisite)}
+                      deadline={inferencer.getFurthestDeadline(prerequisite.id)}
                       release={achievement.release}
                       progress={getAchievementProgress(prerequisite)}
                       displayModal={displayModal}
