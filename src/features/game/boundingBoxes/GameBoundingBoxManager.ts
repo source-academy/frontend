@@ -48,6 +48,37 @@ class GameBoundingBoxManager implements StateObserver {
     return bboxContainer;
   }
 
+  public enableBBoxActions(locationId: LocationId) {
+    const bboxIds = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.boundingBoxes,
+      locationId
+    );
+    const bboxPropMap = GameActionManager.getInstance().getBBoxPropertyMap();
+
+    if (!bboxIds) {
+      return;
+    }
+
+    bboxIds.forEach((id: ItemId) => {
+      const bboxProp = bboxPropMap.get(id);
+      const bboxSprite = this.bboxIdMap.get(id);
+
+      if (!bboxSprite || !bboxProp) {
+        return;
+      }
+
+      bboxSprite.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
+        GameActionManager.getInstance().executeStoryAction(bboxProp.actionIds)
+      );
+    });
+  }
+
+  public disableBBoxActions() {
+    this.bboxIdMap.forEach((sprite: Phaser.GameObjects.GameObject) =>
+      sprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP)
+    );
+  }
+
   public renderBBoxLayerContainer(locationId: LocationId): void {
     GameActionManager.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender =

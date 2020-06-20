@@ -49,7 +49,8 @@ door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, ad
 topLeft, 0, 0, 100, 100
 middleBB, 100, 100, 200, 200
 $
-#topLeft, collectible: goodStuff
+topLeft, collectible: goodStuff
+
 
 <<dialogueLocation>>
 classroom: +dialogue1, dialogue1

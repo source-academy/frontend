@@ -46,16 +46,20 @@ door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, ad
 
 <<boundingBoxes>>
 [room]
-topLeft, 0, 0, 100, 100
-middleBB, 100, 100, 200, 200
++topLeft, 0, 0, 300, 300
++middleBB, 300, 300, 600, 600
 $
-#topLeft, collectible: goodStuff
+topLeft, bringUpDialogue: dialogue5
 
 <<dialogueLocation>>
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
 room: +dialogue1
 
+<<dialogue5>>
+title: What?
+[part0]
+Who would have thought that there's something hidden at the top left corner?
 
 <<dialogue4>>
 title: You found me
