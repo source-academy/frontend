@@ -17,6 +17,7 @@ import { AceMouseEvent, Position } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 
 import useHighlighting from './UseHighlighting';
+import useNavigation from './UseNavigation';
 
 // =============== Mixins ===============
 /* import WithShareAce from './WithShareAce';
@@ -297,7 +298,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 
 // in a real usage, hooks would be specified by the parent component
 export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
-  <EditorBase {...props} hooks={[useHighlighting]} ref={ref} />
+  <EditorBase {...props} hooks={[useHighlighting, useNavigation]} ref={ref} />
 ));
 
 // real export

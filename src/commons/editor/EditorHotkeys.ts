@@ -5,14 +5,10 @@ export const keyBindings = {
     win: 'Shift-Enter',
     mac: 'Shift-Enter'
   },
-  // {
-  //   name: 'navigate',
-  //   bindKey: {
-  //     win: 'Ctrl-B',
-  //     mac: 'Command-B'
-  //   },
-  //   exec: 'handleNavigate'
-  // },
+  navigate: {
+      win: 'Ctrl-B',
+      mac: 'Command-B'
+  },
   // {
   //   name: 'refactor',
   //   bindKey: {
