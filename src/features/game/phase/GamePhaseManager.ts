@@ -1,5 +1,6 @@
 import { GamePhaseType } from './GamePhaseTypes';
 import { gamePhaseMap } from './GamePhaseConstants';
+import GameActionManager from '../action/GameActionManager';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
@@ -10,16 +11,20 @@ export default class GamePhaseManager {
 
   public async popPhase(newPhaseParams?: any): Promise<void> {
     const prevPhase = this.phaseStack.pop()!;
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = false;
     await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(this.getCurrentPhase()).reactivate(newPhaseParams);
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = true;
   }
 
   public async pushPhase(newPhase: GamePhaseType, newPhaseParams?: any): Promise<void> {
     const prevPhase = this.getCurrentPhase();
     if (newPhase === prevPhase) return;
 
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = false;
     await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(newPhase).activate(newPhaseParams);
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = true;
     this.phaseStack.push(newPhase);
   }
 
@@ -28,8 +33,10 @@ export default class GamePhaseManager {
     if (newPhase === prevPhase) return;
 
     this.phaseStack.pop();
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = false;
     await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(newPhase).activate(newPhaseParams);
+    GameActionManager.getInstance().getGameManager().input.keyboard.enabled = true;
     this.phaseStack.push(newPhase);
   }
 

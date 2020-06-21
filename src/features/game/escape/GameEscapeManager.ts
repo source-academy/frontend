@@ -41,7 +41,7 @@ class GameEscapeManager {
     const continueButton = createButton(
       gameManager,
       'Continue',
-      () => this.destroyEscapeMenu(escapeMenuContainer),
+      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
       mediumButton.key,
       { x: screenSize.x * 0.5, y: escapeButtonYPos },
       escapeTextOriX,
@@ -64,12 +64,10 @@ class GameEscapeManager {
     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 
-  private destroyEscapeMenu(escapeMenuContainer: Phaser.GameObjects.Container) {
+  public destroyEscapeMenu() {
     GameActionManager.getInstance()
       .getGameManager()
       .layerManager.clearSeveralLayers([Layer.Escape]);
-    escapeMenuContainer.destroy();
-    GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
   }
 }
 

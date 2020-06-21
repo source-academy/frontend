@@ -161,7 +161,13 @@ class GameManager extends Phaser.Scene {
 
   private bindEscapeMenu() {
     const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    escKey.on('up', () => this.phaseManager.pushPhase(GamePhaseType.EscapeMenu));
+    escKey.on('up', () => {
+      if (this.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        this.phaseManager.popPhase();
+      } else {
+        this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
+      }
+    });
   }
 }
 
