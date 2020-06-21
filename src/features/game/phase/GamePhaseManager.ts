@@ -28,9 +28,13 @@ export default class GamePhaseManager {
     this.phaseStack.push(newPhase);
   }
 
+  public isCurrentPhase(phase: GamePhaseType): boolean {
+    return this.getCurrentPhase() === phase;
+  }
+
   private getCurrentPhase(): GamePhaseType {
     if (!this.phaseStack.length) {
-      this.phaseStack = [GamePhaseType.Menu];
+      this.phaseStack = [GamePhaseType.None];
     }
     return this.phaseStack[this.phaseStack.length - 1];
   }

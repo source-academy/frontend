@@ -15,6 +15,12 @@ const gameModeMove = new GameModeMove();
 
 const gamePhases: GamePhase[] = [
   {
+    type: GamePhaseType.None,
+    activate: Constants.nullFunction,
+    reactivate: Constants.nullFunction,
+    deactivate: Constants.nullFunction
+  },
+  {
     type: GamePhaseType.Menu,
     activate: async () => await gameModeMenu.activateUI(),
     reactivate: async () => await gameModeMenu.activateUI(),
