@@ -20,13 +20,9 @@ export const keyBindings = {
   highlightScope: {
     win: 'Ctrl-Shift-H',
     mac: 'Command-Shift-H'
+  },
+  typeInferenceDisplay: {
+    win: 'Ctrl-Shift-M',
+    mac: 'Command-Shift-M'
   }
-  // {
-  //   name: 'TypeInferenceDisplay',
-  //   bindKey: {
-  //     win: 'Ctrl-Shift-M',
-  //     mac: 'Command-Shift-M'
-  //   },
-  //   exec: 'handleTypeInferenceDisplay'
-  // }
 };
