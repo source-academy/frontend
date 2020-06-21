@@ -14,6 +14,7 @@ class GameSoundManager {
     this.soundAssets = new Map<AssetKey, SoundAsset>();
     this.baseSoundManager = game.sound;
     this.scene = undefined;
+    this.baseSoundManager.pauseOnBlur = true;
   }
 
   public initialise(scene: Phaser.Scene) {
@@ -21,6 +22,7 @@ class GameSoundManager {
   }
 
   public renderBackgroundMusic(locationId: LocationId) {
+    console.log('Rendering BGM');
     const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
     if (bgmKey) {
       this.playBgMusic(bgmKey);
@@ -72,6 +74,7 @@ class GameSoundManager {
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
+    console.log('Stopping BG music');
     const currBgMusicKey = game.getCurrBgMusicKey();
     if (this.scene && currBgMusicKey) {
       // Fade out current music

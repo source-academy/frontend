@@ -1,4 +1,4 @@
-export const bgMusicFadeDuration = 2000;
+export const bgMusicFadeDuration = 1000;
 
 export const musicFadeOutTween = {
   volume: 0,
