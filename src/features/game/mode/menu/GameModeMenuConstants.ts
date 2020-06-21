@@ -6,13 +6,13 @@ export const modeButtonYPos = screenSize.y * 0.8;
 
 export const menuEntryTweenProps = {
   y: 0,
-  duration: 800,
+  duration: 500,
   ease: 'Power2'
 };
 
 export const menuExitTweenProps = {
   y: screenSize.y * 0.4,
-  duration: 500,
+  duration: 300,
   ease: 'Power2'
 };
 
