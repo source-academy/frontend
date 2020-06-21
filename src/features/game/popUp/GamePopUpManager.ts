@@ -83,6 +83,8 @@ class GamePopUpManager {
     atPosContainer.setVisible(false);
     atPosContainer.setActive(false);
     atPosContainer.destroy();
+
+    this.currPopUp.delete(position);
   }
 
   private getAssetKey(itemId: ItemId) {
