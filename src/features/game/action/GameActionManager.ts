@@ -378,6 +378,14 @@ class GameActionManager {
       this.gameManager.soundManager.continueCurrBgMusic();
     }
   }
+
+  /////////////////////
+  //      Input      //
+  /////////////////////
+
+  public enableKeyboardInput(active: boolean) {
+    this.getGameManager().input.keyboard.enabled = active;
+  }
 }
 
 export default GameActionManager;
