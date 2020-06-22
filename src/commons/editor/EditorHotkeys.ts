@@ -6,8 +6,8 @@ export const keyBindings = {
     mac: 'Shift-Enter'
   },
   navigate: {
-      win: 'Ctrl-B',
-      mac: 'Command-B'
+    win: 'Ctrl-B',
+    mac: 'Command-B'
   },
   // {
   //   name: 'refactor',
