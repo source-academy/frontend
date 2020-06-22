@@ -65,6 +65,11 @@ export const popUpFrame: ImageAsset = {
   path: '../assets/popUpFrame.png'
 };
 
+export const mediumBox: ImageAsset = {
+  key: 'medium-box',
+  path: '../assets/mediumBox.png'
+};
+
 export const escapeMenuBackground: ImageAsset = {
   key: 'escape-bg',
   path: '../assets/escapeMenu.png'
@@ -84,6 +89,7 @@ const commonAssets = [
   talkOptCheck,
   modeMenuBanner,
   popUpFrame,
+  mediumBox,
   escapeMenuBackground
 ];
 

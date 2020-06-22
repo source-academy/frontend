@@ -3,10 +3,11 @@ import { screenSize, Constants } from './CommonConstants';
 import { Color, hex } from '../utils/StyleUtils';
 
 class CommonRadioButtons extends Phaser.GameObjects.Container {
-  private readonly optionDiameter: number = 20;
-  private readonly optionOutlineThickness: number = 5;
-  private readonly optionCheckedDiameter: number = 15;
-  private readonly textYOffset: number = 15;
+  private circleDiameter: number;
+  private outlineSize: number;
+  private checkedDiameter: number;
+  private textXOffset: number;
+  private textYOffset: number;
   private valueIdx: number;
   private choices: string[];
   private isChosen: boolean[];
@@ -14,15 +15,22 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
   private style: any;
   private textAnchorX: number | undefined;
   private textAnchorY: number | undefined;
+
   constructor(
     scene: Phaser.Scene,
     choices: string[],
+    defaultChoiceIdx: number,
     maxWidth: number = screenSize.x,
     style: any,
     x?: number,
     y?: number,
     textAnchorX?: number,
-    textAnchorY?: number
+    textAnchorY?: number,
+    circleDiameter: number = 20,
+    outlineSize: number = 5,
+    checkedDiameter: number = 15,
+    textXOffset: number = 0,
+    textYOffset: number = 15
   ) {
     super(scene, x, y);
     this.scene = scene;
@@ -31,11 +39,17 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
     this.style = style;
     this.textAnchorX = textAnchorX;
     this.textAnchorY = textAnchorY;
+    this.circleDiameter = circleDiameter;
+    this.outlineSize = outlineSize;
+    this.checkedDiameter = checkedDiameter;
+    this.textXOffset = textXOffset;
+    this.textYOffset = textYOffset;
     this.radioButtons = [];
     this.isChosen = [];
 
     this.createRadioButtons(this.choices, maxWidth);
     this.renderRadioButtons();
+    this.activate(defaultChoiceIdx);
   }
 
   private createRadioButtons(choices: string[], maxWidth: number) {
@@ -49,7 +63,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
 
   private renderRadioButtons() {
     this.removeAll(true);
-    const optionOutlineDiameter = this.optionDiameter + this.optionOutlineThickness;
+    const optionOutlineDiameter = this.circleDiameter + this.outlineSize;
 
     for (let i = 0; i < this.choices.length; i++) {
       const button = this.radioButtons[i];
@@ -65,8 +79,8 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         this.scene,
         button.assetXPos,
         button.assetYPos,
-        this.optionDiameter,
-        this.optionDiameter,
+        this.circleDiameter,
+        this.circleDiameter,
         hex(Color.lightBlue)
       );
       if (button.isInteractive) {
@@ -75,7 +89,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
       }
       const textOption = new Phaser.GameObjects.Text(
         this.scene,
-        button.assetXPos,
+        button.assetXPos + optionOutlineDiameter + this.textXOffset,
         button.assetYPos + optionOutlineDiameter + this.textYOffset,
         this.choices[i],
         this.style
@@ -88,8 +102,8 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         this.scene,
         button.assetXPos,
         button.assetYPos,
-        this.optionCheckedDiameter,
-        this.optionCheckedDiameter,
+        this.checkedDiameter,
+        this.checkedDiameter,
         hex(Color.darkBlue)
       );
       this.add([optionFrame, option, textOption]);

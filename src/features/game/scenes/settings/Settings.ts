@@ -11,17 +11,21 @@ import {
   volumeContainerXPos,
   volumeContainerYPos,
   volumeOptionTextAnchorX,
-  volumeOptionTextAnchorY
+  volumeOptionTextAnchorY,
+  volumeDefaultOpt,
+  optionHeaderTextStyle
 } from './SettingsConstants';
-import { topButton } from '../../commons/CommonAssets';
+import { topButton, mediumBox } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
 
 class Settings extends Phaser.Scene {
+  private volumeRadioButtons: RadioButtons | undefined;
   private layerManager: GameLayerManager;
 
   constructor() {
     super('Settings');
     this.layerManager = new GameLayerManager();
+    this.volumeRadioButtons = undefined;
   }
 
   public preload() {
@@ -49,9 +53,29 @@ class Settings extends Phaser.Scene {
   }
 
   private renderOptions() {
-    const volumeOptions = new RadioButtons(
+    this.renderVolumeOptions();
+    const backButton = this.createBackButtonContainer();
+    this.layerManager.addToLayer(Layer.UI, backButton);
+  }
+
+  private renderVolumeOptions() {
+    const volumeBg = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x - 10,
+      volumeContainerYPos - 60,
+      mediumBox.key
+    );
+    const volumeText = new Phaser.GameObjects.Text(
+      this,
+      screenCenter.x,
+      volumeContainerYPos - 110,
+      'Volume',
+      optionHeaderTextStyle
+    ).setOrigin(0.5, 0.25);
+    this.volumeRadioButtons = new RadioButtons(
       this,
       volumeContainerOptions,
+      volumeDefaultOpt,
       volumeOptionXSpace,
       volumeOptionTextStyle,
       volumeContainerXPos,
@@ -59,9 +83,9 @@ class Settings extends Phaser.Scene {
       volumeOptionTextAnchorX,
       volumeOptionTextAnchorY
     );
-    const backButton = this.createBackButtonContainer();
-    this.layerManager.addToLayer(Layer.UI, volumeOptions);
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.layerManager.addToLayer(Layer.UI, volumeBg);
+    this.layerManager.addToLayer(Layer.UI, volumeText);
+    this.layerManager.addToLayer(Layer.UI, this.volumeRadioButtons);
   }
 
   private createBackButtonContainer() {
