@@ -1,3 +1,5 @@
+import { IconName } from '@blueprintjs/core';
+
 // TODO: Rename abilities
 export enum AchievementAbility {
   ACADEMIC = 'Academic',
@@ -56,6 +58,7 @@ export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
+  icon?: IconName;
   exp?: number;
   deadline?: Date;
   release?: Date;
