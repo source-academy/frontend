@@ -55,7 +55,6 @@ class GameManager extends Phaser.Scene {
 
     this.currentChapter = LocationSelectChapter;
     this.currentLocationId = this.currentChapter.startingLoc;
-
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
@@ -70,11 +69,28 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
-
-    GameActionManager.getInstance().setGameManager(this);
   }
 
-  async init({ text, continueGame, chapterNum }: GameManagerProps) {
+  public async init({ text, continueGame, chapterNum }: GameManagerProps) {
+    this.currentChapter = LocationSelectChapter;
+    this.currentLocationId = this.currentChapter.startingLoc;
+
+    this.layerManager = new GameLayerManager();
+    this.stateManager = new GameStateManager();
+    this.characterManager = new GameCharacterManager();
+    this.objectManager = new GameObjectManager();
+    this.dialogueManager = new GameDialogueManager();
+    this.actionExecuter = new GameActionExecuter();
+    this.userStateManager = new GameUserStateManager();
+    this.boundingBoxManager = new GameBBoxManager();
+    this.popUpManager = new GamePopUpManager();
+    this.saveManager = new GameSaveManager();
+    this.escapeManager = new GameEscapeManager();
+    this.phaseManager = new GamePhaseManager();
+    this.backgroundManager = new GameBackgroundManager();
+
+    GameActionManager.getInstance().setGameManager(this);
+
     this.currentChapter = Parser.parse(text);
     await this.loadGameState(continueGame, chapterNum);
 
@@ -139,7 +155,7 @@ class GameManager extends Phaser.Scene {
     this.characterManager.renderCharacterLayerContainer(locationId);
 
     const gameLocation = this.currentChapter.map.getLocationAtId(locationId);
-    this.phaseManager.swapPhase(GamePhaseType.Sequence);
+    await this.phaseManager.swapPhase(GamePhaseType.Sequence);
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);

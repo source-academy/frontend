@@ -24,15 +24,19 @@ import {
 import { topButton, mediumButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
 import { createButton } from '../../utils/StyleUtils';
+import GameSaveManager from '../../save/GameSaveManager';
+import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
   private layerManager: GameLayerManager;
+  private settingsSaveManager: GameSaveManager;
 
   constructor() {
     super('Settings');
     this.layerManager = new GameLayerManager();
     this.volumeRadioButtons = undefined;
+    this.settingsSaveManager = new GameSaveManager();
   }
 
   public preload() {
@@ -43,6 +47,7 @@ class Settings extends Phaser.Scene {
   public create() {
     this.renderBackground();
     this.renderOptions();
+    this.settingsSaveManager.initialise(this.getAccountInfo());
   }
 
   private preloadAssets() {
@@ -147,8 +152,15 @@ class Settings extends Phaser.Scene {
   public applySettings(volume?: RadioButtons) {
     if (volume) {
       const volumeVal = parseFloat(volume.getChosenChoice());
-      console.log('Volume is set to', volumeVal);
+      this.settingsSaveManager.saveSettings({ volume: volumeVal });
     }
+  }
+
+  private getAccountInfo(): AccountInfo {
+    if (!game.getAccountInfo()) {
+      throw new Error('No account info');
+    }
+    return game.getAccountInfo()!;
   }
 }
 

@@ -23,9 +23,9 @@ export default class GameSaveManager {
     this.chapterNum = -1;
   }
 
-  public async initialise(accountInfo: AccountInfo, chapterNum: number) {
+  public async initialise(accountInfo: AccountInfo, chapterNum?: number) {
     this.accountInfo = accountInfo;
-    this.chapterNum = chapterNum;
+    this.chapterNum = chapterNum === undefined ? -1 : chapterNum;
     const fullSaveState = await loadData(this.getAccountInfo());
     this.fullSaveState = fullSaveState;
   }
@@ -46,8 +46,10 @@ export default class GameSaveManager {
 
   public async saveSettings(settingsJson: SettingsJson) {
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
-
     await saveData(this.getAccountInfo(), this.fullSaveState);
+    await GameActionManager.getInstance()
+      .getGameManager()
+      .soundManager.applyUserSettings(this.fullSaveState.userState);
   }
 
   public getLoadedUserState() {

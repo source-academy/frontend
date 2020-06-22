@@ -6,7 +6,7 @@ export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
 
   constructor() {
-    this.phaseStack = [GamePhaseType.Menu];
+    this.phaseStack = [GamePhaseType.None];
   }
 
   public async popPhase(): Promise<void> {

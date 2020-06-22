@@ -77,6 +77,7 @@ function strToAction(actionString: string): GameAction {
   return {
     actionType,
     actionParams: actionParamObj,
+    actionConditions: [],
     interactionId: actionId,
     isInteractive: false
   };
