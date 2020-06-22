@@ -9,7 +9,9 @@ import {
   volumeOptionXSpace,
   volumeOptionTextStyle,
   volumeContainerXPos,
-  volumeContainerYPos
+  volumeContainerYPos,
+  volumeOptionTextAnchorX,
+  volumeOptionTextAnchorY
 } from './SettingsConstants';
 import { topButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
@@ -53,7 +55,9 @@ class Settings extends Phaser.Scene {
       volumeOptionXSpace,
       volumeOptionTextStyle,
       volumeContainerXPos,
-      volumeContainerYPos
+      volumeContainerYPos,
+      volumeOptionTextAnchorX,
+      volumeOptionTextAnchorY
     );
     const backButton = this.createBackButtonContainer();
     this.layerManager.addToLayer(Layer.UI, volumeOptions);

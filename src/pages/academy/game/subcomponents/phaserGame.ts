@@ -4,6 +4,7 @@ import { AssetKey } from 'src/features/game/commons/CommonsTypes';
 import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+import Settings from 'src/features/game/scenes/settings/Settings';
 
 export type AccountInfo = {
   accessToken: string;
@@ -55,7 +56,7 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [MainMenu, ChapterSelect, GameManager]
+  scene: [MainMenu, Settings, ChapterSelect, GameManager]
 };
 
 const phaserGame = new SourceAcademyGame(config);

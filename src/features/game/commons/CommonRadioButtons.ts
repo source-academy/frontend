@@ -4,28 +4,33 @@ import { Color, hex } from '../utils/StyleUtils';
 
 class CommonRadioButtons extends Phaser.GameObjects.Container {
   private readonly optionDiameter: number = 20;
-  private readonly optionOutlineThickness: number = 2;
-  private readonly optionCheckedDiameter: number = 18;
-  private readonly textYOffset: number = 10;
+  private readonly optionOutlineThickness: number = 5;
+  private readonly optionCheckedDiameter: number = 15;
+  private readonly textYOffset: number = 15;
   private valueIdx: number;
   private choices: string[];
   private isChosen: boolean[];
   private radioButtons: GameButton[];
   private style: any;
-
+  private textAnchorX: number | undefined;
+  private textAnchorY: number | undefined;
   constructor(
     scene: Phaser.Scene,
     choices: string[],
     maxWidth: number = screenSize.x,
     style: any,
     x?: number,
-    y?: number
+    y?: number,
+    textAnchorX?: number,
+    textAnchorY?: number
   ) {
     super(scene, x, y);
     this.scene = scene;
     this.valueIdx = 0;
     this.choices = choices;
     this.style = style;
+    this.textAnchorX = textAnchorX;
+    this.textAnchorY = textAnchorY;
     this.radioButtons = [];
     this.isChosen = [];
 
@@ -71,6 +76,10 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         this.choices[i],
         this.style
       );
+      const xAnchor = this.textAnchorX ? this.textAnchorX : 0.25;
+      const yAnchor = this.textAnchorY ? this.textAnchorY : 0.5;
+      textOption.setOrigin(xAnchor, yAnchor);
+
       const optionChecked = new Phaser.GameObjects.Ellipse(
         this.scene,
         button.assetXPos,
