@@ -18,6 +18,8 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 
   const _inferencer = new Inferencer(achievementDict);
 
+  _inferencer.logInfo();
+
   const achievementTasks = mapAchievementDictToTask(
     achievementItems,
     FilterStatus.ALL,
@@ -31,12 +33,6 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     setCurrentTasks(
       mapAchievementDictToTask(achievementItems, FilterStatus.ALL, studentProgress, _inferencer)
     );
-  };
-
-  const currentTaskIDs = currentTasks.map(item => item.props.achievement.id);
-
-  const getPendingTasks = () => {
-    return Object.values(achievementItems).filter(item => !currentTaskIDs.includes(item.id));
   };
 
   const editableTasks = currentTasks.map(task => (
@@ -59,7 +55,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
           achievementItems={achievementItems}
           setAchievementItems={setAchievementItems}
           resetCurrentTasks={resetCurrentTasks}
-          pendingTasks={getPendingTasks()}
+          pendingTasks={_inferencer.getNonTaskAchievementsItems()}
         />
       </div>
     </div>

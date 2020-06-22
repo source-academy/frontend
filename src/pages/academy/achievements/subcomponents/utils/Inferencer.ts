@@ -6,6 +6,7 @@ class Node {
   achievement: AchievementItem;
   id: number;
   furthestDeadline?: Date;
+  isTask: boolean;
   totalExp?: number;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites
@@ -14,6 +15,7 @@ class Node {
     this.achievement = achievement;
     this.id = achievement.id;
     this.furthestDeadline = achievement.deadline;
+    this.isTask = achievement.isTask;
     this.totalExp = achievement.exp;
     this.children = new Set(achievement.prerequisiteIDs);
     this.descendant = new Set(achievement.prerequisiteIDs);
@@ -35,6 +37,8 @@ class Inferencer {
         node.achievement.title,
         prettifyDeadline(node.furthestDeadline),
         node.totalExp,
+        '\nisTask:',
+        node.isTask,
         '\nchildren:',
         node.children,
         '\ndescendants:',
@@ -66,6 +70,14 @@ class Inferencer {
 
   public getDescendant(achievementId: number) {
     return this.nodeList[achievementId].descendant;
+  }
+
+  public getNonTaskAchievementsItems() {
+    return this.nodeList.filter(node => !node.isTask).map(node => node.achievement);
+  }
+
+  public getAchievementItems() {
+    return this.nodeList.filter(node => node.isTask);
   }
 
   private generateNodeList(achievementDict: { [id: number]: AchievementItem }) {
