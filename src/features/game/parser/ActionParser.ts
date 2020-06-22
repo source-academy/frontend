@@ -106,7 +106,7 @@ function strToCondition(conditionString: string): ActionCondition {
 
   switch (strToGameStateStorage[gameStateStorage]) {
     case GameStateStorage.ChecklistState:
-      return createCondition(GameStateStorage.ChecklistState, { id: condParams[0] });
+      return createCondition(GameStateStorage.ChecklistState, { id: condParams });
     case GameStateStorage.UserState:
       return createCondition(GameStateStorage.UserState, {
         listName: condParams[0],

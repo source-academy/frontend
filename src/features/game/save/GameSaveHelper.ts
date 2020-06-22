@@ -1,6 +1,6 @@
 import GameUserStateManager from '../state/GameUserStateManager';
 import GameStateManager from '../state/GameStateManager';
-import { FullSaveState, GameSaveState, UserSaveState } from './GameSaveTypes';
+import { FullSaveState, GameSaveState, UserSaveState, SettingsJson } from './GameSaveTypes';
 
 export function gameStateToJson(
   prevGameState: FullSaveState,
@@ -17,7 +17,7 @@ export function gameStateToJson(
   };
 
   const userState: UserSaveState = {
-    settings: { volume: 1 },
+    settings: { ...prevGameState.userState.settings },
     lastPlayedChapter: chapterNum,
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
@@ -28,6 +28,18 @@ export function gameStateToJson(
   const newGameState = {
     gameSaveStates: newGameStoryStates,
     userState
+  };
+
+  return newGameState;
+}
+
+export function userSettingsToJson(
+  prevGameState: FullSaveState,
+  settingsJson: SettingsJson
+): FullSaveState {
+  const newGameState = {
+    gameSaveStates: prevGameState.gameSaveStates,
+    userState: { ...prevGameState.userState, settings: settingsJson }
   };
 
   return newGameState;

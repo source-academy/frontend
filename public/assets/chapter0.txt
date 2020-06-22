@@ -8,6 +8,9 @@ emergency, classroom/emergency, Emergency
 hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
+room, bringUpDialogue: dialogue6 if checklist.visit
+hallway, updateChecklist: visit
+$
 [talk move]
 [explore talk move]
 [talk move]
@@ -29,8 +32,8 @@ emergency: hallway
 hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
-visit, "Visit Hallway"
-talk, "Talk at Classroom"
+visit
+talk
 
 <<objects>>
 [room]
@@ -55,6 +58,12 @@ topLeft, bringUpDialogue: dialogue5
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
 room: +dialogue1
+
+<<dialogue6>>
+Title: cutscene
+[part0]
+You've gone to the hallway, and are now back into the classroom.
+Congrats on your first cutscene.
 
 <<dialogue5>>
 title: What?

@@ -44,6 +44,20 @@ export default class GamePhaseManager {
     this.phaseStack.push(newPhase);
   }
 
+  public async refreshPhase(newPhase: GamePhaseType, newPhaseParams?: any): Promise<void> {
+    const prevPhase = this.getCurrentPhase();
+    if (newPhase !== prevPhase) return;
+
+    this.phaseStack.pop();
+
+    GameActionManager.getInstance().enableKeyboardInput(false);
+    await gamePhaseMap.get(prevPhase).deactivate();
+    await gamePhaseMap.get(newPhase).activate(newPhaseParams);
+    GameActionManager.getInstance().enableKeyboardInput(true);
+
+    this.phaseStack.push(newPhase);
+  }
+
   public isCurrentPhase(phase: GamePhaseType): boolean {
     return this.getCurrentPhase() === phase;
   }

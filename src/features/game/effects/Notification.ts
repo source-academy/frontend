@@ -6,7 +6,7 @@ import GameActionManager from '../action/GameActionManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 
-export async function displayNotification(message: string) {
+export async function displayNotification(message: string): Promise<void> {
   const gameManager = GameActionManager.getInstance().getGameManager();
   const dialogueRenderer = new DialogueRenderer(titleTypeWriterStyle);
   const container = dialogueRenderer.getDialogueContainer();
@@ -18,12 +18,15 @@ export async function displayNotification(message: string) {
   await sleep(Constants.fadeDuration * 2);
   dialogueRenderer.changeText(message);
 
-  dialogueRenderer
-    .getDialogueBox()
-    .setInteractive({ useHandCursor: true, pixelPerfect: true })
-    .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
-      fadeAndDestroy(gameManager, container);
-      GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
-    });
+  const showNotification = new Promise(resolve => {
+    dialogueRenderer
+      .getDialogueBox()
+      .setInteractive({ useHandCursor: true, pixelPerfect: true })
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+        dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
+        fadeAndDestroy(gameManager, container);
+        resolve();
+      });
+  });
+  await showNotification;
 }

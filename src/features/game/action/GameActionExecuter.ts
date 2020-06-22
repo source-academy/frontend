@@ -20,22 +20,23 @@ export default class GameActionExecuter {
         return;
       }
       const action = this.getActionFromId(actionId);
-      await this.executeStoryAction(action);
+      const { actionType, actionParams, actionConditions } = action;
+
+      if (actionConditions) {
+        for (const actionCondition of actionConditions) {
+          if (!this.checkCondition(actionCondition)) {
+            return;
+          }
+        }
+      }
+      await this.executeStoryAction(actionType, actionParams);
+
       GameActionManager.getInstance().triggerInteraction(actionId);
     }
     await GameActionManager.getInstance().saveGame();
   }
 
-  private async executeStoryAction(action: GameAction) {
-    const { actionType, actionParams, actionConditions } = action;
-
-    if (actionConditions) {
-      for (const actionCondition of actionConditions) {
-        if (!this.checkCondition(actionCondition)) {
-          return;
-        }
-      }
-    }
+  private async executeStoryAction(actionType: GameActionType, actionParams: any) {
     const actionManager = GameActionManager.getInstance();
 
     switch (actionType) {
@@ -73,7 +74,7 @@ export default class GameActionExecuter {
     }
   }
 
-  private async checkCondition(conditional: ActionCondition) {
+  private checkCondition(conditional: ActionCondition) {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:

@@ -1,16 +1,16 @@
 import { saveData, loadData } from './GameSaveRequests';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
-import { gameStateToJson } from './GameSaveHelper';
+import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
-import { FullSaveState } from './GameSaveTypes';
+import { FullSaveState, SettingsJson } from './GameSaveTypes';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
-  private loadedGameState: FullSaveState;
+  private fullSaveState: FullSaveState;
   private chapterNum: number;
 
   constructor() {
-    this.loadedGameState = {
+    this.fullSaveState = {
       gameSaveStates: {},
       userState: {
         collectibles: [],
@@ -26,26 +26,36 @@ export default class GameSaveManager {
   public async initialise(accountInfo: AccountInfo, chapterNum: number) {
     this.accountInfo = accountInfo;
     this.chapterNum = chapterNum;
-    const loadedGameState = await loadData(this.getAccountInfo());
-    this.loadedGameState = loadedGameState;
+    const fullSaveState = await loadData(this.getAccountInfo());
+    this.fullSaveState = fullSaveState;
   }
 
   public async saveGame() {
     const gameStateManager = GameActionManager.getInstance().getGameManager().stateManager;
     const userStateManager = GameActionManager.getInstance().getGameManager().userStateManager;
 
-    await saveData(
-      this.getAccountInfo(),
-      gameStateToJson(this.loadedGameState, this.chapterNum, gameStateManager, userStateManager)
+    this.fullSaveState = gameStateToJson(
+      this.fullSaveState,
+      this.chapterNum,
+      gameStateManager,
+      userStateManager
     );
+
+    await saveData(this.getAccountInfo(), this.fullSaveState);
+  }
+
+  public async saveSettings(settingsJson: SettingsJson) {
+    this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
+
+    await saveData(this.getAccountInfo(), this.fullSaveState);
   }
 
   public getLoadedUserState() {
-    return this.loadedGameState.userState;
+    return this.fullSaveState.userState;
   }
 
   public getLoadedGameStoryState() {
-    return this.loadedGameState.gameSaveStates[this.chapterNum];
+    return this.fullSaveState.gameSaveStates[this.chapterNum];
   }
 
   private getAccountInfo() {

@@ -1,5 +1,9 @@
 import { splitToLines } from './ParserHelper';
+import GameObjective from '../objective/GameObjective';
+import Parser from './Parser';
 
 export default function CharacterParser(fileName: string, fileContent: string): void {
-  splitToLines(fileContent);
+  const objectives = new GameObjective();
+  objectives.addObjectives(splitToLines(fileContent));
+  Parser.chapter.objectives = objectives;
 }
