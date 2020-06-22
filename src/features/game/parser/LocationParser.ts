@@ -2,6 +2,7 @@ import Parser from './Parser';
 import { splitToLines, stripEnclosingChars, splitByChar } from './ParserHelper';
 import { Constants } from '../commons/CommonConstants';
 import { GameMode } from '../mode/GameModeTypes';
+import ActionParser from './ActionParser';
 
 function locationAssetKey(shortPath: string) {
   return shortPath;
@@ -14,7 +15,7 @@ function locationAssetValue(shortPath: string) {
 
 export default function LocationParser(fileName: string, fileContent: string): void {
   const gameMap = Parser.chapter.map;
-  const [locationAssets, locationModes, navigation] = fileContent.split('$');
+  const [locationAssets, locationActions, locationModes, navigation] = fileContent.split('$');
 
   const locationIds: string[] = [];
 
@@ -29,6 +30,13 @@ export default function LocationParser(fileName: string, fileContent: string): v
       assetKey: locationAssetKey(shortPath)
     });
     gameMap.addMapAsset(locationAssetKey(shortPath), locationAssetValue(shortPath));
+  });
+
+  splitToLines(locationActions).forEach(locationAction => {
+    const [locationId, ...actions] = splitByChar(locationAction, ',');
+
+    const gameLocation = Parser.chapter.map.getLocationAtId(locationId);
+    gameLocation.actionIds = ActionParser(actions);
   });
 
   // Parse modes per location
