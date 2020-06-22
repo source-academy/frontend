@@ -19,6 +19,7 @@ import { keyBindings, KeyFunction } from './EditorHotkeys';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
+import useShareAce from './UseShareAce';
 
 // =============== Mixins ===============
 /* import WithShareAce from './WithShareAce';
@@ -299,7 +300,11 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 
 // in a real usage, hooks would be specified by the parent component
 export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
-  <EditorBase {...props} hooks={[useHighlighting, useNavigation, useTypeInference]} ref={ref} />
+  <EditorBase
+    {...props}
+    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce]}
+    ref={ref}
+  />
 ));
 
 // real export
