@@ -17,7 +17,7 @@ export function gameStateToJson(
   };
 
   const userState: UserSaveState = {
-    settings: { volume: 1 },
+    settings: { ...prevGameState.userState.settings },
     lastPlayedChapter: chapterNum,
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
@@ -39,7 +39,7 @@ export function userSettingsToJson(
 ): FullSaveState {
   const newGameState = {
     gameSaveStates: prevGameState.gameSaveStates,
-    userState: { ...prevGameState.userState, settingsJson }
+    userState: { ...prevGameState.userState, settings: settingsJson }
   };
 
   return newGameState;
