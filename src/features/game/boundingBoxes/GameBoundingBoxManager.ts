@@ -6,6 +6,7 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
@@ -68,7 +69,11 @@ class GameBoundingBoxManager implements StateObserver {
       }
 
       bboxSprite.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
-        GameActionManager.getInstance().executeStoryAction(bboxProp.actionIds)
+        GameActionManager.getInstance()
+          .getGameManager()
+          .phaseManager.pushPhase(GamePhaseType.Action, {
+            actionIds: bboxProp.actionIds
+          })
       );
     });
   }

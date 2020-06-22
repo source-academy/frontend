@@ -7,6 +7,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
@@ -76,7 +77,11 @@ class GameObjectManager implements StateObserver {
       }
 
       objectSprite.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () =>
-        GameActionManager.getInstance().executeStoryAction(objectProp.actionIds)
+        GameActionManager.getInstance()
+          .getGameManager()
+          .phaseManager.pushPhase(GamePhaseType.Action, {
+            actionIds: objectProp.actionIds
+          })
       );
     });
   }

@@ -143,8 +143,17 @@ class GameManager extends Phaser.Scene {
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
-    await GameActionManager.getInstance().executeStoryAction(gameLocation.actionIds);
-    await this.phaseManager.refreshPhase(GamePhaseType.Menu);
+    if (gameLocation.actionIds) {
+      await GameActionManager.getInstance()
+        .getGameManager()
+        .phaseManager.pushPhase(GamePhaseType.Action, {
+          actionIds: gameLocation.actionIds
+        });
+    } else {
+      await GameActionManager.getInstance()
+        .getGameManager()
+        .phaseManager.refreshPhase(GamePhaseType.Menu);
+    }
   }
 
   public async changeLocationTo(locationId: LocationId) {

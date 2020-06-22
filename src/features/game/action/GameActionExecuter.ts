@@ -11,12 +11,14 @@ export default class GameActionExecuter {
     this.actionMap = actionMap;
   }
 
-  public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
+  public async executeStoryActions(actionIds: ItemId[] | undefined) {
     if (!actionIds || !actionIds.length) {
+      await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
       return;
     }
     for (const actionId of actionIds) {
       if (GameActionManager.getInstance().hasTriggeredInteraction(actionId)) {
+        await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
         return;
       }
       const action = this.getActionFromId(actionId);
@@ -25,15 +27,17 @@ export default class GameActionExecuter {
       if (actionConditions) {
         for (const actionCondition of actionConditions) {
           if (!this.checkCondition(actionCondition)) {
+            await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
             return;
           }
         }
       }
       await this.executeStoryAction(actionType, actionParams);
-
       GameActionManager.getInstance().triggerInteraction(actionId);
     }
     await GameActionManager.getInstance().saveGame();
+    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+    return;
   }
 
   private async executeStoryAction(actionType: GameActionType, actionParams: any) {

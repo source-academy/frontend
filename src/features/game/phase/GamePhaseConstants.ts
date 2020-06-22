@@ -73,6 +73,15 @@ const gamePhases: GamePhase[] = [
     reactivate: Constants.nullFunction,
     deactivate: () =>
       GameActionManager.getInstance().getGameManager().escapeManager.destroyEscapeMenu()
+  },
+  {
+    type: GamePhaseType.Action,
+    activate: async (phaseParams: any) =>
+      await GameActionManager.getInstance()
+        .getGameManager()
+        .actionExecuter.executeStoryActions(phaseParams.actionIds),
+    reactivate: Constants.nullFunction,
+    deactivate: Constants.nullFunction
   }
 ];
 export const gamePhaseMap = createMapWithKey(gamePhases, 'type');

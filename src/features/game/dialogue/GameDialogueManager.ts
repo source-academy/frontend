@@ -8,6 +8,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import { textTypeWriterStyle } from '../dialogue/DialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
 import GameManager from '../scenes/gameManager/GameManager';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
@@ -53,7 +54,9 @@ export default class DialogueManager {
     const { line, speakerDetail, actionIds } = generateDialogue();
     dialogueRenderer.changeText(line);
     gameManager.characterManager.changeSpeakerTo(speakerDetail);
-    await GameActionManager.getInstance().executeStoryAction(actionIds);
+    GameActionManager.getInstance().getGameManager().phaseManager.pushPhase(GamePhaseType.Action, {
+      actionIds: actionIds
+    });
     if (!line) {
       dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
       gameManager.characterManager.changeSpeakerTo(null);
