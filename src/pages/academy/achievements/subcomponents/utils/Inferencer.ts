@@ -7,7 +7,7 @@ class Node {
   id: number;
   furthestDeadline?: Date;
   isTask: boolean;
-  totalExp?: number;
+  totalExp: number;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites
 
@@ -60,12 +60,12 @@ class Inferencer {
     return this.nodeList[achievementId].children.has(childId);
   }
 
-  public isDescendant(achievementId: number, childId: number) {
-    return this.nodeList[achievementId].descendant.has(childId);
-  }
-
   public getImmediateChild(achievementId: number) {
     return this.nodeList[achievementId].children;
+  }
+
+  public isDescendant(achievementId: number, childId: number) {
+    return this.nodeList[achievementId].descendant.has(childId);
   }
 
   public getDescendant(achievementId: number) {
@@ -139,14 +139,8 @@ class Inferencer {
   // Set the node's total EXP by combining all descendants' EXP
   private generateTotalExp(node: Node) {
     // Sum of two EXP
-    const combineExps = (accumulateExp: number | undefined, currentExp: number | undefined) => {
-      if (currentExp === undefined) {
-        return accumulateExp;
-      } else if (accumulateExp === undefined) {
-        return currentExp;
-      } else {
-        return accumulateExp + currentExp;
-      }
+    const combineExps = (accumulateExp: number, currentExp: number) => {
+      return accumulateExp + currentExp;
     };
 
     // Temporary array of all descendants' exps

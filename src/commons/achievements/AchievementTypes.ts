@@ -53,7 +53,7 @@ export type AchievementProgress = {
  *    (Note: UI displays the furthest deadline of all prerequisite)
  * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
- * @param {number[]} prerequisiteIdss an array of the prerequisites id
+ * @param {number[]} prerequisiteIds an array of the prerequisites id
  * @param {AchievementStatus} status status of the achievement item
  * @param {number} completionGoal achievement is marked as complete if
  *    user's completionProgress >= completionGoal
