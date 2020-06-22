@@ -73,6 +73,6 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 type AchievementControlPanelProps = {};
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  return <div>Achievement Control Panel</div>;
+  return <></>;
 }
 export default AchievementControlPanel;

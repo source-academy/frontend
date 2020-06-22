@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Card } from '@blueprintjs/core';
+import { Card, Button } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 
 import {
@@ -12,55 +12,53 @@ import EditableAchievementAbility from './editableUtils/EditableAchievementAbili
 import EditableAchievementDeadline from './editableUtils/EditableAchievementDeadline';
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
-import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 
 type EditableAchievementCardProps = {
-  id: number;
-  inferencer: Inferencer;
+  achievement: AchievementItem;
+  saveChanges: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, inferencer } = props;
-  const achievement = inferencer.getAchievementItem(id);
+  const { achievement, saveChanges } = props;
 
-  const { title, ability, exp, deadline, icon, modal } = achievement;
-  const [content, setContent] = useState<AchievementItem>(achievement);
+  const [achievementInfo, setAchievementInfo] = useState<AchievementItem>(achievement);
+  const { title, ability, exp, deadline, icon } = achievementInfo;
 
-  /* Handlers to Change State of Achievement Data */
+  /* Handlers to Change State of Achievement information */
   const changeTitle = (title: string) => {
-    setContent({
-      ...content,
+    setAchievementInfo({
+      ...achievementInfo,
       title: title
     });
   };
 
   const changeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
-      setContent({
-        ...content,
+      setAchievementInfo({
+        ...achievementInfo,
         exp: parseInt(exp)
       });
     }
   };
 
   const changeDeadline = (deadline: Date) => {
-    setContent({
-      ...content,
+    setAchievementInfo({
+      ...achievementInfo,
       deadline: deadline
     });
   };
 
   const changeAbility = (ability: AchievementAbility, e: any) => {
-    setContent({
-      ...content,
+    setAchievementInfo({
+      ...achievementInfo,
       ability: ability
     });
   };
 
   const changeThumbnail = (thumbnail: IconName) => {
-    setContent({
-      ...content,
+    setAchievementInfo({
+      ...achievementInfo,
       icon: thumbnail
     });
   };
@@ -68,7 +66,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   // TODO: Delete Achievement Item
   return (
     <Card className="editable-achievement">
-      <EditableAchievementModal title={title} modal={modal} />
+      <div className="top-bar">
+        <EditableAchievementModal title={title} modal={achievement.modal} />
+        <Button icon={'export'} intent={'danger'} outlined={true} onClick={saveChanges} />
+      </div>
 
       <div className="main">
         <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={changeThumbnail} />
