@@ -64,7 +64,6 @@ class GamePopUpManager {
     container.setVisible(true);
 
     setTimeout(() => this.destroyPopUp(position), duration);
-    GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
   }
 
   public destroyAllPopUps() {

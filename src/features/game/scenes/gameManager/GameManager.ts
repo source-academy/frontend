@@ -139,21 +139,13 @@ class GameManager extends Phaser.Scene {
     this.characterManager.renderCharacterLayerContainer(locationId);
 
     const gameLocation = this.currentChapter.map.getLocationAtId(locationId);
+    this.phaseManager.swapPhase(GamePhaseType.Sequence);
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
-    if (gameLocation.actionIds) {
-      await GameActionManager.getInstance()
-        .getGameManager()
-        .phaseManager.pushPhase(GamePhaseType.Action, {
-          actionIds: gameLocation.actionIds
-        });
-    } else {
-      await GameActionManager.getInstance()
-        .getGameManager()
-        .phaseManager.refreshPhase(GamePhaseType.Menu);
-    }
+    await this.actionExecuter.executeStoryActions(gameLocation.actionIds);
+    await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
 
   public async changeLocationTo(locationId: LocationId) {

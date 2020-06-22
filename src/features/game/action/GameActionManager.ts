@@ -9,6 +9,7 @@ import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
 import { AssetKey } from '../commons/CommonsTypes';
 import { StateObserver } from '../state/GameStateTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -296,7 +297,23 @@ class GameActionManager {
   /////////////////////
 
   public async executeStoryAction(actionIds: ItemId[] | undefined) {
+    await GameActionManager.getInstance()
+      .getGameManager()
+      .phaseManager.pushPhase(GamePhaseType.Sequence);
     await this.getGameManager().actionExecuter.executeStoryActions(actionIds);
+    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+  }
+
+  /////////////////////
+  //   Dialogue      //
+  /////////////////////
+
+  public async bringUpDialogue(dialogueId: ItemId) {
+    await GameActionManager.getInstance()
+      .getGameManager()
+      .phaseManager.pushPhase(GamePhaseType.Sequence);
+    await this.getGameManager().dialogueManager.playDialogue(dialogueId);
+    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
   }
 
   /////////////////////
