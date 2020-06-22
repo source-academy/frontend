@@ -15,11 +15,14 @@ function EditableAchievementThumbnail(props: EditableAchievementThumbnailProps) 
 
   return (
     <div className="icon">
-      <Icon icon={thumbnail === undefined ? IconNames.CONFIRM : thumbnail} onClick={() => setDialogOpen(!isDialogOpen)} />
+      <Icon
+        icon={thumbnail === undefined ? IconNames.CONFIRM : thumbnail}
+        onClick={() => setDialogOpen(!isDialogOpen)}
+      />
       <Dialog
-          onClose={() => setDialogOpen(!isDialogOpen)}
-          isOpen={isDialogOpen}
-          title="Change Your Icon"
+        onClose={() => setDialogOpen(!isDialogOpen)}
+        isOpen={isDialogOpen}
+        title="Change Your Icon"
       >
         <AchievementIconSelect iconName={thumbnail} onChange={changeThumbnail} />
       </Dialog>
