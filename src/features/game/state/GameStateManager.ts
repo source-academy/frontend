@@ -229,7 +229,10 @@ class GameStateManager implements StateSubject {
 
   public isObjectiveComplete(key: string): boolean {
     const isComplete = this.chapterObjective.getObjectiveState(key);
-    return isComplete || true;
+    if (isComplete === undefined || isComplete) {
+      return true;
+    }
+    return false;
   }
 
   public areObjectivesComplete(keys: string[]): boolean {
@@ -239,7 +242,7 @@ class GameStateManager implements StateSubject {
   }
 
   public completeObjective(key: string): void {
-    return this.chapterObjective.setObjective(key, true);
+    this.chapterObjective.setObjective(key, true);
   }
 
   ///////////////////////////////

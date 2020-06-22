@@ -1,9 +1,10 @@
 import { GameMode } from '../mode/GameModeTypes';
 import { ItemId, AssetKey } from '../commons/CommonsTypes';
+import { IGameActionable } from '../action/GameActionTypes';
 
 export type LocationId = string;
 
-export type GameLocation = {
+export type GameLocation = IGameActionable & {
   id: LocationId;
   name: string;
   assetKey: string;

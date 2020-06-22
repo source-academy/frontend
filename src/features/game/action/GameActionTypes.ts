@@ -2,18 +2,18 @@ import { GameStateStorage } from '../state/GameStateTypes';
 import { ItemId, TrackInteraction } from '../commons/CommonsTypes';
 
 export enum GameActionType {
-  MoveCharacter,
-  UpdateCharacter,
-  Collectible,
-  UpdateChecklist,
-  LocationChange,
-  AddItem,
-  RemoveItem,
-  BringUpDialogue,
-  ChangeBackground,
-  RemoveLocationMode,
-  AddLocationMode,
-  AddPopup
+  MoveCharacter = 'MoveCharacter',
+  UpdateCharacter = 'UpdateCharacter',
+  Collectible = 'Collectible',
+  UpdateChecklist = 'UpdateChecklist',
+  LocationChange = 'LocationChange',
+  AddItem = 'AddItem',
+  RemoveItem = 'RemoveItem',
+  BringUpDialogue = 'BringUpDialogue',
+  ChangeBackground = 'ChangeBackground',
+  RemoveLocationMode = 'RemoveLocationMode',
+  AddLocationMode = 'AddLocationMode',
+  AddPopup = 'AddPopup'
 }
 
 export interface IGameActionable {

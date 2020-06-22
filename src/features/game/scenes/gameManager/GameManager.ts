@@ -132,20 +132,19 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(locationId: LocationId) {
-    // draw layers
     this.soundManager.renderBackgroundMusic(locationId);
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
 
+    const gameLocation = this.currentChapter.map.getLocationAtId(locationId);
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
-      const locationName = this.currentChapter.map.getLocationAtId(locationId).name;
-      await this.phaseManager.pushPhase(GamePhaseType.Notification, { id: locationName });
-    } else {
-      await this.phaseManager.refreshPhase(GamePhaseType.Menu);
+      await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
+    await GameActionManager.getInstance().executeStoryAction(gameLocation.actionIds);
+    await this.phaseManager.refreshPhase(GamePhaseType.Menu);
   }
 
   public async changeLocationTo(locationId: LocationId) {
