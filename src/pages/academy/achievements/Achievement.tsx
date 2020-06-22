@@ -18,7 +18,7 @@ function Achievement() {
   const [modalId, setModalId] = useState<number>(-1);
 
   const _inferencer = new Inferencer(achievementData);
-  _inferencer.logInfo();
+  //_inferencer.logInfo();
 
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (

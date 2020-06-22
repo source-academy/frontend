@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 import { InputGroup } from '@blueprintjs/core';
 
 type EditableAchievementExpProps = {
-  exp?: number;
+  exp: number;
   changeExp: any;
 };
 
@@ -15,7 +15,7 @@ function EditableAchievementExp(props: EditableAchievementExpProps) {
     <div className="exp">
       <InputGroup
         placeholder={'Enter a number here'}
-        value={exp?.toString()}
+        value={exp.toString()}
         onChange={(e: any) => changeExp(e.target.value)}
         leftIcon={IconNames.BANK_ACCOUNT}
         rightElement={<p>XP</p>}

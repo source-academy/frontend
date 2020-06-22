@@ -1,18 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
+/*
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import { studentProgress } from '../../../../commons/mocks/AchievementMocks';
 import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
-import { mapAchievementDictToTask } from '../../achievements/Achievement';
 import AchievementControlPanelTaskAdder from './controlPanelTools/AchievementControlPanelTaskAdder';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementControlPanelProps = {
-  achievementDict: { [id: number]: AchievementItem };
+  inferencer: Inferencer
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { achievementDict } = props;
+  const { inferencer } = props;
 
   const [achievementItems, setAchievementItems] = useState(achievementDict);
 
@@ -26,6 +24,15 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     studentProgress,
     _inferencer
   );
+
+  const mapAchievementIdsToTasks = (taskIds: number[]) =>
+    taskIds.map(id => (
+      <EditableAchievementTask
+        key={id}
+        id={id}
+        inferencer={inferencer}
+        />
+    ))
 
   const [currentTasks, setCurrentTasks] = useState(achievementTasks); // Here
 
@@ -61,5 +68,11 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     </div>
   );
 }
+*/
 
+type AchievementControlPanelProps = {};
+
+function AchievementControlPanel(props: AchievementControlPanelProps) {
+  return <div>Achievement Control Panel</div>;
+}
 export default AchievementControlPanel;

@@ -7,11 +7,12 @@ import EditableAchievementModalGoalText from './EditableAchievementModalGoalText
 import EditableAchievementModalImage from './EditableAchievementModalImage';
 
 type EditableAchievementModalProps = {
-  modal: AchievementModalItem;
+  title: string;
+  modal?: AchievementModalItem;
 };
 
 function EditableAchievementModal(props: EditableAchievementModalProps) {
-  const { modal } = props;
+  const { title, modal } = props;
 
   const renderModal = modal === undefined ? modalTemplate : modal;
 
@@ -19,7 +20,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
 
   const [modalData, setModalData] = useState<AchievementModalItem>(renderModal);
 
-  const { title, modalImageUrl, description, goalText } = modalData;
+  const { modalImageUrl, description, goalText } = modalData;
 
   const setDescription = (description: string) => {
     setModalData({

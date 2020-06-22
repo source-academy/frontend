@@ -17,21 +17,17 @@ type PrerequisiteCardProps = {
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { id, inferencer, shouldPartiallyRender, displayModal } = props;
 
-  const {
-    title,
-    exp,
-    deadline,
-    release,
-    completionProgress,
-    completionGoal
-  } = inferencer.getAchievementItem(id);
+  const { title, release, completionProgress, completionGoal } = inferencer.getAchievementItem(id);
+
+  const totalExp = inferencer.getTotalExp(id);
+  const furthestDeadline = inferencer.getFurthestDeadline(id);
 
   return (
     <div className="node">
       <Card
         className="prerequisite"
         style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
-        onClick={displayModal(id)}
+        onClick={() => displayModal(id)}
       >
         <AchievementHints release={release} />
 
@@ -46,9 +42,9 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
                 <p></p>
               </div>
 
-              <AchievementDeadline deadline={deadline} />
+              <AchievementDeadline deadline={furthestDeadline} />
 
-              <AchievementExp exp={exp} />
+              <AchievementExp exp={totalExp} />
             </div>
           </div>
         </div>

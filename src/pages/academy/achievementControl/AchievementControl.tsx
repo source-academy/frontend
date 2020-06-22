@@ -15,7 +15,7 @@ function AchievementControl() {
 
   return (
     <div className="AchievementControl">
-      <AchievementControlPanel inferencer={_inferencer} />
+      <AchievementControlPanel />
 
       <AchievementEditor inferencer={_inferencer} />
     </div>

@@ -29,12 +29,13 @@ function AchievementCard(props: AchievementCardProps) {
   const {
     title,
     ability,
-    exp,
-    deadline,
     release,
     completionProgress,
     completionGoal
   } = inferencer.getAchievementItem(id);
+
+  const totalExp = inferencer.getTotalExp(id);
+  const furthestDeadline = inferencer.getFurthestDeadline(id);
 
   const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
 
@@ -42,7 +43,7 @@ function AchievementCard(props: AchievementCardProps) {
     <Card
       className="achievement"
       style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
-      onClick={displayModal(id)}
+      onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
       <AchievementHints release={release} />
@@ -68,9 +69,9 @@ function AchievementCard(props: AchievementCardProps) {
               <p>{ability}</p>
             </div>
 
-            <AchievementDeadline deadline={deadline} />
+            <AchievementDeadline deadline={furthestDeadline} />
 
-            <AchievementExp exp={exp} />
+            <AchievementExp exp={totalExp} />
           </div>
         </div>
       </div>

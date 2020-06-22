@@ -100,7 +100,7 @@ class Inferencer {
   }
 
   public getModalItem(id: number) {
-    return this.nodeList[id].modal;
+    return id < 0 ? undefined : this.nodeList[id].modal;
   }
 
   public getFilterCount(filterStatus: FilterStatus) {

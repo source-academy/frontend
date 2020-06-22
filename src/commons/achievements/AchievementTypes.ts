@@ -35,9 +35,7 @@ export enum FilterStatus {
  * @param {AchievementAbility} ability ability of the achievement item
  * @param {IconName} icon Optional, icon of the achievement item, to be replaced by image
  * @param {number} exp amount of exp that the achievement item grants
- *    (Note: UI displays the sum of exp and all prerequisite exp)
  * @param {Date} deadline Optional, the deadline of the achievement item
- *    (Note: UI displays the furthest deadline of all prerequisite)
  * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
  * @param {number[]} prerequisiteIds an array of the prerequisites id

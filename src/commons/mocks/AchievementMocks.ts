@@ -28,7 +28,7 @@ export const achievementData: AchievementItem[] = [
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
-    deadline: new Date(2020, 5, 24, 0, 0, 0),
+    deadline: new Date(2020, 5, 25, 0, 0, 0),
     release: new Date(2020, 5, 12, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
@@ -51,7 +51,7 @@ export const achievementData: AchievementItem[] = [
     deadline: new Date(2020, 5, 23, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.ACTIVE,
+    status: AchievementStatus.EXPIRED,
     completionGoal: 100,
     completionProgress: 23,
     modal: {
@@ -123,7 +123,7 @@ export const achievementData: AchievementItem[] = [
     release: new Date(2020, 6, 8, 0, 0, 0),
     isTask: true,
     prerequisiteIds: [],
-    status: AchievementStatus.EXPIRED,
+    status: AchievementStatus.ACTIVE,
     completionGoal: 100,
     completionProgress: 10,
     modal: {
@@ -145,7 +145,8 @@ export const achievementData: AchievementItem[] = [
     completionGoal: 2,
     completionProgress: 0,
     modal: {
-      modalImageUrl: 'https://imgur.com/a/LVi7l0t',
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
       description: '?',
       goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
       completionText: 'Such wow. Mission Master.'
@@ -160,7 +161,7 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [4, 9],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2,
-    completionProgress: 2
+    completionProgress: 0
   }
 ];
 

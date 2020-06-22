@@ -76,7 +76,7 @@ function AchievementTask(props: AchievementTaskProps) {
               {inferencer.listImmediateChildren(id).map(prerequisite => (
                 <li key={prerequisite}>
                   <PrerequisiteCard
-                    id={id}
+                    id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}
                     displayModal={displayModal}
