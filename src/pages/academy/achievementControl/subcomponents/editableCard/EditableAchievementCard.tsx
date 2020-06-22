@@ -12,7 +12,7 @@ import EditableAchievementTitle from './EditableAchievementTitle';
 import EditableAchievementAbility from './EditableAchievementAbility';
 import EditableAchievementDeadline from './EditableAchievementDeadline';
 import EditableAchievementExp from './EditableAchievementExp';
-import EditableAchievementModal from './EditableAchievementModal';
+import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import EditableAchievementThumbnail from './EditableAchievementThumbnail';
 
 type EditableAchievementCardProps = {

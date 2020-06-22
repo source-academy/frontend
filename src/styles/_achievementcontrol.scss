@@ -281,11 +281,12 @@
           display: flex;
           justify-content: center;
           text-align: center;
-  
+
           .background-card {
+            max-width: 100%;
             background-color: #333e50;
           }
-  
+
           .modal-img {
             max-width: 100%;
           }
