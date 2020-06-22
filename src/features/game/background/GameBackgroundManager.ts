@@ -1,8 +1,9 @@
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize, Constants } from '../commons/CommonConstants';
 import { LocationId } from '../location/GameMapTypes';
 import { AssetKey } from '../commons/CommonsTypes';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
+import { fadeIn } from '../effects/FadeEffect';
 
 export default class GameBackgroundManager {
   public observerId: string;
@@ -23,7 +24,11 @@ export default class GameBackgroundManager {
       screenCenter.x,
       screenCenter.y,
       assetKey
-    ).setDisplaySize(screenSize.x, screenSize.y);
+    )
+      .setDisplaySize(screenSize.x, screenSize.y)
+      .setAlpha(0);
+
+    gameManager.add.tween(fadeIn([backgroundAsset], Constants.fadeDuration));
     GameActionManager.getInstance().addContainerToLayer(Layer.Background, backgroundAsset);
   }
 }

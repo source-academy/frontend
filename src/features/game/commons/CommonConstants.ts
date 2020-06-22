@@ -1,7 +1,7 @@
 export const Constants = {
   repoAssetsFolder: '../../../assets',
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
-  fadeDuration: 300,
+  fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
   popupDuration: 1000
