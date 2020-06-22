@@ -29,7 +29,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
         return true;
       }
 
-      if (checkCyclicDependent(taskID, achievementItems[prereqID].prerequisiteIDs)) {
+      if (checkCyclicDependent(taskID, achievementItems[prereqID].prerequisiteIds)) {
         return true;
       }
     }
@@ -40,9 +40,9 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const isCyclicDependenent = (taskID: number, prereqID: number): boolean => {
     const clonedTaskPrereqIDs = Object.assign(
       [],
-      achievementItems[taskID].prerequisiteIDs === undefined
+      achievementItems[taskID].prerequisiteIds === undefined
         ? []
-        : achievementItems[taskID].prerequisiteIDs
+        : achievementItems[taskID].prerequisiteIds
     );
 
     clonedTaskPrereqIDs.push(prereqID);
@@ -61,11 +61,11 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   };
 
   const getPrerequisiteIDs = () => {
-    if (achievementItems[id] === undefined || achievementItems[id].prerequisiteIDs === undefined) {
+    if (achievementItems[id] === undefined || achievementItems[id].prerequisiteIds === undefined) {
       return [];
     }
 
-    return achievementItems[id].prerequisiteIDs;
+    return achievementItems[id].prerequisiteIds;
   };
 
   const getNonPrerequisitesIDs = () => {
@@ -89,11 +89,11 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       return;
     }
 
-    if (achievementItems[taskID].prerequisiteIDs === undefined) {
-      achievementItems[taskID].prerequisiteIDs = [];
+    if (achievementItems[taskID].prerequisiteIds === undefined) {
+      achievementItems[taskID].prerequisiteIds = [];
     }
 
-    if (achievementItems[taskID].prerequisiteIDs?.includes(prereqID)) {
+    if (achievementItems[taskID].prerequisiteIds?.includes(prereqID)) {
       return;
     }
 
@@ -101,7 +101,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       return;
     }
 
-    achievementItems[taskID].prerequisiteIDs?.push(prereqID);
+    achievementItems[taskID].prerequisiteIds?.push(prereqID);
     setAchievementItems(achievementItems);
     resetCurrentTasks();
   };
@@ -111,7 +111,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       return;
     }
 
-    achievementItems[taskID].prerequisiteIDs = achievementItems[taskID].prerequisiteIDs?.filter(
+    achievementItems[taskID].prerequisiteIds = achievementItems[taskID].prerequisiteIds?.filter(
       id => id !== prereqID
     );
     setAchievementItems(achievementItems);
@@ -120,7 +120,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
   const deleteTask = () => {
     achievementItems[id].isTask = false;
-    achievementItems[id].prerequisiteIDs = [];
+    achievementItems[id].prerequisiteIds = [];
     setAchievementItems(achievementItems);
     resetCurrentTasks();
   };

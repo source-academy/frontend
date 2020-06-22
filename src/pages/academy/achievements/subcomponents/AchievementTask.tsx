@@ -26,9 +26,9 @@ export const getPrerequisites = (
   achievement: AchievementItem,
   achievementDict: { [id: number]: AchievementItem }
 ): AchievementItem[] => {
-  return achievement === undefined || achievement.prerequisiteIDs === undefined
+  return achievement === undefined || achievement.prerequisiteIds === undefined
     ? []
-    : achievement.prerequisiteIDs.map(prerequisiteID => achievementDict[prerequisiteID]);
+    : achievement.prerequisiteIds.map(id => achievementDict[id]);
 };
 
 const hasPrerequisites = (

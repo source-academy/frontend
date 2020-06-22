@@ -49,17 +49,31 @@ export const studentProgress: { [id: number]: AchievementProgress } = {
   }
 };
 
-export const achievementDict: { [id: number]: AchievementItem } = {
-  1: {
+export const achievementDict: AchievementItem[] = [
+  // TODO: remove first item
+  {
+    id: 0,
+    title: '',
+    ability: AchievementAbility.ACADEMIC,
+    exp: 0,
+    isTask: false,
+    prerequisiteIds: [],
+    status: AchievementStatus.ACTIVE,
+    completionGoal: 0,
+    completionProgress: 0
+  },
+  {
     id: 1,
     title: 'Rune Master',
     ability: AchievementAbility.ACADEMIC,
+    exp: 0,
     isTask: true,
-    prerequisiteIDs: [2, 3],
+    prerequisiteIds: [2, 3],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 2
+    completionGoal: 2,
+    completionProgress: 0
   },
-  2: {
+  {
     id: 2,
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
@@ -67,56 +81,68 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     deadline: new Date(2020, 5, 24, 0, 0, 0),
     release: new Date(2020, 5, 12, 0, 0, 0),
     isTask: false,
+    prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 100
+    completionGoal: 100,
+    completionProgress: 77
   },
-  3: {
+  {
     id: 3,
     title: 'Colorful Carpet',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
     deadline: new Date(2020, 5, 23, 0, 0, 0),
     isTask: false,
+    prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 100
+    completionGoal: 100,
+    completionProgress: 23
   },
-  4: {
+  {
     id: 4,
     title: 'Keyboard Warrior',
     ability: AchievementAbility.COMMUNITY,
+    exp: 0,
     isTask: true,
-    prerequisiteIDs: [5, 6, 7],
+    prerequisiteIds: [5, 6, 7],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 3
+    completionGoal: 3,
+    completionProgress: 2
   },
-  5: {
+  {
     id: 5,
     title: 'Keyboard Warrior - Bronze Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 50,
     isTask: false,
+    prerequisiteIds: [],
     status: AchievementStatus.COMPLETED,
-    completionGoal: 10
+    completionGoal: 10,
+    completionProgress: 92
   },
-  6: {
+  {
     id: 6,
     title: 'Keyboard Warrior - Silver Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
     isTask: false,
+    prerequisiteIds: [],
     status: AchievementStatus.COMPLETED,
-    completionGoal: 50
+    completionGoal: 50,
+    completionProgress: 92
   },
-  7: {
+  {
     id: 7,
     title: 'Keyboard Warrior - Gold Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 200,
     isTask: false,
+    prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 100
+    completionGoal: 100,
+    completionProgress: 92
   },
-  8: {
+  {
     id: 8,
     title: "That was Sort'a Easy",
     ability: AchievementAbility.ACADEMIC,
@@ -124,33 +150,37 @@ export const achievementDict: { [id: number]: AchievementItem } = {
     deadline: new Date(2020, 6, 22, 0, 0, 0),
     release: new Date(2020, 6, 8, 0, 0, 0),
     isTask: true,
+    prerequisiteIds: [],
     status: AchievementStatus.EXPIRED,
-    completionGoal: 100
+    completionGoal: 100,
+    completionProgress: 10
   },
-  9: {
+  {
     id: 9,
     title: 'Mission Master',
     ability: AchievementAbility.EFFORT,
     exp: 80,
     isTask: true,
-    prerequisiteIDs: [1, 8],
+    prerequisiteIds: [1, 8],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 2
+    completionGoal: 2,
+    completionProgress: 0
   },
-  10: {
+  {
     id: 10,
     title: 'Mission Grandmaster',
     ability: AchievementAbility.EFFORT,
     exp: 80,
     isTask: true,
-    prerequisiteIDs: [4, 9],
+    prerequisiteIds: [4, 9],
     status: AchievementStatus.ACTIVE,
-    completionGoal: 2
+    completionGoal: 2,
+    completionProgress: 2
   }
-};
+];
 
-export const achievementModalDict: { [id: number]: AchievementModalItem } = {
-  1: {
+export const achievementModalDict: AchievementModalItem[] = [
+  {
     id: 1,
     title: 'Rune Master',
     modalImageUrl:
@@ -160,7 +190,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
     completionText: 'Cooooookiess!!!'
   },
-  2: {
+  {
     id: 2,
     title: 'Beyond the Second Dimension',
     modalImageUrl:
@@ -170,7 +200,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: 'Complete Beyond the Second Dimension mission.',
     completionText: 'BTSD'
   },
-  3: {
+  {
     id: 3,
     title: 'Colorful Carpet',
     modalImageUrl:
@@ -180,7 +210,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: 'Complete Colorful Carpet mission.',
     completionText: 'CC'
   },
-  4: {
+  {
     id: 4,
     title: 'Keyboard Warrior',
     modalImageUrl:
@@ -191,7 +221,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: 'Reach Gold Tier in Keyboard Warrior achievements.',
     completionText: 'YOU DA KEYBOARD WARRIOR'
   },
-  8: {
+  {
     id: 8,
     title: "That was Sort'a Easy",
     modalImageUrl:
@@ -201,7 +231,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: 'Complete Sorting mission.',
     completionText: 'Good job!'
   },
-  9: {
+  {
     id: 9,
     title: 'Mission Master',
     modalImageUrl:
@@ -211,7 +241,7 @@ export const achievementModalDict: { [id: number]: AchievementModalItem } = {
     goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
     completionText: 'Such wow. Mission Master.'
   }
-};
+];
 
 export const semester1Weeks = {
   2: new Date(2020, 7, 17, 0, 0, 0),

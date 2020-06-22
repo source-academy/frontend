@@ -44,28 +44,34 @@ export type AchievementProgress = {
  * Information of an achievement item
  *
  * @param {number} id unique id, primary key of the achievement item
+ * @param {string} title title of the achievement item
+ * @param {AchievementAbility} ability ability of the achievement item
+ * @param {IconName} icon Optional, icon of the achievement item, to be replaced by image
  * @param {number} exp amount of exp that the achievement item grants
  *    (Note: UI displays the sum of exp and all prerequisite exp)
- * @param {Date} deadline the deadline of the achievement item
+ * @param {Date} deadline Optional, the deadline of the achievement item
  *    (Note: UI displays the furthest deadline of all prerequisite)
- * @param {Date} release the release of the achievement item
+ * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
- * @param {number[]} prerequisites an array of the prerequisites id
+ * @param {number[]} prerequisiteIdss an array of the prerequisites id
+ * @param {AchievementStatus} status status of the achievement item
  * @param {number} completionGoal achievement is marked as complete if
  *    user's completionProgress >= completionGoal
+ * @param {number} completionProgress achievement is marked as complete if
  */
 export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
   icon?: IconName;
-  exp?: number;
+  exp: number;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
-  prerequisiteIDs?: number[];
+  prerequisiteIds: number[];
   status: AchievementStatus;
   completionGoal: number;
+  completionProgress: number;
 };
 
 /**

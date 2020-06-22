@@ -10,9 +10,12 @@ export const achievementTemplate: AchievementItem = {
   id: Object.keys(achievementDict).length,
   title: '',
   ability: AchievementAbility.ACADEMIC,
+  exp: 0,
   isTask: true,
+  prerequisiteIds: [],
   status: AchievementStatus.ACTIVE,
-  completionGoal: 0
+  completionGoal: 0,
+  completionProgress: 0
 };
 
 export const modalTemplate: AchievementModalItem = {

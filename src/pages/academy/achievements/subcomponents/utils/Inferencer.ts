@@ -17,8 +17,8 @@ class Node {
     this.furthestDeadline = achievement.deadline;
     this.isTask = achievement.isTask;
     this.totalExp = achievement.exp;
-    this.children = new Set(achievement.prerequisiteIDs);
-    this.descendant = new Set(achievement.prerequisiteIDs);
+    this.children = new Set(achievement.prerequisiteIds);
+    this.descendant = new Set(achievement.prerequisiteIds);
   }
 }
 
