@@ -87,15 +87,17 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         option.setInteractive({ useHandCursor: true });
         option.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
       }
+      const xPos = this.textXOffset ? button.assetXPos + optionOutlineDiameter + this.textXOffset : button.assetXPos;
+      const yPos = this.textYOffset ? button.assetYPos + optionOutlineDiameter + this.textYOffset : button.assetYPos;
+      const xAnchor = this.textAnchorX ? this.textAnchorX : 0.25;
+      const yAnchor = this.textAnchorY ? this.textAnchorY : 0.5;
       const textOption = new Phaser.GameObjects.Text(
         this.scene,
-        button.assetXPos + optionOutlineDiameter + this.textXOffset,
-        button.assetYPos + optionOutlineDiameter + this.textYOffset,
+        xPos,
+        yPos,
         this.choices[i],
         this.style
       );
-      const xAnchor = this.textAnchorX ? this.textAnchorX : 0.25;
-      const yAnchor = this.textAnchorY ? this.textAnchorY : 0.5;
       textOption.setOrigin(xAnchor, yAnchor);
 
       const optionChecked = new Phaser.GameObjects.Ellipse(
