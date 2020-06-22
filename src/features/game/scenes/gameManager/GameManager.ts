@@ -144,7 +144,7 @@ class GameManager extends Phaser.Scene {
       const locationName = this.currentChapter.map.getLocationAtId(locationId).name;
       await this.phaseManager.pushPhase(GamePhaseType.Notification, { id: locationName });
     } else {
-      await this.phaseManager.swapPhase(GamePhaseType.Menu);
+      await this.phaseManager.refreshPhase(GamePhaseType.Menu);
     }
   }
 

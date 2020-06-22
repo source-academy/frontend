@@ -3,8 +3,6 @@ import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import GameActionManager from '../action/GameActionManager';
 import { FullSaveState, SettingsJson } from './GameSaveTypes';
-import GameSoundManager from '../sound/GameSoundManager';
-import GameUserStateManager from '../state/GameUserStateManager';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
