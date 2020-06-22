@@ -12,14 +12,21 @@ function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
   const { deadline, changeDeadline } = props;
   const [isOpen, setOpen] = useState<boolean>(false);
 
-  // TODO: show result of date picker (e.g. 1st January 2020, 23:59)
+  const generateDeadlineString = () => {
+    return deadline === undefined
+      ? ''
+      : `${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`;
+  };
 
   return (
     <div className="deadline">
-      <div>
-        <Button onClick={() => setOpen(!isOpen)}>
-          <AchievementDeadline deadline={deadline} />
-        </Button>
+      <div className="deadline-details">
+        <div>{generateDeadlineString()}</div>
+        <div>
+          <Button onClick={() => setOpen(!isOpen)}>
+            <AchievementDeadline deadline={deadline} />
+          </Button>
+        </div>
       </div>
       <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title="Edit Achievement Deadline">
         <DatePicker
