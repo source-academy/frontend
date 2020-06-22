@@ -41,8 +41,12 @@ export type GameSaveState = {
 };
 
 export type UserSaveState = {
-  settings: { volume: number };
+  settings: SettingsJson;
   lastPlayedChapter: number;
   collectibles: string[];
   achievements: string[];
+};
+
+export type SettingsJson = {
+  volume: any;
 };
