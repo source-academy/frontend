@@ -24,7 +24,6 @@ import {
 import { topButton, mediumButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
 import { createButton } from '../../utils/StyleUtils';
-import { Constants } from '../../commons/CommonConstants';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -73,7 +72,7 @@ class Settings extends Phaser.Scene {
     const applySettingsButton = createButton(
       this,
       'Apply Settings',
-      Constants.nullFunction,
+      () => this.applySettings(this.volumeRadioButtons),
       mediumButton.key,
       { x: screenCenter.x, y: screenSize.y * 0.925 },
       applySettingsAnchorX,
@@ -143,6 +142,13 @@ class Settings extends Phaser.Scene {
     });
     backButtonContainer.add([backButtonSprite, backButtonText]);
     return backButtonContainer;
+  }
+
+  public applySettings(volume?: RadioButtons) {
+    if (volume) {
+      const volumeVal = parseFloat(volume.getChosenChoice());
+      console.log('Volume is set to', volumeVal);
+    }
   }
 }
 
