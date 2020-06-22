@@ -97,7 +97,7 @@ class GameEscapeManager {
       gameManager,
       'Apply Settings',
       () => {
-        GameActionManager.getInstance().saveGame();
+        GameActionManager.getInstance().getGameManager().saveManager.saveSettings({ volume: 5 });
       },
       mediumButton.key,
       { x: screenSize.x * 0.75, y: escapeButtonYPos },

@@ -11,28 +11,18 @@ export default class GameActionExecuter {
   }
 
   public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
-    if (!actionIds || !actionIds.length) {
-      return;
-    }
+    if (!actionIds || !actionIds.length) return;
     for (const actionId of actionIds) {
-      if (GameActionManager.getInstance().hasTriggeredInteraction(actionId)) {
-        return;
+      const { actionType, actionParams, actionConditions } = this.getActionFromId(actionId);
+      if (
+        !GameActionManager.getInstance().hasTriggeredInteraction(actionId) &&
+        actionConditions.every(actionCondition => this.checkCondition(actionCondition))
+      ) {
+        await this.executeStoryAction(actionType, actionParams);
+        GameActionManager.getInstance().triggerInteraction(actionId);
       }
-      const action = this.getActionFromId(actionId);
-      const { actionType, actionParams, actionConditions } = action;
-
-      if (actionConditions) {
-        for (const actionCondition of actionConditions) {
-          if (!this.checkCondition(actionCondition)) {
-            return;
-          }
-        }
-      }
-      await this.executeStoryAction(actionType, actionParams);
-      GameActionManager.getInstance().triggerInteraction(actionId);
     }
     await GameActionManager.getInstance().saveGame();
-    return;
   }
 
   private async executeStoryAction(actionType: GameActionType, actionParams: any) {

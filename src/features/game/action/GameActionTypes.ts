@@ -29,7 +29,7 @@ export type ActionCondition = {
 export type GameAction = TrackInteraction & {
   actionType: GameActionType;
   actionParams: any;
-  actionConditions?: ActionCondition[];
+  actionConditions: ActionCondition[];
 };
 
 export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
