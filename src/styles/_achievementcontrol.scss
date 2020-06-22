@@ -11,6 +11,11 @@
     ),
     url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
 
+  .bp3-dialog-container {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
   .sample-cards {
     width: 50%;
     display: table;
@@ -266,6 +271,26 @@
 
       display: flex;
       flex-direction: column;
+
+      .bp3-dialog-container {
+        align-items: center;
+        justify-content: center;
+
+        .modal-editor {
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          text-align: center;
+  
+          .background-card {
+            background-color: #333e50;
+          }
+  
+          .modal-img {
+            max-width: 100%;
+          }
+        }
+      }
 
       .main {
         display: flex;

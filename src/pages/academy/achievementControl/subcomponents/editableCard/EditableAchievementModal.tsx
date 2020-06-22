@@ -17,7 +17,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
   return (
-    <>
+    <div>
       <div>
         <Button text={'Edit Modal'} onClick={() => setDialogOpen(!isDialogOpen)} />
       </div>
@@ -25,16 +25,15 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
         onClose={() => setDialogOpen(!isDialogOpen)}
         isOpen={isDialogOpen}
         title={'Edit Modal'}
+        usePortal={false}
       >
-        <div
-          style={{ width: '100%', display: 'flex', justifyContent: 'center', textAlign: 'center' }} // TODO: move to css
-        >
+        <div className="modal-editor">
           {/* TODO: make modal editable */}
-          <Card style={{ backgroundColor: '#333e50' }}>
+          <Card className="background-card">
             <h1>{title} </h1>
 
             <div>
-              <img style={{ maxWidth: '100%' }} src={modalImageUrl} alt={title} />
+              <img className="modal-img" src={modalImageUrl} alt={title} />
             </div>
 
             <h3> {description} </h3>
@@ -42,7 +41,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
           </Card>
         </div>
       </Dialog>
-    </>
+    </div>
   );
 }
 
