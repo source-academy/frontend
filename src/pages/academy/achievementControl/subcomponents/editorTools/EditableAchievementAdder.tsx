@@ -8,11 +8,7 @@ type EditableAchievementAdderProps = {
 function EditableAchievementAdder(props: EditableAchievementAdderProps) {
   const { addNewCard } = props;
 
-  return (
-    <>
-      <Button className="main-adder" onClick={() => addNewCard()} text={'Add A New Item'} />
-    </>
-  );
+  return <Button className="main-adder" onClick={() => addNewCard()} text={'Add A New Item'} />;
 }
 
 export default EditableAchievementAdder;

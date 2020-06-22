@@ -18,6 +18,7 @@ function AchievementModal(props: AchievementModalProps) {
   const modal = inferencer.getModalItem(id);
 
   if (modal === undefined) return null;
+
   const { title, exp } = inferencer.getAchievementItem(id);
   const { modalImageUrl, description, goalText, completionText } = modal;
 
