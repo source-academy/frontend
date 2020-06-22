@@ -48,6 +48,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
   }
 
   private renderRadioButtons() {
+    this.removeAll(true);
     const optionOutlineDiameter = this.optionDiameter + this.optionOutlineThickness;
 
     for (let i = 0; i < this.choices.length; i++) {
@@ -68,7 +69,10 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         this.optionDiameter,
         hex(Color.lightBlue)
       );
-      option.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => button.onInteract);
+      if (button.isInteractive) {
+        option.setInteractive({ useHandCursor: true });
+        option.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
+      }
       const textOption = new Phaser.GameObjects.Text(
         this.scene,
         button.assetXPos,
@@ -128,6 +132,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
     for (let i = 0; i < this.choices.length; i++) {
       this.isChosen[i] = i === id;
     }
+    this.renderRadioButtons();
   }
 
   public getValueIdx(): number {
