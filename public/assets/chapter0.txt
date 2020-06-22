@@ -8,7 +8,7 @@ emergency, classroom/emergency, Emergency
 hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
-room, bringUpDialogue: dialogue6 if checklist.visit
+room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
 hallway, updateChecklist: visit
 $
 [talk move]
@@ -62,8 +62,12 @@ room: +dialogue1
 <<dialogue6>>
 Title: cutscene
 [part0]
-You've gone to the hallway, and are now back into the classroom.
+You've gone to the hallway, and are now back into the room.
 Congrats on your first cutscene.
+Have you ever seen what the classroom looks like?
+#changeBackground: classroom
+Well here it is! Go ahead and explore it.
+Now, we bring you to a totally new location.
 
 <<dialogue5>>
 title: What?
@@ -91,6 +95,7 @@ title: What happened?
 $narrator
 The year is 1101 A.E.
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
+#changeBackground: classroom
 As Earth’s population reached a breaking point, humans began to migrate across the galaxy, colonizing planets once thought uninhabitable, as well as making settlements on those with amicable alien life.
 To supplement this rapid expansion, large space stations scattered throughout the solar systems began to emerge, serving as hubs for different human needs.
 #addItem: [objects room yourChair], collectible: cookies

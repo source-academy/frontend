@@ -32,6 +32,11 @@ export default class GameActionExecuter {
       case GameActionType.LocationChange:
         actionManager.changeLocationTo(actionParams.id);
         return;
+      case GameActionType.ChangeBackground:
+        actionManager
+          .getGameManager()
+          .backgroundManager.renderBackgroundLayerContainer(actionParams.id);
+        return;
       case GameActionType.Collectible:
         actionManager.obtainCollectible(actionParams.id);
         return;

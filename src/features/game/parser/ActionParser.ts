@@ -88,7 +88,7 @@ export const stringToActionType = {
   updateCharacter: GameActionType.UpdateCharacter,
   collectible: GameActionType.Collectible,
   updateChecklist: GameActionType.UpdateChecklist,
-  locationChange: GameActionType.LocationChange,
+  changeLocation: GameActionType.LocationChange,
   addItem: GameActionType.AddItem,
   removeItem: GameActionType.RemoveItem,
   changeBackground: GameActionType.ChangeBackground,
