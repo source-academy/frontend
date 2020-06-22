@@ -4,6 +4,10 @@ import game, { AccountInfo } from './subcomponents/phaserGame';
 import AssetSelection from './subcomponents/AssetSelection';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
+// import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
+// import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
+// import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+// import Settings from 'src/features/game/scenes/settings/Settings';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
@@ -26,6 +30,11 @@ function Game() {
       accessToken: session.accessToken,
       refreshToken: session.refreshToken
     } as AccountInfo);
+
+    // game.scene.add('MainMenu', MainMenu, true);
+    // game.scene.add('Settings', Settings);
+    // game.scene.add('ChapterSelect', ChapterSelect);
+    // game.scene.add('GameManager', GameManager);
 
     setSessionLoaded(true);
   }, [session, sessionLoaded]);

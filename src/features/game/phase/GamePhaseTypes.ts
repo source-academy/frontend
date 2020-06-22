@@ -8,7 +8,8 @@ export enum GamePhaseType {
   Cutscene = 'Cutscene',
   EscapeMenu = 'EscapeMenu',
   None = 'None',
-  Notification = 'Notification'
+  Notification = 'Notification',
+  Action = 'Action'
 }
 
 export type GamePhase = {
