@@ -1,67 +1,10 @@
 import {
   AchievementAbility,
   AchievementItem,
-  AchievementModalItem,
-  AchievementStatus,
-  AchievementProgress
+  AchievementStatus
 } from '../achievements/AchievementTypes';
 
-export const studentProgress: { [id: number]: AchievementProgress } = {
-  1: {
-    id: 1,
-    completionProgress: 0
-  },
-  2: {
-    id: 2,
-    completionProgress: 77
-  },
-  3: {
-    id: 3,
-    completionProgress: 23
-  },
-  4: {
-    id: 4,
-    completionProgress: 2
-  },
-  5: {
-    id: 5,
-    completionProgress: 92
-  },
-  6: {
-    id: 6,
-    completionProgress: 92
-  },
-  7: {
-    id: 7,
-    completionProgress: 92
-  },
-  8: {
-    id: 8,
-    completionProgress: 22
-  },
-  9: {
-    id: 9,
-    completionProgress: 0
-  },
-  10: {
-    id: 10,
-    completionProgress: 0
-  }
-};
-
-export const achievementDict: AchievementItem[] = [
-  // TODO: remove first item
-  {
-    id: 0,
-    title: '',
-    ability: AchievementAbility.ACADEMIC,
-    exp: 0,
-    isTask: false,
-    prerequisiteIds: [],
-    status: AchievementStatus.ACTIVE,
-    completionGoal: 0,
-    completionProgress: 0
-  },
+export const achievementData: AchievementItem[] = [
   {
     id: 1,
     title: 'Rune Master',
@@ -71,7 +14,14 @@ export const achievementDict: AchievementItem[] = [
     prerequisiteIds: [2, 3],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2,
-    completionProgress: 0
+    completionProgress: 0,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      description: 'Cookies!',
+      goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
+      completionText: 'Cooooookiess!!!'
+    }
   },
   {
     id: 2,
@@ -84,7 +34,14 @@ export const achievementDict: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
     completionGoal: 100,
-    completionProgress: 77
+    completionProgress: 77,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
+      description: 'Huehuehuehuehuehuehuehue',
+      goalText: 'Complete Beyond the Second Dimension mission.',
+      completionText: 'BTSD'
+    }
   },
   {
     id: 3,
@@ -96,7 +53,14 @@ export const achievementDict: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
     completionGoal: 100,
-    completionProgress: 23
+    completionProgress: 23,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
+      description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas',
+      goalText: 'Complete Colorful Carpet mission.',
+      completionText: 'CC'
+    }
   },
   {
     id: 4,
@@ -153,7 +117,14 @@ export const achievementDict: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.EXPIRED,
     completionGoal: 100,
-    completionProgress: 10
+    completionProgress: 10,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
+      description: 'description',
+      goalText: 'Complete Sorting mission.',
+      completionText: 'Good job!'
+    }
   },
   {
     id: 9,
@@ -179,6 +150,7 @@ export const achievementDict: AchievementItem[] = [
   }
 ];
 
+/*
 export const achievementModalDict: AchievementModalItem[] = [
   {
     id: 1,
@@ -242,6 +214,7 @@ export const achievementModalDict: AchievementModalItem[] = [
     completionText: 'Such wow. Mission Master.'
   }
 ];
+*/
 
 export const semester1Weeks = {
   2: new Date(2020, 7, 17, 0, 0, 0),

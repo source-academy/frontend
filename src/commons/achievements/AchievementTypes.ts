@@ -28,19 +28,6 @@ export enum FilterStatus {
 }
 
 /**
- * Information of a Student's Achievement Progress
- *
- * @param {number} id unique id, primary key of the achievement item
- * @param {number} completionProgress progress of the student's achievement
- *
- */
-
-export type AchievementProgress = {
-  id: number;
-  completionProgress: number;
-};
-
-/**
  * Information of an achievement item
  *
  * @param {number} id unique id, primary key of the achievement item
@@ -58,6 +45,7 @@ export type AchievementProgress = {
  * @param {number} completionGoal achievement is marked as complete if
  *    user's completionProgress >= completionGoal
  * @param {number} completionProgress achievement is marked as complete if
+ * @param {AchievementModalItem} modal modal item of the achievement
  */
 export type AchievementItem = {
   id: number;
@@ -72,23 +60,20 @@ export type AchievementItem = {
   status: AchievementStatus;
   completionGoal: number;
   completionProgress: number;
+  modal?: AchievementModalItem;
 };
 
 /**
  * Information of an achievement in a modal
  *
- * @param {number} id unique id, primary key of the modal
  * @param {string} modalImageUrl URL of the modal image
  * @param {string} description fixed text that displays under title
  * @param {string} goal describes the achievement requirement
  * @param {string} completionText text that displays after student completes the achievement
  */
 export type AchievementModalItem = {
-  id: number;
-  title: string;
   modalImageUrl: string;
   description: string;
-  exp: number;
   goalText: string;
   completionText: string;
 };

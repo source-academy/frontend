@@ -2,80 +2,40 @@ import React, { useState } from 'react';
 
 import AchievementCard from './cards/AchievementCard';
 import PrerequisiteCard from './cards/PrerequisiteCard';
-import {
-  AchievementItem,
-  FilterStatus,
-  AchievementStatus,
-  AchievementProgress
-} from '../../../../commons/achievements/AchievementTypes';
+import { FilterStatus, AchievementStatus } from '../../../../commons/achievements/AchievementTypes';
 import Inferencer from './utils/Inferencer';
 
 type AchievementTaskProps = {
+  id: number;
   inferencer: Inferencer;
-  achievement: AchievementItem;
-  achievementDict: { [id: number]: AchievementItem };
-  studentProgress: { [id: number]: AchievementProgress };
   filterStatus: FilterStatus;
-  setModalID?: any;
-};
-
-/* ------ Helper for Prerequisites ------ */
-
-// Returns an array of prerequisites of the AchievementItem
-export const getPrerequisites = (
-  achievement: AchievementItem,
-  achievementDict: { [id: number]: AchievementItem }
-): AchievementItem[] => {
-  return achievement === undefined || achievement.prerequisiteIds === undefined
-    ? []
-    : achievement.prerequisiteIds.map(id => achievementDict[id]);
-};
-
-const hasPrerequisites = (
-  achievement: AchievementItem,
-  achievementDict: { [id: number]: AchievementItem }
-): boolean => {
-  return getPrerequisites(achievement, achievementDict).length > 0;
+  displayModal: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const {
-    inferencer,
-    achievement,
-    achievementDict,
-    filterStatus,
-    setModalID,
-    studentProgress
-  } = props;
+  const { id, inferencer, filterStatus, displayModal } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
-  const togglePrerequisitesDropdown = () => {
+  const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const displayModal = (modalID: number) => {
-    if (setModalID) {
-      return () => setModalID(modalID);
-    }
-
-    return () => {};
   };
 
   /* -------- Helper for Renderer -------- */
 
   /**
-   * Checks whether the AchievementItem should be rendered based on
+   * Checks whether the AchievementItem (can be a task or prereq) should be rendered based on
    * the achivement page filterStatus.
    */
+  const shouldRender = (id: number): boolean => {
+    const { status } = inferencer.getAchievementItem(id);
 
-  const shouldRender = (achievement: AchievementItem): boolean => {
     switch (filterStatus) {
       case FilterStatus.ALL:
         return true;
       case FilterStatus.ACTIVE:
-        return achievement.status === AchievementStatus.ACTIVE;
+        return status === AchievementStatus.ACTIVE;
       case FilterStatus.COMPLETED:
-        return achievement.status === AchievementStatus.COMPLETED;
+        return status === AchievementStatus.COMPLETED;
       default:
         return false;
     }
@@ -88,114 +48,39 @@ function AchievementTask(props: AchievementTaskProps) {
    * If there is at least 1 prerequisite that needs to be rendered,
    * the whole AchievementTask will be rendered together.
    */
-  const shouldRenderPrerequisites = (achievement: AchievementItem) => {
-    return getPrerequisites(achievement, achievementDict).reduce((canRender, prerequisite) => {
-      return shouldRender(prerequisite) || canRender;
+  const shouldRenderPrerequisites = (id: number) => {
+    const children = inferencer.listImmediateChildren(id);
+    return children.reduce((canRender, prerequisite) => {
+      return canRender || shouldRender(prerequisite);
     }, false);
   };
 
-  /* -------- Helper for Deadlines --------
-
-  // Maps the prerequisites of the achievement to their furthest deadlines
-  const mapPrerequisitesToDeadlines = (achievement: AchievementItem): (Date | undefined)[] => {
-    const prerequisites = getPrerequisites(achievement, achievementDict);
-    return prerequisites.map(prerequisite => getFurthestDeadline(prerequisite));
-  };
-
-  // Gets the furthest deadline of the achievement item, including its prerequisites
-  const getFurthestDeadline = (achievement: AchievementItem): Date | undefined => {
-    if (achievement === undefined) {
-      return undefined;
-    }
-
-    const prerequisiteDeadlines = mapPrerequisitesToDeadlines(achievement);
-    return prerequisiteDeadlines.reduce(compareDeadlines, achievement.deadline);
-  };
-
-  // Comparator of two deadlines
-  const compareDeadlines = (
-    furthestDeadline: Date | undefined,
-    currentDeadline: Date | undefined
-  ) => {
-    if (currentDeadline === undefined) {
-      return furthestDeadline;
-    } else if (furthestDeadline === undefined) {
-      return currentDeadline;
-    } else {
-      return furthestDeadline >= currentDeadline ? furthestDeadline : currentDeadline;
-    }
-  };
-
-  /* ----------- Helper for EXP ----------- */
-
-  // Maps the prerequisites of the achievement to their total EXP
-  const mapPrerequisitesToEXPs = (achievement: AchievementItem): (number | undefined)[] => {
-    const prerequisites = getPrerequisites(achievement, achievementDict);
-    return prerequisites.map(prerequisite => getTotalEXP(prerequisite));
-  };
-
-  // Gets the total EXP of the achievement item, including its prerequisites
-  const getTotalEXP = (achievement: AchievementItem): number | undefined => {
-    if (achievement === undefined) {
-      return undefined;
-    }
-
-    const prerequisiteEXPs = mapPrerequisitesToEXPs(achievement);
-    return prerequisiteEXPs.reduce(combineEXPs, achievement.exp);
-  };
-
-  // Sum of two EXP
-  const combineEXPs = (accumulateEXP: number | undefined, currentEXP: number | undefined) => {
-    if (currentEXP === undefined) {
-      return accumulateEXP;
-    } else if (accumulateEXP === undefined) {
-      return currentEXP;
-    } else {
-      return accumulateEXP + currentEXP;
-    }
-  };
-
-  /* -------- Helper for Progress -------- */
-
-  // Returns the achievement progress in decimal (e.g. 0.5)
-  const getAchievementProgress = (achievement: AchievementItem): number => {
-    const progress = studentProgress[achievement.id];
-    return Math.min(progress.completionProgress / achievement.completionGoal, 1);
-  };
+  const shouldRenderTask = (id: number) => shouldRender(id) || shouldRenderPrerequisites(id);
 
   // if the main achievement or any of the prerequisites need to be rendered,
   // the whole achievement task will be rendered
   return (
     <>
-      {shouldRender(achievement) || shouldRenderPrerequisites(achievement) ? (
-        <li key={achievement.title}>
+      {shouldRenderTask(id) ? (
+        <li key={id}>
           <AchievementCard
-            achievement={achievement}
-            exp={getTotalEXP(achievement)}
-            deadline={inferencer.getFurthestDeadline(achievement.id)}
-            release={achievement.release}
-            progress={getAchievementProgress(achievement)}
-            shouldPartiallyRender={!shouldRender(achievement)}
-            hasDropdown={hasPrerequisites(achievement, achievementDict)}
+            id={id}
+            inferencer={inferencer}
+            shouldPartiallyRender={!shouldRender(id)}
             isDropdownOpen={isDropdownOpen}
-            toggleDropdown={togglePrerequisitesDropdown}
+            toggleDropdown={toggleDropdown}
             displayModal={displayModal}
           />
           {isDropdownOpen ? (
             <ul>
-              {getPrerequisites(achievement, achievementDict).map(prerequisite => (
-                <li key={prerequisite.title}>
-                  <div className="node">
-                    <PrerequisiteCard
-                      achievement={prerequisite}
-                      exp={getTotalEXP(prerequisite)}
-                      deadline={inferencer.getFurthestDeadline(prerequisite.id)}
-                      release={achievement.release}
-                      progress={getAchievementProgress(prerequisite)}
-                      displayModal={displayModal}
-                      shouldPartiallyRender={!shouldRender(prerequisite)}
-                    />
-                  </div>
+              {inferencer.listImmediateChildren(id).map(prerequisite => (
+                <li key={prerequisite}>
+                  <PrerequisiteCard
+                    id={id}
+                    inferencer={inferencer}
+                    shouldPartiallyRender={!shouldRender(prerequisite)}
+                    displayModal={displayModal}
+                  />
                 </li>
               ))}
             </ul>

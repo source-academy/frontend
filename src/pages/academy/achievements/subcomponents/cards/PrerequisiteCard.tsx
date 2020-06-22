@@ -3,52 +3,63 @@ import React from 'react';
 import { Card } from '@blueprintjs/core';
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementHints from '../utils/AchievementHints';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
+import Inferencer from '../utils/Inferencer';
 
 type PrerequisiteCardProps = {
-  achievement: AchievementItem;
-  exp?: number;
-  deadline?: Date;
-  release?: Date;
-  progress: number;
+  id: number;
+  inferencer: Inferencer;
   shouldPartiallyRender: boolean;
   displayModal: any;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { achievement, exp, deadline, progress, shouldPartiallyRender, displayModal } = props;
-  const { id, title, release } = achievement;
+  const { id, inferencer, shouldPartiallyRender, displayModal } = props;
+
+  const {
+    title,
+    exp,
+    deadline,
+    release,
+    completionProgress,
+    completionGoal
+  } = inferencer.getAchievementItem(id);
 
   return (
-    <Card
-      className="prerequisite"
-      style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
-      onClick={displayModal(id)}
-    >
-      <AchievementHints release={release} />
+    <div className="node">
+      <Card
+        className="prerequisite"
+        style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
+        onClick={displayModal(id)}
+      >
+        <AchievementHints release={release} />
 
-      <div className="main">
-        <div className="display">
-          <div>
-            <h3>{title}</h3>
-          </div>
-
-          <div className="details">
-            <div className="path">
-              <p></p>
+        <div className="main">
+          <div className="display">
+            <div>
+              <h3>{title}</h3>
             </div>
 
-            <AchievementDeadline deadline={deadline} />
+            <div className="details">
+              <div className="path">
+                <p></p>
+              </div>
 
-            <AchievementExp exp={exp} />
+              <AchievementDeadline deadline={deadline} />
+
+              <AchievementExp exp={exp} />
+            </div>
           </div>
         </div>
-      </div>
 
-      <AchievementProgressBar value={progress} shouldAnimate={!shouldPartiallyRender} />
-    </Card>
+        <AchievementProgressBar
+          completionProgress={completionProgress}
+          completionGoal={completionGoal}
+          shouldAnimate={!shouldPartiallyRender}
+        />
+      </Card>
+    </div>
   );
 }
 

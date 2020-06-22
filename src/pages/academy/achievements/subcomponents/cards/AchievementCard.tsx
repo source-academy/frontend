@@ -1,19 +1,15 @@
 import React from 'react';
+import Inferencer from '../utils/Inferencer';
 import { Card, Icon } from '@blueprintjs/core';
+import AchievementHints from '../utils/AchievementHints';
 import { IconNames } from '@blueprintjs/icons';
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
-import AchievementHints from '../utils/AchievementHints';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type AchievementCardProps = {
-  achievement: AchievementItem;
-  exp?: number;
-  deadline?: Date;
-  release?: Date;
-  progress: number;
-  hasDropdown: boolean;
+  id: number;
+  inferencer: Inferencer;
   shouldPartiallyRender: boolean;
   isDropdownOpen: boolean;
   toggleDropdown: any;
@@ -22,17 +18,25 @@ type AchievementCardProps = {
 
 function AchievementCard(props: AchievementCardProps) {
   const {
-    achievement,
-    exp,
-    deadline,
-    progress,
+    id,
+    inferencer,
     shouldPartiallyRender,
-    hasDropdown,
     isDropdownOpen,
     toggleDropdown,
     displayModal
   } = props;
-  const { id, title, ability, release } = achievement;
+
+  const {
+    title,
+    ability,
+    exp,
+    deadline,
+    release,
+    completionProgress,
+    completionGoal
+  } = inferencer.getAchievementItem(id);
+
+  const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
 
   return (
     <Card
@@ -71,7 +75,11 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
       </div>
 
-      <AchievementProgressBar value={progress} shouldAnimate={!shouldPartiallyRender} />
+      <AchievementProgressBar
+        completionProgress={completionProgress}
+        completionGoal={completionGoal}
+        shouldAnimate={!shouldPartiallyRender}
+      />
     </Card>
   );
 }

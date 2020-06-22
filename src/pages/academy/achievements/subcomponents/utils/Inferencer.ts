@@ -1,32 +1,37 @@
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
+import {
+  AchievementItem,
+  AchievementModalItem,
+  FilterStatus,
+  AchievementStatus
+} from 'src/commons/achievements/AchievementTypes';
 import { prettifyDeadline } from 'src/pages/academy/achievements/subcomponents/utils/AchievementDeadline';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
   achievement: AchievementItem;
   id: number;
-  furthestDeadline?: Date;
-  isTask: boolean;
   totalExp: number;
+  furthestDeadline?: Date;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites
+  modal?: AchievementModalItem;
 
   constructor(achievement: AchievementItem) {
     this.achievement = achievement;
     this.id = achievement.id;
-    this.furthestDeadline = achievement.deadline;
-    this.isTask = achievement.isTask;
     this.totalExp = achievement.exp;
+    this.furthestDeadline = achievement.deadline;
     this.children = new Set(achievement.prerequisiteIds);
     this.descendant = new Set(achievement.prerequisiteIds);
+    this.modal = achievement.modal;
   }
 }
 
 class Inferencer {
   private nodeList: Node[];
 
-  constructor(achievementDict: { [id: number]: AchievementItem }) {
-    this.nodeList = this.generateNodeList(achievementDict);
+  constructor(achievementData: AchievementItem[]) {
+    this.nodeList = this.generateNodeList(achievementData);
     this.processNodeList();
   }
 
@@ -60,32 +65,58 @@ class Inferencer {
     return this.nodeList[achievementId].children.has(childId);
   }
 
-  public getImmediateChild(achievementId: number) {
+  public getImmediateChildren(achievementId: number) {
     return this.nodeList[achievementId].children;
+  }
+
+  public listImmediateChildren(achievementId: number) {
+    return [...this.getImmediateChildren(achievementId)];
   }
 
   public isDescendant(achievementId: number, childId: number) {
     return this.nodeList[achievementId].descendant.has(childId);
   }
 
-  public getDescendant(achievementId: number) {
+  public getDescendants(achievementId: number) {
     return this.nodeList[achievementId].descendant;
   }
 
   public getNonTaskAchievementsItems() {
-    return this.nodeList.filter(node => !node.isTask).map(node => node.achievement);
+    return this.nodeList.filter(node => !node.achievement.isTask).map(node => node.achievement);
   }
 
   public getAchievementItems() {
-    return this.nodeList.filter(node => node.isTask);
+    // to be removed
+    return this.nodeList.filter(node => node.achievement.isTask);
   }
 
-  private generateNodeList(achievementDict: { [id: number]: AchievementItem }) {
+  public getAchievementItem(achievementId: number) {
+    return this.nodeList[achievementId].achievement;
+  }
+
+  public getFilterCount(filterStatus: FilterStatus) {
+    switch (filterStatus) {
+      case FilterStatus.ALL:
+        return this.nodeList.length;
+      case FilterStatus.ACTIVE:
+        return this.nodeList.filter(node => node.achievement.status === AchievementStatus.ACTIVE)
+          .length;
+      case FilterStatus.COMPLETED:
+        return this.nodeList.filter(node => node.achievement.status === AchievementStatus.COMPLETED)
+          .length;
+      default:
+        return 0;
+    }
+  }
+
+  public getTaskIds() {
+    return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
+  }
+
+  private generateNodeList(achievementData: AchievementItem[]) {
     const nodeList: Node[] = [];
 
-    Object.values(achievementDict).forEach(
-      achievement => (nodeList[achievement.id] = new Node(achievement))
-    );
+    achievementData.forEach(achievement => (nodeList[achievement.id] = new Node(achievement)));
     return nodeList;
   }
 
