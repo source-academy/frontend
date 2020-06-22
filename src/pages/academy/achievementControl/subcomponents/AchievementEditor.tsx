@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import EditableAchievementCard from './editableCard/EditableAchievementCard';
 import { AchievementItem, AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
 import { modalTemplate, achievementTemplate } from './editableCard/EditableTemplates';
+import EditableAchievementAdder from './editableCard/EditableAchievementAdder';
 
 type AchievementEditorProps = {
   achievementDict: { [id: number]: AchievementItem };
@@ -22,11 +23,23 @@ function AchievementEditor(props: AchievementEditorProps) {
     ));
   };
 
+  const [editableCards, setEditableCards] = useState<JSX.Element[]>(
+    mapAchievementDictToEditableCard(achievementDict)
+  );
+  const templateCard = (
+    <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />
+  );
+
+  const addNewCard = () => {
+    const newCards = [...editableCards];
+    newCards.push(templateCard);
+    setEditableCards(newCards);
+  };
+
   return (
     <div className="main">
-      <ul className="display-list">{mapAchievementDictToEditableCard(achievementDict)}</ul>
-      <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />
-      {/* TODO: create editor tool for this */}
+      <ul className="display-list">{editableCards}</ul>
+      <EditableAchievementAdder addNewCard={addNewCard} />
     </div>
   );
 }

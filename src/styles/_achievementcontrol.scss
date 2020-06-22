@@ -237,6 +237,11 @@
     width: 50%;
     display: table;
 
+    .main-adder {
+      width: 100%;
+      text-align: center;
+    }
+
     ::-webkit-scrollbar {
       width: 12px;
     }
