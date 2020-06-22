@@ -3,22 +3,25 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { studentRoomImg } from '../../location/GameMapConstants';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
-import { settingsAssets } from './SettingsAssets';
+import { settingsAssets, settingBg, settingOption } from './SettingsAssets';
 import {
   volumeContainerOptions,
-  volumeOptionXSpace,
-  volumeOptionTextStyle,
-  volumeContainerXPos,
-  volumeContainerYPos,
+  optionTextStyle,
   volumeOptionTextAnchorX,
   volumeOptionTextAnchorY,
   volumeDefaultOpt,
   optionHeaderTextStyle,
   applySettingsTextStyle,
   applySettingsAnchorX,
-  applySettingsAnchorY
+  applySettingsAnchorY,
+  volumeUnderlineYPos,
+  volumeTextXpos,
+  volumeTextYPos,
+  optionsXSpace,
+  optionsXPos,
+  volumeOptionYPos
 } from './SettingsConstants';
-import { topButton, mediumBox, mediumButton } from '../../commons/CommonAssets';
+import { topButton, mediumButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
 import { createButton } from '../../utils/StyleUtils';
 import { Constants } from '../../commons/CommonConstants';
@@ -54,7 +57,15 @@ class Settings extends Phaser.Scene {
       screenCenter.y,
       studentRoomImg.key
     );
+
+    const settingBgImg = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      settingBg.key
+    );
     this.layerManager.addToLayer(Layer.Background, background);
+    this.layerManager.addToLayer(Layer.Background, settingBgImg);
   }
 
   private renderOptions() {
@@ -64,7 +75,7 @@ class Settings extends Phaser.Scene {
       'Apply Settings',
       Constants.nullFunction,
       mediumButton.key,
-      { x: screenCenter.x, y: screenSize.y * 0.9 },
+      { x: screenCenter.x, y: screenSize.y * 0.925 },
       applySettingsAnchorX,
       applySettingsAnchorY,
       applySettingsTextStyle
@@ -77,14 +88,14 @@ class Settings extends Phaser.Scene {
   private renderVolumeOptions() {
     const volumeBg = new Phaser.GameObjects.Image(
       this,
-      screenCenter.x - 10,
-      volumeContainerYPos - 60,
-      mediumBox.key
+      screenCenter.x,
+      volumeUnderlineYPos,
+      settingOption.key
     );
     const volumeText = new Phaser.GameObjects.Text(
       this,
-      screenCenter.x,
-      volumeContainerYPos - 110,
+      volumeTextXpos,
+      volumeTextYPos,
       'Volume',
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
@@ -92,12 +103,17 @@ class Settings extends Phaser.Scene {
       this,
       volumeContainerOptions,
       volumeDefaultOpt,
-      volumeOptionXSpace,
-      volumeOptionTextStyle,
-      volumeContainerXPos,
-      volumeContainerYPos,
+      optionsXSpace,
+      optionTextStyle,
+      optionsXPos,
+      volumeOptionYPos,
       volumeOptionTextAnchorX,
-      volumeOptionTextAnchorY
+      volumeOptionTextAnchorY,
+      20,
+      5,
+      15,
+      0,
+      -70
     );
     this.layerManager.addToLayer(Layer.UI, volumeBg);
     this.layerManager.addToLayer(Layer.UI, volumeText);

@@ -112,8 +112,8 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         this.checkedDiameter,
         hex(Color.darkBlue)
       );
-      this.add([optionFrame, option, textOption]);
-      if (this.isChosen[i]) this.add(optionChecked);
+      this.add([optionFrame, option]);
+      if (this.isChosen[i]) this.add([optionChecked, textOption]);
     }
   }
 

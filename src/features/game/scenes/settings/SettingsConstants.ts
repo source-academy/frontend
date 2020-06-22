@@ -1,27 +1,31 @@
-import { screenSize } from '../../commons/CommonConstants';
 import { Color } from '../../utils/StyleUtils';
+import { screenSize } from '../../commons/CommonConstants';
 
-export const volumeOptionTextAnchorX = 1;
+export const optionsXSpace = screenSize.x * 0.4;
+export const optionsXPos = 140;
+
+export const volumeUnderlineYPos = screenSize.y * 0.25;
+export const volumeTextXpos = screenSize.x * 0.25;
+export const volumeTextYPos = screenSize.y * 0.23;
+export const volumeOptionYPos = screenSize.y * 0.24;
+export const volumeOptionTextAnchorX = 0.5;
 export const volumeOptionTextAnchorY = 0.25;
-export const volumeContainerOptions = ['0', '0.50', '1.00', '1.50', '2.00'];
+export const volumeContainerOptions = ['0', '0.5', '1.0', '1.5', '2.0'];
 export const volumeDefaultOpt = 2;
-export const volumeOptionXSpace = screenSize.x * 0.5;
-export const volumeContainerXPos = 0;
-export const volumeContainerYPos = screenSize.y * 0.3;
 
 export const applySettingsAnchorX = 0.33;
 export const applySettingsAnchorY = 0.85;
 
-export const volumeOptionTextStyle = {
+export const optionTextStyle = {
   fontFamily: 'Helvetica',
-  fontSize: '25px',
+  fontSize: '20px',
   fill: Color.lightBlue,
   align: 'center'
 };
 
 export const optionHeaderTextStyle = {
   fontFamily: 'Helvetica',
-  fontSize: '45px',
+  fontSize: '35px',
   fill: Color.lightBlue,
   align: 'center'
 };
