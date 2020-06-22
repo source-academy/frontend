@@ -1,7 +1,7 @@
 import React from 'react';
 
-import { NumericInput } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { InputGroup } from '@blueprintjs/core';
 
 type EditableAchievementExpProps = {
   exp?: number;
@@ -10,14 +10,13 @@ type EditableAchievementExpProps = {
 
 function EditableAchievementExp(props: EditableAchievementExpProps) {
   const { exp, changeExp } = props;
-  // TODO: add regex to only allow numeric input
+
   return (
     <div className="exp">
-      <NumericInput
-        buttonPosition={'none'}
+      <InputGroup
         placeholder={'Enter a number here'}
-        value={exp}
-        onValueChange={changeExp}
+        value={exp?.toString()}
+        onChange={(e: any) => changeExp(e.target.value)}
         leftIcon={IconNames.BANK_ACCOUNT}
         rightElement={<p>XP</p>}
       />

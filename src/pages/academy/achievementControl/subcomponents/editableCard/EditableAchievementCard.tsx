@@ -33,11 +33,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
   };
 
-  const changeExp = (exp: number) => {
-    setAchievementData({
-      ...achievementData,
-      exp: exp
-    });
+  const changeExp = (exp: string) => {
+    if (RegExp('[0-9]*').test(exp)) {
+      setAchievementData({
+        ...achievementData,
+        exp: parseInt(exp)
+      });
+    }
   };
 
   const changeDeadline = (deadline: Date) => {
