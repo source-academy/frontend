@@ -6,11 +6,30 @@ import {
   escapeOptButtonStyle,
   escapeTextOriX,
   escapeTextOriY,
-  escapeButtonYPos
+  escapeButtonYPos,
+  volumeRadioOptTextStyle,
+  optTextStyle,
+  optHeaderTextXPos,
+  optHeaderTextYPos,
+  radioButtonsXSpace,
+  volumeOptXPos,
+  volumeOptYPos,
+  volumeOptTextAnchorX,
+  volumeOptTextAnchorY,
+  volumeOptTextXOffset,
+  volumeOptTextYOffset
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
+import CommonRadioButtons from '../commons/CommonRadioButtons';
+import { volumeContainerOptions, volumeDefaultOpt } from '../scenes/settings/SettingsConstants';
 
 class GameEscapeManager {
+  private volumeOptions: CommonRadioButtons | undefined;
+
+  constructor() {
+    this.volumeOptions = undefined;
+  }
+
   public createEscapeMenu() {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
@@ -23,6 +42,31 @@ class GameEscapeManager {
     );
     escapeMenuBg.setDisplaySize(screenSize.x, screenSize.y);
     escapeMenuBg.setInteractive({ pixelPerfect: true });
+
+    const volumeText = new Phaser.GameObjects.Text(
+      gameManager,
+      optHeaderTextXPos,
+      optHeaderTextYPos,
+      'Volume',
+      optTextStyle
+    );
+
+    this.volumeOptions = new CommonRadioButtons(
+      gameManager,
+      volumeContainerOptions,
+      volumeDefaultOpt, // TODO: Use previous setting
+      radioButtonsXSpace,
+      volumeRadioOptTextStyle,
+      volumeOptXPos,
+      volumeOptYPos,
+      volumeOptTextAnchorX,
+      volumeOptTextAnchorY,
+      15,
+      3,
+      10,
+      volumeOptTextXOffset,
+      volumeOptTextYOffset
+    );
 
     const mainMenuButton = createButton(
       gameManager,
@@ -62,7 +106,14 @@ class GameEscapeManager {
       escapeOptButtonStyle
     );
 
-    escapeMenuContainer.add([escapeMenuBg, mainMenuButton, continueButton, applySettingsButton]);
+    escapeMenuContainer.add([
+      escapeMenuBg,
+      volumeText,
+      this.volumeOptions,
+      mainMenuButton,
+      continueButton,
+      applySettingsButton
+    ]);
     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 
