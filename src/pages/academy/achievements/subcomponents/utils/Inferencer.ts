@@ -43,7 +43,7 @@ class Inferencer {
         prettifyDeadline(node.furthestDeadline),
         node.totalExp,
         '\nisTask:',
-        node.isTask,
+        node.achievement.isTask,
         '\nchildren:',
         node.children,
         '\ndescendants:',
@@ -53,35 +53,40 @@ class Inferencer {
     console.log('ಠ_ಠ hmm...u should only see me once');
   }
 
-  public getFurthestDeadline(achievementId: number) {
-    return this.nodeList[achievementId].furthestDeadline;
+  public getFurthestDeadline(id: number) {
+    return this.nodeList[id].furthestDeadline;
   }
 
-  public getTotalExp(achievementId: number) {
-    return this.nodeList[achievementId].totalExp;
+  public getTotalExp(id: number) {
+    return this.nodeList[id].totalExp;
   }
 
-  public isImmediateChild(achievementId: number, childId: number) {
-    return this.nodeList[achievementId].children.has(childId);
+  public isImmediateChild(id: number, childId: number) {
+    return this.nodeList[id].children.has(childId);
   }
 
-  public getImmediateChildren(achievementId: number) {
-    return this.nodeList[achievementId].children;
+  public getImmediateChildren(id: number) {
+    return this.nodeList[id].children;
   }
 
-  public listImmediateChildren(achievementId: number) {
-    return [...this.getImmediateChildren(achievementId)];
+  public listImmediateChildren(id: number) {
+    return [...this.getImmediateChildren(id)];
   }
 
-  public isDescendant(achievementId: number, childId: number) {
-    return this.nodeList[achievementId].descendant.has(childId);
+  public isDescendant(id: number, childId: number) {
+    return this.nodeList[id].descendant.has(childId);
   }
 
-  public getDescendants(achievementId: number) {
-    return this.nodeList[achievementId].descendant;
+  public getDescendants(id: number) {
+    return this.nodeList[id].descendant;
+  }
+
+  public listDescendants(id: number) {
+    return [...this.getDescendants(id)];
   }
 
   public getNonTaskAchievementsItems() {
+    // to be removed
     return this.nodeList.filter(node => !node.achievement.isTask).map(node => node.achievement);
   }
 
@@ -90,8 +95,12 @@ class Inferencer {
     return this.nodeList.filter(node => node.achievement.isTask);
   }
 
-  public getAchievementItem(achievementId: number) {
-    return this.nodeList[achievementId].achievement;
+  public getAchievementItem(id: number) {
+    return this.nodeList[id].achievement;
+  }
+
+  public getModalItem(id: number) {
+    return this.nodeList[id].modal;
   }
 
   public getFilterCount(filterStatus: FilterStatus) {
@@ -109,7 +118,7 @@ class Inferencer {
     }
   }
 
-  public getTaskIds() {
+  public listTaskIds() {
     return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
   }
 

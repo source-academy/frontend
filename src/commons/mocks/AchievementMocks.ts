@@ -71,7 +71,15 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [5, 6, 7],
     status: AchievementStatus.ACTIVE,
     completionGoal: 3,
-    completionProgress: 2
+    completionProgress: 2,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
+      description:
+        'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.',
+      goalText: 'Reach Gold Tier in Keyboard Warrior achievements.',
+      completionText: 'YOU DA KEYBOARD WARRIOR'
+    }
   },
   {
     id: 5,
@@ -135,7 +143,13 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [1, 8],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2,
-    completionProgress: 0
+    completionProgress: 0,
+    modal: {
+      modalImageUrl: 'https://imgur.com/a/LVi7l0t',
+      description: '?',
+      goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
+      completionText: 'Such wow. Mission Master.'
+    }
   },
   {
     id: 10,
@@ -149,72 +163,6 @@ export const achievementData: AchievementItem[] = [
     completionProgress: 2
   }
 ];
-
-/*
-export const achievementModalDict: AchievementModalItem[] = [
-  {
-    id: 1,
-    title: 'Rune Master',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    description: 'Cookies!',
-    exp: 200,
-    goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
-    completionText: 'Cooooookiess!!!'
-  },
-  {
-    id: 2,
-    title: 'Beyond the Second Dimension',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
-    description: 'Huehuehuehuehuehuehuehue',
-    exp: 100,
-    goalText: 'Complete Beyond the Second Dimension mission.',
-    completionText: 'BTSD'
-  },
-  {
-    id: 3,
-    title: 'Colorful Carpet',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
-    description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas',
-    exp: 100,
-    goalText: 'Complete Colorful Carpet mission.',
-    completionText: 'CC'
-  },
-  {
-    id: 4,
-    title: 'Keyboard Warrior',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
-    description:
-      'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.',
-    exp: 350,
-    goalText: 'Reach Gold Tier in Keyboard Warrior achievements.',
-    completionText: 'YOU DA KEYBOARD WARRIOR'
-  },
-  {
-    id: 8,
-    title: "That was Sort'a Easy",
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
-    description: 'description',
-    exp: 250,
-    goalText: 'Complete Sorting mission.',
-    completionText: 'Good job!'
-  },
-  {
-    id: 9,
-    title: 'Mission Master',
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/messyClassroom%40x2.png',
-    description: '?',
-    exp: 80,
-    goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
-    completionText: 'Such wow. Mission Master.'
-  }
-];
-*/
 
 export const semester1Weeks = {
   2: new Date(2020, 7, 17, 0, 0, 0),

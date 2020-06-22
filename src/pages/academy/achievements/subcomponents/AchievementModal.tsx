@@ -1,29 +1,30 @@
 import React from 'react';
 
+import Inferencer from './utils/Inferencer';
 import { Card } from '@blueprintjs/core';
-import { AchievementModalItem } from '../../../../commons/achievements/AchievementTypes';
+import AchievementExp from './utils/AchievementExp';
 import AchievementModalDescription from './modal/AchievementModalDescription';
 import AchievementModalGoal from './modal/AchievementModalGoal';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
-import AchievementExp from './utils/AchievementExp';
 
 type AchievementModalProps = {
-  modalID: number;
-  achievementModalDict: { [id: number]: AchievementModalItem };
+  id: number;
+  inferencer: Inferencer;
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { modalID, achievementModalDict } = props;
+  const { id, inferencer } = props;
 
-  const modal = achievementModalDict[modalID];
+  const modal = inferencer.getModalItem(id);
+
   if (modal === undefined) return null;
-  const { title, modalImageUrl, description, exp, goalText, completionText } = modal;
+  const { title, exp } = inferencer.getAchievementItem(id);
+  const { modalImageUrl, description, goalText, completionText } = modal;
 
   return (
     <div className="modal">
       <Card className="modal-container">
         <h1>{title}</h1>
-
         <div>
           <img src={modalImageUrl} alt={title} />
         </div>

@@ -7,6 +7,7 @@ import { FilterStatus } from '../../../commons/achievements/AchievementTypes';
 import { achievementData } from 'src/commons/mocks/AchievementMocks';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
+import AchievementModal from './subcomponents/AchievementModal';
 
 export type DispatchProps = {};
 
@@ -19,7 +20,7 @@ function Achievement() {
   const _inferencer = new Inferencer(achievementData);
   _inferencer.logInfo();
 
-  const mapAchievementIdToTask = (taskIds: number[]) =>
+  const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (
       <AchievementTask
         key={id}
@@ -56,11 +57,10 @@ function Achievement() {
         </div>
 
         <div className="cards">
-          <ul className="display-list">
-            {mapAchievementIdToTask(_inferencer.getTaskIds())}
-            {console.log('Display modal: ', modalId)}
-          </ul>
+          <ul className="display-list">{mapAchievementIdsToTasks(_inferencer.listTaskIds())}</ul>
         </div>
+
+        <AchievementModal id={modalId} inferencer={_inferencer} />
       </div>
     </div>
   );
