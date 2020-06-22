@@ -118,8 +118,26 @@ class Inferencer {
     }
   }
 
+  public listIds() {
+    return this.nodeList.map(node => node.id);
+  }
+
   public listTaskIds() {
     return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
+  }
+
+  public insertAchievement(achievement: AchievementItem) {
+    // TODO: handle generate new index here
+    this.nodeList[achievement.id] = new Node(achievement);
+    this.processNodeList();
+  }
+
+  public removeAchievement(id: number) {
+    this.nodeList.splice(id, 1);
+  }
+
+  public normalizeData() {
+    // clean up indexes before fetching to database?
   }
 
   private generateNodeList(achievementData: AchievementItem[]) {

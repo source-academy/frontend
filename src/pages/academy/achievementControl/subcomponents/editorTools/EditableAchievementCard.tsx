@@ -5,60 +5,62 @@ import { IconName } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
-  AchievementAbility,
-  AchievementModalItem
+  AchievementAbility
 } from '../../../../../commons/achievements/AchievementTypes';
-import EditableAchievementTitle from './EditableAchievementTitle';
-import EditableAchievementAbility from './EditableAchievementAbility';
-import EditableAchievementDeadline from './EditableAchievementDeadline';
-import EditableAchievementExp from './EditableAchievementExp';
+import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
+import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
+import EditableAchievementDeadline from './editableUtils/EditableAchievementDeadline';
+import EditableAchievementExp from './editableUtils/EditableAchievementExp';
+import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
+import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
-import EditableAchievementThumbnail from './EditableAchievementThumbnail';
 
 type EditableAchievementCardProps = {
-  achievement: AchievementItem;
-  modal: AchievementModalItem;
+  id: number;
+  inferencer: Inferencer;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, modal } = props;
-  const [achievementData, setAchievementData] = useState<AchievementItem>(achievement);
-  const { title, ability, exp, deadline, icon } = achievementData;
+  const { id, inferencer } = props;
+  const achievement = inferencer.getAchievementItem(id);
+
+  const { title, ability, exp, deadline, icon, modal } = achievement;
+  const [content, setContent] = useState<AchievementItem>(achievement);
 
   /* Handlers to Change State of Achievement Data */
   const changeTitle = (title: string) => {
-    setAchievementData({
-      ...achievementData,
+    setContent({
+      ...content,
       title: title
     });
   };
 
   const changeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
-      setAchievementData({
-        ...achievementData,
+      setContent({
+        ...content,
         exp: parseInt(exp)
       });
     }
   };
 
   const changeDeadline = (deadline: Date) => {
-    setAchievementData({
-      ...achievementData,
+    setContent({
+      ...content,
       deadline: deadline
     });
   };
 
   const changeAbility = (ability: AchievementAbility, e: any) => {
-    setAchievementData({
-      ...achievementData,
+    setContent({
+      ...content,
       ability: ability
     });
   };
 
   const changeThumbnail = (thumbnail: IconName) => {
-    setAchievementData({
-      ...achievementData,
+    setContent({
+      ...content,
       icon: thumbnail
     });
   };
@@ -66,7 +68,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   // TODO: Delete Achievement Item
   return (
     <Card className="editable-achievement">
-      <EditableAchievementModal modal={modal} />
+      <EditableAchievementModal title={title} modal={modal} />
 
       <div className="main">
         <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={changeThumbnail} />

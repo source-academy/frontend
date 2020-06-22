@@ -1,45 +1,30 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import EditableAchievementCard from './editableCard/EditableAchievementCard';
-import { AchievementItem, AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
-import { modalTemplate, achievementTemplate } from './editableCard/EditableTemplates';
-import EditableAchievementAdder from './editableCard/EditableAchievementAdder';
+import EditableAchievementCard from './editorTools/EditableAchievementCard';
+import { achievementTemplate } from './editorTools/EditableTemplates';
+import EditableAchievementAdder from './editorTools/EditableAchievementAdder';
+import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementEditorProps = {
-  achievementDict: { [id: number]: AchievementItem };
-  achievementModalDict: { [id: number]: AchievementModalItem };
+  inferencer: Inferencer;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { achievementDict, achievementModalDict } = props;
+  const { inferencer } = props;
 
-  const mapAchievementDictToEditableCard = (achievementDict: { [id: number]: AchievementItem }) => {
-    return Object.values(achievementDict).map(achievement => (
-      <EditableAchievementCard
-        key={achievement.title}
-        achievement={achievement}
-        modal={achievementModalDict[achievement.id]}
-      />
-    ));
-  };
-
-  const [editableCards, setEditableCards] = useState<JSX.Element[]>(
-    mapAchievementDictToEditableCard(achievementDict)
-  );
-  const templateCard = (
-    <EditableAchievementCard achievement={achievementTemplate} modal={modalTemplate} />
-  );
+  const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>
+    achievementIds.map(id => <EditableAchievementCard key={id} id={id} inferencer={inferencer} />);
 
   const addNewCard = () => {
-    const newCards = [...editableCards];
-    newCards.push(templateCard);
-    setEditableCards(newCards);
+    inferencer.insertAchievement(achievementTemplate);
   };
 
   return (
-    <div className="main">
-      <ul className="display-list">{editableCards}</ul>
-      <EditableAchievementAdder addNewCard={addNewCard} />
+    <div className="editor-cards">
+      <div className="main">
+        <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
+        <EditableAchievementAdder addNewCard={addNewCard} />
+      </div>
     </div>
   );
 }

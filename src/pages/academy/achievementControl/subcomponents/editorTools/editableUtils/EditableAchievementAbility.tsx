@@ -6,7 +6,7 @@ import { MenuItem, Button, Classes } from '@blueprintjs/core';
 import {
   AchievementAbility,
   achievementAbilities
-} from '../../../../../commons/achievements/AchievementTypes';
+} from '../../../../../../commons/achievements/AchievementTypes';
 
 type EditableAchievementAbilityProps = {
   ability: AchievementAbility;

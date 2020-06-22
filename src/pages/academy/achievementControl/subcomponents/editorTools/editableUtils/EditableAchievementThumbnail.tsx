@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import { Dialog, Icon } from '@blueprintjs/core';
-import { AchievementIconSelect } from '../controlPanelTools/AchievementIconSelect';
+import { AchievementIconSelect } from '../../controlPanelTools/AchievementIconSelect';
 
 type EditableAchievementThumbnailProps = {
   thumbnail: IconName | undefined;

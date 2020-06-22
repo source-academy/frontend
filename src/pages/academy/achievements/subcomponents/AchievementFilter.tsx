@@ -11,7 +11,7 @@ type AchievementFilterProps = {
 };
 
 function AchievementFilter(props: AchievementFilterProps) {
-  const { icon, filterStatus, setFilterStatus, count } = props;
+  const { filterStatus, setFilterStatus, icon, count } = props;
 
   /**
    * Changes the filter status for the achievement page.

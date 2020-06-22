@@ -2,23 +2,22 @@ import React from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
-import { achievementDict, achievementModalDict } from '../../../commons/mocks/AchievementMocks';
+import { achievementData } from '../../../commons/mocks/AchievementMocks';
+import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 
 export type DispatchProps = {};
 
 export type StateProps = {};
 
 function AchievementControl() {
+  const _inferencer = new Inferencer(achievementData);
+  _inferencer.logInfo();
+
   return (
     <div className="AchievementControl">
-      <AchievementControlPanel achievementDict={achievementDict} />
+      <AchievementControlPanel inferencer={_inferencer} />
 
-      <div className="editor-cards">
-        <AchievementEditor
-          achievementDict={achievementDict}
-          achievementModalDict={achievementModalDict}
-        />
-      </div>
+      <AchievementEditor inferencer={_inferencer} />
     </div>
   );
 }
