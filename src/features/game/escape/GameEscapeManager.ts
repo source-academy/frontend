@@ -49,10 +49,12 @@ class GameEscapeManager {
       escapeOptButtonStyle
     );
 
-    const saveSettingsButton = createButton(
+    const applySettingsButton = createButton(
       gameManager,
-      'Save Settings',
-      () => GameActionManager.getInstance().saveGame(),
+      'Apply Settings',
+      () => {
+        GameActionManager.getInstance().saveGame();
+      },
       mediumButton.key,
       { x: screenSize.x * 0.75, y: escapeButtonYPos },
       escapeTextOriX,
@@ -60,7 +62,7 @@ class GameEscapeManager {
       escapeOptButtonStyle
     );
 
-    escapeMenuContainer.add([escapeMenuBg, mainMenuButton, continueButton, saveSettingsButton]);
+    escapeMenuContainer.add([escapeMenuBg, mainMenuButton, continueButton, applySettingsButton]);
     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 

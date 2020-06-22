@@ -4,6 +4,7 @@ import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameActionManager from '../action/GameActionManager';
+import { UserSaveState } from '../save/GameSaveTypes';
 
 class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
@@ -19,6 +20,10 @@ class GameSoundManager {
 
   public initialise(scene: Phaser.Scene) {
     this.scene = scene;
+  }
+
+  public applyUserSettings(userSaveState: UserSaveState) {
+    this.setGlobalVolume(userSaveState.settings.volume);
   }
 
   public renderBackgroundMusic(locationId: LocationId) {
@@ -107,6 +112,10 @@ class GameSoundManager {
       const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
       if (currBgMusic.isPaused) currBgMusic.play();
     }
+  }
+
+  public setGlobalVolume(volume: number) {
+    this.baseSoundManager.volume = volume;
   }
 }
 

@@ -41,9 +41,7 @@ export type GameSaveState = {
 };
 
 export type UserSaveState = {
-  soundConfig: {
-    volume: number;
-  };
+  settings: { volume: number };
   lastPlayedChapter: number;
   collectibles: string[];
   achievements: string[];

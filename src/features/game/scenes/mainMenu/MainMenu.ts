@@ -47,6 +47,7 @@ class MainMenu extends Phaser.Scene {
 
   public async create() {
     this.loadedGameState = await loadData(this.getAccountInfo()!);
+    this.applyUserSettings();
     this.renderBackground();
     this.renderOptionButtons();
 
@@ -209,6 +210,12 @@ class MainMenu extends Phaser.Scene {
       this.callGameManager(key, continueGame, chapterNum);
     });
     this.load.start();
+  }
+
+  private applyUserSettings() {
+    if (this.loadedGameState) {
+      this.soundManager.applyUserSettings(this.loadedGameState.userState);
+    }
   }
 
   private callGameManager(key: string, continueGame: boolean, chapterNum: number) {

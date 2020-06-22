@@ -17,7 +17,7 @@ export function gameStateToJson(
   };
 
   const userState: UserSaveState = {
-    soundConfig: { volume: 5 },
+    settings: { volume: 1 },
     lastPlayedChapter: chapterNum,
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
