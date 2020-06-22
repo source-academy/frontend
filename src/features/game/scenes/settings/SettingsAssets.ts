@@ -1,4 +1,4 @@
 import { studentRoomImg } from '../../location/GameMapConstants';
-import { topButton, mediumBox } from '../../commons/CommonAssets';
+import { topButton, mediumBox, mediumButton } from '../../commons/CommonAssets';
 
-export const settingsAssets = [studentRoomImg, topButton, mediumBox];
+export const settingsAssets = [studentRoomImg, topButton, mediumBox, mediumButton];

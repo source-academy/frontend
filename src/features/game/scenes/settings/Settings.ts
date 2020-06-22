@@ -1,7 +1,7 @@
 import RadioButtons from '../../commons/CommonRadioButtons';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { studentRoomImg } from '../../location/GameMapConstants';
-import { screenCenter } from '../../commons/CommonConstants';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { settingsAssets } from './SettingsAssets';
 import {
@@ -13,10 +13,15 @@ import {
   volumeOptionTextAnchorX,
   volumeOptionTextAnchorY,
   volumeDefaultOpt,
-  optionHeaderTextStyle
+  optionHeaderTextStyle,
+  applySettingsTextStyle,
+  applySettingsAnchorX,
+  applySettingsAnchorY
 } from './SettingsConstants';
-import { topButton, mediumBox } from '../../commons/CommonAssets';
+import { topButton, mediumBox, mediumButton } from '../../commons/CommonAssets';
 import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
+import { createButton } from '../../utils/StyleUtils';
+import { Constants } from '../../commons/CommonConstants';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -54,7 +59,18 @@ class Settings extends Phaser.Scene {
 
   private renderOptions() {
     this.renderVolumeOptions();
+    const applySettingsButton = createButton(
+      this,
+      'Apply Settings',
+      Constants.nullFunction,
+      mediumButton.key,
+      { x: screenCenter.x, y: screenSize.y * 0.9 },
+      applySettingsAnchorX,
+      applySettingsAnchorY,
+      applySettingsTextStyle
+    );
     const backButton = this.createBackButtonContainer();
+    this.layerManager.addToLayer(Layer.UI, applySettingsButton);
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
