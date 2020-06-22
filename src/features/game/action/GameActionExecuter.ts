@@ -2,7 +2,6 @@ import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { ItemId } from '../commons/CommonsTypes';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
@@ -11,14 +10,12 @@ export default class GameActionExecuter {
     this.actionMap = actionMap;
   }
 
-  public async executeStoryActions(actionIds: ItemId[] | undefined) {
+  public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
     if (!actionIds || !actionIds.length) {
-      await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
       return;
     }
     for (const actionId of actionIds) {
       if (GameActionManager.getInstance().hasTriggeredInteraction(actionId)) {
-        await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
         return;
       }
       const action = this.getActionFromId(actionId);
@@ -27,7 +24,6 @@ export default class GameActionExecuter {
       if (actionConditions) {
         for (const actionCondition of actionConditions) {
           if (!this.checkCondition(actionCondition)) {
-            await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
             return;
           }
         }
@@ -36,7 +32,6 @@ export default class GameActionExecuter {
       GameActionManager.getInstance().triggerInteraction(actionId);
     }
     await GameActionManager.getInstance().saveGame();
-    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
     return;
   }
 
@@ -70,10 +65,14 @@ export default class GameActionExecuter {
         actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
-        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Dialogue, actionParams);
+        await actionManager.getGameManager().dialogueManager.playDialogue(actionParams.id);
         return;
       case GameActionType.AddPopup:
-        actionManager.getGameManager().phaseManager.pushPhase(GamePhaseType.Popup, actionParams);
+        await actionManager.displayPopUp(
+          actionParams.id,
+          actionParams.position,
+          actionParams.duration
+        );
         return;
     }
   }

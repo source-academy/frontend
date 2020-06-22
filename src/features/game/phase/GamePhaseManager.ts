@@ -9,47 +9,30 @@ export default class GamePhaseManager {
     this.phaseStack = [GamePhaseType.Menu];
   }
 
-  public async popPhase(newPhaseParams?: any): Promise<void> {
+  public async popPhase(): Promise<void> {
     const prevPhase = this.phaseStack.pop()!;
-
-    GameActionManager.getInstance().enableKeyboardInput(false);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(this.getCurrentPhase()).reactivate(newPhaseParams);
-    GameActionManager.getInstance().enableKeyboardInput(true);
+    await this.executePhaseTransition(prevPhase, this.getCurrentPhase());
   }
 
-  public async pushPhase(newPhase: GamePhaseType, newPhaseParams?: any): Promise<void> {
+  public async pushPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
     if (newPhase === prevPhase) return;
     this.phaseStack.push(newPhase);
-
-    GameActionManager.getInstance().enableKeyboardInput(false);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(newPhase).activate(newPhaseParams);
-    GameActionManager.getInstance().enableKeyboardInput(true);
+    await this.executePhaseTransition(prevPhase, newPhase);
   }
 
-  public async swapPhase(newPhase: GamePhaseType, newPhaseParams?: any): Promise<void> {
+  public async swapPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
     if (newPhase === prevPhase) return;
     this.phaseStack.pop();
     this.phaseStack.push(newPhase);
-
-    GameActionManager.getInstance().enableKeyboardInput(false);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(newPhase).activate(newPhaseParams);
-    GameActionManager.getInstance().enableKeyboardInput(true);
+    await this.executePhaseTransition(prevPhase, newPhase);
   }
 
-  public async refreshPhase(newPhase: GamePhaseType, newPhaseParams?: any): Promise<void> {
-    const prevPhase = this.getCurrentPhase();
-    if (newPhase !== prevPhase) return;
-    this.phaseStack.pop();
-    this.phaseStack.push(newPhase);
-
+  public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
     GameActionManager.getInstance().enableKeyboardInput(false);
     await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(newPhase).activate(newPhaseParams);
+    await gamePhaseMap.get(newPhase).activate();
     GameActionManager.getInstance().enableKeyboardInput(true);
   }
 
