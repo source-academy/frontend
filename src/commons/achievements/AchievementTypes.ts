@@ -83,3 +83,11 @@ export type AchievementModalItem = {
   goalText: string;
   completionText: string;
 };
+
+export type AchievementState = {
+  achievements: AchievementItem[];
+};
+
+export const defaultAchievements: AchievementState = {
+  achievements: []
+};
