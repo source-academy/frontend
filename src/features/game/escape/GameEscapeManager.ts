@@ -22,6 +22,7 @@ import {
 import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
 import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameEscapeManager {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -76,6 +77,7 @@ class GameEscapeManager {
       gameManager,
       'Main Menu',
       () => {
+        gameManager.unbindEscapeMenu();
         gameManager.layerManager.clearAllLayers();
         gameManager.scene.start('MainMenu');
       },
@@ -89,7 +91,11 @@ class GameEscapeManager {
     const continueButton = createButton(
       gameManager,
       'Continue',
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      async () => {
+        if (gameManager.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await gameManager.phaseManager.popPhase();
+        }
+      },
       mediumButton.key,
       { x: screenSize.x * 0.5, y: escapeButtonYPos },
       escapeTextOriX,

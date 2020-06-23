@@ -40,6 +40,7 @@ class GameManager extends Phaser.Scene {
   private continueGame: boolean;
   private chapterNum: number;
   private checkpointNum: number;
+  private escKey: Phaser.Input.Keyboard.Key | undefined;
 
   public layerManager: GameLayerManager;
   public stateManager: GameStateManager;
@@ -206,14 +207,20 @@ class GameManager extends Phaser.Scene {
   }
 
   private bindEscapeMenu() {
-    const escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    escKey.on('up', () => {
+    this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
+    this.escKey.addListener('up', async () => {
       if (this.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        this.phaseManager.popPhase();
+        await this.phaseManager.popPhase();
       } else {
-        this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
+        await this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
       }
     });
+  }
+
+  public unbindEscapeMenu() {
+    if (this.escKey) {
+      this.escKey.removeAllListeners();
+    }
   }
 }
 
