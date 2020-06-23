@@ -1,12 +1,7 @@
 import { IconName } from '@blueprintjs/core';
 
-export const ADD_ACHIEVEMENT = 'ADD_ACHIEVEMENT';
-export const DELETE_ACHIEVEMENT = 'DELETE_ACHIEVEMENT';
-export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
+export const UPDATE_ACHIEVEMENTS = 'UPDATE_ACHIEVEMENTSS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
-export const ADD_TASK = 'ADD_TASK';
-export const EDIT_TASK = 'EDIT_TASK';
-export const DELETE_TASK = 'DELETE_TASK';
 
 // TODO: Rename abilities
 export enum AchievementAbility {

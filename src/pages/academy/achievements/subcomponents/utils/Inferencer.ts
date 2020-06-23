@@ -65,7 +65,7 @@ class Inferencer {
     this.processNodeList();
   }
 
-  public editAchievement(achievement: AchievementItem) {
+  public editAchievements(achievement: AchievementItem) {
     this.nodeList[achievement.id] = new Node(achievement);
     this.processNodeList();
   }
