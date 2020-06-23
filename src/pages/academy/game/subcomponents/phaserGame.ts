@@ -16,7 +16,7 @@ type GlobalGameProps = {
   accountInfo: AccountInfo | undefined;
 };
 
-class SourceAcademyGame extends Phaser.Game {
+export class SourceAcademyGame extends Phaser.Game {
   protected global: GlobalGameProps;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
@@ -41,7 +41,8 @@ class SourceAcademyGame extends Phaser.Game {
 
   public getAccountInfo() {
     if (!this.global.accountInfo) {
-      throw new Error('No account info');
+      console.log('No account info');
+      return;
     }
     return this.global.accountInfo;
   }
@@ -62,6 +63,11 @@ const config = {
   scene: [MainMenu, Settings, ChapterSelect, GameManager]
 };
 
-const phaserGame = new SourceAcademyGame(config);
+let sourceAcademyGame: SourceAcademyGame;
+export const getSourceAcademyGame = () => {
+  return sourceAcademyGame;
+};
 
-export default phaserGame;
+export const createSourceAcademyGame = () => {
+  sourceAcademyGame = new SourceAcademyGame(config);
+};

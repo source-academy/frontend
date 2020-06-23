@@ -1,5 +1,8 @@
 import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
-import game from 'src/pages/academy/game/subcomponents/phaserGame';
+import {
+  getSourceAcademyGame,
+  SourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/phaserGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 import { LocationId } from '../location/GameMapTypes';
@@ -10,10 +13,12 @@ class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
   private baseSoundManager: Phaser.Sound.BaseSoundManager;
   private scene: Phaser.Scene | undefined;
+  private game: SourceAcademyGame;
 
   constructor() {
+    this.game = getSourceAcademyGame();
     this.soundAssets = new Map<AssetKey, SoundAsset>();
-    this.baseSoundManager = game.sound;
+    this.baseSoundManager = this.game.sound;
     this.scene = undefined;
     this.baseSoundManager.pauseOnBlur = true;
   }
@@ -63,7 +68,7 @@ class GameSoundManager {
 
   public playBgMusic(soundKey: AssetKey) {
     // If same music is already playing, skip
-    const currBgMusicKey = game.getCurrBgMusicKey();
+    const currBgMusicKey = this.game.getCurrBgMusicKey();
     if (currBgMusicKey && currBgMusicKey === soundKey) {
       return;
     }
@@ -73,12 +78,12 @@ class GameSoundManager {
     const soundAsset = this.soundAssets.get(soundKey);
     if (soundAsset) {
       this.baseSoundManager.play(soundAsset.key, soundAsset.config);
-      game.setCurrBgMusicKey(soundAsset.key);
+      this.game.setCurrBgMusicKey(soundAsset.key);
     }
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    const currBgMusicKey = game.getCurrBgMusicKey();
+    const currBgMusicKey = this.game.getCurrBgMusicKey();
     if (this.scene && currBgMusicKey) {
       // Fade out current music
       const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
@@ -90,7 +95,7 @@ class GameSoundManager {
 
       await sleep(fadeDuration);
       this.baseSoundManager.stopByKey(currBgMusicKey);
-      game.setCurrBgMusicKey(undefined);
+      this.game.setCurrBgMusicKey(undefined);
     }
   }
 
@@ -99,7 +104,7 @@ class GameSoundManager {
   }
 
   public pauseCurrBgMusic() {
-    const currBgMusicKey = game.getCurrBgMusicKey();
+    const currBgMusicKey = this.game.getCurrBgMusicKey();
     if (this.scene && currBgMusicKey) {
       const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
       if (currBgMusic.isPlaying) currBgMusic.pause();
@@ -107,7 +112,7 @@ class GameSoundManager {
   }
 
   public continueCurrBgMusic() {
-    const currBgMusicKey = game.getCurrBgMusicKey();
+    const currBgMusicKey = this.game.getCurrBgMusicKey();
     if (this.scene && currBgMusicKey) {
       const currBgMusic = this.baseSoundManager.get(currBgMusicKey);
       if (currBgMusic.isPaused) currBgMusic.play();

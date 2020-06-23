@@ -17,7 +17,7 @@ import CommonBackButton from '../../commons/CommonBackButton';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -44,12 +44,12 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public async create() {
-    try {
-      this.loadedGameState = await loadData(phaserGame.getAccountInfo()!);
-    } catch (e) {
-      console.log('Catch');
-    } finally {
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!accountInfo) {
+      console.log('No account info');
+      return;
     }
+    this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderChapters();
   }
