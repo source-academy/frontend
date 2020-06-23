@@ -16,7 +16,7 @@ export default function DialogueParser(fileName: string, fileContent: string): v
 
       dialogueIds.split(', ').forEach(dialogueId => {
         if (dialogueId[0] === '+') {
-          Parser.chapter.map.setItemAt(
+          Parser.checkpoint.map.setItemAt(
             locationId,
             GameLocationAttr.talkTopics,
             dialogueId.slice(1)
@@ -36,7 +36,7 @@ export default function DialogueParser(fileName: string, fileContent: string): v
   const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(rawlines, createDialogueLines);
   const dialogue: Dialogue = { title: title, content: dialogueObject };
 
-  Parser.chapter.map.addItemToMap(GameLocationAttr.talkTopics, dialogueId, dialogue);
+  Parser.checkpoint.map.addItemToMap(GameLocationAttr.talkTopics, dialogueId, dialogue);
 }
 
 function createDialogueLines(lines: string[]): DialogueLine[] {

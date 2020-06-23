@@ -1,24 +1,30 @@
-import GameUserStateManager from '../state/GameUserStateManager';
-import GameStateManager from '../state/GameStateManager';
 import { FullSaveState, GameSaveState, UserSaveState, SettingsJson } from './GameSaveTypes';
+import GameActionManager from '../action/GameActionManager';
 
 export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,
-  gameStateManager: GameStateManager,
-  userStateManager: GameUserStateManager
+  checkpointNum: number
 ): FullSaveState {
+  const gameManager = GameActionManager.getInstance().getGameManager();
+  const gameStateManager = gameManager.stateManager;
+  const userStateManager = gameManager.userStateManager;
+  const phaseManager = gameManager.phaseManager;
+
   const gameStoryState: GameSaveState = {
+    currentLocation: gameManager.currentLocationId,
+    currentPhase: phaseManager.getCurrentPhase(),
     chapterObjective: mapToJsObject(gameStateManager.getChapterObjectives().getObjectives()),
     locationStates: mapToJsObject(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
-    triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions())
+    triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions()),
+    lastCheckpointPlayed: checkpointNum
   };
 
   const userState: UserSaveState = {
     settings: { ...prevGameState.userState.settings },
-    lastPlayedChapter: chapterNum,
+    lastPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements')
   };

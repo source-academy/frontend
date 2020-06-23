@@ -25,7 +25,11 @@ function parseAction(fullActionString: string): ItemId {
     gameAction.actionConditions = splitByChar(conditionalsString, 'AND').map(strToCondition);
   }
 
-  Parser.chapter.map.addItemToMap(GameLocationAttr.actions, gameAction.interactionId, gameAction);
+  Parser.checkpoint.map.addItemToMap(
+    GameLocationAttr.actions,
+    gameAction.interactionId,
+    gameAction
+  );
 
   return gameAction.interactionId;
 }

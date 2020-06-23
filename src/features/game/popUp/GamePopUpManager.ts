@@ -89,7 +89,7 @@ class GamePopUpManager {
   private getAssetKey(itemId: ItemId) {
     const objectPropMap = GameActionManager.getInstance()
       .getGameManager()
-      .currentChapter.map.getObjects();
+      .currentCheckpoint.map.getObjects();
     const objProp = objectPropMap.get(itemId);
     if (objProp) {
       return objProp.assetKey;

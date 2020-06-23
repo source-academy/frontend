@@ -4,7 +4,10 @@ export type FullSaveState = {
 };
 
 export type GameSaveState = {
+  currentLocation: string;
+  currentPhase: string;
   chapterObjective: { [objective: string]: boolean };
+  lastCheckpointPlayed: number;
   locationStates: {
     [locationId: string]: {
       id: string;
@@ -42,7 +45,7 @@ export type GameSaveState = {
 
 export type UserSaveState = {
   settings: SettingsJson;
-  lastPlayedChapter: number;
+  lastPlayedCheckpoint: [number, number];
   collectibles: string[];
   achievements: string[];
 };

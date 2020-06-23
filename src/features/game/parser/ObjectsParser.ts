@@ -46,12 +46,12 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
       interactionId: objectId
     };
 
-    Parser.chapter.map.addItemToMap(GameLocationAttr.objects, objectId, object);
+    Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, object);
 
-    Parser.chapter.map.addMapAsset(objectAssetKey(shortPath), objectAssetValue(shortPath));
+    Parser.checkpoint.map.addMapAsset(objectAssetKey(shortPath), objectAssetValue(shortPath));
 
     if (toAddToMap) {
-      Parser.chapter.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
+      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
     }
   });
 
@@ -61,7 +61,7 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
     objectActions.forEach(objectDetail => {
       const [objectId, ...actions] = objectDetail.split(', ');
 
-      const objectProperty = Parser.chapter.map.getObjects().get(objectId);
+      const objectProperty = Parser.checkpoint.map.getObjects().get(objectId);
       if (objectProperty) {
         objectProperty.actionIds = ActionParser(actions);
         objectProperty.isInteractive = true;

@@ -22,6 +22,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import game from 'src/pages/academy/game/subcomponents/phaserGame';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { SampleChapters } from '../chapterSelect/SampleChapters';
+import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -46,7 +47,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    this.loadedGameState = await loadData(this.getAccountInfo()!);
+    this.loadedGameState = await loadData(game.getAccountInfo());
     this.renderBackground();
     this.renderOptionButtons();
 
@@ -175,8 +176,8 @@ class MainMenu extends Phaser.Scene {
 
   private newGame() {
     const chapterNum = this.getUnplayedChapter();
-    const fileName = SampleChapters[chapterNum].fileName;
-    this.loadFile(fileName, true, chapterNum);
+    const fileName = SampleChapters[chapterNum].checkpointsFilenames[0];
+    callGameManagerOnTxtLoad(this, fileName, true, chapterNum, 0);
   }
 
   private getUnplayedChapter() {
@@ -187,13 +188,13 @@ class MainMenu extends Phaser.Scene {
   }
 
   private continueGame() {
-    const chapterNum = this.getLastPlayedChapter();
-    const fileName = SampleChapters[chapterNum].fileName;
-    this.loadFile(fileName, true, chapterNum);
+    const [chapterNum, checkpointNum] = this.getLastPlayedCheckpoint();
+    const fileName = SampleChapters[chapterNum].checkpointsFilenames[checkpointNum];
+    callGameManagerOnTxtLoad(this, fileName, true, chapterNum, checkpointNum);
   }
 
-  private getLastPlayedChapter() {
-    return this.getLoadedGameState().userState.lastPlayedChapter;
+  private getLastPlayedCheckpoint() {
+    return this.getLoadedGameState().userState.lastPlayedCheckpoint;
   }
 
   private getLoadedGameState() {
@@ -201,39 +202,6 @@ class MainMenu extends Phaser.Scene {
       throw new Error('Cannot load game');
     }
     return this.loadedGameState;
-  }
-
-  public loadFile(fileName: string, continueGame: boolean, chapterNum: number) {
-    const key = `#${fileName}`;
-
-    if (this.cache.text.exists(key)) {
-      this.callGameManager(key, continueGame, chapterNum);
-      return;
-    }
-
-    this.load.text(key, fileName);
-    this.load.once('filecomplete', (key: string) => {
-      this.callGameManager(key, continueGame, chapterNum);
-    });
-    this.load.start();
-  }
-
-  private callGameManager(key: string, continueGame: boolean, chapterNum: number) {
-    if (key[0] === '#') {
-      const text = this.cache.text.get(key);
-      this.scene.start('GameManager', {
-        text,
-        continueGame: continueGame,
-        chapterNum: chapterNum
-      });
-    }
-  }
-
-  private getAccountInfo() {
-    if (!game.getAccountInfo()) {
-      throw new Error('No account info');
-    }
-    return game.getAccountInfo();
   }
 }
 

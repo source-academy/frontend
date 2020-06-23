@@ -2,7 +2,6 @@ import { screenCenter } from 'src/features/game/commons/CommonConstants';
 import { limitNumber } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
-import { ChapterDetail } from './ChapterSelectTypes';
 import { chapterSelectAssets, chapterSelectBackground } from './ChapterSelectAssets';
 import {
   defaultScrollSpeed,
@@ -15,13 +14,18 @@ import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { GameChapter } from '../../chapter/GameChapterTypes';
+import { loadData } from '../../save/GameSaveRequests';
+import { FullSaveState } from '../../save/GameSaveTypes';
+import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
   private scrollSpeed: number;
-  private chapterDetails: ChapterDetail[];
+  private chapterDetails: GameChapter[];
   private layerManager: GameLayerManager;
+  private loadedGameState: FullSaveState | undefined;
 
   constructor() {
     super('ChapterSelect');
@@ -39,7 +43,8 @@ class ChapterSelect extends Phaser.Scene {
     addLoadingScreen(this);
   }
 
-  public create() {
+  public async create() {
+    this.loadedGameState = await loadData(phaserGame.getAccountInfo()!);
     this.renderBackground();
     this.renderChapters();
   }
@@ -56,21 +61,6 @@ class ChapterSelect extends Phaser.Scene {
       this.chapterContainer.x - this.scrollSpeed,
       0
     );
-  }
-
-  public loadFile(fileName: string, continueGame: boolean, chapterNum: number) {
-    const key = `#${fileName}`;
-
-    if (this.cache.text.exists(key)) {
-      this.callGameManager(key, continueGame, chapterNum);
-      return;
-    }
-
-    this.load.text(key, fileName);
-    this.load.once('filecomplete', (key: string) => {
-      this.callGameManager(key, continueGame, chapterNum);
-    });
-    this.load.start();
   }
 
   private preloadAssets() {
@@ -120,20 +110,16 @@ class ChapterSelect extends Phaser.Scene {
   private createChapterContainer() {
     const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
     chapterContainer.add(
-      this.chapterDetails.map((chapterDetail, index) => createChapter(this, chapterDetail, index))
+      this.chapterDetails.map((chapterDetail, chapterIndex) => {
+        // Use latest checkpoint if it exist
+        let lastCheckpoint = 0;
+        if (this.loadedGameState && this.loadedGameState.gameSaveStates[chapterIndex]) {
+          lastCheckpoint = this.loadedGameState.gameSaveStates[chapterIndex].lastCheckpointPlayed;
+        }
+        return createChapter(this, chapterDetail, chapterIndex, lastCheckpoint);
+      })
     );
     return chapterContainer;
-  }
-
-  private callGameManager(key: string, continueGame: boolean, chapterNum: number) {
-    if (key[0] === '#') {
-      const text = this.cache.text.get(key);
-      this.scene.start('GameManager', {
-        text,
-        continueGame: continueGame,
-        chapterNum: chapterNum
-      });
-    }
   }
 }
 

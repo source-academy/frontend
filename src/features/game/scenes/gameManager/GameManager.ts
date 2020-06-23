@@ -17,22 +17,22 @@ import GameBackgroundManager from '../../background/GameBackgroundManager';
 
 import LocationSelectChapter from '../LocationSelectChapter';
 import commonAssets from 'src/features/game/commons/CommonAssets';
-import { GameChapter } from 'src/features/game/chapter/GameChapterTypes';
+import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
-import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
+import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 type GameManagerProps = {
-  accountInfo: AccountInfo;
   text: string;
   continueGame: boolean;
   chapterNum: number;
+  checkpointNum: number;
 };
 
 class GameManager extends Phaser.Scene {
-  public currentChapter: GameChapter;
+  public currentCheckpoint: GameCheckpoint;
   public currentLocationId: LocationId;
 
   public layerManager: GameLayerManager;
@@ -53,8 +53,8 @@ class GameManager extends Phaser.Scene {
   constructor() {
     super('GameManager');
 
-    this.currentChapter = LocationSelectChapter;
-    this.currentLocationId = this.currentChapter.startingLoc;
+    this.currentCheckpoint = LocationSelectChapter;
+    this.currentLocationId = this.currentCheckpoint.startingLoc;
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
@@ -71,10 +71,8 @@ class GameManager extends Phaser.Scene {
     this.backgroundManager = new GameBackgroundManager();
   }
 
-  public async init({ text, continueGame, chapterNum }: GameManagerProps) {
-    this.currentChapter = LocationSelectChapter;
-    this.currentLocationId = this.currentChapter.startingLoc;
-
+  public async init({ text, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
+    console.log(continueGame, chapterNum, checkpointNum);
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
@@ -91,29 +89,33 @@ class GameManager extends Phaser.Scene {
 
     GameActionManager.getInstance().setGameManager(this);
 
-    this.currentChapter = Parser.parse(text);
-    await this.loadGameState(continueGame, chapterNum);
+    this.currentCheckpoint = Parser.parse(text);
+    this.currentLocationId = this.currentCheckpoint.startingLoc;
+
+    await this.loadGameState(continueGame, chapterNum, checkpointNum);
+    console.log('after loadGameState', this.currentLocationId);
 
     this.soundManager.initialise(this);
-    this.dialogueManager.initialise(this.currentChapter.map.getDialogues());
-    this.characterManager.initialise(this.currentChapter.map.getCharacters());
-    this.actionExecuter.initialise(this.currentChapter.map.getActions());
+    this.dialogueManager.initialise(this.currentCheckpoint.map.getDialogues());
+    this.characterManager.initialise(this.currentCheckpoint.map.getCharacters());
+    this.actionExecuter.initialise(this.currentCheckpoint.map.getActions());
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
-    this.soundManager.loadSounds(this.currentChapter.map.getSoundAssets());
+    this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
     this.bindEscapeMenu();
   }
 
-  public async loadGameState(continueGame: boolean, chapterNum: number) {
-    const accountInfo = game.getAccountInfo();
-    if (accountInfo) {
-      await this.saveManager.initialise(accountInfo, chapterNum);
-      this.userStateManager.initialise(this.saveManager.getLoadedUserState());
-    }
+  public async loadGameState(continueGame: boolean, chapterNum: number, checkpointNum: number) {
+    const accountInfo = phaserGame.getAccountInfo();
+    await this.saveManager.initialise(accountInfo, chapterNum, checkpointNum);
+    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
     const startingGameState =
       continueGame && accountInfo ? this.saveManager.getLoadedGameStoryState() : undefined;
-    this.stateManager.initialise(this.currentChapter, startingGameState);
+    this.stateManager.initialise(this.currentCheckpoint, startingGameState);
+    if (continueGame) {
+      this.currentLocationId = this.saveManager.getLoadedLocation();
+    }
   }
 
   //////////////////////
@@ -122,8 +124,9 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.preloadLocationsAssets(this.currentChapter);
+    this.preloadLocationsAssets(this.currentCheckpoint);
     this.preloadBaseAssets();
+    console.log('at preload', this.currentLocationId);
   }
 
   private preloadBaseAssets() {
@@ -132,7 +135,7 @@ class GameManager extends Phaser.Scene {
     });
   }
 
-  private preloadLocationsAssets(chapter: GameChapter) {
+  private preloadLocationsAssets(chapter: GameCheckpoint) {
     chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
       this.load.image(assetKey, assetPath);
     });
@@ -143,18 +146,20 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    this.changeLocationTo(this.currentChapter.startingLoc);
+    console.log('at create', this.currentLocationId);
+    this.changeLocationTo(this.currentLocationId);
     await GameActionManager.getInstance().saveGame();
   }
 
   private async renderLocation(locationId: LocationId) {
+    console.log('At render loc', locationId);
     this.soundManager.renderBackgroundMusic(locationId);
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
 
-    const gameLocation = this.currentChapter.map.getLocationAtId(locationId);
+    const gameLocation = this.currentCheckpoint.map.getLocationAtId(locationId);
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {

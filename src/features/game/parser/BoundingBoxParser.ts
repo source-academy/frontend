@@ -38,10 +38,10 @@ function addBBoxToLoc(bboxList: string[], locationId: LocationId): void {
       interactionId: bboxId
     };
 
-    Parser.chapter.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bbox);
+    Parser.checkpoint.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bbox);
 
     if (toAddToMap) {
-      Parser.chapter.map.setItemAt(locationId, GameLocationAttr.boundingBoxes, bboxId);
+      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.boundingBoxes, bboxId);
     }
   });
 
@@ -51,7 +51,7 @@ function addBBoxToLoc(bboxList: string[], locationId: LocationId): void {
     bboxActions.forEach(bboxDetail => {
       const [bboxId, ...actions] = bboxDetail.split(', ');
 
-      const bBoxProperty = Parser.chapter.map.getBBoxes().get(bboxId);
+      const bBoxProperty = Parser.checkpoint.map.getBBoxes().get(bboxId);
       if (bBoxProperty) {
         bBoxProperty.actionIds = ActionParser(actions);
         bBoxProperty.isInteractive = true;

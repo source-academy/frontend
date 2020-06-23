@@ -38,7 +38,6 @@ class GameModeTalk implements IGameUI {
         this.addTalkOptionButton(
           dialogue.title,
           async () => {
-            // console.log('TRIGGER');
             GameActionManager.getInstance().triggerInteraction(dialogueId);
             await GameActionManager.getInstance().bringUpDialogue(dialogueId);
           },

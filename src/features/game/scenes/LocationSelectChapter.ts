@@ -1,4 +1,4 @@
-import { GameChapter } from '../chapter/GameChapterTypes';
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import GameMap from '../location/GameMap';
 import {
   crashSiteImg,
@@ -184,7 +184,7 @@ LocationSelectMap.setItemAt('room', GameLocationAttr.characters, scottie.id);
 const objectives = new GameObjective();
 objectives.addObjectives(['Visit Hallway', 'Talk At Classroom']);
 
-const LocationSelectChapter: GameChapter = {
+const LocationSelectChapter: GameCheckpoint = {
   map: LocationSelectMap,
   startingLoc: 'room',
   objectives: objectives
