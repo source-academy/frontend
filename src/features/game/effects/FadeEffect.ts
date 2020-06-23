@@ -2,6 +2,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
+import { Color, hex } from '../utils/StyleUtils';
 
 export const fadeOut = (
   targets: Phaser.GameObjects.GameObject[],
@@ -37,7 +38,7 @@ export function fadeAndDestroy(
   setTimeout(() => object.destroy(), fadeDuration || Constants.fadeDuration);
 }
 
-function blackScreen(scene: Phaser.Scene) {
+export function blackScreen(scene: Phaser.Scene) {
   return new Phaser.GameObjects.Rectangle(
     scene,
     screenCenter.x,
@@ -45,6 +46,17 @@ function blackScreen(scene: Phaser.Scene) {
     screenSize.x,
     screenSize.y,
     0
+  );
+}
+
+export function whiteScreen(scene: Phaser.Scene) {
+  return new Phaser.GameObjects.Rectangle(
+    scene,
+    screenCenter.x,
+    screenCenter.y,
+    screenSize.x,
+    screenSize.y,
+    hex(Color.white)
   );
 }
 
