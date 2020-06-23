@@ -20,12 +20,12 @@ import {
   optionsXPos,
   volumeOptionYPos
 } from './SettingsConstants';
-import { topButton, mediumButton } from '../../commons/CommonAssets';
-import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
+import { mediumButton } from '../../commons/CommonAssets';
 import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import GameSoundManager from '../../sound/GameSoundManager';
+import CommonBackButton from '../../commons/CommonBackButton';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -87,7 +87,15 @@ class Settings extends Phaser.Scene {
       applySettingsAnchorY,
       applySettingsTextStyle
     );
-    const backButton = this.createBackButtonContainer();
+    const backButton = new CommonBackButton(
+      this,
+      () => {
+        this.layerManager.clearAllLayers();
+        this.scene.start('MainMenu');
+      },
+      0,
+      0
+    );
     this.layerManager.addToLayer(Layer.UI, applySettingsButton);
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
@@ -127,31 +135,6 @@ class Settings extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, volumeBg);
     this.layerManager.addToLayer(Layer.UI, volumeText);
     this.layerManager.addToLayer(Layer.UI, this.volumeRadioButtons);
-  }
-
-  private createBackButtonContainer() {
-    const backButtonContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const backButtonText = new Phaser.GameObjects.Text(
-      this,
-      screenCenter.x,
-      backTextYPos,
-      backText,
-      backButtonStyle
-    ).setOrigin(0.5, 0.25);
-
-    const backButtonSprite = new Phaser.GameObjects.Sprite(
-      this,
-      screenCenter.x,
-      screenCenter.y,
-      topButton.key
-    );
-    backButtonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-    backButtonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      this.layerManager.clearAllLayers();
-      this.scene.start('MainMenu');
-    });
-    backButtonContainer.add([backButtonSprite, backButtonText]);
-    return backButtonContainer;
   }
 
   public async applySettings(volume?: RadioButtons) {

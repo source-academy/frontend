@@ -14,8 +14,7 @@ import {
 import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { topButton } from '../../commons/CommonAssets';
-import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeTypes';
+import CommonBackButton from '../../commons/CommonBackButton';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -93,7 +92,15 @@ class ChapterSelect extends Phaser.Scene {
 
   private renderChapters() {
     const mask = this.createMask();
-    this.backButtonContainer = this.createBackButtonContainer();
+    this.backButtonContainer = new CommonBackButton(
+      this,
+      () => {
+        this.layerManager.clearAllLayers();
+        this.scene.start('MainMenu');
+      },
+      0,
+      0
+    );
     this.chapterContainer = this.createChapterContainer();
     this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
 
@@ -108,31 +115,6 @@ class ChapterSelect extends Phaser.Scene {
       .setPosition(screenCenter.x, screenCenter.y);
     mask.alpha = 0;
     return mask;
-  }
-
-  private createBackButtonContainer() {
-    const backButtonContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const backButtonText = new Phaser.GameObjects.Text(
-      this,
-      screenCenter.x,
-      backTextYPos,
-      backText,
-      backButtonStyle
-    ).setOrigin(0.5, 0.25);
-
-    const backButtonSprite = new Phaser.GameObjects.Sprite(
-      this,
-      screenCenter.x,
-      screenCenter.y,
-      topButton.key
-    );
-    backButtonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-    backButtonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      this.layerManager.clearAllLayers();
-      this.scene.start('MainMenu');
-    });
-    backButtonContainer.add([backButtonSprite, backButtonText]);
-    return backButtonContainer;
   }
 
   private createChapterContainer() {
