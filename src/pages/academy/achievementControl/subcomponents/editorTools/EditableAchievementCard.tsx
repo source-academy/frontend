@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Card, Button } from '@blueprintjs/core';
+import { Card } from '@blueprintjs/core';
 import { IconName } from '@blueprintjs/icons';
 
 import {
@@ -13,18 +13,41 @@ import EditableAchievementDeadline from './editableUtils/EditableAchievementDead
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
+import EditableAchievementAction from './editableUtils/EditableAchievementAction';
+import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
-  setHasChanges: any;
-  saveChanges: any;
+  inferencer: Inferencer;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, setHasChanges, saveChanges } = props;
+  const { achievement, inferencer } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { title, ability, exp, deadline, icon } = editableAchievement;
+
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [pendingUpload, setPendingUpload] = useState<boolean>(false);
+
+  const handleSaveChanges = (achievement: AchievementItem) => {
+    inferencer.editAchievement(achievement);
+    setHasChanges(false);
+    setPendingUpload(true);
+    console.log('Saved changes!');
+    console.log(achievement);
+  };
+
+  const handleDiscardChanges = () => {
+    setEditableAchievement(achievement);
+    setHasChanges(false);
+  };
+
+  const handleUploadChanges = () => {
+    setPendingUpload(false);
+    console.log('Uploading changes...');
+    inferencer.logInfo();
+  };
 
   /* Handlers to Change State of Achievement information */
   const changeTitle = (title: string) => {
@@ -74,11 +97,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     <Card className="editable-achievement">
       <div className="top-bar">
         <EditableAchievementModal title={title} modal={achievement.modal} />
-        <Button
-          icon={'export'}
-          intent={'danger'}
-          outlined={true}
-          onClick={() => saveChanges(editableAchievement)}
+        <EditableAchievementAction
+          achievement={editableAchievement}
+          hasChanges={hasChanges}
+          saveChanges={handleSaveChanges}
+          discardChanges={handleDiscardChanges}
+          pendingUpload={pendingUpload}
+          uploadChanges={handleUploadChanges}
         />
       </div>
 

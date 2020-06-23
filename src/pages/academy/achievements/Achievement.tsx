@@ -17,14 +17,14 @@ function Achievement() {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
-  const _inferencer = new Inferencer(achievementData);
+  const inferencer = new Inferencer(achievementData);
 
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (
       <AchievementTask
         key={id}
         id={id}
-        inferencer={_inferencer}
+        inferencer={inferencer}
         filterStatus={filterStatus}
         displayModal={setModalId}
       />
@@ -39,27 +39,27 @@ function Achievement() {
             filterStatus={FilterStatus.ALL}
             setFilterStatus={setFilterStatus}
             icon={IconNames.GLOBE}
-            count={_inferencer.getFilterCount(FilterStatus.ALL)}
+            count={inferencer.getFilterCount(FilterStatus.ALL)}
           />
           <AchievementFilter
             filterStatus={FilterStatus.ACTIVE}
             setFilterStatus={setFilterStatus}
             icon={IconNames.LOCATE}
-            count={_inferencer.getFilterCount(FilterStatus.ACTIVE)}
+            count={inferencer.getFilterCount(FilterStatus.ACTIVE)}
           />
           <AchievementFilter
             filterStatus={FilterStatus.COMPLETED}
             setFilterStatus={setFilterStatus}
             icon={IconNames.ENDORSED}
-            count={_inferencer.getFilterCount(FilterStatus.COMPLETED)}
+            count={inferencer.getFilterCount(FilterStatus.COMPLETED)}
           />
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementIdsToTasks(_inferencer.listTaskIds())}</ul>
+          <ul className="display-list">{mapAchievementIdsToTasks(inferencer.listTaskIds())}</ul>
         </div>
 
-        <AchievementModal id={modalId} inferencer={_inferencer} />
+        <AchievementModal id={modalId} inferencer={inferencer} />
       </div>
     </div>
   );

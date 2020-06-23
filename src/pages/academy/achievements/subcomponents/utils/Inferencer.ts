@@ -33,6 +33,7 @@ class Inferencer {
   constructor(achievementData: AchievementItem[]) {
     this.nodeList = this.generateNodeList(achievementData);
     this.processNodeList();
+    console.log('Generate Inferencer');
   }
 
   public logInfo() {
@@ -53,18 +54,42 @@ class Inferencer {
     console.log('ಠ_ಠ hmm...u should only see me once');
   }
 
-  public setItem(achievement: AchievementItem) {
-    console.log('Set new item', achievement);
+  public getAchievementItem(id: number) {
+    return this.nodeList[id].achievement;
+  }
+
+  public addAchievement(achievement: AchievementItem) {
+    const newId = this.nodeList.length;
+    achievement.id = newId;
+    this.nodeList[newId] = new Node(achievement);
+    this.processNodeList();
+  }
+
+  public editAchievement(achievement: AchievementItem) {
     this.nodeList[achievement.id] = new Node(achievement);
     this.processNodeList();
   }
 
-  public getFurthestDeadline(id: number) {
-    return this.nodeList[id].furthestDeadline;
+  public removeAchievement(id: number) {
+    this.nodeList.splice(id, 1);
+    this.normalizeData();
+    this.processNodeList();
+  }
+
+  public listIds() {
+    return this.nodeList.map(node => node.id);
+  }
+
+  public listTaskIds() {
+    return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
   }
 
   public getTotalExp(id: number) {
     return this.nodeList[id].totalExp;
+  }
+
+  public getFurthestDeadline(id: number) {
+    return this.nodeList[id].furthestDeadline;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -91,20 +116,6 @@ class Inferencer {
     return [...this.getDescendants(id)];
   }
 
-  public getNonTaskAchievementsItems() {
-    // to be removed
-    return this.nodeList.filter(node => !node.achievement.isTask).map(node => node.achievement);
-  }
-
-  public getAchievementItems() {
-    // to be removed
-    return this.nodeList.filter(node => node.achievement.isTask);
-  }
-
-  public getAchievementItem(id: number) {
-    return this.nodeList[id].achievement;
-  }
-
   public getModalItem(id: number) {
     return id < 0 ? undefined : this.nodeList[id].modal;
   }
@@ -122,28 +133,6 @@ class Inferencer {
       default:
         return 0;
     }
-  }
-
-  public listIds() {
-    return this.nodeList.map(node => node.id);
-  }
-
-  public listTaskIds() {
-    return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
-  }
-
-  public insertAchievement(achievement: AchievementItem) {
-    // TODO: handle generate new index here
-    this.nodeList[achievement.id] = new Node(achievement);
-    this.processNodeList();
-  }
-
-  public removeAchievement(id: number) {
-    this.nodeList.splice(id, 1);
-  }
-
-  public normalizeData() {
-    // clean up indexes before fetching to database?
   }
 
   private generateNodeList(achievementData: AchievementItem[]) {
@@ -216,6 +205,10 @@ class Inferencer {
 
     // Reduces the temporary array to a single number value
     node.totalExp = descendantExps.reduce(combineExps, node.totalExp);
+  }
+
+  private normalizeData() {
+    // clean up indexes before fetching to database?
   }
 }
 
