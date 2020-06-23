@@ -9,7 +9,7 @@ export const AchievementReducer: Reducer<AchievementState> = (
   action: SourceActionType
 ) => {
   switch (action.type) {
-    case UPDATE_ACHIEVEMENTS: 
+    case UPDATE_ACHIEVEMENTS:
       return {
         achievements: action.payload
       };

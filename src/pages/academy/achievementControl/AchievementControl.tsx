@@ -4,8 +4,12 @@ import AchievementEditor from './subcomponents/AchievementEditor';
 
 import { achievementData } from '../../../commons/mocks/AchievementMocks';
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  handleAchievementsFetch: () => void;
+  handleAchievementsUpdate: (achievements: AchievementItem[]) => void;
+};
 
 export type StateProps = {};
 
