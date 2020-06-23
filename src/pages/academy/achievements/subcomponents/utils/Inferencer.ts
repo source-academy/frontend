@@ -71,9 +71,7 @@ class Inferencer {
   }
 
   public removeAchievement(id: number) {
-    this.nodeList.splice(id, 1);
-    this.normalizeData();
-    this.processNodeList();
+    // implement remove
   }
 
   public listIds() {
@@ -205,10 +203,6 @@ class Inferencer {
 
     // Reduces the temporary array to a single number value
     node.totalExp = descendantExps.reduce(combineExps, node.totalExp);
-  }
-
-  private normalizeData() {
-    // clean up indexes before fetching to database?
   }
 }
 

@@ -16,7 +16,7 @@ function EditableAchievementExp(props: EditableAchievementExpProps) {
       <InputGroup
         placeholder={'Enter a number here'}
         value={exp.toString()}
-        onChange={(e: any) => changeExp(e.target.value)}
+        onChange={(event: any) => changeExp(event.target.value)}
         leftIcon={IconNames.BANK_ACCOUNT}
         rightElement={<p>XP</p>}
       />

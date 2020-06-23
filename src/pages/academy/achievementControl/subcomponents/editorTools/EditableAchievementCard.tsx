@@ -13,29 +13,30 @@ import EditableAchievementDeadline from './editableUtils/EditableAchievementDead
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
-import EditableAchievementAction from './editableUtils/EditableAchievementAction';
+import SaveAchievementButton from './editableUtils/SaveAchievementButton';
 import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
+import DeleteAchievementButton from './editableUtils/DeleteAchievementButton';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
+  forceUpdate: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, inferencer } = props;
+  const { achievement, inferencer, forceUpdate } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { title, ability, exp, deadline, icon } = editableAchievement;
+  const { id, title, ability, exp, deadline, icon } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
 
-  const handleSaveChanges = (achievement: AchievementItem) => {
-    inferencer.editAchievement(achievement);
+  const handleSaveChanges = () => {
+    inferencer.editAchievement(editableAchievement);
     setHasChanges(false);
     setPendingUpload(true);
-    console.log('Saved changes!');
-    console.log(achievement);
+    console.log('Saved changes!', editableAchievement);
   };
 
   const handleDiscardChanges = () => {
@@ -48,6 +49,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setPendingUpload(false);
     console.log('Uploading changes...');
     inferencer.logInfo();
+  };
+
+  const handleDeleteAchievement = () => {
+    console.log('Deleted achievement', inferencer.getAchievementItem(id));
+    inferencer.removeAchievement(id);
+    forceUpdate();
   };
 
   /* Handlers to Change State of Achievement information */
@@ -68,8 +75,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
         ...editableAchievement,
         exp: parseInt(exp)
       });
+      setHasChanges(true);
     }
-    setHasChanges(true);
   };
 
   const handleChangeDeadline = (deadline: Date) => {
@@ -100,8 +107,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     <Card className="editable-achievement">
       <div className="top-bar">
         <EditableAchievementModal title={title} modal={achievement.modal} />
-        <EditableAchievementAction
-          achievement={editableAchievement}
+        <SaveAchievementButton
           hasChanges={hasChanges}
           saveChanges={handleSaveChanges}
           discardChanges={handleDiscardChanges}
@@ -112,7 +118,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
       <div className="main">
         <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={handleChangeThumbnail} />
-
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 
@@ -126,6 +131,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
             <EditableAchievementExp exp={exp} changeExp={handleChangeExp} />
           </div>
+        </div>
+        <div className="details">
+          <DeleteAchievementButton deleteAchievement={handleDeleteAchievement} />
         </div>
       </div>
     </Card>

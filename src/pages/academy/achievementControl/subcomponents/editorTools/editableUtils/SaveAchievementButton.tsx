@@ -1,9 +1,7 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 
-type EditableAchievementActionProps = {
-  achievement: AchievementItem;
+type SaveAchievementButtonProps = {
   hasChanges: boolean;
   saveChanges: any;
   discardChanges: any;
@@ -11,15 +9,8 @@ type EditableAchievementActionProps = {
   uploadChanges: any;
 };
 
-function EditableAchievementAction(props: EditableAchievementActionProps) {
-  const {
-    achievement,
-    hasChanges,
-    saveChanges,
-    discardChanges,
-    pendingUpload,
-    uploadChanges
-  } = props;
+function SaveAchievementButton(props: SaveAchievementButtonProps) {
+  const { hasChanges, saveChanges, discardChanges, pendingUpload, uploadChanges } = props;
 
   return (
     <>
@@ -30,7 +21,7 @@ function EditableAchievementAction(props: EditableAchievementActionProps) {
             text={'Save'}
             intent={'primary'}
             outlined={true}
-            onClick={() => saveChanges(achievement)}
+            onClick={saveChanges}
           />
           <Button
             icon={'cross'}
@@ -41,15 +32,10 @@ function EditableAchievementAction(props: EditableAchievementActionProps) {
           />
         </>
       ) : pendingUpload ? (
-        <Button
-          icon={'export'}
-          text={'Submit'}
-          intent={'primary'}
-          onClick={() => uploadChanges(achievement)}
-        />
+        <Button icon={'export'} text={'Submit'} intent={'primary'} onClick={uploadChanges} />
       ) : null}
     </>
   );
 }
 
-export default EditableAchievementAction;
+export default SaveAchievementButton;
