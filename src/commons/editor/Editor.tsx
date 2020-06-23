@@ -20,6 +20,7 @@ import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
 import useShareAce from './UseShareAce';
+import useRefactor from './UseRefactor';
 
 // =============== Mixins ===============
 /* import WithShareAce from './WithShareAce';
@@ -302,7 +303,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   <EditorBase
     {...props}
-    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce]}
+    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor]}
     ref={ref}
   />
 ));

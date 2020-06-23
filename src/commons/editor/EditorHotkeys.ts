@@ -9,14 +9,10 @@ export const keyBindings = {
     win: 'Ctrl-B',
     mac: 'Command-B'
   },
-  // {
-  //   name: 'refactor',
-  //   bindKey: {
-  //     win: 'Ctrl-M',
-  //     mac: 'Command-M'
-  //   },
-  //   exec: 'handleRefactor'
-  // },
+  refactor: {
+    win: 'Ctrl-M',
+    mac: 'Command-M'
+  },
   highlightScope: {
     win: 'Ctrl-Shift-H',
     mac: 'Command-Shift-H'
