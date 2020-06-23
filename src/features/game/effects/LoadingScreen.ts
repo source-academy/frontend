@@ -12,10 +12,15 @@ const innerBarX = barX + padding;
 const innerBarY = barY + padding;
 
 export function addLoadingScreen(scene: Phaser.Scene) {
-  const progressBar = scene.add.graphics();
-  const progressBox = scene.add.graphics();
-  progressBox.fillStyle(0x222222, 0.8);
-  progressBox.fillRect(barX, barY, barWidth, barHeight);
+  let progressBar: Phaser.GameObjects.Graphics;
+  let progressBox: Phaser.GameObjects.Graphics;
+
+  scene.load.on('start', () => {
+    progressBar = scene.add.graphics();
+    progressBox = scene.add.graphics();
+    progressBox.fillStyle(0x222222, 0.8);
+    progressBox.fillRect(barX, barY, barWidth, barHeight);
+  });
 
   scene.load.on('progress', (value: number) => {
     progressBar.clear();
