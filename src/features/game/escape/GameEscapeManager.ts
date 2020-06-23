@@ -21,7 +21,7 @@ import {
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
-import { volumeContainerOptions, volumeDefaultOpt } from '../scenes/settings/SettingsConstants';
+import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 
 class GameEscapeManager {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -51,10 +51,14 @@ class GameEscapeManager {
       optTextStyle
     );
 
+    const userVol = GameActionManager.getInstance()
+      .getGameManager()
+      .saveManager.getLoadedUserState().settings.volume;
+    const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
     this.volumeOptions = new CommonRadioButtons(
       gameManager,
       volumeContainerOptions,
-      volumeDefaultOpt, // TODO: Use previous setting
+      userVolIdx,
       radioButtonsXSpace,
       volumeRadioOptTextStyle,
       volumeOptXPos,
@@ -96,9 +100,7 @@ class GameEscapeManager {
     const applySettingsButton = createButton(
       gameManager,
       'Apply Settings',
-      () => {
-        GameActionManager.getInstance().getGameManager().saveManager.saveSettings({ volume: 5 });
-      },
+      () => this.applySettings(),
       mediumButton.key,
       { x: screenSize.x * 0.75, y: escapeButtonYPos },
       escapeTextOriX,
@@ -121,6 +123,24 @@ class GameEscapeManager {
     GameActionManager.getInstance()
       .getGameManager()
       .layerManager.clearSeveralLayers([Layer.Escape]);
+  }
+
+  private async applySettings() {
+    if (this.volumeOptions) {
+      // Save settings
+      const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
+      await GameActionManager.getInstance()
+        .getGameManager()
+        .saveManager.saveSettings({ volume: volumeVal });
+
+      // Apply settings
+      const newUserSetting = GameActionManager.getInstance()
+        .getGameManager()
+        .saveManager.getLoadedUserState();
+      GameActionManager.getInstance()
+        .getGameManager()
+        .soundManager.applyUserSettings(newUserSetting);
+    }
   }
 }
 

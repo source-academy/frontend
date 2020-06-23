@@ -9,7 +9,6 @@ import {
   optionTextStyle,
   volumeOptionTextAnchorX,
   volumeOptionTextAnchorY,
-  volumeDefaultOpt,
   optionHeaderTextStyle,
   applySettingsTextStyle,
   applySettingsAnchorX,
@@ -26,22 +25,26 @@ import { backButtonStyle, backText, backTextYPos } from '../../mode/GameModeType
 import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
+import GameSoundManager from '../../sound/GameSoundManager';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
   private layerManager: GameLayerManager;
   private settingsSaveManager: GameSaveManager;
+  private soundManager: GameSoundManager;
 
   constructor() {
     super('Settings');
     this.layerManager = new GameLayerManager();
     this.volumeRadioButtons = undefined;
     this.settingsSaveManager = new GameSaveManager();
+    this.soundManager = new GameSoundManager();
   }
 
   public preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this);
   }
 
   public create() {
@@ -103,10 +106,12 @@ class Settings extends Phaser.Scene {
       'Volume',
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
+    const userVol = this.settingsSaveManager.getLoadedUserState().settings.volume;
+    const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
     this.volumeRadioButtons = new RadioButtons(
       this,
       volumeContainerOptions,
-      volumeDefaultOpt,
+      userVolIdx,
       optionsXSpace,
       optionTextStyle,
       optionsXPos,
@@ -149,10 +154,15 @@ class Settings extends Phaser.Scene {
     return backButtonContainer;
   }
 
-  public applySettings(volume?: RadioButtons) {
+  public async applySettings(volume?: RadioButtons) {
     if (volume) {
+      // Save settings
       const volumeVal = parseFloat(volume.getChosenChoice());
-      this.settingsSaveManager.saveSettings({ volume: volumeVal });
+      await this.settingsSaveManager.saveSettings({ volume: volumeVal });
+
+      // Apply settings
+      const newUserSetting = this.settingsSaveManager.getLoadedUserState();
+      this.soundManager.applyUserSettings(newUserSetting);
     }
   }
 

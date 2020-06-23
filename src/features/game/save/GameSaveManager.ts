@@ -15,7 +15,7 @@ export default class GameSaveManager {
       userState: {
         collectibles: [],
         achievements: [],
-        settings: { volume: 0 },
+        settings: { volume: 1 },
         lastPlayedChapter: -1
       }
     } as FullSaveState;
@@ -47,9 +47,6 @@ export default class GameSaveManager {
   public async saveSettings(settingsJson: SettingsJson) {
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
     await saveData(this.getAccountInfo(), this.fullSaveState);
-    await GameActionManager.getInstance()
-      .getGameManager()
-      .soundManager.applyUserSettings(this.fullSaveState.userState);
   }
 
   public getLoadedUserState() {
