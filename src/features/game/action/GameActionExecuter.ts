@@ -27,6 +27,7 @@ export default class GameActionExecuter {
 
   private async executeStoryAction(actionType: GameActionType, actionParams: any) {
     const actionManager = GameActionManager.getInstance();
+    const gameManager = actionManager.getGameManager();
 
     switch (actionType) {
       case GameActionType.LocationChange:

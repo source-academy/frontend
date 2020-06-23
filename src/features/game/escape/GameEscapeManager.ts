@@ -77,8 +77,7 @@ class GameEscapeManager {
       gameManager,
       'Main Menu',
       () => {
-        gameManager.unbindEscapeMenu();
-        gameManager.layerManager.clearAllLayers();
+        gameManager.cleanUp();
         gameManager.scene.start('MainMenu');
       },
       mediumButton.key,

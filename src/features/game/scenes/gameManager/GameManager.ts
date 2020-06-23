@@ -217,14 +217,16 @@ class GameManager extends Phaser.Scene {
     });
   }
 
-  public unbindEscapeMenu() {
+  public cleanUp() {
     if (this.escKey) {
       this.escKey.removeAllListeners();
     }
+    this.layerManager.clearAllLayers();
   }
 
   public checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
+      this.cleanUp();
       this.scene.start('CheckpointTransition');
     }
   }
