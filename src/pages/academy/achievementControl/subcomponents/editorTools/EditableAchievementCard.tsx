@@ -41,6 +41,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleDiscardChanges = () => {
     setEditableAchievement(achievement);
     setHasChanges(false);
+    setPendingUpload(false);
   };
 
   const handleUploadChanges = () => {
@@ -50,7 +51,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   /* Handlers to Change State of Achievement information */
-  const changeTitle = (title: string) => {
+  const handleChangeTitle = (title: string) => {
     setEditableAchievement({
       ...editableAchievement,
       title: title
@@ -58,8 +59,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
-  const changeExp = (exp: string) => {
+  const handleChangeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
+      if (exp === '') {
+        exp = '0'; // handle special case of empty input
+      }
       setEditableAchievement({
         ...editableAchievement,
         exp: parseInt(exp)
@@ -68,7 +72,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
-  const changeDeadline = (deadline: Date) => {
+  const handleChangeDeadline = (deadline: Date) => {
     setEditableAchievement({
       ...editableAchievement,
       deadline: deadline
@@ -76,7 +80,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
-  const changeAbility = (ability: AchievementAbility, e: any) => {
+  const handleChangeAbility = (ability: AchievementAbility, e: any) => {
     setEditableAchievement({
       ...editableAchievement,
       ability: ability
@@ -84,7 +88,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
-  const changeThumbnail = (thumbnail: IconName) => {
+  const handleChangeThumbnail = (thumbnail: IconName) => {
     setEditableAchievement({
       ...editableAchievement,
       icon: thumbnail
@@ -92,7 +96,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
-  // TODO: Delete Achievement Item
   return (
     <Card className="editable-achievement">
       <div className="top-bar">
@@ -108,17 +111,20 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       </div>
 
       <div className="main">
-        <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={changeThumbnail} />
+        <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={handleChangeThumbnail} />
 
         <div className="display">
-          <EditableAchievementTitle title={title} changeTitle={changeTitle} />
+          <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 
           <div className="details">
-            <EditableAchievementAbility ability={ability} changeAbility={changeAbility} />
+            <EditableAchievementAbility ability={ability} changeAbility={handleChangeAbility} />
 
-            <EditableAchievementDeadline deadline={deadline} changeDeadline={changeDeadline} />
+            <EditableAchievementDeadline
+              deadline={deadline}
+              changeDeadline={handleChangeDeadline}
+            />
 
-            <EditableAchievementExp exp={exp} changeExp={changeExp} />
+            <EditableAchievementExp exp={exp} changeExp={handleChangeExp} />
           </div>
         </div>
       </div>
