@@ -20,7 +20,7 @@ import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
-import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 
@@ -114,7 +114,11 @@ class GameManager extends Phaser.Scene {
   }
 
   public loadGameState() {
-    const accountInfo = phaserGame.getAccountInfo();
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!accountInfo) {
+      console.log('No account info');
+      return;
+    }
     this.saveManager.initialise(
       accountInfo,
       this.fullSaveState,

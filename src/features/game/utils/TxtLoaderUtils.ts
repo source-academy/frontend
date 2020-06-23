@@ -1,5 +1,5 @@
 import { loadData } from '../save/GameSaveRequests';
-import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
 import Parser from '../parser/Parser';
 
 export async function callGameManagerOnTxtLoad(
@@ -32,7 +32,11 @@ async function startGameManager(
 ) {
   if (key[0] === '#') {
     const text = scene.cache.text.get(key);
-    const fullSaveState = await loadData(phaserGame.getAccountInfo());
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!accountInfo) {
+      return;
+    }
+    const fullSaveState = await loadData(accountInfo);
     const gameCheckpoint = Parser.parse(text);
 
     scene.scene.start('GameManager', {

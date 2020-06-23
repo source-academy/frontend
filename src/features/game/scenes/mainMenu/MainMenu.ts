@@ -19,7 +19,7 @@ import commonSoundAssets, {
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { loadData } from '../../save/GameSaveRequests';
-import game from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { SampleChapters } from '../chapterSelect/SampleChapters';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
@@ -47,7 +47,12 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    this.loadedGameState = await loadData(game.getAccountInfo());
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!accountInfo) {
+      console.log('No account info');
+      return;
+    }
+    this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderOptionButtons();
 
