@@ -2,12 +2,12 @@ import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';
-import { getBackToMenuContainer } from '../GameModeHelper';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
+import CommonBackButton from '../../commons/CommonBackButton';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -120,7 +120,13 @@ class GameModeTalk implements IGameUI {
       }
     });
 
-    talkMenuContainer.add(getBackToMenuContainer());
+    const backButton = new CommonBackButton(
+      gameManager,
+      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      0,
+      0
+    );
+    talkMenuContainer.add(backButton);
     return talkMenuContainer;
   }
 

@@ -6,11 +6,11 @@ import {
   magnifyingGlassChecked,
   magnifyingGlassHighlight
 } from './GameModeExploreConstants';
-import { getBackToMenuContainer } from '../GameModeHelper';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { Layer } from '../../layer/GameLayerTypes';
+import CommonBackButton from '../../commons/CommonBackButton';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -22,7 +22,15 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-    exploreMenuContainer.add(getBackToMenuContainer());
+
+    // Add back button
+    const backButton = new CommonBackButton(
+      gameManager,
+      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      0,
+      0
+    );
+    exploreMenuContainer.add(backButton);
 
     return exploreMenuContainer;
   }
