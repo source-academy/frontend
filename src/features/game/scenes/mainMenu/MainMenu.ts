@@ -47,7 +47,12 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    this.loadedGameState = await loadData(game.getAccountInfo());
+    try {
+      this.loadedGameState = await loadData(game.getAccountInfo());
+    } catch (e) {
+      console.log('Catch');
+    } finally {
+    }
     this.renderBackground();
     this.renderOptionButtons();
 

@@ -25,6 +25,7 @@ function Game() {
     if (!session || sessionLoaded) {
       return;
     }
+    console.log('HERE');
 
     game.setAccountInfo({
       accessToken: session.accessToken,

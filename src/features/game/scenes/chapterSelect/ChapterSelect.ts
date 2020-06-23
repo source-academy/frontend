@@ -44,7 +44,12 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public async create() {
-    this.loadedGameState = await loadData(phaserGame.getAccountInfo()!);
+    try {
+      this.loadedGameState = await loadData(phaserGame.getAccountInfo()!);
+    } catch (e) {
+      console.log('Catch');
+    } finally {
+    }
     this.renderBackground();
     this.renderChapters();
   }
