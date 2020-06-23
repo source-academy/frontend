@@ -33,7 +33,6 @@ hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
 visit
-talk
 
 <<objects>>
 [room]

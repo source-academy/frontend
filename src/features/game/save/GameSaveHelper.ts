@@ -14,7 +14,7 @@ export function gameStateToJson(
   const gameStoryState: GameSaveState = {
     currentLocation: gameManager.currentLocationId,
     currentPhase: phaseManager.getCurrentPhase(),
-    chapterObjective: mapToJsObject(gameStateManager.getChapterObjectives().getObjectives()),
+    chapterObjective: mapToJsObject(gameStateManager.getCheckpointObjectives().getObjectives()),
     locationStates: mapToJsObject(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
