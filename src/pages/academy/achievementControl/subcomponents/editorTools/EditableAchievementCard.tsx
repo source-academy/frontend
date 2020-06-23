@@ -16,51 +16,57 @@ import EditableAchievementModal from './editableModal/EditableAchievementModal';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
+  setHasChanges: any;
   saveChanges: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, saveChanges } = props;
+  const { achievement, setHasChanges, saveChanges } = props;
 
-  const [achievementInfo, setAchievementInfo] = useState<AchievementItem>(achievement);
-  const { title, ability, exp, deadline, icon } = achievementInfo;
+  const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
+  const { title, ability, exp, deadline, icon } = editableAchievement;
 
   /* Handlers to Change State of Achievement information */
   const changeTitle = (title: string) => {
-    setAchievementInfo({
-      ...achievementInfo,
+    setEditableAchievement({
+      ...editableAchievement,
       title: title
     });
+    setHasChanges(true);
   };
 
   const changeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
-      setAchievementInfo({
-        ...achievementInfo,
+      setEditableAchievement({
+        ...editableAchievement,
         exp: parseInt(exp)
       });
     }
+    setHasChanges(true);
   };
 
   const changeDeadline = (deadline: Date) => {
-    setAchievementInfo({
-      ...achievementInfo,
+    setEditableAchievement({
+      ...editableAchievement,
       deadline: deadline
     });
+    setHasChanges(true);
   };
 
   const changeAbility = (ability: AchievementAbility, e: any) => {
-    setAchievementInfo({
-      ...achievementInfo,
+    setEditableAchievement({
+      ...editableAchievement,
       ability: ability
     });
+    setHasChanges(true);
   };
 
   const changeThumbnail = (thumbnail: IconName) => {
-    setAchievementInfo({
-      ...achievementInfo,
+    setEditableAchievement({
+      ...editableAchievement,
       icon: thumbnail
     });
+    setHasChanges(true);
   };
 
   // TODO: Delete Achievement Item
@@ -68,7 +74,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     <Card className="editable-achievement">
       <div className="top-bar">
         <EditableAchievementModal title={title} modal={achievement.modal} />
-        <Button icon={'export'} intent={'danger'} outlined={true} onClick={saveChanges} />
+        <Button
+          icon={'export'}
+          intent={'danger'}
+          outlined={true}
+          onClick={() => saveChanges(editableAchievement)}
+        />
       </div>
 
       <div className="main">

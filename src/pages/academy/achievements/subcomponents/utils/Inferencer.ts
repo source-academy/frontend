@@ -53,6 +53,12 @@ class Inferencer {
     console.log('ಠ_ಠ hmm...u should only see me once');
   }
 
+  public setItem(achievement: AchievementItem) {
+    console.log('Set new item', achievement);
+    this.nodeList[achievement.id] = new Node(achievement);
+    this.processNodeList();
+  }
+
   public getFurthestDeadline(id: number) {
     return this.nodeList[id].furthestDeadline;
   }
