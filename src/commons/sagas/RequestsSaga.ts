@@ -165,6 +165,58 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   });
 }
 
+/**
+ * POST /achievements/
+ */
+export async function addAchievement(tokens: Tokens) {
+  const resp = await request(`assessments/add/`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/
+ */
+export async function deleteAchievement(achievementID: number, tokens: Tokens) {
+  const resp = await request(`assessments/add/`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/${achievement_id}/
+ */
+export async function editAchievement(
+  achievementID: number,
+  achievement: AchievementItem,
+  tokens: Tokens
+) {
+  const resp = await request(`assessments/add/`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  return resp;
+}
+
 /* END OF ACHIEVEMENT REQUESTS */
 
 /**
