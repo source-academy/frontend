@@ -1,5 +1,6 @@
 import { ActionType } from 'typesafe-actions';
 
+import * as AchievementActions from '../../commons/achievements/AchievementActions';
 import * as CommonsActions from '../../commons/application/actions/CommonsActions';
 import * as InterpreterActions from '../../commons/application/actions/InterpreterActions';
 import * as SessionActions from '../../commons/application/actions/SessionActions';
@@ -14,6 +15,7 @@ import * as SourceRecorderActions from '../../features/sourceRecorder/SourceReco
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
 
 export const actions = {
+  ...AchievementActions,
   ...CommonsActions,
   ...CollabEditingActions,
   ...DashboardActions,

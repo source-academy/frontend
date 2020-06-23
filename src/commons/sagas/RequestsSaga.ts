@@ -22,6 +22,12 @@ import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
+import {
+  AchievementItem,
+  AchievementModalItem,
+  AchievementAbility,
+  AchievementStatus
+} from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token
@@ -127,6 +133,39 @@ export async function putUserGameState(
 }
 
 /**
+ * GET /achievements
+ */
+export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
+  const resp = await request('assessments', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievements = await resp.json();
+  return achievements.map((achievement: any) => {
+    achievement.ability = achievement.ability as AchievementAbility;
+    achievement.status = achievement.status as AchievementStatus;
+    achievement.modal = !achievement.isTask
+      ? null
+      : ({
+          modalImageUrl: achievement.modalImageUrl,
+          description: achievement.description,
+          goalText: achievement.goalText,
+          completionText: achievement.completionText
+        } as AchievementModalItem);
+
+    return achievement as AchievementItem;
+  });
+}
+
+/* START OF ASSESSMENT REQUESTS */
+
+/**
  * GET /assessments
  */
 export async function getAssessmentOverviews(tokens: Tokens): Promise<AssessmentOverview[] | null> {
@@ -159,6 +198,8 @@ export async function getAssessmentOverviews(tokens: Tokens): Promise<Assessment
     return overview as AssessmentOverview;
   });
 }
+
+/* END OF ASSESSMENT REQUESTS */
 
 /**
  * GET /assessments/${assessmentId}
