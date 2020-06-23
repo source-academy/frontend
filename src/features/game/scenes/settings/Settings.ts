@@ -25,7 +25,7 @@ import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
-import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { loadData } from '../../save/GameSaveRequests';
 
 class Settings extends Phaser.Scene {
@@ -51,8 +51,13 @@ class Settings extends Phaser.Scene {
   public async create() {
     this.renderBackground();
     this.renderOptions();
-    const fullSaveState = await loadData(phaserGame.getAccountInfo());
-    this.settingsSaveManager.initialise(phaserGame.getAccountInfo(), fullSaveState);
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!accountInfo) {
+      console.log('No account info');
+      return;
+    }
+    const fullSaveState = await loadData(accountInfo);
+    this.settingsSaveManager.initialise(accountInfo, fullSaveState);
   }
 
   private preloadAssets() {
