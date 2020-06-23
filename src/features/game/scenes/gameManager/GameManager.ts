@@ -222,6 +222,12 @@ class GameManager extends Phaser.Scene {
       this.escKey.removeAllListeners();
     }
   }
+
+  public checkpointTransition() {
+    if (GameActionManager.getInstance().isAllComplete()) {
+      this.scene.start('CheckpointTransition');
+    }
+  }
 }
 
 export default GameManager;

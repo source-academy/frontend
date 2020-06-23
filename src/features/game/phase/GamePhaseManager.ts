@@ -34,6 +34,9 @@ export default class GamePhaseManager {
     await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(newPhase).activate();
     GameActionManager.getInstance().enableKeyboardInput(true);
+
+    // Transition to the next scene if possible
+    GameActionManager.getInstance().getGameManager().checkpointTransition();
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {

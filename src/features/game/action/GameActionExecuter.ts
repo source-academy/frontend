@@ -42,9 +42,6 @@ export default class GameActionExecuter {
         return;
       case GameActionType.UpdateChecklist:
         actionManager.completeObjective(actionParams.id);
-        if (actionManager.isAllComplete()) {
-          actionManager.getGameManager().scene.start('CheckpointTransition');
-        }
         return;
       case GameActionType.AddItem:
         actionManager.addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);

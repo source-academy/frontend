@@ -5,6 +5,7 @@ import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import Settings from 'src/features/game/scenes/settings/Settings';
+import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 
 export type AccountInfo = {
   accessToken: string;
@@ -59,7 +60,7 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [MainMenu, Settings, ChapterSelect, GameManager]
+  scene: [MainMenu, Settings, ChapterSelect, GameManager, CheckpointTransition]
 };
 
 const phaserGame = new SourceAcademyGame(config);
