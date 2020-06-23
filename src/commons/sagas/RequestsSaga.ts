@@ -132,6 +132,8 @@ export async function putUserGameState(
   return resp;
 }
 
+/* START OF ACHIEVEMENT REQUESTS */
+
 /**
  * GET /achievements
  */
@@ -163,7 +165,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   });
 }
 
-/* START OF ASSESSMENT REQUESTS */
+/* END OF ACHIEVEMENT REQUESTS */
 
 /**
  * GET /assessments
@@ -198,8 +200,6 @@ export async function getAssessmentOverviews(tokens: Tokens): Promise<Assessment
     return overview as AssessmentOverview;
   });
 }
-
-/* END OF ASSESSMENT REQUESTS */
 
 /**
  * GET /assessments/${assessmentId}
