@@ -30,6 +30,8 @@ class GameModeExplore implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
+    gameManager.input.setDefaultCursor(magnifyingGlass);
+
     this.uiContainer = this.getUIContainer();
     GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
