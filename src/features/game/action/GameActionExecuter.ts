@@ -27,6 +27,7 @@ export default class GameActionExecuter {
 
   private async executeStoryAction(actionType: GameActionType, actionParams: any) {
     const actionManager = GameActionManager.getInstance();
+    const gameManager = actionManager.getGameManager();
 
     switch (actionType) {
       case GameActionType.LocationChange:
@@ -43,7 +44,8 @@ export default class GameActionExecuter {
       case GameActionType.UpdateChecklist:
         actionManager.completeObjective(actionParams.id);
         if (actionManager.isAllComplete()) {
-          actionManager.getGameManager().scene.start('CheckpointTransition');
+          gameManager.cleanUp();
+          gameManager.scene.start('CheckpointTransition');
         }
         return;
       case GameActionType.AddItem:
