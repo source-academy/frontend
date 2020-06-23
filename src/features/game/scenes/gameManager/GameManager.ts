@@ -217,10 +217,11 @@ class GameManager extends Phaser.Scene {
     });
   }
 
-  public unbindEscapeMenu() {
+  public cleanUp() {
     if (this.escKey) {
       this.escKey.removeAllListeners();
     }
+    this.layerManager.clearAllLayers();
   }
 }
 
