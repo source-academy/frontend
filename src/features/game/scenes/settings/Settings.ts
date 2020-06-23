@@ -23,9 +23,10 @@ import {
 import { mediumButton } from '../../commons/CommonAssets';
 import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
-import game, { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
+import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import { loadData } from '../../save/GameSaveRequests';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -47,10 +48,11 @@ class Settings extends Phaser.Scene {
     this.soundManager.initialise(this);
   }
 
-  public create() {
+  public async create() {
     this.renderBackground();
     this.renderOptions();
-    this.settingsSaveManager.initialise(this.getAccountInfo());
+    const fullSaveState = await loadData(phaserGame.getAccountInfo());
+    this.settingsSaveManager.initialise(phaserGame.getAccountInfo(), fullSaveState);
   }
 
   private preloadAssets() {
@@ -147,13 +149,6 @@ class Settings extends Phaser.Scene {
       const newUserSetting = this.settingsSaveManager.getLoadedUserState();
       this.soundManager.applyUserSettings(newUserSetting);
     }
-  }
-
-  private getAccountInfo(): AccountInfo {
-    if (!game.getAccountInfo()) {
-      throw new Error('No account info');
-    }
-    return game.getAccountInfo()!;
   }
 }
 

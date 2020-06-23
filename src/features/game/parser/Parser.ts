@@ -1,5 +1,5 @@
 import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
-import { GameChapter } from '../chapter/GameChapterTypes';
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
 import ObjectParser from './ObjectsParser';
@@ -12,7 +12,7 @@ import GameObjective from '../objective/GameObjective';
 
 class Parser {
   private static parserMap: object;
-  public static chapter: GameChapter;
+  public static checkpoint: GameCheckpoint;
   private static actionIdNum: number;
 
   public static generateActionId() {
@@ -20,7 +20,7 @@ class Parser {
     return `action#${Parser.actionIdNum}`;
   }
 
-  public static parse(chapterText: string): GameChapter {
+  public static parse(chapterText: string): GameCheckpoint {
     Parser.actionIdNum = 0;
 
     Parser.parserMap = {
@@ -33,7 +33,7 @@ class Parser {
       objectives: ObjectiveParser
     };
 
-    Parser.chapter = {
+    Parser.checkpoint = {
       configuration: '',
       map: new GameMap(),
       startingLoc: '',
@@ -54,7 +54,7 @@ class Parser {
       parserFunction(fileName, fileContent);
     });
 
-    return this.chapter;
+    return this.checkpoint;
   }
 }
 

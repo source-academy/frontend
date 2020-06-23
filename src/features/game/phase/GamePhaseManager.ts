@@ -40,7 +40,7 @@ export default class GamePhaseManager {
     return this.getCurrentPhase() === phase;
   }
 
-  private getCurrentPhase(): GamePhaseType {
+  public getCurrentPhase(): GamePhaseType {
     if (!this.phaseStack.length) {
       this.phaseStack = [GamePhaseType.None];
     }

@@ -10,19 +10,22 @@ import {
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
-import { ChapterDetail } from './ChapterSelectTypes';
 import {
   chapterContinueButton,
   chapterRepeatButton,
   chapterSelectFrame
 } from './ChapterSelectAssets';
+import { GameChapter } from '../../chapter/GameChapterTypes';
+import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 
 export function createChapter(
   scene: ChapterSelect,
-  { title, fileName }: ChapterDetail,
-  index: number
+  { title, previewBgPath, checkpointsFilenames }: GameChapter,
+  index: number,
+  lastCheckpointsIdx: number
 ) {
   const [x, y] = getCoorByChapter(index);
+  const firstCheckpoint = checkpointsFilenames[0];
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
 
   // Chapter Preview
@@ -50,7 +53,7 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      scene.loadFile(fileName, false, index);
+      callGameManagerOnTxtLoad(scene, firstCheckpoint, false, index, 0);
     });
 
   const chapterContinue = new Phaser.GameObjects.Sprite(
@@ -61,7 +64,13 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      scene.loadFile(fileName, true, index);
+      callGameManagerOnTxtLoad(
+        scene,
+        checkpointsFilenames[lastCheckpointsIdx],
+        true,
+        index,
+        lastCheckpointsIdx
+      );
     });
 
   // Chapter Text

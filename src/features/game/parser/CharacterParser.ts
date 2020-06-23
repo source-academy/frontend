@@ -45,17 +45,17 @@ function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): voi
   expressions.set(defaultExpression, characterAssetKey(id, defaultExpression));
 
   // Add asset keys to expression map
-  Parser.chapter.map.addMapAsset(
+  Parser.checkpoint.map.addMapAsset(
     characterAssetKey(id, defaultExpression),
     characterAssetValue(id, defaultExpression)
   );
 
   // Add character to map
-  Parser.chapter.map.addItemToMap(GameLocationAttr.characters, id, character);
+  Parser.checkpoint.map.addItemToMap(GameLocationAttr.characters, id, character);
 
   // Add character to location
   if (addCharacterToMap) {
-    Parser.chapter.map.setItemAt(locationId, GameLocationAttr.characters, id);
+    Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.characters, id);
   }
 }
 
@@ -63,7 +63,7 @@ export function addCharacterExprToMap(charId: string, expression: string) {
   if (charId === 'you' || charId === 'narrator') {
     return;
   }
-  const character = Parser.chapter.map.getCharacters().get(charId);
+  const character = Parser.checkpoint.map.getCharacters().get(charId);
 
   if (!character) {
     throw new Error(`Character ${charId} not in map!`);
@@ -71,7 +71,7 @@ export function addCharacterExprToMap(charId: string, expression: string) {
 
   character.expressions.set(expression, characterAssetKey(charId, expression));
 
-  Parser.chapter.map.addMapAsset(
+  Parser.checkpoint.map.addMapAsset(
     characterAssetKey(charId, expression),
     characterAssetValue(charId, expression)
   );

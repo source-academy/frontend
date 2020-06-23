@@ -1,4 +1,4 @@
-import { GameChapter } from '../chapter/GameChapterTypes';
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
@@ -15,8 +15,8 @@ class GameStateManager implements StateSubject {
   public subscribers: Array<StateObserver>;
 
   // Game State
-  private chapter: GameChapter;
-  private chapterObjective: GameObjective;
+  private checkpoint: GameCheckpoint;
+  private checkpointObjective: GameObjective;
   private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
@@ -28,8 +28,8 @@ class GameStateManager implements StateSubject {
   constructor() {
     this.subscribers = new Array<StateObserver>();
 
-    this.chapter = {} as GameChapter;
-    this.chapterObjective = new GameObjective();
+    this.checkpoint = {} as GameCheckpoint;
+    this.checkpointObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
     this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
@@ -98,9 +98,9 @@ class GameStateManager implements StateSubject {
   //        Preprocess         //
   ///////////////////////////////
 
-  public initialise(chapter: GameChapter, gameSaveState: GameSaveState | undefined): void {
-    this.chapter = chapter;
-    this.chapterObjective = this.chapter.objectives;
+  public initialise(chapter: GameCheckpoint, gameSaveState: GameSaveState | undefined): void {
+    this.checkpoint = chapter;
+    this.checkpointObjective = this.checkpoint.objectives;
 
     if (gameSaveState) {
       this.loadFromGameStoryState(gameSaveState);
@@ -118,7 +118,7 @@ class GameStateManager implements StateSubject {
   }
 
   private loadFromGameStoryState(gameStoryState: GameSaveState) {
-    this.chapterObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
+    this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
     this.locationStates = jsObjectToMap(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
     this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
@@ -126,10 +126,10 @@ class GameStateManager implements StateSubject {
   }
 
   private loadNewGameStoryState() {
-    this.chapterObjective = this.chapter.objectives;
-    this.locationStates = this.chapter.map.getLocations();
-    this.objectPropertyMap = this.chapter.map.getObjects();
-    this.bboxPropertyMap = this.chapter.map.getBBoxes();
+    this.checkpointObjective = this.checkpoint.objectives;
+    this.locationStates = this.checkpoint.map.getLocations();
+    this.objectPropertyMap = this.checkpoint.map.getObjects();
+    this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
     this.triggeredInteractions.clear();
   }
 
@@ -167,7 +167,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   public getLocationMode(locationId: LocationId): GameMode[] {
-    return this.chapter.map.getLocationAtId(locationId).modes!;
+    return this.checkpoint.map.getLocationAtId(locationId).modes!;
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {
@@ -224,11 +224,11 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   public isAllComplete(): boolean {
-    return this.chapterObjective.isAllComplete();
+    return this.checkpointObjective.isAllComplete();
   }
 
   public isObjectiveComplete(key: string): boolean {
-    const isComplete = this.chapterObjective.getObjectiveState(key);
+    const isComplete = this.checkpointObjective.getObjectiveState(key);
     if (isComplete === undefined || isComplete) {
       return true;
     }
@@ -242,7 +242,7 @@ class GameStateManager implements StateSubject {
   }
 
   public completeObjective(key: string): void {
-    this.chapterObjective.setObjective(key, true);
+    this.checkpointObjective.setObjective(key, true);
   }
 
   ///////////////////////////////
@@ -292,7 +292,7 @@ class GameStateManager implements StateSubject {
   }
 
   public getChapterObjectives() {
-    return this.chapterObjective;
+    return this.checkpointObjective;
   }
 
   public getTriggeredInteractions() {

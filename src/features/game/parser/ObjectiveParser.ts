@@ -5,5 +5,5 @@ import Parser from './Parser';
 export default function CharacterParser(fileName: string, fileContent: string): void {
   const objectives = new GameObjective();
   objectives.addObjectives(splitToLines(fileContent));
-  Parser.chapter.objectives = objectives;
+  Parser.checkpoint.objectives = objectives;
 }

@@ -40,6 +40,9 @@ class SourceAcademyGame extends Phaser.Game {
   }
 
   public getAccountInfo() {
+    if (!this.global.accountInfo) {
+      throw new Error('No account info');
+    }
     return this.global.accountInfo;
   }
 }

@@ -1,13 +1,13 @@
-import { saveData, loadData } from './GameSaveRequests';
+import { saveData } from './GameSaveRequests';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
-import GameActionManager from '../action/GameActionManager';
 import { FullSaveState, SettingsJson } from './GameSaveTypes';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
   private fullSaveState: FullSaveState;
   private chapterNum: number;
+  private checkpointNum: number;
 
   constructor() {
     this.fullSaveState = {
@@ -16,31 +16,31 @@ export default class GameSaveManager {
         collectibles: [],
         achievements: [],
         settings: { volume: 1 },
-        lastPlayedChapter: -1
+        lastPlayedCheckpoint: [-1, -1]
       }
     } as FullSaveState;
 
     this.chapterNum = -1;
+    this.checkpointNum = -1;
   }
 
-  public async initialise(accountInfo: AccountInfo, chapterNum?: number) {
+  public async initialise(
+    accountInfo: AccountInfo,
+    fullSaveState: FullSaveState | undefined,
+    chapterNum?: number,
+    checkpointNum?: number
+  ) {
     this.accountInfo = accountInfo;
     this.chapterNum = chapterNum === undefined ? -1 : chapterNum;
-    const fullSaveState = await loadData(this.getAccountInfo());
+    this.checkpointNum = checkpointNum === undefined ? -1 : checkpointNum;
+    if (!fullSaveState) {
+      throw Error('No loaded state');
+    }
     this.fullSaveState = fullSaveState;
   }
 
   public async saveGame() {
-    const gameStateManager = GameActionManager.getInstance().getGameManager().stateManager;
-    const userStateManager = GameActionManager.getInstance().getGameManager().userStateManager;
-
-    this.fullSaveState = gameStateToJson(
-      this.fullSaveState,
-      this.chapterNum,
-      gameStateManager,
-      userStateManager
-    );
-
+    this.fullSaveState = gameStateToJson(this.fullSaveState, this.chapterNum, this.checkpointNum);
     await saveData(this.getAccountInfo(), this.fullSaveState);
   }
 
@@ -55,6 +55,14 @@ export default class GameSaveManager {
 
   public getLoadedGameStoryState() {
     return this.fullSaveState.gameSaveStates[this.chapterNum];
+  }
+
+  public getLoadedLocation() {
+    return this.fullSaveState.gameSaveStates[this.chapterNum].currentLocation;
+  }
+
+  public getLoadedPhase() {
+    return this.fullSaveState.gameSaveStates[this.chapterNum].currentPhase;
   }
 
   private getAccountInfo() {

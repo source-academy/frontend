@@ -14,7 +14,7 @@ function locationAssetValue(shortPath: string) {
 }
 
 export default function LocationParser(fileName: string, fileContent: string): void {
-  const gameMap = Parser.chapter.map;
+  const gameMap = Parser.checkpoint.map;
   const [locationAssets, locationActions, locationModes, navigation] = fileContent.split('$');
 
   const locationIds: string[] = [];
@@ -35,7 +35,7 @@ export default function LocationParser(fileName: string, fileContent: string): v
   splitToLines(locationActions).forEach(locationAction => {
     const [locationId, ...actions] = splitByChar(locationAction, ',');
 
-    const gameLocation = Parser.chapter.map.getLocationAtId(locationId);
+    const gameLocation = Parser.checkpoint.map.getLocationAtId(locationId);
     gameLocation.actionIds = ActionParser(actions);
   });
 
