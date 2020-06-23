@@ -13,7 +13,7 @@ class GameObjective {
     const prevState = this.objective.get(key);
     this.objective.set(key, value);
     // Handle repeated calls
-    if (prevState !== undefined && prevState === value) {
+    if (prevState !== undefined && prevState !== value) {
       this.numOfCompletedObjectives++;
     }
   }

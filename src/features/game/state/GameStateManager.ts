@@ -291,7 +291,7 @@ class GameStateManager implements StateSubject {
     return this.locationStates;
   }
 
-  public getChapterObjectives() {
+  public getCheckpointObjectives() {
     return this.checkpointObjective;
   }
 
