@@ -1,4 +1,8 @@
-export function callGameManagerOnTxtLoad(
+import { loadData } from '../save/GameSaveRequests';
+import phaserGame from 'src/pages/academy/game/subcomponents/phaserGame';
+import Parser from '../parser/Parser';
+
+export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,
   fileName: string,
   continueGame: boolean,
@@ -8,7 +12,7 @@ export function callGameManagerOnTxtLoad(
   const key = `#${fileName}`;
 
   if (scene.cache.text.exists(key)) {
-    startGameManager(scene, key, continueGame, chapterNum, checkpointNum);
+    await startGameManager(scene, key, continueGame, chapterNum, checkpointNum);
     return;
   }
 
@@ -19,7 +23,7 @@ export function callGameManagerOnTxtLoad(
   scene.load.start();
 }
 
-function startGameManager(
+async function startGameManager(
   scene: Phaser.Scene,
   key: string,
   continueGame: boolean,
@@ -28,8 +32,12 @@ function startGameManager(
 ) {
   if (key[0] === '#') {
     const text = scene.cache.text.get(key);
+    const fullSaveState = await loadData(phaserGame.getAccountInfo());
+    const gameCheckpoint = Parser.parse(text);
+
     scene.scene.start('GameManager', {
-      text,
+      fullSaveState,
+      gameCheckpoint,
       continueGame: continueGame,
       chapterNum: chapterNum,
       checkpointNum

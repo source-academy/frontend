@@ -1,4 +1,4 @@
-import { saveData, loadData } from './GameSaveRequests';
+import { saveData } from './GameSaveRequests';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { FullSaveState, SettingsJson } from './GameSaveTypes';
@@ -24,11 +24,18 @@ export default class GameSaveManager {
     this.checkpointNum = -1;
   }
 
-  public async initialise(accountInfo: AccountInfo, chapterNum?: number, checkpointNum?: number) {
+  public async initialise(
+    accountInfo: AccountInfo,
+    fullSaveState: FullSaveState | undefined,
+    chapterNum?: number,
+    checkpointNum?: number
+  ) {
     this.accountInfo = accountInfo;
     this.chapterNum = chapterNum === undefined ? -1 : chapterNum;
     this.checkpointNum = checkpointNum === undefined ? -1 : checkpointNum;
-    const fullSaveState = await loadData(this.getAccountInfo());
+    if (!fullSaveState) {
+      throw Error('No loaded state');
+    }
     this.fullSaveState = fullSaveState;
   }
 
