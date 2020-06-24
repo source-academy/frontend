@@ -33,7 +33,6 @@ export default function* AchievementSaga(): SagaIterator {
     const resp = yield call(editAchievements, achievements, tokens);
 
     if (!resp) {
-      console.log(resp);
       return;
     }
   });
