@@ -138,7 +138,7 @@ export async function putUserGameState(
  * GET /achievements
  */
 export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
-  const resp = await request('assessments/', 'GET', {
+  const resp = await request('achievements/', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -154,14 +154,12 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   return achievements.map((achievement: any) => {
     achievement.ability = achievement.ability as AchievementAbility;
     achievement.status = achievement.status as AchievementStatus;
-    achievement.modal = !achievement.isTask
-      ? null
-      : ({
-          modalImageUrl: achievement.modalImageUrl,
-          description: achievement.description,
-          goalText: achievement.goalText,
-          completionText: achievement.completionText
-        } as AchievementModalItem);
+    achievement.modal = {
+      modalImageUrl: achievement.modalImageUrl ? achievement.modal_image_url : '',
+      description: achievement.description ? achievement.description : '',
+      goalText: achievement.goalText ? achievement.goal_text : '',
+      completionText: achievement.completionText ? achievement.completion_text : ''
+    } as AchievementModalItem;
 
     return achievement as AchievementItem;
   });
