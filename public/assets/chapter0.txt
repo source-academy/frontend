@@ -9,7 +9,7 @@ hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
 room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
-hallway, updateChecklist: visit
+crashsite, updateChecklist: visit
 $
 [talk move]
 [explore talk move]
