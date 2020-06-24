@@ -3,9 +3,10 @@ import { Constants, screenCenter } from 'src/features/game/commons/CommonConstan
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SSObjectDetail, ShortPath } from './SSObjectManagerTypes';
 import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
-import { generateItemId } from './SSObjectManagerHelper';
-import { shortButton } from 'src/features/game/commons/CommonAssets';
-import { objectDetailStyle } from './SSObjectManagerConstants';
+import { objectDetailStyle, resizePixels, activeSelectMargin } from './SSObjectManagerConstants';
+import { shortButton } from 'src/features/storySimulator/utils/StorySimulatorAssets';
+import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
+import { toIntString } from '../utils/SSUtils';
 
 export default class SSObjectManager {
   private objectPlacement: ObjectPlacement | undefined;
@@ -13,6 +14,8 @@ export default class SSObjectManager {
   private objectDetailMap: Map<ItemId, SSObjectDetail>;
   private assetMap: Map<AssetKey, ShortPath>;
   private objectDetailMapContainer: Phaser.GameObjects.Container | undefined;
+  private activeSelection: Phaser.GameObjects.Image | undefined;
+  private activeSelectRect: Phaser.GameObjects.Rectangle | undefined;
 
   constructor() {
     this.objectIdNumber = 0;
@@ -25,6 +28,8 @@ export default class SSObjectManager {
     this.objectIdNumber = 0;
     this.objectDetailMap = new Map<ItemId, SSObjectDetail>();
     this.trackDraggables();
+    this.drawActiveSelectRect();
+    this.bindBracketsToResize();
   }
 
   private trackDraggables() {
@@ -33,12 +38,10 @@ export default class SSObjectManager {
       (_: MouseEvent, gameObject: Phaser.GameObjects.Image, dragX: number, dragY: number) => {
         gameObject.x = dragX;
         gameObject.y = dragY;
-        const itemId = gameObject.data.get('itemId');
 
-        const objectDetail = this.objectDetailMap.get(itemId);
-        if (!objectDetail) return;
-        objectDetail.x = dragX;
-        objectDetail.y = dragY;
+        this.setAttribute(gameObject, 'x', dragX);
+        this.setAttribute(gameObject, 'y', dragY);
+        this.setActiveSelection(gameObject);
       }
     );
   }
@@ -49,13 +52,15 @@ export default class SSObjectManager {
     const objectAssetKey = `#${shortPath}`;
     this.assetMap.set(objectAssetKey, shortPath);
 
-    this.getObjectPlacement().load.image(objectAssetKey, Constants.assetsFolder + shortPath);
-
-    console.log(Constants.assetsFolder + shortPath);
-    this.getObjectPlacement().load.once('filecomplete', (objectAssetKey: string) => {
+    if (this.getObjectPlacement().textures.get(objectAssetKey).key !== '__MISSING') {
       this.renderObject(objectAssetKey);
-    });
-    this.getObjectPlacement().load.start();
+    } else {
+      this.getObjectPlacement().load.image(objectAssetKey, Constants.assetsFolder + shortPath);
+      this.getObjectPlacement().load.once('filecomplete', (objectAssetKey: string) => {
+        this.renderObject(objectAssetKey);
+      });
+      this.getObjectPlacement().load.start();
+    }
   }
 
   private renderObject(objectAssetKey: string) {
@@ -72,7 +77,7 @@ export default class SSObjectManager {
       .setDataEnabled();
 
     this.getObjectPlacement().input.setDraggable(objectSprite);
-    const itemId = generateItemId(objectAssetKey, this.objectIdNumber);
+    const itemId = this.generateItemId(objectAssetKey, this.objectIdNumber);
     objectSprite.data.set('itemId', itemId);
 
     const shortPath = this.assetMap.get(objectAssetKey);
@@ -94,7 +99,11 @@ export default class SSObjectManager {
     this.objectIdNumber++;
   }
 
-  public showMap() {
+  private generateItemId(assetKey: string, objectIdNumber: number) {
+    return `${assetKey}${objectIdNumber}`;
+  }
+
+  public showObjectDetailMap() {
     this.objectDetailMapContainer = new Phaser.GameObjects.Container(
       this.getObjectPlacement(),
       0,
@@ -107,6 +116,7 @@ export default class SSObjectManager {
         ssObjectDetail.y,
         shortButton.key
       );
+      multiplyDimensions(rect, 1.2);
       const mapShowText = new Phaser.GameObjects.Text(
         this.getObjectPlacement(),
         ssObjectDetail.x,
@@ -119,8 +129,24 @@ export default class SSObjectManager {
     this.getObjectPlacement().add.existing(this.objectDetailMapContainer);
   }
 
+  private drawActiveSelectRect() {
+    this.activeSelectRect = new Phaser.GameObjects.Rectangle(
+      this.getObjectPlacement(),
+      0,
+      0,
+      1,
+      1,
+      0
+    ).setAlpha(0.3);
+    this.getObjectPlacement().layerManager.addToLayer(Layer.Selector, this.activeSelectRect);
+  }
+
   private formatObjectDetails(ssObjectDetail: SSObjectDetail) {
-    return `${ssObjectDetail.assetPath}\nx: ${ssObjectDetail.x}\ny: ${ssObjectDetail.y}`;
+    let message = `${ssObjectDetail.assetPath}\nx: ${ssObjectDetail.x}\ny: ${ssObjectDetail.y}`;
+    if (ssObjectDetail.width) {
+      message += `\nwidth: ${ssObjectDetail.width}\nheight: ${ssObjectDetail.height}`;
+    }
+    return message;
   }
 
   public hideMap() {
@@ -129,20 +155,25 @@ export default class SSObjectManager {
     }
   }
 
-  public printMap() {
+  public printObjectDetailMap() {
     console.log(this.getObjectDetailMap());
   }
 
   private getObjectDetailMap() {
-    let map = '';
+    let map = '<<objects>>\n\n';
     this.objectDetailMap.forEach((objectDetail: SSObjectDetail) => {
-      const objectDetailString = [
+      const objectDetailArray = [
         objectDetail.id,
         objectDetail.assetPath,
-        objectDetail.x.toString(),
-        objectDetail.y.toString()
-      ].join(',');
-      map += objectDetailString + '\n';
+        toIntString(objectDetail.x),
+        toIntString(objectDetail.y)
+      ];
+      if (objectDetail.width) {
+        objectDetailArray.push(toIntString(objectDetail.width));
+        objectDetailArray.push(toIntString(objectDetail.height!));
+      }
+
+      map += objectDetailArray.join(', ') + '\n';
     });
     return map;
   }
@@ -152,5 +183,57 @@ export default class SSObjectManager {
       throw new Error('No object placement parent scene');
     }
     return this.objectPlacement;
+  }
+
+  private bindBracketsToResize() {
+    const openBracketKey = this.getObjectPlacement().input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET
+    );
+    openBracketKey.addListener('up', () => {
+      this.resizeActive(false);
+    });
+
+    const closeBracketKey = this.getObjectPlacement().input.keyboard.addKey(
+      Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET
+    );
+    closeBracketKey.addListener('up', () => {
+      this.resizeActive(true);
+    });
+
+    this.getObjectPlacement().registerKeyboardListener(openBracketKey);
+    this.getObjectPlacement().registerKeyboardListener(closeBracketKey);
+  }
+
+  private resizeActive(enlarge: boolean) {
+    if (!this.activeSelection || !this.activeSelectRect) {
+      return;
+    }
+    const enlargeBy = enlarge ? resizePixels : -resizePixels;
+    this.activeSelection.displayWidth += enlargeBy;
+    this.activeSelection.displayHeight += enlargeBy;
+
+    this.activeSelectRect.displayWidth += enlargeBy;
+    this.activeSelectRect.displayHeight += enlargeBy;
+
+    this.setAttribute(this.activeSelection, 'width', this.activeSelection.displayWidth);
+    this.setAttribute(this.activeSelection, 'height', this.activeSelection.displayHeight);
+  }
+
+  private setActiveSelection(gameObject: Phaser.GameObjects.Image) {
+    if (!this.activeSelectRect) {
+      return;
+    }
+    this.activeSelection = gameObject;
+    this.activeSelectRect.x = gameObject.x;
+    this.activeSelectRect.y = gameObject.y;
+    this.activeSelectRect.displayHeight = gameObject.displayHeight + activeSelectMargin;
+    this.activeSelectRect.displayWidth = gameObject.displayWidth + activeSelectMargin;
+  }
+
+  private setAttribute(gameObject: Phaser.GameObjects.Image, attribute: string, value: number) {
+    const itemId = gameObject.data.get('itemId');
+    const objectDetail = this.objectDetailMap.get(itemId);
+    if (!objectDetail) return;
+    objectDetail[attribute] = value;
   }
 }

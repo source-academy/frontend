@@ -7,4 +7,6 @@ export type SSObjectDetail = {
   assetPath: string;
   x: number;
   y: number;
+  width?: number;
+  height?: number;
 };

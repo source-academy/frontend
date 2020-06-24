@@ -24,7 +24,10 @@ function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset }: OwnProps)
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
       const selectedPath = getFilePath(assetTree.nodes, levels);
-      setCurrentAsset(selectedPath);
+
+      if (!nodeData.childNodes) {
+        setCurrentAsset(selectedPath);
+      }
       sessionStorage.setItem('selectedAsset', selectedPath);
       setAssetTree({ ...assetTree });
     },
@@ -51,6 +54,9 @@ function pathToObj(assetPaths: string[]): object {
   assetPaths.forEach(assetPath => {
     const assetPathList = assetPath.split('/');
     const file = assetPathList.pop();
+    if (file === 'Thumbs.db') {
+      return;
+    }
     const oldfilesInFolder = _.get(assetObj, assetPathList);
     if (Array.isArray(oldfilesInFolder) || !oldfilesInFolder) {
       const newFilesInFolder = oldfilesInFolder ? [...oldfilesInFolder, file] : [file];

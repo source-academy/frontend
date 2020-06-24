@@ -7,12 +7,14 @@ type AssetProps = {
 
 function AssetViewer({ assetPath }: AssetProps) {
   return (
-    <img
-      alt="asset"
-      crossOrigin={'anonymous'}
-      src={Constants.assetsFolder + assetPath}
-      width="150px"
-    ></img>
+    <>
+      <img
+        alt="asset"
+        crossOrigin={'anonymous'}
+        src={Constants.assetsFolder + assetPath}
+        width="150px"
+      ></img>
+    </>
   );
 }
 
