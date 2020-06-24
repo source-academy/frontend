@@ -21,16 +21,16 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleAchievementsFetch();
   }, [handleAchievementsFetch]);
 
-  const _inferencer = new Inferencer(achievementItems);
+  const inferencer = new Inferencer(achievementItems);
 
-  _inferencer.logInfo();
+  inferencer.logInfo();
 
   return (
     <>
       <div className="AchievementControl">
         <AchievementControlPanel />
 
-        <AchievementEditor inferencer={_inferencer} />
+        <AchievementEditor inferencer={inferencer} />
       </div>
     </>
   );

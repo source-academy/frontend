@@ -168,7 +168,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 /**
  * POST /achievements
  */
-export async function editAchievements(
+export async function updateAchievements(
   achievements: AchievementItem[],
   tokens: Tokens
 ): Promise<Response | null> {
