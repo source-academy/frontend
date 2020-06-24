@@ -27,7 +27,7 @@ function AchievementTask(props: AchievementTaskProps) {
    * the achivement page filterStatus.
    */
   const shouldRender = (id: number): boolean => {
-    const { status } = inferencer.getAchievementItem(id);
+    const status = inferencer.getStatus(id);
 
     switch (filterStatus) {
       case FilterStatus.ALL:

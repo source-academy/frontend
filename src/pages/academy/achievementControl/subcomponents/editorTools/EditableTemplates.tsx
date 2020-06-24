@@ -1,7 +1,6 @@
 import {
   AchievementItem,
   AchievementAbility,
-  AchievementStatus,
   AchievementModalItem
 } from 'src/commons/achievements/AchievementTypes';
 
@@ -12,7 +11,6 @@ export const achievementTemplate: AchievementItem = {
   exp: 0,
   isTask: true,
   prerequisiteIds: [],
-  status: AchievementStatus.ACTIVE,
   completionGoal: 0,
   completionProgress: 0,
   modal: {

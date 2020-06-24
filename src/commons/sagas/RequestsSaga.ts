@@ -25,8 +25,7 @@ import { showWarningMessage } from '../utils/NotificationsHelper';
 import {
   AchievementItem,
   AchievementModalItem,
-  AchievementAbility,
-  AchievementStatus
+  AchievementAbility
 } from '../achievements/AchievementTypes';
 
 /**
@@ -153,7 +152,6 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 
   return achievements.map((achievement: any) => {
     achievement.ability = achievement.ability as AchievementAbility;
-    achievement.status = achievement.status as AchievementStatus;
     achievement.modal = {
       modalImageUrl: achievement.modalImageUrl ? achievement.modal_image_url : '',
       description: achievement.description ? achievement.description : '',

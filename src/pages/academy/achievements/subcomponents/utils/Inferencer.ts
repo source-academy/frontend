@@ -10,6 +10,7 @@ import { prettifyDeadline } from 'src/pages/academy/achievements/subcomponents/u
 class Node {
   achievement: AchievementItem;
   id: number;
+  status: AchievementStatus;
   totalExp: number;
   furthestDeadline?: Date;
   children: Set<number>; // immediate prerequisite
@@ -17,13 +18,38 @@ class Node {
   modal: AchievementModalItem;
 
   constructor(achievement: AchievementItem) {
+    const {
+      id,
+      exp,
+      deadline,
+      completionGoal,
+      completionProgress,
+      prerequisiteIds,
+      modal
+    } = achievement;
+
     this.achievement = achievement;
-    this.id = achievement.id;
-    this.totalExp = achievement.exp;
-    this.furthestDeadline = achievement.deadline;
-    this.children = new Set(achievement.prerequisiteIds);
-    this.descendant = new Set(achievement.prerequisiteIds);
-    this.modal = achievement.modal;
+    this.id = id;
+    this.status = this.generateStatus(deadline, completionGoal, completionProgress);
+    this.totalExp = exp;
+    this.furthestDeadline = deadline;
+    this.children = new Set(prerequisiteIds);
+    this.descendant = new Set(prerequisiteIds);
+    this.modal = modal;
+  }
+
+  private generateStatus(
+    deadline: Date | undefined,
+    completionGoal: number,
+    completionProgress: number
+  ) {
+    if (completionProgress >= completionGoal) {
+      return AchievementStatus.COMPLETED;
+    } else if (deadline !== undefined && deadline.getTime() > Date.now()) {
+      return AchievementStatus.EXPIRED;
+    } else {
+      return AchievementStatus.ACTIVE;
+    }
   }
 }
 
@@ -82,6 +108,10 @@ class Inferencer {
     return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
   }
 
+  public getStatus(id: number) {
+    return this.nodeList[id].status;
+  }
+
   public getTotalExp(id: number) {
     return this.nodeList[id].totalExp;
   }
@@ -123,11 +153,9 @@ class Inferencer {
       case FilterStatus.ALL:
         return this.nodeList.length;
       case FilterStatus.ACTIVE:
-        return this.nodeList.filter(node => node.achievement.status === AchievementStatus.ACTIVE)
-          .length;
+        return this.nodeList.filter(node => node.status === AchievementStatus.ACTIVE).length;
       case FilterStatus.COMPLETED:
-        return this.nodeList.filter(node => node.achievement.status === AchievementStatus.COMPLETED)
-          .length;
+        return this.nodeList.filter(node => node.status === AchievementStatus.COMPLETED).length;
       default:
         return 0;
     }

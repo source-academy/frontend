@@ -42,7 +42,6 @@ export enum FilterStatus {
  * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
  * @param {number[]} prerequisiteIds an array of the prerequisites id
- * @param {AchievementStatus} status status of the achievement item
  * @param {number} completionGoal achievement is marked as complete if
  *    user's completionProgress >= completionGoal
  * @param {number} completionProgress achievement is marked as complete if
@@ -58,7 +57,6 @@ export type AchievementItem = {
   release?: Date;
   isTask: boolean;
   prerequisiteIds: number[];
-  status: AchievementStatus;
   completionGoal: number;
   completionProgress: number;
   modal: AchievementModalItem;

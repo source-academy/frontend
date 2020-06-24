@@ -1,8 +1,4 @@
-import {
-  AchievementAbility,
-  AchievementItem,
-  AchievementStatus
-} from '../achievements/AchievementTypes';
+import { AchievementAbility, AchievementItem } from '../achievements/AchievementTypes';
 
 export const achievementData: AchievementItem[] = [
   {
@@ -12,7 +8,6 @@ export const achievementData: AchievementItem[] = [
     exp: 0,
     isTask: true,
     prerequisiteIds: [2, 3],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 2,
     completionProgress: 0,
     modal: {
@@ -32,7 +27,6 @@ export const achievementData: AchievementItem[] = [
     release: new Date(2020, 5, 12, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 100,
     completionProgress: 77,
     modal: {
@@ -51,7 +45,6 @@ export const achievementData: AchievementItem[] = [
     deadline: new Date(2020, 5, 23, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.EXPIRED,
     completionGoal: 100,
     completionProgress: 23,
     modal: {
@@ -69,7 +62,6 @@ export const achievementData: AchievementItem[] = [
     exp: 0,
     isTask: true,
     prerequisiteIds: [5, 6, 7],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 3,
     completionProgress: 2,
     modal: {
@@ -88,7 +80,6 @@ export const achievementData: AchievementItem[] = [
     exp: 50,
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.COMPLETED,
     completionGoal: 10,
     completionProgress: 92,
     modal: {
@@ -106,7 +97,6 @@ export const achievementData: AchievementItem[] = [
     exp: 100,
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.COMPLETED,
     completionGoal: 50,
     completionProgress: 92,
     modal: {
@@ -124,7 +114,6 @@ export const achievementData: AchievementItem[] = [
     exp: 200,
     isTask: false,
     prerequisiteIds: [],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 100,
     completionProgress: 92,
     modal: {
@@ -144,7 +133,6 @@ export const achievementData: AchievementItem[] = [
     release: new Date(2020, 6, 8, 0, 0, 0),
     isTask: true,
     prerequisiteIds: [],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 100,
     completionProgress: 10,
     modal: {
@@ -162,7 +150,6 @@ export const achievementData: AchievementItem[] = [
     exp: 80,
     isTask: true,
     prerequisiteIds: [1, 8],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 2,
     completionProgress: 0,
     modal: {
@@ -180,7 +167,6 @@ export const achievementData: AchievementItem[] = [
     exp: 80,
     isTask: true,
     prerequisiteIds: [4, 9],
-    status: AchievementStatus.ACTIVE,
     completionGoal: 2,
     completionProgress: 0,
     modal: {
