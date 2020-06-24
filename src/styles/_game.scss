@@ -12,9 +12,16 @@
   justify-content: space-evenly;
 }
 
-.FileMenu {
+.StorySimulator {
   background-color: white;
   width: 800px;
+  height: 150px;
+  overflow: scroll;
+}
+
+.FileMenu {
+  background-color: white;
+  width: 400px;
   height: 150px;
   overflow: scroll;
 }
