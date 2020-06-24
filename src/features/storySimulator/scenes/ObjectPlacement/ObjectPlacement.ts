@@ -36,7 +36,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       () => this.scene.start('StorySimulatorMenu'),
       0,
-      -screenCenter.y
+      0
     );
     const buttonDetails = [
       { name: 'Add Object', callback: () => this.objectManager.loadObject() },
