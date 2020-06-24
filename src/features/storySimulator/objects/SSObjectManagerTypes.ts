@@ -1,7 +1,7 @@
 import { ItemId } from 'src/features/game/commons/CommonsTypes';
 export type ShortPath = string;
 
-export type ObjectDetail = {
+export type SSObjectDetail = {
   id: ItemId;
   assetKey: string;
   assetPath: string;

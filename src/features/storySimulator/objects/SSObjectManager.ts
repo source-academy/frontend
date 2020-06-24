@@ -1,26 +1,29 @@
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { ObjectDetail, ShortPath } from './SSObjectManagerTypes';
+import { SSObjectDetail, ShortPath } from './SSObjectManagerTypes';
 import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { generateItemId } from './SSObjectManagerHelper';
+import { shortButton } from 'src/features/game/commons/CommonAssets';
+import { objectDetailStyle } from './SSObjectManagerConstants';
 
 export default class SSObjectManager {
   private objectPlacement: ObjectPlacement | undefined;
   private objectIdNumber: number;
-  private objectSpriteMap: Map<ItemId, ObjectDetail>;
+  private objectDetailMap: Map<ItemId, SSObjectDetail>;
   private assetMap: Map<AssetKey, ShortPath>;
+  private objectDetailMapContainer: Phaser.GameObjects.Container | undefined;
 
   constructor() {
     this.objectIdNumber = 0;
-    this.objectSpriteMap = new Map<ItemId, ObjectDetail>();
+    this.objectDetailMap = new Map<ItemId, SSObjectDetail>();
     this.assetMap = new Map<AssetKey, ShortPath>();
   }
 
   public initialise(objectPlacement: ObjectPlacement) {
     this.objectPlacement = objectPlacement;
     this.objectIdNumber = 0;
-    this.objectSpriteMap = new Map<ItemId, ObjectDetail>();
+    this.objectDetailMap = new Map<ItemId, SSObjectDetail>();
     this.trackDraggables();
   }
 
@@ -32,7 +35,7 @@ export default class SSObjectManager {
         gameObject.y = dragY;
         const itemId = gameObject.data.get('itemId');
 
-        const objectDetail = this.objectSpriteMap.get(itemId);
+        const objectDetail = this.objectDetailMap.get(itemId);
         if (!objectDetail) return;
         objectDetail.x = dragX;
         objectDetail.y = dragY;
@@ -47,6 +50,8 @@ export default class SSObjectManager {
     this.assetMap.set(objectAssetKey, shortPath);
 
     this.getObjectPlacement().load.image(objectAssetKey, Constants.assetsFolder + shortPath);
+
+    console.log(Constants.assetsFolder + shortPath);
     this.getObjectPlacement().load.once('filecomplete', (objectAssetKey: string) => {
       this.renderObject(objectAssetKey);
     });
@@ -75,28 +80,71 @@ export default class SSObjectManager {
       throw new Error('Object short path not recorded');
     }
 
-    this.objectSpriteMap.set(itemId, {
+    const objectDetail: SSObjectDetail = {
       id: itemId,
       assetKey: objectAssetKey,
       assetPath: shortPath,
       x: screenCenter.x,
       y: screenCenter.y
-    });
+    };
+
+    this.objectDetailMap.set(itemId, objectDetail);
 
     this.getObjectPlacement().layerManager.addToLayer(Layer.Objects, objectSprite);
     this.objectIdNumber++;
   }
 
+  public showMap() {
+    this.objectDetailMapContainer = new Phaser.GameObjects.Container(
+      this.getObjectPlacement(),
+      0,
+      0
+    );
+    this.objectDetailMap.forEach((ssObjectDetail: SSObjectDetail) => {
+      const rect = new Phaser.GameObjects.Image(
+        this.getObjectPlacement(),
+        ssObjectDetail.x,
+        ssObjectDetail.y,
+        shortButton.key
+      );
+      const mapShowText = new Phaser.GameObjects.Text(
+        this.getObjectPlacement(),
+        ssObjectDetail.x,
+        ssObjectDetail.y,
+        this.formatObjectDetails(ssObjectDetail),
+        objectDetailStyle
+      ).setOrigin(0.5);
+      this.objectDetailMapContainer!.add([rect, mapShowText]);
+    });
+    this.getObjectPlacement().add.existing(this.objectDetailMapContainer);
+  }
+
+  private formatObjectDetails(ssObjectDetail: SSObjectDetail) {
+    return `${ssObjectDetail.assetPath}\nx: ${ssObjectDetail.x}\ny: ${ssObjectDetail.y}`;
+  }
+
+  public hideMap() {
+    if (this.objectDetailMapContainer) {
+      this.objectDetailMapContainer.destroy();
+    }
+  }
+
   public printMap() {
-    this.objectSpriteMap.forEach((objectDetail: ObjectDetail) => {
+    console.log(this.getObjectDetailMap());
+  }
+
+  private getObjectDetailMap() {
+    let map = '';
+    this.objectDetailMap.forEach((objectDetail: SSObjectDetail) => {
       const objectDetailString = [
         objectDetail.id,
         objectDetail.assetPath,
         objectDetail.x.toString(),
         objectDetail.y.toString()
       ].join(',');
-      console.log(objectDetailString);
+      map += objectDetailString + '\n';
     });
+    return map;
   }
 
   private getObjectPlacement() {

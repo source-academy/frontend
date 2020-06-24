@@ -39,8 +39,13 @@ export default class ObjectPlacement extends Phaser.Scene {
       0
     );
     const buttonDetails = [
-      { name: 'Add Object', callback: () => this.objectManager.loadObject() },
-      { name: 'Print Objects', callback: () => this.objectManager.printMap() }
+      { name: 'Add Object', onClick: () => this.objectManager.loadObject() },
+      {
+        name: 'Print Objects',
+        onClick: () => this.objectManager.printMap(),
+        onHover: () => this.objectManager.showMap(),
+        onPointerout: () => this.objectManager.hideMap()
+      }
     ];
 
     uiContainer.add(backButton);

@@ -76,7 +76,9 @@ class GameLayerManager {
     if (!layerContainer) {
       return;
     }
-    layerContainer.list.map((gameObject: Phaser.GameObjects.GameObject) => gameObject.destroy());
+    layerContainer.list.forEach((gameObject: Phaser.GameObjects.GameObject) =>
+      gameObject.destroy()
+    );
   }
 }
 
