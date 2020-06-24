@@ -17,10 +17,11 @@ type PrerequisiteCardProps = {
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { id, inferencer, shouldPartiallyRender, displayModal } = props;
 
-  const { title, release, completionProgress, completionGoal } = inferencer.getAchievementItem(id);
+  const { title, release } = inferencer.getAchievementItem(id);
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
+  const collectiveProgress = inferencer.getCollectiveProgress(id);
 
   return (
     <div className="node">
@@ -50,8 +51,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         </div>
 
         <AchievementProgressBar
-          completionProgress={completionProgress}
-          completionGoal={completionGoal}
+          progress={collectiveProgress}
           shouldAnimate={!shouldPartiallyRender}
         />
       </Card>

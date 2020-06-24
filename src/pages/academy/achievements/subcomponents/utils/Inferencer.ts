@@ -4,7 +4,6 @@ import {
   FilterStatus,
   AchievementStatus
 } from 'src/commons/achievements/AchievementTypes';
-import { prettifyDeadline } from 'src/pages/academy/achievements/subcomponents/utils/AchievementDeadline';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
@@ -13,6 +12,7 @@ class Node {
   status: AchievementStatus;
   totalExp: number;
   furthestDeadline?: Date;
+  collectiveProgress: number;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites
   modal: AchievementModalItem;
@@ -33,6 +33,7 @@ class Node {
     this.status = this.generateStatus(deadline, completionGoal, completionProgress);
     this.totalExp = exp;
     this.furthestDeadline = deadline;
+    this.collectiveProgress = Math.min(completionProgress / completionGoal, 1);
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
     this.modal = modal;
@@ -67,14 +68,8 @@ class Inferencer {
       console.log(
         node.id,
         node.achievement.title,
-        prettifyDeadline(node.furthestDeadline),
-        node.totalExp,
-        '\nisTask:',
-        node.achievement.isTask,
-        '\nchildren:',
-        node.children,
-        '\ndescendants:',
-        node.descendant
+        node.achievement.completionProgress + '/' + node.achievement.completionGoal,
+        node.collectiveProgress
       )
     );
     console.log('ಠ_ಠ hmm...u should only see me once');
@@ -118,6 +113,10 @@ class Inferencer {
 
   public getFurthestDeadline(id: number) {
     return this.nodeList[id].furthestDeadline;
+  }
+
+  public getCollectiveProgress(id: number) {
+    return this.nodeList[id].collectiveProgress;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -172,6 +171,7 @@ class Inferencer {
     this.nodeList.forEach(node => this.generateDescendant(node));
     this.nodeList.forEach(node => this.generateFurthestDeadline(node));
     this.nodeList.forEach(node => this.generateTotalExp(node));
+    this.nodeList.forEach(node => this.generateCollectiveProgress(node));
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
@@ -231,6 +231,32 @@ class Inferencer {
 
     // Reduces the temporary array to a single number value
     node.totalExp = descendantExps.reduce(combineExps, node.totalExp);
+  }
+
+  // Set the node's collective progress by combining all descendants' progress
+  private generateCollectiveProgress(node: Node) {
+    if (node.children.size === 0) {
+      // No prerequisites, just display the achievement progress
+      return;
+    }
+
+    // Node has prerequisites, display aggregated descendants progress
+
+    // Combiner of progress
+    const collateProgress = (accumulateProgress: number, currentProgress: number) => {
+      return accumulateProgress + currentProgress;
+    };
+
+    const descendantProgress = [];
+    for (const child of node.descendant) {
+      const { completionGoal, completionProgress } = this.nodeList[child].achievement;
+      const childProgress = Math.min(completionProgress / completionGoal, 1);
+      descendantProgress.push(childProgress);
+    }
+    const normalize = descendantProgress.length;
+
+    // Reduces the temporary array to a single number value
+    node.collectiveProgress = descendantProgress.reduce(collateProgress, 0) / normalize;
   }
 }
 
