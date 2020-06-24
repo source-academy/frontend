@@ -14,10 +14,6 @@ class CheckpointTransition extends Phaser.Scene {
   public async preload() {
     addLoadingScreen(this);
     const accountInfo = getSourceAcademyGame().getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
-      return;
-    }
     const loadedGameState = await loadData(accountInfo);
     const chapterDetails = SampleChapters; // TODO: Fetch from backend
     const [nextChapterNum, nextCheckpointNum, nextCheckpointFileName] = this.getNextChapter(

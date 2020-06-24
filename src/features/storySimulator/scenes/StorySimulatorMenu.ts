@@ -1,4 +1,3 @@
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import commonAssets, { studentRoomImg } from 'src/features/storySimulator/utils/Assets';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
@@ -15,11 +14,6 @@ class StorySimulatorMenu extends Phaser.Scene {
   }
   public init() {
     this.layerManager.initialiseMainLayer(this);
-    const accountInfo = getStorySimulatorGame().getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
-      return;
-    }
   }
 
   public async preload() {
