@@ -1,4 +1,4 @@
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Constants from 'src/commons/utils/Constants';
 import { FullSaveState } from './GameSaveTypes';
 

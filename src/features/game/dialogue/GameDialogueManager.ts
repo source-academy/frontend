@@ -7,6 +7,7 @@ import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { textTypeWriterStyle } from '../dialogue/DialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
@@ -15,8 +16,8 @@ export default class DialogueManager {
     this.dialogueMap = new Map<ItemId, Dialogue>();
   }
 
-  public initialise(dialogueMap: Map<ItemId, Dialogue>) {
-    this.dialogueMap = dialogueMap;
+  public initialise(gameManager: GameManager) {
+    this.dialogueMap = gameManager.currentCheckpoint.map.getDialogues();
   }
 
   public async playDialogue(dialogueId: ItemId): Promise<void> {

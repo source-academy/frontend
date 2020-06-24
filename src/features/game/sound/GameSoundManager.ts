@@ -2,7 +2,7 @@ import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
 import {
   getSourceAcademyGame,
   SourceAcademyGame
-} from 'src/pages/academy/game/subcomponents/phaserGame';
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 import { LocationId } from '../location/GameMapTypes';

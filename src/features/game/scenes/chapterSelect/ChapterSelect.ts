@@ -17,7 +17,7 @@ import CommonBackButton from '../../commons/CommonBackButton';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
