@@ -74,7 +74,7 @@ class GameObjectManager implements StateObserver {
       if (!objectSprite || !objectProp) {
         return;
       }
-
+      objectSprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
       objectSprite.on(
         Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
         async () => await GameActionManager.getInstance().executeStoryAction(objectProp.actionIds)

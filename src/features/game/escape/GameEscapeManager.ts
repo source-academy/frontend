@@ -78,7 +78,12 @@ class GameEscapeManager {
       'Main Menu',
       () => {
         gameManager.cleanUp();
-        gameManager.scene.start('MainMenu');
+        if (gameManager.isStorySimulator) {
+          gameManager.scene.start('MainMenu');
+        } else {
+          console.log(gameManager.scene);
+          gameManager.scene.start('StorySimulatorMenu');
+        }
       },
       mediumButton.key,
       { x: screenSize.x * 0.25, y: escapeButtonYPos },

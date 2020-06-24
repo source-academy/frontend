@@ -41,15 +41,15 @@ class MainMenu extends Phaser.Scene {
   public async preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
-    this.soundManager.initialise(this);
+    this.soundManager.initialise(this, getSourceAcademyGame());
     this.soundManager.loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
     this.createOptionButtons();
   }
 
   public async create() {
     const accountInfo = getSourceAcademyGame().getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
+    if (accountInfo.role === 'staff') {
+      console.log('Staff do not have accounts');
       return;
     }
     this.loadedGameState = await loadData(accountInfo);
