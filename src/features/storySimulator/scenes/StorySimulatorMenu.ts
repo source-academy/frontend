@@ -6,6 +6,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
 import { vBannerButton } from './StorySimulatorMenuHelper';
+import Parser from 'src/features/game/parser/Parser';
 
 class StorySimulatorMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -36,13 +37,29 @@ class StorySimulatorMenu extends Phaser.Scene {
       },
       {
         text: 'Simulate Checkpoint',
-        callback: () => this.scene.start('StorySimulatorTransition')
+        callback: () => this.callGameManager()
       }
     ];
     optionsContainer.add(
       buttons.map((button, buttonIndex) => vBannerButton(this, button, buttonIndex, buttons.length))
     );
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
+  }
+
+  private callGameManager() {
+    const text = sessionStorage.getItem('checkpointTxt');
+    if (text) {
+      const gameCheckpoint = Parser.parse(text);
+
+      this.scene.start('GameManager', {
+        isStorySimulator: true,
+        fullSaveState: undefined,
+        gameCheckpoint,
+        continueGame: false,
+        chapterNum: -1,
+        checkpointNum: -1
+      });
+    }
   }
 
   private renderBackground() {
