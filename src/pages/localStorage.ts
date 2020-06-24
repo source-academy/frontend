@@ -6,9 +6,11 @@ import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
+import { AchievementItem } from '../commons/achievements/AchievementTypes';
 
 export type SavedState = {
   session: Partial<SessionState>;
+  achievements: AchievementItem[];
   playgroundEditorValue: string | null;
   playgroundIsEditorAutorun: boolean;
   playgroundSourceChapter: number;
@@ -42,6 +44,7 @@ export const saveState = (state: OverallState) => {
         role: state.session.role,
         name: state.session.name
       },
+      achievements: state.achievements.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,

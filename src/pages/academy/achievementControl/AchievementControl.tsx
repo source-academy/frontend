@@ -11,10 +11,13 @@ export type DispatchProps = {
   handleAchievementsUpdate: (achievements: AchievementItem[]) => void;
 };
 
-export type StateProps = {};
+export type StateProps = {
+  achievementItems: AchievementItem[];
+};
 
-function AchievementControl() {
+function AchievementControl(props: DispatchProps & StateProps) {
   const _inferencer = new Inferencer(achievementData);
+
   _inferencer.logInfo();
 
   return (

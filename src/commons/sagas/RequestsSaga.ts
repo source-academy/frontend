@@ -138,7 +138,7 @@ export async function putUserGameState(
  * GET /achievements
  */
 export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
-  const resp = await request('assessments', 'GET', {
+  const resp = await request('assessments/', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -149,6 +149,8 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   }
 
   const achievements = await resp.json();
+  console.log(achievements);
+
   return achievements.map((achievement: any) => {
     achievement.ability = achievement.ability as AchievementAbility;
     achievement.status = achievement.status as AchievementStatus;
@@ -168,11 +170,17 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 /**
  * POST /achievements
  */
-export async function editAchievements(achievements: AchievementItem[], tokens: Tokens) {
+export async function editAchievements(
+  achievements: AchievementItem[],
+  tokens: Tokens
+): Promise<Response | null> {
   const resp = await request(`achievements/`, 'POST', {
     accessToken: tokens.accessToken,
     body: { achievements: achievements },
-    refreshToken: tokens.refreshToken
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
   });
 
   return resp;

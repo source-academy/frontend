@@ -5,13 +5,18 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 import { getAchievements, editAchievements } from 'src/commons/achievements/AchievementActions';
 
-const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({});
+const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
+  achievementItems: state.achievements.achievements
+});
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators({
-    handleAchievementsFetch: getAchievements,
-    handleAchievementsUpdate: editAchievements
-  }, dispatch);
+  bindActionCreators(
+    {
+      handleAchievementsFetch: getAchievements,
+      handleAchievementsUpdate: editAchievements
+    },
+    dispatch
+  );
 
 const AchievementControlContainer = connect(
   mapStateToProps,

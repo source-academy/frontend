@@ -7,14 +7,16 @@ import { OverallState } from '../application/ApplicationTypes';
 import { editAchievements, getAchievements } from '../sagas/RequestsSaga';
 
 export default function* AchievementSaga(): SagaIterator {
-  yield takeEvery(GET_ACHIEVEMENTS, function* (action: ReturnType<typeof actions.getAchievements>) {
+  yield takeEvery(GET_ACHIEVEMENTS, function* () {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const assessmentOverviews = yield call(getAchievements, tokens);
-    if (assessmentOverviews) {
-      yield put(actions.getAchievements());
+
+    const achievements = yield call(getAchievements, tokens);
+
+    if (achievements) {
+      yield put(actions.editAchievements(achievements));
     }
   });
 
@@ -25,7 +27,14 @@ export default function* AchievementSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
+
     const achievements = action.payload;
-    yield call(editAchievements, achievements, tokens);
+
+    const resp = yield call(editAchievements, achievements, tokens);
+
+    if (!resp) {
+      console.log(resp);
+      return;
+    }
   });
 }
