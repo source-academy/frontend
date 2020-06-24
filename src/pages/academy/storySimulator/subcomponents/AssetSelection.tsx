@@ -8,9 +8,10 @@ type TreeState = {
 
 type OwnProps = {
   assetPaths: string[];
+  setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function AssetSelection({ assetPaths }: OwnProps) {
+function AssetSelection({ assetPaths, setCurrentAsset }: OwnProps) {
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
@@ -22,10 +23,12 @@ function AssetSelection({ assetPaths }: OwnProps) {
       treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
-      sessionStorage.setItem('selectedAsset', getFilePath(assetTree.nodes, levels));
+      const selectedPath = getFilePath(assetTree.nodes, levels);
+      setCurrentAsset(selectedPath);
+      sessionStorage.setItem('selectedAsset', selectedPath);
       setAssetTree({ ...assetTree });
     },
-    [assetTree]
+    [assetTree, setCurrentAsset]
   );
 
   return <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />;

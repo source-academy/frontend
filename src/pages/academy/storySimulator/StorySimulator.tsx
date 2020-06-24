@@ -10,17 +10,18 @@ import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import StoryXmlLoader from './subcomponents/StoryXmlLoader';
+import AssetViewer from './subcomponents/AssetViewer';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
   const [sessionLoaded, setSessionLoaded] = React.useState(false);
 
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
+  const [currentAsset, setCurrentAsset] = React.useState<string>('');
 
   React.useEffect(() => {
     (async () => {
       const paths = await fetchAssetPathsLocally();
-      console.log(paths.join(',\n'));
       setAssetPaths(paths);
     })();
   }, []);
@@ -48,9 +49,16 @@ function StorySimulator() {
         <div id="phaser-div" />
       </div>
       <div className="Centered">
-        <div className="FileMenu">
+        <div className="StorySimulator">
           <StoryXmlLoader />
-          <AssetSelection assetPaths={assetPaths} />
+          <div className="Horizontal">
+            <div className="FileMenu">
+              <AssetSelection assetPaths={assetPaths} setCurrentAsset={setCurrentAsset} />
+            </div>
+            <div>
+              <AssetViewer assetPath={currentAsset} />
+            </div>
+          </div>
         </div>
       </div>
 
