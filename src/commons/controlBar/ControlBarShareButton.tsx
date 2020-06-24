@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import controlButton from '../ControlButton';
+import Constants from '../utils/Constants';
 
 type ControlBarShareButtonProps = DispatchProps & StateProps;
 
@@ -37,6 +38,15 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
   }
 
   public render() {
+    let url = '';
+    const { urlShortener } = Constants;
+    if (urlShortener) {
+      const matches = urlShortener.match(new RegExp(/^(.*[\\\/])/));
+      if (matches) {
+        url = matches[0];
+      }
+    }
+
     return (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         <Tooltip content="Get shareable link">
@@ -52,7 +62,8 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
             {!this.props.shortURL || this.props.shortURL === 'ERROR' ? (
               !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
                 <div>
-                  <input placeholder={'Custom Alias (optional)'} onChange={this.handleChange} />
+                  {url}&nbsp;
+                  <input placeholder={'custom string (optional)'} onChange={this.handleChange} />
                   {controlButton('Get Link', IconNames.SHARE, () => {
                     this.props.handleShortenURL(this.state.keyword);
                     this.setState({ isLoading: true });
