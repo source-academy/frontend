@@ -40,11 +40,17 @@ class MainMenu extends Phaser.Scene {
     const buttons = [
       {
         text: 'Object Placement',
-        callback: () => this.scene.start('ObjectPlacement')
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('ObjectPlacement');
+        }
       },
       {
         text: 'Simulate Checkpoint',
-        callback: () => this.callGameManager()
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.callGameManager();
+        }
       }
     ];
     optionsContainer.add(
