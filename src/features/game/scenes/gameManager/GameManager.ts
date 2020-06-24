@@ -27,6 +27,7 @@ import {
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import { Layer } from '../../layer/GameLayerTypes';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -195,6 +196,7 @@ class GameManager extends Phaser.Scene {
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
+    GameActionManager.getInstance().getGameManager().layerManager.showLayer(Layer.Character);
 
     const gameLocation = this.currentCheckpoint.map.getLocationAtId(locationId);
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);

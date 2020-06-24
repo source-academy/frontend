@@ -16,7 +16,7 @@ import { screenSize } from '../../commons/CommonConstants';
 import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
+import { backToMenuButton } from '../../commons/CommonBackButton';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -157,14 +157,8 @@ class GameModeMove implements IGameUI {
       moveMenuContainer.add(locationButtonText);
     });
 
-    // Add back button
-    const backButton = new CommonBackButton(
-      gameManager,
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
-      0,
-      0
-    );
-    moveMenuContainer.add(backButton);
+    moveMenuContainer.add(backToMenuButton(gameManager));
+
     return moveMenuContainer;
   }
 

@@ -1,6 +1,8 @@
 import { screenCenter, screenSize } from './CommonConstants';
 import { topButton } from './CommonAssets';
 import { Color } from '../utils/StyleUtils';
+import { Layer } from '../layer/GameLayerTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 
 const backText = 'Back';
 const backTextYPos = screenSize.y * 0.012;
@@ -39,5 +41,16 @@ class CommonBackButton extends Phaser.GameObjects.Container {
     this.add(backButtonText);
   }
 }
+
+export const backToMenuButton = (gameManager: GameManager) =>
+  new CommonBackButton(
+    gameManager,
+    () => {
+      gameManager.phaseManager.popPhase();
+      gameManager.layerManager.fadeInLayer(Layer.Character, 300);
+    },
+    0,
+    0
+  );
 
 export default CommonBackButton;
