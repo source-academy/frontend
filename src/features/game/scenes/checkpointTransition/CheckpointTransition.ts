@@ -1,6 +1,6 @@
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { loadData } from '../../save/GameSaveRequests';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { SampleChapters } from '../chapterSelect/SampleChapters';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';

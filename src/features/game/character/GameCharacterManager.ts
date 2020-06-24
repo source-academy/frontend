@@ -15,6 +15,7 @@ import { resize } from '../utils/SpriteUtils';
 import { speakerBox } from '../commons/CommonAssets';
 import { capitalise } from '../utils/StringUtils';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
@@ -27,8 +28,8 @@ export default class CharacterManager {
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
   }
 
-  public initialise(characterMap: Map<ItemId, Character>) {
-    this.characterMap = characterMap;
+  public initialise(gameManager: GameManager) {
+    this.characterMap = gameManager.currentCheckpoint.map.getCharacters();
   }
 
   public renderCharacterLayerContainer(locationId: LocationId): void {

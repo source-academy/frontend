@@ -2,12 +2,13 @@ import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { ItemId } from '../commons/CommonsTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
 
-  public initialise(actionMap: Map<ItemId, GameAction>) {
-    this.actionMap = actionMap;
+  public initialise(gameManager: GameManager) {
+    this.actionMap = gameManager.currentCheckpoint.map.getActions();
   }
 
   public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {

@@ -25,7 +25,7 @@ import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 
 class Settings extends Phaser.Scene {

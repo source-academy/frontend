@@ -20,9 +20,13 @@ import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import {
+  getSourceAcademyGame,
+  SourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
+import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -30,11 +34,13 @@ type GameManagerProps = {
   continueGame: boolean;
   chapterNum: number;
   checkpointNum: number;
+  isStorySimulator: boolean;
 };
 
 class GameManager extends Phaser.Scene {
   public currentCheckpoint: GameCheckpoint;
   public currentLocationId: LocationId;
+  public parentGame: SourceAcademyGame | undefined;
 
   private fullSaveState: FullSaveState | undefined;
   private continueGame: boolean;
@@ -87,8 +93,10 @@ class GameManager extends Phaser.Scene {
     fullSaveState,
     continueGame,
     chapterNum,
-    checkpointNum
+    checkpointNum,
+    isStorySimulator
   }: GameManagerProps) {
+    this.parentGame = isStorySimulator ? getStorySimulatorGame() : getSourceAcademyGame();
     this.currentCheckpoint = gameCheckpoint;
     this.fullSaveState = fullSaveState;
     this.continueGame = continueGame;
@@ -114,7 +122,11 @@ class GameManager extends Phaser.Scene {
   }
 
   public loadGameState() {
-    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    if (!this.parentGame) {
+      console.log('No account info');
+      return;
+    }
+    const accountInfo = this.parentGame.getAccountInfo();
     if (!accountInfo) {
       console.log('No account info');
       return;
@@ -146,9 +158,9 @@ class GameManager extends Phaser.Scene {
     this.loadGameState();
 
     this.soundManager.initialise(this);
-    this.dialogueManager.initialise(this.currentCheckpoint.map.getDialogues());
-    this.characterManager.initialise(this.currentCheckpoint.map.getCharacters());
-    this.actionExecuter.initialise(this.currentCheckpoint.map.getActions());
+    this.dialogueManager.initialise(this);
+    this.characterManager.initialise(this);
+    this.actionExecuter.initialise(this);
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);

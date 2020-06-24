@@ -19,7 +19,7 @@ import commonSoundAssets, {
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { loadData } from '../../save/GameSaveRequests';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { SampleChapters } from '../chapterSelect/SampleChapters';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';

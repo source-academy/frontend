@@ -1,5 +1,5 @@
 import { loadData } from '../save/GameSaveRequests';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/phaserGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Parser from '../parser/Parser';
 
 export async function callGameManagerOnTxtLoad(
@@ -40,10 +40,11 @@ async function startGameManager(
     const gameCheckpoint = Parser.parse(text);
 
     scene.scene.start('GameManager', {
+      isStorySimulator: false,
       fullSaveState,
       gameCheckpoint,
-      continueGame: continueGame,
-      chapterNum: chapterNum,
+      continueGame,
+      chapterNum,
       checkpointNum
     });
   }
