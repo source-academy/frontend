@@ -16,7 +16,6 @@ import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 import Game from './game/Game';
 import GroundControl from './groundControl/GroundControlContainer';
 import StorySimulator from './storySimulator/StorySimulator';
-import AchievementContainer from './achievements/AchievementContainer';
 import AchievementControlContainer from './achievementControl/AchievementControlContainer';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
@@ -80,7 +79,6 @@ class Academy extends React.Component<AcademyProps> {
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
-          <Route path="/academy/achievements" component={AchievementContainer} />
           <Route path="/academy/achievement-control" component={AchievementControlContainer} />
           <Route path={'/academy/storysimulator'} component={StorySimulator} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
