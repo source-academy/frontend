@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { SourceAcademyGame } from '../../game/subcomponents/sourceAcademyGame';
-import StorySimulatorMenu from 'src/features/storySimulator/scenes/StorySimulatorMenu/StorySimulatorMenu';
+import StorySimulatorMenu from 'src/features/storySimulator/scenes/StorySimulatorMenu';
 import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
 const config = {

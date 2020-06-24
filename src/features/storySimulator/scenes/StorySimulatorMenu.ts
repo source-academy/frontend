@@ -1,5 +1,7 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import commonAssets, { studentRoomImg } from 'src/features/storySimulator/utils/Assets';
+import storySimulatorAssets, {
+  studentRoomImg
+} from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
@@ -17,7 +19,7 @@ class StorySimulatorMenu extends Phaser.Scene {
   }
 
   public async preload() {
-    commonAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
+    storySimulatorAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
   }
 
   public async create() {
@@ -43,7 +45,7 @@ class StorySimulatorMenu extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
   }
 
-  public renderBackground() {
+  private renderBackground() {
     const backgroundImg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
