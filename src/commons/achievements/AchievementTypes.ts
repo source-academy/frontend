@@ -61,7 +61,7 @@ export type AchievementItem = {
   status: AchievementStatus;
   completionGoal: number;
   completionProgress: number;
-  modal?: AchievementModalItem;
+  modal: AchievementModalItem;
 };
 
 /**

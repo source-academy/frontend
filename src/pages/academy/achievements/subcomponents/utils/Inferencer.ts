@@ -14,7 +14,7 @@ class Node {
   furthestDeadline?: Date;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites
-  modal?: AchievementModalItem;
+  modal: AchievementModalItem;
 
   constructor(achievement: AchievementItem) {
     this.achievement = achievement;

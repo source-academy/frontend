@@ -90,7 +90,14 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.COMPLETED,
     completionGoal: 10,
-    completionProgress: 92
+    completionProgress: 92,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      description: 'Keyboard Warrior - Bronze Tier!',
+      goalText: 'Keyboard Warrior - Bronze Tier!!',
+      completionText: 'Keyboard Warrior - Bronze Tier!!!'
+    }
   },
   {
     id: 6,
@@ -101,7 +108,14 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.COMPLETED,
     completionGoal: 50,
-    completionProgress: 92
+    completionProgress: 92,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      description: 'Keyboard Warrior - Silver Tier!',
+      goalText: 'Keyboard Warrior - Silver Tier!!',
+      completionText: 'Keyboard Warrior - Silver Tier!!!'
+    }
   },
   {
     id: 7,
@@ -112,7 +126,14 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [],
     status: AchievementStatus.ACTIVE,
     completionGoal: 100,
-    completionProgress: 92
+    completionProgress: 92,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      description: 'Keyboard Warrior - Gold Tier!',
+      goalText: 'Keyboard Warrior - Gold Tier!!',
+      completionText: 'Keyboard Warrior - Gold Tier!!!'
+    }
   },
   {
     id: 8,
@@ -161,7 +182,14 @@ export const achievementData: AchievementItem[] = [
     prerequisiteIds: [4, 9],
     status: AchievementStatus.ACTIVE,
     completionGoal: 2,
-    completionProgress: 0
+    completionProgress: 0,
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
+      description: '!!!',
+      goalText: 'Complete All mission achievement.',
+      completionText: 'Such wow. Mission Grandmaster.'
+    }
   }
 ];
 

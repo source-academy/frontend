@@ -8,7 +8,7 @@ import EditableAchievementModalImage from './EditableAchievementModalImage';
 
 type EditableAchievementModalProps = {
   title: string;
-  modal?: AchievementModalItem;
+  modal: AchievementModalItem;
 };
 
 function EditableAchievementModal(props: EditableAchievementModalProps) {
