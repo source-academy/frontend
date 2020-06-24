@@ -45,10 +45,6 @@ class ChapterSelect extends Phaser.Scene {
 
   public async create() {
     const accountInfo = getSourceAcademyGame().getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
-      return;
-    }
     this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderChapters();

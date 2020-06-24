@@ -79,10 +79,9 @@ class GameEscapeManager {
       () => {
         gameManager.cleanUp();
         if (gameManager.isStorySimulator) {
-          gameManager.scene.start('MainMenu');
-        } else {
-          console.log(gameManager.scene);
           gameManager.scene.start('StorySimulatorMenu');
+        } else {
+          gameManager.scene.start('MainMenu');
         }
       },
       mediumButton.key,

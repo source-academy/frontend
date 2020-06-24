@@ -240,10 +240,9 @@ class GameManager extends Phaser.Scene {
     if (GameActionManager.getInstance().isAllComplete()) {
       this.cleanUp();
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
-        this.scene.start('CheckpointTransition');
-      } else {
-        console.log(this.scene);
         this.scene.start('StorySimulatorMenu');
+      } else {
+        this.scene.start('CheckpointTransition');
       }
     }
   }

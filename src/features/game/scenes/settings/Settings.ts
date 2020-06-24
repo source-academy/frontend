@@ -52,10 +52,6 @@ class Settings extends Phaser.Scene {
     this.renderBackground();
     this.renderOptions();
     const accountInfo = getSourceAcademyGame().getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
-      return;
-    }
     const fullSaveState = await loadData(accountInfo);
     this.settingsSaveManager.initialiseForSettings(accountInfo, fullSaveState);
   }
