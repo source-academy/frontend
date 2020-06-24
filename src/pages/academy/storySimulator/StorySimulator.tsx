@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { fetchAssetPathsLocally } from 'src/features/storySimulator/StorySimulatorService';
-import AssetSelection from '../storySimulator/subcomponents/AssetSelection';
+import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import {
   createStorySimulatorGame,
   getStorySimulatorGame
@@ -9,8 +9,8 @@ import {
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
-import CheckpointTxtLoader from './subcomponents/CheckpointTxtLoader';
-import AssetViewer from './subcomponents/AssetViewer';
+import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoader';
+import AssetViewer from './subcomponents/StorySimulatorAssetViewer';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -51,7 +51,10 @@ function StorySimulator() {
           <CheckpointTxtLoader />
           <div className="AssetPanel">
             <div className="AssetColumn">
-              <AssetSelection assetPaths={assetPaths} setCurrentAsset={setCurrentAsset} />
+              <StorySimulatorAssetSelection
+                assetPaths={assetPaths}
+                setCurrentAsset={setCurrentAsset}
+              />
             </div>
             <div className="AssetColumn Centered">
               <AssetViewer assetPath={currentAsset} />

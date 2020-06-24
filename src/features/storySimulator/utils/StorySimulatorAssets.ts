@@ -11,6 +11,11 @@ export const mainMenuOptBanner: ImageAsset = {
   path: '../assets/menuOption.png'
 };
 
-const commonAssets = [studentRoomImg, mainMenuOptBanner];
+export const shortButton: ImageAsset = {
+  key: 'short-button',
+  path: '../assets/shortButton.png'
+};
 
-export default commonAssets;
+const storySimulatorAssets = [studentRoomImg, mainMenuOptBanner, shortButton];
+
+export default storySimulatorAssets;

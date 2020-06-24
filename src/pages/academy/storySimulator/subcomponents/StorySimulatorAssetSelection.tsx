@@ -11,7 +11,7 @@ type OwnProps = {
   setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
 };
 
-function AssetSelection({ assetPaths, setCurrentAsset }: OwnProps) {
+function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset }: OwnProps) {
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
@@ -34,7 +34,7 @@ function AssetSelection({ assetPaths, setCurrentAsset }: OwnProps) {
   return <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />;
 }
 
-export default AssetSelection;
+export default StorySimulatorAssetSelection;
 
 function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) => void) {
   if (!nodes) {
