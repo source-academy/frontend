@@ -2,8 +2,8 @@ import * as Phaser from 'phaser';
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { SourceAcademyGame } from '../../game/subcomponents/sourceAcademyGame';
-import StorySimulatorTransition from 'src/features/storySimulator/scenes/StorySimulatorTransition';
-import StorySimulatorMenu from 'src/features/storySimulator/scenes/StorySimulatorMenu';
+import StorySimulatorMenu from 'src/features/storySimulator/scenes/StorySimulatorMenu/StorySimulatorMenu';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
 const config = {
   debug: true,
@@ -27,6 +27,6 @@ export const getStorySimulatorGame = () => {
 export const createStorySimulatorGame = () => {
   storySimulatorGame = new SourceAcademyGame(config);
   storySimulatorGame.scene.add('StorySimulatorMenu', StorySimulatorMenu, true);
-  storySimulatorGame.scene.add('StorySimulatorTransition', StorySimulatorTransition);
+  storySimulatorGame.scene.add('ObjectPlacement', ObjectPlacement);
   storySimulatorGame.scene.add('GameManager', GameManager);
 };
