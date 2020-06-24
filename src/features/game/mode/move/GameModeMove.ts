@@ -160,7 +160,12 @@ class GameModeMove implements IGameUI {
     // Add back button
     const backButton = new CommonBackButton(
       gameManager,
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      () => {
+        GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+        GameActionManager.getInstance()
+          .getGameManager()
+          .layerManager.fadeInLayer(Layer.Character, 300);
+      },
       0,
       0
     );
