@@ -19,7 +19,13 @@
   overflow: scroll;
 }
 
-.FileMenu {
+.AssetPanel {
+  display: flex;
+  flex-direction: row;
+}
+
+.AssetColumn {
+  padding: 20px;
   background-color: white;
   width: 400px;
   height: 150px;

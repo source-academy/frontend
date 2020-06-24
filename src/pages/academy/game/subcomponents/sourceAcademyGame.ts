@@ -10,6 +10,7 @@ import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/
 export type AccountInfo = {
   accessToken: string;
   refreshToken: string;
+  role: string;
 };
 
 type GlobalGameProps = {
@@ -42,8 +43,7 @@ export class SourceAcademyGame extends Phaser.Game {
 
   public getAccountInfo() {
     if (!this.global.accountInfo) {
-      console.log('No account info');
-      return;
+      throw new Error('No account info');
     }
     return this.global.accountInfo;
   }

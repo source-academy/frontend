@@ -1,15 +1,16 @@
 import { UserState } from './GameStateTypes';
-import { DefaultUserState } from './GameStateConstants';
+import { emptyUserState } from './GameStateConstants';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameUserStateManager {
   private userState: UserState;
 
   constructor() {
-    this.userState = DefaultUserState;
+    this.userState = emptyUserState;
   }
 
-  public initialise(userState: UserState) {
-    this.userState = userState;
+  public initialise(gameManager: GameManager) {
+    this.userState = gameManager.saveManager.getLoadedUserState() || emptyUserState;
   }
 
   public addToList(listName: string, id: string): void {

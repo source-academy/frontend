@@ -22,7 +22,8 @@ function Game() {
 
     getSourceAcademyGame().setAccountInfo({
       accessToken: session.accessToken,
-      refreshToken: session.refreshToken
+      refreshToken: session.refreshToken,
+      role: session.role
     } as AccountInfo);
 
     setSessionLoaded(true);

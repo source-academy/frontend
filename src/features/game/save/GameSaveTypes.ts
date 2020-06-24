@@ -1,3 +1,10 @@
+export enum SaveManagerType {
+  Game = 'Game',
+  Settings = 'Settings',
+  Simulator = 'Simulator',
+  None = 'None'
+}
+
 export type FullSaveState = {
   gameSaveStates: { [chapterNum: number]: GameSaveState };
   userState: UserSaveState;

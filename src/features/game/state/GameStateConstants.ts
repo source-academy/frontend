@@ -3,7 +3,7 @@ export const SampleUserState = {
   achievements: ['trophy', 'coolbeans guy']
 };
 
-export const DefaultUserState = {
+export const emptyUserState = {
   collectibles: [],
   achievements: []
 };

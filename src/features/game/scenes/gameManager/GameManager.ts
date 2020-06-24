@@ -41,6 +41,7 @@ class GameManager extends Phaser.Scene {
   public currentCheckpoint: GameCheckpoint;
   public currentLocationId: LocationId;
   public parentGame: SourceAcademyGame | undefined;
+  public isStorySimulator: boolean;
 
   private fullSaveState: FullSaveState | undefined;
   private continueGame: boolean;
@@ -71,6 +72,7 @@ class GameManager extends Phaser.Scene {
     this.chapterNum = -1;
     this.checkpointNum = -1;
     this.currentLocationId = this.currentCheckpoint.startingLoc;
+    this.isStorySimulator = false;
 
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
@@ -96,6 +98,7 @@ class GameManager extends Phaser.Scene {
     checkpointNum,
     isStorySimulator
   }: GameManagerProps) {
+    this.isStorySimulator = isStorySimulator;
     this.parentGame = isStorySimulator ? getStorySimulatorGame() : getSourceAcademyGame();
     this.currentCheckpoint = gameCheckpoint;
     this.fullSaveState = fullSaveState;
@@ -121,43 +124,19 @@ class GameManager extends Phaser.Scene {
     this.backgroundManager = new GameBackgroundManager();
   }
 
-  public loadGameState() {
-    if (!this.parentGame) {
-      console.log('No account info');
-      return;
-    }
-    const accountInfo = this.parentGame.getAccountInfo();
-    if (!accountInfo) {
-      console.log('No account info');
-      return;
-    }
-    this.saveManager.initialise(
-      accountInfo,
-      this.fullSaveState,
-      this.chapterNum,
-      this.checkpointNum
-    );
-    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
-    const startingGameState =
-      this.continueGame && accountInfo ? this.saveManager.getLoadedGameStoryState() : undefined;
-    this.stateManager.initialise(this.currentCheckpoint, startingGameState);
-    if (this.continueGame) {
-      this.currentLocationId = this.saveManager.getLoadedLocation();
-    }
-  }
-
   //////////////////////
   //    Preload       //
   //////////////////////
 
   public preload() {
     GameActionManager.getInstance().setGameManager(this);
-
-    this.currentLocationId = this.currentCheckpoint.startingLoc;
-
     this.loadGameState();
 
-    this.soundManager.initialise(this);
+    this.currentLocationId =
+      this.saveManager.getLoadedLocation() || this.currentCheckpoint.startingLoc;
+    this.stateManager.initialise(this);
+    this.userStateManager.initialise(this);
+    this.soundManager.initialise(this, this.parentGame || getSourceAcademyGame());
     this.dialogueManager.initialise(this);
     this.characterManager.initialise(this);
     this.actionExecuter.initialise(this);
@@ -170,6 +149,23 @@ class GameManager extends Phaser.Scene {
     addLoadingScreen(this);
     this.preloadLocationsAssets(this.currentCheckpoint);
     this.preloadBaseAssets();
+  }
+
+  private loadGameState() {
+    const accountInfo = this.getParentGame().getAccountInfo();
+    if (this.isStorySimulator && accountInfo.role === 'staff') {
+      this.saveManager.initialiseForStaff(accountInfo);
+    } else if (!this.isStorySimulator && accountInfo.role === 'student') {
+      this.saveManager.initialiseForGame(
+        accountInfo,
+        this.fullSaveState,
+        this.chapterNum,
+        this.checkpointNum,
+        this.continueGame
+      );
+    } else {
+      throw new Error('Mismatch of roles');
+    }
   }
 
   private preloadBaseAssets() {
@@ -243,8 +239,20 @@ class GameManager extends Phaser.Scene {
   public checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
       this.cleanUp();
-      this.scene.start('CheckpointTransition');
+      if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
+        this.scene.start('CheckpointTransition');
+      } else {
+        console.log(this.scene);
+        this.scene.start('StorySimulatorMenu');
+      }
     }
+  }
+
+  private getParentGame() {
+    if (!this.parentGame) {
+      throw new Error('No parent game');
+    }
+    return this.parentGame;
   }
 }
 

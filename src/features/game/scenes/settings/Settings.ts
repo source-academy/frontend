@@ -45,7 +45,7 @@ class Settings extends Phaser.Scene {
   public preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
-    this.soundManager.initialise(this);
+    this.soundManager.initialise(this, getSourceAcademyGame());
   }
 
   public async create() {
@@ -57,7 +57,7 @@ class Settings extends Phaser.Scene {
       return;
     }
     const fullSaveState = await loadData(accountInfo);
-    this.settingsSaveManager.initialise(accountInfo, fullSaveState);
+    this.settingsSaveManager.initialiseForSettings(accountInfo, fullSaveState);
   }
 
   private preloadAssets() {

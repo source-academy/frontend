@@ -67,6 +67,7 @@ class GameBoundingBoxManager implements StateObserver {
         return;
       }
 
+      bboxSprite.off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
       bboxSprite.on(
         Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
         async () => await GameActionManager.getInstance().executeStoryAction(bboxProp.actionIds)

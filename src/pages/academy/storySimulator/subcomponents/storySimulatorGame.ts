@@ -16,15 +16,17 @@ const config = {
   scale: {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
-  },
-  scene: [StorySimulatorMenu, StorySimulatorTransition, GameManager]
+  }
 };
 
-let storySimualtorGame: SourceAcademyGame;
+let storySimulatorGame: SourceAcademyGame;
 export const getStorySimulatorGame = () => {
-  return storySimualtorGame;
+  return storySimulatorGame;
 };
 
 export const createStorySimulatorGame = () => {
-  storySimualtorGame = new SourceAcademyGame(config);
+  storySimulatorGame = new SourceAcademyGame(config);
+  storySimulatorGame.scene.add('StorySimulatorMenu', StorySimulatorMenu, true);
+  storySimulatorGame.scene.add('StorySimulatorTransition', StorySimulatorTransition);
+  storySimulatorGame.scene.add('GameManager', GameManager);
 };

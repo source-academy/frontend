@@ -9,6 +9,7 @@ import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { jsObjectToMap } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 
 class GameStateManager implements StateSubject {
   // Subscribers
@@ -98,8 +99,9 @@ class GameStateManager implements StateSubject {
   //        Preprocess         //
   ///////////////////////////////
 
-  public initialise(chapter: GameCheckpoint, gameSaveState: GameSaveState | undefined): void {
-    this.checkpoint = chapter;
+  public initialise(gameManager: GameManager): void {
+    this.checkpoint = gameManager.currentCheckpoint;
+    const gameSaveState = gameManager.saveManager.getLoadedGameStoryState();
     this.checkpointObjective = this.checkpoint.objectives;
 
     if (gameSaveState) {
