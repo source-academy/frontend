@@ -43,23 +43,16 @@ function StorySimulator() {
 
   return (
     <>
-      <div id="game-display">
-        <div id="phaser-div" />
-      </div>
-      <div className="Centered">
-        <div className="StorySimulator">
+      <div className="StorySimulatorWrapper">
+        <div id="game-display" />
+        <div className="LeftAlign StorySimulatorPanel">
+          <h2>StorySimulator</h2>
+          <h3>Checkpoint Text Loader</h3>
           <CheckpointTxtLoader />
-          <div className="AssetPanel">
-            <div className="AssetColumn">
-              <StorySimulatorAssetSelection
-                assetPaths={assetPaths}
-                setCurrentAsset={setCurrentAsset}
-              />
-            </div>
-            <div className="AssetColumn Centered">
-              <AssetViewer assetPath={currentAsset} />
-            </div>
-          </div>
+          <h3>Asset Viewer</h3>
+          <AssetViewer assetPath={currentAsset} />
+          <h3>Asset Selection</h3>
+          <StorySimulatorAssetSelection assetPaths={assetPaths} setCurrentAsset={setCurrentAsset} />
         </div>
       </div>
     </>

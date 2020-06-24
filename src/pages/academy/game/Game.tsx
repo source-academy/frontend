@@ -31,9 +31,7 @@ function Game() {
 
   return (
     <>
-      <div id="game-display">
-        <div id="phaser-div" />
-      </div>
+      <div id="game-display"></div>
     </>
   );
 }

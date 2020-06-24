@@ -4,30 +4,3 @@
   width: 100%;
   align-items: center;
 }
-
-.Centered {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.StorySimulator {
-  background-color: white;
-  width: 800px;
-  height: 150px;
-  overflow: scroll;
-}
-
-.AssetPanel {
-  display: flex;
-  flex-direction: row;
-}
-
-.AssetColumn {
-  padding: 20px;
-  background-color: white;
-  width: 400px;
-  height: 150px;
-  overflow: scroll;
-}

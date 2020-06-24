@@ -8,8 +8,7 @@ function CheckpointTxtLoader() {
   }
 
   return (
-    <div className="Vertical AlignCenter">
-      <h3>Checkpoint Text Loader</h3>
+    <div className="LeftAlign">
       <input type="file" onChange={onChange} style={{ width: '250px' }} />
     </div>
   );

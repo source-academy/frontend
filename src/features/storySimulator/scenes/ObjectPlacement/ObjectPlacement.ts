@@ -7,6 +7,7 @@ import storySimulatorAssets, {
 import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
 import { objectPlacementButton } from './ObjectPlacementHelper';
+import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -31,14 +32,21 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   private createUIButtons() {
     const uiContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const buttons = [
+    const backButton = new CommonBackButton(
+      this,
+      () => this.scene.start('StorySimulatorMenu'),
+      0,
+      -screenCenter.y
+    );
+    const buttonDetails = [
       { name: 'Add Object', callback: () => this.objectManager.loadObject() },
-      { name: 'Print Object Placement', callback: () => this.objectManager.printMap() }
+      { name: 'Print Objects', callback: () => this.objectManager.printMap() }
     ];
 
+    uiContainer.add(backButton);
     uiContainer.add(
-      buttons.map((button, buttonIndex) =>
-        objectPlacementButton(this, button, buttonIndex, buttons.length)
+      buttonDetails.map((button, buttonIndex) =>
+        objectPlacementButton(this, button, buttonIndex, buttonDetails.length)
       )
     );
 

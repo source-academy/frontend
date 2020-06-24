@@ -1,25 +1,35 @@
-.StoryItems {
+#simulator-display {
+  width: 200px;
+  align-self: flex-start;
+
+  #game-display > canvas {
+    width: 600px;
+  }
+}
+
+.StorySimulatorWrapper {
   display: flex;
+  flex-direction: row;
+  margin: 30px;
+  border-radius: 10px;
+  overflow: scroll;
+}
+
+#asset-display {
+  width: 200px;
+  align-self: flex-end;
+  background-color: white;
+}
+
+.LeftAlign {
   flex-direction: column;
   align-items: flex-start;
-  max-height: 200px;
-  width: 80%;
+}
+
+.StorySimulatorPanel {
+  background-color: white;
+  width: 500px;
+  height: 100%;
   overflow: scroll;
-  background-color: #eeeeee;
-  padding: 10px;
-  border-radius: 3px;
-}
-
-.Column {
-  flex-basis: 100%;
-  flex: 1;
-}
-
-.AceEditor {
-  max-height: 300px;
-  overflow: scroll;
-}
-
-.JsonUpload {
-  width: 80%;
+  padding: 20px;
 }
