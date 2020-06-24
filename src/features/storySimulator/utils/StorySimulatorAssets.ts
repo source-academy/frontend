@@ -31,13 +31,19 @@ export const topButton: ImageAsset = {
   path: '../assets/topButton.png'
 };
 
+export const longButton: ImageAsset = {
+  key: 'long-button',
+  path: '../assets/longButton.png'
+};
+
 const storySimulatorAssets = [
   studentRoomImg,
   mainMenuOptBanner,
   shortButton,
   invertedButton,
   topButton,
-  blueUnderlay
+  blueUnderlay,
+  longButton
 ];
 
 export default storySimulatorAssets;

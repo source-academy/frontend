@@ -1,6 +1,5 @@
 UI/Thumbs.db,
 UI/wristDeviceButton.png,
-assets/testFolder,
 avatars/beat/beat.happy.png,
 avatars/beat/beat.normal.png,
 avatars/beat/beat.pleading.png,

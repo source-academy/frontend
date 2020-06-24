@@ -19,6 +19,7 @@ export default class GameBackgroundManager {
   }
 
   private renderBackgroundImage(assetKey: AssetKey) {
+    GameActionManager.getInstance().clearSeveralLayers([Layer.Background]);
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     const backgroundAsset = new Phaser.GameObjects.Image(

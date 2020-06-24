@@ -6,7 +6,16 @@ type AssetProps = {
 };
 
 function AssetViewer({ assetPath }: AssetProps) {
-  return <img alt="asset" src={Constants.assetsFolder + assetPath} width="150px"></img>;
+  return (
+    <>
+      <img
+        alt="asset"
+        crossOrigin={'anonymous'}
+        src={Constants.assetsFolder + assetPath}
+        width="150px"
+      ></img>
+    </>
+  );
 }
 
 export default AssetViewer;

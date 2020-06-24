@@ -12,15 +12,21 @@ import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
   private objectManager: SSObjectManager;
+  private keyboardListeners: Phaser.Input.Keyboard.Key[];
 
   constructor() {
     super('ObjectPlacement');
     this.layerManager = new GameLayerManager();
     this.objectManager = new SSObjectManager();
+    this.keyboardListeners = [];
   }
 
   public async preload() {
     storySimulatorAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
+  }
+
+  public registerKeyboardListener(keyboardListener: Phaser.Input.Keyboard.Key) {
+    this.keyboardListeners.push(keyboardListener);
   }
 
   public create() {
@@ -34,13 +40,21 @@ export default class ObjectPlacement extends Phaser.Scene {
     const uiContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const backButton = new CommonBackButton(
       this,
-      () => this.scene.start('StorySimulatorMenu'),
+      () => {
+        this.cleanUp();
+        this.scene.start('StorySimulatorMenu');
+      },
       0,
       0
     );
     const buttonDetails = [
-      { name: 'Add Object', callback: () => this.objectManager.loadObject() },
-      { name: 'Print Objects', callback: () => this.objectManager.printMap() }
+      { name: 'Add Object', onClick: () => this.objectManager.loadObject() },
+      {
+        name: 'Print Objects',
+        onClick: () => this.objectManager.printObjectDetailMap(),
+        onHover: () => this.objectManager.showObjectDetailMap(),
+        onPointerout: () => this.objectManager.hideMap()
+      }
     ];
 
     uiContainer.add(backButton);
@@ -64,5 +78,10 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.add.existing(backgroundImg);
 
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
+  }
+
+  private cleanUp() {
+    this.keyboardListeners.forEach(keyboardListener => keyboardListener.removeAllListeners());
+    this.layerManager.clearAllLayers();
   }
 }
