@@ -25,11 +25,18 @@ export const blueUnderlay: ImageAsset = {
   key: 'blue-underlay',
   path: '../assets/blueUnderlay.png'
 };
+
+export const topButton: ImageAsset = {
+  key: 'top-button',
+  path: '../assets/topButton.png'
+};
+
 const storySimulatorAssets = [
   studentRoomImg,
   mainMenuOptBanner,
   shortButton,
   invertedButton,
+  topButton,
   blueUnderlay
 ];
 
