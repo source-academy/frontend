@@ -209,7 +209,7 @@ class GameManager extends Phaser.Scene {
   public async changeLocationTo(locationId: LocationId) {
     this.currentLocationId = locationId;
 
-    await blackFade(this, 300, 300, () => {
+    await blackFade(this, 300, 500, () => {
       this.layerManager.clearAllLayers();
       this.renderLocation(locationId);
     });
