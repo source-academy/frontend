@@ -108,6 +108,11 @@ export default class SSTransformManager {
     this.activeSelectRect.displayWidth = gameObject.displayWidth + activeSelectMargin;
   }
 
+  private deselect() {
+    this.activeSelectRect!.setAlpha(0);
+    this.activeSelection = undefined;
+  }
+
   private getObjectPlacement() {
     if (!this.objectPlacement) {
       throw new Error('No object placement parent scene');
@@ -116,15 +121,35 @@ export default class SSTransformManager {
   }
 
   private bindDeleteKey() {
-    const deleteKey = this.getObjectPlacement().input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.DELETE
+    const deleteKeys = [
+      this.getObjectPlacement().input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE),
+      this.getObjectPlacement().input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE)
+    ];
+
+    deleteKeys.forEach(key =>
+      key.addListener('up', () => {
+        this.deleteActiveSelection();
+        this.deselect();
+      })
     );
 
-    deleteKey.addListener('up', () => {
-      if (!this.activeSelection) return;
-      this.activeSelection.destroy();
-    });
+    this.getObjectPlacement().registerKeyboardListeners(deleteKeys);
+  }
 
-    this.getObjectPlacement().registerKeyboardListeners([deleteKey]);
+  private deleteActiveSelection() {
+    if (!this.activeSelection) return;
+    switch (this.getType(this.activeSelection)) {
+      case 'object':
+        this.getObjectPlacement().deleteObj(this.activeSelection);
+        break;
+      case 'bbox':
+        this.getObjectPlacement().deleteBBox(this.activeSelection);
+        break;
+    }
+    this.activeSelection.destroy();
+  }
+
+  private getType(gameObject: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image) {
+    return this.activeSelection?.data.get('type');
   }
 }
