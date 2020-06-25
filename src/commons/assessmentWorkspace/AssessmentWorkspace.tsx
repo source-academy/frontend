@@ -38,7 +38,7 @@ import { ControlBarResetButton } from '../controlBar/ControlBarResetButton';
 import { ControlBarRunButton } from '../controlBar/ControlBarRunButton';
 import { ControlButtonSaveButton } from '../controlBar/ControlBarSaveButton';
 import controlButton from '../ControlButton';
-import { Position } from '../editor/EditorTypes';
+import { Position, HighlightedLines } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
@@ -101,7 +101,7 @@ export type StateProps = {
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;

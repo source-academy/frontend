@@ -18,7 +18,7 @@ import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExec
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { Position } from '../../commons/editor/EditorTypes';
+import { Position, HighlightedLines } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
@@ -75,7 +75,7 @@ export type StateProps = {
   editorWidth: string;
   execTime: number;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   isRunning: boolean;
   isDebugging: boolean;

@@ -5,7 +5,7 @@ import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcere
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import { Position } from '../editor/EditorTypes';
+import { Position, HighlightedLines } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -106,7 +106,7 @@ export type WorkspaceState = {
   readonly editorHeight: number;
   readonly editorWidth: string;
   readonly execTime: number;
-  readonly highlightedLines: number[][];
+  readonly highlightedLines: HighlightedLines[];
   readonly newCursorPosition?: Position;
   readonly isRunning: boolean;
   readonly isDebugging: boolean;

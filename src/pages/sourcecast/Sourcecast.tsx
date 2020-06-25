@@ -12,7 +12,7 @@ import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChap
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
-import { Position } from '../../commons/editor/EditorTypes';
+import { Position, HighlightedLines } from '../../commons/editor/EditorTypes';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
@@ -84,7 +84,7 @@ export type StateProps = {
   editorWidth: string;
   externalLibraryName: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   inputToApply: Input | null;
   isRunning: boolean;
