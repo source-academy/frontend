@@ -238,7 +238,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.objectManager.setAttribute(objectSprite, attribute, value);
   }
 
-  public deleteObj(objectSprite: Phaser.GameObjects.Rectangle) {
+  public deleteObj(objectSprite: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image) {
     this.objectManager.delete(objectSprite);
   }
 
@@ -250,7 +250,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.bboxManager.setAttribute(bboxSprite, attribute, value);
   }
 
-  public deleteBBox(bboxSprite: Phaser.GameObjects.Rectangle) {
+  public deleteBBox(bboxSprite: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image) {
     this.bboxManager.delete(bboxSprite);
   }
 }
