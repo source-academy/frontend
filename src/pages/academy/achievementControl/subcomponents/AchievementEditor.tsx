@@ -20,6 +20,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
+        forceRefresh={forceRefresh}
       />
     ));
 

@@ -4,7 +4,10 @@ import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
-import { achievementData } from '../../../commons/mocks/AchievementMocks';
+import {
+  mockAchievementData,
+  updateMockAchievementData
+} from '../../../commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
@@ -12,11 +15,11 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  achievementItems: AchievementItem[];
+  achievementData: AchievementItem[];
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  /* TOOD: Uncomment before Production
+  /* TODO: Uncomment before Production
   const { handleAchievementsFetch, handleAchievementsUpdate, achievementItems } = props;
 
   useEffect(() => {
@@ -30,14 +33,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const forceRefresh = () => setRefresh(!refresh);
 
   const uploadAchievementData = (achievementData: AchievementItem[]) => {
-    // handleAchievementsUpdate(achievementData);
-
-    console.log('Upload data');
-    inferencer.logInfo();
+    updateMockAchievementData(achievementData); // TODO: replace with handleAchievementsUpdate(achievementData);
     forceRefresh();
   };
 
-  const inferencer = new Inferencer(achievementData);
+  const inferencer = new Inferencer(mockAchievementData);
 
   return (
     <>

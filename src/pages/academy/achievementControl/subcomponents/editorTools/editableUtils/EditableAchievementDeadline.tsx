@@ -18,8 +18,6 @@ function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
       : `${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`;
   };
 
-  console.log(generateDeadlineString());
-
   return (
     <div className="deadline">
       <div className="deadline-details">

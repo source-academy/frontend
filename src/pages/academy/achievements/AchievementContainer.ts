@@ -6,7 +6,7 @@ import Achievement, { DispatchProps, StateProps } from './Achievement';
 import { getAchievements } from 'src/commons/achievements/AchievementActions';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  achievementItems: state.achievements.achievements
+  achievementData: state.achievements.achievements
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import AchievementFilter from './subcomponents/AchievementFilter';
 import { FilterStatus, AchievementItem } from '../../../commons/achievements/AchievementTypes';
-import { achievementData } from '../../../commons/mocks/AchievementMocks';
+import { mockAchievementData } from '../../../commons/mocks/AchievementMocks';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
@@ -14,7 +14,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  achievementItems: AchievementItem[];
+  achievementData: AchievementItem[];
 };
 
 function Achievement(props: DispatchProps & StateProps) {
@@ -29,7 +29,7 @@ function Achievement(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
-  const inferencer = new Inferencer(achievementData);
+  const inferencer = new Inferencer(mockAchievementData);
 
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (
