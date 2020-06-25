@@ -1,4 +1,4 @@
-import { screenCenter, screenSize, Constants } from 'src/features/game/commons/CommonConstants';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import storySimulatorAssets, {
@@ -21,6 +21,8 @@ export default class ObjectPlacement extends Phaser.Scene {
   private cursorModes: SSCursorMode | undefined;
   private objectManager: SSObjectManager;
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
+  private openBracket: Phaser.Input.Keyboard.Key | undefined;
+  private closedBracket: Phaser.Input.Keyboard.Key | undefined;
 
   constructor() {
     super('ObjectPlacement');
@@ -43,6 +45,17 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.objectManager.initialise(this);
     this.renderBackground();
     this.createUIButtons();
+    this.openBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET);
+    this.closedBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET);
+  }
+
+  public update() {
+    if (this.openBracket && this.openBracket.isDown) {
+      this.objectManager.resizeActive(false);
+    }
+    if (this.closedBracket && this.closedBracket.isDown) {
+      this.objectManager.resizeActive(true);
+    }
   }
 
   private createUIButtons() {
@@ -82,12 +95,8 @@ export default class ObjectPlacement extends Phaser.Scene {
   private populateCursorModes() {
     if (this.cursorModes) {
       // Change background
-      this.cursorModes.addCursorMode(
-        this,
-        colorIcon.key,
-        false,
-        'Set background',
-        Constants.nullFunction
+      this.cursorModes.addCursorMode(this, colorIcon.key, false, 'Set background', () =>
+        this.objectManager.loadBackground()
       );
 
       // Add object
