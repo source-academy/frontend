@@ -118,6 +118,10 @@ class Inferencer {
     return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
   }
 
+  public listNonTaskIds() {
+    return this.nodeList.filter(node => !node.achievement.isTask).map(node => node.id);
+  }
+
   public getStatus(id: number) {
     return this.nodeList[id].status;
   }

@@ -14,22 +14,17 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
 
-  const nonTaskIDs = inferencer.listIds();
+  const nonTaskIDs = inferencer.listNonTaskIds();
 
   const [addedTaskID, setAddedTaskID] = useState<number>(
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
 
   const addNewTask = () => {
-    uploadAchievementData([]);
-    /*
-          const achievement = inferencer.getAchievementItem(addedTaskID);
-    console.log(achievement);
+    const achievement = inferencer.getAchievementItem(addedTaskID);
     achievement.isTask = true;
     inferencer.editAchievement(achievement);
     uploadAchievementData(inferencer.getAchievementData);
-    */
-    // TODO: fix
   };
 
   const addingAction = (e: any) => {
@@ -42,6 +37,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
       <AchievementTaskSelect
         tasks={nonTaskIDs}
+        inferencer={inferencer}
         focusTaskID={addedTaskID}
         setFocusTaskID={setAddedTaskID}
         buttonText={'Add Task'}

@@ -6,7 +6,7 @@ import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Infer
 
 type AchievementTaskSelectProps = {
   tasks: number[];
-  inferencer?: Inferencer;
+  inferencer: Inferencer;
   focusTaskID: number;
   buttonText: string;
   dialogHeader: string;
@@ -34,11 +34,6 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   } = props;
 
   const getTaskTitle = (id: number) => {
-    if (inferencer === undefined) {
-      // TODO: Remove
-      return '';
-    }
-
     return inferencer.getAchievementItem(id).title;
   };
 
