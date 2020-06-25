@@ -219,12 +219,10 @@ class Inferencer {
       this.generateTotalExp(node);
       this.generateCollectiveProgress(node);
     });
-    console.log(this.achievementData);
-    console.log([...this.nodeList.values()]);
-    console.log(this.nodeList);
     this.dataCheck();
   }
 
+  // Verify the key-value mappings of achievementData and nodeList are correct
   private dataCheck() {
     for (const [id, node] of this.nodeList) {
       if (id !== node.achievement.id) {
@@ -239,7 +237,7 @@ class Inferencer {
         );
       }
     }
-    console.log('Noice');
+    console.log('Processed data with no data integrity warning');
   }
 
   private constructNodeList() {
@@ -311,17 +309,18 @@ class Inferencer {
 
   // Set the node's collective progress by combining all descendants' progress
   private generateCollectiveProgress(node: Node) {
-    if (node.children.size === 0) {
-      return; // If no prerequisites, just display the achievement progress
-    }
-
+    // If no prerequisites, just display the achievement progress
     // Otherwise, display aggregated descendants progress
+    if (node.children.size === 0) {
+      return;
+    }
 
     // Combiner of progress
     const collateProgress = (accumulateProgress: number, currentProgress: number) => {
       return accumulateProgress + currentProgress;
     };
 
+    // Temporary array of all descendants' progress
     const descendantProgress = [];
     for (const childId of node.descendant) {
       const { completionGoal, completionProgress } = this.nodeList.get(childId)!.achievement;

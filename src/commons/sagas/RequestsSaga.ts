@@ -148,7 +148,6 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   }
 
   const achievements = await resp.json();
-  console.log(achievements);
 
   return achievements.map((achievement: any) => {
     achievement.id = achievement.inferencer_id;
