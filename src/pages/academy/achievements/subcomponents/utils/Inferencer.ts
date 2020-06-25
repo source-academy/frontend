@@ -206,7 +206,7 @@ class Inferencer {
   private generateDescendant(node: Node) {
     for (const child of node.descendant) {
       if (child === node.id) {
-        throw 'Circular dependency detected';
+        console.error('Circular dependency detected');
       }
       for (const grandchild of this.nodeList[child].descendant) {
         // Newly added grandchild is appended to the back of the set.

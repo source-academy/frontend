@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
+
+import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementTaskSelect from './AchievementTaskSelect';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
+import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementControlPanelDeleterProps = {
   editableAchievement: AchievementItem;
@@ -62,28 +63,3 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
 }
 
 export default AchievementControlPanelDeleter;
-
-/*
-
-  return (
-    <>
-      <Button
-        className="editor-button"
-        onClick={() => toggleDialogFlag(flag)}
-        text={'Delete A Prerequisite'}
-      />
-      <AchievementTaskSelect
-        tasks={prerequisites}
-        focusTaskID={deletedPrerequisiteID}
-        setFocusTaskID={setDeletedPrerequisiteID}
-        buttonText={'Delete Prerequisite'}
-        dialogHeader={'Delete A Prerequisite'}
-        emptyTasksMessage={'You have no more prerequisites to delete'}
-        setDialogOpen={() => toggleDialogFlag(flag)}
-        isDialogOpen={isDialogOpen}
-        action={deleteAction}
-      />
-    </>
-  );
-
-*/
