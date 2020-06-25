@@ -2,8 +2,8 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SSObjectDetail, ShortPath } from './SSObjectManagerTypes';
-import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
-import { objectDetailStyle, resizePixels, activeSelectMargin } from './SSObjectManagerConstants';
+import { ItemId, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { objectDetailStyle, activeSelectMargin, scaleFactor } from './SSObjectManagerConstants';
 import { shortButton } from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { toIntString } from '../utils/SSUtils';
@@ -16,6 +16,7 @@ export default class SSObjectManager {
   private objectDetailMapContainer: Phaser.GameObjects.Container | undefined;
   private activeSelection: Phaser.GameObjects.Image | undefined;
   private activeSelectRect: Phaser.GameObjects.Rectangle | undefined;
+  private backgroundAssetPath: string | undefined;
 
   constructor() {
     this.objectIdNumber = 0;
@@ -29,7 +30,6 @@ export default class SSObjectManager {
     this.objectDetailMap = new Map<ItemId, SSObjectDetail>();
     this.trackDraggables();
     this.drawActiveSelectRect();
-    this.bindBracketsToResize();
   }
 
   private trackDraggables() {
@@ -46,21 +46,57 @@ export default class SSObjectManager {
     );
   }
 
+  public loadBackground() {
+    const shortPath = sessionStorage.getItem('selectedAsset');
+    if (!shortPath || !shortPath.startsWith('/locations/')) {
+      return;
+    }
+    this.backgroundAssetPath = shortPath;
+
+    const backgroundAssetKey = `!${shortPath}`;
+    this.assetMap.set(backgroundAssetKey, shortPath);
+    this.loadImage(
+      backgroundAssetKey,
+      Constants.assetsFolder + shortPath,
+      (backgroundAssetKey: string) => {
+        this.renderBackground(backgroundAssetKey);
+      }
+    );
+  }
+
+  private renderBackground(backgroundAssetKey: AssetKey) {
+    if (backgroundAssetKey[0] !== '!') {
+      return;
+    }
+    this.getObjectPlacement().layerManager.clearLayerContents(Layer.Background);
+    const backgroundSprite = new Phaser.GameObjects.Image(
+      this.getObjectPlacement(),
+      screenCenter.x,
+      screenCenter.y,
+      backgroundAssetKey
+    );
+    this.getObjectPlacement().layerManager.addToLayer(Layer.Background, backgroundSprite);
+  }
+
+  private loadImage(assetKey: AssetKey, assetPath: AssetPath, onLoad: (key: AssetKey) => void) {
+    if (this.getObjectPlacement().textures.get(assetKey).key !== '__MISSING') {
+      this.renderObject(assetKey);
+    } else {
+      this.getObjectPlacement().load.image(assetKey, assetPath);
+      this.getObjectPlacement().load.once('filecomplete', onLoad);
+      this.getObjectPlacement().load.start();
+    }
+  }
+
   public loadObject() {
     const shortPath = sessionStorage.getItem('selectedAsset');
     if (!shortPath) return;
     const objectAssetKey = `#${shortPath}`;
     this.assetMap.set(objectAssetKey, shortPath);
 
-    if (this.getObjectPlacement().textures.get(objectAssetKey).key !== '__MISSING') {
+    this.loadImage(objectAssetKey, Constants.assetsFolder + shortPath, (objectAssetKey: string) => {
       this.renderObject(objectAssetKey);
-    } else {
-      this.getObjectPlacement().load.image(objectAssetKey, Constants.assetsFolder + shortPath);
-      this.getObjectPlacement().load.once('filecomplete', (objectAssetKey: string) => {
-        this.renderObject(objectAssetKey);
-      });
-      this.getObjectPlacement().load.start();
-    }
+    });
   }
 
   private renderObject(objectAssetKey: string) {
@@ -77,7 +113,7 @@ export default class SSObjectManager {
       .setDataEnabled();
 
     this.getObjectPlacement().input.setDraggable(objectSprite);
-    const itemId = this.generateItemId(objectAssetKey, this.objectIdNumber);
+    const itemId = this.generateItemId(objectAssetKey, this.objectIdNumber++);
     objectSprite.data.set('itemId', itemId);
 
     const shortPath = this.assetMap.get(objectAssetKey);
@@ -96,11 +132,12 @@ export default class SSObjectManager {
     this.objectDetailMap.set(itemId, objectDetail);
 
     this.getObjectPlacement().layerManager.addToLayer(Layer.Objects, objectSprite);
-    this.objectIdNumber++;
+    this.setActiveSelection(objectSprite);
   }
 
   private generateItemId(assetKey: string, objectIdNumber: number) {
-    return `${assetKey}${objectIdNumber}`;
+    const itemName = assetKey.split('/').pop()!.split('.')[0];
+    return `${itemName}${objectIdNumber}`;
   }
 
   public showObjectDetailMap() {
@@ -120,7 +157,7 @@ export default class SSObjectManager {
       const mapShowText = new Phaser.GameObjects.Text(
         this.getObjectPlacement(),
         ssObjectDetail.x,
-        ssObjectDetail.y,
+        ssObjectDetail.y + 10,
         this.formatObjectDetails(ssObjectDetail),
         objectDetailStyle
       ).setOrigin(0.5);
@@ -142,9 +179,13 @@ export default class SSObjectManager {
   }
 
   private formatObjectDetails(ssObjectDetail: SSObjectDetail) {
-    let message = `${ssObjectDetail.assetPath}\nx: ${ssObjectDetail.x}\ny: ${ssObjectDetail.y}`;
+    let message = `${ssObjectDetail.assetPath}\nx: ${toIntString(
+      ssObjectDetail.x
+    )}\ny: ${toIntString(ssObjectDetail.y)}`;
     if (ssObjectDetail.width) {
-      message += `\nwidth: ${ssObjectDetail.width}\nheight: ${ssObjectDetail.height}`;
+      message += `\nwidth: ${toIntString(ssObjectDetail.width)}\nheight: ${toIntString(
+        ssObjectDetail.height!
+      )}`;
     }
     return message;
   }
@@ -160,7 +201,9 @@ export default class SSObjectManager {
   }
 
   private getObjectDetailMap() {
-    let map = '<<objects>>\n\n';
+    let map = '<<locations>>\n\n';
+    map += this.backgroundAssetPath;
+    map += '\n\n<<objects>>\n\n';
     this.objectDetailMap.forEach((objectDetail: SSObjectDetail) => {
       const objectDetailArray = [
         objectDetail.id,
@@ -185,35 +228,14 @@ export default class SSObjectManager {
     return this.objectPlacement;
   }
 
-  private bindBracketsToResize() {
-    const openBracketKey = this.getObjectPlacement().input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET
-    );
-    openBracketKey.addListener('up', () => {
-      this.resizeActive(false);
-    });
-
-    const closeBracketKey = this.getObjectPlacement().input.keyboard.addKey(
-      Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET
-    );
-    closeBracketKey.addListener('up', () => {
-      this.resizeActive(true);
-    });
-
-    this.getObjectPlacement().registerKeyboardListener(openBracketKey);
-    this.getObjectPlacement().registerKeyboardListener(closeBracketKey);
-  }
-
-  private resizeActive(enlarge: boolean) {
+  public resizeActive(enlarge: boolean) {
     if (!this.activeSelection || !this.activeSelectRect) {
       return;
     }
-    const enlargeBy = enlarge ? resizePixels : -resizePixels;
-    this.activeSelection.displayWidth += enlargeBy;
-    this.activeSelection.displayHeight += enlargeBy;
-
-    this.activeSelectRect.displayWidth += enlargeBy;
-    this.activeSelectRect.displayHeight += enlargeBy;
+    const factor = enlarge ? scaleFactor : 1 / scaleFactor;
+    multiplyDimensions(this.activeSelection, factor);
+    this.activeSelectRect.displayHeight = this.activeSelection.displayHeight + activeSelectMargin;
+    this.activeSelectRect.displayWidth = this.activeSelection.displayWidth + activeSelectMargin;
 
     this.setAttribute(this.activeSelection, 'width', this.activeSelection.displayWidth);
     this.setAttribute(this.activeSelection, 'height', this.activeSelection.displayHeight);

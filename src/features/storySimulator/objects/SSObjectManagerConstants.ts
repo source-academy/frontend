@@ -4,5 +4,5 @@ export const objectDetailStyle = {
   fill: '#abd4c6'
 };
 
-export const resizePixels = 20;
-export const activeSelectMargin = 10;
+export const activeSelectMargin = 30;
+export const scaleFactor = 1.02;
