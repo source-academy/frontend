@@ -31,13 +31,49 @@ export const topButton: ImageAsset = {
   path: '../assets/topButton.png'
 };
 
+export const colorIcon: ImageAsset = {
+  key: 'color-icon',
+  path: '../assets/colorIcon.png'
+};
+
+export const imageIcon: ImageAsset = {
+  key: 'image-icon',
+  path: '../assets/imageIcon.png'
+};
+
+export const bboxIcon: ImageAsset = {
+  key: 'bbox-icon',
+  path: '../assets/bboxIcon.png'
+};
+
+export const handIcon: ImageAsset = {
+  key: 'hand-icon',
+  path: '../assets/handIcon.png'
+};
+
+export const listIcon: ImageAsset = {
+  key: 'list-icon',
+  path: '../assets/listIcon.png'
+};
+
+export const iconBg: ImageAsset = {
+  key: 'icon-bg',
+  path: '../assets/modeIconBg.png'
+};
+
 const storySimulatorAssets = [
   studentRoomImg,
   mainMenuOptBanner,
   shortButton,
   invertedButton,
   topButton,
-  blueUnderlay
+  blueUnderlay,
+  colorIcon,
+  imageIcon,
+  bboxIcon,
+  handIcon,
+  listIcon,
+  iconBg
 ];
 
 export default storySimulatorAssets;
