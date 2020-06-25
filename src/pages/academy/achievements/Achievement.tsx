@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { IconNames } from '@blueprintjs/icons';
 
 import AchievementFilter from './subcomponents/AchievementFilter';
-import { FilterStatus } from '../../../commons/achievements/AchievementTypes';
+import { FilterStatus, AchievementItem } from '../../../commons/achievements/AchievementTypes';
 import { achievementData } from '../../../commons/mocks/AchievementMocks';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
 
-export type DispatchProps = {};
+export type DispatchProps = {
+  handleAchievementsFetch: any;
+};
 
-export type StateProps = {};
+export type StateProps = {
+  achievementItems: AchievementItem[];
+};
 
-function Achievement() {
+function Achievement(props: DispatchProps & StateProps) {
+  const { handleAchievementsFetch } = props;
+
+  useEffect(() => {
+    handleAchievementsFetch();
+  }, [handleAchievementsFetch]);
+
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
