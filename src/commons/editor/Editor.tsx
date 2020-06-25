@@ -13,21 +13,18 @@ import { Variant } from 'js-slang/dist/types';
 
 import { Documentation } from '../documentation/Documentation';
 import { useMergedRef } from '../utils/Hooks';
-import { AceMouseEvent, Position } from './EditorTypes';
+import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 
+
+// =============== Hooks ===============
+// Temporary: Should refactor into EditorBase + different variants.
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
 import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
 
-// =============== Mixins ===============
-/* import WithShareAce from './WithShareAce';
-import WithHighlighting from './WithHighlighting';
-import WithNavigation from './WithNavigation';
-import WithTypeInference from './WithTypeInference';
-export type Constructor<T> = new (...args: any[]) => T; */
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -64,7 +61,7 @@ type StateProps = {
   breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
-  highlightedLines: number[][]; // FIXME type this better??
+  highlightedLines: HighlightedLines[]; // FIXME type this better??
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
   sharedbAceInitValue?: string;
@@ -75,23 +72,19 @@ type StateProps = {
   hooks?: EditorHook[];
 };
 
-const getMarkers = (highlightedLines: StateProps['highlightedLines']) => {
-  const markerProps: IAceEditorProps['markers'] = [];
-  for (const lineNum of highlightedLines) {
-    markerProps.push({
-      startRow: lineNum[0],
-      startCol: 0,
-      endRow: lineNum[1],
-      endCol: 1,
-      className: 'myMarker',
-      type: 'fullLine'
-    });
-  }
-  return markerProps;
+const getMarkers = (highlightedLines: StateProps['highlightedLines']): IAceEditorProps['markers'] => {
+  return highlightedLines.map(lineNums => ({
+    startRow: lineNums[0],
+    startCol: 0,
+    endRow: lineNums[1],
+    endCol: 1,
+    className: 'myMarker',
+    type: 'fullLine'
+  }));
 };
 
 const getModeString = (chapter: number, variant: Variant, library: string) =>
-  'source' + chapter.toString() + variant + library;
+  `source${chapter}${variant}${library}`;
 
 /**
  * This _modifies global state_ and defines a new Ace mode globally.
@@ -133,12 +126,15 @@ const makeHandleGutterClick = (
   handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
 };
 
-const makeHandleAnnotationChange = (session: any) => () => {
+// Note: This is untestable/unused because JS-hint has been removed.
+const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
   const annotations = session.getAnnotations();
   let count = 0;
   for (const anno of annotations) {
     if (anno.type === 'info') {
       anno.type = 'error';
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore 
+      // @ts-ignore // Probably some undocumented type
       anno.className = 'ace_error';
       count++;
     }
@@ -149,7 +145,7 @@ const makeHandleAnnotationChange = (session: any) => () => {
 };
 
 const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAutocomplete']) => ({
-  getCompletions: (editor: any, session: any, pos: any, prefix: any, callback: any) => {
+  getCompletions: (editor: Ace.Editor, session: Ace.EditSession, pos: Ace.Point, prefix: string, callback: () => void) => {
     // Don't prompt if prefix starts with number
     if (prefix && /\d/.test(prefix.charAt(0))) {
       callback();
@@ -270,7 +266,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     setOptions: {
       enableBasicAutocompletion: true,
       enableLiveAutocompletion: true,
-      fontFamily: "'Inconsolata', 'Consolas', monospace"
+      fontFamily: "'Inconsolata', monospace"
     },
     onChange
   };

@@ -37,3 +37,5 @@ export interface IAutocompletionResult {
   docHTML?: string;
   score?: number;
 }
+
+export type HighlightedLines = [number, number]; // Start line, end line.
