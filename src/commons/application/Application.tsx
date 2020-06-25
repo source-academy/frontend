@@ -17,8 +17,8 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-import AchievementContainer from 'src/pages/academy/achievements/AchievementContainer';
-import AchievementControlContainer from 'src/pages/academy/achievementControl/AchievementControlContainer';
+import AchievementContainer from '../../pages/academy/achievements/AchievementContainer';
+import AchievementControlContainer from '../../pages/academy/achievementControl/AchievementControlContainer';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 

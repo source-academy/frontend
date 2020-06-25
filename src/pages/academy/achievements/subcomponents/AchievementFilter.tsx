@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { IconName, Icon } from '@blueprintjs/core';
-import { FilterStatus } from 'src/commons/achievements/AchievementTypes';
+import { FilterStatus } from '../../../../commons/achievements/AchievementTypes';
 
 type AchievementFilterProps = {
   filterStatus: FilterStatus;

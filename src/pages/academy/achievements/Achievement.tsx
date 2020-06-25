@@ -4,7 +4,7 @@ import { IconNames } from '@blueprintjs/icons';
 
 import AchievementFilter from './subcomponents/AchievementFilter';
 import { FilterStatus } from '../../../commons/achievements/AchievementTypes';
-import { achievementData } from 'src/commons/mocks/AchievementMocks';
+import { achievementData } from '../../../commons/mocks/AchievementMocks';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';

@@ -3,7 +3,10 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
-import { getAchievements, updateAchievements } from 'src/commons/achievements/AchievementActions';
+import {
+  getAchievements,
+  updateAchievements
+} from '../../../commons/achievements/AchievementActions';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   achievementItems: state.achievements.achievements

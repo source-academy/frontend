@@ -4,8 +4,8 @@ import React from 'react';
 
 import AchievementControlPanelPrerequisiteDeleter from './AchievementControlPanelPrerequisiteDeleter';
 import AchievementControlPanelPrerequisiteAdder from './AchievementControlPanelPrerequisiteAdder';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
+import Inferencer from '../../../../../pages/academy/achievements/subcomponents/utils/Inferencer';
 import AchievementControlPanelTaskDeleter from './AchievementControlPanelTaskDeleter';
 
 type AchievementControlPanelToolsProps = {

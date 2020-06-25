@@ -14,7 +14,7 @@ import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import SaveAchievementButton from './editableUtils/SaveAchievementButton';
-import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
+import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 import DeleteAchievementButton from './editableUtils/DeleteAchievementButton';
 
 type EditableAchievementCardProps = {

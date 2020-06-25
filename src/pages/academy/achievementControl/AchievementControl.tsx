@@ -3,8 +3,8 @@ import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import { achievementData } from 'src/commons/mocks/AchievementMocks';
+import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
+import { achievementData } from '../../../commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;

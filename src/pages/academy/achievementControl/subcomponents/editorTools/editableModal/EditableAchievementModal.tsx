@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Card } from '@blueprintjs/core';
-import { AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
+import { AchievementModalItem } from '../../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementModalDescription from './EditableAchievementModalDescription';
 import EditableAchievementModalGoalText from './EditableAchievementModalGoalText';
 import EditableAchievementModalImage from './EditableAchievementModalImage';

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Dialog } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import AchievementDeadline from 'src/pages/academy/achievements/subcomponents/utils/AchievementDeadline';
+import AchievementDeadline from '../../../../achievements/subcomponents/utils/AchievementDeadline';
 
 type EditableAchievementDeadlineProps = {
   deadline?: Date;

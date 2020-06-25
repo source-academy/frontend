@@ -2,7 +2,7 @@ import {
   AchievementItem,
   AchievementAbility,
   AchievementModalItem
-} from 'src/commons/achievements/AchievementTypes';
+} from '../../../../../commons/achievements/AchievementTypes';
 
 export const achievementTemplate: AchievementItem = {
   id: 0,
