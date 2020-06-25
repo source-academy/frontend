@@ -12,6 +12,7 @@ exports[`Application renders correctly 1`] = `
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast\\" component={{...}} />
       <Route path=\\"/achievements\\" component={{...}} />
+      <Route path=\\"/achievement-control\\" component={{...}} />
       <Route exact={true} path=\\"/\\" render={[Function]} />
       <Route component={[Function: NotFound]} />
     </Switch>

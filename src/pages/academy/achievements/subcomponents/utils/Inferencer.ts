@@ -64,9 +64,7 @@ class Inferencer {
   }
 
   public logInfo() {
-    this.nodeList.forEach(node =>
-      console.log(node.id, node.achievement.title, node.children, node.descendant)
-    );
+    this.nodeList.forEach(node => console.log(node.id, node.achievement.title));
   }
 
   public getAchievementItem(id: number) {
@@ -105,8 +103,6 @@ class Inferencer {
     this.achievementData = newAchievementData;
     // finally reconstruct the nodeList
     this.processData();
-    console.log('achievementData', this.achievementData);
-    console.log('nodeList', this.nodeList);
   }
 
   public listIds() {

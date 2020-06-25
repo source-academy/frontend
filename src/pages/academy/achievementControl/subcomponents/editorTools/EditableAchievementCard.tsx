@@ -36,7 +36,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     inferencer.editAchievement(editableAchievement);
     setHasChanges(false);
     setPendingUpload(true);
-    console.log('Saved changes!', editableAchievement);
   };
 
   const handleDiscardChanges = () => {
@@ -47,12 +46,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const handleUploadChanges = () => {
     setPendingUpload(false);
-    console.log('Uploading changes...');
     inferencer.logInfo();
   };
 
   const handleDeleteAchievement = () => {
-    console.log('Deleted achievement', inferencer.getAchievementItem(id));
     inferencer.removeAchievement(id);
     forceUpdate();
   };
