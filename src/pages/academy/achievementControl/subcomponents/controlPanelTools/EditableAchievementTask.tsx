@@ -41,14 +41,3 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 }
 
 export default EditableAchievementTask;
-
-/*
-          <AchievementControlPanelTools
-          addPrerequisite={addPrerequisite}
-          deletePrerequisite={deletePrerequisite}
-          prerequisites={prerequisiteIds}
-          nonPrerequisites={mapPrerequisiteIDsToAchievements(getNonPrerequisitesIDs())}
-          deleteTask={deleteTask}
-          taskID={id}
-        />
-*/

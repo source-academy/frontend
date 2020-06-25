@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import AchievementTaskSelect from './AchievementTaskSelect';
-import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 
-// TODO: Rename to PrerequisireAdder
+import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
+import AchievementTaskSelect from './AchievementTaskSelect';
+import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementControlPanelPrerequisiteAdderProps = {
   editableAchievement: AchievementItem;
@@ -13,7 +12,9 @@ type AchievementControlPanelPrerequisiteAdderProps = {
   uploadAchievementData: any;
 };
 
-function AchievementControlPanelPrerequisiteAdder(props: AchievementControlPanelPrerequisiteAdderProps) {
+function AchievementControlPanelPrerequisiteAdder(
+  props: AchievementControlPanelPrerequisiteAdderProps
+) {
   const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
