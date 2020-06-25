@@ -2,8 +2,8 @@ import React from 'react';
 
 // import { Button } from '@blueprintjs/core';
 
-import AchievementControlPanelDeleter from './AchievementControlPanelDeleter';
-import AchievementControlPanelAdder from './AchievementControlPanelAdder';
+import AchievementControlPanelPrerequisiteDeleter from './AchievementControlPanelPrerequisiteDeleter';
+import AchievementControlPanelPrerequisiteAdder from './AchievementControlPanelPrerequisiteAdder';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 import AchievementControlPanelTaskDeleter from './AchievementControlPanelTaskDeleter';
@@ -20,14 +20,14 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
   return (
     <>
-      <AchievementControlPanelAdder
+      <AchievementControlPanelPrerequisiteAdder
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
       />
 
-      <AchievementControlPanelDeleter
+      <AchievementControlPanelPrerequisiteDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
