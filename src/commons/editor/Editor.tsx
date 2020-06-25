@@ -16,7 +16,6 @@ import { useMergedRef } from '../utils/Hooks';
 import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 
-
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
 import useHighlighting from './UseHighlighting';
@@ -24,7 +23,6 @@ import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
 import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
-
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -72,7 +70,9 @@ type StateProps = {
   hooks?: EditorHook[];
 };
 
-const getMarkers = (highlightedLines: StateProps['highlightedLines']): IAceEditorProps['markers'] => {
+const getMarkers = (
+  highlightedLines: StateProps['highlightedLines']
+): IAceEditorProps['markers'] => {
   return highlightedLines.map(lineNums => ({
     startRow: lineNums[0],
     startCol: 0,
@@ -133,7 +133,7 @@ const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
   for (const anno of annotations) {
     if (anno.type === 'info') {
       anno.type = 'error';
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
       // @ts-ignore // Probably some undocumented type
       anno.className = 'ace_error';
       count++;
@@ -145,7 +145,13 @@ const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
 };
 
 const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAutocomplete']) => ({
-  getCompletions: (editor: Ace.Editor, session: Ace.EditSession, pos: Ace.Point, prefix: string, callback: () => void) => {
+  getCompletions: (
+    editor: Ace.Editor,
+    session: Ace.EditSession,
+    pos: Ace.Point,
+    prefix: string,
+    callback: () => void
+  ) => {
     // Don't prompt if prefix starts with number
     if (prefix && /\d/.test(prefix.charAt(0))) {
       callback();
