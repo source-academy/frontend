@@ -11,7 +11,6 @@ import storySimulatorAssets, {
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
-import { objectPlacementButton } from './ObjectPlacementHelper';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 import SSCursorMode from '../../cursorMode/SSCursorMode';
 import { cursorModeXPos, cursorModeYPos } from './ObjectPlacementConstants';
@@ -56,26 +55,12 @@ export default class ObjectPlacement extends Phaser.Scene {
       0,
       0
     );
-    const buttonDetails = [
-      { name: 'Add Object', onClick: () => this.objectManager.loadObject() },
-      {
-        name: 'Print Objects',
-        onClick: () => this.objectManager.printObjectDetailMap(),
-        onHover: () => this.objectManager.showObjectDetailMap(),
-        onPointerout: () => this.objectManager.hideMap()
-      }
-    ];
 
     this.cursorModes = new SSCursorMode(this, cursorModeXPos, cursorModeYPos);
     this.populateCursorModes();
 
     uiContainer.add(this.cursorModes);
     uiContainer.add(backButton);
-    uiContainer.add(
-      buttonDetails.map((button, buttonIndex) =>
-        objectPlacementButton(this, button, buttonIndex, buttonDetails.length)
-      )
-    );
 
     this.layerManager.addToLayer(Layer.UI, uiContainer);
   }
@@ -103,14 +88,12 @@ export default class ObjectPlacement extends Phaser.Scene {
         'Set background',
         Constants.nullFunction
       );
+
       // Add object
-      this.cursorModes.addCursorMode(
-        this,
-        imageIcon.key,
-        false,
-        'Add selected object',
-        Constants.nullFunction
+      this.cursorModes.addCursorMode(this, imageIcon.key, false, 'Add selected object', () =>
+        this.objectManager.loadObject()
       );
+
       // Draw BBox
       this.cursorModes.addCursorMode(
         this,
@@ -119,6 +102,7 @@ export default class ObjectPlacement extends Phaser.Scene {
         'Draw bounding boxes',
         Constants.nullFunction
       );
+
       // Drag/Resize
       this.cursorModes.addCursorMode(
         this,
@@ -127,14 +111,18 @@ export default class ObjectPlacement extends Phaser.Scene {
         'Drag or resize',
         Constants.nullFunction
       );
+
       // Print info
       this.cursorModes.addCursorMode(
         this,
         listIcon.key,
         false,
         'Print coordinates',
-        Constants.nullFunction
+        () => this.objectManager.printObjectDetailMap(),
+        () => this.objectManager.showObjectDetailMap(),
+        () => this.objectManager.hideMap()
       );
+
       this.cursorModes.renderCursorModesContainer();
     }
   }
