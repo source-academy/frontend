@@ -14,6 +14,7 @@ import SSObjectManager from '../../objects/SSObjectManager';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 import SSCursorMode from '../../cursorMode/SSCursorMode';
 import { cursorModeXPos, cursorModeYPos } from './ObjectPlacementConstants';
+import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -95,12 +96,8 @@ export default class ObjectPlacement extends Phaser.Scene {
       );
 
       // Draw BBox
-      this.cursorModes.addCursorMode(
-        this,
-        bboxIcon.key,
-        true,
-        'Draw bounding boxes',
-        Constants.nullFunction
+      this.cursorModes.addCursorMode(this, bboxIcon.key, true, 'Draw bounding boxes', () =>
+        this.cursorModes!.setCursorMode(CursorMode.DrawBBox)
       );
 
       // Drag/Resize
@@ -109,7 +106,8 @@ export default class ObjectPlacement extends Phaser.Scene {
         handIcon.key,
         true,
         'Drag or resize',
-        Constants.nullFunction
+        Constants.nullFunction,
+        () => this.cursorModes!.setCursorMode(CursorMode.DragResizeObj)
       );
 
       // Print info

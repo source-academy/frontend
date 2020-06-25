@@ -25,7 +25,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     scene: Phaser.Scene,
     x?: number,
     y?: number,
-    defaultCursorMode: CursorMode = CursorMode.DragObj
+    defaultCursorMode: CursorMode = CursorMode.DragResizeObj
   ) {
     super(scene, x, y);
     this.currCursorMode = defaultCursorMode;
@@ -36,6 +36,10 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
 
   public getCurrCursorMode() {
     return this.currCursorMode;
+  }
+
+  public setCursorMode(newMode: CursorMode) {
+    this.currCursorMode = newMode;
   }
 
   public addCursorMode(
