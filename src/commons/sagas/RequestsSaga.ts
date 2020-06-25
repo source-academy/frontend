@@ -168,6 +168,8 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
+ * TODO: Delete?
+ *
  * POST /achievements
  */
 export async function updateAchievements(
@@ -185,6 +187,10 @@ export async function updateAchievements(
 
   return resp;
 }
+
+// TODO: Implement POST /achievements/achievement_id
+
+// TODO: Implement DELETE /achievements/achievement_id
 
 /* END OF ACHIEVEMENT REQUESTS */
 

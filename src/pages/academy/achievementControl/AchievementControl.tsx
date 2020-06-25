@@ -1,12 +1,12 @@
-import React, { useState /* useEffect */ } from 'react';
+import React, { useState } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
 import {
-  mockAchievementData,
-  updateMockAchievementData
+  updateMockAchievementData,
+  fetchMockAchievementData
 } from '../../../commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
@@ -15,40 +15,37 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  achievementData: AchievementItem[];
+  inferencer: Inferencer;
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  /* TODO: Uncomment before Production
-  const { handleAchievementsFetch, handleAchievementsUpdate, achievementItems } = props;
+  const { inferencer } = props;
 
-  useEffect(() => {
-    handleAchievementsFetch();
-  }, [handleAchievementsFetch]);
+  let _inferencer: Inferencer = inferencer;
 
-  */
-
-  // force re-render the achievement-control page after updating the achievement items
+  // force re-render the achievement-control page
   const [refresh, setRefresh] = useState<boolean>();
-  const forceRefresh = () => setRefresh(!refresh);
+  const forceRefresh = () => {
+    setRefresh(!refresh);
+  };
 
   const uploadAchievementData = (achievementData: AchievementItem[]) => {
     updateMockAchievementData(achievementData); // TODO: replace with handleAchievementsUpdate(achievementData);
+    const refreshData = fetchMockAchievementData(); // TODO: replace with handleAchievementFetch()
+    _inferencer = new Inferencer(refreshData);
     forceRefresh();
   };
-
-  const inferencer = new Inferencer(mockAchievementData);
 
   return (
     <>
       <div className="AchievementControl">
         <AchievementControlPanel
-          inferencer={inferencer}
+          inferencer={_inferencer}
           uploadAchievementData={uploadAchievementData}
         />
 
         <AchievementEditor
-          inferencer={inferencer}
+          inferencer={_inferencer}
           uploadAchievementData={uploadAchievementData}
           forceRefresh={forceRefresh}
         />

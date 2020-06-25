@@ -7,9 +7,12 @@ import {
   getAchievements,
   updateAchievements
 } from '../../../commons/achievements/AchievementActions';
+import Inferencer from '../achievements/subcomponents/utils/Inferencer';
+import { defaultAchievementData } from 'src/commons/mocks/AchievementMocks';
 
+// TODO: replace defaultAchievementData with fetch database data
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  achievementData: state.achievements.achievements
+  inferencer: new Inferencer(defaultAchievementData)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

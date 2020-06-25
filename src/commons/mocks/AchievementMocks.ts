@@ -1,9 +1,6 @@
 import { AchievementAbility, AchievementItem } from '../achievements/AchievementTypes';
 
-export const updateMockAchievementData = (newAchievementData: AchievementItem[]) =>
-  (mockAchievementData = newAchievementData);
-
-const defaultAchievementData: AchievementItem[] = [
+export const defaultAchievementData: AchievementItem[] = [
   {
     id: 0,
     title: 'Rune Master',
@@ -182,7 +179,17 @@ const defaultAchievementData: AchievementItem[] = [
   }
 ];
 
-export let mockAchievementData = defaultAchievementData;
+let mockAchievementData = defaultAchievementData;
+
+export const fetchMockAchievementData = () => {
+  console.log('Fetched mock data', mockAchievementData);
+  return mockAchievementData;
+};
+
+export const updateMockAchievementData = (newAchievementData: AchievementItem[]) => {
+  mockAchievementData = newAchievementData;
+  console.log('Updated mock data', mockAchievementData);
+};
 
 export const semester1Weeks = {
   2: new Date(2020, 7, 17, 0, 0, 0),
