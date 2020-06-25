@@ -21,6 +21,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   );
 
   const addNewTask = () => {
+    uploadAchievementData([]);
     /*
           const achievement = inferencer.getAchievementItem(addedTaskID);
     console.log(achievement);
