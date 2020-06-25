@@ -92,7 +92,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
 
     // Set listeners
     modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      this.currActiveModeIdx = currIdx;
+      if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;
       onClick();
       this.renderCursorModesContainer();
     });
