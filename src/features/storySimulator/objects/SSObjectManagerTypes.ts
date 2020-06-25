@@ -1,10 +1,10 @@
-import { ItemId } from 'src/features/game/commons/CommonsTypes';
-export type ShortPath = string;
+import { ItemId, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { IScreenLoggable } from '../logger/SSLogManagerTypes';
 
-export type SSObjectDetail = {
+export type SSObjectDetail = IScreenLoggable & {
   id: ItemId;
-  assetKey: string;
-  assetPath: string;
+  assetKey: AssetKey;
+  assetPath: AssetPath;
   x: number;
   y: number;
   width?: number;

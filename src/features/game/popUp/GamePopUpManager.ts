@@ -47,11 +47,11 @@ class GamePopUpManager {
       assetKey
     );
 
-    let resizedImage = popUpImage;
+    const resizedImage = popUpImage;
     if (popUpImage.displayWidth > popUpImage.displayHeight) {
-      resizedImage = resize(popUpImage, popUpRect.width);
+      resize(popUpImage, popUpRect.width);
     } else {
-      resizedImage = resize(popUpImage, 0, popUpRect.height);
+      resize(popUpImage, 0, popUpRect.height);
     }
 
     container.add([popUpFrameImg, resizedImage]);

@@ -3,9 +3,9 @@ import { loadImage } from '../utils/ImageLoaderUtils';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { ICheckpointLogger, IDetailLogger } from '../logger/SSLogManagerTypes';
+import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
 
-export default class SSBackgroundManager implements IDetailLogger, ICheckpointLogger {
+export default class SSBackgroundManager implements ICheckpointLogger {
   public checkpointTitle = 'location';
 
   private backgroundAssetPath: string | undefined;
