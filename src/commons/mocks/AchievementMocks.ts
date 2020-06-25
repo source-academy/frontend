@@ -2,12 +2,12 @@ import { AchievementAbility, AchievementItem } from '../achievements/Achievement
 
 export const achievementData: AchievementItem[] = [
   {
-    id: 1,
+    id: 0,
     title: 'Rune Master',
     ability: AchievementAbility.ACADEMIC,
     exp: 0,
     isTask: true,
-    prerequisiteIds: [2, 3],
+    prerequisiteIds: [1, 2],
     completionGoal: 2,
     completionProgress: 0,
     modal: {
@@ -19,7 +19,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 2,
+    id: 1,
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
@@ -38,7 +38,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 3,
+    id: 2,
     title: 'Colorful Carpet',
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
@@ -56,12 +56,12 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 4,
+    id: 3,
     title: 'Keyboard Warrior',
     ability: AchievementAbility.COMMUNITY,
     exp: 0,
     isTask: true,
-    prerequisiteIds: [5, 6, 7],
+    prerequisiteIds: [4, 5, 6],
     completionGoal: 3,
     completionProgress: 2,
     modal: {
@@ -74,7 +74,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 5,
+    id: 4,
     title: 'Keyboard Warrior - Bronze Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 50,
@@ -91,7 +91,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 6,
+    id: 5,
     title: 'Keyboard Warrior - Silver Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 100,
@@ -108,7 +108,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 7,
+    id: 6,
     title: 'Keyboard Warrior - Gold Tier',
     ability: AchievementAbility.COMMUNITY,
     exp: 200,
@@ -125,7 +125,7 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 8,
+    id: 7,
     title: "That was Sort'a Easy",
     ability: AchievementAbility.ACADEMIC,
     exp: 250,
@@ -144,12 +144,12 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 9,
+    id: 8,
     title: 'Mission Master',
     ability: AchievementAbility.EFFORT,
     exp: 80,
     isTask: true,
-    prerequisiteIds: [1, 8],
+    prerequisiteIds: [0, 7],
     completionGoal: 2,
     completionProgress: 0,
     modal: {
@@ -161,12 +161,12 @@ export const achievementData: AchievementItem[] = [
     }
   },
   {
-    id: 10,
+    id: 9,
     title: 'Mission Grandmaster',
     ability: AchievementAbility.EFFORT,
     exp: 80,
     isTask: true,
-    prerequisiteIds: [4, 9],
+    prerequisiteIds: [3, 8],
     completionGoal: 2,
     completionProgress: 0,
     modal: {

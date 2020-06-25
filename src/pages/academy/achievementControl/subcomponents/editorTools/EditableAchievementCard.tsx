@@ -33,7 +33,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
 
   const handleSaveChanges = () => {
-    inferencer.editAchievements(editableAchievement);
+    inferencer.editAchievement(editableAchievement);
     setHasChanges(false);
     setPendingUpload(true);
     console.log('Saved changes!', editableAchievement);

@@ -55,18 +55,18 @@ class Node {
 }
 
 class Inferencer {
-  private nodeList: Node[];
+  private achievementData: AchievementItem[] = [];
+  private nodeList: Node[] = [];
 
   constructor(achievementData: AchievementItem[]) {
-    this.nodeList = this.generateNodeList(achievementData);
-    this.processNodeList();
-    console.log('Generated Inferencer');
-    this.logInfo();
+    this.achievementData = achievementData;
+    this.processData();
   }
 
   public logInfo() {
-    this.nodeList.forEach(node => console.log(node.id, node.achievement.title));
-    console.log('ಠ_ಠ hmm...u should only see me once');
+    this.nodeList.forEach(node =>
+      console.log(node.id, node.achievement.title, node.children, node.descendant)
+    );
   }
 
   public getAchievementItem(id: number) {
@@ -74,19 +74,39 @@ class Inferencer {
   }
 
   public addAchievement(achievement: AchievementItem) {
-    const newId = this.nodeList.length;
+    const newId = this.achievementData.length;
     achievement.id = newId;
-    this.nodeList[newId] = new Node(achievement);
-    this.processNodeList();
+    this.achievementData[newId] = achievement;
+    this.processData();
   }
 
-  public editAchievements(achievement: AchievementItem) {
-    this.nodeList[achievement.id] = new Node(achievement);
-    this.processNodeList();
+  public editAchievement(achievement: AchievementItem) {
+    this.achievementData[achievement.id] = achievement;
+    this.processData();
   }
 
   public removeAchievement(id: number) {
-    // implement remove
+    // first, remove reference of the achievement from other achievement's prerequisite
+    this.nodeList.forEach(node => {
+      if (node.children.has(id)) {
+        const prerequisiteIds = this.achievementData[node.id].prerequisiteIds;
+        const newPrerequisiteIds = prerequisiteIds.filter(target => target !== id);
+        this.achievementData[node.id].prerequisiteIds = newPrerequisiteIds;
+      }
+    });
+
+    // then remove the achievement from achievementData by copying the whole array
+    // this is to ensure that AchievementData[] indices will always map to the
+    // correct Achievement ID
+    const newAchievementData: AchievementItem[] = [];
+    this.achievementData
+      .filter(achievement => achievement.id !== id)
+      .forEach(achievement => (newAchievementData[achievement.id] = achievement));
+    this.achievementData = newAchievementData;
+    // finally reconstruct the nodeList
+    this.processData();
+    console.log('achievementData', this.achievementData);
+    console.log('nodeList', this.nodeList);
   }
 
   public listIds() {
@@ -154,18 +174,19 @@ class Inferencer {
     }
   }
 
-  private generateNodeList(achievementData: AchievementItem[]) {
-    const nodeList: Node[] = [];
-
-    achievementData.forEach(achievement => (nodeList[achievement.id] = new Node(achievement)));
-    return nodeList;
-  }
-
-  private processNodeList() {
+  private processData() {
+    this.constructNodeList();
     this.nodeList.forEach(node => this.generateDescendant(node));
     this.nodeList.forEach(node => this.generateFurthestDeadline(node));
     this.nodeList.forEach(node => this.generateTotalExp(node));
     this.nodeList.forEach(node => this.generateCollectiveProgress(node));
+  }
+
+  private constructNodeList() {
+    this.nodeList = [];
+    this.achievementData.forEach(
+      achievement => (this.nodeList[achievement.id] = new Node(achievement))
+    );
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
@@ -230,11 +251,11 @@ class Inferencer {
   // Set the node's collective progress by combining all descendants' progress
   private generateCollectiveProgress(node: Node) {
     if (node.children.size === 0) {
-      // No prerequisites, just display the achievement progress
+      // If no prerequisites, just display the achievement progress
       return;
     }
 
-    // Node has prerequisites, display aggregated descendants progress
+    // Otherwise, display aggregated descendants progress
 
     // Combiner of progress
     const collateProgress = (accumulateProgress: number, currentProgress: number) => {

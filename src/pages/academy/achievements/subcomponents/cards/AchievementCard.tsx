@@ -51,7 +51,11 @@ function AchievementCard(props: AchievementCardProps) {
         ) : null}
 
         <div className="icon">
-          <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
+          <Icon
+            icon={IconNames.PREDICTIVE_ANALYSIS}
+            iconSize={28}
+            onClick={() => inferencer.removeAchievement(id)}
+          />
         </div>
 
         <div className="display">
