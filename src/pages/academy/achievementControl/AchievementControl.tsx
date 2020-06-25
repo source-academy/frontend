@@ -23,8 +23,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
   const inferencer = new Inferencer(achievementItems);
 
-  inferencer.logInfo();
-
   return (
     <>
       <div className="AchievementControl">

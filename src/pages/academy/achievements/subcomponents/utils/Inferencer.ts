@@ -60,18 +60,12 @@ class Inferencer {
   constructor(achievementData: AchievementItem[]) {
     this.nodeList = this.generateNodeList(achievementData);
     this.processNodeList();
-    console.log('Generate Inferencer');
+    console.log('Generated Inferencer');
+    this.logInfo();
   }
 
   public logInfo() {
-    this.nodeList.forEach(node =>
-      console.log(
-        node.id,
-        node.achievement.title,
-        node.achievement.completionProgress + '/' + node.achievement.completionGoal,
-        node.collectiveProgress
-      )
-    );
+    this.nodeList.forEach(node => console.log(node.id, node.achievement.title));
     console.log('ಠ_ಠ hmm...u should only see me once');
   }
 
