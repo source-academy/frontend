@@ -18,3 +18,11 @@ export function resizeSquare(obj: Image, width: number, height?: number) {
   obj.displayHeight = height || width;
   return obj;
 }
+
+export function multiplyDimensions(
+  obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
+  factor: number
+) {
+  obj.displayWidth *= factor;
+  obj.displayHeight *= factor;
+}

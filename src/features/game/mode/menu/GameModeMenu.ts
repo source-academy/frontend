@@ -25,11 +25,17 @@ class GameModeMenu implements IGameUI {
     if (modes) {
       // Refresh Buttons
       modes.forEach(mode => {
-        this.addModeButton(mode, () =>
+        this.addModeButton(mode, () => {
           GameActionManager.getInstance()
             .getGameManager()
-            .phaseManager.pushPhase(gameModeToPhase[mode])
-        );
+            .phaseManager.pushPhase(gameModeToPhase[mode]);
+
+          if (mode !== GameMode.Talk) {
+            GameActionManager.getInstance()
+              .getGameManager()
+              .layerManager.fadeOutLayer(Layer.Character, 300);
+          }
+        });
       });
     }
   }

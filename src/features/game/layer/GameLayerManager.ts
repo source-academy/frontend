@@ -29,12 +29,12 @@ class GameLayerManager {
 
   public hideLayer(layerType: Layer) {
     const layerToHide = this.layers.get(layerType);
-    layerToHide && layerToHide.setVisible(false);
+    layerToHide && layerToHide.setVisible(false) && layerToHide.setAlpha(0);
   }
 
   public showLayer(layerType: Layer) {
     const layerToHide = this.layers.get(layerType);
-    layerToHide && layerToHide.setVisible(true);
+    layerToHide && layerToHide.setVisible(true) && layerToHide.setAlpha(1);
   }
 
   public async fadeInLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
@@ -76,7 +76,9 @@ class GameLayerManager {
     if (!layerContainer) {
       return;
     }
-    layerContainer.list.map((gameObject: Phaser.GameObjects.GameObject) => gameObject.destroy());
+    layerContainer.list.forEach((gameObject: Phaser.GameObjects.GameObject) =>
+      gameObject.destroy()
+    );
   }
 }
 

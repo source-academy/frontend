@@ -61,6 +61,11 @@ export const iconBg: ImageAsset = {
   path: '../assets/modeIconBg.png'
 };
 
+export const longButton: ImageAsset = {
+  key: 'long-button',
+  path: '../assets/longButton.png'
+};
+
 const storySimulatorAssets = [
   studentRoomImg,
   mainMenuOptBanner,
@@ -73,7 +78,8 @@ const storySimulatorAssets = [
   bboxIcon,
   handIcon,
   listIcon,
-  iconBg
+  iconBg,
+  longButton
 ];
 
 export default storySimulatorAssets;

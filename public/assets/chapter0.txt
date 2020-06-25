@@ -9,7 +9,7 @@ hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
 room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
-hallway, updateChecklist: visit
+crashsite, updateChecklist: visit
 $
 [talk move]
 [explore talk move]
@@ -29,7 +29,7 @@ emergency: hallway
 
 [hallway]
 +beat, Beat, happy, right
-hartin-menz, Hartin Menz, happy, middle
+chieftain, Hartin Menz, serious, middle
 
 <<objectives>>
 visit
@@ -44,7 +44,7 @@ yourOtherDoor, door/yourRoom-dim, 0, 0
 $
 yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
 yourCarpet, collectible: cookies if checklist.visit
-door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, addLocationMode: [hallway talk], addItem: [talkTopics hallway dialogue4]
+door6, addItem: [characters hallway chieftain], bringUpDialogue: dialogue3, addLocationMode: [hallway talk], addItem: [talkTopics hallway dialogue4]
 
 <<boundingBoxes>>
 [room]

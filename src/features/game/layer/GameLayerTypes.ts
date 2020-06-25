@@ -9,12 +9,14 @@ export enum Layer {
   UI,
   Objects,
   BBox,
-  Escape
+  Escape,
+  Selector
 }
 
 // Back to Front
 export const defaultLayerSequence = [
   Layer.Background,
+  Layer.Selector,
   Layer.Objects,
   Layer.BBox,
   Layer.Character,
