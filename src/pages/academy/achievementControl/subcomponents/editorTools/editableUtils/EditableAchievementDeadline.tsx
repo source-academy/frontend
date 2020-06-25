@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Dialog } from '@blueprintjs/core';
+import { Button, Dialog, Popover, Position, PopoverInteractionKind } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import AchievementDeadline from '../../../../achievements/subcomponents/utils/AchievementDeadline';
 
@@ -18,14 +18,18 @@ function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
       : `${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`;
   };
 
+  console.log(generateDeadlineString());
+
   return (
     <div className="deadline">
       <div className="deadline-details">
-        <div>{generateDeadlineString()}</div>
         <div>
-          <Button onClick={() => setOpen(!isOpen)}>
-            <AchievementDeadline deadline={deadline} />
-          </Button>
+          <Popover interactionKind={PopoverInteractionKind.HOVER} position={Position.TOP}>
+            <Button onClick={() => setOpen(!isOpen)}>
+              <AchievementDeadline deadline={deadline} />
+            </Button>
+            {generateDeadlineString()}
+          </Popover>
         </div>
       </div>
       <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title="Edit Achievement Deadline">
