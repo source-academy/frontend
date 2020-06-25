@@ -24,7 +24,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
     const achievement = inferencer.getAchievementItem(addedTaskID);
     achievement.isTask = true;
     inferencer.editAchievement(achievement);
-    uploadAchievementData(inferencer.getAchievementData);
+    uploadAchievementData(inferencer.getAchievementData());
   };
 
   const addingAction = (e: any) => {

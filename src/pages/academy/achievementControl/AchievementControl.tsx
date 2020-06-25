@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, /* useEffect */ } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
@@ -16,12 +16,13 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  //const { handleAchievementsUpdate } = props;
+  /* TOOD: Uncomment before Production
+  const { handleAchievementsFetch, handleAchievementsUpdate, achievementItems } = props;
 
-  /* 
   useEffect(() => {
     handleAchievementsFetch();
   }, [handleAchievementsFetch]);
+
   */
 
   // force re-render the achievement-control page after updating the achievement items
@@ -29,7 +30,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const forceRefresh = () => setRefresh(!refresh);
 
   const uploadAchievementData = (achievementData: AchievementItem[]) => {
-    //handleAchievementsUpdate(achievementData);
+    // handleAchievementsUpdate(achievementData);
+
     console.log('Upload data');
     inferencer.logInfo();
     forceRefresh();
