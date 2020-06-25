@@ -1,6 +1,4 @@
-type Image = Phaser.GameObjects.Image;
-
-export function resize(obj: Image, width: number, height?: number) {
+export function resize(obj: Phaser.GameObjects.Image, width: number, height?: number) {
   const ratio = obj.displayHeight / obj.displayWidth;
   if (!width) {
     obj.displayWidth = height! / ratio;
@@ -13,7 +11,20 @@ export function resize(obj: Image, width: number, height?: number) {
   }
 }
 
-export function resizeSquare(obj: Image, width: number, height?: number) {
+export function resizeRect(obj: Phaser.GameObjects.Rectangle, width: number, height?: number) {
+  const ratio = obj.displayHeight / obj.displayWidth;
+  if (!width) {
+    obj.displayWidth = height! / ratio;
+    obj.displayHeight = height!;
+    return obj;
+  } else {
+    obj.displayWidth = width;
+    obj.displayHeight = height || width * ratio;
+    return obj;
+  }
+}
+
+export function resizeSquare(obj: Phaser.GameObjects.Image, width: number, height?: number) {
   obj.displayWidth = width;
   obj.displayHeight = height || width;
   return obj;

@@ -27,8 +27,8 @@ function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset }: OwnProps)
 
       if (!nodeData.childNodes) {
         setCurrentAsset(selectedPath);
+        sessionStorage.setItem('selectedAsset', selectedPath);
       }
-      sessionStorage.setItem('selectedAsset', selectedPath);
       setAssetTree({ ...assetTree });
     },
     [assetTree, setCurrentAsset]
