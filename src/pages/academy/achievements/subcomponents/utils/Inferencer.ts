@@ -8,7 +8,7 @@ import {
 // A Node item encapsulates all important information of an achievement item
 class Node {
   achievement: AchievementItem;
-  id: number;
+  dataIdx: number; // achievementData[dataIdx] = achievement
   status: AchievementStatus;
   totalExp: number;
   furthestDeadline?: Date;
@@ -17,9 +17,8 @@ class Node {
   descendant: Set<number>; // all descendant prerequisites including immediate prerequisites
   modal: AchievementModalItem;
 
-  constructor(achievement: AchievementItem) {
+  constructor(achievement: AchievementItem, dataIdx: number) {
     const {
-      id,
       exp,
       deadline,
       completionGoal,
@@ -29,7 +28,7 @@ class Node {
     } = achievement;
 
     this.achievement = achievement;
-    this.id = id;
+    this.dataIdx = dataIdx;
     this.status = this.generateStatus(deadline, completionGoal, completionProgress);
     this.totalExp = exp;
     this.furthestDeadline = deadline;
@@ -56,16 +55,11 @@ class Node {
 
 class Inferencer {
   private achievementData: AchievementItem[] = [];
-  private nodeList: Node[] = [];
+  private nodeList: Map<number, Node> = new Map(); // key = achievement id
 
   constructor(achievementData: AchievementItem[]) {
     this.achievementData = achievementData;
     this.processData();
-    console.log('Generate Inferencer');
-  }
-
-  public logInfo() {
-    this.nodeList.forEach(node => console.log(node.id, node.achievement.title));
   }
 
   public getAchievementData() {
@@ -73,77 +67,106 @@ class Inferencer {
   }
 
   public getAchievementItem(id: number) {
-    return this.nodeList[id].achievement;
+    // asserts: the achievement id already exist in nodeList
+    return this.nodeList.get(id)!.achievement;
   }
 
   public addAchievement(achievement: AchievementItem) {
-    const newId = this.achievementData.length;
+    // first, generate a new unique id
+    const len = this.achievementData.length;
+    const newId = len > 0 ? this.achievementData[len - 1].id + 1 : 0;
+
+    // then assign the new unique id by overwriting the achievement item
+    // and append it to achievementData
     achievement.id = newId;
-    this.achievementData[newId] = achievement;
+    this.achievementData.push(achievement);
+
+    // finally, reconstruct the nodeList
     this.processData();
   }
 
   public editAchievement(achievement: AchievementItem) {
-    this.achievementData[achievement.id] = achievement;
+    // directly modify the achievement element in achievementData
+    // asserts: the achievement id already exists in nodeList
+    const idx = this.nodeList.get(achievement.id)!.dataIdx;
+    this.achievementData[idx] = achievement;
+
+    // then, reconstruct the nodeList
     this.processData();
   }
 
   public removeAchievement(id: number) {
-    // first, remove reference of the achievement from other achievement's prerequisite
-    this.nodeList.forEach(node => {
-      if (node.children.has(id)) {
-        const prerequisiteIds = this.achievementData[node.id].prerequisiteIds;
-        const newPrerequisiteIds = prerequisiteIds.filter(target => target !== id);
-        this.achievementData[node.id].prerequisiteIds = newPrerequisiteIds;
-      }
-    });
+    const hasChild = (achievement: AchievementItem) =>
+      achievement.prerequisiteIds.reduce((acc, child) => acc || child === id, false);
 
-    // then remove the achievement from achievementData by copying the whole array
-    // this is to ensure that AchievementData[] indices will always map to the
-    // correct Achievement ID
+    const removeChild = (achievement: AchievementItem) =>
+      achievement.prerequisiteIds.filter(child => child !== id);
+
+    // create a copy of achievementData that:
+    // 1. does not contain the removed achievement
+    // 2. does not contain reference of the removed achievement in other achievement's prerequisite
     const newAchievementData: AchievementItem[] = [];
-    this.achievementData
-      .filter(achievement => achievement.id !== id)
-      .forEach(achievement => (newAchievementData[achievement.id] = achievement));
+
+    this.achievementData.reduce((acc, parent) => {
+      if (parent.id === id) {
+        return acc; // removed item not included in the new achievementData
+      } else if (hasChild(parent)) {
+        parent.prerequisiteIds = removeChild(parent); // reference of the removed item is filtered out
+      }
+      acc.push(parent);
+      return acc;
+    }, newAchievementData);
+
     this.achievementData = newAchievementData;
-    // finally reconstruct the nodeList
+
+    // finally, reconstruct the nodeList
     this.processData();
   }
 
   public listIds() {
-    return this.nodeList.map(node => node.id);
+    return this.achievementData.map(achievement => achievement.id);
   }
 
   public listTaskIds() {
-    return this.nodeList.filter(node => node.achievement.isTask).map(node => node.id);
+    return this.achievementData.reduce((acc, achievement) => {
+      if (achievement.isTask) {
+        acc.push(achievement.id);
+      }
+      return acc;
+    }, [] as number[]);
   }
 
   public listNonTaskIds() {
-    return this.nodeList.filter(node => !node.achievement.isTask).map(node => node.id);
+    return this.achievementData.reduce((acc, achievement) => {
+      if (!achievement.isTask) {
+        acc.push(achievement.id);
+      }
+      return acc;
+    }, [] as number[]);
   }
 
   public getStatus(id: number) {
-    return this.nodeList[id].status;
+    return this.nodeList.get(id)!.status;
   }
 
   public getTotalExp(id: number) {
-    return this.nodeList[id].totalExp;
+    return this.nodeList.get(id)!.totalExp;
   }
 
   public getFurthestDeadline(id: number) {
-    return this.nodeList[id].furthestDeadline;
+    return this.nodeList.get(id)!.furthestDeadline;
   }
 
   public getCollectiveProgress(id: number) {
-    return this.nodeList[id].collectiveProgress;
+    return this.nodeList.get(id)!.collectiveProgress;
   }
 
   public isImmediateChild(id: number, childId: number) {
-    return this.nodeList[id].children.has(childId);
+    return this.nodeList.get(id)!.children.has(childId);
   }
 
   public getImmediateChildren(id: number) {
-    return this.nodeList[id].children;
+    return this.nodeList.get(id)!.children;
   }
 
   public listImmediateChildren(id: number) {
@@ -151,11 +174,11 @@ class Inferencer {
   }
 
   public isDescendant(id: number, childId: number) {
-    return this.nodeList[id].descendant.has(childId);
+    return this.nodeList.get(id)!.descendant.has(childId);
   }
 
   public getDescendants(id: number) {
-    return this.nodeList[id].descendant;
+    return this.nodeList.get(id)!.descendant;
   }
 
   public listDescendants(id: number) {
@@ -169,17 +192,20 @@ class Inferencer {
   }
 
   public getModalItem(id: number) {
-    return id < 0 ? undefined : this.nodeList[id].modal;
+    return id < 0 ? undefined : this.nodeList.get(id)!.modal;
   }
 
   public getFilterCount(filterStatus: FilterStatus) {
     switch (filterStatus) {
       case FilterStatus.ALL:
-        return this.nodeList.length;
+        return this.nodeList.size;
       case FilterStatus.ACTIVE:
-        return this.nodeList.filter(node => node.status === AchievementStatus.ACTIVE).length;
+        return [...this.nodeList.values()].filter(node => node.status === AchievementStatus.ACTIVE)
+          .length;
       case FilterStatus.COMPLETED:
-        return this.nodeList.filter(node => node.status === AchievementStatus.COMPLETED).length;
+        return [...this.nodeList.values()].filter(
+          node => node.status === AchievementStatus.COMPLETED
+        ).length;
       default:
         return 0;
     }
@@ -193,24 +219,46 @@ class Inferencer {
       this.generateTotalExp(node);
       this.generateCollectiveProgress(node);
     });
+    console.log(this.achievementData);
+    console.log([...this.nodeList.values()]);
+    console.log(this.nodeList);
+    this.dataCheck();
+  }
+
+  private dataCheck() {
+    for (const [id, node] of this.nodeList) {
+      if (id !== node.achievement.id) {
+        console.log('Unmatched nodeList key-achievementId mapping', node);
+      } else if (node.achievement !== this.achievementData[node.dataIdx]) {
+        console.log(
+          'Unmatched achievement items in nodeList and achievementData\n',
+          'Data\n',
+          this.achievementData[id],
+          '\nNode\n',
+          node
+        );
+      }
+    }
+    console.log('Noice');
   }
 
   private constructNodeList() {
-    this.nodeList = [];
-    this.achievementData.forEach(
-      achievement => (this.nodeList[achievement.id] = new Node(achievement))
-    );
+    this.nodeList = new Map();
+    for (let idx = 0; idx < this.achievementData.length; idx++) {
+      const achievement = this.achievementData[idx];
+      this.nodeList.set(achievement.id, new Node(achievement, idx));
+    }
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
   private generateDescendant(node: Node) {
-    for (const child of node.descendant) {
-      if (child === node.id) {
+    for (const childId of node.descendant) {
+      if (childId === node.achievement.id) {
         console.error('Circular dependency detected');
       }
-      for (const grandchild of this.nodeList[child].descendant) {
+      for (const grandchildId of this.nodeList.get(childId)!.descendant) {
         // Newly added grandchild is appended to the back of the set.
-        node.descendant.add(grandchild);
+        node.descendant.add(grandchildId);
         // Hence the great grandchildren will be added when the iterator reaches there
       }
     }
@@ -234,8 +282,8 @@ class Inferencer {
 
     // Temporary array of all descendants' deadlines
     const descendantDeadlines = [];
-    for (const child of node.descendant) {
-      const childDeadline = this.nodeList[child].achievement.deadline;
+    for (const childId of node.descendant) {
+      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
 
@@ -252,8 +300,8 @@ class Inferencer {
 
     // Temporary array of all descendants' exps
     const descendantExps = [];
-    for (const child of node.descendant) {
-      const childExp = this.nodeList[child].achievement.exp;
+    for (const childId of node.descendant) {
+      const childExp = this.nodeList.get(childId)!.achievement.exp;
       descendantExps.push(childExp);
     }
 
@@ -275,8 +323,8 @@ class Inferencer {
     };
 
     const descendantProgress = [];
-    for (const child of node.descendant) {
-      const { completionGoal, completionProgress } = this.nodeList[child].achievement;
+    for (const childId of node.descendant) {
+      const { completionGoal, completionProgress } = this.nodeList.get(childId)!.achievement;
       const childProgress = Math.min(completionProgress / completionGoal, 1);
       descendantProgress.push(childProgress);
     }
