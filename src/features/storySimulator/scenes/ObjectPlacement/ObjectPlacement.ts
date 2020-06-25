@@ -101,13 +101,8 @@ export default class ObjectPlacement extends Phaser.Scene {
       );
 
       // Drag/Resize
-      this.cursorModes.addCursorMode(
-        this,
-        handIcon.key,
-        true,
-        'Drag or resize',
-        Constants.nullFunction,
-        () => this.cursorModes!.setCursorMode(CursorMode.DragResizeObj)
+      this.cursorModes.addCursorMode(this, handIcon.key, true, 'Drag or resize', () =>
+        this.cursorModes!.setCursorMode(CursorMode.DragResizeObj)
       );
 
       // Print info
