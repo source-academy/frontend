@@ -1,4 +1,4 @@
-import React, { useState, /* useEffect */ } from 'react';
+import React, { useState /* useEffect */ } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 

@@ -10,9 +10,12 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
-  bindActionCreators({
-    handleAchievementsFetch: getAchievements
-  }, dispatch);
+  bindActionCreators(
+    {
+      handleAchievementsFetch: getAchievements
+    },
+    dispatch
+  );
 
 const AchievementContainer = connect(mapStateToProps, mapDispatchToProps)(Achievement);
 

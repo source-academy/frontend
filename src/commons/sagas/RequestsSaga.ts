@@ -151,7 +151,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   console.log(achievements);
 
   return achievements.map((achievement: any) => {
-    achievement.id = achievement.inferencer_id; 
+    achievement.id = achievement.inferencer_id;
     achievement.ability = achievement.ability as AchievementAbility;
     achievement.modal = {
       modalImageUrl: achievement.modalImageUrl ? achievement.modal_image_url : '',
@@ -161,7 +161,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     } as AchievementModalItem;
     if (achievement.prerequisiteIDs === null) {
       achievement.prerequisiteIDs = [];
-    } 
+    }
 
     return achievement as AchievementItem;
   });
