@@ -1,16 +1,24 @@
-import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { screenCenter, screenSize, Constants } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import storySimulatorAssets, {
-  studentRoomImg
+  studentRoomImg,
+  colorIcon,
+  imageIcon,
+  bboxIcon,
+  handIcon,
+  listIcon
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
 import { objectPlacementButton } from './ObjectPlacementHelper';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
+import SSCursorMode from '../../cursorMode/SSCursorMode';
+import { cursorModeXPos, cursorModeYPos } from './ObjectPlacementConstants';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
+  private cursorModes: SSCursorMode | undefined;
   private objectManager: SSObjectManager;
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
 
@@ -18,6 +26,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     super('ObjectPlacement');
     this.layerManager = new GameLayerManager();
     this.objectManager = new SSObjectManager();
+    this.cursorModes = undefined;
     this.keyboardListeners = [];
   }
 
@@ -57,6 +66,10 @@ export default class ObjectPlacement extends Phaser.Scene {
       }
     ];
 
+    this.cursorModes = new SSCursorMode(this, cursorModeXPos, cursorModeYPos);
+    this.populateCursorModes();
+
+    uiContainer.add(this.cursorModes);
     uiContainer.add(backButton);
     uiContainer.add(
       buttonDetails.map((button, buttonIndex) =>
@@ -78,6 +91,52 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.add.existing(backgroundImg);
 
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
+  }
+
+  private populateCursorModes() {
+    if (this.cursorModes) {
+      // Change background
+      this.cursorModes.addCursorMode(
+        this,
+        colorIcon.key,
+        false,
+        'Set background',
+        Constants.nullFunction
+      );
+      // Add object
+      this.cursorModes.addCursorMode(
+        this,
+        imageIcon.key,
+        false,
+        'Add selected object',
+        Constants.nullFunction
+      );
+      // Draw BBox
+      this.cursorModes.addCursorMode(
+        this,
+        bboxIcon.key,
+        true,
+        'Draw bounding boxes',
+        Constants.nullFunction
+      );
+      // Drag/Resize
+      this.cursorModes.addCursorMode(
+        this,
+        handIcon.key,
+        true,
+        'Drag or resize',
+        Constants.nullFunction
+      );
+      // Print info
+      this.cursorModes.addCursorMode(
+        this,
+        listIcon.key,
+        false,
+        'Print coordinates',
+        Constants.nullFunction
+      );
+      this.cursorModes.renderCursorModesContainer();
+    }
   }
 
   private cleanUp() {
