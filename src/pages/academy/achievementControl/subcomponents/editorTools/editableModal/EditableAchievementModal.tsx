@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Card } from '@blueprintjs/core';
 import { AchievementModalItem } from 'src/commons/achievements/AchievementTypes';
-import { modalTemplate } from '../EditableTemplates';
 import EditableAchievementModalDescription from './EditableAchievementModalDescription';
 import EditableAchievementModalGoalText from './EditableAchievementModalGoalText';
 import EditableAchievementModalImage from './EditableAchievementModalImage';
+import { modalTemplate } from '../AchievementTemplate';
 
 type EditableAchievementModalProps = {
   title: string;

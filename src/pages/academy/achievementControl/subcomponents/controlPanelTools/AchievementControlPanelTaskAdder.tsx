@@ -1,51 +1,52 @@
 import React, { useState } from 'react';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import { Button } from '@blueprintjs/core';
 import AchievementTaskSelect from './AchievementTaskSelect';
+import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 
 export type AchievementControlPanelTaskAdderProps = {
-  achievementItems: { [id: number]: AchievementItem };
-  setAchievementItems: any;
-  resetCurrentTasks: any;
-  pendingTasks: AchievementItem[];
+  inferencer: Inferencer;
+  uploadAchievementData: any;
 };
 
 function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdderProps) {
-  const { achievementItems, setAchievementItems, resetCurrentTasks, pendingTasks } = props;
-
-  const [addedTaskID, setAddedTaskID] = useState<number>(
-    pendingTasks.length === 0 ? -1 : pendingTasks[0].id
-  );
+  const { inferencer, uploadAchievementData } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
 
-  const setTaskState = (taskID: number) => {
-    achievementItems[taskID].isTask = true;
-    setAchievementItems(achievementItems);
+  const nonTaskIDs = inferencer.listIds();
+
+  const [addedTaskID, setAddedTaskID] = useState<number>(
+    nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
+  );
+
+  const addNewTask = () => {
+    /*
+          const achievement = inferencer.getAchievementItem(addedTaskID);
+    console.log(achievement);
+    achievement.isTask = true;
+    inferencer.editAchievement(achievement);
+    uploadAchievementData(inferencer.getAchievementData);
+    */
+    // TODO: fix
   };
 
   const addingAction = (e: any) => {
-    setDialogOpen(!isDialogOpen);
-    setTaskState(addedTaskID);
-    resetCurrentTasks();
-    setAddedTaskID(pendingTasks.length === 0 ? -1 : pendingTasks[0].id);
+    toggleDialogOpen();
+    addNewTask();
   };
 
   return (
     <>
-      <Button
-        className="main-adder"
-        onClick={() => setDialogOpen(!isDialogOpen)}
-        text={'Add A Task'}
-      />
+      <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
       <AchievementTaskSelect
-        tasks={pendingTasks}
+        tasks={nonTaskIDs}
         focusTaskID={addedTaskID}
         setFocusTaskID={setAddedTaskID}
         buttonText={'Add Task'}
         dialogHeader={'Add A Task'}
         emptyTasksMessage={'You have no more tasks to add'}
-        setDialogOpen={() => setDialogOpen(!isDialogOpen)}
+        setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />

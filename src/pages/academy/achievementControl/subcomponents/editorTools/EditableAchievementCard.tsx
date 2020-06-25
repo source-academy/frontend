@@ -20,11 +20,11 @@ import DeleteAchievementButton from './editableUtils/DeleteAchievementButton';
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
-  forceUpdate: any;
+  uploadAchievementData: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, inferencer, forceUpdate } = props;
+  const { achievement, inferencer, uploadAchievementData } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id, title, ability, exp, deadline, icon } = editableAchievement;
@@ -45,13 +45,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   const handleUploadChanges = () => {
+    uploadAchievementData(inferencer.getAchievementData());
     setPendingUpload(false);
-    inferencer.logInfo();
   };
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
-    forceUpdate();
+    uploadAchievementData(inferencer.getAchievementData());
   };
 
   /* Handlers to Change State of Achievement information */

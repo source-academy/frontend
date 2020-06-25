@@ -2,53 +2,54 @@ import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import AchievementTaskSelect from './AchievementTaskSelect';
+import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
+
+// TODO: Rename to PrerequisireAdder
 
 type AchievementControlPanelAdderProps = {
-  toggleDialogFlag: any;
-  addPrerequisite: any;
-  flag: string;
-  findNextID: any;
-  isDialogOpen: boolean;
-  nonPrerequisites: AchievementItem[];
-  taskID: number;
+  editableAchievement: AchievementItem;
+  setEditableAchievement: any;
+  inferencer: Inferencer;
+  uploadAchievementData: any;
 };
 
 function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) {
-  const {
-    toggleDialogFlag,
-    addPrerequisite,
-    flag,
-    findNextID,
-    nonPrerequisites,
-    isDialogOpen,
-    taskID
-  } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
+
+  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
+
+  const nonPrerequisites = inferencer.listAvailablePrerequisites(editableAchievement.id);
+
+  const addPrerequisite = (prerequisiteID: number) => {
+    const newAchievement = editableAchievement;
+    newAchievement.prerequisiteIds.push(prerequisiteID);
+    return newAchievement;
+  };
 
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
-    nonPrerequisites.length === 0 ? -1 : nonPrerequisites[0].id
+    nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
   );
 
   const addingAction = (e: any) => {
-    toggleDialogFlag(flag);
-    addPrerequisite(taskID, addedPrerequisiteID);
-    setAddedPrerequisiteID(findNextID(nonPrerequisites, addedPrerequisiteID));
+    toggleDialogOpen();
+    setEditableAchievement(addPrerequisite(addedPrerequisiteID));
+    inferencer.editAchievement(editableAchievement);
+    uploadAchievementData(inferencer.getAchievementData);
   };
 
   return (
     <>
-      <Button
-        className="editor-button"
-        onClick={() => toggleDialogFlag(flag)}
-        text={'Add A Prerequisite'}
-      />
+      <Button className="editor-button" onClick={toggleDialogOpen} text={'Add A Prerequisite'} />
       <AchievementTaskSelect
         tasks={nonPrerequisites}
+        inferencer={inferencer}
         focusTaskID={addedPrerequisiteID}
         setFocusTaskID={setAddedPrerequisiteID}
         buttonText={'Add Prerequisite'}
         dialogHeader={'Add A Prerequisite'}
         emptyTasksMessage={'You have no more prerequisites to add'}
-        setDialogOpen={() => toggleDialogFlag(flag)}
+        setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />

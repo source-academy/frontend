@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
@@ -8,7 +8,7 @@ import { achievementData } from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
-  handleAchievementsUpdate: (achievements: AchievementItem[]) => void;
+  handleAchievementsUpdate: (achievementData: AchievementItem[]) => void;
 };
 
 export type StateProps = {
@@ -16,20 +16,40 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
+  //const { handleAchievementsUpdate } = props;
+
   /* 
   useEffect(() => {
     handleAchievementsFetch();
   }, [handleAchievementsFetch]);
   */
 
+  // force re-render the achievement-control page after updating the achievement items
+  const [refresh, setRefresh] = useState<boolean>();
+  const forceRefresh = () => setRefresh(!refresh);
+
+  const uploadAchievementData = (achievementData: AchievementItem[]) => {
+    //handleAchievementsUpdate(achievementData);
+    console.log('Upload data');
+    inferencer.logInfo();
+    forceRefresh();
+  };
+
   const inferencer = new Inferencer(achievementData);
 
   return (
     <>
       <div className="AchievementControl">
-        <AchievementControlPanel />
+        <AchievementControlPanel
+          inferencer={inferencer}
+          uploadAchievementData={uploadAchievementData}
+        />
 
-        <AchievementEditor inferencer={inferencer} />
+        <AchievementEditor
+          inferencer={inferencer}
+          uploadAchievementData={uploadAchievementData}
+          forceRefresh={forceRefresh}
+        />
       </div>
     </>
   );

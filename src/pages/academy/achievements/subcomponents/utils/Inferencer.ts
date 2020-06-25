@@ -14,7 +14,7 @@ class Node {
   furthestDeadline?: Date;
   collectiveProgress: number;
   children: Set<number>; // immediate prerequisite
-  descendant: Set<number>; // all descendant prerequisites
+  descendant: Set<number>; // all descendant prerequisites including immediate prerequisites
   modal: AchievementModalItem;
 
   constructor(achievement: AchievementItem) {
@@ -61,10 +61,15 @@ class Inferencer {
   constructor(achievementData: AchievementItem[]) {
     this.achievementData = achievementData;
     this.processData();
+    console.log('Generate Inferencer');
   }
 
   public logInfo() {
     this.nodeList.forEach(node => console.log(node.id, node.achievement.title));
+  }
+
+  public getAchievementData() {
+    return this.achievementData;
   }
 
   public getAchievementItem(id: number) {
@@ -153,6 +158,12 @@ class Inferencer {
     return [...this.getDescendants(id)];
   }
 
+  public listAvailablePrerequisites(id: number) {
+    return this.listIds().filter(
+      target => target !== id && !this.isDescendant(id, target) && !this.isDescendant(target, id)
+    );
+  }
+
   public getModalItem(id: number) {
     return id < 0 ? undefined : this.nodeList[id].modal;
   }
@@ -172,10 +183,12 @@ class Inferencer {
 
   private processData() {
     this.constructNodeList();
-    this.nodeList.forEach(node => this.generateDescendant(node));
-    this.nodeList.forEach(node => this.generateFurthestDeadline(node));
-    this.nodeList.forEach(node => this.generateTotalExp(node));
-    this.nodeList.forEach(node => this.generateCollectiveProgress(node));
+    this.nodeList.forEach(node => {
+      this.generateDescendant(node);
+      this.generateFurthestDeadline(node);
+      this.generateTotalExp(node);
+      this.generateCollectiveProgress(node);
+    });
   }
 
   private constructNodeList() {
@@ -189,7 +202,7 @@ class Inferencer {
   private generateDescendant(node: Node) {
     for (const child of node.descendant) {
       if (child === node.id) {
-        console.log('Circular dependency detected for Achievement', child);
+        throw 'Circular dependency detected';
       }
       for (const grandchild of this.nodeList[child].descendant) {
         // Newly added grandchild is appended to the back of the set.
@@ -247,8 +260,7 @@ class Inferencer {
   // Set the node's collective progress by combining all descendants' progress
   private generateCollectiveProgress(node: Node) {
     if (node.children.size === 0) {
-      // If no prerequisites, just display the achievement progress
-      return;
+      return; // If no prerequisites, just display the achievement progress
     }
 
     // Otherwise, display aggregated descendants progress

@@ -1,11 +1,12 @@
 import React from 'react';
 
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
+import Inferencer from 'src/pages/academy/achievements/subcomponents/utils/Inferencer';
 
 type AchievementTaskSelectProps = {
-  tasks: AchievementItem[];
+  tasks: number[];
+  inferencer?: Inferencer;
   focusTaskID: number;
   buttonText: string;
   dialogHeader: string;
@@ -21,6 +22,7 @@ type AchievementTaskSelectProps = {
 function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   const {
     tasks,
+    inferencer,
     focusTaskID,
     buttonText,
     dialogHeader,
@@ -31,10 +33,13 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
     setFocusTaskID
   } = props;
 
-  const taskIDs = tasks.map(item => item.id);
-
   const getTaskTitle = (id: number) => {
-    return tasks.find(item => item.id === id)?.title;
+    if (inferencer === undefined) {
+      // TODO: Remove
+      return '';
+    }
+
+    return inferencer.getAchievementItem(id).title;
   };
 
   const changeFocusTaskID = (taskID: number, e: any) => {
@@ -42,9 +47,7 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   };
 
   const taskRenderer: ItemRenderer<number> = (id, { handleClick }) => {
-    return (
-      <MenuItem active={false} key={id} onClick={handleClick} text={`${id} ${getTaskTitle(id)}`} />
-    );
+    return <MenuItem active={false} key={id} onClick={handleClick} text={getTaskTitle(id)} />;
   };
 
   const TaskSelectComponent = Select.ofType<number>();
@@ -52,10 +55,7 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   const taskSelector = (currentPrerequisiteID: number) => {
     return (
       <div>
-        <Button
-          className={Classes.MINIMAL}
-          text={`${currentPrerequisiteID} ${getTaskTitle(currentPrerequisiteID)}`}
-        />
+        <Button className={Classes.MINIMAL} text={getTaskTitle(currentPrerequisiteID)} />
       </div>
     );
   };
@@ -78,7 +78,7 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
               <div className="task-selector">
                 <div>
                   <TaskSelectComponent
-                    items={taskIDs}
+                    items={tasks}
                     onItemSelect={changeFocusTaskID}
                     itemRenderer={taskRenderer}
                     filterable={false}

@@ -9,7 +9,7 @@ export const achievementTemplate: AchievementItem = {
   title: '',
   ability: AchievementAbility.ACADEMIC,
   exp: 0,
-  isTask: true,
+  isTask: false,
   prerequisiteIds: [],
   completionGoal: 0,
   completionProgress: 0,
