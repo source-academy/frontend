@@ -18,6 +18,7 @@ import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import AchievementContainer from 'src/pages/academy/achievements/AchievementContainer';
+import AchievementControlContainer from 'src/pages/academy/achievementControl/AchievementControlContainer';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -80,6 +81,7 @@ class Application extends React.Component<ApplicationProps, {}> {
               <Route path="/contributors" component={Contributors} />
               <Route path="/sourcecast" component={SourcecastContainer} />
               <Route path="/achievements" component={AchievementContainer} />
+              <Route path="/achievement-control" component={AchievementControlContainer} />
               <Route exact={true} path="/" render={this.redirectToAcademy} />
               <Route component={NotFound} />
             </Switch>

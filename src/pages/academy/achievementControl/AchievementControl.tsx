@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
+import { achievementData } from 'src/commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
@@ -15,13 +16,13 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  const { handleAchievementsFetch, achievementItems } = props;
-
+  /* 
   useEffect(() => {
     handleAchievementsFetch();
   }, [handleAchievementsFetch]);
+  */
 
-  const inferencer = new Inferencer(achievementItems);
+  const inferencer = new Inferencer(achievementData);
 
   return (
     <>
