@@ -76,7 +76,8 @@ export default class CharacterManager {
       assetKey
     ).setOrigin(0.5, 1);
 
-    return resize(characterSprite, charWidth);
+    resize(characterSprite, charWidth);
+    return characterSprite;
   }
 
   public showCharacterOnMap(characterId: ItemId) {

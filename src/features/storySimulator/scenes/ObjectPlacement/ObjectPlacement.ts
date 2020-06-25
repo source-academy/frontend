@@ -16,19 +16,20 @@ import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 import SSCursorMode from '../../cursorMode/SSCursorMode';
 import { cursorModeXPos, cursorModeYPos } from './ObjectPlacementConstants';
 import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
-import { ShortPath } from '../../objects/SSObjectManagerTypes';
 import SSBackgroundManager from '../../background/SSBackgroundManager';
 import SSLogManager from '../../logger/SSLogManager';
+import SSTransformManager from '../../transform/SSTransformManager';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
+  private transformManager: SSTransformManager;
   private cursorModes: SSCursorMode | undefined;
-  private objectManager: SSObjectManager;
   private bboxManager: SSBBoxManager;
+  private objectManager: SSObjectManager;
   private backgroundManager: SSBackgroundManager;
   private logManager: SSLogManager;
 
-  private assetMap: Map<AssetKey, ShortPath>;
+  private assetMap: Map<AssetKey, AssetPath>;
   private itemIdNumber: number;
 
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
@@ -43,6 +44,22 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.bboxManager = new SSBBoxManager();
     this.backgroundManager = new SSBackgroundManager();
     this.logManager = new SSLogManager();
+    this.transformManager = new SSTransformManager();
+
+    this.cursorModes = undefined;
+    this.keyboardListeners = [];
+    this.eventListeners = [];
+    this.itemIdNumber = 0;
+    this.assetMap = new Map<AssetKey, AssetPath>();
+  }
+
+  public init() {
+    this.layerManager = new GameLayerManager();
+    this.objectManager = new SSObjectManager();
+    this.bboxManager = new SSBBoxManager();
+    this.backgroundManager = new SSBackgroundManager();
+    this.logManager = new SSLogManager();
+    this.transformManager = new SSTransformManager();
 
     this.cursorModes = undefined;
     this.keyboardListeners = [];
@@ -70,19 +87,22 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.backgroundManager.initialise(this);
     this.objectManager.initialise(this);
     this.bboxManager.initialise(this);
+    this.transformManager.initialise(this);
+    this.logManager.initialise(this);
+
     this.openBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.OPEN_BRACKET);
     this.closedBracket = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.CLOSED_BRACKET);
   }
 
   public update() {
     if (this.openBracket && this.openBracket.isDown) {
-      this.objectManager.resizeActive(false);
+      this.transformManager.resizeActive(false);
     }
     if (this.closedBracket && this.closedBracket.isDown) {
-      this.objectManager.resizeActive(true);
+      this.transformManager.resizeActive(true);
     }
 
-    this.bboxManager.resize(this);
+    this.bboxManager.resizeWhileBeingDrawn(this);
   }
 
   private createUIButtons() {
@@ -157,12 +177,16 @@ export default class ObjectPlacement extends Phaser.Scene {
         'Print coordinates',
         () =>
           this.logManager.printDetailMap([
-            this.objectManager,
             this.backgroundManager,
+            this.objectManager,
             this.bboxManager
           ]),
-        () => this.objectManager.showObjectDetailMap(),
-        () => this.objectManager.hideMap()
+        () =>
+          this.logManager.showDetailMap([
+            ...this.objectManager.getLoggables(),
+            ...this.bboxManager.getLoggables()
+          ]),
+        () => this.logManager.hideDetailMap()
       );
 
       this.cursorModes.renderCursorModesContainer();
@@ -200,5 +224,33 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   public generateItemIdNumber() {
     return this.itemIdNumber++;
+  }
+
+  public setActiveSelection(gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle) {
+    this.transformManager.setActiveSelection(gameObject);
+  }
+
+  public setObjAttribute(
+    objectSprite: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
+    attribute: string,
+    value: number
+  ) {
+    this.objectManager.setAttribute(objectSprite, attribute, value);
+  }
+
+  public deleteObj(objectSprite: Phaser.GameObjects.Rectangle) {
+    this.objectManager.delete(objectSprite);
+  }
+
+  public setBBoxAttribute(
+    bboxSprite: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
+    attribute: string,
+    value: number
+  ) {
+    this.bboxManager.setAttribute(bboxSprite, attribute, value);
+  }
+
+  public deleteBBox(bboxSprite: Phaser.GameObjects.Rectangle) {
+    this.bboxManager.delete(bboxSprite);
   }
 }

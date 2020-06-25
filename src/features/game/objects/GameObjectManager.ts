@@ -141,8 +141,8 @@ class GameObjectManager implements StateObserver {
     if (objectProperty.isInteractive) {
       objectSprite.setInteractive({ pixelPerfect: true });
     }
-    const resizedObjectSprite = width ? resize(objectSprite, width, height) : objectSprite;
-    return resizedObjectSprite;
+    width && resize(objectSprite, width, height);
+    return objectSprite;
   }
 }
 

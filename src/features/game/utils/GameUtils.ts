@@ -3,7 +3,7 @@ export function sleep(ms: number) {
 }
 
 export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R) {
-  const newMap = new Map<K, any>();
+  const newMap = new Map<K, R>();
   map.forEach((value: V, key: K) => {
     const result: R = fn(value, key);
     newMap.set(key, result);

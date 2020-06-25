@@ -1,7 +1,7 @@
 import { ItemId } from 'src/features/game/commons/CommonsTypes';
-export type ShortPath = string;
+import { IScreenLoggable } from '../logger/SSLogManagerTypes';
 
-export type SSObjectDetail = {
+export type SSBBoxDetail = IScreenLoggable & {
   id: ItemId;
   x: number;
   y: number;
