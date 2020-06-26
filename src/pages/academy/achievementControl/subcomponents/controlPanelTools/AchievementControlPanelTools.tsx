@@ -13,10 +13,17 @@ type AchievementControlPanelToolsProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
+  const {
+    editableAchievement,
+    setEditableAchievement,
+    inferencer,
+    uploadAchievementData,
+    editAchievement
+  } = props;
 
   return (
     <>
@@ -25,6 +32,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
+        editAchievement={editAchievement}
       />
 
       <AchievementControlPanelPrerequisiteDeleter
@@ -32,6 +40,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
+        editAchievement={editAchievement}
       />
 
       <AchievementControlPanelTaskDeleter
@@ -39,6 +48,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
+        editAchievement={editAchievement}
       />
     </>
   );

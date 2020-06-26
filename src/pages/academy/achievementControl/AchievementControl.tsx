@@ -57,6 +57,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
         <AchievementControlPanel
           inferencer={_inferencer}
           uploadAchievementData={uploadAchievementData}
+          editAchievement={editAchievement}
         />
 
         <AchievementEditor

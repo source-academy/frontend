@@ -11,10 +11,11 @@ type EditableAchievementTaskProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { inferencer, achievement, uploadAchievementData } = props;
+  const { inferencer, achievement, uploadAchievementData, editAchievement } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
@@ -37,6 +38,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
           setEditableAchievement={setEditableAchievement}
           inferencer={inferencer}
           uploadAchievementData={uploadAchievementData}
+          editAchievement={editAchievement}
         />
       </div>
     </div>

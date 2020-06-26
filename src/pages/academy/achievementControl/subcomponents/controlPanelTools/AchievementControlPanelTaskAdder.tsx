@@ -6,6 +6,7 @@ import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 export type AchievementControlPanelTaskAdderProps = {
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdderProps) {
@@ -24,6 +25,8 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
     const achievement = inferencer.getAchievementItem(addedTaskID);
     achievement.isTask = true;
     inferencer.editAchievement(achievement);
+    // TODO: add this
+    // editAchievement(achievement);
     uploadAchievementData(inferencer.getAchievementData());
   };
 

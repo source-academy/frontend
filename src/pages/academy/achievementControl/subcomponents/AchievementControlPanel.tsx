@@ -6,10 +6,11 @@ import AchievementControlPanelTaskAdder from './controlPanelTools/AchievementCon
 type AchievementControlPanelProps = {
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { inferencer, uploadAchievementData } = props;
+  const { inferencer, uploadAchievementData, editAchievement } = props;
 
   const mapAchievementIdsToEditableTask = (achievementIds: number[]) =>
     achievementIds.map(id => (
@@ -18,6 +19,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
+        editAchievement={editAchievement}
       />
     ));
 
@@ -29,6 +31,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
         <AchievementControlPanelTaskAdder
           inferencer={inferencer}
           uploadAchievementData={uploadAchievementData}
+          editAchievement={editAchievement}
         />
       </div>
     </div>

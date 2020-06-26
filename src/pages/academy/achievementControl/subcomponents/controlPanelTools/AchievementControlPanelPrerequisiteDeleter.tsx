@@ -10,6 +10,7 @@ type AchievementControlPanelPrerequisiteDeleterProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanelPrerequisiteDeleter(
@@ -42,6 +43,8 @@ function AchievementControlPanelPrerequisiteDeleter(
     toggleDialogOpen();
     setEditableAchievement(deletePrerequisite(deletedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+    // TODO: add this
+    // editAchievement(editableAchievement);
     uploadAchievementData(inferencer.getAchievementData);
   };
 

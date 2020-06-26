@@ -8,6 +8,7 @@ type AchievementControlPanelTaskDeleterProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanelTaskDeleter(props: AchievementControlPanelTaskDeleterProps) {
@@ -23,6 +24,8 @@ function AchievementControlPanelTaskDeleter(props: AchievementControlPanelTaskDe
   const deleteAction = (e: any) => {
     setEditableAchievement(setNonTask());
     inferencer.editAchievement(editableAchievement);
+    // TODO: add this
+    // editAchievement(editableAchievement);
     uploadAchievementData(inferencer.getAchievementData);
   };
 

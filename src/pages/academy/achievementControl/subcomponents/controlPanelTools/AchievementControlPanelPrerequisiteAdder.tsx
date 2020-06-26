@@ -10,6 +10,7 @@ type AchievementControlPanelPrerequisiteAdderProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
 function AchievementControlPanelPrerequisiteAdder(
@@ -36,6 +37,8 @@ function AchievementControlPanelPrerequisiteAdder(
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+    // TODO: add this
+    // editAchievement(editableAchievement);
     uploadAchievementData(inferencer.getAchievementData);
   };
 
