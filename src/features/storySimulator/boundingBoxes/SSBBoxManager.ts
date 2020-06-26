@@ -145,6 +145,10 @@ export default class SSBBoxManager implements ICheckpointLogger {
     bboxDetail[attribute] = value;
   }
 
+  public deleteAll() {
+    this.bboxDetailMap.clear();
+  }
+
   public delete(gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle) {
     const itemId = gameObject.data.get('itemId');
     this.bboxDetailMap.delete(itemId);

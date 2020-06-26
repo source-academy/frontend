@@ -192,6 +192,8 @@ export default class ObjectPlacement extends Phaser.Scene {
       // Erase Layers
       this.cursorModes.addCursorMode(this, eraseIcon.key, false, 'Erase all', () => {
         this.layerManager.clearSeveralLayers([Layer.Background, Layer.BBox, Layer.Objects]);
+        this.objectManager.deleteAll();
+        this.bboxManager.deleteAll();
         this.transformManager.deselect();
         this.renderBackground();
       });

@@ -127,6 +127,10 @@ export default class SSObjectManager implements ICheckpointLogger {
     itemDetail[attribute] = value;
   }
 
+  public deleteAll() {
+    this.objectDetailMap.clear();
+  }
+
   public delete(gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle) {
     const itemId = gameObject.data.get('itemId');
     this.objectDetailMap.delete(itemId);

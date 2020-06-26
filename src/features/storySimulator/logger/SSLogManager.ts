@@ -1,8 +1,8 @@
 import { ICheckpointLogger, IScreenLoggable, loggableStyle } from './SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { shortButton } from '../utils/StorySimulatorAssets';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { toIntString } from '../utils/SSUtils';
+import { hex, Color } from 'src/features/game/utils/StyleUtils';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -26,12 +26,12 @@ export default class SSLogManager {
   public showDetailMap(loggables: IScreenLoggable[]) {
     this.detailMapContainer = new Phaser.GameObjects.Container(this.getObjectPlacement(), 0, 0);
     loggables.forEach((loggable: IScreenLoggable) => {
-      const rect = new Phaser.GameObjects.Image(
+      const rect = new Phaser.GameObjects.Rectangle(
         this.getObjectPlacement(),
         loggable.x,
         loggable.y,
-        shortButton.key
-      );
+        hex(Color.darkBlue)
+      ).setAlpha(0.8);
       multiplyDimensions(rect, 1.2);
       const mapShowText = new Phaser.GameObjects.Text(
         this.getObjectPlacement(),
