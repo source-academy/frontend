@@ -180,6 +180,15 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 ) {
   const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
 
+  // Refs for things that technically shouldn't change... but just in case.
+  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
+  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+
+  React.useEffect(() => {
+    handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
+    handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
+  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete])
+
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || 1,
     props.sourceVariant || 'default',
@@ -196,12 +205,14 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     }
     const editor = reactAceRef.current.editor;
     const session = editor.getSession();
+    // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
+    // The () => ref.current() are designed to use the latest instance only.
 
     // NOTE: the two `any`s below are because the Ace editor typedefs are
     // hopelessly incomplete
     editor.on(
       'gutterclick' as any,
-      makeHandleGutterClick(props.handleEditorUpdateBreakpoints) as any
+      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
     );
 
     // Change all info annotations to error annotations
@@ -209,9 +220,10 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 
     // Start autocompletion
     acequire('ace/ext/language_tools').setCompleters([
-      makeCompleter(props.handlePromptAutocomplete)
+      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
-  }, [reactAceRef, props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
+    // This should run exactly once.
+  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef]);
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {
