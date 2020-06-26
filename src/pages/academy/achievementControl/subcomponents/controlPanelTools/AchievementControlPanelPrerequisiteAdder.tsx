@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
@@ -30,8 +30,12 @@ function AchievementControlPanelPrerequisiteAdder(
   };
 
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
-    nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
+    inferencer.getNextID(nonPrerequisites)
   );
+
+  useEffect(() => {
+    setAddedPrerequisiteID(inferencer.getNextID(nonPrerequisites));
+  }, [inferencer, nonPrerequisites]);
 
   const addingAction = (e: any) => {
     toggleDialogOpen();

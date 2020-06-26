@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
@@ -36,8 +36,12 @@ function AchievementControlPanelPrerequisiteDeleter(
   };
 
   const [deletedPrerequisiteID, setDeletedPrerequisiteID] = useState<number>(
-    prerequisites.length === 0 ? 0 : prerequisites[0]
+    inferencer.getNextID(prerequisites)
   );
+
+  useEffect(() => {
+    setDeletedPrerequisiteID(inferencer.getNextID(prerequisites));
+  }, [inferencer, prerequisites]);
 
   const deleteAction = (e: any) => {
     toggleDialogOpen();

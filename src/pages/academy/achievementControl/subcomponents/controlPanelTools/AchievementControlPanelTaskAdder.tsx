@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 import AchievementTaskSelect from './AchievementTaskSelect';
 import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
@@ -20,6 +20,10 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   const [addedTaskID, setAddedTaskID] = useState<number>(
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
+
+  useEffect(() => {
+    setAddedTaskID(inferencer.getNextID(nonTaskIDs));
+  }, [inferencer, nonTaskIDs]);
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);

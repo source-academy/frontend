@@ -34,6 +34,10 @@ function AchievementTaskSelect(props: AchievementTaskSelectProps) {
   } = props;
 
   const getTaskTitle = (id: number) => {
+    if (!inferencer.doesAchievementExist(id)) {
+      return '';
+    }
+
     return inferencer.getAchievementItem(id).title;
   };
 

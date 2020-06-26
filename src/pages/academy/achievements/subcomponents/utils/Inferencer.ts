@@ -62,6 +62,24 @@ class Inferencer {
     this.processData();
   }
 
+  public doesAchievementExist(id: number) {
+    return this.nodeList.get(id) !== undefined;
+  }
+
+  public getNextID(tasks: number[]) {
+    if (tasks.length === 0) {
+      return 0;
+    } else {
+      for (let i = 0; i < tasks.length; i++) {
+        if (this.doesAchievementExist(tasks[i])) {
+          return tasks[i];
+        }
+      }
+
+      return 0;
+    }
+  }
+
   public getAchievementData() {
     return this.achievementData;
   }
