@@ -76,9 +76,9 @@ class GameLayerManager {
     if (!layerContainer) {
       return;
     }
-    layerContainer.list.forEach((gameObject: Phaser.GameObjects.GameObject) =>
-      gameObject.destroy()
-    );
+    while (layerContainer.list.length) {
+      layerContainer.list[0].destroy();
+    }
   }
 }
 
