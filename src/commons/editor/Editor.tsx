@@ -187,7 +187,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   React.useEffect(() => {
     handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
-  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete])
+  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || 1,
