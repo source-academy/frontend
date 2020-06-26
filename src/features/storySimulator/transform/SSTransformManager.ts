@@ -100,6 +100,7 @@ export default class SSTransformManager {
     if (!this.activeSelectRect) {
       return;
     }
+    this.activeSelectRect!.setAlpha(0.3);
     this.activeSelection = gameObject;
     this.activeSelectRect.x = gameObject.x;
     this.activeSelectRect.y = gameObject.y;
@@ -108,7 +109,7 @@ export default class SSTransformManager {
     this.activeSelectRect.displayWidth = gameObject.displayWidth + activeSelectMargin;
   }
 
-  private deselect() {
+  public deselect() {
     this.activeSelectRect!.setAlpha(0);
     this.activeSelection = undefined;
   }

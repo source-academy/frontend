@@ -7,7 +7,8 @@ import storySimulatorAssets, {
   imageIcon,
   bboxIcon,
   handIcon,
-  listIcon
+  listIcon,
+  eraseIcon
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { ImageAsset, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
@@ -134,7 +135,6 @@ export default class ObjectPlacement extends Phaser.Scene {
       studentRoomImg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
-    this.add.existing(backgroundImg);
 
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
   }
@@ -188,6 +188,13 @@ export default class ObjectPlacement extends Phaser.Scene {
           ]),
         () => this.logManager.hideDetailMap()
       );
+
+      // Erase Layers
+      this.cursorModes.addCursorMode(this, eraseIcon.key, false, 'Erase all', () => {
+        this.layerManager.clearSeveralLayers([Layer.Background, Layer.BBox, Layer.Objects]);
+        this.transformManager.deselect();
+        this.renderBackground();
+      });
 
       this.cursorModes.renderCursorModesContainer();
     }

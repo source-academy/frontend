@@ -56,6 +56,10 @@ export const listIcon: ImageAsset = {
   path: '../assets/listIcon.png'
 };
 
+export const eraseIcon: ImageAsset = {
+  key: 'erase-icon',
+  path: '../assets/eraserIcon.png'
+};
 export const iconBg: ImageAsset = {
   key: 'icon-bg',
   path: '../assets/modeIconBg.png'
@@ -78,6 +82,7 @@ const storySimulatorAssets = [
   bboxIcon,
   handIcon,
   listIcon,
+  eraseIcon,
   iconBg,
   longButton
 ];
