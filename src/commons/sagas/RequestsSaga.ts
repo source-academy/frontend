@@ -24,7 +24,6 @@ import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import {
   AchievementItem,
-  AchievementModalItem,
   AchievementAbility
 } from '../achievements/AchievementTypes';
 
@@ -152,12 +151,13 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   return achievements.map((achievement: any) => {
     achievement.id = achievement.inferencer_id;
     achievement.ability = achievement.ability as AchievementAbility;
-    achievement.modal = {
-      modalImageUrl: achievement.modalImageUrl ? achievement.modalImageUrl : '',
-      description: achievement.description ? achievement.description : '',
-      goalText: achievement.goalText ? achievement.goalText : '',
-      completionText: achievement.completionText ? achievement.completionText : ''
-    } as AchievementModalItem;
+    
+    achievement.modal = {};
+    achievement.modal.modalImageUrl = achievement.modalImageUrl ? achievement.modalImageUrl : '';
+    achievement.modal.description = achievement.description ? achievement.description : '';
+    achievement.modal.goalText = achievement.goalText ? achievement.goalText : '';
+    achievement.modal.completionText = achievement.completionText ? achievement.completionText : '';
+
     if (achievement.prerequisiteIds === null) {
       achievement.prerequisiteIds = [];
     }
