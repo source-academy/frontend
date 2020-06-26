@@ -9,10 +9,11 @@ import { modalTemplate } from '../AchievementTemplate';
 type EditableAchievementModalProps = {
   title: string;
   modal: AchievementModalItem;
+  handleChangeModal: any;
 };
 
 function EditableAchievementModal(props: EditableAchievementModalProps) {
-  const { title, modal } = props;
+  const { title, modal, handleChangeModal } = props;
 
   const renderModal = modal === undefined ? modalTemplate : modal;
 
@@ -27,6 +28,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
       ...modalData,
       description: description
     });
+    handleChangeModal(modalData);
   };
 
   const setGoalText = (goalText: string) => {
@@ -34,6 +36,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
       ...modalData,
       goalText: goalText
     });
+    handleChangeModal(modalData);
   };
 
   const setModalImageUrl = (modalImageUrl: string) => {
@@ -41,6 +44,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
       ...modalData,
       modalImageUrl: modalImageUrl
     });
+    handleChangeModal(modalData);
   };
 
   return (

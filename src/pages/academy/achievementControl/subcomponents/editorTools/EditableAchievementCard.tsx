@@ -5,7 +5,8 @@ import { IconName } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
-  AchievementAbility
+  AchievementAbility,
+  AchievementModalItem
 } from '../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
@@ -130,10 +131,22 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(true);
   };
 
+  const handleChangeModal = (modal: AchievementModalItem) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      modal: modal
+    });
+    setHasChanges(true);
+  };
+
   return (
     <Card className="editable-achievement">
       <div className="top-bar">
-        <EditableAchievementModal title={title} modal={achievement.modal} />
+        <EditableAchievementModal
+          title={title}
+          modal={achievement.modal}
+          handleChangeModal={handleChangeModal}
+        />
         <SaveAchievementButton
           hasChanges={hasChanges}
           saveChanges={handleSaveChanges}
