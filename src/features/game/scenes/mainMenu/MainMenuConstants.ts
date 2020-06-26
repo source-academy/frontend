@@ -14,7 +14,7 @@ export const optionsText = {
   settings: settingsText
 };
 
-export const mainMenuYSpace = screenSize.y * 0.7;
+export const mainMenuYSpace = screenSize.y * 0.5;
 export const textXOffset = 80;
 
 export const bannerHide = 300;

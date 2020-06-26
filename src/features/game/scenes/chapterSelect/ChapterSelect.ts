@@ -48,6 +48,7 @@ class ChapterSelect extends Phaser.Scene {
     this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderChapters();
+    this.autoScroll();
   }
 
   public update() {
@@ -121,6 +122,45 @@ class ChapterSelect extends Phaser.Scene {
       })
     );
     return chapterContainer;
+  }
+
+  private async autoScroll() {
+    let chapterIdx = 0;
+    if (this.loadedGameState) {
+      const chapterNum = this.loadedGameState.userState.lastPlayedCheckpoint[0];
+
+      // Check that chapter is finished or not
+      // TODO: Fix
+      const isFinished = false;
+      chapterIdx = isFinished ? this.getUnplayedChapter() : chapterNum;
+    }
+    await this.scrollToIndex(chapterIdx);
+  }
+
+  private scrollToIndex(id: number) {
+    if (!this.chapterContainer) return;
+    const xTarget = id * imageDist;
+
+    this.tweens.add({
+      targets: this.chapterContainer,
+      x: xTarget,
+      ease: 'Power2',
+      duration: 800
+    });
+  }
+
+  private getLoadedGameState() {
+    if (!this.loadedGameState) {
+      throw new Error('Cannot load game');
+    }
+    return this.loadedGameState;
+  }
+
+  private getUnplayedChapter() {
+    return Math.max(
+      Object.keys(this.getLoadedGameState().gameSaveStates).length - 1,
+      SampleChapters.length - 1
+    );
   }
 }
 

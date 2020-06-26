@@ -18,17 +18,12 @@ import commonSoundAssets, {
   galacticHarmonyBgMusic
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import { loadData } from '../../save/GameSaveRequests';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { FullSaveState } from '../../save/GameSaveTypes';
-import { SampleChapters } from '../chapterSelect/SampleChapters';
-import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;
   private optionButtons: GameButton[];
-  private loadedGameState: FullSaveState | undefined;
 
   constructor() {
     super('MainMenu');
@@ -52,7 +47,6 @@ class MainMenu extends Phaser.Scene {
       console.log('Staff do not have accounts');
       return;
     }
-    this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderOptionButtons();
 
@@ -120,12 +114,6 @@ class MainMenu extends Phaser.Scene {
 
   private createOptionButtons() {
     this.optionButtons = [];
-    this.addOptionButton(optionsText.play, () => this.newGame(), Constants.nullInteractionId);
-    this.addOptionButton(
-      optionsText.continue,
-      () => this.continueGame(),
-      Constants.nullInteractionId
-    );
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
@@ -177,36 +165,6 @@ class MainMenu extends Phaser.Scene {
 
     // Update
     this.optionButtons.push(newTalkButton);
-  }
-
-  private newGame() {
-    const chapterNum = this.getUnplayedChapter();
-    const fileName = SampleChapters[chapterNum].checkpointsFilenames[0];
-    callGameManagerOnTxtLoad(this, fileName, true, chapterNum, 0);
-  }
-
-  private getUnplayedChapter() {
-    return Math.max(
-      Object.keys(this.getLoadedGameState().gameSaveStates).length - 1,
-      SampleChapters.length - 1
-    );
-  }
-
-  private continueGame() {
-    const [chapterNum, checkpointNum] = this.getLastPlayedCheckpoint();
-    const fileName = SampleChapters[chapterNum].checkpointsFilenames[checkpointNum];
-    callGameManagerOnTxtLoad(this, fileName, true, chapterNum, checkpointNum);
-  }
-
-  private getLastPlayedCheckpoint() {
-    return this.getLoadedGameState().userState.lastPlayedCheckpoint;
-  }
-
-  private getLoadedGameState() {
-    if (!this.loadedGameState) {
-      throw new Error('Cannot load game');
-    }
-    return this.loadedGameState;
   }
 }
 
