@@ -22,10 +22,7 @@ import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import {
-  AchievementItem,
-  AchievementAbility
-} from '../achievements/AchievementTypes';
+import { AchievementItem, AchievementAbility } from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token
@@ -151,7 +148,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
   return achievements.map((achievement: any) => {
     achievement.id = achievement.inferencer_id;
     achievement.ability = achievement.ability as AchievementAbility;
-    
+
     achievement.modal = {};
     achievement.modal.modalImageUrl = achievement.modalImageUrl ? achievement.modalImageUrl : '';
     achievement.modal.description = achievement.description ? achievement.description : '';
