@@ -8,6 +8,7 @@ import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import * as AcademyActions from '../../features/academy/AcademyActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
+import * as PersistenceActions from '../../features/persistence/PersistenceActions';
 import * as PlaygroundActions from '../../features/playground/PlaygroundActions';
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
@@ -25,7 +26,8 @@ export const actions = {
   ...SourcereelActions,
   ...WorkspaceActions,
   ...GroundControlActions,
-  ...AcademyActions
+  ...AcademyActions,
+  ...PersistenceActions
 };
 
 export type SourceActionType = ActionType<typeof actions>;

@@ -16,6 +16,9 @@ const urlShortenerSignature = process.env.REACT_APP_URL_SHORTENER_SIGNATURE;
 const moduleBackendUrl = process.env.REACT_APP_MODULE_BACKEND_URL || 'modules';
 const playgroundOnly = !isTest && isTrue(process.env.REACT_APP_PLAYGROUND_ONLY);
 const sentryDsn = process.env.REACT_APP_SENTRY_DSN;
+const googleClientId = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+const googleApiKey = process.env.REACT_APP_GOOGLE_API_KEY;
+const googleAppId = process.env.REACT_APP_GOOGLE_APP_ID;
 
 const authProviders: Map<
   string,
@@ -76,7 +79,10 @@ const Constants = {
   moduleBackendUrl,
   authProviders,
   playgroundOnly,
-  sentryDsn
+  sentryDsn,
+  googleClientId,
+  googleApiKey,
+  googleAppId
 };
 
 export default Constants;
