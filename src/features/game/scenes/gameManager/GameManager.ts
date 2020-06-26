@@ -238,12 +238,13 @@ class GameManager extends Phaser.Scene {
     this.layerManager.clearAllLayers();
   }
 
-  public checkpointTransition() {
+  public async checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
       this.cleanUp();
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
         this.scene.start('StorySimulatorMenu');
       } else {
+        await this.saveManager.saveGame(true);
         this.scene.start('CheckpointTransition');
       }
     }

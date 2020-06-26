@@ -126,14 +126,11 @@ class ChapterSelect extends Phaser.Scene {
 
   private async autoScroll() {
     let chapterIdx = 0;
-    if (this.loadedGameState) {
-      const chapterNum = this.loadedGameState.userState.lastPlayedCheckpoint[0];
+    const chapterNum = this.getLoadedGameState().userState.lastPlayedCheckpoint[0];
+    const hasCompletedChapter = this.getLoadedGameState().gameSaveStates[chapterNum].isComplete;
 
-      // Check that chapter is finished or not
-      // TODO: Fix
-      const isFinished = false;
-      chapterIdx = isFinished ? this.getUnplayedChapter() : chapterNum;
-    }
+    // If last chapter is completed, scroll to next playable chapter
+    chapterIdx = hasCompletedChapter ? this.getUnplayedChapter() : chapterNum;
     await this.scrollToIndex(chapterIdx);
   }
 
@@ -158,7 +155,7 @@ class ChapterSelect extends Phaser.Scene {
 
   private getUnplayedChapter() {
     return Math.max(
-      Object.keys(this.getLoadedGameState().gameSaveStates).length - 1,
+      this.getLoadedGameState().userState.lastCompletedChapter,
       SampleChapters.length - 1
     );
   }

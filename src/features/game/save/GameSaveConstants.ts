@@ -6,6 +6,7 @@ export const emptySaveState: FullSaveState = {
     collectibles: [],
     achievements: [],
     settings: { volume: 1 },
-    lastPlayedCheckpoint: [-1, -1]
+    lastPlayedCheckpoint: [-1, -1],
+    lastCompletedChapter: -1
   }
 };

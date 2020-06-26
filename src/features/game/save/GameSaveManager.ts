@@ -62,9 +62,14 @@ export default class GameSaveManager {
     this.version = SaveManagerType.Simulator;
   }
 
-  public async saveGame() {
+  public async saveGame(completedChapter?: boolean) {
     if (this.version === SaveManagerType.Game) {
-      this.fullSaveState = gameStateToJson(this.fullSaveState, this.chapterNum, this.checkpointNum);
+      this.fullSaveState = gameStateToJson(
+        this.fullSaveState,
+        this.chapterNum,
+        this.checkpointNum,
+        completedChapter
+      );
       await saveData(this.getAccountInfo(), this.fullSaveState);
     } else if (this.version === SaveManagerType.Simulator) {
       return;
