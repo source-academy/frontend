@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState /* useEffect */ } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
@@ -12,6 +12,9 @@ import {
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
   handleAchievementsUpdate: (achievementData: AchievementItem[]) => void;
+  addAchievement: (achievement: AchievementItem) => void;
+  editAchievement: (achievement: AchievementItem) => void;
+  deleteAchievement: (achievement: AchievementItem) => void;
 };
 
 export type StateProps = {
@@ -19,7 +22,19 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  const { inferencer } = props;
+  const {
+    inferencer,
+    // handleAchievementsFetch,
+    addAchievement,
+    editAchievement,
+    deleteAchievement
+  } = props;
+
+  /* TODO: Implement 
+  useEffect(() => {
+    handleAchievementsFetch();
+  }, [ handleAchievementsFetch ]);
+  */
 
   let _inferencer: Inferencer = inferencer;
 
@@ -48,6 +63,9 @@ function AchievementControl(props: DispatchProps & StateProps) {
           inferencer={_inferencer}
           uploadAchievementData={uploadAchievementData}
           forceRefresh={forceRefresh}
+          addAchievement={addAchievement}
+          editAchievement={editAchievement}
+          deleteAchievement={deleteAchievement}
         />
       </div>
     </>

@@ -6,6 +6,7 @@ import { achievementTemplate } from '../AchievementTemplate';
 type AddAchievementButtonProps = {
   inferencer: Inferencer;
   forceRefresh: any;
+  addAchievement: any;
 };
 
 function AddAchievementButton(props: AddAchievementButtonProps) {
@@ -13,6 +14,8 @@ function AddAchievementButton(props: AddAchievementButtonProps) {
 
   const handleAddAchievement = () => {
     inferencer.addAchievement(achievementTemplate);
+    // TODO: Add this before production
+    // addAchievement(achievementTemplate);
     forceRefresh();
   };
 

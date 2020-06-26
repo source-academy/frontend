@@ -5,7 +5,10 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 import {
   getAchievements,
-  updateAchievements
+  updateAchievements,
+  addAchievement,
+  editAchievement,
+  deleteAchievement
 } from '../../../commons/achievements/AchievementActions';
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { defaultAchievementData } from 'src/commons/mocks/AchievementMocks';
@@ -19,7 +22,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAchievementsFetch: getAchievements,
-      handleAchievementsUpdate: updateAchievements
+      handleAchievementsUpdate: updateAchievements,
+      addAchievement: addAchievement,
+      editAchievement: editAchievement,
+      deleteAchievement: deleteAchievement
     },
     dispatch
   );

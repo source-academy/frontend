@@ -22,6 +22,8 @@ type EditableAchievementCardProps = {
   inferencer: Inferencer;
   uploadAchievementData: any;
   forceRefresh: any;
+  editAchievement: any;
+  deleteAchievement: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
@@ -40,12 +42,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     forceRefresh();
   };
 
-  const handleDiscardChanges = () => {
-    setEditableAchievement(achievement);
-    setHasChanges(false);
-    setPendingUpload(false);
-  };
-
   const handleUploadChanges = () => {
     uploadAchievementData(inferencer.getAchievementData());
     setPendingUpload(false);
@@ -55,6 +51,38 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     inferencer.removeAchievement(id);
     uploadAchievementData(inferencer.getAchievementData());
   };
+
+  const handleDiscardChanges = () => {
+    setEditableAchievement(achievement);
+    setHasChanges(false);
+    setPendingUpload(false);
+  };
+
+  ///////////////////////// TODO: IMPLEMENT THIS //////////////////////////////
+
+  /*
+  const handleDeleteAchievement = () => {
+    const achievement = inferencer.getAchievementItem(id);
+    inferencer.removeAchievement(id);
+    deleteAchievement(achievement);
+    forceRefresh();
+  }
+
+  const handleSaveChanges = () => {
+    inferencer.editAchievement(editableAchievement);
+    setHasChanges(false);
+    setPendingUpload(true);
+    forceRefresh();
+  }
+
+  const handleUploadChanges = () => {
+    editAchievement(editableAchievement);
+    setPendingUpload(false);
+    forceRefresh();
+  }
+  */
+
+  ///////////////////////// TODO: IMPLEMENT THIS //////////////////////////////
 
   /* Handlers to Change State of Achievement information */
   const handleChangeTitle = (title: string) => {
