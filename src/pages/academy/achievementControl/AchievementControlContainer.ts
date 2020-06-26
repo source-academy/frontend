@@ -7,8 +7,7 @@ import {
   getAchievements,
   updateAchievements,
   addAchievement,
-  editAchievement,
-  deleteAchievement
+  editAchievement
 } from '../../../commons/achievements/AchievementActions';
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { defaultAchievementData } from 'src/commons/mocks/AchievementMocks';
@@ -24,8 +23,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleAchievementsFetch: getAchievements,
       handleAchievementsUpdate: updateAchievements,
       addAchievement: addAchievement,
-      editAchievement: editAchievement,
-      deleteAchievement: deleteAchievement
+      editAchievement: editAchievement
     },
     dispatch
   );

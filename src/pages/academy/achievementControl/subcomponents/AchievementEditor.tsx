@@ -10,7 +10,7 @@ type AchievementEditorProps = {
   forceRefresh: any;
   addAchievement: any;
   editAchievement: any;
-  deleteAchievement: any;
+  handleAchievementsUpdate: any;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
@@ -20,7 +20,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     forceRefresh,
     addAchievement,
     editAchievement,
-    deleteAchievement
+    handleAchievementsUpdate
   } = props;
 
   const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>
@@ -31,7 +31,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         inferencer={inferencer}
         uploadAchievementData={uploadAchievementData}
         editAchievement={editAchievement}
-        deleteAchievement={deleteAchievement}
+        handleAchievementsUpdate={handleAchievementsUpdate}
         forceRefresh={forceRefresh}
       />
     ));

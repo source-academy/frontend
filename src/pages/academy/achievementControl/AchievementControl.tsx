@@ -14,7 +14,6 @@ export type DispatchProps = {
   handleAchievementsUpdate: (achievementData: AchievementItem[]) => void;
   addAchievement: (achievement: AchievementItem) => void;
   editAchievement: (achievement: AchievementItem) => void;
-  deleteAchievement: (achievement: AchievementItem) => void;
 };
 
 export type StateProps = {
@@ -27,7 +26,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
     // handleAchievementsFetch,
     addAchievement,
     editAchievement,
-    deleteAchievement
+    handleAchievementsUpdate
   } = props;
 
   /* TODO: Implement 
@@ -66,7 +65,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           forceRefresh={forceRefresh}
           addAchievement={addAchievement}
           editAchievement={editAchievement}
-          deleteAchievement={deleteAchievement}
+          handleAchievementsUpdate={handleAchievementsUpdate}
         />
       </div>
     </>

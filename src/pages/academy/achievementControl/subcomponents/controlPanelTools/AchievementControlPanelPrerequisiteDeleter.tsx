@@ -72,28 +72,3 @@ function AchievementControlPanelPrerequisiteDeleter(
 }
 
 export default AchievementControlPanelPrerequisiteDeleter;
-
-/*
-
-  return (
-    <>
-      <Button
-        className="editor-button"
-        onClick={() => toggleDialogFlag(flag)}
-        text={'Delete A Prerequisite'}
-      />
-      <AchievementTaskSelect
-        tasks={prerequisites}
-        focusTaskID={deletedPrerequisiteID}
-        setFocusTaskID={setDeletedPrerequisiteID}
-        buttonText={'Delete Prerequisite'}
-        dialogHeader={'Delete A Prerequisite'}
-        emptyTasksMessage={'You have no more prerequisites to delete'}
-        setDialogOpen={() => toggleDialogFlag(flag)}
-        isDialogOpen={isDialogOpen}
-        action={deleteAction}
-      />
-    </>
-  );
-
-*/
