@@ -167,7 +167,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
- * TODO: Delete?
+ * TODO: Delete
  *
  * POST /achievements
  */
@@ -187,9 +187,62 @@ export async function updateAchievements(
   return resp;
 }
 
-// TODO: Implement POST /achievements/achievement_id
+/**
+ * POST /achievements/add
+ */
+export async function addAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/add/`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
 
-// TODO: Implement DELETE /achievements/achievement_id
+  return resp;
+}
+
+/**
+ * POST /achievements/update
+ */
+export async function editAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/update/`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELERE /achievements
+ */
+export async function deleteAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
 
 /* END OF ACHIEVEMENT REQUESTS */
 
