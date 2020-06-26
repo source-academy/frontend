@@ -17,7 +17,7 @@ import {
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
 import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
-import { FETCH_GROUP_OVERVIEWS } from '../../features/dashboard/DashboardTypes';
+import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
   CHANGE_DATE_ASSESSMENT,
@@ -53,7 +53,7 @@ import {
   getAssessmentOverviews,
   getGrading,
   getGradingOverviews,
-  getGroupOverviews,
+  getGradingSummary,
   getNotifications,
   getSourcecastIndex,
   getUser,
@@ -482,16 +482,16 @@ function* BackendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
-  yield takeEvery(FETCH_GROUP_OVERVIEWS, function* (
-    action: ReturnType<typeof actions.fetchGroupOverviews>
+  yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* (
+    action: ReturnType<typeof actions.fetchGroupGradingSummary>
   ) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const groupOverviews = yield call(getGroupOverviews, tokens);
+    const groupOverviews = yield call(getGradingSummary, tokens);
     if (groupOverviews) {
-      yield put(actions.updateGroupOverviews(groupOverviews));
+      yield put(actions.updateGroupGradingSummary(groupOverviews));
     }
   });
 

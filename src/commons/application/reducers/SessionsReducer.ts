@@ -13,7 +13,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  SET_GOOGLE_USER
 } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (
@@ -33,6 +34,11 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         ...action.payload
+      };
+    case SET_GOOGLE_USER:
+      return {
+        ...state,
+        googleUser: action.payload
       };
     case UPDATE_HISTORY_HELPERS:
       const helper = state.historyHelper;

@@ -1,20 +1,17 @@
-export const FETCH_GROUP_OVERVIEWS = 'FETCH_GROUP_OVERVIEWS';
-export const UPDATE_GROUP_OVERVIEWS = 'UPDATE_GROUP_OVERVIEWS';
+export const FETCH_GROUP_GRADING_SUMMARY = 'FETCH_GROUP_GRADING_SUMMARY';
+export const UPDATE_GROUP_GRADING_SUMMARY = 'UPDATE_GROUP_GRADING_SUMMARY';
 
-export type GroupOverview = {
-  id: number;
+export type DashboardState = {
+  gradingSummary: GradingSummary;
+};
+
+export type GradingSummaryEntry = {
   groupName: string;
-  avengerName: string;
+  leaderName: string;
+  ungradedMissions: number;
+  submittedMissions: number;
+  ungradedSidequests: number;
+  submittedSidequests: number;
 };
 
-export type LeaderBoardInfo = {
-  avengerName: string;
-  numOfUngradedMissions: number;
-  totalNumOfMissions: number;
-  numOfUngradedQuests: number;
-  totalNumOfQuests: number;
-};
-
-export type DashBoardState = {
-  readonly groupOverviews: GroupOverview[];
-};
+export type GradingSummary = GradingSummaryEntry[];

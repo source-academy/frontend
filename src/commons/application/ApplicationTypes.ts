@@ -15,7 +15,7 @@ import {
 import { ExternalLibraryName } from './types/ExternalTypes';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
-import { DashBoardState } from '../../features/dashboard/DashboardTypes';
+import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { SessionState } from './types/SessionTypes';
 
@@ -25,7 +25,7 @@ export type OverallState = {
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly workspaces: WorkspaceManagerState;
-  readonly dashboard: DashBoardState;
+  readonly dashboard: DashboardState;
 };
 
 export type ApplicationState = {
@@ -159,8 +159,8 @@ export const defaultApplication: ApplicationState = {
   environment: currentEnvironment()
 };
 
-export const defaultDashBoard: DashBoardState = {
-  groupOverviews: []
+export const defaultDashboard: DashboardState = {
+  gradingSummary: []
 };
 
 export const defaultPlayground: PlaygroundState = {
@@ -295,7 +295,7 @@ export const defaultSession: SessionState = {
 export const defaultState: OverallState = {
   academy: defaultAcademy,
   application: defaultApplication,
-  dashboard: defaultDashBoard,
+  dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager

@@ -67,6 +67,7 @@ type State = {
 
 class Grading extends React.Component<GradingProps, State> {
   private columnDefs: ColDef[];
+  private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: GradingProps) {
@@ -78,10 +79,10 @@ class Grading extends React.Component<GradingProps, State> {
         field: 'notifications',
         cellRendererFramework: this.NotificationBadgeCell,
         width: 30,
-        suppressResize: true,
         suppressMovable: true,
         suppressMenu: true,
-        suppressSizeToFit: true
+        suppressSizeToFit: true,
+        resizable: false
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
@@ -149,10 +150,10 @@ class Grading extends React.Component<GradingProps, State> {
           handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
         },
         width: 65,
-        suppressFilter: true,
-        suppressSorting: true,
+        filter: false,
+        resizable: false,
+        sortable: false,
         suppressSizeToFit: true,
-        suppressResize: true,
         cellStyle: {
           padding: 0
         }
@@ -168,10 +169,10 @@ class Grading extends React.Component<GradingProps, State> {
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
           role: this.props.role
         },
-        suppressFilter: true,
-        suppressSorting: true,
+        filter: false,
+        resizable: false,
+        sortable: false,
         suppressSizeToFit: true,
-        suppressResize: true,
         cellStyle: {
           padding: 0
         }
@@ -188,6 +189,12 @@ class Grading extends React.Component<GradingProps, State> {
       { headerName: 'Max XP', field: 'maxXp', hide: true },
       { headerName: 'Bonus XP', field: 'xpBonus', hide: true }
     ];
+
+    this.defaultColumnDefs = {
+      filter: true,
+      resizable: true,
+      sortable: true
+    };
 
     this.state = {
       filterValue: '',
@@ -294,11 +301,9 @@ class Grading extends React.Component<GradingProps, State> {
         <div className="Grading">
           <div className="ag-grid-parent ag-theme-balham">
             <AgGridReact
-              gridAutoHeight={true}
-              enableColResize={true}
-              enableSorting={true}
-              enableFilter={true}
+              domLayout={'autoHeight'}
               columnDefs={this.columnDefs}
+              defaultColDef={this.defaultColumnDefs}
               onGridReady={this.onGridReady}
               onGridSizeChanged={this.resizeGrid}
               onPaginationChanged={this.updatePaginationState}

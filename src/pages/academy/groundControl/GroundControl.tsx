@@ -35,10 +35,12 @@ type State = {
 
 class GroundControl extends React.Component<GroundControlProps, State> {
   private columnDefs: ColDef[];
+  private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: GroundControlProps) {
     super(props);
+
     this.state = {
       forceUpdate: false,
       displayConfirmation: false
@@ -62,7 +64,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           forOpenDate: true
         },
         width: 150,
-        suppressSorting: true,
+        sortable: false,
         suppressMovable: true,
         suppressMenu: true,
         cellStyle: {
@@ -78,7 +80,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           forOpenDate: false
         },
         width: 150,
-        suppressSorting: true,
+        sortable: false,
         suppressMovable: true,
         suppressMenu: true,
         cellStyle: {
@@ -93,7 +95,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
         width: 100,
-        suppressSorting: true,
+        sortable: false,
         suppressMovable: true,
         suppressMenu: true,
         cellStyle: {
@@ -109,7 +111,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
         width: 100,
-        suppressSorting: true,
+        sortable: false,
         suppressMovable: true,
         suppressMenu: true,
         cellStyle: {
@@ -118,6 +120,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
         hide: !this.props.handleDeleteAssessment
       }
     ];
+
+    this.defaultColumnDefs = {
+      filter: true,
+      resizable: true,
+      sortable: true
+    };
   }
 
   public componentDidUpdate(prevProps: GroundControlProps) {
@@ -135,11 +143,9 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       <div className="GradingContainer">
         <div className="Grading ag-grid-parent ag-theme-balham">
           <AgGridReact
-            gridAutoHeight={true}
-            enableColResize={true}
-            enableSorting={true}
-            enableFilter={true}
+            domLayout={'autoHeight'}
             columnDefs={this.columnDefs}
+            defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
             onGridSizeChanged={this.resizeGrid}
             rowData={data}

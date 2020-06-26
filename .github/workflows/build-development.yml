@@ -46,6 +46,9 @@ jobs:
         REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
         REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
         REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+        REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+        REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
+        REACT_APP_GOOGLE_APP_ID: ${{ secrets.REACT_APP_GOOGLE_APP_ID }}
         REACT_APP_PLAYGROUND_ONLY: "TRUE"
         REACT_APP_VERSION: ${{ format('pages-{0}-{1}', github.sha, steps.get-time.outputs.time) }}
         REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
