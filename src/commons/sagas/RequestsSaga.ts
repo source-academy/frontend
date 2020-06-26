@@ -153,13 +153,13 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     achievement.id = achievement.inferencer_id;
     achievement.ability = achievement.ability as AchievementAbility;
     achievement.modal = {
-      modalImageUrl: achievement.modalImageUrl ? achievement.modal_image_url : '',
+      modalImageUrl: achievement.modalImageUrl ? achievement.modalImageUrl : '',
       description: achievement.description ? achievement.description : '',
-      goalText: achievement.goalText ? achievement.goal_text : '',
-      completionText: achievement.completionText ? achievement.completion_text : ''
+      goalText: achievement.goalText ? achievement.goalText : '',
+      completionText: achievement.completionText ? achievement.completionText : ''
     } as AchievementModalItem;
-    if (achievement.prerequisiteIDs === null) {
-      achievement.prerequisiteIDs = [];
+    if (achievement.prerequisiteIds === null) {
+      achievement.prerequisiteIds = [];
     }
 
     return achievement as AchievementItem;
