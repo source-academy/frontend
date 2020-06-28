@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
 
-type SaveAchievementButtonProps = {
+type AchievementUploaderProps = {
   hasChanges: boolean;
   saveChanges: any;
   discardChanges: any;
@@ -9,7 +9,7 @@ type SaveAchievementButtonProps = {
   uploadChanges: any;
 };
 
-function SaveAchievementButton(props: SaveAchievementButtonProps) {
+function AchievementUploader(props: AchievementUploaderProps) {
   const { hasChanges, saveChanges, discardChanges, pendingUpload, uploadChanges } = props;
 
   return (
@@ -38,4 +38,4 @@ function SaveAchievementButton(props: SaveAchievementButtonProps) {
   );
 }
 
-export default SaveAchievementButton;
+export default AchievementUploader;

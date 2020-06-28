@@ -14,7 +14,7 @@ import EditableAchievementDeadline from './editableUtils/EditableAchievementDead
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
-import SaveAchievementButton from './editableUtils/SaveAchievementButton';
+import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 
@@ -147,7 +147,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           modal={achievement.modal}
           handleChangeModal={handleChangeModal}
         />
-        <SaveAchievementButton
+        <AchievementUploader
           hasChanges={hasChanges}
           saveChanges={handleSaveChanges}
           discardChanges={handleDiscardChanges}
