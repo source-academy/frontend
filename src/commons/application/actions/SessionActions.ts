@@ -29,7 +29,9 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  SET_GOOGLE_USER,
+  LOGOUT_GOOGLE
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -49,6 +51,8 @@ export const fetchGradingOverviews = (filterToGroup = true) =>
   action(FETCH_GRADING_OVERVIEWS, filterToGroup);
 
 export const login = (providerId: string) => action(LOGIN, providerId);
+
+export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
 export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
 
@@ -72,6 +76,8 @@ export const setUser = (user: {
   story?: Story;
   gameState?: GameState;
 }) => action(SET_USER, user);
+
+export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
   action(SUBMIT_ANSWER, {

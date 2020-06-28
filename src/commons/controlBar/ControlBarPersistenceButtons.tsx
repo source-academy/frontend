@@ -1,0 +1,74 @@
+import { Popover, ButtonGroup, Tooltip, Intent, Classes } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import * as React from 'react';
+
+import controlButton from '../ControlButton';
+import { PersistenceState, PersistenceFile } from '../../features/persistence/PersistenceTypes';
+
+export type ControlBarPersistenceButtonsProps = {
+  loggedInAs?: string;
+  currentFile?: PersistenceFile;
+  isDirty?: boolean;
+  onClickOpen?: () => any;
+  onClickSave?: () => any;
+  onClickSaveAs?: () => any;
+  onClickLogOut?: () => any;
+  onPopoverOpening?: () => any;
+};
+
+const stateToIntent: { [state in PersistenceState]: Intent } = {
+  INACTIVE: Intent.NONE,
+  SAVED: Intent.PRIMARY,
+  DIRTY: Intent.WARNING
+};
+
+export const ControlBarPersistenceButtons: React.FC<ControlBarPersistenceButtonsProps> = props => {
+  const state: PersistenceState = props.currentFile
+    ? props.isDirty
+      ? 'DIRTY'
+      : 'SAVED'
+    : 'INACTIVE';
+  const mainButton = controlButton(
+    (props.currentFile && props.currentFile.name) || 'Google Drive',
+    IconNames.CLOUD,
+    null,
+    {
+      intent: stateToIntent[state]
+    }
+  );
+  const openButton = controlButton('Open', IconNames.DOCUMENT_OPEN, props.onClickOpen);
+  const saveButton = controlButton(
+    'Save',
+    IconNames.FLOPPY_DISK,
+    props.onClickSave,
+    undefined,
+    // disable if logged_in only (i.e. not linked to a file)
+    state === 'INACTIVE'
+  );
+  const saveAsButton = controlButton('Save as', IconNames.SEND_TO, props.onClickSaveAs);
+  const logoutButton = props.loggedInAs && (
+    <Tooltip content={`Logged in as ${props.loggedInAs}`}>
+      {controlButton('Log out', IconNames.LOG_OUT, props.onClickLogOut)}
+    </Tooltip>
+  );
+
+  return (
+    <Popover
+      autoFocus={false}
+      content={
+        <div>
+          <ButtonGroup large={true}>
+            {openButton}
+            {saveButton}
+            {saveAsButton}
+            {logoutButton}
+          </ButtonGroup>
+        </div>
+      }
+      onOpening={props.onPopoverOpening}
+      popoverClassName={Classes.POPOVER_DISMISS}
+    >
+      {mainButton}
+    </Popover>
+  );
+};

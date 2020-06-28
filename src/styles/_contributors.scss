@@ -61,6 +61,10 @@
         vertical-align: top;
         display: inline-block;
         width: 120px;
+
+        &.wider {
+          width: 140px;
+        }
       }
     }
 

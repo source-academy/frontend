@@ -88,10 +88,6 @@ export async function shortenURLRequest(
     url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/playground#${queryString}`;
   }
 
-  const method = 'GET';
-  const fetchOpts: any = {
-    method
-  };
   const params = {
     signature: Constants.urlShortenerSignature,
     action: 'shorturl',
@@ -99,12 +95,15 @@ export async function shortenURLRequest(
     keyword,
     url
   };
+  const fetchOpts: RequestInit = {
+    method: 'POST',
+    body: Object.entries(params).reduce((formData, [k, v]) => {
+      formData.append(k, v!);
+      return formData;
+    }, new FormData())
+  };
 
-  const query = Object.keys(params)
-    .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
-    .join('&');
-
-  const resp = await fetch(Constants.urlShortener + '?' + query, fetchOpts);
+  const resp = await fetch(Constants.urlShortener!, fetchOpts);
   if (!resp || !resp.ok) {
     return null;
   }
