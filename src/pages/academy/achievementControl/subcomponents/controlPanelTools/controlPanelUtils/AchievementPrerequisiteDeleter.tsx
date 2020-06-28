@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import AchievementTaskSelect from './AchievementTaskSelect';
-import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
+import AchievementTaskSelector from './AchievementTaskSelector';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementControlPanelDeleterProps = {
+type AchievementPrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
-function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterProps) {
+function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterProps) {
   const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -33,20 +34,26 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
   };
 
   const [deletedPrerequisiteID, setDeletedPrerequisiteID] = useState<number>(
-    prerequisites.length === 0 ? 0 : prerequisites[0]
+    inferencer.getNextID(prerequisites)
   );
+
+  useEffect(() => {
+    setDeletedPrerequisiteID(inferencer.getNextID(prerequisites));
+  }, [inferencer, prerequisites]);
 
   const deleteAction = (e: any) => {
     toggleDialogOpen();
     setEditableAchievement(deletePrerequisite(deletedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+    // TODO: add this
+    // editAchievement(editableAchievement);
     uploadAchievementData(inferencer.getAchievementData);
   };
 
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Delete A Prerequisite'} />
-      <AchievementTaskSelect
+      <AchievementTaskSelector
         tasks={prerequisites}
         inferencer={inferencer}
         focusTaskID={deletedPrerequisiteID}
@@ -62,4 +69,4 @@ function AchievementControlPanelDeleter(props: AchievementControlPanelDeleterPro
   );
 }
 
-export default AchievementControlPanelDeleter;
+export default AchievementPrerequisiteDeleter;

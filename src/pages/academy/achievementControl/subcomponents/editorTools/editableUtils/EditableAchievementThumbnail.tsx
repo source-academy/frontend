@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import { Dialog, Icon } from '@blueprintjs/core';
-import { AchievementIconSelect } from '../../controlPanelTools/AchievementIconSelect';
+import { IconSelector } from './IconSelector';
 
 type EditableAchievementThumbnailProps = {
   thumbnail: IconName | undefined;
@@ -24,7 +24,7 @@ function EditableAchievementThumbnail(props: EditableAchievementThumbnailProps) 
         isOpen={isDialogOpen}
         title="Change Your Icon"
       >
-        <AchievementIconSelect iconName={thumbnail} onChange={changeThumbnail} />
+        <IconSelector iconName={thumbnail} onChange={changeThumbnail} />
       </Dialog>
     </div>
   );

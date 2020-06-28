@@ -4,7 +4,7 @@ import { Alignment, Button, Classes, MenuItem } from '@blueprintjs/core';
 import { IconName, IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 
-export interface IIconSelectProps {
+export interface IIconSelectorProps {
   iconName?: IconName;
   onChange: (iconName?: IconName) => void;
 }
@@ -13,7 +13,7 @@ const ICON_NAMES = Object.keys(IconNames).map<IconName>((name: any) => IconNames
 
 const IconSelect = Select.ofType<IconName>();
 
-export class AchievementIconSelect extends React.PureComponent<IIconSelectProps> {
+export class IconSelector extends React.PureComponent<IIconSelectorProps> {
   public render() {
     const { iconName } = this.props;
     return (

@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
-import AchievementTaskSelect from './AchievementTaskSelect';
-import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
+import AchievementTaskSelector from './AchievementTaskSelector';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 
-export type AchievementControlPanelTaskAdderProps = {
+export type AchievementTaskAdderProps = {
   inferencer: Inferencer;
   uploadAchievementData: any;
   editAchievement: any;
 };
 
-function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdderProps) {
+function AchievementTaskAdder(props: AchievementTaskAdderProps) {
   const { inferencer, uploadAchievementData } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -42,7 +42,7 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   return (
     <>
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
-      <AchievementTaskSelect
+      <AchievementTaskSelector
         tasks={nonTaskIDs}
         inferencer={inferencer}
         focusTaskID={addedTaskID}
@@ -58,4 +58,4 @@ function AchievementControlPanelTaskAdder(props: AchievementControlPanelTaskAdde
   );
 }
 
-export default AchievementControlPanelTaskAdder;
+export default AchievementTaskAdder;

@@ -1,7 +1,7 @@
 import React from 'react';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
-import AchievementControlPanelTaskAdder from './controlPanelTools/AchievementControlPanelTaskAdder';
+import AchievementTaskAdder from './controlPanelTools/controlPanelUtils/AchievementTaskAdder';
 
 type AchievementControlPanelProps = {
   inferencer: Inferencer;
@@ -28,7 +28,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       <ul className="display-list">{mapAchievementIdsToEditableTask(inferencer.listTaskIds())}</ul>
 
       <div>
-        <AchievementControlPanelTaskAdder
+        <AchievementTaskAdder
           inferencer={inferencer}
           uploadAchievementData={uploadAchievementData}
           editAchievement={editAchievement}

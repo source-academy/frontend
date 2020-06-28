@@ -2,11 +2,11 @@ import React from 'react';
 
 // import { Button } from '@blueprintjs/core';
 
-import AchievementControlPanelPrerequisiteDeleter from './AchievementControlPanelPrerequisiteDeleter';
-import AchievementControlPanelPrerequisiteAdder from './AchievementControlPanelPrerequisiteAdder';
+import AchievementPrerequisiteDeleter from './controlPanelUtils/AchievementPrerequisiteDeleter';
+import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import Inferencer from '../../../../../pages/academy/achievements/subcomponents/utils/Inferencer';
-import AchievementControlPanelTaskDeleter from './AchievementControlPanelTaskDeleter';
+import AchievementTaskDeleter from './controlPanelUtils/AchievementTaskDeleter';
 
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
@@ -27,7 +27,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
   return (
     <>
-      <AchievementControlPanelPrerequisiteAdder
+      <AchievementPrerequisiteAdder
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
@@ -35,7 +35,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editAchievement={editAchievement}
       />
 
-      <AchievementControlPanelPrerequisiteDeleter
+      <AchievementPrerequisiteDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
@@ -43,7 +43,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editAchievement={editAchievement}
       />
 
-      <AchievementControlPanelTaskDeleter
+      <AchievementTaskDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}

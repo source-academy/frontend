@@ -1,9 +1,9 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementControlPanelTaskDeleterProps = {
+type AchievementTaskDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
@@ -11,7 +11,7 @@ type AchievementControlPanelTaskDeleterProps = {
   editAchievement: any;
 };
 
-function AchievementControlPanelTaskDeleter(props: AchievementControlPanelTaskDeleterProps) {
+function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
   const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
 
   const setNonTask = () => {
@@ -36,4 +36,4 @@ function AchievementControlPanelTaskDeleter(props: AchievementControlPanelTaskDe
   );
 }
 
-export default AchievementControlPanelTaskDeleter;
+export default AchievementTaskDeleter;

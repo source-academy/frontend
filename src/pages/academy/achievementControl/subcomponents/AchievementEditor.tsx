@@ -2,7 +2,7 @@ import React from 'react';
 
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
-import AddAchievementButton from './editorTools/editableUtils/AddAchievementButton';
+import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
   inferencer: Inferencer;
@@ -40,7 +40,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     <div className="editor-cards">
       <div className="main">
         <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
-        <AddAchievementButton
+        <AchievementAdder
           inferencer={inferencer}
           forceRefresh={forceRefresh}
           addAchievement={addAchievement}

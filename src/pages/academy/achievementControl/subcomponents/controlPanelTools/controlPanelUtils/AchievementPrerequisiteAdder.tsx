@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@blueprintjs/core';
 
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import AchievementTaskSelect from './AchievementTaskSelect';
-import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
+import AchievementTaskSelector from './AchievementTaskSelector';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 
-// TODO: Rename to PrerequisireAdder
-
-type AchievementControlPanelAdderProps = {
+type AchievementPrerequisiteAdderProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
   uploadAchievementData: any;
+  editAchievement: any;
 };
 
-function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) {
+function AchievementPrerequisiteAdder(props: AchievementPrerequisiteAdderProps) {
   const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -29,20 +28,26 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
   };
 
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
-    nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
+    inferencer.getNextID(nonPrerequisites)
   );
+
+  useEffect(() => {
+    setAddedPrerequisiteID(inferencer.getNextID(nonPrerequisites));
+  }, [inferencer, nonPrerequisites]);
 
   const addingAction = (e: any) => {
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+    // TODO: add this
+    // editAchievement(editableAchievement);
     uploadAchievementData(inferencer.getAchievementData);
   };
 
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Add A Prerequisite'} />
-      <AchievementTaskSelect
+      <AchievementTaskSelector
         tasks={nonPrerequisites}
         inferencer={inferencer}
         focusTaskID={addedPrerequisiteID}
@@ -58,4 +63,4 @@ function AchievementControlPanelAdder(props: AchievementControlPanelAdderProps) 
   );
 }
 
-export default AchievementControlPanelAdder;
+export default AchievementPrerequisiteAdder;

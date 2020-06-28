@@ -16,7 +16,7 @@ import EditableAchievementThumbnail from './editableUtils/EditableAchievementThu
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import SaveAchievementButton from './editableUtils/SaveAchievementButton';
 import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
-import DeleteAchievementButton from './editableUtils/DeleteAchievementButton';
+import AchievementDeleter from './editableUtils/AchievementDeleter';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -173,7 +173,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           </div>
         </div>
         <div className="details">
-          <DeleteAchievementButton deleteAchievement={handleDeleteAchievement} />
+          <AchievementDeleter deleteAchievement={handleDeleteAchievement} />
         </div>
       </div>
     </Card>

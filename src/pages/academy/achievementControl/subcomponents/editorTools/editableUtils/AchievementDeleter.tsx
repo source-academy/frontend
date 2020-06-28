@@ -1,11 +1,11 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
 
-type DeleteAchievementButtonProps = {
+type AchievementDeleterProps = {
   deleteAchievement: any;
 };
 
-function DeleteAchievementButton(props: DeleteAchievementButtonProps) {
+function AchievementDeleter(props: AchievementDeleterProps) {
   const { deleteAchievement } = props;
 
   return (
@@ -18,4 +18,4 @@ function DeleteAchievementButton(props: DeleteAchievementButtonProps) {
   );
 }
 
-export default DeleteAchievementButton;
+export default AchievementDeleter;
