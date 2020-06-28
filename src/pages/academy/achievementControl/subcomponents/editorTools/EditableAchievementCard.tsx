@@ -22,13 +22,13 @@ type EditableAchievementCardProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
   handleAchievementsUpdate: any;
-  uploadAchievementData: any;
+  uploadAchievements: any;
   forceRefresh: any;
   editAchievement: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, inferencer, uploadAchievementData, forceRefresh } = props;
+  const { achievement, inferencer, uploadAchievements, forceRefresh } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id, title, ability, exp, deadline, icon } = editableAchievement;
@@ -44,13 +44,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   const handleUploadChanges = () => {
-    uploadAchievementData(inferencer.getAchievementData());
+    uploadAchievements(inferencer.getAchievements());
     setPendingUpload(false);
   };
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
-    uploadAchievementData(inferencer.getAchievementData());
+    uploadAchievements(inferencer.getAchievements());
   };
 
   const handleDiscardChanges = () => {

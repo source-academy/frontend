@@ -5,12 +5,12 @@ import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer'
 
 export type AchievementTaskAdderProps = {
   inferencer: Inferencer;
-  uploadAchievementData: any;
+  uploadAchievements: any;
   editAchievement: any;
 };
 
 function AchievementTaskAdder(props: AchievementTaskAdderProps) {
-  const { inferencer, uploadAchievementData } = props;
+  const { inferencer, uploadAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -31,7 +31,7 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
     inferencer.editAchievement(achievement);
     // TODO: add this
     // editAchievement(achievement);
-    uploadAchievementData(inferencer.getAchievementData());
+    uploadAchievements(inferencer.getAchievements());
   };
 
   const addingAction = (e: any) => {

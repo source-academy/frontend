@@ -8,7 +8,7 @@ import {
 // A Node item encapsulates all important information of an achievement item
 class Node {
   achievement: AchievementItem;
-  dataIdx: number; // achievementData[dataIdx] = achievement
+  dataIdx: number; // achievements[dataIdx] = achievement
   status: AchievementStatus;
   totalExp: number;
   furthestDeadline?: Date;
@@ -54,11 +54,11 @@ class Node {
 }
 
 class Inferencer {
-  private achievementData: AchievementItem[] = [];
+  private achievements: AchievementItem[] = [];
   private nodeList: Map<number, Node> = new Map(); // key = achievement id
 
-  constructor(achievementData: AchievementItem[]) {
-    this.achievementData = achievementData;
+  constructor(achievements: AchievementItem[]) {
+    this.achievements = achievements;
     this.processData();
   }
 
@@ -80,8 +80,8 @@ class Inferencer {
     }
   }
 
-  public getAchievementData() {
-    return this.achievementData;
+  public getAchievements() {
+    return this.achievements;
   }
 
   public getAchievementItem(id: number) {
@@ -91,23 +91,23 @@ class Inferencer {
 
   public addAchievement(achievement: AchievementItem) {
     // first, generate a new unique id
-    const len = this.achievementData.length;
-    const newId = len > 0 ? this.achievementData[len - 1].id + 1 : 0;
+    const len = this.achievements.length;
+    const newId = len > 0 ? this.achievements[len - 1].id + 1 : 0;
 
     // then assign the new unique id by overwriting the achievement item
-    // and append it to achievementData
+    // and append it to achievements
     achievement.id = newId;
-    this.achievementData.push(achievement);
+    this.achievements.push(achievement);
 
     // finally, reconstruct the nodeList
     this.processData();
   }
 
   public editAchievement(achievement: AchievementItem) {
-    // directly modify the achievement element in achievementData
+    // directly modify the achievement element in achievements
     // asserts: the achievement id already exists in nodeList
     const idx = this.nodeList.get(achievement.id)!.dataIdx;
-    this.achievementData[idx] = achievement;
+    this.achievements[idx] = achievement;
 
     // then, reconstruct the nodeList
     this.processData();
@@ -120,33 +120,33 @@ class Inferencer {
     const removeChild = (achievement: AchievementItem) =>
       achievement.prerequisiteIds.filter(child => child !== id);
 
-    // create a copy of achievementData that:
+    // create a copy of achievements that:
     // 1. does not contain the removed achievement
     // 2. does not contain reference of the removed achievement in other achievement's prerequisite
-    const newAchievementData: AchievementItem[] = [];
+    const newachievements: AchievementItem[] = [];
 
-    this.achievementData.reduce((acc, parent) => {
+    this.achievements.reduce((acc, parent) => {
       if (parent.id === id) {
-        return acc; // removed item not included in the new achievementData
+        return acc; // removed item not included in the new achievements
       } else if (hasChild(parent)) {
         parent.prerequisiteIds = removeChild(parent); // reference of the removed item is filtered out
       }
       acc.push(parent);
       return acc;
-    }, newAchievementData);
+    }, newachievements);
 
-    this.achievementData = newAchievementData;
+    this.achievements = newachievements;
 
     // finally, reconstruct the nodeList
     this.processData();
   }
 
   public listIds() {
-    return this.achievementData.map(achievement => achievement.id);
+    return this.achievements.map(achievement => achievement.id);
   }
 
   public listTaskIds() {
-    return this.achievementData.reduce((acc, achievement) => {
+    return this.achievements.reduce((acc, achievement) => {
       if (achievement.isTask) {
         acc.push(achievement.id);
       }
@@ -155,7 +155,7 @@ class Inferencer {
   }
 
   public listNonTaskIds() {
-    return this.achievementData.reduce((acc, achievement) => {
+    return this.achievements.reduce((acc, achievement) => {
       if (!achievement.isTask) {
         acc.push(achievement.id);
       }
@@ -240,16 +240,16 @@ class Inferencer {
     this.dataCheck();
   }
 
-  // Verify the key-value mappings of achievementData and nodeList are correct
+  // Verify the key-value mappings of achievements and nodeList are correct
   private dataCheck() {
     for (const [id, node] of this.nodeList) {
       if (id !== node.achievement.id) {
         console.log('Unmatched nodeList key-achievementId mapping', node);
-      } else if (node.achievement !== this.achievementData[node.dataIdx]) {
+      } else if (node.achievement !== this.achievements[node.dataIdx]) {
         console.log(
-          'Unmatched achievement items in nodeList and achievementData\n',
+          'Unmatched achievement items in nodeList and achievements\n',
           'Data\n',
-          this.achievementData[id],
+          this.achievements[id],
           '\nNode\n',
           node
         );
@@ -260,8 +260,8 @@ class Inferencer {
 
   private constructNodeList() {
     this.nodeList = new Map();
-    for (let idx = 0; idx < this.achievementData.length; idx++) {
-      const achievement = this.achievementData[idx];
+    for (let idx = 0; idx < this.achievements.length; idx++) {
+      const achievement = this.achievements[idx];
       this.nodeList.set(achievement.id, new Node(achievement, idx));
     }
   }

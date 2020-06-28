@@ -4,6 +4,14 @@ import {
   AchievementModalItem
 } from '../../../../../commons/achievements/AchievementTypes';
 
+export const modalTemplate: AchievementModalItem = {
+  modalImageUrl:
+    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/sourceAcademy%40x2.png',
+  description: 'Modal Description here',
+  goalText: 'Goal Text here',
+  completionText: 'Completion Text here'
+};
+
 export const achievementTemplate: AchievementItem = {
   id: 0,
   title: '',
@@ -13,19 +21,5 @@ export const achievementTemplate: AchievementItem = {
   prerequisiteIds: [],
   completionGoal: 0,
   completionProgress: 0,
-  modal: {
-    modalImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/sourceAcademy%40x2.png',
-    description: 'Modal Description here.',
-    goalText: 'Goal Text here.',
-    completionText: 'Completion Text here.'
-  }
-};
-
-export const modalTemplate: AchievementModalItem = {
-  modalImageUrl:
-    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/sourceAcademy%40x2.png',
-  description: 'Modal Description here.',
-  goalText: 'Goal Text here.',
-  completionText: 'Completion Text here.'
+  modal: modalTemplate
 };

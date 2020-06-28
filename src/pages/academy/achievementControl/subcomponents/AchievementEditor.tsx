@@ -6,7 +6,7 @@ import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
   inferencer: Inferencer;
-  uploadAchievementData: any;
+  uploadAchievements: any;
   forceRefresh: any;
   addAchievement: any;
   editAchievement: any;
@@ -16,7 +16,7 @@ type AchievementEditorProps = {
 function AchievementEditor(props: AchievementEditorProps) {
   const {
     inferencer,
-    uploadAchievementData,
+    uploadAchievements,
     forceRefresh,
     addAchievement,
     editAchievement,
@@ -29,7 +29,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         key={id}
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
-        uploadAchievementData={uploadAchievementData}
+        uploadAchievements={uploadAchievements}
         editAchievement={editAchievement}
         handleAchievementsUpdate={handleAchievementsUpdate}
         forceRefresh={forceRefresh}

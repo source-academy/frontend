@@ -5,13 +5,13 @@ import AchievementEditor from './subcomponents/AchievementEditor';
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
 import {
-  updateMockAchievementData,
-  fetchMockAchievementData
+  updateMockAchievements,
+  fetchMockAchievements
 } from '../../../commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
-  handleAchievementsUpdate: (achievementData: AchievementItem[]) => void;
+  handleAchievementsUpdate: (achievements: AchievementItem[]) => void;
   addAchievement: (achievement: AchievementItem) => void;
   editAchievement: (achievement: AchievementItem) => void;
 };
@@ -43,9 +43,9 @@ function AchievementControl(props: DispatchProps & StateProps) {
     setRefresh(!refresh);
   };
 
-  const uploadAchievementData = (achievementData: AchievementItem[]) => {
-    updateMockAchievementData(achievementData); // TODO: replace with handleAchievementsUpdate(achievementData);
-    const refreshData = fetchMockAchievementData(); // TODO: replace with handleAchievementFetch()
+  const uploadAchievements = (achievements: AchievementItem[]) => {
+    updateMockAchievements(achievements); // TODO: replace with handleAchievementsUpdate(achievements);
+    const refreshData = fetchMockAchievements(); // TODO: replace with handleAchievementFetch()
     _inferencer = new Inferencer(refreshData);
     forceRefresh();
   };
@@ -55,13 +55,13 @@ function AchievementControl(props: DispatchProps & StateProps) {
       <div className="AchievementControl">
         <AchievementControlPanel
           inferencer={_inferencer}
-          uploadAchievementData={uploadAchievementData}
+          uploadAchievements={uploadAchievements}
           editAchievement={editAchievement}
         />
 
         <AchievementEditor
           inferencer={_inferencer}
-          uploadAchievementData={uploadAchievementData}
+          uploadAchievements={uploadAchievements}
           forceRefresh={forceRefresh}
           addAchievement={addAchievement}
           editAchievement={editAchievement}

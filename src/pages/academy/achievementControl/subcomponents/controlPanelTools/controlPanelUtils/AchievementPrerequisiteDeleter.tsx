@@ -9,12 +9,12 @@ type AchievementPrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  uploadAchievementData: any;
+  uploadAchievements: any;
   editAchievement: any;
 };
 
 function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -47,7 +47,7 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
     inferencer.editAchievement(editableAchievement);
     // TODO: add this
     // editAchievement(editableAchievement);
-    uploadAchievementData(inferencer.getAchievementData);
+    uploadAchievements(inferencer.getAchievements);
   };
 
   return (

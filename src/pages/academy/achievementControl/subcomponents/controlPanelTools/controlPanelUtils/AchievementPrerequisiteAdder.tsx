@@ -9,12 +9,12 @@ type AchievementPrerequisiteAdderProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  uploadAchievementData: any;
+  uploadAchievements: any;
   editAchievement: any;
 };
 
 function AchievementPrerequisiteAdder(props: AchievementPrerequisiteAdderProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievementData } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -41,7 +41,7 @@ function AchievementPrerequisiteAdder(props: AchievementPrerequisiteAdderProps) 
     inferencer.editAchievement(editableAchievement);
     // TODO: add this
     // editAchievement(editableAchievement);
-    uploadAchievementData(inferencer.getAchievementData);
+    uploadAchievements(inferencer.getAchievements);
   };
 
   return (
