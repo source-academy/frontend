@@ -56,15 +56,14 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
-const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
-const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const assessmentWorkspace: WorkspaceLocation = 'assessment';
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
+const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
+const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -1060,7 +1059,7 @@ describe('FINISH_INVITE', () => {
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace(WorkspaceLocations.playground),
+      ...createDefaultWorkspace('playground'),
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [

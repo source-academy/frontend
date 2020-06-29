@@ -44,7 +44,7 @@ import {
   updateEditorValue,
   updateReplValue
 } from '../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
   persistenceOpenPicker,
   persistenceSaveFileAs,
@@ -87,7 +87,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceFile: state.playground.persistenceFile
 });
 
-const workspaceLocation: WorkspaceLocation = WorkspaceLocations.playground;
+const workspaceLocation: WorkspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

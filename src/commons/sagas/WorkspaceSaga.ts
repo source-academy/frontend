@@ -61,10 +61,8 @@ import {
   PROMPT_AUTOCOMPLETE,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_EDITOR_BREAKPOINTS,
-  WorkspaceLocation,
-  WorkspaceLocations
+  WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
-import { WorkspaceState } from '../workspace/WorkspaceTypes';
 
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
@@ -73,8 +71,8 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select((state: OverallState) => {
-      const prependCode = (state.workspaces[workspaceLocation] as WorkspaceState).editorPrepend;
-      const editorCode = (state.workspaces[workspaceLocation] as WorkspaceState).editorValue!;
+      const prependCode = state.workspaces[workspaceLocation].editorPrepend;
+      const editorCode = state.workspaces[workspaceLocation].editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
     const [prepend, tempvalue] = code;
@@ -87,22 +85,19 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
     const value = exploded.join('\n');
     const chapter: number = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.chapter
+      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
     );
     const execTime: number = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).execTime
+      (state: OverallState) => state.workspaces[workspaceLocation].execTime
     );
     const symbols: string[] = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.externalSymbols
+      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
     );
     const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).globals
+      (state: OverallState) => state.workspaces[workspaceLocation].globals
     );
     const variant: Variant = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.variant
+      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
     );
     const library = {
       chapter,
@@ -118,9 +113,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     // Clear the context, with the same chapter and externalSymbols as before.
     yield put(actions.beginClearContext(library, workspaceLocation));
     yield put(actions.clearReplOutput(workspaceLocation));
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -138,13 +131,11 @@ export default function* WorkspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
 
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
     const code: string = yield select((state: OverallState) => {
-      const prependCode = (state.workspaces[workspaceLocation] as WorkspaceState).editorPrepend;
-      const editorCode = (state.workspaces[workspaceLocation] as WorkspaceState).editorValue!;
+      const prependCode = state.workspaces[workspaceLocation].editorPrepend;
+      const editorCode = state.workspaces[workspaceLocation].editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
     const [prepend, editorValue] = code;
@@ -187,8 +178,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     const builtinSuggestions = Documentation.builtins[chapterName] || [];
 
     const extLib = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).externalLibrary
+      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
     );
 
     const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
@@ -205,8 +195,7 @@ export default function* WorkspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const isEditorAutorun = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).isEditorAutorun
+      (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
   });
@@ -220,43 +209,37 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).replValue
+      (state: OverallState) => state.workspaces[workspaceLocation].replValue
     );
     const execTime: number = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).execTime
+      (state: OverallState) => state.workspaces[workspaceLocation].execTime
     );
     yield put(actions.beginInterruptExecution(workspaceLocation));
     yield put(actions.clearReplInput(workspaceLocation));
     yield put(actions.sendReplInputToOutput(code, workspaceLocation));
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield call(evalCode, code, context, execTime, workspaceLocation, EVAL_REPL);
   });
 
   yield takeEvery(DEBUG_RESUME, function* (action: ReturnType<typeof actions.debuggerResume>) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).editorValue
+      (state: OverallState) => state.workspaces[workspaceLocation].editorValue
     );
     const execTime: number = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).execTime
+      (state: OverallState) => state.workspaces[workspaceLocation].execTime
     );
     yield put(actions.beginInterruptExecution(workspaceLocation));
     /** Clear the context, with the same chapter and externalSymbols as before. */
     yield put(actions.clearReplOutput(workspaceLocation));
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.highlightEditorLine([], workspaceLocation));
     yield call(evalCode, code, context, execTime, workspaceLocation, DEBUG_RESUME);
   });
 
   yield takeEvery(DEBUG_RESET, function* (action: ReturnType<typeof actions.debuggerReset>) {
     const workspaceLocation = action.payload.workspaceLocation;
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
     yield put(actions.clearReplOutput(workspaceLocation));
     inspectorUpdate(undefined);
     highlightLine(undefined);
@@ -285,22 +268,19 @@ export default function* WorkspaceSaga(): SagaIterator {
     const index = action.payload.testcaseId;
     const code: string = yield select((state: OverallState) => {
       // tslint:disable: no-shadowed-variable
-      const prepend = (state.workspaces[workspaceLocation] as WorkspaceState).editorPrepend;
-      const value = (state.workspaces[workspaceLocation] as WorkspaceState).editorValue!;
-      const postpend = (state.workspaces[workspaceLocation] as WorkspaceState).editorPostpend;
-      const testcase = (state.workspaces[workspaceLocation] as WorkspaceState).editorTestcases[
-        index
-      ].program;
+      const prepend = state.workspaces[workspaceLocation].editorPrepend;
+      const value = state.workspaces[workspaceLocation].editorValue!;
+      const postpend = state.workspaces[workspaceLocation].editorPostpend;
+      const testcase = state.workspaces[workspaceLocation].editorTestcases[index].program;
       return [prepend, value, postpend, testcase] as [string, string, string, string];
       // tslint:enable: no-shadowed-variable
     });
     const [prepend, value, postpend, testcase] = code;
     const type: TestcaseType = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).editorTestcases[index].type
+      (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases[index].type
     );
     const execTime: number = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).execTime
+      (state: OverallState) => state.workspaces[workspaceLocation].execTime
     );
 
     // Do not interrupt execution of other testcases (potential race condition)
@@ -313,9 +293,7 @@ export default function* WorkspaceSaga(): SagaIterator {
      *  But, do not persist this context to the workspace state - this prevent students from using
      *  this elevated context to run dis-allowed code beyond the current chapter from the REPL
      */
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
     // Execute prepend silently in privileged context
     const elevatedContext = makeElevatedContext(context);
@@ -348,21 +326,18 @@ export default function* WorkspaceSaga(): SagaIterator {
     const workspaceLocation = action.payload.workspaceLocation;
     const newChapter = action.payload.chapter;
     const oldVariant = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.variant
+      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
     );
     const newVariant = action.payload.variant;
     const oldChapter = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.chapter
+      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
     );
 
     const symbols: string[] = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.externalSymbols
+      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
     );
     const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).globals
+      (state: OverallState) => state.workspaces[workspaceLocation].globals
     );
     if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
@@ -397,11 +372,10 @@ export default function* WorkspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const chapter = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).context.chapter
+      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
     );
     const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).globals
+      (state: OverallState) => state.workspaces[workspaceLocation].globals
     );
     const newExternalLibraryName = action.payload.externalLibraryName;
     const oldExternalLibraryName = yield select(
@@ -512,11 +486,9 @@ export default function* WorkspaceSaga(): SagaIterator {
   ) {
     const workspaceLocation = action.payload.workspaceLocation;
     const code: string = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).editorValue
+      (state: OverallState) => state.workspaces[workspaceLocation].editorValue
     );
-    context = yield select(
-      (state: OverallState) => (state.workspaces[workspaceLocation] as WorkspaceState).context
-    );
+    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
     const result = findDeclaration(code, context, {
       line: action.payload.cursorPosition.row + 1,
@@ -599,7 +571,7 @@ export function* evalCode(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );
   const substActiveAndCorrectChapter =
-    context.chapter <= 2 && workspaceLocation === WorkspaceLocations.playground && substIsActive;
+    context.chapter <= 2 && workspaceLocation === 'playground' && substIsActive;
   if (substActiveAndCorrectChapter) {
     context.executionMethod = 'interpreter';
     // icon to blink
@@ -726,8 +698,7 @@ export function* evalCode(
    */
   if (actionType === EVAL_EDITOR) {
     const activeTab: SideContentType = yield select(
-      (state: OverallState) =>
-        (state.workspaces[workspaceLocation] as WorkspaceState).sideContentActiveTab
+      (state: OverallState) => state.workspaces[workspaceLocation].sideContentActiveTab
     );
     /** If a student is attempting an assessment and has the autograder tab open OR
      *    a grader is grading a submission and has the autograder tab open,
@@ -737,12 +708,10 @@ export function* evalCode(
      */
     if (
       activeTab === SideContentType.autograder &&
-      (workspaceLocation === WorkspaceLocations.assessment ||
-        workspaceLocation === WorkspaceLocations.grading)
+      (workspaceLocation === 'assessment' || workspaceLocation === 'grading')
     ) {
       const testcases: Testcase[] = yield select(
-        (state: OverallState) =>
-          (state.workspaces[workspaceLocation] as WorkspaceState).editorTestcases
+        (state: OverallState) => state.workspaces[workspaceLocation].editorTestcases
       );
       // Avoid displaying message if there are no testcases
       if (testcases.length > 0) {

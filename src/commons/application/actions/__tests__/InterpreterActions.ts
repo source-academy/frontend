@@ -1,4 +1,4 @@
-import { WorkspaceLocation, WorkspaceLocations } from '../../../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../workspace/WorkspaceTypes';
 import {
   BEGIN_DEBUG_PAUSE,
   BEGIN_INTERRUPT_EXECUTION,
@@ -24,9 +24,9 @@ import {
   handleConsoleLog
 } from '../InterpreterActions';
 
-const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
+const assessmentWorkspace: WorkspaceLocation = 'assessment';
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('handleConsoleLog generates correct action object', () => {
   const logString = 'test-log-string';
