@@ -1,19 +1,28 @@
-import { GroupOverview } from '../../features/dashboard/DashboardTypes';
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 
-export const mockGroupOverviews: GroupOverview[] = [
+export const mockGradingSummary: GradingSummary = [
   {
-    id: 1,
-    avengerName: 'John',
-    groupName: 'Mock Group 1'
+    leaderName: 'John',
+    groupName: 'Mock Group 1',
+    ungradedMissions: 123,
+    submittedMissions: 200,
+    ungradedSidequests: 100,
+    submittedSidequests: 117
   },
   {
-    id: 2,
-    avengerName: 'Billy',
-    groupName: 'Mock Group 2'
+    leaderName: 'Molly',
+    groupName: 'Mock Group 2',
+    ungradedMissions: 1232,
+    submittedMissions: 205430,
+    ungradedSidequests: 345,
+    submittedSidequests: 11547
   },
   {
-    id: 3,
-    avengerName: 'Harry',
-    groupName: 'Mock Group 3'
+    leaderName: 'Lenny',
+    groupName: 'Mock Group 3',
+    ungradedMissions: 1532,
+    submittedMissions: 22200,
+    ungradedSidequests: 134500,
+    submittedSidequests: 6777
   }
 ];

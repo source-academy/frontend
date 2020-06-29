@@ -5,95 +5,86 @@ import { AgGridReact } from 'ag-grid-react';
 import * as React from 'react';
 
 import ContentDisplay from '../../../commons/ContentDisplay';
-import { GroupOverview, LeaderBoardInfo } from '../../../features/dashboard/DashboardTypes';
-import { GradingOverview } from '../../../features/grading/GradingTypes';
+import { GradingSummary } from '../../../features/dashboard/DashboardTypes';
 
 type DashboardProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
-  handleFetchGroupOverviews: () => void;
+  handleFetchGradingSummary: () => void;
 };
 
 export type StateProps = {
-  gradingOverviews: GradingOverview[];
-  groupOverviews: GroupOverview[];
+  gradingSummary: GradingSummary;
 };
 
-type State = {
-  filterValue: string;
-  groupFilterEnabled: boolean;
-  currPage: number;
-  maxPages: number;
-  rowCountString: string;
-  isBackDisabled: boolean;
-  isForwardDisabled: boolean;
-};
-
-class Dashboard extends React.Component<DashboardProps, State> {
+class Dashboard extends React.Component<DashboardProps> {
   private columnDefs: ColDef[];
+  private defaultColumnDefs: ColDef;
   private gridApi?: GridApi;
 
   public constructor(props: DashboardProps) {
     super(props);
+
     this.columnDefs = [
       {
+        headerName: 'Group',
+        field: 'groupName',
+        width: 80,
+        sort: 'asc'
+      },
+      {
         headerName: 'Avenger',
-        field: 'avengerName',
-        width: 100
+        field: 'leaderName'
       },
       {
-        headerName: 'Number of Ungraded Missions',
-        field: 'numOfUngradedMissions'
+        headerName: 'Ungraded Missions',
+        field: 'ungradedMissions'
       },
       {
-        headerName: 'Number of Submitted Missions',
-        field: 'totalNumOfMissions'
+        headerName: 'Submitted Missions',
+        field: 'submittedMissions'
       },
       {
-        headerName: 'Number of Ungraded Quests',
-        field: 'numOfUngradedQuests'
+        headerName: 'Ungraded Quests',
+        field: 'ungradedSidequests'
       },
       {
-        headerName: 'Number of Submitted Quests',
-        field: 'totalNumOfQuests'
+        headerName: 'Submitted Quests',
+        field: 'submittedSidequests'
       }
     ];
+
+    this.defaultColumnDefs = {
+      filter: true,
+      resizable: true,
+      sortable: true
+    };
   }
 
-  public componentDidMount() {
-    this.props.handleFetchGroupOverviews();
-  }
-
-  public componentDidUpdate(prevProps: DashboardProps, prevState: State) {
-    if (this.gridApi && this.props.gradingOverviews.length !== prevProps.gradingOverviews.length) {
-      this.gridApi.setRowData(this.updateLeaderBoard());
+  public componentDidUpdate(prevProps: DashboardProps) {
+    if (this.gridApi && this.props.gradingSummary.length !== prevProps.gradingSummary.length) {
+      this.gridApi.setRowData(this.props.gradingSummary);
     }
   }
 
-  public handleFetchGradingOverviews = () => {
-    this.props.handleFetchGradingOverviews(false);
+  public handleFetchGradingSummary = () => {
+    this.props.handleFetchGradingSummary();
   };
 
   public render() {
-    const data = this.updateLeaderBoard();
     const grid = (
       <div className="GradingContainer">
         <div className="Grading ag-grid-parent ag-theme-balham">
           <AgGridReact
-            gridAutoHeight={true}
-            enableColResize={true}
-            enableSorting={true}
-            enableFilter={true}
+            domLayout={'autoHeight'}
             columnDefs={this.columnDefs}
+            defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
+            onFirstDataRendered={this.resizeGrid}
             onGridSizeChanged={this.resizeGrid}
-            rowData={data}
+            rowData={this.props.gradingSummary}
             rowHeight={30}
-            pagination={true}
-            paginationPageSize={25}
             suppressMovableColumns={true}
-            suppressPaginationPanel={true}
           />
         </div>
       </div>
@@ -101,67 +92,13 @@ class Dashboard extends React.Component<DashboardProps, State> {
 
     return (
       <div>
-        <ContentDisplay display={grid} loadContentDispatch={this.handleFetchGradingOverviews} />
+        <ContentDisplay display={grid} loadContentDispatch={this.handleFetchGradingSummary} />
       </div>
     );
   }
 
-  private updateLeaderBoard = () => {
-    if (this.props.groupOverviews.length === 0) {
-      return [];
-    }
-    const gradingOverview: GradingOverview[] = this.filterSubmissionsByCategory();
-    const filteredData: LeaderBoardInfo[] = [];
-    for (const current of gradingOverview) {
-      if (current.submissionStatus !== 'submitted') {
-        continue;
-      }
-      const groupName = current.groupName;
-      const groupOverviews = this.props.groupOverviews;
-      const index = groupOverviews.findIndex(x => x.groupName === groupName);
-
-      if (index !== -1) {
-        if (filteredData[index] === undefined) {
-          filteredData[index] = {
-            avengerName: groupOverviews[index].avengerName,
-            numOfUngradedMissions: 0,
-            totalNumOfMissions: 0,
-            numOfUngradedQuests: 0,
-            totalNumOfQuests: 0
-          };
-        }
-
-        const currentEntry = filteredData[index];
-        const gradingStatus = current.gradingStatus;
-
-        if (current.assessmentCategory === 'Mission') {
-          if (gradingStatus === 'none' || gradingStatus === 'grading') {
-            currentEntry.numOfUngradedMissions++;
-          }
-          currentEntry.totalNumOfMissions++;
-        } else {
-          if (gradingStatus === 'none' || gradingStatus === 'grading') {
-            currentEntry.numOfUngradedQuests++;
-          }
-          currentEntry.totalNumOfQuests++;
-        }
-      }
-    }
-    return filteredData;
-  };
-
-  private filterSubmissionsByCategory = () => {
-    if (!this.props.gradingOverviews) {
-      return [];
-    }
-    return (this.props.gradingOverviews as GradingOverview[]).filter(
-      sub => sub.assessmentCategory === 'Sidequest' || sub.assessmentCategory === 'Mission'
-    );
-  };
-
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
-    this.gridApi.sizeColumnsToFit();
   };
 
   private resizeGrid = () => {

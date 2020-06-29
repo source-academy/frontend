@@ -6,10 +6,12 @@ import BackendSaga from './BackendSaga';
 import LoginSaga from './LoginSaga';
 import PlaygroundSaga from './PlaygroundSaga';
 import WorkspaceSaga from './WorkspaceSaga';
+import PersistenceSaga from './PersistenceSaga';
 
 export default function* MainSaga(): SagaIterator {
   yield fork(Constants.useBackend ? BackendSaga : mockBackendSaga);
   yield fork(WorkspaceSaga);
   yield fork(LoginSaga);
   yield fork(PlaygroundSaga);
+  yield fork(PersistenceSaga);
 }

@@ -1,21 +1,37 @@
-import { Intent, Position, Toaster } from '@blueprintjs/core';
+import { Intent, Position, Toaster, IToastProps } from '@blueprintjs/core';
 
 const notification = Toaster.create({
   position: Position.TOP
 });
 
-export const showSuccessMessage = (message: string | JSX.Element, timeout: number = 2000) => {
-  notification.show({
-    intent: Intent.SUCCESS,
-    message,
-    timeout
-  });
-};
+export const showSuccessMessage = (
+  message: string | JSX.Element,
+  timeout: number = 2000,
+  key?: string
+) =>
+  notification.show(
+    {
+      intent: Intent.SUCCESS,
+      message,
+      timeout
+    },
+    key
+  );
 
-export const showWarningMessage = (message: string | JSX.Element, timeout: number = 2000) => {
-  notification.show({
-    intent: Intent.WARNING,
-    message,
-    timeout
-  });
-};
+export const showWarningMessage = (
+  message: string | JSX.Element,
+  timeout: number = 2000,
+  key?: string
+) =>
+  notification.show(
+    {
+      intent: Intent.WARNING,
+      message,
+      timeout
+    },
+    key
+  );
+
+export const showMessage = (props: IToastProps, key?: string) => notification.show(props, key);
+
+export const dismiss = (key: string) => notification.dismiss(key);

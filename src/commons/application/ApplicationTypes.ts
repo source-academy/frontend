@@ -8,14 +8,13 @@ import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
-import { DashBoardState } from '../../features/dashboard/DashboardTypes';
+import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { SessionState } from './types/SessionTypes';
 
@@ -25,7 +24,7 @@ export type OverallState = {
   readonly playground: PlaygroundState;
   readonly session: SessionState;
   readonly workspaces: WorkspaceManagerState;
-  readonly dashboard: DashBoardState;
+  readonly dashboard: DashboardState;
 };
 
 export type ApplicationState = {
@@ -159,8 +158,8 @@ export const defaultApplication: ApplicationState = {
   environment: currentEnvironment()
 };
 
-export const defaultDashBoard: DashBoardState = {
-  groupOverviews: []
+export const defaultDashboard: DashboardState = {
+  gradingSummary: []
 };
 
 export const defaultPlayground: PlaygroundState = {
@@ -186,10 +185,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue:
-    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecast
-      ? defaultEditorValue
-      : '',
+  editorValue: workspaceLocation === 'playground' || 'sourcecast' ? defaultEditorValue : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],
@@ -220,23 +216,23 @@ export const defaultRoomId = null;
 
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
-    ...createDefaultWorkspace(WorkspaceLocations.assessment),
+    ...createDefaultWorkspace('assessment'),
     currentAssessment: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
   grading: {
-    ...createDefaultWorkspace(WorkspaceLocations.grading),
+    ...createDefaultWorkspace('grading'),
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    ...createDefaultWorkspace('playground'),
     usingSubst: false
   },
   sourcecast: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
+    ...createDefaultWorkspace('sourcecast'),
     audioUrl: '',
     codeDeltasToApply: null,
     currentPlayerTime: 0,
@@ -252,7 +248,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     title: null
   },
   sourcereel: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
+    ...createDefaultWorkspace('sourcereel'),
     playbackData: {
       init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
       inputs: []
@@ -295,7 +291,7 @@ export const defaultSession: SessionState = {
 export const defaultState: OverallState = {
   academy: defaultAcademy,
   application: defaultApplication,
-  dashboard: defaultDashBoard,
+  dashboard: defaultDashboard,
   playground: defaultPlayground,
   session: defaultSession,
   workspaces: defaultWorkspaceManager

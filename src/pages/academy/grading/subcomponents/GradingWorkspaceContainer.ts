@@ -34,15 +34,11 @@ import {
   updateHasUnsavedChanges,
   updateReplValue
 } from '../../../../commons/workspace/WorkspaceActions';
-import {
-  WorkspaceLocation,
-  WorkspaceLocations,
-  WorkspaceState
-} from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation, WorkspaceState } from '../../../../commons/workspace/WorkspaceTypes';
 
 import GradingWorkspace, { DispatchProps, OwnProps, StateProps } from './GradingWorkspace';
 
-const workspaceLocation: WorkspaceLocation = WorkspaceLocations.grading;
+const workspaceLocation: WorkspaceLocation = 'grading';
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {

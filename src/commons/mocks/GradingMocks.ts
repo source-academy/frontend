@@ -1,3 +1,4 @@
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview } from '../../features/grading/GradingTypes';
 import { Testcase, TestcaseTypes } from '../assessment/AssessmentTypes';
 import { mockRuneLibrary } from './AssessmentMocks';
@@ -194,7 +195,7 @@ _italics_
 
     code
 
-[link to Source Academy](https://sourceacademy.nus.edu.sg)  
+[link to Source Academy](https://sourceacademy.nus.edu.sg)
 
 ![](image-url-goes-here)
       `,
@@ -285,7 +286,7 @@ You look at the display of the robot dog.
 
 <br/>
 <br/>
-    
+
 New message from **Avenger**!
 
 > _Cadet, please meet me at Level X-05, outside the pod bay doors. There is an important mission awaiting us._
@@ -401,3 +402,30 @@ export const mockFetchGrading = (accessToken: string, submissionId: number): Gra
     return mockGrading;
   }
 };
+
+export const mockGradingSummary: GradingSummary = [
+  {
+    leaderName: 'John',
+    groupName: 'Mock Group 1',
+    ungradedMissions: 123,
+    submittedMissions: 200,
+    ungradedSidequests: 100,
+    submittedSidequests: 117
+  },
+  {
+    leaderName: 'Molly',
+    groupName: 'Mock Group 2',
+    ungradedMissions: 1232,
+    submittedMissions: 205430,
+    ungradedSidequests: 345,
+    submittedSidequests: 11547
+  },
+  {
+    leaderName: 'Lenny',
+    groupName: 'Mock Group 3',
+    ungradedMissions: 1532,
+    submittedMissions: 22200,
+    ungradedSidequests: 134500,
+    submittedSidequests: 6777
+  }
+];

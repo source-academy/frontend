@@ -10,8 +10,10 @@ export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
 export const FETCH_GRADING = 'FETCH_GRADING';
 export const FETCH_GRADING_OVERVIEWS = 'FETCH_GRADING_OVERVIEWS';
 export const LOGIN = 'LOGIN';
+export const LOGOUT_GOOGLE = 'LOGOUT_GOOGLE';
 export const SET_TOKENS = 'SET_TOKENS';
 export const SET_USER = 'SET_USER';
+export const SET_GOOGLE_USER = 'SET_GOOGLE_USER';
 export const SUBMIT_ANSWER = 'SUBMIT_ANSWER';
 export const SUBMIT_ASSESSMENT = 'SUBMIT_ASSESSMENT';
 export const SUBMIT_GRADING = 'SUBMIT_GRADING';
@@ -44,4 +46,5 @@ export type SessionState = {
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
+  readonly googleUser?: string;
 };
