@@ -2,7 +2,6 @@ import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import * as React from 'react';
-import { RouteComponentProps } from 'react-router';
 
 import { Variant } from 'js-slang/dist/types';
 
@@ -13,7 +12,7 @@ import {
 } from '../../../commons/application/ApplicationTypes';
 import { Chapter } from '../../../commons/application/types/ChapterTypes';
 
-export type DefaultChapterProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type DefaultChapterProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleFetchChapter: () => void;
@@ -26,7 +25,7 @@ export type StateProps = {
   sourceVariant: Variant;
 };
 
-export function DefaultChapter(props: DefaultChapterProps) {
+export function AcademyDefaultChapter(props: DefaultChapterProps) {
   props.handleFetchChapter();
 
   const chapters = sourceLanguages.map((lang: SourceLanguage) => {
@@ -72,3 +71,5 @@ export function DefaultChapter(props: DefaultChapterProps) {
     <div> {chapSelect(props.sourceChapter, props.sourceVariant, props.handleUpdateChapter)} </div>
   );
 }
+
+export default AcademyDefaultChapter;
