@@ -7,12 +7,12 @@ type AchievementTaskDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  uploadAchievements: any;
+  updateAchievements: any;
   editAchievement: any;
 };
 
 function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievements } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   const setNonTask = () => {
     const newAchievement = editableAchievement;
@@ -26,7 +26,7 @@ function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
     inferencer.editAchievement(editableAchievement);
     // TODO: add this
     // editAchievement(editableAchievement);
-    uploadAchievements(inferencer.getAchievements);
+    updateAchievements(inferencer.getAchievements);
   };
 
   return (

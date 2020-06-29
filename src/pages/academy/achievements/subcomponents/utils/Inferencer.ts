@@ -4,6 +4,7 @@ import {
   FilterStatus,
   AchievementStatus
 } from '../../../../../commons/achievements/AchievementTypes';
+import { achievementTemplate } from 'src/pages/academy/achievementControl/subcomponents/editorTools/AchievementTemplate';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
@@ -66,6 +67,7 @@ class Inferencer {
     return this.nodeList.get(id) !== undefined;
   }
 
+  /*
   public getNextID(tasks: number[]) {
     if (tasks.length === 0) {
       return 0;
@@ -79,6 +81,7 @@ class Inferencer {
       return 0;
     }
   }
+  */
 
   public getAchievements() {
     return this.achievements;
@@ -87,6 +90,21 @@ class Inferencer {
   public getAchievementItem(id: number) {
     // asserts: the achievement id already exist in nodeList
     return this.nodeList.get(id)!.achievement;
+  }
+
+  public previewNewAchievement() {
+    const achievement = achievementTemplate;
+
+    // first, generate a new unique id
+    const len = this.achievements.length;
+    const newId = len > 0 ? this.achievements[len - 1].id + 1 : 0;
+
+    // then assign the new unique id by overwriting the achievement item
+    // and append it to achievements
+    achievement.id = newId;
+
+    console.log(achievement);
+    return achievement;
   }
 
   public addAchievement(achievement: AchievementItem) {

@@ -21,14 +21,12 @@ import AchievementDeleter from './editableUtils/AchievementDeleter';
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
-  handleAchievementsUpdate: any;
-  uploadAchievements: any;
-  forceRefresh: any;
+  updateAchievements: any;
   editAchievement: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { achievement, inferencer, uploadAchievements, forceRefresh } = props;
+  const { achievement, inferencer, updateAchievements, editAchievement } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id, title, ability, exp, deadline, icon } = editableAchievement;
@@ -40,17 +38,16 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     inferencer.editAchievement(editableAchievement);
     setHasChanges(false);
     setPendingUpload(true);
-    forceRefresh();
   };
 
   const handleUploadChanges = () => {
-    uploadAchievements(inferencer.getAchievements());
+    editAchievement(editableAchievement);
     setPendingUpload(false);
   };
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
-    uploadAchievements(inferencer.getAchievements());
+    updateAchievements();
   };
 
   const handleDiscardChanges = () => {
@@ -58,32 +55,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(false);
     setPendingUpload(false);
   };
-
-  ///////////////////////// TODO: IMPLEMENT THIS //////////////////////////////
-
-  /*
-  const handleDeleteAchievement = () => {
-    const achievement = inferencer.getAchievementItem(id);
-    inferencer.removeAchievement(id);
-    handleAchievementsUpdate(achievement);
-    forceRefresh();
-  }
-
-  const handleSaveChanges = () => {
-    inferencer.editAchievement(editableAchievement);
-    setHasChanges(false);
-    setPendingUpload(true);
-    forceRefresh();
-  }
-
-  const handleUploadChanges = () => {
-    editAchievement(editableAchievement);
-    setPendingUpload(false);
-    forceRefresh();
-  }
-  */
-
-  ///////////////////////// TODO: IMPLEMENT THIS //////////////////////////////
 
   /* Handlers to Change State of Achievement information */
   const handleChangeTitle = (title: string) => {

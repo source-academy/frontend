@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
@@ -9,12 +9,12 @@ type AchievementPrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  uploadAchievements: any;
+  updateAchievements: any;
   editAchievement: any;
 };
 
 function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, uploadAchievements } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -34,12 +34,15 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
   };
 
   const [deletedPrerequisiteID, setDeletedPrerequisiteID] = useState<number>(
-    inferencer.getNextID(prerequisites)
+    prerequisites.length === 0 ? 0 : prerequisites[0]
+    // inferencer.getNextID(prerequisites)
   );
 
+  /*
   useEffect(() => {
     setDeletedPrerequisiteID(inferencer.getNextID(prerequisites));
   }, [inferencer, prerequisites]);
+  */
 
   const deleteAction = (e: any) => {
     toggleDialogOpen();
@@ -47,7 +50,7 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
     inferencer.editAchievement(editableAchievement);
     // TODO: add this
     // editAchievement(editableAchievement);
-    uploadAchievements(inferencer.getAchievements);
+    updateAchievements(inferencer.getAchievements);
   };
 
   return (

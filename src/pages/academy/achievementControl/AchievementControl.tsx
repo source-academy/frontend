@@ -1,19 +1,14 @@
-import React, { useState /* useEffect */ } from 'react';
+import React, { useEffect, useState } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
 import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
-import {
-  updateMockAchievements,
-  fetchMockAchievements
-} from '../../../commons/mocks/AchievementMocks';
 
 export type DispatchProps = {
-  handleAchievementsFetch: () => void;
-  handleAchievementsUpdate: (achievements: AchievementItem[]) => void;
-  addAchievement: (achievement: AchievementItem) => void;
-  editAchievement: (achievement: AchievementItem) => void;
+  handleFetchAchievements: () => void;
+  handleUpdateAchievements: (achievements: AchievementItem[]) => void;
+  handleEditAchievement: (achievement: AchievementItem) => void;
 };
 
 export type StateProps = {
@@ -23,49 +18,43 @@ export type StateProps = {
 function AchievementControl(props: DispatchProps & StateProps) {
   const {
     inferencer,
-    // handleAchievementsFetch,
-    addAchievement,
-    editAchievement,
-    handleAchievementsUpdate
+    handleFetchAchievements,
+    handleUpdateAchievements,
+    handleEditAchievement
   } = props;
 
-  /* TODO: Implement 
   useEffect(() => {
-    handleAchievementsFetch();
-  }, [ handleAchievementsFetch ]);
-  */
+    handleFetchAchievements();
+  }, [handleFetchAchievements]);
 
-  let _inferencer: Inferencer = inferencer;
-
-  // force re-render the achievement-control page
+  /* force re-render the achievement-control page */
   const [refresh, setRefresh] = useState<boolean>();
   const forceRefresh = () => {
     setRefresh(!refresh);
   };
 
-  const uploadAchievements = (achievements: AchievementItem[]) => {
-    updateMockAchievements(achievements); // TODO: replace with handleAchievementsUpdate(achievements);
-    const refreshData = fetchMockAchievements(); // TODO: replace with handleAchievementFetch()
-    _inferencer = new Inferencer(refreshData);
-    forceRefresh();
+  const updateAchievements = () => {
+    handleUpdateAchievements(inferencer.getAchievements());
+  };
+
+  const editAchievement = (achievement: AchievementItem) => {
+    handleEditAchievement(achievement);
   };
 
   return (
     <>
       <div className="AchievementControl">
         <AchievementControlPanel
-          inferencer={_inferencer}
-          uploadAchievements={uploadAchievements}
+          inferencer={inferencer}
+          updateAchievements={updateAchievements}
           editAchievement={editAchievement}
         />
 
         <AchievementEditor
-          inferencer={_inferencer}
-          uploadAchievements={uploadAchievements}
-          forceRefresh={forceRefresh}
-          addAchievement={addAchievement}
+          inferencer={inferencer}
+          updateAchievements={updateAchievements}
           editAchievement={editAchievement}
-          handleAchievementsUpdate={handleAchievementsUpdate}
+          forceRefresh={forceRefresh}
         />
       </div>
     </>

@@ -6,7 +6,6 @@ import { achievementTemplate } from '../AchievementTemplate';
 type AchievementAdderProps = {
   inferencer: Inferencer;
   forceRefresh: any;
-  addAchievement: any;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
@@ -14,8 +13,6 @@ function AchievementAdder(props: AchievementAdderProps) {
 
   const handleAddAchievement = () => {
     inferencer.addAchievement(achievementTemplate);
-    // TODO: Add this before production
-    // addAchievement(achievementTemplate);
     forceRefresh();
   };
 

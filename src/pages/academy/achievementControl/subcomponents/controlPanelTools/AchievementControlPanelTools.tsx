@@ -12,7 +12,7 @@ type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  uploadAchievements: any;
+  updateAchievements: any;
   editAchievement: any;
 };
 
@@ -21,7 +21,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
     editableAchievement,
     setEditableAchievement,
     inferencer,
-    uploadAchievements,
+    updateAchievements,
     editAchievement
   } = props;
 
@@ -31,7 +31,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
-        uploadAchievements={uploadAchievements}
+        updateAchievements={updateAchievements}
         editAchievement={editAchievement}
       />
 
@@ -39,7 +39,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
-        uploadAchievements={uploadAchievements}
+        updateAchievements={updateAchievements}
         editAchievement={editAchievement}
       />
 
@@ -47,7 +47,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
-        uploadAchievements={uploadAchievements}
+        updateAchievements={updateAchievements}
         editAchievement={editAchievement}
       />
     </>

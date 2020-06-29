@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 import AchievementTaskSelector from './AchievementTaskSelector';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 
 export type AchievementTaskAdderProps = {
   inferencer: Inferencer;
-  uploadAchievements: any;
+  updateAchievements: any;
   editAchievement: any;
 };
 
 function AchievementTaskAdder(props: AchievementTaskAdderProps) {
-  const { inferencer, uploadAchievements } = props;
+  const { inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -21,9 +21,11 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
 
+  /*
   useEffect(() => {
     setAddedTaskID(inferencer.getNextID(nonTaskIDs));
   }, [inferencer, nonTaskIDs]);
+  */
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);
@@ -31,7 +33,7 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
     inferencer.editAchievement(achievement);
     // TODO: add this
     // editAchievement(achievement);
-    uploadAchievements(inferencer.getAchievements());
+    updateAchievements(inferencer.getAchievements());
   };
 
   const addingAction = (e: any) => {

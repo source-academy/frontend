@@ -6,22 +6,13 @@ import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
   inferencer: Inferencer;
-  uploadAchievements: any;
-  forceRefresh: any;
-  addAchievement: any;
+  updateAchievements: any;
   editAchievement: any;
-  handleAchievementsUpdate: any;
+  forceRefresh: any;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const {
-    inferencer,
-    uploadAchievements,
-    forceRefresh,
-    addAchievement,
-    editAchievement,
-    handleAchievementsUpdate
-  } = props;
+  const { inferencer, updateAchievements, editAchievement, forceRefresh } = props;
 
   const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>
     achievementIds.map(id => (
@@ -29,10 +20,8 @@ function AchievementEditor(props: AchievementEditorProps) {
         key={id}
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
-        uploadAchievements={uploadAchievements}
+        updateAchievements={updateAchievements}
         editAchievement={editAchievement}
-        handleAchievementsUpdate={handleAchievementsUpdate}
-        forceRefresh={forceRefresh}
       />
     ));
 
@@ -40,11 +29,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     <div className="editor-cards">
       <div className="main">
         <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
-        <AchievementAdder
-          inferencer={inferencer}
-          forceRefresh={forceRefresh}
-          addAchievement={addAchievement}
-        />
+        <AchievementAdder inferencer={inferencer} forceRefresh={forceRefresh} />
       </div>
     </div>
   );

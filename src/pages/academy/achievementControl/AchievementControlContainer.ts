@@ -6,24 +6,20 @@ import AchievementControl, { DispatchProps, StateProps } from './AchievementCont
 import {
   getAchievements,
   updateAchievements,
-  addAchievement,
   editAchievement
 } from '../../../commons/achievements/AchievementActions';
 import Inferencer from '../achievements/subcomponents/utils/Inferencer';
-import { defaultMockAchievements } from 'src/commons/mocks/AchievementMocks';
 
-// TODO: replace defaultAchievements with fetch database data
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new Inferencer(defaultMockAchievements)
+  inferencer: new Inferencer(state.achievements.achievements)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleAchievementsFetch: getAchievements,
-      handleAchievementsUpdate: updateAchievements,
-      addAchievement: addAchievement,
-      editAchievement: editAchievement
+      handleFetchAchievements: getAchievements,
+      handleUpdateAchievements: updateAchievements,
+      handleEditAchievement: editAchievement
     },
     dispatch
   );
