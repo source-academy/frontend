@@ -16,7 +16,12 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
-import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import {
+  CHANGE_CHAPTER,
+  FETCH_CHAPTER,
+  WorkspaceLocation
+} from '../../commons/workspace/WorkspaceTypes';
+import { Chapter } from '../application/types/ChapterTypes';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
@@ -45,10 +50,10 @@ import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/Au
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
 import {
-  changeChapter,
   changeDateAssessment,
   deleteAssessment,
   deleteSourcecastEntry,
+  getChapter,
   getAssessment,
   getAssessmentOverviews,
   getGrading,
@@ -62,6 +67,7 @@ import {
   postAnswer,
   postAssessment,
   postAuth,
+  postChapter,
   postGrading,
   postSourcecast,
   postUnsubmit,
@@ -464,6 +470,17 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/sourcecast');
   });
 
+  yield takeEvery(FETCH_CHAPTER, function* (action: ReturnType<typeof actions.fetchChapter>) {
+    const defaultChapter: Chapter | null = yield call(getChapter);
+
+    if (!defaultChapter) {
+      yield call(showWarningMessage, `Failed to load default Source chapter for Playground!`);
+      return;
+    }
+
+    yield put(actions.updateChapter(defaultChapter.chapter, defaultChapter.variant));
+  });
+
   yield takeEvery(CHANGE_CHAPTER, function* (action: ReturnType<typeof actions.changeChapter>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
@@ -471,7 +488,7 @@ function* BackendSaga(): SagaIterator {
     }));
 
     const chapter = action.payload;
-    const resp: Response = yield call(changeChapter, chapter.chapter, chapter.variant, tokens);
+    const resp: Response = yield call(postChapter, chapter.chapter, chapter.variant, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp);
