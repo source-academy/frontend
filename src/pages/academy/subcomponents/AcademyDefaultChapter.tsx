@@ -25,24 +25,19 @@ export type StateProps = {
   sourceVariant: Variant;
 };
 
-export function AcademyDefaultChapter(props: DefaultChapterProps) {
-  props.handleFetchChapter();
+export const sourceChapters: Chapter[] = sourceLanguages.map((lang: SourceLanguage) => {
+  return { ...lang, displayName: styliseChapter(lang.chapter, lang.variant) };
+});
 
-  const chapters = sourceLanguages.map((lang: SourceLanguage) => {
-    return {
-      chapter: lang.chapter,
-      variant: lang.variant,
-      displayName: styliseChapter(lang.chapter, lang.variant)
-    };
-  });
+const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = props => {
+  const { handleFetchChapter, handleUpdateChapter } = props;
+
+  React.useEffect(() => {
+    handleFetchChapter();
+  }, [handleFetchChapter]);
 
   const chapterRenderer: ItemRenderer<Chapter> = (lang, { handleClick }) => (
-    <MenuItem
-      active={false}
-      key={lang.chapter + lang.variant}
-      onClick={handleClick}
-      text={lang.displayName}
-    />
+    <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
   );
 
   const ChapterSelectComponent = Select.ofType<Chapter>();
@@ -50,11 +45,11 @@ export function AcademyDefaultChapter(props: DefaultChapterProps) {
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: Chapter) => {}
+    handleSelect = (item: Chapter) => {}
   ) => (
     <ChapterSelectComponent
       className={Classes.MINIMAL}
-      items={chapters}
+      items={sourceChapters}
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
       filterable={false}
@@ -67,9 +62,7 @@ export function AcademyDefaultChapter(props: DefaultChapterProps) {
     </ChapterSelectComponent>
   );
 
-  return (
-    <div> {chapSelect(props.sourceChapter, props.sourceVariant, props.handleUpdateChapter)} </div>
-  );
-}
+  return <div>{chapSelect(props.sourceChapter, props.sourceVariant, handleUpdateChapter)}</div>;
+};
 
 export default AcademyDefaultChapter;
