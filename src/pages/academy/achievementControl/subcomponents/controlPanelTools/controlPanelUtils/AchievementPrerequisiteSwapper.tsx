@@ -4,33 +4,31 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
 
-type AchievementTaskSelectorProps = {
-  tasks: number[];
+type AchievementPrerequisiteSwapperProps = {
+  prerequisiteIdDs: number[];
   inferencer: Inferencer;
-  focusTaskID: number;
-  buttonText: string;
-  dialogHeader: string;
-
-  emptyTasksMessage: string;
 
   setDialogOpen: any;
   isDialogOpen: boolean;
   action: (e: any) => void;
-  setFocusTaskID: any;
+
+  firstID: number;
+  setFirstID: any;
+  secondID: number;
+  setSecondID: any;
 };
 
-function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
+function AchievementPrerequisiteSwapper(props: AchievementPrerequisiteSwapperProps) {
   const {
-    tasks,
+    prerequisiteIdDs,
     inferencer,
-    focusTaskID,
-    buttonText,
-    dialogHeader,
-    emptyTasksMessage,
     setDialogOpen,
     isDialogOpen,
     action,
-    setFocusTaskID
+    firstID,
+    setFirstID,
+    secondID,
+    setSecondID
   } = props;
 
   const getTaskTitle = (id: number) => {
@@ -42,7 +40,11 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   };
 
   const changeFocusTaskID = (taskID: number, e: any) => {
-    setFocusTaskID(taskID);
+    setFirstID(taskID);
+  };
+
+  const changeSecondFocusTaskID = (taskID: number, e: any) => {
+    setSecondID(taskID);
   };
 
   const taskRenderer: ItemRenderer<number> = (id, { handleClick }) => {
@@ -65,28 +67,40 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
         onClose={setDialogOpen}
         className={'task-selector'}
         isOpen={isDialogOpen}
-        title={dialogHeader}
+        title={'Swap'}
       >
         <div className={Classes.DIALOG_BODY}>
-          {tasks.length === 0 ? (
+          {prerequisiteIdDs.length === 0 ? (
             <div className="task-selector">
-              <p>{emptyTasksMessage}</p>
+              <p>Add a prerequisite to continue</p>
             </div>
           ) : (
             <>
               <div className="task-selector">
                 <div>
                   <TaskSelectComponent
-                    items={tasks}
+                    items={prerequisiteIdDs}
                     onItemSelect={changeFocusTaskID}
                     itemRenderer={taskRenderer}
                     filterable={false}
                   >
-                    {taskSelector(focusTaskID)}
+                    {taskSelector(firstID)}
                   </TaskSelectComponent>
                 </div>
+
                 <div>
-                  <Button className="editor-button" onClick={action} text={buttonText} />
+                  <TaskSelectComponent
+                    items={prerequisiteIdDs}
+                    onItemSelect={changeSecondFocusTaskID}
+                    itemRenderer={taskRenderer}
+                    filterable={false}
+                  >
+                    {taskSelector(secondID)}
+                  </TaskSelectComponent>
+                </div>
+
+                <div>
+                  <Button className="editor-button" onClick={action} text={'swap'} />
                 </div>
               </div>
             </>
@@ -97,4 +111,4 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   );
 }
 
-export default AchievementTaskSelector;
+export default AchievementPrerequisiteSwapper;
