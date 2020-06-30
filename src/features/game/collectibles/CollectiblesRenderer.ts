@@ -4,7 +4,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { LocationId } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
-import { CollectibleProperty } from './CollectiblesTypes';
+import { CollectibleProperty } from './GameCollectiblesTypes';
 
 export default class GameCollectibleRenderer {
   private collectiblesMap: Map<ItemId, CollectibleProperty>;

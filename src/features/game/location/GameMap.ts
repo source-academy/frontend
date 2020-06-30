@@ -6,7 +6,7 @@ import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { GameAction } from '../action/GameActionTypes';
-import { CollectibleProperty } from '../collectibles/CollectiblesTypes';
+import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
 
 class GameMap {
   private soundAssets: SoundAsset[];

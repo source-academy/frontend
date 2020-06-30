@@ -18,6 +18,7 @@ class GameCollectiblesManager {
   private scene: Phaser.Scene | undefined;
   private currCollectiblePage: CollectiblePage;
   private layerManager: GameLayerManager | undefined;
+  private collectibleContainer: Phaser.GameObjects.Container | undefined;
 
   constructor() {
     this.currCollectiblePage = CollectiblePage.Collectibles;
@@ -29,6 +30,8 @@ class GameCollectiblesManager {
   }
 
   public renderCollectibleMenu() {
+    if (this.collectibleContainer) this.collectibleContainer.destroy();
+
     const collectibleContainer = new Phaser.GameObjects.Container(
       this.getScene(),
       screenCenter.x,
@@ -46,7 +49,11 @@ class GameCollectiblesManager {
     Object.keys(CollectiblePage).forEach((page, index) => {
       const isChosen = page === (this.currCollectiblePage as string);
       const pageOptContainer = this.addPageBanner(page, index, isChosen, () => {
-        this.currCollectiblePage = page as CollectiblePage;
+        const newPage = page as CollectiblePage;
+        if (newPage !== this.currCollectiblePage) {
+          this.currCollectiblePage = page as CollectiblePage;
+          this.renderCollectibleMenu();
+        }
       });
       collectibleContainer.add(pageOptContainer);
     });
@@ -54,10 +61,13 @@ class GameCollectiblesManager {
     const activePage = this.getCurrentPage(this.currCollectiblePage);
     collectibleContainer.add(activePage);
 
-    this.getLayerManager().addToLayer(Layer.UI, collectibleContainer);
+    this.collectibleContainer = collectibleContainer;
+    this.getLayerManager().addToLayer(Layer.UI, this.collectibleContainer);
   }
 
-  public destroyCollectibleMenu() {}
+  public destroyCollectibleMenu() {
+    if (this.collectibleContainer) this.collectibleContainer.destroy();
+  }
 
   private getScene() {
     if (!this.scene) {
@@ -130,8 +140,17 @@ class GameCollectiblesManager {
     }
 
     const pageContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    objectList.forEach(obj => {});
+    objectList.forEach(obj => {
+      const objContainer = this.createObjContainer(obj, () => {});
+      pageContainer.add(objContainer);
+    });
     return pageContainer;
+  }
+
+  private createObjContainer(objs: string, callback: any) {
+    const container = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+
+    return container;
   }
 }
 

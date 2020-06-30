@@ -2,7 +2,7 @@ import { splitToLines, isEnclosedBySquareBrackets, mapByHeader, splitByChar } fr
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Constants } from '../commons/CommonConstants';
-import { CollectibleProperty } from '../collectibles/CollectiblesTypes';
+import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
 
 export default function CollectibleParser(fileName: string, fileContent: string): void {
   const lines: string[] = splitToLines(fileContent);
