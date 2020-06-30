@@ -8,18 +8,10 @@ type AchievementEditorProps = {
   inferencer: Inferencer;
   updateAchievements: any;
   editAchievement: any;
-  addUnsavedChange: any;
-  removedUnsavedChange: any;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const {
-    inferencer,
-    updateAchievements,
-    editAchievement,
-    addUnsavedChange,
-    removedUnsavedChange
-  } = props;
+  const { inferencer, updateAchievements, editAchievement } = props;
 
   const [adderId, setAdderId] = useState<number>(-1);
 
@@ -33,8 +25,6 @@ function AchievementEditor(props: AchievementEditorProps) {
         editAchievement={editAchievement}
         adderId={adderId}
         setAdderId={setAdderId}
-        addUnsavedChange={addUnsavedChange}
-        removedUnsavedChange={removedUnsavedChange}
       />
     ));
 
