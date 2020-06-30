@@ -10,13 +10,15 @@ export enum Layer {
   Objects,
   BBox,
   Escape,
-  Selector
+  Selector,
+  Collectibles
 }
 
 // Back to Front
 export const defaultLayerSequence = [
   Layer.Background,
   Layer.Selector,
+  Layer.Collectibles,
   Layer.Objects,
   Layer.BBox,
   Layer.Character,

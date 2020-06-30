@@ -1,6 +1,8 @@
 import { loadData } from '../save/GameSaveRequests';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Parser from '../parser/Parser';
+import { loadText } from 'src/features/storySimulator/utils/LoaderUtils';
+import { defaultChapter } from '../commons/CommonAssets';
 
 export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,
@@ -9,43 +11,28 @@ export async function callGameManagerOnTxtLoad(
   chapterNum: number,
   checkpointNum: number
 ) {
-  const key = `#${fileName}`;
+  const chapterKey = `#${fileName}`;
+  await loadText(scene, chapterKey, fileName);
+  await loadText(scene, defaultChapter.key, defaultChapter.path);
 
-  if (scene.cache.text.exists(key)) {
-    await startGameManager(scene, key, continueGame, chapterNum, checkpointNum);
+  const text = scene.cache.text.get(chapterKey);
+  const defaultChapterText = scene.cache.text.get(defaultChapter.key);
+
+  const accountInfo = getSourceAcademyGame().getAccountInfo();
+  if (!accountInfo) {
     return;
   }
+  const fullSaveState = await loadData(accountInfo);
+  Parser.parse(defaultChapterText);
+  Parser.parse(text, true);
+  const gameCheckpoint = Parser.checkpoint;
 
-  scene.load.text(key, fileName);
-  scene.load.once('filecomplete', (key: string) => {
-    startGameManager(scene, key, continueGame, chapterNum, checkpointNum);
+  scene.scene.start('GameManager', {
+    isStorySimulator: false,
+    fullSaveState,
+    gameCheckpoint,
+    continueGame,
+    chapterNum,
+    checkpointNum
   });
-  scene.load.start();
-}
-
-async function startGameManager(
-  scene: Phaser.Scene,
-  key: string,
-  continueGame: boolean,
-  chapterNum: number,
-  checkpointNum: number
-) {
-  if (key[0] === '#') {
-    const text = scene.cache.text.get(key);
-    const accountInfo = getSourceAcademyGame().getAccountInfo();
-    if (!accountInfo) {
-      return;
-    }
-    const fullSaveState = await loadData(accountInfo);
-    const gameCheckpoint = Parser.parse(text);
-
-    scene.scene.start('GameManager', {
-      isStorySimulator: false,
-      fullSaveState,
-      gameCheckpoint,
-      continueGame,
-      chapterNum,
-      checkpointNum
-    });
-  }
 }

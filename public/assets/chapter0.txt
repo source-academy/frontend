@@ -2,26 +2,10 @@
 startingLoc: room
 
 <<location>>
-crashsite, crashSite, Crash Site
-classroom, classroom/classOn, Class Room
-emergency, classroom/emergency, Emergency
-hallway, hallway, Hallway
-room, yourRoom-dim, Student Room
 $
-room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
 hallway, updateChecklist: visit
 $
-[talk move]
-[explore talk move]
-[talk move]
-[move]
-[explore move talk]
 $
-classroom: crashsite, hallway
-crashsite: classroom
-hallway: classroom, room, emergency
-room: hallway
-emergency: hallway
 
 <<characters>>
 [room]
@@ -36,11 +20,11 @@ visit
 
 <<objects>>
 [room]
-yourCarpet, yourCarpet, 640, 667
-+yourChair, yourChair, 932, 549, 300, 300
-+door6, door/yourRoom-dim, 831, 270
-+yourBed, yourHeadphones, 372, 514
-yourOtherDoor, door/yourRoom-dim, 0, 0
+yourCarpet, objects/yourCarpet, 640, 667
++yourChair, objects/yourChair, 932, 549, 300, 300
++door6, objects/door/yourRoom-dim, 831, 270
++yourBed, objects/yourHeadphones, 372, 514
+yourOtherDoor, objects/door/yourRoom-dim, 0, 0
 $
 yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
 yourCarpet, collectible: cookies if checklist.visit
@@ -93,6 +77,7 @@ title: What happened?
 [part0]
 $narrator
 The year is 1101 A.E.
+#collectible: cookie
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
 #changeBackground: classroom
 As Earth’s population reached a breaking point, humans began to migrate across the galaxy, colonizing planets once thought uninhabitable, as well as making settlements on those with amicable alien life.

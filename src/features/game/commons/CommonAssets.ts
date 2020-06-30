@@ -1,5 +1,10 @@
 import { ImageAsset } from './CommonsTypes';
 
+export const defaultChapter: ImageAsset = {
+  key: 'defaultChapter',
+  path: '../assets/defaultChapter.txt'
+};
+
 export const shortButton: ImageAsset = {
   key: 'short-button',
   path: '../assets/shortButton.png'
