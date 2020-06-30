@@ -17,7 +17,7 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-import AchievementContainer from '../../pages/academy/achievements/AchievementContainer';
+import AchievementContainer from 'src/pages/academy/achievements/AchievementContainer';
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -78,7 +78,7 @@ class Application extends React.Component<ApplicationProps, {}> {
               <Route path="/login" render={toLogin(this.props)} />
               <Route path="/contributors" component={Contributors} />
               <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route path="/achievements" component={AchievementContainer} />
+              <Route path="/achievements" component={toAchievements(this.props)} />
               <Route exact={true} path="/" render={this.redirectToAcademy} />
               <Route component={NotFound} />
             </Switch>
@@ -101,6 +101,11 @@ const toAcademy = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
+
+const toAchievements = (props: ApplicationProps) =>
+  props.accessToken === undefined || props.role === undefined
+    ? () => <Redirect to="/login" />
+    : () => <AchievementContainer />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
