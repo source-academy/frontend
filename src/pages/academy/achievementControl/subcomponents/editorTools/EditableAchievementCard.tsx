@@ -73,7 +73,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setPendingUpload(false);
   };
 
-  /* Handlers to Change State of Achievement information */
   const handleChangeTitle = (title: string) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -85,7 +84,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleChangeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
       if (exp === '') {
-        exp = '0'; // handle special case of empty input
+        exp = '0';
       }
       setEditableAchievement({
         ...editableAchievement,

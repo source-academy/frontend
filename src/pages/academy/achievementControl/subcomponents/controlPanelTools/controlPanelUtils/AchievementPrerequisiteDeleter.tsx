@@ -35,21 +35,12 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
 
   const [deletedPrerequisiteID, setDeletedPrerequisiteID] = useState<number>(
     prerequisites.length === 0 ? 0 : prerequisites[0]
-    // inferencer.getNextID(prerequisites)
   );
-
-  /*
-  useEffect(() => {
-    setDeletedPrerequisiteID(inferencer.getNextID(prerequisites));
-  }, [inferencer, prerequisites]);
-  */
 
   const deleteAction = (e: any) => {
     toggleDialogOpen();
     setEditableAchievement(deletePrerequisite(deletedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
-    // TODO: add this
-    // editAchievement(editableAchievement);
     updateAchievements(inferencer.getAchievements);
   };
 

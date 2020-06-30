@@ -1,7 +1,5 @@
 import React from 'react';
 
-// import { Button } from '@blueprintjs/core';
-
 import AchievementPrerequisiteDeleter from './controlPanelUtils/AchievementPrerequisiteDeleter';
 import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';

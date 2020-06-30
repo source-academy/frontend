@@ -29,21 +29,12 @@ function AchievementPrerequisiteAdder(props: AchievementPrerequisiteAdderProps) 
 
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
     nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
-    // inferencer.getNextID(nonPrerequisites)
   );
-
-  /*
-  useEffect(() => {
-    setAddedPrerequisiteID(inferencer.getNextID(nonPrerequisites));
-  }, [inferencer, nonPrerequisites]);
-  */
 
   const addingAction = (e: any) => {
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
-    // TODO: add this
-    // editAchievement(editableAchievement);
     updateAchievements(inferencer.getAchievements);
   };
 

@@ -27,7 +27,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleFetchAchievements();
   }, [handleFetchAchievements]);
 
-  // rename handlers
   const updateAchievements = () => {
     handleUpdateAchievements(inferencer.getAchievements());
   };
