@@ -35,6 +35,8 @@ export default function* AchievementSaga(): SagaIterator {
     if (!resp) {
       return;
     }
+
+    yield put(actions.saveAchievements(achievements));
   });
 
   yield takeEvery(EDIT_ACHIEVEMENT, function* (action: ReturnType<typeof actions.editAchievement>) {
