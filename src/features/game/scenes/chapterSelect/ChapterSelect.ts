@@ -1,5 +1,5 @@
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
-import { limitNumber } from 'src/features/game/utils/GameUtils';
+import { limitNumber, sleep } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import { chapterSelectAssets, chapterSelectBackground } from './ChapterSelectAssets';
@@ -26,6 +26,7 @@ class ChapterSelect extends Phaser.Scene {
   private chapterDetails: GameChapter[];
   private layerManager: GameLayerManager;
   private loadedGameState: FullSaveState | undefined;
+  private autoScrolling: boolean;
 
   constructor() {
     super('ChapterSelect');
@@ -35,6 +36,7 @@ class ChapterSelect extends Phaser.Scene {
     this.scrollSpeed = defaultScrollSpeed;
     this.chapterDetails = SampleChapters;
     this.layerManager = new GameLayerManager();
+    this.autoScrolling = true;
   }
 
   public preload() {
@@ -53,6 +55,10 @@ class ChapterSelect extends Phaser.Scene {
 
   public update() {
     if (!this.chapterContainer) return;
+
+    if (this.autoScrolling) {
+      return;
+    }
     let xOffset = this.input.x - screenCenter.x;
     if (Math.abs(xOffset) < imageRect.width / 2) {
       xOffset = 0;
@@ -125,39 +131,34 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   private async autoScroll() {
-    let chapterIdx = 0;
-    const chapterNum = this.getLoadedGameState().userState.lastPlayedCheckpoint[0];
-    const hasCompletedChapter = this.getLoadedGameState().gameSaveStates[chapterNum].isComplete;
+    const chapterIdx = Math.min(
+      this.getLoadedGameState().userState.lastCompletedChapter + 1,
+      SampleChapters.length - 1
+    );
 
-    // If last chapter is completed, scroll to next playable chapter
-    chapterIdx = hasCompletedChapter ? this.getUnplayedChapter() : chapterNum;
     await this.scrollToIndex(chapterIdx);
+    this.autoScrolling = false;
   }
 
-  private scrollToIndex(id: number) {
+  private async scrollToIndex(id: number) {
     if (!this.chapterContainer) return;
-    const xTarget = id * imageDist;
+    const xTarget = -id * imageDist;
 
+    const scrollDuration = 800;
     this.tweens.add({
       targets: this.chapterContainer,
       x: xTarget,
       ease: 'Power2',
-      duration: 800
+      duration: scrollDuration
     });
+    sleep(scrollDuration);
   }
 
-  private getLoadedGameState() {
+  public getLoadedGameState() {
     if (!this.loadedGameState) {
       throw new Error('Cannot load game');
     }
     return this.loadedGameState;
-  }
-
-  private getUnplayedChapter() {
-    return Math.max(
-      this.getLoadedGameState().userState.lastCompletedChapter,
-      SampleChapters.length - 1
-    );
   }
 }
 

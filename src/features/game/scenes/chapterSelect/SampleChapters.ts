@@ -9,7 +9,7 @@ export const SampleChapters: GameChapter[] = [
   {
     title: 'Alien Attack',
     previewBgPath: 'https://source.unsplash.com/random/500x700',
-    checkpointsFilenames: ['../assets/chapter1.txt', '../assets/chapter1.1.txt']
+    checkpointsFilenames: ['../assets/chapter1.txt']
   },
   {
     title: 'Jedi Master',

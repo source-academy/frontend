@@ -5,7 +5,7 @@ export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,
   checkpointNum: number,
-  completedChapter?: boolean
+  completedChapter: boolean
 ): FullSaveState {
   const gameManager = GameActionManager.getInstance().getGameManager();
   const gameStateManager = gameManager.stateManager;
@@ -21,7 +21,7 @@ export function gameStateToJson(
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
     triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions()),
     lastCheckpointPlayed: checkpointNum,
-    isComplete: prevGameState.gameSaveStates[chapterNum].isComplete
+    isComplete: completedChapter || prevGameState.userState[chapterNum]
   };
 
   const userState: UserSaveState = {
