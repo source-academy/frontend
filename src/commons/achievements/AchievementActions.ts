@@ -8,9 +8,16 @@ import {
   EDIT_ACHIEVEMENT
 } from './AchievementTypes';
 
+/*
+  Note: This Updates the Achievements in the Backend. 
+*/
 export const updateAchievements = (achievements: AchievementItem[]) =>
   action(UPDATE_ACHIEVEMENTS, achievements);
 
+/*
+  Note: This Updates the store for our Achievements in the frontend. 
+  Please refer to AchievementReducer to find out more. 
+*/
 export const saveAchievements = (achievements: AchievementItem[]) =>
   action(SAVE_ACHIEVEMENTS, achievements);
 
