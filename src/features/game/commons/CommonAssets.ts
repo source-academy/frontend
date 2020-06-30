@@ -75,6 +75,21 @@ export const escapeMenuBackground: ImageAsset = {
   path: '../assets/escapeMenu.png'
 };
 
+export const collectiblesMenu: ImageAsset = {
+  key: 'collectibles-bg',
+  path: '../assets/collectiblesBg.png'
+};
+
+export const collectiblesBanner: ImageAsset = {
+  key: 'collectibles-banner',
+  path: '../assets/collectiblesBanner.png'
+};
+
+export const collectiblesPage: ImageAsset = {
+  key: 'collectibles-page-opt',
+  path: '../assets/collectiblesPageOpt.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
@@ -90,7 +105,10 @@ const commonAssets = [
   modeMenuBanner,
   popUpFrame,
   mediumBox,
-  escapeMenuBackground
+  escapeMenuBackground,
+  collectiblesMenu,
+  collectiblesPage,
+  collectiblesBanner
 ];
 
 export default commonAssets;
