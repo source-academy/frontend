@@ -63,6 +63,8 @@ export type AchievementItem = {
   completionGoal: number;
   completionProgress: number;
   modal: AchievementModalItem;
+
+  position: number;
 };
 
 /**

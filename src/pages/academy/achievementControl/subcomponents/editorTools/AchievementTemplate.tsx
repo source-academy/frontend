@@ -21,5 +21,6 @@ export const achievementTemplate: AchievementItem = {
   prerequisiteIds: [],
   completionGoal: 0,
   completionProgress: 0,
+  position: 0,
   modal: modalTemplate
 };
