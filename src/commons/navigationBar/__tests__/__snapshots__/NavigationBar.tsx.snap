@@ -22,12 +22,6 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
         Playground
       </div>
     </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievements\\">
-      <Blueprint3.Icon icon=\\"mountain\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Achievements
-      </div>
-    </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
     <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
@@ -67,12 +61,6 @@ exports[`NavigationBar renders correctly with username 1`] = `
       <Blueprint3.Icon icon=\\"code\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
         Playground
-      </div>
-    </NavLink>
-    <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievements\\">
-      <Blueprint3.Icon icon=\\"mountain\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
-        Achievements
       </div>
     </NavLink>
   </Blueprint3.NavbarGroup>
