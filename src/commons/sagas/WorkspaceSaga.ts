@@ -63,7 +63,6 @@ import {
   UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
@@ -478,7 +477,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = { game: getSourceAcademyGame() };
+    action.payload.library.moduleParams = { runes: {} };
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });
