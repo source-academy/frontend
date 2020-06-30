@@ -1,31 +1,39 @@
-import GameUserStateManager from '../state/GameUserStateManager';
-import { CollectiblePage } from './CollectiblesTypes';
-import { collectiblesMenu, collectiblesPage } from '../commons/CommonAssets';
+import { CollectiblePage } from './GameCollectiblesTypes';
+import {
+  collectiblesMenu,
+  collectiblesPage,
+  collectiblesPageChosen
+} from '../commons/CommonAssets';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
+import { screenCenter } from '../commons/CommonConstants';
+import {
+  bannerYStartPos,
+  bannerXSpacing,
+  bannerTextXPos,
+  bannerTextStyle
+} from './GameCollectiblesConstants';
 
-class CollectiblesManager {
+class GameCollectiblesManager {
   private scene: Phaser.Scene | undefined;
   private currCollectiblePage: CollectiblePage;
-  private userStateManager: GameUserStateManager | undefined;
   private layerManager: GameLayerManager | undefined;
 
   constructor() {
     this.currCollectiblePage = CollectiblePage.Collectibles;
   }
 
-  public initialise(
-    scene: Phaser.Scene,
-    userStateManager: GameUserStateManager,
-    layerManager: GameLayerManager
-  ) {
+  public initialise(scene: Phaser.Scene, layerManager: GameLayerManager) {
     this.scene = scene;
-    this.userStateManager = userStateManager;
     this.layerManager = layerManager;
   }
 
-  public createCollectibleMenu() {
-    const collectibleContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+  public renderCollectibleMenu() {
+    const collectibleContainer = new Phaser.GameObjects.Container(
+      this.getScene(),
+      screenCenter.x,
+      screenCenter.y
+    );
     const collectiblesBg = new Phaser.GameObjects.Image(
       this.getScene(),
       0,
@@ -35,12 +43,13 @@ class CollectiblesManager {
     collectibleContainer.add(collectiblesBg);
 
     // Add options
-    for (const page in CollectiblePage) {
-      const pageOptContainer = this.addPageBanner(page, () => {
+    Object.keys(CollectiblePage).forEach((page, index) => {
+      const isChosen = page === (this.currCollectiblePage as string);
+      const pageOptContainer = this.addPageBanner(page, index, isChosen, () => {
         this.currCollectiblePage = page as CollectiblePage;
       });
       collectibleContainer.add(pageOptContainer);
-    }
+    });
 
     const activePage = this.getCurrentPage(this.currCollectiblePage);
     collectibleContainer.add(activePage);
@@ -57,13 +66,6 @@ class CollectiblesManager {
     return this.scene;
   }
 
-  private getUserStateManager() {
-    if (!this.userStateManager) {
-      throw console.error('Undefined User State Manager');
-    }
-    return this.userStateManager;
-  }
-
   private getLayerManager() {
     if (!this.layerManager) {
       throw console.error('Undefined Layer Manager');
@@ -71,22 +73,47 @@ class CollectiblesManager {
     return this.layerManager;
   }
 
-  private addPageBanner(text: string, callback: any) {
+  private addPageBanner(text: string, index: number, isChosen: boolean, callback: any) {
     const pageBannerContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const pageBannerBg = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, collectiblesPage.key);
-    const pageBannerText = new Phaser.GameObjects.Text(this.getScene(), 0, 0, text, {});
+    const bannerYPos = bannerYStartPos + index * bannerXSpacing;
+    const pageBannerBg = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      0,
+      bannerYPos,
+      collectiblesPage.key
+    );
+
+    const pageBannerChosen = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      0,
+      bannerYPos,
+      collectiblesPageChosen.key
+    );
+
+    const bannerTextYPos = bannerYStartPos + index * bannerXSpacing;
+    const pageBannerText = new Phaser.GameObjects.Text(
+      this.getScene(),
+      bannerTextXPos,
+      bannerTextYPos,
+      text,
+      bannerTextStyle
+    );
+    pageBannerText.setOrigin(0.1, 0.55);
+
     pageBannerBg.setInteractive({ pixelPerfect: true, useHandCursor: true });
     pageBannerBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
     pageBannerContainer.add([pageBannerBg, pageBannerText]);
+    if (isChosen) pageBannerContainer.add(pageBannerChosen);
+
     return pageBannerContainer;
   }
 
   private getCollectibles() {
-    return this.getUserStateManager().getList('collectibles');
+    return ['collect1', 'collect2'];
   }
 
   private getAchievements() {
-    return this.getUserStateManager().getList('achievements');
+    return ['achievement1', 'achievement2', 'achievement3'];
   }
 
   private getCurrentPage(page: CollectiblePage) {
@@ -108,4 +135,4 @@ class CollectiblesManager {
   }
 }
 
-export default CollectiblesManager;
+export default GameCollectiblesManager;

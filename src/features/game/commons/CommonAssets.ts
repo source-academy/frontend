@@ -85,6 +85,11 @@ export const collectiblesBanner: ImageAsset = {
   path: '../assets/collectiblesBanner.png'
 };
 
+export const collectiblesPageChosen: ImageAsset = {
+  key: 'collectibles-page-chosen',
+  path: '../assets/collectiblesPageOptChosen.png'
+};
+
 export const collectiblesPage: ImageAsset = {
   key: 'collectibles-page-opt',
   path: '../assets/collectiblesPageOpt.png'
@@ -108,6 +113,7 @@ const commonAssets = [
   escapeMenuBackground,
   collectiblesMenu,
   collectiblesPage,
+  collectiblesPageChosen,
   collectiblesBanner
 ];
 
