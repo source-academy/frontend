@@ -151,7 +151,7 @@ class ChapterSelect extends Phaser.Scene {
       ease: 'Power2',
       duration: scrollDuration
     });
-    sleep(scrollDuration);
+    await sleep(scrollDuration);
   }
 
   public getLoadedGameState() {
