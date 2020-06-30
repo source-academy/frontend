@@ -14,6 +14,7 @@ export type GameLocation = IGameActionable & {
   objects?: ItemId[];
   boundingBoxes?: ItemId[];
   bgmKey?: AssetKey;
+  collectibles?: ItemId[];
 };
 
 export enum GameLocationAttr {
@@ -23,5 +24,6 @@ export enum GameLocationAttr {
   boundingBoxes = 'boundingBoxes',
   characters = 'characters',
   actions = 'actions',
-  bgmKey = 'bgmKey'
+  bgmKey = 'bgmKey',
+  collectibles = 'collectibles'
 }

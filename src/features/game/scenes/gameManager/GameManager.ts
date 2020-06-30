@@ -13,9 +13,9 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
+import GameCollectibleRenderer from '../../collectibles/CollectiblesRenderer';
 
 import LocationSelectChapter from '../LocationSelectChapter';
-import commonAssets from 'src/features/game/commons/CommonAssets';
 import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
@@ -64,6 +64,7 @@ class GameManager extends Phaser.Scene {
   public escapeManager: GameEscapeManager;
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
+  public collectibleRenderer: GameCollectibleRenderer;
 
   constructor() {
     super('GameManager');
@@ -89,6 +90,7 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
+    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   public init({
@@ -123,6 +125,7 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
+    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   //////////////////////
@@ -144,12 +147,12 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
+    this.collectibleRenderer.initialise(this);
     this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
     this.bindEscapeMenu();
 
     addLoadingScreen(this);
     this.preloadLocationsAssets(this.currentCheckpoint);
-    this.preloadBaseAssets();
   }
 
   private loadGameState() {
@@ -169,12 +172,6 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  private preloadBaseAssets() {
-    commonAssets.forEach(asset => {
-      this.load.image(asset.key, asset.path);
-    });
-  }
-
   private preloadLocationsAssets(chapter: GameCheckpoint) {
     chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
       this.load.image(assetKey, assetPath);
@@ -191,10 +188,13 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(locationId: LocationId) {
+    console.log(this.userStateManager.getList('collectibles'));
+
     this.soundManager.renderBackgroundMusic(locationId);
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
+    this.collectibleRenderer.renderCollectiblesLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
     this.layerManager.showLayer(Layer.Character);
 
@@ -244,7 +244,6 @@ class GameManager extends Phaser.Scene {
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
         this.scene.start('StorySimulatorMenu');
       } else {
-        await this.saveManager.saveGame(true);
         this.scene.start('CheckpointTransition');
       }
     }
