@@ -16,6 +16,11 @@ import { useMergedRef } from '../utils/Hooks';
 import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 
+import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
+
+import CSS from 'csstype'; // TODO: Remove
+
+
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
 import useHighlighting from './UseHighlighting';
@@ -23,6 +28,7 @@ import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
 import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
+import ReactDOM from 'react-dom';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -85,6 +91,23 @@ const getMarkers = (
 
 const getModeString = (chapter: number, variant: Variant, library: string) =>
   `source${chapter}${variant}${library}`;
+
+const LineWidgets = acequire("ace/line_widgets").LineWidgets;
+console.log('QQQQQQQQQQQ', LineWidgets);
+
+// =============== STYLES ===============
+// TODO: REMOVE.
+
+
+
+const profileStyles: CSS.Properties = {
+
+};
+
+const profilePicStyles: CSS.Properties = {
+  width: "3em",
+  height: "3em"
+};
 
 /**
  * This _modifies global state_ and defines a new Ace mode globally.
@@ -173,12 +196,70 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 const handlers = {
   goGreen: () => {}
 };
+// TODO: move helper function
+
+// function usePrevious<T>(value: T) { 
+//   const ref = React.useRef<T>();
+//   React.useEffect(() => {
+//     ref.current = value;
+//   });
+//   return ref.current;
+// }
 
 const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   props,
   forwardedRef
 ) {
   const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+  // @ts-ignore
+  const [contextMenu, setContextMenu] = React.useState(false);
+  // @ts-ignore
+  const [comments, setComments] = React.useState([] as Comment[]);
+  // const prevComments = usePrevious(comments);
+
+  // Inferred from: https://github.com/ajaxorg/ace/blob/master/lib/ace/ext/error_marker.js#L129
+  interface IWidget {
+    row: number;
+    fixedWidth: boolean;
+    coverGutter: boolean;
+    el: Element;
+    type: string;
+  }
+
+  interface ILineManager {
+    attach: (editor: Ace.Editor) => void;
+    addLineWidget: (widget: IWidget) => void;
+    removeLineWidget: (widget: IWidget) => void;
+  }
+  // @ts-ignore
+  const widgetManagerRef: React.MutableRefObject<ILineManager | null> = React.useRef(null);
+  React.useEffect(() => {
+    if(!reactAceRef.current) { return; }
+    const editor = reactAceRef.current!.editor;
+    widgetManagerRef.current = new LineWidgets(editor.session);
+    widgetManagerRef.current!.attach(editor)
+  }, [reactAceRef])
+
+  interface Comment {
+    isEditing: boolean;
+    isCollapsed: boolean;
+    // TODO: Reference user differently.
+    username: string;
+    profilePic: string;
+    linenum: number;
+    text: string;
+  }
+
+  const createCommentPrompt = React.useCallback( () => {
+    setComments([...comments, {
+      isEditing: true,
+      isCollapsed: false,
+      username: 'My user name',
+      profilePic: 'https://picsum.photos/200',
+      linenum: 0,
+      text: 'dis is random comment'
+    }]);
+  }, [comments]);
 
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
@@ -194,6 +275,47 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     props.sourceVariant || 'default',
     props.externalLibraryName || 'NONE'
   ];
+
+  // TODO: Move.
+  // Render comments.
+  React.useEffect(() => {
+    // Re-render all comments.
+    console.log('Re-rendering comments', comments);
+    // TODO: Group all comments with a given line number, render them together.
+    const commentWidgets = comments.map( (comment) => {
+      const { text, profilePic, username } = comment;
+      // I wouldn't do this if i didn't have to.
+      const container = document.createElement('div');
+      const commentDOM = (<div className="comment">
+        <img className="profile-pic" src={profilePic} alt="" style={profilePicStyles}></img>
+        <div className="username">{username}</div>
+        <div className="text">{text}</div>
+      </div>);
+      ReactDOM.render(commentDOM, container);
+      container.style.width = '50em';
+      container.style.backgroundColor = 'grey';
+      const widget: IWidget = {
+        row: comment.linenum,
+        fixedWidth: true,
+        coverGutter: false,
+        el: container,
+        type: "errorMarker"
+      };
+      widgetManagerRef.current?.addLineWidget(widget);
+      console.log('added line widget', widget);
+      return { ...comment, widget };
+    });
+
+
+    return () => {
+      // Remove all comments
+      console.log('Removing comments', comments);
+      commentWidgets.forEach( ({ widget }) => {
+        widgetManagerRef.current?.removeLineWidget(widget);
+      })
+    }
+  }, [comments])
+  
 
   React.useEffect(() => {
     selectMode(sourceChapter, sourceVariant, externalLibraryName);
@@ -214,6 +336,24 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       'gutterclick' as any,
       makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
     );
+    const gutter = (editor.renderer as any).$gutter as HTMLElement;
+    gutter.addEventListener('contextmenu', (e: MouseEvent) => {
+      e.preventDefault();
+      ContextMenu.show(
+        <Menu onContextMenu={() => false}>
+          <MenuItem icon="full-circle" text="Toggle Breakpoint"/>
+          <MenuItem icon="comment" text="Add comment" onClick={createCommentPrompt}/>
+        </Menu>,
+        { left: e.clientX, top: e.clientY },
+        () => { 
+          console.log('Closed');
+          setContextMenu(false);
+        }
+      );
+      // indicate that context menu is open so we can add a CSS class to this element
+      setContextMenu(true);
+    });
+    document.addEventListener('click', () => ContextMenu.hide());
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
@@ -241,6 +381,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     isEditorAutorun,
     handleEditorEval
   } = props;
+
   const onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
       if (!reactAceRef.current) {
