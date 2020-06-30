@@ -185,25 +185,6 @@ export async function updateAchievements(
 }
 
 /**
- * POST /achievements/add
- */
-export async function addAchievement(
-  achievement: AchievementItem,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request(`achievements/add/`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: { achievement: achievement },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-}
-
-/**
  * POST /achievements/update
  */
 export async function editAchievement(
@@ -211,25 +192,6 @@ export async function editAchievement(
   tokens: Tokens
 ): Promise<Response | null> {
   const resp = await request(`achievements/update/`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: { achievement: achievement },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-}
-
-/**
- * DELERE /achievements
- */
-export async function deleteAchievement(
-  achievement: AchievementItem,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request(`achievements/`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
     noHeaderAccept: true,
