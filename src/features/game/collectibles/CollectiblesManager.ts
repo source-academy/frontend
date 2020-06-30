@@ -94,8 +94,10 @@ class CollectiblesManager {
     switch (page) {
       case CollectiblePage.Achievements:
         objectList = this.getCollectibles();
+        break;
       case CollectiblePage.Collectibles:
         objectList = this.getAchievements();
+        break;
       default:
         objectList = [];
     }
