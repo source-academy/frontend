@@ -1,9 +1,9 @@
 import {
   AchievementItem,
+  AchievementStatus,
   AchievementModalItem,
-  FilterStatus,
-  AchievementStatus
-} from '../../../../../commons/achievements/AchievementTypes';
+  FilterStatus
+} from 'src/commons/achievements/AchievementTypes';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {

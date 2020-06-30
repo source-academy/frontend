@@ -1,10 +1,10 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { OverallState } from '../../../commons/application/ApplicationTypes';
 import Achievement, { DispatchProps, StateProps } from './Achievement';
 import { getAchievements } from 'src/commons/achievements/AchievementActions';
 import Inferencer from './subcomponents/utils/Inferencer';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: new Inferencer(state.achievements.achievements)

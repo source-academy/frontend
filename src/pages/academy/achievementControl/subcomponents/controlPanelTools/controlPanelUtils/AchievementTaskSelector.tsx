@@ -2,7 +2,7 @@ import React from 'react';
 
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
-import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
 
 type AchievementTaskSelectorProps = {
   tasks: number[];

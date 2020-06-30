@@ -3,10 +3,10 @@ import React, { useState } from 'react';
 import { IconNames } from '@blueprintjs/icons';
 
 import AchievementFilter from './subcomponents/AchievementFilter';
-import { FilterStatus } from '../../../commons/achievements/AchievementTypes';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
+import { FilterStatus } from 'src/commons/achievements/AchievementTypes';
 
 export type DispatchProps = {
   handleAchievementsFetch: any;

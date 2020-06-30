@@ -5,9 +5,9 @@ import React from 'react';
 import AchievementPrerequisiteDeleter from './controlPanelUtils/AchievementPrerequisiteDeleter';
 import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import Inferencer from '../../../../../pages/academy/achievements/subcomponents/utils/Inferencer';
 import AchievementTaskDeleter from './controlPanelUtils/AchievementTaskDeleter';
 import AchievementTaskPositionEditor from './controlPanelUtils/AchievementTaskPositionEditor';
+import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
 
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;

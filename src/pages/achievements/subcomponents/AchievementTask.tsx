@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import AchievementCard from './cards/AchievementCard';
 import PrerequisiteCard from './cards/PrerequisiteCard';
-import { FilterStatus, AchievementStatus } from '../../../../commons/achievements/AchievementTypes';
 import Inferencer from './utils/Inferencer';
+import { FilterStatus, AchievementStatus } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementTaskProps = {
   id: number;

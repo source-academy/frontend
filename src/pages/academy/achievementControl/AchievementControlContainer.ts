@@ -8,7 +8,7 @@ import {
   updateAchievements,
   editAchievement
 } from '../../../commons/achievements/AchievementActions';
-import Inferencer from '../achievements/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: new Inferencer(state.achievements.achievements)
