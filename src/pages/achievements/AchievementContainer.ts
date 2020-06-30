@@ -5,6 +5,7 @@ import Achievement, { DispatchProps, StateProps } from './Achievement';
 import { getAchievements } from '../../commons/achievements/AchievementActions';
 import Inferencer from './subcomponents/utils/Inferencer';
 import { OverallState } from '../../commons/application/ApplicationTypes';
+import { withRouter } from 'react-router';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: new Inferencer(state.achievements.achievements)
@@ -18,6 +19,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const AchievementContainer = connect(mapStateToProps, mapDispatchToProps)(Achievement);
+const AchievementContainer = withRouter(connect(mapStateToProps, mapDispatchToProps)(Achievement));
 
 export default AchievementContainer;

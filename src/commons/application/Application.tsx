@@ -102,6 +102,11 @@ const toAcademy = (props: ApplicationProps) =>
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
 
+/**
+ * A user routes to /achievements,
+ *  1. If the user is logged in, render the Achievements component
+ *  2. If the user is not logged in, redirect to /login
+ */
 const toAchievements = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
