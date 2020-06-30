@@ -55,6 +55,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
       <AchievementTaskPositionEditor
         editableAchievement={editableAchievement}
         inferencer={inferencer}
+        updateAchievements={updateAchievements}
       />
     </>
   );
