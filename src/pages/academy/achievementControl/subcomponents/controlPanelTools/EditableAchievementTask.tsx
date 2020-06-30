@@ -4,8 +4,8 @@ import {
   FilterStatus
 } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementControlPanelTools from './AchievementControlPanelTools';
-import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
-import AchievementTask from 'src/pages/achievements/subcomponents/AchievementTask';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
+import AchievementTask from '../../../../achievements/subcomponents/AchievementTask';
 
 type EditableAchievementTaskProps = {
   achievement: AchievementItem;

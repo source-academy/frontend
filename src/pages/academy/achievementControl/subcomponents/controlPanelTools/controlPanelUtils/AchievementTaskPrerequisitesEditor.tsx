@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
-import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
+import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
+import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 import { Button } from '@blueprintjs/core';
 import AchievementPrerequisiteSwapper from './AchievementPrerequisiteSwapper';
 

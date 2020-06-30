@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tag, Intent } from '@blueprintjs/core';
-import { semester1Weeks } from 'src/commons/mocks/AchievementMocks';
+import { semester1Weeks } from '../../../../commons/mocks/AchievementMocks';
 
 type AchievementHintsProps = {
   release?: Date;

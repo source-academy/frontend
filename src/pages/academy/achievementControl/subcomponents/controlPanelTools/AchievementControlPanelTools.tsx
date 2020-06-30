@@ -7,7 +7,7 @@ import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequ
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import AchievementTaskDeleter from './controlPanelUtils/AchievementTaskDeleter';
 import AchievementTaskPositionEditor from './controlPanelUtils/AchievementTaskPositionEditor';
-import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
+import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import AchievementTaskPrerequisitesEditor from './controlPanelUtils/AchievementTaskPrerequisitesEditor';
 
 type AchievementControlPanelToolsProps = {

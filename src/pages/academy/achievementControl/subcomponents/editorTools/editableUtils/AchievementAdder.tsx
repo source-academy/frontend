@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@blueprintjs/core';
-import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
+import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {

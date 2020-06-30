@@ -6,7 +6,7 @@ import AchievementFilter from './subcomponents/AchievementFilter';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
-import { FilterStatus } from 'src/commons/achievements/AchievementTypes';
+import { FilterStatus } from '../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {
   handleAchievementsFetch: any;
