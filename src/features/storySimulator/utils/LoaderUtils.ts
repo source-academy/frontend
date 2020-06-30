@@ -10,3 +10,14 @@ export const loadImage = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
       scene.load.start();
     }
   });
+
+export const loadText = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
+  new Promise<AssetKey>(resolve => {
+    if (scene.cache.text.exists(assetKey)) {
+      resolve(assetKey);
+    } else {
+      scene.load.text(assetKey, assetPath);
+      scene.load.once('filecomplete', resolve);
+      scene.load.start();
+    }
+  });

@@ -4,7 +4,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { toIntString } from '../utils/SSUtils';
-import { loadImage } from '../utils/ImageLoaderUtils';
+import { loadImage } from '../utils/LoaderUtils';
 import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
 
 export default class SSObjectManager implements ICheckpointLogger {

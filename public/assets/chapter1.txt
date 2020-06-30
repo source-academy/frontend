@@ -34,11 +34,11 @@ hartin-menz, Hartin Menz, happy, middle
 talk
 <<objects>>
 [room]
-yourCarpet, yourCarpet, 640, 667
-+yourChair, yourChair, 932, 549, 300, 300
-+door6, door/yourRoom-dim, 831, 270
-+yourBed, yourHeadphones, 372, 514
-yourOtherDoor, door/yourRoom-dim, 0, 0
+yourCarpet, objects/yourCarpet, 640, 667
++yourChair, objects/yourChair, 932, 549, 300, 300
++door6, objects/door/yourRoom-dim, 831, 270
++yourBed, objects/yourHeadphones, 372, 514
+yourOtherDoor, objects/door/yourRoom-dim, 0, 0
 $
 yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
 yourCarpet, collectible: cookies if checklist.visit

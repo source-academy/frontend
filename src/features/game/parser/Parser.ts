@@ -1,12 +1,15 @@
-import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import LocationParser from './LocationParser';
 import ConfigParser from './ConfigParser';
-import ObjectParser from './ObjectsParser';
+import ObjectParser from './ObjectParser';
 import DialogueParser from './DialogueParser';
 import CharacterParser from './CharacterParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import ObjectiveParser from './ObjectiveParser';
+import CollectibleParser from './CollectibleParser';
+import AssetParser from './AssetParser';
+
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
+import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
 
@@ -20,7 +23,7 @@ class Parser {
     return `action#${Parser.actionIdNum}`;
   }
 
-  public static parse(chapterText: string): GameCheckpoint {
+  public static init() {
     Parser.actionIdNum = 0;
 
     Parser.parserMap = {
@@ -30,7 +33,9 @@ class Parser {
       dialogue: DialogueParser,
       characters: CharacterParser,
       boundingBoxes: BoundingBoxParser,
-      objectives: ObjectiveParser
+      objectives: ObjectiveParser,
+      collectibles: CollectibleParser,
+      assets: AssetParser
     };
 
     Parser.checkpoint = {
@@ -39,6 +44,12 @@ class Parser {
       startingLoc: '',
       objectives: new GameObjective()
     };
+  }
+
+  public static parse(chapterText: string, continueParse = false): GameCheckpoint {
+    if (!continueParse) {
+      Parser.init();
+    }
 
     // Split files by the <<>>
     splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {

@@ -9,8 +9,8 @@ function objectAssetKey(shortPath: string) {
 }
 
 function objectAssetValue(shortPath: string) {
-  const [texture, skin] = shortPath.split('/');
-  return `${Constants.assetsFolder}/objects/${texture}/${skin || 'normal'}.png`;
+  const [folder, texture, skin] = shortPath.split('/');
+  return `${Constants.assetsFolder}/${folder}/${texture}/${skin || 'normal'}.png`;
 }
 
 export default function ObjectParser(fileName: string, fileContent: string) {

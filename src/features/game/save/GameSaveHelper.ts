@@ -24,12 +24,14 @@ export function gameStateToJson(
     isComplete: completedChapter || prevGameState.userState[chapterNum]
   };
 
+  console.log('lastCompletedChapter', prevGameState.userState.lastCompletedChapter);
+
   const userState: UserSaveState = {
     settings: { ...prevGameState.userState.settings },
     lastPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements'),
-    lastCompletedChapter: prevGameState.userState.lastCompletedChapter
+    lastCompletedChapter: prevGameState.userState.lastCompletedChapter || -1
   };
 
   if (completedChapter) {
