@@ -16,6 +16,7 @@ import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 import Game from './game/Game';
 import GroundControl from './groundControl/GroundControlContainer';
 import StorySimulator from './storySimulator/StorySimulator';
+import AchievementControlContainer from './achievementControl/AchievementControlContainer';
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -77,6 +78,7 @@ class Academy extends React.Component<AcademyProps> {
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
+          <Route path="/academy/achievement-control" component={AchievementControlContainer} />
           <Route path={'/academy/storysimulator'} component={StorySimulator} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           <Route component={this.redirectTo404} />
@@ -91,7 +93,7 @@ class Academy extends React.Component<AcademyProps> {
 
   /**
    * 1. If user is in /academy.*, redirect to game
-   * 2. If not, redirect to the last /acdaemy.* route the user was in
+   * 2. If not, redirect to the last /academy.* route the user was in
    * See ../../commons/utils/HistoryHelper.ts for more details
    */
   private dynamicRedirect = (props: StateProps) => {
