@@ -70,6 +70,11 @@ class Inferencer {
     return this.achievements;
   }
 
+  public getAchievementsByPosition() {
+    const sortedAchievements = [...this.achievements].sort((a, b) => a.position - b.position);
+    return sortedAchievements;
+  }
+
   public getAchievementItem(id: number) {
     // asserts: the achievement id already exist in nodeList
     return this.nodeList.get(id)!.achievement;
@@ -91,6 +96,39 @@ class Inferencer {
     this.processData();
 
     return newId;
+  }
+
+  /* Handlers for Positions */
+  public updateAllPositions() {
+    this.achievements.sort((a, b) => a.position - b.position);
+
+    let pos = 1;
+
+    for (let i = 0; i < this.achievements.length; i++) {
+      if (this.achievements[i].isTask) {
+        this.achievements[i].position = pos;
+        pos++;
+      }
+    }
+  }
+
+  public setNonTaskAchievement(achievement: AchievementItem) {
+    const newAchievement = achievement;
+    newAchievement.prerequisiteIds = [];
+    newAchievement.isTask = false;
+    newAchievement.position = 0;
+
+    this.editAchievement(newAchievement);
+
+    this.updateAllPositions();
+  }
+
+  public setTaskAchievement(achievement: AchievementItem) {
+    const newAchievement = achievement;
+    newAchievement.isTask = true;
+    newAchievement.position = this.listTaskIds().length;
+
+    this.editAchievement(newAchievement);
   }
 
   public editAchievement(achievement: AchievementItem) {
@@ -136,7 +174,7 @@ class Inferencer {
   }
 
   public listTaskIds() {
-    return this.achievements.reduce((acc, achievement) => {
+    return this.getAchievementsByPosition().reduce((acc, achievement) => {
       if (achievement.isTask) {
         acc.push(achievement.id);
       }

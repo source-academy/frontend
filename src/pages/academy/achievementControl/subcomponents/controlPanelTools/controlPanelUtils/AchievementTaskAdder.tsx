@@ -29,10 +29,7 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);
-    achievement.isTask = true;
-    inferencer.editAchievement(achievement);
-    // TODO: add this
-    // editAchievement(achievement);
+    inferencer.setTaskAchievement(achievement);
     updateAchievements(inferencer.getAchievements());
   };
 

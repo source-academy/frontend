@@ -10,6 +10,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [1, 2],
     completionGoal: 2,
     completionProgress: 0,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
@@ -29,6 +30,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 100,
     completionProgress: 77,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
@@ -47,6 +49,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 100,
     completionProgress: 23,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
@@ -64,6 +67,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [4, 5, 6],
     completionGoal: 3,
     completionProgress: 2,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
@@ -82,6 +86,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 10,
     completionProgress: 92,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
@@ -99,6 +104,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 50,
     completionProgress: 92,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
@@ -116,6 +122,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 100,
     completionProgress: 92,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
@@ -135,6 +142,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     completionGoal: 100,
     completionProgress: 10,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
@@ -152,6 +160,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [0, 7],
     completionGoal: 2,
     completionProgress: 0,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
@@ -169,6 +178,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     prerequisiteIds: [3, 8],
     completionGoal: 2,
     completionProgress: 0,
+    position: 0,
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
