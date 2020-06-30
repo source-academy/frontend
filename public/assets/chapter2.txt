@@ -1,5 +1,5 @@
 <<configuration>>
-startingLoc: emergency
+startingLoc: room
 
 <<location>>
 crashsite, crashSite, Crash Site
@@ -7,6 +7,7 @@ classroom, classroom/classOn, Class Room
 emergency, classroom/emergency, Emergency
 hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
+$
 $
 [talk move]
 [explore talk move]
@@ -29,9 +30,7 @@ emergency: hallway
 hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
-visit, "Visit Hallway"
-talk, "Talk at Classroom"
-
+talk
 <<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
@@ -46,17 +45,30 @@ door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, ad
 
 <<boundingBoxes>>
 [room]
-topLeft, 0, 0, 100, 100
-middleBB, 100, 100, 200, 200
++topLeft, 0, 0, 300, 300
++middleBB, 300, 300, 600, 600
 $
-topLeft, collectible: goodStuff
-
+topLeft, bringUpDialogue: dialogue5
 
 <<dialogueLocation>>
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
 room: +dialogue1
 
+<<dialogue6>>
+Title: cutscene
+[part0]
+You've gone to the hallway, and are now back into the room.
+Congrats on your first cutscene.
+Have you ever seen what the classroom looks like?
+#changeBackground: classroom
+Well here it is! Go ahead and explore it.
+Now, we bring you to a totally new location.
+
+<<dialogue5>>
+title: What?
+[part0]
+Who would have thought that there's something hidden at the top left corner?
 
 <<dialogue4>>
 title: You found me
@@ -79,6 +91,7 @@ title: What happened?
 $narrator
 The year is 1101 A.E.
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
+#changeBackground: classroom
 As Earth’s population reached a breaking point, humans began to migrate across the galaxy, colonizing planets once thought uninhabitable, as well as making settlements on those with amicable alien life.
 To supplement this rapid expansion, large space stations scattered throughout the solar systems began to emerge, serving as hubs for different human needs.
 #addItem: [objects room yourChair], collectible: cookies
@@ -87,20 +100,8 @@ Here, students learn how to harness the power of an invisible force known as the
 #addItem: [objects room yourChair], collectible: cookies
 Today, you have enrolled in...
 The Source Academy!
-[Goto part2]
+#addPopup: [yourChair middle], updateChecklist: talk
 
-[part2]
-$you tired
-Whew... That was a long trip. It feels like I was on that shuttle for a thousand years.
-I guess this is the Source Academy. It’s much bigger than my high school back on Earth. It’s hard to believe this is a space station.
-$narrator
-The teleportation bay is empty, as far as you can see.
-You must have been one of the last to arrive, as all the shuttle services before this were fully-booked.
-If only you hadn’t procrastinated so much
-$you
-Never mind that!
-Now, the message I got last week says I’m supposed to find my dorm room the minute I get here...
-Oh hi, you must be our last recruit! Everyone else is already getting settled in.
 $narrator
 The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
 $scottie happy
@@ -112,14 +113,3 @@ You hastily make for the door, feeling a little embarassed.
 You exit the elevator into a long hallway leading to various rooms. You look around for a sign leading to the student quarters.
 $you
 Ah, there it is! I can't wait to unload my stuff. It's killing my back. I guess I should've packed lighter.
-[Goto part3]
-
-[part3]
-$narrator
-After navigating through long hallways and twisty corridors, you find yourself in front of a room inscribed with your full name.
-$you
-Oh, here it is!
-$narrator
-Sensing your presence via face and voice-recognition, the door opens smoothly...
-..revealing your room inside
-Neat! Better start unpacking and settling in!

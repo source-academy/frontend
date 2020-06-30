@@ -19,6 +19,7 @@ import commonSoundAssets, {
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import { loadData } from '../../save/GameSaveRequests';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -33,7 +34,7 @@ class MainMenu extends Phaser.Scene {
     this.optionButtons = [];
   }
 
-  public async preload() {
+  public preload() {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
@@ -50,7 +51,11 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
-    this.soundManager.playBgMusic(galacticHarmonyBgMusic.key);
+    const fullSaveState = await loadData(accountInfo);
+    this.soundManager.playBgMusic(
+      galacticHarmonyBgMusic.key,
+      fullSaveState.userState.settings.volume
+    );
   }
 
   private preloadAssets() {
