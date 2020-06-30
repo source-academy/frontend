@@ -130,11 +130,12 @@ class Inferencer {
   public updateAllPositions() {
     this.achievements.sort((a, b) => a.position - b.position);
 
-    const pos = 1;
+    let pos = 1;
 
     for (let i = 0; i < this.achievements.length; i++) {
       if (this.achievements[i].isTask) {
         this.achievements[i].position = pos;
+        pos++;
       }
     }
   }
@@ -145,9 +146,9 @@ class Inferencer {
     newAchievement.isTask = false;
     newAchievement.position = 0;
 
-    this.updateAllPositions();
-
     this.editAchievement(newAchievement);
+
+    this.updateAllPositions();
   }
 
   public setTaskAchievement(achievement: AchievementItem) {

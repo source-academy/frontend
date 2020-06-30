@@ -16,8 +16,6 @@ function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
 
   const deleteAction = (e: any) => {
     inferencer.setNonTaskAchievement(editableAchievement);
-    // TODO: add this
-    // editAchievement(editableAchievement);
     updateAchievements(inferencer.getAchievements);
   };
 
