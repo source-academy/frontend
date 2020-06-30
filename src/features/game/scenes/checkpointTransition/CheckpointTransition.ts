@@ -16,40 +16,22 @@ class CheckpointTransition extends Phaser.Scene {
     const accountInfo = getSourceAcademyGame().getAccountInfo();
     const loadedGameState = await loadData(accountInfo);
     const chapterDetails = SampleChapters; // TODO: Fetch from backend
-    const [nextChapterNum, nextCheckpointNum, nextCheckpointFileName] = this.getNextChapter(
-      loadedGameState,
-      chapterDetails
-    );
-    callGameManagerOnTxtLoad(
-      this,
-      nextCheckpointFileName,
-      false,
-      nextChapterNum,
-      nextCheckpointNum
-    );
+
+    this.getNextChapter(loadedGameState, chapterDetails);
   }
 
-  private getNextChapter(
-    fullState: FullSaveState,
-    chapterDetails: GameChapter[]
-  ): [number, number, string] {
+  private getNextChapter(fullState: FullSaveState, chapterDetails: GameChapter[]): void {
     const [currChapter, currCheckpoint] = fullState.userState.lastPlayedCheckpoint;
 
-    let nextChapter = currChapter;
+    const nextChapter = currChapter;
     let nextCheckpoint = currChapter;
     if (currCheckpoint >= chapterDetails[currChapter].checkpointsFilenames.length - 1) {
-      nextCheckpoint = 0;
-      if (nextChapter < chapterDetails.length - 1) nextChapter++;
-      else {
-        // Last chapter is played, bring to main menu
-        this.scene.start('MainMenu');
-      }
+      this.scene.start('ChapterSelect');
     } else {
       nextCheckpoint++;
+      const filename = chapterDetails[nextChapter].checkpointsFilenames[nextCheckpoint];
+      callGameManagerOnTxtLoad(this, filename, false, nextChapter, nextCheckpoint);
     }
-
-    const filename = chapterDetails[nextChapter].checkpointsFilenames[nextCheckpoint];
-    return [nextChapter, nextCheckpoint, filename];
   }
 }
 

@@ -83,7 +83,28 @@ export function createChapter(
     chapterSelectStyle
   ).setOrigin(0.5);
 
-  chapterContainer.add([chapterPreview, chapterFrame, chapterRepeat, chapterContinue, text]);
+  const chapterDone = index <= scene.getLoadedGameState().userState.lastCompletedChapter + 1;
+
+  const blackTint = new Phaser.GameObjects.Rectangle(
+    scene,
+    0,
+    0,
+    imageRect.width,
+    imageRect.height,
+    0
+  )
+    .setOrigin(0.5)
+    .setAlpha(chapterDone ? 0 : 0.8)
+    .setInteractive();
+
+  chapterContainer.add([
+    chapterPreview,
+    chapterFrame,
+    chapterRepeat,
+    chapterContinue,
+    text,
+    blackTint
+  ]);
 
   return chapterContainer;
 }

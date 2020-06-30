@@ -9,7 +9,6 @@ hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
 room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
-hallway, updateChecklist: visit
 $
 [talk move]
 [explore talk move]
@@ -32,9 +31,7 @@ emergency: hallway
 hartin-menz, Hartin Menz, happy, middle
 
 <<objectives>>
-visit
 talk
-
 <<objects>>
 [room]
 yourCarpet, yourCarpet, 640, 667
@@ -104,7 +101,7 @@ Here, students learn how to harness the power of an invisible force known as the
 #addItem: [objects room yourChair], collectible: cookies
 Today, you have enrolled in...
 The Source Academy!
-#addPopup: [yourChair middle]
+#addPopup: [yourChair middle], updateChecklist: talk
 
 $narrator
 The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.

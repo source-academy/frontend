@@ -62,7 +62,7 @@ class GameSoundManager {
     }
   }
 
-  public playBgMusic(soundKey: AssetKey) {
+  public playBgMusic(soundKey: AssetKey, volume = 1.5) {
     // If same music is already playing, skip
     const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
     if (currBgMusicKey && currBgMusicKey === soundKey) {
@@ -73,7 +73,7 @@ class GameSoundManager {
 
     const soundAsset = this.soundAssets.get(soundKey);
     if (soundAsset) {
-      this.getBaseSoundManager().play(soundAsset.key, soundAsset.config);
+      this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });
       this.getParentGame().setCurrBgMusicKey(soundAsset.key);
     }
   }
