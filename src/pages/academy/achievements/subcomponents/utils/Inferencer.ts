@@ -4,7 +4,6 @@ import {
   FilterStatus,
   AchievementStatus
 } from '../../../../../commons/achievements/AchievementTypes';
-import { achievementTemplate } from 'src/pages/academy/achievementControl/subcomponents/editorTools/AchievementTemplate';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
@@ -67,22 +66,6 @@ class Inferencer {
     return this.nodeList.get(id) !== undefined;
   }
 
-  /*
-  public getNextID(tasks: number[]) {
-    if (tasks.length === 0) {
-      return 0;
-    } else {
-      for (let i = 0; i < tasks.length; i++) {
-        if (this.doesAchievementExist(tasks[i])) {
-          return tasks[i];
-        }
-      }
-
-      return 0;
-    }
-  }
-  */
-
   public getAchievements() {
     return this.achievements;
   }
@@ -92,25 +75,12 @@ class Inferencer {
     return this.nodeList.get(id)!.achievement;
   }
 
-  public previewNewAchievement() {
-    const achievement = achievementTemplate;
-
-    // first, generate a new unique id
-    const len = this.achievements.length;
-    const newId = len > 0 ? this.achievements[len - 1].id + 1 : 0;
-
-    // then assign the new unique id by overwriting the achievement item
-    // and append it to achievements
-    achievement.id = newId;
-
-    console.log(achievement);
-    return achievement;
-  }
-
   public addAchievement(achievement: AchievementItem) {
     // first, generate a new unique id
-    const len = this.achievements.length;
-    const newId = len > 0 ? this.achievements[len - 1].id + 1 : 0;
+    let newId = 0;
+    if (this.achievements.length > 0) {
+      newId = [...this.nodeList.keys()].reduce((acc, cur) => Math.max(acc, cur), 0) + 1;
+    }
 
     // then assign the new unique id by overwriting the achievement item
     // and append it to achievements
@@ -119,6 +89,8 @@ class Inferencer {
 
     // finally, reconstruct the nodeList
     this.processData();
+
+    return newId;
   }
 
   public editAchievement(achievement: AchievementItem) {
@@ -255,25 +227,6 @@ class Inferencer {
       this.generateTotalExp(node);
       this.generateCollectiveProgress(node);
     });
-    this.dataCheck();
-  }
-
-  // Verify the key-value mappings of achievements and nodeList are correct
-  private dataCheck() {
-    for (const [id, node] of this.nodeList) {
-      if (id !== node.achievement.id) {
-        console.log('Unmatched nodeList key-achievementId mapping', node);
-      } else if (node.achievement !== this.achievements[node.dataIdx]) {
-        console.log(
-          'Unmatched achievement items in nodeList and achievements\n',
-          'Data\n',
-          this.achievements[id],
-          '\nNode\n',
-          node
-        );
-      }
-    }
-    console.log('Processed data with no data integrity warning');
   }
 
   private constructNodeList() {

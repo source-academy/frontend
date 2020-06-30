@@ -5,18 +5,28 @@ import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {
   inferencer: Inferencer;
-  forceRefresh: any;
+  adderId: number;
+  setAdderId: any;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
-  const { inferencer, forceRefresh } = props;
+  const { inferencer, adderId, setAdderId } = props;
 
   const handleAddAchievement = () => {
-    inferencer.addAchievement(achievementTemplate);
-    forceRefresh();
+    const newId = inferencer.addAchievement(achievementTemplate);
+    setAdderId(newId);
   };
 
-  return <Button className="main-adder" onClick={handleAddAchievement} text={'Add A New Item'} />;
+  const disableAdder = adderId !== -1;
+
+  return (
+    <Button
+      className="main-adder"
+      onClick={handleAddAchievement}
+      text={'Add A New Item'}
+      disabled={disableAdder}
+    />
+  );
 }
 
 export default AchievementAdder;

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
@@ -27,12 +27,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleFetchAchievements();
   }, [handleFetchAchievements]);
 
-  /* force re-render the achievement-control page */
-  const [refresh, setRefresh] = useState<boolean>();
-  const forceRefresh = () => {
-    setRefresh(!refresh);
-  };
-
+  // rename handlers
   const updateAchievements = () => {
     handleUpdateAchievements(inferencer.getAchievements());
   };
@@ -54,7 +49,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
           inferencer={inferencer}
           updateAchievements={updateAchievements}
           editAchievement={editAchievement}
-          forceRefresh={forceRefresh}
         />
       </div>
     </>

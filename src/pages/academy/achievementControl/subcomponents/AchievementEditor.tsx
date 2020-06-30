@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
@@ -8,11 +8,12 @@ type AchievementEditorProps = {
   inferencer: Inferencer;
   updateAchievements: any;
   editAchievement: any;
-  forceRefresh: any;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { inferencer, updateAchievements, editAchievement, forceRefresh } = props;
+  const { inferencer, updateAchievements, editAchievement } = props;
+
+  const [adderId, setAdderId] = useState<number>(-1);
 
   const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>
     achievementIds.map(id => (
@@ -22,14 +23,21 @@ function AchievementEditor(props: AchievementEditorProps) {
         inferencer={inferencer}
         updateAchievements={updateAchievements}
         editAchievement={editAchievement}
+        adderId={adderId}
+        setAdderId={setAdderId}
       />
     ));
 
   return (
     <div className="editor-cards">
       <div className="main">
+        <AchievementAdder
+          key={-1}
+          inferencer={inferencer}
+          adderId={adderId}
+          setAdderId={setAdderId}
+        />
         <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
-        <AchievementAdder inferencer={inferencer} forceRefresh={forceRefresh} />
       </div>
     </div>
   );
