@@ -131,6 +131,17 @@ class Inferencer {
     this.editAchievement(newAchievement);
   }
 
+  public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
+    const temp = achievement1.position;
+    achievement1.position = achievement2.position;
+    achievement2.position = temp;
+
+    this.editAchievement(achievement1);
+    this.editAchievement(achievement2);
+  }
+
+  /* End of Positions Handlers */
+
   public editAchievement(achievement: AchievementItem) {
     // directly modify the achievement element in achievements
     // asserts: the achievement id already exists in nodeList

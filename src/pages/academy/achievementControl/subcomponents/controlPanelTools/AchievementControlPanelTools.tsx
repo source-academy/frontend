@@ -7,6 +7,7 @@ import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequ
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import Inferencer from '../../../../../pages/academy/achievements/subcomponents/utils/Inferencer';
 import AchievementTaskDeleter from './controlPanelUtils/AchievementTaskDeleter';
+import AchievementTaskPositionEditor from './controlPanelUtils/AchievementTaskPositionEditor';
 
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
@@ -49,6 +50,11 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         inferencer={inferencer}
         updateAchievements={updateAchievements}
         editAchievement={editAchievement}
+      />
+
+      <AchievementTaskPositionEditor
+        editableAchievement={editableAchievement}
+        inferencer={inferencer}
       />
     </>
   );
