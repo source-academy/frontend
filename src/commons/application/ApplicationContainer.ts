@@ -13,7 +13,6 @@ import {
   setEditorBreakpoint,
   updateEditorValue
 } from '../workspace/WorkspaceActions';
-import { WorkspaceLocations } from '../workspace/WorkspaceTypes';
 import { logOut } from './actions/CommonsActions';
 import Application, { DispatchProps, StateProps } from './Application';
 import { OverallState } from './ApplicationTypes';
@@ -36,7 +35,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   currentExternalLibrary: state.workspaces.playground.externalLibrary
 });
 
-const workspaceLocation = WorkspaceLocations.playground;
+const workspaceLocation = 'playground';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

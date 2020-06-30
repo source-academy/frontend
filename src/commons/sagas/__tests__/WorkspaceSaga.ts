@@ -54,8 +54,7 @@ import {
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
   TOGGLE_EDITOR_AUTORUN,
-  WorkspaceLocation,
-  WorkspaceLocations
+  WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import workspaceSaga, { evalCode, evalTestCode } from '../WorkspaceSaga';
 
@@ -85,7 +84,7 @@ beforeEach(() => {
 
 describe('EVAL_EDITOR', () => {
   test('puts beginClearContext and correctly executes prepend and value in sequence (calls evalCode)', () => {
-    const workspaceLocation = WorkspaceLocations.playground;
+    const workspaceLocation = 'playground';
     const editorPrepend = 'const foo = (x) => -1;\n"reeee";';
     const editorValue = 'foo(2);';
     const editorPostpend = '42;';
@@ -163,7 +162,7 @@ describe('EVAL_EDITOR', () => {
 
 describe('TOGGLE_EDITOR_AUTORUN', () => {
   test('calls showWarningMessage correctly when isEditorAutorun set to false', () => {
-    const workspaceLocation = WorkspaceLocations.assessment;
+    const workspaceLocation = 'assessment';
     return expectSaga(workspaceSaga)
       .withState(defaultState)
       .call(showWarningMessage, 'Autorun Stopped', 750)
@@ -175,7 +174,7 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
   });
 
   test('calls showWarningMessage correctly when isEditorAutorun set to true', () => {
-    const workspaceLocation = WorkspaceLocations.grading;
+    const workspaceLocation = 'grading';
     const isEditorAutorun = true;
     const newDefaultState = generateDefaultState(workspaceLocation, { isEditorAutorun });
 
@@ -203,7 +202,7 @@ describe('INVALID_EDITOR_SESSION_ID', () => {
 
 describe('EVAL_REPL', () => {
   test('puts beginInterruptExecution, clearReplInput, sendReplInputToOutput and calls evalCode correctly', () => {
-    const workspaceLocation = WorkspaceLocations.playground;
+    const workspaceLocation = 'playground';
     const replValue = 'sample code';
     const newState = generateDefaultState(workspaceLocation, { replValue });
     const context = newState.workspaces[workspaceLocation].context;
@@ -238,7 +237,7 @@ describe('DEBUG_RESUME', () => {
 
   beforeEach(() => {
     // Ensure that lastDebuggerResult is set correctly before running each of the tests below
-    workspaceLocation = WorkspaceLocations.playground;
+    workspaceLocation = 'playground';
     editorValue = 'sample code here';
     execTime = 1000;
     context = mockRuntimeContext();
@@ -283,7 +282,7 @@ describe('DEBUG_RESUME', () => {
 
 describe('DEBUG_RESET', () => {
   test('puts clearReplOutput correctly', () => {
-    const workspaceLocation = WorkspaceLocations.assessment;
+    const workspaceLocation = 'assessment';
     const newDefaultState = generateDefaultState(workspaceLocation, { editorValue: 'test-value' });
 
     return expectSaga(workspaceSaga)
@@ -302,7 +301,7 @@ describe('DEBUG_RESET', () => {
 
 describe('EVAL_TESTCASE', () => {
   test('correctly executes prepend, value, postpend, testcase in sequence (calls evalTestCode)', () => {
-    const workspaceLocation = WorkspaceLocations.grading;
+    const workspaceLocation = 'grading';
     const editorPrepend = 'let z = 2;\nconst bar = (x, y) => 10 * x + y;\n"boink";';
     const editorValue = 'bar(6, 9);';
     const editorPostpend = '777;';
@@ -402,7 +401,7 @@ describe('CHAPTER_SELECT', () => {
   let context: Context;
 
   beforeEach(() => {
-    workspaceLocation = WorkspaceLocations.playground;
+    workspaceLocation = 'playground';
     globals = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -475,7 +474,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   let context: Context;
 
   beforeEach(() => {
-    workspaceLocation = WorkspaceLocations.playground;
+    workspaceLocation = 'playground';
     globals = [
       ['testNumber', 3.141592653589793],
       ['testObject', { a: 1, b: 2 }],
@@ -603,7 +602,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     (window as any).loadLib = loadLib;
     (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
 
-    workspaceLocation = WorkspaceLocations.grading;
+    workspaceLocation = 'grading';
     chapter = 4;
     globals = [
       ['testNumber', 3.141592653589793],
@@ -683,7 +682,7 @@ describe('evalCode', () => {
   let state: OverallState;
 
   beforeEach(() => {
-    workspaceLocation = WorkspaceLocations.assessment;
+    workspaceLocation = 'assessment';
     code = 'sample code';
     execTime = 1000;
     actionType = EVAL_EDITOR;
@@ -798,7 +797,7 @@ describe('evalCode', () => {
 
     test('puts evalTestcase (submission has testcases and Autograder tab is active)', () => {
       const type = 'result';
-      workspaceLocation = WorkspaceLocations.grading;
+      workspaceLocation = 'grading';
       state = generateDefaultState(workspaceLocation, {
         editorTestcases: mockTestcases,
         sideContentActiveTab: SideContentType.autograder
@@ -977,7 +976,7 @@ describe('evalTestCode', () => {
   let state: OverallState;
 
   beforeEach(() => {
-    workspaceLocation = WorkspaceLocations.assessment;
+    workspaceLocation = 'assessment';
     code = 'more sample code';
     execTime = 1000;
     context = mockRuntimeContext();
@@ -1074,7 +1073,7 @@ describe('NAV_DECLARATION', () => {
   let state: OverallState;
 
   beforeEach(() => {
-    workspaceLocation = WorkspaceLocations.playground;
+    workspaceLocation = 'playground';
     editorValue = 'const foo = (x) => -1; foo(2);';
     context = {
       ...mockRuntimeContext(),

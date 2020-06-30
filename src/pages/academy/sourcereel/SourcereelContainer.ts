@@ -31,7 +31,7 @@ import {
   updateEditorValue,
   updateReplValue
 } from '../../../commons/workspace/WorkspaceActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import { fetchSourcecastIndex } from '../../../features/sourceRecorder/sourcecast/SourcecastActions';
 import {
   saveSourcecastData,
@@ -93,7 +93,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   timeResumed: state.workspaces.sourcereel.timeResumed
 });
 
-const location: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const location: WorkspaceLocation = 'sourcereel';
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(

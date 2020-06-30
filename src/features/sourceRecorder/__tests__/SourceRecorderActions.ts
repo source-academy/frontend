@@ -1,5 +1,5 @@
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
-import { WorkspaceLocation, WorkspaceLocations } from '../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../commons/workspace/WorkspaceTypes';
 import {
   saveSourcecastData,
   setCodeDeltasToApply,
@@ -21,8 +21,8 @@ import {
   SET_SOURCECAST_PLAYBACK_STATUS
 } from '../SourceRecorderTypes';
 
-const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
-const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
+const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
 test('saveSourcecastData generates correct action object', () => {
   const fakeUrl = 'someFakeAudioUrl.com';

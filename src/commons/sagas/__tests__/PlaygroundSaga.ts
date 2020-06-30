@@ -14,7 +14,6 @@ import {
 } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { WorkspaceLocations } from '../../workspace/WorkspaceTypes';
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {
@@ -35,7 +34,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -58,7 +57,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -82,7 +81,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -137,7 +136,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -192,7 +191,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -227,7 +226,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false
@@ -284,7 +283,7 @@ describe('Playground saga tests', () => {
       workspaces: {
         ...defaultWorkspaceManager,
         playground: {
-          ...createDefaultWorkspace(WorkspaceLocations.playground),
+          ...createDefaultWorkspace('playground'),
           externalLibrary: ExternalLibraryName.NONE,
           editorValue: dummyEditorValue,
           usingSubst: false

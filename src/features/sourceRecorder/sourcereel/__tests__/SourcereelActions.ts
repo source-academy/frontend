@@ -1,8 +1,5 @@
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
-import {
-  WorkspaceLocation,
-  WorkspaceLocations
-} from '../../../../commons/workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../../../commons/workspace/WorkspaceTypes';
 import { CodeDelta, Input, PlaybackData } from '../../SourceRecorderTypes';
 import {
   recordInit,
@@ -23,7 +20,7 @@ import {
   TIMER_STOP
 } from '../SourcereelTypes';
 
-const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
 function dateIsCloseEnough(dateA: number, dateB: number) {
   return Math.abs(dateA - dateB) <= 1000;
