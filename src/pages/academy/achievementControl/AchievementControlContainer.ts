@@ -6,6 +6,7 @@ import AchievementControl, { DispatchProps, StateProps } from './AchievementCont
 import {
   getAchievements,
   updateAchievements,
+  saveAchievements, 
   editAchievement
 } from '../../../commons/achievements/AchievementActions';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
@@ -19,6 +20,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleFetchAchievements: getAchievements,
       handleUpdateAchievements: updateAchievements,
+      handleSaveAchievements: saveAchievements, 
       handleEditAchievement: editAchievement
     },
     dispatch

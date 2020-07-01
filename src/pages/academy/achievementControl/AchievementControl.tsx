@@ -7,6 +7,7 @@ import { AchievementItem } from '../../../commons/achievements/AchievementTypes'
 
 export type DispatchProps = {
   handleFetchAchievements: () => void;
+  handleSaveAchievements: (achievements: AchievementItem[]) => void;
   handleUpdateAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
 };
@@ -20,6 +21,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
     inferencer,
     handleFetchAchievements,
     handleUpdateAchievements,
+    handleSaveAchievements, 
     handleEditAchievement
   } = props;
 
@@ -27,16 +29,15 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const [panelPendingUpload, setPanelPendingUpload] = useState<boolean>(false);
 
   useEffect(() => {
-    handleFetchAchievements();
-
     if (editorUnsavedChanges !== 0 || panelPendingUpload) {
       window.onbeforeunload = () => true;
     }
 
     if (editorUnsavedChanges === 0 && !panelPendingUpload) {
+      handleFetchAchievements();
       window.onbeforeunload = null;
     }
-  }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
+  }, [editorUnsavedChanges, panelPendingUpload]);
 
   const addUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges + 1);
   const removeUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges - 1);
@@ -62,6 +63,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           isDisabled={editorUnsavedChanges !== 0}
           pendingUpload={panelPendingUpload}
           setPendingUpload={setPanelPendingUpload}
+          saveAchievementsToFrontEnd={handleSaveAchievements}
         />
 
         <AchievementEditor

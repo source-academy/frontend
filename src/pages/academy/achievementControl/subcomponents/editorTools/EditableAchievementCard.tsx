@@ -57,10 +57,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   const setUpload = () => {
-    if (pendingUpload) {
-      setPendingUpload(false);
-      removeUnsavedChange();
-    }
+    setPendingUpload(false);
+    removeUnsavedChange();
   };
 
   const handleSaveChanges = () => {

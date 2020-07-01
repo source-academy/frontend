@@ -12,6 +12,7 @@ type AchievementControlPanelProps = {
 
   pendingUpload: any;
   setPendingUpload: any;
+  saveAchievementsToFrontEnd: any;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
@@ -21,11 +22,13 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     forceRender,
     isDisabled,
     pendingUpload,
-    setPendingUpload
+    setPendingUpload, 
+    saveAchievementsToFrontEnd
   } = props;
 
   const handleSaveChanges = () => {
     setPendingUpload(true);
+    saveAchievementsToFrontEnd(inferencer.getAchievements());
     forceRender();
   };
 
