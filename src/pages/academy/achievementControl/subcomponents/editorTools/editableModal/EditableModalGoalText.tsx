@@ -11,14 +11,12 @@ function EditableModalGoalText(props: EditableModalGoalTextProps) {
 
   return (
     <>
-      <p>
-        <EditableText
-          placeholder={`Enter your goal text here`}
-          value={goalText}
-          onChange={setGoalText}
-          multiline={true}
-        />
-      </p>
+      <EditableText
+        placeholder={`Enter your goal text here`}
+        value={goalText}
+        onChange={setGoalText}
+        multiline={true}
+      />
     </>
   );
 }
