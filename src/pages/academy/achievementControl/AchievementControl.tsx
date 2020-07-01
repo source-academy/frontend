@@ -37,7 +37,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
       handleFetchAchievements();
       window.onbeforeunload = null;
     }
-  }, [editorUnsavedChanges, panelPendingUpload]);
+  }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
 
   const addUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges + 1);
   const removeUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges - 1);
