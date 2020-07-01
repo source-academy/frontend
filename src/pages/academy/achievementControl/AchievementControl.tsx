@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
@@ -35,15 +35,23 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleEditAchievement(achievement);
   };
 
+  const [render, setRender] = useState<boolean>();
+  const forceRender = () => setRender(!render);
+
   return (
     <>
       <div className="AchievementControl">
-        <AchievementControlPanel inferencer={inferencer} updateAchievements={updateAchievements} />
+        <AchievementControlPanel
+          inferencer={inferencer}
+          updateAchievements={updateAchievements}
+          forceRender={forceRender}
+        />
 
         <AchievementEditor
           inferencer={inferencer}
           updateAchievements={updateAchievements}
           editAchievement={editAchievement}
+          forceRender={forceRender}
         />
       </div>
     </>

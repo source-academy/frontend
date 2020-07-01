@@ -7,13 +7,17 @@ import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
 type AchievementControlPanelProps = {
   inferencer: Inferencer;
   updateAchievements: any;
+  forceRender: any;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { inferencer, updateAchievements } = props;
+  const { inferencer, updateAchievements, forceRender } = props;
 
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
-  const togglePendingUpload = () => setPendingUpload(true);
+  const handleSaveChanges = () => {
+    setPendingUpload(true);
+    forceRender();
+  };
 
   const handleUploadChanges = () => {
     updateAchievements();
@@ -26,7 +30,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
         key={id}
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
-        saveChanges={togglePendingUpload}
+        saveChanges={handleSaveChanges}
       />
     ));
 
@@ -36,7 +40,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
 
       <div>
         <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
-        <TaskAdder inferencer={inferencer} saveChanges={togglePendingUpload} />
+        <TaskAdder inferencer={inferencer} saveChanges={handleSaveChanges} />
       </div>
     </div>
   );
