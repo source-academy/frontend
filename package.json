@@ -37,7 +37,7 @@
     "ace-builds": "^1.4.11",
     "acorn": "^7.3.1",
     "ag-grid-community": "^23.2.0",
-    "ag-grid-react": "^23.2.0",
+    "ag-grid-react": "^23.2.1",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
     "flexboxgrid": "^6.3.1",
