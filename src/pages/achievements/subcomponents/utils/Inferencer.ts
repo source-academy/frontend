@@ -98,24 +98,6 @@ class Inferencer {
     return newId;
   }
 
-  public setTaskAchievement(achievement: AchievementItem) {
-    const newAchievement = achievement;
-    newAchievement.isTask = true;
-    newAchievement.position = this.listTaskIds().length;
-
-    this.editAchievement(newAchievement);
-  }
-
-  public setNonTaskAchievement(achievement: AchievementItem) {
-    achievement.prerequisiteIds = [];
-    achievement.isTask = false;
-    achievement.position = 0;
-
-    this.editAchievement(achievement);
-
-    this.normalizePositions();
-  }
-
   public editAchievement(achievement: AchievementItem) {
     // directly modify the achievement element in achievements
     // asserts: the achievement id already exists in nodeList
@@ -167,6 +149,15 @@ class Inferencer {
     }, [] as number[]);
   }
 
+  public setTask(achievement: AchievementItem) {
+    achievement.isTask = true;
+    achievement.position = this.listTaskIds().length;
+
+    this.editAchievement(achievement);
+
+    this.normalizePositions();
+  }
+
   public listNonTaskIds() {
     return this.achievements.reduce((acc, achievement) => {
       if (!achievement.isTask) {
@@ -174,6 +165,16 @@ class Inferencer {
       }
       return acc;
     }, [] as number[]);
+  }
+
+  public setNonTask(achievement: AchievementItem) {
+    achievement.prerequisiteIds = [];
+    achievement.isTask = false;
+    achievement.position = 0;
+
+    this.editAchievement(achievement);
+
+    this.normalizePositions();
   }
 
   public getStatus(id: number) {

@@ -13,7 +13,7 @@ function TaskDeleter(props: TaskDeleterProps) {
   const { editableAchievement, inferencer, updateAchievements } = props;
 
   const deleteAction = () => {
-    inferencer.setNonTaskAchievement(editableAchievement);
+    inferencer.setNonTask(editableAchievement);
     updateAchievements(inferencer.getAchievements);
   };
 
