@@ -1921,10 +1921,10 @@
   dependencies:
     "@types/gapi" "*"
 
-"@types/gapi.client.drive@^3.0.7":
-  version "3.0.7"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.7.tgz#7cc24362769fc5b4c1d987699721199a20db569f"
-  integrity sha512-g7utqVfe6vJVaDbJJSmEJ2FOSzoQCUOEx5/T/dA1frKRYCJJFZJWHMxLAv/aPZapyMotCmN7S0fq7WgGkvVC3A==
+"@types/gapi.client.drive@^3.0.8":
+  version "3.0.8"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.8.tgz#7c91b21a8dcc526a366844f56814de7cf4566329"
+  integrity sha512-VKnITcwgEozkqbFE6kyu6fjTM046ikzBiHvmApl3c+naFvDQI5/5ikSIGCMyLRJAr9+5ZGiQL/cvNCT5gMs31A==
   dependencies:
     "@types/gapi.client" "*"
 
