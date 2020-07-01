@@ -49,7 +49,7 @@
     "normalize.css": "^8.0.1",
     "phaser": "^3.23.0",
     "query-string": "^6.13.1",
-    "re-resizable": "^6.4.0",
+    "re-resizable": "^6.5.1",
     "react": "^16.13.1",
     "react-ace": "^9.0.0",
     "react-copy-to-clipboard": "^5.0.2",
