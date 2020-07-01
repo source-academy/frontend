@@ -4,36 +4,34 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementTaskSelectorProps = {
-  tasks: number[];
+type PopupSelectorProps = {
+  selectionIds: number[];
   inferencer: Inferencer;
-  focusTaskID: number;
-  buttonText: string;
   dialogHeader: string;
-
-  emptyTasksMessage: string;
-
-  setDialogOpen: any;
+  focusId: number;
+  setFocusId: any;
+  buttonText: string;
+  emptySelectionMessage: string;
   isDialogOpen: boolean;
+  toggleDialogOpen: any;
   action: (e: any) => void;
-  setFocusTaskID: any;
 };
 
-function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
+function PopupSelector(props: PopupSelectorProps) {
   const {
-    tasks,
+    selectionIds,
     inferencer,
-    focusTaskID,
-    buttonText,
     dialogHeader,
-    emptyTasksMessage,
-    setDialogOpen,
+    focusId,
+    setFocusId,
+    buttonText,
+    emptySelectionMessage,
     isDialogOpen,
-    action,
-    setFocusTaskID
+    toggleDialogOpen,
+    action
   } = props;
 
-  const getTaskTitle = (id: number) => {
+  const getAchievementTitle = (id: number) => {
     if (!inferencer.doesAchievementExist(id)) {
       return 'Please Select an Item';
     }
@@ -41,12 +39,14 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
     return inferencer.getAchievementItem(id).title;
   };
 
-  const changeFocusTaskID = (taskID: number, e: any) => {
-    setFocusTaskID(taskID);
+  const changeFocusId = (taskID: number, e: any) => {
+    setFocusId(taskID);
   };
 
   const taskRenderer: ItemRenderer<number> = (id, { handleClick }) => {
-    return <MenuItem active={false} key={id} onClick={handleClick} text={getTaskTitle(id)} />;
+    return (
+      <MenuItem active={false} key={id} onClick={handleClick} text={getAchievementTitle(id)} />
+    );
   };
 
   const TaskSelectComponent = Select.ofType<number>();
@@ -54,7 +54,7 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   const taskSelector = (currentPrerequisiteID: number) => {
     return (
       <div>
-        <Button className={Classes.MINIMAL} text={getTaskTitle(currentPrerequisiteID)} />
+        <Button className={Classes.MINIMAL} text={getAchievementTitle(currentPrerequisiteID)} />
       </div>
     );
   };
@@ -62,27 +62,27 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   return (
     <>
       <Dialog
-        onClose={setDialogOpen}
+        onClose={toggleDialogOpen}
         className={'task-selector'}
         isOpen={isDialogOpen}
         title={dialogHeader}
       >
         <div className={Classes.DIALOG_BODY}>
-          {tasks.length === 0 ? (
+          {selectionIds.length === 0 ? (
             <div className="task-selector">
-              <p>{emptyTasksMessage}</p>
+              <p>{emptySelectionMessage}</p>
             </div>
           ) : (
             <>
               <div className="task-selector">
                 <div>
                   <TaskSelectComponent
-                    items={tasks}
-                    onItemSelect={changeFocusTaskID}
+                    items={selectionIds}
+                    onItemSelect={changeFocusId}
                     itemRenderer={taskRenderer}
                     filterable={false}
                   >
-                    {taskSelector(focusTaskID)}
+                    {taskSelector(focusId)}
                   </TaskSelectComponent>
                 </div>
                 <div>
@@ -97,4 +97,4 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   );
 }
 
-export default AchievementTaskSelector;
+export default PopupSelector;

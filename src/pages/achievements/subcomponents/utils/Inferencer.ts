@@ -58,6 +58,7 @@ class Inferencer {
   private nodeList: Map<number, Node> = new Map(); // key = achievement id
 
   constructor(achievements: AchievementItem[]) {
+    console.log('Constructed Inferencer');
     this.achievements = achievements;
     this.processData();
   }
@@ -276,6 +277,7 @@ class Inferencer {
       this.generateTotalExp(node);
       this.generateCollectiveProgress(node);
     });
+    console.log('Processed Data', this.achievements);
   }
 
   private constructNodeList() {

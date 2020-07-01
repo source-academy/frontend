@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
-import AchievementTaskSelector from './AchievementTaskSelector';
+import PopupSelector from './PopupSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-export type AchievementTaskAdderProps = {
+export type TaskAdderProps = {
   inferencer: Inferencer;
   updateAchievements: any;
   editAchievement: any;
 };
 
-function AchievementTaskAdder(props: AchievementTaskAdderProps) {
+function TaskAdder(props: TaskAdderProps) {
   const { inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -20,12 +20,6 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
   const [addedTaskID, setAddedTaskID] = useState<number>(
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
-
-  /*
-  useEffect(() => {
-    setAddedTaskID(inferencer.getNextID(nonTaskIDs));
-  }, [inferencer, nonTaskIDs]);
-  */
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);
@@ -41,15 +35,15 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
   return (
     <>
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
-      <AchievementTaskSelector
-        tasks={nonTaskIDs}
+      <PopupSelector
+        selectionIds={nonTaskIDs}
         inferencer={inferencer}
-        focusTaskID={addedTaskID}
-        setFocusTaskID={setAddedTaskID}
+        focusId={addedTaskID}
+        setFocusId={setAddedTaskID}
         buttonText={'Add Task'}
         dialogHeader={'Add A Task'}
-        emptyTasksMessage={'You have no more tasks to add'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionMessage={'You have no more tasks to add'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />
@@ -57,4 +51,4 @@ function AchievementTaskAdder(props: AchievementTaskAdderProps) {
   );
 }
 
-export default AchievementTaskAdder;
+export default TaskAdder;

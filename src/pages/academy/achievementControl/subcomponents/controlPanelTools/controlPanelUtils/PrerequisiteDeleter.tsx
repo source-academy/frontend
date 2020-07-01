@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
-import AchievementTaskSelector from './AchievementTaskSelector';
+import PopupSelector from './PopupSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementPrerequisiteDeleterProps = {
+type PrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
@@ -13,7 +13,7 @@ type AchievementPrerequisiteDeleterProps = {
   editAchievement: any;
 };
 
-function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterProps) {
+function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
   const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -47,15 +47,15 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Delete A Prerequisite'} />
-      <AchievementTaskSelector
-        tasks={prerequisites}
+      <PopupSelector
+        selectionIds={prerequisites}
         inferencer={inferencer}
-        focusTaskID={deletedPrerequisiteID}
-        setFocusTaskID={setDeletedPrerequisiteID}
+        focusId={deletedPrerequisiteID}
+        setFocusId={setDeletedPrerequisiteID}
         buttonText={'Delete Prerequisite'}
         dialogHeader={'Delete A Prerequisite'}
-        emptyTasksMessage={'You have no more prerequisites to delete'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionMessage={'You have no more prerequisites to delete'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={deleteAction}
       />
@@ -63,4 +63,4 @@ function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterPro
   );
 }
 
-export default AchievementPrerequisiteDeleter;
+export default PrerequisiteDeleter;

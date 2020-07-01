@@ -1,12 +1,12 @@
 import React from 'react';
 
-import AchievementPrerequisiteDeleter from './controlPanelUtils/AchievementPrerequisiteDeleter';
-import AchievementPrerequisiteAdder from './controlPanelUtils/AchievementPrerequisiteAdder';
+import PrerequisiteDeleter from './controlPanelUtils/PrerequisiteDeleter';
+import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import AchievementTaskDeleter from './controlPanelUtils/AchievementTaskDeleter';
-import AchievementTaskPositionEditor from './controlPanelUtils/AchievementTaskPositionEditor';
+import TaskDeleter from './controlPanelUtils/TaskDeleter';
+import TaskPositionEditor from './controlPanelUtils/TaskPositionEditor';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
-import AchievementTaskPrerequisitesEditor from './controlPanelUtils/AchievementTaskPrerequisitesEditor';
+import PrerequisitePositionEditor from './controlPanelUtils/PrerequisitePositionEditor';
 
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
@@ -27,7 +27,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
   return (
     <>
-      <AchievementPrerequisiteAdder
+      <PrerequisiteAdder
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
@@ -35,7 +35,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editAchievement={editAchievement}
       />
 
-      <AchievementPrerequisiteDeleter
+      <PrerequisiteDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
@@ -43,7 +43,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editAchievement={editAchievement}
       />
 
-      <AchievementTaskDeleter
+      <TaskDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
@@ -51,13 +51,13 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editAchievement={editAchievement}
       />
 
-      <AchievementTaskPositionEditor
+      <TaskPositionEditor
         editableAchievement={editableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
       />
 
-      <AchievementTaskPrerequisitesEditor
+      <PrerequisitePositionEditor
         editableAchievement={editableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}

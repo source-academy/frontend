@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
-import AchievementTaskSelector from './AchievementTaskSelector';
+import PopupSelector from './PopupSelector';
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
 
-type AchievementTaskPositionEditorProps = {
+type TaskPositionEditorProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
   updateAchievements: any;
 };
 
-function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps) {
+function TaskPositionEditor(props: TaskPositionEditorProps) {
   const { editableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -32,15 +32,15 @@ function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Change Pos'} />
-      <AchievementTaskSelector
-        tasks={taskIDs}
+      <PopupSelector
+        selectionIds={taskIDs}
         inferencer={inferencer}
-        focusTaskID={swappedTaskID}
-        setFocusTaskID={setSwappedTaskID}
+        focusId={swappedTaskID}
+        setFocusId={setSwappedTaskID}
         buttonText={'Swap Positions'}
         dialogHeader={"Swap this task's position"}
-        emptyTasksMessage={'You have no more tasks to swap with'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionMessage={'You have no more tasks to swap with'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={swappingAction}
       />
@@ -48,4 +48,4 @@ function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps
   );
 }
 
-export default AchievementTaskPositionEditor;
+export default TaskPositionEditor;
