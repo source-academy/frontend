@@ -3,7 +3,7 @@ import { Button } from '@blueprintjs/core';
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementTaskDeleterProps = {
+type TaskDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
@@ -11,7 +11,7 @@ type AchievementTaskDeleterProps = {
   editAchievement: any;
 };
 
-function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
+function TaskDeleter(props: TaskDeleterProps) {
   const { editableAchievement, inferencer, updateAchievements } = props;
 
   const deleteAction = (e: any) => {
@@ -26,4 +26,4 @@ function AchievementTaskDeleter(props: AchievementTaskDeleterProps) {
   );
 }
 
-export default AchievementTaskDeleter;
+export default TaskDeleter;

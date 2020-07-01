@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
-import AchievementTaskSelector from './AchievementTaskSelector';
+import AchievementSelector from './AchievementSelector';
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
 
-type AchievementTaskPositionEditorProps = {
+type TaskPositionEditorProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
   updateAchievements: any;
 };
 
-function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps) {
+function TaskPositionEditor(props: TaskPositionEditorProps) {
   const { editableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -32,7 +32,7 @@ function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Change Pos'} />
-      <AchievementTaskSelector
+      <AchievementSelector
         tasks={taskIDs}
         inferencer={inferencer}
         focusTaskID={swappedTaskID}
@@ -48,4 +48,4 @@ function AchievementTaskPositionEditor(props: AchievementTaskPositionEditorProps
   );
 }
 
-export default AchievementTaskPositionEditor;
+export default TaskPositionEditor;

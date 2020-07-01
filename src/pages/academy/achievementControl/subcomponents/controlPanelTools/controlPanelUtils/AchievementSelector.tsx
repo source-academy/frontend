@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementTaskSelectorProps = {
+type AchievementSelectorProps = {
   tasks: number[];
   inferencer: Inferencer;
   focusTaskID: number;
@@ -19,7 +19,7 @@ type AchievementTaskSelectorProps = {
   setFocusTaskID: any;
 };
 
-function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
+function AchievementSelector(props: AchievementSelectorProps) {
   const {
     tasks,
     inferencer,
@@ -97,4 +97,4 @@ function AchievementTaskSelector(props: AchievementTaskSelectorProps) {
   );
 }
 
-export default AchievementTaskSelector;
+export default AchievementSelector;

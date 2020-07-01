@@ -4,7 +4,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type AchievementPrerequisiteSwapperProps = {
+type PrerequisiteSwapperProps = {
   prerequisiteIdDs: number[];
   inferencer: Inferencer;
 
@@ -18,7 +18,7 @@ type AchievementPrerequisiteSwapperProps = {
   setSecondID: any;
 };
 
-function AchievementPrerequisiteSwapper(props: AchievementPrerequisiteSwapperProps) {
+function PrerequisiteSwapper(props: PrerequisiteSwapperProps) {
   const {
     prerequisiteIdDs,
     inferencer,
@@ -111,4 +111,4 @@ function AchievementPrerequisiteSwapper(props: AchievementPrerequisiteSwapperPro
   );
 }
 
-export default AchievementPrerequisiteSwapper;
+export default PrerequisiteSwapper;
