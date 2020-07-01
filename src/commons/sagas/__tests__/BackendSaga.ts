@@ -52,7 +52,6 @@ import {
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
-  changeChapter,
   getAssessment,
   getAssessmentOverviews,
   getGradingSummary,
@@ -61,7 +60,8 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth
+  postAuth,
+  postChapter
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -439,9 +439,9 @@ describe('Test CHANGE_CHAPTER Action', () => {
   test('when chapter is changed', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(changeChapter, 1, 'default', mockTokens)
+      .call(postChapter, 1, 'default', mockTokens)
       .put(updateChapter(1, 'default'))
-      .provide([[call(changeChapter, 1, 'default', mockTokens), { ok: true }]])
+      .provide([[call(postChapter, 1, 'default', mockTokens), { ok: true }]])
       .dispatch({ type: CHANGE_CHAPTER, payload: { chapter: 1, variant: 'default' } })
       .silentRun();
   });
