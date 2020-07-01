@@ -17,7 +17,6 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
 
   const prereqs = editableAchievement.prerequisiteIds;
-  console.log(prereqs);
 
   const [firstID, setFirstID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
   const [secondID, setSecondID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { EditableText, Button } from '@blueprintjs/core';
 
-type EditableAchievementModalImage = {
+type EditableModalImageProps = {
   modalImageUrl: string;
   title: string;
   setModalImageUrl: any;
 };
 
-function EditableAchievementModalImage(props: EditableAchievementModalImage) {
+function EditableModalImage(props: EditableModalImageProps) {
   const { modalImageUrl, title, setModalImageUrl } = props;
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
@@ -32,4 +32,4 @@ function EditableAchievementModalImage(props: EditableAchievementModalImage) {
   );
 }
 
-export default EditableAchievementModalImage;
+export default EditableModalImage;

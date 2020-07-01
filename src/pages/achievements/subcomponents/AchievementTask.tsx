@@ -9,7 +9,7 @@ type AchievementTaskProps = {
   id: number;
   inferencer: Inferencer;
   filterStatus: FilterStatus;
-  displayModal?: any;
+  displayModal: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
