@@ -59,7 +59,6 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
         usePortal={false}
       >
         <div className="modal-editor">
-          {/* TODO: make modal editable */}
           <Card className="background-card">
             <h1>{title} </h1>
 
