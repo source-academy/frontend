@@ -23,9 +23,22 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleEditAchievement
   } = props;
 
+  const [unsavedChanges, setUnsavedChanges] = useState<number>(0);
+
   useEffect(() => {
     handleFetchAchievements();
-  }, [handleFetchAchievements]);
+
+    if (unsavedChanges !== 0) {
+      window.onbeforeunload = () => true;
+    }
+
+    if (unsavedChanges === 0) {
+      window.onbeforeunload = null;
+    }
+  }, [handleFetchAchievements, unsavedChanges]);
+
+  const addUnsavedChange = () => setUnsavedChanges(unsavedChanges + 1);
+  const removeUnsavedChange = () => setUnsavedChanges(unsavedChanges - 1);
 
   const updateAchievements = () => {
     handleUpdateAchievements(inferencer.getAchievements());
@@ -45,6 +58,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           inferencer={inferencer}
           updateAchievements={updateAchievements}
           forceRender={forceRender}
+          isDisabled={unsavedChanges !== 0}
         />
 
         <AchievementEditor
@@ -52,6 +66,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
           updateAchievements={updateAchievements}
           editAchievement={editAchievement}
           forceRender={forceRender}
+          addUnsavedChange={addUnsavedChange}
+          removeUnsavedChange={removeUnsavedChange}
         />
       </div>
     </>

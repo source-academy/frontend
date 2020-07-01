@@ -26,6 +26,8 @@ type EditableAchievementCardProps = {
   forceRender: any;
   adderId: number;
   setAdderId: any;
+  addUnsavedChange: any;
+  removeUnsavedChange: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
@@ -36,7 +38,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     editAchievement,
     forceRender,
     adderId,
-    setAdderId
+    setAdderId,
+    addUnsavedChange,
+    removeUnsavedChange
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
@@ -44,6 +48,20 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
+
+  const setUnsaved = () => {
+    if (!hasChanges) {
+      setHasChanges(true);
+      addUnsavedChange();
+    }
+  };
+
+  const setUpload = () => {
+    if (pendingUpload) {
+      setPendingUpload(false);
+      removeUnsavedChange();
+    }
+  };
 
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
@@ -59,7 +77,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const handleUploadChanges = () => {
     editAchievement(editableAchievement);
-    setPendingUpload(false);
+    setUpload();
   };
 
   const handleDeleteAchievement = () => {
@@ -74,7 +92,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleDiscardChanges = () => {
     setEditableAchievement(achievement);
     setHasChanges(false);
-    setPendingUpload(false);
+    setUpload();
   };
 
   const handleChangeTitle = (title: string) => {
@@ -82,7 +100,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       title: title
     });
-    setHasChanges(true);
+    setUnsaved();
   };
 
   const handleChangeExp = (exp: string) => {
@@ -94,7 +112,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
         ...editableAchievement,
         exp: parseInt(exp)
       });
-      setHasChanges(true);
+      setUnsaved();
     }
   };
 
@@ -103,7 +121,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       deadline: deadline
     });
-    setHasChanges(true);
+    setUnsaved();
   };
 
   const handleChangeAbility = (ability: AchievementAbility, e: any) => {
@@ -111,7 +129,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       ability: ability
     });
-    setHasChanges(true);
+    setUnsaved();
   };
 
   const handleChangeThumbnail = (thumbnail: IconName) => {
@@ -119,7 +137,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       icon: thumbnail
     });
-    setHasChanges(true);
+    setUnsaved();
   };
 
   const handleChangeModal = (modal: AchievementModalItem) => {
@@ -127,7 +145,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       modal: modal
     });
-    setHasChanges(true);
+    setUnsaved();
   };
 
   return (

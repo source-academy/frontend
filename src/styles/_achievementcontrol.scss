@@ -16,6 +16,10 @@
     justify-content: flex-start;
   }
 
+  .panel-disabler {
+    pointer-events: none;
+  }
+
   .sample-cards {
     width: 50%;
     display: table;

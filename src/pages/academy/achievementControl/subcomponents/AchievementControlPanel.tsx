@@ -8,10 +8,11 @@ type AchievementControlPanelProps = {
   inferencer: Inferencer;
   updateAchievements: any;
   forceRender: any;
+  isDisabled: boolean;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { inferencer, updateAchievements, forceRender } = props;
+  const { inferencer, updateAchievements, forceRender, isDisabled } = props;
 
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
   const handleSaveChanges = () => {
@@ -35,7 +36,10 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     ));
 
   return (
-    <div className="sample-cards">
+    <div
+      className="sample-cards"
+      style={isDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+    >
       <ul className="display-list">{mapAchievementIdsToEditableTask(inferencer.listTaskIds())}</ul>
 
       <div>
