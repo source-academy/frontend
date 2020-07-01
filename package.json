@@ -36,7 +36,7 @@
     "@sentry/browser": "^5.17.0",
     "ace-builds": "^1.4.11",
     "acorn": "^7.3.1",
-    "ag-grid-community": "^23.2.0",
+    "ag-grid-community": "^23.2.1",
     "ag-grid-react": "^23.2.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
