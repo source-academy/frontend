@@ -2,16 +2,21 @@ import { CollectiblePage } from './GameCollectiblesTypes';
 import {
   collectiblesMenu,
   collectiblesPage,
-  collectiblesPageChosen
+  collectiblesPageChosen,
+  collectiblesBanner
 } from '../commons/CommonAssets';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { screenCenter } from '../commons/CommonConstants';
 import {
-  bannerYStartPos,
-  bannerXSpacing,
-  bannerTextXPos,
-  bannerTextStyle
+  pageBannerYStartPos,
+  pageBannerYSpacing,
+  pageBannerTextXPos,
+  pageBannerTextStyle,
+  listBannerYStartPos,
+  listBannerYSpacing,
+  listBannerTextXPos,
+  listBannerTextStyle
 } from './GameCollectiblesConstants';
 
 class GameCollectiblesManager {
@@ -85,7 +90,7 @@ class GameCollectiblesManager {
 
   private addPageBanner(text: string, index: number, isChosen: boolean, callback: any) {
     const pageBannerContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const bannerYPos = bannerYStartPos + index * bannerXSpacing;
+    const bannerYPos = pageBannerYStartPos + index * pageBannerYSpacing;
     const pageBannerBg = new Phaser.GameObjects.Sprite(
       this.getScene(),
       0,
@@ -100,13 +105,13 @@ class GameCollectiblesManager {
       collectiblesPageChosen.key
     );
 
-    const bannerTextYPos = bannerYStartPos + index * bannerXSpacing;
+    const bannerTextYPos = pageBannerYStartPos + index * pageBannerYSpacing;
     const pageBannerText = new Phaser.GameObjects.Text(
       this.getScene(),
-      bannerTextXPos,
+      pageBannerTextXPos,
       bannerTextYPos,
       text,
-      bannerTextStyle
+      pageBannerTextStyle
     );
     pageBannerText.setOrigin(0.1, 0.55);
 
@@ -140,16 +145,36 @@ class GameCollectiblesManager {
     }
 
     const pageContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    objectList.forEach(obj => {
-      const objContainer = this.createObjContainer(obj, () => {});
+    objectList.forEach((obj, index) => {
+      const objContainer = this.createObjContainer(obj, index, () => {});
       pageContainer.add(objContainer);
     });
     return pageContainer;
   }
 
-  private createObjContainer(objs: string, callback: any) {
+  private createObjContainer(obj: string, index: number, callback: any) {
     const container = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+    const objBannerYPos = listBannerYStartPos + index * listBannerYSpacing;
 
+    const objListBg = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      0,
+      objBannerYPos,
+      collectiblesBanner.key
+    );
+    const objListText = new Phaser.GameObjects.Text(
+      this.getScene(),
+      listBannerTextXPos,
+      objBannerYPos,
+      obj,
+      listBannerTextStyle
+    );
+    objListText.setOrigin(0.0, 0.55);
+
+    objListBg.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    objListBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
+
+    container.add([objListBg, objListText]);
     return container;
   }
 }
