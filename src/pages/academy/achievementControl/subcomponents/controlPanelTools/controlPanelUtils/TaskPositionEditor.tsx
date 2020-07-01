@@ -16,17 +16,19 @@ function TaskPositionEditor(props: TaskPositionEditorProps) {
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
 
-  const taskIDs = inferencer.listTaskIds();
+  const taskIDs = inferencer.listTaskIds().filter(id => id !== editableAchievement.id);
 
   const [swappedTaskID, setSwappedTaskID] = useState<number>(taskIDs.length === 0 ? 0 : taskIDs[0]);
 
-  const swappingAction = (e: any) => {
-    toggleDialogOpen();
+  const swapAction = () => {
     inferencer.swapAchievementPositions(
       editableAchievement,
       inferencer.getAchievementItem(swappedTaskID)
     );
+
     updateAchievements(inferencer.getAchievements());
+
+    toggleDialogOpen();
   };
 
   return (
@@ -39,10 +41,10 @@ function TaskPositionEditor(props: TaskPositionEditorProps) {
         setSelectedId={setSwappedTaskID}
         buttonText={'Swap Positions'}
         dialogHeader={"Swap this task's position"}
-        emptySelectionsMessage={'You have no more tasks to swap with'}
+        emptySelectionsMessage={'You have no tasks to swap with'}
         toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        action={swappingAction}
+        action={swapAction}
       />
     </>
   );

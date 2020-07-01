@@ -21,7 +21,7 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
   const [firstID, setFirstID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
   const [secondID, setSecondID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
 
-  const swapAction = (e: any) => {
+  const swapAction = () => {
     const firstIndex = editableAchievement.prerequisiteIds.findIndex(id => id === firstID);
     const secondIndex = editableAchievement.prerequisiteIds.findIndex(id => id === secondID);
 

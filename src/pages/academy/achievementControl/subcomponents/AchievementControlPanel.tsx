@@ -26,10 +26,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       <ul className="display-list">{mapAchievementIdsToEditableTask(inferencer.listTaskIds())}</ul>
 
       <div>
-        <TaskAdder
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-        />
+        <TaskAdder inferencer={inferencer} updateAchievements={updateAchievements} />
       </div>
     </div>
   );

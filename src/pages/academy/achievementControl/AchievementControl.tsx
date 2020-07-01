@@ -38,10 +38,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
   return (
     <>
       <div className="AchievementControl">
-        <AchievementControlPanel
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-        />
+        <AchievementControlPanel inferencer={inferencer} updateAchievements={updateAchievements} />
 
         <AchievementEditor
           inferencer={inferencer}

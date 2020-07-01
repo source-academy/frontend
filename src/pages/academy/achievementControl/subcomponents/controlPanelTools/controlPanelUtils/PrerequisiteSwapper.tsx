@@ -10,7 +10,7 @@ type PrerequisiteSwapperProps = {
 
   setDialogOpen: any;
   isDialogOpen: boolean;
-  action: (e: any) => void;
+  action: any;
 
   firstID: number;
   setFirstID: any;

@@ -31,10 +31,12 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
   );
 
   const addAction = () => {
-    toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+
     updateAchievements(inferencer.getAchievements);
+
+    toggleDialogOpen();
   };
 
   return (

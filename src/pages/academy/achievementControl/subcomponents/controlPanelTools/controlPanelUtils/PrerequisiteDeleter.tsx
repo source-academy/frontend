@@ -36,11 +36,13 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
     prerequisites.length === 0 ? 0 : prerequisites[0]
   );
 
-  const deleteAction = (e: any) => {
-    toggleDialogOpen();
+  const deleteAction = () => {
     setEditableAchievement(deletePrerequisite(deletedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
+
     updateAchievements(inferencer.getAchievements);
+
+    toggleDialogOpen();
   };
 
   return (

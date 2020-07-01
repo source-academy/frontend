@@ -26,9 +26,10 @@ function TaskAdder(props: TaskAdderProps) {
     updateAchievements(inferencer.getAchievements());
   };
 
-  const addingAction = (e: any) => {
-    toggleDialogOpen();
+  const addAction = () => {
     addNewTask();
+
+    toggleDialogOpen();
   };
 
   return (
@@ -44,7 +45,7 @@ function TaskAdder(props: TaskAdderProps) {
         emptySelectionsMessage={'You have no more tasks to add'}
         toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        action={addingAction}
+        action={addAction}
       />
     </>
   );

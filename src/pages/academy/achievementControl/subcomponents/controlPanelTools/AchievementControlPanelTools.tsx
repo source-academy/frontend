@@ -16,12 +16,7 @@ type AchievementControlPanelToolsProps = {
 };
 
 function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) {
-  const {
-    editableAchievement,
-    setEditableAchievement,
-    inferencer,
-    updateAchievements
-  } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   return (
     <>
@@ -41,7 +36,6 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
       <TaskDeleter
         editableAchievement={editableAchievement}
-        setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
       />
