@@ -25,8 +25,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
   useEffect(() => {
     handleFetchAchievements();
-    console.log('Use effect', inferencer.getAchievements());
-  }, [handleFetchAchievements, inferencer]);
+  }, [handleFetchAchievements]);
 
   const updateAchievements = () => {
     handleUpdateAchievements(inferencer.getAchievements());

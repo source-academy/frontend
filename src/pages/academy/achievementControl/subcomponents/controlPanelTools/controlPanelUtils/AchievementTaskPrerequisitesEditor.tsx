@@ -2,21 +2,22 @@ import React, { useState } from 'react';
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 import { Button } from '@blueprintjs/core';
-import PrerequisiteSwapper from './PrerequisiteSwapper';
+import AchievementPrerequisiteSwapper from './AchievementPrerequisiteSwapper';
 
-type PrerequisitePositionEditorProps = {
+type AchievementTaskPrerequisitesEditorProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
   updateAchievements: any;
 };
 
-function PrerequisitePositionEditor(props: PrerequisitePositionEditorProps) {
+function AchievementTaskPrerequisitesEditor(props: AchievementTaskPrerequisitesEditorProps) {
   const { editableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
 
   const prereqs = editableAchievement.prerequisiteIds;
+  console.log(prereqs);
 
   const [firstID, setFirstID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
   const [secondID, setSecondID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
@@ -43,7 +44,7 @@ function PrerequisitePositionEditor(props: PrerequisitePositionEditorProps) {
         onClick={toggleDialogOpen}
         text={'Change Prerequisite Pos'}
       />
-      <PrerequisiteSwapper
+      <AchievementPrerequisiteSwapper
         prerequisiteIdDs={prereqs}
         inferencer={inferencer}
         setDialogOpen={toggleDialogOpen}
@@ -58,4 +59,4 @@ function PrerequisitePositionEditor(props: PrerequisitePositionEditorProps) {
   );
 }
 
-export default PrerequisitePositionEditor;
+export default AchievementTaskPrerequisitesEditor;

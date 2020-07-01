@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
-import PopupSelector from './PopupSelector';
+import AchievementTaskSelector from './AchievementTaskSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-export type TaskAdderProps = {
+export type AchievementTaskAdderProps = {
   inferencer: Inferencer;
   updateAchievements: any;
   editAchievement: any;
 };
 
-function TaskAdder(props: TaskAdderProps) {
+function AchievementTaskAdder(props: AchievementTaskAdderProps) {
   const { inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -20,6 +20,12 @@ function TaskAdder(props: TaskAdderProps) {
   const [addedTaskID, setAddedTaskID] = useState<number>(
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
+
+  /*
+  useEffect(() => {
+    setAddedTaskID(inferencer.getNextID(nonTaskIDs));
+  }, [inferencer, nonTaskIDs]);
+  */
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);
@@ -35,15 +41,15 @@ function TaskAdder(props: TaskAdderProps) {
   return (
     <>
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
-      <PopupSelector
-        selectionIds={nonTaskIDs}
+      <AchievementTaskSelector
+        tasks={nonTaskIDs}
         inferencer={inferencer}
-        focusId={addedTaskID}
-        setFocusId={setAddedTaskID}
+        focusTaskID={addedTaskID}
+        setFocusTaskID={setAddedTaskID}
         buttonText={'Add Task'}
         dialogHeader={'Add A Task'}
-        emptySelectionMessage={'You have no more tasks to add'}
-        toggleDialogOpen={toggleDialogOpen}
+        emptyTasksMessage={'You have no more tasks to add'}
+        setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />
@@ -51,4 +57,4 @@ function TaskAdder(props: TaskAdderProps) {
   );
 }
 
-export default TaskAdder;
+export default AchievementTaskAdder;

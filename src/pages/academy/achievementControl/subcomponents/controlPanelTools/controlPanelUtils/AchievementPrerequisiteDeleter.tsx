@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
-import PopupSelector from './PopupSelector';
+import AchievementTaskSelector from './AchievementTaskSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type PrerequisiteDeleterProps = {
+type AchievementPrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
@@ -13,7 +13,7 @@ type PrerequisiteDeleterProps = {
   editAchievement: any;
 };
 
-function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
+function AchievementPrerequisiteDeleter(props: AchievementPrerequisiteDeleterProps) {
   const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -47,15 +47,15 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Delete A Prerequisite'} />
-      <PopupSelector
-        selectionIds={prerequisites}
+      <AchievementTaskSelector
+        tasks={prerequisites}
         inferencer={inferencer}
-        focusId={deletedPrerequisiteID}
-        setFocusId={setDeletedPrerequisiteID}
+        focusTaskID={deletedPrerequisiteID}
+        setFocusTaskID={setDeletedPrerequisiteID}
         buttonText={'Delete Prerequisite'}
         dialogHeader={'Delete A Prerequisite'}
-        emptySelectionMessage={'You have no more prerequisites to delete'}
-        toggleDialogOpen={toggleDialogOpen}
+        emptyTasksMessage={'You have no more prerequisites to delete'}
+        setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={deleteAction}
       />
@@ -63,4 +63,4 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
   );
 }
 
-export default PrerequisiteDeleter;
+export default AchievementPrerequisiteDeleter;

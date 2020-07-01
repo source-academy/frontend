@@ -1,12 +1,12 @@
 import React from 'react';
 import { EditableText } from '@blueprintjs/core';
 
-type EditableModalDescriptionProps = {
+type EditableAchievementModalDescriptionProps = {
   description: string;
   setDescription: any;
 };
 
-function EditableModalDescription(props: EditableModalDescriptionProps) {
+function EditableAchievementModalDescription(props: EditableAchievementModalDescriptionProps) {
   const { description, setDescription } = props;
 
   return (
@@ -23,4 +23,4 @@ function EditableModalDescription(props: EditableModalDescriptionProps) {
   );
 }
 
-export default EditableModalDescription;
+export default EditableAchievementModalDescription;

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
 
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
-import PopupSelector from './PopupSelector';
+import AchievementTaskSelector from './AchievementTaskSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
-type PrerequisiteAdderProps = {
+type AchievementPrerequisiteAdderProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
@@ -13,7 +13,7 @@ type PrerequisiteAdderProps = {
   editAchievement: any;
 };
 
-function PrerequisiteAdder(props: PrerequisiteAdderProps) {
+function AchievementPrerequisiteAdder(props: AchievementPrerequisiteAdderProps) {
   const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -35,27 +35,26 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
-    // TODO: forceRefresh() here
     updateAchievements(inferencer.getAchievements);
   };
 
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Add A Prerequisite'} />
-      <PopupSelector
-        selectionIds={nonPrerequisites}
+      <AchievementTaskSelector
+        tasks={nonPrerequisites}
         inferencer={inferencer}
-        dialogHeader={'Add A Prerequisite'}
-        focusId={addedPrerequisiteID}
-        setFocusId={setAddedPrerequisiteID}
+        focusTaskID={addedPrerequisiteID}
+        setFocusTaskID={setAddedPrerequisiteID}
         buttonText={'Add Prerequisite'}
-        emptySelectionMessage={'You have no more prerequisites to add'}
+        dialogHeader={'Add A Prerequisite'}
+        emptyTasksMessage={'You have no more prerequisites to add'}
+        setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        toggleDialogOpen={toggleDialogOpen}
         action={addingAction}
       />
     </>
   );
 }
 
-export default PrerequisiteAdder;
+export default AchievementPrerequisiteAdder;

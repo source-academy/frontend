@@ -20,7 +20,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
 
-  const renderTask = (
+  const task = (
     <AchievementTask
       id={id}
       inferencer={inferencer}
@@ -31,7 +31,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
 
   return (
     <div className="edit-container">
-      <div className="main-cards">{renderTask}</div>
+      <div className="main-cards">{task}</div>
       <div className="editor-buttons">
         <AchievementControlPanelTools
           editableAchievement={editableAchievement}
