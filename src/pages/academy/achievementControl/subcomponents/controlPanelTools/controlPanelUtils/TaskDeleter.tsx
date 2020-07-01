@@ -14,7 +14,7 @@ function TaskDeleter(props: TaskDeleterProps) {
 
   const deleteAction = () => {
     inferencer.setNonTask(editableAchievement);
-    
+
     saveChanges();
   };
 

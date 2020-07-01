@@ -1,6 +1,6 @@
 import { IconName } from '@blueprintjs/core';
 
-export const UPDATE_ACHIEVEMENTS = 'UPDATE_ACHIEVEMENTSS';
+export const UPDATE_ACHIEVEMENTS = 'UPDATE_ACHIEVEMENTS';
 export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';

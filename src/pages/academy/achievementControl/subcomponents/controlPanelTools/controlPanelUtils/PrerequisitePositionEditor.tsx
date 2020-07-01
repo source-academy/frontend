@@ -31,9 +31,9 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
     editableAchievement.prerequisiteIds[secondIndex] = temp;
 
     inferencer.modifyAchievement(editableAchievement);
-    
+
     saveChanges();
-    
+
     toggleDialogOpen();
   };
 

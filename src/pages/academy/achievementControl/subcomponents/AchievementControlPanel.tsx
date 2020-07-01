@@ -35,7 +35,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       <ul className="display-list">{mapAchievementIdsToEditableTask(inferencer.listTaskIds())}</ul>
 
       <div>
-        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges}/>
+        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
         <TaskAdder inferencer={inferencer} saveChanges={togglePendingUpload} />
       </div>
     </div>
