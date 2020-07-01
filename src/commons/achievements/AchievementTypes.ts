@@ -48,6 +48,7 @@ export enum FilterStatus {
  *    user's completionProgress >= completionGoal
  * @param {number} completionProgress achievement is marked as complete if
  * @param {AchievementModalItem} modal modal item of the achievement
+ * @param {number} position ordering position of the achievement, value is 0 for non-tasks
  */
 export type AchievementItem = {
   id: number;
@@ -62,7 +63,6 @@ export type AchievementItem = {
   completionGoal: number;
   completionProgress: number;
   modal: AchievementModalItem;
-
   position: number;
 };
 

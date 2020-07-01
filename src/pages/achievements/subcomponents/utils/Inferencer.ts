@@ -98,31 +98,6 @@ class Inferencer {
     return newId;
   }
 
-  /* Handlers for Positions */
-  public updateAllPositions() {
-    this.achievements.sort((a, b) => a.position - b.position);
-
-    let pos = 1;
-
-    for (let i = 0; i < this.achievements.length; i++) {
-      if (this.achievements[i].isTask) {
-        this.achievements[i].position = pos;
-        pos++;
-      }
-    }
-  }
-
-  public setNonTaskAchievement(achievement: AchievementItem) {
-    const newAchievement = achievement;
-    newAchievement.prerequisiteIds = [];
-    newAchievement.isTask = false;
-    newAchievement.position = 0;
-
-    this.editAchievement(newAchievement);
-
-    this.updateAllPositions();
-  }
-
   public setTaskAchievement(achievement: AchievementItem) {
     const newAchievement = achievement;
     newAchievement.isTask = true;
@@ -131,16 +106,15 @@ class Inferencer {
     this.editAchievement(newAchievement);
   }
 
-  public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
-    const temp = achievement1.position;
-    achievement1.position = achievement2.position;
-    achievement2.position = temp;
+  public setNonTaskAchievement(achievement: AchievementItem) {
+    achievement.prerequisiteIds = [];
+    achievement.isTask = false;
+    achievement.position = 0;
 
-    this.editAchievement(achievement1);
-    this.editAchievement(achievement2);
+    this.editAchievement(achievement);
+
+    this.normalizePositions();
   }
-
-  /* End of Positions Handlers */
 
   public editAchievement(achievement: AchievementItem) {
     // directly modify the achievement element in achievements
@@ -268,6 +242,13 @@ class Inferencer {
     }
   }
 
+  public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
+    [achievement1.position, achievement2.position] = [achievement2.position, achievement1.position];
+
+    this.editAchievement(achievement1);
+    this.editAchievement(achievement2);
+  }
+
   private processData() {
     this.constructNodeList();
     this.nodeList.forEach(node => {
@@ -369,6 +350,24 @@ class Inferencer {
 
     // Reduces the temporary array to a single number value
     node.collectiveProgress = descendantProgress.reduce(collateProgress, 0) / normalize;
+  }
+
+  // normalize positions
+  private normalizePositions() {
+    this.achievements.sort((a, b) => a.position - b.position);
+
+    // position 0 is reserved for non-task achievements
+    const nonTaskPosition = 0;
+    let newPosition = 1;
+
+    for (let i = 0; i < this.achievements.length; i++) {
+      if (this.achievements[i].isTask) {
+        this.achievements[i].position = newPosition;
+        newPosition++;
+      } else {
+        this.achievements[i].position = nonTaskPosition;
+      }
+    }
   }
 }
 
