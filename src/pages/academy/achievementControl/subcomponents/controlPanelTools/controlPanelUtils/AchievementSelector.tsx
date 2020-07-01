@@ -5,56 +5,58 @@ import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementSelectorProps = {
-  tasks: number[];
   inferencer: Inferencer;
-  focusTaskID: number;
-  buttonText: string;
   dialogHeader: string;
-
-  emptyTasksMessage: string;
-
-  setDialogOpen: any;
+  selections: number[];
+  selectedId: number;
+  setSelectedId: any;
+  buttonText: string;
+  emptySelectionsMessage: string;
+  action: any;
   isDialogOpen: boolean;
-  action: (e: any) => void;
-  setFocusTaskID: any;
+  toggleDialogOpen: any;
 };
 
 function AchievementSelector(props: AchievementSelectorProps) {
   const {
-    tasks,
     inferencer,
-    focusTaskID,
-    buttonText,
     dialogHeader,
-    emptyTasksMessage,
-    setDialogOpen,
-    isDialogOpen,
+    selections,
+    selectedId,
+    setSelectedId,
+    buttonText,
+    emptySelectionsMessage,
     action,
-    setFocusTaskID
+    isDialogOpen,
+    toggleDialogOpen
   } = props;
 
-  const getTaskTitle = (id: number) => {
+  let shouldDisabledAction = false;
+
+  const getAchievementTitle = (id: number) => {
     if (!inferencer.doesAchievementExist(id)) {
+      shouldDisabledAction = true;
       return 'Please Select an Item';
     }
-
     return inferencer.getAchievementItem(id).title;
   };
 
-  const changeFocusTaskID = (taskID: number, e: any) => {
-    setFocusTaskID(taskID);
+  const changeSelectedId = (selectedId: number) => {
+    setSelectedId(selectedId);
   };
 
-  const taskRenderer: ItemRenderer<number> = (id, { handleClick }) => {
-    return <MenuItem active={false} key={id} onClick={handleClick} text={getTaskTitle(id)} />;
+  const selectionsRenderer: ItemRenderer<number> = (id, { handleClick }) => {
+    return (
+      <MenuItem active={false} key={id} onClick={handleClick} text={getAchievementTitle(id)} />
+    );
   };
 
-  const TaskSelectComponent = Select.ofType<number>();
+  const SelectionsComponent = Select.ofType<number>();
 
-  const taskSelector = (currentPrerequisiteID: number) => {
+  const selectButton = (currentPrerequisiteID: number) => {
     return (
       <div>
-        <Button className={Classes.MINIMAL} text={getTaskTitle(currentPrerequisiteID)} />
+        <Button className={Classes.MINIMAL} text={getAchievementTitle(currentPrerequisiteID)} />
       </div>
     );
   };
@@ -62,31 +64,36 @@ function AchievementSelector(props: AchievementSelectorProps) {
   return (
     <>
       <Dialog
-        onClose={setDialogOpen}
+        onClose={toggleDialogOpen}
         className={'task-selector'}
         isOpen={isDialogOpen}
         title={dialogHeader}
       >
         <div className={Classes.DIALOG_BODY}>
-          {tasks.length === 0 ? (
+          {selections.length === 0 ? (
             <div className="task-selector">
-              <p>{emptyTasksMessage}</p>
+              <p>{emptySelectionsMessage}</p>
             </div>
           ) : (
             <>
               <div className="task-selector">
                 <div>
-                  <TaskSelectComponent
-                    items={tasks}
-                    onItemSelect={changeFocusTaskID}
-                    itemRenderer={taskRenderer}
+                  <SelectionsComponent
+                    items={selections}
+                    onItemSelect={changeSelectedId}
+                    itemRenderer={selectionsRenderer}
                     filterable={false}
                   >
-                    {taskSelector(focusTaskID)}
-                  </TaskSelectComponent>
+                    {selectButton(selectedId)}
+                  </SelectionsComponent>
                 </div>
                 <div>
-                  <Button className="editor-button" onClick={action} text={buttonText} />
+                  <Button
+                    className="editor-button"
+                    onClick={action}
+                    text={buttonText}
+                    disabled={shouldDisabledAction}
+                  />
                 </div>
               </div>
             </>

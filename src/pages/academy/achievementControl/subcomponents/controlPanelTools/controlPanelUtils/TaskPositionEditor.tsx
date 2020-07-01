@@ -33,14 +33,14 @@ function TaskPositionEditor(props: TaskPositionEditorProps) {
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Change Pos'} />
       <AchievementSelector
-        tasks={taskIDs}
+        selections={taskIDs}
         inferencer={inferencer}
-        focusTaskID={swappedTaskID}
-        setFocusTaskID={setSwappedTaskID}
+        selectedId={swappedTaskID}
+        setSelectedId={setSwappedTaskID}
         buttonText={'Swap Positions'}
         dialogHeader={"Swap this task's position"}
-        emptyTasksMessage={'You have no more tasks to swap with'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionsMessage={'You have no more tasks to swap with'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={swappingAction}
       />

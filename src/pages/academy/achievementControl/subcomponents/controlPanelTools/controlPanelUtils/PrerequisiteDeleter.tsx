@@ -48,14 +48,14 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Delete A Prerequisite'} />
       <AchievementSelector
-        tasks={prerequisites}
+        selections={prerequisites}
         inferencer={inferencer}
-        focusTaskID={deletedPrerequisiteID}
-        setFocusTaskID={setDeletedPrerequisiteID}
+        selectedId={deletedPrerequisiteID}
+        setSelectedId={setDeletedPrerequisiteID}
         buttonText={'Delete Prerequisite'}
         dialogHeader={'Delete A Prerequisite'}
-        emptyTasksMessage={'You have no more prerequisites to delete'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionsMessage={'You have no more prerequisites to delete'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={deleteAction}
       />

@@ -31,7 +31,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
     nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
   );
 
-  const addingAction = (e: any) => {
+  const addingAction = () => {
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
@@ -42,14 +42,14 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Add A Prerequisite'} />
       <AchievementSelector
-        tasks={nonPrerequisites}
+        selections={nonPrerequisites}
         inferencer={inferencer}
-        focusTaskID={addedPrerequisiteID}
-        setFocusTaskID={setAddedPrerequisiteID}
+        selectedId={addedPrerequisiteID}
+        setSelectedId={setAddedPrerequisiteID}
         buttonText={'Add Prerequisite'}
         dialogHeader={'Add A Prerequisite'}
-        emptyTasksMessage={'You have no more prerequisites to add'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionsMessage={'You have no more prerequisites to add'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />

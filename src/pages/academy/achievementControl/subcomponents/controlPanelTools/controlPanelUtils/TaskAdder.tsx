@@ -42,14 +42,14 @@ function TaskAdder(props: TaskAdderProps) {
     <>
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
       <AchievementSelector
-        tasks={nonTaskIDs}
+        selections={nonTaskIDs}
         inferencer={inferencer}
-        focusTaskID={addedTaskID}
-        setFocusTaskID={setAddedTaskID}
+        selectedId={addedTaskID}
+        setSelectedId={setAddedTaskID}
         buttonText={'Add Task'}
         dialogHeader={'Add A Task'}
-        emptyTasksMessage={'You have no more tasks to add'}
-        setDialogOpen={toggleDialogOpen}
+        emptySelectionsMessage={'You have no more tasks to add'}
+        toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
         action={addingAction}
       />
