@@ -24,6 +24,7 @@ class GameCollectiblesManager {
   private currCollectiblePage: CollectiblePage;
   private layerManager: GameLayerManager | undefined;
   private collectibleContainer: Phaser.GameObjects.Container | undefined;
+  private listContainer: Phaser.GameObjects.Container | undefined;
 
   constructor() {
     this.currCollectiblePage = CollectiblePage.Collectibles;
@@ -36,6 +37,7 @@ class GameCollectiblesManager {
 
   public renderCollectibleMenu() {
     if (this.collectibleContainer) this.collectibleContainer.destroy();
+    if (this.listContainer) this.listContainer.destroy();
 
     const collectibleContainer = new Phaser.GameObjects.Container(
       this.getScene(),
@@ -63,8 +65,9 @@ class GameCollectiblesManager {
       collectibleContainer.add(pageOptContainer);
     });
 
-    const activePage = this.getCurrentPage(this.currCollectiblePage);
-    collectibleContainer.add(activePage);
+    // Add object list
+    this.listContainer = this.getCurrentPage(this.currCollectiblePage);
+    collectibleContainer.add(this.listContainer);
 
     this.collectibleContainer = collectibleContainer;
     this.getLayerManager().addToLayer(Layer.UI, this.collectibleContainer);
