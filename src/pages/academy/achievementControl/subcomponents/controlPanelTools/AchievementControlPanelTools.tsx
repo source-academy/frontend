@@ -12,11 +12,11 @@ type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, saveChanges } = props;
 
   return (
     <>
@@ -24,32 +24,32 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
+        saveChanges={saveChanges}
       />
 
       <PrerequisiteDeleter
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
+        saveChanges={saveChanges}
       />
 
       <TaskDeleter
         editableAchievement={editableAchievement}
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
+        saveChanges={saveChanges}
       />
 
       <TaskPositionEditor
         editableAchievement={editableAchievement}
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
+        saveChanges={saveChanges}
       />
 
       <PrerequisitePositionEditor
         editableAchievement={editableAchievement}
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
+        saveChanges={saveChanges}
       />
     </>
   );

@@ -9,11 +9,11 @@ type PrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
-  const { editableAchievement, setEditableAchievement, inferencer, updateAchievements } = props;
+  const { editableAchievement, setEditableAchievement, inferencer, saveChanges } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -38,9 +38,9 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
 
   const deleteAction = () => {
     setEditableAchievement(deletePrerequisite(deletedPrerequisiteID));
-    inferencer.editAchievement(editableAchievement);
+    inferencer.modifyAchievement(editableAchievement);
 
-    updateAchievements(inferencer.getAchievements);
+    saveChanges();
 
     toggleDialogOpen();
   };

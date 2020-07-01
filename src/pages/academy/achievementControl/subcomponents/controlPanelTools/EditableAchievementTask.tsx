@@ -10,11 +10,11 @@ import AchievementTask from '../../../../achievements/subcomponents/AchievementT
 type EditableAchievementTaskProps = {
   achievement: AchievementItem;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { inferencer, achievement, updateAchievements } = props;
+  const { inferencer, achievement, saveChanges } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
@@ -36,7 +36,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
           editableAchievement={editableAchievement}
           setEditableAchievement={setEditableAchievement}
           inferencer={inferencer}
-          updateAchievements={updateAchievements}
+          saveChanges={saveChanges}
         />
       </div>
     </div>

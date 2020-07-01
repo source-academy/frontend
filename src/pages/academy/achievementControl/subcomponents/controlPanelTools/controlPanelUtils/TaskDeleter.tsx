@@ -6,15 +6,16 @@ import Inferencer from '../../../../../achievements/subcomponents/utils/Inferenc
 type TaskDeleterProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function TaskDeleter(props: TaskDeleterProps) {
-  const { editableAchievement, inferencer, updateAchievements } = props;
+  const { editableAchievement, inferencer, saveChanges } = props;
 
   const deleteAction = () => {
     inferencer.setNonTask(editableAchievement);
-    updateAchievements(inferencer.getAchievements);
+    
+    saveChanges();
   };
 
   return (

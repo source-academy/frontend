@@ -7,11 +7,11 @@ import PrerequisiteSwapper from './PrerequisiteSwapper';
 type PrerequisitesPositionEditorProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
-  const { editableAchievement, inferencer, updateAchievements } = props;
+  const { editableAchievement, inferencer, saveChanges } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -30,9 +30,10 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
       editableAchievement.prerequisiteIds[secondIndex];
     editableAchievement.prerequisiteIds[secondIndex] = temp;
 
-    inferencer.editAchievement(editableAchievement);
-    updateAchievements(inferencer.getAchievements());
-
+    inferencer.modifyAchievement(editableAchievement);
+    
+    saveChanges();
+    
     toggleDialogOpen();
   };
 

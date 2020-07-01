@@ -13,7 +13,7 @@ function AchievementAdder(props: AchievementAdderProps) {
   const { inferencer, adderId, setAdderId } = props;
 
   const handleAddAchievement = () => {
-    const newId = inferencer.addAchievement(achievementTemplate);
+    const newId = inferencer.insertAchievement(achievementTemplate);
     setAdderId(newId);
   };
 

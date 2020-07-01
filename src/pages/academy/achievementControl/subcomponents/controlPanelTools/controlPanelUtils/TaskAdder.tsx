@@ -5,11 +5,11 @@ import Inferencer from '../../../../../achievements/subcomponents/utils/Inferenc
 
 export type TaskAdderProps = {
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function TaskAdder(props: TaskAdderProps) {
-  const { inferencer, updateAchievements } = props;
+  const { inferencer, saveChanges } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -23,7 +23,7 @@ function TaskAdder(props: TaskAdderProps) {
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);
     inferencer.setTask(achievement);
-    updateAchievements(inferencer.getAchievements());
+    saveChanges();
   };
 
   const addAction = () => {

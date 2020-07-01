@@ -7,11 +7,11 @@ import { AchievementItem } from '../../../../../../commons/achievements/Achievem
 type TaskPositionEditorProps = {
   editableAchievement: AchievementItem;
   inferencer: Inferencer;
-  updateAchievements: any;
+  saveChanges: any;
 };
 
 function TaskPositionEditor(props: TaskPositionEditorProps) {
-  const { editableAchievement, inferencer, updateAchievements } = props;
+  const { editableAchievement, inferencer, saveChanges } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
   const toggleDialogOpen = () => setDialogOpen(!isDialogOpen);
@@ -26,7 +26,7 @@ function TaskPositionEditor(props: TaskPositionEditorProps) {
       inferencer.getAchievementItem(swappedTaskID)
     );
 
-    updateAchievements(inferencer.getAchievements());
+    saveChanges();
 
     toggleDialogOpen();
   };

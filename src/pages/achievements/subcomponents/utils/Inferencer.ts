@@ -80,7 +80,7 @@ class Inferencer {
     return this.nodeList.get(id)!.achievement;
   }
 
-  public addAchievement(achievement: AchievementItem) {
+  public insertAchievement(achievement: AchievementItem) {
     // first, generate a new unique id
     let newId = 0;
     if (this.achievements.length > 0) {
@@ -98,7 +98,7 @@ class Inferencer {
     return newId;
   }
 
-  public editAchievement(achievement: AchievementItem) {
+  public modifyAchievement(achievement: AchievementItem) {
     // directly modify the achievement element in achievements
     // asserts: the achievement id already exists in nodeList
     const idx = this.nodeList.get(achievement.id)!.dataIdx;
@@ -153,7 +153,7 @@ class Inferencer {
     achievement.isTask = true;
     achievement.position = this.listTaskIds().length;
 
-    this.editAchievement(achievement);
+    this.modifyAchievement(achievement);
 
     this.normalizePositions();
   }
@@ -172,7 +172,7 @@ class Inferencer {
     achievement.isTask = false;
     achievement.position = 0;
 
-    this.editAchievement(achievement);
+    this.modifyAchievement(achievement);
 
     this.normalizePositions();
   }
@@ -246,8 +246,8 @@ class Inferencer {
   public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
     [achievement1.position, achievement2.position] = [achievement2.position, achievement1.position];
 
-    this.editAchievement(achievement1);
-    this.editAchievement(achievement2);
+    this.modifyAchievement(achievement1);
+    this.modifyAchievement(achievement2);
   }
 
   private processData() {
