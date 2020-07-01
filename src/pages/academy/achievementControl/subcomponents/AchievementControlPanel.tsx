@@ -22,7 +22,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     forceRender,
     isDisabled,
     pendingUpload,
-    setPendingUpload, 
+    setPendingUpload,
     saveAchievementsToFrontEnd
   } = props;
 

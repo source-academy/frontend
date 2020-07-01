@@ -21,7 +21,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
     inferencer,
     handleFetchAchievements,
     handleUpdateAchievements,
-    handleSaveAchievements, 
+    handleSaveAchievements,
     handleEditAchievement
   } = props;
 
