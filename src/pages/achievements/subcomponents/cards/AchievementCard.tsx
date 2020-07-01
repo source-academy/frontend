@@ -26,7 +26,7 @@ function AchievementCard(props: AchievementCardProps) {
     displayModal
   } = props;
 
-  const { title, ability, release } = inferencer.getAchievementItem(id);
+  const { title, ability, release, icon } = inferencer.getAchievementItem(id);
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
@@ -53,7 +53,7 @@ function AchievementCard(props: AchievementCardProps) {
         )}
 
         <div className="icon">
-          <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
+          <Icon icon={icon} iconSize={28} />
         </div>
 
         <div className="display">
