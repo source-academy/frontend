@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
@@ -9,12 +9,21 @@ type AchievementControlPanelProps = {
   updateAchievements: any;
   forceRender: any;
   isDisabled: boolean;
+
+  pendingUpload: any;
+  setPendingUpload: any;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { inferencer, updateAchievements, forceRender, isDisabled } = props;
+  const {
+    inferencer,
+    updateAchievements,
+    forceRender,
+    isDisabled,
+    pendingUpload,
+    setPendingUpload
+  } = props;
 
-  const [pendingUpload, setPendingUpload] = useState<boolean>(false);
   const handleSaveChanges = () => {
     setPendingUpload(true);
     forceRender();
