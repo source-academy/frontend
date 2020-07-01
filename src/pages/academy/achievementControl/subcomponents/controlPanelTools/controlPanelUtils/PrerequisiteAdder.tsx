@@ -10,7 +10,6 @@ type PrerequisiteAdderProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function PrerequisiteAdder(props: PrerequisiteAdderProps) {
@@ -31,7 +30,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
     nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
   );
 
-  const addingAction = () => {
+  const addAction = () => {
     toggleDialogOpen();
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.editAchievement(editableAchievement);
@@ -51,7 +50,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
         emptySelectionsMessage={'You have no more prerequisites to add'}
         toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        action={addingAction}
+        action={addAction}
       />
     </>
   );

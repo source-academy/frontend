@@ -6,7 +6,6 @@ import Inferencer from '../../../../../achievements/subcomponents/utils/Inferenc
 export type TaskAdderProps = {
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function TaskAdder(props: TaskAdderProps) {
@@ -20,12 +19,6 @@ function TaskAdder(props: TaskAdderProps) {
   const [addedTaskID, setAddedTaskID] = useState<number>(
     nonTaskIDs.length === 0 ? 0 : nonTaskIDs[0]
   );
-
-  /*
-  useEffect(() => {
-    setAddedTaskID(inferencer.getNextID(nonTaskIDs));
-  }, [inferencer, nonTaskIDs]);
-  */
 
   const addNewTask = () => {
     const achievement = inferencer.getAchievementItem(addedTaskID);

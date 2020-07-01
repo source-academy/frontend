@@ -6,11 +6,10 @@ import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 type AchievementControlPanelProps = {
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function AchievementControlPanel(props: AchievementControlPanelProps) {
-  const { inferencer, updateAchievements, editAchievement } = props;
+  const { inferencer, updateAchievements } = props;
 
   const mapAchievementIdsToEditableTask = (achievementIds: number[]) =>
     achievementIds.map(id => (
@@ -19,7 +18,6 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
-        editAchievement={editAchievement}
       />
     ));
 
@@ -31,7 +29,6 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
         <TaskAdder
           inferencer={inferencer}
           updateAchievements={updateAchievements}
-          editAchievement={editAchievement}
         />
       </div>
     </div>

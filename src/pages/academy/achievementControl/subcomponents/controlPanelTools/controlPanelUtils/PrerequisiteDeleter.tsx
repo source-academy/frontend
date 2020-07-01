@@ -10,7 +10,6 @@ type PrerequisiteDeleterProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {

@@ -8,7 +8,6 @@ type TaskDeleterProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function TaskDeleter(props: TaskDeleterProps) {

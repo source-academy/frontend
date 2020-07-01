@@ -13,7 +13,6 @@ type AchievementControlPanelToolsProps = {
   setEditableAchievement: any;
   inferencer: Inferencer;
   updateAchievements: any;
-  editAchievement: any;
 };
 
 function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) {
@@ -21,8 +20,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
     editableAchievement,
     setEditableAchievement,
     inferencer,
-    updateAchievements,
-    editAchievement
+    updateAchievements
   } = props;
 
   return (
@@ -32,7 +30,6 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
-        editAchievement={editAchievement}
       />
 
       <PrerequisiteDeleter
@@ -40,7 +37,6 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
-        editAchievement={editAchievement}
       />
 
       <TaskDeleter
@@ -48,7 +44,6 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         updateAchievements={updateAchievements}
-        editAchievement={editAchievement}
       />
 
       <TaskPositionEditor

@@ -41,7 +41,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
         <AchievementControlPanel
           inferencer={inferencer}
           updateAchievements={updateAchievements}
-          editAchievement={editAchievement}
         />
 
         <AchievementEditor
