@@ -48,7 +48,9 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="dropdown">
             <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
           </div>
-        ) : null}
+        ) : (
+          <div className="dropdown"></div>
+        )}
 
         <div className="icon">
           <Icon icon={IconNames.PREDICTIVE_ANALYSIS} iconSize={28} />
