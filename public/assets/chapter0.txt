@@ -80,7 +80,7 @@ $narrator
 The year is 1101 A.E.
 #collectible: cookie
 Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
-Today, you have enrolled in...
+Today, you, {name}, have enrolled in...
 The Source Academy!
 #addPopup: [yourChair middle]
 

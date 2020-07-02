@@ -38,12 +38,13 @@ export default class DialogueManager {
 
     async function nextLine(resolve: () => void) {
       const { line, speakerDetail, actionIds } = generateDialogue();
-      dialogueRenderer.changeText(line);
+      const lineWithName = line.replace('{name}', gameManager.getAccountInfo().name);
+      dialogueRenderer.changeText(lineWithName);
       gameManager.characterManager.changeSpeakerTo(speakerDetail);
       await GameActionManager.getInstance()
         .getGameManager()
         .actionExecuter.executeStoryActions(actionIds);
-      if (!line) {
+      if (!lineWithName) {
         resolve();
         dialogueRenderer.destroy();
         gameManager.characterManager.changeSpeakerTo(null);
