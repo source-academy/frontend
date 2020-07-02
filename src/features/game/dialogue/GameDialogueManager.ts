@@ -1,7 +1,7 @@
 import { ItemId } from '../commons/CommonsTypes';
 import { Dialogue } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
-import { fadeIn, fadeAndDestroy } from '../effects/FadeEffect';
+import { fadeIn } from '../effects/FadeEffect';
 import DialogueGenerator from './DialogueGenerator';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
@@ -44,10 +44,9 @@ export default class DialogueManager {
         .getGameManager()
         .actionExecuter.executeStoryActions(actionIds);
       if (!line) {
-        dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
         resolve();
+        dialogueRenderer.destroy();
         gameManager.characterManager.changeSpeakerTo(null);
-        fadeAndDestroy(gameManager, dialogueContainer);
       }
     }
 
@@ -55,7 +54,6 @@ export default class DialogueManager {
       nextLine(resolve);
       dialogueRenderer
         .getDialogueBox()
-        .setInteractive({ useHandCursor: true, pixelPerfect: true })
         .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await nextLine(resolve));
     });
 

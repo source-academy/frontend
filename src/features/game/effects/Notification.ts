@@ -1,6 +1,6 @@
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import { titleTypeWriterStyle } from '../dialogue/DialogueConstants';
-import { fadeIn, fadeAndDestroy } from './FadeEffect';
+import { fadeIn } from './FadeEffect';
 import { Constants } from '../commons/CommonConstants';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
@@ -19,14 +19,10 @@ export async function displayNotification(message: string): Promise<void> {
   dialogueRenderer.changeText(message);
 
   const showNotification = new Promise(resolve => {
-    dialogueRenderer
-      .getDialogueBox()
-      .setInteractive({ useHandCursor: true, pixelPerfect: true })
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-        dialogueRenderer.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
-        fadeAndDestroy(gameManager, container);
-        resolve();
-      });
+    dialogueRenderer.getDialogueBox().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+      dialogueRenderer.destroy();
+      resolve();
+    });
   });
   await showNotification;
 }

@@ -37,6 +37,11 @@ mode-banner, modeMenuBanner
 pop-up-frame, popUpFrame
 medium-box, mediumBox
 escape-bg, escapeMenu
+collectibles-bg, collectiblesBg
+collectibles-banner, collectiblesBanner
+collectibles-page-chosen, collectiblesPageOptChosen
+collectibles-page-opt, collectiblesPageOpt
+diamond, zircon
 
 <<collectibles>>
 [crashsite]
