@@ -58,8 +58,12 @@ class GameModeExplore implements IGameUI {
     });
 
     const locationId = GameActionManager.getInstance().getCurrLocId();
-    gameManager.objectManager.enableObjectActions(locationId);
-    gameManager.boundingBoxManager.enableBBoxActions(locationId);
+
+    gameManager.objectManager.enableObjectAction({
+      onClick: this.explorePointerUp,
+      onHover: this.explorePointerOver,
+      onPointerout: this.explorePointerOut
+    });
 
     this.attachExploreModeCallbacks(locationId);
     gameManager.input.setDefaultCursor(magnifyingGlass);
@@ -68,8 +72,9 @@ class GameModeExplore implements IGameUI {
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     gameManager.input.setDefaultCursor('');
-    gameManager.objectManager.disableObjectActions();
     gameManager.boundingBoxManager.disableBBoxActions();
+    gameManager.objectManager.disableObjectAction();
+
     this.removeExploreModeCallbacks(gameManager.currentLocationId);
 
     if (this.uiContainer) {
@@ -89,23 +94,6 @@ class GameModeExplore implements IGameUI {
   }
 
   private attachExploreModeCallbacks(locationId: LocationId) {
-    // Objects
-    GameActionManager.getInstance().addInteractiveObjectsListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER,
-      this.explorePointerOver
-    );
-    GameActionManager.getInstance().addInteractiveObjectsListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT,
-      this.explorePointerOut
-    );
-    GameActionManager.getInstance().addInteractiveObjectsListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
-      this.explorePointerUp
-    );
-
     // BBoxes
     GameActionManager.getInstance().addInteractiveBBoxListeners(
       locationId,
@@ -125,20 +113,6 @@ class GameModeExplore implements IGameUI {
   }
 
   private removeExploreModeCallbacks(locationId: LocationId) {
-    // Objects
-    GameActionManager.getInstance().removeInteractiveObjectListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OVER
-    );
-    GameActionManager.getInstance().removeInteractiveObjectListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_OUT
-    );
-    GameActionManager.getInstance().removeInteractiveObjectListeners(
-      locationId,
-      Phaser.Input.Events.GAMEOBJECT_POINTER_UP
-    );
-
     // BBoxes
     GameActionManager.getInstance().removeInteractiveBBoxListeners(
       locationId,

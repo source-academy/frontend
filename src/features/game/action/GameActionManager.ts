@@ -150,22 +150,6 @@ class GameActionManager {
   //  Game Objects   //
   /////////////////////
 
-  public addInteractiveObjectsListeners(
-    locationId: LocationId,
-    event: string | symbol,
-    fn: (id: ItemId) => void
-  ) {
-    if (this.gameManager) {
-      this.gameManager.objectManager.addInteractiveObjectsListeners(locationId, event, fn);
-    }
-  }
-
-  public removeInteractiveObjectListeners(locationId: LocationId, event: string | symbol) {
-    if (this.gameManager) {
-      this.gameManager.objectManager.removeInteractiveObjectListeners(locationId, event);
-    }
-  }
-
   public getObjPropertyMap() {
     if (this.gameManager) {
       return this.gameManager.stateManager.getObjPropertyMap();
