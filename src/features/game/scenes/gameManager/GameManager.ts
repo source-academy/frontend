@@ -29,7 +29,6 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
-import { SampleChapters } from '../chapterSelect/SampleChapters';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
