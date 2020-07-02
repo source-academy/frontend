@@ -54,7 +54,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
+  UPDATE_SUBLANGUAGE,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
@@ -646,15 +646,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
-    case UPDATE_CHAPTER:
+    case UPDATE_SUBLANGUAGE:
       return {
         ...state,
         playground: {
           ...state.playground,
           context: {
             ...state.playground.context,
-            chapter: action.payload.chapter,
-            variant: action.payload.variant
+            chapter: action.payload.sublang.chapter,
+            variant: action.payload.sublang.variant
           }
         }
       };

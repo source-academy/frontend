@@ -8,75 +8,70 @@ import { Variant } from 'js-slang/dist/types';
 import {
   SourceLanguage,
   sourceLanguages,
-  styliseChapter
+  styliseSublanguage
 } from '../../../commons/application/ApplicationTypes';
 import controlButton from '../../../commons/ControlButton';
-import { Chapter } from '../../../commons/application/types/ChapterTypes';
 
 export type DefaultChapterProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
-  handleFetchChapter: () => void;
-  handleUpdateChapter: (chapter: Chapter) => void;
-  handleChapterSelect?: (i: Chapter, e: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleFetchSublanguage: () => void;
+  handleUpdateSublanguage: (sublang: SourceLanguage) => void;
 };
 
 export type StateProps = {
+  // handleChapterSelect?: (i: SourceLanguage, e: React.ChangeEvent<HTMLSelectElement>) => void;
   sourceChapter: number;
   sourceVariant: Variant;
 };
 
-export const sourceChapters: Chapter[] = sourceLanguages.map((lang: SourceLanguage) => {
-  return { ...lang, displayName: styliseChapter(lang.chapter, lang.variant) };
-});
-
 const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = props => {
-  const { handleFetchChapter, handleUpdateChapter } = props;
+  const { handleFetchSublanguage, handleUpdateSublanguage } = props;
 
   React.useEffect(() => {
-    handleFetchChapter();
-  }, [handleFetchChapter]);
+    handleFetchSublanguage();
+  }, [handleFetchSublanguage]);
 
   const { sourceChapter, sourceVariant } = props;
 
-  const [chosenChapter, setChapterChoice] = React.useState<Chapter>(sourceChapters[0]);
+  const [chosenSublang, setSublanguage] = React.useState<SourceLanguage>(sourceLanguages[0]);
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
 
   const handleOpenDialog = React.useCallback(
-    (choice: Chapter) => {
+    (choice: SourceLanguage) => {
       setDialogState(true);
-      setChapterChoice(choice);
+      setSublanguage(choice);
     },
-    [setDialogState, setChapterChoice]
+    [setDialogState, setSublanguage]
   );
   const handleCloseDialog = React.useCallback(() => {
     setDialogState(false);
   }, [setDialogState]);
   const handleConfirmDialog = React.useCallback(() => {
     setDialogState(false);
-    handleUpdateChapter(chosenChapter);
-  }, [chosenChapter, setDialogState, handleUpdateChapter]);
+    handleUpdateSublanguage(chosenSublang);
+  }, [chosenSublang, setDialogState, handleUpdateSublanguage]);
 
-  const chapterRenderer: ItemRenderer<Chapter> = (lang, { handleClick }) => (
+  const chapterRenderer: ItemRenderer<SourceLanguage> = (lang, { handleClick }) => (
     <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
   );
 
-  const ChapterSelect = Select.ofType<Chapter>();
+  const ChapterSelect = Select.ofType<SourceLanguage>();
 
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (item: Chapter) => {}
+    handleSelect = (item: SourceLanguage) => {}
   ) => (
     <ChapterSelect
-      items={sourceChapters}
+      items={sourceLanguages}
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
       filterable={false}
     >
       <Button
         className={Classes.MINIMAL}
-        text={styliseChapter(currentChap, currentVariant)}
+        text={styliseSublanguage(currentChap, currentVariant)}
         rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
       />
     </ChapterSelect>
@@ -88,16 +83,16 @@ const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = prop
       <Dialog
         canEscapeKeyClose={true}
         canOutsideClickClose={true}
-        className="change-default-chapter-dialog"
+        className="change-default-lang-dialog"
         icon={IconNames.ERROR}
         isCloseButtonShown={true}
         isOpen={isDialogOpen}
         onClose={handleCloseDialog}
-        title="Updating default Source chapter"
+        title="Updating default Source sublanguage"
       >
         <div className={Classes.DIALOG_BODY}>
-          Are you sure you want to update the <b>default Playground Source chapter</b> from{' '}
-          {styliseChapter(sourceChapter, sourceVariant)} to <b>{chosenChapter.displayName}</b>?
+          Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
+          {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <div className={Classes.DIALOG_FOOTER_ACTIONS}>

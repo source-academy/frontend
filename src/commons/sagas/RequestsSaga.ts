@@ -2,7 +2,11 @@
 /*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-import { GameState, styliseChapter } from '../../commons/application/ApplicationTypes';
+import {
+  GameState,
+  styliseSublanguage,
+  SourceLanguage
+} from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -14,7 +18,6 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Chapter } from '../application/types/ChapterTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
@@ -599,7 +602,7 @@ export async function getGradingSummary(tokens: Tokens): Promise<GradingSummary 
 /**
  * GET /chapter
  */
-export async function getChapter(): Promise<Chapter | null> {
+export async function getSublanguage(): Promise<SourceLanguage | null> {
   const resp = await request('chapter', 'GET', {
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -610,18 +613,18 @@ export async function getChapter(): Promise<Chapter | null> {
     return null;
   }
 
-  const defaultChapter = (await resp.json()).chapter;
+  const sublang = (await resp.json()).chapter;
   return {
-    chapter: defaultChapter.chapterno,
-    variant: defaultChapter.variant,
-    displayName: styliseChapter(defaultChapter.chapterno, defaultChapter.variant)
+    chapter: sublang.chapterno,
+    variant: sublang.variant,
+    displayName: styliseSublanguage(sublang.chapterno, sublang.variant)
   };
 }
 
 /**
  * POST /chapter/update/1
  */
-export async function postChapter(chapterno: number, variant: string, tokens: Tokens) {
+export async function postSublanguage(chapterno: number, variant: string, tokens: Tokens) {
   const resp = await request(`chapter/update/1`, 'POST', {
     accessToken: tokens.accessToken,
     body: { chapterno, variant },

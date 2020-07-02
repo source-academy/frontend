@@ -1,4 +1,4 @@
-import { createDefaultWorkspace } from '../../application/ApplicationTypes';
+import { createDefaultWorkspace, SourceLanguage } from '../../application/ApplicationTypes';
 import { ExternalLibraryName } from '../../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../../application/types/InterpreterTypes';
 import { Library } from '../../assessment/AssessmentTypes';
@@ -7,7 +7,7 @@ import {
   beginClearContext,
   browseReplHistoryDown,
   browseReplHistoryUp,
-  changeChapter,
+  changeSublanguage,
   changeEditorHeight,
   changeEditorWidth,
   changeExternalLibrary,
@@ -22,7 +22,7 @@ import {
   evalRepl,
   evalTestcase,
   externalLibrarySelect,
-  fetchChapter,
+  fetchSublanguage,
   highlightEditorLine,
   moveCursor,
   navigateToDeclaration,
@@ -32,18 +32,18 @@ import {
   setEditorBreakpoint,
   toggleEditorAutorun,
   updateActiveTab,
-  updateChapter,
   updateCurrentAssessmentId,
   updateCurrentSubmissionId,
   updateEditorValue,
   updateHasUnsavedChanges,
+  updateSublanguage,
   updateReplValue
 } from '../WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_CHAPTER,
+  CHANGE_SUBLANGUAGE,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXTERNAL_LIBRARY,
@@ -57,7 +57,7 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_CHAPTER,
+  FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -66,7 +66,7 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
+  UPDATE_SUBLANGUAGE,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
@@ -458,35 +458,39 @@ test('moveCursor generates correct action object', () => {
   });
 });
 
-test('fetchChapter generates correct action object', () => {
-  const action = fetchChapter();
+test('fetchSublanguage generates correct action object', () => {
+  const action = fetchSublanguage();
   expect(action).toEqual({
-    type: FETCH_CHAPTER
+    type: FETCH_SUBLANGUAGE
   });
 });
 
-test('changeChapter generates correct action object', () => {
-  const chapter = 1;
-  const variant = 'default';
-  const action = changeChapter(chapter, variant);
+test('changeSublanguage generates correct action object', () => {
+  const sublang: SourceLanguage = {
+    chapter: 2,
+    variant: 'default',
+    displayName: 'Source \xa72'
+  };
+  const action = changeSublanguage(sublang);
   expect(action).toEqual({
-    type: CHANGE_CHAPTER,
+    type: CHANGE_SUBLANGUAGE,
     payload: {
-      chapter,
-      variant
+      sublang
     }
   });
 });
 
 test('updateChapter generates correct action object', () => {
-  const chapter = 1;
-  const variant = 'default';
-  const action = updateChapter(chapter, variant);
+  const sublang: SourceLanguage = {
+    chapter: 2,
+    variant: 'default',
+    displayName: 'Source \xa72'
+  };
+  const action = updateSublanguage(sublang);
   expect(action).toEqual({
-    type: UPDATE_CHAPTER,
+    type: UPDATE_SUBLANGUAGE,
     payload: {
-      chapter,
-      variant
+      sublang
     }
   });
 });

@@ -2,8 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { Chapter } from '../../../commons/application/types/ChapterTypes';
-import { changeChapter, fetchChapter } from '../../../commons/workspace/WorkspaceActions';
+import { changeSublanguage, fetchSublanguage } from '../../../commons/workspace/WorkspaceActions';
 
 import AcademyDefaultChapter, { DispatchProps, StateProps } from './AcademyDefaultChapter';
 
@@ -15,8 +14,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleFetchChapter: fetchChapter,
-      handleUpdateChapter: (chapter: Chapter) => changeChapter(chapter.chapter, chapter.variant)
+      handleFetchSublanguage: fetchSublanguage,
+      handleUpdateSublanguage: changeSublanguage
     },
     dispatch
   );

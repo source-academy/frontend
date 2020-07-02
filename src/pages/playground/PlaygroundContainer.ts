@@ -34,7 +34,7 @@ import {
   evalEditor,
   evalRepl,
   externalLibrarySelect,
-  fetchChapter,
+  fetchSublanguage,
   navigateToDeclaration,
   promptAutocomplete,
   sendReplInputToOutput,
@@ -133,7 +133,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerPause: () => beginDebuggerPause(workspaceLocation),
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
-      handleFetchChapter: fetchChapter,
+      handleFetchChapter: fetchSublanguage,
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
       handlePersistenceOpenPicker: persistenceOpenPicker,

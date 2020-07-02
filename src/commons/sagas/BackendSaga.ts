@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { OverallState, Role } from '../../commons/application/ApplicationTypes';
+import { SourceLanguage, OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -17,11 +17,10 @@ import {
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
 import {
-  CHANGE_CHAPTER,
-  FETCH_CHAPTER,
+  CHANGE_SUBLANGUAGE,
+  FETCH_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../commons/workspace/WorkspaceTypes';
-import { Chapter } from '../application/types/ChapterTypes';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
@@ -53,7 +52,6 @@ import {
   changeDateAssessment,
   deleteAssessment,
   deleteSourcecastEntry,
-  getChapter,
   getAssessment,
   getAssessmentOverviews,
   getGrading,
@@ -61,15 +59,16 @@ import {
   getGradingSummary,
   getNotifications,
   getSourcecastIndex,
+  getSublanguage,
   getUser,
   handleResponseError,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
   postAuth,
-  postChapter,
   postGrading,
   postSourcecast,
+  postSublanguage,
   postUnsubmit,
   publishAssessment,
   uploadAssessment
@@ -470,32 +469,36 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/sourcecast');
   });
 
-  yield takeEvery(FETCH_CHAPTER, function* (action: ReturnType<typeof actions.fetchChapter>) {
-    const defaultChapter: Chapter | null = yield call(getChapter);
+  yield takeEvery(FETCH_SUBLANGUAGE, function* (
+    action: ReturnType<typeof actions.fetchSublanguage>
+  ) {
+    const sublang: SourceLanguage | null = yield call(getSublanguage);
 
-    if (!defaultChapter) {
-      yield call(showWarningMessage, `Failed to load default Source chapter for Playground!`);
+    if (!sublang) {
+      yield call(showWarningMessage, `Failed to load default Source sublanguage for Playground!`);
       return;
     }
 
-    yield put(actions.updateChapter(defaultChapter.chapter, defaultChapter.variant));
+    yield put(actions.updateSublanguage(sublang));
   });
 
-  yield takeEvery(CHANGE_CHAPTER, function* (action: ReturnType<typeof actions.changeChapter>) {
+  yield takeEvery(CHANGE_SUBLANGUAGE, function* (
+    action: ReturnType<typeof actions.changeSublanguage>
+  ) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const chapter = action.payload;
-    const resp: Response = yield call(postChapter, chapter.chapter, chapter.variant, tokens);
+    const { sublang } = action.payload;
+    const resp: Response = yield call(postSublanguage, sublang.chapter, sublang.variant, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp);
       return;
     }
 
-    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
+    yield put(actions.updateSublanguage(sublang));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
