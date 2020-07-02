@@ -23,6 +23,7 @@ function Game() {
     getSourceAcademyGame().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
+      name: session.name,
       role: session.role
     } as AccountInfo);
 

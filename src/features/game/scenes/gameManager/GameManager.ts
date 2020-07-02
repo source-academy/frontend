@@ -22,12 +22,14 @@ import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import {
   getSourceAcademyGame,
-  SourceAcademyGame
+  SourceAcademyGame,
+  AccountInfo
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
+import { SampleChapters } from '../chapterSelect/SampleChapters';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -44,6 +46,7 @@ class GameManager extends Phaser.Scene {
   public parentGame: SourceAcademyGame | undefined;
   public isStorySimulator: boolean;
 
+  private accountInfo: AccountInfo | undefined;
   private fullSaveState: FullSaveState | undefined;
   private continueGame: boolean;
   private chapterNum: number;
@@ -167,6 +170,7 @@ class GameManager extends Phaser.Scene {
         this.checkpointNum,
         this.continueGame
       );
+      this.accountInfo = accountInfo;
     } else {
       throw new Error('Mismatch of roles');
     }
@@ -183,13 +187,11 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    this.changeLocationTo(this.currentLocationId);
+    this.changeLocationTo(this.currentLocationId, this.checkpointNum === 0);
     await GameActionManager.getInstance().saveGame();
   }
 
-  private async renderLocation(locationId: LocationId) {
-    console.log(this.userStateManager.getList('collectibles'));
-
+  private async renderLocation(locationId: LocationId, addChapterNotif = false) {
     this.soundManager.renderBackgroundMusic(locationId);
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
@@ -199,7 +201,14 @@ class GameManager extends Phaser.Scene {
     this.layerManager.showLayer(Layer.Character);
 
     const gameLocation = this.currentCheckpoint.map.getLocationAtId(locationId);
+
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
+
+    if (addChapterNotif) {
+      await GameActionManager.getInstance().bringUpUpdateNotif(
+        `Chapter ${this.chapterNum} - ${SampleChapters[this.chapterNum].title}`
+      );
+    }
     // Notify players that location is not yet visited/has new update
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
@@ -208,12 +217,12 @@ class GameManager extends Phaser.Scene {
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
 
-  public async changeLocationTo(locationId: LocationId) {
+  public async changeLocationTo(locationId: LocationId, addChapterNotif = false) {
     this.currentLocationId = locationId;
 
-    await blackFade(this, 300, 500, () => {
-      this.layerManager.clearAllLayers();
-      this.renderLocation(locationId);
+    await blackFade(this, 300, 500, async () => {
+      await this.layerManager.clearAllLayers();
+      await this.renderLocation(locationId, addChapterNotif);
     });
 
     // Update state after location is fully rendered
@@ -254,6 +263,13 @@ class GameManager extends Phaser.Scene {
       throw new Error('No parent game');
     }
     return this.parentGame;
+  }
+
+  public getAccountInfo() {
+    if (!this.accountInfo) {
+      throw new Error('No account info');
+    }
+    return this.accountInfo;
   }
 }
 

@@ -4,8 +4,7 @@ import GameActionManager from '../action/GameActionManager';
 export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,
-  checkpointNum: number,
-  completedChapter: boolean
+  checkpointNum: number
 ): FullSaveState {
   const gameManager = GameActionManager.getInstance().getGameManager();
   const gameStateManager = gameManager.stateManager;
@@ -20,24 +19,19 @@ export function gameStateToJson(
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
     triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions()),
-    lastCheckpointPlayed: checkpointNum,
-    isComplete: completedChapter || prevGameState.userState[chapterNum]
+    lastCheckpointPlayed: checkpointNum
   };
-
-  console.log('lastCompletedChapter', prevGameState.userState.lastCompletedChapter);
 
   const userState: UserSaveState = {
     settings: { ...prevGameState.userState.settings },
     lastPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList('collectibles'),
     achievements: userStateManager.getList('achievements'),
-    lastCompletedChapter: prevGameState.userState.lastCompletedChapter || -1
+    lastCompletedChapter:
+      prevGameState.userState.lastCompletedChapter === undefined
+        ? -1
+        : prevGameState.userState.lastCompletedChapter
   };
-
-  if (completedChapter) {
-    gameStoryState.isComplete = true;
-    userState.lastCompletedChapter = Math.max(userState.lastCompletedChapter, chapterNum);
-  }
 
   const newGameStoryStates = { ...prevGameState.gameSaveStates, [chapterNum]: gameStoryState };
 
