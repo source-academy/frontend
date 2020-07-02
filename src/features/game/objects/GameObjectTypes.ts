@@ -1,6 +1,5 @@
 import { TrackInteraction } from '../commons/CommonsTypes';
 import { IGameActionable } from '../action/GameActionTypes';
-import { BlinkingObject } from '../effects/BlinkingObject';
 
 type ActionName = string;
 type ActionParams = Array<any>;
@@ -21,7 +20,7 @@ export type ObjectLayerProps = {
 };
 
 export type ActivatableObject = {
-  blinkingObject: BlinkingObject;
+  sprite: Phaser.GameObjects.Image;
   activate: Function;
   deactivate: Function;
 };
