@@ -44,19 +44,9 @@ function TaskPositionEditor(props: TaskPositionEditorProps) {
 
   return (
     <div className="move-editor-buttons">
-      <Button
-        className="move-button"
-        onClick={switchWithPreviousTask}
-        text={'Move Up'}
-        disabled={ind === 1}
-      />
+      <Button onClick={switchWithPreviousTask} text={'Move Up'} disabled={ind === 1} />
 
-      <Button
-        className="move-button"
-        onClick={switchWithNextTask}
-        text={'Move Down'}
-        disabled={ind === taskIDs.length}
-      />
+      <Button onClick={switchWithNextTask} text={'Move Down'} disabled={ind === taskIDs.length} />
     </div>
   );
 }

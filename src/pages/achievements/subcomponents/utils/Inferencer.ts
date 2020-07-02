@@ -243,6 +243,26 @@ class Inferencer {
     }
   }
 
+  public insertAchievementPosition(oldPosition: number, newPosition: number) {
+    const taskIds = this.listTaskIds();
+
+    if (oldPosition < newPosition) {
+      for (let i = oldPosition - 1; i < newPosition - 1; i++) {
+        this.swapAchievementPositions(
+          this.getAchievementItem(taskIds[i]),
+          this.getAchievementItem(taskIds[i + 1])
+        );
+      }
+    } else {
+      for (let i = newPosition - 1; i < oldPosition - 1; i++) {
+        this.swapAchievementPositions(
+          this.getAchievementItem(taskIds[i]),
+          this.getAchievementItem(taskIds[i + 1])
+        );
+      }
+    }
+  }
+
   public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
     [achievement1.position, achievement2.position] = [achievement2.position, achievement1.position];
 

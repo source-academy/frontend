@@ -7,6 +7,7 @@ import TaskDeleter from './controlPanelUtils/TaskDeleter';
 import TaskPositionEditor from './controlPanelUtils/TaskPositionEditor';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import PrerequisitePositionEditor from './controlPanelUtils/PrerequisitePositionEditor';
+import TaskPositionInserter from './controlPanelUtils/TaskPositionInserter';
 
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
@@ -36,6 +37,13 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
       <TaskDeleter
         editableAchievement={editableAchievement}
+        inferencer={inferencer}
+        saveChanges={saveChanges}
+      />
+
+      <TaskPositionInserter
+        editableAchievement={editableAchievement}
+        setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         saveChanges={saveChanges}
       />
