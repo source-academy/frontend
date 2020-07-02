@@ -26,8 +26,7 @@ yourCarpet, objects/yourCarpet, 640, 667
 +yourBed, objects/yourHeadphones, 372, 514
 yourOtherDoor, objects/door/yourRoom-dim, 0, 0
 $
-yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
-yourCarpet, collectible: cookies if checklist.visit
+yourCarpet, addItem: [objects room yourOtherDoor]
 door6, addItem: [characters hallway chieftain], bringUpDialogue: dialogue3, addLocationMode: [hallway talk], addItem: [talkTopics hallway dialogue4]
 
 <<boundingBoxes>>

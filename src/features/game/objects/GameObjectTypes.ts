@@ -1,5 +1,6 @@
 import { TrackInteraction } from '../commons/CommonsTypes';
 import { IGameActionable } from '../action/GameActionTypes';
+import { BlinkingObject } from '../effects/BlinkingObject';
 
 type ActionName = string;
 type ActionParams = Array<any>;
@@ -17,4 +18,10 @@ export type ObjectProperty = TrackInteraction &
 
 export type ObjectLayerProps = {
   cursor?: string;
+};
+
+export type ActivatableObject = {
+  blinkingObject: BlinkingObject;
+  activate: Function;
+  deactivate: Function;
 };
