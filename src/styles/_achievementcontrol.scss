@@ -67,6 +67,7 @@
       .editor-buttons {
         flex-basis: 25%;
         height: 100%;
+        margin-bottom: 0.5em;
 
         display: flex;
         flex-direction: column;
@@ -82,6 +83,15 @@
 
           .editor-button {
             width: 100%;
+          }
+
+          .move-editor-buttons {
+            display: flex;
+            flex-direction: row;
+
+            .move-button {
+              flex-basis: 50%;
+            }
           }
         }
       }

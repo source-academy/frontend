@@ -42,6 +42,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
 
       <TaskPositionEditor
         editableAchievement={editableAchievement}
+        setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
         saveChanges={saveChanges}
       />
