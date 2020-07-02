@@ -20,12 +20,11 @@ import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 
 export function createChapter(
   scene: ChapterSelect,
-  { title, previewBgPath, checkpointsFilenames }: GameChapter,
+  { title, previewBgPath }: GameChapter,
   index: number,
   lastCheckpointsIdx: number
 ) {
   const [x, y] = getCoorByChapter(index);
-  const firstCheckpoint = checkpointsFilenames[0];
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
 
   // Chapter Preview
@@ -53,7 +52,7 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      callGameManagerOnTxtLoad(scene, firstCheckpoint, false, index, 0);
+      callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0);
     });
 
   const chapterContinue = new Phaser.GameObjects.Sprite(
@@ -64,13 +63,7 @@ export function createChapter(
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      callGameManagerOnTxtLoad(
-        scene,
-        checkpointsFilenames[lastCheckpointsIdx],
-        true,
-        index,
-        lastCheckpointsIdx
-      );
+      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx);
     });
 
   // Chapter Text

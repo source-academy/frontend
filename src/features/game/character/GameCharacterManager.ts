@@ -1,12 +1,6 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
-import {
-  charRect,
-  charWidth,
-  speakerRect,
-  textPadding,
-  speakerTextStyle
-} from './GameCharacterConstants';
+import { charRect, charWidth, speakerRect, speakerTextStyle } from './GameCharacterConstants';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
@@ -20,6 +14,7 @@ import GameManager from '../scenes/gameManager/GameManager';
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
+  private username: string | undefined;
 
   private currentSpeakerId: ItemId | undefined;
 
@@ -30,6 +25,7 @@ export default class CharacterManager {
 
   public initialise(gameManager: GameManager) {
     this.characterMap = gameManager.currentCheckpoint.map.getCharacters();
+    this.username = gameManager.getAccountInfo().name;
   }
 
   public renderCharacterLayerContainer(locationId: LocationId): void {
@@ -96,7 +92,7 @@ export default class CharacterManager {
     }
   }
 
-  private drawSpeakerBox(text: string) {
+  private drawSpeakerBox(text: string, positionRight = false) {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -109,11 +105,16 @@ export default class CharacterManager {
 
     const speakerText = new Phaser.GameObjects.Text(
       gameManager,
-      speakerRect.x + textPadding,
-      speakerRect.y + textPadding,
+      speakerRect.x,
+      speakerRect.y,
       '',
       speakerTextStyle
     ).setOrigin(0.5);
+
+    if (positionRight) {
+      rectangle.displayWidth *= -1;
+      speakerText.x = screenSize.x - speakerText.x;
+    }
 
     container.add([rectangle, speakerText]);
     speakerText.text = capitalise(text);
@@ -140,6 +141,10 @@ export default class CharacterManager {
 
     // show new speaker and hide speaker's character on map
     const { speakerId, expression, speakerPosition } = speakerDetail;
+    console.log(speakerId);
+    if (speakerId === 'you') {
+      this.drawSpeakerBox(this.username!, true);
+    }
 
     this.hideCharacterFromMap(speakerId);
     const speakerToShow = this.characterMap.get(speakerId);

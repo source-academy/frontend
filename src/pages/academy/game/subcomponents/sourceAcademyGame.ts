@@ -12,6 +12,7 @@ export type AccountInfo = {
   accessToken: string;
   refreshToken: string;
   role: string;
+  name: string;
 };
 
 type GlobalGameProps = {

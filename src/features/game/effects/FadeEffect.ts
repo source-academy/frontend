@@ -79,7 +79,7 @@ export const blackFade = async (
   gameManager.tweens.add(fadeIn([fadeBlack], fadeDuration));
   await sleep(fadeDuration);
 
-  callback();
+  await callback();
   await sleep(delay);
 
   fadeBlack.setAlpha(1);

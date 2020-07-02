@@ -10,17 +10,15 @@ export const charRect = {
   height: screenSize.y * 0.4
 };
 
-export const textPadding = 10;
-
 export const speakerRect = {
-  x: 300,
-  y: 730
+  x: 330,
+  y: 740
 };
 
 export const speakerTextStyle = {
   fontFamily: 'Helvetica',
   fontSize: '36px',
   fill: Color.lightBlue,
-  align: 'left',
+  align: 'center',
   lineSpacing: 10
 };

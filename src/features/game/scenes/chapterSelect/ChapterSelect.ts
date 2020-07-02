@@ -23,10 +23,10 @@ class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
   private scrollSpeed: number;
-  private chapterDetails: GameChapter[];
   private layerManager: GameLayerManager;
   private loadedGameState: FullSaveState | undefined;
   private autoScrolling: boolean;
+  public chapterDetails: GameChapter[];
 
   constructor() {
     super('ChapterSelect');
@@ -34,12 +34,13 @@ class ChapterSelect extends Phaser.Scene {
     this.chapterContainer = undefined;
     this.backButtonContainer = undefined;
     this.scrollSpeed = defaultScrollSpeed;
-    this.chapterDetails = SampleChapters;
+    this.chapterDetails = [];
     this.layerManager = new GameLayerManager();
     this.autoScrolling = true;
   }
 
   public preload() {
+    this.chapterDetails = SampleChapters;
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     addLoadingScreen(this);
