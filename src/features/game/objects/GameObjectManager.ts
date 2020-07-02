@@ -6,8 +6,8 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { BlinkingObject } from '../effects/BlinkingObject';
 import { Constants } from '../commons/CommonConstants';
+import { resize } from '../utils/SpriteUtils';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
@@ -43,7 +43,7 @@ class GameObjectManager implements StateObserver {
       .filter(objectProp => objectProp !== undefined)
       .map(objectProp => {
         const object = this.createObject(gameManager, objectProp!);
-        objectContainer.add(object.blinkingObject.getContainer());
+        objectContainer.add(object.sprite);
         return object;
       });
 
@@ -72,37 +72,36 @@ class GameObjectManager implements StateObserver {
     gameManager: GameManager,
     objectProperty: ObjectProperty
   ): ActivatableObject {
-    const { assetKey, x, y, width, height } = objectProperty;
-    const object = new BlinkingObject(gameManager, x, y, assetKey, width, height);
+    const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
+    const object = new Phaser.GameObjects.Image(gameManager, x, y, assetKey).setInteractive();
+    width && resize(object, width, height);
 
     function activate({
       onClick = (id?: ItemId) => {},
       onPointerout = (id?: ItemId) => {},
       onHover = (id?: ItemId) => {}
     }) {
-      object.disable();
-      object.setOnClick(async () => {
-        onClick(objectProperty.interactionId);
-        await GameActionManager.getInstance().executeStoryAction(objectProperty.actionIds);
+      object.on('pointerup', async () => {
+        onClick(interactionId);
+        await GameActionManager.getInstance().executeStoryAction(actionIds);
       });
-      object.setOnHover(() => {
-        object.startBlink();
-        onHover(objectProperty.interactionId);
+      object.on('pointerover', () => {
+        onHover(interactionId);
       });
-      object.setOnPointerout(() => {
-        object.clearBlink();
-        onPointerout(objectProperty.interactionId);
+      object.on('pointerout', () => {
+        onPointerout(interactionId);
       });
     }
 
     function deactivate() {
-      object.clearBlink();
-      object.disable();
+      object.off('pointerup');
+      object.off('pointerover');
+      object.off('pointerout');
     }
 
     return {
-      blinkingObject: object,
-      activate: objectProperty.actionIds ? activate : Constants.nullFunction,
+      sprite: object,
+      activate: actionIds ? activate : Constants.nullFunction,
       deactivate
     };
   }
