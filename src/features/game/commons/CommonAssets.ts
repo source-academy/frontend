@@ -100,6 +100,11 @@ export const collectiblesPage: ImageAsset = {
   path: '../assets/collectiblesPageOpt.png'
 };
 
+export const diamond: ImageAsset = {
+  key: 'diamond',
+  path: '../assets/Zircon.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
@@ -119,7 +124,8 @@ const commonAssets = [
   collectiblesMenu,
   collectiblesPage,
   collectiblesPageChosen,
-  collectiblesBanner
+  collectiblesBanner,
+  diamond
 ];
 
 export default commonAssets;

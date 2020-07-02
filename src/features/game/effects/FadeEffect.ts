@@ -88,3 +88,22 @@ export const blackFade = async (
 
   fadeBlack.destroy();
 };
+
+export function blink(scene: Phaser.Scene, gameObject: Phaser.GameObjects.Image) {
+  let i = 0;
+  const blink = setInterval(() => {
+    if (i % 2 !== 0) {
+      gameObject.setAlpha(0);
+      scene.tweens.add(fadeIn([gameObject], 250));
+    } else {
+      gameObject.setAlpha(1);
+      scene.tweens.add(fadeOut([gameObject], 250));
+    }
+    i++;
+  }, 500);
+  function clearBlink() {
+    i = 0;
+    clearInterval(blink);
+  }
+  return clearBlink;
+}

@@ -3,6 +3,16 @@ import { Color } from '../utils/StyleUtils';
 
 const dialogueRectMargin = 10;
 
+export const diamondSize = {
+  x: 30,
+  y: 60
+};
+
+export const diamondPadding = {
+  x: 30,
+  y: 10
+};
+
 export const dialogueRect = {
   x: dialogueRectMargin,
   y: 760,

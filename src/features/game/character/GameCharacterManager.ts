@@ -141,7 +141,6 @@ export default class CharacterManager {
 
     // show new speaker and hide speaker's character on map
     const { speakerId, expression, speakerPosition } = speakerDetail;
-    console.log(speakerId);
     if (speakerId === 'you') {
       this.drawSpeakerBox(this.username!, true);
     }
