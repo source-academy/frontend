@@ -600,10 +600,10 @@ export async function getGradingSummary(tokens: Tokens): Promise<GradingSummary 
 }
 
 /**
- * GET /chapter
+ * GET /settings/sublanguage
  */
 export async function getSublanguage(): Promise<SourceLanguage | null> {
-  const resp = await request('chapter', 'GET', {
+  const resp = await request('settings/sublanguage', 'GET', {
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -613,21 +613,20 @@ export async function getSublanguage(): Promise<SourceLanguage | null> {
     return null;
   }
 
-  const sublang = (await resp.json()).chapter;
+  const sublang = (await resp.json()).sublanguage;
   return {
-    chapter: sublang.chapterno,
-    variant: sublang.variant,
-    displayName: styliseSublanguage(sublang.chapterno, sublang.variant)
+    ...sublang,
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
   };
 }
 
 /**
- * POST /chapter/update/1
+ * PUT /settings/sublanguage
  */
-export async function postSublanguage(chapterno: number, variant: string, tokens: Tokens) {
-  const resp = await request(`chapter/update/1`, 'POST', {
+export async function postSublanguage(chapter: number, variant: string, tokens: Tokens) {
+  const resp = await request(`settings/sublanguage`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { chapterno, variant },
+    body: { chapter, variant },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
