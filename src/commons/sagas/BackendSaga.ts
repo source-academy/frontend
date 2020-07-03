@@ -451,7 +451,7 @@ function* BackendSaga(): SagaIterator {
   ) {
     const role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can save sourcecast.');
+      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
     }
     const { title, description, audio, playbackData } = action.payload;
     const tokens = yield select((state: OverallState) => ({
@@ -493,8 +493,12 @@ function* BackendSaga(): SagaIterator {
     const { sublang } = action.payload;
     const resp: Response = yield call(postSublanguage, sublang.chapter, sublang.variant, tokens);
 
+    const codes: Map<number, string> = new Map([
+      [400, 'Request rejected - invalid chapter-variant combination.'],
+      [403, 'Request rejected - only staff are allowed to set the default sublanguage.']
+    ]);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
+      yield handleResponseError(resp, codes);
       return;
     }
 
