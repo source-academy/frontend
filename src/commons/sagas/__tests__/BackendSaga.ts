@@ -48,6 +48,7 @@ import {
   CHANGE_SUBLANGUAGE,
   FETCH_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
@@ -56,6 +57,7 @@ import {
   getAssessmentOverviews,
   getGradingSummary,
   getNotifications,
+  getSublanguage,
   getUser,
   postAcknowledgeNotifications,
   postAnswer,
@@ -430,8 +432,28 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
 });
 
 describe('Test FETCH_SUBLANGUAGE action', () => {
-  test('when response is ok', () => {
-    return expectSaga(BackendSaga).dispatch({ type: FETCH_SUBLANGUAGE }).silentRun();
+  test('when sublanguage is obtained', () => {
+    const mockSublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
+
+    return expectSaga(BackendSaga)
+      .provide([[call(getSublanguage), mockSublang]])
+      .call(getSublanguage)
+      .put(updateSublanguage(mockSublang))
+      .dispatch({ type: FETCH_SUBLANGUAGE })
+      .silentRun();
+  });
+
+  test('when response is null', () => {
+    return expectSaga(BackendSaga)
+      .provide([[call(getSublanguage), null]])
+      .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_SUBLANGUAGE })
+      .silentRun();
   });
 });
 
