@@ -123,7 +123,7 @@ export default class SSBBoxManager implements ICheckpointLogger {
     let map = '';
     this.bboxDetailMap.forEach((bboxDetail: SSBBoxDetail) => {
       const objectDetailArray = [
-        bboxDetail.id,
+        '+' + bboxDetail.id,
         toIntString(bboxDetail.x),
         toIntString(bboxDetail.y),
         toIntString(bboxDetail.width),

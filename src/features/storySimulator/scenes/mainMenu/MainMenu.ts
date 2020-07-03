@@ -12,7 +12,8 @@ import {
   maxOptButtonsRow,
   optButtonsXSpace,
   optButtonsYSpace,
-  mainMenuOptStyle
+  mainMenuOptStyle,
+  gameTxtStorageName
 } from './MainMenuConstants';
 
 class MainMenu extends Phaser.Scene {
@@ -48,7 +49,6 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
-          this.layerManager.clearAllLayers();
           this.callGameManager();
         }
       }
@@ -106,19 +106,26 @@ class MainMenu extends Phaser.Scene {
   }
 
   private callGameManager() {
-    const text = sessionStorage.getItem('checkpointTxt');
-    if (text) {
-      const gameCheckpoint = Parser.parse(text);
-
-      this.scene.start('GameManager', {
-        isStorySimulator: true,
-        fullSaveState: undefined,
-        gameCheckpoint,
-        continueGame: false,
-        chapterNum: -1,
-        checkpointNum: -1
-      });
+    const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter) || '';
+    const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt) || '';
+    if (defaultChapterText === '' && checkpointTxt === '') {
+      return;
     }
+    this.layerManager.clearAllLayers();
+    Parser.parse(defaultChapterText);
+    if (checkpointTxt) {
+      Parser.parse(checkpointTxt, true);
+    }
+    const gameCheckpoint = Parser.checkpoint;
+
+    this.scene.start('GameManager', {
+      isStorySimulator: true,
+      fullSaveState: undefined,
+      gameCheckpoint,
+      continueGame: false,
+      chapterNum: -1,
+      checkpointNum: -1
+    });
   }
 
   private renderBackground() {

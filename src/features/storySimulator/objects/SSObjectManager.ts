@@ -6,6 +6,7 @@ import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { toIntString } from '../utils/SSUtils';
 import { loadImage } from '../utils/LoaderUtils';
 import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
+import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
 
 export default class SSObjectManager implements ICheckpointLogger {
   public checkpointTitle = 'objects';
@@ -82,7 +83,7 @@ export default class SSObjectManager implements ICheckpointLogger {
   }
 
   private generateItemId(assetKey: string, objectIdNumber: number) {
-    const itemName = assetKey.split('/').pop()!.split('.')[0];
+    const itemName = getIdFromShortPath(assetKey);
     return `${itemName}${objectIdNumber}`;
   }
 
@@ -94,7 +95,7 @@ export default class SSObjectManager implements ICheckpointLogger {
     let map = '';
     this.objectDetailMap.forEach((objectDetail: SSObjectDetail) => {
       const objectDetailArray = [
-        objectDetail.id,
+        '+' + objectDetail.id,
         objectDetail.assetPath,
         toIntString(objectDetail.x),
         toIntString(objectDetail.y)

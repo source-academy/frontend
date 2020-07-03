@@ -9,8 +9,26 @@ function objectAssetKey(shortPath: string) {
 }
 
 function objectAssetValue(shortPath: string) {
-  const [folder, texture, skin] = shortPath.split('/');
-  return `${Constants.assetsFolder}/${folder}/${texture}/${skin || 'normal'}.png`;
+  let extension;
+  let filename: string;
+  if (shortPath.includes('.')) {
+    const shortPathArray = shortPath.split('.');
+    extension = shortPathArray.pop();
+    filename = shortPathArray.join('.');
+  } else {
+    filename = shortPath;
+  }
+
+  const [, folder, texture, skin] = filename.split('/');
+  if (folder === 'objects') {
+    return `${Constants.assetsFolder}/${folder}/${texture}/${skin || 'normal'}.${
+      extension || 'png'
+    }`;
+  } else if (folder === 'avatars') {
+    return `${Constants.assetsFolder}${shortPath}`;
+  } else {
+    return `${Constants.assetsFolder}/${folder}/${texture}.${extension || 'png'}`;
+  }
 }
 
 export default function ObjectParser(fileName: string, fileContent: string) {
@@ -25,7 +43,10 @@ export default function ObjectParser(fileName: string, fileContent: string) {
 
 function addObjectListToLoc(objectsList: string[], locationId: LocationId): void {
   const separatorIndex = objectsList.findIndex(object => object === '$');
-  const objectDetails = objectsList.slice(0, separatorIndex);
+  const objectDetails = objectsList.slice(
+    0,
+    separatorIndex === -1 ? objectsList.length : separatorIndex
+  );
 
   // Parse basic object
   objectDetails.forEach(objectDetail => {

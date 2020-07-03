@@ -13,7 +13,6 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
-import GameCollectibleRenderer from '../../collectibles/CollectiblesRenderer';
 
 import LocationSelectChapter from '../LocationSelectChapter';
 import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
@@ -29,6 +28,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
+import commonAssets from '../../commons/CommonAssets';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -66,7 +66,6 @@ class GameManager extends Phaser.Scene {
   public escapeManager: GameEscapeManager;
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
-  public collectibleRenderer: GameCollectibleRenderer;
 
   constructor() {
     super('GameManager');
@@ -92,7 +91,6 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
-    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   public init({
@@ -127,7 +125,6 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
-    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   //////////////////////
@@ -149,30 +146,35 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
-    this.collectibleRenderer.initialise(this);
     this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
     this.bindEscapeMenu();
 
     addLoadingScreen(this);
+    this.preloadBaseAssets();
     this.preloadLocationsAssets(this.currentCheckpoint);
   }
 
   private loadGameState() {
-    const accountInfo = this.getParentGame().getAccountInfo();
-    if (this.isStorySimulator && accountInfo.role === 'staff') {
-      this.saveManager.initialiseForStaff(accountInfo);
-    } else if (!this.isStorySimulator && accountInfo.role === 'student') {
+    this.accountInfo = this.getParentGame().getAccountInfo();
+    if (this.isStorySimulator && this.accountInfo.role === 'staff') {
+      this.saveManager.initialiseForStaff(this.accountInfo);
+    } else if (!this.isStorySimulator && this.accountInfo.role === 'student') {
       this.saveManager.initialiseForGame(
-        accountInfo,
+        this.accountInfo,
         this.fullSaveState,
         this.chapterNum,
         this.checkpointNum,
         this.continueGame
       );
-      this.accountInfo = accountInfo;
     } else {
       throw new Error('Mismatch of roles');
     }
+  }
+
+  private preloadBaseAssets() {
+    commonAssets.forEach(({ key, path }) => {
+      this.load.image(key, path);
+    });
   }
 
   private preloadLocationsAssets(chapter: GameCheckpoint) {
@@ -195,7 +197,6 @@ class GameManager extends Phaser.Scene {
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
-    this.collectibleRenderer.renderCollectiblesLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
     this.layerManager.showLayer(Layer.Character);
 
@@ -243,8 +244,8 @@ class GameManager extends Phaser.Scene {
 
   public async checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
-      this.cleanUp();
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
+        console.log('HELLO');
         this.scene.start('StorySimulatorMenu');
       } else {
         this.scene.start('CheckpointTransition');

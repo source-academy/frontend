@@ -2,10 +2,26 @@
 startingLoc: room
 
 <<location>>
+crashsite, /crashSite, Crash Site
+classroom, /classroom/classOn, Class Room
+emergency, /classroom/emergency, Emergency
+hallway, /hallway, Hallway
+room, /yourRoom-dim, Student Room
 $
-classroom, updateChecklist: visit
+crashsite: talk, move
+classroom: explore, talk, move
+emergency: talk, move
+hallway: move
+room: explore, talk, move
 $
+classroom: crashsite, hallway
+crashsite: classroom
+hallway: classroom, room, emergency
+room: hallway
+emergency: hallway
 $
+room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
+crashsite, updateChecklist: visit
 
 <<characters>>
 [room]
@@ -20,12 +36,13 @@ visit
 
 <<objects>>
 [room]
-yourCarpet, objects/yourCarpet, 640, 667
-+yourChair, objects/yourChair, 932, 549, 300, 300
-+door6, objects/door/yourRoom-dim, 831, 270
-+yourBed, objects/yourHeadphones, 372, 514
-yourOtherDoor, objects/door/yourRoom-dim, 0, 0
+yourCarpet, /objects/yourCarpet, 640, 667
++yourChair, /objects/yourChair, 932, 549, 300, 300
++door6, /objects/door/yourRoom-dim, 831, 270
++yourBed, /objects/yourHeadphones, 372, 514
+yourOtherDoor, /objects/door/yourRoom-dim, 0, 0
 $
+yourChair, addItem: [objects room yourCarpet], bringUpDialogue: dialogue2
 yourCarpet, addItem: [objects room yourOtherDoor]
 door6, addItem: [characters hallway chieftain], bringUpDialogue: dialogue3, addLocationMode: [hallway talk], addItem: [talkTopics hallway dialogue4]
 

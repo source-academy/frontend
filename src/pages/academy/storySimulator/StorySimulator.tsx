@@ -11,6 +11,7 @@ import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoader';
 import AssetViewer from './subcomponents/StorySimulatorAssetViewer';
+import { gameTxtStorageName } from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -35,7 +36,8 @@ function StorySimulator() {
     getStorySimulatorGame().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
-      role: session.role
+      role: session.role,
+      name: session.name
     } as AccountInfo);
 
     setSessionLoaded(true);
@@ -48,7 +50,17 @@ function StorySimulator() {
         <div className="LeftAlign StorySimulatorPanel">
           <h2>StorySimulator</h2>
           <h3>Checkpoint Text Loader</h3>
-          <CheckpointTxtLoader />
+          <CheckpointTxtLoader
+            title={'Default Chapter'}
+            storageName={gameTxtStorageName.defaultChapter}
+            clearStorage={true}
+          />
+          <br />
+          <CheckpointTxtLoader
+            title={'Checkpoint text file'}
+            storageName={gameTxtStorageName.checkpointTxt}
+            clearStorage={false}
+          />
           <h3>Asset Viewer</h3>
           <AssetViewer assetPath={currentAsset} />
           <h3>Asset Selection</h3>
