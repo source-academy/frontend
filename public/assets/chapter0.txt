@@ -1,11 +1,30 @@
 <<configuration>>
 startingLoc: room
 
+<<configuration>>
+startingLoc: emergency
+
 <<location>>
+crashsite, crashSite, Crash Site
+classroom, classroom/classOn, Class Room
+emergency, classroom/emergency, Emergency
+hallway, hallway, Hallway
+room, yourRoom-dim, Student Room
 $
-classroom, updateChecklist: visit
+room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
+hallway, updateChecklist: visit
 $
+[talk move]
+[explore talk move]
+[talk move]
+[move]
+[explore move talk]
 $
+classroom: crashsite, hallway
+crashsite: classroom
+hallway: classroom, room, emergency
+room: hallway
+emergency: hallway
 
 <<characters>>
 [room]

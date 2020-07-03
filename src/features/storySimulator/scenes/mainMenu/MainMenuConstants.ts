@@ -10,3 +10,8 @@ export const mainMenuOptStyle = {
   fontSize: '35px',
   fill: Color.darkBlue
 };
+
+export const gameTxtStorageName = {
+  defaultChapter: 'defaultChapter',
+  checkpointTxt: 'checkpointTxt'
+};
