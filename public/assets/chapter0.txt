@@ -14,11 +14,11 @@ $
 room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
 hallway, updateChecklist: visit
 $
-[talk move]
-[explore talk move]
-[talk move]
-[move]
-[explore move talk]
+crashsite: talk, move
+classroom: explore, talk, move
+emergency: talk, move
+hallway: move
+room: explore
 $
 classroom: crashsite, hallway
 crashsite: classroom
