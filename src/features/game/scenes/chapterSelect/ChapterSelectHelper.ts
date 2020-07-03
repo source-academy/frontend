@@ -6,7 +6,8 @@ import {
   chapterButtonsXOffset,
   chapterFrameXOffset,
   chapterFrameYOffset,
-  chapterTextYOffset
+  chapterTextYOffset,
+  chapterActionAltStyle
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
@@ -17,6 +18,7 @@ import {
 } from './ChapterSelectAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import { hex, Color } from '../../utils/StyleUtils';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -43,28 +45,58 @@ export function createChapter(
     chapterSelectFrame.key
   );
 
+  // Chapter Action Popup
+  const chapterRepeatPopup = createHoverTextContainer(
+    scene,
+    'Reset progress',
+    chapterActionAltStyle
+  );
+  const chapterContinuePopup = createHoverTextContainer(
+    scene,
+    'Play/Continue',
+    chapterActionAltStyle
+  );
+  chapterRepeatPopup
+    .setPosition(chapterButtonsXOffset + 120, chapterButtonsYOffset - 40)
+    .setVisible(false);
+  chapterContinuePopup
+    .setPosition(-chapterButtonsXOffset + 120, chapterButtonsYOffset - 40)
+    .setVisible(false);
+
   // Chapter Actions
   const chapterRepeat = new Phaser.GameObjects.Sprite(
     scene,
-    -chapterButtonsXOffset,
+    chapterButtonsXOffset,
     chapterButtonsYOffset,
     chapterRepeatButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0);
-    });
+    })
+    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
+      chapterRepeatPopup.setVisible(true)
+    )
+    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
+      chapterRepeatPopup.setVisible(false)
+    );
 
   const chapterContinue = new Phaser.GameObjects.Sprite(
     scene,
-    chapterButtonsXOffset,
+    -chapterButtonsXOffset,
     chapterButtonsYOffset,
     chapterContinueButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx);
-    });
+    })
+    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
+      chapterContinuePopup.setVisible(true)
+    )
+    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
+      chapterContinuePopup.setVisible(false)
+    );
 
   // Chapter Text
   const chapterText = `Chapter ${index}\n${title}`;
@@ -95,6 +127,8 @@ export function createChapter(
     chapterFrame,
     chapterRepeat,
     chapterContinue,
+    chapterRepeatPopup,
+    chapterContinuePopup,
     text,
     blackTint
   ]);
@@ -106,4 +140,18 @@ export function getCoorByChapter(chapterNum: number) {
   const x = screenCenter.x + imageDist * chapterNum;
   const y = screenCenter.y;
   return [x, y];
+}
+
+function createHoverTextContainer(scene: Phaser.Scene, text: string, style: any) {
+  const altTextBg = new Phaser.GameObjects.Rectangle(
+    scene,
+    0,
+    0,
+    180,
+    40,
+    hex(Color.darkBlue)
+  ).setAlpha(0.7);
+  const altText = new Phaser.GameObjects.Text(scene, 0, 0, text, style).setOrigin(0.5, 0.5);
+  const altTextContainer = new Phaser.GameObjects.Container(scene, 0, 0, [altTextBg, altText]);
+  return altTextContainer;
 }

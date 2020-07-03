@@ -33,3 +33,10 @@ export const chapterSelectStyle = {
   align: 'center',
   lineSpacing: 10
 };
+
+export const chapterActionAltStyle = {
+  fontFamily: 'Helvetica',
+  fontSize: '15px',
+  fill: Color.lightBlue,
+  align: 'left'
+};
