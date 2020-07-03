@@ -105,6 +105,11 @@ export const diamond: ImageAsset = {
   path: '../assets/Zircon.png'
 };
 
+export const arrow: ImageAsset = {
+  key: 'arrow',
+  path: '../assets/arrow.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
@@ -125,7 +130,8 @@ const commonAssets = [
   collectiblesPage,
   collectiblesPageChosen,
   collectiblesBanner,
-  diamond
+  diamond,
+  arrow
 ];
 
 export default commonAssets;

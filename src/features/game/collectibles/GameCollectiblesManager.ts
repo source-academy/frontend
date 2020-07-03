@@ -3,7 +3,8 @@ import {
   collectiblesMenu,
   collectiblesPage,
   collectiblesPageChosen,
-  collectiblesBanner
+  collectiblesBanner,
+  arrow
 } from '../commons/CommonAssets';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
@@ -16,7 +17,12 @@ import {
   listBannerYStartPos,
   listBannerYSpacing,
   listBannerTextXPos,
-  listBannerTextStyle
+  listBannerTextStyle,
+  arrowXPos,
+  arrowUpYPos,
+  arrowDownYPos,
+  arrowXScale,
+  arrowYScale
 } from './GameCollectiblesConstants';
 
 class GameCollectiblesManager {
@@ -64,6 +70,32 @@ class GameCollectiblesManager {
       });
       collectibleContainer.add(pageOptContainer);
     });
+
+    // Add arrows
+    const arrowUp = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      arrowXPos,
+      arrowUpYPos,
+      arrow.key
+    ).setScale(arrowXScale, arrowYScale);
+    const arrowDown = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      arrowXPos,
+      arrowDownYPos,
+      arrow.key
+    )
+      .setScale(arrowXScale, arrowYScale)
+      .setFlipY(true);
+    arrowUp.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
+    arrowDown.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
+    arrowUp.addListener(Phaser.Input.Events.GAMEOBJECT_DRAG, () => {
+      if (this.listContainer) this.listContainer.y -= 10;
+    });
+    arrowDown.addListener(Phaser.Input.Events.GAMEOBJECT_DRAG, () => {
+      if (this.listContainer) this.listContainer.y += 10;
+    });
+
+    collectibleContainer.add([arrowUp, arrowDown]);
 
     // Add object list
     this.listContainer = this.getCurrentPage(this.currCollectiblePage);
