@@ -26,7 +26,7 @@ function AchievementCard(props: AchievementCardProps) {
     displayModal
   } = props;
 
-  const { title, ability, release, icon } = inferencer.getAchievementItem(id);
+  const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
@@ -37,7 +37,10 @@ function AchievementCard(props: AchievementCardProps) {
   return (
     <Card
       className="achievement"
-      style={{ opacity: shouldPartiallyRender ? '20%' : '100%' }}
+      style={{
+        opacity: shouldPartiallyRender ? '20%' : '100%',
+        background: `url(${backgroundImageUrl})`
+      }}
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
@@ -51,10 +54,6 @@ function AchievementCard(props: AchievementCardProps) {
         ) : (
           <div className="dropdown"></div>
         )}
-
-        <div className="icon">
-          <Icon icon={icon} iconSize={28} />
-        </div>
 
         <div className="display">
           <div>

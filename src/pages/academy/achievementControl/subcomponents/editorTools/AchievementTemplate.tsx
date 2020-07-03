@@ -22,5 +22,7 @@ export const achievementTemplate: AchievementItem = {
   completionGoal: 0,
   completionProgress: 0,
   position: 0,
+  backgroundImageUrl:
+    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
   modal: modalTemplate
 };

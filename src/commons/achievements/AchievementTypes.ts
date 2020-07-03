@@ -1,5 +1,3 @@
-import { IconName } from '@blueprintjs/core';
-
 export const UPDATE_ACHIEVEMENTS = 'UPDATE_ACHIEVEMENTS';
 export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
@@ -38,7 +36,7 @@ export enum FilterStatus {
  * @param {number} id unique id, primary key of the achievement item
  * @param {string} title title of the achievement item
  * @param {AchievementAbility} ability ability of the achievement item
- * @param {IconName} icon Optional, icon of the achievement item, to be replaced by image
+ * @param {String} backgroundImageUrl background image of the achievement's card
  * @param {number} exp amount of exp that the achievement item grants
  * @param {Date} deadline Optional, the deadline of the achievement item
  * @param {Date} release Optional, the release date of the achievement item
@@ -54,7 +52,7 @@ export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
-  icon?: IconName;
+  backgroundImageUrl: string;
   exp: number;
   deadline?: Date;
   release?: Date;

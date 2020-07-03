@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 import { Card } from '@blueprintjs/core';
-import { IconName } from '@blueprintjs/icons';
 
 import {
   AchievementItem,
@@ -12,7 +11,6 @@ import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
 import EditableAchievementDeadline from './editableUtils/EditableAchievementDeadline';
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
-import EditableAchievementThumbnail from './editableUtils/EditableAchievementThumbnail';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
@@ -44,7 +42,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, exp, deadline, icon } = editableAchievement;
+  const { id, title, ability, exp, deadline, backgroundImageUrl } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -130,14 +128,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handleChangeThumbnail = (thumbnail: IconName) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      icon: thumbnail
-    });
-    setUnsaved();
-  };
-
   const handleChangeModal = (modal: AchievementModalItem) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -147,7 +137,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   return (
-    <Card className="editable-achievement">
+    <Card
+      className="editable-achievement"
+      style={{
+        background: `url(${backgroundImageUrl})`
+      }}
+    >
       <div className="top-bar">
         <EditableAchievementModal
           title={title}
@@ -164,7 +159,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       </div>
 
       <div className="main">
-        <EditableAchievementThumbnail thumbnail={icon} changeThumbnail={handleChangeThumbnail} />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 
