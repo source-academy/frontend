@@ -49,7 +49,6 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
-          this.layerManager.clearAllLayers();
           this.callGameManager();
         }
       }
@@ -107,12 +106,12 @@ class MainMenu extends Phaser.Scene {
   }
 
   private callGameManager() {
-    const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter);
-    const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt);
-
-    if (!defaultChapterText) {
+    const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter) || '';
+    const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt) || '';
+    if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
+    this.layerManager.clearAllLayers();
     Parser.parse(defaultChapterText);
     if (checkpointTxt) {
       Parser.parse(checkpointTxt, true);

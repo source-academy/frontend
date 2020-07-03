@@ -3,6 +3,10 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { toIntString } from '../utils/SSUtils';
 import { hex, Color } from 'src/features/game/utils/StyleUtils';
+import { AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { getIdFromShortPath } from './SSLogManagerHelper';
+import { toCapitalizedWords } from 'src/features/game/utils/StringUtils';
+import { LocationId } from 'src/features/game/location/GameMapTypes';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -12,15 +16,39 @@ export default class SSLogManager {
     this.objectPlacement = objectPlacement;
   }
 
-  public printDetailMap(checkpointLoggers: ICheckpointLogger[]) {
+  public printDetailMap(locationAssetPath: AssetPath = '', checkpointLoggers: ICheckpointLogger[]) {
+    const locationId = locationAssetPath === '' ? 'default' : getIdFromShortPath(locationAssetPath);
+
+    const configLog = `<<configuration>>\nstartingLoc: ${locationId}`;
+    const locationLog = this.createLocationLog(locationId, locationAssetPath);
+
+    const loggables = checkpointLoggers.map(checkpointLogger => {
+      const txt = checkpointLogger.checkpointTxtLog();
+      if (!txt) {
+        return '';
+      }
+      const details = `<<${checkpointLogger.checkpointTitle}>>\n[${locationId}]\n` + txt;
+      return details;
+    });
+
+    const sampleDialogue = `<<dialogue1>>\ntitle: None\n[part0]\nCongrats on making your scene`;
+    const sampleObjectives = `<<objectives>>\nfinishGame`;
+
     console.log(
-      checkpointLoggers
-        .map(checkpointLogger => {
-          const txt = checkpointLogger.checkpointTxtLog();
-          return txt ? `<<${checkpointLogger.checkpointTitle}>>\n\n` + txt : '';
-        })
-        .join('\n\n')
+      [configLog, locationLog, ...loggables, sampleDialogue, sampleObjectives].join('\n\n')
     );
+  }
+
+  private createLocationLog(locationId: LocationId, locationAssetPath: AssetPath) {
+    const header = `<<locations>>`;
+    const locationAsset = `${locationId}, ${locationAssetPath}, ${toCapitalizedWords(
+      locationAssetPath
+    )}`;
+    const modes = `$\n${locationId}: explore`;
+    const navigability = `$\n${locationId}: otherLocation1, otherLocation2`;
+    const actions = `$\n${locationId}, bringUpDialogue: dialogue1`;
+
+    return [header, locationAsset, modes, navigability, actions].join('\n');
   }
 
   public showDetailMap(loggables: IScreenLoggable[]) {
@@ -30,6 +58,8 @@ export default class SSLogManager {
         this.getObjectPlacement(),
         loggable.x,
         loggable.y,
+        350,
+        150,
         hex(Color.darkBlue)
       ).setAlpha(0.8);
       multiplyDimensions(rect, 1.2);

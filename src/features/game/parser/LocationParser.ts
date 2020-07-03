@@ -9,8 +9,11 @@ function locationAssetKey(shortPath: string) {
 }
 
 function locationAssetValue(shortPath: string) {
-  const [location, skin] = shortPath.split('/');
-  return Constants.assetsFolder + '/locations/' + location + '/' + (skin || 'normal') + '.png';
+  const [filename, extension] = shortPath.split('.');
+  const [, location, skin] = filename.split('/');
+  return `${Constants.assetsFolder}/locations/${location}/${skin || 'normal'}.${
+    extension || 'png'
+  }`;
 }
 
 export default function LocationParser(fileName: string, fileContent: string): void {

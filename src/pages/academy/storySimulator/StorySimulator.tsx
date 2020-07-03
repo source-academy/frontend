@@ -21,7 +21,6 @@ function StorySimulator() {
   const [currentAsset, setCurrentAsset] = React.useState<string>('');
 
   React.useEffect(() => {
-    clearSessionStorage();
     createStorySimulatorGame();
     (async () => {
       const paths = await fetchAssetPathsLocally();
@@ -54,11 +53,13 @@ function StorySimulator() {
           <CheckpointTxtLoader
             title={'Default Chapter'}
             storageName={gameTxtStorageName.defaultChapter}
+            clearStorage={true}
           />
           <br />
           <CheckpointTxtLoader
             title={'Checkpoint text file'}
             storageName={gameTxtStorageName.checkpointTxt}
+            clearStorage={false}
           />
           <h3>Asset Viewer</h3>
           <AssetViewer assetPath={currentAsset} />
@@ -71,8 +72,3 @@ function StorySimulator() {
 }
 
 export default StorySimulator;
-
-function clearSessionStorage() {
-  sessionStorage.setItem(gameTxtStorageName.checkpointTxt, '');
-  sessionStorage.setItem(gameTxtStorageName.defaultChapter, '');
-}

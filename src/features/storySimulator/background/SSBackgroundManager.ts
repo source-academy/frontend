@@ -3,11 +3,8 @@ import { loadImage } from '../utils/LoaderUtils';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
 
-export default class SSBackgroundManager implements ICheckpointLogger {
-  public checkpointTitle = 'location';
-
+export default class SSBackgroundManager {
   private backgroundAssetPath: string | undefined;
   private objectPlacement: ObjectPlacement | undefined;
   public x: number;
@@ -27,7 +24,7 @@ export default class SSBackgroundManager implements ICheckpointLogger {
     if (!shortPath || !shortPath.startsWith('/locations/')) {
       return;
     }
-    this.backgroundAssetPath = shortPath;
+    this.backgroundAssetPath = shortPath.slice(10); // length of "/locations"
 
     const backgroundAssetKey = `!${shortPath}`;
     this.getObjectPlacement().addAsset(backgroundAssetKey, shortPath);
@@ -62,7 +59,7 @@ export default class SSBackgroundManager implements ICheckpointLogger {
     return this.objectPlacement;
   }
 
-  public checkpointTxtLog() {
+  public getBackgroundAssetPath() {
     return this.backgroundAssetPath;
   }
 
