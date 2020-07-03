@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AceEditor, { IAnnotation } from 'react-ace';
+import AceEditor from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 import sharedbAce from 'sharedb-ace';
 
@@ -45,6 +45,8 @@ export interface IEditorProps {
   handleDeclarationNavigate: (cursorPosition: IPosition) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (newCode: string) => void;
+  handleReplValueChange?: (newCode: string) => void;
+  handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
@@ -73,7 +75,6 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   public AceEditor: React.RefObject<AceEditor>;
   private markerIds: number[];
   private onChangeMethod: (newCode: string) => void;
-  private onValidateMethod: (annotations: IAnnotation[]) => void;
   private completer: {};
 
   constructor(props: IEditorProps) {
@@ -87,8 +88,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       }
       this.props.handleEditorValueChange(newCode);
       this.handleVariableHighlighting();
-    };
-    this.onValidateMethod = (annotations: IAnnotation[]) => {
+      const annotations = this.AceEditor.current!.editor.getSession().getAnnotations();
       if (this.props.isEditorAutorun && annotations.length === 0) {
         this.props.handleEditorEval();
       }
@@ -108,7 +108,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   }
 
   public getBreakpoints() {
-    const breakpoints = (this.AceEditor.current as any).editor.session.$breakpoints;
+    const breakpoints = this.AceEditor.current!.editor.session.$breakpoints;
     const res = [];
     for (let i = 0; i < breakpoints.length; i++) {
       if (breakpoints[i] != null) {
@@ -122,7 +122,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     if (!this.AceEditor.current) {
       return;
     }
-    const editor = (this.AceEditor.current as any).editor;
+    const editor = this.AceEditor.current!.editor;
     const session = editor.getSession();
 
     /* disable error threshold incrementer
@@ -274,14 +274,13 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
             mode={this.chapterNo()} // select according to props.sourceChapter
             onChange={this.onChangeMethod}
             onCursorChange={this.handleVariableHighlighting}
-            onValidate={this.onValidateMethod}
             theme="source"
             value={this.props.editorValue}
             width="100%"
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
-              fontFamily: "'Inconsolata', 'Consolas', monospace"
+              fontFamily: "'Inconsolata', monospace"
             }}
           />
         </div>
@@ -291,18 +290,18 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
 
   // Used in navigating from occurence to navigation
   private moveCursor = (position: IPosition) => {
-    (this.AceEditor.current as any).editor.selection.clearSelection();
-    (this.AceEditor.current as any).editor.moveCursorToPosition(position);
-    (this.AceEditor.current as any).editor.renderer.$cursorLayer.showCursor();
-    (this.AceEditor.current as any).editor.renderer.scrollCursorIntoView(position, 0.5);
+    this.AceEditor.current!.editor.selection.clearSelection();
+    this.AceEditor.current!.editor.moveCursorToPosition(position);
+    this.AceEditor.current!.editor.renderer.$cursorLayer.showCursor();
+    this.AceEditor.current!.editor.renderer.scrollCursorIntoView(position, 0.5);
   };
 
   private handleNavigate = () => {
     const chapter = this.props.sourceChapter;
     const variantString =
       this.props.sourceVariant === 'default' ? '' : `_${this.props.sourceVariant}`;
-    const pos = (this.AceEditor.current as any).editor.selection.getCursor();
-    const token = (this.AceEditor.current as any).editor.session.getTokenAt(pos.row, pos.column);
+    const pos = this.AceEditor.current!.editor.selection.getCursor();
+    const token = this.AceEditor.current!.editor.session.getTokenAt(pos.row, pos.column);
     const url = LINKS.TEXTBOOK;
 
     const external =
@@ -311,11 +310,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
       this.props.externalLibraryName === 'ALL' ? `External%20libraries` : external;
     const ext = Documentation.externalLibraries[external];
 
-    this.props.handleDeclarationNavigate(
-      (this.AceEditor.current as any).editor.getCursorPosition()
-    );
+    this.props.handleDeclarationNavigate(this.AceEditor.current!.editor.getCursorPosition());
 
-    const newPos = (this.AceEditor.current as any).editor.selection.getCursor();
+    const newPos = this.AceEditor.current!.editor.selection.getCursor();
     if (newPos.row !== pos.row || newPos.column !== pos.column) {
       return;
     }
@@ -348,7 +345,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   };
 
   private handleRefactor = () => {
-    const editor = (this.AceEditor.current as any).editor;
+    const editor = this.AceEditor.current!.editor;
     if (!editor) {
       return;
     }
@@ -369,7 +366,7 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   };
 
   private handleHighlightScope = () => {
-    const editor = (this.AceEditor.current as any).editor;
+    const editor = this.AceEditor.current!.editor;
     if (!editor) {
       return;
     }
@@ -406,7 +403,10 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
     // We use async blocks so we don't block the browser during editing
 
     setTimeout(() => {
-      const editor = (this.AceEditor.current as any).editor;
+      if (!this.AceEditor.current) {
+        return;
+      }
+      const editor = this.AceEditor.current.editor;
       const session = editor.session;
       const code = this.props.editorValue;
       const chapterNumber = this.props.sourceChapter;
@@ -434,10 +434,9 @@ class Editor extends React.PureComponent<IEditorProps, {}> {
   };
 
   private handleTypeInferenceDisplay = (): void => {
-    // declare constants
     const chapter = this.props.sourceChapter;
     const code = this.props.editorValue;
-    const editor = (this.AceEditor.current as any).editor;
+    const editor = this.AceEditor.current!.editor;
     const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
 

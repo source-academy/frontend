@@ -17,7 +17,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, IState> = state => ({
   announcements: state.session.announcements
 });
 
-const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch<any>) =>
+const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
       handleAnnouncementsFetch: fetchAnnouncements

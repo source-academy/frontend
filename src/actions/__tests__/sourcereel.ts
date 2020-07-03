@@ -110,7 +110,7 @@ test('timerReset generates correct action object', () => {
 
 test('timerResume generates correct action object', () => {
   const currentTime = Date.now();
-  const action = timerResume(sourcereelWorkspace);
+  const action = timerResume(1000, sourcereelWorkspace);
   expect(action.type).toEqual(actionTypes.TIMER_RESUME);
   expect(action.payload.workspaceLocation).toEqual(sourcereelWorkspace);
   expect(dateIsCloseEnough(currentTime, action.payload.timeNow)).toBeTruthy();

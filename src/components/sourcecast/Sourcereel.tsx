@@ -18,13 +18,16 @@ import { SideContentTab } from '../workspace/side-content';
 import EnvVisualizer from '../workspace/side-content/EnvVisualizer';
 import Inspector from '../workspace/side-content/Inspector';
 import ListVisualizer from '../workspace/side-content/ListVisualizer';
+import SourcecastControlbar, { ISourcecastControlbarProps } from './SourcecastControlbar';
 import SourcecastEditor, { ISourcecastEditorProps } from './SourcecastEditor';
 import {
+  ICodeDelta,
   Input,
   IPlaybackData,
   IPosition,
   ISourcecastData,
   KeyboardCommand,
+  PlaybackStatus,
   RecordingStatus
 } from './sourcecastShape';
 import SourcecastTable from './SourcecastTable';
@@ -33,6 +36,9 @@ import SourcereelControlbar from './SourcereelControlbar';
 export interface ISourcereelProps extends IDispatchProps, IStateProps {}
 
 export interface IStateProps {
+  audioUrl: string;
+  currentPlayerTime: number;
+  codeDeltasToApply: ICodeDelta[] | null;
   breakpoints: string[];
   editorHeight?: string;
   editorReadonly: boolean;
@@ -41,12 +47,15 @@ export interface IStateProps {
   enableDebugging: boolean;
   externalLibraryName: string;
   highlightedLines: number[][];
+  inputToApply: Input | null;
   isDebugging: boolean;
   isEditorAutorun: boolean;
   isRunning: boolean;
   newCursorPosition?: IPosition;
   output: InterpreterOutput[];
   playbackData: IPlaybackData;
+  playbackDuration: number;
+  playbackStatus: PlaybackStatus;
   recordingStatus: RecordingStatus;
   replValue: string;
   timeElapsedBeforePause: number;
@@ -75,6 +84,8 @@ export interface IDispatchProps {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
   handleFetchSourcecastIndex: () => void;
   handleInterruptEval: () => void;
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleResetInputs: (inputs: Input[]) => void;
   handleRecordInput: (input: Input) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -86,11 +97,22 @@ export interface IDispatchProps {
     audio: Blob,
     playbackData: IPlaybackData
   ) => void;
-  handleSetEditorReadonly: (readonly: boolean) => void;
+  handleSetSourcecastData: (
+    title: string,
+    description: string,
+    audioUrl: string,
+    playbackData: IPlaybackData
+  ) => void;
+  handleSetCurrentPlayerTime: (playTime: number) => void;
+  handleSetCodeDeltasToApply: (delta: ICodeDelta[]) => void;
+  handleSetEditorReadonly: (editorReadonly: boolean) => void;
+  handleSetInputToApply: (inputToApply: Input) => void;
+  handleSetSourcecastDuration: (duration: number) => void;
+  handleSetSourcecastStatus: (PlaybackStatus: PlaybackStatus) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTimerPause: () => void;
   handleTimerReset: () => void;
-  handleTimerResume: () => void;
+  handleTimerResume: (timeBefore: number) => void;
   handleTimerStart: () => void;
   handleTimerStop: () => void;
   handleToggleEditorAutorun: () => void;
@@ -182,6 +204,7 @@ class Sourcereel extends React.Component<ISourcereelProps> {
     );
 
     const editorProps: ISourcecastEditorProps = {
+      codeDeltasToApply: this.props.codeDeltasToApply,
       editorReadonly: this.props.editorReadonly,
       editorValue: this.props.editorValue,
       editorSessionId: '',
@@ -190,6 +213,8 @@ class Sourcereel extends React.Component<ISourcereelProps> {
       handleEditorEval: this.props.handleEditorEval,
       handleEditorValueChange: this.props.handleEditorValueChange,
       isEditorAutorun: this.props.isEditorAutorun,
+      inputToApply: this.props.inputToApply,
+      isPlaying: this.props.playbackStatus === PlaybackStatus.playing,
       isRecording: this.props.recordingStatus === RecordingStatus.recording,
       breakpoints: this.props.breakpoints,
       highlightedLines: this.props.highlightedLines,
@@ -229,11 +254,14 @@ class Sourcereel extends React.Component<ISourcereelProps> {
                   <Pre> {INTRODUCTION} </Pre>
                 </span>
                 <SourcereelControlbar
+                  currentPlayerTime={this.props.currentPlayerTime}
                   editorValue={this.props.editorValue}
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
                   handleRecordInit={this.handleRecordInit}
+                  handleResetInputs={this.props.handleResetInputs}
                   handleSaveSourcecastData={this.props.handleSaveSourcecastData}
+                  handleSetSourcecastData={this.props.handleSetSourcecastData}
                   handleSetEditorReadonly={this.props.handleSetEditorReadonly}
                   handleTimerPause={this.props.handleTimerPause}
                   handleTimerReset={this.props.handleTimerReset}
@@ -265,8 +293,30 @@ class Sourcereel extends React.Component<ISourcereelProps> {
         ]
       }
     };
+    const sourcecastControlbarProps: ISourcecastControlbarProps = {
+      handleEditorValueChange: this.props.handleEditorValueChange,
+      handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+      handleSetCurrentPlayerTime: this.props.handleSetCurrentPlayerTime,
+      handleSetCodeDeltasToApply: this.props.handleSetCodeDeltasToApply,
+      handleSetEditorReadonly: this.props.handleSetEditorReadonly,
+      handleSetInputToApply: this.props.handleSetInputToApply,
+      handleSetSourcecastDuration: this.props.handleSetSourcecastDuration,
+      handleSetSourcecastStatus: this.props.handleSetSourcecastStatus,
+      audioUrl: this.props.audioUrl,
+      currentPlayerTime: this.props.currentPlayerTime,
+      duration: this.props.playbackDuration,
+      playbackData: this.props.playbackData,
+      playbackStatus: this.props.playbackStatus,
+      handleChapterSelect: this.props.handleChapterSelect,
+      handleExternalSelect: this.props.handleExternalSelect
+    };
     return (
       <div className={classNames('Sourcereel', Classes.DARK)}>
+        {this.props.recordingStatus === RecordingStatus.paused ? (
+          <SourcecastControlbar {...sourcecastControlbarProps} />
+        ) : (
+          undefined
+        )}
         <Workspace {...workspaceProps} />
       </div>
     );

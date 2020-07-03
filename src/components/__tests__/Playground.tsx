@@ -43,6 +43,8 @@ const baseProps = {
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
   handleFinishInvite: () => {},
   handleGenerateLz: () => {},
+  handleShortenURL: () => {},
+  handleUpdateShortURL: (s: string) => {},
   handleInterruptEval: () => {},
   handleInvalidEditorSessionId: () => {},
   handleReplEval: () => {},
@@ -58,6 +60,7 @@ const baseProps = {
   handleDebuggerPause: () => {},
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
+  handleFetchChapter: () => {},
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
 };
 

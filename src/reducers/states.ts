@@ -52,6 +52,7 @@ export interface IDashBoardState {
 
 export interface IPlaygroundState {
   readonly queryString?: string;
+  readonly shortURL?: string;
   readonly usingSubst: boolean;
 }
 
@@ -74,6 +75,7 @@ export interface IPlaygroundWorkspace extends IWorkspaceState {
 export interface ISourcecastWorkspace extends IWorkspaceState {
   readonly audioUrl: string;
   readonly codeDeltasToApply: ICodeDelta[] | null;
+  readonly currentPlayerTime: number;
   readonly description: string | null;
   readonly inputToApply: Input | null;
   readonly playbackData: IPlaybackData;
@@ -145,7 +147,8 @@ export interface ISessionState {
   readonly maxXp: number;
   readonly refreshToken?: string;
   readonly role?: Role;
-  readonly story?: Story;
+  readonly story: Story;
+  readonly gameState: GameState;
   readonly name?: string;
   readonly xp: number;
   readonly notifications: Notification[];
@@ -162,6 +165,11 @@ export const maxBrowseIndex = 50;
 export type Story = {
   story: string;
   playStory: boolean;
+};
+
+export type GameState = {
+  collectibles: { [id: string]: string };
+  completed_quests: string[];
 };
 
 /**
@@ -384,6 +392,7 @@ export const defaultWorkspaceManager: IWorkspaceManagerState = {
     ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
     audioUrl: '',
     codeDeltasToApply: null,
+    currentPlayerTime: 0,
     description: null,
     inputToApply: null,
     playbackData: {
@@ -435,6 +444,14 @@ export const defaultSession: ISessionState = {
   refreshToken: undefined,
   role: undefined,
   name: undefined,
+  story: {
+    story: '',
+    playStory: false
+  },
+  gameState: {
+    completed_quests: [],
+    collectibles: {}
+  },
   xp: 0,
   notifications: []
 };

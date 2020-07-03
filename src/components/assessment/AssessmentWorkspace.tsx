@@ -14,7 +14,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 import ChatApp from '../../containers/ChatContainer';
 import { InterpreterOutput, IWorkspaceState, SideContentType } from '../../reducers/states';
-import { USE_CHATKIT } from '../../utils/constants';
+import { DEFAULT_SOURCE_VARIANT, USE_CHATKIT } from '../../utils/constants';
 import { beforeNow } from '../../utils/dateHelpers';
 import { history } from '../../utils/history';
 import { showWarningMessage } from '../../utils/notification';
@@ -24,6 +24,7 @@ import Markdown from '../commons/Markdown';
 import Workspace, { WorkspaceProps } from '../workspace';
 import { ControlBarProps } from '../workspace/controlBar/ControlBar';
 import {
+  ChapterSelect,
   ClearButton,
   EvalButton,
   NextButton,
@@ -175,6 +176,7 @@ class AssessmentWorkspace extends React.Component<
         />
       );
     }
+
     const overlay = (
       <Dialog className="assessment-briefing" isOpen={this.state.showOverlay}>
         <Card>
@@ -189,12 +191,14 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
+    const closeOverlay = () => this.setState({ showResetTemplateOverlay: false });
     const resetTemplateOverlay = (
       <Dialog
         className="assessment-reset"
         icon={IconNames.ERROR}
         isCloseButtonShown={true}
         isOpen={this.state.showResetTemplateOverlay}
+        onClose={closeOverlay}
         title="Confirmation: Reset editor?"
       >
         <div className={Classes.DIALOG_BODY}>
@@ -203,19 +207,14 @@ class AssessmentWorkspace extends React.Component<
         </div>
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
-            {controlButton(
-              'Cancel',
-              null,
-              () => this.setState({ showResetTemplateOverlay: false }),
-              {
-                minimal: false
-              }
-            )}
+            {controlButton('Cancel', null, closeOverlay, {
+              minimal: false
+            })}
             {controlButton(
               'Confirm',
               null,
               () => {
-                this.setState({ showResetTemplateOverlay: false });
+                closeOverlay();
                 this.props.handleEditorValueChange(
                   (this.props.assessment!.questions[questionId] as IProgrammingQuestion)
                     .solutionTemplate
@@ -228,6 +227,7 @@ class AssessmentWorkspace extends React.Component<
         </div>
       </Dialog>
     );
+
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
@@ -536,8 +536,20 @@ class AssessmentWorkspace extends React.Component<
         />
       ) : null;
 
+    const handleChapterSelect = () => {};
+
+    const chapterSelect = (
+      <ChapterSelect
+        handleChapterSelect={handleChapterSelect}
+        sourceChapter={this.props.assessment!.questions[questionId].library.chapter}
+        sourceVariant={DEFAULT_SOURCE_VARIANT}
+        disabled={true}
+        key="chapter"
+      />
+    );
+
     return {
-      editorButtons: [runButton, saveButton, resetButton],
+      editorButtons: [runButton, saveButton, resetButton, chapterSelect],
       flowButtons: [previousButton, questionView, nextButton],
       replButtons: [evalButton, clearButton]
     };

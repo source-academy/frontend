@@ -216,6 +216,14 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
+export const fetchChapter = () => action(actionTypes.FETCH_CHAPTER);
+
+export const changeChapter = (chapter: number, variant: Variant) =>
+  action(actionTypes.CHANGE_CHAPTER, { chapter, variant });
+
+export const updateChapter = (chapter: number, variant: Variant) =>
+  action(actionTypes.UPDATE_CHAPTER, { chapter, variant });
+
 export const promptAutocomplete = (
   workspaceLocation: WorkspaceLocation,
   row: number,

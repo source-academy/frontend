@@ -3,7 +3,7 @@ import * as React from 'react';
 import { DirectoryData, MaterialData } from './materialShape';
 import MaterialTable from './MaterialTable';
 
-interface IMaterialProps extends IDispatchProps, IStateProps {}
+export interface IMaterialProps extends IDispatchProps, IStateProps {}
 
 export interface IDispatchProps {
   handleFetchMaterialIndex: (id?: number) => void;

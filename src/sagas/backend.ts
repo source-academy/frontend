@@ -3,6 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
+import { MaterialData } from 'src/components/game-dev/storyShape';
 import * as actions from '../actions';
 import * as actionTypes from '../actions/actionTypes';
 import { WorkspaceLocation } from '../actions/workspaces';
@@ -21,7 +22,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
-import { IState, Role } from '../reducers/states';
+import { GameState, IState, Role } from '../reducers/states';
 import { history } from '../utils/history';
 import { showSuccessMessage, showWarningMessage } from '../utils/notification';
 import * as request from './requests';
@@ -556,6 +557,34 @@ function* backendSaga(): SagaIterator {
     yield call(showSuccessMessage, 'Deleted successfully!', 1000);
   });
 
+  yield takeEvery(actionTypes.FETCH_CHAPTER, function*() {
+    const chapter = yield call(request.fetchChapter);
+
+    if (chapter) {
+      yield put(actions.updateChapter(chapter.chapter.chapterno, chapter.chapter.variant));
+    }
+  });
+
+  yield takeEvery(actionTypes.CHANGE_CHAPTER, function*(
+    action: ReturnType<typeof actions.changeChapter>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const chapter = action.payload;
+    const resp: Response = yield request.changeChapter(chapter.chapter, chapter.variant, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
+
   yield takeEvery(actionTypes.FETCH_GROUP_OVERVIEWS, function*(
     action: ReturnType<typeof actions.fetchGroupOverviews>
   ) {
@@ -567,6 +596,150 @@ function* backendSaga(): SagaIterator {
     if (groupOverviews) {
       yield put(actions.updateGroupOverviews(groupOverviews));
     }
+  });
+
+  yield takeEvery(actionTypes.CHANGE_DATE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.changeDateAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const closeAt = action.payload.closeAt;
+    const openAt = action.payload.openAt;
+    const respMsg: string | null = yield request.changeDateAssessment(id, closeAt, openAt, tokens);
+    if (respMsg == null) {
+      yield request.handleResponseError(respMsg);
+      return;
+    } else if (respMsg !== 'OK') {
+      yield call(showWarningMessage, respMsg, 5000);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Updated successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.DELETE_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.deleteAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload;
+    const resp: Response = yield request.deleteAssessment(id, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+  });
+
+  yield takeEvery(actionTypes.PUBLISH_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.publishAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const id = action.payload.id;
+    const togglePublishTo = action.payload.togglePublishTo;
+    const resp: Response = yield request.publishAssessment(id, togglePublishTo, tokens);
+
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+
+    yield put(actions.fetchAssessmentOverviews());
+
+    if (togglePublishTo) {
+      yield call(showSuccessMessage, 'Published successfully!', 1000);
+    } else {
+      yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
+    }
+  });
+
+  yield takeEvery(actionTypes.UPLOAD_ASSESSMENT, function*(
+    action: ReturnType<typeof actions.uploadAssessment>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const file = action.payload.file;
+    const forceUpdate = action.payload.forceUpdate;
+    const respMsg = yield request.uploadAssessment(file, tokens, forceUpdate);
+    if (!respMsg) {
+      yield request.handleResponseError(respMsg);
+    } else if (respMsg === 'OK') {
+      yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
+    } else if (respMsg === 'Force Update OK') {
+      yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+    } else {
+      yield call(showWarningMessage, respMsg, 10000);
+      return;
+    }
+    yield put(actions.fetchAssessmentOverviews());
+  });
+
+  yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
+    action: ReturnType<typeof actions.fetchTestStories>
+  ) {
+    const fileName: string = 'Test Stories';
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    let resp = yield call(request.getMaterialIndex, -1, tokens);
+    if (resp) {
+      let materialIndex = resp.index;
+      let storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
+      if (storyFolder === undefined) {
+        const role = yield select((state: IState) => state.session.role!);
+        if (role === Role.Student) {
+          return yield call(showWarningMessage, 'Only staff can create materials folder.');
+        }
+        resp = yield request.postMaterialFolder(fileName, -1, tokens);
+        if (!resp || !resp.ok) {
+          yield request.handleResponseError(resp);
+          return;
+        }
+      }
+      resp = yield call(request.getMaterialIndex, -1, tokens);
+      if (resp) {
+        materialIndex = resp.index;
+        storyFolder = yield materialIndex.find((x: MaterialData) => x.title === fileName);
+        resp = yield call(request.getMaterialIndex, storyFolder.id, tokens);
+        if (resp) {
+          const directory_tree = resp.directory_tree;
+          materialIndex = resp.index;
+          yield put(actions.updateMaterialDirectoryTree(directory_tree));
+          yield put(actions.updateMaterialIndex(materialIndex));
+        }
+      }
+    }
+  });
+
+  yield takeEvery(actionTypes.SAVE_USER_STATE, function*(
+    action: ReturnType<typeof actions.saveUserData>
+  ) {
+    const tokens = yield select((state: IState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const gameState: GameState = action.payload;
+    const resp = yield request.putUserGameState(gameState, tokens);
+    if (!resp || !resp.ok) {
+      yield request.handleResponseError(resp);
+      return;
+    }
+    yield put(actions.setGameState(gameState));
   });
 }
 

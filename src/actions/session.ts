@@ -6,7 +6,7 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../components/notification/notificationShape';
-import { Story } from '../reducers/states';
+import { GameState, Story } from '../reducers/states';
 import * as actionTypes from './actionTypes';
 
 import { Role } from '../reducers/states';
@@ -31,6 +31,8 @@ export const fetchGradingOverviews = (filterToGroup = true) =>
 
 export const login = () => action(actionTypes.LOGIN);
 
+export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
+
 export const setTokens = ({
   accessToken,
   refreshToken
@@ -48,7 +50,8 @@ export const setUser = (user: {
   role: Role;
   group: string | null;
   grade: number;
-  story: Story;
+  story?: Story;
+  gameState?: GameState;
 }) => action(actionTypes.SET_USER, user);
 
 export const submitAnswer = (id: number, answer: string | number) =>
