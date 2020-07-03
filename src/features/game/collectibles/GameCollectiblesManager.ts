@@ -88,10 +88,10 @@ class GameCollectiblesManager {
       .setFlipY(true);
     arrowUp.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
     arrowDown.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
-    arrowUp.addListener(Phaser.Input.Events.GAMEOBJECT_DRAG, () => {
+    arrowUp.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
       if (this.listContainer) this.listContainer.y -= 10;
     });
-    arrowDown.addListener(Phaser.Input.Events.GAMEOBJECT_DRAG, () => {
+    arrowDown.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
       if (this.listContainer) this.listContainer.y += 10;
     });
 
