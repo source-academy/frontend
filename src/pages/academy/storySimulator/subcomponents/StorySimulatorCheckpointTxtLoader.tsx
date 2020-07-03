@@ -1,5 +1,5 @@
-import 'ace-builds/webpack-resolver';
 import * as React from 'react';
+import 'ace-builds/webpack-resolver';
 
 type Props = {
   title: string;

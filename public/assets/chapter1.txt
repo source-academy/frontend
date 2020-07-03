@@ -8,19 +8,20 @@ emergency, classroom/emergency, Emergency
 hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
-room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
-$
-[talk move]
-[explore talk move]
-[talk move]
-[move]
-[explore move talk]
+crashsite: talk, move
+classroom: explore, talk, move
+emergency: talk, move
+hallway: move
+room: explore
 $
 classroom: crashsite, hallway
 crashsite: classroom
 hallway: classroom, room, emergency
 room: hallway
 emergency: hallway
+$
+room, bringUpDialogue: dialogue6 if checklist.visit, changeLocation: classroom if checklist.visit
+
 
 <<characters>>
 [room]

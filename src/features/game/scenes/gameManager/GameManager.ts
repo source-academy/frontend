@@ -13,7 +13,6 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
-import GameCollectibleRenderer from '../../collectibles/CollectiblesRenderer';
 
 import LocationSelectChapter from '../LocationSelectChapter';
 import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
@@ -67,7 +66,6 @@ class GameManager extends Phaser.Scene {
   public escapeManager: GameEscapeManager;
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
-  public collectibleRenderer: GameCollectibleRenderer;
 
   constructor() {
     super('GameManager');
@@ -93,7 +91,6 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
-    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   public init({
@@ -128,7 +125,6 @@ class GameManager extends Phaser.Scene {
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
-    this.collectibleRenderer = new GameCollectibleRenderer();
   }
 
   //////////////////////
@@ -150,7 +146,6 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
-    this.collectibleRenderer.initialise(this);
     this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
     this.bindEscapeMenu();
 
@@ -202,7 +197,6 @@ class GameManager extends Phaser.Scene {
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
-    this.collectibleRenderer.renderCollectiblesLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
     this.layerManager.showLayer(Layer.Character);
 
@@ -250,8 +244,8 @@ class GameManager extends Phaser.Scene {
 
   public async checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
-      this.cleanUp();
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
+        console.log('HELLO');
         this.scene.start('StorySimulatorMenu');
       } else {
         this.scene.start('CheckpointTransition');

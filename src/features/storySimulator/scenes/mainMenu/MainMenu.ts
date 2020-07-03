@@ -109,6 +109,7 @@ class MainMenu extends Phaser.Scene {
   private callGameManager() {
     const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter);
     const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt);
+
     if (!defaultChapterText) {
       return;
     }

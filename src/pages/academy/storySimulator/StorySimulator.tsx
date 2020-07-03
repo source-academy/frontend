@@ -21,6 +21,7 @@ function StorySimulator() {
   const [currentAsset, setCurrentAsset] = React.useState<string>('');
 
   React.useEffect(() => {
+    clearSessionStorage();
     createStorySimulatorGame();
     (async () => {
       const paths = await fetchAssetPathsLocally();
@@ -32,8 +33,6 @@ function StorySimulator() {
     if (sessionLoaded || !session) {
       return;
     }
-
-    console.log(session);
 
     getStorySimulatorGame().setAccountInfo({
       accessToken: session.accessToken,
@@ -72,3 +71,8 @@ function StorySimulator() {
 }
 
 export default StorySimulator;
+
+function clearSessionStorage() {
+  sessionStorage.setItem(gameTxtStorageName.checkpointTxt, '');
+  sessionStorage.setItem(gameTxtStorageName.defaultChapter, '');
+}

@@ -8,12 +8,11 @@ emergency, classroom/emergency, Emergency
 hallway, hallway, Hallway
 room, yourRoom-dim, Student Room
 $
-$
-[talk move]
-[explore talk move]
-[talk move]
-[move]
-[explore move talk]
+crashsite: talk, move
+classroom: explore, talk, move
+emergency: talk, move
+hallway: move
+room: explore
 $
 classroom: crashsite, hallway
 crashsite: classroom
