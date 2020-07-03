@@ -21,7 +21,7 @@ type GlobalGameProps = {
 };
 
 export class SourceAcademyGame extends Phaser.Game {
-  protected global: GlobalGameProps;
+  public global: GlobalGameProps;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
     super(config);

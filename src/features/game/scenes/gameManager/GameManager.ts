@@ -29,6 +29,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
+import commonAssets from '../../commons/CommonAssets';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -154,25 +155,31 @@ class GameManager extends Phaser.Scene {
     this.bindEscapeMenu();
 
     addLoadingScreen(this);
+    this.preloadBaseAssets();
     this.preloadLocationsAssets(this.currentCheckpoint);
   }
 
   private loadGameState() {
-    const accountInfo = this.getParentGame().getAccountInfo();
-    if (this.isStorySimulator && accountInfo.role === 'staff') {
-      this.saveManager.initialiseForStaff(accountInfo);
-    } else if (!this.isStorySimulator && accountInfo.role === 'student') {
+    this.accountInfo = this.getParentGame().getAccountInfo();
+    if (this.isStorySimulator && this.accountInfo.role === 'staff') {
+      this.saveManager.initialiseForStaff(this.accountInfo);
+    } else if (!this.isStorySimulator && this.accountInfo.role === 'student') {
       this.saveManager.initialiseForGame(
-        accountInfo,
+        this.accountInfo,
         this.fullSaveState,
         this.chapterNum,
         this.checkpointNum,
         this.continueGame
       );
-      this.accountInfo = accountInfo;
     } else {
       throw new Error('Mismatch of roles');
     }
+  }
+
+  private preloadBaseAssets() {
+    commonAssets.forEach(({ key, path }) => {
+      this.load.image(key, path);
+    });
   }
 
   private preloadLocationsAssets(chapter: GameCheckpoint) {
