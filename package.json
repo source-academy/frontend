@@ -67,6 +67,7 @@
     "sharedb-ace": "^1.0.9",
     "showdown": "^1.9.1",
     "sourceror": "^0.6.2",
+    "timeago.js": "^4.0.2",
     "typesafe-actions": "^5.1.0",
     "xml2js": "^0.4.23",
     "yareco": "^0.1.5"

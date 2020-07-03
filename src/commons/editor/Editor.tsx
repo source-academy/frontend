@@ -18,7 +18,9 @@ import { keyBindings, KeyFunction } from './EditorHotkeys';
 
 import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
 
-import CSS from 'csstype'; // TODO: Remove
+import { groupBy, map } from 'lodash';
+import Comments, { IComment } from './Comments';
+
 
 
 // =============== Hooks ===============
@@ -65,7 +67,7 @@ type StateProps = {
   breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
-  highlightedLines: HighlightedLines[]; // FIXME type this better??
+  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
   sharedbAceInitValue?: string;
@@ -93,21 +95,7 @@ const getModeString = (chapter: number, variant: Variant, library: string) =>
   `source${chapter}${variant}${library}`;
 
 const LineWidgets = acequire("ace/line_widgets").LineWidgets;
-console.log('QQQQQQQQQQQ', LineWidgets);
 
-// =============== STYLES ===============
-// TODO: REMOVE.
-
-
-
-const profileStyles: CSS.Properties = {
-
-};
-
-const profilePicStyles: CSS.Properties = {
-  width: "3em",
-  height: "3em"
-};
 
 /**
  * This _modifies global state_ and defines a new Ace mode globally.
@@ -214,7 +202,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   // @ts-ignore
   const [contextMenu, setContextMenu] = React.useState(false);
   // @ts-ignore
-  const [comments, setComments] = React.useState([] as Comment[]);
+  const [comments, setComments] = React.useState([] as IComment[]);
   // const prevComments = usePrevious(comments);
 
   // Inferred from: https://github.com/ajaxorg/ace/blob/master/lib/ace/ext/error_marker.js#L129
@@ -240,26 +228,20 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     widgetManagerRef.current!.attach(editor)
   }, [reactAceRef])
 
-  interface Comment {
-    isEditing: boolean;
-    isCollapsed: boolean;
-    // TODO: Reference user differently.
-    username: string;
-    profilePic: string;
-    linenum: number;
-    text: string;
-  }
 
-  const createCommentPrompt = React.useCallback( () => {
-    setComments([...comments, {
+  const createCommentPrompt = React.useCallback(() => {
+    console.log('@@@', comments);
+    setComments([...comments, 
+    {
       isEditing: true,
       isCollapsed: false,
       username: 'My user name',
       profilePic: 'https://picsum.photos/200',
       linenum: 0,
-      text: 'dis is random comment'
+      text: 'dis is random comment', 
+      datetime: 0, // Not submitted yet! 
     }]);
-  }, [comments]);
+  },[comments]);
 
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
@@ -279,38 +261,42 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   // TODO: Move.
   // Render comments.
   React.useEffect(() => {
+    // React can't handle the rendering because it's going into 
+    // an unmanaged component.
+    // Also, the line number changes externally, so extra fun.
+      // TODO: implement line number changes for comments.
+      // TODO: Put a minimize/maximize button. 
+
     // Re-render all comments.
     console.log('Re-rendering comments', comments);
-    // TODO: Group all comments with a given line number, render them together.
-    const commentWidgets = comments.map( (comment) => {
-      const { text, profilePic, username } = comment;
-      // I wouldn't do this if i didn't have to.
+    const commentsWithIdx = map(comments, (c, idx) => [c, idx] as [IComment, number]);
+    const commentsByLine = groupBy(commentsWithIdx,([c, _]) => c.linenum);
+    const commentsWidgets = map(commentsByLine, ( (commentsOnLine) => {
+      
       const container = document.createElement('div');
-      const commentDOM = (<div className="comment">
-        <img className="profile-pic" src={profilePic} alt="" style={profilePicStyles}></img>
-        <div className="username">{username}</div>
-        <div className="text">{text}</div>
-      </div>);
-      ReactDOM.render(commentDOM, container);
-      container.style.width = '50em';
-      container.style.backgroundColor = 'grey';
+      container.style.maxWidth = '40em';
+      // container.style.backgroundColor = 'grey';
       const widget: IWidget = {
-        row: comment.linenum,
+        row: comments[0].linenum, // Must exist.
         fixedWidth: true,
-        coverGutter: false,
+        coverGutter: true,
         el: container,
         type: "errorMarker"
       };
+      ReactDOM.render((<Comments 
+        allComments={comments} 
+        comments={commentsOnLine} 
+        setComments={setComments}/>), container);
       widgetManagerRef.current?.addLineWidget(widget);
       console.log('added line widget', widget);
-      return { ...comment, widget };
-    });
+      return widget;
+    }));
 
 
     return () => {
       // Remove all comments
       console.log('Removing comments', comments);
-      commentWidgets.forEach( ({ widget }) => {
+      commentsWidgets.forEach( ( widget ) => {
         widgetManagerRef.current?.removeLineWidget(widget);
       })
     }
@@ -321,7 +307,17 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     selectMode(sourceChapter, sourceVariant, externalLibraryName);
   }, [sourceChapter, sourceVariant, externalLibraryName]);
 
+
+  const handlers = {
+    createCommentPrompt,
+  };
+
+  const handlersRef = React.useRef(handlers);
+  handlersRef.current = handlers;
+
+
   React.useLayoutEffect(() => {
+    // const { createCommentPrompt } = handlersRef.current;
     if (!reactAceRef.current) {
       return;
     }
@@ -342,7 +338,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       ContextMenu.show(
         <Menu onContextMenu={() => false}>
           <MenuItem icon="full-circle" text="Toggle Breakpoint"/>
-          <MenuItem icon="comment" text="Add comment" onClick={createCommentPrompt}/>
+          <MenuItem icon="comment" text="Add comment" onClick={() => handlersRef.current.createCommentPrompt()}/>
         </Menu>,
         { left: e.clientX, top: e.clientY },
         () => { 
@@ -363,7 +359,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
     // This should run exactly once.
-  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef]);
+  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef, handlersRef]);
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {
