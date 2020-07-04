@@ -1,25 +1,14 @@
-startingLoc: room
-
 objectives
-    talk
-
-locations
-    crashsite, /locations/crashSite/normal.png, Crash Site
-    classroom, /locations/classroom/classOn.png, Class Room
-    emergency, /locations/classroom/emergency.png, Emergency
-    hallway, /locations/hallway/normal.png, Hallway
-    room, /locations/yourRoom-dim/normal.png, Student Room
+    finish
 
 room
-    modes: talk, move
-    nav: hallway
-    talkTopics: dialogue1, dialogue2
-    actions: show_dialogue(what), show_dialogue(carpet) if checklist.visit
+    modes: talk, explore
+    talkTopics: what
+    actions: show_dialogue(welcome)
 
     objects
         +door, /objects/yourCarpet/normal.png, 300, 300
-            show_dialogue(whodda-thought) if checklist.visit
-            change_location(classroom) if checklist.visit 
+            change_location(classroom)
         +chair, /objects/yourChair/normal.png, 90, 90
         +carpet, /objects/yourCarpet/normal.png, 90, 90
 
@@ -30,69 +19,29 @@ room
         +scottie, Scottie, sad, left
 
 hallway
-    modes: talk, move
-    nav: classroom, room
-    talkTopics: dialogue2
-
+    modes: talk
+    talkTopics: welcome-to-hallway
 
 classroom
-    modes: talk, move
-    nav: crashsite, hallway
-    talkTopics: dialogue1
-
+    modes: explore
     objects
-        chalk, /objects/yourChair/normal.png, 30, 30
+        +classroomChair, /objects/yourChair/normal.png, 30, 30
+            update_checklist(finish)
 
 emergency
     modes: move
     nav: classroom
 
 dialogues
-    cutscene: Cut Scene
-        0
-        You've gone to the hallway, and are now back into the room.
-        Congrats on your first cutscene.
-        Have you ever seen what the classroom looks like?
-            change_background(classroom)
-        Well here it is! Go ahead and explore it.
+    welcome
+        @scottie, happy
+        Welcome to Source Academy!
 
-        1
-        Well, you've really proven yourself to be a great anything.
+        I'm glad you took the time to come in
 
-    whod-ve-thought
-        Who would have thought that there's something hidden at the top left corner?
-
-    found
-        Wow, I see you've used the power of source and found me
-
-    carpet
-        You found the other carpet! Go out and come back to see it :)
-
-    what-happened: What happened?
+    what, What should I do now, Scottie?
         @you
-        I'm tired
+        What should I do now?
 
-        @narrator
-        The year is 1101 A.E.
-            collectible(cookie)
-        Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
-        Today, you, {name}, have enrolled in...
-        The Source Academy!
-            add_popup(yourChair, middle)
-
-        @narrator
-        The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
-        
-        @scottie happy
-        If you exit through that door, the elevator will take you up to the hallway. From there you can access the rest of the ship. Follow the sign at the end of the corridor and you'll find the student quarters. Off you go now!
-        
-        @you
-        Oh, um, thanks!
-        
-        @narrator
-        You hastily make for the door, feeling a little embarassed.
-        You exit the elevator into a long hallway leading to various rooms. You look around for a sign leading to the student quarters.
-        
-        @you
-        Ah, there it is! I can't wait to unload my stuff. It's killing my back. I guess I should've packed lighter.
-        
+        @scottie
+        I'm glad you asked!

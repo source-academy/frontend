@@ -22,31 +22,31 @@ export default class LocationParser {
 
   public static parseLocationConfig(locationId: LocationId, locationConfig: string) {
     const [key, value] = StringUtils.splitByChar(locationConfig, ':');
-
+    const location = Parser.checkpoint.map.getLocationAtId(locationId);
     switch (key) {
       case 'modes':
-        const gameModes = StringUtils.splitByChar(value, ',').map(mode =>
-          ParserConverter.stringToGameMode(mode)
-        );
-        Parser.checkpoint.map.setModesAt(locationId, gameModes);
+        !location.modes && (location.modes = []);
+        StringUtils.splitByChar(value, ',').forEach(mode => {
+          const gameMode = ParserConverter.stringToGameMode(mode);
+          location.modes!.push(gameMode);
+        });
         break;
       case 'nav':
-        const connectedLocations = StringUtils.splitByChar(value, ',');
-        Parser.checkpoint.map.setNavigationFrom(locationId, connectedLocations);
+        !location.navigation && (location.navigation = []);
+        StringUtils.splitByChar(value, ',').forEach(otherLocationId => {
+          location.navigation!.push(otherLocationId);
+        });
         break;
       case 'talkTopics':
         const talkTopics = StringUtils.splitByChar(value, ',');
-        Parser.checkpoint.map.getLocationAtId(locationId).talkTopics = talkTopics;
+        location.talkTopics = talkTopics;
         break;
       case 'actions':
         const actions = StringUtils.splitByChar(value, ',');
-        Parser.checkpoint.map.getLocationAtId(locationId).actionIds = ActionParser.parseActions(
-          actions
-        );
+        location.actionIds = ActionParser.parseActions(actions);
         break;
       default:
-        console.error('Invalid location config key');
-        break;
+        throw new Error(`Invalid location config key ${key}`);
     }
   }
 
@@ -62,8 +62,7 @@ export default class LocationParser {
         CharacterParser.parse(locationId, body);
         break;
       default:
-        console.error('Invalid location paragraph header');
-        break;
+        throw new Error(`Invalid location paragraph header ${header}`);
     }
   }
 }

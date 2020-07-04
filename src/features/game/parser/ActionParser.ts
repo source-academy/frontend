@@ -34,7 +34,7 @@ export default class ActionParser {
   public static parseActionContent(actionString: string): GameAction {
     const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
     const actionType = ParserConverter.stringToActionType(action);
-    const actionParams = StringUtils.splitByChar(actionParamString.slice(1), ',');
+    const actionParams = StringUtils.splitByChar(actionParamString.slice(0, -1), ',');
     const actionParamObj: any = {};
 
     switch (actionType) {
@@ -58,7 +58,7 @@ export default class ActionParser {
         break;
       case GameActionType.AddPopup:
         actionParamObj.id = actionParams[0];
-        actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
+        actionParamObj.position = ParserConverter.stringToPopupPosition(actionParams[1]);
         break;
     }
 

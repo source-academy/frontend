@@ -43,6 +43,8 @@ class Parser {
       }
     });
 
+    console.log(this.checkpoint.map);
+
     return this.checkpoint;
   }
 
@@ -53,8 +55,7 @@ class Parser {
         Parser.checkpoint.startingLoc = value;
         break;
       default:
-        console.error('Invalid checkpoint config key');
-        break;
+        throw new Error(`Invalid checkpoint config key, ${checkpointConfig}`);
     }
   }
 

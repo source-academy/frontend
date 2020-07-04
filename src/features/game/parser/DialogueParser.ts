@@ -20,7 +20,7 @@ export default class DialogueParser {
   }
 
   public static parseDialogue(dialogueDetails: string, dialogueBody: string[]) {
-    const [dialogueId, title] = StringUtils.splitByChar(dialogueDetails, ':');
+    const [dialogueId, title] = StringUtils.splitByChar(dialogueDetails, ',', 1);
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };
 
@@ -28,10 +28,13 @@ export default class DialogueParser {
   }
 
   public static parseDialogueContent(dialogueBody: string[]) {
+    console.log(dialogueBody);
     const rawDialogueContent: Map<PartName, string[]> = StringUtils.mapByHeader(
       dialogueBody,
       isInteger
     );
+
+    console.log(rawDialogueContent);
 
     const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(
       rawDialogueContent,
@@ -74,7 +77,7 @@ export default class DialogueParser {
   }
 }
 
-const isInteger = (line: string) => new RegExp(/[0-9]+/).test(line);
-const isGotoLabel = (line: string) => new RegExp(/goto [0-9]+/).test(line);
+const isInteger = (line: string) => new RegExp(/^[0-9]+$/).test(line);
+const isGotoLabel = (line: string) => new RegExp(/^goto [0-9]+$/).test(line);
 const isActionLabel = (line: string) => line && (line[0] === '\t' || line.slice(0, 4) === '    ');
 const isSpeaker = (line: string) => line && line[0] === '@';

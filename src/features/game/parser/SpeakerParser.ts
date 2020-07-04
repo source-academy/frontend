@@ -7,10 +7,10 @@ import CharacterParser from './CharacterParser';
 export default class SpeakerParser {
   public static parse(rawStr: string): SpeakerDetail {
     const [speakerId, expression, speakerPositionStr] = StringUtils.splitByChar(
-      rawStr.slice(1),
-      ' '
+      rawStr.slice(1), // remove the @
+      ','
     );
-    const speakerPosition = ParserConverter.stringToPosition(speakerPositionStr);
+    const speakerPosition = ParserConverter.stringToCharPosition(speakerPositionStr);
 
     this.addCharacterExprToMap(speakerId, expression);
 

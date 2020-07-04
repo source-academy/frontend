@@ -50,10 +50,9 @@ export default class StringUtils {
    */
   public static splitByChar(line: string, sep: string, limit?: number): string[] {
     if (limit) {
-      const arr = line.split(sep);
-      const rest = arr.splice(0, limit);
-      rest.push(arr.join(' '));
-      return rest.map((phrase: string) => phrase.trim());
+      return line
+        .split(new RegExp((sep + '(.+)').repeat(limit)))
+        .map((phrase: string) => phrase.trim());
     } else {
       return line.split(sep).map((phrase: string) => phrase.trim());
     }
