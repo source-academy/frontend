@@ -5,10 +5,11 @@ import { SSObjectDetail } from './SSObjectManagerTypes';
 import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
 import { toIntString } from '../utils/SSUtils';
 import { loadImage } from '../utils/LoaderUtils';
-import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
+import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
+import { mapValues } from 'src/features/game/utils/GameUtils';
 
-export default class SSObjectManager implements ICheckpointLogger {
+export default class SSObjectManager implements ICheckpointLoggable {
   public checkpointTitle = 'objects';
 
   private objectPlacement: ObjectPlacement | undefined;
@@ -92,22 +93,21 @@ export default class SSObjectManager implements ICheckpointLogger {
   }
 
   public checkpointTxtLog() {
-    let map = '';
-    this.objectDetailMap.forEach((objectDetail: SSObjectDetail) => {
-      const objectDetailArray = [
-        '+' + objectDetail.id,
-        objectDetail.assetPath,
-        toIntString(objectDetail.x),
-        toIntString(objectDetail.y)
-      ];
-      if (objectDetail.width) {
-        objectDetailArray.push(toIntString(objectDetail.width));
-        objectDetailArray.push(toIntString(objectDetail.height!));
-      }
-
-      map += objectDetailArray.join(', ') + '\n';
-    });
-    return map;
+    return Array.from(
+      mapValues(this.objectDetailMap, (objectDetail: SSObjectDetail) => {
+        const objectDetailArray = [
+          '+' + objectDetail.id,
+          objectDetail.assetPath,
+          toIntString(objectDetail.x),
+          toIntString(objectDetail.y)
+        ];
+        if (objectDetail.width) {
+          objectDetailArray.push(toIntString(objectDetail.width));
+          objectDetailArray.push(toIntString(objectDetail.height!));
+        }
+        return objectDetailArray.join(', ');
+      }).values()
+    );
   }
 
   private getObjectPlacement() {

@@ -64,6 +64,7 @@ class GameModeExplore implements IGameUI {
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
     });
+    gameManager.boundingBoxManager.enableBBoxActions(locationId);
 
     this.attachExploreModeCallbacks(locationId);
     gameManager.input.setDefaultCursor(magnifyingGlass);

@@ -35,7 +35,7 @@ export default class BoundingBoxParser {
 
     Parser.checkpoint.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bboxProperty);
     if (addToLoc) {
-      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, bboxId);
+      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.boundingBoxes, bboxId);
     }
 
     return bboxProperty;

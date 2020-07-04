@@ -9,7 +9,7 @@ export interface IScreenLoggable {
   y: number;
 }
 
-export interface ICheckpointLogger {
+export interface ICheckpointLoggable {
   checkpointTitle: string;
-  checkpointTxtLog: () => string | undefined;
+  checkpointTxtLog: () => string[];
 }

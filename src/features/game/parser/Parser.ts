@@ -36,7 +36,7 @@ class Parser {
     const checkPointParagraphs = StringUtils.splitToParagraph(checkPointLines);
 
     checkPointParagraphs.forEach(([header, body]: [string, string[]]) => {
-      if (body.length === 0) {
+      if (body.length === 0 && header.includes(':')) {
         Parser.parseCheckpointConfig(header);
       } else {
         Parser.parseCheckpointParagraphs(header, body) || LocationParser.parse(header, body);

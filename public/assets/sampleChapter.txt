@@ -1,28 +1,23 @@
-<<configuration>>
-startingLoc: emergency
+startingLoc: normal
 
-<<locations>>
-emergency, /LKoffice/emergency.png, L Koffice Emergency Png
-$
-emergency: explore
-$
-emergency: otherLocation1, otherLocation2
-$
-emergency, bringUpDialogue: dialogue1
+objectives
+    talk
 
-<<objects>>
-[emergency]
-+2d-2018-1st-place0, /images/2d-2018-1st-place.png, 605, 478, 468, 465
-+chieftain1, /avatars/chieftain/chieftain.angry.png, 1176, 276, 400, 427
-+emergency2, /objects/cmd-chair03/emergency.png, 1323, 830, 324, 406
-$
-chieftain1, bringUpDialogue: dialogue1, changeLocation: hallway
+locations
+    normal, /locations/yourRoom-dim/normal.png, Locations Your Room Dim Normal Png
 
+normal
+    modes: explore
+    actions: show_dialogue(welcome)
+    objects
+        +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+        +chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
+    boundingBoxes
+        +bbox#0, 536, 420, 373, 402
+            show_dialogue(click)
 
-<<dialogue1>>
-title: None
-[part0]
-Congrats on making your scene
-
-<<objectives>>
-finishGame
+dialogues
+    welcome
+        Congrats on creating your scene
+    click
+        Invisible bounding box is right here

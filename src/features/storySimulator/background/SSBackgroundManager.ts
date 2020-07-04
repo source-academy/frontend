@@ -24,7 +24,7 @@ export default class SSBackgroundManager {
     if (!shortPath || !shortPath.startsWith('/locations/')) {
       return;
     }
-    this.backgroundAssetPath = shortPath.slice(10); // length of "/locations"
+    this.backgroundAssetPath = shortPath;
 
     const backgroundAssetKey = `!${shortPath}`;
     this.getObjectPlacement().addAsset(backgroundAssetKey, shortPath);
