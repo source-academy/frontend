@@ -168,22 +168,6 @@ class GameActionManager {
   //    Game BBox    //
   /////////////////////
 
-  public addInteractiveBBoxListeners(
-    locationId: LocationId,
-    event: string | symbol,
-    fn: (id: ItemId) => void
-  ) {
-    if (this.gameManager) {
-      this.gameManager.boundingBoxManager.addInteractiveBBoxListeners(locationId, event, fn);
-    }
-  }
-
-  public removeInteractiveBBoxListeners(locationId: LocationId, event: string | symbol) {
-    if (this.gameManager) {
-      this.gameManager.boundingBoxManager.removeInteractiveBBoxListeners(locationId, event);
-    }
-  }
-
   public getBBoxPropertyMap() {
     if (this.gameManager) {
       return this.gameManager.stateManager.getBBoxPropertyMap();

@@ -1,6 +1,6 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { ObjectProperty, ActivatableObject } from './GameObjectTypes';
+import { ObjectProperty } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
@@ -8,6 +8,7 @@ import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { Constants } from '../commons/CommonConstants';
 import { resize } from '../utils/SpriteUtils';
+import { ActivatableObject } from './GameObjectTypes';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
@@ -73,7 +74,9 @@ class GameObjectManager implements StateObserver {
     objectProperty: ObjectProperty
   ): ActivatableObject {
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
-    const object = new Phaser.GameObjects.Image(gameManager, x, y, assetKey).setInteractive();
+    const object = new Phaser.GameObjects.Image(gameManager, x, y, assetKey).setInteractive({
+      pixelPerfect: true
+    });
     width && resize(object, width, height);
 
     function activate({

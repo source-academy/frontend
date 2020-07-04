@@ -20,7 +20,7 @@ export type ObjectLayerProps = {
 };
 
 export type ActivatableObject = {
-  sprite: Phaser.GameObjects.Image;
+  sprite: Phaser.GameObjects.GameObject;
   activate: Function;
   deactivate: Function;
 };
