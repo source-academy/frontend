@@ -131,7 +131,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
       ];
 
       map.push(bboxDetailArray.join(', '));
-      map.push('    show_dialogue(click)');
+      map.push('    show_dialogue*(click)');
     });
     return map;
   }
