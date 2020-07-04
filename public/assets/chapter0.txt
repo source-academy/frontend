@@ -10,7 +10,9 @@ room
 
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+            make_object_glow*(emergency1)
         +chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
+            complete_objective(finish)
     boundingBoxes
         +bbox#0, 536, 420, 373, 402
             show_dialogue(click)
@@ -29,7 +31,7 @@ classroom
     modes: explore
     objects
         +classroomChair, /objects/yourChair/normal.png, 30, 30
-            update_checklist(finish)
+            complete_objective(finish)
 
 emergency
     modes: move

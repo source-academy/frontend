@@ -67,6 +67,12 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         actionParamObj.position = ParserConverter.stringToPopupPosition(actionParams[1]);
         break;
+      case GameActionType.MakeObjectBlink:
+        actionParamObj.id = actionParams[0];
+        break;
+      case GameActionType.MakeObjectGlow:
+        actionParamObj.id = actionParams[0];
+        break;
     }
 
     const actionId = Parser.generateActionId();

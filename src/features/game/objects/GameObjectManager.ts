@@ -1,22 +1,22 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { ObjectProperty } from './GameObjectTypes';
+import { ObjectProperty, ActivatableObject } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
+import GlowingImage from '../effects/GlowingObject';
 import { Constants } from '../commons/CommonConstants';
-import { resize } from '../utils/SpriteUtils';
-import { ActivatableObject } from './GameObjectTypes';
+import { blink } from '../effects/FadeEffect';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
-  private objects: ActivatableObject[];
+  private objects: Map<ItemId, ActivatableObject>;
 
   constructor() {
     this.observerId = 'GameObjectManager';
-    this.objects = [];
+    this.objects = new Map<ItemId, ActivatableObject>();
   }
 
   public initialise() {
@@ -39,12 +39,13 @@ class GameObjectManager implements StateObserver {
     const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    this.objects = objectIds
+    objectIds
       .map(id => objectPropMap.get(id))
       .filter(objectProp => objectProp !== undefined)
-      .map(objectProp => {
+      .forEach(objectProp => {
         const object = this.createObject(gameManager, objectProp!);
-        objectContainer.add(object.sprite);
+        objectContainer.add((object.sprite as GlowingImage).getContainer());
+        this.objects.set(objectProp!.interactionId, object);
         return object;
       });
 
@@ -69,37 +70,50 @@ class GameObjectManager implements StateObserver {
     this.objects.forEach(object => object.deactivate());
   }
 
+  public makeObjectGlow(objectId: ItemId) {
+    const object = this.objects.get(objectId);
+    if (!object) {
+      return;
+    }
+    (object.sprite as GlowingImage).startGlow();
+  }
+
+  public makeObjectBlink(objectId: ItemId) {
+    const object = this.objects.get(objectId);
+    if (!object) {
+      return;
+    }
+    blink(GameActionManager.getInstance().getGameManager(), object.sprite.getContainer());
+  }
+
   private createObject(
     gameManager: GameManager,
     objectProperty: ObjectProperty
   ): ActivatableObject {
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
-    const object = new Phaser.GameObjects.Image(gameManager, x, y, assetKey).setInteractive({
-      pixelPerfect: true
-    });
-    width && resize(object, width, height);
+    const object = new GlowingImage(gameManager, x, y, assetKey, width, height);
 
     function activate({
       onClick = (id?: ItemId) => {},
       onPointerout = (id?: ItemId) => {},
       onHover = (id?: ItemId) => {}
     }) {
-      object.on('pointerup', async () => {
+      object.getClickArea().on('pointerup', async () => {
         onClick(interactionId);
         await GameActionManager.getInstance().executeStoryAction(actionIds);
       });
-      object.on('pointerover', () => {
+      object.getClickArea().on('pointerover', () => {
         onHover(interactionId);
       });
-      object.on('pointerout', () => {
+      object.getClickArea().on('pointerout', () => {
         onPointerout(interactionId);
       });
     }
 
     function deactivate() {
-      object.off('pointerup');
-      object.off('pointerover');
-      object.off('pointerout');
+      object.getClickArea().off('pointerup');
+      object.getClickArea().off('pointerover');
+      object.getClickArea().off('pointerout');
     }
 
     return {

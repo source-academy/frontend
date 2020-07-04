@@ -27,7 +27,7 @@ const stringToActionTypeMap = {
   move_character: GameActionType.MoveCharacter,
   update_character: GameActionType.UpdateCharacter,
   collectible: GameActionType.Collectible,
-  update_checklist: GameActionType.UpdateChecklist,
+  complete_objective: GameActionType.UpdateChecklist,
   change_location: GameActionType.LocationChange,
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
@@ -35,7 +35,9 @@ const stringToActionTypeMap = {
   show_dialogue: GameActionType.BringUpDialogue,
   add_mode: GameActionType.AddLocationMode,
   remove_mode: GameActionType.RemoveLocationMode,
-  add_popup: GameActionType.AddPopup
+  add_popup: GameActionType.AddPopup,
+  make_object_glow: GameActionType.MakeObjectGlow,
+  make_object_blink: GameActionType.MakeObjectBlink
 };
 
 const stringToGameStateStorageMap = {

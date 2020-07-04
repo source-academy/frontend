@@ -13,7 +13,9 @@ export enum GameActionType {
   ChangeBackground = 'ChangeBackground',
   RemoveLocationMode = 'RemoveLocationMode',
   AddLocationMode = 'AddLocationMode',
-  AddPopup = 'AddPopup'
+  AddPopup = 'AddPopup',
+  MakeObjectBlink = 'MakeObjectBlink',
+  MakeObjectGlow = 'MakeObjectGlow'
 }
 
 export interface IGameActionable {

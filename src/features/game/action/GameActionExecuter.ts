@@ -73,6 +73,12 @@ export default class GameActionExecuter {
           actionParams.duration
         );
         return;
+      case GameActionType.MakeObjectBlink:
+        await actionManager.makeObjectBlink(actionParams.id);
+        return;
+      case GameActionType.MakeObjectGlow:
+        await actionManager.makeObjectGlow(actionParams.id);
+        return;
     }
   }
 

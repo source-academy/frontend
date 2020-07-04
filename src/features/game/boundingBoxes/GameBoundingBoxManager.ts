@@ -1,18 +1,17 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 
-import { BBoxProperty } from './GameBoundingBoxTypes';
+import { BBoxProperty, ActivatableBBox } from './GameBoundingBoxTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { ActivatableObject } from '../objects/GameObjectTypes';
 import { Constants } from '../commons/CommonConstants';
 
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
-  private bboxes: ActivatableObject[];
+  private bboxes: ActivatableBBox[];
 
   constructor() {
     this.observerId = 'GameBoundingBoxManager';
@@ -68,7 +67,7 @@ class GameBoundingBoxManager implements StateObserver {
     this.bboxes.forEach(bbox => bbox.deactivate());
   }
 
-  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableObject {
+  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableBBox {
     const { x, y, width, height, actionIds, interactionId } = bboxProperty;
     const bboxSprite = new Phaser.GameObjects.Rectangle(gameManager, x, y, width, height, 0, 0);
     if (bboxProperty.isInteractive) {

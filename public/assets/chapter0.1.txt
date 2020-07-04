@@ -26,7 +26,7 @@ hallway
     modes: talk, move
     nav: classroom, room
     talkTopics: dialogue2
-    actions: update_checklist(talk)
+    actions: complete_objective(talk)
 
 
 classroom
@@ -77,7 +77,7 @@ dialogues
         @narrator
         The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.
         
-        @scottie happy
+        @scottie, happy
         If you exit through that door, the elevator will take you up to the hallway. From there you can access the rest of the ship. Follow the sign at the end of the corridor and you'll find the student quarters. Off you go now!
         
         @you

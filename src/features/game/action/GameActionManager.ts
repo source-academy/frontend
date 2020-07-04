@@ -150,6 +150,14 @@ class GameActionManager {
   //  Game Objects   //
   /////////////////////
 
+  public makeObjectGlow(objectId: ItemId) {
+    return this.getGameManager().objectManager.makeObjectGlow(objectId);
+  }
+
+  public makeObjectBlink(objectId: ItemId) {
+    return this.getGameManager().objectManager.makeObjectBlink(objectId);
+  }
+
   public getObjPropertyMap() {
     if (this.gameManager) {
       return this.gameManager.stateManager.getObjPropertyMap();
