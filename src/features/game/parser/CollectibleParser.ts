@@ -1,4 +1,9 @@
-import { splitToLines, isEnclosedBySquareBrackets, mapByHeader, splitByChar } from './ParserHelper';
+import {
+  splitToLines,
+  isEnclosedBySquareBrackets,
+  mapByHeader,
+  splitByChar
+} from '../utils/StringUtils';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Constants } from '../commons/CommonConstants';

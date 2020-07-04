@@ -1,35 +1,31 @@
-import { splitToLines } from './ParserHelper';
+import StringUtils from '../utils/StringUtils';
 
-import { mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import ActionParser from './ActionParser';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 
-export default function BoundingBoxParser(fileName: string, fileContent: string) {
-  const lines: string[] = splitToLines(fileContent);
-  const locationRawBBMap: Map<LocationId, string[]> = mapByHeader(
-    lines,
-    isEnclosedBySquareBrackets
-  );
+export default class BoundingBoxParser {
+  public static parse(locationId: LocationId, boundingBoxList: string[]) {
+    const boundingBoxParagraphs = StringUtils.splitToParagraph(boundingBoxList);
 
-  locationRawBBMap.forEach(addBBoxToLoc);
-}
+    boundingBoxParagraphs.forEach(([header, body]: [string, string[]]) => {
+      const boundingBox = this.parseBBoxConfig(locationId, header);
+      if (body.length) {
+        boundingBox.isInteractive = true;
+        boundingBox.actionIds = ActionParser(body);
+      }
+    });
+  }
 
-function addBBoxToLoc(bboxList: string[], locationId: LocationId): void {
-  const separatorIndex = bboxList.findIndex(bbox => bbox === '$');
-  const bboxDetails = bboxList.slice(0, separatorIndex);
-
-  // Parse basic bbox
-  bboxDetails.forEach(bboxDetails => {
-    const toAddToMap = bboxDetails && bboxDetails[0] === '+';
-    if (toAddToMap) {
+  public static parseBBoxConfig(locationId: LocationId, bboxDetails: string) {
+    const addToLoc = bboxDetails[0] === '+';
+    if (addToLoc) {
       bboxDetails = bboxDetails.slice(1);
     }
 
-    const [bboxId, x, y, width, height] = splitByChar(bboxDetails, ',');
-
-    const bbox: BBoxProperty = {
+    const [bboxId, x, y, width, height] = StringUtils.splitByChar(bboxDetails, ',');
+    const bboxProperty: BBoxProperty = {
       x: parseInt(x),
       y: parseInt(y),
       width: parseInt(width),
@@ -38,24 +34,11 @@ function addBBoxToLoc(bboxList: string[], locationId: LocationId): void {
       interactionId: bboxId
     };
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bbox);
-
-    if (toAddToMap) {
-      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.boundingBoxes, bboxId);
+    Parser.checkpoint.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bboxProperty);
+    if (addToLoc) {
+      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, bboxId);
     }
-  });
 
-  // Parse actions
-  if (separatorIndex !== -1) {
-    const bboxActions = bboxList.slice(separatorIndex + 1, bboxList.length);
-    bboxActions.forEach(bboxDetail => {
-      const [bboxId, ...actions] = bboxDetail.split(', ');
-
-      const bBoxProperty = Parser.checkpoint.map.getBBoxes().get(bboxId);
-      if (bBoxProperty) {
-        bBoxProperty.actionIds = ActionParser(actions);
-        bBoxProperty.isInteractive = true;
-      }
-    });
+    return bboxProperty;
   }
 }

@@ -4,9 +4,9 @@ import {
   ActionCondition,
   GameActionType
 } from '../action/GameActionTypes';
-import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from './ParserHelper';
+import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from '../utils/StringUtils';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { textToGameModeMap } from './LocationParser';
+import { textToGameModeMap } from './LocationsParser';
 import { ItemId } from '../commons/CommonsTypes';
 import Parser from './Parser';
 import { GameLocationAttr } from '../location/GameMapTypes';

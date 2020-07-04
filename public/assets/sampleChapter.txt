@@ -15,8 +15,8 @@ emergency, bringUpDialogue: dialogue1
 +2d-2018-1st-place0, /images/2d-2018-1st-place.png, 605, 478, 468, 465
 +chieftain1, /avatars/chieftain/chieftain.angry.png, 1176, 276, 400, 427
 +emergency2, /objects/cmd-chair03/emergency.png, 1323, 830, 324, 406
-
-
+$
+chieftain1, bringUpDialogue: dialogue1, changeLocation: hallway
 
 
 <<dialogue1>>

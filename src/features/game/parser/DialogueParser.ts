@@ -1,4 +1,4 @@
-import { mapByHeader, stripEnclosingChars, splitToLines, splitByChar } from './ParserHelper';
+import { mapByHeader, stripEnclosingChars, splitToLines, splitByChar } from '../utils/StringUtils';
 import { DialogueLine, Dialogue, PartName } from '../dialogue/GameDialogueTypes';
 import { mapValues } from '../utils/GameUtils';
 import ActionParser from './ActionParser';
@@ -9,24 +9,6 @@ import { addCharacterExprToMap } from './CharacterParser';
 import { GameLocationAttr } from '../location/GameMapTypes';
 
 export default function DialogueParser(fileName: string, fileContent: string): void {
-  // Parse locations per dialogue
-  if (fileName === 'dialogueLocation') {
-    splitToLines(fileContent).forEach(line => {
-      const [locationId, dialogueIds] = line.split(': ');
-
-      dialogueIds.split(', ').forEach(dialogueId => {
-        if (dialogueId[0] === '+') {
-          Parser.checkpoint.map.setItemAt(
-            locationId,
-            GameLocationAttr.talkTopics,
-            dialogueId.slice(1)
-          );
-        }
-      });
-    });
-    return;
-  }
-
   const lines: string[] = splitToLines(fileContent);
   const [titleWithLabel, ...restOfLines] = lines;
   const [, title] = splitByChar(titleWithLabel, ':');
