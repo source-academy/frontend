@@ -1,3 +1,4 @@
+import * as _ from 'lodash';
 import { AssetKey } from '../commons/CommonsTypes';
 
 export const Color = {
@@ -15,6 +16,9 @@ export const Color = {
   black: '#000000',
   purple: '#dd33dd'
 };
+
+const hex = (str: string) => parseInt(str.slice(1), 16);
+export const HexColor = _.mapValues(Color, hex);
 
 type ButtonConfig = { x: number; y: number; fontSize?: number };
 
@@ -43,5 +47,3 @@ export function createButton(
 
   return container;
 }
-
-export const hex = (str: string) => parseInt(str.slice(1), 16);

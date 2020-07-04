@@ -1,5 +1,5 @@
 import { blink } from './FadeEffect';
-import { hex, Color } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
 import { resize } from '../utils/SpriteUtils';
 
 export class BlinkingObject {
@@ -24,7 +24,7 @@ export class BlinkingObject {
       .setAlpha(0)
       .setInteractive();
 
-    this.imageGlow.setTint(hex(Color.yellow));
+    this.imageGlow.setTint(HexColor.yellow);
     if (width) {
       resize(this.image, width, height);
       resize(this.imageGlow, width, height);

@@ -2,7 +2,7 @@ import { ICheckpointLogger, IScreenLoggable, loggableStyle } from './SSLogManage
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { toIntString } from '../utils/SSUtils';
-import { hex, Color } from 'src/features/game/utils/StyleUtils';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { AssetPath } from 'src/features/game/commons/CommonsTypes';
 import { getIdFromShortPath } from './SSLogManagerHelper';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
@@ -60,7 +60,7 @@ export default class SSLogManager {
         loggable.y,
         350,
         150,
-        hex(Color.darkBlue)
+        HexColor.darkBlue
       ).setAlpha(0.8);
       multiplyDimensions(rect, 1.2);
       const mapShowText = new Phaser.GameObjects.Text(
