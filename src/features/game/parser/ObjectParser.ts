@@ -1,17 +1,9 @@
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
-import { Constants } from '../commons/CommonConstants';
 import ActionParser from './ActionParser';
 import StringUtils from '../utils/StringUtils';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-
-function objectAssetKey(shortPath: string) {
-  return shortPath;
-}
-
-function objectPath(shortPath: string) {
-  return Constants.assetsFolder + shortPath;
-}
+import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
+import { Constants } from '../commons/CommonConstants';
 
 export default class ObjectParser {
   public static parse(locationId: LocationId, objectList: string[]) {
@@ -21,12 +13,20 @@ export default class ObjectParser {
       const object = this.parseObjectConfig(locationId, header);
       if (body.length) {
         object.isInteractive = true;
-        object.actionIds = ActionParser(body);
+        object.actionIds = ActionParser.parseActions(body);
       }
     });
   }
 
-  public static parseObjectConfig(locationId: LocationId, objectDetails: string) {
+  private static objectAssetKey(shortPath: string) {
+    return shortPath;
+  }
+
+  private static objectPath(shortPath: string) {
+    return Constants.assetsFolder + shortPath;
+  }
+
+  private static parseObjectConfig(locationId: LocationId, objectDetails: string) {
     const addToLoc = objectDetails[0] === '+';
     if (addToLoc) {
       objectDetails = objectDetails.slice(1);
@@ -34,7 +34,7 @@ export default class ObjectParser {
 
     const [objectId, shortPath, x, y, width, height] = StringUtils.splitByChar(objectDetails, ',');
     const objectProperty: ObjectProperty = {
-      assetKey: objectAssetKey(shortPath),
+      assetKey: this.objectAssetKey(shortPath),
       x: parseInt(x),
       y: parseInt(y),
       width: parseInt(width) || undefined,
@@ -43,7 +43,7 @@ export default class ObjectParser {
       interactionId: objectId
     };
 
-    Parser.checkpoint.map.addMapAsset(objectAssetKey(shortPath), objectPath(shortPath));
+    Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), this.objectPath(shortPath));
 
     Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, objectProperty);
     if (addToLoc) {

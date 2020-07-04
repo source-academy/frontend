@@ -4,27 +4,36 @@ objectives
     talk
 
 locations
-    crashsite, Crash Site, /locations/crashsite.png
-    classroom, Class Room, /locations/classroom/classOn.png
-    emergency, Emergency, /locations/classroom/emergency.png
-    hallway, Hallway, /locations/hallway.png
-    room, Student Room, /locations/yourRoom-dim.png
+    crashsite, /locations/crashSite/normal.png, Crash Site
+    classroom, /locations/classroom/classOn.png, Class Room
+    emergency, /locations/classroom/emergency.png, Emergency
+    hallway, /locations/hallway/normal.png, Hallway
+    room, /locations/yourRoom-dim/normal.png, Student Room
 
-crashsite
+room
     modes: talk, move
-    nav: crashsite, hallway
+    nav: hallway
     talkTopics: dialogue1, dialogue2
     actions: show_dialogue(what), show_dialogue(carpet) if checklist.visit
 
     objects
-        door, /objects/door.png, 300, 300
+        +door, /objects/yourCarpet/normal.png, 300, 300
             show_dialogue(whodda-thought) if checklist.visit
             change_location(classroom) if checklist.visit 
-        chair, /chair.png, 90, 90
-        carpet, /carpet.png, 90, 90
+        +chair, /objects/yourChair/normal.png, 90, 90
+        +carpet, /objects/yourCarpet/normal.png, 90, 90
 
     boundingBoxes
-        bbox1, 10, 10, 30, 30
+        +bbox1, 10, 10, 30, 30
+
+    characters
+        +scottie, Scottie, sad, left
+
+hallway
+    modes: talk, move
+    nav: classroom, room
+    talkTopics: dialogue2
+
 
 classroom
     modes: talk, move
@@ -32,7 +41,7 @@ classroom
     talkTopics: dialogue1
 
     objects
-        chalk, /yourChalk.png, 30, 30
+        chalk, /objects/yourChair/normal.png, 30, 30
 
 emergency
     modes: move
@@ -86,3 +95,4 @@ dialogues
         
         @you
         Ah, there it is! I can't wait to unload my stuff. It's killing my back. I guess I should've packed lighter.
+        

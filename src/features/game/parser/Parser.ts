@@ -1,7 +1,7 @@
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
-import DialoguesParser from './DialoguesParser';
-import LocationsParser from './LocationsParser';
+import DialoguesParser from './DialogueParser';
+import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 
 import { GameCheckpoint } from '../chapter/GameChapterTypes';

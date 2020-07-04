@@ -1,11 +1,11 @@
 import { LocationId } from '../location/GameMapTypes';
 import Parser from './Parser';
 import StringUtils from '../utils/StringUtils';
-import { textToGameModeMap } from './LocationsParser';
 import ActionParser from './ActionParser';
 import ObjectParser from './ObjectParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import CharacterParser from './CharacterParser';
+import ParserConverter from './ParserConverter';
 
 export default class LocationParser {
   public static parse(locationId: LocationId, locationBody: string[]) {
@@ -25,7 +25,9 @@ export default class LocationParser {
 
     switch (key) {
       case 'modes':
-        const gameModes = StringUtils.splitByChar(value, ',').map(mode => textToGameModeMap[mode]);
+        const gameModes = StringUtils.splitByChar(value, ',').map(mode =>
+          ParserConverter.stringToGameMode(mode)
+        );
         Parser.checkpoint.map.setModesAt(locationId, gameModes);
         break;
       case 'nav':
@@ -38,7 +40,9 @@ export default class LocationParser {
         break;
       case 'actions':
         const actions = StringUtils.splitByChar(value, ',');
-        Parser.checkpoint.map.getLocationAtId(locationId).actionIds = ActionParser(actions);
+        Parser.checkpoint.map.getLocationAtId(locationId).actionIds = ActionParser.parseActions(
+          actions
+        );
         break;
       default:
         console.error('Invalid location config key');

@@ -1,5 +1,4 @@
 import StringUtils from '../utils/StringUtils';
-
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import ActionParser from './ActionParser';
@@ -13,12 +12,12 @@ export default class BoundingBoxParser {
       const boundingBox = this.parseBBoxConfig(locationId, header);
       if (body.length) {
         boundingBox.isInteractive = true;
-        boundingBox.actionIds = ActionParser(body);
+        boundingBox.actionIds = ActionParser.parseActions(body);
       }
     });
   }
 
-  public static parseBBoxConfig(locationId: LocationId, bboxDetails: string) {
+  private static parseBBoxConfig(locationId: LocationId, bboxDetails: string) {
     const addToLoc = bboxDetails[0] === '+';
     if (addToLoc) {
       bboxDetails = bboxDetails.slice(1);

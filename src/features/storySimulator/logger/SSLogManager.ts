@@ -5,8 +5,8 @@ import { toIntString } from '../utils/SSUtils';
 import { hex, Color } from 'src/features/game/utils/StyleUtils';
 import { AssetPath } from 'src/features/game/commons/CommonsTypes';
 import { getIdFromShortPath } from './SSLogManagerHelper';
-import { toCapitalizedWords } from 'src/features/game/utils/StringUtils';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
+import StringUtils from 'src/features/game/utils/StringUtils';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -41,7 +41,7 @@ export default class SSLogManager {
 
   private createLocationLog(locationId: LocationId, locationAssetPath: AssetPath) {
     const header = `<<locations>>`;
-    const locationAsset = `${locationId}, ${locationAssetPath}, ${toCapitalizedWords(
+    const locationAsset = `${locationId}, ${locationAssetPath}, ${StringUtils.toCapitalizedWords(
       locationAssetPath
     )}`;
     const modes = `$\n${locationId}: explore`;
