@@ -43,8 +43,6 @@ class Parser {
       }
     });
 
-    console.log(this.checkpoint.map);
-
     return this.checkpoint;
   }
 

@@ -1,6 +1,10 @@
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import {
+  AccountInfo,
+  getSourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Constants from 'src/commons/utils/Constants';
 import { FullSaveState } from './GameSaveTypes';
+import { emptySaveState } from './GameSaveConstants';
 
 export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
   const options = {
@@ -16,8 +20,9 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullSaveStat
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/save`, options);
   if (resp && resp.ok) {
-    return;
+    return resp;
   }
+  return;
 }
 
 export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
@@ -42,7 +47,15 @@ export async function clearData(accountInfo: AccountInfo) {
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/clear`, options);
 
   if (resp && resp.ok) {
-    console.log('Game cleared!');
+    alert('Game cleared!');
+    return;
+  }
+}
+
+export async function resetData() {
+  const resp = await saveData(getSourceAcademyGame().getAccountInfo(), emptySaveState);
+  if (resp && resp.ok) {
+    alert('Game data reset!');
     return;
   }
 }

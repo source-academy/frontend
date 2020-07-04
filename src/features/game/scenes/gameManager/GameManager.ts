@@ -245,7 +245,6 @@ class GameManager extends Phaser.Scene {
   public async checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
       if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
-        console.log('HELLO');
         this.scene.start('StorySimulatorMenu');
       } else {
         this.scene.start('CheckpointTransition');

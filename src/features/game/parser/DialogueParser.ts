@@ -28,13 +28,10 @@ export default class DialogueParser {
   }
 
   public static parseDialogueContent(dialogueBody: string[]) {
-    console.log(dialogueBody);
     const rawDialogueContent: Map<PartName, string[]> = StringUtils.mapByHeader(
       dialogueBody,
       isInteger
     );
-
-    console.log(rawDialogueContent);
 
     const dialogueObject: Map<PartName, DialogueLine[]> = mapValues(
       rawDialogueContent,
