@@ -9,12 +9,13 @@ import {
 } from '../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
-import EditableAchievementDeadline from './editableUtils/EditableAchievementDeadline';
+import EditableAchievementDate from './editableUtils/EditableAchievementDate';
 import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
+import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -42,7 +43,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, exp, deadline, backgroundImageUrl } = editableAchievement;
+  const { id, title, ability, exp, deadline, backgroundImageUrl, release } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -112,6 +113,22 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     }
   };
 
+  const handleChangeBackground = (backgroundImageUrl: string) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      backgroundImageUrl: backgroundImageUrl
+    });
+    setUnsaved();
+  }
+
+  const handleChangeRelease = (release: Date) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      release: release
+    });
+    setUnsaved();
+  };
+  
   const handleChangeDeadline = (deadline: Date) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -159,15 +176,26 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       </div>
 
       <div className="main">
+        <EditableAchievementBackground 
+          backgroundImageUrl={backgroundImageUrl}
+          setBackgroundImageUrl={handleChangeBackground}
+        />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 
           <div className="details">
             <EditableAchievementAbility ability={ability} changeAbility={handleChangeAbility} />
 
-            <EditableAchievementDeadline
+            <EditableAchievementDate
+              type="Deadline"
               deadline={deadline}
               changeDeadline={handleChangeDeadline}
+            />
+
+            <EditableAchievementDate
+              type="Release"
+              deadline={release}
+              changeDeadline={handleChangeRelease}
             />
 
             <EditableAchievementExp exp={exp} changeExp={handleChangeExp} />

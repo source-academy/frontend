@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { Button, Dialog, Popover, Position, PopoverInteractionKind } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import AchievementDeadline from '../../../../../achievements/subcomponents/utils/AchievementDeadline';
 
-type EditableAchievementDeadlineProps = {
+type EditableAchievementDateProps = {
+  type: string;
   deadline?: Date;
   changeDeadline: any;
 };
 
-function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
-  const { deadline, changeDeadline } = props;
+function EditableAchievementDate(props: EditableAchievementDateProps) {
+  const { type, deadline, changeDeadline } = props;
   const [isOpen, setOpen] = useState<boolean>(false);
 
   const generateDeadlineString = () => {
@@ -24,22 +24,22 @@ function EditableAchievementDeadline(props: EditableAchievementDeadlineProps) {
         <div>
           <Popover interactionKind={PopoverInteractionKind.HOVER} position={Position.TOP}>
             <Button onClick={() => setOpen(!isOpen)}>
-              <AchievementDeadline deadline={deadline} />
+              {`Change ${type}`}
             </Button>
             {generateDeadlineString()}
           </Popover>
         </div>
       </div>
-      <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title="Edit Achievement Deadline">
+  <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title={`Edit Achievement ${type}`} >
         <DatePicker
           timePickerProps={{ showArrowButtons: true }}
           value={deadline}
           onChange={changeDeadline}
         />
-        <Button text="Remove Deadline" onClick={() => changeDeadline(undefined)} />
+        <Button text={`Remove ${type}`} onClick={() => changeDeadline(undefined)} />
       </Dialog>
     </div>
   );
 }
 
-export default EditableAchievementDeadline;
+export default EditableAchievementDate;

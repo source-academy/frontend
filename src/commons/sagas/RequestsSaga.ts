@@ -149,6 +149,9 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     achievement.id = achievement.inferencer_id;
     achievement.ability = achievement.ability as AchievementAbility;
 
+    achievement.deadline = new Date(achievement.deadline);
+    achievement.release = new Date(achievement.release);
+
     achievement.modal = {};
     achievement.modal.modalImageUrl = achievement.modalImageUrl ? achievement.modalImageUrl : '';
     achievement.modal.description = achievement.description ? achievement.description : '';

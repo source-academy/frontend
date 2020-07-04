@@ -43,6 +43,8 @@ class Node {
     completionGoal: number,
     completionProgress: number
   ) {
+    console.log(typeof deadline);
+
     if (completionProgress >= completionGoal) {
       return AchievementStatus.COMPLETED;
     } else if (deadline !== undefined && deadline.getTime() > Date.now()) {

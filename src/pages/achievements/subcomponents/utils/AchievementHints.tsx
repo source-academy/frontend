@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag, Intent } from '@blueprintjs/core';
+import { Tag } from '@blueprintjs/core';
 import { semester1Weeks } from '../../../../commons/mocks/AchievementMocks';
 
 type AchievementHintsProps = {
@@ -8,8 +8,6 @@ type AchievementHintsProps = {
 
 function AchievementHints(props: AchievementHintsProps) {
   const { release } = props;
-
-  const oneDayInMilliSeconds = 60 * 60 * 24 * 1000;
 
   const getWeekNumber = (): number | undefined => {
     if (release === undefined) {
@@ -25,25 +23,8 @@ function AchievementHints(props: AchievementHintsProps) {
     return 13;
   };
 
-  const isNewTask = (): boolean => {
-    if (release === undefined) {
-      return false;
-    }
-
-    return Date.now() - release.getTime() <= oneDayInMilliSeconds;
-  };
-
   return (
     <div className="hints">
-      <div>
-        {isNewTask() ? (
-          <Tag round={true} intent={Intent.WARNING}>
-            {'NEW'}
-          </Tag>
-        ) : (
-          <></>
-        )}
-      </div>
       <div>
         {getWeekNumber() === undefined ? (
           <></>
