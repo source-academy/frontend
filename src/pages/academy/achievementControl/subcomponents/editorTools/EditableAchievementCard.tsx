@@ -119,7 +119,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       backgroundImageUrl: backgroundImageUrl
     });
     setUnsaved();
-  }
+  };
 
   const handleChangeRelease = (release: Date) => {
     setEditableAchievement({
@@ -128,7 +128,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     });
     setUnsaved();
   };
-  
+
   const handleChangeDeadline = (deadline: Date) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -176,7 +176,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       </div>
 
       <div className="main">
-        <EditableAchievementBackground 
+        <EditableAchievementBackground
           backgroundImageUrl={backgroundImageUrl}
           setBackgroundImageUrl={handleChangeBackground}
         />

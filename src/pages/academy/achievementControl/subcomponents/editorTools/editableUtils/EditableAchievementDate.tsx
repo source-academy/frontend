@@ -23,14 +23,12 @@ function EditableAchievementDate(props: EditableAchievementDateProps) {
       <div className="deadline-details">
         <div>
           <Popover interactionKind={PopoverInteractionKind.HOVER} position={Position.TOP}>
-            <Button onClick={() => setOpen(!isOpen)}>
-              {`Change ${type}`}
-            </Button>
+            <Button onClick={() => setOpen(!isOpen)}>{`Change ${type}`}</Button>
             {generateDeadlineString()}
           </Popover>
         </div>
       </div>
-  <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title={`Edit Achievement ${type}`} >
+      <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title={`Edit Achievement ${type}`}>
         <DatePicker
           timePickerProps={{ showArrowButtons: true }}
           value={deadline}
