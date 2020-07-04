@@ -13,7 +13,7 @@ import {
   altTextXPos
 } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
-import { hex, Color } from 'src/features/game/utils/StyleUtils';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
@@ -71,7 +71,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       0,
       180,
       40,
-      hex(Color.darkBlue)
+      HexColor.darkBlue
     ).setAlpha(0.7);
     const altText = new Phaser.GameObjects.Text(scene, 0, 0, text, altTextStyle).setOrigin(
       0.5,

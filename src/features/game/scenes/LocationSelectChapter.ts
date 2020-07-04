@@ -15,10 +15,9 @@ import { Character, CharacterPosition } from '../character/GameCharacterTypes';
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import { createCondition, GameActionType, GameAction } from '../action/GameActionTypes';
+import { GameActionType, GameAction } from '../action/GameActionTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { PartName, DialogueLine, Dialogue } from '../dialogue/GameDialogueTypes';
-import { createSpeaker } from '../character/GameCharacterHelper';
 
 const LocationSelectMap = new GameMap();
 
@@ -211,7 +210,10 @@ const gameActions: GameAction[] = [
     actionType: GameActionType.Collectible,
     actionParams: { id: 'hartinPoster' },
     actionConditions: [
-      createCondition(GameStateStorage.UserState, { listName: 'collectibles', id: 'trophy' })
+      {
+        state: GameStateStorage.UserState,
+        conditionParams: { listName: 'collectibles', id: 'trophy' }
+      }
     ],
     isInteractive: false
   },
@@ -241,7 +243,11 @@ const DialogueObject1 = new Map<PartName, DialogueLine[]>();
 DialogueObject1.set('part1', [
   {
     line: "How's it going?",
-    speakerDetail: createSpeaker('beat', 'happy', 'right'),
+    speakerDetail: {
+      speakerId: 'beat',
+      expression: 'happy',
+      speakerPosition: CharacterPosition.Right
+    },
     actionIds: [gameActions[0].interactionId]
   },
   {
@@ -257,7 +263,11 @@ DialogueObject1.set('part1', [
   },
   {
     line: "Hi, I'm Scottie, the Scottish alien",
-    speakerDetail: createSpeaker('scottie', 'happy', 'left'),
+    speakerDetail: {
+      speakerId: 'beat',
+      expression: 'happy',
+      speakerPosition: CharacterPosition.Right
+    },
     goto: 'part2'
   }
 ]);

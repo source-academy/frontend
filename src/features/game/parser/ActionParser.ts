@@ -1,128 +1,74 @@
-import {
-  GameAction,
-  createCondition,
-  ActionCondition,
-  GameActionType
-} from '../action/GameActionTypes';
-import { splitByChar, stripEnclosingChars, isEnclosedBySquareBrackets } from './ParserHelper';
-import { GameStateStorage } from '../state/GameStateTypes';
-import { textToGameModeMap } from './LocationParser';
-import { ItemId } from '../commons/CommonsTypes';
 import Parser from './Parser';
+import StringUtils from '../utils/StringUtils';
+import ParserConverter from './ParserConverter';
 import { GameLocationAttr } from '../location/GameMapTypes';
-import { textToPositionMap } from './DialogueParser';
+import { GameAction, GameActionType } from '../action/GameActionTypes';
+import { ItemId } from '../commons/CommonsTypes';
+import ConditionParser from './ConditionParser';
 
-export default function ActionParser(actionText: string[]): ItemId[] {
-  return actionText.map(parseAction);
-}
-
-// converts full action string (with conditions) to action object
-function parseAction(fullActionString: string): ItemId {
-  const [actionString, conditionalsString] = splitByChar(fullActionString, 'if');
-
-  const gameAction = strToAction(actionString);
-  if (conditionalsString) {
-    gameAction.actionConditions = splitByChar(conditionalsString, 'AND').map(strToCondition);
+export default class ActionParser {
+  public static parseActions(actionDetails: string[]): ItemId[] {
+    return actionDetails.map(actionDetail => this.parseAction(actionDetail));
   }
 
-  Parser.checkpoint.map.addItemToMap(
-    GameLocationAttr.actions,
-    gameAction.interactionId,
-    gameAction
-  );
+  public static parseAction(actionDetail: string): ItemId {
+    const [actionString, conditionalsString] = StringUtils.splitByChar(actionDetail, 'if');
 
-  return gameAction.interactionId;
-}
+    const gameAction = this.parseActionContent(actionString);
+    if (conditionalsString) {
+      gameAction.actionConditions = StringUtils.splitByChar(
+        conditionalsString,
+        'AND'
+      ).map(condition => ConditionParser.parse(condition));
+    }
 
-/*
- * Converts actionstring to action object (without conditions)
- */
-function strToAction(actionString: string): GameAction {
-  const [action, actionParamString] = splitByChar(actionString, ':');
-  const actionType = stringToActionType[action];
+    Parser.checkpoint.map.addItemToMap(
+      GameLocationAttr.actions,
+      gameAction.interactionId,
+      gameAction
+    );
 
-  if (!actionType) {
-    throw new Error(`Action ${action} is not found`);
+    return gameAction.interactionId;
   }
 
-  let actionParams;
-  if (isEnclosedBySquareBrackets(actionParamString)) {
-    actionParams = splitByChar(stripEnclosingChars(actionParamString), ' ');
-  } else {
-    actionParams = [actionParamString];
-  }
-  const actionParamObj: any = {};
-  switch (actionType) {
-    case GameActionType.Collectible:
-    case GameActionType.UpdateChecklist:
-    case GameActionType.LocationChange:
-    case GameActionType.ChangeBackground:
-    case GameActionType.BringUpDialogue:
-      actionParamObj.id = actionParams[0];
-      break;
-    case GameActionType.AddItem:
-    case GameActionType.RemoveItem:
-      actionParamObj.attr = actionParams[0];
-      actionParamObj.locationId = actionParams[1];
-      actionParamObj.id = actionParams[2];
-      break;
-    case GameActionType.AddLocationMode:
-    case GameActionType.RemoveLocationMode:
-      actionParamObj.locationId = actionParams[0];
-      actionParamObj.mode = textToGameModeMap[actionParams[1]];
-      break;
-    case GameActionType.AddPopup:
-      actionParamObj.id = actionParams[0];
-      actionParamObj.position = textToPositionMap[actionParams[1]];
-      break;
-  }
+  public static parseActionContent(actionString: string): GameAction {
+    const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
+    const actionType = ParserConverter.stringToActionType(action);
+    const actionParams = StringUtils.splitByChar(actionParamString.slice(1), ',');
+    const actionParamObj: any = {};
 
-  const actionId = Parser.generateActionId();
-  return {
-    actionType,
-    actionParams: actionParamObj,
-    actionConditions: [],
-    interactionId: actionId,
-    isInteractive: false
-  };
-}
+    switch (actionType) {
+      case GameActionType.Collectible:
+      case GameActionType.UpdateChecklist:
+      case GameActionType.LocationChange:
+      case GameActionType.ChangeBackground:
+      case GameActionType.BringUpDialogue:
+        actionParamObj.id = actionParams[0];
+        break;
+      case GameActionType.AddItem:
+      case GameActionType.RemoveItem:
+        actionParamObj.attr = actionParams[0];
+        actionParamObj.locationId = actionParams[1];
+        actionParamObj.id = actionParams[2];
+        break;
+      case GameActionType.AddLocationMode:
+      case GameActionType.RemoveLocationMode:
+        actionParamObj.locationId = actionParams[0];
+        actionParamObj.mode = ParserConverter.stringToGameMode(actionParams[1]);
+        break;
+      case GameActionType.AddPopup:
+        actionParamObj.id = actionParams[0];
+        actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
+        break;
+    }
 
-export const stringToActionType = {
-  moveCharacter: GameActionType.MoveCharacter,
-  updateCharacter: GameActionType.UpdateCharacter,
-  collectible: GameActionType.Collectible,
-  updateChecklist: GameActionType.UpdateChecklist,
-  changeLocation: GameActionType.LocationChange,
-  addItem: GameActionType.AddItem,
-  removeItem: GameActionType.RemoveItem,
-  changeBackground: GameActionType.ChangeBackground,
-  bringUpDialogue: GameActionType.BringUpDialogue,
-  addLocationMode: GameActionType.AddLocationMode,
-  removeLocationMode: GameActionType.RemoveLocationMode,
-  addPopup: GameActionType.AddPopup
-};
-
-/*
- * Converts conditional string e.g. 'checklist.wallet' to condition object {
- * { state: GameStateStorage.UserState, conditionParams: {listName..., id...} }
- */
-function strToCondition(conditionString: string): ActionCondition {
-  const [gameStateStorage, condParams] = splitByChar(conditionString, '.');
-
-  switch (strToGameStateStorage[gameStateStorage]) {
-    case GameStateStorage.ChecklistState:
-      return createCondition(GameStateStorage.ChecklistState, { id: condParams });
-    case GameStateStorage.UserState:
-      return createCondition(GameStateStorage.UserState, {
-        listName: condParams[0],
-        id: condParams[1]
-      });
-    default:
-      throw new Error('Parsing error: Cannot find storage for action if condition');
+    const actionId = Parser.generateActionId();
+    return {
+      actionType,
+      actionParams: actionParamObj,
+      actionConditions: [],
+      interactionId: actionId,
+      isInteractive: false
+    };
   }
 }
-
-const strToGameStateStorage = {
-  checklist: GameStateStorage.ChecklistState,
-  userstate: GameStateStorage.UserState
-};

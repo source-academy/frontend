@@ -50,7 +50,7 @@ door6, addItem: [characters hallway hartin-menz], bringUpDialogue: dialogue3, ad
 $
 topLeft, bringUpDialogue: dialogue5
 
-<<dialogueLocation>>
+<<talkTopics>>
 classroom: +dialogue1, dialogue1
 crashsite: +dialogue1, +dialogue1
 room: +dialogue1

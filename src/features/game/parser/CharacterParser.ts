@@ -1,78 +1,62 @@
-import { splitToLines, isEnclosedBySquareBrackets, mapByHeader, splitByChar } from './ParserHelper';
+import StringUtils from '../utils/StringUtils';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
-import { textToPositionMap } from './DialogueParser';
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
 import { Constants } from '../commons/CommonConstants';
+import ParserConverter from './ParserConverter';
 
-export default function CharacterParser(fileName: string, fileContent: string): void {
-  const lines: string[] = splitToLines(fileContent);
-  const locToCharMap: Map<LocationId, string[]> = mapByHeader(lines, isEnclosedBySquareBrackets);
-  locToCharMap.forEach((characters, locationId) =>
-    characters.forEach(characterString => addCharacterToLoc(characterString, locationId))
-  );
-}
-
-export function characterAssetKey(characterId: ItemId, expression: string) {
-  return characterId + expression;
-}
-
-export function characterAssetValue(characterId: ItemId, expression: string) {
-  return `${Constants.assetsFolder}/avatars/${characterId}/${characterId}.${expression}.png`;
-}
-
-function addCharacterToLoc(rawCharacterStr: string, locationId: LocationId): void {
-  let addCharacterToMap = false;
-  if (rawCharacterStr[0] === '+') {
-    addCharacterToMap = true;
-    rawCharacterStr = rawCharacterStr.slice(1);
+export default class CharacterParser {
+  public static parse(locationId: LocationId, characterList: string[]) {
+    characterList.forEach(characterDetails =>
+      this.parseCharacterDetails(locationId, characterDetails)
+    );
   }
 
-  const [id, name, defaultExpression, defaultPosition] = splitByChar(rawCharacterStr, ',');
-
-  const expressions = new Map<string, AssetKey>();
-
-  const character: Character = {
-    id,
-    name,
-    expressions,
-    defaultExpression,
-    defaultPosition: textToPositionMap[defaultPosition]
-  };
-
-  // Add asset key to expression map
-  expressions.set(defaultExpression, characterAssetKey(id, defaultExpression));
-
-  // Add asset keys to expression map
-  Parser.checkpoint.map.addMapAsset(
-    characterAssetKey(id, defaultExpression),
-    characterAssetValue(id, defaultExpression)
-  );
-
-  // Add character to map
-  Parser.checkpoint.map.addItemToMap(GameLocationAttr.characters, id, character);
-
-  // Add character to location
-  if (addCharacterToMap) {
-    Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.characters, id);
-  }
-}
-
-export function addCharacterExprToMap(charId: string, expression: string) {
-  if (charId === 'you' || charId === 'narrator') {
-    return;
-  }
-  const character = Parser.checkpoint.map.getCharacters().get(charId);
-
-  if (!character) {
-    throw new Error(`Character ${charId} not in map!`);
+  public static characterAssetKey(characterId: ItemId, expression: string) {
+    return characterId + expression;
   }
 
-  character.expressions.set(expression, characterAssetKey(charId, expression));
+  public static characterAssetValue(characterId: ItemId, expression: string) {
+    return `${Constants.assetsFolder}/avatars/${characterId}/${characterId}.${expression}.png`;
+  }
 
-  Parser.checkpoint.map.addMapAsset(
-    characterAssetKey(charId, expression),
-    characterAssetValue(charId, expression)
-  );
+  private static parseCharacterDetails(locationId: LocationId, characterDetails: string) {
+    const addToLoc = characterDetails[0] === '+';
+    if (addToLoc) {
+      characterDetails = characterDetails.slice(1);
+    }
+
+    const [id, name, defaultExpression, defaultPosition] = StringUtils.splitByChar(
+      characterDetails,
+      ','
+    );
+
+    const expressions = new Map<string, AssetKey>();
+
+    const character: Character = {
+      id,
+      name,
+      expressions,
+      defaultExpression,
+      defaultPosition: ParserConverter.stringToPosition(defaultPosition)
+    };
+
+    // Add asset key to expression map
+    expressions.set(defaultExpression, this.characterAssetKey(id, defaultExpression));
+
+    // Add asset keys to expression map
+    Parser.checkpoint.map.addMapAsset(
+      this.characterAssetKey(id, defaultExpression),
+      this.characterAssetValue(id, defaultExpression)
+    );
+
+    // Add character to map
+    Parser.checkpoint.map.addItemToMap(GameLocationAttr.characters, id, character);
+
+    // Add character to location
+    if (addToLoc) {
+      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.characters, id);
+    }
+  }
 }

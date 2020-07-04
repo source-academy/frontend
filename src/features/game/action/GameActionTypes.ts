@@ -31,11 +31,3 @@ export type GameAction = TrackInteraction & {
   actionParams: any;
   actionConditions: ActionCondition[];
 };
-
-export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
-  return {
-    state,
-    conditionParams,
-    boolean
-  };
-}

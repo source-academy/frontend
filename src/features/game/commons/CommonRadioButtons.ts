@@ -1,6 +1,6 @@
 import { GameButton } from './CommonsTypes';
 import { screenSize, Constants } from './CommonConstants';
-import { Color, hex } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
 
 class CommonRadioButtons extends Phaser.GameObjects.Container {
   private circleDiameter: number;
@@ -73,7 +73,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         button.assetYPos,
         optionOutlineDiameter,
         optionOutlineDiameter,
-        hex(Color.darkBlue)
+        HexColor.darkBlue
       );
       const option = new Phaser.GameObjects.Ellipse(
         this.scene,
@@ -81,7 +81,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         button.assetYPos,
         this.circleDiameter,
         this.circleDiameter,
-        hex(Color.lightBlue)
+        HexColor.lightBlue
       );
       if (button.isInteractive) {
         option.setInteractive({ useHandCursor: true });
@@ -110,7 +110,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         button.assetYPos,
         this.checkedDiameter,
         this.checkedDiameter,
-        hex(Color.darkBlue)
+        HexColor.darkBlue
       );
       this.add([optionFrame, option]);
       if (this.isChosen[i]) this.add([optionChecked, textOption]);

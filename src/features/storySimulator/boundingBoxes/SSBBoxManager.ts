@@ -2,7 +2,7 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { resize } from 'src/features/game/utils/SpriteUtils';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { Color, hex } from 'src/features/game/utils/StyleUtils';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
 import { ItemId } from 'src/features/game/commons/CommonsTypes';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
@@ -61,7 +61,7 @@ export default class SSBBoxManager implements ICheckpointLogger {
       y,
       1,
       1,
-      hex(Color.white)
+      HexColor.white
     )
       .setOrigin(0)
       .setAlpha(0.1)

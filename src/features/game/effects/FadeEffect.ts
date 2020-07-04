@@ -2,7 +2,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { screenSize, screenCenter, Constants } from '../commons/CommonConstants';
-import { Color, hex } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
 
 export const fadeOut = (
   targets: Phaser.GameObjects.GameObject[],
@@ -56,7 +56,7 @@ export function whiteScreen(scene: Phaser.Scene) {
     screenCenter.y,
     screenSize.x,
     screenSize.y,
-    hex(Color.white)
+    HexColor.white
   );
 }
 
