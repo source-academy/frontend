@@ -33,7 +33,14 @@ export default class ActionParser {
 
   public static parseActionContent(actionString: string): GameAction {
     const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
-    const actionType = ParserConverter.stringToActionType(action);
+    let repeatable = false;
+    let actionTypeString = action;
+    if (action[action.length - 1] === '*') {
+      repeatable = true;
+      actionTypeString = actionTypeString.slice(0, -1);
+    }
+
+    const actionType = ParserConverter.stringToActionType(actionTypeString);
     const actionParams = StringUtils.splitByChar(actionParamString.slice(0, -1), ',');
     const actionParamObj: any = {};
 
@@ -68,7 +75,8 @@ export default class ActionParser {
       actionParams: actionParamObj,
       actionConditions: [],
       interactionId: actionId,
-      isInteractive: false
+      isInteractive: false,
+      repeatable
     };
   }
 }

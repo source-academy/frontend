@@ -30,4 +30,5 @@ export type GameAction = TrackInteraction & {
   actionType: GameActionType;
   actionParams: any;
   actionConditions: ActionCondition[];
+  repeatable: boolean;
 };

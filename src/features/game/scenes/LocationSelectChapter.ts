@@ -196,14 +196,16 @@ const gameActions: GameAction[] = [
     actionType: GameActionType.Collectible,
     actionParams: { id: 'cookies' },
     isInteractive: false,
-    actionConditions: []
+    actionConditions: [],
+    repeatable: false
   },
   {
     interactionId: 'trophyAction',
     actionType: GameActionType.Collectible,
     actionParams: { id: 'cookies' },
     isInteractive: false,
-    actionConditions: []
+    actionConditions: [],
+    repeatable: false
   },
   {
     interactionId: 'awardHartinAction',
@@ -215,21 +217,24 @@ const gameActions: GameAction[] = [
         conditionParams: { listName: 'collectibles', id: 'trophy' }
       }
     ],
-    isInteractive: false
+    isInteractive: false,
+    repeatable: false
   },
   {
     interactionId: 'addCarpetAction',
     actionType: GameActionType.UpdateChecklist,
     actionParams: { id: 'carpet' },
     isInteractive: false,
-    actionConditions: []
+    actionConditions: [],
+    repeatable: false
   },
   {
     interactionId: 'changeLocationAction',
     actionType: GameActionType.LocationChange,
     actionParams: { id: 'Emergency' },
     isInteractive: false,
-    actionConditions: []
+    actionConditions: [],
+    repeatable: false
   }
 ];
 
