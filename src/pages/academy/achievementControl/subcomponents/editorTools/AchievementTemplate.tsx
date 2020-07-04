@@ -16,13 +16,15 @@ export const achievementTemplate: AchievementItem = {
   id: 0,
   title: '',
   ability: AchievementAbility.ACADEMIC,
+  deadline: new Date(),
   exp: 0,
   isTask: false,
+  release: new Date(),
   prerequisiteIds: [],
   completionGoal: 0,
   completionProgress: 0,
   position: 0,
   backgroundImageUrl:
-    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+    'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
   modal: modalTemplate
 };
