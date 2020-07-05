@@ -98,11 +98,11 @@ class GameManager extends Phaser.Scene {
   }
 
   public preload() {
-    this.bindEscapeMenu();
     addLoadingScreen(this);
     this.preloadBaseAssets();
     this.preloadLocationsAssets(this.currentCheckpoint);
     this.initialiseManagers();
+    this.bindEscapeMenu();
   }
 
   private initialiseManagers() {
@@ -119,8 +119,8 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager(this);
     this.objectManager = new GameObjectManager(this);
     this.backgroundManager = new GameBackgroundManager(this);
-    this.escapeManager = new GameEscapeManager(this);
     this.inputManager = new GameInputManager(this);
+    this.escapeManager = new GameEscapeManager(this);
     this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
   }
 
@@ -220,7 +220,7 @@ class GameManager extends Phaser.Scene {
   }
 
   private bindEscapeMenu() {
-    this.inputManager.registerKeyboardListener(
+    this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {

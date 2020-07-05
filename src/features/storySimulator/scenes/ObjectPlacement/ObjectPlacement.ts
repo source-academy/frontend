@@ -252,5 +252,5 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
-  public getInputManager = () => mandatory(this.inputManager) as GameLayerManager;
+  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
 }
