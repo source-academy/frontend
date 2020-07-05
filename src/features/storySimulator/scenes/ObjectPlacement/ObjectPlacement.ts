@@ -21,10 +21,12 @@ import SSBackgroundManager from '../../background/SSBackgroundManager';
 import SSLogManager from '../../logger/SSLogManager';
 import SSTransformManager from '../../transform/SSTransformManager';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import GameInputManager from 'src/features/game/input/GameInputManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class ObjectPlacement extends Phaser.Scene {
-  private layerManager?: GameLayerManager;
+  public layerManager?: GameLayerManager;
+  public inputManager?: GameInputManager;
   private transformManager: SSTransformManager;
   private cursorModes: SSCursorMode | undefined;
   private bboxManager: SSBBoxManager;
@@ -35,8 +37,6 @@ export default class ObjectPlacement extends Phaser.Scene {
   private assetMap: Map<AssetKey, AssetPath>;
   private itemIdNumber: number;
 
-  private keyboardListeners: Phaser.Input.Keyboard.Key[];
-  private eventListeners: Phaser.Input.InputPlugin[];
   private openBracket: Phaser.Input.Keyboard.Key | undefined;
   private closedBracket: Phaser.Input.Keyboard.Key | undefined;
 
@@ -49,8 +49,6 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.transformManager = new SSTransformManager();
 
     this.cursorModes = undefined;
-    this.keyboardListeners = [];
-    this.eventListeners = [];
     this.itemIdNumber = 0;
     this.assetMap = new Map<AssetKey, AssetPath>();
   }
@@ -63,8 +61,6 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.transformManager = new SSTransformManager();
 
     this.cursorModes = undefined;
-    this.keyboardListeners = [];
-    this.eventListeners = [];
     this.itemIdNumber = 0;
     this.assetMap = new Map<AssetKey, AssetPath>();
   }
@@ -73,16 +69,9 @@ export default class ObjectPlacement extends Phaser.Scene {
     storySimulatorAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
   }
 
-  public registerKeyboardListeners(keyboardListener: Phaser.Input.Keyboard.Key[]) {
-    this.keyboardListeners.concat(keyboardListener);
-  }
-
-  public registerEventListeners(eventListener: Phaser.Input.InputPlugin[]) {
-    this.eventListeners.concat(eventListener);
-  }
-
   public create() {
     this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
     this.renderBackground();
     this.createUIButtons();
     this.backgroundManager.initialise(this);
@@ -218,8 +207,7 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   private cleanUp() {
-    this.keyboardListeners.forEach(keyboardListener => keyboardListener.removeAllListeners());
-    this.eventListeners.forEach(eventListener => eventListener.removeAllListeners());
+    this.getInputManager().clearListeners();
     this.getLayerManager().clearAllLayers();
   }
 
@@ -264,4 +252,5 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  public getInputManager = () => mandatory(this.inputManager) as GameLayerManager;
 }

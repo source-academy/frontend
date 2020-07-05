@@ -29,7 +29,7 @@ export default class SSTransformManager {
   }
 
   private trackDraggables(objectPlacement: ObjectPlacement) {
-    const dragListener = objectPlacement.input.on(
+    objectPlacement.inputManager.registerEventListener(
       'drag',
       (
         pointer: MouseEvent,
@@ -56,7 +56,6 @@ export default class SSTransformManager {
         }
       }
     );
-    objectPlacement.registerEventListeners([dragListener]);
   }
 
   public resizeActive(enlarge: boolean) {
@@ -123,18 +122,15 @@ export default class SSTransformManager {
 
   private bindDeleteKey() {
     const deleteKeys = [
-      this.getObjectPlacement().input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.BACKSPACE),
-      this.getObjectPlacement().input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DELETE)
+      Phaser.Input.Keyboard.KeyCodes.BACKSPACE,
+      Phaser.Input.Keyboard.KeyCodes.DELETE
     ];
-
     deleteKeys.forEach(key =>
-      key.addListener('up', () => {
+      this.getObjectPlacement().inputManager.registerKeyboardListener(key, 'up', () => {
         this.deleteActiveSelection();
         this.deselect();
       })
     );
-
-    this.getObjectPlacement().registerKeyboardListeners(deleteKeys);
   }
 
   private deleteActiveSelection() {

@@ -12,6 +12,7 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
+import GameInputManager from '../../input/GameInputManager';
 
 import LocationSelectChapter from '../LocationSelectChapter';
 import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
@@ -51,7 +52,6 @@ class GameManager extends Phaser.Scene {
   private continueGame: boolean;
   private chapterNum: number;
   private checkpointNum: number;
-  private escKey: Phaser.Input.Keyboard.Key | undefined;
 
   private layerManager?: GameLayerManager;
   private stateManager?: GameStateManager;
@@ -67,6 +67,7 @@ class GameManager extends Phaser.Scene {
   private escapeManager?: GameEscapeManager;
   private phaseManager?: GamePhaseManager;
   private backgroundManager?: GameBackgroundManager;
+  private inputManager?: GameInputManager;
 
   constructor() {
     super('GameManager');
@@ -119,6 +120,7 @@ class GameManager extends Phaser.Scene {
     this.objectManager = new GameObjectManager(this);
     this.backgroundManager = new GameBackgroundManager(this);
     this.escapeManager = new GameEscapeManager(this);
+    this.inputManager = new GameInputManager(this);
     this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
   }
 
@@ -142,6 +144,7 @@ class GameManager extends Phaser.Scene {
   public getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
   public getPopupManager = () => mandatory(this.popUpManager) as GamePopUpManager;
   public getEscapeManager = () => mandatory(this.escapeManager) as GameEscapeManager;
+  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
 
   //////////////////////
   //    Preload       //
@@ -217,20 +220,21 @@ class GameManager extends Phaser.Scene {
   }
 
   private bindEscapeMenu() {
-    this.escKey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
-    this.escKey.addListener('up', async () => {
-      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        await this.getPhaseManager().popPhase();
-      } else {
-        await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
+    this.inputManager.registerKeyboardListener(
+      Phaser.Input.Keyboard.KeyCodes.ESC,
+      'up',
+      async () => {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await this.getPhaseManager().popPhase();
+        } else {
+          await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
+        }
       }
-    });
+    );
   }
 
   public cleanUp() {
-    if (this.escKey) {
-      this.escKey.removeAllListeners();
-    }
+    this.getInputManager().clearListeners();
     this.getLayerManager().clearAllLayers();
   }
 

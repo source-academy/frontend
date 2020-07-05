@@ -22,11 +22,9 @@ class GameSoundManager {
     this.setGlobalVolume(userSaveState.settings.volume);
   }
 
-  public renderBackgroundMusic(bgmKey: string) {
+  public renderBackgroundMusic(bgmKey: AssetKey) {
     this.stopCurrBgMusic();
-    if (bgmKey) {
-      this.playBgMusic(bgmKey);
-    }
+    this.playBgMusic(bgmKey);
   }
 
   public clearSoundAssets() {

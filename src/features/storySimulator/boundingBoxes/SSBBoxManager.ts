@@ -26,12 +26,13 @@ export default class SSBBoxManager implements ICheckpointLoggable {
   }
 
   private addBBoxListeners(objectPlacement: ObjectPlacement) {
-    const mouseDown = objectPlacement.input.on('pointerdown', () => {
+    this.getObjectPlacement().inputManager.registerEventListener('pointerdown', () => {
       if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox)) {
         this.bboxBeingDrawn = this.createNewBBox();
       }
     });
-    const mouseUp = objectPlacement.input.on('pointerup', () => {
+
+    this.getObjectPlacement().inputManager.registerEventListener('pointerup', () => {
       if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) && this.bboxBeingDrawn) {
         if (this.bboxBeingDrawn.displayWidth <= 2 || this.bboxBeingDrawn.displayHeight <= 2) {
           this.bboxBeingDrawn.destroy();
@@ -49,8 +50,6 @@ export default class SSBBoxManager implements ICheckpointLoggable {
         this.bboxBeingDrawn = undefined;
       }
     });
-
-    this.getObjectPlacement().registerEventListeners([mouseDown, mouseUp]);
   }
 
   private createNewBBox() {

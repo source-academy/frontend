@@ -3,12 +3,9 @@ class GameInputManager {
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
   private eventListeners: Phaser.Input.InputPlugin[];
 
-  constructor() {
+  constructor(scene: Phaser.Scene) {
     this.keyboardListeners = [];
     this.eventListeners = [];
-  }
-
-  public initialise(scene: Phaser.Scene) {
     this.scene = scene;
   }
 
@@ -26,7 +23,7 @@ class GameInputManager {
   ) {
     const keyObj = this.getScene().input.keyboard.addKey(key);
     const keyboardListener = keyObj.addListener(event, callback);
-    this.keyboardListeners.concat(keyboardListener);
+    this.keyboardListeners.push(keyboardListener);
   }
 
   public registerEventListener(event: string | symbol, callback: Function) {
