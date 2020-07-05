@@ -6,7 +6,7 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { jsObjectToMap } from '../save/GameSaveHelper';
+import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
 import GameManager from '../scenes/gameManager/GameManager';
@@ -130,7 +130,7 @@ class GameStateManager implements StateSubject {
 
   private loadFromGameStoryState(gameStoryState: GameSaveState) {
     this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
-    this.locationStates = jsObjectToMap(gameStoryState.locationStates);
+    this.locationStates = jsonToLocationStates(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
     this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
     this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
