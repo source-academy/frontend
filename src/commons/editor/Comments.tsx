@@ -3,7 +3,7 @@ import CSS from 'csstype'; // TODO: Remove
 import { Card, Button, ButtonGroup } from '@blueprintjs/core';
 import { format } from 'timeago.js';
 import Markdown from '../Markdown';
-import { keyBy, omit, assign } from 'lodash';
+import { keyBy, omit } from 'lodash';
 
 export interface IComment {
     isEditing: boolean;
@@ -38,6 +38,7 @@ const commentStyles: CSS.Properties = {
     display: "grid",
     gridTemplateColumns: "4em auto",
     fontSize: '0.8em',
+    backgroundColor: "#253545",
 }
 
 const contentStyles: CSS.Properties = {
@@ -117,7 +118,6 @@ export default function Comments(props: CommentsProps) {
                     text,
                 }, idx],
             };
-            console.log(t);
             setCommentsBeingEdited(t);
         }
     }
@@ -165,7 +165,6 @@ export default function Comments(props: CommentsProps) {
                 // TODO, implement properly
                 console.error('Error occured when sending the comment to server', e);
             }
-
         }
     }
 
@@ -183,15 +182,18 @@ export default function Comments(props: CommentsProps) {
                     <div className="content" style={contentStyles}>
                         <span className="username" style={usernameStyles}>{username} </span>
                         <span className="relative-time" style={relativeTimeStyles}>{isEditing ? 'Preview' : format(new Date(datetime))}</span>
-                        <Markdown className="text" content={text} />
+                        <Markdown className="text" content={text || "(Content preview)"} />
                     </div>
                     {(isEditing ? <div className="reply-container" style={replyContainerStyles}>
                         <textarea style={enterMessageStyles}
                             placeholder="Write a message..."
-                            onChange={updatePreviewCommentText(displayComment, idx)}>{text}</textarea>
+                            onChange={updatePreviewCommentText(displayComment, idx)}
+                            defaultValue={text}></textarea>
                         <ButtonGroup>
                             <Button onClick={cancelWithPrompt([displayComment, idx])}>Cancel</Button>
-                            <Button intent="success" onClick={confirmSubmit([displayComment, idx])}>Submit</Button>
+                            <Button intent="success"
+                                onClick={confirmSubmit([displayComment, idx])}
+                                disabled={text.trim().length === 0}>Submit</Button>
                         </ButtonGroup>
                     </div> : '')}
                 </Card>);

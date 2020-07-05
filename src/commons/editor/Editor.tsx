@@ -5,6 +5,7 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
+import { mapValues } from 'lodash';
 
 // import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
@@ -16,10 +17,8 @@ import { useMergedRef } from '../utils/Hooks';
 import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 
-import { ContextMenu, Menu, MenuItem } from '@blueprintjs/core';
-
-import { groupBy, map } from 'lodash';
-import Comments, { IComment } from './Comments';
+import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
+import GutterContextMenu, { ContextMenuItems, ContextMenuHandler } from './GutterContextMenu';
 
 
 
@@ -30,14 +29,18 @@ import useNavigation from './UseNavigation';
 import useTypeInference from './UseTypeInference';
 import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
-import ReactDOM from 'react-dom';
+import { IAceEditor } from 'react-ace/lib/types';
+import useComments from './useComments';
+
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
+export type ContextMenuHandlers = { [name in ContextMenuItems]?: ContextMenuHandler };
 export type EditorHook = (
   inProps: Readonly<EditorProps>,
   outProps: IAceEditorProps,
   keyBindings: EditorKeyBindingHandlers,
-  reactAceRef: React.MutableRefObject<AceEditor | null>
+  reactAceRef: React.MutableRefObject<AceEditor | null>,
+  contextMenuHandlers: ContextMenuHandlers,
 ) => void;
 
 /**
@@ -94,7 +97,7 @@ const getMarkers = (
 const getModeString = (chapter: number, variant: Variant, library: string) =>
   `source${chapter}${variant}${library}`;
 
-const LineWidgets = acequire("ace/line_widgets").LineWidgets;
+
 
 
 /**
@@ -106,6 +109,21 @@ const selectMode = (chapter: number, variant: Variant, library: string) => {
   HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
   ModeSelector(chapter, variant, library);
 };
+
+const toggleBreakpoint = (editor: IAceEditor, row: number) => {
+  const content = editor.session.getLine(row);
+  const breakpoints = editor.session.getBreakpoints();
+  if (
+    breakpoints[row] === undefined &&
+    content.length !== 0 &&
+    !content.includes('//') &&
+    !content.includes('debugger;')
+  ) {
+    editor.session.setBreakpoint(row, undefined!);
+  } else {
+    editor.session.clearBreakpoint(row);
+  }
+}
 
 const makeHandleGutterClick = (
   handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']
@@ -121,18 +139,8 @@ const makeHandleGutterClick = (
 
   // Breakpoint related.
   const row = e.getDocumentPosition().row;
-  const content = e.editor.session.getLine(row);
-  const breakpoints = e.editor.session.getBreakpoints();
-  if (
-    breakpoints[row] === undefined &&
-    content.length !== 0 &&
-    !content.includes('//') &&
-    !content.includes('debugger;')
-  ) {
-    e.editor.session.setBreakpoint(row, undefined!);
-  } else {
-    e.editor.session.clearBreakpoint(row);
-  }
+  toggleBreakpoint(e.editor, row);
+
   e.stop();
   handleEditorUpdateBreakpoints(e.editor.session.getBreakpoints());
 };
@@ -182,7 +190,7 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => {}
+  goGreen: () => { }
 };
 // TODO: move helper function
 
@@ -198,50 +206,8 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   props,
   forwardedRef
 ) {
+  // ----------------- GLOBAL REFS ----------------
   const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
-  // @ts-ignore
-  const [contextMenu, setContextMenu] = React.useState(false);
-  // @ts-ignore
-  const [comments, setComments] = React.useState([] as IComment[]);
-  // const prevComments = usePrevious(comments);
-
-  // Inferred from: https://github.com/ajaxorg/ace/blob/master/lib/ace/ext/error_marker.js#L129
-  interface IWidget {
-    row: number;
-    fixedWidth: boolean;
-    coverGutter: boolean;
-    el: Element;
-    type: string;
-  }
-
-  interface ILineManager {
-    attach: (editor: Ace.Editor) => void;
-    addLineWidget: (widget: IWidget) => void;
-    removeLineWidget: (widget: IWidget) => void;
-  }
-  // @ts-ignore
-  const widgetManagerRef: React.MutableRefObject<ILineManager | null> = React.useRef(null);
-  React.useEffect(() => {
-    if(!reactAceRef.current) { return; }
-    const editor = reactAceRef.current!.editor;
-    widgetManagerRef.current = new LineWidgets(editor.session);
-    widgetManagerRef.current!.attach(editor)
-  }, [reactAceRef])
-
-
-  const createCommentPrompt = React.useCallback(() => {
-    console.log('@@@', comments);
-    setComments([...comments, 
-    {
-      isEditing: true,
-      isCollapsed: false,
-      username: 'My user name',
-      profilePic: 'https://picsum.photos/200',
-      linenum: 0,
-      text: 'dis is random comment', 
-      datetime: 0, // Not submitted yet! 
-    }]);
-  },[comments]);
 
   // Refs for things that technically shouldn't change... but just in case.
   const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
@@ -252,72 +218,42 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
+  // -------------- HOTKEYS --------------
+
+  const { handleEditorEval } = props;
+
+  const keyHandlers: EditorKeyBindingHandlers = {
+    evaluate: handleEditorEval
+  };
+
+  const contextMenuHandlers: ContextMenuHandlers = {
+    toggleBreakpoint: (row: number) => {
+      if (!reactAceRef.current) {
+        return;
+      }
+      toggleBreakpoint(reactAceRef.current?.editor, row);
+    }
+  }
+
+  // ----------------- LANGUAGE RELATED ----------------
+
   const [sourceChapter, sourceVariant, externalLibraryName] = [
     props.sourceChapter || 1,
     props.sourceVariant || 'default',
     props.externalLibraryName || 'NONE'
   ];
 
-  // TODO: Move.
-  // Render comments.
-  React.useEffect(() => {
-    // React can't handle the rendering because it's going into 
-    // an unmanaged component.
-    // Also, the line number changes externally, so extra fun.
-      // TODO: implement line number changes for comments.
-      // TODO: Put a minimize/maximize button. 
-
-    // Re-render all comments.
-    console.log('Re-rendering comments', comments);
-    const commentsWithIdx = map(comments, (c, idx) => [c, idx] as [IComment, number]);
-    const commentsByLine = groupBy(commentsWithIdx,([c, _]) => c.linenum);
-    const commentsWidgets = map(commentsByLine, ( (commentsOnLine) => {
-      
-      const container = document.createElement('div');
-      container.style.maxWidth = '40em';
-      // container.style.backgroundColor = 'grey';
-      const widget: IWidget = {
-        row: comments[0].linenum, // Must exist.
-        fixedWidth: true,
-        coverGutter: true,
-        el: container,
-        type: "errorMarker"
-      };
-      ReactDOM.render((<Comments 
-        allComments={comments} 
-        comments={commentsOnLine} 
-        setComments={setComments}/>), container);
-      widgetManagerRef.current?.addLineWidget(widget);
-      console.log('added line widget', widget);
-      return widget;
-    }));
-
-
-    return () => {
-      // Remove all comments
-      console.log('Removing comments', comments);
-      commentsWidgets.forEach( ( widget ) => {
-        widgetManagerRef.current?.removeLineWidget(widget);
-      })
-    }
-  }, [comments])
-  
-
   React.useEffect(() => {
     selectMode(sourceChapter, sourceVariant, externalLibraryName);
   }, [sourceChapter, sourceVariant, externalLibraryName]);
 
+  // ----------------- RUN ONCE PER INSTANCE ----------------
 
-  const handlers = {
-    createCommentPrompt,
-  };
-
-  const handlersRef = React.useRef(handlers);
-  handlersRef.current = handlers;
-
+  // This needs to be defined later, unfortunately.
+  // Too tedious to rearrange the code otherwise.
+  const showContextMenuRef = React.useRef( (e: MouseEvent) => {});
 
   React.useLayoutEffect(() => {
-    // const { createCommentPrompt } = handlersRef.current;
     if (!reactAceRef.current) {
       return;
     }
@@ -332,24 +268,10 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       'gutterclick' as any,
       makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
     );
+
     const gutter = (editor.renderer as any).$gutter as HTMLElement;
-    gutter.addEventListener('contextmenu', (e: MouseEvent) => {
-      e.preventDefault();
-      ContextMenu.show(
-        <Menu onContextMenu={() => false}>
-          <MenuItem icon="full-circle" text="Toggle Breakpoint"/>
-          <MenuItem icon="comment" text="Add comment" onClick={() => handlersRef.current.createCommentPrompt()}/>
-        </Menu>,
-        { left: e.clientX, top: e.clientY },
-        () => { 
-          console.log('Closed');
-          setContextMenu(false);
-        }
-      );
-      // indicate that context menu is open so we can add a CSS class to this element
-      setContextMenu(true);
-    });
-    document.addEventListener('click', () => ContextMenu.hide());
+    gutter.addEventListener('contextmenu', showContextMenuRef.current);
+    document.addEventListener('click', () => BPContextMenu.hide());
 
     // Change all info annotations to error annotations
     session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
@@ -359,7 +281,9 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
     // This should run exactly once.
-  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef, handlersRef]);
+  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef, contextMenuHandlers]);
+
+  // ----------------- BIND CURSOR MOVEMENTS ----------------
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {
@@ -374,9 +298,11 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   const {
     handleUpdateHasUnsavedChanges,
     handleEditorValueChange,
-    isEditorAutorun,
-    handleEditorEval
+    isEditorAutorun
   } = props;
+
+
+  // ----------------- DON'T KNOW HOW TO CLASSIFY ----------------
 
   const onChange = React.useCallback(
     (newCode: string, delta: Ace.Delta) => {
@@ -401,9 +327,6 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     ]
   );
 
-  const keyHandlers: EditorKeyBindingHandlers = {
-    evaluate: handleEditorEval
-  };
 
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
@@ -426,16 +349,45 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     onChange
   };
 
-  // Hooks must not change after an editor is instantiated, so to prevent that
+    // -------------- LOAD ALL PLUGINS --------------
+
+    // Hooks must not change after an editor is instantiated, so to prevent that
   // we store the original value and always use that only
   const [hooks] = React.useState(props.hooks);
   if (hooks) {
     // Note: the following is extremely non-standard use of hooks
     // DO NOT refactor this into any form where the hook is called from a lambda
     for (const hook of hooks) {
-      hook(props, aceEditorProps, keyHandlers, reactAceRef);
+      hook(props, aceEditorProps, keyHandlers, reactAceRef, contextMenuHandlers);
     }
   }
+
+  // ----------------- BIND CONTEXT MENU ----------------
+  // const [contextMenu, setContextMenu] = React.useState(false);
+
+  const transformedHandlers = mapValues(contextMenuHandlers, (_, key) => {
+    const row = 0; // TODO: fix.
+    return () => (contextMenuHandlers[key] ? contextMenuHandlers[key](row) : undefined);
+  });
+
+  const showContextMenu = React.useCallback((e: MouseEvent) => {
+    e.preventDefault();
+    BPContextMenu.show((<GutterContextMenu handlers={transformedHandlers}></GutterContextMenu>)
+      ,
+      { left: e.clientX, top: e.clientY },
+      () => {
+        console.log('Closed');
+        // setContextMenu(false);
+      }
+    );
+    // indicate that context menu is open so we can add a CSS class to this element
+    // setContextMenu(true);
+  }, [transformedHandlers]);
+
+  // This needs to be used earlier, otherwise this shd be made a const.
+  showContextMenuRef.current = showContextMenu;
+
+  // ----------------- BIND HOTKEYS ----------------
 
   aceEditorProps.commands = Object.entries(keyHandlers)
     .filter(([_, exec]) => exec)
@@ -454,7 +406,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   <EditorBase
     {...props}
-    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor]}
+    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor, useComments]}
     ref={ref}
   />
 ));
