@@ -145,6 +145,7 @@ export type Library = {
     1: any;
     2?: string; // For mission control
   }>;
+  moduleParams?: any;
 };
 
 export type Testcase = {
