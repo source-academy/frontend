@@ -125,28 +125,6 @@ class GameManager extends Phaser.Scene {
   }
 
   //////////////////////
-  //     Getters      //
-  //////////////////////
-
-  private getParentGame = () => mandatory(this.parentGame, 'game') as SourceAcademyGame;
-  public getAccountInfo = () => mandatory(this.accountInfo, 'accountInfo') as AccountInfo;
-  public getSaveManager = () => mandatory(this.saveManager) as GameSaveManager;
-  public getStateManager = () => mandatory(this.stateManager) as GameStateManager;
-  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
-  public getObjectManager = () => mandatory(this.objectManager) as GameObjectManager;
-  public getCharacterManager = () => mandatory(this.characterManager) as GameCharacterManager;
-  public getDialogueManager = () => mandatory(this.dialogueManager) as GameDialogueManager;
-  public getActionExecuter = () => mandatory(this.actionExecuter) as GameActionExecuter;
-  public getUserStateManager = () => mandatory(this.userStateManager) as GameUserStateManager;
-  public getBBoxManager = () => mandatory(this.boundingBoxManager) as GameBBoxManager;
-  public getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
-  public getBackgroundManager = () => mandatory(this.backgroundManager) as GameBackgroundManager;
-  public getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
-  public getPopupManager = () => mandatory(this.popUpManager) as GamePopUpManager;
-  public getEscapeManager = () => mandatory(this.escapeManager) as GameEscapeManager;
-  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
-
-  //////////////////////
   //    Preload       //
   //////////////////////
 
@@ -247,6 +225,28 @@ class GameManager extends Phaser.Scene {
       }
     }
   }
+
+  //////////////////////
+  //     Getters      //
+  //////////////////////
+
+  private getParentGame = () => mandatory(this.parentGame, 'game') as SourceAcademyGame;
+  public getAccountInfo = () => mandatory(this.accountInfo, 'accountInfo') as AccountInfo;
+  public getSaveManager = () => mandatory(this.saveManager) as GameSaveManager;
+  public getStateManager = () => mandatory(this.stateManager) as GameStateManager;
+  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  public getObjectManager = () => mandatory(this.objectManager) as GameObjectManager;
+  public getCharacterManager = () => mandatory(this.characterManager) as GameCharacterManager;
+  public getDialogueManager = () => mandatory(this.dialogueManager) as GameDialogueManager;
+  public getActionExecuter = () => mandatory(this.actionExecuter) as GameActionExecuter;
+  public getUserStateManager = () => mandatory(this.userStateManager) as GameUserStateManager;
+  public getBBoxManager = () => mandatory(this.boundingBoxManager) as GameBBoxManager;
+  public getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
+  public getBackgroundManager = () => mandatory(this.backgroundManager) as GameBackgroundManager;
+  public getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
+  public getPopupManager = () => mandatory(this.popUpManager) as GamePopUpManager;
+  public getEscapeManager = () => mandatory(this.escapeManager) as GameEscapeManager;
+  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
 }
 
 export default GameManager;
