@@ -1,4 +1,7 @@
 import { ImageAsset } from '../commons/CommonsTypes';
+import { GameLocation } from './GameMapTypes';
+
+export const emptySet = new Set([]);
 
 export const crashSiteImg: ImageAsset = {
   key: 'crash-site',
@@ -28,3 +31,18 @@ export const studentRoomImg: ImageAsset = {
   path:
     'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/yourRoom-dim/normal.png'
 };
+
+export function createEmptyLocation(): GameLocation {
+  return {
+    id: '',
+    name: '',
+    assetKey: '',
+    modes: new Set([]),
+    navigation: new Set([]),
+    talkTopics: new Set([]),
+    objects: new Set([]),
+    boundingBoxes: new Set([]),
+    bgmKey: '',
+    characters: new Set([])
+  };
+}

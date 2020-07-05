@@ -8,13 +8,13 @@ export type GameLocation = IGameActionable & {
   id: LocationId;
   name: string;
   assetKey: string;
-  modes?: GameMode[];
-  navigation?: LocationId[];
-  talkTopics?: ItemId[];
-  objects?: ItemId[];
-  boundingBoxes?: ItemId[];
-  bgmKey?: AssetKey;
-  collectibles?: ItemId[];
+  modes: Set<GameMode>;
+  navigation: Set<LocationId>;
+  talkTopics: Set<ItemId>;
+  objects: Set<ItemId>;
+  boundingBoxes: Set<ItemId>;
+  bgmKey: AssetKey;
+  characters: Set<ItemId>;
 };
 
 export enum GameLocationAttr {

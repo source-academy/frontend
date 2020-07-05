@@ -6,13 +6,16 @@ objectives
 room
     modes: talk, explore
     talkTopics: what
-    actions: show_dialogue(welcome)
+    
+    actions
+        show_dialogue(welcome)
 
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             make_object_glow*(emergency1)
         +chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
-            complete_objective(finish)
+            show_dialogue(addHallway)
+            add_mode*(hallway, talk)
     boundingBoxes
         +bbox#0, 536, 420, 373, 402
             show_dialogue(click)
@@ -24,7 +27,7 @@ room
         +scottie, Scottie, sad, left
 
 hallway
-    modes: talk
+    modes: talk, move
     talkTopics: welcome-to-hallway
 
 classroom
@@ -56,3 +59,6 @@ dialogues
 
     click
         You found the hidden BBox!
+
+    addHallway
+        I'm adding a super secret mode in the hallway

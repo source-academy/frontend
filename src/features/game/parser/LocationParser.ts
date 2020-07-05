@@ -1,4 +1,4 @@
-import { LocationId } from '../location/GameMapTypes';
+import { LocationId, GameLocation } from '../location/GameMapTypes';
 import Parser from './Parser';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -9,57 +9,59 @@ import ParserConverter from './ParserConverter';
 
 export default class LocationParser {
   public static parse(locationId: LocationId, locationBody: string[]) {
+    const location = Parser.checkpoint.map.getLocationAtId(locationId);
     const locationParagraphs = StringUtils.splitToParagraph(locationBody);
 
     locationParagraphs.forEach(([header, body]: [string, string[]]) => {
       if (body.length === 0) {
-        this.parseLocationConfig(locationId, header);
+        this.parseLocationConfig(location, header);
       } else {
-        this.parseLocationParagraphs(locationId, header, body);
+        this.parseLocationParagraphs(location, header, body);
       }
     });
   }
 
-  public static parseLocationConfig(locationId: LocationId, locationConfig: string) {
+  public static parseLocationConfig(location: GameLocation, locationConfig: string) {
     const [key, value] = StringUtils.splitByChar(locationConfig, ':');
-    const location = Parser.checkpoint.map.getLocationAtId(locationId);
     switch (key) {
       case 'modes':
-        !location.modes && (location.modes = []);
+        !location.modes && (location.modes = new Set([]));
         StringUtils.splitByChar(value, ',').forEach(mode => {
           const gameMode = ParserConverter.stringToGameMode(mode);
-          location.modes!.push(gameMode);
+          location.modes!.add(gameMode);
         });
         break;
+      case 'bgm':
+        location.bgmKey = value;
+        break;
       case 'nav':
-        !location.navigation && (location.navigation = []);
+        !location.navigation && (location.navigation = new Set([]));
         StringUtils.splitByChar(value, ',').forEach(otherLocationId => {
-          location.navigation!.push(otherLocationId);
+          location.navigation!.add(otherLocationId);
         });
         break;
       case 'talkTopics':
         const talkTopics = StringUtils.splitByChar(value, ',');
-        location.talkTopics = talkTopics;
-        break;
-      case 'actions':
-        const actions = StringUtils.splitByChar(value, ',');
-        location.actionIds = ActionParser.parseActions(actions);
+        location.talkTopics = new Set(talkTopics);
         break;
       default:
         throw new Error(`Invalid location config key ${key}`);
     }
   }
 
-  public static parseLocationParagraphs(locationId: LocationId, header: string, body: string[]) {
+  public static parseLocationParagraphs(location: GameLocation, header: string, body: string[]) {
     switch (header) {
       case 'objects':
-        ObjectParser.parse(locationId, body);
+        ObjectParser.parse(location.id, body);
         break;
       case 'boundingBoxes':
-        BoundingBoxParser.parse(locationId, body);
+        BoundingBoxParser.parse(location.id, body);
         break;
       case 'characters':
-        CharacterParser.parse(locationId, body);
+        CharacterParser.parse(location.id, body);
+        break;
+      case 'actions':
+        location.actionIds = ActionParser.parseActions(body);
         break;
       default:
         throw new Error(`Invalid location paragraph header ${header}`);

@@ -1,5 +1,7 @@
+import * as _ from 'lodash';
 import { FullSaveState, GameSaveState, UserSaveState, SettingsJson } from './GameSaveTypes';
 import GameActionManager from '../action/GameActionManager';
+import { GameLocation, LocationId } from '../location/GameMapTypes';
 
 export function gameStateToJson(
   prevGameState: FullSaveState,
@@ -15,7 +17,7 @@ export function gameStateToJson(
     currentLocation: gameManager.currentLocationId,
     currentPhase: phaseManager.getCurrentPhase(),
     chapterObjective: mapToJsObject(gameStateManager.getCheckpointObjectives().getObjectives()),
-    locationStates: mapToJsObject(gameStateManager.getLocationStates()),
+    locationStates: locationStatesToJson(gameStateManager.getLocationStates()),
     objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
     bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
     triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions()),
@@ -61,6 +63,39 @@ function mapToJsObject<K, V>(map: Map<K, V>): any {
     jsObject[(key as any) as string] = value;
   });
   return jsObject;
+}
+
+function locationStatesToJson(map: Map<LocationId, GameLocation>): any {
+  const jsObject = {};
+  map.forEach((location: GameLocation, locationId: LocationId) => {
+    const locationWithArrays = _.mapValues(location, locationProperty => {
+      if (locationProperty instanceof Set) {
+        return Array.from(locationProperty);
+      }
+      return locationProperty;
+    });
+    jsObject[locationId] = locationWithArrays;
+  });
+  return jsObject;
+}
+
+export function jsonToLocationStates(obj: any): Map<LocationId, GameLocation> {
+  const map = new Map<LocationId, any>();
+
+  if (Object.keys(obj).length) {
+    Object.keys(obj).forEach((locationId: LocationId) => {
+      const locationWithSets = _.mapValues(obj[locationId], locationProperty => {
+        if (locationProperty instanceof Array) {
+          return new Set(locationProperty);
+        }
+        return locationProperty;
+      });
+
+      map.set(locationId, locationWithSets);
+    });
+  }
+
+  return map;
 }
 
 export function jsObjectToMap(obj: any): Map<string, any> {

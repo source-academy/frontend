@@ -5,7 +5,8 @@ import {
   classRoomImg,
   emergencyImg,
   hallwayImg,
-  studentRoomImg
+  studentRoomImg,
+  createEmptyLocation
 } from '../location/GameMapConstants';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameLocation, GameLocationAttr } from '../location/GameMapTypes';
@@ -23,33 +24,38 @@ const LocationSelectMap = new GameMap();
 
 const gameLocations: GameLocation[] = [
   {
+    ...createEmptyLocation(),
     id: 'crashsite',
     name: 'Crash Site',
-    modes: [GameMode.Talk, GameMode.Move],
+    modes: new Set([GameMode.Talk, GameMode.Move]),
     assetKey: crashSiteImg.key
   },
   {
+    ...createEmptyLocation(),
     id: 'classroom',
     name: 'Class Room',
-    modes: [GameMode.Explore, GameMode.Talk, GameMode.Move],
+    modes: new Set([GameMode.Explore, GameMode.Talk, GameMode.Move]),
     assetKey: classRoomImg.key
   },
   {
+    ...createEmptyLocation(),
     id: 'emergency',
     name: 'Emergency',
-    modes: [GameMode.Talk, GameMode.Move],
+    modes: new Set([GameMode.Talk, GameMode.Move]),
     assetKey: emergencyImg.key
   },
   {
+    ...createEmptyLocation(),
     id: 'hallway',
     name: 'Hallway',
-    modes: [GameMode.Move],
+    modes: new Set([GameMode.Move]),
     assetKey: hallwayImg.key
   },
   {
+    ...createEmptyLocation(),
     id: 'room',
     name: 'Student Room',
-    modes: [GameMode.Explore, GameMode.Move, GameMode.Talk],
+    modes: new Set([GameMode.Explore, GameMode.Move, GameMode.Talk]),
     assetKey: studentRoomImg.key
   }
 ];

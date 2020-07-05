@@ -1,6 +1,7 @@
 import Parser from './Parser';
 import { Constants } from '../commons/CommonConstants';
 import StringUtils from '../utils/StringUtils';
+import { createEmptyLocation } from '../location/GameMapConstants';
 
 export default class LocationDetailsParser {
   public static parse(locationDetails: string[]) {
@@ -8,6 +9,7 @@ export default class LocationDetailsParser {
       const [id, shortPath, name] = StringUtils.splitByChar(locationDetail, ',', 2);
 
       Parser.checkpoint.map.addLocation(id, {
+        ...createEmptyLocation(),
         id,
         name,
         assetKey: this.locationAssetKey(shortPath)

@@ -50,14 +50,14 @@ class GameMap {
   }
 
   public setModesAt(id: LocationId, modes: GameMode[]) {
-    return (this.getLocationAtId(id).modes = modes);
+    this.getLocationAtId(id).modes = new Set(modes);
   }
 
   public setNavigationFrom(id: LocationId, navigation: string[]) {
-    this.getLocationAtId(id).navigation = navigation;
+    this.getLocationAtId(id).navigation = new Set(navigation);
   }
 
-  public getNavigationFrom(id: LocationId): string[] | undefined {
+  public getNavigationFrom(id: LocationId): Set<string> | undefined {
     return this.getLocationAtId(id).navigation;
   }
 
@@ -99,11 +99,7 @@ class GameMap {
 
   public setItemAt<T>(locationId: LocationId, listName: GameLocationAttr, itemId: string) {
     const location = this.getLocationAtId(locationId);
-
-    if (!location[listName]) {
-      location[listName] = [];
-    }
-    location[listName].push(itemId);
+    location[listName].add(itemId);
   }
 
   public setBGMusicAt(locationId: LocationId, soundKey: AssetKey) {

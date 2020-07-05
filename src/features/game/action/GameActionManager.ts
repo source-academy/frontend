@@ -109,11 +109,8 @@ class GameActionManager {
   //    Game Attr    //
   /////////////////////
 
-  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId) {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.getLocationAttr(attr, locationId);
-    }
-    return undefined;
+  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
+    return this.getGameManager().stateManager.getLocationAttr(attr, locationId);
   }
 
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string): void {
@@ -166,10 +163,7 @@ class GameActionManager {
   }
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
-    if (this.gameManager) {
-      const currLocName = this.gameManager.currentLocationId;
-      this.gameManager.stateManager.setObjProperty(currLocName, id, newObjProp);
-    }
+    this.getGameManager().stateManager.setObjProperty(id, newObjProp);
   }
 
   /////////////////////
@@ -184,10 +178,7 @@ class GameActionManager {
   }
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
-    if (this.gameManager) {
-      const currLocName = this.gameManager.currentLocationId;
-      this.gameManager.stateManager.setBBoxProperty(currLocName, id, newBBoxProp);
-    }
+    this.getGameManager().stateManager.setBBoxProperty(id, newBBoxProp);
   }
 
   /////////////////////

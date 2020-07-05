@@ -4,7 +4,7 @@ import {
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Constants from 'src/commons/utils/Constants';
 import { FullSaveState } from './GameSaveTypes';
-import { emptySaveState } from './GameSaveConstants';
+import { createEmptySaveState } from './GameSaveConstants';
 
 export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
   const options = {
@@ -53,7 +53,7 @@ export async function clearData(accountInfo: AccountInfo) {
 }
 
 export async function resetData() {
-  const resp = await saveData(getSourceAcademyGame().getAccountInfo(), emptySaveState);
+  const resp = await saveData(getSourceAcademyGame().getAccountInfo(), createEmptySaveState());
   if (resp && resp.ok) {
     alert('Game data reset!');
     return;

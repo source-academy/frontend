@@ -6,10 +6,11 @@ import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { jsObjectToMap } from '../save/GameSaveHelper';
+import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
 import GameManager from '../scenes/gameManager/GameManager';
+import { emptySet } from '../location/GameMapConstants';
 
 class GameStateManager implements StateSubject {
   // Subscribers
@@ -95,6 +96,14 @@ class GameStateManager implements StateSubject {
     });
   }
 
+  private getLocationById(locationId: LocationId): GameLocation {
+    const location = this.locationStates.get(locationId);
+    if (!location) {
+      throw console.error('Location does not exist');
+    }
+    return location;
+  }
+
   ///////////////////////////////
   //        Preprocess         //
   ///////////////////////////////
@@ -121,7 +130,7 @@ class GameStateManager implements StateSubject {
 
   private loadFromGameStoryState(gameStoryState: GameSaveState) {
     this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
-    this.locationStates = jsObjectToMap(gameStoryState.locationStates);
+    this.locationStates = jsonToLocationStates(gameStoryState.locationStates);
     this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
     this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
     this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
@@ -169,23 +178,20 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   public getLocationMode(locationId: LocationId): GameMode[] {
-    return this.checkpoint.map.getLocationAtId(locationId).modes!;
+    return Array.from(this.checkpoint.map.getLocationAtId(locationId).modes || emptySet);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {
-    this.checkLocationsExist([locationId]);
-
-    this.locationStates.get(locationId)!.modes!.push(mode);
+    const location = this.getLocationById(locationId);
+    location.modes!.add(mode);
+    this.locationStates.get(locationId)!.modes!.add(mode);
     this.updateLocationStateMode(locationId, GameMode.Menu);
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
-    this.checkLocationsExist([locationId]);
-
-    const newAttr = this.locationStates
-      .get(locationId)!
-      .modes!.filter((oldAttr: string) => oldAttr !== mode);
-    this.locationStates.get(locationId)!.modes = newAttr;
+    const location = this.getLocationById(locationId);
+    if (!location.modes) return;
+    location.modes.delete(mode);
     this.updateLocationStateMode(locationId, GameMode.Menu);
   }
 
@@ -193,31 +199,22 @@ class GameStateManager implements StateSubject {
   //    Location Attr State    //
   ///////////////////////////////
 
-  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId) {
-    const location = this.locationStates.get(locationId);
-    return location ? location[attr] : undefined;
+  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
+    const location = this.getLocationById(locationId);
+    return Array.from(location[attr]);
   }
 
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    this.checkLocationsExist([locationId]);
-
-    if (!this.locationStates.get(locationId)![attr]) {
-      this.locationStates.get(locationId)![attr] = [];
-    }
-    this.locationStates.get(locationId)![attr]!.push(attrElem);
+    const location = this.getLocationById(locationId);
+    !location[attr] && (location[attr] = []);
+    location[attr].push(attrElem);
     this.updateLocationStateAttr(locationId, attr);
   }
 
   public removeLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    this.checkLocationsExist([locationId]);
-
-    if (!this.locationStates.get(locationId)![attr]) {
-      return;
-    }
-    const newAttr = this.locationStates
-      .get(locationId)!
-      [attr]!.filter((oldAttr: string) => oldAttr !== attrElem);
-    this.locationStates.get(locationId)![attr] = newAttr;
+    const location = this.getLocationById(locationId);
+    if (!location[attr]) return;
+    location[attr] = location[attr].filter((oldAttr: string) => oldAttr !== attrElem);
     this.updateLocationStateAttr(locationId, attr);
   }
 
@@ -255,12 +252,12 @@ class GameStateManager implements StateSubject {
     return this.objectPropertyMap;
   }
 
-  public setObjProperty(currLocName: LocationId, id: ItemId, newObjProp: ObjectProperty) {
+  public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.objectPropertyMap.set(id, newObjProp);
 
     // Update every location that uses it
-    this.locationStates.forEach((location, locationId, map) => {
-      if (location.objects && location.objects.find(objId => objId === id)) {
+    this.locationStates.forEach((location, locationId) => {
+      if (location.objects && location.objects.has(id)) {
         this.updateLocationStateAttr(locationId, GameLocationAttr.objects);
       }
     });
@@ -274,12 +271,12 @@ class GameStateManager implements StateSubject {
     return this.bboxPropertyMap;
   }
 
-  public setBBoxProperty(currLocName: LocationId, id: ItemId, newBBoxProp: BBoxProperty) {
+  public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.bboxPropertyMap.set(id, newBBoxProp);
 
     // Update every location that uses it
-    this.locationStates.forEach((location, locationId, map) => {
-      if (location.boundingBoxes && location.boundingBoxes.find(bboxId => bboxId === id)) {
+    this.locationStates.forEach((location, locationId) => {
+      if (location.boundingBoxes && location.boundingBoxes.delete(id)) {
         this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes);
       }
     });
