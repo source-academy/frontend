@@ -28,7 +28,7 @@ export default class SpeakerParser {
     const character = Parser.checkpoint.map.getCharacters().get(charId);
 
     if (!character) {
-      throw new Error(`Character ${charId} not in map`);
+      throw new Error(`Character "${charId}" not in map`);
     }
 
     character.expressions.set(expression, CharacterParser.characterAssetKey(charId, expression));

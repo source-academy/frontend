@@ -6,10 +6,12 @@ import LocationParser from './LocationParser';
 
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import StringUtils from '../utils/StringUtils';
+import ParserValidator, { GameAttr } from './ParserValidator';
 
 class Parser {
   public static checkpoint: GameCheckpoint;
   private static actionIdNum: number;
+  public static validator: ParserValidator;
 
   public static generateActionId() {
     Parser.actionIdNum++;
@@ -25,6 +27,8 @@ class Parser {
       startingLoc: '',
       objectives: new GameObjective()
     };
+
+    Parser.validator = new ParserValidator();
   }
 
   public static parse(chapterText: string, continueParse = false): GameCheckpoint {
@@ -43,6 +47,7 @@ class Parser {
       }
     });
 
+    Parser.validator.verifyAssertions();
     return this.checkpoint;
   }
 
@@ -50,10 +55,11 @@ class Parser {
     const [key, value] = StringUtils.splitByChar(checkpointConfig, ':');
     switch (key) {
       case 'startingLoc':
+        Parser.validator.assertAttr(GameAttr.locations, value);
         Parser.checkpoint.startingLoc = value;
         break;
       default:
-        throw new Error(`Invalid checkpoint config key, ${checkpointConfig}`);
+        throw new Error(`Invalid checkpoint config key, "${checkpointConfig}"`);
     }
   }
 

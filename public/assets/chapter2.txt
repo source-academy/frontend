@@ -4,8 +4,9 @@ objectives
     finish
 
 emergency
-    actions: show_dialogue(emergency)
+    actions
+        show_dialogue(chapter2)
 
 dialogues
-    chapter1
-        Hold it, we have an emergency. You're now at chpater 3!
+    chapter2
+        Hold it, we have an emergency. You're now at chapter 2!

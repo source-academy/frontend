@@ -3,6 +3,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import { GameActionType } from '../action/GameActionTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
+import { GameLocationAttr } from '../location/GameMapTypes';
 
 const stringToCharPositionMap = {
   left: CharacterPosition.Left,
@@ -21,6 +22,17 @@ const stringToGameModeMap = {
   explore: GameMode.Explore,
   move: GameMode.Move,
   menu: GameMode.Menu
+};
+
+const stringToLocAttrMap = {
+  navigation: GameLocationAttr.navigation,
+  talkTopics: GameLocationAttr.talkTopics,
+  objects: GameLocationAttr.objects,
+  boundingBoxes: GameLocationAttr.boundingBoxes,
+  characters: GameLocationAttr.characters,
+  actions: GameLocationAttr.actions,
+  bgmKey: GameLocationAttr.bgmKey,
+  collectibles: GameLocationAttr.collectibles
 };
 
 const stringToActionTypeMap = {
@@ -74,6 +86,14 @@ export default class ParserConverter {
     const result = stringToGameStateStorageMap[str];
     if (!result) {
       throw new Error(`Invalid action type, ${str}`);
+    }
+    return result;
+  }
+
+  public static stringToLocAttr(str: string) {
+    const result = stringToLocAttrMap[str];
+    if (!result) {
+      throw new Error(`Invalid entity type, ${str}`);
     }
     return result;
   }

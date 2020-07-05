@@ -8,12 +8,11 @@ room
     nav: hallway
     talkTopics: cutscene
     actions
-        show_dialogue(what)
         show_dialogue(carpet) if checklist.visit
 
     objects
         +door, /objects/yourCarpet/normal.png, 300, 300
-            show_dialogue(whodda-thought) if checklist.visit
+            show_dialogue(whoddaThought) if checklist.visit
             change_location(classroom) if checklist.visit 
         +chair, /objects/yourChair/normal.png, 90, 90
         +carpet, /objects/yourCarpet/normal.png, 90, 90
@@ -27,14 +26,14 @@ room
 hallway
     modes: talk, move
     nav: classroom, room
-    talkTopics: dialogue2
-    actions: complete_objective(talk)
+    actions
+        complete_objective(talk)
 
 
 classroom
     modes: talk, move
     nav: crashsite, hallway
-    talkTopics: dialogue1
+    talkTopics: whatHappened
 
     objects
         chalk, /objects/yourChair/normal.png, 30, 30
@@ -44,7 +43,7 @@ emergency
     nav: classroom
 
 dialogues
-    cutscene: Cut Scene
+    cutscene, Cut Scene
         0
         You've gone to the hallway, and are now back into the room.
         Congrats on your first cutscene.
@@ -55,7 +54,7 @@ dialogues
         1
         Well, you've really proven yourself to be a great anything.
 
-    whod-ve-thought
+    whoddaThought
         Who would have thought that there's something hidden at the top left corner?
 
     found
@@ -64,17 +63,16 @@ dialogues
     carpet
         You found the other carpet! Go out and come back to see it :)
 
-    what-happened: What happened?
+    whatHappened, What happened?
         @you
         I'm tired
 
         @narrator
         The year is 1101 A.E.
-            collectible(cookie)
         Exponential advances in technology have allowed the human race to traverse light years’ worth of distances in mere hours.
         Today, you, {name}, have enrolled in...
         The Source Academy!
-            add_popup(yourChair, middle)
+            add_popup(chair, middle)
 
         @narrator
         The strange alien voice startles you. You were so preoccupied you hadn't even noticed the telebay's operator. This is your first time meeting an alien in person. You couldn't help but gawk at him, lost for words.

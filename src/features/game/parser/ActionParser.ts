@@ -5,6 +5,7 @@ import { GameLocationAttr } from '../location/GameMapTypes';
 import { GameAction, GameActionType } from '../action/GameActionTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import ConditionParser from './ConditionParser';
+import { GameAttr } from './ParserValidator';
 
 export default class ActionParser {
   public static parseActions(actionDetails: string[]): ItemId[] {
@@ -34,50 +35,97 @@ export default class ActionParser {
   public static parseActionContent(actionString: string): GameAction {
     const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
     let repeatable = false;
-    let actionTypeString = action;
+    let actionType = action;
     if (action[action.length - 1] === '*') {
       repeatable = true;
-      actionTypeString = actionTypeString.slice(0, -1);
+      actionType = actionType.slice(0, -1);
     }
 
-    const actionType = ParserConverter.stringToActionType(actionTypeString);
+    const gameActionType = ParserConverter.stringToActionType(actionType);
     const actionParams = StringUtils.splitByChar(actionParamString.slice(0, -1), ',');
     const actionParamObj: any = {};
 
-    switch (actionType) {
+    switch (gameActionType) {
       case GameActionType.Collectible:
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          GameLocationAttr.collectibles,
+          actionParams[0],
+          actionType
+        );
+        break;
       case GameActionType.UpdateChecklist:
+        actionParamObj.id = Parser.validator.assertAttr(
+          GameAttr.objectives,
+          actionParams[0],
+          actionType
+        );
+        break;
       case GameActionType.LocationChange:
       case GameActionType.ChangeBackground:
+        actionParamObj.id = Parser.validator.assertAttr(
+          GameAttr.locations,
+          actionParams[0],
+          actionType
+        );
+        break;
       case GameActionType.BringUpDialogue:
-        actionParamObj.id = actionParams[0];
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          GameLocationAttr.talkTopics,
+          actionParams[0],
+          actionType
+        );
         break;
       case GameActionType.AddItem:
       case GameActionType.RemoveItem:
-        actionParamObj.attr = actionParams[0];
-        actionParamObj.locationId = actionParams[1];
-        actionParamObj.id = actionParams[2];
+        const gameLocAttr = ParserConverter.stringToLocAttr(actionParams[0]);
+        actionParamObj.attr = gameLocAttr;
+        actionParamObj.locationId = Parser.validator.assertAttr(
+          GameAttr.locations,
+          actionParams[1],
+          actionType
+        );
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          gameLocAttr,
+          actionParams[2],
+          actionType
+        );
         break;
       case GameActionType.AddLocationMode:
       case GameActionType.RemoveLocationMode:
-        actionParamObj.locationId = actionParams[0];
+        actionParamObj.locationId = Parser.validator.assertAttr(
+          GameAttr.locations,
+          actionParams[0],
+          actionType
+        );
         actionParamObj.mode = ParserConverter.stringToGameMode(actionParams[1]);
         break;
       case GameActionType.AddPopup:
-        actionParamObj.id = actionParams[0];
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          GameLocationAttr.objects,
+          actionParams[0],
+          actionType
+        );
         actionParamObj.position = ParserConverter.stringToPopupPosition(actionParams[1]);
         break;
       case GameActionType.MakeObjectBlink:
-        actionParamObj.id = actionParams[0];
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          GameLocationAttr.objects,
+          actionParams[0],
+          actionType
+        );
         break;
       case GameActionType.MakeObjectGlow:
-        actionParamObj.id = actionParams[0];
+        actionParamObj.id = Parser.validator.assertLocAttr(
+          GameLocationAttr.objects,
+          actionParams[0],
+          actionType
+        );
         break;
     }
 
     const actionId = Parser.generateActionId();
     return {
-      actionType,
+      actionType: gameActionType,
       actionParams: actionParamObj,
       actionConditions: [],
       interactionId: actionId,

@@ -9,6 +9,7 @@ room
     
     actions
         show_dialogue(welcome)
+        complete_objective(finish)
 
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
@@ -28,7 +29,7 @@ room
 
 hallway
     modes: talk, move
-    talkTopics: welcome-to-hallway
+    talkTopics: welcomeToHallway
 
 classroom
     modes: explore
@@ -53,6 +54,9 @@ dialogues
 
         @scottie
         I'm glad you asked!
+    
+    welcomeToHallway
+        Welcome to the Hallway, we've got fun and games.
 
     found
         You found the object!

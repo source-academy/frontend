@@ -1,4 +1,4 @@
-import { LocationId, GameLocation } from '../location/GameMapTypes';
+import { LocationId, GameLocation, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -6,6 +6,7 @@ import ObjectParser from './ObjectParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import CharacterParser from './CharacterParser';
 import ParserConverter from './ParserConverter';
+import { GameAttr } from './ParserValidator';
 
 export default class LocationParser {
   public static parse(locationId: LocationId, locationBody: string[]) {
@@ -25,27 +26,27 @@ export default class LocationParser {
     const [key, value] = StringUtils.splitByChar(locationConfig, ':');
     switch (key) {
       case 'modes':
-        !location.modes && (location.modes = new Set([]));
         StringUtils.splitByChar(value, ',').forEach(mode => {
           const gameMode = ParserConverter.stringToGameMode(mode);
-          location.modes!.add(gameMode);
+          location.modes.add(gameMode);
         });
         break;
       case 'bgm':
         location.bgmKey = value;
         break;
       case 'nav':
-        !location.navigation && (location.navigation = new Set([]));
         StringUtils.splitByChar(value, ',').forEach(otherLocationId => {
-          location.navigation!.add(otherLocationId);
+          Parser.validator.assertAttr(GameAttr.locations, otherLocationId);
+          location.navigation.add(otherLocationId);
         });
         break;
       case 'talkTopics':
         const talkTopics = StringUtils.splitByChar(value, ',');
+        Parser.validator.assertLocAttrs(GameLocationAttr.talkTopics, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
       default:
-        throw new Error(`Invalid location config key ${key}`);
+        throw new Error(`Invalid config key "${key}" specified under location "${location.id}"`);
     }
   }
 
@@ -64,7 +65,7 @@ export default class LocationParser {
         location.actionIds = ActionParser.parseActions(body);
         break;
       default:
-        throw new Error(`Invalid location paragraph header ${header}`);
+        throw new Error(`Invalid location paragraph header "${header}"`);
     }
   }
 }
