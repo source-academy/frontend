@@ -8,23 +8,29 @@ import AchievementModalGoal from './modal/AchievementModalGoal';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 
 type AchievementModalProps = {
+  generateBackgroundGradient: any;
   id: number;
   inferencer: Inferencer;
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { id, inferencer } = props;
+  const { generateBackgroundGradient, id, inferencer } = props;
 
   const modal = inferencer.getModalItem(id);
 
   if (modal === undefined) return null;
 
-  const { title, exp } = inferencer.getAchievementItem(id);
+  const { title, exp, ability } = inferencer.getAchievementItem(id);
   const { modalImageUrl, description, goalText, completionText } = modal;
 
   return (
     <div className="modal">
-      <Card className="modal-container">
+      <Card
+        className="modal-container"
+        style={{
+          background: `${generateBackgroundGradient(ability)}`
+        }}
+      >
         <h1>{title}</h1>
         <div>
           <img src={modalImageUrl} alt={title} />
