@@ -72,18 +72,22 @@ function AchievementTask(props: AchievementTaskProps) {
             displayModal={displayModal}
           />
           {isDropdownOpen ? (
-            <ul>
+            <>
               {inferencer.listImmediateChildren(id).map(prerequisite => (
-                <li key={prerequisite}>
+                <div>
                   <PrerequisiteCard
+                    isLast={
+                      inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
+                      inferencer.listImmediateChildren(id).length - 1
+                    }
                     id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}
                     displayModal={displayModal}
                   />
-                </li>
+                </div>
               ))}
-            </ul>
+            </>
           ) : null}
         </li>
       ) : null}

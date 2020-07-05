@@ -59,8 +59,6 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      <AchievementHints release={release} />
-
       <div className="main">
         {hasDropdown ? (
           <div className="dropdown">
@@ -70,9 +68,17 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="dropdown"></div>
         )}
 
+        <div className="padder">
+          <p></p>
+        </div>
+
         <div className="display">
-          <div>
-            <h1>{title}</h1>
+          <div className="headings">
+            <div className="title">
+              <h1>{title}</h1>
+            </div>
+
+            <AchievementHints release={release} />
           </div>
 
           <div className="details">

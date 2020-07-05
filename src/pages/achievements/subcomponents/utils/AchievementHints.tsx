@@ -1,5 +1,5 @@
 import React from 'react';
-import { Tag } from '@blueprintjs/core';
+import { Tag, Intent } from '@blueprintjs/core';
 import { semester1Weeks } from '../../../../commons/mocks/AchievementMocks';
 
 type AchievementHintsProps = {
@@ -29,7 +29,7 @@ function AchievementHints(props: AchievementHintsProps) {
         {getWeekNumber() === undefined ? (
           <></>
         ) : (
-          <Tag round={true}>{`Week ${getWeekNumber()}`}</Tag>
+          <Tag intent={Intent.WARNING} round={true}>{`Week ${getWeekNumber()}`}</Tag>
         )}
       </div>
     </div>

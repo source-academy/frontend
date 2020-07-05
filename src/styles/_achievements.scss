@@ -86,21 +86,6 @@
         display: flex;
         flex-direction: column;
 
-        .hints {
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-
-        .delete {
-          width: 10%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
         .main {
           display: flex;
           flex-direction: row;
@@ -113,40 +98,48 @@
             flex-basis: 10%;
           }
 
-          .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-basis: 10%;
+          .padder {
+            flex-basis: 15%;
           }
 
           .display {
             display: flex;
             justify-content: center;
-            margin-left: 10%;
             width: 100%;
             flex-direction: column;
+
+            .headings {
+              display: flex;
+              flex-direction: row;
+
+              .title {
+                flex-basis: 60%;
+              }
+
+              .hints {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+            }
 
             .details {
               display: flex;
               flex-direction: row;
-              justify-content: space-evenly;
 
               .ability {
-                flex-basis: 40%;
+                flex-basis: 60%;
               }
 
               .deadline {
                 display: flex;
                 flex-direction: row;
-                flex-basis: 30%;
               }
 
               .exp {
                 display: flex;
                 margin-left: 5%;
                 flex-direction: row;
-                flex-basis: 30%;
               }
             }
           }
@@ -156,63 +149,86 @@
       .node {
         display: flex;
         flex-direction: row;
+        height: 100%;
+
+        .lines {
+          width: 10%;
+          position: flex;
+          display: flex;
+          flex-direction: column;
+
+          .upper {
+            width: 100%;
+            height: 50%;
+            position: flex;
+            border-bottom: 1px solid white;
+            border-left: 1px solid white;
+          }
+
+          .lower {
+            width: 100%;
+            height: 50%;
+            position: flex;
+            border-top: 1px solid white;
+            border-left: 1px solid white;
+          }
+        }
 
         .prerequisite {
-          width: 81%;
+          width: 80%;
           background-color: #333e50;
-
           margin-bottom: 10px;
 
           display: flex;
           flex-direction: column;
-
-          .delete {
-            width: 10%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-basis: 10%;
-          }
-
-          .hints {
-            width: 100%;
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-          }
 
           .main {
             display: flex;
             flex-direction: row;
             flex-basis: 80%;
 
+            .padder {
+              flex-basis: 10%;
+            }
+
             .display {
               display: flex;
               justify-content: center;
-              margin-left: 10%;
               width: 100%;
               flex-direction: column;
+
+              .headings {
+                display: flex;
+                flex-direction: row;
+
+                .title {
+                  flex-basis: 60%;
+                }
+
+                .hints {
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                }
+              }
 
               .details {
                 display: flex;
                 flex-direction: row;
-                justify-content: space-evenly;
 
-                .path {
-                  flex-basis: 40%;
+                .ability {
+                  flex-basis: 60%;
                 }
 
                 .deadline {
                   display: flex;
                   flex-direction: row;
-                  flex-basis: 30%;
                 }
 
                 .exp {
                   display: flex;
                   margin-left: 5%;
                   flex-direction: row;
-                  flex-basis: 30%;
                 }
               }
             }
