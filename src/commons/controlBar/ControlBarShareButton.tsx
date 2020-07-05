@@ -41,10 +41,7 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
     let url = '';
     const { urlShortener } = Constants;
     if (urlShortener) {
-      const matches = urlShortener.match(new RegExp(/^(.*[\\\/])/));
-      if (matches) {
-        url = matches[0];
-      }
+      url = urlShortener.split('/').slice(0, -1).join('/') + '/';
     }
 
     return (
@@ -63,7 +60,11 @@ export class ControlBarShareButton extends React.PureComponent<ControlBarShareBu
               !this.state.isLoading || this.props.shortURL === 'ERROR' ? (
                 <div>
                   {url}&nbsp;
-                  <input placeholder={'custom string (optional)'} onChange={this.handleChange} />
+                  <input
+                    placeholder={'custom string (optional)'}
+                    onChange={this.handleChange}
+                    style={{ width: 175 }}
+                  />
                   {controlButton('Get Link', IconNames.SHARE, () => {
                     this.props.handleShortenURL(this.state.keyword);
                     this.setState({ isLoading: true });
