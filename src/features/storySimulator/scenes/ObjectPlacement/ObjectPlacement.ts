@@ -20,6 +20,7 @@ import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
 import SSBackgroundManager from '../../background/SSBackgroundManager';
 import SSLogManager from '../../logger/SSLogManager';
 import SSTransformManager from '../../transform/SSTransformManager';
+import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -112,6 +113,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       () => {
         this.cleanUp();
+        getStorySimulatorGame().getStorySimProps('setStorySimState')('upload');
         this.scene.start('StorySimulatorMenu');
       },
       0,

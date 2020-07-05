@@ -20,8 +20,11 @@ function StorySimulator() {
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
   const [currentAsset, setCurrentAsset] = React.useState<string>('');
 
+  const [storySimState, setStorySimState] = React.useState<string>('upload');
+
   React.useEffect(() => {
     createStorySimulatorGame();
+    getStorySimulatorGame().setStorySimProps({ setStorySimState });
     (async () => {
       const paths = await fetchAssetPathsLocally();
       setAssetPaths(paths);
@@ -48,23 +51,45 @@ function StorySimulator() {
       <div className="StorySimulatorWrapper">
         <div id="game-display" />
         <div className="LeftAlign StorySimulatorPanel">
-          <h2>StorySimulator</h2>
-          <h3>Checkpoint Text Loader</h3>
-          <CheckpointTxtLoader
-            title={'Default Chapter'}
-            storageName={gameTxtStorageName.defaultChapter}
-            clearStorage={true}
-          />
-          <br />
-          <CheckpointTxtLoader
-            title={'Checkpoint text file'}
-            storageName={gameTxtStorageName.checkpointTxt}
-            clearStorage={false}
-          />
-          <h3>Asset Viewer</h3>
-          <AssetViewer assetPath={currentAsset} />
-          <h3>Asset Selection</h3>
-          <StorySimulatorAssetSelection assetPaths={assetPaths} setCurrentAsset={setCurrentAsset} />
+          <h2>Story Simulator</h2>
+          {storySimState === 'upload' && (
+            <>
+              <h3>Checkpoint Text Loader</h3>
+              <CheckpointTxtLoader
+                title={'Default Chapter'}
+                storageName={gameTxtStorageName.defaultChapter}
+                clearStorage={true}
+              />
+              <br />
+              <CheckpointTxtLoader
+                title={'Checkpoint text file'}
+                storageName={gameTxtStorageName.checkpointTxt}
+                clearStorage={false}
+              />
+              <br />
+            </>
+          )}
+          {storySimState === 'objectPlacement' && (
+            <>
+              <h3>Asset Viewer</h3>
+              <AssetViewer assetPath={currentAsset} />
+              <h3>Asset Selection</h3>
+              <StorySimulatorAssetSelection
+                assetPaths={assetPaths}
+                setCurrentAsset={setCurrentAsset}
+              />
+            </>
+          )}
+
+          {storySimState === 'assetUploader' && (
+            <>
+              <h3>Asset uploader</h3>
+              <StorySimulatorAssetSelection
+                assetPaths={assetPaths}
+                setCurrentAsset={setCurrentAsset}
+              />
+            </>
+          )}
         </div>
       </div>
     </>

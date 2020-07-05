@@ -6,12 +6,13 @@ type AssetProps = {
 };
 
 function AssetViewer({ assetPath }: AssetProps) {
+  const displayAssetPath = assetPath || Constants.defaultAssetPath;
   return (
     <>
       <img
         alt="asset"
         crossOrigin={'anonymous'}
-        src={Constants.assetsFolder + assetPath}
+        src={Constants.assetsFolder + displayAssetPath}
         width="150px"
       ></img>
     </>

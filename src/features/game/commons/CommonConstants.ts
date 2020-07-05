@@ -4,7 +4,8 @@ export const Constants = {
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
-  popupDuration: 1000
+  popupDuration: 1000,
+  defaultAssetPath: '/UI/wristDeviceButton.png'
 };
 
 export const screenSize = {

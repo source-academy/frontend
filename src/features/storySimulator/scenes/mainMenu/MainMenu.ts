@@ -15,6 +15,7 @@ import {
   mainMenuOptStyle,
   gameTxtStorageName
 } from './MainMenuConstants';
+import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -42,6 +43,7 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
+          getStorySimulatorGame().getStorySimProps('setStorySimState')('objectPlacement');
           this.layerManager.clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
@@ -49,7 +51,14 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
+          getStorySimulatorGame().getStorySimProps('setStorySimState')('upload');
           this.callGameManager();
+        }
+      },
+      {
+        text: 'Asset Uploader',
+        callback: () => {
+          getStorySimulatorGame().getStorySimProps('setStorySimState')('assetUploader');
         }
       }
     ];

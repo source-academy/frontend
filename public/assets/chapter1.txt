@@ -4,7 +4,8 @@ objectives
     finish
 
 hallway
-    actions: show_dialogue(chapter1)
+    actions
+        show_dialogue(chapter1)
 
 dialogues
     chapter1, What?

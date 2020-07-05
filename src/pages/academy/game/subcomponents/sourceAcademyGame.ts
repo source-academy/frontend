@@ -15,9 +15,14 @@ export type AccountInfo = {
   name: string;
 };
 
+type StorySimulatorProps = {
+  setStorySimState: (value: React.SetStateAction<string>) => void;
+};
+
 type GlobalGameProps = {
   currBgMusicKey: AssetKey | undefined;
   accountInfo: AccountInfo | undefined;
+  storySimulatorProps?: StorySimulatorProps;
 };
 
 export class SourceAcademyGame extends Phaser.Game {
@@ -48,6 +53,21 @@ export class SourceAcademyGame extends Phaser.Game {
       throw new Error('No account info');
     }
     return this.global.accountInfo;
+  }
+
+  public setStorySimProps(storySimulatorProps: StorySimulatorProps) {
+    this.global.storySimulatorProps = {
+      ...this.global.storySimulatorProps,
+      ...storySimulatorProps
+    };
+  }
+
+  public getStorySimProps(key: string) {
+    const storySimProps = this.global.storySimulatorProps;
+    if (!storySimProps || !storySimProps[key]) {
+      throw new Error('Story Sim property not found');
+    }
+    return storySimProps[key];
   }
 }
 
