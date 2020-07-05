@@ -2,8 +2,6 @@ import { TrackInteraction } from '../commons/CommonsTypes';
 import { IGameActionable } from '../action/GameActionTypes';
 import GlowingImage from '../effects/GlowingObject';
 
-export default IGameObjectManager;
-
 export type ObjectProperty = TrackInteraction &
   IGameActionable & {
     assetKey: string;
