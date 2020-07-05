@@ -2,8 +2,6 @@ import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
 import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
-import { LocationId } from '../location/GameMapTypes';
-import GameActionManager from '../action/GameActionManager';
 import { UserSaveState } from '../save/GameSaveTypes';
 
 class GameSoundManager {
@@ -27,12 +25,9 @@ class GameSoundManager {
     this.setGlobalVolume(userSaveState.settings.volume);
   }
 
-  public renderBackgroundMusic(locationId: LocationId) {
-    const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
+  public renderBackgroundMusic(bgmKey: AssetKey) {
     this.stopCurrBgMusic();
-    if (bgmKey) {
-      this.playBgMusic(bgmKey);
-    }
+    this.playBgMusic(bgmKey);
   }
 
   public clearSoundAssets() {
