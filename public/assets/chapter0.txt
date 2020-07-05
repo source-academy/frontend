@@ -30,7 +30,7 @@ room
         +scottie, Scottie, sad, left
 
 hallway
-    modes: talk, move
+    modes: talk, move, explore
     talkTopics: welcomeToHallway
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
@@ -53,6 +53,7 @@ dialogues
         Welcome to Source Academy!
 
         I'm glad you took the time to come in
+
 
     what, What should I do now, Scottie?
         @you

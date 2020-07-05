@@ -27,25 +27,24 @@ import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
+import { mandatory } from '../../utils/GameUtils';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
   private settingsSaveManager: GameSaveManager;
-  private soundManager: GameSoundManager;
+  private soundManager?: GameSoundManager;
 
   constructor() {
     super('Settings');
-    this.layerManager = new GameLayerManager();
     this.volumeRadioButtons = undefined;
     this.settingsSaveManager = new GameSaveManager();
-    this.soundManager = new GameSoundManager();
   }
 
   public preload() {
     this.preloadAssets();
-    this.layerManager.initialiseMainLayer(this);
-    this.soundManager.initialise(this, getSourceAcademyGame());
+    this.layerManager = new GameLayerManager(this);
+    this.soundManager = new GameSoundManager(this, getSourceAcademyGame());
   }
 
   public async create() {
@@ -74,8 +73,8 @@ class Settings extends Phaser.Scene {
       screenCenter.y,
       settingBg.key
     );
-    this.layerManager.addToLayer(Layer.Background, background);
-    this.layerManager.addToLayer(Layer.Background, settingBgImg);
+    this.getLayerManager().addToLayer(Layer.Background, background);
+    this.getLayerManager().addToLayer(Layer.Background, settingBgImg);
   }
 
   private renderOptions() {
@@ -93,14 +92,14 @@ class Settings extends Phaser.Scene {
     const backButton = new CommonBackButton(
       this,
       () => {
-        this.layerManager.clearAllLayers();
+        this.getLayerManager().clearAllLayers();
         this.scene.start('MainMenu');
       },
       0,
       0
     );
-    this.layerManager.addToLayer(Layer.UI, applySettingsButton);
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, applySettingsButton);
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
 
   private renderVolumeOptions() {
@@ -135,9 +134,9 @@ class Settings extends Phaser.Scene {
       0,
       -70
     );
-    this.layerManager.addToLayer(Layer.UI, volumeBg);
-    this.layerManager.addToLayer(Layer.UI, volumeText);
-    this.layerManager.addToLayer(Layer.UI, this.volumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, volumeBg);
+    this.getLayerManager().addToLayer(Layer.UI, volumeText);
+    this.getLayerManager().addToLayer(Layer.UI, this.volumeRadioButtons);
   }
 
   public async applySettings(volume?: RadioButtons) {
@@ -148,9 +147,12 @@ class Settings extends Phaser.Scene {
 
       // Apply settings
       const newUserSetting = this.settingsSaveManager.getLoadedUserState();
-      this.soundManager.applyUserSettings(newUserSetting);
+      this.getSoundManager().applyUserSettings(newUserSetting);
     }
   }
+
+  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  public getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
 }
 
 export default Settings;

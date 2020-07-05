@@ -16,16 +16,13 @@ import {
   gameTxtStorageName
 } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 class MainMenu extends Phaser.Scene {
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
 
   constructor() {
     super('StorySimulatorMenu');
-    this.layerManager = new GameLayerManager();
-  }
-  public init() {
-    this.layerManager.initialiseMainLayer(this);
   }
 
   public async preload() {
@@ -33,6 +30,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
+    this.layerManager = new GameLayerManager(this);
     this.renderBackground();
     this.renderOptionButtons();
   }
@@ -44,7 +42,7 @@ class MainMenu extends Phaser.Scene {
         text: 'Object Placement',
         callback: () => {
           getStorySimulatorGame().getStorySimProps('setStorySimState')('objectPlacement');
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
       },
@@ -67,7 +65,7 @@ class MainMenu extends Phaser.Scene {
         this.createOptionButton(button.text, index, buttons.length, button.callback)
       )
     );
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
 
   private createOptionButton(
@@ -120,7 +118,7 @@ class MainMenu extends Phaser.Scene {
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
-    this.layerManager.clearAllLayers();
+    this.getLayerManager().clearAllLayers();
     Parser.parse(defaultChapterText);
     if (checkpointTxt) {
       Parser.parse(checkpointTxt, true);
@@ -151,9 +149,10 @@ class MainMenu extends Phaser.Scene {
       screenCenter.y,
       blueUnderlay.key
     ).setAlpha(0.5);
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
-    this.layerManager.addToLayer(Layer.Background, backgroundUnderlay);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);
   }
+  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
 }
 
 export default MainMenu;

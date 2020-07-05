@@ -25,7 +25,7 @@ export default class SSTransformManager {
       1,
       0
     ).setAlpha(0.3);
-    this.getObjectPlacement().layerManager.addToLayer(Layer.Selector, this.activeSelectRect);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.Selector, this.activeSelectRect);
   }
 
   private trackDraggables(objectPlacement: ObjectPlacement) {

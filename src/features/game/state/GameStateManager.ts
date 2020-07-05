@@ -4,10 +4,8 @@ import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonsTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
-import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 import { emptySet } from '../location/GameMapConstants';
@@ -23,21 +21,40 @@ class GameStateManager implements StateSubject {
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
   private bboxPropertyMap: Map<ItemId, BBoxProperty>;
+  private gameManager: GameManager;
 
   // Triggered Interactions
   private triggeredInteractions: Map<ItemId, boolean>;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.subscribers = new Array<StateObserver>();
-
-    this.checkpoint = {} as GameCheckpoint;
-    this.checkpointObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
-    this.locationStates = new Map<string, GameLocation>();
-    this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
-    this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
 
     this.triggeredInteractions = new Map<ItemId, boolean>();
+    this.checkpoint = gameManager.currentCheckpoint;
+    this.checkpointObjective = this.checkpoint.objectives;
+
+    const gameSaveState = gameManager.getSaveManager().getLoadedGameStoryState();
+    if (gameSaveState) {
+      this.checkpointObjective.setObjectives(jsObjectToMap(gameSaveState.chapterObjective));
+      this.locationStates = jsonToLocationStates(gameSaveState.locationStates);
+      this.objectPropertyMap = jsObjectToMap(gameSaveState.objectPropertyMap);
+      this.bboxPropertyMap = jsObjectToMap(gameSaveState.bboxPropertyMap);
+      this.triggeredInteractions = jsObjectToMap(gameSaveState.triggeredInteractions);
+    } else {
+      this.checkpointObjective = this.checkpoint.objectives;
+      this.locationStates = this.checkpoint.map.getLocations();
+      this.objectPropertyMap = this.checkpoint.map.getObjects();
+      this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
+      this.triggeredInteractions.clear();
+    }
+
+    // Register every mode of each location under the chapter
+    this.locationStates.forEach((location, locationId) => {
+      this.locationHasUpdate.set(locationId, new Map<GameMode, boolean>());
+      location.modes.forEach(mode => this.locationHasUpdate.get(locationId)!.set(mode, true));
+    });
   }
 
   ///////////////////////////////
@@ -61,7 +78,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
-    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    const currLocId = this.gameManager.currentLocationId;
 
     this.locationHasUpdate.get(targetLocId)!.set(mode, true);
 
@@ -102,46 +119,6 @@ class GameStateManager implements StateSubject {
       throw console.error('Location does not exist');
     }
     return location;
-  }
-
-  ///////////////////////////////
-  //        Preprocess         //
-  ///////////////////////////////
-
-  public initialise(gameManager: GameManager): void {
-    this.checkpoint = gameManager.currentCheckpoint;
-    const gameSaveState = gameManager.saveManager.getLoadedGameStoryState();
-    this.checkpointObjective = this.checkpoint.objectives;
-
-    if (gameSaveState) {
-      this.loadFromGameStoryState(gameSaveState);
-    } else {
-      this.loadNewGameStoryState();
-    }
-
-    // Register every mode of each location under the chapter
-    this.locationStates.forEach((location, locationId, map) => {
-      this.locationHasUpdate.set(locationId, new Map<GameMode, boolean>());
-      if (location.modes) {
-        location.modes.forEach(mode => this.locationHasUpdate.get(locationId)!.set(mode, true));
-      }
-    });
-  }
-
-  private loadFromGameStoryState(gameStoryState: GameSaveState) {
-    this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
-    this.locationStates = jsonToLocationStates(gameStoryState.locationStates);
-    this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
-    this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
-    this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
-  }
-
-  private loadNewGameStoryState() {
-    this.checkpointObjective = this.checkpoint.objectives;
-    this.locationStates = this.checkpoint.map.getLocations();
-    this.objectPropertyMap = this.checkpoint.map.getObjects();
-    this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
-    this.triggeredInteractions.clear();
   }
 
   ///////////////////////////////

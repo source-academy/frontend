@@ -7,18 +7,20 @@ import {
   modeBannerRect
 } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
-import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import { screenSize, Constants } from '../../commons/CommonConstants';
 import { shortButton } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+import GameManager from '../../scenes/gameManager/GameManager';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private gameButtons: GameButton[];
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.gameButtons = [];
   }
 
@@ -27,14 +29,10 @@ class GameModeMenu implements IGameUI {
       // Refresh Buttons
       modes.sort().forEach(mode => {
         this.addModeButton(mode, () => {
-          GameActionManager.getInstance()
-            .getGameManager()
-            .phaseManager.pushPhase(gameModeToPhase[mode]);
+          this.gameManager.getPhaseManager().pushPhase(gameModeToPhase[mode]);
 
           if (mode !== GameMode.Talk) {
-            GameActionManager.getInstance()
-              .getGameManager()
-              .layerManager.fadeOutLayer(Layer.Character, 300);
+            this.gameManager.getLayerManager().fadeOutLayer(Layer.Character, 300);
           }
         });
       });
@@ -72,12 +70,11 @@ class GameModeMenu implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const currLocId = GameActionManager.getInstance().getCurrLocId();
-    let latestModesInLoc = GameActionManager.getInstance().getModesByLocId(currLocId);
-    const talkTopics = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
-      currLocId
-    );
+    const currLocId = this.gameManager.currentLocationId;
+    let latestModesInLoc = this.gameManager.getStateManager().getLocationMode(currLocId);
+    const talkTopics = this.gameManager
+      .getStateManager()
+      .getLocationAttr(GameLocationAttr.talkTopics, currLocId);
     if (talkTopics) {
       latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
     }
@@ -85,7 +82,7 @@ class GameModeMenu implements IGameUI {
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const modeBanner = new Phaser.GameObjects.Image(
@@ -130,10 +127,9 @@ class GameModeMenu implements IGameUI {
     this.uiContainer = undefined;
     this.gameButtons = [];
     this.fetchLatestState();
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
+    const gameManager = this.gameManager;
     this.uiContainer = await this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
@@ -146,12 +142,10 @@ class GameModeMenu implements IGameUI {
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-      gameManager.tweens.add({
+      this.gameManager.tweens.add({
         targets: this.uiContainer,
         ...menuExitTweenProps
       });

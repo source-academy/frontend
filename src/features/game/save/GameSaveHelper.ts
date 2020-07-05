@@ -1,17 +1,17 @@
 import * as _ from 'lodash';
 import { FullSaveState, GameSaveState, UserSaveState, SettingsJson } from './GameSaveTypes';
-import GameActionManager from '../action/GameActionManager';
 import { GameLocation, LocationId } from '../location/GameMapTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export function gameStateToJson(
+  gameManager: GameManager,
   prevGameState: FullSaveState,
   chapterNum: number,
   checkpointNum: number
 ): FullSaveState {
-  const gameManager = GameActionManager.getInstance().getGameManager();
-  const gameStateManager = gameManager.stateManager;
-  const userStateManager = gameManager.userStateManager;
-  const phaseManager = gameManager.phaseManager;
+  const gameStateManager = gameManager.getStateManager();
+  const userStateManager = gameManager.getUserStateManager();
+  const phaseManager = gameManager.getPhaseManager();
 
   const gameStoryState: GameSaveState = {
     currentLocation: gameManager.currentLocationId,

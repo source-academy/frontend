@@ -1,7 +1,5 @@
-import GameActionManager from '../action/GameActionManager';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 import { diamond } from '../commons/CommonAssets';
-import GameManager from '../scenes/gameManager/GameManager';
 import { screenSize } from '../commons/CommonConstants';
 import { diamondSize, diamondPadding } from './DialogueConstants';
 import { blink, fadeAndDestroy } from '../effects/FadeEffect';
@@ -10,33 +8,33 @@ class DialogueRenderer {
   private typewriter: any;
   private dialogueBox: Phaser.GameObjects.Image;
   private blinkingDiamond: any;
+  private scene: Phaser.Scene;
 
-  constructor(typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    this.dialogueBox = createDialogueBox(gameManager).setInteractive({
+  constructor(scene: Phaser.Scene, typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
+    this.scene = scene;
+    this.dialogueBox = createDialogueBox(scene).setInteractive({
       useHandCursor: true,
       pixelPerfect: true
     });
-    this.typewriter = createTypewriter(gameManager, typewriterStyle);
-    this.blinkingDiamond = this.drawDiamond(gameManager);
+    this.typewriter = createTypewriter(scene, typewriterStyle);
+    this.blinkingDiamond = this.drawDiamond(scene);
   }
 
   public getDialogueContainer() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const container = new Phaser.GameObjects.Container(gameManager, 0, 0).setAlpha(0);
+    const container = new Phaser.GameObjects.Container(this.scene, 0, 0).setAlpha(0);
     container.add([this.dialogueBox, this.blinkingDiamond.container, this.typewriter.container]);
     return container;
   }
 
-  private drawDiamond(gameManager: GameManager) {
+  private drawDiamond(scene: Phaser.Scene) {
     const diamondSprite = new Phaser.GameObjects.Image(
-      gameManager,
+      scene,
       screenSize.x - diamondSize.x - diamondPadding.x,
       screenSize.y - diamondSize.y - diamondPadding.y,
       diamond.key
     ).setDisplaySize(diamondSize.x, diamondSize.y);
 
-    return { container: diamondSprite, clearBlink: blink(gameManager, diamondSprite) };
+    return { container: diamondSprite, clearBlink: blink(scene, diamondSprite) };
   }
 
   public getDialogueBox() {
@@ -44,10 +42,9 @@ class DialogueRenderer {
   }
 
   public destroy() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
-    fadeAndDestroy(gameManager, this.getDialogueContainer());
+    fadeAndDestroy(this.scene, this.getDialogueContainer());
   }
 
   public changeText(message: string) {

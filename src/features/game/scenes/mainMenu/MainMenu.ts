@@ -20,25 +20,24 @@ import commonSoundAssets, {
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
+import { mandatory } from '../../utils/GameUtils';
 
 class MainMenu extends Phaser.Scene {
-  private layerManager: GameLayerManager;
-  private soundManager: GameSoundManager;
+  private layerManager?: GameLayerManager;
+  private soundManager?: GameSoundManager;
   private optionButtons: GameButton[];
 
   constructor() {
     super('MainMenu');
 
-    this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.optionButtons = [];
   }
 
   public preload() {
     this.preloadAssets();
-    this.layerManager.initialiseMainLayer(this);
-    this.soundManager.initialise(this, getSourceAcademyGame());
-    this.soundManager.loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
+    this.layerManager = new GameLayerManager(this);
+    this.soundManager = new GameSoundManager(this, getSourceAcademyGame());
+    this.getSoundManager().loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
     this.createOptionButtons();
   }
 
@@ -52,7 +51,7 @@ class MainMenu extends Phaser.Scene {
     this.renderOptionButtons();
 
     const fullSaveState = await loadData(accountInfo);
-    this.soundManager.playBgMusic(
+    this.getSoundManager().playBgMusic(
       galacticHarmonyBgMusic.key,
       fullSaveState.userState && fullSaveState.userState.settings.volume
     );
@@ -71,7 +70,7 @@ class MainMenu extends Phaser.Scene {
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
   }
 
   private renderOptionButtons() {
@@ -98,7 +97,7 @@ class MainMenu extends Phaser.Scene {
 
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-        this.soundManager.playSound(buttonHoverSound.key);
+        this.getSoundManager().playSound(buttonHoverSound.key);
         this.tweens.add({
           targets: buttonSprite,
           ...onFocusOptTween
@@ -114,7 +113,7 @@ class MainMenu extends Phaser.Scene {
       optionsContainer.add(buttonText);
     });
 
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
 
   private createOptionButtons() {
@@ -122,7 +121,7 @@ class MainMenu extends Phaser.Scene {
     this.addOptionButton(
       optionsText.chapterSelect,
       () => {
-        this.layerManager.clearAllLayers();
+        this.getLayerManager().clearAllLayers();
         this.scene.start('ChapterSelect');
       },
       Constants.nullInteractionId
@@ -130,7 +129,7 @@ class MainMenu extends Phaser.Scene {
     this.addOptionButton(
       optionsText.studentRoom,
       () => {
-        this.layerManager.clearAllLayers();
+        this.getLayerManager().clearAllLayers();
         this.scene.start('MyRoom');
       },
       Constants.nullInteractionId
@@ -138,7 +137,7 @@ class MainMenu extends Phaser.Scene {
     this.addOptionButton(
       optionsText.settings,
       () => {
-        this.layerManager.clearAllLayers();
+        this.getLayerManager().clearAllLayers();
         this.scene.start('Settings');
       },
       Constants.nullInteractionId
@@ -174,6 +173,8 @@ class MainMenu extends Phaser.Scene {
     // Update
     this.optionButtons.push(newTalkButton);
   }
+  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  public getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
 }
 
 export default MainMenu;

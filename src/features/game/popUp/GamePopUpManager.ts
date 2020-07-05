@@ -1,18 +1,20 @@
 import { ItemId, GameSprite } from '../commons/CommonsTypes';
 import { PopUpPosition } from './GamePopUpTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import GameActionManager from '../action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 import { popUpFrame } from '../commons/CommonAssets';
 import { popUpRect, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
 import { resize } from '../utils/SpriteUtils';
 import { Constants } from '../commons/CommonConstants';
+import GameManager from '../scenes/gameManager/GameManager';
 
 class GamePopUpManager {
   private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
   private popUpFrame: GameSprite;
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.currPopUp = new Map<PopUpPosition, Phaser.GameObjects.Container>();
     this.popUpFrame = {
       assetKey: popUpFrame.key,
@@ -25,7 +27,7 @@ class GamePopUpManager {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     // Frame
@@ -56,7 +58,7 @@ class GamePopUpManager {
 
     container.add([popUpFrameImg, resizedImage]);
     this.currPopUp.set(position, container);
-    GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
+    this.gameManager.getLayerManager().addToLayer(Layer.PopUp, container);
 
     // TODO: Animate
 
@@ -87,9 +89,7 @@ class GamePopUpManager {
   }
 
   private getAssetKey(itemId: ItemId) {
-    const objectPropMap = GameActionManager.getInstance()
-      .getGameManager()
-      .currentCheckpoint.map.getObjects();
+    const objectPropMap = this.gameManager.currentCheckpoint.map.getObjects();
     const objProp = objectPropMap.get(itemId);
     if (objProp) {
       return objProp.assetKey;

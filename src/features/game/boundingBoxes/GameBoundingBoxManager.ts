@@ -1,5 +1,4 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
 
 import { BBoxProperty, ActivatableBBox } from './GameBoundingBoxTypes';
 import { ItemId } from '../commons/CommonsTypes';
@@ -12,46 +11,44 @@ import { Constants } from '../commons/CommonConstants';
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
   private bboxes: ActivatableBBox[];
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.observerId = 'GameBoundingBoxManager';
     this.bboxes = [];
-  }
-
-  public initialise() {
-    GameActionManager.getInstance().subscribeState(this);
+    this.gameManager.getStateManager().subscribe(this);
   }
 
   public notify(locationId: LocationId) {
-    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationId,
-      GameMode.Explore
-    );
-    const currLocationId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    const hasUpdate = this.gameManager
+      .getStateManager()
+      .hasLocationUpdate(locationId, GameMode.Explore);
+    const currLocationId = this.gameManager.currentLocationId;
     if (hasUpdate && locationId === currLocationId) {
       this.renderBBoxLayerContainer(locationId);
     }
   }
 
   public renderBBoxLayerContainer(locationId: LocationId): void {
-    GameActionManager.getInstance().clearSeveralLayers([Layer.BBox]);
+    this.gameManager.getLayerManager().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender =
-      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) ||
-      [];
+      this.gameManager
+        .getStateManager()
+        .getLocationAttr(GameLocationAttr.boundingBoxes, locationId) || [];
     const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
-    GameActionManager.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.BBox, bboxContainer);
   }
 
   public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const bboxPropMap = GameActionManager.getInstance().getBBoxPropertyMap();
-    const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    const bboxPropMap = this.gameManager.getStateManager().getBBoxPropertyMap();
+    const bboxContainer = new Phaser.GameObjects.Container(this.gameManager, 0, 0);
 
     this.bboxes = bboxIds
       .map(id => bboxPropMap.get(id))
       .filter(bboxProp => bboxProp !== undefined)
       .map(bboxProp => {
-        const bbox = this.createBBox(gameManager, bboxProp!);
+        const bbox = this.createBBox(this.gameManager, bboxProp!);
         bboxContainer.add(bbox.sprite);
         return bbox;
       });
@@ -73,7 +70,6 @@ class GameBoundingBoxManager implements StateObserver {
     if (bboxProperty.isInteractive) {
       bboxSprite.setInteractive();
     }
-
     function activate({
       onClick = (id?: ItemId) => {},
       onPointerout = (id?: ItemId) => {},
@@ -81,7 +77,7 @@ class GameBoundingBoxManager implements StateObserver {
     }) {
       bboxSprite.on('pointerup', async () => {
         onClick(interactionId);
-        await GameActionManager.getInstance().executeStoryAction(actionIds);
+        await gameManager.getActionExecuter().executeStoryActions(actionIds);
       });
       bboxSprite.on('pointerover', () => {
         onHover(interactionId);

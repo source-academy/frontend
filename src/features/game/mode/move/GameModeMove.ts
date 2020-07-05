@@ -8,7 +8,6 @@ import {
   previewFill,
   previewFrame
 } from './GameModeMoveConstants';
-import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
@@ -17,6 +16,7 @@ import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import GameManager from '../../scenes/gameManager/GameManager';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -25,8 +25,10 @@ class GameModeMove implements IGameUI {
   private previewFill: GameSprite;
   private previewFrame: GameSprite;
   private gameButtons: GameButton[];
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.uiContainer = undefined;
     this.currentLocationAssetKey = defaultLocationImg.key;
     this.locationAssetKeys = new Map<string, string>();
@@ -40,11 +42,11 @@ class GameModeMove implements IGameUI {
     this.gameButtons = [];
 
     await navigation.forEach(locationId => {
-      const location = GameActionManager.getInstance().getLocationAtId(locationId);
+      const location = this.gameManager.currentCheckpoint.map.getLocationAtId(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, async () => {
-          await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
-          await GameActionManager.getInstance().getGameManager().changeLocationTo(location.id);
+          await this.gameManager.getPhaseManager().popPhase();
+          await this.gameManager.changeLocationTo(location.id);
         });
         this.locationAssetKeys.set(location.name, location.assetKey);
       }
@@ -82,11 +84,10 @@ class GameModeMove implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const locationId = GameActionManager.getInstance().getCurrLocId();
-    const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.navigation,
-      locationId
-    );
+    const locationId = this.gameManager.currentLocationId;
+    const latestLocationNav = this.gameManager
+      .getStateManager()
+      .getLocationAttr(GameLocationAttr.navigation, locationId);
     if (!latestLocationNav) {
       return;
     }
@@ -94,7 +95,7 @@ class GameModeMove implements IGameUI {
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const previewFrame = new Phaser.GameObjects.Image(
@@ -161,10 +162,8 @@ class GameModeMove implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
-        GameActionManager.getInstance()
-          .getGameManager()
-          .layerManager.fadeInLayer(Layer.Character, 300);
+        gameManager.getPhaseManager().popPhase();
+        gameManager.getLayerManager().fadeInLayer(Layer.Character, 300);
       },
       0,
       0
@@ -184,29 +183,25 @@ class GameModeMove implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
     this.fetchLatestState();
     this.uiContainer = await this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
-    gameManager.tweens.add({
+    this.gameManager.tweens.add({
       targets: this.uiContainer,
       ...entryTweenProps
     });
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-      gameManager.tweens.add({
+      this.gameManager.tweens.add({
         targets: this.uiContainer,
         ...exitTweenProps
       });

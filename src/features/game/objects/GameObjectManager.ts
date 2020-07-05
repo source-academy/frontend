@@ -1,49 +1,44 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
-import { ObjectProperty, ActivatableObject } from './GameObjectTypes';
+import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonsTypes';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GlowingImage from '../effects/GlowingObject';
-import { Constants } from '../commons/CommonConstants';
 import { blink } from '../effects/FadeEffect';
+import { Constants } from '../commons/CommonConstants';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;
   private objects: Map<ItemId, ActivatableObject>;
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.observerId = 'GameObjectManager';
     this.objects = new Map<ItemId, ActivatableObject>();
-  }
-
-  public initialise() {
-    GameActionManager.getInstance().subscribeState(this);
+    this.gameManager.getStateManager().subscribe(this);
   }
 
   public notify(locationId: LocationId) {
-    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationId,
-      GameMode.Explore
-    );
-    const currLocationId = GameActionManager.getInstance().getGameManager().currentLocationId;
-    if (hasUpdate && locationId === currLocationId) {
+    const hasUpdate = this.gameManager
+      .getStateManager()
+      .hasLocationUpdate(locationId, GameMode.Explore);
+    if (hasUpdate && locationId === this.gameManager.currentLocationId) {
       this.renderObjectsLayerContainer(locationId);
     }
   }
 
   private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
-    const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    const objectPropMap = this.gameManager.getStateManager().getObjPropertyMap();
+    const objectContainer = new Phaser.GameObjects.Container(this.gameManager, 0, 0);
 
     objectIds
       .map(id => objectPropMap.get(id))
       .filter(objectProp => objectProp !== undefined)
       .forEach(objectProp => {
-        const object = this.createObject(gameManager, objectProp!);
+        const object = this.createObject(this.gameManager, objectProp!);
         objectContainer.add((object.sprite as GlowingImage).getContainer());
         this.objects.set(objectProp!.interactionId, object);
         return object;
@@ -53,13 +48,13 @@ class GameObjectManager implements StateObserver {
   }
 
   public renderObjectsLayerContainer(locationId: LocationId): void {
-    GameActionManager.getInstance().clearSeveralLayers([Layer.Objects]);
+    this.gameManager.getLayerManager().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender =
-      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
+      this.gameManager.getStateManager().getLocationAttr(GameLocationAttr.objects, locationId) ||
+      [];
 
     const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
-
-    GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.Objects, objectContainer);
   }
 
   public enableObjectAction(callbacks: any): void {
@@ -83,7 +78,7 @@ class GameObjectManager implements StateObserver {
     if (!object) {
       return;
     }
-    blink(GameActionManager.getInstance().getGameManager(), object.sprite.getContainer());
+    blink(this.gameManager, object.sprite.getContainer());
   }
 
   private createObject(
@@ -98,22 +93,20 @@ class GameObjectManager implements StateObserver {
       onPointerout = (id?: ItemId) => {},
       onHover = (id?: ItemId) => {}
     }) {
-      object.getClickArea().on('pointerup', async () => {
+      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
         onClick(interactionId);
-        await GameActionManager.getInstance().executeStoryAction(actionIds);
+        await gameManager.getActionExecuter().executeStoryActions(actionIds);
       });
-      object.getClickArea().on('pointerover', () => {
+      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
         onHover(interactionId);
       });
-      object.getClickArea().on('pointerout', () => {
+      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
         onPointerout(interactionId);
       });
     }
 
     function deactivate() {
-      object.getClickArea().off('pointerup');
-      object.getClickArea().off('pointerover');
-      object.getClickArea().off('pointerout');
+      object.getClickArea().removeAllListeners();
     }
 
     return {

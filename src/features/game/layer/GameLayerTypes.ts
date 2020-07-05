@@ -1,3 +1,5 @@
+import GameLayerManager from './GameLayerManager';
+
 export enum Layer {
   Effects,
   Background,
@@ -30,3 +32,7 @@ export const defaultLayerSequence = [
   Layer.Effects,
   Layer.Escape
 ];
+
+export interface ILayeredScene extends Phaser.Scene {
+  getLayerManager: () => GameLayerManager;
+}

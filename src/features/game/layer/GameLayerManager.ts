@@ -1,26 +1,23 @@
 import { defaultLayerSequence, Layer } from './GameLayerTypes';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
-import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 
 class GameLayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;
   private layers: Map<Layer, Phaser.GameObjects.Container>;
+  private scene: Phaser.Scene;
 
-  constructor() {
-    this.mainLayer = undefined;
-    this.layers = new Map<Layer, Phaser.GameObjects.Container>();
-  }
-
-  public initialiseMainLayer(scene: Phaser.Scene) {
-    this.mainLayer = new Phaser.GameObjects.Container(scene, 0, 0);
-    scene.add.existing(this.mainLayer);
-    for (const layerType of defaultLayerSequence) {
-      const layerContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-      this.layers.set(layerType, layerContainer);
-      this.mainLayer.add(layerContainer);
-    }
+  constructor(scene: Phaser.Scene) {
+    this.scene = scene;
+    this.mainLayer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+    this.layers = new Map(
+      defaultLayerSequence.map(layerType => {
+        return [layerType, new Phaser.GameObjects.Container(this.scene, 0, 0)];
+      })
+    );
+    this.mainLayer.add(Array.from(this.layers.values()));
+    this.scene.add.existing(this.mainLayer);
   }
 
   public getLayer(layerType: Layer) {
@@ -38,20 +35,18 @@ class GameLayerManager {
   }
 
   public async fadeInLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
     const layerToFadeIn = this.layers.get(layerType)!;
 
     layerToFadeIn.setAlpha(0);
-    gameManager.tweens.add(fadeIn([layerToFadeIn], fadeDuration));
+    this.scene.tweens.add(fadeIn([layerToFadeIn], fadeDuration));
     sleep(fadeDuration);
   }
 
   public async fadeOutLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
     const layerToFadeOut = this.layers.get(layerType)!;
 
     layerToFadeOut.setAlpha(1);
-    gameManager.tweens.add(fadeOut([layerToFadeOut], fadeDuration));
+    this.scene.tweens.add(fadeOut([layerToFadeOut], fadeDuration));
     sleep(fadeDuration);
   }
 

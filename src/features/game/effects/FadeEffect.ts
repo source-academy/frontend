@@ -62,7 +62,7 @@ export function whiteScreen(scene: Phaser.Scene) {
 
 export function blackFadeIn(gameManager: GameManager, { fadeDuration }: FadeProps = {}) {
   const fadeBlack = blackScreen(gameManager);
-  gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
+  gameManager.getLayerManager().addToLayer(Layer.Effects, fadeBlack);
   fadeAndDestroy(gameManager, fadeBlack, { fadeDuration });
 }
 
@@ -73,7 +73,7 @@ export const blackFade = async (
   callback: any
 ) => {
   const fadeBlack = blackScreen(gameManager);
-  gameManager.layerManager.addToLayer(Layer.Effects, fadeBlack);
+  gameManager.getLayerManager().addToLayer(Layer.Effects, fadeBlack);
 
   fadeBlack.setAlpha(0);
   gameManager.tweens.add(fadeIn([fadeBlack], fadeDuration));

@@ -1,4 +1,3 @@
-import GameActionManager from '../action/GameActionManager';
 import { mediumButton, escapeMenuBackground } from '../commons/CommonAssets';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { createButton } from '../utils/StyleUtils';
@@ -19,21 +18,23 @@ import {
   volumeOptTextXOffset,
   volumeOptTextYOffset
 } from './GameEscapeConstants';
-import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
 import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import { Layer } from '../layer/GameLayerTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 
 class GameEscapeManager {
   private volumeOptions: CommonRadioButtons | undefined;
+  private scene: GameManager;
 
-  constructor() {
+  constructor(scene: GameManager) {
+    this.scene = scene;
     this.volumeOptions = undefined;
   }
 
   public createEscapeMenu() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
+    const gameManager = this.scene;
     const escapeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     const escapeMenuBg = new Phaser.GameObjects.Image(
       gameManager,
@@ -52,9 +53,7 @@ class GameEscapeManager {
       optTextStyle
     );
 
-    const userVol = GameActionManager.getInstance()
-      .getGameManager()
-      .saveManager.getLoadedUserState().settings.volume;
+    const userVol = this.scene.getSaveManager().getLoadedUserState().settings.volume;
     const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
     this.volumeOptions = new CommonRadioButtons(
       gameManager,
@@ -95,8 +94,8 @@ class GameEscapeManager {
       gameManager,
       'Continue',
       async () => {
-        if (gameManager.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-          await gameManager.phaseManager.popPhase();
+        if (gameManager.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await gameManager.getPhaseManager().popPhase();
         }
       },
       mediumButton.key,
@@ -125,30 +124,22 @@ class GameEscapeManager {
       continueButton,
       applySettingsButton
     ]);
-    GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
+    this.scene.getLayerManager().addToLayer(Layer.Escape, escapeMenuContainer);
   }
 
   public destroyEscapeMenu() {
-    GameActionManager.getInstance()
-      .getGameManager()
-      .layerManager.clearSeveralLayers([Layer.Escape]);
+    this.scene.getLayerManager().clearSeveralLayers([Layer.Escape]);
   }
 
   private async applySettings() {
     if (this.volumeOptions) {
       // Save settings
       const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await GameActionManager.getInstance()
-        .getGameManager()
-        .saveManager.saveSettings({ volume: volumeVal });
+      await this.scene.getSaveManager().saveSettings({ volume: volumeVal });
 
       // Apply settings
-      const newUserSetting = GameActionManager.getInstance()
-        .getGameManager()
-        .saveManager.getLoadedUserState();
-      GameActionManager.getInstance()
-        .getGameManager()
-        .soundManager.applyUserSettings(newUserSetting);
+      const newUserSetting = this.scene.getSaveManager().getLoadedUserState();
+      this.scene.getSoundManager().applyUserSettings(newUserSetting);
     }
   }
 }

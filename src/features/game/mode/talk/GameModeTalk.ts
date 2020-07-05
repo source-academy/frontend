@@ -1,5 +1,4 @@
 import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
-import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
@@ -8,20 +7,22 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import GameManager from '../../scenes/gameManager/GameManager';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private gameButtons: GameButton[];
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.gameButtons = [];
   }
 
   public fetchLatestState(): void {
-    const talkTopics = GameActionManager.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
-      GameActionManager.getInstance().getCurrLocId()
-    );
+    const talkTopics = this.gameManager
+      .getStateManager()
+      .getLocationAttr(GameLocationAttr.talkTopics, this.gameManager.currentLocationId);
     if (!talkTopics.length) {
       return;
     }
@@ -33,13 +34,13 @@ class GameModeTalk implements IGameUI {
     this.gameButtons = [];
 
     dialogueIds.forEach(dialogueId => {
-      const dialogue = GameActionManager.getInstance().getDialogue(dialogueId);
+      const dialogue = this.gameManager.currentCheckpoint.map.getDialogues().get(dialogueId);
       if (dialogue) {
         this.addTalkOptionButton(
           dialogue.title,
           async () => {
-            GameActionManager.getInstance().triggerInteraction(dialogueId);
-            await GameActionManager.getInstance().bringUpDialogue(dialogueId);
+            this.gameManager.getStateManager().triggerInteraction(dialogueId);
+            await this.gameManager.getDialogueManager().bringUpDialogue(dialogueId);
           },
           dialogueId
         );
@@ -78,7 +79,7 @@ class GameModeTalk implements IGameUI {
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
     const talkMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     this.gameButtons.forEach((topicButton: GameButton) => {
@@ -113,7 +114,7 @@ class GameModeTalk implements IGameUI {
 
       const isTriggeredTopic =
         !!topicButton.interactionId &&
-        GameActionManager.getInstance().hasTriggeredInteraction(topicButton.interactionId);
+        this.gameManager.getStateManager().hasTriggeredInteraction(topicButton.interactionId);
       if (isTriggeredTopic) {
         talkMenuContainer.add(checkedSprite);
       }
@@ -121,7 +122,7 @@ class GameModeTalk implements IGameUI {
 
     const backButton = new CommonBackButton(
       gameManager,
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      () => gameManager.getPhaseManager().popPhase(),
       0,
       0
     );
@@ -132,29 +133,26 @@ class GameModeTalk implements IGameUI {
   public async activateUI(): Promise<void> {
     this.gameButtons = [];
     this.fetchLatestState();
-    const gameManager = GameActionManager.getInstance().getGameManager();
 
     this.fetchLatestState();
     this.uiContainer = await this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
-    gameManager.tweens.add({
+    this.gameManager.tweens.add({
       targets: this.uiContainer,
       ...entryTweenProps
     });
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-      gameManager.tweens.add({
+      this.gameManager.tweens.add({
         targets: this.uiContainer,
         ...exitTweenProps
       });

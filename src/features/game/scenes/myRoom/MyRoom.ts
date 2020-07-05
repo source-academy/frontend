@@ -4,21 +4,21 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import commonAssets from '../../commons/CommonAssets';
+import { mandatory } from '../../utils/GameUtils';
 
 class MyRoom extends Phaser.Scene {
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
   private collectiblesManager: GameCollectiblesManager;
 
   constructor() {
     super('MyRoom');
-    this.layerManager = new GameLayerManager();
     this.collectiblesManager = new GameCollectiblesManager();
   }
 
   public preload() {
     addLoadingScreen(this);
     this.preloadBaseAssets();
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager = new GameLayerManager(this);
     this.collectiblesManager.initialise(this, this.layerManager);
   }
 
@@ -37,14 +37,15 @@ class MyRoom extends Phaser.Scene {
     const backButton = new CommonBackButton(
       this,
       () => {
-        this.layerManager.clearAllLayers();
+        this.getLayerManager().clearAllLayers();
         this.scene.start('MainMenu');
       },
       0,
       0
     );
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
+  public getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
 }
 
 export default MyRoom;

@@ -1,4 +1,3 @@
-import GameActionManager from 'src/features/game/action/GameActionManager';
 import { IGameUI, ItemId } from '../../commons/CommonsTypes';
 import {
   magnifyingGlass,
@@ -10,15 +9,21 @@ import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import GameManager from '../../scenes/gameManager/GameManager';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
+  private gameManager: GameManager;
+
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
+  }
 
   // Explore Mode does not require states
   public fetchLatestState(): void {}
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
@@ -26,10 +31,8 @@ class GameModeExplore implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
-        GameActionManager.getInstance()
-          .getGameManager()
-          .layerManager.fadeInLayer(Layer.Character, 300);
+        gameManager.getPhaseManager().popPhase();
+        gameManager.getLayerManager().fadeInLayer(Layer.Character, 300);
       },
       0,
       0
@@ -40,12 +43,12 @@ class GameModeExplore implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
 
     gameManager.input.setDefaultCursor(magnifyingGlass);
 
     this.uiContainer = this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    this.gameManager.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
@@ -56,13 +59,13 @@ class GameModeExplore implements IGameUI {
       ...entryTweenProps
     });
 
-    gameManager.objectManager.enableObjectAction({
+    gameManager.getObjectManager().enableObjectAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
     });
 
-    gameManager.boundingBoxManager.enableBBoxAction({
+    gameManager.getBBoxManager().enableBBoxAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
@@ -72,10 +75,10 @@ class GameModeExplore implements IGameUI {
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = this.gameManager;
     gameManager.input.setDefaultCursor('');
-    gameManager.boundingBoxManager.disableBBoxAction();
-    gameManager.objectManager.disableObjectAction();
+    gameManager.getBBoxManager().disableBBoxAction();
+    gameManager.getObjectManager().disableObjectAction();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -93,25 +96,23 @@ class GameModeExplore implements IGameUI {
     }
   }
 
-  private explorePointerOver(id: ItemId) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(id);
+  private explorePointerOver = (id: ItemId) => {
+    const hasTriggered = this.gameManager.getStateManager().hasTriggeredInteraction(id);
     if (hasTriggered) {
-      gameManager.input.setDefaultCursor(magnifyingGlassChecked);
+      this.gameManager.input.setDefaultCursor(magnifyingGlassChecked);
     } else {
-      gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
+      this.gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
     }
-  }
+  };
 
-  private explorePointerOut() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    gameManager.input.setDefaultCursor(magnifyingGlass);
-  }
+  private explorePointerOut = () => {
+    this.gameManager.input.setDefaultCursor(magnifyingGlass);
+  };
 
-  private explorePointerUp(id: string) {
+  private explorePointerUp = (id: string) => {
     // Trigger action here
-    GameActionManager.getInstance().triggerInteraction(id);
-  }
+    this.gameManager.getStateManager().triggerInteraction(id);
+  };
 }
 
 export default GameModeExplore;

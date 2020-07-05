@@ -24,3 +24,8 @@ export function createMapWithKey<K, V>(list: any[], id: string) {
 
   return newMap;
 }
+
+export function mandatory(object: any, name?: any) {
+  if (!object) throw new Error(`No ${name || 'manager'} found`);
+  return object;
+}

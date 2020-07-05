@@ -69,7 +69,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
       .setDataEnabled();
 
     this.startingCoordinates = [x, y];
-    this.getObjectPlacement().layerManager.addToLayer(Layer.BBox, bboxBeingDrawn);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.BBox, bboxBeingDrawn);
     return bboxBeingDrawn;
   }
 

@@ -2,8 +2,6 @@ import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
 import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
-import { LocationId } from '../location/GameMapTypes';
-import GameActionManager from '../action/GameActionManager';
 import { UserSaveState } from '../save/GameSaveTypes';
 
 class GameSoundManager {
@@ -12,11 +10,8 @@ class GameSoundManager {
   private scene: Phaser.Scene | undefined;
   private parentGame: SourceAcademyGame | undefined;
 
-  constructor() {
+  constructor(scene: Phaser.Scene, parentGame: SourceAcademyGame) {
     this.soundAssets = new Map<AssetKey, SoundAsset>();
-  }
-
-  public initialise(scene: Phaser.Scene, parentGame: SourceAcademyGame) {
     this.scene = scene;
     this.parentGame = parentGame;
     this.baseSoundManager = this.parentGame.sound;
@@ -27,8 +22,7 @@ class GameSoundManager {
     this.setGlobalVolume(userSaveState.settings.volume);
   }
 
-  public renderBackgroundMusic(locationId: LocationId) {
-    const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
+  public renderBackgroundMusic(bgmKey: string) {
     this.stopCurrBgMusic();
     if (bgmKey) {
       this.playBgMusic(bgmKey);

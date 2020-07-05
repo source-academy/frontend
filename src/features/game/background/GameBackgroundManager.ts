@@ -1,29 +1,29 @@
 import { screenCenter, screenSize, Constants } from '../commons/CommonConstants';
 import { LocationId } from '../location/GameMapTypes';
 import { AssetKey } from '../commons/CommonsTypes';
-import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { fadeIn } from '../effects/FadeEffect';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameBackgroundManager {
   public observerId: string;
+  private gameManager: GameManager;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.observerId = 'GameBackgroundManager';
   }
 
   public renderBackgroundLayerContainer(locationId: LocationId) {
-    const assetKey = GameActionManager.getInstance().getLocationAtId(locationId).assetKey;
-
+    const assetKey = this.gameManager.currentCheckpoint.map.getLocationAtId(locationId).assetKey;
     this.renderBackgroundImage(assetKey);
   }
 
   private renderBackgroundImage(assetKey: AssetKey) {
-    GameActionManager.getInstance().clearSeveralLayers([Layer.Background]);
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    this.gameManager.getLayerManager().clearSeveralLayers([Layer.Background]);
 
     const backgroundAsset = new Phaser.GameObjects.Image(
-      gameManager,
+      this.gameManager,
       screenCenter.x,
       screenCenter.y,
       assetKey
@@ -31,7 +31,7 @@ export default class GameBackgroundManager {
       .setDisplaySize(screenSize.x, screenSize.y)
       .setAlpha(0);
 
-    gameManager.add.tween(fadeIn([backgroundAsset], Constants.fadeDuration));
-    GameActionManager.getInstance().addContainerToLayer(Layer.Background, backgroundAsset);
+    this.gameManager.add.tween(fadeIn([backgroundAsset], Constants.fadeDuration));
+    this.gameManager.getLayerManager().addToLayer(Layer.Background, backgroundAsset);
   }
 }

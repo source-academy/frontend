@@ -1,12 +1,16 @@
-import { GamePhaseType } from './GamePhaseTypes';
-import { gamePhaseMap } from './GamePhaseConstants';
-import GameActionManager from '../action/GameActionManager';
+import { GamePhaseType, GamePhase } from './GamePhaseTypes';
+import GameManager from '../scenes/gameManager/GameManager';
+import { createGamePhaseMap } from './GamePhaseConstants';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
+  private gameManager: GameManager;
+  private gamePhaseMap: Map<string, GamePhase>;
 
-  constructor() {
+  constructor(gameManager: GameManager) {
+    this.gameManager = gameManager;
     this.phaseStack = [GamePhaseType.None];
+    this.gamePhaseMap = createGamePhaseMap(gameManager);
   }
 
   public async popPhase(): Promise<void> {
@@ -30,13 +34,13 @@ export default class GamePhaseManager {
   }
 
   public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    GameActionManager.getInstance().enableKeyboardInput(false);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(newPhase).activate();
-    GameActionManager.getInstance().enableKeyboardInput(true);
+    this.gameManager.input.keyboard.enabled = false;
+    await this.gamePhaseMap.get(prevPhase)!.deactivate();
+    await this.gamePhaseMap.get(newPhase)!.activate();
+    this.gameManager.input.keyboard.enabled = true;
 
     // Transition to the next scene if possible
-    GameActionManager.getInstance().getGameManager().checkpointTransition();
+    this.gameManager.checkpointTransition();
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {

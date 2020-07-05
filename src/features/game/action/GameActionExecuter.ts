@@ -1,14 +1,15 @@
 import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
-import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { ItemId } from '../commons/CommonsTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
+  private gameManager: GameManager;
 
-  public initialise(gameManager: GameManager) {
+  constructor(gameManager: GameManager) {
     this.actionMap = gameManager.currentCheckpoint.map.getActions();
+    this.gameManager = gameManager;
   }
 
   public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
@@ -18,65 +19,63 @@ export default class GameActionExecuter {
         actionId
       );
       if (
-        (repeatable || !GameActionManager.getInstance().hasTriggeredInteraction(actionId)) &&
+        (repeatable || !this.gameManager.getStateManager().hasTriggeredInteraction(actionId)) &&
         actionConditions.every(actionCondition => this.checkCondition(actionCondition))
       ) {
         await this.executeStoryAction(actionType, actionParams);
-        GameActionManager.getInstance().triggerInteraction(actionId);
+        this.gameManager.getStateManager().triggerInteraction(actionId);
       }
     }
-    await GameActionManager.getInstance().saveGame();
+    await this.gameManager.getSaveManager().saveGame(this.gameManager);
   }
 
   private async executeStoryAction(actionType: GameActionType, actionParams: any) {
-    const actionManager = GameActionManager.getInstance();
-
     switch (actionType) {
       case GameActionType.LocationChange:
-        actionManager.changeLocationTo(actionParams.id);
+        this.gameManager.changeLocationTo(actionParams.id);
         return;
       case GameActionType.ChangeBackground:
-        actionManager
-          .getGameManager()
-          .backgroundManager.renderBackgroundLayerContainer(actionParams.id);
+        this.gameManager.getBackgroundManager().renderBackgroundLayerContainer(actionParams.id);
         return;
       case GameActionType.Collectible:
-        actionManager.obtainCollectible(actionParams.id);
+        this.gameManager.getUserStateManager().addToList('collectibles', actionParams.id);
         return;
       case GameActionType.UpdateChecklist:
-        actionManager.completeObjective(actionParams.id);
+        this.gameManager.getStateManager().completeObjective(actionParams.id);
         return;
       case GameActionType.AddItem:
-        actionManager.addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
+        this.gameManager
+          .getStateManager()
+          .addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.RemoveItem:
-        actionManager.removeLocationAttr(
-          actionParams.attr,
-          actionParams.locationId,
-          actionParams.id
-        );
+        this.gameManager
+          .getStateManager()
+          .removeLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.AddLocationMode:
-        actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
+        this.gameManager
+          .getStateManager()
+          .addLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.RemoveLocationMode:
-        actionManager.removeLocationMode(actionParams.locationId, actionParams.mode);
+        this.gameManager
+          .getStateManager()
+          .removeLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
-        await actionManager.getGameManager().dialogueManager.playDialogue(actionParams.id);
+        await this.gameManager.getDialogueManager().playDialogue(actionParams.id);
         return;
       case GameActionType.AddPopup:
-        await actionManager.displayPopUp(
-          actionParams.id,
-          actionParams.position,
-          actionParams.duration
-        );
+        await this.gameManager
+          .getPopupManager()
+          .displayPopUp(actionParams.id, actionParams.position, actionParams.duration);
         return;
       case GameActionType.MakeObjectBlink:
-        await actionManager.makeObjectBlink(actionParams.id);
+        await this.gameManager.getObjectManager().makeObjectBlink(actionParams.id);
         return;
       case GameActionType.MakeObjectGlow:
-        await actionManager.makeObjectGlow(actionParams.id);
+        await this.gameManager.getObjectManager().makeObjectGlow(actionParams.id);
         return;
     }
   }
@@ -86,13 +85,14 @@ export default class GameActionExecuter {
     switch (state) {
       case GameStateStorage.UserState:
         return (
-          GameActionManager.getInstance().existsInUserStateList(
-            conditionParams.listName,
-            conditionParams.id
-          ) === boolean
+          this.gameManager
+            .getUserStateManager()
+            .doesIdExistInList(conditionParams.listName, conditionParams.id) === boolean
         );
       case GameStateStorage.ChecklistState:
-        return GameActionManager.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
+        return (
+          this.gameManager.getStateManager().isObjectiveComplete(conditionParams.id) === boolean
+        );
       default:
         return true;
     }

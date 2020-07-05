@@ -3,6 +3,7 @@ import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyG
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { FullSaveState, SettingsJson, SaveManagerType } from './GameSaveTypes';
 import { createEmptySaveState } from './GameSaveConstants';
+import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
@@ -62,9 +63,14 @@ export default class GameSaveManager {
     this.version = SaveManagerType.Simulator;
   }
 
-  public async saveGame() {
+  public async saveGame(gameManager: GameManager) {
     if (this.version === SaveManagerType.Game) {
-      this.fullSaveState = gameStateToJson(this.fullSaveState, this.chapterNum, this.checkpointNum);
+      this.fullSaveState = gameStateToJson(
+        gameManager,
+        this.fullSaveState,
+        this.chapterNum,
+        this.checkpointNum
+      );
       await saveData(this.getAccountInfo(), this.fullSaveState);
     } else if (this.version === SaveManagerType.Simulator) {
       return;

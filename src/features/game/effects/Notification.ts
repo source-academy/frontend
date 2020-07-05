@@ -2,17 +2,15 @@ import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import { titleTypeWriterStyle } from '../dialogue/DialogueConstants';
 import { fadeIn } from './FadeEffect';
 import { Constants } from '../commons/CommonConstants';
-import GameActionManager from '../action/GameActionManager';
-import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
+import { ILayeredScene, Layer } from '../layer/GameLayerTypes';
 
-export async function displayNotification(message: string): Promise<void> {
-  const gameManager = GameActionManager.getInstance().getGameManager();
-  const dialogueRenderer = new DialogueRenderer(titleTypeWriterStyle);
+export async function displayNotification(scene: ILayeredScene, message: string): Promise<void> {
+  const dialogueRenderer = new DialogueRenderer(scene, titleTypeWriterStyle);
   const container = dialogueRenderer.getDialogueContainer();
 
-  GameActionManager.getInstance().addContainerToLayer(Layer.Effects, container);
-  gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
+  scene.getLayerManager().addToLayer(Layer.Dialogue, container);
+  scene.add.tween(fadeIn([container], Constants.fadeDuration * 2));
 
   // Wait for fade in to finish
   await sleep(Constants.fadeDuration * 2);
