@@ -26,7 +26,7 @@ class GameInputManager {
   ) {
     const keyObj = this.getScene().input.keyboard.addKey(key);
     const keyboardListener = keyObj.addListener(event, callback);
-    this.keyboardListeners.concat(keyboardListener);
+    this.keyboardListeners.push(keyboardListener);
   }
 
   public registerEventListener(event: string | symbol, callback: Function) {
