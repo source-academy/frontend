@@ -4,7 +4,6 @@ import PrerequisiteDeleter from './controlPanelUtils/PrerequisiteDeleter';
 import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
 import TaskDeleter from './controlPanelUtils/TaskDeleter';
-import TaskPositionEditor from './controlPanelUtils/TaskPositionEditor';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import PrerequisitePositionEditor from './controlPanelUtils/PrerequisitePositionEditor';
 import TaskPositionInserter from './controlPanelUtils/TaskPositionInserter';
@@ -42,13 +41,6 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
       />
 
       <TaskPositionInserter
-        editableAchievement={editableAchievement}
-        setEditableAchievement={setEditableAchievement}
-        inferencer={inferencer}
-        saveChanges={saveChanges}
-      />
-
-      <TaskPositionEditor
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
         inferencer={inferencer}
