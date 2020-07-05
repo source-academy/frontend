@@ -2,7 +2,6 @@ import React from 'react';
 
 import Inferencer from './utils/Inferencer';
 import { Card } from '@blueprintjs/core';
-import AchievementExp from './utils/AchievementExp';
 import AchievementModalDescription from './modal/AchievementModalDescription';
 import AchievementModalGoal from './modal/AchievementModalGoal';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
@@ -20,7 +19,7 @@ function AchievementModal(props: AchievementModalProps) {
 
   if (modal === undefined) return null;
 
-  const { title, exp, ability } = inferencer.getAchievementItem(id);
+  const { title, ability, deadline } = inferencer.getAchievementItem(id);
   const { modalImageUrl, description, goalText, completionText } = modal;
 
   return (
@@ -31,13 +30,21 @@ function AchievementModal(props: AchievementModalProps) {
           background: `${generateBackgroundGradient(ability)}`
         }}
       >
-        <h1>{title}</h1>
-        <div>
+        <div className="sample">
           <img src={modalImageUrl} alt={title} />
+          <div className="modal-title">
+            {' '}
+            <h3>{title}</h3>
+          </div>
+          <div className="modal-deadline">
+            <p>{`Deadline: ${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`}</p>
+          </div>
+          <AchievementModalDescription description={description} />
         </div>
-        <AchievementExp exp={exp} />
-        <AchievementModalDescription description={description} />
+
         <AchievementModalGoal goalText={goalText} />
+
+        <hr />
         <AchievementModalCompletion completionText={completionText} />
       </Card>
     </div>

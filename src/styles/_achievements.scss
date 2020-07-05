@@ -2,14 +2,6 @@
   display: flex;
   flex-direction: column;
   flex: 1 1 100%;
-  background-size: cover;
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.3)
-    ),
-    url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
 
   .achievement-main {
     display: flex;
@@ -17,6 +9,17 @@
     flex-wrap: wrap;
     flex: 1 1 100%;
     text-align: justify;
+
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.6),
+        rgba(0, 0, 0, 0.3)
+      ),
+      url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
 
     & > * {
       overflow-wrap: break-word;
@@ -161,16 +164,18 @@
             width: 100%;
             height: 50%;
             position: flex;
-            border-bottom: 1px solid white;
-            border-left: 1px solid white;
+            border-bottom: 1px solid #4195fc;
+            border-left: 1px solid #4195fc;
+            box-shadow: 0px 0px 5px #4195fc;
           }
 
           .lower {
             width: 100%;
             height: 50%;
             position: flex;
-            border-top: 1px solid white;
-            border-left: 1px solid white;
+            border-bottom: 1px solid #4195fc;
+            border-left: 1px solid #4195fc;
+            box-shadow: 0px 0px 5px #4195fc;
           }
         }
 
@@ -239,20 +244,57 @@
 
     .modal {
       width: 40%;
-      height: 80%;
+      height: 50em;
       display: flex;
       justify-content: center;
       text-align: center;
 
       .modal-container {
-        width: 80%;
+        width: 90%;
         border: solid white;
         background-color: #333e50;
         text-align: center;
 
-        img {
-          max-height: 40%;
-          max-width: 100%;
+        .sample {
+          position: relative;
+          text-align: center;
+          color: white;
+
+          img {
+            max-height: 100em;
+            max-width: 100%;
+          }
+
+          .modal-title {
+            text-align: center;
+            position: absolute;
+            margin: auto;
+            top: 0;
+            left: 0;
+            right: 0;
+          }
+
+          .modal-deadline {
+            text-align: center;
+            position: absolute;
+            margin: auto;
+            top: 3em;
+            left: 0;
+            right: 0;
+          }
+
+          .modal-desc {
+            text-align: center;
+            position: absolute;
+            margin: auto;
+            left: 0;
+            bottom: 0;
+            right: 0;
+
+            p {
+              color: yellow;
+            }
+          }
         }
 
         .modal-exp {

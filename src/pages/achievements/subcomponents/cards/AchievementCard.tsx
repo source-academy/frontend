@@ -15,6 +15,7 @@ type AchievementCardProps = {
   isDropdownOpen: boolean;
   toggleDropdown: any;
   displayModal: any;
+  handleGlow: any;
 };
 
 function AchievementCard(props: AchievementCardProps) {
@@ -25,7 +26,8 @@ function AchievementCard(props: AchievementCardProps) {
     isDropdownOpen,
     toggleDropdown,
     displayModal,
-    generateBackgroundGradient
+    generateBackgroundGradient,
+    handleGlow
   } = props;
 
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
@@ -40,6 +42,7 @@ function AchievementCard(props: AchievementCardProps) {
     <Card
       className="achievement"
       style={{
+        ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
         background: `${generateBackgroundGradient(ability)}, url(${backgroundImageUrl})`
       }}
@@ -62,7 +65,7 @@ function AchievementCard(props: AchievementCardProps) {
         <div className="display">
           <div className="headings">
             <div className="title">
-              <h1>{title}</h1>
+              <h3>{title}</h3>
             </div>
 
             <AchievementHints release={release} />

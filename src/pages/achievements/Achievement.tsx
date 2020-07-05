@@ -19,6 +19,13 @@ export type StateProps = {
 function Achievement(props: DispatchProps & StateProps) {
   const { inferencer, handleAchievementsFetch } = props;
 
+  useEffect(() => {
+    handleAchievementsFetch();
+  }, [handleAchievementsFetch]);
+
+  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
+  const [modalId, setModalId] = useState<number>(-1);
+
   const generateBackgroundGradient = (ability: AchievementAbility) => {
     switch (ability) {
       case 'Academic':
@@ -34,12 +41,16 @@ function Achievement(props: DispatchProps & StateProps) {
     }
   };
 
-  useEffect(() => {
-    handleAchievementsFetch();
-  }, [handleAchievementsFetch]);
+  const handleGlow = (id: number) => {
+    if (id === modalId) {
+      return {
+        border: '5px solid #4195fc',
+        boxShadow: '0px 0px 20px #4195fc'
+      };
+    }
 
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
-  const [modalId, setModalId] = useState<number>(-1);
+    return {};
+  };
 
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (
@@ -49,6 +60,7 @@ function Achievement(props: DispatchProps & StateProps) {
         inferencer={inferencer}
         filterStatus={filterStatus}
         displayModal={setModalId}
+        handleGlow={handleGlow}
         generateBackgroundGradient={generateBackgroundGradient}
       />
     ));

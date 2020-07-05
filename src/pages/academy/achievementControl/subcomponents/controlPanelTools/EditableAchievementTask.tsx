@@ -42,6 +42,7 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
       inferencer={inferencer}
       filterStatus={FilterStatus.ALL}
       displayModal={() => {}}
+      handleGlow={(id: number) => {}}
     />
   );
 
