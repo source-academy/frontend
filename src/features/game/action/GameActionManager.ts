@@ -54,7 +54,7 @@ class GameActionManager {
   /////////////////////
 
   public getModesByLocId(locationId: LocationId): GameMode[] {
-    return Array.from(this.getGameManager().stateManager.getLocationMode(locationId));
+    return this.getGameManager().stateManager.getLocationMode(locationId);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
