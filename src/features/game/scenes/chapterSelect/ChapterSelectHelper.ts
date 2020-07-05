@@ -18,7 +18,7 @@ import {
 } from './ChapterSelectAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
-import { hex, Color } from '../../utils/StyleUtils';
+import { HexColor } from '../../utils/StyleUtils';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -149,7 +149,7 @@ function createHoverTextContainer(scene: Phaser.Scene, text: string, style: any)
     0,
     180,
     40,
-    hex(Color.darkBlue)
+    HexColor.darkBlue
   ).setAlpha(0.7);
   const altText = new Phaser.GameObjects.Text(scene, 0, 0, text, style).setOrigin(0.5, 0.5);
   const altTextContainer = new Phaser.GameObjects.Container(scene, 0, 0, [altTextBg, altText]);

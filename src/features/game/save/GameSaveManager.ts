@@ -94,7 +94,7 @@ export default class GameSaveManager {
   }
 
   public getLoadedLocation() {
-    if (this.continueGame) {
+    if (this.continueGame && this.fullSaveState.gameSaveStates[this.chapterNum]) {
       return this.fullSaveState.gameSaveStates[this.chapterNum].currentLocation;
     } else {
       return;

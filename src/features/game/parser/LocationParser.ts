@@ -1,61 +1,68 @@
+import { LocationId } from '../location/GameMapTypes';
 import Parser from './Parser';
-import { splitToLines, splitByChar } from './ParserHelper';
-import { Constants } from '../commons/CommonConstants';
-import { GameMode } from '../mode/GameModeTypes';
+import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
+import ObjectParser from './ObjectParser';
+import BoundingBoxParser from './BoundingBoxParser';
+import CharacterParser from './CharacterParser';
+import ParserConverter from './ParserConverter';
 
-function locationAssetKey(shortPath: string) {
-  return shortPath;
-}
+export default class LocationParser {
+  public static parse(locationId: LocationId, locationBody: string[]) {
+    const locationParagraphs = StringUtils.splitToParagraph(locationBody);
 
-function locationAssetValue(shortPath: string) {
-  const [filename, extension] = shortPath.split('.');
-  const [, location, skin] = filename.split('/');
-  return `${Constants.assetsFolder}/locations/${location}/${skin || 'normal'}.${
-    extension || 'png'
-  }`;
-}
-
-export default function LocationParser(fileName: string, fileContent: string): void {
-  const gameMap = Parser.checkpoint.map;
-  const [locationAssets, locationModes, navigation, locationActions] = fileContent.split('$');
-
-  // Parse and load location assets
-  splitToLines(locationAssets).forEach(locationAsset => {
-    const [id, shortPath, name] = splitByChar(locationAsset, ',');
-
-    gameMap.addLocation(id, {
-      id,
-      name,
-      assetKey: locationAssetKey(shortPath)
+    locationParagraphs.forEach(([header, body]: [string, string[]]) => {
+      if (body.length === 0) {
+        this.parseLocationConfig(locationId, header);
+      } else {
+        this.parseLocationParagraphs(locationId, header, body);
+      }
     });
-    gameMap.addMapAsset(locationAssetKey(shortPath), locationAssetValue(shortPath));
-  });
+  }
 
-  // Parse modes per location
-  splitToLines(locationModes).forEach(location => {
-    const [locationId, modes] = location.split(': ');
-    const gameModes = splitByChar(modes, ',').map(mode => textToGameModeMap[mode]);
-    gameMap.setModesAt(locationId, gameModes);
-  });
+  public static parseLocationConfig(locationId: LocationId, locationConfig: string) {
+    const [key, value] = StringUtils.splitByChar(locationConfig, ':');
+    const location = Parser.checkpoint.map.getLocationAtId(locationId);
+    switch (key) {
+      case 'modes':
+        !location.modes && (location.modes = []);
+        StringUtils.splitByChar(value, ',').forEach(mode => {
+          const gameMode = ParserConverter.stringToGameMode(mode);
+          location.modes!.push(gameMode);
+        });
+        break;
+      case 'nav':
+        !location.navigation && (location.navigation = []);
+        StringUtils.splitByChar(value, ',').forEach(otherLocationId => {
+          location.navigation!.push(otherLocationId);
+        });
+        break;
+      case 'talkTopics':
+        const talkTopics = StringUtils.splitByChar(value, ',');
+        location.talkTopics = talkTopics;
+        break;
+      case 'actions':
+        const actions = StringUtils.splitByChar(value, ',');
+        location.actionIds = ActionParser.parseActions(actions);
+        break;
+      default:
+        throw new Error(`Invalid location config key ${key}`);
+    }
+  }
 
-  // Parse which locations can be visited from one location
-  splitToLines(navigation).forEach(location => {
-    const [locationId, connectedTo] = location.split(': ');
-    gameMap.setNavigationFrom(locationId, connectedTo.split(', '));
-  });
-
-  // Parse actions per location
-  splitToLines(locationActions).forEach(locationAction => {
-    const [locationId, ...actions] = splitByChar(locationAction, ',');
-    const gameLocation = Parser.checkpoint.map.getLocationAtId(locationId);
-    gameLocation.actionIds = ActionParser(actions);
-  });
+  public static parseLocationParagraphs(locationId: LocationId, header: string, body: string[]) {
+    switch (header) {
+      case 'objects':
+        ObjectParser.parse(locationId, body);
+        break;
+      case 'boundingBoxes':
+        BoundingBoxParser.parse(locationId, body);
+        break;
+      case 'characters':
+        CharacterParser.parse(locationId, body);
+        break;
+      default:
+        throw new Error(`Invalid location paragraph header ${header}`);
+    }
+  }
 }
-
-export const textToGameModeMap = {
-  talk: GameMode.Talk,
-  explore: GameMode.Explore,
-  move: GameMode.Move,
-  menu: GameMode.Menu
-};

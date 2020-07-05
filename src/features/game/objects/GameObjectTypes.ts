@@ -1,5 +1,6 @@
 import { TrackInteraction } from '../commons/CommonsTypes';
 import { IGameActionable } from '../action/GameActionTypes';
+import GlowingImage from '../effects/GlowingObject';
 
 type ActionName = string;
 type ActionParams = Array<any>;
@@ -20,7 +21,7 @@ export type ObjectLayerProps = {
 };
 
 export type ActivatableObject = {
-  sprite: Phaser.GameObjects.Image;
+  sprite: GlowingImage;
   activate: Function;
   deactivate: Function;
 };

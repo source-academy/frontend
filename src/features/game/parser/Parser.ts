@@ -1,20 +1,13 @@
-import LocationParser from './LocationParser';
-import ConfigParser from './ConfigParser';
-import ObjectParser from './ObjectParser';
-import DialogueParser from './DialogueParser';
-import CharacterParser from './CharacterParser';
-import BoundingBoxParser from './BoundingBoxParser';
-import ObjectiveParser from './ObjectiveParser';
-import CollectibleParser from './CollectibleParser';
-import AssetParser from './AssetParser';
-
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import { splitByHeader, matchStartingKey, stripEnclosingChars } from './ParserHelper';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
+import DialoguesParser from './DialogueParser';
+import LocationsParser from './LocationDetailsParser';
+import LocationParser from './LocationParser';
+
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
+import StringUtils from '../utils/StringUtils';
 
 class Parser {
-  private static parserMap: object;
   public static checkpoint: GameCheckpoint;
   private static actionIdNum: number;
 
@@ -25,18 +18,6 @@ class Parser {
 
   public static init() {
     Parser.actionIdNum = 0;
-
-    Parser.parserMap = {
-      configuration: ConfigParser,
-      location: LocationParser,
-      objects: ObjectParser,
-      dialogue: DialogueParser,
-      characters: CharacterParser,
-      boundingBoxes: BoundingBoxParser,
-      objectives: ObjectiveParser,
-      collectibles: CollectibleParser,
-      assets: AssetParser
-    };
 
     Parser.checkpoint = {
       configuration: '',
@@ -51,21 +32,46 @@ class Parser {
       Parser.init();
     }
 
-    // Split files by the <<>>
-    splitByHeader(chapterText, /<<.+>>/).forEach(([fileName, fileContent]) => {
-      if (!fileName || !fileContent) {
-        return;
+    const checkPointLines = StringUtils.splitToLines(chapterText);
+    const checkPointParagraphs = StringUtils.splitToParagraph(checkPointLines);
+
+    checkPointParagraphs.forEach(([header, body]: [string, string[]]) => {
+      if (body.length === 0 && header.includes(':')) {
+        Parser.parseCheckpointConfig(header);
+      } else {
+        Parser.parseCheckpointParagraphs(header, body) || LocationParser.parse(header, body);
       }
-      fileName = stripEnclosingChars(fileName, 2);
-      const parserType = matchStartingKey(Parser.parserMap, fileName);
-      if (!parserType) {
-        throw new Error(`Unknown parser type ${fileName}`);
-      }
-      const parserFunction = Parser.parserMap[parserType];
-      parserFunction(fileName, fileContent);
     });
 
     return this.checkpoint;
+  }
+
+  private static parseCheckpointConfig(checkpointConfig: string) {
+    const [key, value] = StringUtils.splitByChar(checkpointConfig, ':');
+    switch (key) {
+      case 'startingLoc':
+        Parser.checkpoint.startingLoc = value;
+        break;
+      default:
+        throw new Error(`Invalid checkpoint config key, ${checkpointConfig}`);
+    }
+  }
+
+  private static parseCheckpointParagraphs(header: string, body: string[]) {
+    switch (header) {
+      case 'objectives':
+        Parser.checkpoint.objectives.addObjectives(body);
+        break;
+      case 'locations':
+        LocationsParser.parse(body);
+        break;
+      case 'dialogues':
+        DialoguesParser.parse(body);
+        break;
+      default:
+        return false;
+    }
+    return true;
   }
 }
 

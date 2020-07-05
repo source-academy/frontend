@@ -14,10 +14,13 @@ export default class GameActionExecuter {
   public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {
     if (!actionIds || !actionIds.length) return;
     for (const actionId of actionIds) {
-      const { actionType, actionParams, actionConditions } = this.getActionFromId(actionId);
+      const { actionType, actionParams, actionConditions, repeatable } = this.getActionFromId(
+        actionId
+      );
       if (
-        !GameActionManager.getInstance().hasTriggeredInteraction(actionId) &&
-        actionConditions.every(actionCondition => this.checkCondition(actionCondition))
+        repeatable ||
+        (!GameActionManager.getInstance().hasTriggeredInteraction(actionId) &&
+          actionConditions.every(actionCondition => this.checkCondition(actionCondition)))
       ) {
         await this.executeStoryAction(actionType, actionParams);
         GameActionManager.getInstance().triggerInteraction(actionId);
@@ -69,6 +72,12 @@ export default class GameActionExecuter {
           actionParams.position,
           actionParams.duration
         );
+        return;
+      case GameActionType.MakeObjectBlink:
+        await actionManager.makeObjectBlink(actionParams.id);
+        return;
+      case GameActionType.MakeObjectGlow:
+        await actionManager.makeObjectGlow(actionParams.id);
         return;
     }
   }

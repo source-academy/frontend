@@ -1,4 +1,7 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameManager from '../scenes/gameManager/GameManager';
+import StringUtils from '../utils/StringUtils';
+
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { charRect, charWidth, speakerRect, speakerTextStyle } from './GameCharacterConstants';
 import { ItemId } from '../commons/CommonsTypes';
@@ -7,9 +10,7 @@ import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterType
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { speakerBox } from '../commons/CommonAssets';
-import { capitalise } from '../utils/StringUtils';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
-import GameManager from '../scenes/gameManager/GameManager';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
@@ -117,7 +118,7 @@ export default class CharacterManager {
     }
 
     container.add([rectangle, speakerText]);
-    speakerText.text = capitalise(text);
+    speakerText.text = StringUtils.capitalize(text);
 
     gameManager.layerManager.addToLayer(Layer.DialogueLabel, container);
   }

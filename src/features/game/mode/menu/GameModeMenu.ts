@@ -24,7 +24,7 @@ class GameModeMenu implements IGameUI {
   private createGameButtons(modes?: GameMode[]) {
     if (modes) {
       // Refresh Buttons
-      modes.forEach(mode => {
+      modes.sort().forEach(mode => {
         this.addModeButton(mode, () => {
           GameActionManager.getInstance()
             .getGameManager()

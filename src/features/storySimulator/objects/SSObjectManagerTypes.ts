@@ -1,7 +1,6 @@
 import { ItemId, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
-import { IScreenLoggable } from '../logger/SSLogManagerTypes';
 
-export type SSObjectDetail = IScreenLoggable & {
+export type SSObjectDetail = {
   id: ItemId;
   assetKey: AssetKey;
   assetPath: AssetPath;

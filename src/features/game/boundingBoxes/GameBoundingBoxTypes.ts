@@ -8,3 +8,9 @@ export type BBoxProperty = TrackInteraction &
     width: number;
     height: number;
   };
+
+export type ActivatableBBox = {
+  sprite: Phaser.GameObjects.Rectangle;
+  activate: Function;
+  deactivate: Function;
+};

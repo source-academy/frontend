@@ -176,7 +176,7 @@ export default class ObjectPlacement extends Phaser.Scene {
         false,
         'Print coordinates',
         () =>
-          this.logManager.printDetailMap(this.backgroundManager.getBackgroundAssetPath(), [
+          this.logManager.printCheckpoint(this.backgroundManager.getBackgroundAssetPath(), [
             this.objectManager,
             this.bboxManager
           ]),

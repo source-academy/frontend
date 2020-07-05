@@ -13,7 +13,9 @@ export enum GameActionType {
   ChangeBackground = 'ChangeBackground',
   RemoveLocationMode = 'RemoveLocationMode',
   AddLocationMode = 'AddLocationMode',
-  AddPopup = 'AddPopup'
+  AddPopup = 'AddPopup',
+  MakeObjectBlink = 'MakeObjectBlink',
+  MakeObjectGlow = 'MakeObjectGlow'
 }
 
 export interface IGameActionable {
@@ -30,12 +32,5 @@ export type GameAction = TrackInteraction & {
   actionType: GameActionType;
   actionParams: any;
   actionConditions: ActionCondition[];
+  repeatable: boolean;
 };
-
-export function createCondition(state: GameStateStorage, conditionParams: any, boolean = true) {
-  return {
-    state,
-    conditionParams,
-    boolean
-  };
-}

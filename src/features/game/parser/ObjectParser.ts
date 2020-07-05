@@ -1,64 +1,40 @@
-import { splitToLines, mapByHeader, isEnclosedBySquareBrackets, splitByChar } from './ParserHelper';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
-import { Constants } from '../commons/CommonConstants';
 import ActionParser from './ActionParser';
+import StringUtils from '../utils/StringUtils';
+import { ObjectProperty } from '../objects/GameObjectTypes';
+import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
+import { Constants } from '../commons/CommonConstants';
 
-function objectAssetKey(shortPath: string) {
-  return shortPath;
-}
+export default class ObjectParser {
+  public static parse(locationId: LocationId, objectList: string[]) {
+    const objectParagraphs = StringUtils.splitToParagraph(objectList);
 
-function objectAssetValue(shortPath: string) {
-  let extension;
-  let filename: string;
-  if (shortPath.includes('.')) {
-    const shortPathArray = shortPath.split('.');
-    extension = shortPathArray.pop();
-    filename = shortPathArray.join('.');
-  } else {
-    filename = shortPath;
+    objectParagraphs.forEach(([header, body]: [string, string[]]) => {
+      const object = this.parseObjectConfig(locationId, header);
+      if (body.length) {
+        object.isInteractive = true;
+        object.actionIds = ActionParser.parseActions(body);
+      }
+    });
   }
 
-  const [, folder, texture, skin] = filename.split('/');
-  if (folder === 'objects') {
-    return `${Constants.assetsFolder}/${folder}/${texture}/${skin || 'normal'}.${
-      extension || 'png'
-    }`;
-  } else if (folder === 'avatars') {
-    return `${Constants.assetsFolder}${shortPath}`;
-  } else {
-    return `${Constants.assetsFolder}/${folder}/${texture}.${extension || 'png'}`;
+  private static objectAssetKey(shortPath: string) {
+    return shortPath;
   }
-}
 
-export default function ObjectParser(fileName: string, fileContent: string) {
-  const lines: string[] = splitToLines(fileContent);
-  const locationRawObjectsMap: Map<LocationId, string[]> = mapByHeader(
-    lines,
-    isEnclosedBySquareBrackets
-  );
+  private static objectPath(shortPath: string) {
+    return Constants.assetsFolder + shortPath;
+  }
 
-  locationRawObjectsMap.forEach(addObjectListToLoc);
-}
-
-function addObjectListToLoc(objectsList: string[], locationId: LocationId): void {
-  const separatorIndex = objectsList.findIndex(object => object === '$');
-  const objectDetails = objectsList.slice(
-    0,
-    separatorIndex === -1 ? objectsList.length : separatorIndex
-  );
-
-  // Parse basic object
-  objectDetails.forEach(objectDetail => {
-    const toAddToMap = objectDetail && objectDetail[0] === '+';
-    if (toAddToMap) {
-      objectDetail = objectDetail.slice(1);
+  private static parseObjectConfig(locationId: LocationId, objectDetails: string) {
+    const addToLoc = objectDetails[0] === '+';
+    if (addToLoc) {
+      objectDetails = objectDetails.slice(1);
     }
 
-    const [objectId, shortPath, x, y, width, height] = splitByChar(objectDetail, ',');
-
-    const object = {
-      assetKey: objectAssetKey(shortPath),
+    const [objectId, shortPath, x, y, width, height] = StringUtils.splitByChar(objectDetails, ',');
+    const objectProperty: ObjectProperty = {
+      assetKey: this.objectAssetKey(shortPath),
       x: parseInt(x),
       y: parseInt(y),
       width: parseInt(width) || undefined,
@@ -67,26 +43,13 @@ function addObjectListToLoc(objectsList: string[], locationId: LocationId): void
       interactionId: objectId
     };
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, object);
+    Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), this.objectPath(shortPath));
 
-    Parser.checkpoint.map.addMapAsset(objectAssetKey(shortPath), objectAssetValue(shortPath));
-
-    if (toAddToMap) {
+    Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, objectProperty);
+    if (addToLoc) {
       Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
     }
-  });
 
-  // Parse actions
-  if (separatorIndex !== -1) {
-    const objectActions = objectsList.slice(separatorIndex + 1, objectsList.length);
-    objectActions.forEach(objectDetail => {
-      const [objectId, ...actions] = objectDetail.split(', ');
-
-      const objectProperty = Parser.checkpoint.map.getObjects().get(objectId);
-      if (objectProperty) {
-        objectProperty.actionIds = ActionParser(actions);
-        objectProperty.isInteractive = true;
-      }
-    });
+    return objectProperty;
   }
 }

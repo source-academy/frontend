@@ -54,7 +54,7 @@ class MainMenu extends Phaser.Scene {
     const fullSaveState = await loadData(accountInfo);
     this.soundManager.playBgMusic(
       galacticHarmonyBgMusic.key,
-      fullSaveState.userState.settings.volume
+      fullSaveState.userState && fullSaveState.userState.settings.volume
     );
   }
 

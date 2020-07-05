@@ -2,13 +2,13 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { resize } from 'src/features/game/utils/SpriteUtils';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { Color, hex } from 'src/features/game/utils/StyleUtils';
-import { ICheckpointLogger } from '../logger/SSLogManagerTypes';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { ItemId } from 'src/features/game/commons/CommonsTypes';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 import { toIntString } from '../utils/SSUtils';
+import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 
-export default class SSBBoxManager implements ICheckpointLogger {
+export default class SSBBoxManager implements ICheckpointLoggable {
   public checkpointTitle = 'boundingBoxes';
 
   private objectPlacement: ObjectPlacement | undefined;
@@ -61,7 +61,7 @@ export default class SSBBoxManager implements ICheckpointLogger {
       y,
       1,
       1,
-      hex(Color.white)
+      HexColor.white
     )
       .setOrigin(0)
       .setAlpha(0.1)
@@ -74,7 +74,7 @@ export default class SSBBoxManager implements ICheckpointLogger {
   }
 
   private registerBBox(bboxSprite: Phaser.GameObjects.Rectangle) {
-    const itemId = 'bbox#' + this.getObjectPlacement().generateItemIdNumber();
+    const itemId = 'bbox' + this.getObjectPlacement().generateItemIdNumber();
 
     const objectDetail: SSBBoxDetail = {
       id: itemId,
@@ -120,16 +120,18 @@ export default class SSBBoxManager implements ICheckpointLogger {
   }
 
   public checkpointTxtLog() {
-    let map = '';
+    const map: string[] = [];
     this.bboxDetailMap.forEach((bboxDetail: SSBBoxDetail) => {
-      const objectDetailArray = [
+      const bboxDetailArray = [
         '+' + bboxDetail.id,
         toIntString(bboxDetail.x),
         toIntString(bboxDetail.y),
         toIntString(bboxDetail.width),
         toIntString(bboxDetail.height)
       ];
-      map += objectDetailArray.join(', ') + '\n';
+
+      map.push(bboxDetailArray.join(', '));
+      map.push('    show_dialogue*(click)');
     });
     return map;
   }
