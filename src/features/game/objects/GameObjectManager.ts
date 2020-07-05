@@ -97,10 +97,10 @@ class GameObjectManager implements StateObserver {
         onClick(interactionId);
         await gameManager.getActionExecuter().executeStoryActions(actionIds);
       });
-      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
         onHover(interactionId);
       });
-      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+      object.getClickArea().on(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
         onPointerout(interactionId);
       });
     }
