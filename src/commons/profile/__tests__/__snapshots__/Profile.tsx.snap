@@ -8,15 +8,15 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
         <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} style={{...}} vertical={false} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
           <Blueprint3.Portal className={[undefined]} container={{...}}>
             <Portal containerInfo={{...}}>
-              <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function]} childFactory={[Function: childFactory]}>
-                <div className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" onKeyDown={[Function]}>
+              <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
+                <div className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" onKeyDown={[Function (anonymous)]}>
                   <CSSTransition classNames=\\"bp3-overlay\\" timeout={300} onExited={[Function: bound bound handleExited]} in={true} appear={true} enter={[undefined]} exit={[undefined]}>
-                    <Transition timeout={300} onExited={[Function]} in={true} appear={true} enter={true} exit={true} onEnter={[Function]} onEntered={[Function]} onEntering={[Function]} onExit={[Function]} onExiting={[Function]} mountOnEnter={false} unmountOnExit={false}>
-                      <div className=\\"bp3-overlay-backdrop\\" onMouseDown={[Function]} tabIndex={0} />
+                    <Transition timeout={300} onExited={[Function (anonymous)]} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onEntered={[Function (anonymous)]} onEntering={[Function (anonymous)]} onExit={[Function (anonymous)]} onExiting={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
+                      <div className=\\"bp3-overlay-backdrop\\" onMouseDown={[Function (anonymous)]} tabIndex={0} />
                     </Transition>
                   </CSSTransition>
                   <CSSTransition classNames=\\"bp3-overlay\\" onEntering={[undefined]} onEntered={[undefined]} onExiting={[undefined]} onExited={[Function: bound bound handleExited]} timeout={300} in={true} appear={true} enter={[undefined]} exit={[undefined]}>
-                    <Transition onEntering={[Function]} onEntered={[Function]} onExiting={[Function]} onExited={[Function]} timeout={300} in={true} appear={true} enter={true} exit={true} onEnter={[Function]} onExit={[Function]} mountOnEnter={false} unmountOnExit={false}>
+                    <Transition onEntering={[Function (anonymous)]} onEntered={[Function (anonymous)]} onExiting={[Function (anonymous)]} onExited={[Function (anonymous)]} timeout={300} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onExit={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
                       <div className=\\"bp3-drawer bp3-position-left profile bp3-overlay-content\\" style={{...}} tabIndex={0}>
                         <div className=\\"bp3-drawer-header\\">
                           <Blueprint3.Icon icon=\\"user\\" iconSize={20}>
@@ -35,7 +35,7 @@ exports[`Profile renders correctly when there are closed assessments 1`] = `
                             </h4>
                           </Component>
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
-                            <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                            <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                               <Blueprint3.Icon icon={{...}}>
                                 <Blueprint3.Icon icon=\\"small-cross\\" iconSize={20}>
                                   <span icon=\\"small-cross\\" className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>
@@ -329,15 +329,15 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
         <Blueprint3.Overlay className=\\"bp3-overlay-container\\" icon=\\"user\\" isCloseButtonShown={true} isOpen={true} onClose={[Function: onClose]} title=\\"User Profile\\" position=\\"left\\" size=\\"30%\\" canOutsideClickClose={true} style={{...}} vertical={false} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} hasBackdrop={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true}>
           <Blueprint3.Portal className={[undefined]} container={{...}}>
             <Portal containerInfo={{...}}>
-              <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function]} childFactory={[Function: childFactory]}>
-                <div className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" onKeyDown={[Function]}>
+              <TransitionGroup appear={true} className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" component=\\"div\\" onKeyDown={[Function (anonymous)]} childFactory={[Function: childFactory]}>
+                <div className=\\"bp3-overlay bp3-overlay-open bp3-overlay-container\\" onKeyDown={[Function (anonymous)]}>
                   <CSSTransition classNames=\\"bp3-overlay\\" timeout={300} onExited={[Function: bound bound handleExited]} in={true} appear={true} enter={[undefined]} exit={[undefined]}>
-                    <Transition timeout={300} onExited={[Function]} in={true} appear={true} enter={true} exit={true} onEnter={[Function]} onEntered={[Function]} onEntering={[Function]} onExit={[Function]} onExiting={[Function]} mountOnEnter={false} unmountOnExit={false}>
-                      <div className=\\"bp3-overlay-backdrop\\" onMouseDown={[Function]} tabIndex={0} />
+                    <Transition timeout={300} onExited={[Function (anonymous)]} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onEntered={[Function (anonymous)]} onEntering={[Function (anonymous)]} onExit={[Function (anonymous)]} onExiting={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
+                      <div className=\\"bp3-overlay-backdrop\\" onMouseDown={[Function (anonymous)]} tabIndex={0} />
                     </Transition>
                   </CSSTransition>
                   <CSSTransition classNames=\\"bp3-overlay\\" onEntering={[undefined]} onEntered={[undefined]} onExiting={[undefined]} onExited={[Function: bound bound handleExited]} timeout={300} in={true} appear={true} enter={[undefined]} exit={[undefined]}>
-                    <Transition onEntering={[Function]} onEntered={[Function]} onExiting={[Function]} onExited={[Function]} timeout={300} in={true} appear={true} enter={true} exit={true} onEnter={[Function]} onExit={[Function]} mountOnEnter={false} unmountOnExit={false}>
+                    <Transition onEntering={[Function (anonymous)]} onEntered={[Function (anonymous)]} onExiting={[Function (anonymous)]} onExited={[Function (anonymous)]} timeout={300} in={true} appear={true} enter={true} exit={true} onEnter={[Function (anonymous)]} onExit={[Function (anonymous)]} mountOnEnter={false} unmountOnExit={false}>
                       <div className=\\"bp3-drawer bp3-position-left profile bp3-overlay-content\\" style={{...}} tabIndex={0}>
                         <div className=\\"bp3-drawer-header\\">
                           <Blueprint3.Icon icon=\\"user\\" iconSize={20}>
@@ -356,7 +356,7 @@ exports[`Profile renders correctly when there are no closed assessments 1`] = `
                             </h4>
                           </Component>
                           <Blueprint3.Button aria-label=\\"Close\\" className=\\"bp3-dialog-close-button\\" icon={{...}} minimal={true} onClick={[Function: onClose]}>
-                            <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+                            <button type=\\"button\\" aria-label=\\"Close\\" className=\\"bp3-button bp3-minimal bp3-dialog-close-button\\" onClick={[Function: onClose]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                               <Blueprint3.Icon icon={{...}}>
                                 <Blueprint3.Icon icon=\\"small-cross\\" iconSize={20}>
                                   <span icon=\\"small-cross\\" className=\\"bp3-icon bp3-icon-small-cross\\" title={[undefined]}>

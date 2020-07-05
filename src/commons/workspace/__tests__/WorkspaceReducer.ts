@@ -496,18 +496,18 @@ describe('END_CLEAR_CONTEXT', () => {
         'default'
       );
 
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          context: {
-            ...context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
-          },
-          globals: mockGlobals
-        }
-      });
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceManager,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            context,
+            globals: mockGlobals
+          }
+        })
+      );
     });
   });
 });
@@ -1144,19 +1144,19 @@ describe('RESET_WORKSPACE', () => {
       const result = WorkspaceReducer(resetWorkspaceDefaultState, action);
       const location = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
-      expect(result).toEqual({
-        ...resetWorkspaceDefaultState,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          ...newContext,
-          ...workspaceOptions,
-          context: {
-            ...newContext.context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...resetWorkspaceDefaultState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            ...newContext,
+            ...workspaceOptions,
+            context: newContext.context
           }
-        }
-      });
+        })
+      );
     });
   });
 });
