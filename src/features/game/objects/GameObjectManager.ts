@@ -34,7 +34,7 @@ class GameObjectManager implements StateObserver {
     }
   }
 
-  public createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
+  private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameActionManager.getInstance().getGameManager();
     const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);

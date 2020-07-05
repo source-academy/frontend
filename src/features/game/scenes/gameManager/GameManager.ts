@@ -193,7 +193,7 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(locationId: LocationId) {
-    this.soundManager.renderBackgroundMusic(locationId);
+    await this.soundManager.renderBackgroundMusic(locationId);
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);

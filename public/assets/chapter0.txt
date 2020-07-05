@@ -5,6 +5,10 @@ objectives
 
 room
     modes: talk, explore
+    bgm
+        heavyHitter, /HeavyHitter.mp3, 0.5
+    sfx
+        card, /card.mp3, 0.5
     
     actions
         show_dialogue(welcome)
@@ -28,8 +32,10 @@ room
 hallway
     modes: talk, move
     talkTopics: welcomeToHallway
-    actions
-        complete_objective(finish)
+    objects
+        +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+            complete_objective(finish)
+
 
 classroom
     modes: explore

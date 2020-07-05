@@ -6,7 +6,9 @@ import ObjectParser from './ObjectParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import CharacterParser from './CharacterParser';
 import ParserConverter from './ParserConverter';
+import MusicParser from './MusicParser';
 import { GameAttr } from './ParserValidator';
+import { GameSoundType } from '../sound/GameSoundTypes';
 
 export default class LocationParser {
   public static parse(locationId: LocationId, locationBody: string[]) {
@@ -24,24 +26,22 @@ export default class LocationParser {
 
   public static parseLocationConfig(location: GameLocation, locationConfig: string) {
     const [key, value] = StringUtils.splitByChar(locationConfig, ':');
+    const configValues = StringUtils.splitByChar(value, ',');
     switch (key) {
       case 'modes':
-        StringUtils.splitByChar(value, ',').forEach(mode => {
+        configValues.forEach(mode => {
           const gameMode = ParserConverter.stringToGameMode(mode);
           location.modes.add(gameMode);
         });
         break;
-      case 'bgm':
-        location.bgmKey = value;
-        break;
       case 'nav':
-        StringUtils.splitByChar(value, ',').forEach(otherLocationId => {
+        configValues.forEach(otherLocationId => {
           Parser.validator.assertAttr(GameAttr.locations, otherLocationId);
           location.navigation.add(otherLocationId);
         });
         break;
       case 'talkTopics':
-        const talkTopics = StringUtils.splitByChar(value, ',');
+        const talkTopics = configValues;
         Parser.validator.assertLocAttrs(GameLocationAttr.talkTopics, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
@@ -60,6 +60,12 @@ export default class LocationParser {
         break;
       case 'characters':
         CharacterParser.parse(location.id, body);
+        break;
+      case 'bgm':
+        MusicParser.parse(location.id, body, GameSoundType.BGM);
+        break;
+      case 'sfx':
+        MusicParser.parse(location.id, body, GameSoundType.SFX);
         break;
       case 'actions':
         location.actionIds = ActionParser.parseActions(body);

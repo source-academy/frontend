@@ -74,9 +74,6 @@ export default class GameSaveManager {
   }
 
   public async saveSettings(settingsJson: SettingsJson) {
-    if (this.version !== SaveManagerType.Settings) {
-      throw new Error('Only used for saving settings');
-    }
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
     await saveData(this.getAccountInfo(), this.fullSaveState);
   }

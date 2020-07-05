@@ -50,10 +50,10 @@ class Settings extends Phaser.Scene {
 
   public async create() {
     this.renderBackground();
-    this.renderOptions();
     const accountInfo = getSourceAcademyGame().getAccountInfo();
     const fullSaveState = await loadData(accountInfo);
     this.settingsSaveManager.initialiseForSettings(accountInfo, fullSaveState);
+    this.renderOptions();
   }
 
   private preloadAssets() {

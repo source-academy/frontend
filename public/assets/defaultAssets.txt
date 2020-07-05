@@ -1,0 +1,26 @@
+pngs
+    short-button, shortButton
+    med-button, mediumButton
+    long-button, longButton
+    top-button, topButton
+    speechBox, speechBox
+    speakerBox, speakerBox
+    loc-preview-fill, locationPreviewFill
+    talk-opt-button, talkOptButton
+    talk-opt-check, talkOptCheck
+    mode-banner, modeMenuBanner
+    pop-up-frame, popUpFrame
+    medium-box, mediumBox
+    escape-bg, escapeMenu
+    collectibles-bg, collectiblesBg
+    collectibles-page-chosen, collectiblesPageOptChosen
+    collectibles-page-opt, collectiblesPageOpt
+    diamond, Zircon
+    arrow, arrow
+
+images
+    loc-default, defaultLocation.jpg
+
+bgm
+    galactic-harmony, GalacticHarmony.mp3, 0.5
+

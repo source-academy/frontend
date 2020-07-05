@@ -29,10 +29,9 @@ class GameSoundManager {
 
   public renderBackgroundMusic(locationId: LocationId) {
     const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
+    this.stopCurrBgMusic();
     if (bgmKey) {
       this.playBgMusic(bgmKey);
-    } else {
-      this.stopCurrBgMusic();
     }
   }
 
@@ -69,9 +68,8 @@ class GameSoundManager {
       return;
     }
 
-    this.stopCurrBgMusic();
-
     const soundAsset = this.soundAssets.get(soundKey);
+
     if (soundAsset) {
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });
       this.getParentGame().setCurrBgMusicKey(soundAsset.key);
@@ -80,6 +78,7 @@ class GameSoundManager {
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
     const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
+    this.getParentGame().setCurrBgMusicKey(undefined);
     if (this.scene && currBgMusicKey) {
       // Fade out current music
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
@@ -91,7 +90,6 @@ class GameSoundManager {
 
       await sleep(fadeDuration);
       this.getBaseSoundManager().stopByKey(currBgMusicKey);
-      this.getParentGame().setCurrBgMusicKey(undefined);
     }
   }
 
