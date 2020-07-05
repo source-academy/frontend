@@ -7,8 +7,3 @@ export const talkButtonStyle = {
   fontSize: '35px',
   fill: '#abd4c6'
 };
-
-export enum TalkButtonType {
-  Dialogue = 'Dialogue',
-  Other = 'Other'
-}

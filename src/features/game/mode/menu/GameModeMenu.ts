@@ -12,6 +12,7 @@ import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import { screenSize, Constants } from '../../commons/CommonConstants';
 import { shortButton } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
+import { GameLocationAttr } from '../../location/GameMapTypes';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -71,9 +72,15 @@ class GameModeMenu implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const latestModesInLoc = GameActionManager.getInstance().getModesByLocId(
-      GameActionManager.getInstance().getCurrLocId()
+    const currLocId = GameActionManager.getInstance().getCurrLocId();
+    let latestModesInLoc = GameActionManager.getInstance().getModesByLocId(currLocId);
+    const talkTopics = GameActionManager.getInstance().getLocationAttr(
+      GameLocationAttr.talkTopics,
+      currLocId
     );
+    if (talkTopics) {
+      latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
+    }
     this.createGameButtons(latestModesInLoc);
   }
 

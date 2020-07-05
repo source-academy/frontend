@@ -22,7 +22,7 @@ class GameModeTalk implements IGameUI {
       GameLocationAttr.talkTopics,
       GameActionManager.getInstance().getCurrLocId()
     );
-    if (!talkTopics) {
+    if (!talkTopics.length) {
       return;
     }
     this.createGameButtons(talkTopics);
