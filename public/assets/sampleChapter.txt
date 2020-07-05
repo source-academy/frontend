@@ -8,8 +8,9 @@ locations
 
 normal
     modes: explore, talk
-    actions: show_dialogue(welcome)
     talkTopics: whatToDo
+    actions
+        show_dialogue(welcome)
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
         +chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744

@@ -7,7 +7,9 @@ room
     modes: talk, move
     nav: hallway
     talkTopics: cutscene
-    actions: show_dialogue(what), show_dialogue(carpet) if checklist.visit
+    actions
+        show_dialogue(what)
+        show_dialogue(carpet) if checklist.visit
 
     objects
         +door, /objects/yourCarpet/normal.png, 300, 300

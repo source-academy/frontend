@@ -18,9 +18,8 @@ export default class GameActionExecuter {
         actionId
       );
       if (
-        repeatable ||
-        (!GameActionManager.getInstance().hasTriggeredInteraction(actionId) &&
-          actionConditions.every(actionCondition => this.checkCondition(actionCondition)))
+        (repeatable || !GameActionManager.getInstance().hasTriggeredInteraction(actionId)) &&
+        actionConditions.every(actionCondition => this.checkCondition(actionCondition))
       ) {
         await this.executeStoryAction(actionType, actionParams);
         GameActionManager.getInstance().triggerInteraction(actionId);
@@ -61,7 +60,7 @@ export default class GameActionExecuter {
         actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.RemoveLocationMode:
-        actionManager.addLocationMode(actionParams.locationId, actionParams.mode);
+        actionManager.removeLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
         await actionManager.getGameManager().dialogueManager.playDialogue(actionParams.id);

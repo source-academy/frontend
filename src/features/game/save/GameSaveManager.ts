@@ -2,7 +2,7 @@ import { saveData } from './GameSaveRequests';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { FullSaveState, SettingsJson, SaveManagerType } from './GameSaveTypes';
-import { emptySaveState } from './GameSaveConstants';
+import { createEmptySaveState } from './GameSaveConstants';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
@@ -13,7 +13,7 @@ export default class GameSaveManager {
   private version: SaveManagerType;
 
   constructor() {
-    this.fullSaveState = emptySaveState;
+    this.fullSaveState = createEmptySaveState();
     this.chapterNum = -1;
     this.checkpointNum = -1;
     this.continueGame = false;

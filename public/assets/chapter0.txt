@@ -6,7 +6,9 @@ objectives
 room
     modes: talk, explore
     talkTopics: what
-    actions: show_dialogue(welcome)
+    
+    actions
+        show_dialogue(welcome)
 
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
