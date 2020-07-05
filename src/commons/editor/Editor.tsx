@@ -218,7 +218,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
   }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-  // -------------- HOTKEYS --------------
+  // -------------- HOTKEYS / CONTEXTMENU GLOBALS --------------
 
   const { handleEditorEval } = props;
 

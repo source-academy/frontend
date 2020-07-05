@@ -3,10 +3,11 @@ import CSS from 'csstype'; // TODO: Remove
 import { Card, Button, ButtonGroup } from '@blueprintjs/core';
 import { format } from 'timeago.js';
 import Markdown from '../Markdown';
-import { keyBy, omit } from 'lodash';
+import { CommentAPI } from './useComments';
+import { EventEmitter } from 'events';
 
 export interface IComment {
-    isEditing: boolean;
+    id: string;
     isCollapsed: boolean;
     // TODO: Reference user differently.
     username: string;
@@ -17,9 +18,10 @@ export interface IComment {
 }
 
 export interface CommentsProps {
-    allComments: IComment[]; // Need this to use setComments properly.
-    comments: Array<[IComment, number]>; // Need the position to update
-    setComments: (comments: IComment[]) => void;
+    comments: IComment[]; // Ordering guaranteed to be ascending order.
+    commentsBeingEditedRef: React.MutableRefObject<{ [id: string]: IComment }>;
+    APIRef: React.MutableRefObject<CommentAPI>;
+    commentEditChangeEE: EventEmitter;
 }
 
 
@@ -91,76 +93,74 @@ function sendToServer(comment: IComment) {
 }
 
 export default function Comments(props: CommentsProps) {
-    const { comments, setComments, allComments } = props;
-    // TODO: Move this outside.
-    const [commentsBeingEdited, setCommentsBeingEdited] =
-        React.useState(keyBy(comments.filter((c) => c[0].isEditing),
-            (c) => c[1]));
+    const { comments, commentsBeingEditedRef, APIRef, commentEditChangeEE } = props;
+    const { updateComment, updateCommentsBeingEdited, removeComment, 
+        removeCommentEdit, isUnsubmittedComment } = APIRef.current;
+    
+    // Yes, this is an antipattern.
+    // It's also the only way to prevent the parent from being updated.
+    // While allowing the child to update.
+    const [commentsBeingEdited, setCommentsBeingEdited] = React.useState(commentsBeingEditedRef.current);
 
+    React.useEffect(() => {
+        const callback = (x: any) => {
+            setCommentsBeingEdited(x);
+        };
+        commentEditChangeEE.on('change', callback);
+        return () => {
+            commentEditChangeEE.off('change', callback)
+        }
+    },[commentEditChangeEE, commentsBeingEditedRef])
+ 
 
     // ---------------- STATE HELPERS ----------------
 
     // Will be required later to propagate the changes back.
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const updateComment = (comment: IComment, idx: number) => {
-        const prepend = allComments.slice(0, idx);
-        const postPend = allComments.slice(idx + 1, comments.length);
-        setComments([...prepend, comment, ...postPend]);
-    }
 
-    function updatePreviewCommentText(comment: IComment, idx: number) {
+
+    function updatePreviewCommentText(comment: IComment) {
         return function (event: React.ChangeEvent<HTMLTextAreaElement>) {
             const text = event.target.value;
-            const t = {
-                ...commentsBeingEdited,
-                [idx]: [{
-                    ...comment,
-                    text,
-                }, idx],
-            };
-            setCommentsBeingEdited(t);
+            updateCommentsBeingEdited({
+                ...comment,
+                text,
+            })
         }
     }
 
 
     // ---------------- CONTROLS ----------------
 
-    function cancelWithPrompt(commentIdx: [IComment, number]) {
+    function cancelWithPrompt(comment: IComment) {
         return function (evt: any) {
-            const [comment, idx] = commentIdx;
             // eslint-disable-next-line no-restricted-globals
             const sure = confirm('Are you sure about that?');
             if (sure) {
-                const isNewComment = comment.datetime === 0;
+                const isNewComment = isUnsubmittedComment(comment);
                 if (isNewComment) {
-                    // Remove the placeholder comment entirely
-                    const prepend = allComments.slice(0, idx);
-                    const postPend = allComments.slice(idx + 1, comments.length);
-                    console.log('new comments', [...prepend, ...postPend])
-                    setComments([...prepend, ...postPend]);
+                    removeComment(comment)
+                } else {
+                    removeCommentEdit(comment)
                 }
-                // remove from comments being edited.
-                const newCommentsBeingEdited = omit(commentsBeingEdited, [idx]);
-                setCommentsBeingEdited(newCommentsBeingEdited);
             }
         }
     }
 
 
-    function confirmSubmit(commentIdx: [IComment, number]) {
+    function confirmSubmit(comment: IComment) {
         return async function (evt: any) {
             // TODO: figure out a method for edits
-            const [comment, idx] = commentIdx;
             const newComment: IComment = {
                 ...comment,
-                isEditing: false,
                 datetime: Date.now(),
             };
 
             // TODO: feedback to user first
             try {
                 await sendToServer(newComment); // TODO: STUB FUNCTION, PLEASE UPDATE.
-                updateComment(newComment, idx);
+                updateComment(newComment);
+                removeCommentEdit(newComment)
             } catch (e) {
                 // TODO, implement properly
                 console.error('Error occured when sending the comment to server', e);
@@ -168,37 +168,40 @@ export default function Comments(props: CommentsProps) {
         }
     }
 
-
+    // ----------------- RENDERING -----------------
 
     return (
         <div className="comments-container" style={commentsContainerStyles}>
             <div className="gutter-controls">-</div>
-            {comments.map(([comment, idx]) => {
+            {comments.map((comment) => {
+                const id = comment.id;
+                console.log('@@@@@@@@@@', id, commentsBeingEdited);
                 const displayComment
-                    = commentsBeingEdited[idx] ? commentsBeingEdited[idx][0] : comment;
-                const { profilePic, username, text, datetime, isEditing } = displayComment;
-                return (<Card className="comment" key={datetime} style={commentStyles}>
+                    = commentsBeingEdited[id] ? commentsBeingEdited[id] : comment;
+                const { profilePic, username, text, datetime } = displayComment;
+                const isEditing: boolean = !!commentsBeingEdited[id];
+                return (<Card className="comment" key={id} style={commentStyles}>
                     <img className="profile-pic" src={profilePic} alt="" style={profilePicStyles}></img>
                     <div className="content" style={contentStyles}>
                         <span className="username" style={usernameStyles}>{username} </span>
-                        <span className="relative-time" style={relativeTimeStyles}>{isEditing ? 'Preview' : format(new Date(datetime))}</span>
+                        <span className="relative-time"
+                            style={relativeTimeStyles}>{ isUnsubmittedComment(comment) ? 'Preview' : format(new Date(datetime))}</span>
                         <Markdown className="text" content={text || "(Content preview)"} />
                     </div>
                     {(isEditing ? <div className="reply-container" style={replyContainerStyles}>
                         <textarea style={enterMessageStyles}
                             placeholder="Write a message..."
-                            onChange={updatePreviewCommentText(displayComment, idx)}
+                            onChange={updatePreviewCommentText(displayComment)}
                             defaultValue={text}></textarea>
                         <ButtonGroup>
-                            <Button onClick={cancelWithPrompt([displayComment, idx])}>Cancel</Button>
+                            <Button onClick={cancelWithPrompt(displayComment)}>Cancel</Button>
                             <Button intent="success"
-                                onClick={confirmSubmit([displayComment, idx])}
+                                onClick={confirmSubmit(displayComment)}
                                 disabled={text.trim().length === 0}>Submit</Button>
                         </ButtonGroup>
                     </div> : '')}
                 </Card>);
             })}
-
         </div>
     );
 }
