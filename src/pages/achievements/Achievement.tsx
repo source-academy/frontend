@@ -61,7 +61,6 @@ function Achievement(props: DispatchProps & StateProps) {
         filterStatus={filterStatus}
         displayModal={setModalId}
         handleGlow={handleGlow}
-        generateBackgroundGradient={generateBackgroundGradient}
       />
     ));
 

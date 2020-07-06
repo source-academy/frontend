@@ -8,7 +8,6 @@ import AchievementProgressBar from '../utils/AchievementProgressBar';
 import Inferencer from '../utils/Inferencer';
 
 type PrerequisiteCardProps = {
-  generateBackgroundGradient: any;
   isLast: boolean;
   id: number;
   inferencer: Inferencer;
@@ -18,15 +17,7 @@ type PrerequisiteCardProps = {
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const {
-    generateBackgroundGradient,
-    isLast,
-    id,
-    inferencer,
-    shouldPartiallyRender,
-    displayModal,
-    handleGlow
-  } = props;
+  const { isLast, id, inferencer, shouldPartiallyRender, displayModal, handleGlow } = props;
 
   const { title, release, ability, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
@@ -45,7 +36,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         style={{
           ...handleGlow(id),
           opacity: shouldPartiallyRender ? '20%' : '100%',
-          background: `${generateBackgroundGradient(ability)}, url(${backgroundImageUrl})`
+          background: `url(${backgroundImageUrl})`
         }}
         onClick={() => displayModal(id)}
       >

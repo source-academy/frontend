@@ -6,7 +6,6 @@ import Inferencer from './utils/Inferencer';
 import { FilterStatus, AchievementStatus } from '../../../commons/achievements/AchievementTypes';
 
 type AchievementTaskProps = {
-  generateBackgroundGradient: any;
   id: number;
   inferencer: Inferencer;
   filterStatus: FilterStatus;
@@ -15,14 +14,7 @@ type AchievementTaskProps = {
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const {
-    generateBackgroundGradient,
-    id,
-    inferencer,
-    filterStatus,
-    displayModal,
-    handleGlow
-  } = props;
+  const { id, inferencer, filterStatus, displayModal, handleGlow } = props;
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
   const toggleDropdown = () => {
@@ -74,7 +66,6 @@ function AchievementTask(props: AchievementTaskProps) {
         <li key={id}>
           <AchievementCard
             id={id}
-            generateBackgroundGradient={generateBackgroundGradient}
             inferencer={inferencer}
             shouldPartiallyRender={!shouldRender(id)}
             isDropdownOpen={isDropdownOpen}
@@ -91,7 +82,6 @@ function AchievementTask(props: AchievementTaskProps) {
                       inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
                       inferencer.listImmediateChildren(id).length - 1
                     }
-                    generateBackgroundGradient={generateBackgroundGradient}
                     id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}

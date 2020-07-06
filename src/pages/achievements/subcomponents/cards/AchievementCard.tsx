@@ -8,7 +8,6 @@ import AchievementExp from '../utils/AchievementExp';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
 
 type AchievementCardProps = {
-  generateBackgroundGradient: any;
   id: number;
   inferencer: Inferencer;
   shouldPartiallyRender: boolean;
@@ -26,7 +25,6 @@ function AchievementCard(props: AchievementCardProps) {
     isDropdownOpen,
     toggleDropdown,
     displayModal,
-    generateBackgroundGradient,
     handleGlow
   } = props;
 
@@ -44,7 +42,7 @@ function AchievementCard(props: AchievementCardProps) {
       style={{
         ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
-        background: `${generateBackgroundGradient(ability)}, url(${backgroundImageUrl})`
+        background: `url(${backgroundImageUrl})`
       }}
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
