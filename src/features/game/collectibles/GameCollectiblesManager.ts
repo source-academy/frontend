@@ -18,11 +18,14 @@ import {
   listBannerYSpacing,
   listBannerTextXPos,
   listBannerTextStyle,
-  arrowXPos,
-  arrowUpYPos,
+  arrowXMidPos,
   arrowDownYPos,
   arrowXScale,
-  arrowYScale
+  arrowYScale,
+  itemsPerPage,
+  arrowXOffset,
+  offHoverAlpha,
+  onHoverAlpha
 } from './GameCollectiblesConstants';
 
 class GameCollectiblesManager {
@@ -31,14 +34,23 @@ class GameCollectiblesManager {
   private layerManager: GameLayerManager | undefined;
   private collectibleContainer: Phaser.GameObjects.Container | undefined;
   private listContainer: Phaser.GameObjects.Container | undefined;
+  private pageNumber: Map<CollectiblePage, number>;
 
   constructor() {
     this.currCollectiblePage = CollectiblePage.Collectibles;
+    this.pageNumber = new Map<CollectiblePage, number>();
   }
 
   public initialise(scene: Phaser.Scene, layerManager: GameLayerManager) {
     this.scene = scene;
     this.layerManager = layerManager;
+
+    // Set initial page number to zero
+    this.pageNumber.clear();
+    Object.keys(CollectiblePage).forEach((page, index) => {
+      const pageName = page as CollectiblePage;
+      this.pageNumber.set(pageName, 0);
+    });
   }
 
   public renderCollectibleMenu() {
@@ -72,37 +84,73 @@ class GameCollectiblesManager {
     });
 
     // Add arrows
-    const arrowUp = new Phaser.GameObjects.Sprite(
+    const arrowLeft = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      arrowXPos,
-      arrowUpYPos,
-      arrow.key
-    ).setScale(arrowXScale, arrowYScale);
-    const arrowDown = new Phaser.GameObjects.Sprite(
-      this.getScene(),
-      arrowXPos,
+      arrowXMidPos - arrowXOffset,
       arrowDownYPos,
       arrow.key
     )
       .setScale(arrowXScale, arrowYScale)
-      .setFlipY(true);
-    arrowUp.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
-    arrowDown.setInteractive({ pixelPerfect: true, useHandCursor: true, draggable: true });
-    arrowUp.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-      if (this.listContainer) this.listContainer.y -= 10;
+      .setRotation((-90 * Math.PI) / 180)
+      .setAlpha(offHoverAlpha);
+
+    const arrowRight = new Phaser.GameObjects.Sprite(
+      this.getScene(),
+      arrowXMidPos + arrowXOffset,
+      arrowDownYPos,
+      arrow.key
+    )
+      .setScale(arrowXScale, arrowYScale)
+      .setRotation((90 * Math.PI) / 180)
+      .setAlpha(offHoverAlpha);
+
+    arrowLeft.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    arrowLeft.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+      await this.scrollPage(false);
     });
-    arrowDown.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
-      if (this.listContainer) this.listContainer.y += 10;
+    arrowLeft.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+      arrowLeft.setAlpha(onHoverAlpha);
+    });
+    arrowLeft.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+      arrowLeft.setAlpha(offHoverAlpha);
     });
 
-    collectibleContainer.add([arrowUp, arrowDown]);
+    arrowRight.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    arrowRight.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+      await this.scrollPage(true);
+    });
+    arrowRight.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
+      arrowRight.setAlpha(onHoverAlpha);
+    });
+    arrowRight.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+      arrowRight.setAlpha(offHoverAlpha);
+    });
+
+    collectibleContainer.add([arrowLeft, arrowRight]);
 
     // Add object list
-    this.listContainer = this.getCurrentPage(this.currCollectiblePage);
+    this.listContainer = this.getCurrentPage(
+      this.currCollectiblePage,
+      this.pageNumber.get(this.currCollectiblePage)!
+    );
     collectibleContainer.add(this.listContainer);
 
     this.collectibleContainer = collectibleContainer;
     this.getLayerManager().addToLayer(Layer.UI, this.collectibleContainer);
+  }
+
+  private scrollPage(next: boolean) {
+    const currPageNum = this.pageNumber.get(this.currCollectiblePage)!;
+    const newPageNum = next ? currPageNum + 1 : currPageNum - 1;
+    if (!this.listContainer || !this.collectibleContainer || newPageNum < 0) return;
+
+    const newListContainer = this.getCurrentPage(this.currCollectiblePage, newPageNum);
+    if (newListContainer.length > 0) {
+      this.listContainer.destroy();
+      this.listContainer = newListContainer;
+      this.collectibleContainer.add(this.listContainer);
+      this.pageNumber.set(this.currCollectiblePage, newPageNum);
+    }
   }
 
   public destroyCollectibleMenu() {
@@ -163,10 +211,23 @@ class GameCollectiblesManager {
   }
 
   private getAchievements() {
-    return ['achievement1', 'achievement2', 'achievement3'];
+    return [
+      'achievement1',
+      'achievement2',
+      'achievement3',
+      'achievement4',
+      'achievement5',
+      'achievement6',
+      'achievement7',
+      'achievement8',
+      'achievement9',
+      'achievement10',
+      'achievement11',
+      'achievement12'
+    ];
   }
 
-  private getCurrentPage(page: CollectiblePage) {
+  private getCurrentPage(page: CollectiblePage, pageNum: number) {
     let objectList: string[];
     switch (page) {
       case CollectiblePage.Achievements:
@@ -180,10 +241,16 @@ class GameCollectiblesManager {
     }
 
     const pageContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    objectList.forEach((obj, index) => {
-      const objContainer = this.createObjContainer(obj, index, () => {});
-      pageContainer.add(objContainer);
-    });
+    const startingIdx = pageNum * itemsPerPage;
+    const endingIdx = startingIdx + itemsPerPage;
+
+    if (startingIdx < objectList.length) {
+      for (let i = startingIdx; i < objectList.length && i < endingIdx; i++) {
+        const objContainer = this.createObjContainer(objectList[i], i - startingIdx, () => {});
+        pageContainer.add(objContainer);
+      }
+    }
+
     return pageContainer;
   }
 
