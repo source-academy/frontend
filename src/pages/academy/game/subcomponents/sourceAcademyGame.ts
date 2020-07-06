@@ -7,6 +7,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import Settings from 'src/features/game/scenes/settings/Settings';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
+import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 
 export type AccountInfo = {
   accessToken: string;
@@ -83,7 +84,7 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [MainMenu, Settings, ChapterSelect, GameManager, CheckpointTransition, MyRoom]
+  scene: [MainMenu, Settings, ChapterSelect, GameManager, CheckpointTransition, MyRoom, RoomPreview]
 };
 
 let sourceAcademyGame: SourceAcademyGame;
