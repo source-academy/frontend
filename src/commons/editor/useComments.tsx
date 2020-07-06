@@ -81,12 +81,17 @@ const useComments: EditorHook = (inProps, outProps, keyBindings, reactAceRef, co
     // 2) The commentsBeingEdited need to here so that incoming data can be managed easily.
     // 3) commentsBeingEditedRef cannot trigger changes by default, so it needs an event to trigger it.
     const [commentEditChangeEE] = React.useState(new EventEmitter());
+    // The following events are emitted:
+        // change(current: typeof commentsBeingEdited)
+        // delete(current: typeof commentsBeingEdited, idOfDeleted: string)
+        // change event is ALWAYS emitted when anything changes.        
     const setCommentsBeingEdited = React.useCallback((x:  { [id: string]: IComment }) => {
         _setCommentsBeingEdited(x);
-        console.log('setCommentsBeingEdited', x);
+        // The updated version needs to be emitted
+        // Otherwise an older version will be gotten from commentsBeingEditedRef.current.
+        // Possibly: commentsBeingEditedRef will only refresh on nextTick
         commentEditChangeEE.emit('change', x);
     }, [commentEditChangeEE]);
-
     const commentsBeingEditedRef = React.useRef(commentsBeingEdited);
     commentsBeingEditedRef.current = commentsBeingEdited;
 
@@ -110,15 +115,17 @@ const useComments: EditorHook = (inProps, outProps, keyBindings, reactAceRef, co
     }, [commentsBeingEdited, setCommentsBeingEdited]);
 
     const removeCommentEdit = React.useCallback((comment: IComment) => {
-        setCommentsBeingEdited(omit(commentsBeingEdited, [comment.id]));
-    }, [commentsBeingEdited, setCommentsBeingEdited]);
+        const updated = omit(commentsBeingEdited, [comment.id]);
+        setCommentsBeingEdited(updated);
+        commentEditChangeEE.emit('delete', updated, comment.id);
+    }, [commentEditChangeEE, commentsBeingEdited, setCommentsBeingEdited]);
 
 
     const removeComment = React.useCallback((comment: IComment) => {
-        setCommentsBeingEdited(omit(comments, [comment.id]));
+        setComments(omit(comments, [comment.id]));
         // Also remove from being edited.
         removeCommentEdit(comment);
-    }, [comments, removeCommentEdit, setCommentsBeingEdited]);
+    }, [comments, removeCommentEdit]);
 
     const isUnsubmittedComment = React.useCallback((comment: IComment) => {
         return comment.datetime === Infinity;
