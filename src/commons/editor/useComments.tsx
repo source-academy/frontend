@@ -2,7 +2,7 @@ import { require as acequire, Ace } from 'ace-builds';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
 
-import { groupBy, map, omit, sortBy, values } from 'lodash';
+import { groupBy, map, omit, sortBy, values, keyBy } from 'lodash';
 
 import { EditorHook } from './Editor';
 import Comments, { IComment } from './Comments';
@@ -27,8 +27,8 @@ interface ILineManager {
 
 export interface CommentAPI {
   // Assumes commentId is immutable. Do not update it unless explicitly via API.
-  updateComment: (comment: IComment) => void;
-  updateCommentsBeingEdited: (comment: IComment) => void;
+  updateComment: (...comments: IComment[]) => void;
+  updateCommentsBeingEdited: (...comments: IComment[]) => void;
   removeComment: (comment: IComment) => void;
   removeCommentEdit: (comment: IComment) => void;
   // Probably need a replaceId for comments to update when the server does.
@@ -111,39 +111,43 @@ const useComments: EditorHook = (
   // is an unedited comment.
 
   const updateComment = React.useCallback(
-    (comment: IComment) => {
+    (...updatedComments: IComment[]) => {
+      const updatedCommentsById = keyBy(updatedComments, 'id');
       setComments({
         ...comments,
-        [comment.id]: comment
+        ...updatedCommentsById
       });
     },
     [comments]
   );
 
   const updateCommentsBeingEdited = React.useCallback(
-    (comment: IComment) => {
+    (...updatedComments: IComment[]) => {
+      const updatedCommentsById = keyBy(updatedComments, 'id');
       setCommentsBeingEdited({
         ...commentsBeingEdited,
-        [comment.id]: comment
+        ...updatedCommentsById
       });
     },
     [commentsBeingEdited, setCommentsBeingEdited]
   );
 
   const removeCommentEdit = React.useCallback(
-    (comment: IComment) => {
-      const updated = omit(commentsBeingEdited, [comment.id]);
+    (...commentsToRemove: IComment[]) => {
+      const ids = commentsToRemove.map(c => c.id);
+      const updated = omit(commentsBeingEdited, ids);
       setCommentsBeingEdited(updated);
-      commentEditChangeEE.emit('delete', updated, comment.id);
+      commentEditChangeEE.emit('delete', updated, ids);
     },
     [commentEditChangeEE, commentsBeingEdited, setCommentsBeingEdited]
   );
 
   const removeComment = React.useCallback(
-    (comment: IComment) => {
-      setComments(omit(comments, [comment.id]));
+    (...commentsToRemove: IComment[]) => {
+      const ids = commentsToRemove.map(c => c.id);
+      setComments(omit(comments, ids));
       // Also remove from being edited.
-      removeCommentEdit(comment);
+      removeCommentEdit(...commentsToRemove);
     },
     [comments, removeCommentEdit]
   );
