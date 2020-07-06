@@ -1,6 +1,9 @@
 import * as React from 'react';
 import CSS from 'csstype'; // TODO: Remove
-import { Card, Button, ButtonGroup } from '@blueprintjs/core';
+import {
+    Card, Button, ButtonGroup,
+    Icon, Popover, Menu, MenuItem, Position
+} from '@blueprintjs/core';
 import { format } from 'timeago.js';
 import Markdown from '../Markdown';
 import { CommentAPI } from './useComments';
@@ -14,7 +17,8 @@ export interface IComment {
     profilePic: string;
     linenum: number;
     text: string;
-    datetime: number; // if this is 0, means not submitted yet!
+    datetime: number; // if this is infinity, means not submitted yet!
+    // Infinity so it gets sorted to bottom.
 }
 
 export interface CommentsProps {
@@ -47,6 +51,11 @@ const contentStyles: CSS.Properties = {
 
 };
 
+
+const optionStyles: CSS.Properties = {
+    float: "right",
+};
+
 const relativeTimeStyles: CSS.Properties = {
     color: "lightgray",
 }
@@ -59,10 +68,6 @@ const profilePicStyles: CSS.Properties = {
     width: "3em",
     height: "3em"
 };
-
-const textStyles: CSS.Properties = {
-    marginTop: "0.2em",
-}
 
 const replyContainerStyles: CSS.Properties = {
     gridColumn: "1 / 3",
@@ -94,9 +99,9 @@ function sendToServer(comment: IComment) {
 
 export default function Comments(props: CommentsProps) {
     const { comments, commentsBeingEditedRef, APIRef, commentEditChangeEE } = props;
-    const { updateComment, updateCommentsBeingEdited, removeComment, 
+    const { updateComment, updateCommentsBeingEdited, removeComment,
         removeCommentEdit, isUnsubmittedComment } = APIRef.current;
-    
+
     // Yes, this is an antipattern.
     // It's also the only way to prevent the parent from being updated.
     // While allowing the child to update.
@@ -110,8 +115,8 @@ export default function Comments(props: CommentsProps) {
         return () => {
             commentEditChangeEE.off('change', callback)
         }
-    },[commentEditChangeEE, commentsBeingEditedRef])
- 
+    }, [commentEditChangeEE, commentsBeingEditedRef])
+
 
     // ---------------- STATE HELPERS ----------------
 
@@ -137,8 +142,7 @@ export default function Comments(props: CommentsProps) {
             // eslint-disable-next-line no-restricted-globals
             const sure = confirm('Are you sure about that?');
             if (sure) {
-                const isNewComment = isUnsubmittedComment(comment);
-                if (isNewComment) {
+                if (isUnsubmittedComment(comment)) {
                     removeComment(comment)
                 } else {
                     removeCommentEdit(comment)
@@ -168,6 +172,25 @@ export default function Comments(props: CommentsProps) {
         }
     }
 
+    function editComment(comment: IComment) {
+        return function (evt: any) {
+            // Puts this comment as being updated
+            updateCommentsBeingEdited(comment);
+        }
+    }
+
+    function deleteComment(comment: IComment) {
+        return async function (evt: any) {
+            try {
+                await sendToServer(comment);
+                removeComment(comment);
+            } catch (e) {
+                // TODO, implement properly
+                console.error('Error occured when sending the comment to server', e);
+            }
+        }
+    }
+
     // ----------------- RENDERING -----------------
 
     return (
@@ -175,7 +198,6 @@ export default function Comments(props: CommentsProps) {
             <div className="gutter-controls">-</div>
             {comments.map((comment) => {
                 const id = comment.id;
-                console.log('@@@@@@@@@@', id, commentsBeingEdited);
                 const displayComment
                     = commentsBeingEdited[id] ? commentsBeingEdited[id] : comment;
                 const { profilePic, username, text, datetime } = displayComment;
@@ -183,9 +205,22 @@ export default function Comments(props: CommentsProps) {
                 return (<Card className="comment" key={id} style={commentStyles}>
                     <img className="profile-pic" src={profilePic} alt="" style={profilePicStyles}></img>
                     <div className="content" style={contentStyles}>
+                        {/* Popover bp-layout="float-right" isn't working */
+                            !isEditing ? 
+                                <div style={optionStyles}>
+                                <Popover content={<Menu>
+                                    <MenuItem text="Edit" onClick={editComment(comment)}></MenuItem>
+                                    <MenuItem text="Delete" onClick={deleteComment(comment)}></MenuItem>
+                                </Menu>}
+                                    position={Position.RIGHT_TOP}>
+                                    <Icon icon="more"></Icon>
+                                </Popover>
+                            </div>
+                            : ""
+                        }
                         <span className="username" style={usernameStyles}>{username} </span>
                         <span className="relative-time"
-                            style={relativeTimeStyles}>{ isUnsubmittedComment(comment) ? 'Preview' : format(new Date(datetime))}</span>
+                            style={relativeTimeStyles}>{isUnsubmittedComment(comment) ? 'Preview' : format(new Date(datetime))}</span>
                         <Markdown className="text" content={text || "(Content preview)"} />
                     </div>
                     {(isEditing ? <div className="reply-container" style={replyContainerStyles}>
