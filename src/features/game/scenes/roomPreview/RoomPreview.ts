@@ -7,12 +7,11 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public async preload() {
-
     await this.eval(`\npreload();`);
   }
 
   public async create() {
-    this.eval(`\ncreate();`)
+    this.eval(`\ncreate();`);
   }
 
   private async eval(append: string) {
@@ -26,8 +25,6 @@ export default class RoomPreview extends Phaser.Scene {
   }
 }
 
-
-
 const studentCode = `import {create_text, add, load_image} from "game";
     
 function preload() {
@@ -38,4 +35,4 @@ function create(){
   let text = create_text(500,500,"cool");
   add(text);
 }
-`
+`;
