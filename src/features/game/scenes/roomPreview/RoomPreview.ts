@@ -21,16 +21,10 @@ export default class RoomPreview extends Phaser.Scene {
       phaser: Phaser
     });
     context.externalContext = 'playground';
-    await runInContext(studentCode + append, context);
+    const result = await runInContext(studentCode + append, context);
+    console.log(result);
   }
 }
-
-
-
-
-
-
-
 
 
 
