@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ITreeNode, Tree } from '@blueprintjs/core';
 import * as _ from 'lodash';
+import { s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
 type TreeState = {
   nodes: ITreeNode[];
@@ -63,6 +64,7 @@ function pathToObj(assetPaths: string[]): object {
       _.set(assetObj, assetPathList, newFilesInFolder);
     }
   });
+  s3AssetFolders.forEach(folder => !assetObj[folder] && (assetObj[folder] = []));
   return assetObj;
 }
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 
-import { fetchAssetPathsLocally } from 'src/features/storySimulator/StorySimulatorService';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
+import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import {
   createStorySimulatorGame,
   getStorySimulatorGame
@@ -12,10 +12,13 @@ import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoader';
 import AssetViewer from './subcomponents/StorySimulatorAssetViewer';
 import { gameTxtStorageName } from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
+import { fetchAssetPaths } from 'src/features/storySimulator/StorySimulatorService';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-  const [sessionLoaded, setSessionLoaded] = React.useState(false);
+
+  const accessToken = useSelector((state: OverallState) => state.session.accessToken);
+  const [fetchToggle, setFetchToggle] = React.useState(false);
 
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
   const [currentAsset, setCurrentAsset] = React.useState<string>('');
@@ -25,26 +28,30 @@ function StorySimulator() {
   React.useEffect(() => {
     createStorySimulatorGame();
     getStorySimulatorGame().setStorySimProps({ setStorySimState });
-    (async () => {
-      const paths = await fetchAssetPathsLocally();
-      setAssetPaths(paths);
-    })();
   }, []);
 
   React.useEffect(() => {
-    if (sessionLoaded || !session) {
-      return;
-    }
-
     getStorySimulatorGame().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
       name: session.name
     } as AccountInfo);
+  }, [session]);
 
-    setSessionLoaded(true);
-  }, [session, sessionLoaded]);
+  React.useEffect(() => {
+    (async () => {
+      if (!accessToken) {
+        setFetchToggle(!fetchToggle);
+        return;
+      }
+      const paths = await fetchAssetPaths(accessToken);
+      if (!paths) {
+        setFetchToggle(!fetchToggle);
+      }
+      setAssetPaths(paths);
+    })();
+  }, [accessToken, fetchToggle]);
 
   return (
     <>
@@ -84,6 +91,8 @@ function StorySimulator() {
           {storySimState === 'assetUploader' && (
             <>
               <h3>Asset uploader</h3>
+              <AssetViewer assetPath={currentAsset} />
+              <StorySimulatorAssetFileUploader accessToken={accessToken} />
               <StorySimulatorAssetSelection
                 assetPaths={assetPaths}
                 setCurrentAsset={setCurrentAsset}
