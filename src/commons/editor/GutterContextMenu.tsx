@@ -8,17 +8,24 @@ export type ContextMenuItems = "toggleBreakpoint" | "createCommentPrompt";
 export type ContextMenuHandler = (linenum: number) => void;
 
 export interface ContextMenuProps {
-    handlers: { [name in ContextMenuItems]?: () => void };
+    row: number;
+    handlers: { [name in ContextMenuItems]?: ContextMenuHandler };
 }
 
 // TODO: disable creating comment prompt when assignment is not yet submitted.
 
 export default function ContextMenu(props: ContextMenuProps) {
+    const { handlers, row } = props;
 
-    const { handlers } = props; 
+    function tryGet(item: ContextMenuItems) {
+        const fn = handlers[item] || ((row: number) =>  {});
+        return () => fn(row);
+    }
     
     return (<Menu onContextMenu={() => false}>
-          <MenuItem icon="full-circle" text="Toggle Breakpoint" onClick={ handlers.toggleBreakpoint }/>
-          <MenuItem icon="comment" text="Add comment" onClick={ handlers.createCommentPrompt }/>
+          <MenuItem icon="full-circle" text="Toggle Breakpoint" 
+            onClick={ tryGet("toggleBreakpoint") }/>
+          <MenuItem icon="comment" text="Add comment" 
+            onClick={ tryGet("createCommentPrompt") }/>
         </Menu>);
 }

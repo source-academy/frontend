@@ -5,7 +5,6 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-import { mapValues } from 'lodash';
 
 // import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
@@ -192,15 +191,6 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 const handlers = {
   goGreen: () => { }
 };
-// TODO: move helper function
-
-// function usePrevious<T>(value: T) { 
-//   const ref = React.useRef<T>();
-//   React.useEffect(() => {
-//     ref.current = value;
-//   });
-//   return ref.current;
-// }
 
 const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   props,
@@ -363,26 +353,24 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   }
 
   // ----------------- BIND CONTEXT MENU ----------------
-  // const [contextMenu, setContextMenu] = React.useState(false);
-
-  const transformedHandlers = mapValues(contextMenuHandlers, (_, key) => {
-    const row = 0; // TODO: fix.
-    return () => (contextMenuHandlers[key] ? contextMenuHandlers[key](row) : undefined);
-  });
+  // const [isContextMenuOpen, setContextMenuOpen] = React.useState(false);
 
   const showContextMenu = React.useCallback((e: MouseEvent) => {
+    const editor = reactAceRef.current!.editor;
+    const pos: Position = (editor.renderer as any).screenToTextCoordinates(e.clientX, e.clientY);
     e.preventDefault();
-    BPContextMenu.show((<GutterContextMenu handlers={transformedHandlers}></GutterContextMenu>)
+    BPContextMenu.show((<GutterContextMenu 
+      row={pos.row}
+      handlers={contextMenuHandlers}/>)
       ,
       { left: e.clientX, top: e.clientY },
       () => {
-        console.log('Closed');
-        // setContextMenu(false);
+        // setContextMenuOpen(false);
       }
     );
     // indicate that context menu is open so we can add a CSS class to this element
-    // setContextMenu(true);
-  }, [transformedHandlers]);
+    // setContextMenuOpen(true);
+  }, [contextMenuHandlers, reactAceRef]);
 
   // This needs to be used earlier, otherwise this shd be made a const.
   showContextMenuRef.current = showContextMenu;
