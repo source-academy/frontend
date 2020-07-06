@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Dialog, Card } from '@blueprintjs/core';
 import { AchievementModalItem } from '../../../../../../commons/achievements/AchievementTypes';
 import EditableModalDescription from './EditableModalDescription';
-import EditableModalGoalText from './EditableModalGoalText';
+import EditableModalText from './EditableModalText';
 import EditableModalImage from './EditableModalImage';
 import { modalTemplate } from '../AchievementTemplate';
 
@@ -21,7 +21,7 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
 
   const [modalData, setModalData] = useState<AchievementModalItem>(renderModal);
 
-  const { modalImageUrl, description, goalText } = modalData;
+  const { modalImageUrl, description, completionText, goalText } = modalData;
 
   const setDescription = (description: string) => {
     setModalData({
@@ -35,6 +35,14 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
     setModalData({
       ...modalData,
       goalText: goalText
+    });
+    changeModal(modalData);
+  };
+
+  const setCompletionText = (completionText: string) => {
+    setModalData({
+      ...modalData,
+      completionText: completionText
     });
     changeModal(modalData);
   };
@@ -69,7 +77,8 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
             />
 
             <EditableModalDescription description={description} setDescription={setDescription} />
-            <EditableModalGoalText goalText={goalText} setGoalText={setGoalText} />
+            <EditableModalText goalText={goalText} setGoalText={setGoalText} />
+            <EditableModalText goalText={completionText} setGoalText={setCompletionText} />
           </Card>
         </div>
       </Dialog>

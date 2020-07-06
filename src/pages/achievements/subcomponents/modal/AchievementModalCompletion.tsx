@@ -8,7 +8,7 @@ function AchievementModalCompletion(props: AchievementModalCompletionProps) {
   const { completionText } = props;
 
   return (
-    <div>
+    <div className="completiom">
       <p>{completionText}</p>
     </div>
   );

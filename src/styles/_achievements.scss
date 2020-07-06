@@ -255,13 +255,51 @@
         background-color: #333e50;
         text-align: center;
 
+        .completiom {
+          border: 1px solid white;
+          box-shadow: 0px 0px 3px white;
+          min-height: 5em;
+
+          display: flex;
+
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+
+          p {
+            color: white;
+          }
+        }
+
+        .goal {
+          display: flex;
+          flex-direction: row;
+
+          .goal-medal {
+            display: flex;
+            flex-direction: column;
+            flex-basis: 25%;
+
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .goal-text {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
         .sample {
           position: relative;
           text-align: center;
           color: white;
 
           img {
-            max-height: 100em;
+            max-height: 30em;
             max-width: 100%;
           }
 
