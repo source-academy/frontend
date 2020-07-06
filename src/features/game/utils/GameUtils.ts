@@ -1,4 +1,4 @@
-import Constants from 'src/commons/utils/Constants';
+import { Constants } from '../commons/CommonConstants';
 
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -28,5 +28,9 @@ export function createMapWithKey<K, V>(list: any[], id: string) {
 }
 
 export function convertPathToS3(localFileName: string) {
-  return Constants.backendUrl + '/ui' + localFileName.slice(9); // remove "../assets"
+  if (localFileName.startsWith('../assets')) {
+    return Constants.assetsFolder + '/ui' + localFileName.slice(9); // remove "../assets"
+  } else {
+    return localFileName;
+  }
 }

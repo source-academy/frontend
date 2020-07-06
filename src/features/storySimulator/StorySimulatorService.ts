@@ -36,7 +36,10 @@ export async function uploadAssets(accessToken: string, fileList: FileList, fold
   }
 
   const responses = await Promise.all(
-    fileArray.map(async file => await uploadAsset(accessToken, file, folderName, file.name))
+    fileArray.map(async file => {
+      const response = await uploadAsset(accessToken, file, folderName, file.name);
+      return file.name + ' => ' + response;
+    })
   );
 
   alert(responses.join('\n'));
@@ -44,6 +47,9 @@ export async function uploadAssets(accessToken: string, fileList: FileList, fold
 
 async function uploadAsset(accessToken: string, file: Blob, folderName: string, fileName: string) {
   try {
+    if (!file.type.startsWith('image') && !file.type.startsWith('audio')) {
+      return 'Only images and audio allowed.';
+    }
     const formData = new FormData();
     formData.set('upload', file);
 
@@ -58,7 +64,7 @@ async function uploadAsset(accessToken: string, file: Blob, folderName: string, 
     });
 
     const responseText = await response.text();
-    return fileName + ' => ' + responseText;
+    return responseText;
   } finally {
   }
 }

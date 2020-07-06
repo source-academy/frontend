@@ -16,6 +16,7 @@ import {
   gameTxtStorageName
 } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import { convertPathToS3 } from 'src/features/game/utils/GameUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -29,7 +30,9 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async preload() {
-    storySimulatorAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
+    storySimulatorAssets.forEach((asset: ImageAsset) =>
+      this.load.image(asset.key, convertPathToS3(asset.path))
+    );
   }
 
   public async create() {

@@ -27,7 +27,7 @@ export const topButton: ImageAsset = {
 
 export const speechBox: ImageAsset = {
   key: 'speechBox',
-  path: '../assets/speechBox.png'
+  path: '../assets/speechbox.png'
 };
 
 export const speakerBox: ImageAsset = {
@@ -102,7 +102,7 @@ export const collectiblesPage: ImageAsset = {
 
 export const diamond: ImageAsset = {
   key: 'diamond',
-  path: '../assets/Zircon.png'
+  path: '../assets/zircon.png'
 };
 
 export const arrow: ImageAsset = {

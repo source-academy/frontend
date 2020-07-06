@@ -22,6 +22,7 @@ import SSLogManager from '../../logger/SSLogManager';
 import SSTransformManager from '../../transform/SSTransformManager';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import GameInputManager from 'src/features/game/input/GameInputManager';
+import { convertPathToS3 } from 'src/features/game/utils/GameUtils';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -69,7 +70,9 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public async preload() {
-    storySimulatorAssets.forEach((asset: ImageAsset) => this.load.image(asset.key, asset.path));
+    storySimulatorAssets.forEach((asset: ImageAsset) =>
+      this.load.image(asset.key, convertPathToS3(asset.path))
+    );
   }
 
   public create() {

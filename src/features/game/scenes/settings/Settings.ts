@@ -27,6 +27,7 @@ import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
+import { convertPathToS3 } from '../../utils/GameUtils';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -57,7 +58,7 @@ class Settings extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    settingsAssets.forEach(asset => this.load.image(asset.key, asset.path));
+    settingsAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
   }
 
   private renderBackground() {

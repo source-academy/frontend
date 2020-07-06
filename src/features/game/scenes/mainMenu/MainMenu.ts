@@ -20,6 +20,7 @@ import commonSoundAssets, {
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
+import { convertPathToS3 } from '../../utils/GameUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -59,7 +60,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    mainMenuAssets.forEach(asset => this.load.image(asset.key, asset.path));
+    mainMenuAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
   }
 
   private renderBackground() {
