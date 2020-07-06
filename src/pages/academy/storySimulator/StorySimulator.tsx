@@ -13,6 +13,7 @@ import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoad
 import AssetViewer from './subcomponents/StorySimulatorAssetViewer';
 import { gameTxtStorageName } from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 import { fetchAssetPaths } from 'src/features/storySimulator/StorySimulatorService';
+import { Button } from '@blueprintjs/core';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -65,15 +66,14 @@ function StorySimulator() {
               <CheckpointTxtLoader
                 title={'Default Chapter'}
                 storageName={gameTxtStorageName.defaultChapter}
-                clearStorage={true}
               />
               <br />
               <CheckpointTxtLoader
                 title={'Checkpoint text file'}
                 storageName={gameTxtStorageName.checkpointTxt}
-                clearStorage={false}
               />
               <br />
+              <Button onClick={clearSessionStorage}>Clear Browser Files</Button>
             </>
           )}
           {storySimState === 'objectPlacement' && (
@@ -103,6 +103,11 @@ function StorySimulator() {
       </div>
     </>
   );
+}
+
+function clearSessionStorage() {
+  sessionStorage.setItem(gameTxtStorageName.checkpointTxt, '');
+  sessionStorage.setItem(gameTxtStorageName.defaultChapter, '');
 }
 
 export default StorySimulator;

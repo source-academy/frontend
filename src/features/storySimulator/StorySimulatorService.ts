@@ -29,12 +29,20 @@ async function fetchFolder(accessToken: string, folderName: string) {
   }
 }
 
-export async function uploadAsset(
-  accessToken: string,
-  file: Blob,
-  folderName: string,
-  fileName: string
-) {
+export async function uploadAssets(accessToken: string, fileList: FileList, folderName: string) {
+  const fileArray = [];
+  for (let i = 0; i < fileList.length; i++) {
+    fileArray.push(fileList[i]);
+  }
+
+  const responses = await Promise.all(
+    fileArray.map(async file => await uploadAsset(accessToken, file, folderName, file.name))
+  );
+
+  alert(responses.join('\n'));
+}
+
+async function uploadAsset(accessToken: string, file: Blob, folderName: string, fileName: string) {
   try {
     const formData = new FormData();
     formData.set('upload', file);
@@ -49,8 +57,8 @@ export async function uploadAsset(
       mode: 'cors'
     });
 
-    alert(await response.text());
-    return response;
+    const responseText = await response.text();
+    return fileName + ' => ' + responseText;
   } finally {
   }
 }

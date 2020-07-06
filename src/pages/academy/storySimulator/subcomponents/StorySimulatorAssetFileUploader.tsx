@@ -1,36 +1,31 @@
 import * as React from 'react';
 import _ from 'lodash';
-
-import { uploadAsset, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 import { Menu, MenuItem, Position, Popover, Button } from '@blueprintjs/core';
+
+import { uploadAssets, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
 type Props = {
   accessToken?: string;
 };
 
 function AssetFileUploader({ accessToken }: Props) {
-  const [file, setFile] = React.useState<[File, string]>();
-  const [folder, setFolder] = React.useState<string>('Choose folder...');
+  const [fileList, setFileList] = React.useState<FileList>();
+  const [folder, setFolder] = React.useState<string>();
 
-  function onChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const fakePath =
-      document && document.getElementById('id') && (document.getElementById('id')! as any).value;
-    const fileName = fakePath.split('\\').pop();
+  function onLoadFile(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
-    const [uploadedFile] = e.target.files;
-    setFile([uploadedFile, fileName]);
+    const loadedFiles = e.target.files;
+    setFileList(loadedFiles);
   }
 
-  function onClick() {
-    if (!accessToken || !file) return;
-    const [blob, fileName] = file;
-    uploadAsset(accessToken, blob, 'ui', fileName);
+  function onUploadButtonClick() {
+    if (!accessToken || !fileList || !folder) return;
+    uploadAssets(accessToken, fileList, folder);
   }
+
   function onChangeFolder(e: any) {
-    if (!e.target.innerText) {
-      return;
-    }
-    setFolder(e.target.innerText.toLowerCase() || 'Choose folder...');
+    if (!e.target.innerText) return;
+    setFolder(e.target.innerText.toLowerCase());
   }
 
   const dropDown = (
@@ -46,12 +41,12 @@ function AssetFileUploader({ accessToken }: Props) {
   return (
     <div className="LeftAlign">
       <Popover content={dropDown} position={Position.BOTTOM}>
-        <Button style={{ width: '100%' }} text={_.capitalize(folder)} />
+        <Button style={{ width: '100%' }} text={_.capitalize(folder) || 'Choose Folder...'} />
       </Popover>
       <br />
-      <input type="file" id="id" onChange={onChange} style={{ width: '250px' }} />
+      <input type="file" multiple id="id" onChange={onLoadFile} style={{ width: '250px' }} />
       <br />
-      <Button onClick={onClick}>Upload</Button>
+      <Button onClick={onUploadButtonClick}>Upload</Button>
     </div>
   );
 }
