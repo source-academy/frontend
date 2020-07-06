@@ -1,14 +1,18 @@
-import { screenCenter } from 'src/features/game/commons/CommonConstants';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { limitNumber, sleep } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
-import { chapterSelectAssets, chapterSelectBackground } from './ChapterSelectAssets';
+import {
+  chapterSelectAssets,
+  chapterSelectBackground,
+  chapterSelectBorder,
+  chapterSelectArrow
+} from './ChapterSelectAssets';
 import {
   defaultScrollSpeed,
   maskRect,
   imageDist,
-  scrollSpeedLimit,
-  imageRect
+  chapterArrowXOffset
 } from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
@@ -22,10 +26,12 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
-  private scrollSpeed: number;
   private layerManager: GameLayerManager;
   private loadedGameState: FullSaveState | undefined;
   private autoScrolling: boolean;
+  private isScrollLeft: boolean;
+  private isScrollRight: boolean;
+
   public chapterDetails: GameChapter[];
 
   constructor() {
@@ -33,10 +39,11 @@ class ChapterSelect extends Phaser.Scene {
 
     this.chapterContainer = undefined;
     this.backButtonContainer = undefined;
-    this.scrollSpeed = defaultScrollSpeed;
     this.chapterDetails = [];
     this.layerManager = new GameLayerManager();
     this.autoScrolling = true;
+    this.isScrollLeft = false;
+    this.isScrollRight = false;
   }
 
   public preload() {
@@ -55,19 +62,17 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public update() {
-    if (!this.chapterContainer) return;
+    if (!this.chapterContainer || this.autoScrolling) return;
 
-    if (this.autoScrolling) {
-      return;
+    let newXPos = this.chapterContainer.x;
+    if (this.isScrollRight) {
+      newXPos -= defaultScrollSpeed;
+    } else if (this.isScrollLeft) {
+      newXPos += defaultScrollSpeed;
     }
-    let xOffset = this.input.x - screenCenter.x;
-    if (Math.abs(xOffset) < imageRect.width / 2) {
-      xOffset = 0;
-    }
-    this.scrollSpeed = limitNumber(-scrollSpeedLimit, xOffset, scrollSpeedLimit) * 0.2;
     this.chapterContainer.x = limitNumber(
+      newXPos,
       -imageDist * (this.chapterDetails.length - 1),
-      this.chapterContainer.x - this.scrollSpeed,
       0
     );
   }
@@ -86,7 +91,16 @@ class ChapterSelect extends Phaser.Scene {
       screenCenter.y,
       chapterSelectBackground.key
     );
+    const blackOverlay = new Phaser.GameObjects.Rectangle(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      screenSize.x,
+      screenSize.y,
+      0
+    ).setAlpha(0.3);
     this.layerManager.addToLayer(Layer.Background, background);
+    this.layerManager.addToLayer(Layer.Background, blackOverlay);
   }
 
   private renderChapters() {
@@ -103,8 +117,49 @@ class ChapterSelect extends Phaser.Scene {
     this.chapterContainer = this.createChapterContainer();
     this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
 
+    const border = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      chapterSelectBorder.key
+    );
+
+    const leftArrow = new Phaser.GameObjects.Sprite(
+      this,
+      screenCenter.x - chapterArrowXOffset,
+      screenCenter.y,
+      chapterSelectArrow.key
+    ).setDataEnabled();
+    const rightArrow = new Phaser.GameObjects.Sprite(
+      this,
+      screenCenter.x + chapterArrowXOffset,
+      screenCenter.y,
+      chapterSelectArrow.key
+    )
+      .setDataEnabled()
+      .setFlipX(true);
+
+    leftArrow.data.set('dir', 'left');
+    rightArrow.data.set('dir', 'right');
+    this.setArrowFunctionality(leftArrow);
+    this.setArrowFunctionality(rightArrow);
+
     this.layerManager.addToLayer(Layer.UI, this.chapterContainer);
     this.layerManager.addToLayer(Layer.UI, this.backButtonContainer);
+    this.layerManager.addToLayer(Layer.UI, border);
+    this.layerManager.addToLayer(Layer.UI, leftArrow);
+    this.layerManager.addToLayer(Layer.UI, rightArrow);
+  }
+
+  private setArrowFunctionality(arrow: Phaser.GameObjects.GameObject) {
+    const isLeft = arrow.data.get('dir') === 'left';
+    const setScroll = isLeft
+      ? (value: boolean) => (this.isScrollLeft = value)
+      : (value: boolean) => (this.isScrollRight = value);
+    arrow.setInteractive({ useHandCursor: true });
+    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => setScroll(true));
+    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => setScroll(false));
+    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => setScroll(false));
   }
 
   private createMask() {

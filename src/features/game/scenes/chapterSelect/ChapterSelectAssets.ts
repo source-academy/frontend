@@ -22,10 +22,22 @@ export const chapterSelectFrame: ImageAsset = {
   path: '../assets/chapterSelectionFrame.png'
 };
 
+export const chapterSelectBorder: ImageAsset = {
+  key: 'chapter-select-border',
+  path: '../assets/chapterSelectionBorder.png'
+};
+
+export const chapterSelectArrow: ImageAsset = {
+  key: 'chapteer-select-arrow',
+  path: '../assets/chapSelectArrow.png'
+};
+
 export const chapterSelectAssets = [
   chapterSelectBackground,
   chapterRepeatButton,
   chapterContinueButton,
   chapterSelectFrame,
+  chapterSelectBorder,
+  chapterSelectArrow,
   topButton
 ];
