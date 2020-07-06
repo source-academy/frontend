@@ -136,6 +136,14 @@ class MainMenu extends Phaser.Scene {
       Constants.nullInteractionId
     );
     this.addOptionButton(
+      'Room Preview',
+      () => {
+        this.layerManager.clearAllLayers();
+        this.scene.start('RoomPreview');
+      },
+      Constants.nullInteractionId
+    );
+    this.addOptionButton(
       optionsText.settings,
       () => {
         this.layerManager.clearAllLayers();
