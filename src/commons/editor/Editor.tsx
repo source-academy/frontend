@@ -19,8 +19,6 @@ import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
 import GutterContextMenu, { ContextMenuItems, ContextMenuHandler } from './GutterContextMenu';
 
-
-
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
 import useHighlighting from './UseHighlighting';
@@ -31,7 +29,6 @@ import useRefactor from './UseRefactor';
 import { IAceEditor } from 'react-ace/lib/types';
 import useComments from './useComments';
 
-
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type ContextMenuHandlers = { [name in ContextMenuItems]?: ContextMenuHandler };
 export type EditorHook = (
@@ -39,7 +36,7 @@ export type EditorHook = (
   outProps: IAceEditorProps,
   keyBindings: EditorKeyBindingHandlers,
   reactAceRef: React.MutableRefObject<AceEditor | null>,
-  contextMenuHandlers: ContextMenuHandlers,
+  contextMenuHandlers: ContextMenuHandlers
 ) => void;
 
 /**
@@ -96,9 +93,6 @@ const getMarkers = (
 const getModeString = (chapter: number, variant: Variant, library: string) =>
   `source${chapter}${variant}${library}`;
 
-
-
-
 /**
  * This _modifies global state_ and defines a new Ace mode globally.
  *
@@ -122,7 +116,7 @@ const toggleBreakpoint = (editor: IAceEditor, row: number) => {
   } else {
     editor.session.clearBreakpoint(row);
   }
-}
+};
 
 const makeHandleGutterClick = (
   handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']
@@ -189,7 +183,7 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => { }
+  goGreen: () => {}
 };
 
 const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
@@ -223,7 +217,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       }
       toggleBreakpoint(reactAceRef.current?.editor, row);
     }
-  }
+  };
 
   // ----------------- LANGUAGE RELATED ----------------
 
@@ -241,7 +235,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 
   // This needs to be defined later, unfortunately.
   // Too tedious to rearrange the code otherwise.
-  const showContextMenuRef = React.useRef( (e: MouseEvent) => {});
+  const showContextMenuRef = React.useRef((e: MouseEvent) => {});
 
   React.useLayoutEffect(() => {
     if (!reactAceRef.current) {
@@ -271,7 +265,12 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
       makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
     ]);
     // This should run exactly once.
-  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef, contextMenuHandlers]);
+  }, [
+    reactAceRef,
+    handleEditorUpdateBreakpointsRef,
+    handlePromptAutocompleteRef,
+    contextMenuHandlers
+  ]);
 
   // ----------------- BIND CURSOR MOVEMENTS ----------------
 
@@ -285,12 +284,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     }
   }, [reactAceRef, props.newCursorPosition]);
 
-  const {
-    handleUpdateHasUnsavedChanges,
-    handleEditorValueChange,
-    isEditorAutorun
-  } = props;
-
+  const { handleUpdateHasUnsavedChanges, handleEditorValueChange, isEditorAutorun } = props;
 
   // ----------------- DON'T KNOW HOW TO CLASSIFY ----------------
 
@@ -317,7 +311,6 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     ]
   );
 
-
   const aceEditorProps: IAceEditorProps = {
     className: 'react-ace',
     editorProps: {
@@ -339,9 +332,9 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     onChange
   };
 
-    // -------------- LOAD ALL PLUGINS --------------
+  // -------------- LOAD ALL PLUGINS --------------
 
-    // Hooks must not change after an editor is instantiated, so to prevent that
+  // Hooks must not change after an editor is instantiated, so to prevent that
   // we store the original value and always use that only
   const [hooks] = React.useState(props.hooks);
   if (hooks) {
@@ -355,22 +348,23 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   // ----------------- BIND CONTEXT MENU ----------------
   // const [isContextMenuOpen, setContextMenuOpen] = React.useState(false);
 
-  const showContextMenu = React.useCallback((e: MouseEvent) => {
-    const editor = reactAceRef.current!.editor;
-    const pos: Position = (editor.renderer as any).screenToTextCoordinates(e.clientX, e.clientY);
-    e.preventDefault();
-    BPContextMenu.show((<GutterContextMenu 
-      row={pos.row}
-      handlers={contextMenuHandlers}/>)
-      ,
-      { left: e.clientX, top: e.clientY },
-      () => {
-        // setContextMenuOpen(false);
-      }
-    );
-    // indicate that context menu is open so we can add a CSS class to this element
-    // setContextMenuOpen(true);
-  }, [contextMenuHandlers, reactAceRef]);
+  const showContextMenu = React.useCallback(
+    (e: MouseEvent) => {
+      const editor = reactAceRef.current!.editor;
+      const pos: Position = (editor.renderer as any).screenToTextCoordinates(e.clientX, e.clientY);
+      e.preventDefault();
+      BPContextMenu.show(
+        <GutterContextMenu row={pos.row} handlers={contextMenuHandlers} />,
+        { left: e.clientX, top: e.clientY },
+        () => {
+          // setContextMenuOpen(false);
+        }
+      );
+      // indicate that context menu is open so we can add a CSS class to this element
+      // setContextMenuOpen(true);
+    },
+    [contextMenuHandlers, reactAceRef]
+  );
 
   // This needs to be used earlier, otherwise this shd be made a const.
   showContextMenuRef.current = showContextMenu;
@@ -394,7 +388,14 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
 export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   <EditorBase
     {...props}
-    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor, useComments]}
+    hooks={[
+      useHighlighting,
+      useNavigation,
+      useTypeInference,
+      useShareAce,
+      useRefactor,
+      useComments
+    ]}
     ref={ref}
   />
 ));
