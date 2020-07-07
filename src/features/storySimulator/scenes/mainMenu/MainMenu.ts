@@ -17,6 +17,7 @@ import {
 } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
+import commonAssets from 'src/features/game/commons/CommonAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -30,7 +31,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async preload() {
-    storySimulatorAssets.forEach((asset: ImageAsset) =>
+    [...storySimulatorAssets, ...commonAssets].forEach((asset: ImageAsset) =>
       this.load.image(asset.key, toS3Path(asset.path))
     );
   }
