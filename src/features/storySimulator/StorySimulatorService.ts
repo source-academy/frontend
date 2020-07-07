@@ -16,19 +16,13 @@ async function fetchFolder(accessToken: string, folderName: string) {
   const response = await createAssetRequest(accessToken, folderName, 'GET', {
     'Content-Type': 'application/json'
   });
-  return response ? response.json() : [];
+  return response.status === 200 ? response.json() : [];
 }
 
 export async function deleteS3File(accessToken: string, assetPath: string) {
-  if (
-    window.confirm(`Are you sure you want to delete ${assetPath}? There is no undoing this action!`)
-  ) {
-    console.log('Deleted');
-  } else {
-    console.log('Whew');
-  }
   const response = await createAssetRequest(accessToken, assetPath, 'DELETE');
-  return response ? response.text() : 'Unknown response';
+  const message = await response.text();
+  return message || 'Successfully Deleted';
 }
 
 export async function uploadAssets(accessToken: string, fileList: FileList, folderName: string) {
@@ -52,9 +46,9 @@ async function uploadAsset(accessToken: string, file: Blob, folderName: string, 
     accessToken,
     `${folderName}/${fileName}`,
     'POST',
-    { 'Content-Type': 'multipart/form-data' },
-    { body: formData }
+    {},
+    { body: formData, mode: 'cors' }
   );
 
-  return response ? response.json() : [];
+  return response ? response.text() : '';
 }

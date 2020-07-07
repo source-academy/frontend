@@ -75,8 +75,12 @@ function pathToObj(assetPaths: string[]): object {
   return assetObj;
 }
 
-const deleteFile = (filePath: string, accessToken: string) => async () =>
-  await deleteS3File(accessToken, filePath);
+const deleteFile = (filePath: string, accessToken: string) => async () => {
+  const confirm = window.confirm(
+    `Are you sure you want to delete ${filePath}?\nThere is no undoing this action!`
+  );
+  alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
+};
 
 function listToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
   let assetCounter = 0;

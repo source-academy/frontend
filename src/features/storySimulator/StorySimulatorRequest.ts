@@ -12,23 +12,19 @@ export async function createAssetRequest(
     Object.entries(headerConfig).forEach(([key, value]: string[]) => {
       headers.append(key, value);
     });
-    const response = await fetch(Constants.backendUrl + '/v1/assets/' + requestPath, {
+
+    const config = {
       method,
       headers,
       ...requestDetails
-    });
-    if (response.status === 200) {
-      return response;
-    } else {
-      throw new Error(await response.text());
-    }
-  } catch {
-    return;
+    };
+
+    return fetch(Constants.backendUrl + '/v1/assets/' + requestPath, config);
   } finally {
   }
 }
 
-function createHeaders(accessToken: string): Headers {
+export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
   headers.append('Accept', 'application/json');
   headers.append('Authorization', `Bearer ${accessToken}`);
