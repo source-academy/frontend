@@ -1,5 +1,5 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, sleep } from 'src/features/game/utils/GameUtils';
+import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import {
@@ -78,7 +78,7 @@ class ChapterSelect extends Phaser.Scene {
 
   private preloadAssets() {
     this.chapterDetails.forEach((chapter, index) => {
-      this.load.image(`chapterImage${index}`, chapter.previewBgPath);
+      this.load.image(`chapterImage${index}`, toS3Path(chapter.previewBgPath));
     });
   }
 

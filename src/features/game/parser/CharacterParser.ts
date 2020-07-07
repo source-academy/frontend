@@ -3,7 +3,6 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, ItemId } from '../commons/CommonsTypes';
-import { Constants } from '../commons/CommonConstants';
 import ParserConverter from './ParserConverter';
 
 export default class CharacterParser {
@@ -18,7 +17,7 @@ export default class CharacterParser {
   }
 
   public static characterAssetValue(characterId: ItemId, expression: string) {
-    return `${Constants.assetsFolder}/avatars/${characterId}/${characterId}.${expression}.png`;
+    return `/avatars/${characterId}/${characterId}.${expression}.png`;
   }
 
   private static parseCharacterDetails(locationId: LocationId, characterDetails: string) {
@@ -45,6 +44,7 @@ export default class CharacterParser {
     // Add asset key to expression map
     expressions.set(defaultExpression, this.characterAssetKey(id, defaultExpression));
 
+    console.log(id, defaultExpression);
     // Add asset keys to expression map
     Parser.checkpoint.map.addMapAsset(
       this.characterAssetKey(id, defaultExpression),

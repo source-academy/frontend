@@ -1,5 +1,4 @@
 import { LocationId } from '../location/GameMapTypes';
-import { Constants } from '../commons/CommonConstants';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 import { GameSoundType } from '../sound/GameSoundTypes';
@@ -10,7 +9,7 @@ export default class MusicParser {
       const [id, assetPath, volume] = StringUtils.splitByChar(bgm, ',');
       Parser.checkpoint.map.addSoundAsset({
         key: id,
-        path: Constants.repoAssetsFolder + assetPath,
+        path: assetPath,
         config: {
           volume: parseInt(volume),
           loop: soundType === GameSoundType.BGM

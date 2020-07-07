@@ -47,8 +47,9 @@ class GameActionManager {
   }
 
   public getLocationAtId(locationId: LocationId): GameLocation {
-    return this.getGameManager().currentCheckpoint.map.getLocationAtId(locationId);
+    return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
   }
+
   /////////////////////
   //    Game Mode    //
   /////////////////////
@@ -246,7 +247,7 @@ class GameActionManager {
   }
 
   public getDialogue(dialogueId: ItemId) {
-    return this.getGameManager().currentCheckpoint.map.getDialogues().get(dialogueId);
+    return this.getGameManager().getCurrentCheckpoint().map.getDialogues().get(dialogueId);
   }
 
   /////////////////////

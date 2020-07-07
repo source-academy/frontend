@@ -15,7 +15,6 @@ import GameSaveManager from '../../save/GameSaveManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameInputManager from '../../input/GameInputManager';
 
-import LocationSelectChapter from '../LocationSelectChapter';
 import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
@@ -29,6 +28,8 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
+import { toS3Path } from '../../utils/GameUtils';
+import { Constants } from '../../commons/CommonConstants';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -40,7 +41,7 @@ type GameManagerProps = {
 };
 
 class GameManager extends Phaser.Scene {
-  public currentCheckpoint: GameCheckpoint;
+  public currentCheckpoint: GameCheckpoint | undefined;
   public currentLocationId: LocationId;
   public parentGame: SourceAcademyGame | undefined;
   public isStorySimulator: boolean;
@@ -69,12 +70,12 @@ class GameManager extends Phaser.Scene {
 
   constructor() {
     super('GameManager');
-    this.currentCheckpoint = LocationSelectChapter;
+    this.currentCheckpoint = undefined;
     this.fullSaveState = undefined;
     this.continueGame = false;
     this.chapterNum = -1;
     this.checkpointNum = -1;
-    this.currentLocationId = this.currentCheckpoint.startingLoc;
+    this.currentLocationId = Constants.nullInteractionId;
     this.isStorySimulator = false;
 
     this.layerManager = new GameLayerManager();
@@ -138,7 +139,7 @@ class GameManager extends Phaser.Scene {
     this.loadGameState();
 
     this.currentLocationId =
-      this.saveManager.getLoadedLocation() || this.currentCheckpoint.startingLoc;
+      this.saveManager.getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
     this.stateManager.initialise(this);
     this.userStateManager.initialise(this);
     this.soundManager.initialise(this, this.parentGame || getSourceAcademyGame());
@@ -149,11 +150,11 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
-    this.soundManager.loadSounds(this.currentCheckpoint.map.getSoundAssets());
+    this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.bindEscapeMenu();
 
     addLoadingScreen(this);
-    this.preloadLocationsAssets(this.currentCheckpoint);
+    this.preloadLocationsAssets(this.getCurrentCheckpoint());
   }
 
   private loadGameState() {
@@ -175,7 +176,7 @@ class GameManager extends Phaser.Scene {
 
   private preloadLocationsAssets(chapter: GameCheckpoint) {
     chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
-      this.load.image(assetKey, assetPath);
+      this.load.image(assetKey, toS3Path(assetPath));
     });
   }
 
@@ -256,6 +257,13 @@ class GameManager extends Phaser.Scene {
       throw new Error('No parent game');
     }
     return this.parentGame;
+  }
+
+  public getCurrentCheckpoint() {
+    if (!this.currentCheckpoint) {
+      throw new Error('No loaded checkpoint');
+    }
+    return this.currentCheckpoint;
   }
 
   public getAccountInfo() {

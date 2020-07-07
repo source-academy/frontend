@@ -6,9 +6,9 @@ objectives
 room
     modes: talk, explore
     bgm
-        heavyHitter, /HeavyHitter.mp3, 0.5
+        heavyHitter, /ui/HeavyHitter.mp3, 0.5
     sfx
-        card, /card.mp3, 0.5
+        card, /ui/card.mp3, 0.5
     
     actions
         show_dialogue(welcome)

@@ -17,7 +17,7 @@ export default class DialogueManager {
   }
 
   public initialise(gameManager: GameManager) {
-    this.dialogueMap = gameManager.currentCheckpoint.map.getDialogues();
+    this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
   }
 
   public async playDialogue(dialogueId: ItemId): Promise<void> {

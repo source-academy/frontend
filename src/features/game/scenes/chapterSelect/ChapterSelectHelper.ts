@@ -22,7 +22,7 @@ import { HexColor } from '../../utils/StyleUtils';
 
 export function createChapter(
   scene: ChapterSelect,
-  { title, previewBgPath }: GameChapter,
+  { title }: GameChapter,
   index: number,
   lastCheckpointsIdx: number
 ) {

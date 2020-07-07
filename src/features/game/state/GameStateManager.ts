@@ -109,7 +109,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   public initialise(gameManager: GameManager): void {
-    this.checkpoint = gameManager.currentCheckpoint;
+    this.checkpoint = gameManager.getCurrentCheckpoint();
     const gameSaveState = gameManager.saveManager.getLoadedGameStoryState();
     this.checkpointObjective = this.checkpoint.objectives;
 

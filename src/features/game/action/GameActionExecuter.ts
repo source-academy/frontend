@@ -8,7 +8,7 @@ export default class GameActionExecuter {
   private actionMap: Map<ItemId, GameAction> | undefined;
 
   public initialise(gameManager: GameManager) {
-    this.actionMap = gameManager.currentCheckpoint.map.getActions();
+    this.actionMap = gameManager.getCurrentCheckpoint().map.getActions();
   }
 
   public async executeStoryActions(actionIds: ItemId[] | undefined): Promise<void> {

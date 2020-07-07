@@ -3,7 +3,6 @@ import ActionParser from './ActionParser';
 import StringUtils from '../utils/StringUtils';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { Constants } from '../commons/CommonConstants';
 
 export default class ObjectParser {
   public static parse(locationId: LocationId, objectList: string[]) {
@@ -23,7 +22,7 @@ export default class ObjectParser {
   }
 
   private static objectPath(shortPath: string) {
-    return Constants.assetsFolder + shortPath;
+    return shortPath;
   }
 
   private static parseObjectConfig(locationId: LocationId, objectDetails: string) {

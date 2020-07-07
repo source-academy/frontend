@@ -25,7 +25,7 @@ export default class CharacterManager {
   }
 
   public initialise(gameManager: GameManager) {
-    this.characterMap = gameManager.currentCheckpoint.map.getCharacters();
+    this.characterMap = gameManager.getCurrentCheckpoint().map.getCharacters();
     this.username = gameManager.getAccountInfo().name;
   }
 
