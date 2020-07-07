@@ -11,7 +11,7 @@ class Node {
   achievement: AchievementItem;
   dataIdx: number; // achievements[dataIdx] = achievement
   exp: number;
-  progress: number;
+  progressBar: number;
   status: AchievementStatus;
   furthestDeadline?: Date;
   children: Set<number>; // immediate prerequisite
@@ -23,24 +23,27 @@ class Node {
 
     this.achievement = achievement;
     this.dataIdx = dataIdx;
-    this.exp = goals.reduce((acc, goal) => acc + goal.goalTarget, 0);
-    this.progress = this.generateProgress(goals);
-    this.status = this.generateStatus(deadline, this.progress);
+    this.exp = goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
+    this.progressBar = this.generateProgressBar(goals);
+    this.status = this.generateStatus(deadline, this.progressBar);
     this.furthestDeadline = deadline;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
     this.modal = modal;
   }
 
-  private generateProgress(goals: AchievementGoal[]) {
-    const totalProgress = goals.reduce((acc, goal) => acc + goal.goalProgress, 0);
-    const totalTarget = goals.reduce((acc, goal) => acc + goal.goalTarget, 0);
+  private generateProgressBar(goals: AchievementGoal[]) {
+    const totalProgress = goals.reduce(
+      (totalProgress, goal) => totalProgress + goal.goalProgress,
+      0
+    );
+    const totalTarget = goals.reduce((totalTarget, goal) => totalTarget + goal.goalTarget, 0);
 
     return Math.min(totalProgress / totalTarget, 1);
   }
 
-  private generateStatus(deadline: Date | undefined, progress: number) {
-    if (progress === 1) {
+  private generateStatus(deadline: Date | undefined, progressBar: number) {
+    if (progressBar === 1) {
       return AchievementStatus.COMPLETED;
     } else if (deadline !== undefined && deadline.getTime() < Date.now()) {
       return AchievementStatus.EXPIRED;
@@ -81,7 +84,7 @@ class Inferencer {
     // first, generate a new unique id
     let newId = 0;
     if (this.achievements.length > 0) {
-      newId = [...this.nodeList.keys()].reduce((acc, cur) => Math.max(acc, cur), 0) + 1;
+      newId = [...this.nodeList.keys()].reduce((maxId, curId) => Math.max(maxId, curId), 0) + 1;
     }
 
     // then assign the new unique id by overwriting the achievement item
@@ -107,7 +110,7 @@ class Inferencer {
 
   public removeAchievement(id: number) {
     const hasChild = (achievement: AchievementItem) =>
-      achievement.prerequisiteIds.reduce((acc, child) => acc || child === id, false);
+      achievement.prerequisiteIds.reduce((hasChild, child) => hasChild || child === id, false);
 
     const removeChild = (achievement: AchievementItem) =>
       achievement.prerequisiteIds.filter(child => child !== id);
@@ -115,19 +118,19 @@ class Inferencer {
     // create a copy of achievements that:
     // 1. does not contain the removed achievement
     // 2. does not contain reference of the removed achievement in other achievement's prerequisite
-    const newachievements: AchievementItem[] = [];
+    const newAchievements: AchievementItem[] = [];
 
-    this.achievements.reduce((acc, parent) => {
+    this.achievements.reduce((arr, parent) => {
       if (parent.id === id) {
-        return acc; // removed item not included in the new achievements
+        return arr; // removed item not included in the new achievements
       } else if (hasChild(parent)) {
         parent.prerequisiteIds = removeChild(parent); // reference of the removed item is filtered out
       }
-      acc.push(parent);
-      return acc;
-    }, newachievements);
+      arr.push(parent);
+      return arr;
+    }, newAchievements);
 
-    this.achievements = newachievements;
+    this.achievements = newAchievements;
 
     // finally, reconstruct the nodeList
     this.processData();
@@ -138,11 +141,11 @@ class Inferencer {
   }
 
   public listTaskIds() {
-    return this.getAchievementsByPosition().reduce((acc, achievement) => {
+    return this.getAchievementsByPosition().reduce((taskIds, achievement) => {
       if (achievement.isTask) {
-        acc.push(achievement.id);
+        taskIds.push(achievement.id);
       }
-      return acc;
+      return taskIds;
     }, [] as number[]);
   }
 
@@ -156,11 +159,11 @@ class Inferencer {
   }
 
   public listNonTaskIds() {
-    return this.achievements.reduce((acc, achievement) => {
+    return this.achievements.reduce((nonTaskIds, achievement) => {
       if (!achievement.isTask) {
-        acc.push(achievement.id);
+        nonTaskIds.push(achievement.id);
       }
-      return acc;
+      return nonTaskIds;
     }, [] as number[]);
   }
 
@@ -186,8 +189,8 @@ class Inferencer {
     return this.nodeList.get(id)!.furthestDeadline;
   }
 
-  public getProgress(id: number) {
-    return this.nodeList.get(id)!.progress;
+  public getProgressBar(id: number) {
+    return this.nodeList.get(id)!.progressBar;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -226,13 +229,13 @@ class Inferencer {
 
   public getFilterCount(filterStatus: FilterStatus) {
     // published is an array of Node that are published on the achievement page
-    const published = this.listTaskIds().reduce((acc, id) => {
+    const published = this.listTaskIds().reduce((arr, id) => {
       const node = this.nodeList.get(id)!;
-      acc.push(node);
+      arr.push(node);
       for (const child of node.children) {
-        acc.push(this.nodeList.get(child)!);
+        arr.push(this.nodeList.get(child)!);
       }
-      return acc;
+      return arr;
     }, [] as Node[]);
 
     switch (filterStatus) {
