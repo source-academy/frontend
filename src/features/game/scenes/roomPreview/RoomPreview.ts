@@ -3,16 +3,24 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import { roomDefaultCode } from './RoomPreviewConstants';
+
+type RoomPreviewProps = {
+  studentCode: string;
+};
 
 export default class RoomPreview extends Phaser.Scene {
   private layerManager: GameLayerManager;
+  private studentCode: string;
 
   constructor() {
     super('RoomPreview');
     this.layerManager = new GameLayerManager();
+    this.studentCode = roomDefaultCode;
   }
 
-  public init() {
+  public init({ studentCode }: RoomPreviewProps) {
+    this.studentCode = studentCode;
     this.layerManager.initialiseMainLayer(this);
   }
 
@@ -40,19 +48,6 @@ export default class RoomPreview extends Phaser.Scene {
       phaser: Phaser
     });
     context.externalContext = 'playground';
-    const result = await runInContext(studentCode + append, context);
-    console.log(result);
+    await runInContext(this.studentCode + append, context);
   }
 }
-
-const studentCode = `import {create_text, add, load_image} from "game";
-    
-function preload() {
-  load_image("cow", "https://source.unsplash.com/random/500x700");
-}
-
-function create(){
-  let text = create_text(500,500,"cool");
-  add(text);
-}
-`;

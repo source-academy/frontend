@@ -44,7 +44,6 @@ export default class CharacterParser {
     // Add asset key to expression map
     expressions.set(defaultExpression, this.characterAssetKey(id, defaultExpression));
 
-    console.log(id, defaultExpression);
     // Add asset keys to expression map
     Parser.checkpoint.map.addMapAsset(
       this.characterAssetKey(id, defaultExpression),

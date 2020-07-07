@@ -17,17 +17,25 @@ import commonSoundAssets, {
   galacticHarmonyBgMusic
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import {
+  getSourceAcademyGame,
+  AccountInfo
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
 import commonAssets from '../../commons/CommonAssets';
 import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
 import { settingsAssets } from '../settings/SettingsAssets';
+import { getAssessment } from 'src/commons/sagas/RequestsSaga';
+import { Assessment } from 'src/commons/assessment/AssessmentTypes';
+import { roomDefaultCode } from '../roomPreview/RoomPreviewConstants';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;
   private optionButtons: GameButton[];
+  private roomCode: string;
 
   constructor() {
     super('MainMenu');
@@ -35,6 +43,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager = new GameLayerManager();
     this.soundManager = new GameSoundManager();
     this.optionButtons = [];
+    this.roomCode = Constants.nullInteractionId;
   }
 
   public preload() {
@@ -43,6 +52,7 @@ class MainMenu extends Phaser.Scene {
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.soundManager.loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
     this.createOptionButtons();
+    addLoadingScreen(this);
   }
 
   public async create() {
@@ -54,6 +64,7 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
+    this.roomCode = await this.getRoomPreviewCode(accountInfo);
     const fullSaveState = await loadData(accountInfo);
     const volume = fullSaveState.userState ? fullSaveState.userState.settings.volume : 1;
     this.soundManager.playBgMusic(galacticHarmonyBgMusic.key, volume);
@@ -143,7 +154,7 @@ class MainMenu extends Phaser.Scene {
       'Room Preview',
       () => {
         this.layerManager.clearAllLayers();
-        this.scene.start('RoomPreview');
+        this.scene.start('RoomPreview', { studentCode: this.roomCode });
       },
       Constants.nullInteractionId
     );
@@ -185,6 +196,29 @@ class MainMenu extends Phaser.Scene {
 
     // Update
     this.optionButtons.push(newTalkButton);
+  }
+
+  private async getRoomPreviewCode(accInfo: AccountInfo) {
+    const roomMissionId = this.getRoomMissionId();
+    const mission = await getAssessment(roomMissionId, {
+      accessToken: accInfo.accessToken,
+      refreshToken: accInfo.refreshToken
+    });
+    const studentCode = this.getStudentCode(mission);
+    return studentCode;
+  }
+
+  private getRoomMissionId() {
+    // TODO: Change to non-hardcode
+    return 401;
+  }
+
+  private getStudentCode(mission: Assessment | null) {
+    if (mission) {
+      const answer = mission.questions[0].answer;
+      return answer ? (answer as string) : roomDefaultCode;
+    }
+    return roomDefaultCode;
   }
 }
 
