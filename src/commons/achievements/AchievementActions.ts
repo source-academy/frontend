@@ -4,8 +4,11 @@ import {
   UPDATE_ACHIEVEMENTS,
   SAVE_ACHIEVEMENTS,
   GET_ACHIEVEMENTS,
+  EDIT_ACHIEVEMENT,
+  UPDATE_GOAL,
   AchievementItem,
-  EDIT_ACHIEVEMENT
+  AchievementGoal,
+  DELETE_GOAL
 } from './AchievementTypes';
 
 /*
@@ -20,6 +23,12 @@ export const updateAchievements = (achievements: AchievementItem[]) =>
 */
 export const saveAchievements = (achievements: AchievementItem[]) =>
   action(SAVE_ACHIEVEMENTS, achievements);
+
+export const editGoal = (goal: AchievementGoal, inferencerId: number) =>
+  action(UPDATE_GOAL, { goal, inferencerId });
+
+export const deleteGoal = (goal: AchievementGoal, inferencerId: number) =>
+  action(DELETE_GOAL, { goal, inferencerId });
 
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
 

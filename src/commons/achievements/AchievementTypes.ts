@@ -3,6 +3,9 @@ export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
 
+export const UPDATE_GOAL = 'UPDATE_GOAL';
+export const DELETE_GOAL = 'DELETE_GOAL';
+
 // TODO: Rename abilities
 export enum AchievementAbility {
   ACADEMIC = 'Academic',
