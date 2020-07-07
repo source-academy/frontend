@@ -1,45 +1,43 @@
 import {
   AchievementItem,
   AchievementStatus,
-  AchievementModalItem,
-  FilterStatus,
-  AchievementGoal
-} from '../../../../commons/achievements/AchievementTypes';
+  AchievementGoal,
+  FilterStatus
+} from 'src/commons/achievements/AchievementTypes';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
   achievement: AchievementItem;
-  dataIdx: number; // achievements[dataIdx] = achievement
+  dataIdx: number; // the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
   exp: number;
-  progressBar: number;
+  progressBar: number; // progress in decimal, min=0, max=1
   status: AchievementStatus;
   furthestDeadline?: Date;
   children: Set<number>; // immediate prerequisite
-  descendant: Set<number>; // all descendant prerequisites including immediate prerequisites
-  modal: AchievementModalItem;
+  descendant: Set<number>; // all descendant prerequisites (including immediate prerequisites)
 
   constructor(achievement: AchievementItem, dataIdx: number) {
-    const { deadline, prerequisiteIds, goals, modal } = achievement;
+    const { deadline, prerequisiteIds, goals } = achievement;
 
     this.achievement = achievement;
     this.dataIdx = dataIdx;
-    this.exp = goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
+    this.exp = this.generateExp(goals);
     this.progressBar = this.generateProgressBar(goals);
     this.status = this.generateStatus(deadline, this.progressBar);
     this.furthestDeadline = deadline;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
-    this.modal = modal;
+  }
+
+  // sum of all goal exp
+  private generateExp(goals: AchievementGoal[]) {
+    return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
   }
 
   private generateProgressBar(goals: AchievementGoal[]) {
-    const totalProgress = goals.reduce(
-      (totalProgress, goal) => totalProgress + goal.goalProgress,
-      0
-    );
-    const totalTarget = goals.reduce((totalTarget, goal) => totalTarget + goal.goalTarget, 0);
+    const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
-    return Math.min(totalProgress / totalTarget, 1);
+    return Math.min(progress / this.exp, 1);
   }
 
   private generateStatus(deadline: Date | undefined, progressBar: number) {
@@ -223,17 +221,13 @@ class Inferencer {
     );
   }
 
-  public getModalItem(id: number) {
-    return id < 0 ? undefined : this.nodeList.get(id)!.modal;
-  }
-
   public getFilterCount(filterStatus: FilterStatus) {
-    // published is an array of Node that are published on the achievement page
+    // array of Node that are published to the achievement page
     const published = this.listTaskIds().reduce((arr, id) => {
       const node = this.nodeList.get(id)!;
-      arr.push(node);
+      arr.push(node); // task achievement
       for (const child of node.children) {
-        arr.push(this.nodeList.get(child)!);
+        arr.push(this.nodeList.get(child)!); // immediate prerequisites
       }
       return arr;
     }, [] as Node[]);
@@ -250,6 +244,7 @@ class Inferencer {
     }
   }
 
+  // TODO: Replace swap operation with insert
   public insertAchievementPosition(oldPosition: number, newPosition: number) {
     const taskIds = this.listTaskIds();
 
@@ -342,12 +337,11 @@ class Inferencer {
     const nonTaskPosition = 0;
     let newPosition = 1;
 
-    for (let i = 0; i < this.achievements.length; i++) {
-      if (this.achievements[i].isTask) {
-        this.achievements[i].position = newPosition;
-        newPosition++;
+    for (let idx = 0; idx < this.achievements.length; idx++) {
+      if (this.achievements[idx].isTask) {
+        this.achievements[idx].position = newPosition++;
       } else {
-        this.achievements[i].position = nonTaskPosition;
+        this.achievements[idx].position = nonTaskPosition;
       }
     }
   }

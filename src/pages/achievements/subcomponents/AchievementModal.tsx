@@ -15,11 +15,10 @@ type AchievementModalProps = {
 function AchievementModal(props: AchievementModalProps) {
   const { generateBackgroundGradient, id, inferencer } = props;
 
-  const modal = inferencer.getModalItem(id);
+  if (id < 0) return null;
 
-  if (modal === undefined) return null;
-
-  const { title, ability, deadline, goals } = inferencer.getAchievementItem(id);
+  const achievement = inferencer.getAchievementItem(id);
+  const { title, ability, deadline, goals, modal } = achievement;
   const { modalImageUrl, description, completionText } = modal;
 
   return (
