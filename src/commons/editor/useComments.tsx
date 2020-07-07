@@ -181,7 +181,6 @@ const useComments: EditorHook = (
 
   const createCommentPrompt = React.useCallback(
     row => {
-      console.log('@@@', comments);
       const id = uuidv1();
       const newcomment = {
         id,
@@ -207,7 +206,6 @@ const useComments: EditorHook = (
   );
 
   contextMenuHandlers.createCommentPrompt = createCommentPrompt;
-  console.log('Re-binding createCommentPrompt', comments);
 
   // ----------------- RENDERING -----------------
 
@@ -220,7 +218,6 @@ const useComments: EditorHook = (
     // TODO: Put a minimize/maximize button.
 
     // Re-render all comments.
-    console.log('Re-rendering comments', comments);
     const commentsByLine = groupBy(values(comments), c => c.linenum);
     const commentsWidgets = map(commentsByLine, commentsOnLineUnsorted => {
       const commentsOnLine = sortBy(commentsOnLineUnsorted, c => c.datetime);
@@ -244,13 +241,11 @@ const useComments: EditorHook = (
         container
       );
       widgetManagerRef.current?.addLineWidget(widget);
-      console.log('added line widget', widget);
       return widget;
     });
 
     return () => {
       // Remove all comments
-      console.log('Removing comments', comments);
       commentsWidgets.forEach(widget => {
         widgetManagerRef.current?.removeLineWidget(widget);
       });
