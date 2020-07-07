@@ -28,7 +28,7 @@ function Achievement(props: DispatchProps & StateProps) {
 
   const generateBackgroundGradient = (ability: AchievementAbility) => {
     switch (ability) {
-      case 'Academic':
+      case 'Core':
         return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(98, 89, 0, 0.8))`;
       case 'Community':
         return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(247, 3, 240, 0.8))`;

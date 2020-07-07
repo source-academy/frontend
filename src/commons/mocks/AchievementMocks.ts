@@ -4,7 +4,7 @@ export const defaultMockAchievements: AchievementItem[] = [
   {
     id: 0,
     title: 'Rune Master',
-    ability: AchievementAbility.ACADEMIC,
+    ability: AchievementAbility.EFFORT,
     isTask: true,
     prerequisiteIds: [1, 2],
     goals: [
@@ -40,7 +40,7 @@ export const defaultMockAchievements: AchievementItem[] = [
   {
     id: 1,
     title: 'Beyond the Second Dimension',
-    ability: AchievementAbility.ACADEMIC,
+    ability: AchievementAbility.CORE,
     deadline: new Date(2020, 7, 22, 0, 0, 0),
     release: new Date(2020, 7, 19, 0, 0, 0),
     isTask: false,
@@ -72,7 +72,7 @@ export const defaultMockAchievements: AchievementItem[] = [
   {
     id: 2,
     title: 'Colorful Carpet',
-    ability: AchievementAbility.ACADEMIC,
+    ability: AchievementAbility.CORE,
     deadline: new Date(2020, 7, 29, 0, 0, 0),
     release: new Date(2020, 7, 26, 0, 0, 0),
     isTask: false,
@@ -104,7 +104,7 @@ export const defaultMockAchievements: AchievementItem[] = [
   {
     id: 3,
     title: 'Unpublished',
-    ability: AchievementAbility.ACADEMIC,
+    ability: AchievementAbility.CORE,
     isTask: false,
     prerequisiteIds: [],
     goals: [],

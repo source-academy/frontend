@@ -14,7 +14,7 @@ export const modalTemplate: AchievementModalItem = {
 export const achievementTemplate: AchievementItem = {
   id: 0,
   title: '',
-  ability: AchievementAbility.ACADEMIC,
+  ability: AchievementAbility.CORE,
   deadline: new Date(),
   isTask: false,
   release: new Date(),

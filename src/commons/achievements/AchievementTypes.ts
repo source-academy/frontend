@@ -8,17 +8,17 @@ export const DELETE_GOAL = 'DELETE_GOAL';
 
 // TODO: Rename abilities
 export enum AchievementAbility {
-  ACADEMIC = 'Academic',
-  COMMUNITY = 'Community',
+  CORE = 'Core',
   EFFORT = 'Effort',
-  EXPLORATION = 'Exploration'
+  EXPLORATION = 'Exploration',
+  COMMUNITY = 'Community'
 }
 
 export const achievementAbilities = [
-  AchievementAbility.ACADEMIC,
-  AchievementAbility.COMMUNITY,
+  AchievementAbility.CORE,
   AchievementAbility.EFFORT,
-  AchievementAbility.EXPLORATION
+  AchievementAbility.EXPLORATION,
+  AchievementAbility.COMMUNITY
 ];
 
 export enum AchievementStatus {
