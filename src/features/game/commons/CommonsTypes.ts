@@ -39,8 +39,6 @@ export type TrackInteraction = {
 };
 
 export interface IGameUI {
-  fetchLatestState: () => void;
-  getUIContainer: () => Phaser.GameObjects.Container;
-  activateUI: () => Promise<void>;
-  deactivateUI: () => Promise<void>;
+  activateUI: () => Promise<void> | void;
+  deactivateUI: () => Promise<void> | void;
 }

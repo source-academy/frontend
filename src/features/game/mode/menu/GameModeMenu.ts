@@ -27,9 +27,7 @@ class GameModeMenu implements IGameUI {
       // Refresh Buttons
       modes.sort().forEach(mode => {
         this.addModeButton(mode, () => {
-          GameActionManager.getInstance()
-            .getGameManager()
-            .phaseManager.pushPhase(gameModeToPhase[mode]);
+          GameActionManager.getInstance().pushPhase(gameModeToPhase[mode]);
 
           if (mode !== GameMode.Talk) {
             GameActionManager.getInstance()
@@ -78,7 +76,7 @@ class GameModeMenu implements IGameUI {
       GameLocationAttr.talkTopics,
       currLocId
     );
-    if (talkTopics) {
+    if (talkTopics.length === 0) {
       latestModesInLoc = latestModesInLoc.filter(mode => mode !== GameMode.Talk);
     }
     this.createGameButtons(latestModesInLoc);

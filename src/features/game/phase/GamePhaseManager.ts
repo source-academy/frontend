@@ -1,15 +1,20 @@
 import _ from 'lodash';
 
-import { GamePhaseType, GamePhase } from './GamePhaseTypes';
+import { GamePhaseType } from './GamePhaseTypes';
 import { createGamePhases } from './GamePhaseConstants';
 import GameActionManager from '../action/GameActionManager';
+import { IGameUI } from '../commons/CommonsTypes';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
-  public phaseMap: Map<GamePhaseType, GamePhase>;
+  public phaseMap: Map<GamePhaseType, IGameUI>;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
+    this.phaseMap = new Map<GamePhaseType, IGameUI>();
+  }
+
+  public initialise() {
     this.phaseMap = createGamePhases();
   }
 
@@ -39,14 +44,14 @@ export default class GamePhaseManager {
       _.isEqual(this.phaseStack, [GamePhaseType.Menu]) &&
       GameActionManager.getInstance().isAllComplete()
     ) {
-      await this.phaseMap.get(prevPhase)!.deactivate();
+      await this.phaseMap.get(prevPhase)!.deactivateUI();
       await GameActionManager.getInstance().getGameManager().checkpointTransition();
       return;
     }
     GameActionManager.getInstance().enableKeyboardInput(false);
     GameActionManager.getInstance().enableMouseInput(false);
-    await this.phaseMap.get(prevPhase)!.deactivate();
-    await this.phaseMap.get(newPhase)!.activate();
+    await this.phaseMap.get(prevPhase)!.deactivateUI();
+    await this.phaseMap.get(newPhase)!.activateUI();
     GameActionManager.getInstance().enableMouseInput(true);
     GameActionManager.getInstance().enableKeyboardInput(true);
   }

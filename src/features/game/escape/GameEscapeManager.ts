@@ -23,15 +23,16 @@ import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
 import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import { IGameUI } from '../commons/CommonsTypes';
 
-class GameEscapeManager {
+class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;
 
   constructor() {
     this.volumeOptions = undefined;
   }
 
-  public createEscapeMenu() {
+  public activateUI() {
     const gameManager = GameActionManager.getInstance().getGameManager();
 
     const escapeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -128,7 +129,7 @@ class GameEscapeManager {
     GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 
-  public destroyEscapeMenu() {
+  public deactivateUI() {
     GameActionManager.getInstance()
       .getGameManager()
       .layerManager.clearSeveralLayers([Layer.Escape]);

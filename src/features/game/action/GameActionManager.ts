@@ -349,18 +349,6 @@ class GameActionManager {
   public isCurrentPhase(gamePhaseType: GamePhaseType) {
     return this.getGameManager().phaseManager.isCurrentPhase(gamePhaseType);
   }
-
-  /////////////////////
-  //   Escape Menu   //
-  /////////////////////
-
-  public createEscapeMenu() {
-    this.getGameManager().escapeManager.createEscapeMenu();
-  }
-
-  public destroyEscapeMenu() {
-    this.getGameManager().escapeManager.destroyEscapeMenu();
-  }
 }
 
 export default GameActionManager;

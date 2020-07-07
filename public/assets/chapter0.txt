@@ -44,7 +44,8 @@ hallway
 
 
 classroom
-    modes: explore
+    modes: explore, talk
+    talkTopics: what
     objects
         +classroomChair, /objects/yourChair/normal.png, 30, 30
             complete_objective(finish)
@@ -63,6 +64,10 @@ dialogues
     unwelcome
         @scottie, sad
         Finish assessment 301 first and come back?
+        Did you know that you can go to the classroom?
+        ...
+            change_location(classroom)
+        Did you know that?
 
     what, What should I do now, Scottie?
         @you

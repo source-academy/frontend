@@ -150,6 +150,7 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialiseMainLayer(this);
+    this.phaseManager.initialise();
     this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.bindEscapeMenu();
 
@@ -194,16 +195,14 @@ class GameManager extends Phaser.Scene {
   }
 
   private async renderLocation(locationId: LocationId) {
-    const bgmKey = GameActionManager.getInstance().getLocationAtId(locationId).bgmKey;
-    await this.soundManager.renderBackgroundMusic(bgmKey);
+    const gameLocation = GameActionManager.getInstance().getLocationAtId(locationId);
+    await this.soundManager.renderBackgroundMusic(gameLocation.bgmKey);
 
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
     this.characterManager.renderCharacterLayerContainer(locationId);
     this.layerManager.showLayer(Layer.Character);
-
-    const gameLocation = GameActionManager.getInstance().getLocationAtId(locationId);
 
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 
@@ -242,12 +241,13 @@ class GameManager extends Phaser.Scene {
   }
 
   public cleanUp() {
+    this.soundManager.stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }
 
   public async checkpointTransition() {
-    this.phaseManager.phaseMap.get(GamePhaseType.Menu)?.deactivate();
+    this.phaseManager.phaseMap.get(GamePhaseType.Menu)?.deactivateUI();
     await this.actionExecuter.executeStoryActions(this.getCurrentCheckpoint().map.getEndActions());
     this.cleanUp();
     if (GameActionManager.getInstance().isStorySimulator()) {
