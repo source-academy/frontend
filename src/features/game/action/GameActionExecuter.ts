@@ -63,7 +63,7 @@ export default class GameActionExecuter {
         actionManager.removeLocationMode(actionParams.locationId, actionParams.mode);
         return;
       case GameActionType.BringUpDialogue:
-        await actionManager.getGameManager().dialogueManager.playDialogue(actionParams.id);
+        await actionManager.playDialogue(actionParams.id);
         return;
       case GameActionType.AddPopup:
         await actionManager.displayPopUp(

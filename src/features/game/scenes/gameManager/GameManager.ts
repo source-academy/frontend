@@ -41,11 +41,11 @@ type GameManagerProps = {
 };
 
 class GameManager extends Phaser.Scene {
-  public currentCheckpoint: GameCheckpoint | undefined;
   public currentLocationId: LocationId;
   public parentGame: SourceAcademyGame | undefined;
   public isStorySimulator: boolean;
 
+  private currentCheckpoint: GameCheckpoint | undefined;
   private accountInfo: AccountInfo | undefined;
   private fullSaveState: FullSaveState | undefined;
   private continueGame: boolean;

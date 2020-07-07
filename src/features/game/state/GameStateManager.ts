@@ -61,7 +61,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
-    const currLocId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    const currLocId = GameActionManager.getInstance().getCurrLocId();
 
     this.locationHasUpdate.get(targetLocId)!.set(mode, true);
 

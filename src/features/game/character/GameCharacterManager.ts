@@ -120,7 +120,7 @@ export default class CharacterManager {
     container.add([rectangle, speakerText]);
     speakerText.text = StringUtils.capitalize(text);
 
-    gameManager.layerManager.addToLayer(Layer.DialogueLabel, container);
+    GameActionManager.getInstance().addContainerToLayer(Layer.DialogueLabel, container);
   }
 
   public changeSpeakerTo(speakerDetail: SpeakerDetail | undefined | null) {
@@ -132,9 +132,7 @@ export default class CharacterManager {
     if (this.currentSpeakerId) {
       this.showCharacterOnMap(this.currentSpeakerId);
     }
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    gameManager.layerManager.clearLayerContents(Layer.Speaker);
-    gameManager.layerManager.clearLayerContents(Layer.DialogueLabel);
+    GameActionManager.getInstance().clearSeveralLayers([Layer.Speaker, Layer.DialogueLabel]);
 
     if (speakerDetail === null) {
       return;
@@ -154,7 +152,7 @@ export default class CharacterManager {
         expression,
         speakerPosition
       );
-      gameManager.layerManager.addToLayer(Layer.Speaker, characterSprite);
+      GameActionManager.getInstance().addContainerToLayer(Layer.Speaker, characterSprite);
       this.drawSpeakerBox(speakerToShow.name);
       this.currentSpeakerId = speakerId;
     }
