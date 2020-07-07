@@ -479,7 +479,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
     action.payload.library.moduleParams = {
       runes: {},
-      phaser: Phaser,
+      phaser: Phaser
     };
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
