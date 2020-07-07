@@ -27,13 +27,13 @@ export default function* PlaygroundSaga(): SagaIterator {
 
     //we catch and move on if there are errors (plus have a timeout in case)
     try {
-      const { result, hasTimeOut } = yield race({
+      const { result, hasTimedOut } = yield race({
         result: call(shortenURLRequest, queryString, keyword),
-        timeout: delay(10000)
+        hasTimedOut: delay(10000)
       });
 
       resp = result;
-      timeout = hasTimeOut;
+      timeout = hasTimedOut;
     } catch (_) {}
 
     if (!resp || timeout) {

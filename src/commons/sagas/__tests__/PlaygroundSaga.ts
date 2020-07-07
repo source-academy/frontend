@@ -343,8 +343,8 @@ describe('Playground saga tests', () => {
       })
       .provide({
         race: () => ({
-          resp: undefined,
-          timeout: true
+          result: undefined,
+          hasTimedOut: true
         })
       })
       .call(showWarningMessage, errMsg)
