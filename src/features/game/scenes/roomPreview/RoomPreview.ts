@@ -24,11 +24,11 @@ export default class RoomPreview extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
   }
 
-  public async preload() {
-    await this.eval(`\npreload();`);
+  public preload() {
+    this.eval('\npreload();');
   }
 
-  public async create() {
+  public create() {
     this.eval(`\ncreate();`);
     const backButton = new CommonBackButton(
       this,
@@ -40,6 +40,10 @@ export default class RoomPreview extends Phaser.Scene {
       0
     );
     this.layerManager.addToLayer(Layer.UI, backButton);
+  }
+
+  public update() {
+    this.eval(`\nupdate();`);
   }
 
   private async eval(append: string) {
