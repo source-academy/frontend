@@ -15,7 +15,7 @@ import { format } from 'timeago.js';
 import Markdown from '../Markdown';
 import { CommentAPI } from './useComments';
 import { EventEmitter } from 'events';
-import { some } from 'lodash';
+import { some, omit } from 'lodash';
 
 export interface IComment {
   id: string;
@@ -85,6 +85,11 @@ const enterMessageStyles: CSS.Properties = {
   resize: 'vertical'
 };
 
+const errorTextStyles: CSS.Properties = {
+    color: "red",
+    padding: "0.2em"
+};
+
 /* Note on interfacing with extra data.
 
 The currentComment will be overwritten by parent refreshing from new data. 
@@ -97,12 +102,19 @@ The currentComment will be overwritten by parent refreshing from new data.
 // Mock function, please replace.
 function sendToServer(comment: IComment) {
   return new Promise((resolve, reject) => {
-    setTimeout(resolve, 1000);
+      if(Math.random() < 0.5) {
+        setTimeout(resolve, 1000);
+      } else {
+        setTimeout(() => reject('(Test error message) Some error occured, please try again'), 1000);
+      }
   });
 }
 
 export default function Comments(props: CommentsProps) {
   const { comments, commentsBeingEditedRef, APIRef, commentEditChangeEE } = props;
+  // Errors are local.
+  const [errorMsgs, setErrorMsgs] = React.useState({} as {[id: string]: string});
+
   const {
     updateComment,
     updateCommentsBeingEdited,
@@ -148,7 +160,7 @@ export default function Comments(props: CommentsProps) {
   function cancelWithPrompt(comment: IComment) {
     return function (evt: any) {
       // eslint-disable-next-line no-restricted-globals
-      const sure = confirm('Are you sure about that?');
+      const sure = comment.text.trim() === '' || confirm('Are you sure about that?');
       if (sure) {
         if (isUnsubmittedComment(comment)) {
           removeComment(comment);
@@ -172,9 +184,12 @@ export default function Comments(props: CommentsProps) {
         await sendToServer(newComment); // TODO: STUB FUNCTION, PLEASE UPDATE.
         updateComment(newComment);
         removeCommentEdit(newComment);
+        setErrorMsgs(omit(errorMsgs, [comment.id]));
       } catch (e) {
-        // TODO, implement properly
-        console.error('Error occured when sending the comment to server', e);
+        setErrorMsgs({
+            ...errorMsgs,
+            [comment.id]: e,
+        });
       }
     };
   }
@@ -191,9 +206,12 @@ export default function Comments(props: CommentsProps) {
       try {
         await sendToServer(comment);
         removeComment(comment);
+        setErrorMsgs(omit(errorMsgs, [comment.id]));
       } catch (e) {
-        // TODO, implement properly
-        console.error('Error occured when sending the comment to server', e);
+        setErrorMsgs({
+            ...errorMsgs,
+            [comment.id]: e,
+        });
       }
     };
   }
@@ -230,6 +248,7 @@ export default function Comments(props: CommentsProps) {
       </div>
       {comments.map(comment => {
         const { id, isCollapsed } = comment; // Only the main comment is collapsed.
+        const error = errorMsgs[id] || '';
         const displayComment = commentsBeingEdited[id] ? commentsBeingEdited[id] : comment;
         const { profilePic, username, text, datetime } = displayComment;
         const isEditing: boolean = !!commentsBeingEdited[id];
@@ -281,6 +300,7 @@ export default function Comments(props: CommentsProps) {
                 {isUnsubmittedComment(comment) ? 'Preview' : format(new Date(datetime))}
               </span>
               <Markdown className="text" content={text || '(Content preview)'} />
+              <div className="error-text" style={errorTextStyles}>{error}</div>
             </div>
             {isEditing ? (
               <div className="reply-container" style={replyContainerStyles}>
