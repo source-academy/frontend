@@ -100,6 +100,23 @@ export const defaultMockAchievements: AchievementItem[] = [
       description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas',
       completionText: 'CC'
     }
+  },
+  {
+    id: 3,
+    title: 'Unpublished',
+    ability: AchievementAbility.ACADEMIC,
+    isTask: false,
+    prerequisiteIds: [],
+    goals: [],
+    position: 0,
+    backgroundImageUrl:
+      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
+      description: '',
+      completionText: ''
+    }
   }
 ];
 

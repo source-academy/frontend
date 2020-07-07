@@ -225,16 +225,23 @@ class Inferencer {
   }
 
   public getFilterCount(filterStatus: FilterStatus) {
+    // published is an array of Node that are published on the achievement page
+    const published = this.listTaskIds().reduce((acc, id) => {
+      const node = this.nodeList.get(id)!;
+      acc.push(node);
+      for (const child of node.children) {
+        acc.push(this.nodeList.get(child)!);
+      }
+      return acc;
+    }, [] as Node[]);
+
     switch (filterStatus) {
       case FilterStatus.ALL:
-        return this.nodeList.size;
+        return published.length;
       case FilterStatus.ACTIVE:
-        return [...this.nodeList.values()].filter(node => node.status === AchievementStatus.ACTIVE)
-          .length;
+        return published.filter(node => node.status === AchievementStatus.ACTIVE).length;
       case FilterStatus.COMPLETED:
-        return [...this.nodeList.values()].filter(
-          node => node.status === AchievementStatus.COMPLETED
-        ).length;
+        return published.filter(node => node.status === AchievementStatus.COMPLETED).length;
       default:
         return 0;
     }
