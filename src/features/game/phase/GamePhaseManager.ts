@@ -1,12 +1,16 @@
-import { GamePhaseType } from './GamePhaseTypes';
-import { gamePhaseMap } from './GamePhaseConstants';
+import _ from 'lodash';
+
+import { GamePhaseType, GamePhase } from './GamePhaseTypes';
+import { createGamePhases } from './GamePhaseConstants';
 import GameActionManager from '../action/GameActionManager';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
+  private phaseMap: Map<GamePhaseType, GamePhase>;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
+    this.phaseMap = createGamePhases();
   }
 
   public async popPhase(): Promise<void> {
@@ -32,13 +36,16 @@ export default class GamePhaseManager {
   public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
     GameActionManager.getInstance().enableKeyboardInput(false);
     GameActionManager.getInstance().enableMouseInput(false);
-    await gamePhaseMap.get(prevPhase).deactivate();
-    await gamePhaseMap.get(newPhase).activate();
+    await this.phaseMap.get(prevPhase)!.deactivate();
+    await this.phaseMap.get(newPhase)!.activate();
     GameActionManager.getInstance().enableMouseInput(true);
     GameActionManager.getInstance().enableKeyboardInput(true);
 
     // Transition to the next scene if possible
-    GameActionManager.getInstance().getGameManager().checkpointTransition();
+    if (_.isEqual(this.phaseStack, [GamePhaseType.Menu])) {
+      GameActionManager.getInstance().getGameManager().checkpointTransition();
+    }
+    console.log(this.phaseStack);
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {
