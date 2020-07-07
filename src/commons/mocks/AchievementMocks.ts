@@ -5,19 +5,35 @@ export const defaultMockAchievements: AchievementItem[] = [
     id: 0,
     title: 'Rune Master',
     ability: AchievementAbility.ACADEMIC,
-    exp: 0,
     isTask: true,
     prerequisiteIds: [1, 2],
-    completionGoal: 2,
-    completionProgress: 0,
+    goals: [
+      {
+        goalId: 0,
+        goalText: 'Complete Beyond the Second Dimension achievement',
+        goalProgress: 213,
+        goalTarget: 250
+      },
+      {
+        goalId: 1,
+        goalText: 'Complete Colorful Carpet achievement',
+        goalProgress: 0,
+        goalTarget: 250
+      },
+      {
+        goalId: 2,
+        goalText: 'Bonus for completing Rune Master achievement',
+        goalProgress: 0,
+        goalTarget: 100
+      }
+    ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
       description: 'Cookies!',
-      goalText: 'Complete Beyond the Second Dimension & Colorful Carpet missions.',
       completionText: 'Cooooookiess!!!'
     }
   },
@@ -25,21 +41,31 @@ export const defaultMockAchievements: AchievementItem[] = [
     id: 1,
     title: 'Beyond the Second Dimension',
     ability: AchievementAbility.ACADEMIC,
-    exp: 250,
-    deadline: new Date(2020, 5, 25, 0, 0, 0),
-    release: new Date(2020, 5, 12, 0, 0, 0),
+    deadline: new Date(2020, 7, 22, 0, 0, 0),
+    release: new Date(2020, 7, 19, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
-    completionGoal: 100,
-    completionProgress: 77,
+    goals: [
+      {
+        goalId: 0,
+        goalText: 'Complete Beyond the Second Dimension mission',
+        goalProgress: 100,
+        goalTarget: 100
+      },
+      {
+        goalId: 1,
+        goalText: 'Score earned from Beyond the Second Dimension mission',
+        goalProgress: 113,
+        goalTarget: 150
+      }
+    ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine%40x2.png',
       description: 'Huehuehuehuehuehuehuehue',
-      goalText: 'Complete Beyond the Second Dimension mission.',
       completionText: 'BTSD'
     }
   },
@@ -47,164 +73,32 @@ export const defaultMockAchievements: AchievementItem[] = [
     id: 2,
     title: 'Colorful Carpet',
     ability: AchievementAbility.ACADEMIC,
-    exp: 250,
-    deadline: new Date(2020, 5, 23, 0, 0, 0),
+    deadline: new Date(2020, 7, 29, 0, 0, 0),
+    release: new Date(2020, 7, 26, 0, 0, 0),
     isTask: false,
     prerequisiteIds: [],
-    completionGoal: 100,
-    completionProgress: 23,
+    goals: [
+      {
+        goalId: 0,
+        goalText: 'Complete Colorful Carpet mission',
+        goalProgress: 0,
+        goalTarget: 100
+      },
+      {
+        goalId: 1,
+        goalText: 'Score earned from Colorful Carpet mission',
+        goalProgress: 0,
+        goalTarget: 150
+      }
+    ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
+      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/gosperCurve%40x2.png',
       description: 'Uvuvwevwevwe Onyetenyevwe Ugwemubwem Ossas',
-      goalText: 'Complete Colorful Carpet mission.',
       completionText: 'CC'
-    }
-  },
-  {
-    id: 3,
-    title: 'Keyboard Warrior',
-    ability: AchievementAbility.COMMUNITY,
-    exp: 0,
-    isTask: true,
-    prerequisiteIds: [4, 5, 6],
-    completionGoal: 3,
-    completionProgress: 2,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/morseCode%40x2.png',
-      description:
-        'Compiled successfully! You can now view cadet-frontend in the browser. Note that the development build is not optimized. To create a production build, use yarn build.',
-      goalText: 'Reach Gold Tier in Keyboard Warrior achievements.',
-      completionText: 'YOU DA KEYBOARD WARRIOR'
-    }
-  },
-  {
-    id: 4,
-    title: 'Keyboard Warrior - Bronze Tier',
-    ability: AchievementAbility.COMMUNITY,
-    exp: 50,
-    isTask: false,
-    prerequisiteIds: [],
-    completionGoal: 10,
-    completionProgress: 92,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-      description: 'Keyboard Warrior - Bronze Tier!',
-      goalText: 'Keyboard Warrior - Bronze Tier!!',
-      completionText: 'Keyboard Warrior - Bronze Tier!!!'
-    }
-  },
-  {
-    id: 5,
-    title: 'Keyboard Warrior - Silver Tier',
-    ability: AchievementAbility.COMMUNITY,
-    exp: 100,
-    isTask: false,
-    prerequisiteIds: [],
-    completionGoal: 50,
-    completionProgress: 92,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-      description: 'Keyboard Warrior - Silver Tier!',
-      goalText: 'Keyboard Warrior - Silver Tier!!',
-      completionText: 'Keyboard Warrior - Silver Tier!!!'
-    }
-  },
-  {
-    id: 6,
-    title: 'Keyboard Warrior - Gold Tier',
-    ability: AchievementAbility.COMMUNITY,
-    exp: 200,
-    isTask: false,
-    prerequisiteIds: [],
-    completionGoal: 100,
-    completionProgress: 92,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-      description: 'Keyboard Warrior - Gold Tier!',
-      goalText: 'Keyboard Warrior - Gold Tier!!',
-      completionText: 'Keyboard Warrior - Gold Tier!!!'
-    }
-  },
-  {
-    id: 7,
-    title: "That was Sort'a Easy",
-    ability: AchievementAbility.ACADEMIC,
-    exp: 250,
-    deadline: new Date(2020, 6, 22, 0, 0, 0),
-    release: new Date(2020, 6, 8, 0, 0, 0),
-    isTask: true,
-    prerequisiteIds: [],
-    completionGoal: 100,
-    completionProgress: 10,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/mysteryCube%40x2.png',
-      description: 'description',
-      goalText: 'Complete Sorting mission.',
-      completionText: 'Good job!'
-    }
-  },
-  {
-    id: 8,
-    title: 'Mission Master',
-    ability: AchievementAbility.EFFORT,
-    exp: 80,
-    isTask: true,
-    prerequisiteIds: [0, 7],
-    completionGoal: 2,
-    completionProgress: 0,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
-      description: '?',
-      goalText: "Complete Rune Master & That was Sort'a Easy achievement.",
-      completionText: 'Such wow. Mission Master.'
-    }
-  },
-  {
-    id: 9,
-    title: 'Mission Grandmaster',
-    ability: AchievementAbility.EFFORT,
-    exp: 80,
-    isTask: true,
-    prerequisiteIds: [3, 8],
-    completionGoal: 2,
-    completionProgress: 0,
-    position: 0,
-    backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/robotDog%40x2.png',
-    modal: {
-      modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice%40x2.png',
-      description: '!!!',
-      goalText: 'Complete All mission achievement.',
-      completionText: 'Such wow. Mission Grandmaster.'
     }
   }
 ];
@@ -212,13 +106,11 @@ export const defaultMockAchievements: AchievementItem[] = [
 let mockAchievements = defaultMockAchievements;
 
 export const fetchMockAchievements = () => {
-  console.log('Fetched mock data', mockAchievements);
   return mockAchievements;
 };
 
 export const updateMockAchievements = (newAchievements: AchievementItem[]) => {
   mockAchievements = newAchievements;
-  console.log('Updated mock data', mockAchievements);
 };
 
 export const semester1Weeks = {

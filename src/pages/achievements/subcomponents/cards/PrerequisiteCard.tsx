@@ -23,7 +23,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
-  const collectiveProgress = inferencer.getCollectiveProgress(id);
+  const collectiveProgress = inferencer.getProgress(id);
 
   return (
     <div className="node">

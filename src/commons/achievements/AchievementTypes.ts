@@ -37,14 +37,11 @@ export enum FilterStatus {
  * @param {string} title title of the achievement item
  * @param {AchievementAbility} ability ability of the achievement item
  * @param {String} backgroundImageUrl background image of the achievement's card
- * @param {number} exp amount of exp that the achievement item grants
  * @param {Date} deadline Optional, the deadline of the achievement item
  * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
  * @param {number[]} prerequisiteIds an array of the prerequisites id
- * @param {number} completionGoal achievement is marked as complete if
- *    user's completionProgress >= completionGoal
- * @param {number} completionProgress achievement is marked as complete if
+ * @param {AchievementGoal[]} goals an array of achievement goals
  * @param {AchievementModalItem} modal modal item of the achievement
  * @param {number} position ordering position of the achievement, value is 0 for non-tasks
  */
@@ -53,15 +50,28 @@ export type AchievementItem = {
   title: string;
   ability: AchievementAbility;
   backgroundImageUrl: string;
-  exp: number;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
   prerequisiteIds: number[];
-  completionGoal: number;
-  completionProgress: number;
+  goals: AchievementGoal[];
   modal: AchievementModalItem;
   position: number;
+};
+
+/**
+ * Information of an achievement goal
+ *
+ * @param {number} goalId id of the goal
+ * @param {string} goalText describes the goal requirement
+ * @param {number} goalProgress student's current xp of this goal
+ * @param {number} goalTarget maximum xp of this goal
+ */
+export type AchievementGoal = {
+  goalId: number;
+  goalText: string;
+  goalProgress: number;
+  goalTarget: number;
 };
 
 /**
@@ -69,13 +79,11 @@ export type AchievementItem = {
  *
  * @param {string} modalImageUrl URL of the modal image
  * @param {string} description fixed text that displays under title
- * @param {string} goal describes the achievement requirement
  * @param {string} completionText text that displays after student completes the achievement
  */
 export type AchievementModalItem = {
   modalImageUrl: string;
   description: string;
-  goalText: string;
   completionText: string;
 };
 

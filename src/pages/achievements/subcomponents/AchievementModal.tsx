@@ -19,8 +19,8 @@ function AchievementModal(props: AchievementModalProps) {
 
   if (modal === undefined) return null;
 
-  const { title, ability, deadline } = inferencer.getAchievementItem(id);
-  const { modalImageUrl, description, goalText, completionText } = modal;
+  const { title, ability, deadline, goals } = inferencer.getAchievementItem(id);
+  const { modalImageUrl, description, completionText } = modal;
 
   return (
     <div className="modal">
@@ -42,7 +42,9 @@ function AchievementModal(props: AchievementModalProps) {
           <AchievementModalDescription description={description} />
         </div>
 
-        <AchievementModalGoal goalText={goalText} />
+        <ul>
+          <AchievementModalGoal goals={goals} />
+        </ul>
 
         <hr />
         <AchievementModalCompletion completionText={completionText} />

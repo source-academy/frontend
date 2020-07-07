@@ -21,20 +21,12 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
 
   const [modalData, setModalData] = useState<AchievementModalItem>(renderModal);
 
-  const { modalImageUrl, description, completionText, goalText } = modalData;
+  const { modalImageUrl, description, completionText } = modalData;
 
   const setDescription = (description: string) => {
     setModalData({
       ...modalData,
       description: description
-    });
-    changeModal(modalData);
-  };
-
-  const setGoalText = (goalText: string) => {
-    setModalData({
-      ...modalData,
-      goalText: goalText
     });
     changeModal(modalData);
   };
@@ -77,7 +69,6 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
             />
 
             <EditableModalDescription description={description} setDescription={setDescription} />
-            <EditableModalText goalText={goalText} setGoalText={setGoalText} />
             <EditableModalText goalText={completionText} setGoalText={setCompletionText} />
           </Card>
         </div>

@@ -2,52 +2,47 @@ import {
   AchievementItem,
   AchievementStatus,
   AchievementModalItem,
-  FilterStatus
+  FilterStatus,
+  AchievementGoal
 } from '../../../../commons/achievements/AchievementTypes';
 
 // A Node item encapsulates all important information of an achievement item
 class Node {
   achievement: AchievementItem;
   dataIdx: number; // achievements[dataIdx] = achievement
+  exp: number;
+  progress: number;
   status: AchievementStatus;
-  totalExp: number;
   furthestDeadline?: Date;
-  collectiveProgress: number;
   children: Set<number>; // immediate prerequisite
   descendant: Set<number>; // all descendant prerequisites including immediate prerequisites
   modal: AchievementModalItem;
 
   constructor(achievement: AchievementItem, dataIdx: number) {
-    const {
-      exp,
-      deadline,
-      completionGoal,
-      completionProgress,
-      prerequisiteIds,
-      modal
-    } = achievement;
+    const { deadline, prerequisiteIds, goals, modal } = achievement;
 
     this.achievement = achievement;
     this.dataIdx = dataIdx;
-    this.status = this.generateStatus(deadline, completionGoal, completionProgress);
-    this.totalExp = exp;
+    this.exp = goals.reduce((acc, goal) => acc + goal.goalTarget, 0);
+    this.progress = this.generateProgress(goals);
+    this.status = this.generateStatus(deadline, this.progress);
     this.furthestDeadline = deadline;
-    this.collectiveProgress = Math.min(completionProgress / completionGoal, 1);
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
     this.modal = modal;
   }
 
-  private generateStatus(
-    deadline: Date | undefined,
-    completionGoal: number,
-    completionProgress: number
-  ) {
-    console.log(typeof deadline);
+  private generateProgress(goals: AchievementGoal[]) {
+    const totalProgress = goals.reduce((acc, goal) => acc + goal.goalProgress, 0);
+    const totalTarget = goals.reduce((acc, goal) => acc + goal.goalTarget, 0);
 
-    if (completionProgress >= completionGoal) {
+    return Math.min(totalProgress / totalTarget, 1);
+  }
+
+  private generateStatus(deadline: Date | undefined, progress: number) {
+    if (progress === 1) {
       return AchievementStatus.COMPLETED;
-    } else if (deadline !== undefined && deadline.getTime() > Date.now()) {
+    } else if (deadline !== undefined && deadline.getTime() < Date.now()) {
       return AchievementStatus.EXPIRED;
     } else {
       return AchievementStatus.ACTIVE;
@@ -184,15 +179,15 @@ class Inferencer {
   }
 
   public getTotalExp(id: number) {
-    return this.nodeList.get(id)!.totalExp;
+    return this.nodeList.get(id)!.exp;
   }
 
   public getFurthestDeadline(id: number) {
     return this.nodeList.get(id)!.furthestDeadline;
   }
 
-  public getCollectiveProgress(id: number) {
-    return this.nodeList.get(id)!.collectiveProgress;
+  public getProgress(id: number) {
+    return this.nodeList.get(id)!.progress;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -277,8 +272,6 @@ class Inferencer {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateFurthestDeadline(node);
-      this.generateTotalExp(node);
-      this.generateCollectiveProgress(node);
     });
   }
 
@@ -329,50 +322,6 @@ class Inferencer {
 
     // Reduces the temporary array to a single Date value
     node.furthestDeadline = descendantDeadlines.reduce(compareDeadlines, node.furthestDeadline);
-  }
-
-  // Set the node's total EXP by combining all descendants' EXP
-  private generateTotalExp(node: Node) {
-    // Sum of two EXP
-    const combineExps = (accumulateExp: number, currentExp: number) => {
-      return accumulateExp + currentExp;
-    };
-
-    // Temporary array of all descendants' exps
-    const descendantExps = [];
-    for (const childId of node.descendant) {
-      const childExp = this.nodeList.get(childId)!.achievement.exp;
-      descendantExps.push(childExp);
-    }
-
-    // Reduces the temporary array to a single number value
-    node.totalExp = descendantExps.reduce(combineExps, node.totalExp);
-  }
-
-  // Set the node's collective progress by combining all descendants' progress
-  private generateCollectiveProgress(node: Node) {
-    // If no prerequisites, just display the achievement progress
-    // Otherwise, display aggregated descendants progress
-    if (node.children.size === 0) {
-      return;
-    }
-
-    // Combiner of progress
-    const collateProgress = (accumulateProgress: number, currentProgress: number) => {
-      return accumulateProgress + currentProgress;
-    };
-
-    // Temporary array of all descendants' progress
-    const descendantProgress = [];
-    for (const childId of node.descendant) {
-      const { completionGoal, completionProgress } = this.nodeList.get(childId)!.achievement;
-      const childProgress = Math.min(completionProgress / completionGoal, 1);
-      descendantProgress.push(childProgress);
-    }
-    const normalize = descendantProgress.length;
-
-    // Reduces the temporary array to a single number value
-    node.collectiveProgress = descendantProgress.reduce(collateProgress, 0) / normalize;
   }
 
   // normalize positions

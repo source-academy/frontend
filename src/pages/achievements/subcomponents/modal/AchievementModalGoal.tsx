@@ -1,23 +1,31 @@
 import React from 'react';
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { AchievementGoal } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementModalGoalProps = {
-  goalText: string;
+  goals: AchievementGoal[];
 };
 
 function AchievementModalGoal(props: AchievementModalGoalProps) {
-  const { goalText } = props;
+  const { goals } = props;
 
-  return (
-    <div className="goal">
-      <div className="goal-medal">
-        <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
-        <div>100 / 100 XP</div>
+  const mapGoalToJSX = (goal: AchievementGoal) => {
+    const { goalId, goalText, goalProgress, goalTarget } = goal;
+    return (
+      <div className="goal" key={goalId}>
+        <div className="goal-medal">
+          <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
+          <div>
+            {goalProgress} / {goalTarget} XP
+          </div>
+        </div>
+        <div className="goal-text">{goalText}</div>
       </div>
-      <div className="goal-text">{goalText}</div>
-    </div>
-  );
+    );
+  };
+
+  return <>{goals.map(goal => mapGoalToJSX(goal))}</>;
 }
 
 export default AchievementModalGoal;

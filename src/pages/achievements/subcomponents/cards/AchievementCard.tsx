@@ -32,7 +32,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
-  const collectiveProgress = inferencer.getCollectiveProgress(id);
+  const collectiveProgress = inferencer.getProgress(id);
 
   const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
 

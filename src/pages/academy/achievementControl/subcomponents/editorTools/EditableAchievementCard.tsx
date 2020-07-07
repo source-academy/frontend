@@ -10,7 +10,6 @@ import {
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
 import EditableAchievementDate from './editableUtils/EditableAchievementDate';
-import EditableAchievementExp from './editableUtils/EditableAchievementExp';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
@@ -43,7 +42,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, exp, deadline, backgroundImageUrl, release } = editableAchievement;
+  const { id, title, ability, deadline, backgroundImageUrl, release } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -100,6 +99,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
+  /*
+  TODO: Implement editable goals in editable modal
   const handleChangeExp = (exp: string) => {
     if (RegExp('[0-9]*').test(exp)) {
       if (exp === '') {
@@ -111,7 +112,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       });
       setUnsaved();
     }
-  };
+  }; */
 
   const handleChangeBackground = (backgroundImageUrl: string) => {
     setEditableAchievement({
@@ -197,8 +198,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
               deadline={release}
               changeDeadline={handleChangeRelease}
             />
-
-            <EditableAchievementExp exp={exp} changeExp={handleChangeExp} />
           </div>
         </div>
         <div className="details">

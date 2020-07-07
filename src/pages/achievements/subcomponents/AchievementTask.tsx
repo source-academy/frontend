@@ -78,15 +78,16 @@ function AchievementTask(props: AchievementTaskProps) {
               {inferencer.listImmediateChildren(id).map(prerequisite => (
                 <div>
                   <PrerequisiteCard
-                    isLast={
-                      inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
-                      inferencer.listImmediateChildren(id).length - 1
-                    }
+                    key={id}
                     id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}
                     displayModal={displayModal}
                     handleGlow={handleGlow}
+                    isLast={
+                      inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
+                      inferencer.listImmediateChildren(id).length - 1
+                    }
                   />
                 </div>
               ))}
