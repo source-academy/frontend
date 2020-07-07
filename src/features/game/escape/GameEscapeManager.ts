@@ -95,8 +95,8 @@ class GameEscapeManager {
       gameManager,
       'Continue',
       async () => {
-        if (gameManager.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-          await gameManager.phaseManager.popPhase();
+        if (GameActionManager.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await GameActionManager.getInstance().popPhase();
         }
       },
       mediumButton.key,

@@ -27,7 +27,7 @@ class GameBoundingBoxManager implements StateObserver {
       locationId,
       GameMode.Explore
     );
-    const currLocationId = GameActionManager.getInstance().getGameManager().currentLocationId;
+    const currLocationId = GameActionManager.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       this.renderBBoxLayerContainer(locationId);
     }

@@ -43,8 +43,8 @@ class GameModeMove implements IGameUI {
       const location = GameActionManager.getInstance().getLocationAtId(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, async () => {
-          await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
-          await GameActionManager.getInstance().getGameManager().changeLocationTo(location.id);
+          await GameActionManager.getInstance().popPhase();
+          await GameActionManager.getInstance().changeLocationTo(location.id);
         });
         this.locationAssetKeys.set(location.name, location.assetKey);
       }
@@ -161,7 +161,7 @@ class GameModeMove implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+        GameActionManager.getInstance().popPhase();
         GameActionManager.getInstance()
           .getGameManager()
           .layerManager.fadeInLayer(Layer.Character, 300);

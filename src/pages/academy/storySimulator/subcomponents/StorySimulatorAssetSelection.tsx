@@ -7,8 +7,6 @@ type TreeState = {
   nodes: ITreeNode[];
 };
 
-type ExtendedTreeNode = ITreeNode & { shortPath: string };
-
 type Props = {
   assetPaths: string[];
   setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
@@ -17,22 +15,20 @@ type Props = {
 
 function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset, accessToken }: Props) {
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
-  const [fetchToggle, setFetchToggle] = React.useState(false);
 
   React.useEffect(() => {
     if (!accessToken) {
-      setFetchToggle(!fetchToggle);
       return;
     }
-    setAssetTree({ nodes: listToTree(assetPaths, accessToken) });
-  }, [accessToken, assetPaths, fetchToggle]);
+    setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken) });
+  }, [accessToken, assetPaths]);
 
   const handleNodeClick = React.useCallback(
     (nodeData: ITreeNode) => {
       treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
-      const selectedPath = (nodeData as ExtendedTreeNode).shortPath;
+      const selectedPath = nodeData.id.toString();
       if (!nodeData.childNodes) {
         setCurrentAsset(selectedPath);
         sessionStorage.setItem('selectedAsset', selectedPath);
@@ -62,19 +58,21 @@ const deleteFile = (filePath: string, accessToken: string) => async () => {
   alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
 };
 
-function listToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
-  let assetCounter = 0;
+function assetPathsToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
   const assetObj = {};
   assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
-  s3AssetFolders.forEach(folder => !assetObj[folder] && (assetObj[folder] = []));
+  s3AssetFolders.forEach(folder => {
+    if (!assetObj[folder] || assetObj[folder] === 'FILE') {
+      assetObj[folder] = [];
+    }
+  });
 
   function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
     return Object.keys(assetObj).map(file => {
       const shortPath = '/' + parentFolders.join('/') + '/' + file;
       return {
-        id: assetCounter++,
+        id: shortPath,
         label: file,
-        shortPath,
         secondaryLabel: (
           <Tooltip content="Delete">
             <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />

@@ -50,6 +50,10 @@ class GameActionManager {
     return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
   }
 
+  public checkpointTransition() {
+    this.getGameManager().checkpointTransition();
+  }
+
   /////////////////////
   //    Game Mode    //
   /////////////////////
@@ -59,15 +63,11 @@ class GameActionManager {
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
-    if (this.gameManager) {
-      this.gameManager.stateManager.addLocationMode(locationId, mode);
-    }
+    this.getGameManager().stateManager.addLocationMode(locationId, mode);
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
-    if (this.gameManager) {
-      this.gameManager.stateManager.removeLocationMode(locationId, mode);
-    }
+    this.getGameManager().stateManager.removeLocationMode(locationId, mode);
   }
 
   /////////////////////
@@ -75,17 +75,11 @@ class GameActionManager {
   /////////////////////
 
   public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.hasLocationUpdate(locationId, mode);
-    }
-    return false;
+    return this.getGameManager().stateManager.hasLocationUpdate(locationId, mode);
   }
 
   public changeLocationTo(locationName: string) {
-    if (this.gameManager) {
-      return this.gameManager.changeLocationTo(locationName);
-    }
-    return;
+    this.getGameManager().changeLocationTo(locationName);
   }
 
   /////////////////////
@@ -93,17 +87,11 @@ class GameActionManager {
   /////////////////////
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.hasTriggeredInteraction(id);
-    }
-    return undefined;
+    return this.getGameManager().stateManager.hasTriggeredInteraction(id);
   }
 
   public triggerInteraction(id: string): void {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.triggerInteraction(id);
-    }
-    return undefined;
+    this.getGameManager().stateManager.triggerInteraction(id);
   }
 
   /////////////////////
@@ -115,10 +103,7 @@ class GameActionManager {
   }
 
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string): void {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.addLocationAttr(attr, locationId, attrElem);
-    }
-    return;
+    this.getGameManager().stateManager.addLocationAttr(attr, locationId, attrElem);
   }
 
   public removeLocationAttr(
@@ -126,22 +111,15 @@ class GameActionManager {
     locationId: LocationId,
     attrElem: string
   ): void {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.removeLocationAttr(attr, locationId, attrElem);
-    }
-    return;
+    return this.getGameManager().stateManager.removeLocationAttr(attr, locationId, attrElem);
   }
 
   public subscribeState(observer: StateObserver) {
-    if (this.gameManager) {
-      this.gameManager.stateManager.subscribe(observer);
-    }
+    this.getGameManager().stateManager.subscribe(observer);
   }
 
   public unsubscribeState(observer: StateObserver) {
-    if (this.gameManager) {
-      this.gameManager.stateManager.unsubscribe(observer);
-    }
+    this.getGameManager().stateManager.unsubscribe(observer);
   }
 
   /////////////////////
@@ -149,22 +127,27 @@ class GameActionManager {
   /////////////////////
 
   public makeObjectGlow(objectId: ItemId) {
-    return this.getGameManager().objectManager.makeObjectGlow(objectId);
+    this.getGameManager().objectManager.makeObjectGlow(objectId);
   }
 
   public makeObjectBlink(objectId: ItemId) {
-    return this.getGameManager().objectManager.makeObjectBlink(objectId);
+    this.getGameManager().objectManager.makeObjectBlink(objectId);
   }
 
   public getObjPropertyMap() {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.getObjPropertyMap();
-    }
-    return new Map<ItemId, ObjectProperty>();
+    return this.getGameManager().stateManager.getObjPropertyMap();
   }
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.getGameManager().stateManager.setObjProperty(id, newObjProp);
+  }
+
+  public enableObjectAction(callbacks: any) {
+    this.getGameManager().objectManager.enableObjectAction(callbacks);
+  }
+
+  public disableObjectAction() {
+    this.getGameManager().objectManager.disableObjectAction();
   }
 
   /////////////////////
@@ -172,14 +155,19 @@ class GameActionManager {
   /////////////////////
 
   public getBBoxPropertyMap() {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.getBBoxPropertyMap();
-    }
-    return new Map<ItemId, BBoxProperty>();
+    return this.getGameManager().stateManager.getBBoxPropertyMap();
   }
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.getGameManager().stateManager.setBBoxProperty(id, newBBoxProp);
+  }
+
+  public enableBBoxAction(callbacks: any) {
+    this.getGameManager().boundingBoxManager.enableBBoxAction(callbacks);
+  }
+
+  public disableBBoxAction() {
+    this.getGameManager().boundingBoxManager.disableBBoxAction();
   }
 
   /////////////////////
@@ -187,30 +175,19 @@ class GameActionManager {
   /////////////////////
 
   public isAllComplete(): boolean {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.isAllComplete();
-    }
-    return false;
+    return this.getGameManager().stateManager.isAllComplete();
   }
 
   public isObjectiveComplete(key: string): boolean {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.isObjectiveComplete(key);
-    }
-    return false;
+    return this.getGameManager().stateManager.isObjectiveComplete(key);
   }
 
   public areObjectivesComplete(keys: string[]): boolean {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.areObjectivesComplete(keys);
-    }
-    return false;
+    return this.getGameManager().stateManager.areObjectivesComplete(keys);
   }
 
   public completeObjective(key: string): void {
-    if (this.gameManager) {
-      return this.gameManager.stateManager.completeObjective(key);
-    }
+    this.getGameManager().stateManager.completeObjective(key);
   }
 
   /////////////////////
@@ -218,16 +195,11 @@ class GameActionManager {
   /////////////////////
 
   public addToUserStateList(listName: string, id: string): void {
-    if (this.gameManager) {
-      return this.gameManager.userStateManager.addToList(listName, id);
-    }
+    this.getGameManager().userStateManager.addToList(listName, id);
   }
 
   public existsInUserStateList(listName: string, id: string): boolean {
-    if (this.gameManager) {
-      return this.gameManager.userStateManager.doesIdExistInList(listName, id);
-    }
-    return false;
+    return this.getGameManager().userStateManager.doesIdExistInList(listName, id);
   }
 
   /////////////////////
@@ -235,19 +207,15 @@ class GameActionManager {
   /////////////////////
 
   public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
-    if (this.gameManager) {
-      this.gameManager.layerManager.clearSeveralLayers(layerTypes, withFade);
-    }
+    this.getGameManager().layerManager.clearSeveralLayers(layerTypes, withFade);
   }
 
   public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
-    if (this.gameManager) {
-      this.gameManager.layerManager.addToLayer(layer, gameObj);
-    }
+    this.getGameManager().layerManager.addToLayer(layer, gameObj);
   }
 
-  public getDialogue(dialogueId: ItemId) {
-    return this.getGameManager().getCurrentCheckpoint().map.getDialogues().get(dialogueId);
+  public fadeInLayer(layer: Layer) {
+    this.getGameManager().layerManager.fadeInLayer(layer);
   }
 
   /////////////////////
@@ -255,9 +223,8 @@ class GameActionManager {
   /////////////////////
 
   public async bringUpUpdateNotif(message: string) {
-    if (this.gameManager) {
-      await displayNotification(message);
-    }
+    this.getGameManager();
+    await displayNotification(message);
   }
 
   /////////////////////
@@ -265,11 +232,9 @@ class GameActionManager {
   /////////////////////
 
   public async executeStoryAction(actionIds: ItemId[] | undefined) {
-    await GameActionManager.getInstance()
-      .getGameManager()
-      .phaseManager.pushPhase(GamePhaseType.Sequence);
+    await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
     await this.getGameManager().actionExecuter.executeStoryActions(actionIds);
-    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+    await this.getGameManager().phaseManager.popPhase();
   }
 
   /////////////////////
@@ -277,21 +242,24 @@ class GameActionManager {
   /////////////////////
 
   public async bringUpDialogue(dialogueId: ItemId) {
-    await GameActionManager.getInstance()
-      .getGameManager()
-      .phaseManager.pushPhase(GamePhaseType.Sequence);
+    await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
     await this.getGameManager().dialogueManager.playDialogue(dialogueId);
-    await GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+    await this.getGameManager().phaseManager.popPhase();
   }
 
+  public async playDialogue(dialogueId: ItemId) {
+    await this.getGameManager().dialogueManager.playDialogue(dialogueId);
+  }
+
+  public getDialogue(dialogueId: ItemId) {
+    return this.getGameManager().getCurrentCheckpoint().map.getDialogues().get(dialogueId);
+  }
   /////////////////////
   //   Collectible   //
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    if (this.gameManager) {
-      this.gameManager.userStateManager.addToList('collectibles', collectibleId);
-    }
+    this.getGameManager().userStateManager.addToList('collectibles', collectibleId);
   }
 
   /////////////////////
@@ -299,21 +267,15 @@ class GameActionManager {
   /////////////////////
 
   public displayPopUp(itemId: ItemId, position: PopUpPosition, duration?: number) {
-    if (this.gameManager) {
-      this.gameManager.popUpManager.displayPopUp(itemId, position, duration);
-    }
+    this.getGameManager().popUpManager.displayPopUp(itemId, position, duration);
   }
 
   public destroyAllPopUps() {
-    if (this.gameManager) {
-      this.gameManager.popUpManager.destroyAllPopUps();
-    }
+    this.getGameManager().popUpManager.destroyAllPopUps();
   }
 
   public async destroyPopUp(position: PopUpPosition) {
-    if (this.gameManager) {
-      this.gameManager.popUpManager.destroyPopUp(position);
-    }
+    this.getGameManager().popUpManager.destroyPopUp(position);
   }
 
   /////////////////////
@@ -329,39 +291,27 @@ class GameActionManager {
   /////////////////////
 
   public playSound(soundKey: AssetKey) {
-    if (this.gameManager) {
-      this.gameManager.soundManager.playSound(soundKey);
-    }
+    this.getGameManager().soundManager.playSound(soundKey);
   }
 
   public playBgMusic(soundKey: AssetKey) {
-    if (this.gameManager) {
-      this.gameManager.soundManager.playSound(soundKey);
-    }
+    this.getGameManager().soundManager.playSound(soundKey);
   }
 
   public async stopCurrBgMusic(fadeDuration?: number) {
-    if (this.gameManager) {
-      this.gameManager.soundManager.stopCurrBgMusic(fadeDuration);
-    }
+    this.getGameManager().soundManager.stopCurrBgMusic(fadeDuration);
   }
 
   public async stopAllSound() {
-    if (this.gameManager) {
-      this.gameManager.soundManager.stopAllSound();
-    }
+    this.getGameManager().soundManager.stopAllSound();
   }
 
   public pauseCurrBgMusic() {
-    if (this.gameManager) {
-      this.gameManager.soundManager.pauseCurrBgMusic();
-    }
+    this.getGameManager().soundManager.pauseCurrBgMusic();
   }
 
   public continueCurrBgMusic() {
-    if (this.gameManager) {
-      this.gameManager.soundManager.continueCurrBgMusic();
-    }
+    this.getGameManager().soundManager.continueCurrBgMusic();
   }
 
   /////////////////////
@@ -374,6 +324,38 @@ class GameActionManager {
 
   public enableMouseInput(active: boolean) {
     this.getGameManager().inputManager.enableMouseInput(active);
+  }
+
+  /////////////////////
+  //      Phases     //
+  /////////////////////
+
+  public popPhase() {
+    this.getGameManager().phaseManager.popPhase();
+  }
+
+  public pushPhase(gamePhaseType: GamePhaseType) {
+    this.getGameManager().phaseManager.pushPhase(gamePhaseType);
+  }
+
+  public swapPhase(gamePhaseType: GamePhaseType) {
+    this.getGameManager().phaseManager.swapPhase(gamePhaseType);
+  }
+
+  public isCurrentPhase(gamePhaseType: GamePhaseType) {
+    return this.getGameManager().phaseManager.isCurrentPhase(gamePhaseType);
+  }
+
+  /////////////////////
+  //   Escape Menu   //
+  /////////////////////
+
+  public createEscapeMenu() {
+    this.getGameManager().escapeManager.createEscapeMenu();
+  }
+
+  public destroyEscapeMenu() {
+    this.getGameManager().escapeManager.destroyEscapeMenu();
   }
 }
 

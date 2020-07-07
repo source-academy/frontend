@@ -121,7 +121,7 @@ class GameModeTalk implements IGameUI {
 
     const backButton = new CommonBackButton(
       gameManager,
-      () => GameActionManager.getInstance().getGameManager().phaseManager.popPhase(),
+      () => GameActionManager.getInstance().popPhase(),
       0,
       0
     );

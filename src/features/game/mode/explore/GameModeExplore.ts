@@ -26,7 +26,7 @@ class GameModeExplore implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().getGameManager().phaseManager.popPhase();
+        GameActionManager.getInstance().popPhase();
         GameActionManager.getInstance()
           .getGameManager()
           .layerManager.fadeInLayer(Layer.Character, 300);
@@ -56,13 +56,13 @@ class GameModeExplore implements IGameUI {
       ...entryTweenProps
     });
 
-    gameManager.objectManager.enableObjectAction({
+    GameActionManager.getInstance().enableObjectAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
     });
 
-    gameManager.boundingBoxManager.enableBBoxAction({
+    GameActionManager.getInstance().enableBBoxAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
@@ -74,8 +74,8 @@ class GameModeExplore implements IGameUI {
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     gameManager.input.setDefaultCursor('');
-    gameManager.boundingBoxManager.disableBBoxAction();
-    gameManager.objectManager.disableObjectAction();
+    GameActionManager.getInstance().disableBBoxAction();
+    GameActionManager.getInstance().disableObjectAction();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
