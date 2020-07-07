@@ -37,6 +37,10 @@ export class SourceAcademyGame extends Phaser.Game {
     };
   }
 
+  public stopAllSounds() {
+    this.sound.stopAll();
+  }
+
   public setCurrBgMusicKey(key: AssetKey | undefined) {
     this.global.currBgMusicKey = key;
   }

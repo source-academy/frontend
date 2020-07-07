@@ -49,6 +49,10 @@ export default class RoomPreview extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
+  public update() {
+    this.eval(`\nupdate();`);
+  }
+
   private async eval(append: string) {
     const context: Context = createContext(4, [], {}, 'gpu', {
       scene: this,
