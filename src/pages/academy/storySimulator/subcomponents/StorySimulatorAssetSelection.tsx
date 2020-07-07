@@ -48,33 +48,11 @@ function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset, accessToken
 export default StorySimulatorAssetSelection;
 
 function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) => void) {
-  if (!nodes) {
-    return;
-  }
-  for (const node of nodes) {
-    fn(node);
-    treeMap(node.childNodes, fn);
-  }
-}
-
-function pathToObj(assetPaths: string[]): object {
-  const assetObj = {};
-  assetPaths.forEach(assetPath => {
-    const assetPathList = assetPath.split('/');
-    const file = assetPathList.pop();
-    if (file === 'Thumbs.db') {
-      return;
-    }
-    const oldfilesInFolder = _.get(assetObj, assetPathList);
-    if (Array.isArray(oldfilesInFolder) || !oldfilesInFolder) {
-      const newFilesInFolder = oldfilesInFolder ? [...oldfilesInFolder, file] : [file];
-      _.set(assetObj, assetPathList, newFilesInFolder);
-    } else {
-      assetPathList && file && _.set(assetObj, [...assetPathList, file], 'FILE');
-    }
-  });
-  s3AssetFolders.forEach(folder => !assetObj[folder] && (assetObj[folder] = []));
-  return assetObj;
+  nodes &&
+    nodes.forEach(node => {
+      fn(node);
+      treeMap(node.childNodes, fn);
+    });
 }
 
 const deleteFile = (filePath: string, accessToken: string) => async () => {
@@ -84,37 +62,27 @@ const deleteFile = (filePath: string, accessToken: string) => async () => {
   alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
 };
 
-function createFileNode(id: number, parentFolders: string[], file: string, accessToken: string) {
-  const shortPath = '/' + parentFolders.join('/') + '/' + file;
-  return {
-    id,
-    label: file,
-    shortPath,
-    secondaryLabel: (
-      <Tooltip content="Delete">
-        <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
-      </Tooltip>
-    )
-  };
-}
-
 function listToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
   let assetCounter = 0;
-  const assetObj = pathToObj(assetPaths);
+  const assetObj = {};
+  assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
+  s3AssetFolders.forEach(folder => !assetObj[folder] && (assetObj[folder] = []));
+
   function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
-    if (Array.isArray(assetObj)) {
-      return assetObj.map(asset =>
-        createFileNode(assetCounter++, parentFolders, asset, accessToken)
-      );
-    }
-    return Object.keys(assetObj).map(key => {
-      return assetObj[key] === 'FILE'
-        ? createFileNode(assetCounter++, parentFolders, key, accessToken)
-        : {
-            id: assetCounter++,
-            label: key,
-            childNodes: helper([...parentFolders, key], assetObj[key])
-          };
+    return Object.keys(assetObj).map(file => {
+      const shortPath = '/' + parentFolders.join('/') + '/' + file;
+      return {
+        id: assetCounter++,
+        label: file,
+        shortPath,
+        secondaryLabel: (
+          <Tooltip content="Delete">
+            <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
+          </Tooltip>
+        ),
+        childNodes:
+          assetObj[file] === 'FILE' ? undefined : helper([...parentFolders, file], assetObj[file])
+      };
     });
   }
   return helper([], assetObj);
