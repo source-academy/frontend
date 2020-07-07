@@ -1,9 +1,19 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
+import CommonBackButton from '../../commons/CommonBackButton';
+import GameLayerManager from '../../layer/GameLayerManager';
+import { Layer } from '../../layer/GameLayerTypes';
 
 export default class RoomPreview extends Phaser.Scene {
+  private layerManager: GameLayerManager;
+
   constructor() {
     super('RoomPreview');
+    this.layerManager = new GameLayerManager();
+  }
+
+  public init() {
+    this.layerManager.initialiseMainLayer(this);
   }
 
   public async preload() {
@@ -12,6 +22,16 @@ export default class RoomPreview extends Phaser.Scene {
 
   public async create() {
     this.eval(`\ncreate();`);
+    const backButton = new CommonBackButton(
+      this,
+      () => {
+        this.layerManager.clearAllLayers();
+        this.scene.start('MainMenu');
+      },
+      0,
+      0
+    );
+    this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
   private async eval(append: string) {
