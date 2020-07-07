@@ -6,7 +6,7 @@ import GameActionManager from '../action/GameActionManager';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
-  private phaseMap: Map<GamePhaseType, GamePhase>;
+  public phaseMap: Map<GamePhaseType, GamePhase>;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
@@ -34,17 +34,21 @@ export default class GamePhaseManager {
   }
 
   public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
+    // Transition to the next scene if possible
+    if (
+      _.isEqual(this.phaseStack, [GamePhaseType.Menu]) &&
+      GameActionManager.getInstance().isAllComplete()
+    ) {
+      await this.phaseMap.get(prevPhase)!.deactivate();
+      await GameActionManager.getInstance().getGameManager().checkpointTransition();
+      return;
+    }
     GameActionManager.getInstance().enableKeyboardInput(false);
     GameActionManager.getInstance().enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivate();
     await this.phaseMap.get(newPhase)!.activate();
     GameActionManager.getInstance().enableMouseInput(true);
     GameActionManager.getInstance().enableKeyboardInput(true);
-
-    // Transition to the next scene if possible
-    if (_.isEqual(this.phaseStack, [GamePhaseType.Menu])) {
-      GameActionManager.getInstance().getGameManager().checkpointTransition();
-    }
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {

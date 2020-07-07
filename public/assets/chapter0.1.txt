@@ -1,6 +1,7 @@
 startingLoc: room
 
 objectives
+    visit
     talk
 
 room

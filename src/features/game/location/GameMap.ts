@@ -19,6 +19,8 @@ class GameMap {
   private characters: Map<ItemId, Character>;
   private actions: Map<ItemId, GameAction>;
   private collectibles: Map<ItemId, CollectibleProperty>;
+  private startActions: ItemId[];
+  private endActions: ItemId[];
 
   constructor() {
     this.soundAssets = [];
@@ -31,6 +33,8 @@ class GameMap {
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
     this.collectibles = new Map<ItemId, CollectibleProperty>();
+    this.startActions = [];
+    this.endActions = [];
   }
 
   public addSoundAsset(soundAsset: SoundAsset) {
@@ -59,6 +63,22 @@ class GameMap {
 
   public getNavigationFrom(id: LocationId): Set<string> | undefined {
     return this.getLocationAtId(id).navigation;
+  }
+
+  public setStartActions(actionIds: ItemId[]) {
+    this.startActions = actionIds;
+  }
+
+  public setEndActions(actionIds: ItemId[]) {
+    this.endActions = actionIds;
+  }
+
+  public getStartActions() {
+    return this.startActions;
+  }
+
+  public getEndActions() {
+    return this.endActions;
   }
 
   public getLocations(): Map<LocationId, GameLocation> {

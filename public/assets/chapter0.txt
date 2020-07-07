@@ -3,6 +3,13 @@ startingLoc: room
 objectives
     finish
 
+startActions
+    show_dialogue*(unwelcome) if !userstate.assessments.301
+    show_dialogue(welcome) if userstate.assessments.301
+
+endActions
+    show_dialogue(done)
+
 room
     modes: talk, explore
     bgm
@@ -10,10 +17,6 @@ room
     sfx
         card, /ui/card.mp3, 0.5
     
-    actions
-        show_dialogue*(unwelcome) if !userstate.assessments.301
-        show_dialogue(welcome) if userstate.assessments.301
-
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             make_object_glow*(emergency1)
@@ -33,6 +36,8 @@ room
 hallway
     modes: talk, move
     talkTopics: welcomeToHallway
+    actions
+        complete_objective(finish)
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             complete_objective(finish)
@@ -65,6 +70,9 @@ dialogues
 
         @scottie
         I'm glad you asked!
+    
+    done
+        Well, what do you know, you finished the game.
     
     welcomeToHallway
         Welcome to the Hallway, we've got fun and games.

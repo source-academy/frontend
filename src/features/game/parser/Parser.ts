@@ -7,6 +7,7 @@ import LocationParser from './LocationParser';
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import StringUtils from '../utils/StringUtils';
 import ParserValidator, { GameAttr } from './ParserValidator';
+import ActionParser from './ActionParser';
 
 class Parser {
   public static checkpoint: GameCheckpoint;
@@ -70,6 +71,12 @@ class Parser {
         break;
       case 'locations':
         LocationsParser.parse(body);
+        break;
+      case 'startActions':
+        Parser.checkpoint.map.setStartActions(ActionParser.parseActions(body));
+        break;
+      case 'endActions':
+        Parser.checkpoint.map.setEndActions(ActionParser.parseActions(body));
         break;
       case 'dialogues':
         DialoguesParser.parse(body);

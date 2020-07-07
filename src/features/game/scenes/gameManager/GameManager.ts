@@ -186,6 +186,9 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     await this.userStateManager.loadAssessments();
+    await this.actionExecuter.executeStoryActions(
+      this.getCurrentCheckpoint().map.getStartActions()
+    );
     this.changeLocationTo(this.currentLocationId);
     await GameActionManager.getInstance().saveGame();
   }
@@ -244,13 +247,13 @@ class GameManager extends Phaser.Scene {
   }
 
   public async checkpointTransition() {
-    if (GameActionManager.getInstance().isAllComplete()) {
-      this.cleanUp();
-      if (GameActionManager.getInstance().isStorySimulator()) {
-        this.scene.start('StorySimulatorMenu');
-      } else {
-        this.scene.start('CheckpointTransition');
-      }
+    this.phaseManager.phaseMap.get(GamePhaseType.Menu)?.deactivate();
+    await this.actionExecuter.executeStoryActions(this.getCurrentCheckpoint().map.getEndActions());
+    this.cleanUp();
+    if (GameActionManager.getInstance().isStorySimulator()) {
+      this.scene.start('StorySimulatorMenu');
+    } else {
+      this.scene.start('CheckpointTransition');
     }
   }
 
