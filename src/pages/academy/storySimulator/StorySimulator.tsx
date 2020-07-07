@@ -84,6 +84,7 @@ function StorySimulator() {
               <StorySimulatorAssetSelection
                 assetPaths={assetPaths}
                 setCurrentAsset={setCurrentAsset}
+                accessToken={accessToken}
               />
             </>
           )}
@@ -96,6 +97,7 @@ function StorySimulator() {
               <StorySimulatorAssetSelection
                 assetPaths={assetPaths}
                 setCurrentAsset={setCurrentAsset}
+                accessToken={accessToken}
               />
             </>
           )}

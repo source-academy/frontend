@@ -1,4 +1,4 @@
-import Constants from 'src/commons/utils/Constants';
+import { createAssetRequest } from './StorySimulatorRequest';
 
 export const s3AssetFolders = ['locations', 'objects', 'images', 'avatars', 'ui', 'sfx', 'bgm'];
 
@@ -13,65 +13,42 @@ export async function fetchAssetPaths(accessToken: string) {
 }
 
 async function fetchFolder(accessToken: string, folderName: string) {
-  try {
-    const headers = createHeaders(accessToken);
-    headers.append('Content-Type', 'application/json');
+  const response = await createAssetRequest(accessToken, folderName, 'GET', {
+    'Content-Type': 'application/json'
+  });
+  return response.status === 200 ? response.json() : [];
+}
 
-    const response = await fetch(Constants.backendUrl + `/v1/assets/${folderName}`, {
-      method: 'GET',
-      headers
-    });
-    const message = await response.json();
-    return message;
-  } catch {
-    return [];
-  } finally {
-  }
+export async function deleteS3File(accessToken: string, assetPath: string) {
+  const response = await createAssetRequest(accessToken, assetPath, 'DELETE');
+  const message = await response.text();
+  return message || 'Successfully Deleted';
 }
 
 export async function uploadAssets(accessToken: string, fileList: FileList, folderName: string) {
-  const fileArray = [];
-  for (let i = 0; i < fileList.length; i++) {
-    fileArray.push(fileList[i]);
-  }
-
   const responses = await Promise.all(
-    fileArray.map(async file => {
+    Array.from(fileList).map(async file => {
       const response = await uploadAsset(accessToken, file, folderName, file.name);
       return file.name + ' => ' + response;
     })
   );
-
-  alert(responses.join('\n'));
+  return responses.join('\n');
 }
 
 async function uploadAsset(accessToken: string, file: Blob, folderName: string, fileName: string) {
-  try {
-    if (!file.type.startsWith('image') && !file.type.startsWith('audio')) {
-      return 'Only images and audio allowed.';
-    }
-    const formData = new FormData();
-    formData.set('upload', file);
-
-    const headers = createHeaders(accessToken);
-    headers.append('Content-Type', 'multipart/form-data');
-
-    const response = await fetch(Constants.backendUrl + `/v1/assets/${folderName}/${fileName}`, {
-      method: 'POST',
-      body: formData,
-      headers: createHeaders(accessToken),
-      mode: 'cors'
-    });
-
-    const responseText = await response.text();
-    return responseText;
-  } finally {
+  if (!file.type.startsWith('image') && !file.type.startsWith('audio')) {
+    return 'Only images and audio allowed.';
   }
-}
+  const formData = new FormData();
+  formData.set('upload', file);
 
-function createHeaders(accessToken: string): Headers {
-  const headers = new Headers();
-  headers.append('Accept', 'application/json');
-  headers.append('Authorization', `Bearer ${accessToken}`);
-  return headers;
+  const response = await createAssetRequest(
+    accessToken,
+    `${folderName}/${fileName}`,
+    'POST',
+    {},
+    { body: formData, mode: 'cors' }
+  );
+
+  return response ? response.text() : '';
 }

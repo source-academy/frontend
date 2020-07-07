@@ -18,9 +18,10 @@ function AssetFileUploader({ accessToken }: Props) {
     setFileList(loadedFiles);
   }
 
-  function onUploadButtonClick() {
+  async function onUploadButtonClick() {
     if (!accessToken || !fileList || !folder) return;
-    uploadAssets(accessToken, fileList, folder);
+    const resp = await uploadAssets(accessToken, fileList, folder);
+    alert(resp);
   }
 
   function onChangeFolder(e: any) {
@@ -41,7 +42,7 @@ function AssetFileUploader({ accessToken }: Props) {
   return (
     <div className="LeftAlign">
       <Popover content={dropDown} position={Position.BOTTOM}>
-        <Button style={{ width: '100%' }} text={_.capitalize(folder) || 'Choose Folder...'} />
+        <Button text={_.capitalize(folder) || 'Choose Folder...'} />
       </Popover>
       <br />
       <input type="file" multiple id="id" onChange={onLoadFile} style={{ width: '250px' }} />
