@@ -19,6 +19,7 @@ import { random } from 'lodash';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
+import Phaser from 'phaser';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { OverallState, styliseChapter } from '../application/ApplicationTypes';
