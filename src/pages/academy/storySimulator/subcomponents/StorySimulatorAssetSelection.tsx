@@ -1,31 +1,38 @@
 import * as React from 'react';
-import { ITreeNode, Tree } from '@blueprintjs/core';
+import { ITreeNode, Tree, Tooltip, Icon } from '@blueprintjs/core';
 import * as _ from 'lodash';
-import { s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import { s3AssetFolders, deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
 
 type TreeState = {
   nodes: ITreeNode[];
 };
 
-type OwnProps = {
+type ExtendedTreeNode = ITreeNode & { shortPath: string };
+
+type Props = {
   assetPaths: string[];
   setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
+  accessToken?: string;
 };
 
-function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset }: OwnProps) {
+function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset, accessToken }: Props) {
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
+  const [fetchToggle, setFetchToggle] = React.useState(false);
 
   React.useEffect(() => {
-    setAssetTree({ nodes: listToTree(assetPaths) });
-  }, [assetPaths]);
+    if (!accessToken) {
+      setFetchToggle(!fetchToggle);
+      return;
+    }
+    setAssetTree({ nodes: listToTree(assetPaths, accessToken) });
+  }, [accessToken, assetPaths, fetchToggle]);
 
   const handleNodeClick = React.useCallback(
     (nodeData: ITreeNode, levels: number[]) => {
       treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
-      const selectedPath = getFilePath(assetTree.nodes, levels);
-
+      const selectedPath = (nodeData as ExtendedTreeNode).shortPath;
       if (!nodeData.childNodes) {
         setCurrentAsset(selectedPath);
         sessionStorage.setItem('selectedAsset', selectedPath);
@@ -68,29 +75,35 @@ function pathToObj(assetPaths: string[]): object {
   return assetObj;
 }
 
-function listToTree(assetPaths: string[]): ITreeNode[] {
+const deleteFile = (filePath: string, accessToken: string) => async () =>
+  await deleteS3File(accessToken, filePath);
+
+function listToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
   let assetCounter = 0;
   const assetObj = pathToObj(assetPaths);
-  function helper(assetObj: object | Array<string>): ITreeNode[] {
+  function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
     if (Array.isArray(assetObj)) {
-      return assetObj.map(asset => ({ id: assetCounter++, label: asset }));
+      return assetObj.map(asset => {
+        const shortPath = '/' + parentFolders.join('/') + '/' + asset;
+        return {
+          id: assetCounter++,
+          label: asset,
+          shortPath,
+          secondaryLabel: (
+            <Tooltip content="Delete">
+              <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
+            </Tooltip>
+          )
+        };
+      });
     }
     return Object.keys(assetObj).map(key => {
-      return { id: assetCounter++, label: key, childNodes: helper(assetObj[key]) };
+      return {
+        id: assetCounter++,
+        label: key,
+        childNodes: helper([...parentFolders, key], assetObj[key])
+      };
     });
   }
-  return helper(assetObj);
-}
-
-function getFilePath(assetTree: ITreeNode[], levels: number[]) {
-  let filePath = '';
-  for (const [levelNumber, level] of levels.entries()) {
-    const node = assetTree[level];
-    filePath += '/' + node.label.toString();
-    if (!node.childNodes || levelNumber === levels.length - 1) {
-      return filePath;
-    }
-    assetTree = node.childNodes;
-  }
-  return '';
+  return helper([], assetObj);
 }
