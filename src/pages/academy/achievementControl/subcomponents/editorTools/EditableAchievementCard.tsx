@@ -15,6 +15,7 @@ import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
+import EditableAchievementGoals from './editableUtils/EditableAchievementGoals';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
@@ -167,6 +168,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           modal={achievement.modal}
           changeModal={handleChangeModal}
         />
+
         <AchievementUploader
           hasChanges={hasChanges}
           saveChanges={handleSaveChanges}
@@ -181,6 +183,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           backgroundImageUrl={backgroundImageUrl}
           setBackgroundImageUrl={handleChangeBackground}
         />
+
+        <EditableAchievementGoals />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 

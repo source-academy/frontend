@@ -158,6 +158,10 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     achievement.modal.goalText = achievement.goalText ? achievement.goalText : '';
     achievement.modal.completionText = achievement.completionText ? achievement.completionText : '';
 
+    if (achievement.goals === null || achievement.goals === undefined) {
+      achievement.goals = [];
+    }
+
     if (achievement.prerequisiteIds === null) {
       achievement.prerequisiteIds = [];
     }
