@@ -19,6 +19,14 @@ class GameInputManager {
     return this.scene;
   }
 
+  public enableMouseInput(active: boolean) {
+    this.getScene().input.mouse.enabled = active;
+  }
+
+  public enableKeyboardInput(active: boolean) {
+    this.getScene().input.keyboard.enabled = active;
+  }
+
   public registerKeyboardListener(
     key: string | number | Phaser.Input.Keyboard.Key,
     event: string | symbol,

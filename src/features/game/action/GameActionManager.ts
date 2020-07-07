@@ -369,7 +369,11 @@ class GameActionManager {
   /////////////////////
 
   public enableKeyboardInput(active: boolean) {
-    this.getGameManager().input.keyboard.enabled = active;
+    this.getGameManager().inputManager.enableKeyboardInput(active);
+  }
+
+  public enableMouseInput(active: boolean) {
+    this.getGameManager().inputManager.enableMouseInput(active);
   }
 }
 

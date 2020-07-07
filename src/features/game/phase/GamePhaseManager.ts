@@ -31,8 +31,10 @@ export default class GamePhaseManager {
 
   public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
     GameActionManager.getInstance().enableKeyboardInput(false);
+    GameActionManager.getInstance().enableMouseInput(false);
     await gamePhaseMap.get(prevPhase).deactivate();
     await gamePhaseMap.get(newPhase).activate();
+    GameActionManager.getInstance().enableMouseInput(true);
     GameActionManager.getInstance().enableKeyboardInput(true);
 
     // Transition to the next scene if possible
