@@ -9,7 +9,8 @@ import {
   Menu,
   MenuItem,
   Position,
-  Divider
+  Divider,
+  Spinner
 } from '@blueprintjs/core';
 import { format } from 'timeago.js';
 import Markdown from '../Markdown';
@@ -82,12 +83,13 @@ const replyContainerStyles: CSS.Properties = {
 const enterMessageStyles: CSS.Properties = {
   width: '100%',
   display: 'block',
-  resize: 'vertical'
+  resize: 'vertical',
+  marginBottom: '0.4em'
 };
 
 const errorTextStyles: CSS.Properties = {
-    color: "red",
-    padding: "0.2em"
+  color: 'red',
+  padding: '0.2em'
 };
 
 /* Note on interfacing with extra data.
@@ -102,18 +104,25 @@ The currentComment will be overwritten by parent refreshing from new data.
 // Mock function, please replace.
 function sendToServer(comment: IComment) {
   return new Promise((resolve, reject) => {
-      if(Math.random() < 0.5) {
-        setTimeout(resolve, 1000);
-      } else {
-        setTimeout(() => reject('(Test error message) Some error occured, please try again'), 1000);
-      }
+    if (Math.random() < 0.5) {
+      setTimeout(resolve, 1000);
+    } else {
+      setTimeout(() => reject('(Test error message) Some error occured, please try again'), 1000);
+    }
   });
 }
 
 export default function Comments(props: CommentsProps) {
   const { comments, commentsBeingEditedRef, APIRef, commentEditChangeEE } = props;
   // Errors are local.
-  const [errorMsgs, setErrorMsgs] = React.useState({} as {[id: string]: string});
+  const [errorMsgs, setErrorMsgs] = React.useState({} as { [id: string]: string });
+  const errorMsgsRef = React.useRef(errorMsgs);
+  errorMsgsRef.current = errorMsgs;
+
+  // Determines if a messsage is being sent to server. For spinner.
+  const [loadingStatus, setLoadingStatus] = React.useState({} as { [id: string]: boolean });
+  const loadingStatusRef = React.useRef(loadingStatus);
+  loadingStatusRef.current = loadingStatus;
 
   const {
     updateComment,
@@ -179,7 +188,12 @@ export default function Comments(props: CommentsProps) {
         datetime: Date.now()
       };
 
-      // TODO: feedback to user first
+      // This is to give a spinner to the users.
+      setLoadingStatus({
+        ...loadingStatus,
+        [comment.id]: true
+      });
+
       try {
         await sendToServer(newComment); // TODO: STUB FUNCTION, PLEASE UPDATE.
         updateComment(newComment);
@@ -187,9 +201,12 @@ export default function Comments(props: CommentsProps) {
         setErrorMsgs(omit(errorMsgs, [comment.id]));
       } catch (e) {
         setErrorMsgs({
-            ...errorMsgs,
-            [comment.id]: e,
+          ...errorMsgsRef.current,
+          [comment.id]: e
         });
+      } finally {
+        // Pop quiz: why do we need to ref.current?
+        setLoadingStatus(omit(loadingStatusRef.current, [comment.id]));
       }
     };
   }
@@ -209,8 +226,8 @@ export default function Comments(props: CommentsProps) {
         setErrorMsgs(omit(errorMsgs, [comment.id]));
       } catch (e) {
         setErrorMsgs({
-            ...errorMsgs,
-            [comment.id]: e,
+          ...errorMsgsRef.current,
+          [comment.id]: e
         });
       }
     };
@@ -249,6 +266,7 @@ export default function Comments(props: CommentsProps) {
       {comments.map(comment => {
         const { id, isCollapsed } = comment; // Only the main comment is collapsed.
         const error = errorMsgs[id] || '';
+        const isLoading = loadingStatus[id] || false;
         const displayComment = commentsBeingEdited[id] ? commentsBeingEdited[id] : comment;
         const { profilePic, username, text, datetime } = displayComment;
         const isEditing: boolean = !!commentsBeingEdited[id];
@@ -300,7 +318,9 @@ export default function Comments(props: CommentsProps) {
                 {isUnsubmittedComment(comment) ? 'Preview' : format(new Date(datetime))}
               </span>
               <Markdown className="text" content={text || '(Content preview)'} />
-              <div className="error-text" style={errorTextStyles}>{error}</div>
+              <div className="error-text" style={errorTextStyles}>
+                {error}
+              </div>
             </div>
             {isEditing ? (
               <div className="reply-container" style={replyContainerStyles}>
@@ -315,10 +335,20 @@ export default function Comments(props: CommentsProps) {
                   <Button
                     intent="success"
                     onClick={confirmSubmit(displayComment)}
-                    disabled={text.trim().length === 0}
+                    disabled={text.trim().length === 0 || isLoading}
                   >
                     Submit
                   </Button>
+                  {
+                    // Technically not part of button group, by why not?
+                    isLoading ? (
+                      <div style={{ paddingTop: '0.3em', paddingLeft: '1em' }}>
+                        <Spinner size={Spinner.SIZE_SMALL}></Spinner>
+                      </div>
+                    ) : (
+                      ''
+                    )
+                  }
                 </ButtonGroup>
               </div>
             ) : (
