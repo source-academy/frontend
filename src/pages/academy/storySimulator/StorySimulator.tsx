@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Button } from '@blueprintjs/core';
 
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
@@ -10,10 +11,9 @@ import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoader';
-import AssetViewer from './subcomponents/StorySimulatorAssetViewer';
+import StorySimulatorAssetViewer from './subcomponents/StorySimulatorAssetViewer';
 import { gameTxtStorageName } from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 import { fetchAssetPaths } from 'src/features/storySimulator/StorySimulatorService';
-import { Button } from '@blueprintjs/core';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -79,7 +79,7 @@ function StorySimulator() {
           {storySimState === 'objectPlacement' && (
             <>
               <h3>Asset Viewer</h3>
-              <AssetViewer assetPath={currentAsset} />
+              <StorySimulatorAssetViewer assetPath={currentAsset} />
               <h3>Asset Selection</h3>
               <StorySimulatorAssetSelection
                 assetPaths={assetPaths}
@@ -92,7 +92,7 @@ function StorySimulator() {
           {storySimState === 'assetUploader' && (
             <>
               <h3>Asset uploader</h3>
-              <AssetViewer assetPath={currentAsset} />
+              <StorySimulatorAssetViewer assetPath={currentAsset} />
               <StorySimulatorAssetFileUploader accessToken={accessToken} />
               <StorySimulatorAssetSelection
                 assetPaths={assetPaths}

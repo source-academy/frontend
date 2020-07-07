@@ -28,7 +28,7 @@ function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset, accessToken
   }, [accessToken, assetPaths, fetchToggle]);
 
   const handleNodeClick = React.useCallback(
-    (nodeData: ITreeNode, levels: number[]) => {
+    (nodeData: ITreeNode) => {
       treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
       nodeData.isSelected = !nodeData.isSelected;
       nodeData.isExpanded = !nodeData.isExpanded;
@@ -69,6 +69,8 @@ function pathToObj(assetPaths: string[]): object {
     if (Array.isArray(oldfilesInFolder) || !oldfilesInFolder) {
       const newFilesInFolder = oldfilesInFolder ? [...oldfilesInFolder, file] : [file];
       _.set(assetObj, assetPathList, newFilesInFolder);
+    } else {
+      assetPathList && file && _.set(assetObj, [...assetPathList, file], 'FILE');
     }
   });
   s3AssetFolders.forEach(folder => !assetObj[folder] && (assetObj[folder] = []));
@@ -82,31 +84,37 @@ const deleteFile = (filePath: string, accessToken: string) => async () => {
   alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
 };
 
+function createFileNode(id: number, parentFolders: string[], file: string, accessToken: string) {
+  const shortPath = '/' + parentFolders.join('/') + '/' + file;
+  return {
+    id,
+    label: file,
+    shortPath,
+    secondaryLabel: (
+      <Tooltip content="Delete">
+        <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
+      </Tooltip>
+    )
+  };
+}
+
 function listToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
   let assetCounter = 0;
   const assetObj = pathToObj(assetPaths);
   function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
     if (Array.isArray(assetObj)) {
-      return assetObj.map(asset => {
-        const shortPath = '/' + parentFolders.join('/') + '/' + asset;
-        return {
-          id: assetCounter++,
-          label: asset,
-          shortPath,
-          secondaryLabel: (
-            <Tooltip content="Delete">
-              <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
-            </Tooltip>
-          )
-        };
-      });
+      return assetObj.map(asset =>
+        createFileNode(assetCounter++, parentFolders, asset, accessToken)
+      );
     }
     return Object.keys(assetObj).map(key => {
-      return {
-        id: assetCounter++,
-        label: key,
-        childNodes: helper([...parentFolders, key], assetObj[key])
-      };
+      return assetObj[key] === 'FILE'
+        ? createFileNode(assetCounter++, parentFolders, key, accessToken)
+        : {
+            id: assetCounter++,
+            label: key,
+            childNodes: helper([...parentFolders, key], assetObj[key])
+          };
     });
   }
   return helper([], assetObj);
