@@ -28,7 +28,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public async create() {
-    await this.eval(`\npreload();`);
+    await this.eval(`preload();`);
 
     await Promise.all(
       Array.from(this.preload_map).map(async ([key, path]) => {
@@ -36,7 +36,7 @@ export default class RoomPreview extends Phaser.Scene {
       })
     );
 
-    await this.eval(`\ncreate();`);
+    await this.eval(`create();`);
     const backButton = new CommonBackButton(
       this,
       () => {

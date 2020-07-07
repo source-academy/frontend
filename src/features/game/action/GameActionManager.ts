@@ -330,16 +330,16 @@ class GameActionManager {
   //      Phases     //
   /////////////////////
 
-  public popPhase() {
-    this.getGameManager().phaseManager.popPhase();
+  public async popPhase() {
+    await this.getGameManager().phaseManager.popPhase();
   }
 
-  public pushPhase(gamePhaseType: GamePhaseType) {
-    this.getGameManager().phaseManager.pushPhase(gamePhaseType);
+  public async pushPhase(gamePhaseType: GamePhaseType) {
+    await this.getGameManager().phaseManager.pushPhase(gamePhaseType);
   }
 
-  public swapPhase(gamePhaseType: GamePhaseType) {
-    this.getGameManager().phaseManager.swapPhase(gamePhaseType);
+  public async swapPhase(gamePhaseType: GamePhaseType) {
+    await this.getGameManager().phaseManager.swapPhase(gamePhaseType);
   }
 
   public isCurrentPhase(gamePhaseType: GamePhaseType) {
