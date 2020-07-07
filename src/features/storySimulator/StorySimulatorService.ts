@@ -1,6 +1,6 @@
 import Constants from 'src/commons/utils/Constants';
 
-export const s3AssetFolders = ['locations', 'objects', 'images', 'avatars', 'ui'];
+export const s3AssetFolders = ['locations', 'objects', 'images', 'avatars', 'ui', 'sfx', 'bgm'];
 
 export async function fetchAssetPaths(accessToken: string) {
   const files = await Promise.all(

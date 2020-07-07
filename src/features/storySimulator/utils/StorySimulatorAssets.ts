@@ -1,77 +1,76 @@
 import { ImageAsset } from '../../game/commons/CommonsTypes';
 
-export const studentRoomImg: ImageAsset = {
+export const storySimBg: ImageAsset = {
   key: 'student-room',
-  path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/deathCube_ext/shields-down.png'
+  path: '/locations/deathCube_ext/shields-down.png'
 };
 
 export const mainMenuOptBanner: ImageAsset = {
   key: 'menu-option',
-  path: '../assets/menuOption.png'
+  path: '/ui/menuOption.png'
 };
 
 export const shortButton: ImageAsset = {
   key: 'short-button',
-  path: '../assets/shortButton.png'
+  path: '/ui/shortButton.png'
 };
 
 export const invertedButton: ImageAsset = {
   key: 'inverted-button',
-  path: '../assets/invertedColorButton.png'
+  path: '/ui/invertedColorButton.png'
 };
 
 export const blueUnderlay: ImageAsset = {
   key: 'blue-underlay',
-  path: '../assets/blueUnderlay.png'
+  path: '/ui/blueUnderlay.png'
 };
 
 export const topButton: ImageAsset = {
   key: 'top-button',
-  path: '../assets/topButton.png'
+  path: '/ui/topButton.png'
 };
 
 export const colorIcon: ImageAsset = {
   key: 'color-icon',
-  path: '../assets/colorIcon.png'
+  path: '/ui/colorIcon.png'
 };
 
 export const imageIcon: ImageAsset = {
   key: 'image-icon',
-  path: '../assets/imageIcon.png'
+  path: '/ui/imageIcon.png'
 };
 
 export const bboxIcon: ImageAsset = {
   key: 'bbox-icon',
-  path: '../assets/bboxIcon.png'
+  path: '/ui/bboxIcon.png'
 };
 
 export const handIcon: ImageAsset = {
   key: 'hand-icon',
-  path: '../assets/handIcon.png'
+  path: '/ui/handIcon.png'
 };
 
 export const listIcon: ImageAsset = {
   key: 'list-icon',
-  path: '../assets/listIcon.png'
+  path: '/ui/listIcon.png'
 };
 
 export const eraseIcon: ImageAsset = {
   key: 'erase-icon',
-  path: '../assets/eraserIcon.png'
+  path: '/ui/eraserIcon.png'
 };
 export const iconBg: ImageAsset = {
   key: 'icon-bg',
-  path: '../assets/modeIconBg.png'
+  path: '/ui/modeIconBg.png'
 };
 
 export const longButton: ImageAsset = {
   key: 'long-button',
-  path: '../assets/longButton.png'
+  path: '/ui/longButton.png'
 };
 
 const storySimulatorAssets = [
-  studentRoomImg,
+  storySimBg,
   mainMenuOptBanner,
   shortButton,
   invertedButton,

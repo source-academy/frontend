@@ -29,8 +29,6 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
-import commonAssets from '../../commons/CommonAssets';
-import { convertPathToS3 } from '../../utils/GameUtils';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -155,7 +153,6 @@ class GameManager extends Phaser.Scene {
     this.bindEscapeMenu();
 
     addLoadingScreen(this);
-    this.preloadBaseAssets();
     this.preloadLocationsAssets(this.currentCheckpoint);
   }
 
@@ -174,12 +171,6 @@ class GameManager extends Phaser.Scene {
     } else {
       throw new Error('Mismatch of roles');
     }
-  }
-
-  private preloadBaseAssets() {
-    commonAssets.forEach(({ key, path }) => {
-      this.load.image(key, convertPathToS3(path));
-    });
   }
 
   private preloadLocationsAssets(chapter: GameCheckpoint) {

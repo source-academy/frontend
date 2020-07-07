@@ -1,6 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import storySimulatorAssets, {
-  studentRoomImg,
+  storySimBg,
   invertedButton,
   blueUnderlay
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
@@ -16,7 +16,7 @@ import {
   gameTxtStorageName
 } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
-import { convertPathToS3 } from 'src/features/game/utils/GameUtils';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -31,7 +31,7 @@ class MainMenu extends Phaser.Scene {
 
   public async preload() {
     storySimulatorAssets.forEach((asset: ImageAsset) =>
-      this.load.image(asset.key, convertPathToS3(asset.path))
+      this.load.image(asset.key, toS3Path(asset.path))
     );
   }
 
@@ -145,7 +145,7 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      studentRoomImg.key
+      storySimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(

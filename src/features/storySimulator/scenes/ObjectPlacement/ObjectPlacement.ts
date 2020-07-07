@@ -1,8 +1,8 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import storySimulatorAssets, {
-  studentRoomImg,
+import {
+  storySimBg,
   colorIcon,
   imageIcon,
   bboxIcon,
@@ -10,7 +10,7 @@ import storySimulatorAssets, {
   listIcon,
   eraseIcon
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
-import { ImageAsset, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
 import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
@@ -22,7 +22,6 @@ import SSLogManager from '../../logger/SSLogManager';
 import SSTransformManager from '../../transform/SSTransformManager';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import GameInputManager from 'src/features/game/input/GameInputManager';
-import { convertPathToS3 } from 'src/features/game/utils/GameUtils';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -67,12 +66,6 @@ export default class ObjectPlacement extends Phaser.Scene {
     this.cursorModes = undefined;
     this.itemIdNumber = 0;
     this.assetMap = new Map<AssetKey, AssetPath>();
-  }
-
-  public async preload() {
-    storySimulatorAssets.forEach((asset: ImageAsset) =>
-      this.load.image(asset.key, convertPathToS3(asset.path))
-    );
   }
 
   public create() {
@@ -128,7 +121,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      studentRoomImg.key
+      storySimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 

@@ -19,7 +19,7 @@ import commonSoundAssets, {
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
-import { convertPathToS3, toS3Path } from '../../utils/GameUtils';
+import { toS3Path } from '../../utils/GameUtils';
 import commonAssets from '../../commons/CommonAssets';
 import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
 import { settingsAssets } from '../settings/SettingsAssets';
@@ -55,14 +55,12 @@ class MainMenu extends Phaser.Scene {
     this.renderOptionButtons();
 
     const fullSaveState = await loadData(accountInfo);
-    this.soundManager.playBgMusic(
-      galacticHarmonyBgMusic.key,
-      fullSaveState.userState && fullSaveState.userState.settings.volume
-    );
+    const volume = fullSaveState.userState ? fullSaveState.userState.settings.volume : 1;
+    this.soundManager.playBgMusic(galacticHarmonyBgMusic.key, volume);
   }
 
   private preloadAssets() {
-    commonAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
+    commonAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     mainMenuAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     chapterSelectAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
