@@ -15,6 +15,9 @@ function Game() {
 
   React.useEffect(() => {
     createSourceAcademyGame();
+    return () => {
+      getSourceAcademyGame().stopAllSounds();
+    };
   }, []);
 
   React.useEffect(() => {
