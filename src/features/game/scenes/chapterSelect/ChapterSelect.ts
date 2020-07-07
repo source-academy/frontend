@@ -3,7 +3,6 @@ import { limitNumber, sleep } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import {
-  chapterSelectAssets,
   chapterSelectBackground,
   chapterSelectBorder,
   chapterSelectArrow
@@ -78,7 +77,6 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    chapterSelectAssets.forEach(asset => this.load.image(asset.key, asset.path));
     this.chapterDetails.forEach((chapter, index) => {
       this.load.image(`chapterImage${index}`, chapter.previewBgPath);
     });

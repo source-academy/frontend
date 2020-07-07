@@ -3,33 +3,32 @@ import { topButton } from '../../commons/CommonAssets';
 
 export const chapterSelectBackground: ImageAsset = {
   key: 'chapter-select-bg',
-  path:
-    'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets/locations/yourRoom-dim/normal.png'
+  path: '/locations/yourRoom-dim/normal.png'
 };
 
 export const chapterRepeatButton: ImageAsset = {
   key: 'chapter-repeat',
-  path: '../assets/chapterRepeat.png'
+  path: '/ui/chapterRepeat.png'
 };
 
 export const chapterContinueButton: ImageAsset = {
   key: 'chapter-continue',
-  path: '../assets/chapterContinue.png'
+  path: '/ui/chapterContinue.png'
 };
 
 export const chapterSelectFrame: ImageAsset = {
   key: 'chapter-select-frame',
-  path: '../assets/chapterSelectionFrame.png'
+  path: '/ui/chapterSelectionFrame.png'
 };
 
 export const chapterSelectBorder: ImageAsset = {
   key: 'chapter-select-border',
-  path: '../assets/chapterSelectionBorder.png'
+  path: '/ui/chapterSelectionBorder.png'
 };
 
 export const chapterSelectArrow: ImageAsset = {
   key: 'chapteer-select-arrow',
-  path: '../assets/chapSelectArrow.png'
+  path: '/ui/chapSelectArrow.png'
 };
 
 export const chapterSelectAssets = [

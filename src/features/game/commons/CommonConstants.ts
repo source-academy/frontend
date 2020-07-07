@@ -5,7 +5,14 @@ export const Constants = {
   nullFunction: () => {},
   nullInteractionId: '',
   popupDuration: 1000,
-  defaultAssetPath: '/UI/wristDeviceButton.png'
+  defaultAssetPath: '/UI/wristDeviceButton.png',
+  s3AssetFolders: {
+    locations: 'locations',
+    objects: 'objects',
+    images: 'images',
+    avatars: 'avatars',
+    ui: 'ui'
+  }
 };
 
 export const screenSize = {

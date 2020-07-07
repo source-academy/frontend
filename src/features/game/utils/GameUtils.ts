@@ -34,3 +34,7 @@ export function convertPathToS3(localFileName: string) {
     return localFileName;
   }
 }
+
+export function toS3Path(fileName: string) {
+  return Constants.assetsFolder + fileName;
+}

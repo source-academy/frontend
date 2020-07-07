@@ -1,9 +1,13 @@
-import { studentRoomImg } from '../../location/GameMapConstants';
 import { ImageAsset } from '../../commons/CommonsTypes';
+
+export const mainMenuBackground: ImageAsset = {
+  key: 'main-menu-bg',
+  path: '/locations/yourRoom-dim/normal.png'
+};
 
 export const mainMenuOptBanner: ImageAsset = {
   key: 'menu-option',
-  path: '../assets/menuOption.png'
+  path: '/ui/menuOption.png'
 };
 
-export const mainMenuAssets = [studentRoomImg, mainMenuOptBanner];
+export const mainMenuAssets = [mainMenuBackground, mainMenuOptBanner];

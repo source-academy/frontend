@@ -1,22 +1,18 @@
-import { studentRoomImg } from '../../location/GameMapConstants';
-import { topButton, mediumBox, mediumButton } from '../../commons/CommonAssets';
 import { ImageAsset } from '../../commons/CommonsTypes';
 
-export const settingBg: ImageAsset = {
+export const settingBackground: ImageAsset = {
+  key: 'setting-bg',
+  path: '/locations/yourRoom-dim/normal.png'
+};
+
+export const settingBanner: ImageAsset = {
   key: 'settings-bg',
-  path: '../assets/settingsBg.png'
+  path: '/ui/settingsBg.png'
 };
 
 export const settingOption: ImageAsset = {
   key: 'settings-opt',
-  path: '../assets/settingsOption.png'
+  path: '/ui/settingsOption.png'
 };
 
-export const settingsAssets = [
-  studentRoomImg,
-  topButton,
-  mediumBox,
-  mediumButton,
-  settingBg,
-  settingOption
-];
+export const settingsAssets = [settingBackground, settingBanner, settingOption];

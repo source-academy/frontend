@@ -1,5 +1,4 @@
-import { mainMenuAssets, mainMenuOptBanner } from './MainMenuAssets';
-import { studentRoomImg } from '../../location/GameMapConstants';
+import { mainMenuAssets, mainMenuOptBanner, mainMenuBackground } from './MainMenuAssets';
 import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -20,7 +19,10 @@ import commonSoundAssets, {
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
-import { convertPathToS3 } from '../../utils/GameUtils';
+import { convertPathToS3, toS3Path } from '../../utils/GameUtils';
+import commonAssets from '../../commons/CommonAssets';
+import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
+import { settingsAssets } from '../settings/SettingsAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -60,7 +62,10 @@ class MainMenu extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    mainMenuAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
+    commonAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
+    mainMenuAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    chapterSelectAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
   }
 
   private renderBackground() {
@@ -68,7 +73,7 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      studentRoomImg.key
+      mainMenuBackground.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 

@@ -1,9 +1,8 @@
 import RadioButtons from '../../commons/CommonRadioButtons';
 import GameLayerManager from '../../layer/GameLayerManager';
-import { studentRoomImg } from '../../location/GameMapConstants';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
-import { settingsAssets, settingBg, settingOption } from './SettingsAssets';
+import { settingsAssets, settingBanner, settingOption, settingBackground } from './SettingsAssets';
 import {
   volumeContainerOptions,
   optionTextStyle,
@@ -27,7 +26,7 @@ import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
-import { convertPathToS3 } from '../../utils/GameUtils';
+import { toS3Path } from '../../utils/GameUtils';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -58,7 +57,7 @@ class Settings extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    settingsAssets.forEach(asset => this.load.image(asset.key, convertPathToS3(asset.path)));
+    settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
   }
 
   private renderBackground() {
@@ -66,14 +65,14 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      studentRoomImg.key
+      settingBackground.key
     );
 
     const settingBgImg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      settingBg.key
+      settingBanner.key
     );
     this.layerManager.addToLayer(Layer.Background, background);
     this.layerManager.addToLayer(Layer.Background, settingBgImg);
