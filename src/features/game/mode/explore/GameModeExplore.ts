@@ -74,7 +74,6 @@ class GameModeExplore implements IGameUI {
   public async deactivateUI(): Promise<void> {
     const gameManager = GameActionManager.getInstance().getGameManager();
     gameManager.input.setDefaultCursor('');
-    console.log('Deactivating explore mode');
     GameActionManager.getInstance().disableBBoxAction();
     GameActionManager.getInstance().disableObjectAction();
 

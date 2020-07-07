@@ -45,7 +45,6 @@ export default class GamePhaseManager {
     if (_.isEqual(this.phaseStack, [GamePhaseType.Menu])) {
       GameActionManager.getInstance().getGameManager().checkpointTransition();
     }
-    console.log(this.phaseStack);
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {

@@ -31,7 +31,10 @@ export default class SpeakerParser {
       throw new Error(`Character "${charId}" not in map`);
     }
 
-    character.expressions.set(expression, CharacterParser.characterAssetKey(charId, expression));
+    character.expressions.set(
+      expression,
+      CharacterParser.characterAssetKey(charId, expression || character.defaultExpression)
+    );
 
     Parser.checkpoint.map.addMapAsset(
       CharacterParser.characterAssetKey(charId, expression),
