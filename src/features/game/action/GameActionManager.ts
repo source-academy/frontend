@@ -50,6 +50,10 @@ class GameActionManager {
     return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
   }
 
+  public isStorySimulator() {
+    return this.getGameManager().isStorySimulator;
+  }
+
   public checkpointTransition() {
     this.getGameManager().checkpointTransition();
   }
@@ -198,8 +202,8 @@ class GameActionManager {
     this.getGameManager().userStateManager.addToList(listName, id);
   }
 
-  public existsInUserStateList(listName: string, id: string): boolean {
-    return this.getGameManager().userStateManager.doesIdExistInList(listName, id);
+  public async existsInUserStateList(listName: string, id: string): Promise<boolean> {
+    return await this.getGameManager().userStateManager.doesIdExistInList(listName, id);
   }
 
   /////////////////////

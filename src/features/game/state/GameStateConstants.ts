@@ -5,5 +5,5 @@ export const SampleUserState = {
 
 export const emptyUserState = {
   collectibles: [],
-  achievements: []
+  assessments: []
 };

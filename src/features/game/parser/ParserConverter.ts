@@ -85,7 +85,7 @@ export default class ParserConverter {
   public static stringToGameStateStorage(str: string) {
     const result = stringToGameStateStorageMap[str];
     if (!result) {
-      throw new Error(`Invalid action type, ${str}`);
+      throw new Error(`Invalid condition type, ${str}`);
     }
     return result;
   }

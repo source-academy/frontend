@@ -185,6 +185,7 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
+    await this.userStateManager.loadAssessments();
     this.changeLocationTo(this.currentLocationId);
     await GameActionManager.getInstance().saveGame();
   }
@@ -245,7 +246,7 @@ class GameManager extends Phaser.Scene {
   public async checkpointTransition() {
     if (GameActionManager.getInstance().isAllComplete()) {
       this.cleanUp();
-      if (GameActionManager.getInstance().getGameManager().isStorySimulator) {
+      if (GameActionManager.getInstance().isStorySimulator()) {
         this.scene.start('StorySimulatorMenu');
       } else {
         this.scene.start('CheckpointTransition');

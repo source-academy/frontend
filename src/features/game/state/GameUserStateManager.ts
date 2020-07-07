@@ -1,6 +1,14 @@
 import { UserState } from './GameStateTypes';
 import { emptyUserState } from './GameStateConstants';
 import GameManager from '../scenes/gameManager/GameManager';
+import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import GameActionManager from '../action/GameActionManager';
+import { createButton } from '../utils/StyleUtils';
+import { shortButton, longButton } from '../commons/CommonAssets';
+import { screenCenter, Constants } from '../commons/CommonConstants';
+import { Layer } from '../layer/GameLayerTypes';
+import { mainMenuStyle } from '../scenes/mainMenu/MainMenuConstants';
 
 export default class GameUserStateManager {
   private userState: UserState;
@@ -21,7 +29,60 @@ export default class GameUserStateManager {
     return this.userState[listName];
   }
 
-  public doesIdExistInList(listName: string, id: string): boolean {
+  public async doesIdExistInList(listName: string, id: string): Promise<boolean> {
+    if (listName === 'assessments' && GameActionManager.getInstance().isStorySimulator()) {
+      return this.askAssessmentComplete(id);
+    }
     return this.userState[listName].includes(id);
+  }
+
+  public async askAssessmentComplete(assessmentId: string): Promise<boolean> {
+    const gameManager = GameActionManager.getInstance().getGameManager();
+    const assessmentCheckContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+    GameActionManager.getInstance().addContainerToLayer(Layer.UI, assessmentCheckContainer);
+
+    const activateAssessmentContainer: Promise<boolean> = new Promise(resolve => {
+      assessmentCheckContainer.add(
+        createButton(
+          gameManager,
+          `Assessment#${assessmentId} completed?`,
+          Constants.nullFunction,
+          longButton.key,
+          { x: screenCenter.x, y: 100 },
+          0.5,
+          0.4,
+          mainMenuStyle
+        )
+      );
+      assessmentCheckContainer.add(
+        ['Yes', 'No'].map((response, index) =>
+          createButton(
+            gameManager,
+            response,
+            () => {
+              assessmentCheckContainer.destroy();
+              resolve(response === 'Yes');
+            },
+            shortButton.key,
+            { x: screenCenter.x, y: index * 200 + 400 },
+            0.5,
+            0.4,
+            mainMenuStyle
+          )
+        )
+      );
+    });
+    const response = await activateAssessmentContainer;
+    return response;
+  }
+
+  public async loadAssessments() {
+    if (GameActionManager.getInstance().isStorySimulator()) {
+      return;
+    }
+    const assessments = await getAssessmentOverviews(getSourceAcademyGame().getAccountInfo());
+    this.userState.assessments = assessments
+      ?.filter(assessment => assessment.status === 'submitted')
+      .map(assessment => assessment.id.toString());
   }
 }

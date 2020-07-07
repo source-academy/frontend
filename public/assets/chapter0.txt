@@ -11,7 +11,8 @@ room
         card, /ui/card.mp3, 0.5
     
     actions
-        show_dialogue(welcome)
+        show_dialogue*(unwelcome) if !userstate.assessments.301
+        show_dialogue(welcome) if userstate.assessments.301
 
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
@@ -53,6 +54,10 @@ dialogues
         Welcome to Source Academy!
 
         I'm glad you took the time to come in
+
+    unwelcome
+        @scottie, sad
+        Finish assessment 301 first and come back?
 
     what, What should I do now, Scottie?
         @you

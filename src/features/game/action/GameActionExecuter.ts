@@ -17,9 +17,13 @@ export default class GameActionExecuter {
       const { actionType, actionParams, actionConditions, repeatable } = this.getActionFromId(
         actionId
       );
+      const conditionsFulFilled = await Promise.all(
+        actionConditions.map(async actionCondition => await this.checkCondition(actionCondition))
+      );
+      const allConditionsFulFilled = conditionsFulFilled.every(condition => condition === true);
       if (
         (repeatable || !GameActionManager.getInstance().hasTriggeredInteraction(actionId)) &&
-        actionConditions.every(actionCondition => this.checkCondition(actionCondition))
+        allConditionsFulFilled
       ) {
         await this.executeStoryAction(actionType, actionParams);
         GameActionManager.getInstance().triggerInteraction(actionId);
@@ -81,15 +85,15 @@ export default class GameActionExecuter {
     }
   }
 
-  private checkCondition(conditional: ActionCondition) {
+  private async checkCondition(conditional: ActionCondition) {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:
         return (
-          GameActionManager.getInstance().existsInUserStateList(
+          (await GameActionManager.getInstance().existsInUserStateList(
             conditionParams.listName,
             conditionParams.id
-          ) === boolean
+          )) === boolean
         );
       case GameStateStorage.ChecklistState:
         return GameActionManager.getInstance().isObjectiveComplete(conditionParams.id) === boolean;

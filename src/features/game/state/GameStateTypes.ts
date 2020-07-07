@@ -7,7 +7,7 @@ export enum GameStateStorage {
 
 export type UserState = {
   collectibles: string[];
-  achievements: string[];
+  assessments?: string[];
 };
 
 export type StateObserver = {

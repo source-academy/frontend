@@ -31,14 +31,16 @@ export default class SpeakerParser {
       throw new Error(`Character "${charId}" not in map`);
     }
 
+    const charExpression = expression || character.defaultExpression;
+
     character.expressions.set(
       expression,
-      CharacterParser.characterAssetKey(charId, expression || character.defaultExpression)
+      CharacterParser.characterAssetKey(charId, expression || charExpression)
     );
 
     Parser.checkpoint.map.addMapAsset(
-      CharacterParser.characterAssetKey(charId, expression),
-      CharacterParser.characterAssetValue(charId, expression)
+      CharacterParser.characterAssetKey(charId, charExpression),
+      CharacterParser.characterAssetValue(charId, charExpression)
     );
   }
 }

@@ -25,7 +25,7 @@ export interface IGameActionable {
 export type ActionCondition = {
   state: GameStateStorage;
   conditionParams: any;
-  boolean?: boolean;
+  boolean: boolean;
 };
 
 export type GameAction = TrackInteraction & {
