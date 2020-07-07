@@ -32,7 +32,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
-  const collectiveProgress = inferencer.getProgress(id);
+  const progressBar = inferencer.getProgressBar(id);
 
   const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
 
@@ -81,10 +81,7 @@ function AchievementCard(props: AchievementCardProps) {
         </div>
       </div>
 
-      <AchievementProgressBar
-        progress={collectiveProgress}
-        shouldAnimate={!shouldPartiallyRender}
-      />
+      <AchievementProgressBar progress={progressBar} shouldAnimate={!shouldPartiallyRender} />
     </Card>
   );
 }

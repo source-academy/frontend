@@ -23,7 +23,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
 
   const totalExp = inferencer.getTotalExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
-  const collectiveProgress = inferencer.getProgress(id);
+  const progressBar = inferencer.getProgressBar(id);
 
   return (
     <div className="node">
@@ -66,10 +66,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           </div>
         </div>
 
-        <AchievementProgressBar
-          progress={collectiveProgress}
-          shouldAnimate={!shouldPartiallyRender}
-        />
+        <AchievementProgressBar progress={progressBar} shouldAnimate={!shouldPartiallyRender} />
       </Card>
     </div>
   );

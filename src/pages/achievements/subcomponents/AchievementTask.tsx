@@ -63,8 +63,9 @@ function AchievementTask(props: AchievementTaskProps) {
   return (
     <>
       {shouldRenderTask(id) ? (
-        <li key={id}>
+        <li>
           <AchievementCard
+            key={id}
             id={id}
             inferencer={inferencer}
             shouldPartiallyRender={!shouldRender(id)}
@@ -76,20 +77,18 @@ function AchievementTask(props: AchievementTaskProps) {
           {isDropdownOpen ? (
             <>
               {inferencer.listImmediateChildren(id).map(prerequisite => (
-                <div>
-                  <PrerequisiteCard
-                    key={id}
-                    id={prerequisite}
-                    inferencer={inferencer}
-                    shouldPartiallyRender={!shouldRender(prerequisite)}
-                    displayModal={displayModal}
-                    handleGlow={handleGlow}
-                    isLast={
-                      inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
-                      inferencer.listImmediateChildren(id).length - 1
-                    }
-                  />
-                </div>
+                <PrerequisiteCard
+                  key={prerequisite}
+                  id={prerequisite}
+                  inferencer={inferencer}
+                  shouldPartiallyRender={!shouldRender(prerequisite)}
+                  displayModal={displayModal}
+                  handleGlow={handleGlow}
+                  isLast={
+                    inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
+                    inferencer.listImmediateChildren(id).length - 1
+                  }
+                />
               ))}
             </>
           ) : null}
