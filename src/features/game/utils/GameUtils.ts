@@ -27,14 +27,6 @@ export function createMapWithKey<K, V>(list: any[], id: string) {
   return newMap;
 }
 
-export function convertPathToS3(localFileName: string) {
-  if (localFileName.startsWith('../assets')) {
-    return Constants.assetsFolder + '/ui' + localFileName.slice(9); // remove "../assets"
-  } else {
-    return localFileName;
-  }
-}
-
 export function toS3Path(fileName: string) {
   return Constants.assetsFolder + fileName;
 }
