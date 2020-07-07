@@ -13,7 +13,7 @@ import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import CheckpointTxtLoader from './subcomponents/StorySimulatorCheckpointTxtLoader';
 import StorySimulatorAssetViewer from './subcomponents/StorySimulatorAssetViewer';
 import { gameTxtStorageName } from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
-import { fetchAssetPaths } from 'src/features/storySimulator/StorySimulatorService';
+import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -23,6 +23,8 @@ function StorySimulator() {
 
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
   const [currentAsset, setCurrentAsset] = React.useState<string>('');
+
+  const [checkpointPaths, setCheckpointPaths] = React.useState<string[]>([]);
 
   const [storySimState, setStorySimState] = React.useState<string>('upload');
 
@@ -46,13 +48,17 @@ function StorySimulator() {
         setFetchToggle(!fetchToggle);
         return;
       }
-      const paths = await fetchAssetPaths(accessToken);
-      if (!paths) {
+      const paths = await fetchAssetPaths(accessToken, s3AssetFolders);
+      const checkpointPaths = await fetchAssetPaths(accessToken, ['stories']);
+      if (!paths || !checkpointPaths) {
         setFetchToggle(!fetchToggle);
       }
       setAssetPaths(paths);
+      setCheckpointPaths(checkpointPaths);
     })();
   }, [accessToken, fetchToggle]);
+
+  const noop = React.useCallback(() => {}, []);
 
   return (
     <>
@@ -66,14 +72,23 @@ function StorySimulator() {
               <CheckpointTxtLoader
                 title={'Default Chapter'}
                 storageName={gameTxtStorageName.defaultChapter}
+                accessToken={accessToken}
               />
               <br />
               <CheckpointTxtLoader
                 title={'Checkpoint text file'}
                 storageName={gameTxtStorageName.checkpointTxt}
+                accessToken={accessToken}
               />
               <br />
               <Button onClick={clearSessionStorage}>Clear Browser Files</Button>
+              <h3>Asset Manager</h3>
+              <StorySimulatorAssetSelection
+                assetPaths={checkpointPaths}
+                folders={['stories']}
+                setCurrentAsset={noop}
+                accessToken={accessToken}
+              />
             </>
           )}
           {storySimState === 'objectPlacement' && (
@@ -82,6 +97,7 @@ function StorySimulator() {
               <StorySimulatorAssetViewer assetPath={currentAsset} />
               <h3>Asset Selection</h3>
               <StorySimulatorAssetSelection
+                folders={s3AssetFolders}
                 assetPaths={assetPaths}
                 setCurrentAsset={setCurrentAsset}
                 accessToken={accessToken}
@@ -95,6 +111,7 @@ function StorySimulator() {
               <StorySimulatorAssetViewer assetPath={currentAsset} />
               <StorySimulatorAssetFileUploader accessToken={accessToken} />
               <StorySimulatorAssetSelection
+                folders={s3AssetFolders}
                 assetPaths={assetPaths}
                 setCurrentAsset={setCurrentAsset}
                 accessToken={accessToken}

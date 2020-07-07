@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ITreeNode, Tree, Tooltip, Icon } from '@blueprintjs/core';
 import * as _ from 'lodash';
-import { s3AssetFolders, deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
+import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
 
 type TreeState = {
   nodes: ITreeNode[];
@@ -11,17 +11,23 @@ type Props = {
   assetPaths: string[];
   setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
   accessToken?: string;
+  folders: string[];
 };
 
-function StorySimulatorAssetSelection({ assetPaths, setCurrentAsset, accessToken }: Props) {
+function StorySimulatorAssetSelection({
+  assetPaths,
+  setCurrentAsset,
+  accessToken,
+  folders
+}: Props) {
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
     if (!accessToken) {
       return;
     }
-    setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken) });
-  }, [accessToken, assetPaths]);
+    setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken, folders) });
+  }, [accessToken, assetPaths, folders]);
 
   const handleNodeClick = React.useCallback(
     (nodeData: ITreeNode) => {
@@ -58,10 +64,14 @@ const deleteFile = (filePath: string, accessToken: string) => async () => {
   alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
 };
 
-function assetPathsToTree(assetPaths: string[], accessToken: string): ITreeNode[] {
+function assetPathsToTree(
+  assetPaths: string[],
+  accessToken: string,
+  folders: string[]
+): ITreeNode[] {
   const assetObj = {};
   assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
-  s3AssetFolders.forEach(folder => {
+  folders.forEach(folder => {
     if (!assetObj[folder] || assetObj[folder] === 'FILE') {
       assetObj[folder] = [];
     }

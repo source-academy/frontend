@@ -2,9 +2,9 @@ import { createAssetRequest } from './StorySimulatorRequest';
 
 export const s3AssetFolders = ['locations', 'objects', 'images', 'avatars', 'ui', 'sfx', 'bgm'];
 
-export async function fetchAssetPaths(accessToken: string) {
+export async function fetchAssetPaths(accessToken: string, folders: string[]) {
   const files = await Promise.all(
-    s3AssetFolders.map(async folderName => {
+    folders.map(async folderName => {
       const files = await fetchFolder(accessToken, folderName);
       return files.length ? files : [`${folderName}`];
     })
@@ -25,19 +25,30 @@ export async function deleteS3File(accessToken: string, assetPath: string) {
   return message || 'Successfully Deleted';
 }
 
-export async function uploadAssets(accessToken: string, fileList: FileList, folderName: string) {
+export async function uploadAssets(
+  accessToken: string,
+  fileList: FileList,
+  folderName: string,
+  types: string[]
+) {
   const responses = await Promise.all(
     Array.from(fileList).map(async file => {
-      const response = await uploadAsset(accessToken, file, folderName, file.name);
+      const response = await uploadAsset(accessToken, file, folderName, file.name, types);
       return file.name + ' => ' + response;
     })
   );
   return responses.join('\n');
 }
 
-async function uploadAsset(accessToken: string, file: Blob, folderName: string, fileName: string) {
-  if (!file.type.startsWith('image') && !file.type.startsWith('audio')) {
-    return 'Only images and audio allowed.';
+export async function uploadAsset(
+  accessToken: string,
+  file: Blob,
+  folderName: string,
+  fileName: string,
+  types: string[]
+) {
+  if (types.every(type => !file.type.startsWith(type))) {
+    return `Allowed types are ${types.join(',')}`;
   }
   const formData = new FormData();
   formData.set('upload', file);
