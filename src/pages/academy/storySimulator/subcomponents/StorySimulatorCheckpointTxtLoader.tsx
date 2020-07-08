@@ -29,37 +29,29 @@ function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Pro
 
   async function changeChosenFilename(e: any) {
     if (!e.target.innerHTML) return;
-
     const filename = e.target.innerHTML;
-
     setFilename('Loading');
     const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);
     const txt = await response.text();
-
     setFilename(filename);
     sessionStorage.setItem(storageName, txt);
   }
 
   const uploadButton = (
-    <div>
-      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
-    </div>
-  );
-
-  const s3DropDown = (
     <>
-      <Menu>
-        {textAssets.map(file => (
-          <MenuItem onClick={changeChosenFilename} id={file} key={file} text={file} />
-        ))}
-      </Menu>
+      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
     </>
   );
 
   const chooseS3Txt = (
     <>
-      <Popover content={s3DropDown} position={Position.BOTTOM}>
+      <Popover position={Position.BOTTOM}>
         <Button text={filename} />
+        <Menu>
+          {textAssets.map(file => (
+            <MenuItem onClick={changeChosenFilename} id={file} key={file} text={file} />
+          ))}
+        </Menu>
       </Popover>
     </>
   );

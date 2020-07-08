@@ -7,6 +7,9 @@ type Props = {
   accessToken?: string;
 };
 
+const specifyFolderText = 'Specify own folder...';
+const folderOverwritePlaceholder = "Or specify your own, e.g. 'locations/hallway'";
+
 function AssetFileUploader({ accessToken }: Props) {
   const [fileList, setFileList] = React.useState<FileList>();
   const [folder, setFolder] = React.useState<string>('locations');
@@ -43,37 +46,29 @@ function AssetFileUploader({ accessToken }: Props) {
     setShowFolderOverwrite(true);
   }
 
-  const folderDropDown = (
-    <>
-      <Menu>
-        {s3AssetFolders.map(folder => (
-          <MenuItem onClick={onChangeFolder} id={folder} key={folder} text={folder} />
-        ))}
-        <MenuItem
-          onClick={showSpecifyFolder}
-          id={'specify'}
-          key={'specify'}
-          text={'...Specify own folder'}
-        ></MenuItem>
-      </Menu>
-    </>
-  );
-
   return (
     <div className="LeftAlign">
       <h4>Choose Folder</h4>
-      <Popover content={folderDropDown} position={Position.BOTTOM}>
+      <Popover position={Position.BOTTOM}>
         <Button text={folder} />
+        <Menu>
+          {s3AssetFolders.map(folder => (
+            <MenuItem onClick={onChangeFolder} id={folder} key={folder} text={folder} />
+          ))}
+          <MenuItem
+            onClick={showSpecifyFolder}
+            id={specifyFolderText}
+            key={specifyFolderText}
+            text={specifyFolderText}
+          ></MenuItem>
+        </Menu>
       </Popover>
       {showfolderOverwrite && (
-        <InputGroup
-          placeholder="Or specify your own, e.g. 'locations/hallway'"
-          onChange={onChangeFolderOverwrite}
-        />
+        <InputGroup placeholder={folderOverwritePlaceholder} onChange={onChangeFolderOverwrite} />
       )}
       <br />
       <h4>Choose File</h4>
-      <input type="file" multiple id="id" onChange={onLoadFile} style={{ width: '250px' }} />
+      <input type="file" multiple onChange={onLoadFile} />
       <Button onClick={onUploadButtonClick}>Upload</Button>
     </div>
   );
