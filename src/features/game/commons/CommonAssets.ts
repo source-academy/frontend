@@ -2,7 +2,7 @@ import { ImageAsset } from './CommonTypes';
 
 export const defaultChapter: ImageAsset = {
   key: 'defaultChapter',
-  path: '../assets/defaultChapter.txt'
+  path: '../assets/defaultCheckpoint.txt'
 };
 
 export const shortButton: ImageAsset = {
