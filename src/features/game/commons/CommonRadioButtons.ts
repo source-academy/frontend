@@ -1,4 +1,4 @@
-import { GameButton } from './CommonTypes';
+import { GameButton, BitmapFontStyle } from './CommonTypes';
 import { screenSize, Constants } from './CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 
@@ -12,7 +12,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
   private choices: string[];
   private isChosen: boolean[];
   private radioButtons: GameButton[];
-  private style: any;
+  private style: BitmapFontStyle;
   private textAnchorX: number | undefined;
   private textAnchorY: number | undefined;
 
@@ -21,7 +21,7 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
     choices: string[],
     defaultChoiceIdx: number,
     maxWidth: number = screenSize.x,
-    style: any,
+    style: BitmapFontStyle,
     x?: number,
     y?: number,
     textAnchorX?: number,
@@ -95,15 +95,17 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         : button.assetYPos;
       const xAnchor = this.textAnchorX ? this.textAnchorX : 0.25;
       const yAnchor = this.textAnchorY ? this.textAnchorY : 0.5;
-      const textOption = new Phaser.GameObjects.Text(
+      const textOption = new Phaser.GameObjects.BitmapText(
         this.scene,
         xPos,
         yPos,
+        this.style.key,
         this.choices[i],
-        this.style
-      );
-      textOption.setOrigin(xAnchor, yAnchor);
-
+        this.style.size,
+        this.style.align
+      )
+        .setOrigin(xAnchor, yAnchor)
+        .setTintFill(this.style.fill);
       const optionChecked = new Phaser.GameObjects.Ellipse(
         this.scene,
         button.assetXPos,
@@ -113,7 +115,9 @@ class CommonRadioButtons extends Phaser.GameObjects.Container {
         HexColor.darkBlue
       );
       this.add([optionFrame, option]);
-      if (this.isChosen[i]) this.add([optionChecked, textOption]);
+      if (this.isChosen[i]) {
+        this.add([optionChecked, textOption]);
+      }
     }
   }
 

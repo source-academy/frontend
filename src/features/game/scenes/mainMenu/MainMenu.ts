@@ -6,7 +6,7 @@ import { GameButton } from '../../commons/CommonTypes';
 import {
   optionsText,
   mainMenuYSpace,
-  mainMenuBitmapStyle,
+  mainMenuStyle,
   textXOffset,
   bannerHide,
   onFocusOptTween,
@@ -191,7 +191,7 @@ class MainMenu extends Phaser.Scene {
     // Add the new button
     const newTalkButton: GameButton = {
       text: name,
-      bitmapStyle: mainMenuBitmapStyle,
+      bitmapStyle: mainMenuStyle,
       assetKey: mainMenuOptBanner.key,
       assetXPos: screenSize.x - textXOffset,
       assetYPos: newYPos + this.optionButtons.length * partitionSize,

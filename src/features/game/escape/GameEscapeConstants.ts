@@ -1,5 +1,7 @@
 import { screenSize } from '../commons/CommonConstants';
-import { Color } from '../utils/StyleUtils';
+import { Color, HexColor } from '../utils/StyleUtils';
+import { BitmapFontStyle } from '../commons/CommonTypes';
+import { zektonFont } from '../commons/CommonFontAssets';
 
 export const escapeOptButtonStyle = {
   fontFamily: 'Helvetica',
@@ -8,11 +10,11 @@ export const escapeOptButtonStyle = {
   align: 'center'
 };
 
-export const volumeRadioOptTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '15px',
-  fill: Color.lightBlue,
-  align: 'center'
+export const volumeRadioOptTextStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 15,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const optTextStyle = {

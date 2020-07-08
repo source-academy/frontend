@@ -19,13 +19,7 @@ export const textXOffset = 80;
 export const bannerHide = 300;
 export const bannerShow = 200;
 
-export const mainMenuStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '35px',
-  fill: '#abd4c6'
-};
-
-export const mainMenuBitmapStyle: BitmapFontStyle = {
+export const mainMenuStyle: BitmapFontStyle = {
   key: zektonFont.key,
   size: 30,
   fill: HexColor.lightBlue,
