@@ -4,6 +4,7 @@ import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { loadImage, loadSound } from 'src/features/storySimulator/utils/LoaderUtils';
+import { Constants } from '../../commons/CommonConstants';
 
 type RoomPreviewProps = {
   studentCode: string;
@@ -65,7 +66,8 @@ export default class RoomPreview extends Phaser.Scene {
       scene: this,
       phaser: Phaser,
       preloadImageMap: this.preloadImageMap,
-      preloadSoundMap: this.preloadSoundMap
+      preloadSoundMap: this.preloadSoundMap,
+      remotePath: Constants.assetsFolder
     });
     context.externalContext = 'playground';
     await runInContext(this.studentCode + append, context);
