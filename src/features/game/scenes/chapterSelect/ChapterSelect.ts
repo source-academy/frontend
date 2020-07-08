@@ -11,7 +11,8 @@ import {
   defaultScrollSpeed,
   maskRect,
   imageDist,
-  chapterArrowXOffset
+  chapterArrowXOffset,
+  offHoverAlpha
 } from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
@@ -21,6 +22,7 @@ import { GameChapter } from '../../chapter/GameChapterTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import { onHoverAlpha } from 'src/features/storySimulator/cursorMode/SSCursorModeConstants';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -149,14 +151,21 @@ class ChapterSelect extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, rightArrow);
   }
 
-  private setArrowFunctionality(arrow: Phaser.GameObjects.GameObject) {
+  private setArrowFunctionality(arrow: Phaser.GameObjects.Sprite) {
     const isLeft = arrow.data.get('dir') === 'left';
     const setScroll = isLeft
       ? (value: boolean) => (this.isScrollLeft = value)
       : (value: boolean) => (this.isScrollRight = value);
     arrow.setInteractive({ useHandCursor: true });
+    arrow.setAlpha(offHoverAlpha);
+    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
+      arrow.setAlpha(onHoverAlpha)
+    );
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => setScroll(true));
-    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => setScroll(false));
+    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+      setScroll(false);
+      arrow.setAlpha(offHoverAlpha);
+    });
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => setScroll(false));
   }
 

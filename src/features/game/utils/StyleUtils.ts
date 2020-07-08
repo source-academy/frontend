@@ -5,6 +5,7 @@ import { Constants } from '../commons/CommonConstants';
 export const Color = {
   navy: '#03092c',
   lightBlue: '#ece1fb',
+  offWhite: '#bbc1c9',
   white: '#ffffff',
   darkGrey: '#333333',
   lightGrey: '#555555',

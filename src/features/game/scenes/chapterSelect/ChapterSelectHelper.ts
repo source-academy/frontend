@@ -1,13 +1,15 @@
 import {
   imageRect,
-  chapterSelectStyle,
   imageDist,
   chapterButtonsYOffset,
   chapterButtonsXOffset,
   chapterFrameXOffset,
   chapterFrameYOffset,
-  chapterTextYOffset,
-  chapterActionAltStyle
+  chapterTitleYOffset,
+  chapterActionAltStyle,
+  chapterIndexStyle,
+  chapterTitleStyle,
+  chapterIndexYOffset
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
@@ -19,6 +21,7 @@ import {
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import { HexColor } from '../../utils/StyleUtils';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -99,14 +102,29 @@ export function createChapter(
     );
 
   // Chapter Text
-  const chapterText = `Chapter ${index}\n${title}`;
-  const text = new Phaser.GameObjects.Text(
+  const chapterIndexText = new Phaser.GameObjects.BitmapText(
     scene,
     0,
-    chapterTextYOffset,
-    chapterText,
-    chapterSelectStyle
-  ).setOrigin(0.5);
+    chapterIndexYOffset,
+    chapterIndexStyle.key,
+    `Chapter ${index}`,
+    chapterIndexStyle.size,
+    chapterIndexStyle.align
+  )
+    .setTintFill(chapterIndexStyle.fill)
+    .setOrigin(0.5, 0.5);
+
+  const chapterTitleText = new Phaser.GameObjects.BitmapText(
+    scene,
+    0,
+    chapterTitleYOffset,
+    chapterTitleStyle.key,
+    title,
+    chapterTitleStyle.size,
+    chapterTitleStyle.align
+  )
+    .setTintFill(chapterTitleStyle.fill)
+    .setOrigin(0.5, 0.5);
 
   const chapterDone = index <= scene.getLoadedGameState().userState.lastCompletedChapter + 1;
 
@@ -129,7 +147,8 @@ export function createChapter(
     chapterContinue,
     chapterRepeatPopup,
     chapterContinuePopup,
-    text,
+    chapterIndexText,
+    chapterTitleText,
     blackTint
   ]);
 
@@ -142,16 +161,26 @@ export function getCoorByChapter(chapterNum: number) {
   return [x, y];
 }
 
-function createHoverTextContainer(scene: Phaser.Scene, text: string, style: any) {
+function createHoverTextContainer(scene: Phaser.Scene, text: string, style: BitmapFontStyle) {
   const altTextBg = new Phaser.GameObjects.Rectangle(
     scene,
     0,
     0,
     180,
-    40,
+    50,
     HexColor.darkBlue
-  ).setAlpha(0.7);
-  const altText = new Phaser.GameObjects.Text(scene, 0, 0, text, style).setOrigin(0.5, 0.5);
+  ).setAlpha(0.8);
+  const altText = new Phaser.GameObjects.BitmapText(
+    scene,
+    0,
+    0,
+    style.key,
+    text,
+    style.size,
+    style.align
+  )
+    .setOrigin(0.5, 0.5)
+    .setTintFill(style.fill);
   const altTextContainer = new Phaser.GameObjects.Container(scene, 0, 0, [altTextBg, altText]);
   return altTextContainer;
 }
