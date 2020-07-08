@@ -5,16 +5,27 @@ import {
   FilterStatus
 } from 'src/commons/achievements/AchievementTypes';
 
-// A Node item encapsulates all important information of an achievement item
+/**
+ * A Node item encapsulates all important information of an achievement item
+ *
+ * @param {AchievementItem} achievement the achievement item
+ * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
+ * @param {number} exp total achievable EXP of the achievement
+ * @param {number} progressBar progress in decimal, min=0, max=1
+ * @param {AchievementStatus} status the achievement status
+ * @param {Date | undefined} furthestDeadline furthestDeadline of the achievement and all of its descendant prerequities
+ * @param {Set<number>} children a set of immediate prerequisites id
+ * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
+ */
 class Node {
   achievement: AchievementItem;
-  dataIdx: number; // the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
+  dataIdx: number;
   exp: number;
-  progressBar: number; // progress in decimal, min=0, max=1
+  progressBar: number;
   status: AchievementStatus;
   furthestDeadline?: Date;
-  children: Set<number>; // immediate prerequisite
-  descendant: Set<number>; // all descendant prerequisites (including immediate prerequisites)
+  children: Set<number>;
+  descendant: Set<number>;
 
   constructor(achievement: AchievementItem, dataIdx: number) {
     const { deadline, prerequisiteIds, goals } = achievement;
@@ -29,7 +40,6 @@ class Node {
     this.descendant = new Set(prerequisiteIds);
   }
 
-  // sum of all goal exp
   private generateExp(goals: AchievementGoal[]) {
     return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
   }
@@ -52,8 +62,8 @@ class Node {
 }
 
 class Inferencer {
-  private achievements: AchievementItem[] = [];
-  private nodeList: Map<number, Node> = new Map(); // key = achievement id
+  private achievements: AchievementItem[] = []; // note: the achievement_id might not be the same as its array index
+  private nodeList: Map<number, Node> = new Map(); // key = achievement_id, value = achievement node
 
   constructor(achievements: AchievementItem[]) {
     this.achievements = achievements;
@@ -68,8 +78,8 @@ class Inferencer {
     return this.achievements;
   }
 
-  public getAchievementsByPosition() {
-    const sortedAchievements = [...this.achievements].sort((a, b) => a.position - b.position);
+  public getSortedAchievements() {
+    const sortedAchievements = this.achievements.sort((a, b) => a.position - b.position);
     return sortedAchievements;
   }
 
@@ -79,14 +89,14 @@ class Inferencer {
   }
 
   public insertAchievement(achievement: AchievementItem) {
-    // first, generate a new unique id
+    // first, generate a new unique id by finding the max id
     let newId = 0;
     if (this.achievements.length > 0) {
       newId = [...this.nodeList.keys()].reduce((maxId, curId) => Math.max(maxId, curId), 0) + 1;
     }
 
-    // then assign the new unique id by overwriting the achievement item
-    // and append it to achievements
+    // then assign the new unique id by overwriting the achievement item supplied by param
+    // and append it to achievements[]
     achievement.id = newId;
     this.achievements.push(achievement);
 
@@ -139,11 +149,20 @@ class Inferencer {
   }
 
   public listTaskIds() {
-    return this.getAchievementsByPosition().reduce((taskIds, achievement) => {
+    return this.getSortedAchievements().reduce((taskIds, achievement) => {
       if (achievement.isTask) {
         taskIds.push(achievement.id);
       }
       return taskIds;
+    }, [] as number[]);
+  }
+
+  public listNonTaskIds() {
+    return this.achievements.reduce((nonTaskIds, achievement) => {
+      if (!achievement.isTask) {
+        nonTaskIds.push(achievement.id);
+      }
+      return nonTaskIds;
     }, [] as number[]);
   }
 
@@ -156,39 +175,48 @@ class Inferencer {
     this.normalizePositions();
   }
 
-  public listNonTaskIds() {
-    return this.achievements.reduce((nonTaskIds, achievement) => {
-      if (!achievement.isTask) {
-        nonTaskIds.push(achievement.id);
-      }
-      return nonTaskIds;
-    }, [] as number[]);
-  }
-
   public setNonTask(achievement: AchievementItem) {
     achievement.prerequisiteIds = [];
     achievement.isTask = false;
-    achievement.position = 0;
+    achievement.position = 0; // position 0 is reserved for non-task achievements
 
     this.modifyAchievement(achievement);
 
     this.normalizePositions();
   }
 
-  public getStatus(id: number) {
-    return this.nodeList.get(id)!.status;
-  }
-
-  public getTotalExp(id: number) {
+  public getExp(id: number) {
     return this.nodeList.get(id)!.exp;
   }
 
-  public getFurthestDeadline(id: number) {
-    return this.nodeList.get(id)!.furthestDeadline;
+  // total achievable EXP of all published achievements
+  public getTotalExp() {
+    const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
+
+    return publishedTask.reduce((totalExp, node) => totalExp + node.exp, 0);
+  }
+
+  // total EXP earned by the student
+  public getStudentExp() {
+    const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
+
+    return publishedTask.reduce((totalProgress, node) => {
+      const goals = node.achievement.goals;
+      const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
+      return totalProgress + progress;
+    }, 0);
   }
 
   public getProgressBar(id: number) {
     return this.nodeList.get(id)!.progressBar;
+  }
+
+  public getStatus(id: number) {
+    return this.nodeList.get(id)!.status;
+  }
+
+  public getFurthestDeadline(id: number) {
+    return this.nodeList.get(id)!.furthestDeadline;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -222,15 +250,7 @@ class Inferencer {
   }
 
   public getFilterCount(filterStatus: FilterStatus) {
-    // array of Node that are published to the achievement page
-    const published = this.listTaskIds().reduce((arr, id) => {
-      const node = this.nodeList.get(id)!;
-      arr.push(node); // task achievement
-      for (const child of node.children) {
-        arr.push(this.nodeList.get(child)!); // immediate prerequisites
-      }
-      return arr;
-    }, [] as Node[]);
+    const published = this.listPublishedNodes();
 
     switch (filterStatus) {
       case FilterStatus.ALL:
@@ -344,6 +364,18 @@ class Inferencer {
         this.achievements[idx].position = nonTaskPosition;
       }
     }
+  }
+
+  private listPublishedNodes() {
+    // returns an array of Node that are published to the achievement page
+    return this.listTaskIds().reduce((arr, id) => {
+      const node = this.nodeList.get(id)!;
+      arr.push(node); // including task achievement
+      for (const child of node.children) {
+        arr.push(this.nodeList.get(child)!); // including immediate prerequisites
+      }
+      return arr;
+    }, [] as Node[]);
   }
 }
 
