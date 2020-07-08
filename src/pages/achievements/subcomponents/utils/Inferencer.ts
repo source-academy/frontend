@@ -153,12 +153,7 @@ class Inferencer {
   }
 
   public listTaskIdsbyPosition() {
-    const tasks = this.achievements.reduce((taskIds, achievement) => {
-      if (achievement.isTask) {
-        taskIds.push(achievement);
-      }
-      return taskIds;
-    }, [] as AchievementItem[]);
+    const tasks = this.listTaskIds().map(id => this.getAchievementItem(id));
 
     tasks.sort((a, b) => a.position - b.position);
     return tasks.map(task => task.id);
