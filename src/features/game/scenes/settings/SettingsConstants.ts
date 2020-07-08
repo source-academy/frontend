@@ -1,4 +1,3 @@
-import { Color } from '../../utils/StyleUtils';
 import { screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { zektonFont } from '../../commons/CommonFontAssets';
@@ -32,9 +31,9 @@ export const optionHeaderTextStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const applySettingsTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '30px',
-  fill: Color.lightBlue,
-  align: 'center'
+export const applySettingsTextStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 30,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };

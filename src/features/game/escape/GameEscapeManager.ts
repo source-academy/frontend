@@ -45,13 +45,15 @@ class GameEscapeManager implements IGameUI {
     escapeMenuBg.setDisplaySize(screenSize.x, screenSize.y);
     escapeMenuBg.setInteractive({ pixelPerfect: true });
 
-    const volumeText = new Phaser.GameObjects.Text(
+    const volumeText = new Phaser.GameObjects.BitmapText(
       gameManager,
       optHeaderTextXPos,
       optHeaderTextYPos,
+      optTextStyle.key,
       'Volume',
-      optTextStyle
-    );
+      optTextStyle.size,
+      optTextStyle.align
+    ).setTintFill(optTextStyle.fill);
 
     const userVol = GameActionManager.getInstance()
       .getGameManager()
