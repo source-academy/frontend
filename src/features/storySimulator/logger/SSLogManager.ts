@@ -1,4 +1,4 @@
-import { loggableStyle, ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
+import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
@@ -6,6 +6,7 @@ import { AssetPath } from 'src/features/game/commons/CommonTypes';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import StringUtils from 'src/features/game/utils/StringUtils';
 import { toIntString } from '../utils/SSUtils';
+import { loggableStyle } from './SSLogConstants';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -72,13 +73,17 @@ dialogues
       ).setAlpha(0.8);
       multiplyDimensions(loggerRectangle, 1.2);
 
-      const loggerText = new Phaser.GameObjects.Text(
+      const loggerText = new Phaser.GameObjects.BitmapText(
         this.getObjectPlacement(),
         loggable.x,
         loggable.y + 10,
+        loggableStyle.key,
         this.formatObjectDetails(loggable),
-        loggableStyle
-      ).setOrigin(0.5);
+        loggableStyle.size,
+        loggableStyle.align
+      )
+        .setTintFill(loggableStyle.fill)
+        .setOrigin(0.5);
       this.detailMapContainer!.add([loggerRectangle, loggerText]);
     });
     this.getObjectPlacement().add.existing(this.detailMapContainer);

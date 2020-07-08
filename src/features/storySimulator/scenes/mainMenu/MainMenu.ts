@@ -19,6 +19,7 @@ import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcompo
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
+import commonFontAssets from 'src/features/game/commons/CommonFontAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -35,6 +36,9 @@ class MainMenu extends Phaser.Scene {
   public async preload() {
     [...storySimulatorAssets, ...commonAssets].forEach((asset: ImageAsset) =>
       this.load.image(asset.key, toS3Path(asset.path))
+    );
+    commonFontAssets.forEach(asset =>
+      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
   }
 
@@ -108,13 +112,17 @@ class MainMenu extends Phaser.Scene {
     buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
 
-    const buttonText = new Phaser.GameObjects.Text(
+    const buttonText = new Phaser.GameObjects.BitmapText(
       this,
       buttonXPos,
       buttonYPos,
+      mainMenuOptStyle.key,
       text,
-      mainMenuOptStyle
-    ).setOrigin(0.5, 0.5);
+      mainMenuOptStyle.size,
+      mainMenuOptStyle.align
+    )
+      .setTintFill(mainMenuOptStyle.fill)
+      .setOrigin(0.5, 0.5);
 
     buttonContainer.add([buttonSprite, buttonText]);
     return buttonContainer;

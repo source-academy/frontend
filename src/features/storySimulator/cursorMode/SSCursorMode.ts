@@ -10,7 +10,8 @@ import {
   onHoverAlpha,
   altTextStyle,
   altTextYPos,
-  altTextXPos
+  altTextXPos,
+  altTextMargin
 } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
@@ -69,14 +70,24 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       scene,
       0,
       0,
-      180,
-      40,
+      text.length * 12,
+      50,
       HexColor.darkBlue
-    ).setAlpha(0.7);
-    const altText = new Phaser.GameObjects.Text(scene, 0, 0, text, altTextStyle).setOrigin(
-      0.5,
-      0.5
-    );
+    )
+      .setAlpha(0.7)
+      .setOrigin(0.0, 0.5);
+
+    const altText = new Phaser.GameObjects.BitmapText(
+      scene,
+      altTextMargin,
+      0,
+      altTextStyle.key,
+      text,
+      altTextStyle.size,
+      altTextStyle.align
+    )
+      .setTintFill(altTextStyle.fill)
+      .setOrigin(0.0, 0.5);
     const altTextContainer = new Phaser.GameObjects.Container(scene, altTextXPos, altTextYPos, [
       altTextBg,
       altText
