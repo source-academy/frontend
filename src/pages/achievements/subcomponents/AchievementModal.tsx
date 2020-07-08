@@ -21,8 +21,6 @@ function AchievementModal(props: AchievementModalProps) {
   const { ability, title, deadline, goals, modal } = achievement;
   const { description, completionText, modalImageUrl } = modal;
 
-  console.log(generateBackgroundGradient(ability));
-
   return (
     <div
       className="modal"

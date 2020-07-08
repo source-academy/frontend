@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { IconNames } from '@blueprintjs/icons';
 
@@ -7,21 +7,16 @@ import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
 import { FilterStatus, AchievementAbility } from '../../commons/achievements/AchievementTypes';
+import AchievementOverview from './subcomponents/AchievementOverview';
 
-export type DispatchProps = {
-  handleAchievementsFetch: () => void;
-};
+export type DispatchProps = {};
 
 export type StateProps = {
   inferencer: Inferencer;
 };
 
 function Achievement(props: DispatchProps & StateProps) {
-  const { inferencer, handleAchievementsFetch } = props;
-
-  useEffect(() => {
-    handleAchievementsFetch();
-  }, [handleAchievementsFetch]);
+  const { inferencer } = props;
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
@@ -66,6 +61,9 @@ function Achievement(props: DispatchProps & StateProps) {
 
   return (
     <div className="Achievements">
+      <div className="achievement-overview">
+        <AchievementOverview name={'Jet Kan'} studio={'T12-A'} inferencer={inferencer} />
+      </div>
       <div className="achievement-main">
         <div className="filters">
           <div></div>

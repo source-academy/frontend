@@ -7,7 +7,7 @@ type AchievementDeadlineProps = {
 };
 
 // Converts Date to user friendly date string
-export const prettifyDeadline = (deadline: Date | undefined) => {
+const prettifyDeadline = (deadline: Date | undefined) => {
   /* ---------- Date constants ---------- */
   const daysPerWeek = 7;
   const hoursPerDay = 24;
