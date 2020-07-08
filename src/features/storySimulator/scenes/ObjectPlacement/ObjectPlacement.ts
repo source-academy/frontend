@@ -22,6 +22,7 @@ import SSLogManager from '../../logger/SSLogManager';
 import SSTransformManager from '../../transform/SSTransformManager';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import GameInputManager from 'src/features/game/input/GameInputManager';
+import { StorySimState } from '../../StorySimulatorTypes';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -100,7 +101,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       () => {
         this.cleanUp();
-        getStorySimulatorGame().getStorySimProps('setStorySimState')('upload');
+        getStorySimulatorGame().setStorySimState(StorySimState.Default);
         this.scene.start('StorySimulatorMenu');
       },
       0,

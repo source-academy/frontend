@@ -1,52 +1,77 @@
 import * as React from 'react';
 import 'ace-builds/webpack-resolver';
-import { Button, Checkbox } from '@blueprintjs/core';
-import { uploadAsset } from 'src/features/storySimulator/StorySimulatorService';
+import { Tabs, Tab, Button, Popover, MenuItem, Menu, Position } from '@blueprintjs/core';
+import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {
-  title: string;
+  useDefaultChapter: boolean;
   storageName: string;
   accessToken?: string;
+  assetPaths: string[];
 };
 
-function CheckpointTxtLoader({ title, storageName, accessToken }: Props) {
-  const [loadedFile, setLoadedFile] = React.useState<File>();
-  const [useOwnTxt, setUseOwnTxt] = React.useState(true);
+function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Props) {
+  const textAssets = assetPaths
+    .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
+    .map(
+      assetPath => assetPath.slice(8) // remove /stories
+    );
+
+  const [filename, setFilename] = React.useState(
+    useDefaultChapter ? 'defaultCheckpoint.txt' : textAssets[0]
+  );
 
   function onLoadTxt(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const [file] = e.target.files;
-
-    setLoadedFile(file);
     loadFileLocally(storageName, file);
   }
 
-  React.useEffect(() => {}, [useOwnTxt]);
+  async function changeChosenFilename(e: any) {
+    if (!e.target.innerHTML) return;
 
-  async function onUploadButtonClick() {
-    if (!accessToken || !loadedFile) return;
-    console.log(loadedFile.name);
-    const resp = await uploadAsset(accessToken, loadedFile, 'stories', loadedFile.name, ['text']);
-    alert(resp);
+    const filename = e.target.innerHTML;
+
+    setFilename('Loading');
+    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);
+    const txt = await response.text();
+
+    setFilename(filename);
+    sessionStorage.setItem(storageName, txt);
   }
 
-  const toggleSwitch = (useOwnTxt: boolean) => (e: any) => {
-    setUseOwnTxt(useOwnTxt);
-    e.target.checked = !e.target.checked;
-  };
+  const uploadButton = (
+    <div>
+      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
+    </div>
+  );
+
+  const s3DropDown = (
+    <>
+      <Menu>
+        {textAssets.map(file => (
+          <MenuItem onClick={changeChosenFilename} id={file} key={file} text={file} />
+        ))}
+      </Menu>
+    </>
+  );
+
+  const chooseS3Txt = (
+    <>
+      <Popover content={s3DropDown} position={Position.BOTTOM}>
+        <Button text={filename} />
+      </Popover>
+    </>
+  );
 
   return (
     <div className="LeftAlign">
-      <b>{title}</b>
-      <Checkbox checked={false} onChange={toggleSwitch(false)}>
-        Simulate selected file
-      </Checkbox>
-      <Checkbox checked={true} onChange={toggleSwitch(true)}>
-        Simulate with your .txt
-      </Checkbox>
-
-      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
-      <Button onClick={onUploadButtonClick}>Upload</Button>
+      <hr />
+      <Tabs id="Tabs" key={'vertical'} renderActiveTabPanelOnly={true}>
+        <Tab id="own" title="Local" panel={uploadButton} />
+        <Tab id="s3" title="S3" panel={chooseS3Txt} />
+      </Tabs>
+      <hr />
     </div>
   );
 }

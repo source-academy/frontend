@@ -1,7 +1,7 @@
 import Constants from 'src/commons/utils/Constants';
 
 export async function createAssetRequest(
-  accessToken: string,
+  accessToken: string = '',
   requestPath: string,
   method: string,
   headerConfig: object = {},
