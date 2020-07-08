@@ -45,12 +45,7 @@ function AchievementEditor(props: AchievementEditorProps) {
     <div className="editor-cards">
       <div className="main">
         <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
-        <AchievementAdder
-          key={-1}
-          inferencer={inferencer}
-          adderId={adderId}
-          setAdderId={setAdderId}
-        />
+        <AchievementAdder inferencer={inferencer} adderId={adderId} setAdderId={setAdderId} />
       </div>
     </div>
   );

@@ -78,11 +78,6 @@ class Inferencer {
     return this.achievements;
   }
 
-  public getSortedAchievements() {
-    const sortedAchievements = this.achievements.sort((a, b) => a.position - b.position);
-    return sortedAchievements;
-  }
-
   public getAchievementItem(id: number) {
     // asserts: the achievement id already exist in nodeList
     return this.nodeList.get(id)!.achievement;
@@ -149,12 +144,24 @@ class Inferencer {
   }
 
   public listTaskIds() {
-    return this.getSortedAchievements().reduce((taskIds, achievement) => {
+    return this.achievements.reduce((taskIds, achievement) => {
       if (achievement.isTask) {
         taskIds.push(achievement.id);
       }
       return taskIds;
     }, [] as number[]);
+  }
+
+  public listTaskIdsbyPosition() {
+    const tasks = this.achievements.reduce((taskIds, achievement) => {
+      if (achievement.isTask) {
+        taskIds.push(achievement);
+      }
+      return taskIds;
+    }, [] as AchievementItem[]);
+
+    tasks.sort((a, b) => a.position - b.position);
+    return tasks.map(task => task.id);
   }
 
   public listNonTaskIds() {
@@ -171,7 +178,6 @@ class Inferencer {
     achievement.position = this.listTaskIds().length;
 
     this.modifyAchievement(achievement);
-
     this.normalizePositions();
   }
 
@@ -181,7 +187,6 @@ class Inferencer {
     achievement.position = 0; // position 0 is reserved for non-task achievements
 
     this.modifyAchievement(achievement);
-
     this.normalizePositions();
   }
 
@@ -287,7 +292,6 @@ class Inferencer {
 
   public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
     [achievement1.position, achievement2.position] = [achievement2.position, achievement1.position];
-
     this.modifyAchievement(achievement1);
     this.modifyAchievement(achievement2);
   }

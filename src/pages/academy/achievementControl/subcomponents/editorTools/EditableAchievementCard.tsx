@@ -36,7 +36,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     inferencer,
     updateAchievements,
     editAchievement,
-    forceRender,
     adderId,
     setAdderId,
     addUnsavedChange,
@@ -69,8 +68,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     if (id === adderId) {
       setAdderId(-1);
     }
-
-    forceRender();
   };
 
   const handleUploadChanges = () => {

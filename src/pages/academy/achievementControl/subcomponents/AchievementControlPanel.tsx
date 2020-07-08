@@ -35,6 +35,7 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
   const handleUploadChanges = () => {
     updateAchievements();
     setPendingUpload(false);
+    forceRender();
   };
 
   const mapAchievementIdsToEditableTask = (achievementIds: number[]) =>
@@ -52,7 +53,9 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
       className="sample-cards"
       style={isDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}
     >
-      <ul className="display-list">{mapAchievementIdsToEditableTask(inferencer.listTaskIds())}</ul>
+      <ul className="display-list">
+        {mapAchievementIdsToEditableTask(inferencer.listTaskIdsbyPosition())}
+      </ul>
 
       <div>
         <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />

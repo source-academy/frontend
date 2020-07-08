@@ -13,7 +13,7 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
   const { goal, editGoal, removeGoal } = props;
   const [newGoal, setNewGoal] = useState<AchievementGoal>(goal);
 
-  const { goalId, goalText, goalProgress, goalTarget } = newGoal;
+  const { goalText, goalProgress, goalTarget } = newGoal;
 
   const changeGoalText = (goalText: string) => {
     newGoal.goalText = goalText;
@@ -28,7 +28,7 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
   };
 
   return (
-    <div className="goal" key={goalId}>
+    <div className="goal">
       <div className="goal-medal">
         <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
         <div>
