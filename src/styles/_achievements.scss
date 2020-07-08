@@ -83,11 +83,15 @@
         width: 95%;
         background-color: #d9d9d9;
 
-        height: 10em;
-        margin-bottom: 10px;
+        height: 7.5em;
+        margin-bottom: 1em;
 
         display: flex;
         flex-direction: column;
+
+        p {
+          font-size: 1em;
+        }
 
         .main {
           margin-top: -1em;
@@ -98,7 +102,7 @@
           .dropdown {
             display: flex;
             align-items: center;
-            flex-basis: 25%;
+            flex-basis: 20%;
           }
 
           .display {
@@ -145,6 +149,7 @@
         }
 
         .progress {
+          height: 0.3em;
         }
       }
 
@@ -179,18 +184,19 @@
           width: 85%;
           background-color: #333e50;
           margin-bottom: 10px;
+          height: 7.5em;
 
           display: flex;
           flex-direction: column;
 
           .main {
-            margin-top: -1em;
+            margin-top: -1.5em;
             display: flex;
             flex-direction: row;
             flex-basis: 80%;
 
             .padder {
-              flex-basis: 11%;
+              flex-basis: 6%;
             }
 
             .display {
@@ -237,6 +243,7 @@
           }
 
           .progress {
+            height: 0.3em;
           }
         }
       }

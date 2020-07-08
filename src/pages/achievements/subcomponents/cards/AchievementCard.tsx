@@ -59,7 +59,7 @@ function AchievementCard(props: AchievementCardProps) {
         <div className="display">
           <div className="heading">
             <div className="title">
-              <h2>{title}</h2>
+              <h3>{title}</h3>
             </div>
 
             <AchievementHints release={release} />
