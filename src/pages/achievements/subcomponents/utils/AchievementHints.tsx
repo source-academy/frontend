@@ -9,11 +9,11 @@ type AchievementHintsProps = {
 // Converts Date to user friendly week string
 export const prettifyWeek = (date: Date) => {
   let week = 0;
-  for (const [weekString, startOfTheWeek] of Object.entries(semester1Weeks)) {
+  for (const [key, startOfTheWeek] of semester1Weeks.entries()) {
     if (date < startOfTheWeek) {
       break;
     }
-    week = parseFloat(weekString);
+    week = key;
   }
   switch (week) {
     case 6.5:

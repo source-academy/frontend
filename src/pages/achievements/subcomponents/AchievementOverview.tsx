@@ -26,7 +26,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
   const totalExp = inferencer.getTotalExp();
   const level = Math.floor(studentExp / expPerLevel);
 
-  const now = new Date(2020, 8, 20, 1, 0, 0);
+  const now = new Date();
   const week = prettifyWeek(now);
   const date = prettifyDate(now);
 

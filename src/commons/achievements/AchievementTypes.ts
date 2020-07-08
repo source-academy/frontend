@@ -96,23 +96,23 @@ export const defaultAchievements: AchievementState = {
 };
 
 // Start of the week
-export const semester1Weeks: { [week: number]: Date } = {
-  1: new Date(2020, 7, 10, 0, 0, 0),
-  2: new Date(2020, 7, 17, 0, 0, 0),
-  3: new Date(2020, 7, 24, 0, 0, 0),
-  4: new Date(2020, 7, 31, 0, 0, 0),
-  5: new Date(2020, 8, 7, 0, 0, 0),
-  6: new Date(2020, 8, 14, 0, 0, 0),
-  6.5: new Date(2020, 8, 19, 0, 0, 0), // recess week
-  7: new Date(2020, 8, 28, 0, 0, 0),
-  8: new Date(2020, 9, 5, 0, 0, 0),
-  9: new Date(2020, 9, 12, 0, 0, 0),
-  10: new Date(2020, 9, 19, 0, 0, 0),
-  11: new Date(2020, 9, 26, 0, 0, 0),
-  12: new Date(2020, 10, 2, 0, 0, 0),
-  13: new Date(2020, 10, 9, 0, 0, 0),
-  14: new Date(2020, 10, 14, 0, 0, 0), // reading week
-  15.1: new Date(2020, 10, 21, 0, 0, 0), // exam week 1
-  15.2: new Date(2020, 10, 28, 0, 0, 0), // exam week 2
-  16: new Date(2020, 11, 6, 0, 0, 0) // vacation
-};
+export const semester1Weeks: Map<number, Date> = new Map([
+  [1, new Date(2020, 7, 10, 0, 0, 0)],
+  [2, new Date(2020, 7, 17, 0, 0, 0)],
+  [3, new Date(2020, 7, 24, 0, 0, 0)],
+  [4, new Date(2020, 7, 31, 0, 0, 0)],
+  [5, new Date(2020, 8, 7, 0, 0, 0)],
+  [6, new Date(2020, 8, 14, 0, 0, 0)],
+  [6.5, new Date(2020, 8, 19, 0, 0, 0)], // recess week
+  [7, new Date(2020, 8, 28, 0, 0, 0)],
+  [8, new Date(2020, 9, 5, 0, 0, 0)],
+  [9, new Date(2020, 9, 12, 0, 0, 0)],
+  [10, new Date(2020, 9, 19, 0, 0, 0)],
+  [11, new Date(2020, 9, 26, 0, 0, 0)],
+  [12, new Date(2020, 10, 2, 0, 0, 0)],
+  [13, new Date(2020, 10, 9, 0, 0, 0)],
+  [14, new Date(2020, 10, 14, 0, 0, 0)], // reading week
+  [15.1, new Date(2020, 10, 21, 0, 0, 0)], // exam week 1
+  [15.2, new Date(2020, 10, 28, 0, 0, 0)], // exam week 2
+  [16, new Date(2020, 11, 6, 0, 0, 0)] // vacation
+]);

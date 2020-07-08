@@ -4,15 +4,15 @@
   flex: 1 1 100%;
 
   background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-image: linear-gradient(
-        to right,
-        rgba(0, 0, 0, 0.3),
-        rgba(0, 0, 0, 0.6),
-        rgba(0, 0, 0, 0.3)
-      ),
-      url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.3),
+      rgba(0, 0, 0, 0.6),
+      rgba(0, 0, 0, 0.3)
+    ),
+    url('https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal%40x2.png');
 
   .achievement-overview {
     display: flex;
@@ -23,7 +23,7 @@
     align-items: center;
     color: #ffffff;
 
-    margin-right: 40%;
+    margin-right: 50%;
   }
 
   .achievement-main {
