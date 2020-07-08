@@ -78,7 +78,10 @@ class Academy extends React.Component<AcademyProps> {
           <Route path="/academy/dashboard" component={DashboardContainer} />
           <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
           <Route path="/academy/sourcereel" component={Sourcereel} />
-          <Route path="/academy/achievement-control" component={AchievementControlContainer} />
+          <Route
+            path="/academy/achievement-control"
+            component={this.toAchievementControl(this.props)}
+          />
           <Route path={'/academy/storysimulator'} component={StorySimulator} />
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
           <Route component={this.redirectTo404} />
@@ -90,6 +93,16 @@ class Academy extends React.Component<AcademyProps> {
   private assessmentRenderFactory = (cat: AssessmentCategory) => (
     routerProps: RouteComponentProps<any>
   ) => <AssessmentContainer assessmentCategory={cat} />;
+
+  /**
+   * A user routes to /academy/achievement-control,
+   *  1. If the user logged in as staff or admin, render the Achievement Control component
+   *  2. If not, redirect to /login
+   */
+  private toAchievementControl = (props: AcademyProps) =>
+    props.accessToken !== undefined && (props.role === Role.Staff || props.role === Role.Admin)
+      ? () => <AchievementControlContainer />
+      : () => <Redirect to="/login" />;
 
   /**
    * 1. If user is in /academy.*, redirect to game

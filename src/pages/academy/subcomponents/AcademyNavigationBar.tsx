@@ -84,15 +84,6 @@ const AcademyNavigationBar: React.SFC<OwnProps> = props => (
         <DefaultChapterContainer />
 
         <NavLink
-          to={'/academy/achievement-control'}
-          activeClassName={Classes.ACTIVE}
-          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-        >
-          <Icon icon={IconNames.CONSOLE} />
-          <div className="navbar-button-text hidden-xs">Achievement Control</div>
-        </NavLink>
-
-        <NavLink
           to={'/academy/groundcontrol'}
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
