@@ -14,7 +14,7 @@ export const previewYPos = screenSize.y * 0.515;
 
 export const moveButtonStyle: BitmapFontStyle = {
   key: zektonFont.key,
-  size: 35,
+  size: 30,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };

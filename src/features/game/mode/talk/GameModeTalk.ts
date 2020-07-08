@@ -94,7 +94,7 @@ class GameModeTalk implements IGameUI {
         style.align
       )
         .setTintFill(style.fill)
-        .setOrigin(0.5, 0.25);
+        .setOrigin(0.5, 0.2);
 
       const checkedSprite = new Phaser.GameObjects.Sprite(
         gameManager,

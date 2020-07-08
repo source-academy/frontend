@@ -7,7 +7,7 @@ export const talkButtonYSpace = screenSize.y * 0.7;
 
 export const talkButtonStyle: BitmapFontStyle = {
   key: zektonFont.key,
-  size: 35,
+  size: 30,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
