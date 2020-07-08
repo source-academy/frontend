@@ -17,20 +17,15 @@ import commonSoundAssets, {
   galacticHarmonyBgMusic
 } from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import {
-  getSourceAcademyGame,
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
 import commonAssets from '../../commons/CommonAssets';
 import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
 import { settingsAssets } from '../settings/SettingsAssets';
-import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
-import { roomDefaultCode } from '../roomPreview/RoomPreviewConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import commonFontAssets from '../../commons/CommonFontAssets';
+import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -65,7 +60,7 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
-    this.roomCode = await this.getRoomPreviewCode(accountInfo);
+    this.roomCode = await getRoomPreviewCode(accountInfo);
     const fullSaveState = await loadData(accountInfo);
     const volume = fullSaveState.userState ? fullSaveState.userState.settings.volume : 1;
     this.soundManager.playBgMusic(galacticHarmonyBgMusic.key, volume);
@@ -202,30 +197,6 @@ class MainMenu extends Phaser.Scene {
 
     // Update
     this.optionButtons.push(newTalkButton);
-  }
-
-  private async getRoomPreviewCode(accInfo: AccountInfo) {
-    const roomMissionId = this.getRoomMissionId();
-    const mission = await getAssessment(roomMissionId, {
-      accessToken: accInfo.accessToken,
-      refreshToken: accInfo.refreshToken
-    });
-    const studentCode = this.getStudentCode(mission);
-    return studentCode;
-  }
-
-  private getRoomMissionId() {
-    // TODO: Change to non-hardcode
-    return 405;
-  }
-
-  private getStudentCode(mission: Assessment | null) {
-    if (mission) {
-      const progQn = mission.questions[0] as IProgrammingQuestion;
-      const answer = progQn.answer;
-      return answer ? (answer as string) : progQn.solutionTemplate;
-    }
-    return roomDefaultCode;
   }
 }
 
