@@ -10,8 +10,9 @@ function AchievementProgressBar(props: AchievementProgressBarProps) {
   const { progress, shouldAnimate } = props;
 
   return (
-    <div className="progress">
+    <div>
       <ProgressBar
+        className="progress"
         intent={progress === 1 ? 'success' : undefined}
         value={progress}
         animate={shouldAnimate}
