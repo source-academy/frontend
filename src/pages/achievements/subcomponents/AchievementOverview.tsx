@@ -31,16 +31,16 @@ function AchievementOverview(props: AchievementOverviewProps) {
   const date = prettifyDate(now);
 
   return (
-    <div>
-      <h2>{name}</h2>
-      <h2>{studio}</h2>
-      <h2>{level}</h2>
-      <h2>
+    <>
+      <h3>{name}</h3>
+      <h3>{studio}</h3>
+      <h3>{level}</h3>
+      <h3>
         {studentExp} / {totalExp}
-      </h2>
-      <h1>{week}</h1>
-      <h1>{date}</h1>
-    </div>
+      </h3>
+      <h3>{week}</h3>
+      <h3>{date}</h3>
+    </>
   );
 }
 
