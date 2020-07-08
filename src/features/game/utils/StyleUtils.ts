@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import { AssetKey } from '../commons/CommonsTypes';
+import { AssetKey } from '../commons/CommonTypes';
 
 export const Color = {
   navy: '#03092c',

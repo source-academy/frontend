@@ -4,7 +4,7 @@ import StringUtils from '../utils/StringUtils';
 
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { charRect, charWidth, speakerRect, speakerTextStyle } from './GameCharacterConstants';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
 import { Layer } from '../layer/GameLayerTypes';

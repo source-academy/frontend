@@ -12,6 +12,19 @@ export type SoundAsset = {
   soundType: GameSoundType;
 };
 
+export type FontAsset = {
+  key: string;
+  pngPath: string;
+  fntPath: string;
+};
+
+export type BitmapFontStyle = {
+  key: string;
+  size: number;
+  fill: number;
+  align: number;
+};
+
 export type GameSprite = {
   assetKey: string;
   assetXPos: number;
@@ -20,6 +33,7 @@ export type GameSprite = {
 
 export type GameText = {
   text?: string;
+  bitmapStyle?: BitmapFontStyle;
   style?: any;
 };
 

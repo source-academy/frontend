@@ -1,4 +1,4 @@
-import { AssetKey } from 'src/features/game/commons/CommonsTypes';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { iconBg } from '../utils/StorySimulatorAssets';
 import { CursorMode } from './SSCursorModeTypes';
 import {

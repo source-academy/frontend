@@ -3,7 +3,7 @@ import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { resize } from 'src/features/game/utils/SpriteUtils';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { ItemId } from 'src/features/game/commons/CommonsTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 import { toIntString } from '../utils/SSUtils';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';

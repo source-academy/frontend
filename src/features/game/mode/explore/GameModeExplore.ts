@@ -1,5 +1,5 @@
 import GameActionManager from 'src/features/game/action/GameActionManager';
-import { IGameUI, ItemId } from '../../commons/CommonsTypes';
+import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import {
   magnifyingGlass,
   magnifyingGlassChecked,

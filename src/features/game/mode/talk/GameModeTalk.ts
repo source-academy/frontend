@@ -1,4 +1,4 @@
-import { IGameUI, GameButton, ItemId } from '../../commons/CommonsTypes';
+import { IGameUI, GameButton, ItemId } from '../../commons/CommonTypes';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';

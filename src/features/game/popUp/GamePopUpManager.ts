@@ -1,4 +1,4 @@
-import { ItemId, GameSprite } from '../commons/CommonsTypes';
+import { ItemId, GameSprite } from '../commons/CommonTypes';
 import { PopUpPosition } from './GamePopUpTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameActionManager from '../action/GameActionManager';

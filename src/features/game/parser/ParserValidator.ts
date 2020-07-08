@@ -1,4 +1,4 @@
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 

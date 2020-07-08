@@ -1,4 +1,4 @@
-import { GameButton } from './CommonsTypes';
+import { GameButton } from './CommonTypes';
 import { screenSize, Constants } from './CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 

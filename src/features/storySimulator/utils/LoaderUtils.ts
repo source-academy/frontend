@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 
 export const loadImage = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
   new Promise<AssetKey>(resolve => {

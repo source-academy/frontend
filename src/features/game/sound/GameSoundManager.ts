@@ -1,4 +1,4 @@
-import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonsTypes';
+import { AssetKey, AssetPath, SoundAsset } from '../commons/CommonTypes';
 import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { sleep, toS3Path } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';

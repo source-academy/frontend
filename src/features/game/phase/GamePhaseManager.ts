@@ -3,7 +3,7 @@ import _ from 'lodash';
 import { GamePhaseType } from './GamePhaseTypes';
 import { createGamePhases } from './GamePhaseConstants';
 import GameActionManager from '../action/GameActionManager';
-import { IGameUI } from '../commons/CommonsTypes';
+import { IGameUI } from '../commons/CommonTypes';
 
 export default class GamePhaseManager {
   private phaseStack: GamePhaseType[];
