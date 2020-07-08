@@ -18,6 +18,7 @@ import {
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import commonAssets from 'src/features/game/commons/CommonAssets';
+import { StorySimState } from '../../StorySimulatorTypes';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -47,7 +48,9 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')('objectPlacement');
+          getStorySimulatorGame().getStorySimProps('setStorySimState')(
+            StorySimState.ObjectPlacement
+          );
           this.layerManager.clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
@@ -55,14 +58,14 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')('upload');
-          this.callGameManager();
+          getStorySimulatorGame().getStorySimProps('setStorySimState')(StorySimState.CheckpointSim);
+          // this.callGameManager();
         }
       },
       {
         text: 'Asset Uploader',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')('assetUploader');
+          getStorySimulatorGame().getStorySimProps('setStorySimState')(StorySimState.AssetUploader);
         }
       }
     ];
@@ -118,7 +121,7 @@ class MainMenu extends Phaser.Scene {
     return buttonContainer;
   }
 
-  private callGameManager() {
+  public callGameManager() {
     const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter) || '';
     const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt) || '';
     if (defaultChapterText === '' && checkpointTxt === '') {

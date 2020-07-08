@@ -1,7 +1,6 @@
 import * as React from 'react';
 import 'ace-builds/webpack-resolver';
-import { Button, Checkbox } from '@blueprintjs/core';
-import { uploadAsset } from 'src/features/storySimulator/StorySimulatorService';
+import { Tabs, Tab, Button, Popover, MenuItem, Menu, Position } from '@blueprintjs/core';
 
 type Props = {
   title: string;
@@ -10,43 +9,49 @@ type Props = {
 };
 
 function CheckpointTxtLoader({ title, storageName, accessToken }: Props) {
-  const [loadedFile, setLoadedFile] = React.useState<File>();
-  const [useOwnTxt, setUseOwnTxt] = React.useState(true);
-
   function onLoadTxt(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const [file] = e.target.files;
 
-    setLoadedFile(file);
     loadFileLocally(storageName, file);
   }
 
-  React.useEffect(() => {}, [useOwnTxt]);
-
-  async function onUploadButtonClick() {
-    if (!accessToken || !loadedFile) return;
-    console.log(loadedFile.name);
-    const resp = await uploadAsset(accessToken, loadedFile, 'stories', loadedFile.name, ['text']);
-    alert(resp);
+  function clearSessionStorage(e: any) {
+    sessionStorage.setItem(storageName, '');
   }
 
-  const toggleSwitch = (useOwnTxt: boolean) => (e: any) => {
-    setUseOwnTxt(useOwnTxt);
-    e.target.checked = !e.target.checked;
-  };
+  const uploadButton = (
+    <div>
+      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
+      <Button onClick={clearSessionStorage}>Reset</Button>
+    </div>
+  );
+
+  const s3DropDown = (
+    <>
+      <Menu>
+        {['chapter0.0.txt', 'chapter0.1.txt'].map(folder => (
+          <MenuItem onClick={(e: any) => {}} id={folder} key={folder} text={folder} />
+        ))}
+      </Menu>
+    </>
+  );
+
+  const chooseS3Txt = (
+    <Popover content={s3DropDown} position={Position.BOTTOM}>
+      <Button text={'S3 txt'} />
+    </Popover>
+  );
 
   return (
     <div className="LeftAlign">
       <b>{title}</b>
-      <Checkbox checked={false} onChange={toggleSwitch(false)}>
-        Simulate selected file
-      </Checkbox>
-      <Checkbox checked={true} onChange={toggleSwitch(true)}>
-        Simulate with your .txt
-      </Checkbox>
-
-      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
-      <Button onClick={onUploadButtonClick}>Upload</Button>
+      <hr />
+      <Tabs id="Tabs" key={'vertical'} renderActiveTabPanelOnly={true}>
+        <Tab id="own" title="Local" panel={uploadButton} />
+        <Tab id="s3" title="S3" panel={chooseS3Txt} />
+      </Tabs>
+      <hr />
     </div>
   );
 }

@@ -1,6 +1,15 @@
 import { createAssetRequest } from './StorySimulatorRequest';
 
-export const s3AssetFolders = ['locations', 'objects', 'images', 'avatars', 'ui', 'sfx', 'bgm'];
+export const s3AssetFolders = [
+  'locations',
+  'objects',
+  'images',
+  'avatars',
+  'ui',
+  'sfx',
+  'bgm',
+  'stories'
+];
 
 export async function fetchAssetPaths(accessToken: string, folders: string[]) {
   const files = await Promise.all(

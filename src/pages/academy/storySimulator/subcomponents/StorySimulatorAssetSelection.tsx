@@ -1,7 +1,9 @@
 import * as React from 'react';
-import { ITreeNode, Tree, Tooltip, Icon } from '@blueprintjs/core';
 import * as _ from 'lodash';
+import { ITreeNode, Tree, Tooltip, Icon } from '@blueprintjs/core';
+
 import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
+import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
 type TreeState = {
   nodes: ITreeNode[];
@@ -9,23 +11,17 @@ type TreeState = {
 
 type Props = {
   assetPaths: string[];
-  setCurrentAsset: React.Dispatch<React.SetStateAction<string>>;
   accessToken?: string;
   folders: string[];
 };
 
-function StorySimulatorAssetSelection({
-  assetPaths,
-  setCurrentAsset,
-  accessToken,
-  folders
-}: Props) {
+function StorySimulatorAssetSelection({ assetPaths, accessToken, folders }: Props) {
+  const [currentAsset, setCurrentAsset] = React.useState('');
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
-    if (!accessToken) {
-      return;
-    }
+    if (!accessToken) return;
+
     setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken, folders) });
   }, [accessToken, assetPaths, folders]);
 
@@ -44,7 +40,12 @@ function StorySimulatorAssetSelection({
     [assetTree, setCurrentAsset]
   );
 
-  return <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />;
+  return (
+    <>
+      <StorySimulatorAssetViewer assetPath={currentAsset} />
+      <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
+    </>
+  );
 }
 
 export default StorySimulatorAssetSelection;

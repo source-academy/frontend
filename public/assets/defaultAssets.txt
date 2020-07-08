@@ -1,7 +1,7 @@
 pngs
-    short-button, shortButton
-    med-button, mediumButton
-    long-button, longButton
+    /ui/shortButton.png
+    /ui/mediumButton.png
+    /ui/longButton.png
     top-button, topButton
     speechBox, speechBox
     speakerBox, speakerBox
