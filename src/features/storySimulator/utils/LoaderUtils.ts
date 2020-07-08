@@ -21,3 +21,14 @@ export const loadText = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: Ass
       scene.load.start();
     }
   });
+
+export const loadSound = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
+  new Promise<AssetKey>(resolve => {
+    if (scene.sound.get(assetKey) !== null) {
+      resolve(assetKey);
+    } else {
+      scene.load.audio(assetKey, assetPath);
+      scene.load.once('filecomplete', resolve);
+      scene.load.start();
+    }
+  });
