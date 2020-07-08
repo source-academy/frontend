@@ -1,6 +1,8 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { modeMenuBanner } from '../../commons/CommonAssets';
-import { GameSprite } from '../../commons/CommonTypes';
+import { GameSprite, BitmapFontStyle } from '../../commons/CommonTypes';
+import { zektonFont } from '../../commons/CommonFontAssets';
+import { HexColor } from '../../utils/StyleUtils';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 
@@ -16,10 +18,11 @@ export const menuExitTweenProps = {
   ease: 'Power2'
 };
 
-export const modeButtonStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '45px',
-  fill: '#abd4c6'
+export const modeButtonStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 45,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const modeBannerRect = {

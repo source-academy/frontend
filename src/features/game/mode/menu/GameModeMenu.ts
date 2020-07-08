@@ -56,7 +56,7 @@ class GameModeMenu implements IGameUI {
     // Add the new button
     const newModeButton: GameButton = {
       text: modeName,
-      style: modeButtonStyle,
+      bitmapStyle: modeButtonStyle,
       assetKey: shortButton.key,
       assetXPos: newXPos + this.gameButtons.length * partitionSize,
       assetYPos: modeButtonYPos,
@@ -108,14 +108,18 @@ class GameModeMenu implements IGameUI {
       }
 
       const text = button.text ? button.text : '';
-      const style = button.style ? button.style : {};
-      const buttonText = new Phaser.GameObjects.Text(
+      const style = button.bitmapStyle ? button.bitmapStyle : Constants.defaultFontStyle;
+      const buttonText = new Phaser.GameObjects.BitmapText(
         gameManager,
         button.assetXPos,
         button.assetYPos,
+        style.key,
         text,
-        style
-      ).setOrigin(0.5, 0.25);
+        style.size,
+        style.align
+      )
+        .setTintFill(style.fill)
+        .setOrigin(0.5, 0.25);
 
       modeMenuContainer.add(buttonSprite);
       modeMenuContainer.add(buttonText);

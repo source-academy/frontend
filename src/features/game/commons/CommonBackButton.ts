@@ -1,13 +1,16 @@
 import { screenCenter, screenSize } from './CommonConstants';
 import { topButton } from './CommonAssets';
-import { Color } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { BitmapFontStyle } from './CommonTypes';
+import { zektonFont } from './CommonFontAssets';
 
 const backText = 'Back';
 const backTextYPos = screenSize.y * 0.012;
-const backButtonStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '25px',
-  fill: Color.darkBlue
+const backButtonStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 25,
+  fill: HexColor.darkBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 class CommonBackButton extends Phaser.GameObjects.Container {
@@ -17,13 +20,17 @@ class CommonBackButton extends Phaser.GameObjects.Container {
   }
 
   private renderBackButton(callback: any) {
-    const backButtonText = new Phaser.GameObjects.Text(
+    const backButtonText = new Phaser.GameObjects.BitmapText(
       this.scene,
       screenCenter.x,
       backTextYPos,
+      backButtonStyle.key,
       backText,
-      backButtonStyle
-    ).setOrigin(0.5, 0.25);
+      backButtonStyle.size,
+      backButtonStyle.align
+    )
+      .setTintFill(backButtonStyle.fill)
+      .setOrigin(0.5, 0.25);
 
     const backButtonSprite = new Phaser.GameObjects.Sprite(
       this.scene,
