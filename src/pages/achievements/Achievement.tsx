@@ -67,7 +67,7 @@ function Achievement(props: DispatchProps & StateProps) {
   return (
     <div className="Achievements">
       <div className="achievement-main">
-        <div className="icons">
+        <div className="filters">
           <div></div>
           <AchievementFilter
             filterStatus={FilterStatus.ALL}

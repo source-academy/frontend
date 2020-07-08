@@ -5,6 +5,7 @@
 
   .achievement-main {
     display: flex;
+
     flex-direction: row;
     flex-wrap: wrap;
     flex: 1 1 100%;
@@ -25,7 +26,7 @@
       overflow-wrap: break-word;
     }
 
-    .icons {
+    .filters {
       width: 15%;
       flex-direction: column;
 
@@ -54,6 +55,7 @@
       width: 40%;
       display: table;
 
+      // Scroll Bar
       ::-webkit-scrollbar {
         width: 12px;
       }
@@ -71,6 +73,9 @@
         background: rgba(255, 255, 255, 1);
       }
 
+      // End of Scroll Bar
+
+      // Container for Cards
       .display-list {
         overflow: hidden;
         overflow-y: scroll;
@@ -79,6 +84,7 @@
         list-style: none;
       }
 
+      // This is the nightmare
       .achievement {
         width: 85%;
         background-color: #d9d9d9;
@@ -93,6 +99,7 @@
           font-size: 1em;
         }
 
+        // This contains title, week, dropdown, etc
         .main {
           margin-top: -1em;
           display: flex;
@@ -148,12 +155,13 @@
           }
         }
 
+        // Separate div from Main for progress bar
         .progress {
           height: 0.3em;
         }
       }
 
-      .node {
+      .dropdown-expanded {
         display: flex;
         flex-direction: row;
         height: 100%;
@@ -180,6 +188,7 @@
           }
         }
 
+        // Prerequisite cards take 75% of normal card width
         .prerequisite {
           width: 75%;
           background-color: #333e50;
@@ -277,26 +286,6 @@
           }
         }
 
-        .goal {
-          display: flex;
-          flex-direction: row;
-
-          .goal-medal {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 20%;
-
-            align-items: center;
-          }
-
-          .goal-text {
-            display: flex;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-          }
-        }
-
         .modal-header {
           margin-top: -1em;
           position: relative;
@@ -335,6 +324,26 @@
             p {
               color: yellow;
             }
+          }
+        }
+
+        .goal {
+          display: flex;
+          flex-direction: row;
+
+          .goal-medal {
+            display: flex;
+            flex-direction: column;
+            flex-basis: 20%;
+
+            align-items: center;
+          }
+
+          .goal-text {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
           }
         }
 

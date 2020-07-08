@@ -26,7 +26,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
   const progressBar = inferencer.getProgressBar(id);
 
   return (
-    <div className="node">
+    <div className="dropdown-expanded">
       <div className="lines">
         <div className="upper"></div>
         {isLast ? <></> : <div className="lower"></div>}

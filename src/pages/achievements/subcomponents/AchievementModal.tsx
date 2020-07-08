@@ -43,19 +43,22 @@ function AchievementModal(props: AchievementModalProps) {
       >
         <div className="modal-header">
           <div className="modal-padder"></div>
+
           <div className="modal-title">
-            {' '}
             <h3>{title}</h3>
           </div>
+
           <div className="modal-deadline">
             <p>{`Deadline: ${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`}</p>
           </div>
+
           <AchievementModalDescription description={description} />
         </div>
 
         <AchievementModalGoal goals={goals} />
 
         <hr />
+
         <AchievementModalCompletion completionText={completionText} />
       </Card>
     </div>
