@@ -35,6 +35,16 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
     editGoals(newGoals);
   };
 
+  const removeGoal = (goal: AchievementGoal) => {
+    newGoals.splice(goal.goalId, 1);
+    for (let id = 0; id < newGoals.length; id++) {
+      newGoals[id].goalId = id;
+    }
+
+    setNewGoals(newGoals);
+    editGoals(newGoals);
+  };
+
   const newGoalAdder = () => {
     return (
       <Button
@@ -58,7 +68,7 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
         usePortal={false}
       >
         {newGoals.map(goal => (
-          <EditableAchievementGoal goal={goal} editGoal={editGoal} />
+          <EditableAchievementGoal goal={goal} editGoal={editGoal} removeGoal={removeGoal} />
         ))}
 
         {newGoalAdder()}

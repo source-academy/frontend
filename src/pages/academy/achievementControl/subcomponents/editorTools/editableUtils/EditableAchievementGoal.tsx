@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { AchievementGoal } from 'src/commons/achievements/AchievementTypes';
-import { Icon, EditableText } from '@blueprintjs/core';
+import { Icon, EditableText, Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 
 type EditableAchievementGoalProps = {
   goal: AchievementGoal;
   editGoal: any;
+  removeGoal: any;
 };
 
 function EditableAchievementGoal(props: EditableAchievementGoalProps) {
-  const { goal, editGoal } = props;
+  const { goal, editGoal, removeGoal } = props;
   const [newGoal, setNewGoal] = useState<AchievementGoal>(goal);
 
   const { goalId, goalText, goalProgress, goalTarget } = newGoal;
@@ -29,7 +30,6 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
   return (
     <div className="goal" key={goalId}>
       <div className="goal-medal">
-        {goalId}
         <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
         <div>
           {goalProgress} /{' '}
@@ -48,6 +48,7 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
           onChange={changeGoalText}
         />
       </div>
+      <Button text={'Remove Goal'} onClick={() => removeGoal(newGoal)} />
     </div>
   );
 }

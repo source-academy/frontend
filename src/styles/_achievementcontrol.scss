@@ -297,6 +297,29 @@
         align-items: center;
         justify-content: center;
 
+        .goal {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+
+          .goal-medal {
+            display: flex;
+            flex-direction: column;
+            flex-basis: 25%;
+
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+          }
+
+          .goal-text {
+            display: flex;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+
         .modal-editor {
           width: 100%;
           display: flex;
