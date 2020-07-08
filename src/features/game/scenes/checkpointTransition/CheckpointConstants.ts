@@ -1,16 +1,18 @@
-import { Color } from '../../utils/StyleUtils';
+import { HexColor } from '../../utils/StyleUtils';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { zektonFont } from '../../commons/CommonFontAssets';
 
-export const chapterTransitionText = 'Chapter completed';
-export const checkpointTransitionText = 'Checkpoint reached';
+export const chapterTransitionText = 'Chapter completed.';
+export const checkpointTransitionText = 'Checkpoint reached.';
 
-export const transitionTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '35px',
-  fill: Color.lightBlue,
-  align: 'center'
+export const transitionTextStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 40,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const transitionDuration = 2000;
+export const transitionDuration = 1500;
 
 export const transitionEntryTween = {
   alpha: 1,

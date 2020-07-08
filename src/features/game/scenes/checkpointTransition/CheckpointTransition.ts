@@ -48,14 +48,18 @@ class CheckpointTransition extends Phaser.Scene {
   }
 
   private async showTransitionText(text: string) {
-    const transitionText = new Phaser.GameObjects.Text(
+    const transitionText = new Phaser.GameObjects.BitmapText(
       this,
       screenCenter.x,
       screenCenter.y,
+      transitionTextStyle.key,
       text,
-      transitionTextStyle
-    );
+      transitionTextStyle.size,
+      transitionTextStyle.align
+    ).setTintFill(transitionTextStyle.fill);
+
     this.add.existing(transitionText);
+
     transitionText.setOrigin(0.5, 0.5);
     transitionText.setAlpha(0);
 

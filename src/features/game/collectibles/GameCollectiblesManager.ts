@@ -231,10 +231,10 @@ class GameCollectiblesManager {
     let objectList: string[];
     switch (page) {
       case CollectiblePage.Achievements:
-        objectList = this.getCollectibles();
+        objectList = this.getAchievements();
         break;
       case CollectiblePage.Collectibles:
-        objectList = this.getAchievements();
+        objectList = this.getCollectibles();
         break;
       default:
         objectList = [];

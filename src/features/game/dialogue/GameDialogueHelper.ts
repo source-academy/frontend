@@ -9,7 +9,7 @@ export function createDialogueBox(scene: Phaser.Scene) {
     screenCenter.x,
     screenCenter.y,
     speechBox.key
-  ).setAlpha(0.8);
+  ).setAlpha(0.9);
   return dialogueBox;
 }
 
