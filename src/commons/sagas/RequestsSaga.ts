@@ -22,11 +22,7 @@ import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import {
-  AchievementItem,
-  AchievementAbility,
-  AchievementGoal
-} from '../achievements/AchievementTypes';
+import { AchievementItem, AchievementAbility } from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token
@@ -203,46 +199,6 @@ export async function editAchievement(
   const resp = await request(`achievements/update/`, 'POST', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-}
-
-/**
- * POST /achievements/goals
- */
-export async function editGoal(
-  goal: AchievementGoal,
-  inferencerId: number,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request(`/chievements/goals`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: { goal: goal, inferencerId: inferencerId },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-}
-
-/**
- * DELETE /achievements/goals
- */
-export async function deleteGoal(
-  goal: AchievementGoal,
-  inferencerId: number,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request(`/chievements/goals`, 'DELETE', {
-    accessToken: tokens.accessToken,
-    body: { goal: goal, inferencerId: inferencerId },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

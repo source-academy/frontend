@@ -5,7 +5,8 @@ import { Card } from '@blueprintjs/core';
 import {
   AchievementItem,
   AchievementAbility,
-  AchievementModalItem
+  AchievementModalItem,
+  AchievementGoal
 } from '../../../../../commons/achievements/AchievementTypes';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
@@ -43,7 +44,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, deadline, backgroundImageUrl, release } = editableAchievement;
+  const { id, title, ability, deadline, backgroundImageUrl, release, goals } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -100,20 +101,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  /*
-  TODO: Implement editable goals in editable modal
-  const handleChangeExp = (exp: string) => {
-    if (RegExp('[0-9]*').test(exp)) {
-      if (exp === '') {
-        exp = '0';
-      }
-      setEditableAchievement({
-        ...editableAchievement,
-        exp: parseInt(exp)
-      });
-      setUnsaved();
-    }
-  }; */
+  const handleEditGoals = (goals: AchievementGoal[]) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      goals: goals
+    });
+    setUnsaved();
+  };
 
   const handleChangeBackground = (backgroundImageUrl: string) => {
     setEditableAchievement({
@@ -184,7 +178,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           setBackgroundImageUrl={handleChangeBackground}
         />
 
-        <EditableAchievementGoals />
+        <EditableAchievementGoals goals={goals} editGoals={handleEditGoals} />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 
