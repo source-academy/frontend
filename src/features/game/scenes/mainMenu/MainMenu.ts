@@ -27,7 +27,7 @@ import commonAssets from '../../commons/CommonAssets';
 import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
 import { settingsAssets } from '../settings/SettingsAssets';
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { roomDefaultCode } from '../roomPreview/RoomPreviewConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 
@@ -210,13 +210,14 @@ class MainMenu extends Phaser.Scene {
 
   private getRoomMissionId() {
     // TODO: Change to non-hardcode
-    return 401;
+    return 405;
   }
 
   private getStudentCode(mission: Assessment | null) {
     if (mission) {
-      const answer = mission.questions[0].answer;
-      return answer ? (answer as string) : roomDefaultCode;
+      const progQn = mission.questions[0] as IProgrammingQuestion;
+      const answer = progQn.answer;
+      return answer ? (answer as string) : progQn.solutionTemplate;
     }
     return roomDefaultCode;
   }

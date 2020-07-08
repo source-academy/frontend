@@ -2,7 +2,6 @@ import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { loadImage, loadSound } from 'src/features/storySimulator/utils/LoaderUtils';
 
@@ -54,7 +53,7 @@ export default class RoomPreview extends Phaser.Scene {
       0,
       0
     );
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.add.existing(backButton);
   }
 
   public update() {
