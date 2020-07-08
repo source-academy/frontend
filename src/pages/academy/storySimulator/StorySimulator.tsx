@@ -15,8 +15,6 @@ import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-  const accessToken = useSelector((state: OverallState) => state.session.accessToken);
-  const [fetchToggle, setFetchToggle] = React.useState(false);
 
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
@@ -37,17 +35,9 @@ function StorySimulator() {
 
   React.useEffect(() => {
     (async () => {
-      if (!accessToken) {
-        setFetchToggle(!fetchToggle);
-        return;
-      }
-      const paths = await fetchAssetPaths(accessToken, s3AssetFolders);
-      if (!paths) {
-        setFetchToggle(!fetchToggle);
-      }
-      setAssetPaths(paths);
+      setAssetPaths(await fetchAssetPaths(session.accessToken, s3AssetFolders));
     })();
-  }, [accessToken, fetchToggle]);
+  }, [session]);
 
   return (
     <>
@@ -60,7 +50,10 @@ function StorySimulator() {
             </>
           )}
           {storySimState === StorySimState.CheckpointSim && (
-            <StorySimulatorCheckpointSim accessToken={accessToken} />
+            <StorySimulatorCheckpointSim
+              accessToken={session.accessToken}
+              assetPaths={assetPaths}
+            />
           )}
           {storySimState === StorySimState.ObjectPlacement && (
             <>
@@ -68,19 +61,19 @@ function StorySimulator() {
               <StorySimulatorAssetSelection
                 folders={s3AssetFolders}
                 assetPaths={assetPaths}
-                accessToken={accessToken}
+                accessToken={session.accessToken}
               />
             </>
           )}
           {storySimState === StorySimState.AssetUploader && (
             <>
               <h3>Asset uploader</h3>
-              <StorySimulatorAssetFileUploader accessToken={accessToken} />
+              <StorySimulatorAssetFileUploader accessToken={session.accessToken} />
               <h3>Asset Viewer</h3>
               <StorySimulatorAssetSelection
                 folders={s3AssetFolders}
                 assetPaths={assetPaths}
-                accessToken={accessToken}
+                accessToken={session.accessToken}
               />
             </>
           )}

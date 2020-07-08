@@ -11,7 +11,7 @@ export const s3AssetFolders = [
   'stories'
 ];
 
-export async function fetchAssetPaths(accessToken: string, folders: string[]) {
+export async function fetchAssetPaths(accessToken: string = '', folders: string[]) {
   const files = await Promise.all(
     folders.map(async folderName => {
       const files = await fetchFolder(accessToken, folderName);

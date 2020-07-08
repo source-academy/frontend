@@ -8,6 +8,7 @@ import Settings from 'src/features/game/scenes/settings/Settings';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 export type AccountInfo = {
   accessToken: string;
@@ -18,6 +19,7 @@ export type AccountInfo = {
 
 type StorySimulatorProps = {
   setStorySimState: (value: React.SetStateAction<string>) => void;
+  currentScene: Phaser.Scene;
 };
 
 type GlobalGameProps = {
@@ -60,11 +62,15 @@ export class SourceAcademyGame extends Phaser.Game {
     return this.global.accountInfo;
   }
 
-  public setStorySimProps(storySimulatorProps: StorySimulatorProps) {
+  public setStorySimProps(storySimulatorProps: any) {
     this.global.storySimulatorProps = {
       ...this.global.storySimulatorProps,
       ...storySimulatorProps
     };
+  }
+
+  public setStorySimState(state: StorySimState) {
+    this.getStorySimProps('setStorySimState')(state);
   }
 
   public getStorySimProps(key: string) {

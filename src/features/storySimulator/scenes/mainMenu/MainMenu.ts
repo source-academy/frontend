@@ -28,6 +28,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager = new GameLayerManager();
   }
   public init() {
+    getStorySimulatorGame().setStorySimProps({ currentScene: this });
     this.layerManager.initialiseMainLayer(this);
   }
 
@@ -48,9 +49,7 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')(
-            StorySimState.ObjectPlacement
-          );
+          getStorySimulatorGame().setStorySimState(StorySimState.ObjectPlacement);
           this.layerManager.clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
@@ -58,14 +57,14 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')(StorySimState.CheckpointSim);
+          getStorySimulatorGame().setStorySimState(StorySimState.CheckpointSim);
           // this.callGameManager();
         }
       },
       {
         text: 'Asset Uploader',
         callback: () => {
-          getStorySimulatorGame().getStorySimProps('setStorySimState')(StorySimState.AssetUploader);
+          getStorySimulatorGame().setStorySimState(StorySimState.AssetUploader);
         }
       }
     ];
