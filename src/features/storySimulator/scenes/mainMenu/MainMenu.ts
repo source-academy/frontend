@@ -70,6 +70,12 @@ class MainMenu extends Phaser.Scene {
         callback: () => {
           getStorySimulatorGame().setStorySimState(StorySimState.AssetUploader);
         }
+      },
+      {
+        text: 'Chapter Sequencer',
+        callback: () => {
+          getStorySimulatorGame().setStorySimState(StorySimState.ChapterSequence);
+        }
       }
     ];
     optionsContainer.add(
@@ -88,7 +94,7 @@ class MainMenu extends Phaser.Scene {
   ): Phaser.GameObjects.Container {
     const buttonContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const numOfRows = Math.ceil(numOfButtons / maxOptButtonsRow);
-    const numOfButtonsAtLastRow = numOfButtons % maxOptButtonsRow;
+    const numOfButtonsAtLastRow = numOfButtons % maxOptButtonsRow || maxOptButtonsRow;
     const buttonYIdx = Math.floor(buttonIndex / maxOptButtonsRow);
     const buttonXIdx = buttonIndex % maxOptButtonsRow;
 
@@ -100,6 +106,7 @@ class MainMenu extends Phaser.Scene {
       buttonYIdx === numOfRows - 1
         ? optButtonsXSpace / numOfButtonsAtLastRow
         : optButtonsXSpace / maxOptButtonsRow;
+
     const buttonXPos =
       (screenSize.x - optButtonsXSpace + partitionXSpace) / 2 + buttonXIdx * partitionXSpace;
 

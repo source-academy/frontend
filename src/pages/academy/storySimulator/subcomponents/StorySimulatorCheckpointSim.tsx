@@ -12,7 +12,7 @@ type Props = {
 
 export default function CheckpointSim({ accessToken, assetPaths }: Props) {
   function simulateCheckpoint() {
-    getStorySimulatorGame().getStorySimProps('currentScene').callGameManager();
+    getStorySimulatorGame().getStorySimProps().mainMenuRef.callGameManager();
   }
 
   return (

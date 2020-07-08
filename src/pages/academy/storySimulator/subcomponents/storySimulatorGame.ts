@@ -29,4 +29,5 @@ export const createStorySimulatorGame = () => {
   storySimulatorGame.scene.add('StorySimulatorMenu', MainMenu, true);
   storySimulatorGame.scene.add('ObjectPlacement', ObjectPlacement);
   storySimulatorGame.scene.add('GameManager', GameManager);
+  return storySimulatorGame;
 };

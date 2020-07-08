@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
+import StorySimMainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import Settings from 'src/features/game/scenes/settings/Settings';
@@ -19,7 +20,7 @@ export type AccountInfo = {
 
 type StorySimulatorProps = {
   setStorySimState: (value: React.SetStateAction<string>) => void;
-  currentScene: Phaser.Scene;
+  mainMenuRef: StorySimMainMenu;
 };
 
 type GlobalGameProps = {
@@ -70,15 +71,15 @@ export class SourceAcademyGame extends Phaser.Game {
   }
 
   public setStorySimState(state: StorySimState) {
-    this.getStorySimProps('setStorySimState')(state);
+    this.getStorySimProps().setStorySimState(state);
   }
 
-  public getStorySimProps(key: string) {
+  public getStorySimProps() {
     const storySimProps = this.global.storySimulatorProps;
-    if (!storySimProps || !storySimProps[key]) {
-      throw new Error('Story Sim property not found');
+    if (!storySimProps) {
+      throw new Error('Story Sim props not found');
     }
-    return storySimProps[key];
+    return storySimProps;
   }
 }
 

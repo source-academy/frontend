@@ -29,6 +29,7 @@ function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Pro
 
   async function changeChosenFilename(e: any) {
     if (!e.target.innerHTML) return;
+
     const filename = e.target.innerHTML;
     setFilename('Loading');
     const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);

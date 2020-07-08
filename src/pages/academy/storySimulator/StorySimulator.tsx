@@ -3,6 +3,8 @@ import * as React from 'react';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
+import StorySimulatorChapterSequencer from './subcomponents/StorySimulatorChapterSequencer';
+
 import {
   createStorySimulatorGame,
   getStorySimulatorGame
@@ -20,8 +22,7 @@ function StorySimulator() {
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {
-    createStorySimulatorGame();
-    getStorySimulatorGame().setStorySimProps({ setStorySimState });
+    createStorySimulatorGame().setStorySimProps({ setStorySimState });
   }, []);
 
   React.useEffect(() => {
@@ -77,6 +78,7 @@ function StorySimulator() {
               />
             </>
           )}
+          {storySimState === StorySimState.ChapterSequence && <StorySimulatorChapterSequencer />}
         </div>
       </div>
     </>
