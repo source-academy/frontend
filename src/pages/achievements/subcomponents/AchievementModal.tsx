@@ -18,19 +18,31 @@ function AchievementModal(props: AchievementModalProps) {
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, deadline, goals, modal } = achievement;
-  const { modalImageUrl, description, completionText } = modal;
+  const { ability, title, deadline, goals, modal } = achievement;
+  const { description, completionText, modalImageUrl } = modal;
+
+  console.log(generateBackgroundGradient(ability));
 
   return (
-    <div className="modal">
+    <div
+      className="modal"
+      style={{
+        background: `${generateBackgroundGradient(ability)}`,
+        backgroundSize: '80% 100%',
+        backgroundRepeat: 'no-repeat',
+        backgroundPosition: 'center'
+      }}
+    >
       <Card
         className="modal-container"
         style={{
-          background: `${generateBackgroundGradient(ability)}`
+          background: `url(${modalImageUrl})`,
+          backgroundSize: '100% 20em',
+          backgroundRepeat: 'no-repeat'
         }}
       >
-        <div className="sample">
-          <img src={modalImageUrl} alt={title} />
+        <div className="modal-header">
+          <div className="modal-padder"></div>
           <div className="modal-title">
             {' '}
             <h3>{title}</h3>
@@ -41,9 +53,7 @@ function AchievementModal(props: AchievementModalProps) {
           <AchievementModalDescription description={description} />
         </div>
 
-        <ul>
-          <AchievementModalGoal goals={goals} />
-        </ul>
+        <AchievementModalGoal goals={goals} />
 
         <hr />
         <AchievementModalCompletion completionText={completionText} />

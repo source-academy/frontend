@@ -56,14 +56,10 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="dropdown"></div>
         )}
 
-        <div className="padder">
-          <p></p>
-        </div>
-
         <div className="display">
-          <div className="headings">
+          <div className="heading">
             <div className="title">
-              <h3>{title}</h3>
+              <h2>{title}</h2>
             </div>
 
             <AchievementHints release={release} />

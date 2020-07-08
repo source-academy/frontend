@@ -51,7 +51,7 @@
     }
 
     .cards {
-      width: 45%;
+      width: 40%;
       display: table;
 
       ::-webkit-scrollbar {
@@ -80,29 +80,25 @@
       }
 
       .achievement {
-        width: 90%;
+        width: 95%;
         background-color: #d9d9d9;
 
-        height: 20%;
+        height: 10em;
         margin-bottom: 10px;
 
         display: flex;
         flex-direction: column;
 
         .main {
+          margin-top: -1em;
           display: flex;
           flex-direction: row;
           flex-basis: 80%;
 
           .dropdown {
             display: flex;
-            justify-content: center;
             align-items: center;
-            flex-basis: 10%;
-          }
-
-          .padder {
-            flex-basis: 15%;
+            flex-basis: 25%;
           }
 
           .display {
@@ -111,12 +107,12 @@
             width: 100%;
             flex-direction: column;
 
-            .headings {
+            .heading {
               display: flex;
               flex-direction: row;
 
               .title {
-                flex-basis: 60%;
+                flex-basis: 50%;
               }
 
               .hints {
@@ -131,7 +127,7 @@
               flex-direction: row;
 
               .ability {
-                flex-basis: 60%;
+                flex-basis: 50%;
               }
 
               .deadline {
@@ -146,6 +142,9 @@
               }
             }
           }
+        }
+
+        .progress {
         }
       }
 
@@ -164,23 +163,20 @@
             width: 100%;
             height: 50%;
             position: flex;
-            border-bottom: 1px solid #4195fc;
-            border-left: 1px solid #4195fc;
-            box-shadow: 0px 0px 5px #4195fc;
+            border-bottom: 1px solid white;
+            border-left: 1px solid white;
           }
 
           .lower {
             width: 100%;
             height: 50%;
             position: flex;
-            border-bottom: 1px solid #4195fc;
-            border-left: 1px solid #4195fc;
-            box-shadow: 0px 0px 5px #4195fc;
+            border-left: 1px solid white;
           }
         }
 
         .prerequisite {
-          width: 80%;
+          width: 85%;
           background-color: #333e50;
           margin-bottom: 10px;
 
@@ -188,12 +184,13 @@
           flex-direction: column;
 
           .main {
+            margin-top: -1em;
             display: flex;
             flex-direction: row;
             flex-basis: 80%;
 
             .padder {
-              flex-basis: 10%;
+              flex-basis: 11%;
             }
 
             .display {
@@ -202,12 +199,12 @@
               width: 100%;
               flex-direction: column;
 
-              .headings {
+              .heading {
                 display: flex;
                 flex-direction: row;
 
                 .title {
-                  flex-basis: 60%;
+                  flex-basis: 50%;
                 }
 
                 .hints {
@@ -222,7 +219,7 @@
                 flex-direction: row;
 
                 .ability {
-                  flex-basis: 60%;
+                  flex-basis: 50%;
                 }
 
                 .deadline {
@@ -238,21 +235,23 @@
               }
             }
           }
+
+          .progress {
+          }
         }
       }
     }
 
     .modal {
-      width: 40%;
+      width: 45%;
       height: 50em;
       display: flex;
       justify-content: center;
       text-align: center;
 
       .modal-container {
-        width: 90%;
+        width: 80%;
         border: solid white;
-        background-color: #333e50;
         text-align: center;
 
         .completiom {
@@ -278,11 +277,9 @@
           .goal-medal {
             display: flex;
             flex-direction: column;
-            flex-basis: 25%;
+            flex-basis: 20%;
 
-            text-align: center;
             align-items: center;
-            justify-content: center;
           }
 
           .goal-text {
@@ -293,21 +290,21 @@
           }
         }
 
-        .sample {
+        .modal-header {
+          margin-top: -1em;
           position: relative;
           text-align: center;
           color: white;
 
-          img {
-            max-height: 30em;
-            max-width: 100%;
+          .modal-padder {
+            min-height: 20em;
+            max-height: 20em;
           }
 
           .modal-title {
             text-align: center;
             position: absolute;
-            margin: auto;
-            top: 0;
+            top: -1em;
             left: 0;
             right: 0;
           }
@@ -316,7 +313,7 @@
             text-align: center;
             position: absolute;
             margin: auto;
-            top: 3em;
+            top: 2em;
             left: 0;
             right: 0;
           }
@@ -324,9 +321,8 @@
           .modal-desc {
             text-align: center;
             position: absolute;
-            margin: auto;
             left: 0;
-            bottom: 0;
+            bottom: 1em;
             right: 0;
 
             p {
