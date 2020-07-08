@@ -1,13 +1,13 @@
 import GameManager from '../scenes/gameManager/GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId, GameLocation } from '../location/GameMapTypes';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { displayNotification } from '../effects/Notification';
-import { AssetKey } from '../commons/CommonsTypes';
+import { AssetKey } from '../commons/CommonTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 

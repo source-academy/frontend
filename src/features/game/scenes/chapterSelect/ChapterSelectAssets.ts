@@ -1,4 +1,4 @@
-import { ImageAsset } from '../../commons/CommonsTypes';
+import { ImageAsset } from '../../commons/CommonTypes';
 import { topButton } from '../../commons/CommonAssets';
 
 export const chapterSelectBackground: ImageAsset = {

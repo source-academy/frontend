@@ -1,4 +1,4 @@
-import { IGameUI, GameSprite, GameButton } from '../../commons/CommonsTypes';
+import { IGameUI, GameSprite, GameButton } from '../../commons/CommonTypes';
 import {
   previewFrameXPos,
   previewXPos,

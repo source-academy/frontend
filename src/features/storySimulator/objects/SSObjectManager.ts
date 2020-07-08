@@ -2,7 +2,7 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SSObjectDetail } from './SSObjectManagerTypes';
-import { ItemId, AssetKey } from 'src/features/game/commons/CommonsTypes';
+import { ItemId, AssetKey } from 'src/features/game/commons/CommonTypes';
 import { toIntString } from '../utils/SSUtils';
 import { loadImage } from '../utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';

@@ -1,5 +1,5 @@
 import { UserState } from './GameStateTypes';
-import { emptyUserState } from './GameStateConstants';
+import { emptyUserState, userStateStyle } from './GameStateConstants';
 import GameManager from '../scenes/gameManager/GameManager';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
@@ -8,7 +8,6 @@ import { createButton } from '../utils/StyleUtils';
 import { shortButton, longButton } from '../commons/CommonAssets';
 import { screenCenter, Constants } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
-import { mainMenuStyle } from '../scenes/mainMenu/MainMenuConstants';
 
 export default class GameUserStateManager {
   private userState: UserState;
@@ -51,7 +50,7 @@ export default class GameUserStateManager {
           { x: screenCenter.x, y: 100 },
           0.5,
           0.4,
-          mainMenuStyle
+          userStateStyle
         )
       );
       assessmentCheckContainer.add(
@@ -67,7 +66,7 @@ export default class GameUserStateManager {
             { x: screenCenter.x, y: index * 200 + 400 },
             0.5,
             0.4,
-            mainMenuStyle
+            userStateStyle
           )
         )
       );

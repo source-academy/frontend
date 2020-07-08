@@ -10,7 +10,7 @@ import {
   listIcon,
   eraseIcon
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
-import { AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
 import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';

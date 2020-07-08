@@ -2,7 +2,7 @@ import { loggableStyle, ICheckpointLoggable, IScreenLoggable } from './SSLogMana
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { AssetPath } from 'src/features/game/commons/CommonTypes';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import StringUtils from 'src/features/game/utils/StringUtils';
 import { toIntString } from '../utils/SSUtils';

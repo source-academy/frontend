@@ -1,4 +1,4 @@
-import { AssetKey, ItemId } from '../commons/CommonsTypes';
+import { AssetKey, ItemId } from '../commons/CommonTypes';
 
 export type SpeakerDetail = {
   speakerId: ItemId;

@@ -1,7 +1,7 @@
 import { GameActionType, GameAction, ActionCondition } from './GameActionTypes';
 import GameActionManager from './GameActionManager';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 
 export default class GameActionExecuter {

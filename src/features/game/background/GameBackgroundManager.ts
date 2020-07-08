@@ -1,6 +1,6 @@
 import { screenCenter, screenSize, Constants } from '../commons/CommonConstants';
 import { LocationId } from '../location/GameMapTypes';
-import { AssetKey } from '../commons/CommonsTypes';
+import { AssetKey } from '../commons/CommonTypes';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { fadeIn } from '../effects/FadeEffect';

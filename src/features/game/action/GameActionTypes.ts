@@ -1,5 +1,5 @@
 import { GameStateStorage } from '../state/GameStateTypes';
-import { ItemId, TrackInteraction } from '../commons/CommonsTypes';
+import { ItemId, TrackInteraction } from '../commons/CommonTypes';
 
 export enum GameActionType {
   MoveCharacter = 'MoveCharacter',

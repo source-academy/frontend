@@ -1,4 +1,4 @@
-import { ItemId, AssetKey, AssetPath } from 'src/features/game/commons/CommonsTypes';
+import { ItemId, AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 
 export type SSObjectDetail = {
   id: ItemId;

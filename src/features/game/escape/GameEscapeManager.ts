@@ -23,7 +23,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
 import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import { IGameUI } from '../commons/CommonsTypes';
+import { IGameUI } from '../commons/CommonTypes';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;

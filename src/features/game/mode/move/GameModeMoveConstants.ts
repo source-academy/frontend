@@ -1,5 +1,5 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
-import { GameSprite } from '../../commons/CommonsTypes';
+import { GameSprite } from '../../commons/CommonTypes';
 import { locationPreviewFill, locationPreviewFrame } from '../../commons/CommonAssets';
 
 export const moveButtonYSpace = screenSize.y * 0.8;

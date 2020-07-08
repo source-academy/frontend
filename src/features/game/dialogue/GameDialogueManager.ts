@@ -1,4 +1,4 @@
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { Dialogue } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn } from '../effects/FadeEffect';

@@ -1,4 +1,4 @@
-import { GameButton, IGameUI } from '../../commons/CommonsTypes';
+import { GameButton, IGameUI } from '../../commons/CommonTypes';
 import {
   menuEntryTweenProps,
   menuExitTweenProps,

@@ -2,7 +2,7 @@ import { mainMenuAssets, mainMenuOptBanner, mainMenuBackground } from './MainMen
 import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameButton } from '../../commons/CommonsTypes';
+import { GameButton } from '../../commons/CommonTypes';
 import {
   optionsText,
   mainMenuYSpace,
@@ -27,9 +27,10 @@ import commonAssets from '../../commons/CommonAssets';
 import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
 import { settingsAssets } from '../settings/SettingsAssets';
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import { Assessment } from 'src/commons/assessment/AssessmentTypes';
+import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { roomDefaultCode } from '../roomPreview/RoomPreviewConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
+import commonFontAssets from '../../commons/CommonFontAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -75,6 +76,9 @@ class MainMenu extends Phaser.Scene {
     mainMenuAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     chapterSelectAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    commonFontAssets.forEach(asset =>
+      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
+    );
   }
 
   private renderBackground() {
@@ -94,16 +98,18 @@ class MainMenu extends Phaser.Scene {
 
     this.optionButtons.forEach(button => {
       const text = button.text || '';
-      const style = button.style || {};
-      const buttonText = new Phaser.GameObjects.Text(
+      const style = button.bitmapStyle || Constants.defaultFontStyle;
+      const buttonText = new Phaser.GameObjects.BitmapText(
         this,
         button.assetXPos,
         button.assetYPos,
+        style.key,
         text,
-        style
+        style.size,
+        style.align
       )
-        .setOrigin(1.0, 0.15)
-        .setAlign('right');
+        .setOrigin(1.0, 0.1)
+        .setTintFill(style.fill);
       const buttonSprite = new Phaser.GameObjects.Sprite(
         this,
         screenCenter.x + bannerHide,
@@ -185,7 +191,7 @@ class MainMenu extends Phaser.Scene {
     // Add the new button
     const newTalkButton: GameButton = {
       text: name,
-      style: mainMenuStyle,
+      bitmapStyle: mainMenuStyle,
       assetKey: mainMenuOptBanner.key,
       assetXPos: screenSize.x - textXOffset,
       assetYPos: newYPos + this.optionButtons.length * partitionSize,
@@ -210,13 +216,14 @@ class MainMenu extends Phaser.Scene {
 
   private getRoomMissionId() {
     // TODO: Change to non-hardcode
-    return 401;
+    return 405;
   }
 
   private getStudentCode(mission: Assessment | null) {
     if (mission) {
-      const answer = mission.questions[0].answer;
-      return answer ? (answer as string) : roomDefaultCode;
+      const progQn = mission.questions[0] as IProgrammingQuestion;
+      const answer = progQn.answer;
+      return answer ? (answer as string) : progQn.solutionTemplate;
     }
     return roomDefaultCode;
   }

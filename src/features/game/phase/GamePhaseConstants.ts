@@ -1,7 +1,7 @@
 import GameModeMove from '../mode/move/GameModeMove';
 import GameModeTalk from '../mode/talk/GameModeTalk';
 import GameModeMenu from '../mode/menu/GameModeMenu';
-import { IGameUI } from '../commons/CommonsTypes';
+import { IGameUI } from '../commons/CommonTypes';
 import { GamePhaseType } from './GamePhaseTypes';
 import GameActionManager from '../action/GameActionManager';
 import GameModeExplore from '../mode/explore/GameModeExplore';

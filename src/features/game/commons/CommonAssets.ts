@@ -1,4 +1,4 @@
-import { ImageAsset } from './CommonsTypes';
+import { ImageAsset } from './CommonTypes';
 
 export const defaultChapter: ImageAsset = {
   key: 'defaultChapter',

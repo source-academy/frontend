@@ -1,6 +1,6 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { modeMenuBanner } from '../../commons/CommonAssets';
-import { GameSprite } from '../../commons/CommonsTypes';
+import { GameSprite } from '../../commons/CommonTypes';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 

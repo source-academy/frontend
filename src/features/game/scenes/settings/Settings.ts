@@ -110,13 +110,17 @@ class Settings extends Phaser.Scene {
       volumeUnderlineYPos,
       settingOption.key
     );
-    const volumeText = new Phaser.GameObjects.Text(
+    const volumeText = new Phaser.GameObjects.BitmapText(
       this,
       volumeTextXpos,
       volumeTextYPos,
+      optionHeaderTextStyle.key,
       'Volume',
-      optionHeaderTextStyle
-    ).setOrigin(0.5, 0.25);
+      optionHeaderTextStyle.size,
+      optionHeaderTextStyle.align
+    )
+      .setOrigin(0.5, 0.25)
+      .setTintFill(optionHeaderTextStyle.fill);
     const userVol = this.settingsSaveManager.getLoadedUserState().settings.volume;
     const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
     this.volumeRadioButtons = new RadioButtons(

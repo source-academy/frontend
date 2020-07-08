@@ -3,7 +3,7 @@ import StringUtils from '../utils/StringUtils';
 import ParserConverter from './ParserConverter';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import { GameAction, GameActionType } from '../action/GameActionTypes';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import ConditionParser from './ConditionParser';
 import { GameAttr } from './ParserValidator';
 

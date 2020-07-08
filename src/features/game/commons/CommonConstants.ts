@@ -1,3 +1,6 @@
+import { zektonFont } from './CommonFontAssets';
+import { HexColor } from '../utils/StyleUtils';
+
 export const Constants = {
   repoAssetsFolder: '../assets',
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
@@ -5,7 +8,13 @@ export const Constants = {
   nullFunction: () => {},
   nullInteractionId: '',
   popupDuration: 1000,
-  defaultAssetPath: '/UI/wristDeviceButton.png'
+  defaultAssetPath: '/UI/wristDeviceButton.png',
+  defaultFontStyle: {
+    key: zektonFont.key,
+    size: 30,
+    fill: HexColor.lightBlue,
+    align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  }
 };
 
 export const screenSize = {

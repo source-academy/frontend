@@ -1,7 +1,7 @@
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { loadImage } from '../utils/LoaderUtils';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
-import { AssetKey } from 'src/features/game/commons/CommonsTypes';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 
 export default class SSBackgroundManager {

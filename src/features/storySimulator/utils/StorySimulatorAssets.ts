@@ -1,4 +1,4 @@
-import { ImageAsset } from '../../game/commons/CommonsTypes';
+import { ImageAsset } from '../../game/commons/CommonTypes';
 
 export const storySimBg: ImageAsset = {
   key: 'student-room',

@@ -2,7 +2,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 
 import { BBoxProperty, ActivatableBBox } from './GameBoundingBoxTypes';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { StateObserver } from '../state/GameStateTypes';

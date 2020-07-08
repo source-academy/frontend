@@ -1,4 +1,4 @@
-import { SoundAsset } from './CommonsTypes';
+import { SoundAsset } from './CommonTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 
 /////////////////

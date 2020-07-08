@@ -2,7 +2,7 @@ import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
-import { ItemId } from '../commons/CommonsTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import GameActionManager from '../action/GameActionManager';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';

@@ -6,7 +6,7 @@ import storySimulatorAssets, {
 } from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import { ImageAsset } from 'src/features/game/commons/CommonsTypes';
+import { ImageAsset } from 'src/features/game/commons/CommonTypes';
 import Parser from 'src/features/game/parser/Parser';
 import {
   maxOptButtonsRow,

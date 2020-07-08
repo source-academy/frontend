@@ -2,7 +2,7 @@ import StringUtils from '../utils/StringUtils';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
-import { AssetKey, ItemId } from '../commons/CommonsTypes';
+import { AssetKey, ItemId } from '../commons/CommonTypes';
 import ParserConverter from './ParserConverter';
 
 export default class CharacterParser {

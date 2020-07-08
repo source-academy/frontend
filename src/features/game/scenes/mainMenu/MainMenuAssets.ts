@@ -1,4 +1,4 @@
-import { ImageAsset } from '../../commons/CommonsTypes';
+import { ImageAsset } from '../../commons/CommonTypes';
 
 export const mainMenuBackground: ImageAsset = {
   key: 'main-menu-bg',
