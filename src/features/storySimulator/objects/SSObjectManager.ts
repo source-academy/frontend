@@ -4,7 +4,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 import { ItemId, AssetKey } from 'src/features/game/commons/CommonTypes';
 import { toIntString } from '../utils/SSUtils';
-import { loadImage } from '../utils/LoaderUtils';
+import { loadImage } from '../../game/utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import { mapValues } from 'src/features/game/utils/GameUtils';

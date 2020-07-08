@@ -1,7 +1,7 @@
 import { loadData } from '../save/GameSaveRequests';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import Parser from '../parser/Parser';
-import { loadText } from 'src/features/storySimulator/utils/LoaderUtils';
+import { loadText } from 'src/features/game/utils/LoaderUtils';
 import { defaultChapter } from '../commons/CommonAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
 

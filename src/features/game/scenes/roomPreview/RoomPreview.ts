@@ -3,7 +3,7 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
-import { loadImage, loadSound } from 'src/features/storySimulator/utils/LoaderUtils';
+import { loadImage, loadSound } from 'src/features/game/utils/LoaderUtils';
 import { Constants } from '../../commons/CommonConstants';
 
 type RoomPreviewProps = {
