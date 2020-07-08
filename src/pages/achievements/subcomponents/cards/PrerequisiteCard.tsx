@@ -46,7 +46,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           </div>
 
           <div className="display">
-            <div className="headings">
+            <div className="heading">
               <div className="title">
                 <h3>{title}</h3>
               </div>
