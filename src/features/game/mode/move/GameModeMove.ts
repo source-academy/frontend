@@ -12,7 +12,7 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
-import { screenSize } from '../../commons/CommonConstants';
+import { screenSize, Constants } from '../../commons/CommonConstants';
 import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -68,7 +68,7 @@ class GameModeMove implements IGameUI {
     // Add the new button
     const newModeButton: GameButton = {
       text: name,
-      style: moveButtonStyle,
+      bitmapStyle: moveButtonStyle,
       assetKey: longButton.key,
       assetXPos: moveButtonXPos,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
@@ -117,14 +117,20 @@ class GameModeMove implements IGameUI {
 
     this.gameButtons.forEach(locationButton => {
       const text = locationButton.text ? locationButton.text : '';
-      const style = locationButton.style ? locationButton.style : {};
-      const locationButtonText = new Phaser.GameObjects.Text(
+      const style = locationButton.bitmapStyle
+        ? locationButton.bitmapStyle
+        : Constants.defaultFontStyle;
+      const locationButtonText = new Phaser.GameObjects.BitmapText(
         gameManager,
         locationButton.assetXPos,
         locationButton.assetYPos,
+        style.key,
         text,
-        style
-      ).setOrigin(0.5, 0.25);
+        style.size,
+        style.align
+      )
+        .setTintFill(style.fill)
+        .setOrigin(0.5, 0.25);
 
       const buttonSprite = new Phaser.GameObjects.Sprite(
         gameManager,

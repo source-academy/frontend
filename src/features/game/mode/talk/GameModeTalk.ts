@@ -3,7 +3,7 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize, screenCenter } from '../../commons/CommonConstants';
+import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -64,7 +64,7 @@ class GameModeTalk implements IGameUI {
     // Add the new button
     const newTalkButton: GameButton = {
       text: name,
-      style: talkButtonStyle,
+      bitmapStyle: talkButtonStyle,
       assetKey: talkOptButton.key,
       assetXPos: screenCenter.x,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
@@ -83,14 +83,18 @@ class GameModeTalk implements IGameUI {
 
     this.gameButtons.forEach((topicButton: GameButton) => {
       const text = topicButton.text || '';
-      const style = topicButton.style || {};
-      const topicButtonText = new Phaser.GameObjects.Text(
+      const style = topicButton.bitmapStyle || Constants.defaultFontStyle;
+      const topicButtonText = new Phaser.GameObjects.BitmapText(
         gameManager,
         topicButton.assetXPos,
         topicButton.assetYPos,
+        style.key,
         text,
-        style
-      ).setOrigin(0.5, 0.25);
+        style.size,
+        style.align
+      )
+        .setTintFill(style.fill)
+        .setOrigin(0.5, 0.25);
 
       const checkedSprite = new Phaser.GameObjects.Sprite(
         gameManager,
