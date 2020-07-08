@@ -1,6 +1,7 @@
 import React from 'react';
 import { prettifyWeek } from './utils/AchievementHints';
 import Inferencer from './utils/Inferencer';
+import AchievementLevel from './utils/AchievementLevel';
 
 type AchievementOverviewProps = {
   name?: string;
@@ -20,11 +21,7 @@ const prettifyDate = (date: Date) => {
 function AchievementOverview(props: AchievementOverviewProps) {
   const { name, studio, inferencer } = props;
 
-  const expPerLevel = 1000;
-
   const studentExp = inferencer.getStudentExp();
-  const totalExp = inferencer.getTotalExp();
-  const level = Math.floor(studentExp / expPerLevel);
 
   const now = new Date();
   const week = prettifyWeek(now);
@@ -34,10 +31,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
     <>
       <h3>{name}</h3>
       <h3>{studio}</h3>
-      <h3>{level}</h3>
-      <h3>
-        {studentExp} / {totalExp}
-      </h3>
+      <AchievementLevel studentExp={studentExp} />
       <h3>{week}</h3>
       <h3>{date}</h3>
     </>
