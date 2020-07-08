@@ -2,19 +2,19 @@ import React from 'react';
 import { ProgressBar } from '@blueprintjs/core';
 
 type AchievementProgressBarProps = {
-  progress: number;
+  progressFrac: number;
   shouldAnimate: boolean;
 };
 
 function AchievementProgressBar(props: AchievementProgressBarProps) {
-  const { progress, shouldAnimate } = props;
+  const { progressFrac, shouldAnimate } = props;
 
   return (
     <div>
       <ProgressBar
         className="progress"
-        intent={progress === 1 ? 'success' : undefined}
-        value={progress}
+        intent={progressFrac === 1 ? 'success' : undefined}
+        value={progressFrac}
         animate={shouldAnimate}
       />
     </div>

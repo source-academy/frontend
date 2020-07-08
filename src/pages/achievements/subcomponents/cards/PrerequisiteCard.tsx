@@ -23,7 +23,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
 
   const exp = inferencer.getExp(id);
   const furthestDeadline = inferencer.getFurthestDeadline(id);
-  const progressBar = inferencer.getProgressBar(id);
+  const progressFrac = inferencer.getProgressFrac(id);
 
   return (
     <div className="dropdown-expanded">
@@ -66,7 +66,10 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           </div>
         </div>
 
-        <AchievementProgressBar progress={progressBar} shouldAnimate={!shouldPartiallyRender} />
+        <AchievementProgressBar
+          progressFrac={progressFrac}
+          shouldAnimate={!shouldPartiallyRender}
+        />
       </Card>
     </div>
   );

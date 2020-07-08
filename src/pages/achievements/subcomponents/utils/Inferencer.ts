@@ -11,7 +11,7 @@ import {
  * @param {AchievementItem} achievement the achievement item
  * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
  * @param {number} exp total achievable EXP of the achievement
- * @param {number} progressBar progress in decimal, min=0, max=1
+ * @param {number} progressFrac progress percentage in fraction
  * @param {AchievementStatus} status the achievement status
  * @param {Date | undefined} furthestDeadline furthestDeadline of the achievement and all of its descendant prerequities
  * @param {Set<number>} children a set of immediate prerequisites id
@@ -21,7 +21,7 @@ class Node {
   achievement: AchievementItem;
   dataIdx: number;
   exp: number;
-  progressBar: number;
+  progressFrac: number;
   status: AchievementStatus;
   furthestDeadline?: Date;
   children: Set<number>;
@@ -33,8 +33,8 @@ class Node {
     this.achievement = achievement;
     this.dataIdx = dataIdx;
     this.exp = this.generateExp(goals);
-    this.progressBar = this.generateProgressBar(goals);
-    this.status = this.generateStatus(deadline, this.progressBar);
+    this.progressFrac = this.generateProgressFrac(goals);
+    this.status = this.generateStatus(deadline, this.progressFrac);
     this.furthestDeadline = deadline;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
@@ -44,14 +44,14 @@ class Node {
     return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
   }
 
-  private generateProgressBar(goals: AchievementGoal[]) {
+  private generateProgressFrac(goals: AchievementGoal[]) {
     const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
     return Math.min(progress / this.exp, 1);
   }
 
-  private generateStatus(deadline: Date | undefined, progressBar: number) {
-    if (progressBar === 1) {
+  private generateStatus(deadline: Date | undefined, progressFrac: number) {
+    if (progressFrac === 1) {
       return AchievementStatus.COMPLETED;
     } else if (deadline !== undefined && deadline.getTime() < Date.now()) {
       return AchievementStatus.EXPIRED;
@@ -207,8 +207,8 @@ class Inferencer {
     }, 0);
   }
 
-  public getProgressBar(id: number) {
-    return this.nodeList.get(id)!.progressBar;
+  public getProgressFrac(id: number) {
+    return this.nodeList.get(id)!.progressFrac;
   }
 
   public getStatus(id: number) {
