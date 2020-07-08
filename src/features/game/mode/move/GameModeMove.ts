@@ -130,7 +130,7 @@ class GameModeMove implements IGameUI {
         style.align
       )
         .setTintFill(style.fill)
-        .setOrigin(0.35, 0.2);
+        .setOrigin(0.4, 0.15);
 
       const buttonSprite = new Phaser.GameObjects.Sprite(
         gameManager,
