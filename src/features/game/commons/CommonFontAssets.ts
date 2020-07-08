@@ -6,6 +6,12 @@ export const zektonFont: FontAsset = {
   fntPath: '../assets/zekton.fnt'
 };
 
-const commonFontAssets = [zektonFont];
+export const alienCowsFont: FontAsset = {
+  key: 'alienAndCows',
+  pngPath: '../assets/alien_and_cows.png',
+  fntPath: '../assets/alien_and_cows.png'
+};
+
+const commonFontAssets = [zektonFont, alienCowsFont];
 
 export default commonFontAssets;
