@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { AchievementGoal } from 'src/commons/achievements/AchievementTypes';
-import { Button, Dialog, Icon } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
+import { Button, Dialog } from '@blueprintjs/core';
+import EditableAchievementGoal from './EditableAchievementGoal';
 
 type EditableAchievementGoalsProps = {
   goals: AchievementGoal[];
@@ -29,20 +29,10 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
     editGoals(newGoals);
   };
 
-  const mapGoalToJSX = (goal: AchievementGoal) => {
-    const { goalId, goalText, goalProgress, goalTarget } = goal;
-    return (
-      <div className="goal" key={goalId}>
-        <div className="goal-medal">
-          {goalId}
-          <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
-          <div>
-            {goalProgress} / {goalTarget} XP
-          </div>
-        </div>
-        <div className="goal-text">{goalText}</div>
-      </div>
-    );
+  const editGoal = (goal: AchievementGoal) => {
+    newGoals[goal.goalId] = goal;
+    setNewGoals(newGoals);
+    editGoals(newGoals);
   };
 
   const newGoalAdder = () => {
@@ -67,7 +57,9 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
         title={'Edit Goals'}
         usePortal={false}
       >
-        {newGoals.map(goal => mapGoalToJSX(goal))}
+        {newGoals.map(goal => (
+          <EditableAchievementGoal goal={goal} editGoal={editGoal} />
+        ))}
 
         {newGoalAdder()}
       </Dialog>
