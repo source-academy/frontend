@@ -1,5 +1,7 @@
 import { screenSize } from '../commons/CommonConstants';
-import { Color } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { BitmapFontStyle } from '../commons/CommonTypes';
+import { alienLeagueFont, zektonFont } from '../commons/CommonFontAssets';
 
 export const pageBannerYStartPos = -screenSize.y * 0.3;
 export const pageBannerYSpacing = 150;
@@ -20,14 +22,16 @@ export const offHoverAlpha = 0.7;
 
 export const itemsPerPage = 7;
 
-export const pageBannerTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '30px',
-  fill: Color.lightBlue
+export const pageBannerTextStyle: BitmapFontStyle = {
+  key: alienLeagueFont.key,
+  size: 35,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
-export const listBannerTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '25px',
-  fill: Color.darkBlue
+export const listBannerTextStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 25,
+  fill: HexColor.darkBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
