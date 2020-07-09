@@ -55,6 +55,7 @@
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "^16.13.1",
     "react-dropzone": "^11.0.1",
+    "react-es6-progressbar.js": "^1.1.0",
     "react-hotkeys": "^2.0.0",
     "react-mde": "^10.1.0",
     "react-redux": "^7.2.0",
