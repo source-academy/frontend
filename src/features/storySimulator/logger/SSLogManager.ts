@@ -46,7 +46,8 @@ locations
 
 ${locationId}
     modes: explore
-    actions: show_dialogue(welcome)
+    actions
+        show_dialogue(welcome)
 ${loggables.map(padWithTab).join('\n')}
 
 dialogues
