@@ -187,14 +187,11 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     await this.userStateManager.loadAssessments();
-    await this.actionExecuter.executeStoryActions(
-      this.getCurrentCheckpoint().map.getStartActions()
-    );
-    this.changeLocationTo(this.currentLocationId);
+    this.changeLocationTo(this.currentLocationId, true);
     await GameActionManager.getInstance().saveGame();
   }
 
-  private async renderLocation(locationId: LocationId) {
+  private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameActionManager.getInstance().getLocationAtId(locationId);
     await this.soundManager.renderBackgroundMusic(gameLocation.bgmKey);
 
@@ -206,20 +203,26 @@ class GameManager extends Phaser.Scene {
 
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 
-    // Notify players that location is not yet visited/has new update
+    // Execute start actions, notif, then cutscene
+    if (startAction) {
+      await this.actionExecuter.executeStoryActions(
+        this.getCurrentCheckpoint().map.getStartActions()
+      );
+    }
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
     await this.actionExecuter.executeStoryActions(gameLocation.actionIds);
+
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
 
-  public async changeLocationTo(locationId: LocationId) {
+  public async changeLocationTo(locationId: LocationId, startAction: boolean = false) {
     this.currentLocationId = locationId;
 
     await blackFade(this, 300, 500, async () => {
       await this.layerManager.clearAllLayers();
-      await this.renderLocation(locationId);
+      await this.renderLocation(locationId, startAction);
     });
 
     // Update state after location is fully rendered

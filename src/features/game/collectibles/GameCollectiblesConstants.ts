@@ -52,7 +52,7 @@ export const collectibleTitleStyle: BitmapFontStyle = {
 };
 
 export const collectibleDescStyle = {
-  fontFamily: 'Helvetica',
+  fontFamily: 'Verdana',
   fontSize: '25px',
   fill: Color.lightBlue,
   align: 'center',

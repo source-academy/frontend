@@ -27,8 +27,8 @@ export const textPadding = {
 };
 
 export const textTypeWriterStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '36px',
+  fontFamily: 'Verdana',
+  fontSize: '30px',
   fill: Color.lightBlue,
   align: 'left',
   lineSpacing: 10,
