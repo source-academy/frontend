@@ -2,27 +2,64 @@ name: Build source-academy.github.io
 on:
   push:
     branches:
-      - sa_2021
+      - sa_2021_refactor
 
 jobs:
   deploy:
     name: Deploy to GitHub Pages
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - name: Use Node.js
-        uses: actions/setup-node@v1
-        with:
-          node-version: 12.x
-      - name: npm install and build
-        run: |
-          npm install
-          npm run build
+    - uses: actions/checkout@master
+    - name: Use Node.js
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '14'
+    - name: Get yarn cache directory path
+      id: yarn-cache-dir-path
+      run: echo "::set-output name=dir::$(yarn cache dir)"
+    - id: get-time
+      run: echo "::set-output name=time::$(date -Iseconds)"
+    - uses: actions/cache@v2
+      id: yarn-cache
+      with:
+        path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+        key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-yarn-
+    - uses: actions/cache@v2
+      id: build-cache
+      with:
+        path: node_modules/.cache
+        key: ${{ runner.os }}-build-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-
+    - name: yarn install and build
+      run: |
+        yarn install
+        yarn run build
+        ln -s index.html build/playground.html
+        ln -s index.html build/contributors.html
+        ln -s index.html build/sourcecast.html
+      # the `ln`s above are a hack to make GitHub Pages route /playground
+      # and /contributors etc to index, instead of 404-ing.
+      env:
+        REACT_APP_URL_SHORTENER_SIGNATURE: ${{ secrets.REACT_APP_URL_SHORTENER_SIGNATURE }}
+        REACT_APP_URL_SHORTENER_DOMAIN: ${{ secrets.REACT_APP_URL_SHORTENER_DOMAIN }}
+        REACT_APP_SENTRY_DSN: ${{ secrets.REACT_APP_SENTRY_DSN }}
+        REACT_APP_GOOGLE_CLIENT_ID: ${{ secrets.REACT_APP_GOOGLE_CLIENT_ID }}
+        REACT_APP_GOOGLE_API_KEY: ${{ secrets.REACT_APP_GOOGLE_API_KEY }}
+        REACT_APP_GOOGLE_APP_ID: ${{ secrets.REACT_APP_GOOGLE_APP_ID }}
+        REACT_APP_PLAYGROUND_ONLY: "TRUE"
+        REACT_APP_VERSION: ${{ format('pages-{0}-{1}', github.sha, steps.get-time.outputs.time) }}
+        REACT_APP_MODULE_BACKEND_URL: https://source-academy.github.io/modules
+        SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules"]'
+        PUBLIC_URL: "https://source-academy.github.io"
 
-      - name: Deploy
-        uses: s0/git-publish-subdir-action@master
-        env:
-          REPO: git@github.com:source-academy/source-academy.github.io.git
-          BRANCH: master
-          FOLDER: build
-          SSH_PRIVATE_KEY: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        external_repository: source-academy/source-academy.github.io
+        deploy_key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
+        publish_dir: ./build
+        publish_branch: master
+        force_orphan: true
