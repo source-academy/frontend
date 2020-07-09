@@ -1,29 +1,45 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
+import { Button } from '@blueprintjs/core';
 import arrayMove from 'array-move';
 
-const SortableItem = SortableElement(({ value }: any) => <li>{value}</li>);
+const SortableItem = SortableElement(({ value }: any) => (
+  <div>
+    <Button>{value}</Button>
+  </div>
+));
 
 const SortableList = SortableContainer(({ items }: any) => {
   return (
-    <ul>
+    <div>
       {items.map((value: any, index: number) => (
         <SortableItem key={`item-${value}`} index={index} value={value} />
       ))}
-    </ul>
+    </div>
   );
 });
 
-export default class SortableComponent extends Component {
-  state = {
-    items: ['Item 1', 'Item 2', 'Item 3', 'Item 4', 'Item 5', 'Item 6']
+export default function SortableComponent() {
+  const [itemList, setItemList] = React.useState([
+    'Item 1',
+    'Item 2',
+    'Item 3',
+    'Item 4',
+    'Item 5',
+    'Item 6'
+  ]);
+  const onSortEnd = ({ oldIndex, newIndex }: any) => {
+    setItemList(prevState => arrayMove(prevState, oldIndex, newIndex));
   };
-  onSortEnd = ({ oldIndex, newIndex }: any) => {
-    this.setState(({ items }: any) => ({
-      items: arrayMove(items, oldIndex, newIndex)
-    }));
-  };
-  render() {
-    return <SortableList items={this.state.items} onSortEnd={this.onSortEnd} />;
+
+  function saveOrder() {
+    console.log(itemList);
   }
+  return (
+    <>
+      <SortableList items={itemList} onSortEnd={onSortEnd} />
+      <br />
+      <Button onClick={saveOrder}>Save</Button>
+    </>
+  );
 }
