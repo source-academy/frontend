@@ -189,14 +189,18 @@ class GameCollectiblesManager {
     );
 
     const bannerTextYPos = pageBannerYStartPos + index * pageBannerYSpacing;
-    const pageBannerText = new Phaser.GameObjects.Text(
+    const pageBannerText = new Phaser.GameObjects.BitmapText(
       this.getScene(),
       pageBannerTextXPos,
       bannerTextYPos,
+      pageBannerTextStyle.key,
       text,
-      pageBannerTextStyle
-    );
-    pageBannerText.setOrigin(0.1, 0.55);
+      pageBannerTextStyle.size,
+      pageBannerTextStyle.align
+    )
+      .setTintFill(pageBannerTextStyle.fill)
+      .setLetterSpacing(5)
+      .setOrigin(0.1, 0.5);
 
     pageBannerBg.setInteractive({ pixelPerfect: true, useHandCursor: true });
     pageBannerBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
@@ -264,14 +268,17 @@ class GameCollectiblesManager {
       objBannerYPos,
       collectiblesBanner.key
     );
-    const objListText = new Phaser.GameObjects.Text(
+    const objListText = new Phaser.GameObjects.BitmapText(
       this.getScene(),
       listBannerTextXPos,
       objBannerYPos,
+      listBannerTextStyle.key,
       obj,
-      listBannerTextStyle
-    );
-    objListText.setOrigin(0.0, 0.55);
+      listBannerTextStyle.size,
+      listBannerTextStyle.align
+    )
+      .setTintFill(listBannerTextStyle.fill)
+      .setOrigin(0.0, 0.55);
 
     objListBg.setInteractive({ pixelPerfect: true, useHandCursor: true });
     objListBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
