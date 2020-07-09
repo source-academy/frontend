@@ -29,7 +29,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager = new GameLayerManager();
   }
   public init() {
-    getStorySimulatorGame().setStorySimProps({ currentScene: this });
+    getStorySimulatorGame().setStorySimProps({ mainMenuRef: this });
     this.layerManager.initialiseMainLayer(this);
   }
 
