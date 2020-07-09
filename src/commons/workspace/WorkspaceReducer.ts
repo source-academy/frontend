@@ -31,6 +31,7 @@ import {
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -659,7 +660,21 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-
+    case NOTIFY_PROGRAM_EVALUATED:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          debuggerContext: {
+            ...state[workspaceLocation].debuggerContext,
+            result: action.payload.result,
+            lastDebuggerResult: action.payload.lastDebuggerResult,
+            code: action.payload.code,
+            context: action.payload.context,
+            workspaceLocation: action.payload.workspaceLocation
+          }
+        }
+      };
     default:
       return state;
   }
