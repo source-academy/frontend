@@ -9,7 +9,7 @@ export const zektonFont: FontAsset = {
 export const alienCowsFont: FontAsset = {
   key: 'alienAndCows',
   pngPath: '../assets/alien_and_cows.png',
-  fntPath: '../assets/alien_and_cows.png'
+  fntPath: '../assets/alien_and_cows.fnt'
 };
 
 const commonFontAssets = [zektonFont, alienCowsFont];

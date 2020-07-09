@@ -258,6 +258,7 @@ class GameActionManager {
   public getDialogue(dialogueId: ItemId) {
     return this.getGameManager().getCurrentCheckpoint().map.getDialogues().get(dialogueId);
   }
+
   /////////////////////
   //   Collectible   //
   /////////////////////

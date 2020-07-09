@@ -1,13 +1,13 @@
 import { HexColor } from '../../utils/StyleUtils';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { zektonFont } from '../../commons/CommonFontAssets';
+import { alienCowsFont } from '../../commons/CommonFontAssets';
 
 export const chapterTransitionText = 'Chapter completed.';
 export const checkpointTransitionText = 'Checkpoint reached.';
 
 export const transitionTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
-  size: 40,
+  key: alienCowsFont.key,
+  size: 80,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
