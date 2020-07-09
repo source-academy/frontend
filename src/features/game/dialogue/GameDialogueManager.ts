@@ -2,10 +2,10 @@ import { ItemId } from '../commons/CommonTypes';
 import { Dialogue } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn } from '../effects/FadeEffect';
-import DialogueGenerator from './DialogueGenerator';
+import DialogueGenerator from './GameDialogueGenerator';
 import GameActionManager from '../action/GameActionManager';
 import { Layer } from '../layer/GameLayerTypes';
-import { textTypeWriterStyle } from '../dialogue/DialogueConstants';
+import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
 import GameManager from '../scenes/gameManager/GameManager';
 

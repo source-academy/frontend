@@ -1,7 +1,7 @@
 import { screenCenter } from '../commons/CommonConstants';
 import Typewriter from '../effects/Typewriter';
 import { speechBox } from '../commons/CommonAssets';
-import { textPadding, dialogueRect } from '../dialogue/DialogueConstants';
+import { textPadding, dialogueRect } from './GameDialogueConstants';
 
 export function createDialogueBox(scene: Phaser.Scene) {
   const dialogueBox = new Phaser.GameObjects.Image(

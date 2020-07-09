@@ -34,12 +34,3 @@ export const textTypeWriterStyle = {
   lineSpacing: 10,
   wordWrap: { width: dialogueRect.width - textPadding.x * 2 - dialogueRectMargin * 2 }
 };
-
-export const titleTypeWriterStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '50px',
-  fill: Color.yellow,
-  align: 'center',
-  lineSpacing: 15,
-  wordWrap: { width: dialogueRect.width - textPadding.x * 2 - dialogueRectMargin * 2 }
-};

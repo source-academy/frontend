@@ -16,7 +16,8 @@ export const Color = {
   red: '0#ff0000',
   maroon: '#142B2E',
   black: '#000000',
-  purple: '#dd33dd'
+  purple: '#dd33dd',
+  paleYellow: '#f6ffbd'
 };
 
 const hex = (str: string) => parseInt(str.slice(1), 16);

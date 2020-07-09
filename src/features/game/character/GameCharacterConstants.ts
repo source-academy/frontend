@@ -1,5 +1,7 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
-import { Color } from '../utils/StyleUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { BitmapFontStyle } from '../commons/CommonTypes';
+import { zektonFont } from '../commons/CommonFontAssets';
 
 export const charWidth = 700;
 const charXOffset = 350;
@@ -11,14 +13,13 @@ export const charRect = {
 };
 
 export const speakerRect = {
-  x: 330,
-  y: 740
+  x: 320,
+  y: 745
 };
 
-export const speakerTextStyle = {
-  fontFamily: 'Helvetica',
-  fontSize: '36px',
-  fill: Color.lightBlue,
-  align: 'center',
-  lineSpacing: 10
+export const speakerTextStyle: BitmapFontStyle = {
+  key: zektonFont.key,
+  size: 36,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };

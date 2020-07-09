@@ -104,13 +104,17 @@ export default class CharacterManager {
       speakerBox.key
     ).setAlpha(0.8);
 
-    const speakerText = new Phaser.GameObjects.Text(
+    const speakerText = new Phaser.GameObjects.BitmapText(
       gameManager,
       speakerRect.x,
       speakerRect.y,
+      speakerTextStyle.key,
       '',
-      speakerTextStyle
-    ).setOrigin(0.5);
+      speakerTextStyle.size,
+      speakerTextStyle.align
+    )
+      .setTintFill(speakerTextStyle.fill)
+      .setOrigin(0.5, 0.5);
 
     if (positionRight) {
       rectangle.displayWidth *= -1;

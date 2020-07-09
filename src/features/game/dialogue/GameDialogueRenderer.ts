@@ -3,7 +3,7 @@ import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 import { diamond } from '../commons/CommonAssets';
 import GameManager from '../scenes/gameManager/GameManager';
 import { screenSize } from '../commons/CommonConstants';
-import { diamondSize, diamondPadding } from './DialogueConstants';
+import { diamondSize, diamondPadding } from './GameDialogueConstants';
 import { blink, fadeAndDestroy } from '../effects/FadeEffect';
 
 class DialogueRenderer {
