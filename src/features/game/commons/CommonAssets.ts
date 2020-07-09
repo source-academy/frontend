@@ -110,6 +110,11 @@ export const arrow: ImageAsset = {
   path: '/ui/arrow.png'
 };
 
+export const cookies: ImageAsset = {
+  key: 'cookies',
+  path: '/images/cookies.png'
+};
+
 const commonAssets = [
   shortButton,
   longButton,
@@ -131,7 +136,8 @@ const commonAssets = [
   collectiblesPageChosen,
   collectiblesBanner,
   diamond,
-  arrow
+  arrow,
+  cookies
 ];
 
 export default commonAssets;

@@ -7,7 +7,6 @@
 The Source Academy is a gamified platform designed to teach students coding while having fun! This repository in particular houses the source code for the frontend written in ReactJS with Redux.
 
 ## Features
-
 - Playground to write and test programs
 - Built-in Debugger and Visualiser to interact with your programs
 - Missions/Quests/Contests to solve challenging problems while learning about programming fundamentals
@@ -17,7 +16,6 @@ The Source Academy is a gamified platform designed to teach students coding whil
 ## Getting Started
 
 ### Installation
-
 1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
@@ -30,7 +28,40 @@ The project requires some environment variables to be set to work properly. In t
 
 #### Backend configuration
 
-\*If you require access to Luminus keys please email Prof Henz at henz@comp.nus.edu.sg to request for a with the email subject heading "Request for Luminus API Keys".
+1. `REACT_APP_BACKEND_URL`: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
+1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
+1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
+
+#### URL shortener configuration
+
+Unless you need to use the shortener locally, you can leave these values blank. Otherwise, ask your backend engineer.
+
+1. `REACT_APP_URL_SHORTENER_SIGNATURE`: The API key for the YOURLS URL shortener.
+1. `REACT_APP_URL_SHORTENER_DOMAIN`: The base URL of the YOURLS URL shortener. Unless you need to use the shortener locally, you can leave this blank. Otherwise, ask your backend engineer.
+
+#### Authentication provider configuration
+
+If you are testing with a local backend, the values in `.env.example` match the default development configuration of the backend. Otherwise, your backend engineer should provide you with the configuration for the staging and/or production backend.
+
+`n` is an integer starting from 1. The numbers must be consecutive i.e. if you have 5 authentication providers, the numbers must be 1, 2, 3, 4, and 5.
+
+1. `REACT_APP_OAUTH2_PROVIDERn`: The provider ID of the nth authentication provider. This must match the backend configuration.
+1. `REACT_APP_OAUTH2_PROVIDERn_NAME`: The name of the nth authentication provider shown on the login screen.
+1. `REACT_APP_OAUTH2_PROVIDERn_ENDPOINT`: The authentication endpoint of the nth authentication provider.
+
+#### Google API configuration
+
+The following properties are used for the Playground Google Drive integration. You can leave them blank if you are not using or testing that feature locally.
+
+1. `REACT_APP_GOOGLE_CLIENT_ID`: The OAuth2 client ID issued by Google.
+1. `REACT_APP_GOOGLE_API_KEY`: The Picker API key issued by Google.
+1. `REACT_APP_GOOGLE_APP_ID`: The project ID of the Google API project.
+
+See [here](https://github.com/source-academy/cadet-frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
+
+#### Other configuration
+
+1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).
 
 ## Development
 
@@ -44,14 +75,6 @@ Before pushing to Github, ensure that your code is formatted and your tests are 
 ### Running your own js-slang
 
 See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
-
-### Running your own js-slang
-
-See [js-slang README](https://github.com/source-academy/js-slang#using-your-js-slang-in-local-source-academy) for instructions how to run your own js-slang in the cadet-frontend.
-
-### Development of Source Acacademy 2021
-
-The development of Source Academy 2021 is on-going. Use the branch `sa_2021` in this repository for your pull requests. The tip of branch `sa_2021` in `cadet-frontend` is automatically deployed as [https://source-academy.github.io/](https://source-academy.github.io/).
 
 ### Contribution Guidelines
 
