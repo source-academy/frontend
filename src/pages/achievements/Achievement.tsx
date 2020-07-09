@@ -30,13 +30,13 @@ function Achievement(props: DispatchProps & StateProps) {
   const generateBackgroundGradient = (ability: AchievementAbility) => {
     switch (ability) {
       case 'Core':
-        return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(98, 89, 0, 0.8))`;
+        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(98, 89, 0, 1))`;
       case 'Community':
-        return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(247, 3, 240, 0.8))`;
+        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(247, 3, 240, 1))`;
       case 'Effort':
-        return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(77, 77, 77, 0.8))`;
+        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(77, 77, 77, 1))`;
       case 'Exploration':
-        return `radial-gradient(circle, rgba(255, 255, 255, 0.8), rgba(10, 125, 78, 0.8))`;
+        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(10, 125, 78, 1))`;
       default:
         return ``;
     }
