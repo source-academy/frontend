@@ -3,19 +3,16 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameButton } from '../../commons/CommonTypes';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
-import commonSoundAssets, {
-  buttonHoverSound,
-  galacticHarmonyBgMusic
-} from '../../commons/CommonSoundAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
-import commonFontAssets from '../../commons/CommonFontAssets';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import FontAssets from '../../assets/FontAssets';
+import SoundAssets from '../../assets/SoundAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -36,7 +33,7 @@ class MainMenu extends Phaser.Scene {
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
-    this.soundManager.loadSounds(commonSoundAssets.concat([galacticHarmonyBgMusic]));
+    this.soundManager.loadSoundAssetMap(SoundAssets);
     this.createOptionButtons();
     addLoadingScreen(this);
   }
@@ -53,15 +50,15 @@ class MainMenu extends Phaser.Scene {
     this.roomCode = await getRoomPreviewCode(accountInfo);
     const fullSaveState = await loadData(accountInfo);
     const volume = fullSaveState.userState ? fullSaveState.userState.settings.volume : 1;
-    this.soundManager.playBgMusic(galacticHarmonyBgMusic.key, volume);
+    this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
   private preloadAssets() {
     Object.entries(ImageAssets).forEach(asset =>
       this.load.image(asset[1].key, toS3Path(asset[1].path))
     );
-    commonFontAssets.forEach(asset =>
-      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
+    Object.entries(FontAssets).forEach(asset =>
+      this.load.bitmapFont(asset[1].key, asset[1].pngPath, asset[1].fntPath)
     );
   }
 
@@ -99,7 +96,7 @@ class MainMenu extends Phaser.Scene {
 
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-        this.soundManager.playSound(buttonHoverSound.key);
+        this.soundManager.playSound(SoundAssets.buttonHoverSound.key);
         this.tweens.add({
           targets: buttonSprite,
           ...mainMenuConstants.onFocusOptTween

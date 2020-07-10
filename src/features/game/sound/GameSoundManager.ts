@@ -3,7 +3,7 @@ import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAc
 import { sleep, toS3Path } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 import { UserSaveState } from '../save/GameSaveTypes';
-import { SoundAsset } from '../assets/AssetsTypes';
+import { SoundAsset, AssetMap } from '../assets/AssetsTypes';
 
 class GameSoundManager {
   private soundAssets: Map<AssetKey, SoundAsset>;
@@ -39,6 +39,13 @@ class GameSoundManager {
     soundAssets.forEach(asset => {
       this.soundAssets.set(asset.key, asset);
       this.loadSound(asset.key, toS3Path(asset.path));
+    });
+  }
+
+  public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
+    Object.entries(assetMap).forEach(asset => {
+      this.soundAssets.set(asset[1].key, asset[1]);
+      this.loadSound(asset[1].key, toS3Path(asset[1].path));
     });
   }
 

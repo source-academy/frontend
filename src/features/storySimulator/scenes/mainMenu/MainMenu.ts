@@ -6,11 +6,11 @@ import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from '../../StorySimulatorTypes';
-import commonFontAssets from 'src/features/game/commons/CommonFontAssets';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import ImageAssets from 'src/features/game/assets/ImageAssets';
 import SSImageAssets from '../../assets/ImageAssets';
+import FontAssets from 'src/features/game/assets/FontAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -32,8 +32,8 @@ class MainMenu extends Phaser.Scene {
     Object.entries(SSImageAssets).forEach(asset =>
       this.load.image(asset[1].key, toS3Path(asset[1].path))
     );
-    commonFontAssets.forEach(asset =>
-      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
+    Object.entries(FontAssets).forEach(asset =>
+      this.load.bitmapFont(asset[1].key, asset[1].pngPath, asset[1].fntPath)
     );
   }
 

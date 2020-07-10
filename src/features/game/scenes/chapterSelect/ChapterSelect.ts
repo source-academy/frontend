@@ -11,7 +11,6 @@ import { GameChapter } from '../../chapter/GameChapterTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { onHoverAlpha } from 'src/features/storySimulator/cursorMode/SSCursorModeConstants';
 import ImageAssets from '../../assets/ImageAssets';
 
 class ChapterSelect extends Phaser.Scene {
@@ -149,7 +148,7 @@ class ChapterSelect extends Phaser.Scene {
     arrow.setInteractive({ useHandCursor: true });
     arrow.setAlpha(chapConstants.offHoverAlpha);
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      arrow.setAlpha(onHoverAlpha)
+      arrow.setAlpha(chapConstants.onHoverAlpha)
     );
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => setScroll(true));
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
