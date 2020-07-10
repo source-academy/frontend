@@ -1,23 +1,28 @@
 .Achievements {
   display: flex;
   flex-direction: column;
-  flex: 1 1 100%;
+  flex: 1 1 auto;
+
+  overflow: hidden;
 
   background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal.png);
+  background-position: center;
 
   .achievement-overview {
     display: flex;
 
+    height: 100%;
+    width: 50%;
+
     flex-direction: row;
-    flex-wrap: nowrap;
-    justify-content: space-around;
+    justify-content: space-evenly;
     align-items: center;
-    color: #ffffff;
 
-    margin-right: 50%;
+    font-size: 1.3em;
+    color: white;
 
-    .progress {
-      height: 1.5em;
+    .level-progress {
+      height: 1.3em;
       width: 15em;
     }
   }
@@ -26,10 +31,8 @@
     display: flex;
 
     flex-direction: row;
-    flex-wrap: wrap;
     justify-content: flex-start;
     align-items: center;
-    text-align: justify;
 
     & > * {
       overflow-wrap: break-word;
@@ -38,7 +41,7 @@
     .filters {
       display: flex;
 
-      height: 80%;
+      height: 70%;
       width: 15%;
 
       flex-direction: column;
@@ -51,15 +54,15 @@
         flex-direction: column;
         align-items: center;
 
+        font-weight: bold;
         font-size: 1.3em;
         line-height: 0.8em;
-
         color: white;
       }
     }
 
     .cards {
-      width: 40%;
+      width: 35%;
       display: table;
 
       // Scroll Bar

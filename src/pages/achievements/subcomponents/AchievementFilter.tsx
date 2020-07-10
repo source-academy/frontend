@@ -24,7 +24,7 @@ function AchievementFilter(props: AchievementFilterProps) {
     <div className="filter-button" onClick={changeFilterStatus}>
       <Icon color={'#ffffff'} iconSize={40} icon={icon} />
       <br />
-      {filterStatus} ({count})
+      {filterStatus} [{count}]
     </div>
   );
 }
