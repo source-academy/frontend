@@ -29,6 +29,8 @@ const baseProps = {
   replValue: '',
   websocketStatus: 0,
   usingSubst: false,
+  persistenceUser: undefined,
+  persistenceFile: undefined,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -61,7 +63,12 @@ const baseProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handleFetchChapter: () => {},
-  handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
+  handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
+  handlePersistenceOpenPicker: () => {},
+  handlePersistenceSaveFile: () => {},
+  handlePersistenceInitialise: () => {},
+  handlePersistenceUpdateFile: () => {},
+  handlePersistenceLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {

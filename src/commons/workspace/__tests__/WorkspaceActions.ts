@@ -73,13 +73,12 @@ import {
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
-  WorkspaceLocation,
-  WorkspaceLocations
+  WorkspaceLocation
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
+const assessmentWorkspace: WorkspaceLocation = 'assessment';
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('browseReplHistoryDown generates correct action object', () => {
   const action = browseReplHistoryDown(assessmentWorkspace);

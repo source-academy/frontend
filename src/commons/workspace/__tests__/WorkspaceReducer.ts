@@ -56,15 +56,14 @@ import {
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState
 } from '../WorkspaceTypes';
 
-const assessmentWorkspace: WorkspaceLocation = WorkspaceLocations.assessment;
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
-const sourcecastWorkspace: WorkspaceLocation = WorkspaceLocations.sourcecast;
-const sourcereelWorkspace: WorkspaceLocation = WorkspaceLocations.sourcereel;
+const assessmentWorkspace: WorkspaceLocation = 'assessment';
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
+const sourcecastWorkspace: WorkspaceLocation = 'sourcecast';
+const sourcereelWorkspace: WorkspaceLocation = 'sourcereel';
 
 function generateActions(type: string, payload: any = {}): any[] {
   return [
@@ -497,18 +496,18 @@ describe('END_CLEAR_CONTEXT', () => {
         'default'
       );
 
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          context: {
-            ...context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
-          },
-          globals: mockGlobals
-        }
-      });
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...defaultWorkspaceManager,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            context,
+            globals: mockGlobals
+          }
+        })
+      );
     });
   });
 });
@@ -1060,7 +1059,7 @@ describe('FINISH_INVITE', () => {
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
-      ...createDefaultWorkspace(WorkspaceLocations.playground),
+      ...createDefaultWorkspace('playground'),
       editorHeight: 200,
       editorValue: 'test program here',
       highlightedLines: [
@@ -1145,19 +1144,19 @@ describe('RESET_WORKSPACE', () => {
       const result = WorkspaceReducer(resetWorkspaceDefaultState, action);
       const location = action.payload.workspaceLocation;
       const newContext = createDefaultWorkspace(location);
-      expect(result).toEqual({
-        ...resetWorkspaceDefaultState,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          ...newContext,
-          ...workspaceOptions,
-          context: {
-            ...newContext.context,
-            runtime: expect.anything(),
-            contextId: expect.any(Number)
+      // Note: we stringify because context contains functions which cause
+      // the two to compare unequal; stringifying strips functions
+      expect(JSON.stringify(result)).toEqual(
+        JSON.stringify({
+          ...resetWorkspaceDefaultState,
+          [location]: {
+            ...defaultWorkspaceManager[location],
+            ...newContext,
+            ...workspaceOptions,
+            context: newContext.context
           }
-        }
-      });
+        })
+      );
     });
   });
 });

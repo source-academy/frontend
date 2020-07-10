@@ -62,7 +62,6 @@ import {
   UPDATE_REPL_VALUE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState
 } from '../workspace/WorkspaceTypes';
 
@@ -85,7 +84,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
   let lastOutput: InterpreterOutput;
 
   switch (workspaceLocation) {
-    case WorkspaceLocations.sourcecast:
+    case 'sourcecast':
       const sourcecastState = SourcecastReducer(state.sourcecast, action);
       if (sourcecastState === state.sourcecast) {
         break;
@@ -94,7 +93,7 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
         ...state,
         sourcecast: sourcecastState
       };
-    case WorkspaceLocations.sourcereel:
+    case 'sourcereel':
       const sourcereelState = SourcereelReducer(state.sourcereel, action);
       if (sourcereelState === state.sourcereel) {
         break;
@@ -260,7 +259,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.moduleParams
           ),
           globals: action.payload.library.globals
         }

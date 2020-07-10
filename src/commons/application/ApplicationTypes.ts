@@ -8,7 +8,6 @@ import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
   WorkspaceLocation,
-  WorkspaceLocations,
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
@@ -186,10 +185,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   ),
   editorPrepend: '',
   editorSessionId: '',
-  editorValue:
-    workspaceLocation === WorkspaceLocations.playground || WorkspaceLocations.sourcecast
-      ? defaultEditorValue
-      : '',
+  editorValue: workspaceLocation === 'playground' || 'sourcecast' ? defaultEditorValue : '',
   editorPostpend: '',
   editorReadonly: false,
   editorTestcases: [],
@@ -220,23 +216,23 @@ export const defaultRoomId = null;
 
 export const defaultWorkspaceManager: WorkspaceManagerState = {
   assessment: {
-    ...createDefaultWorkspace(WorkspaceLocations.assessment),
+    ...createDefaultWorkspace('assessment'),
     currentAssessment: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
   grading: {
-    ...createDefaultWorkspace(WorkspaceLocations.grading),
+    ...createDefaultWorkspace('grading'),
     currentSubmission: undefined,
     currentQuestion: undefined,
     hasUnsavedChanges: false
   },
   playground: {
-    ...createDefaultWorkspace(WorkspaceLocations.playground),
+    ...createDefaultWorkspace('playground'),
     usingSubst: false
   },
   sourcecast: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcecast),
+    ...createDefaultWorkspace('sourcecast'),
     audioUrl: '',
     codeDeltasToApply: null,
     currentPlayerTime: 0,
@@ -252,7 +248,7 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     title: null
   },
   sourcereel: {
-    ...createDefaultWorkspace(WorkspaceLocations.sourcereel),
+    ...createDefaultWorkspace('sourcereel'),
     playbackData: {
       init: { editorValue: '', chapter: 1, externalLibrary: ExternalLibraryName.NONE },
       inputs: []
