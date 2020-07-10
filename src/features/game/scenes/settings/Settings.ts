@@ -2,21 +2,10 @@ import RadioButtons from '../../commons/CommonRadioButtons';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
-import {
-  volumeContainerOptions,
+import settingsConstants, {
   optionTextStyle,
-  volumeOptionTextAnchorX,
-  volumeOptionTextAnchorY,
   optionHeaderTextStyle,
-  applySettingsTextStyle,
-  applySettingsAnchorX,
-  applySettingsAnchorY,
-  volumeUnderlineYPos,
-  volumeTextXpos,
-  volumeTextYPos,
-  optionsXSpace,
-  optionsXPos,
-  volumeOptionYPos
+  applySettingsTextStyle
 } from './SettingsConstants';
 import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
@@ -80,8 +69,8 @@ class Settings extends Phaser.Scene {
       () => this.applySettings(this.volumeRadioButtons),
       ImageAssets.mediumButton.key,
       { x: screenCenter.x, y: screenSize.y * 0.925 },
-      applySettingsAnchorX,
-      applySettingsAnchorY,
+      settingsConstants.applySettingsAnchorX,
+      settingsConstants.applySettingsAnchorY,
       applySettingsTextStyle
     );
     const backButton = new CommonBackButton(
@@ -101,28 +90,30 @@ class Settings extends Phaser.Scene {
     const volumeBg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
-      volumeUnderlineYPos,
+      settingsConstants.volUnderlineYPos,
       ImageAssets.settingOption.key
     );
     const volumeText = createBitmapText(
       this,
       'Volume',
-      volumeTextXpos,
-      volumeTextYPos,
+      settingsConstants.volTextXpos,
+      settingsConstants.volTextYPos,
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
     const userVol = this.settingsSaveManager.getLoadedUserState().settings.volume;
-    const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
+    const userVolIdx = settingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === userVol
+    );
     this.volumeRadioButtons = new RadioButtons(
       this,
-      volumeContainerOptions,
+      settingsConstants.volContainerOpts,
       userVolIdx,
-      optionsXSpace,
+      settingsConstants.optXSpace,
       optionTextStyle,
-      optionsXPos,
-      volumeOptionYPos,
-      volumeOptionTextAnchorX,
-      volumeOptionTextAnchorY,
+      settingsConstants.optXPos,
+      settingsConstants.volOptYPos,
+      settingsConstants.volOptTextAnchorX,
+      settingsConstants.volOptTextAnchorY,
       20,
       5,
       15,

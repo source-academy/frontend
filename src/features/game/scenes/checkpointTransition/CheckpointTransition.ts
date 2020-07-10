@@ -7,14 +7,7 @@ import { SampleChapters } from '../chapterSelect/SampleChapters';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import {
-  chapterTransitionText,
-  checkpointTransitionText,
-  transitionTextStyle,
-  transitionEntryTween,
-  transitionExitTween,
-  transitionDuration
-} from './CheckpointConstants';
+import checkpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
 import { sleep } from '../../utils/GameUtils';
 import { screenCenter } from '../../commons/CommonConstants';
 import { createBitmapText } from '../../utils/TextUtils';
@@ -37,12 +30,12 @@ class CheckpointTransition extends Phaser.Scene {
         this.scene.start('MainMenu');
         return;
       } else {
-        await this.showTransitionText(chapterTransitionText);
+        await this.showTransitionText(checkpointConstants.chapterText);
         await callGameManagerOnTxtLoad(this, chapterDetails, true, currChapter + 1, 0);
         return;
       }
     } else {
-      await this.showTransitionText(checkpointTransitionText);
+      await this.showTransitionText(checkpointConstants.checkpointText);
       await callGameManagerOnTxtLoad(this, chapterDetails, false, currChapter, currCheckpoint + 1);
       return;
     }
@@ -63,17 +56,17 @@ class CheckpointTransition extends Phaser.Scene {
 
     this.tweens.add({
       targets: transitionText,
-      ...transitionEntryTween
+      ...checkpointConstants.entryTween
     });
 
-    await sleep(transitionDuration * 2);
+    await sleep(checkpointConstants.tweenDuration * 2);
 
     this.tweens.add({
       targets: transitionText,
-      ...transitionExitTween
+      ...checkpointConstants.exitTween
     });
 
-    await sleep(transitionDuration);
+    await sleep(checkpointConstants.tweenDuration);
   }
 
   private async saveChapterComplete(

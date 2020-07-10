@@ -3,20 +3,6 @@ import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
 
-export const optionsXSpace = screenSize.x * 0.4;
-export const optionsXPos = 140;
-
-export const volumeUnderlineYPos = screenSize.y * 0.25;
-export const volumeTextXpos = screenSize.x * 0.25;
-export const volumeTextYPos = screenSize.y * 0.23;
-export const volumeOptionYPos = screenSize.y * 0.24;
-export const volumeOptionTextAnchorX = 0.5;
-export const volumeOptionTextAnchorY = 0.25;
-export const volumeContainerOptions = ['0', '0.5', '1.0', '1.5', '2.0'];
-
-export const applySettingsAnchorX = 0.33;
-export const applySettingsAnchorY = 0.85;
-
 export const optionTextStyle: BitmapFontStyle = {
   key: zektonFont.key,
   size: 25,
@@ -37,3 +23,19 @@ export const applySettingsTextStyle: BitmapFontStyle = {
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
+
+const settingsConstants = {
+  optXSpace: screenSize.x * 0.4,
+  optXPos: 140,
+  volUnderlineYPos: screenSize.y * 0.25,
+  volTextXpos: screenSize.x * 0.25,
+  volTextYPos: screenSize.y * 0.23,
+  volOptYPos: screenSize.y * 0.24,
+  volOptTextAnchorX: 0.5,
+  volOptTextAnchorY: 0.25,
+  volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0'],
+  applySettingsAnchorX: 0.33,
+  applySettingsAnchorY: 0.85
+};
+
+export default settingsConstants;

@@ -1,4 +1,4 @@
-import { FontAsset } from './CommonTypes';
+import { FontAsset } from '../assets/AssetsTypes';
 
 export const zektonFont: FontAsset = {
   key: 'zekton',

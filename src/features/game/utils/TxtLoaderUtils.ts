@@ -3,7 +3,7 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 import Parser from '../parser/Parser';
 import { loadText } from 'src/features/game/utils/LoaderUtils';
 import { GameChapter } from '../chapter/GameChapterTypes';
-import ImageAssets from '../assets/ImageAssets';
+import TextAssets from '../assets/TextAssets';
 
 export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,
@@ -18,17 +18,17 @@ export async function callGameManagerOnTxtLoad(
   }
   const chapterKey = `#${filename}`;
   await loadText(scene, chapterKey, filename);
-  await loadText(scene, ImageAssets.defaultChapter.key, ImageAssets.defaultChapter.path);
+  await loadText(scene, TextAssets.defaultCheckpoint.key, TextAssets.defaultCheckpoint.path);
 
   const text = scene.cache.text.get(chapterKey);
-  const defaultChapterText = scene.cache.text.get(ImageAssets.defaultChapter.key);
+  const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key);
 
   const accountInfo = getSourceAcademyGame().getAccountInfo();
   if (!accountInfo) {
     return;
   }
   const fullSaveState = await loadData(accountInfo);
-  Parser.parse(defaultChapterText);
+  Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);
   const gameCheckpoint = Parser.checkpoint;
 

@@ -26,6 +26,7 @@ export const chapterActionAltStyle: BitmapFontStyle = {
 
 const marginX = 0;
 const marginY = 100;
+const imageRectWidth = 500;
 
 const chapConstants = {
   defaultScrollSpeed: 20,
@@ -45,12 +46,10 @@ const chapConstants = {
     height: screenSize.y - marginY * 2
   },
   imageRect: {
-    width: 500,
+    width: imageRectWidth,
     height: 700
   },
-  imageDist: 0
+  imageDist: imageRectWidth + 150
 };
-
-chapConstants.imageDist = chapConstants.imageRect.width + 150;
 
 export default chapConstants;

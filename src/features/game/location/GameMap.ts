@@ -1,5 +1,6 @@
 import { GameLocation, LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { ItemId, AssetKey, AssetPath, SoundAsset } from '../commons/CommonTypes';
+import { SoundAsset } from '../assets/AssetsTypes';
+import { ItemId, AssetKey, AssetPath } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';

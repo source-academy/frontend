@@ -8,7 +8,7 @@ import escapeConstants, {
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
-import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
+import settingsConstants from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
@@ -45,10 +45,12 @@ class GameEscapeManager implements IGameUI {
     const userVol = GameActionManager.getInstance()
       .getGameManager()
       .saveManager.getLoadedUserState().settings.volume;
-    const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
+    const userVolIdx = settingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === userVol
+    );
     this.volumeOptions = new CommonRadioButtons(
       gameManager,
-      volumeContainerOptions,
+      settingsConstants.volContainerOpts,
       userVolIdx,
       escapeConstants.radioButtonsXSpace,
       volumeRadioOptTextStyle,

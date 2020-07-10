@@ -2,15 +2,7 @@ import { screenCenter, screenSize, Constants } from '../../commons/CommonConstan
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameButton } from '../../commons/CommonTypes';
-import {
-  optionsText,
-  mainMenuYSpace,
-  mainMenuStyle,
-  textXOffset,
-  bannerHide,
-  onFocusOptTween,
-  outFocusOptTween
-} from './MainMenuConstants';
+import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 import commonSoundAssets, {
   buttonHoverSound,
   galacticHarmonyBgMusic
@@ -100,7 +92,7 @@ class MainMenu extends Phaser.Scene {
       ).setOrigin(1.0, 0.1);
       const buttonSprite = new Phaser.GameObjects.Sprite(
         this,
-        screenCenter.x + bannerHide,
+        screenCenter.x + mainMenuConstants.bannerHide,
         button.assetYPos,
         button.assetKey
       ).setInteractive({ pixelPerfect: true, useHandCursor: true });
@@ -110,13 +102,13 @@ class MainMenu extends Phaser.Scene {
         this.soundManager.playSound(buttonHoverSound.key);
         this.tweens.add({
           targets: buttonSprite,
-          ...onFocusOptTween
+          ...mainMenuConstants.onFocusOptTween
         });
       });
       buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
         this.tweens.add({
           targets: buttonSprite,
-          ...outFocusOptTween
+          ...mainMenuConstants.outFocusOptTween
         });
       });
       optionsContainer.add(buttonSprite);
@@ -129,7 +121,7 @@ class MainMenu extends Phaser.Scene {
   private createOptionButtons() {
     this.optionButtons = [];
     this.addOptionButton(
-      optionsText.chapterSelect,
+      mainMenuConstants.optionsText.chapterSelect,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('ChapterSelect');
@@ -137,7 +129,7 @@ class MainMenu extends Phaser.Scene {
       Constants.nullInteractionId
     );
     this.addOptionButton(
-      optionsText.studentRoom,
+      mainMenuConstants.optionsText.studentRoom,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('MyRoom');
@@ -153,7 +145,7 @@ class MainMenu extends Phaser.Scene {
       Constants.nullInteractionId
     );
     this.addOptionButton(
-      optionsText.settings,
+      mainMenuConstants.optionsText.settings,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('Settings');
@@ -164,9 +156,9 @@ class MainMenu extends Phaser.Scene {
 
   private addOptionButton(name: string, callback: any, interactionId: string) {
     const newNumberOfButtons = this.optionButtons.length + 1;
-    const partitionSize = mainMenuYSpace / newNumberOfButtons;
+    const partitionSize = mainMenuConstants.buttonYSpace / newNumberOfButtons;
 
-    const newYPos = (screenSize.y - mainMenuYSpace + partitionSize) / 2;
+    const newYPos = (screenSize.y - mainMenuConstants.buttonYSpace + partitionSize) / 2;
 
     // Rearrange existing buttons
     for (let i = 0; i < this.optionButtons.length; i++) {
@@ -181,7 +173,7 @@ class MainMenu extends Phaser.Scene {
       text: name,
       bitmapStyle: mainMenuStyle,
       assetKey: ImageAssets.mainMenuOptBanner.key,
-      assetXPos: screenSize.x - textXOffset,
+      assetXPos: screenSize.x - mainMenuConstants.textXOffset,
       assetYPos: newYPos + this.optionButtons.length * partitionSize,
       isInteractive: true,
       onInteract: callback,
