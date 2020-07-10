@@ -11825,13 +11825,6 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-progressbar.js@^1.0.1:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/progressbar.js/-/progressbar.js-1.1.0.tgz#300f99be40ba93fb0867f91dff01771236cade70"
-  integrity sha512-K68/xcyXKo2I6T3PfIkXrRaycxROmWeU4bugb49iulWR25cU94PM0cfZ47S0jDhG5K3vPhZwCOy1fgb5Pgh6UQ==
-  dependencies:
-    shifty "^2.1.2"
-
 promise-inflight@^1.0.1, promise-inflight@~1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
@@ -12193,14 +12186,6 @@ react-error-overlay@^6.0.7:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.0.7.tgz#1dcfb459ab671d53f660a991513cb2f0a0553108"
   integrity sha512-TAv1KJFh3RhqxNvhzxj6LeT5NWklP6rDr2a0jaTfsZ5wSZWHOGeqQyejUp3xxLfPt2UpyJEcVQB/zyPcmonNFA==
 
-react-es6-progressbar.js@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-es6-progressbar.js/-/react-es6-progressbar.js-1.1.0.tgz#2474ea0e24c468f193614c6b16af2da7c16610b0"
-  integrity sha512-uFOevq5TNCtYQcmDsdyBPmN3L8sFOeYgunH5Ro0HycIAnmvHJvrXkAveAvFhAC/oK0+HPOV6Mliz+TF/HlApRA==
-  dependencies:
-    progressbar.js "^1.0.1"
-    react "^16.3.2"
-
 react-hotkeys@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/react-hotkeys/-/react-hotkeys-2.0.0.tgz#a7719c7340cbba888b0e9184f806a9ec0ac2c53f"
@@ -12365,7 +12350,7 @@ react-transition-group@^2.9.0:
     prop-types "^15.6.2"
     react-lifecycles-compat "^3.0.4"
 
-react@^16.13.1, react@^16.3.2:
+react@^16.13.1:
   version "16.13.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.13.1.tgz#2e818822f1a9743122c063d6410d85c1e3afe48e"
   integrity sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w==
@@ -13397,11 +13382,6 @@ shellwords@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/shellwords/-/shellwords-0.1.1.tgz#d6b9181c1a48d397324c84871efbcfc73fc0654b"
   integrity sha512-vFwSUfQvqybiICwZY5+DAWIPLKsWO31Q91JSKl3UYv+K5c2QRPzn0qzec6QPu1Qc9eHYItiP3NdJqNVqetYAww==
-
-shifty@^2.1.2:
-  version "2.9.1"
-  resolved "https://registry.yarnpkg.com/shifty/-/shifty-2.9.1.tgz#f37e5c3322803f8c02b328bc88c75421a609c456"
-  integrity sha512-vo9ruo+r214O3QDyoCDzBjQ65lXm0L1fL8HMZG/SA80RdP68eSxj/4yaTj6XdLsMRjdB/H9igApx9w8Wr3jTjQ==
 
 showdown@^1.9.1:
   version "1.9.1"
