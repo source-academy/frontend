@@ -3,10 +3,6 @@ import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 import { zektonFont } from 'src/features/game/commons/CommonFontAssets';
 
-export const maxOptButtonsRow = 2;
-export const optButtonsXSpace = screenSize.x * 0.9;
-export const optButtonsYSpace = screenSize.y * 0.5;
-
 export const mainMenuOptStyle: BitmapFontStyle = {
   key: zektonFont.key,
   size: 35,
@@ -14,7 +10,14 @@ export const mainMenuOptStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const gameTxtStorageName = {
-  defaultChapter: 'defaultChapter',
-  checkpointTxt: 'checkpointTxt'
+const SSMainMenuConstants = {
+  maxOptButtonsRow: 2,
+  optButtonsXSpace: screenSize.x * 0.9,
+  optButtonsYSpace: screenSize.y * 0.5,
+  gameTxtStorageName: {
+    defaultChapter: 'defaultChapter',
+    checkpointTxt: 'checkpointTxt'
+  }
 };
+
+export default SSMainMenuConstants;

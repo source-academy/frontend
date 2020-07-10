@@ -6,7 +6,7 @@ import SSObjectManager from '../../objects/SSObjectManager';
 import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
 import SSCursorMode from '../../cursorMode/SSCursorMode';
-import { cursorModeXPos, cursorModeYPos } from './ObjectPlacementConstants';
+import objPlacementConstants from './ObjectPlacementConstants';
 import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
 import SSBackgroundManager from '../../background/SSBackgroundManager';
 import SSLogManager from '../../logger/SSLogManager';
@@ -100,7 +100,11 @@ export default class ObjectPlacement extends Phaser.Scene {
       0
     );
 
-    this.cursorModes = new SSCursorMode(this, cursorModeXPos, cursorModeYPos);
+    this.cursorModes = new SSCursorMode(
+      this,
+      objPlacementConstants.cursorModeXPos,
+      objPlacementConstants.cursorModeYPos
+    );
     this.populateCursorModes();
 
     uiContainer.add(this.cursorModes);

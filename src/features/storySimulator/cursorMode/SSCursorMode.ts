@@ -1,17 +1,6 @@
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { CursorMode } from './SSCursorModeTypes';
-import {
-  iconBgSize,
-  iconSize,
-  iconSpacing,
-  inactiveAlpha,
-  activeAlpha,
-  onHoverAlpha,
-  altTextStyle,
-  altTextYPos,
-  altTextXPos,
-  altTextMargin
-} from './SSCursorModeConstants';
+import SSCursorModeConstants, { altTextStyle } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
@@ -56,14 +45,14 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     // Main container
     const cursorModeContainer = new Phaser.GameObjects.Container(scene, 0, 0);
     const modeIconBg = new Phaser.GameObjects.Sprite(scene, 0, 0, SSImageAssets.iconBg.key)
-      .setDisplaySize(iconBgSize, iconBgSize)
-      .setAlpha(inactiveAlpha)
+      .setDisplaySize(SSCursorModeConstants.iconBgSize, SSCursorModeConstants.iconBgSize)
+      .setAlpha(SSCursorModeConstants.inactiveAlpha)
       .setInteractive({ pixelPerfect: true, useHandCursor: true });
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(
-      iconSize,
-      iconSize
+      SSCursorModeConstants.iconSize,
+      SSCursorModeConstants.iconSize
     );
 
     // On hover text container
@@ -78,14 +67,19 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       .setAlpha(0.7)
       .setOrigin(0.0, 0.5);
 
-    const altText = createBitmapText(scene, text, altTextMargin, 0, altTextStyle).setOrigin(
-      0.0,
-      0.5
+    const altText = createBitmapText(
+      scene,
+      text,
+      SSCursorModeConstants.altTextMargin,
+      0,
+      altTextStyle
+    ).setOrigin(0.0, 0.5);
+    const altTextContainer = new Phaser.GameObjects.Container(
+      scene,
+      SSCursorModeConstants.altTextXPos,
+      SSCursorModeConstants.altTextYPos,
+      [altTextBg, altText]
     );
-    const altTextContainer = new Phaser.GameObjects.Container(scene, altTextXPos, altTextYPos, [
-      altTextBg,
-      altText
-    ]);
 
     // Hide it by default
     altTextContainer.setVisible(false);
@@ -103,13 +97,15 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     });
     modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
       if (text !== '') altTextContainer.setVisible(true);
-      cursorModeContainer.setAlpha(onHoverAlpha);
+      cursorModeContainer.setAlpha(SSCursorModeConstants.onHoverAlpha);
       onHover();
     });
     modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
       altTextContainer.setVisible(false);
       const activeMode = currIdx === this.currActiveModeIdx && this.isModes[currIdx];
-      cursorModeContainer.setAlpha(activeMode ? activeAlpha : inactiveAlpha);
+      cursorModeContainer.setAlpha(
+        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
+      );
       onOut();
     });
 
@@ -122,9 +118,11 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     this.cursorModes.forEach((mode, index) => {
       mode.setPosition(0, spacing);
       const activeMode = index === this.currActiveModeIdx && this.isModes[index];
-      mode.setAlpha(activeMode ? activeAlpha : inactiveAlpha);
+      mode.setAlpha(
+        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
+      );
       this.add(mode);
-      spacing += iconBgSize + iconSpacing;
+      spacing += SSCursorModeConstants.iconBgSize + SSCursorModeConstants.iconSpacing;
     });
   }
 }

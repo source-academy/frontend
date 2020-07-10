@@ -2,7 +2,7 @@ import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
-import { scaleFactor, activeSelectMargin } from './SSTransformManagerConstants';
+import transformConstants from './SSTransformManagerConstants';
 
 export default class SSTransformManager {
   private activeSelection: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle | undefined;
@@ -63,10 +63,12 @@ export default class SSTransformManager {
     if (!this.activeSelection || !this.activeSelectRect) {
       return;
     }
-    const factor = enlarge ? scaleFactor : 1 / scaleFactor;
+    const factor = enlarge ? transformConstants.scaleFactor : 1 / transformConstants.scaleFactor;
     multiplyDimensions(this.activeSelection, factor);
-    this.activeSelectRect.displayHeight = this.activeSelection.displayHeight + activeSelectMargin;
-    this.activeSelectRect.displayWidth = this.activeSelection.displayWidth + activeSelectMargin;
+    this.activeSelectRect.displayHeight =
+      this.activeSelection.displayHeight + transformConstants.activeSelectMargin;
+    this.activeSelectRect.displayWidth =
+      this.activeSelection.displayWidth + transformConstants.activeSelectMargin;
 
     if (this.activeSelection.data.get('type') === 'object') {
       objectPlacement.setObjAttribute(
@@ -104,8 +106,10 @@ export default class SSTransformManager {
     this.activeSelectRect.x = gameObject.x;
     this.activeSelectRect.y = gameObject.y;
 
-    this.activeSelectRect.displayHeight = gameObject.displayHeight + activeSelectMargin;
-    this.activeSelectRect.displayWidth = gameObject.displayWidth + activeSelectMargin;
+    this.activeSelectRect.displayHeight =
+      gameObject.displayHeight + transformConstants.activeSelectMargin;
+    this.activeSelectRect.displayWidth =
+      gameObject.displayWidth + transformConstants.activeSelectMargin;
   }
 
   public deselect() {

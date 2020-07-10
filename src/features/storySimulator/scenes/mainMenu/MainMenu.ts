@@ -2,13 +2,7 @@ import { screenCenter, screenSize } from 'src/features/game/commons/CommonConsta
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import Parser from 'src/features/game/parser/Parser';
-import {
-  maxOptButtonsRow,
-  optButtonsXSpace,
-  optButtonsYSpace,
-  mainMenuOptStyle,
-  gameTxtStorageName
-} from './MainMenuConstants';
+import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from '../../StorySimulatorTypes';
@@ -93,22 +87,25 @@ class MainMenu extends Phaser.Scene {
     callback: any
   ): Phaser.GameObjects.Container {
     const buttonContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const numOfRows = Math.ceil(numOfButtons / maxOptButtonsRow);
-    const numOfButtonsAtLastRow = numOfButtons % maxOptButtonsRow || maxOptButtonsRow;
-    const buttonYIdx = Math.floor(buttonIndex / maxOptButtonsRow);
-    const buttonXIdx = buttonIndex % maxOptButtonsRow;
+    const numOfRows = Math.ceil(numOfButtons / mainMenuConstants.maxOptButtonsRow);
+    const numOfButtonsAtLastRow =
+      numOfButtons % mainMenuConstants.maxOptButtonsRow || mainMenuConstants.maxOptButtonsRow;
+    const buttonYIdx = Math.floor(buttonIndex / mainMenuConstants.maxOptButtonsRow);
+    const buttonXIdx = buttonIndex % mainMenuConstants.maxOptButtonsRow;
 
-    const partitionYSpace = optButtonsYSpace / numOfRows;
+    const partitionYSpace = mainMenuConstants.optButtonsYSpace / numOfRows;
     const buttonYPos =
-      (screenSize.y - optButtonsYSpace + partitionYSpace) / 2 + buttonYIdx * partitionYSpace;
+      (screenSize.y - mainMenuConstants.optButtonsYSpace + partitionYSpace) / 2 +
+      buttonYIdx * partitionYSpace;
 
     const partitionXSpace =
       buttonYIdx === numOfRows - 1
-        ? optButtonsXSpace / numOfButtonsAtLastRow
-        : optButtonsXSpace / maxOptButtonsRow;
+        ? mainMenuConstants.optButtonsXSpace / numOfButtonsAtLastRow
+        : mainMenuConstants.optButtonsXSpace / mainMenuConstants.maxOptButtonsRow;
 
     const buttonXPos =
-      (screenSize.x - optButtonsXSpace + partitionXSpace) / 2 + buttonXIdx * partitionXSpace;
+      (screenSize.x - mainMenuConstants.optButtonsXSpace + partitionXSpace) / 2 +
+      buttonXIdx * partitionXSpace;
 
     const buttonSprite = new Phaser.GameObjects.Image(
       this,
@@ -132,8 +129,10 @@ class MainMenu extends Phaser.Scene {
   }
 
   public callGameManager() {
-    const defaultChapterText = sessionStorage.getItem(gameTxtStorageName.defaultChapter) || '';
-    const checkpointTxt = sessionStorage.getItem(gameTxtStorageName.checkpointTxt) || '';
+    const defaultChapterText =
+      sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.defaultChapter) || '';
+    const checkpointTxt =
+      sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.checkpointTxt) || '';
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }

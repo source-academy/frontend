@@ -1,2 +1,6 @@
-export const cursorModeXPos = 100;
-export const cursorModeYPos = 100;
+const objPlacementConstants = {
+  cursorModeXPos: 100,
+  cursorModeYPos: 100
+};
+
+export default objPlacementConstants;
