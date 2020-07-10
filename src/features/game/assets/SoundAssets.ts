@@ -3,13 +3,13 @@ import { GameSoundType } from '../sound/GameSoundTypes';
 
 const SoundAssets: AssetMap<SoundAsset> = {
   // SFX
-  buttonHoverSound: {
+  buttonHover: {
     key: 'btn-hover',
     path: '/sfx/buttonHover.mp3',
     config: { volume: 0.3 },
     soundType: GameSoundType.SFX
   },
-  buttonClickSound: {
+  buttonClick: {
     key: 'btn-click',
     path: '/sfx/buttonClick.mp3',
     config: { volume: 0.3 },

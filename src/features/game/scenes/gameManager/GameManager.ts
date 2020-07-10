@@ -124,6 +124,7 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
+    this.soundManager = new GameSoundManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();

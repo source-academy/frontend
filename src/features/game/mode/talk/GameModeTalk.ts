@@ -124,7 +124,8 @@ class GameModeTalk implements IGameUI {
       gameManager,
       () => GameActionManager.getInstance().popPhase(),
       0,
-      0
+      0,
+      GameActionManager.getInstance().getGameManager().soundManager
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;

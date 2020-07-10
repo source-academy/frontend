@@ -32,7 +32,8 @@ class GameModeExplore implements IGameUI {
           .layerManager.fadeInLayer(Layer.Character, 300);
       },
       0,
-      0
+      0,
+      GameActionManager.getInstance().getGameManager().soundManager
     );
     exploreMenuContainer.add(backButton);
 

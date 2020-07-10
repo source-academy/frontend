@@ -20,7 +20,8 @@ const mainMenuConstants = {
     settings: 'Settings'
   },
   buttonYSpace: screenSize.y * 0.5,
-  textXOffset: 80,
+  optXOffset: 80,
+  textXOffset: 600,
   bannerHide: bannerHide,
   bannerShow: bannerShow,
   onFocusOptTween: {

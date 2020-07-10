@@ -80,7 +80,8 @@ class Settings extends Phaser.Scene {
         this.scene.start('MainMenu');
       },
       0,
-      0
+      0,
+      this.soundManager
     );
     this.layerManager.addToLayer(Layer.UI, applySettingsButton);
     this.layerManager.addToLayer(Layer.UI, backButton);

@@ -9,10 +9,10 @@ import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
-import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
 import FontAssets from '../../assets/FontAssets';
 import SoundAssets from '../../assets/SoundAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -79,37 +79,33 @@ class MainMenu extends Phaser.Scene {
 
     this.optionButtons.forEach(button => {
       const text = button.text || '';
-      const style = button.bitmapStyle || Constants.defaultFontStyle;
-      const buttonText = createBitmapText(
-        this,
-        text,
-        button.assetXPos,
-        button.assetYPos,
-        style
-      ).setOrigin(1.0, 0.1);
-      const buttonSprite = new Phaser.GameObjects.Sprite(
-        this,
-        screenCenter.x + mainMenuConstants.bannerHide,
-        button.assetYPos,
-        button.assetKey
-      ).setInteractive({ pixelPerfect: true, useHandCursor: true });
-
-      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
-      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-        this.soundManager.playSound(SoundAssets.buttonHoverSound.key);
+      const tweenOnHover = (target: Phaser.GameObjects.Container) => {
         this.tweens.add({
-          targets: buttonSprite,
+          targets: target,
           ...mainMenuConstants.onFocusOptTween
         });
-      });
-      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
+      };
+      const tweenOffHover = (target: Phaser.GameObjects.Container) => {
         this.tweens.add({
-          targets: buttonSprite,
+          targets: target,
           ...mainMenuConstants.outFocusOptTween
         });
-      });
-      optionsContainer.add(buttonSprite);
-      optionsContainer.add(buttonText);
+      };
+      const optButton: Phaser.GameObjects.Container = createButton(
+        this,
+        text,
+        button.assetKey,
+        { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
+        this.soundManager,
+        button.onInteract,
+        undefined,
+        button.bitmapStyle,
+        () => tweenOnHover(optButton),
+        false,
+        undefined,
+        () => tweenOffHover(optButton)
+      ).setPosition(screenCenter.x + mainMenuConstants.bannerHide, button.assetYPos);
+      optionsContainer.add(optButton);
     });
 
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
@@ -166,11 +162,11 @@ class MainMenu extends Phaser.Scene {
     }
 
     // Add the new button
-    const newTalkButton: GameButton = {
+    const newOptButton: GameButton = {
       text: name,
       bitmapStyle: mainMenuStyle,
       assetKey: ImageAssets.mainMenuOptBanner.key,
-      assetXPos: screenSize.x - mainMenuConstants.textXOffset,
+      assetXPos: screenSize.x - mainMenuConstants.optXOffset,
       assetYPos: newYPos + this.optionButtons.length * partitionSize,
       isInteractive: true,
       onInteract: callback,
@@ -178,7 +174,7 @@ class MainMenu extends Phaser.Scene {
     };
 
     // Update
-    this.optionButtons.push(newTalkButton);
+    this.optionButtons.push(newOptButton);
   }
 }
 

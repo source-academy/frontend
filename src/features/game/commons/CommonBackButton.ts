@@ -1,12 +1,13 @@
-import { screenCenter, screenSize } from './CommonConstants';
+import { screenCenter } from './CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 import { BitmapFontStyle } from './CommonTypes';
-import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import FontAssets from '../assets/FontAssets';
+import { createButton } from '../utils/ButtonUtils';
+import GameSoundManager from '../sound/GameSoundManager';
 
 const backText = 'Back';
-const backTextYPos = screenSize.y * 0.012;
+const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
@@ -15,32 +16,29 @@ const backButtonStyle: BitmapFontStyle = {
 };
 
 class CommonBackButton extends Phaser.GameObjects.Container {
-  constructor(scene: Phaser.Scene, callback: any, x?: number, y?: number) {
+  constructor(
+    scene: Phaser.Scene,
+    callback: any,
+    x?: number,
+    y?: number,
+    soundManager?: GameSoundManager
+  ) {
     super(scene, x, y);
-    this.renderBackButton(callback);
+    this.renderBackButton(callback, soundManager);
   }
 
-  private renderBackButton(callback: any) {
-    const backButtonText = createBitmapText(
+  private renderBackButton(callback: any, soundManager?: GameSoundManager) {
+    const backButton = createButton(
       this.scene,
       backText,
-      screenCenter.x,
-      backTextYPos,
+      ImageAssets.topButton.key,
+      { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
+      soundManager,
+      callback,
+      undefined,
       backButtonStyle
-    ).setOrigin(0.5, 0.25);
-
-    const backButtonSprite = new Phaser.GameObjects.Sprite(
-      this.scene,
-      screenCenter.x,
-      screenCenter.y,
-      ImageAssets.topButton.key
-    );
-
-    backButtonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-    backButtonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
-
-    this.add(backButtonSprite);
-    this.add(backButtonText);
+    ).setPosition(screenCenter.x, screenCenter.y);
+    this.add(backButton);
   }
 }
 
