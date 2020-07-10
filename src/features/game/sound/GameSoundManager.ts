@@ -6,14 +6,9 @@ import { UserSaveState } from '../save/GameSaveTypes';
 import { SoundAsset, AssetMap } from '../assets/AssetsTypes';
 
 class GameSoundManager {
-  private soundAssets: Map<AssetKey, SoundAsset>;
   private baseSoundManager: Phaser.Sound.BaseSoundManager | undefined;
   private scene: Phaser.Scene | undefined;
   private parentGame: SourceAcademyGame | undefined;
-
-  constructor() {
-    this.soundAssets = new Map<AssetKey, SoundAsset>();
-  }
 
   public initialise(scene: Phaser.Scene, parentGame: SourceAcademyGame) {
     this.scene = scene;
@@ -32,19 +27,19 @@ class GameSoundManager {
   }
 
   public clearSoundAssets() {
-    this.soundAssets.clear();
+    this.getParentGame().clearSoundAssetMap();
   }
 
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
-      this.soundAssets.set(asset.key, asset);
+      this.getParentGame().addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
     Object.entries(assetMap).forEach(asset => {
-      this.soundAssets.set(asset[1].key, asset[1]);
+      this.getParentGame().addSoundAsset(asset[1]);
       this.loadSound(asset[1].key, toS3Path(asset[1].path));
     });
   }
@@ -57,7 +52,7 @@ class GameSoundManager {
 
   public playSound(soundKey: AssetKey) {
     if (this.scene) {
-      const soundAsset = this.soundAssets.get(soundKey);
+      const soundAsset = this.getParentGame().getSoundAsset(soundKey);
       if (soundAsset) {
         this.getBaseSoundManager().play(soundAsset.key, soundAsset.config);
       }
@@ -71,7 +66,7 @@ class GameSoundManager {
       return;
     }
 
-    const soundAsset = this.soundAssets.get(soundKey);
+    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
 
     if (soundAsset) {
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });

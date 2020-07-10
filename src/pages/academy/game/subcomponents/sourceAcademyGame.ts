@@ -10,6 +10,7 @@ import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/
 import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
 
 export type AccountInfo = {
   accessToken: string;
@@ -25,6 +26,7 @@ type StorySimulatorProps = {
 
 type GlobalGameProps = {
   currBgMusicKey: AssetKey | undefined;
+  soundAssetMap: Map<AssetKey, SoundAsset>;
   accountInfo: AccountInfo | undefined;
   storySimulatorProps?: StorySimulatorProps;
 };
@@ -36,6 +38,7 @@ export class SourceAcademyGame extends Phaser.Game {
     super(config);
     this.global = {
       currBgMusicKey: undefined,
+      soundAssetMap: new Map<AssetKey, SoundAsset>(),
       accountInfo: undefined
     };
   }
@@ -50,6 +53,18 @@ export class SourceAcademyGame extends Phaser.Game {
 
   public getCurrBgMusicKey() {
     return this.global.currBgMusicKey;
+  }
+
+  public addSoundAsset(soundAsset: SoundAsset) {
+    this.global.soundAssetMap.set(soundAsset.key, soundAsset);
+  }
+
+  public clearSoundAssetMap() {
+    this.global.soundAssetMap.clear();
+  }
+
+  public getSoundAsset(key: AssetKey) {
+    return this.global.soundAssetMap.get(key);
   }
 
   public setAccountInfo(acc: AccountInfo | undefined) {
