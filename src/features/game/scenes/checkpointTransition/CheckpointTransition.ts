@@ -17,6 +17,7 @@ import {
 } from './CheckpointConstants';
 import { sleep } from '../../utils/GameUtils';
 import { screenCenter } from '../../commons/CommonConstants';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class CheckpointTransition extends Phaser.Scene {
   constructor() {
@@ -48,20 +49,17 @@ class CheckpointTransition extends Phaser.Scene {
   }
 
   private async showTransitionText(text: string) {
-    const transitionText = new Phaser.GameObjects.BitmapText(
+    const transitionText = createBitmapText(
       this,
+      text,
       screenCenter.x,
       screenCenter.y,
-      transitionTextStyle.key,
-      text,
-      transitionTextStyle.size,
-      transitionTextStyle.align
-    ).setTintFill(transitionTextStyle.fill);
+      transitionTextStyle
+    )
+      .setOrigin(0.5, 0.5)
+      .setAlpha(0);
 
     this.add.existing(transitionText);
-
-    transitionText.setOrigin(0.5, 0.5);
-    transitionText.setAlpha(0);
 
     this.tweens.add({
       targets: transitionText,

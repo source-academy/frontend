@@ -24,6 +24,7 @@ import CommonRadioButtons from '../commons/CommonRadioButtons';
 import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
+import { createBitmapText } from '../utils/TextUtils';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -45,15 +46,13 @@ class GameEscapeManager implements IGameUI {
     escapeMenuBg.setDisplaySize(screenSize.x, screenSize.y);
     escapeMenuBg.setInteractive({ pixelPerfect: true });
 
-    const volumeText = new Phaser.GameObjects.BitmapText(
+    const volumeText = createBitmapText(
       gameManager,
+      'Volume',
       optHeaderTextXPos,
       optHeaderTextYPos,
-      optTextStyle.key,
-      'Volume',
-      optTextStyle.size,
-      optTextStyle.align
-    ).setTintFill(optTextStyle.fill);
+      optTextStyle
+    );
 
     const userVol = GameActionManager.getInstance()
       .getGameManager()

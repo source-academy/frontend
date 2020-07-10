@@ -13,6 +13,7 @@ import { screenSize, Constants } from '../../commons/CommonConstants';
 import { shortButton } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -109,17 +110,13 @@ class GameModeMenu implements IGameUI {
 
       const text = button.text ? button.text : '';
       const style = button.bitmapStyle ? button.bitmapStyle : Constants.defaultFontStyle;
-      const buttonText = new Phaser.GameObjects.BitmapText(
+      const buttonText = createBitmapText(
         gameManager,
+        text,
         button.assetXPos,
         button.assetYPos,
-        style.key,
-        text,
-        style.size,
-        style.align
-      )
-        .setTintFill(style.fill)
-        .setOrigin(0.5, 0.25);
+        style
+      ).setOrigin(0.5, 0.25);
 
       modeMenuContainer.add(buttonSprite);
       modeMenuContainer.add(buttonText);

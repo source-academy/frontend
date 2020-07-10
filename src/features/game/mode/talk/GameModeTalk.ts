@@ -8,6 +8,7 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -84,17 +85,13 @@ class GameModeTalk implements IGameUI {
     this.gameButtons.forEach((topicButton: GameButton) => {
       const text = topicButton.text || '';
       const style = topicButton.bitmapStyle || Constants.defaultFontStyle;
-      const topicButtonText = new Phaser.GameObjects.BitmapText(
+      const topicButtonText = createBitmapText(
         gameManager,
+        text,
         topicButton.assetXPos,
         topicButton.assetYPos,
-        style.key,
-        text,
-        style.size,
-        style.align
-      )
-        .setTintFill(style.fill)
-        .setOrigin(0.5, 0.2);
+        style
+      ).setOrigin(0.5, 0.2);
 
       const checkedSprite = new Phaser.GameObjects.Sprite(
         gameManager,

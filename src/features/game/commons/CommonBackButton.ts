@@ -3,6 +3,7 @@ import { topButton } from './CommonAssets';
 import { HexColor } from '../utils/StyleUtils';
 import { BitmapFontStyle } from './CommonTypes';
 import { zektonFont } from './CommonFontAssets';
+import { createBitmapText } from '../utils/TextUtils';
 
 const backText = 'Back';
 const backTextYPos = screenSize.y * 0.012;
@@ -20,17 +21,13 @@ class CommonBackButton extends Phaser.GameObjects.Container {
   }
 
   private renderBackButton(callback: any) {
-    const backButtonText = new Phaser.GameObjects.BitmapText(
+    const backButtonText = createBitmapText(
       this.scene,
+      backText,
       screenCenter.x,
       backTextYPos,
-      backButtonStyle.key,
-      backText,
-      backButtonStyle.size,
-      backButtonStyle.align
-    )
-      .setTintFill(backButtonStyle.fill)
-      .setOrigin(0.5, 0.25);
+      backButtonStyle
+    ).setOrigin(0.5, 0.25);
 
     const backButtonSprite = new Phaser.GameObjects.Sprite(
       this.scene,

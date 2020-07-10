@@ -15,6 +15,7 @@ import {
 } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
@@ -77,17 +78,10 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       .setAlpha(0.7)
       .setOrigin(0.0, 0.5);
 
-    const altText = new Phaser.GameObjects.BitmapText(
-      scene,
-      altTextMargin,
-      0,
-      altTextStyle.key,
-      text,
-      altTextStyle.size,
-      altTextStyle.align
-    )
-      .setTintFill(altTextStyle.fill)
-      .setOrigin(0.0, 0.5);
+    const altText = createBitmapText(scene, text, altTextMargin, 0, altTextStyle).setOrigin(
+      0.0,
+      0.5
+    );
     const altTextContainer = new Phaser.GameObjects.Container(scene, altTextXPos, altTextYPos, [
       altTextBg,
       altText

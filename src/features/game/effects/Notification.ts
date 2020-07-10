@@ -8,6 +8,7 @@ import { BitmapFontStyle } from '../commons/CommonTypes';
 import { alienLeagueFont } from '../commons/CommonFontAssets';
 import { HexColor } from '../utils/StyleUtils';
 import { dialogueRect } from '../dialogue/GameDialogueConstants';
+import { createBitmapText } from '../utils/TextUtils';
 
 const notifStyle: BitmapFontStyle = {
   key: alienLeagueFont.key,
@@ -26,16 +27,7 @@ export async function displayNotification(message: string): Promise<void> {
   GameActionManager.getInstance().addContainerToLayer(Layer.Effects, container);
   gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
 
-  const notifText = new Phaser.GameObjects.BitmapText(
-    gameManager,
-    screenCenter.x,
-    notifYPos,
-    notifStyle.key,
-    message,
-    notifStyle.size,
-    notifStyle.align
-  )
-    .setTintFill(notifStyle.fill)
+  const notifText = createBitmapText(gameManager, message, screenCenter.x, notifYPos, notifStyle)
     .setOrigin(0.5, 0.9)
     .setAlpha(0);
   container.add(notifText);

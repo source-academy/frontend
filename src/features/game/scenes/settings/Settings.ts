@@ -27,6 +27,7 @@ import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -110,17 +111,13 @@ class Settings extends Phaser.Scene {
       volumeUnderlineYPos,
       settingOption.key
     );
-    const volumeText = new Phaser.GameObjects.BitmapText(
+    const volumeText = createBitmapText(
       this,
+      'Volume',
       volumeTextXpos,
       volumeTextYPos,
-      optionHeaderTextStyle.key,
-      'Volume',
-      optionHeaderTextStyle.size,
-      optionHeaderTextStyle.align
-    )
-      .setOrigin(0.5, 0.25)
-      .setTintFill(optionHeaderTextStyle.fill);
+      optionHeaderTextStyle
+    ).setOrigin(0.5, 0.25);
     const userVol = this.settingsSaveManager.getLoadedUserState().settings.volume;
     const userVolIdx = volumeContainerOptions.findIndex(value => parseFloat(value) === userVol);
     this.volumeRadioButtons = new RadioButtons(

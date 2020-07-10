@@ -38,6 +38,7 @@ import {
   collectibleDescYOffset
 } from './GameCollectiblesConstants';
 import { resize } from '../utils/SpriteUtils';
+import { createBitmapText } from '../utils/TextUtils';
 
 class GameCollectiblesManager {
   private scene: Phaser.Scene | undefined;
@@ -142,17 +143,13 @@ class GameCollectiblesManager {
       collectiblePreviewYPos,
       cookies.key
     ).setOrigin(0.428, 0.468);
-    this.previewTitle = new Phaser.GameObjects.BitmapText(
+    this.previewTitle = createBitmapText(
       this.getScene(),
+      '',
       collectiblePreviewXPos,
       collectiblePreviewYPos + collectibleTitleYOffset,
-      collectibleTitleStyle.key,
-      '',
-      collectibleTitleStyle.size,
-      collectibleTitleStyle.align
-    )
-      .setTintFill(collectibleTitleStyle.fill)
-      .setOrigin(0.35, 0.5);
+      collectibleTitleStyle
+    ).setOrigin(0.35, 0.5);
     this.previewDesc = new Phaser.GameObjects.Text(
       this.getScene(),
       collectiblePreviewXPos,
@@ -256,16 +253,13 @@ class GameCollectiblesManager {
     );
 
     const bannerTextYPos = pageBannerYStartPos + index * pageBannerYSpacing;
-    const pageBannerText = new Phaser.GameObjects.BitmapText(
+    const pageBannerText = createBitmapText(
       this.getScene(),
+      text,
       pageBannerTextXPos,
       bannerTextYPos,
-      pageBannerTextStyle.key,
-      text,
-      pageBannerTextStyle.size,
-      pageBannerTextStyle.align
+      pageBannerTextStyle
     )
-      .setTintFill(pageBannerTextStyle.fill)
       .setLetterSpacing(5)
       .setOrigin(0.1, 0.5);
 
@@ -338,17 +332,13 @@ class GameCollectiblesManager {
       objBannerYPos,
       collectiblesBanner.key
     );
-    const objListText = new Phaser.GameObjects.BitmapText(
+    const objListText = createBitmapText(
       this.getScene(),
+      obj,
       listBannerTextXPos,
       objBannerYPos,
-      listBannerTextStyle.key,
-      obj,
-      listBannerTextStyle.size,
-      listBannerTextStyle.align
-    )
-      .setTintFill(listBannerTextStyle.fill)
-      .setOrigin(0.0, 0.55);
+      listBannerTextStyle
+    ).setOrigin(0.0, 0.55);
 
     objListBg.setInteractive({ pixelPerfect: true, useHandCursor: true });
     objListBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);

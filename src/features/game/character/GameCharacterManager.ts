@@ -11,6 +11,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { speakerBox } from '../commons/CommonAssets';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
+import { createBitmapText } from '../utils/TextUtils';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
@@ -104,17 +105,13 @@ export default class CharacterManager {
       speakerBox.key
     ).setAlpha(0.8);
 
-    const speakerText = new Phaser.GameObjects.BitmapText(
+    const speakerText = createBitmapText(
       gameManager,
+      '',
       speakerRect.x,
       speakerRect.y,
-      speakerTextStyle.key,
-      '',
-      speakerTextStyle.size,
-      speakerTextStyle.align
-    )
-      .setTintFill(speakerTextStyle.fill)
-      .setOrigin(0.5, 0.5);
+      speakerTextStyle
+    ).setOrigin(0.5, 0.5);
 
     if (positionRight) {
       rectangle.displayWidth *= -1;

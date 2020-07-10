@@ -20,6 +20,7 @@ import { toS3Path } from 'src/features/game/utils/GameUtils';
 import commonAssets from 'src/features/game/commons/CommonAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
 import commonFontAssets from 'src/features/game/commons/CommonFontAssets';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -119,17 +120,13 @@ class MainMenu extends Phaser.Scene {
     buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
 
-    const buttonText = new Phaser.GameObjects.BitmapText(
+    const buttonText = createBitmapText(
       this,
+      text,
       buttonXPos,
       buttonYPos,
-      mainMenuOptStyle.key,
-      text,
-      mainMenuOptStyle.size,
-      mainMenuOptStyle.align
-    )
-      .setTintFill(mainMenuOptStyle.fill)
-      .setOrigin(0.5, 0.5);
+      mainMenuOptStyle
+    ).setOrigin(0.5, 0.5);
 
     buttonContainer.add([buttonSprite, buttonText]);
     return buttonContainer;

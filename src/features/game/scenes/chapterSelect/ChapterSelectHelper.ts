@@ -22,6 +22,7 @@ import { GameChapter } from '../../chapter/GameChapterTypes';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import { HexColor } from '../../utils/StyleUtils';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { createBitmapText } from '../../utils/TextUtils';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -102,29 +103,21 @@ export function createChapter(
     );
 
   // Chapter Text
-  const chapterIndexText = new Phaser.GameObjects.BitmapText(
+  const chapterIndexText = createBitmapText(
     scene,
+    `Chapter ${index}`,
     0,
     chapterIndexYOffset,
-    chapterIndexStyle.key,
-    `Chapter ${index}`,
-    chapterIndexStyle.size,
-    chapterIndexStyle.align
-  )
-    .setTintFill(chapterIndexStyle.fill)
-    .setOrigin(0.5, 0.5);
+    chapterIndexStyle
+  ).setOrigin(0.5, 0.5);
 
-  const chapterTitleText = new Phaser.GameObjects.BitmapText(
+  const chapterTitleText = createBitmapText(
     scene,
+    title,
     0,
     chapterTitleYOffset,
-    chapterTitleStyle.key,
-    title,
-    chapterTitleStyle.size,
-    chapterTitleStyle.align
-  )
-    .setTintFill(chapterTitleStyle.fill)
-    .setOrigin(0.5, 0.5);
+    chapterTitleStyle
+  ).setOrigin(0.5, 0.5);
 
   const chapterDone = index <= scene.getLoadedGameState().userState.lastCompletedChapter + 1;
 
@@ -170,17 +163,7 @@ function createHoverTextContainer(scene: Phaser.Scene, text: string, style: Bitm
     50,
     HexColor.darkBlue
   ).setAlpha(0.8);
-  const altText = new Phaser.GameObjects.BitmapText(
-    scene,
-    0,
-    0,
-    style.key,
-    text,
-    style.size,
-    style.align
-  )
-    .setOrigin(0.5, 0.5)
-    .setTintFill(style.fill);
+  const altText = createBitmapText(scene, text, 0, 0, style).setOrigin(0.5, 0.5);
   const altTextContainer = new Phaser.GameObjects.Container(scene, 0, 0, [altTextBg, altText]);
   return altTextContainer;
 }

@@ -7,6 +7,7 @@ import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import StringUtils from 'src/features/game/utils/StringUtils';
 import { toIntString } from '../utils/SSUtils';
 import { loggableStyle } from './SSLogConstants';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -73,17 +74,13 @@ dialogues
       ).setAlpha(0.8);
       multiplyDimensions(loggerRectangle, 1.2);
 
-      const loggerText = new Phaser.GameObjects.BitmapText(
+      const loggerText = createBitmapText(
         this.getObjectPlacement(),
+        this.formatObjectDetails(loggable),
         loggable.x,
         loggable.y + 10,
-        loggableStyle.key,
-        this.formatObjectDetails(loggable),
-        loggableStyle.size,
-        loggableStyle.align
-      )
-        .setTintFill(loggableStyle.fill)
-        .setOrigin(0.5);
+        loggableStyle
+      ).setOrigin(0.5);
       this.detailMapContainer!.add([loggerRectangle, loggerText]);
     });
     this.getObjectPlacement().add.existing(this.detailMapContainer);

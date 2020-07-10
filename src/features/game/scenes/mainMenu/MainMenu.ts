@@ -26,6 +26,7 @@ import { settingsAssets } from '../settings/SettingsAssets';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import commonFontAssets from '../../commons/CommonFontAssets';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -94,17 +95,13 @@ class MainMenu extends Phaser.Scene {
     this.optionButtons.forEach(button => {
       const text = button.text || '';
       const style = button.bitmapStyle || Constants.defaultFontStyle;
-      const buttonText = new Phaser.GameObjects.BitmapText(
+      const buttonText = createBitmapText(
         this,
+        text,
         button.assetXPos,
         button.assetYPos,
-        style.key,
-        text,
-        style.size,
-        style.align
-      )
-        .setOrigin(1.0, 0.1)
-        .setTintFill(style.fill);
+        style
+      ).setOrigin(1.0, 0.1);
       const buttonSprite = new Phaser.GameObjects.Sprite(
         this,
         screenCenter.x + bannerHide,

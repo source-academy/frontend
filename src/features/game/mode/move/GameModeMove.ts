@@ -17,6 +17,7 @@ import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { createBitmapText } from '../../utils/TextUtils';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -120,17 +121,13 @@ class GameModeMove implements IGameUI {
       const style = locationButton.bitmapStyle
         ? locationButton.bitmapStyle
         : Constants.defaultFontStyle;
-      const locationButtonText = new Phaser.GameObjects.BitmapText(
+      const locationButtonText = createBitmapText(
         gameManager,
+        text,
         locationButton.assetXPos,
         locationButton.assetYPos,
-        style.key,
-        text,
-        style.size,
-        style.align
-      )
-        .setTintFill(style.fill)
-        .setOrigin(0.4, 0.15);
+        style
+      ).setOrigin(0.4, 0.15);
 
       const buttonSprite = new Phaser.GameObjects.Sprite(
         gameManager,
