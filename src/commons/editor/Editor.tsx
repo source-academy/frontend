@@ -118,20 +118,33 @@ const toggleBreakpoint = (editor: IAceEditor, row: number) => {
   }
 };
 
+const isNotGutterClick = (e: React.MouseEvent | MouseEvent) => {
+  const target = e.target! as HTMLDivElement;
+  return (
+    target.className.indexOf('ace_gutter-cell') === -1 || // This guarantees that this is an ace-gutter-cell
+    e.clientX > 35 + target.getBoundingClientRect().left
+  );
+};
+
+const getRowFromAceGutterElement = (elem: HTMLDivElement) => {
+  // ACE Editor's getDocumentPosition is bugged once items are put into it.
+  // The bug is somewhere in either https://github.com/ajaxorg/ace/blob/ba2fd5f25b5ca435b68cee08f6b14965fda62629/lib/ace/virtual_renderer.js#L1483
+  // or https://github.com/ajaxorg/ace/blob/ddb417e61b7056d225b35f7f2469d3eff03b8ec0/lib/ace/edit_session.js#L2116
+  // It will take too long to fix properly.
+  return parseInt(elem.textContent!, 10) - 1; // Please NEVER DISABLE LINE NUMBERS.
+};
+
 const makeHandleGutterClick = (
   handleEditorUpdateBreakpoints: DispatchProps['handleEditorUpdateBreakpoints']
 ) => (e: AceMouseEvent) => {
-  const target = e.domEvent.target! as HTMLDivElement;
-  if (
-    target.className.indexOf('ace_gutter-cell') === -1 ||
-    !e.editor.isFocused() ||
-    e.clientX > 35 + target.getBoundingClientRect().left
-  ) {
+  if (isNotGutterClick(e.domEvent) || !e.editor.isFocused()) {
     return;
   }
-
   // Breakpoint related.
-  const row = e.getDocumentPosition().row;
+  // const row = e.getDocumentPosition().row;
+  const target = e.domEvent.target! as HTMLDivElement;
+  const row = getRowFromAceGutterElement(target);
+
   toggleBreakpoint(e.editor, row);
 
   e.stop();
@@ -351,10 +364,15 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   const showContextMenu = React.useCallback(
     (e: MouseEvent) => {
       const editor = reactAceRef.current!.editor;
-      const pos: Position = (editor.renderer as any).screenToTextCoordinates(e.clientX, e.clientY);
+      if (isNotGutterClick(e) || !editor.isFocused()) {
+        return;
+      }
+      const target = e.target! as HTMLDivElement;
+      const row = getRowFromAceGutterElement(target);
+
       e.preventDefault();
       BPContextMenu.show(
-        <GutterContextMenu row={pos.row} handlers={contextMenuHandlers} />,
+        <GutterContextMenu row={row} handlers={contextMenuHandlers} />,
         { left: e.clientX, top: e.clientY },
         () => {
           // setContextMenuOpen(false);

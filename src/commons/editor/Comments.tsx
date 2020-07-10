@@ -264,7 +264,7 @@ export default function Comments(props: CommentsProps) {
         <Icon icon={isCollapsed ? 'small-plus' : 'small-minus'}></Icon>
       </div>
       {comments.map(comment => {
-        const { id, isCollapsed } = comment; // Only the main comment is collapsed.
+        const { id, isCollapsed } = comment;
         const error = errorMsgs[id] || '';
         const isLoading = loadingStatus[id] || false;
         const displayComment = commentsBeingEdited[id] ? commentsBeingEdited[id] : comment;
