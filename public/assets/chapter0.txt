@@ -13,9 +13,9 @@ endActions
 room
     modes: talk, explore
     bgm
-        heavyHitter, /ui/HeavyHitter.mp3, 0.5
+        heavyHitter, /bgm/HeavyHitter.mp3, 0.5
     sfx
-        card, /ui/card.mp3, 0.5
+        card, /sfx/card.mp3, 0.5
     
     objects
         +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
