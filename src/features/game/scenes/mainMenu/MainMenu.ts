@@ -97,13 +97,14 @@ class MainMenu extends Phaser.Scene {
         button.assetKey,
         { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
         this.soundManager,
+        undefined,
         button.onInteract,
+        () => tweenOnHover(optButton),
+        () => tweenOffHover(optButton),
         undefined,
         button.bitmapStyle,
-        () => tweenOnHover(optButton),
         false,
-        undefined,
-        () => tweenOffHover(optButton)
+        undefined
       ).setPosition(screenCenter.x + mainMenuConstants.bannerHide, button.assetYPos);
       optionsContainer.add(optButton);
     });

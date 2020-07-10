@@ -69,7 +69,10 @@ class Settings extends Phaser.Scene {
       ImageAssets.mediumButton.key,
       { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
       this.soundManager,
+      undefined,
       () => this.applySettings(this.volumeRadioButtons),
+      undefined,
+      undefined,
       undefined,
       applySettingsTextStyle
     ).setPosition(screenCenter.x, screenSize.y * 0.925);

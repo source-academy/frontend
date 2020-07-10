@@ -15,13 +15,14 @@ export function createButton(
   assetKey: AssetKey,
   { x, y, oriX, oriY }: ButtonTextConfig,
   soundManager?: GameSoundManager,
-  onClick: () => void = Constants.nullFunction,
+  onDown: () => void = Constants.nullFunction,
+  onUp: () => void = Constants.nullFunction,
+  onHover: () => void = Constants.nullFunction,
+  onOut: () => void = Constants.nullFunction,
   onClickSound: AssetKey = SoundAssets.buttonClick.key,
   bitMapTextStyle: BitmapFontStyle = Constants.defaultFontStyle,
-  onHover: () => void = Constants.nullFunction,
   onHoverEffect: boolean = true,
-  onHoverSound: AssetKey = SoundAssets.buttonHover.key,
-  onOut: () => void = Constants.nullFunction
+  onHoverSound: AssetKey = SoundAssets.buttonHover.key
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
 
@@ -30,7 +31,7 @@ export function createButton(
   button.setInteractive({ pixelPerfect: true, useHandCursor: true });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
     if (soundManager) soundManager.playSound(onClickSound);
-    onClick();
+    onUp();
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
     if (soundManager) soundManager.playSound(onHoverSound);
@@ -40,6 +41,9 @@ export function createButton(
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
     if (onHoverEffect) container.setAlpha(offHoverAlpha);
     onOut();
+  });
+  button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
+    onDown();
   });
 
   // Set up text

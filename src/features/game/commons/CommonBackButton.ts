@@ -34,7 +34,10 @@ class CommonBackButton extends Phaser.GameObjects.Container {
       ImageAssets.topButton.key,
       { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
       soundManager,
+      undefined,
       callback,
+      undefined,
+      undefined,
       undefined,
       backButtonStyle
     ).setPosition(screenCenter.x, screenCenter.y);

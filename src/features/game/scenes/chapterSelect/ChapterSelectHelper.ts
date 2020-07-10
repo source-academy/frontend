@@ -11,6 +11,7 @@ import { HexColor } from '../../utils/StyleUtils';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -42,53 +43,44 @@ export function createChapter(
     scene,
     'Reset progress',
     chapterActionAltStyle
+  ).setPosition(
+    chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
+    chapConstants.buttonsYOffset + chapConstants.altTextYOffset
   );
+
   const chapterContinuePopup = createHoverTextContainer(
     scene,
     'Play/Continue',
     chapterActionAltStyle
+  ).setPosition(
+    -chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
+    chapConstants.buttonsYOffset + chapConstants.altTextYOffset
   );
-  chapterRepeatPopup
-    .setPosition(chapConstants.buttonsXOffset + 120, chapConstants.buttonsYOffset - 40)
-    .setVisible(false);
-  chapterContinuePopup
-    .setPosition(-chapConstants.buttonsXOffset + 120, chapConstants.buttonsYOffset - 40)
-    .setVisible(false);
 
   // Chapter Actions
-  const chapterRepeat = new Phaser.GameObjects.Sprite(
+  const chapterRepeat = createButton(
     scene,
-    chapConstants.buttonsXOffset,
-    chapConstants.buttonsYOffset,
-    ImageAssets.chapterRepeatButton.key
-  )
-    .setInteractive({ pixelPerfect: true, useHandCursor: true })
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0);
-    })
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      chapterRepeatPopup.setVisible(true)
-    )
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
-      chapterRepeatPopup.setVisible(false)
-    );
+    '',
+    ImageAssets.chapterRepeatButton.key,
+    { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+    undefined,
+    undefined,
+    () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
+    () => chapterRepeatPopup.setVisible(true),
+    () => chapterRepeatPopup.setVisible(false)
+  ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
-  const chapterContinue = new Phaser.GameObjects.Sprite(
+  const chapterContinue = createButton(
     scene,
-    -chapConstants.buttonsXOffset,
-    chapConstants.buttonsYOffset,
-    ImageAssets.chapterContinueButton.key
-  )
-    .setInteractive({ pixelPerfect: true, useHandCursor: true })
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx);
-    })
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      chapterContinuePopup.setVisible(true)
-    )
-    .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
-      chapterContinuePopup.setVisible(false)
-    );
+    '',
+    ImageAssets.chapterContinueButton.key,
+    { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+    undefined,
+    undefined,
+    () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
+    () => chapterContinuePopup.setVisible(true),
+    () => chapterContinuePopup.setVisible(false)
+  ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
@@ -142,16 +134,24 @@ export function getCoorByChapter(chapterNum: number) {
   return [x, y];
 }
 
-function createHoverTextContainer(scene: Phaser.Scene, text: string, style: BitmapFontStyle) {
+function createHoverTextContainer(
+  scene: Phaser.Scene,
+  text: string,
+  style: BitmapFontStyle,
+  textPad: number = 10
+) {
   const altTextBg = new Phaser.GameObjects.Rectangle(
     scene,
     0,
     0,
-    180,
-    50,
+    text.length * style.size * 0.7,
+    style.size * 2,
     HexColor.darkBlue
-  ).setAlpha(0.8);
-  const altText = createBitmapText(scene, text, 0, 0, style).setOrigin(0.5, 0.5);
+  )
+    .setOrigin(0.0, 0.5)
+    .setAlpha(0.8);
+  const altText = createBitmapText(scene, text, textPad, 0, style).setOrigin(0.0, 0.5);
   const altTextContainer = new Phaser.GameObjects.Container(scene, 0, 0, [altTextBg, altText]);
+  altTextContainer.setVisible(false);
   return altTextContainer;
 }

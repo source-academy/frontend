@@ -12,6 +12,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -113,49 +114,35 @@ class ChapterSelect extends Phaser.Scene {
       ImageAssets.chapterSelectBorder.key
     );
 
-    const leftArrow = new Phaser.GameObjects.Sprite(
+    const leftArrow = createButton(
       this,
-      screenCenter.x - chapConstants.arrowXOffset,
-      screenCenter.y,
-      ImageAssets.chapterSelectArrow.key
-    ).setDataEnabled();
-    const rightArrow = new Phaser.GameObjects.Sprite(
-      this,
-      screenCenter.x + chapConstants.arrowXOffset,
-      screenCenter.y,
-      ImageAssets.chapterSelectArrow.key
-    )
-      .setDataEnabled()
-      .setFlipX(true);
+      '',
+      ImageAssets.chapterSelectArrow.key,
+      { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+      undefined,
+      () => (this.isScrollLeft = true),
+      () => (this.isScrollLeft = false),
+      () => (this.isScrollLeft = false)
+    ).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
 
-    leftArrow.data.set('dir', 'left');
-    rightArrow.data.set('dir', 'right');
-    this.setArrowFunctionality(leftArrow);
-    this.setArrowFunctionality(rightArrow);
+    const rightArrow = createButton(
+      this,
+      '',
+      ImageAssets.chapterSelectArrow.key,
+      { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+      undefined,
+      () => (this.isScrollRight = true),
+      () => (this.isScrollRight = false),
+      () => (this.isScrollRight = false)
+    )
+      .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
+      .setScale(-1, 1);
 
     this.layerManager.addToLayer(Layer.UI, this.chapterContainer);
     this.layerManager.addToLayer(Layer.UI, this.backButtonContainer);
     this.layerManager.addToLayer(Layer.UI, border);
     this.layerManager.addToLayer(Layer.UI, leftArrow);
     this.layerManager.addToLayer(Layer.UI, rightArrow);
-  }
-
-  private setArrowFunctionality(arrow: Phaser.GameObjects.Sprite) {
-    const isLeft = arrow.data.get('dir') === 'left';
-    const setScroll = isLeft
-      ? (value: boolean) => (this.isScrollLeft = value)
-      : (value: boolean) => (this.isScrollRight = value);
-    arrow.setInteractive({ useHandCursor: true });
-    arrow.setAlpha(chapConstants.offHoverAlpha);
-    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
-      arrow.setAlpha(chapConstants.onHoverAlpha)
-    );
-    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => setScroll(true));
-    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-      setScroll(false);
-      arrow.setAlpha(chapConstants.offHoverAlpha);
-    });
-    arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => setScroll(false));
   }
 
   private createMask() {
