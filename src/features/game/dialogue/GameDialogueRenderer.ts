@@ -2,7 +2,7 @@ import GameActionManager from '../action/GameActionManager';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 import GameManager from '../scenes/gameManager/GameManager';
 import { screenSize } from '../commons/CommonConstants';
-import { diamondSize, diamondPadding } from './GameDialogueConstants';
+import dialogueConstants from './GameDialogueConstants';
 import { blink, fadeAndDestroy } from '../effects/FadeEffect';
 import ImageAssets from '../assets/ImageAssets';
 
@@ -31,10 +31,10 @@ class DialogueRenderer {
   private drawDiamond(gameManager: GameManager) {
     const diamondSprite = new Phaser.GameObjects.Image(
       gameManager,
-      screenSize.x - diamondSize.x - diamondPadding.x,
-      screenSize.y - diamondSize.y - diamondPadding.y,
+      screenSize.x - dialogueConstants.promptSize.x - dialogueConstants.promptPadding.x,
+      screenSize.y - dialogueConstants.promptSize.y - dialogueConstants.promptPadding.y,
       ImageAssets.diamond.key
-    ).setDisplaySize(diamondSize.x, diamondSize.y);
+    ).setDisplaySize(dialogueConstants.promptSize.x, dialogueConstants.promptSize.y);
 
     return { container: diamondSprite, clearBlink: blink(gameManager, diamondSprite) };
   }

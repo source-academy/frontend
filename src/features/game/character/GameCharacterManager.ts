@@ -3,7 +3,7 @@ import GameManager from '../scenes/gameManager/GameManager';
 import StringUtils from '../utils/StringUtils';
 
 import { screenSize, screenCenter } from '../commons/CommonConstants';
-import { charRect, charWidth, speakerRect, speakerTextStyle } from './GameCharacterConstants';
+import CharConstants, { speakerTextStyle } from './GameCharacterConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
@@ -64,7 +64,7 @@ export default class CharacterManager {
 
     const gameManager = GameActionManager.getInstance().getGameManager();
 
-    const characterXPosition = charRect.x[overridePosition || defaultPosition];
+    const characterXPosition = CharConstants.charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
 
     const characterSprite = new Phaser.GameObjects.Image(
@@ -74,7 +74,7 @@ export default class CharacterManager {
       assetKey
     ).setOrigin(0.5, 1);
 
-    resize(characterSprite, charWidth);
+    resize(characterSprite, CharConstants.charWidth);
     return characterSprite;
   }
 
@@ -108,8 +108,8 @@ export default class CharacterManager {
     const speakerText = createBitmapText(
       gameManager,
       '',
-      speakerRect.x,
-      speakerRect.y,
+      CharConstants.speakerRect.x,
+      CharConstants.speakerRect.y,
       speakerTextStyle
     ).setOrigin(0.5, 0.5);
 

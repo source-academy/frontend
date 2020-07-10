@@ -4,20 +4,6 @@ import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
 import ImageAssets from '../../assets/ImageAssets';
 
-export const modeButtonYPos = screenSize.y * 0.8;
-
-export const menuEntryTweenProps = {
-  y: 0,
-  duration: 500,
-  ease: 'Power2'
-};
-
-export const menuExitTweenProps = {
-  y: screenSize.y * 0.4,
-  duration: 300,
-  ease: 'Power2'
-};
-
 export const modeButtonStyle: BitmapFontStyle = {
   key: zektonFont.key,
   size: 45,
@@ -31,3 +17,19 @@ export const modeBannerRect = {
   assetYPos: screenCenter.y,
   isInteractive: false
 } as GameSprite;
+
+const modeMenuConstants = {
+  modeButtonYPos: screenSize.y * 0.8,
+  entryTweenProps: {
+    y: 0,
+    duration: 500,
+    ease: 'Power2'
+  },
+  exitTweenProps: {
+    y: screenSize.y * 0.4,
+    duration: 300,
+    ease: 'Power2'
+  }
+};
+
+export default modeMenuConstants;

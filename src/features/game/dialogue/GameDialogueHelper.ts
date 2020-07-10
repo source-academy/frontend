@@ -1,6 +1,6 @@
 import { screenCenter } from '../commons/CommonConstants';
 import Typewriter from '../effects/Typewriter';
-import { textPadding, dialogueRect } from './GameDialogueConstants';
+import dialogueConstants from './GameDialogueConstants';
 import ImageAssets from '../assets/ImageAssets';
 
 export function createDialogueBox(scene: Phaser.Scene) {
@@ -18,8 +18,8 @@ export function createTypewriter(
   style: Phaser.Types.GameObjects.Text.TextStyle
 ) {
   const typewriter = Typewriter(scene, {
-    x: dialogueRect.x + textPadding.x,
-    y: dialogueRect.y + textPadding.y,
+    x: dialogueConstants.rect.x + dialogueConstants.textPadding.x,
+    y: dialogueConstants.rect.y + dialogueConstants.textPadding.y,
     textStyle: style
   });
   return typewriter;

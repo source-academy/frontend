@@ -2,13 +2,7 @@ import { screenCenter, screenSize } from 'src/features/game/commons/CommonConsta
 import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
-import {
-  defaultScrollSpeed,
-  maskRect,
-  imageDist,
-  chapterArrowXOffset,
-  offHoverAlpha
-} from './ChapterSelectConstants';
+import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -63,13 +57,13 @@ class ChapterSelect extends Phaser.Scene {
 
     let newXPos = this.chapterContainer.x;
     if (this.isScrollRight) {
-      newXPos -= defaultScrollSpeed;
+      newXPos -= chapConstants.defaultScrollSpeed;
     } else if (this.isScrollLeft) {
-      newXPos += defaultScrollSpeed;
+      newXPos += chapConstants.defaultScrollSpeed;
     }
     this.chapterContainer.x = limitNumber(
       newXPos,
-      -imageDist * (this.chapterDetails.length - 1),
+      -chapConstants.imageDist * (this.chapterDetails.length - 1),
       0
     );
   }
@@ -122,13 +116,13 @@ class ChapterSelect extends Phaser.Scene {
 
     const leftArrow = new Phaser.GameObjects.Sprite(
       this,
-      screenCenter.x - chapterArrowXOffset,
+      screenCenter.x - chapConstants.arrowXOffset,
       screenCenter.y,
       ImageAssets.chapterSelectArrow.key
     ).setDataEnabled();
     const rightArrow = new Phaser.GameObjects.Sprite(
       this,
-      screenCenter.x + chapterArrowXOffset,
+      screenCenter.x + chapConstants.arrowXOffset,
       screenCenter.y,
       ImageAssets.chapterSelectArrow.key
     )
@@ -153,14 +147,14 @@ class ChapterSelect extends Phaser.Scene {
       ? (value: boolean) => (this.isScrollLeft = value)
       : (value: boolean) => (this.isScrollRight = value);
     arrow.setInteractive({ useHandCursor: true });
-    arrow.setAlpha(offHoverAlpha);
+    arrow.setAlpha(chapConstants.offHoverAlpha);
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
       arrow.setAlpha(onHoverAlpha)
     );
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => setScroll(true));
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
       setScroll(false);
-      arrow.setAlpha(offHoverAlpha);
+      arrow.setAlpha(chapConstants.offHoverAlpha);
     });
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => setScroll(false));
   }
@@ -168,7 +162,12 @@ class ChapterSelect extends Phaser.Scene {
   private createMask() {
     const graphics = this.add.graphics();
     const mask = graphics
-      .fillRect(maskRect.x, maskRect.y, maskRect.width, maskRect.height)
+      .fillRect(
+        chapConstants.maskRect.x,
+        chapConstants.maskRect.y,
+        chapConstants.maskRect.width,
+        chapConstants.maskRect.height
+      )
       .setPosition(screenCenter.x, screenCenter.y);
     mask.alpha = 0;
     return mask;
@@ -201,7 +200,7 @@ class ChapterSelect extends Phaser.Scene {
 
   private async scrollToIndex(id: number) {
     if (!this.chapterContainer) return;
-    const xTarget = -id * imageDist;
+    const xTarget = -id * chapConstants.imageDist;
 
     const scrollDuration = 800;
     this.tweens.add({

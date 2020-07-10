@@ -1,15 +1,7 @@
-import {
-  imageRect,
-  imageDist,
-  chapterButtonsYOffset,
-  chapterButtonsXOffset,
-  chapterFrameXOffset,
-  chapterFrameYOffset,
-  chapterTitleYOffset,
+import chapConstants, {
   chapterActionAltStyle,
   chapterIndexStyle,
-  chapterTitleStyle,
-  chapterIndexYOffset
+  chapterTitleStyle
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
@@ -35,13 +27,13 @@ export function createChapter(
     0,
     0,
     `chapterImage${index}`
-  ).setDisplaySize(imageRect.width, imageRect.height);
+  ).setDisplaySize(chapConstants.imageRect.width, chapConstants.imageRect.height);
 
   // Chapter Frame
   const chapterFrame = new Phaser.GameObjects.Sprite(
     scene,
-    chapterFrameXOffset,
-    chapterFrameYOffset,
+    chapConstants.frameXOffset,
+    chapConstants.frameYOffset,
     ImageAssets.chapterSelectFrame.key
   );
 
@@ -57,17 +49,17 @@ export function createChapter(
     chapterActionAltStyle
   );
   chapterRepeatPopup
-    .setPosition(chapterButtonsXOffset + 120, chapterButtonsYOffset - 40)
+    .setPosition(chapConstants.buttonsXOffset + 120, chapConstants.buttonsYOffset - 40)
     .setVisible(false);
   chapterContinuePopup
-    .setPosition(-chapterButtonsXOffset + 120, chapterButtonsYOffset - 40)
+    .setPosition(-chapConstants.buttonsXOffset + 120, chapConstants.buttonsYOffset - 40)
     .setVisible(false);
 
   // Chapter Actions
   const chapterRepeat = new Phaser.GameObjects.Sprite(
     scene,
-    chapterButtonsXOffset,
-    chapterButtonsYOffset,
+    chapConstants.buttonsXOffset,
+    chapConstants.buttonsYOffset,
     ImageAssets.chapterRepeatButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
@@ -83,8 +75,8 @@ export function createChapter(
 
   const chapterContinue = new Phaser.GameObjects.Sprite(
     scene,
-    -chapterButtonsXOffset,
-    chapterButtonsYOffset,
+    -chapConstants.buttonsXOffset,
+    chapConstants.buttonsYOffset,
     ImageAssets.chapterContinueButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
@@ -103,7 +95,7 @@ export function createChapter(
     scene,
     `Chapter ${index}`,
     0,
-    chapterIndexYOffset,
+    chapConstants.indexYOffset,
     chapterIndexStyle
   ).setOrigin(0.5, 0.5);
 
@@ -111,7 +103,7 @@ export function createChapter(
     scene,
     title,
     0,
-    chapterTitleYOffset,
+    chapConstants.titleYOffset,
     chapterTitleStyle
   ).setOrigin(0.5, 0.5);
 
@@ -121,8 +113,8 @@ export function createChapter(
     scene,
     0,
     0,
-    imageRect.width,
-    imageRect.height,
+    chapConstants.imageRect.width,
+    chapConstants.imageRect.height,
     0
   )
     .setOrigin(0.5)
@@ -145,7 +137,7 @@ export function createChapter(
 }
 
 export function getCoorByChapter(chapterNum: number) {
-  const x = screenCenter.x + imageDist * chapterNum;
+  const x = screenCenter.x + chapConstants.imageDist * chapterNum;
   const y = screenCenter.y;
   return [x, y];
 }

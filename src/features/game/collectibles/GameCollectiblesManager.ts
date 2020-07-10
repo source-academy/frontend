@@ -2,31 +2,12 @@ import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { screenCenter } from '../commons/CommonConstants';
-import {
-  pageBannerYStartPos,
-  pageBannerYSpacing,
-  pageBannerTextXPos,
+import CollectibleConstants, {
   pageBannerTextStyle,
-  listBannerYStartPos,
-  listBannerYSpacing,
-  listBannerTextXPos,
   listBannerTextStyle,
-  arrowXMidPos,
-  arrowDownYPos,
-  arrowXScale,
-  arrowYScale,
-  itemsPerPage,
-  arrowXOffset,
-  offHoverAlpha,
-  onHoverAlpha,
-  collectiblePreviewXPos,
-  collectiblePreviewYPos,
-  collectiblePreviewDim,
   collectibleTitleStyle,
   collectibleDescStyle,
-  defaultCollectibleProp,
-  collectibleTitleYOffset,
-  collectibleDescYOffset
+  defaultCollectibleProp
 } from './GameCollectiblesConstants';
 import { resize } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
@@ -93,23 +74,23 @@ class GameCollectiblesManager {
     // Add arrows
     const arrowLeft = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      arrowXMidPos - arrowXOffset,
-      arrowDownYPos,
+      CollectibleConstants.arrowXMidPos - CollectibleConstants.arrowXOffset,
+      CollectibleConstants.arrowDownYPos,
       ImageAssets.arrow.key
     )
-      .setScale(arrowXScale, arrowYScale)
+      .setScale(CollectibleConstants.arrowXScale, CollectibleConstants.arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
-      .setAlpha(offHoverAlpha);
+      .setAlpha(CollectibleConstants.offHoverAlpha);
 
     const arrowRight = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      arrowXMidPos + arrowXOffset,
-      arrowDownYPos,
+      CollectibleConstants.arrowXMidPos + CollectibleConstants.arrowXOffset,
+      CollectibleConstants.arrowDownYPos,
       ImageAssets.arrow.key
     )
-      .setScale(arrowXScale, arrowYScale)
+      .setScale(CollectibleConstants.arrowXScale, CollectibleConstants.arrowYScale)
       .setRotation((90 * Math.PI) / 180)
-      .setAlpha(offHoverAlpha);
+      .setAlpha(CollectibleConstants.offHoverAlpha);
 
     this.setArrowFunctionality(arrowLeft, async () => await this.nextPage(false));
     this.setArrowFunctionality(arrowRight, async () => await this.nextPage(true));
@@ -125,27 +106,27 @@ class GameCollectiblesManager {
     // Add preview
     const frame = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      collectiblePreviewXPos,
-      collectiblePreviewYPos,
+      CollectibleConstants.previewXPos,
+      CollectibleConstants.previewYPos,
       ImageAssets.popUpFrame.key
     ).setScale(1.2);
     this.previewSprite = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      collectiblePreviewXPos,
-      collectiblePreviewYPos,
+      CollectibleConstants.previewXPos,
+      CollectibleConstants.previewYPos,
       ImageAssets.cookies.key
     ).setOrigin(0.428, 0.468);
     this.previewTitle = createBitmapText(
       this.getScene(),
       '',
-      collectiblePreviewXPos,
-      collectiblePreviewYPos + collectibleTitleYOffset,
+      CollectibleConstants.previewXPos,
+      CollectibleConstants.previewYPos + CollectibleConstants.titleYOffset,
       collectibleTitleStyle
     ).setOrigin(0.35, 0.5);
     this.previewDesc = new Phaser.GameObjects.Text(
       this.getScene(),
-      collectiblePreviewXPos,
-      collectiblePreviewYPos + collectibleDescYOffset,
+      CollectibleConstants.previewXPos,
+      CollectibleConstants.previewYPos + CollectibleConstants.descYOffset,
       '',
       collectibleDescStyle
     ).setOrigin(0.45, 0.0);
@@ -164,9 +145,9 @@ class GameCollectiblesManager {
 
     const preview = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
     if (preview.displayWidth > preview.displayHeight) {
-      resize(preview, collectiblePreviewDim);
+      resize(preview, CollectibleConstants.previewDim);
     } else {
-      resize(preview, 0, collectiblePreviewDim);
+      resize(preview, 0, CollectibleConstants.previewDim);
     }
     preview
       .setPosition(this.previewSprite!.x, this.previewSprite!.y)
@@ -184,10 +165,10 @@ class GameCollectiblesManager {
     arrow.setInteractive({ pixelPerfect: true, useHandCursor: true });
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-      arrow.setAlpha(onHoverAlpha);
+      arrow.setAlpha(CollectibleConstants.onHoverAlpha);
     });
     arrow.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-      arrow.setAlpha(offHoverAlpha);
+      arrow.setAlpha(CollectibleConstants.offHoverAlpha);
     });
   }
 
@@ -229,7 +210,8 @@ class GameCollectiblesManager {
 
   private addPageBanner(text: string, index: number, isChosen: boolean, callback: any) {
     const pageBannerContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const bannerYPos = pageBannerYStartPos + index * pageBannerYSpacing;
+    const bannerYPos =
+      CollectibleConstants.pageYStartPos + index * CollectibleConstants.pageYSpacing;
     const pageBannerBg = new Phaser.GameObjects.Sprite(
       this.getScene(),
       0,
@@ -244,11 +226,12 @@ class GameCollectiblesManager {
       ImageAssets.collectiblesPageChosen.key
     );
 
-    const bannerTextYPos = pageBannerYStartPos + index * pageBannerYSpacing;
+    const bannerTextYPos =
+      CollectibleConstants.pageYStartPos + index * CollectibleConstants.pageYSpacing;
     const pageBannerText = createBitmapText(
       this.getScene(),
       text,
-      pageBannerTextXPos,
+      CollectibleConstants.pageTextXPos,
       bannerTextYPos,
       pageBannerTextStyle
     )
@@ -298,8 +281,8 @@ class GameCollectiblesManager {
     }
 
     const pageContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const startingIdx = pageNum * itemsPerPage;
-    const endingIdx = startingIdx + itemsPerPage;
+    const startingIdx = pageNum * CollectibleConstants.itemsPerPage;
+    const endingIdx = startingIdx + CollectibleConstants.itemsPerPage;
 
     if (startingIdx < objectList.length) {
       for (let i = startingIdx; i < objectList.length && i < endingIdx; i++) {
@@ -316,7 +299,8 @@ class GameCollectiblesManager {
 
   private createObjContainer(obj: string, index: number, callback: any) {
     const container = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const objBannerYPos = listBannerYStartPos + index * listBannerYSpacing;
+    const objBannerYPos =
+      CollectibleConstants.listYStartPos + index * CollectibleConstants.listYSpacing;
 
     const objListBg = new Phaser.GameObjects.Sprite(
       this.getScene(),
@@ -327,7 +311,7 @@ class GameCollectiblesManager {
     const objListText = createBitmapText(
       this.getScene(),
       obj,
-      listBannerTextXPos,
+      CollectibleConstants.listTextXPos,
       objBannerYPos,
       listBannerTextStyle
     ).setOrigin(0.0, 0.55);

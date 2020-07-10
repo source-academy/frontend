@@ -5,31 +5,6 @@ import { alienLeagueFont, zektonFont } from '../commons/CommonFontAssets';
 import { CollectibleProperty } from './GameCollectiblesTypes';
 import ImageAssets from '../assets/ImageAssets';
 
-export const pageBannerYStartPos = -screenSize.y * 0.3;
-export const pageBannerYSpacing = 150;
-export const pageBannerTextXPos = screenSize.x * 0.3;
-
-export const listBannerYStartPos = -screenSize.y * 0.31;
-export const listBannerYSpacing = 100;
-export const listBannerTextXPos = -screenSize.x * 0.09;
-
-export const collectiblePreviewXPos = -screenSize.x * 0.3;
-export const collectiblePreviewYPos = -screenSize.y * 0.05;
-export const collectiblePreviewDim = 430;
-export const collectibleTitleYOffset = -275;
-export const collectibleDescYOffset = 275;
-
-export const arrowDownYPos = screenSize.y * 0.34;
-export const arrowXMidPos = screenSize.x * 0.08;
-export const arrowXOffset = 80;
-export const arrowXScale = 0.4;
-export const arrowYScale = 0.3;
-
-export const onHoverAlpha = 1.0;
-export const offHoverAlpha = 0.7;
-
-export const itemsPerPage = 7;
-
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: alienLeagueFont.key,
   size: 35,
@@ -65,3 +40,32 @@ export const defaultCollectibleProp: CollectibleProperty = {
   x: 0,
   y: 0
 };
+
+const CollectibleConstants = {
+  pageYStartPos: -screenSize.y * 0.3,
+  pageYSpacing: 150,
+  pageTextXPos: screenSize.x * 0.3,
+
+  listYStartPos: -screenSize.y * 0.31,
+  listYSpacing: 100,
+  listTextXPos: -screenSize.x * 0.09,
+
+  previewXPos: -screenSize.x * 0.3,
+  previewYPos: -screenSize.y * 0.05,
+  previewDim: 430,
+  titleYOffset: -275,
+  descYOffset: 275,
+
+  arrowDownYPos: screenSize.y * 0.34,
+  arrowXMidPos: screenSize.x * 0.08,
+  arrowXOffset: 80,
+  arrowXScale: 0.4,
+  arrowYScale: 0.3,
+
+  onHoverAlpha: 1.0,
+  offHoverAlpha: 0.7,
+
+  itemsPerPage: 7
+};
+
+export default CollectibleConstants;

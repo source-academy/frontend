@@ -1,17 +1,12 @@
 import { IGameUI, GameSprite, GameButton } from '../../commons/CommonTypes';
-import {
-  previewFrameXPos,
-  previewXPos,
-  previewYPos,
-  previewHeight,
-  previewWidth,
+import modeMoveConstants, {
+  moveButtonStyle,
   previewFill,
   previewFrame
 } from './GameModeMoveConstants';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize, Constants } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -54,9 +49,9 @@ class GameModeMove implements IGameUI {
 
   private addMoveOptionButton(name: string, callback: any) {
     const newNumberOfButtons = this.gameButtons.length + 1;
-    const partitionSize = moveButtonYSpace / newNumberOfButtons;
+    const partitionSize = modeMoveConstants.buttonYSpace / newNumberOfButtons;
 
-    const newYPos = (screenSize.y - moveButtonYSpace) / 2 + partitionSize / 2;
+    const newYPos = (screenSize.y - modeMoveConstants.buttonYSpace) / 2 + partitionSize / 2;
 
     // Rearrange existing buttons
     for (let i = 0; i < this.gameButtons.length; i++) {
@@ -71,7 +66,7 @@ class GameModeMove implements IGameUI {
       text: name,
       bitmapStyle: moveButtonStyle,
       assetKey: ImageAssets.longButton.key,
-      assetXPos: moveButtonXPos,
+      assetXPos: modeMoveConstants.buttonXPos,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
       onInteract: callback,
@@ -100,7 +95,7 @@ class GameModeMove implements IGameUI {
 
     const previewFrame = new Phaser.GameObjects.Image(
       gameManager,
-      previewFrameXPos,
+      modeMoveConstants.previewFrameXPos,
       this.previewFrame.assetYPos,
       this.previewFrame.assetKey
     );
@@ -179,8 +174,8 @@ class GameModeMove implements IGameUI {
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
     sprite
       .setTexture(assetKey)
-      .setDisplaySize(previewWidth, previewHeight)
-      .setPosition(previewXPos, previewYPos);
+      .setDisplaySize(modeMoveConstants.previewWidth, modeMoveConstants.previewHeight)
+      .setPosition(modeMoveConstants.previewXPos, modeMoveConstants.previewYPos);
 
     // Update
     this.currentLocationAssetKey = assetKey;

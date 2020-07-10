@@ -1,22 +1,10 @@
 import GameActionManager from '../action/GameActionManager';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { createButton } from '../utils/StyleUtils';
-import {
+import escapeConstants, {
   escapeOptButtonStyle,
-  escapeTextOriX,
-  escapeTextOriY,
-  escapeButtonYPos,
   volumeRadioOptTextStyle,
-  optTextStyle,
-  optHeaderTextXPos,
-  optHeaderTextYPos,
-  radioButtonsXSpace,
-  volumeOptXPos,
-  volumeOptYPos,
-  volumeOptTextAnchorX,
-  volumeOptTextAnchorY,
-  volumeOptTextXOffset,
-  volumeOptTextYOffset
+  optTextStyle
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import CommonRadioButtons from '../commons/CommonRadioButtons';
@@ -49,8 +37,8 @@ class GameEscapeManager implements IGameUI {
     const volumeText = createBitmapText(
       gameManager,
       'Volume',
-      optHeaderTextXPos,
-      optHeaderTextYPos,
+      escapeConstants.optTextXPos,
+      escapeConstants.optTextYPos,
       optTextStyle
     );
 
@@ -62,17 +50,17 @@ class GameEscapeManager implements IGameUI {
       gameManager,
       volumeContainerOptions,
       userVolIdx,
-      radioButtonsXSpace,
+      escapeConstants.radioButtonsXSpace,
       volumeRadioOptTextStyle,
-      volumeOptXPos,
-      volumeOptYPos,
-      volumeOptTextAnchorX,
-      volumeOptTextAnchorY,
+      escapeConstants.volOptXPos,
+      escapeConstants.volOptYPos,
+      escapeConstants.volOptTextAnchorX,
+      escapeConstants.volOptTextAnchorY,
       15,
       3,
       10,
-      volumeOptTextXOffset,
-      volumeOptTextYOffset
+      escapeConstants.volOptTextXOffset,
+      escapeConstants.volOptTextYOffset
     );
 
     const mainMenuButton = createButton(
@@ -87,9 +75,9 @@ class GameEscapeManager implements IGameUI {
         }
       },
       ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.25, y: escapeButtonYPos },
-      escapeTextOriX,
-      escapeTextOriY,
+      { x: screenSize.x * 0.25, y: escapeConstants.buttonYPos },
+      escapeConstants.textOriX,
+      escapeConstants.textOriY,
       escapeOptButtonStyle
     );
 
@@ -102,9 +90,9 @@ class GameEscapeManager implements IGameUI {
         }
       },
       ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.5, y: escapeButtonYPos },
-      escapeTextOriX,
-      escapeTextOriY,
+      { x: screenSize.x * 0.5, y: escapeConstants.buttonYPos },
+      escapeConstants.textOriX,
+      escapeConstants.textOriY,
       escapeOptButtonStyle
     );
 
@@ -113,9 +101,9 @@ class GameEscapeManager implements IGameUI {
       'Apply Settings',
       () => this.applySettings(),
       ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.75, y: escapeButtonYPos },
-      escapeTextOriX,
-      escapeTextOriY,
+      { x: screenSize.x * 0.75, y: escapeConstants.buttonYPos },
+      escapeConstants.textOriX,
+      escapeConstants.textOriY,
       escapeOptButtonStyle
     );
 

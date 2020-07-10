@@ -1,11 +1,5 @@
 import { GameButton, IGameUI } from '../../commons/CommonTypes';
-import {
-  menuEntryTweenProps,
-  menuExitTweenProps,
-  modeButtonYPos,
-  modeButtonStyle,
-  modeBannerRect
-} from './GameModeMenuConstants';
+import modeMenuConstants, { modeButtonStyle, modeBannerRect } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
@@ -60,7 +54,7 @@ class GameModeMenu implements IGameUI {
       bitmapStyle: modeButtonStyle,
       assetKey: ImageAssets.shortButton.key,
       assetXPos: newXPos + this.gameButtons.length * partitionSize,
-      assetYPos: modeButtonYPos,
+      assetYPos: modeMenuConstants.modeButtonYPos,
       isInteractive: true,
       onInteract: callback,
       interactionId: Constants.nullInteractionId
@@ -140,7 +134,7 @@ class GameModeMenu implements IGameUI {
 
     gameManager.tweens.add({
       targets: this.uiContainer,
-      ...menuEntryTweenProps
+      ...modeMenuConstants.entryTweenProps
     });
   }
 
@@ -152,7 +146,7 @@ class GameModeMenu implements IGameUI {
 
       gameManager.tweens.add({
         targets: this.uiContainer,
-        ...menuExitTweenProps
+        ...modeMenuConstants.exitTweenProps
       });
 
       await sleep(500);

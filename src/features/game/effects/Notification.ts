@@ -7,7 +7,7 @@ import { sleep } from '../utils/GameUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { alienLeagueFont } from '../commons/CommonFontAssets';
 import { HexColor } from '../utils/StyleUtils';
-import { dialogueRect } from '../dialogue/GameDialogueConstants';
+import dialogueConstants from '../dialogue/GameDialogueConstants';
 import { createBitmapText } from '../utils/TextUtils';
 
 const notifStyle: BitmapFontStyle = {
@@ -17,7 +17,7 @@ const notifStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-const notifYPos = dialogueRect.y + notifStyle.size * 2;
+const notifYPos = dialogueConstants.rect.y + notifStyle.size * 2;
 
 export async function displayNotification(message: string): Promise<void> {
   const gameManager = GameActionManager.getInstance().getGameManager();

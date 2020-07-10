@@ -3,27 +3,25 @@ import { Color } from '../utils/StyleUtils';
 
 const dialogueRectMargin = 10;
 
-export const diamondSize = {
-  x: 30,
-  y: 60
-};
-
-export const diamondPadding = {
-  x: 30,
-  y: 10
-};
-
-export const dialogueRect = {
-  x: dialogueRectMargin,
-  y: 760,
-  width: screenSize.x - dialogueRectMargin * 2,
-  height: 320,
-  assetKey: 'speechbox'
-};
-
-export const textPadding = {
-  x: 100,
-  y: 70
+const dialogueConstants = {
+  promptSize: {
+    x: 30,
+    y: 60
+  },
+  promptPadding: {
+    x: 30,
+    y: 10
+  },
+  rect: {
+    x: dialogueRectMargin,
+    y: 760,
+    width: screenSize.x - dialogueRectMargin * 2,
+    height: 320
+  },
+  textPadding: {
+    x: 100,
+    y: 70
+  }
 };
 
 export const textTypeWriterStyle = {
@@ -32,5 +30,10 @@ export const textTypeWriterStyle = {
   fill: Color.lightBlue,
   align: 'left',
   lineSpacing: 10,
-  wordWrap: { width: dialogueRect.width - textPadding.x * 2 - dialogueRectMargin * 2 }
+  wordWrap: {
+    width:
+      dialogueConstants.rect.width - dialogueConstants.textPadding.x * 2 - dialogueRectMargin * 2
+  }
 };
+
+export default dialogueConstants;
