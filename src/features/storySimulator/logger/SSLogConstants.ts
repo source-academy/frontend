@@ -4,7 +4,7 @@ import FontAssets from 'src/features/game/assets/FontAssets';
 
 export const loggableStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
-  size: 20,
+  size: 27,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };

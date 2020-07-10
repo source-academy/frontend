@@ -1,6 +1,6 @@
 import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
+// import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { AssetPath } from 'src/features/game/commons/CommonTypes';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
@@ -69,19 +69,23 @@ dialogues
         this.getObjectPlacement(),
         loggable.x,
         loggable.y,
-        350,
-        150,
+        400,
+        210,
         HexColor.darkBlue
-      ).setAlpha(0.8);
-      multiplyDimensions(loggerRectangle, 1.2);
+      )
+        .setOrigin(0.0, 0.5)
+        .setAlpha(0.9);
 
       const loggerText = createBitmapText(
         this.getObjectPlacement(),
         this.formatObjectDetails(loggable),
-        loggable.x,
+        loggable.x + 20,
         loggable.y + 10,
         loggableStyle
-      ).setOrigin(0.5);
+      )
+        .setLetterSpacing(3)
+        .setOrigin(0.0, 0.6);
+
       this.detailMapContainer!.add([loggerRectangle, loggerText]);
     });
     this.getObjectPlacement().add.existing(this.detailMapContainer);

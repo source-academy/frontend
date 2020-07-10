@@ -2,9 +2,9 @@ import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { CursorMode } from './SSCursorModeTypes';
 import SSCursorModeConstants, { altTextStyle } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
-import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { createBitmapText } from 'src/features/game/utils/TextUtils';
 import SSImageAssets from '../assets/ImageAssets';
+import CommonTextHover from 'src/features/game/commons/CommonTextHover';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
@@ -44,10 +44,56 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
   ) {
     // Main container
     const cursorModeContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-    const modeIconBg = new Phaser.GameObjects.Sprite(scene, 0, 0, SSImageAssets.iconBg.key)
-      .setDisplaySize(SSCursorModeConstants.iconBgSize, SSCursorModeConstants.iconBgSize)
-      .setAlpha(SSCursorModeConstants.inactiveAlpha)
-      .setInteractive({ pixelPerfect: true, useHandCursor: true });
+
+    // Update
+    this.isModes.push(isMode);
+    this.cursorModes.push(cursorModeContainer);
+    const currIdx = this.cursorModes.length - 1;
+
+    // On hover text container
+    const hoverText = new CommonTextHover(
+      scene,
+      SSCursorModeConstants.altTextXPos,
+      SSCursorModeConstants.altTextYPos,
+      text,
+      altTextStyle
+    );
+
+    const onUp = () => {
+      if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;
+      onClick();
+      this.renderCursorModesContainer();
+    };
+
+    const onHoverWrapper = () => {
+      if (text !== '') hoverText.setVisible(true);
+      cursorModeContainer.setAlpha(SSCursorModeConstants.onHoverAlpha);
+      onHover();
+    };
+
+    const onOutWrapper = () => {
+      hoverText.setVisible(false);
+      const activeMode = currIdx === this.currActiveModeIdx && this.isModes[currIdx];
+      cursorModeContainer.setAlpha(
+        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
+      );
+      onOut();
+    };
+
+    const modeButton = createButton(
+      scene,
+      '',
+      SSImageAssets.iconBg.key,
+      { x: 0, y: 0, oriX: 0, oriY: 0 },
+      undefined,
+      undefined,
+      onUp,
+      onHoverWrapper,
+      onOutWrapper,
+      undefined,
+      undefined,
+      false
+    );
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(
@@ -55,61 +101,9 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       SSCursorModeConstants.iconSize
     );
 
-    // On hover text container
-    const altTextBg = new Phaser.GameObjects.Rectangle(
-      scene,
-      0,
-      0,
-      text.length * 12,
-      50,
-      HexColor.darkBlue
-    )
-      .setAlpha(0.7)
-      .setOrigin(0.0, 0.5);
+    modeButton.add(modeIcon);
 
-    const altText = createBitmapText(
-      scene,
-      text,
-      SSCursorModeConstants.altTextMargin,
-      0,
-      altTextStyle
-    ).setOrigin(0.0, 0.5);
-    const altTextContainer = new Phaser.GameObjects.Container(
-      scene,
-      SSCursorModeConstants.altTextXPos,
-      SSCursorModeConstants.altTextYPos,
-      [altTextBg, altText]
-    );
-
-    // Hide it by default
-    altTextContainer.setVisible(false);
-
-    // Update
-    this.isModes.push(isMode);
-    this.cursorModes.push(cursorModeContainer);
-    const currIdx = this.cursorModes.length - 1;
-
-    // Set listeners
-    modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;
-      onClick();
-      this.renderCursorModesContainer();
-    });
-    modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-      if (text !== '') altTextContainer.setVisible(true);
-      cursorModeContainer.setAlpha(SSCursorModeConstants.onHoverAlpha);
-      onHover();
-    });
-    modeIconBg.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-      altTextContainer.setVisible(false);
-      const activeMode = currIdx === this.currActiveModeIdx && this.isModes[currIdx];
-      cursorModeContainer.setAlpha(
-        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
-      );
-      onOut();
-    });
-
-    cursorModeContainer.add([modeIconBg, modeIcon, altTextContainer]);
+    cursorModeContainer.add([modeButton, hoverText]);
   }
 
   public renderCursorModesContainer() {
