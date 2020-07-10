@@ -19,11 +19,9 @@
     justify-content: space-evenly;
     align-items: center;
 
-    font-size: 1.3em;
     color: white;
 
     .level-progress {
-      height: 1.3em;
       width: 15em;
     }
   }
@@ -55,39 +53,35 @@
         flex-direction: column;
         align-items: center;
 
-        font-weight: bold;
-        font-size: 1.3em;
         line-height: 0.8em;
         color: white;
       }
     }
 
     .cards {
+      display: flex;
+
       width: 35%;
-      display: table;
 
       // Container for Cards
       .cards-container {
-        overflow-x: hidden;
-        overflow-y: auto;
         height: 800px; // help
         max-height: 800px;
+
+        overflow-x: hidden;
+        overflow-y: auto;
       }
 
       // Achievement Card
       .achievement {
-        width: 85%;
-        background-color: #d9d9d9;
-
-        height: 7.5em;
-        margin-bottom: 1em;
-
         display: flex;
+
         flex-direction: column;
 
-        p {
-          font-size: 1em;
-        }
+        // Card aspect ratio 6:1
+        height: 7em;
+        width: 30em;
+        margin-bottom: 1em;
 
         // This contains title, week, dropdown, etc
         .main {
