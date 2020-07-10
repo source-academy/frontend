@@ -122,7 +122,7 @@ class MainMenu extends Phaser.Scene {
       Constants.nullInteractionId
     );
     this.addOptionButton(
-      mainMenuConstants.optionsText.studentRoom,
+      mainMenuConstants.optionsText.collectible,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('MyRoom');
@@ -130,7 +130,7 @@ class MainMenu extends Phaser.Scene {
       Constants.nullInteractionId
     );
     this.addOptionButton(
-      'Room Preview',
+      mainMenuConstants.optionsText.studentRoom,
       () => {
         this.layerManager.clearAllLayers();
         this.scene.start('RoomPreview', { studentCode: this.roomCode });

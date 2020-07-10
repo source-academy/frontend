@@ -33,9 +33,7 @@ const settingsConstants = {
   volOptYPos: screenSize.y * 0.24,
   volOptTextAnchorX: 0.5,
   volOptTextAnchorY: 0.25,
-  volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0'],
-  applySettingsAnchorX: 0.33,
-  applySettingsAnchorY: 0.85
+  volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0']
 };
 
 export default settingsConstants;

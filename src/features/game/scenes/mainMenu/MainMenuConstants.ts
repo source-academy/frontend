@@ -17,6 +17,7 @@ const mainMenuConstants = {
   optionsText: {
     chapterSelect: 'Play Chapter',
     studentRoom: 'Go to My Room',
+    collectible: 'Achievements',
     settings: 'Settings'
   },
   buttonYSpace: screenSize.y * 0.5,

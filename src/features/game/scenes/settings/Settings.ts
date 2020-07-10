@@ -7,7 +7,7 @@ import settingsConstants, {
   optionHeaderTextStyle,
   applySettingsTextStyle
 } from './SettingsConstants';
-import { createButton } from '../../utils/StyleUtils';
+import { createButton } from '../../utils/ButtonUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
@@ -66,13 +66,14 @@ class Settings extends Phaser.Scene {
     const applySettingsButton = createButton(
       this,
       'Apply Settings',
-      () => this.applySettings(this.volumeRadioButtons),
       ImageAssets.mediumButton.key,
-      { x: screenCenter.x, y: screenSize.y * 0.925 },
-      settingsConstants.applySettingsAnchorX,
-      settingsConstants.applySettingsAnchorY,
+      { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
+      this.soundManager,
+      () => this.applySettings(this.volumeRadioButtons),
+      undefined,
       applySettingsTextStyle
-    );
+    ).setPosition(screenCenter.x, screenSize.y * 0.925);
+
     const backButton = new CommonBackButton(
       this,
       () => {

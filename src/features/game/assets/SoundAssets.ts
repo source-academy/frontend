@@ -6,13 +6,13 @@ const SoundAssets: AssetMap<SoundAsset> = {
   buttonHover: {
     key: 'btn-hover',
     path: '/sfx/buttonHover.mp3',
-    config: { volume: 0.3 },
+    config: { volume: 0.5 },
     soundType: GameSoundType.SFX
   },
   buttonClick: {
     key: 'btn-click',
     path: '/sfx/buttonClick.mp3',
-    config: { volume: 0.3 },
+    config: { volume: 0.5 },
     soundType: GameSoundType.SFX
   },
 
