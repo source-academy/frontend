@@ -21,6 +21,7 @@ import commonAssets from 'src/features/game/commons/CommonAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
 import commonFontAssets from 'src/features/game/commons/CommonFontAssets';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -35,6 +36,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async preload() {
+    addLoadingScreen(this);
     [...storySimulatorAssets, ...commonAssets].forEach((asset: ImageAsset) =>
       this.load.image(asset.key, toS3Path(asset.path))
     );
@@ -63,7 +65,6 @@ class MainMenu extends Phaser.Scene {
         text: 'Simulate Checkpoint',
         callback: () => {
           getStorySimulatorGame().setStorySimState(StorySimState.CheckpointSim);
-          // this.callGameManager();
         }
       },
       {
