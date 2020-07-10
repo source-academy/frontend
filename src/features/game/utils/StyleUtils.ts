@@ -1,7 +1,4 @@
 import * as _ from 'lodash';
-import { AssetKey, BitmapFontStyle } from '../commons/CommonTypes';
-import { Constants } from '../commons/CommonConstants';
-import { createBitmapText } from './TextUtils';
 
 export const Color = {
   navy: '#03092c',
@@ -23,31 +20,3 @@ export const Color = {
 
 const hex = (str: string) => parseInt(str.slice(1), 16);
 export const HexColor = _.mapValues(Color, hex);
-
-type ButtonConfig = { x: number; y: number; fontSize?: number };
-
-export function createButton(
-  scene: Phaser.Scene,
-  message: string,
-  callback: () => void,
-  assetKey: AssetKey,
-  { x, y }: ButtonConfig,
-  originX?: number,
-  originY?: number,
-  bitMapTextStyle?: BitmapFontStyle
-) {
-  const container = new Phaser.GameObjects.Container(scene, x, y);
-  const button = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
-  button.setInteractive({ pixelPerfect: true, useHandCursor: true });
-  button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
-
-  const style = bitMapTextStyle ? bitMapTextStyle : Constants.defaultFontStyle;
-  const text = createBitmapText(scene, message, 0, 0, style);
-  const oriX = originX ? originX : 0.25;
-  const oriY = originY ? originY : 0.7;
-  text.setOrigin(oriX, oriY);
-
-  container.add([button, text]);
-
-  return container;
-}

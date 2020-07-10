@@ -3,12 +3,14 @@ import GameActionManager from 'src/features/game/action/GameActionManager';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
+// import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { createBitmapText } from '../../utils/TextUtils';
+// import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -84,14 +86,20 @@ class GameModeTalk implements IGameUI {
 
     this.gameButtons.forEach((topicButton: GameButton) => {
       const text = topicButton.text || '';
-      const style = topicButton.bitmapStyle || Constants.defaultFontStyle;
-      const topicButtonText = createBitmapText(
+      const button = createButton(
         gameManager,
         text,
-        topicButton.assetXPos,
-        topicButton.assetYPos,
-        style
-      ).setOrigin(0.5, 0.2);
+        topicButton.assetKey,
+        { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
+        gameManager.soundManager,
+        undefined,
+        topicButton.onInteract,
+        undefined,
+        undefined,
+        undefined,
+        topicButton.bitmapStyle,
+        false
+      ).setPosition(topicButton.assetXPos, topicButton.assetYPos);
 
       const checkedSprite = new Phaser.GameObjects.Sprite(
         gameManager,
@@ -100,21 +108,11 @@ class GameModeTalk implements IGameUI {
         ImageAssets.talkOptCheck.key
       );
 
-      const buttonSprite = new Phaser.GameObjects.Sprite(
-        gameManager,
-        topicButton.assetXPos,
-        topicButton.assetYPos,
-        topicButton.assetKey
-      ).setInteractive({ pixelPerfect: true, useHandCursor: true });
-
-      buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, topicButton.onInteract);
-
-      talkMenuContainer.add(buttonSprite);
-      talkMenuContainer.add(topicButtonText);
-
+      talkMenuContainer.add(button);
       const isTriggeredTopic =
         !!topicButton.interactionId &&
         GameActionManager.getInstance().hasTriggeredInteraction(topicButton.interactionId);
+
       if (isTriggeredTopic) {
         talkMenuContainer.add(checkedSprite);
       }
@@ -125,7 +123,7 @@ class GameModeTalk implements IGameUI {
       () => GameActionManager.getInstance().popPhase(),
       0,
       0,
-      GameActionManager.getInstance().getGameManager().soundManager
+      gameManager.soundManager
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;

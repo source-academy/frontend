@@ -6,8 +6,8 @@ import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import { screenSize, Constants } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -89,31 +89,23 @@ class GameModeMenu implements IGameUI {
     );
     modeMenuContainer.add(modeBanner);
 
-    this.gameButtons.forEach(button => {
-      const buttonSprite = new Phaser.GameObjects.Sprite(
-        gameManager,
-        button.assetXPos,
-        button.assetYPos,
-        button.assetKey
-      );
-
-      if (button.isInteractive) {
-        buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, button.onInteract);
-      }
-
-      const text = button.text ? button.text : '';
-      const style = button.bitmapStyle ? button.bitmapStyle : Constants.defaultFontStyle;
-      const buttonText = createBitmapText(
+    this.gameButtons.forEach(modeButton => {
+      const text = modeButton.text ? modeButton.text : '';
+      const button = createButton(
         gameManager,
         text,
-        button.assetXPos,
-        button.assetYPos,
-        style
-      ).setOrigin(0.5, 0.25);
+        modeButton.assetKey,
+        { x: 0, y: 0, oriX: 0.5, oriY: 0.25 },
+        gameManager.soundManager,
+        undefined,
+        modeButton.onInteract,
+        undefined,
+        undefined,
+        undefined,
+        modeButton.bitmapStyle
+      ).setPosition(modeButton.assetXPos, modeButton.assetYPos);
 
-      modeMenuContainer.add(buttonSprite);
-      modeMenuContainer.add(buttonText);
+      modeMenuContainer.add(button);
     });
 
     return modeMenuContainer;

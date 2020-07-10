@@ -1,6 +1,6 @@
 import GameActionManager from '../action/GameActionManager';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
-import { createButton } from '../utils/StyleUtils';
+import { createButton } from '../utils/ButtonUtils';
 import escapeConstants, {
   escapeOptButtonStyle,
   volumeRadioOptTextStyle,
@@ -13,6 +13,7 @@ import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
+import GameManager from '../scenes/gameManager/GameManager';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -65,49 +66,24 @@ class GameEscapeManager implements IGameUI {
       escapeConstants.volOptTextYOffset
     );
 
-    const mainMenuButton = createButton(
-      gameManager,
-      'Main Menu',
-      () => {
-        gameManager.cleanUp();
-        if (gameManager.isStorySimulator) {
-          gameManager.scene.start('StorySimulatorMenu');
-        } else {
-          gameManager.scene.start('MainMenu');
-        }
-      },
-      ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.25, y: escapeConstants.buttonYPos },
-      escapeConstants.textOriX,
-      escapeConstants.textOriY,
-      escapeOptButtonStyle
-    );
+    const mainMenuButton = this.createEscapeOptButton(gameManager, 'Main Menu', () => {
+      gameManager.cleanUp();
+      if (gameManager.isStorySimulator) {
+        gameManager.scene.start('StorySimulatorMenu');
+      } else {
+        gameManager.scene.start('MainMenu');
+      }
+    }).setPosition(screenSize.x * 0.25, escapeConstants.buttonYPos);
 
-    const continueButton = createButton(
-      gameManager,
-      'Continue',
-      async () => {
-        if (GameActionManager.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
-          await GameActionManager.getInstance().popPhase();
-        }
-      },
-      ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.5, y: escapeConstants.buttonYPos },
-      escapeConstants.textOriX,
-      escapeConstants.textOriY,
-      escapeOptButtonStyle
-    );
+    const continueButton = this.createEscapeOptButton(gameManager, 'Continue', async () => {
+      if (GameActionManager.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        await GameActionManager.getInstance().popPhase();
+      }
+    }).setPosition(screenSize.x * 0.5, escapeConstants.buttonYPos);
 
-    const applySettingsButton = createButton(
-      gameManager,
-      'Apply Settings',
-      () => this.applySettings(),
-      ImageAssets.mediumButton.key,
-      { x: screenSize.x * 0.75, y: escapeConstants.buttonYPos },
-      escapeConstants.textOriX,
-      escapeConstants.textOriY,
-      escapeOptButtonStyle
-    );
+    const applySettingsButton = this.createEscapeOptButton(gameManager, 'Apply Settings', () =>
+      this.applySettings()
+    ).setPosition(screenSize.x * 0.75, escapeConstants.buttonYPos);
 
     escapeMenuContainer.add([
       escapeMenuBg,
@@ -126,21 +102,31 @@ class GameEscapeManager implements IGameUI {
       .layerManager.clearSeveralLayers([Layer.Escape]);
   }
 
+  private createEscapeOptButton(gameManager: GameManager, text: string, callback: any) {
+    return createButton(
+      gameManager,
+      text,
+      ImageAssets.mediumButton.key,
+      { x: 0, y: 0, oriX: 0.25, oriY: 0.7 },
+      gameManager.soundManager,
+      undefined,
+      callback,
+      undefined,
+      undefined,
+      undefined,
+      escapeOptButtonStyle
+    );
+  }
+
   private async applySettings() {
     if (this.volumeOptions) {
       // Save settings
       const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await GameActionManager.getInstance()
-        .getGameManager()
-        .saveManager.saveSettings({ volume: volumeVal });
+      await GameActionManager.getInstance().saveSettings({ volume: volumeVal });
 
       // Apply settings
-      const newUserSetting = GameActionManager.getInstance()
-        .getGameManager()
-        .saveManager.getLoadedUserState();
-      GameActionManager.getInstance()
-        .getGameManager()
-        .soundManager.applyUserSettings(newUserSetting);
+      const newUserSetting = GameActionManager.getInstance().getLoadedUserState();
+      GameActionManager.getInstance().applySoundSettings(newUserSetting);
     }
   }
 }

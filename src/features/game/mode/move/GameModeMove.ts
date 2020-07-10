@@ -7,12 +7,12 @@ import modeMoveConstants, {
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize, Constants } from '../../commons/CommonConstants';
+import { screenSize } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import { createButton } from '../../utils/ButtonUtils';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -113,46 +113,34 @@ class GameModeMove implements IGameUI {
 
     this.gameButtons.forEach(locationButton => {
       const text = locationButton.text ? locationButton.text : '';
-      const style = locationButton.bitmapStyle
-        ? locationButton.bitmapStyle
-        : Constants.defaultFontStyle;
-      const locationButtonText = createBitmapText(
+
+      const previewLoc = () => {
+        const assetKey = this.locationAssetKeys.get(text);
+        if (!assetKey || this.currentLocationAssetKey === assetKey) {
+          return;
+        }
+        this.setPreview(previewFill, assetKey);
+      };
+
+      const previewDefault = () => {
+        this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
+      };
+
+      const button = createButton(
         gameManager,
         text,
-        locationButton.assetXPos,
-        locationButton.assetYPos,
-        style
-      ).setOrigin(0.4, 0.15);
+        locationButton.assetKey,
+        { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
+        gameManager.soundManager,
+        undefined,
+        locationButton.onInteract,
+        previewLoc,
+        previewDefault,
+        undefined,
+        locationButton.bitmapStyle
+      ).setPosition(locationButton.assetXPos, locationButton.assetYPos);
 
-      const buttonSprite = new Phaser.GameObjects.Sprite(
-        gameManager,
-        locationButton.assetXPos,
-        locationButton.assetYPos,
-        locationButton.assetKey
-      );
-
-      if (locationButton.isInteractive) {
-        buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-        buttonSprite.addListener(
-          Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
-          locationButton.onInteract
-        );
-        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-          // Preview location
-          const assetKey = this.locationAssetKeys.get(text);
-          if (!assetKey || this.currentLocationAssetKey === assetKey) {
-            return;
-          }
-          this.setPreview(previewFill, assetKey);
-        });
-        buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
-          // Reset preview
-          this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
-        });
-      }
-
-      moveMenuContainer.add(buttonSprite);
-      moveMenuContainer.add(locationButtonText);
+      moveMenuContainer.add(button);
     });
 
     // Add back button
@@ -166,7 +154,7 @@ class GameModeMove implements IGameUI {
       },
       0,
       0,
-      GameActionManager.getInstance().getGameManager().soundManager
+      gameManager.soundManager
     );
     moveMenuContainer.add(backButton);
     return moveMenuContainer;

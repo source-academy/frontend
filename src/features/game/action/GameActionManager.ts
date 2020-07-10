@@ -10,6 +10,7 @@ import { displayNotification } from '../effects/Notification';
 import { AssetKey } from '../commons/CommonTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import { SettingsJson, UserSaveState } from '../save/GameSaveTypes';
 
 class GameActionManager {
   private gameManager: GameManager | undefined;
@@ -291,6 +292,14 @@ class GameActionManager {
     await this.getGameManager().saveManager.saveGame();
   }
 
+  public async saveSettings(settingsJson: SettingsJson) {
+    await this.getGameManager().saveManager.saveSettings(settingsJson);
+  }
+
+  public getLoadedUserState() {
+    return this.getGameManager().saveManager.getLoadedUserState();
+  }
+
   /////////////////////
   //      Sound      //
   /////////////////////
@@ -317,6 +326,10 @@ class GameActionManager {
 
   public continueCurrBgMusic() {
     this.getGameManager().soundManager.continueCurrBgMusic();
+  }
+
+  public applySoundSettings(userSetting: UserSaveState) {
+    this.getGameManager().soundManager.applyUserSettings(userSetting);
   }
 
   /////////////////////

@@ -4,8 +4,8 @@ import GameManager from '../scenes/gameManager/GameManager';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import GameActionManager from '../action/GameActionManager';
-import { createButton } from '../utils/StyleUtils';
-import { screenCenter, Constants } from '../commons/CommonConstants';
+import { createButton } from '../utils/ButtonUtils';
+import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import ImageAssets from '../assets/ImageAssets';
 
@@ -45,29 +45,35 @@ export default class GameUserStateManager {
         createButton(
           gameManager,
           `Assessment#${assessmentId} completed?`,
-          Constants.nullFunction,
           ImageAssets.longButton.key,
-          { x: screenCenter.x, y: 100 },
-          0.5,
-          0.4,
+          { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
+          undefined,
           userStateStyle
-        )
+        ).setPosition(screenCenter.x, 100)
       );
       assessmentCheckContainer.add(
         ['Yes', 'No'].map((response, index) =>
           createButton(
             gameManager,
             response,
+            ImageAssets.shortButton.key,
+            { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
+            undefined,
+            undefined,
             () => {
               assessmentCheckContainer.destroy();
               resolve(response === 'Yes');
             },
-            ImageAssets.shortButton.key,
-            { x: screenCenter.x, y: index * 200 + 400 },
-            0.5,
-            0.4,
+            undefined,
+            undefined,
+            undefined,
             userStateStyle
-          )
+          ).setPosition(screenCenter.x, index * 200 + 400)
         )
       );
     });
