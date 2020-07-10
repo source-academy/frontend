@@ -72,7 +72,6 @@ function Achievement(props: DispatchProps & StateProps) {
       </div>
       <div className="achievement-main">
         <div className="filters">
-          <div></div>
           <AchievementFilter
             filterStatus={FilterStatus.ALL}
             setFilterStatus={setFilterStatus}

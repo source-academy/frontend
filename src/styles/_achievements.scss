@@ -3,6 +3,8 @@
   flex-direction: column;
   flex: 1 1 100%;
 
+  background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal.png);
+
   .achievement-overview {
     display: flex;
 
@@ -25,7 +27,8 @@
 
     flex-direction: row;
     flex-wrap: wrap;
-    flex: 1 1 100%;
+    justify-content: flex-start;
+    align-items: center;
     text-align: justify;
 
     & > * {
@@ -33,27 +36,25 @@
     }
 
     .filters {
+      display: flex;
+
+      height: 80%;
       width: 15%;
+
       flex-direction: column;
+      justify-content: space-evenly;
+      align-items: center;
 
-      div {
-        &:nth-child(1) {
-          height: 5%;
-        }
+      .filter-button {
+        display: flex;
 
-        &:nth-child(2),
-        &:nth-child(3),
-        &:nth-child(4) {
-          flex-grow: 3;
-          flex-direction: column;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          text-align: center;
+        flex-direction: column;
+        align-items: center;
 
-          height: 20%;
-          color: #ffffff;
-        }
+        font-size: 1.3em;
+        line-height: 0.8em;
+
+        color: white;
       }
     }
 
