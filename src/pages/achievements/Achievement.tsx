@@ -93,7 +93,9 @@ function Achievement(props: DispatchProps & StateProps) {
         </div>
 
         <div className="cards">
-          <ul className="display-list">{mapAchievementIdsToTasks(inferencer.listTaskIds())}</ul>
+          <ul className="display-list">
+            {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
+          </ul>
         </div>
 
         <AchievementModal
