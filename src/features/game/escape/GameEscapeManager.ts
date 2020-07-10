@@ -105,16 +105,14 @@ class GameEscapeManager implements IGameUI {
   private createEscapeOptButton(gameManager: GameManager, text: string, callback: any) {
     return createButton(
       gameManager,
-      text,
-      ImageAssets.mediumButton.key,
-      { x: 0, y: 0, oriX: 0.25, oriY: 0.7 },
-      gameManager.soundManager,
-      undefined,
-      callback,
-      undefined,
-      undefined,
-      undefined,
-      escapeOptButtonStyle
+      {
+        assetKey: ImageAssets.mediumButton.key,
+        message: text,
+        textConfig: { x: 0, y: 0, oriX: 0.25, oriY: 0.7 },
+        bitMapTextStyle: escapeOptButtonStyle,
+        onUp: callback
+      },
+      gameManager.soundManager
     );
   }
 

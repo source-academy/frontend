@@ -54,29 +54,20 @@ export function createChapter(
   );
 
   // Chapter Actions
-  const chapterRepeat = createButton(
-    scene,
-    '',
-    ImageAssets.chapterRepeatButton.key,
-    { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-    undefined,
-    undefined,
-    () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
-    () => chapterRepeatHover.setVisible(true),
-    () => chapterRepeatHover.setVisible(false)
-  ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterRepeat = createButton(scene, {
+    assetKey: ImageAssets.chapterRepeatButton.key,
+    onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
+    onHover: () => chapterRepeatHover.setVisible(true),
+    onOut: () => chapterRepeatHover.setVisible(false)
+  }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
-  const chapterContinue = createButton(
-    scene,
-    '',
-    ImageAssets.chapterContinueButton.key,
-    { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-    undefined,
-    undefined,
-    () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
-    () => chapterContinueHover.setVisible(true),
-    () => chapterContinueHover.setVisible(false)
-  ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterContinue = createButton(scene, {
+    assetKey: ImageAssets.chapterContinueButton.key,
+    onUp: () =>
+      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
+    onHover: () => chapterContinueHover.setVisible(true),
+    onOut: () => chapterContinueHover.setVisible(false)
+  }).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(

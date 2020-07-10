@@ -128,16 +128,16 @@ class GameModeMove implements IGameUI {
 
       const button = createButton(
         gameManager,
-        text,
-        locationButton.assetKey,
-        { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
-        gameManager.soundManager,
-        undefined,
-        locationButton.onInteract,
-        previewLoc,
-        previewDefault,
-        undefined,
-        locationButton.bitmapStyle
+        {
+          assetKey: locationButton.assetKey,
+          message: text,
+          textConfig: { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
+          bitMapTextStyle: locationButton.bitmapStyle,
+          onUp: locationButton.onInteract,
+          onHover: previewLoc,
+          onOut: previewDefault
+        },
+        gameManager.soundManager
       ).setPosition(locationButton.assetXPos, locationButton.assetYPos);
 
       moveMenuContainer.add(button);

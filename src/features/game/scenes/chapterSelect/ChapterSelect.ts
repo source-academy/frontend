@@ -114,27 +114,19 @@ class ChapterSelect extends Phaser.Scene {
       ImageAssets.chapterSelectBorder.key
     );
 
-    const leftArrow = createButton(
-      this,
-      '',
-      ImageAssets.chapterSelectArrow.key,
-      { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-      undefined,
-      () => (this.isScrollLeft = true),
-      () => (this.isScrollLeft = false),
-      () => (this.isScrollLeft = false)
-    ).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
+    const leftArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollLeft = true),
+      onUp: () => (this.isScrollLeft = false),
+      onOut: () => (this.isScrollLeft = false)
+    }).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
 
-    const rightArrow = createButton(
-      this,
-      '',
-      ImageAssets.chapterSelectArrow.key,
-      { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-      undefined,
-      () => (this.isScrollRight = true),
-      () => (this.isScrollRight = false),
-      () => (this.isScrollRight = false)
-    )
+    const rightArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollRight = true),
+      onUp: () => (this.isScrollRight = false),
+      onOut: () => (this.isScrollRight = false)
+    })
       .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
       .setScale(-1, 1);
 

@@ -88,17 +88,15 @@ class GameModeTalk implements IGameUI {
       const text = topicButton.text || '';
       const button = createButton(
         gameManager,
-        text,
-        topicButton.assetKey,
-        { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
-        gameManager.soundManager,
-        undefined,
-        topicButton.onInteract,
-        undefined,
-        undefined,
-        undefined,
-        topicButton.bitmapStyle,
-        false
+        {
+          assetKey: topicButton.assetKey,
+          message: text,
+          textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
+          bitMapTextStyle: topicButton.bitmapStyle,
+          onUp: topicButton.onInteract,
+          onHoverEffect: false
+        },
+        gameManager.soundManager
       ).setPosition(topicButton.assetXPos, topicButton.assetYPos);
 
       const checkedSprite = new Phaser.GameObjects.Sprite(

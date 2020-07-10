@@ -93,16 +93,14 @@ class GameModeMenu implements IGameUI {
       const text = modeButton.text ? modeButton.text : '';
       const button = createButton(
         gameManager,
-        text,
-        modeButton.assetKey,
-        { x: 0, y: 0, oriX: 0.5, oriY: 0.25 },
-        gameManager.soundManager,
-        undefined,
-        modeButton.onInteract,
-        undefined,
-        undefined,
-        undefined,
-        modeButton.bitmapStyle
+        {
+          assetKey: modeButton.assetKey,
+          message: text,
+          textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.25 },
+          bitMapTextStyle: modeButton.bitmapStyle,
+          onUp: modeButton.onInteract
+        },
+        gameManager.soundManager
       ).setPosition(modeButton.assetXPos, modeButton.assetYPos);
 
       modeMenuContainer.add(button);

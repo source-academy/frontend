@@ -80,20 +80,13 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       onOut();
     };
 
-    const modeButton = createButton(
-      scene,
-      '',
-      SSImageAssets.iconBg.key,
-      { x: 0, y: 0, oriX: 0, oriY: 0 },
-      undefined,
-      undefined,
-      onUp,
-      onHoverWrapper,
-      onOutWrapper,
-      undefined,
-      undefined,
-      false
-    );
+    const modeButton = createButton(scene, {
+      assetKey: SSImageAssets.iconBg.key,
+      onUp: onUp,
+      onHover: onHoverWrapper,
+      onOut: onOutWrapper,
+      onHoverEffect: false
+    });
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(

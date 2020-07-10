@@ -93,18 +93,17 @@ class MainMenu extends Phaser.Scene {
       };
       const optButton: Phaser.GameObjects.Container = createButton(
         this,
-        text,
-        button.assetKey,
-        { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
-        this.soundManager,
-        undefined,
-        button.onInteract,
-        () => tweenOnHover(optButton),
-        () => tweenOffHover(optButton),
-        undefined,
-        button.bitmapStyle,
-        false,
-        undefined
+        {
+          assetKey: button.assetKey,
+          message: text,
+          textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
+          bitMapTextStyle: button.bitmapStyle,
+          onUp: button.onInteract,
+          onHover: () => tweenOnHover(optButton),
+          onOut: () => tweenOffHover(optButton),
+          onHoverEffect: false
+        },
+        this.soundManager
       ).setPosition(screenCenter.x + mainMenuConstants.bannerHide, button.assetYPos);
       optionsContainer.add(optButton);
     });

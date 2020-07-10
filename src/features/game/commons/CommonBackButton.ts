@@ -30,16 +30,14 @@ class CommonBackButton extends Phaser.GameObjects.Container {
   private renderBackButton(callback: any, soundManager?: GameSoundManager) {
     const backButton = createButton(
       this.scene,
-      backText,
-      ImageAssets.topButton.key,
-      { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
-      soundManager,
-      undefined,
-      callback,
-      undefined,
-      undefined,
-      undefined,
-      backButtonStyle
+      {
+        assetKey: ImageAssets.topButton.key,
+        message: backText,
+        textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
+        bitMapTextStyle: backButtonStyle,
+        onUp: callback
+      },
+      soundManager
     ).setPosition(screenCenter.x, screenCenter.y);
     this.add(backButton);
   }

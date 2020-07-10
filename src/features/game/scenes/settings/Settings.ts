@@ -65,16 +65,14 @@ class Settings extends Phaser.Scene {
     this.renderVolumeOptions();
     const applySettingsButton = createButton(
       this,
-      'Apply Settings',
-      ImageAssets.mediumButton.key,
-      { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
-      this.soundManager,
-      undefined,
-      () => this.applySettings(this.volumeRadioButtons),
-      undefined,
-      undefined,
-      undefined,
-      applySettingsTextStyle
+      {
+        assetKey: ImageAssets.mediumButton.key,
+        message: 'Apply Settings',
+        textConfig: { x: 0, y: 0, oriX: 0.33, oriY: 0.85 },
+        bitMapTextStyle: applySettingsTextStyle,
+        onUp: () => this.applySettings(this.volumeRadioButtons)
+      },
+      this.soundManager
     ).setPosition(screenCenter.x, screenSize.y * 0.925);
 
     const backButton = new CommonBackButton(

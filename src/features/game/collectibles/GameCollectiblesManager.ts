@@ -73,15 +73,10 @@ class GameCollectiblesManager {
     });
 
     // Add arrows
-    const arrowLeft = createButton(
-      this.getScene(),
-      '',
-      ImageAssets.arrow.key,
-      { x: 0, y: 0, oriX: 0, oriY: 0 },
-      undefined,
-      undefined,
-      () => this.nextPage(false)
-    )
+    const arrowLeft = createButton(this.getScene(), {
+      assetKey: ImageAssets.arrow.key,
+      onUp: () => this.nextPage(false)
+    })
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
@@ -89,15 +84,10 @@ class GameCollectiblesManager {
         collectibleConstants.arrowDownYPos
       );
 
-    const arrowRight = createButton(
-      this.getScene(),
-      '',
-      ImageAssets.arrow.key,
-      { x: 0, y: 0, oriX: 0, oriY: 0 },
-      undefined,
-      undefined,
-      () => this.nextPage(true)
-    )
+    const arrowRight = createButton(this.getScene(), {
+      assetKey: ImageAssets.arrow.key,
+      onUp: () => this.nextPage(true)
+    })
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
@@ -212,19 +202,13 @@ class GameCollectiblesManager {
     const bannerYPos =
       collectibleConstants.pageYStartPos + index * collectibleConstants.pageYSpacing;
 
-    const banner = createButton(
-      this.getScene(),
-      text,
-      ImageAssets.collectiblesPage.key,
-      { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
-      undefined,
-      undefined,
-      callback,
-      undefined,
-      undefined,
-      undefined,
-      pageBannerTextStyle
-    ).setPosition(0, bannerYPos);
+    const banner = createButton(this.getScene(), {
+      assetKey: ImageAssets.collectiblesPage.key,
+      message: text,
+      textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
+      bitMapTextStyle: pageBannerTextStyle,
+      onUp: callback
+    }).setPosition(0, bannerYPos);
 
     const bannerChosen = new Phaser.GameObjects.Sprite(
       this.getScene(),
@@ -292,19 +276,13 @@ class GameCollectiblesManager {
     const objBannerYPos =
       collectibleConstants.listYStartPos + index * collectibleConstants.listYSpacing;
 
-    return createButton(
-      this.getScene(),
-      obj,
-      ImageAssets.collectiblesBanner.key,
-      { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
-      undefined,
-      undefined,
-      callback,
-      undefined,
-      undefined,
-      undefined,
-      listBannerTextStyle
-    ).setPosition(0, objBannerYPos);
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.collectiblesBanner.key,
+      message: obj,
+      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+      bitMapTextStyle: listBannerTextStyle,
+      onUp: callback
+    }).setPosition(0, objBannerYPos);
   }
 }
 

@@ -4,27 +4,44 @@ import { Constants } from '../commons/CommonConstants';
 import SoundAssets from '../assets/SoundAssets';
 import GameSoundManager from '../sound/GameSoundManager';
 
+type ButtonConfig = {
+  assetKey: AssetKey;
+  message?: string;
+  textConfig?: ButtonTextConfig;
+  bitMapTextStyle?: BitmapFontStyle;
+  onDown?: () => void;
+  onUp?: () => void;
+  onHover?: () => void;
+  onOut?: () => void;
+  onHoverEffect?: boolean;
+  onClickSound?: AssetKey;
+  onHoverSound?: AssetKey;
+};
+
 type ButtonTextConfig = { x: number; y: number; oriX: number; oriY: number };
 
 const onHoverAlpha = 1.0;
-const offHoverAlpha = 0.8;
+const offHoverAlpha = 0.9;
 
 export function createButton(
   scene: Phaser.Scene,
-  message: string,
-  assetKey: AssetKey,
-  { x, y, oriX, oriY }: ButtonTextConfig,
-  soundManager?: GameSoundManager,
-  onDown: () => void = Constants.nullFunction,
-  onUp: () => void = Constants.nullFunction,
-  onHover: () => void = Constants.nullFunction,
-  onOut: () => void = Constants.nullFunction,
-  onClickSound: AssetKey = SoundAssets.buttonClick.key,
-  bitMapTextStyle: BitmapFontStyle = Constants.defaultFontStyle,
-  onHoverEffect: boolean = true,
-  onHoverSound: AssetKey = SoundAssets.buttonHover.key
+  {
+    assetKey,
+    message = '',
+    textConfig = { x: 0, y: 0, oriX: 0, oriY: 0 },
+    bitMapTextStyle = Constants.defaultFontStyle,
+    onDown = Constants.nullFunction,
+    onUp = Constants.nullFunction,
+    onHover = Constants.nullFunction,
+    onOut = Constants.nullFunction,
+    onHoverEffect = true,
+    onClickSound = SoundAssets.buttonClick.key,
+    onHoverSound = SoundAssets.buttonHover.key
+  }: ButtonConfig,
+  soundManager?: GameSoundManager
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
+  const { x, y, oriX, oriY } = textConfig;
 
   // Set up button functionality
   const button = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey);

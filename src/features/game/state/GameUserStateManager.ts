@@ -42,38 +42,25 @@ export default class GameUserStateManager {
 
     const activateAssessmentContainer: Promise<boolean> = new Promise(resolve => {
       assessmentCheckContainer.add(
-        createButton(
-          gameManager,
-          `Assessment#${assessmentId} completed?`,
-          ImageAssets.longButton.key,
-          { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          undefined,
-          userStateStyle
-        ).setPosition(screenCenter.x, 100)
+        createButton(gameManager, {
+          assetKey: ImageAssets.longButton.key,
+          message: `Assessment#${assessmentId} completed?`,
+          textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
+          bitMapTextStyle: userStateStyle
+        }).setPosition(screenCenter.x, 100)
       );
       assessmentCheckContainer.add(
         ['Yes', 'No'].map((response, index) =>
-          createButton(
-            gameManager,
-            response,
-            ImageAssets.shortButton.key,
-            { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
-            undefined,
-            undefined,
-            () => {
+          createButton(gameManager, {
+            assetKey: ImageAssets.shortButton.key,
+            message: response,
+            textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
+            bitMapTextStyle: userStateStyle,
+            onUp: () => {
               assessmentCheckContainer.destroy();
               resolve(response === 'Yes');
-            },
-            undefined,
-            undefined,
-            undefined,
-            userStateStyle
-          ).setPosition(screenCenter.x, index * 200 + 400)
+            }
+          }).setPosition(screenCenter.x, index * 200 + 400)
         )
       );
     });
