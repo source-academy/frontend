@@ -5,13 +5,13 @@ import GameActionManager from '../action/GameActionManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { alienLeagueFont } from '../commons/CommonFontAssets';
 import { HexColor } from '../utils/StyleUtils';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import { createBitmapText } from '../utils/TextUtils';
+import FontAssets from '../assets/FontAssets';
 
 const notifStyle: BitmapFontStyle = {
-  key: alienLeagueFont.key,
+  key: FontAssets.alienLeagueFont.key,
   size: 100,
   fill: HexColor.paleYellow,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

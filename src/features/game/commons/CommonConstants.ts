@@ -1,5 +1,5 @@
-import { zektonFont } from './CommonFontAssets';
 import { HexColor } from '../utils/StyleUtils';
+import FontAssets from '../assets/FontAssets';
 
 export const Constants = {
   repoAssetsFolder: '../assets',
@@ -10,7 +10,7 @@ export const Constants = {
   popupDuration: 1000,
   defaultAssetPath: '/UI/wristDeviceButton.png',
   defaultFontStyle: {
-    key: zektonFont.key,
+    key: FontAssets.zektonFont.key,
     size: 30,
     fill: HexColor.lightBlue,
     align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

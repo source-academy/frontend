@@ -1,24 +1,24 @@
 import { HexColor } from '../../utils/StyleUtils';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { zektonFont } from '../../commons/CommonFontAssets';
+import FontAssets from '../../assets/FontAssets';
 
 export const chapterIndexStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 25,
   fill: HexColor.offWhite,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const chapterTitleStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 35,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const chapterActionAltStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 20,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT

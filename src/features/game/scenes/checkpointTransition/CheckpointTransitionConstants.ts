@@ -1,9 +1,9 @@
 import { HexColor } from '../../utils/StyleUtils';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { alienCowsFont } from '../../commons/CommonFontAssets';
+import FontAssets from '../../assets/FontAssets';
 
 export const transitionTextStyle: BitmapFontStyle = {
-  key: alienCowsFont.key,
+  key: FontAssets.alienCowsFont.key,
   size: 80,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

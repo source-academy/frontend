@@ -1,14 +1,14 @@
 import { screenCenter, screenSize } from './CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 import { BitmapFontStyle } from './CommonTypes';
-import { zektonFont } from './CommonFontAssets';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
+import FontAssets from '../assets/FontAssets';
 
 const backText = 'Back';
 const backTextYPos = screenSize.y * 0.012;
 const backButtonStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 25,
   fill: HexColor.darkBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

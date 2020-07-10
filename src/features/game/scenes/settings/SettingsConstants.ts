@@ -1,24 +1,24 @@
 import { screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
+import FontAssets from '../../assets/FontAssets';
 
 export const optionTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 25,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const optionHeaderTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 35,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const applySettingsTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 30,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

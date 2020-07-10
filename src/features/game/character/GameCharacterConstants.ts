@@ -1,10 +1,10 @@
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { zektonFont } from '../commons/CommonFontAssets';
+import FontAssets from '../assets/FontAssets';
 
 export const speakerTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 36,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

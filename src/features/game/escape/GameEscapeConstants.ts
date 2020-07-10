@@ -1,24 +1,24 @@
 import { screenSize } from '../commons/CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { zektonFont } from '../commons/CommonFontAssets';
+import FontAssets from '../assets/FontAssets';
 
 export const escapeOptButtonStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 30,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const volumeRadioOptTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 20,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const optTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 30,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

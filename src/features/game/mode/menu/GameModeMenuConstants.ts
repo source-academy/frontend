@@ -1,11 +1,11 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { GameSprite, BitmapFontStyle } from '../../commons/CommonTypes';
-import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import FontAssets from '../../assets/FontAssets';
 
 export const modeButtonStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 45,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

@@ -1,6 +1,6 @@
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { zektonFont } from '../commons/CommonFontAssets';
 import { HexColor } from '../utils/StyleUtils';
+import FontAssets from '../assets/FontAssets';
 
 export const SampleUserState = {
   collectibles: ['cookies', 'rat'],
@@ -13,7 +13,7 @@ export const emptyUserState = {
 };
 
 export const userStateStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 35,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER

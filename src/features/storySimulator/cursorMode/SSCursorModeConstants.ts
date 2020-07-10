@@ -1,9 +1,9 @@
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
-import { zektonFont } from 'src/features/game/commons/CommonFontAssets';
+import FontAssets from 'src/features/game/assets/FontAssets';
 
 export const altTextStyle: BitmapFontStyle = {
-  key: zektonFont.key,
+  key: FontAssets.zektonFont.key,
   size: 20,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT

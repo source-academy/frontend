@@ -8,6 +8,10 @@ export type TextAssetMap = {
   [name: string]: TextAsset;
 };
 
+export type AssetMap<T> = {
+  [name: string]: T;
+};
+
 export type ImageAsset = {
   key: string;
   path: string;

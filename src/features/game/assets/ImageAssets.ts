@@ -1,6 +1,6 @@
-import { ImageAssetMap } from './AssetsTypes';
+import { AssetMap, ImageAsset } from './AssetsTypes';
 
-const ImageAssets: ImageAssetMap = {
+const ImageAssets: AssetMap<ImageAsset> = {
   // Commons Asset
   shortButton: { key: 'short-button', path: '/ui/shortButton.png' },
   mediumButton: { key: 'med-button', path: '/ui/mediumButton.png' },
