@@ -10,10 +10,10 @@ import { sleep } from '../../utils/GameUtils';
 import GameActionManager from 'src/features/game/action/GameActionManager';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import { screenSize, Constants } from '../../commons/CommonConstants';
-import { shortButton } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -58,7 +58,7 @@ class GameModeMenu implements IGameUI {
     const newModeButton: GameButton = {
       text: modeName,
       bitmapStyle: modeButtonStyle,
-      assetKey: shortButton.key,
+      assetKey: ImageAssets.shortButton.key,
       assetXPos: newXPos + this.gameButtons.length * partitionSize,
       assetYPos: modeButtonYPos,
       isInteractive: true,

@@ -1,8 +1,8 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { GameSprite, BitmapFontStyle } from '../../commons/CommonTypes';
-import { locationPreviewFill, locationPreviewFrame } from '../../commons/CommonAssets';
 import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 export const moveButtonYSpace = screenSize.y * 0.8;
 export const moveButtonXPos = screenSize.x * 0.75;
@@ -20,13 +20,13 @@ export const moveButtonStyle: BitmapFontStyle = {
 };
 
 export const previewFill = {
-  assetKey: locationPreviewFill.key,
+  assetKey: ImageAssets.locationPreviewFill.key,
   assetXPos: screenCenter.x,
   assetYPos: screenCenter.y
 } as GameSprite;
 
 export const previewFrame = {
-  assetKey: locationPreviewFrame.key,
+  assetKey: ImageAssets.locationPreviewFrame.key,
   assetXPos: screenCenter.x,
   assetYPos: screenCenter.y
 } as GameSprite;

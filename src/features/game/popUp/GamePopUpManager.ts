@@ -3,10 +3,10 @@ import { PopUpPosition } from './GamePopUpTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameActionManager from '../action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
-import { popUpFrame } from '../commons/CommonAssets';
 import { popUpRect, popUpImgXOffset, popUpImgYOffset } from './GamePopUpConstants';
 import { resize } from '../utils/SpriteUtils';
 import { Constants } from '../commons/CommonConstants';
+import ImageAssets from '../assets/ImageAssets';
 
 class GamePopUpManager {
   private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
@@ -15,7 +15,7 @@ class GamePopUpManager {
   constructor() {
     this.currPopUp = new Map<PopUpPosition, Phaser.GameObjects.Container>();
     this.popUpFrame = {
-      assetKey: popUpFrame.key,
+      assetKey: ImageAssets.popUpFrame.key,
       assetXPos: popUpRect.x[PopUpPosition.Middle],
       assetYPos: popUpRect.y
     };

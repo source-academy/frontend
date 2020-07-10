@@ -13,11 +13,11 @@ import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { moveButtonYSpace, moveButtonStyle, moveButtonXPos } from './GameModeMoveConstants';
 import { screenSize, Constants } from '../../commons/CommonConstants';
-import { longButton, defaultLocationImg } from '../../commons/CommonAssets';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -29,7 +29,7 @@ class GameModeMove implements IGameUI {
 
   constructor() {
     this.uiContainer = undefined;
-    this.currentLocationAssetKey = defaultLocationImg.key;
+    this.currentLocationAssetKey = ImageAssets.defaultLocationImg.key;
     this.locationAssetKeys = new Map<string, string>();
     this.previewFill = previewFill;
     this.previewFrame = previewFrame;
@@ -70,7 +70,7 @@ class GameModeMove implements IGameUI {
     const newModeButton: GameButton = {
       text: name,
       bitmapStyle: moveButtonStyle,
-      assetKey: longButton.key,
+      assetKey: ImageAssets.longButton.key,
       assetXPos: moveButtonXPos,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
@@ -152,7 +152,7 @@ class GameModeMove implements IGameUI {
         });
         buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () => {
           // Reset preview
-          this.setPreview(previewFill, defaultLocationImg.key);
+          this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
         });
       }
 

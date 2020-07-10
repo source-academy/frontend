@@ -1,12 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import storySimulatorAssets, {
-  storySimBg,
-  invertedButton,
-  blueUnderlay
-} from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import { ImageAsset } from 'src/features/game/commons/CommonTypes';
 import Parser from 'src/features/game/parser/Parser';
 import {
   maxOptButtonsRow,
@@ -17,11 +11,12 @@ import {
 } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
-import commonAssets from 'src/features/game/commons/CommonAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
 import commonFontAssets from 'src/features/game/commons/CommonFontAssets';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SSImageAssets from '../../assets/ImageAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -37,8 +32,11 @@ class MainMenu extends Phaser.Scene {
 
   public async preload() {
     addLoadingScreen(this);
-    [...storySimulatorAssets, ...commonAssets].forEach((asset: ImageAsset) =>
-      this.load.image(asset.key, toS3Path(asset.path))
+    Object.entries(ImageAssets).forEach(asset =>
+      this.load.image(asset[1].key, toS3Path(asset[1].path))
+    );
+    Object.entries(SSImageAssets).forEach(asset =>
+      this.load.image(asset[1].key, toS3Path(asset[1].path))
     );
     commonFontAssets.forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
@@ -116,7 +114,7 @@ class MainMenu extends Phaser.Scene {
       this,
       buttonXPos,
       buttonYPos,
-      invertedButton.key
+      SSImageAssets.invertedButton.key
     );
     buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
@@ -161,14 +159,14 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      storySimBg.key
+      SSImageAssets.storySimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
     const backgroundUnderlay = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      blueUnderlay.key
+      SSImageAssets.blueUnderlay.key
     ).setAlpha(0.5);
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
     this.layerManager.addToLayer(Layer.Background, backgroundUnderlay);

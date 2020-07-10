@@ -5,10 +5,10 @@ import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize, screenCenter, Constants } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
-import { talkOptButton, talkOptCheck } from '../../commons/CommonAssets';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -66,7 +66,7 @@ class GameModeTalk implements IGameUI {
     const newTalkButton: GameButton = {
       text: name,
       bitmapStyle: talkButtonStyle,
-      assetKey: talkOptButton.key,
+      assetKey: ImageAssets.talkOptButton.key,
       assetXPos: screenCenter.x,
       assetYPos: newYPos + this.gameButtons.length * partitionSize,
       isInteractive: true,
@@ -97,7 +97,7 @@ class GameModeTalk implements IGameUI {
         gameManager,
         topicButton.assetXPos,
         topicButton.assetYPos,
-        talkOptCheck.key
+        ImageAssets.talkOptCheck.key
       );
 
       const buttonSprite = new Phaser.GameObjects.Sprite(

@@ -1,8 +1,8 @@
 import { screenSize, screenCenter } from '../../commons/CommonConstants';
-import { modeMenuBanner } from '../../commons/CommonAssets';
 import { GameSprite, BitmapFontStyle } from '../../commons/CommonTypes';
 import { zektonFont } from '../../commons/CommonFontAssets';
 import { HexColor } from '../../utils/StyleUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 export const modeButtonYPos = screenSize.y * 0.8;
 
@@ -26,7 +26,7 @@ export const modeButtonStyle: BitmapFontStyle = {
 };
 
 export const modeBannerRect = {
-  assetKey: modeMenuBanner.key,
+  assetKey: ImageAssets.modeMenuBanner.key,
   assetXPos: screenCenter.x,
   assetYPos: screenCenter.y,
   isInteractive: false

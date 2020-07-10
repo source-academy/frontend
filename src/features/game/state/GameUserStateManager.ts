@@ -5,9 +5,9 @@ import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import GameActionManager from '../action/GameActionManager';
 import { createButton } from '../utils/StyleUtils';
-import { shortButton, longButton } from '../commons/CommonAssets';
 import { screenCenter, Constants } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
+import ImageAssets from '../assets/ImageAssets';
 
 export default class GameUserStateManager {
   private userState: UserState;
@@ -46,7 +46,7 @@ export default class GameUserStateManager {
           gameManager,
           `Assessment#${assessmentId} completed?`,
           Constants.nullFunction,
-          longButton.key,
+          ImageAssets.longButton.key,
           { x: screenCenter.x, y: 100 },
           0.5,
           0.4,
@@ -62,7 +62,7 @@ export default class GameUserStateManager {
               assessmentCheckContainer.destroy();
               resolve(response === 'Yes');
             },
-            shortButton.key,
+            ImageAssets.shortButton.key,
             { x: screenCenter.x, y: index * 200 + 400 },
             0.5,
             0.4,

@@ -1,5 +1,4 @@
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
-import { iconBg } from '../utils/StorySimulatorAssets';
 import { CursorMode } from './SSCursorModeTypes';
 import {
   iconBgSize,
@@ -16,6 +15,7 @@ import {
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import SSImageAssets from '../assets/ImageAssets';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
@@ -55,7 +55,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
   ) {
     // Main container
     const cursorModeContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-    const modeIconBg = new Phaser.GameObjects.Sprite(scene, 0, 0, iconBg.key)
+    const modeIconBg = new Phaser.GameObjects.Sprite(scene, 0, 0, SSImageAssets.iconBg.key)
       .setDisplaySize(iconBgSize, iconBgSize)
       .setAlpha(inactiveAlpha)
       .setInteractive({ pixelPerfect: true, useHandCursor: true });

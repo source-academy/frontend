@@ -1,10 +1,10 @@
 import GameActionManager from '../action/GameActionManager';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
-import { diamond } from '../commons/CommonAssets';
 import GameManager from '../scenes/gameManager/GameManager';
 import { screenSize } from '../commons/CommonConstants';
 import { diamondSize, diamondPadding } from './GameDialogueConstants';
 import { blink, fadeAndDestroy } from '../effects/FadeEffect';
+import ImageAssets from '../assets/ImageAssets';
 
 class DialogueRenderer {
   private typewriter: any;
@@ -33,7 +33,7 @@ class DialogueRenderer {
       gameManager,
       screenSize.x - diamondSize.x - diamondPadding.x,
       screenSize.y - diamondSize.y - diamondPadding.y,
-      diamond.key
+      ImageAssets.diamond.key
     ).setDisplaySize(diamondSize.x, diamondSize.y);
 
     return { container: diamondSprite, clearBlink: blink(gameManager, diamondSprite) };

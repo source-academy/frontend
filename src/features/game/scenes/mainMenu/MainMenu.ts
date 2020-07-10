@@ -1,4 +1,3 @@
-import { mainMenuAssets, mainMenuOptBanner, mainMenuBackground } from './MainMenuAssets';
 import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -20,13 +19,11 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
 import { toS3Path } from '../../utils/GameUtils';
-import commonAssets from '../../commons/CommonAssets';
-import { chapterSelectAssets } from '../chapterSelect/ChapterSelectAssets';
-import { settingsAssets } from '../settings/SettingsAssets';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import commonFontAssets from '../../commons/CommonFontAssets';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
@@ -68,10 +65,9 @@ class MainMenu extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    commonAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-    mainMenuAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-    chapterSelectAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-    settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    Object.entries(ImageAssets).forEach(asset =>
+      this.load.image(asset[1].key, toS3Path(asset[1].path))
+    );
     commonFontAssets.forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
@@ -82,7 +78,7 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      mainMenuBackground.key
+      ImageAssets.mainMenuBackground.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 
@@ -184,7 +180,7 @@ class MainMenu extends Phaser.Scene {
     const newTalkButton: GameButton = {
       text: name,
       bitmapStyle: mainMenuStyle,
-      assetKey: mainMenuOptBanner.key,
+      assetKey: ImageAssets.mainMenuOptBanner.key,
       assetXPos: screenSize.x - textXOffset,
       assetYPos: newYPos + this.optionButtons.length * partitionSize,
       isInteractive: true,

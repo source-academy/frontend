@@ -3,7 +3,7 @@ import { HexColor, Color } from '../utils/StyleUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { alienLeagueFont, zektonFont } from '../commons/CommonFontAssets';
 import { CollectibleProperty } from './GameCollectiblesTypes';
-import { cookies } from '../commons/CommonAssets';
+import ImageAssets from '../assets/ImageAssets';
 
 export const pageBannerYStartPos = -screenSize.y * 0.3;
 export const pageBannerYSpacing = 150;
@@ -61,7 +61,7 @@ export const collectibleDescStyle = {
 };
 
 export const defaultCollectibleProp: CollectibleProperty = {
-  assetKey: cookies.key,
+  assetKey: ImageAssets.cookies.key,
   x: 0,
   y: 0
 };

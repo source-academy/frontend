@@ -3,11 +3,6 @@ import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils'
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import {
-  chapterSelectBackground,
-  chapterSelectBorder,
-  chapterSelectArrow
-} from './ChapterSelectAssets';
-import {
   defaultScrollSpeed,
   maskRect,
   imageDist,
@@ -23,6 +18,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { onHoverAlpha } from 'src/features/storySimulator/cursorMode/SSCursorModeConstants';
+import ImageAssets from '../../assets/ImageAssets';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -89,7 +85,7 @@ class ChapterSelect extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      chapterSelectBackground.key
+      ImageAssets.chapterSelectBackground.key
     );
     const blackOverlay = new Phaser.GameObjects.Rectangle(
       this,
@@ -121,20 +117,20 @@ class ChapterSelect extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      chapterSelectBorder.key
+      ImageAssets.chapterSelectBorder.key
     );
 
     const leftArrow = new Phaser.GameObjects.Sprite(
       this,
       screenCenter.x - chapterArrowXOffset,
       screenCenter.y,
-      chapterSelectArrow.key
+      ImageAssets.chapterSelectArrow.key
     ).setDataEnabled();
     const rightArrow = new Phaser.GameObjects.Sprite(
       this,
       screenCenter.x + chapterArrowXOffset,
       screenCenter.y,
-      chapterSelectArrow.key
+      ImageAssets.chapterSelectArrow.key
     )
       .setDataEnabled()
       .setFlipX(true);

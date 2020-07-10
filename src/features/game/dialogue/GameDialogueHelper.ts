@@ -1,14 +1,14 @@
 import { screenCenter } from '../commons/CommonConstants';
 import Typewriter from '../effects/Typewriter';
-import { speechBox } from '../commons/CommonAssets';
 import { textPadding, dialogueRect } from './GameDialogueConstants';
+import ImageAssets from '../assets/ImageAssets';
 
 export function createDialogueBox(scene: Phaser.Scene) {
   const dialogueBox = new Phaser.GameObjects.Image(
     scene,
     screenCenter.x,
     screenCenter.y,
-    speechBox.key
+    ImageAssets.speechBox.key
   ).setAlpha(0.9);
   return dialogueBox;
 }

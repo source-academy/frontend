@@ -1,15 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import {
-  storySimBg,
-  colorIcon,
-  imageIcon,
-  bboxIcon,
-  handIcon,
-  listIcon,
-  eraseIcon
-} from 'src/features/storySimulator/utils/StorySimulatorAssets';
 import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 import SSObjectManager from '../../objects/SSObjectManager';
 import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
@@ -23,6 +14,7 @@ import SSTransformManager from '../../transform/SSTransformManager';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import GameInputManager from 'src/features/game/input/GameInputManager';
 import { StorySimState } from '../../StorySimulatorTypes';
+import SSImageAssets from '../../assets/ImageAssets';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -122,7 +114,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      storySimBg.key
+      SSImageAssets.storySimBg.key
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 
@@ -134,7 +126,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       // Change background
       this.cursorModes.addCursorMode(
         this,
-        colorIcon.key,
+        SSImageAssets.colorIcon.key,
         false,
         'Set background',
         async () => await this.backgroundManager.loadBackground()
@@ -143,26 +135,30 @@ export default class ObjectPlacement extends Phaser.Scene {
       // Add object
       this.cursorModes.addCursorMode(
         this,
-        imageIcon.key,
+        SSImageAssets.imageIcon.key,
         false,
         'Add selected object',
         async () => await this.objectManager.loadObject()
       );
 
       // Draw BBox
-      this.cursorModes.addCursorMode(this, bboxIcon.key, true, 'Draw bounding boxes', () =>
-        this.cursorModes!.setCursorMode(CursorMode.DrawBBox)
+      this.cursorModes.addCursorMode(
+        this,
+        SSImageAssets.bboxIcon.key,
+        true,
+        'Draw bounding boxes',
+        () => this.cursorModes!.setCursorMode(CursorMode.DrawBBox)
       );
 
       // Drag/Resize
-      this.cursorModes.addCursorMode(this, handIcon.key, true, 'Drag or resize', () =>
+      this.cursorModes.addCursorMode(this, SSImageAssets.handIcon.key, true, 'Drag or resize', () =>
         this.cursorModes!.setCursorMode(CursorMode.DragResizeObj)
       );
 
       // Print info
       this.cursorModes.addCursorMode(
         this,
-        listIcon.key,
+        SSImageAssets.listIcon.key,
         false,
         'Print coordinates',
         () =>
@@ -179,7 +175,7 @@ export default class ObjectPlacement extends Phaser.Scene {
       );
 
       // Erase Layers
-      this.cursorModes.addCursorMode(this, eraseIcon.key, false, 'Erase all', () => {
+      this.cursorModes.addCursorMode(this, SSImageAssets.eraseIcon.key, false, 'Erase all', () => {
         this.layerManager.clearSeveralLayers([Layer.Background, Layer.BBox, Layer.Objects]);
         this.objectManager.deleteAll();
         this.bboxManager.deleteAll();

@@ -13,16 +13,12 @@ import {
 } from './ChapterSelectConstants';
 import ChapterSelect from './ChapterSelect';
 import { screenCenter } from 'src/features/game/commons/CommonConstants';
-import {
-  chapterContinueButton,
-  chapterRepeatButton,
-  chapterSelectFrame
-} from './ChapterSelectAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import { HexColor } from '../../utils/StyleUtils';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 export function createChapter(
   scene: ChapterSelect,
@@ -46,7 +42,7 @@ export function createChapter(
     scene,
     chapterFrameXOffset,
     chapterFrameYOffset,
-    chapterSelectFrame.key
+    ImageAssets.chapterSelectFrame.key
   );
 
   // Chapter Action Popup
@@ -72,7 +68,7 @@ export function createChapter(
     scene,
     chapterButtonsXOffset,
     chapterButtonsYOffset,
-    chapterRepeatButton.key
+    ImageAssets.chapterRepeatButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
@@ -89,7 +85,7 @@ export function createChapter(
     scene,
     -chapterButtonsXOffset,
     chapterButtonsYOffset,
-    chapterContinueButton.key
+    ImageAssets.chapterContinueButton.key
   )
     .setInteractive({ pixelPerfect: true, useHandCursor: true })
     .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {

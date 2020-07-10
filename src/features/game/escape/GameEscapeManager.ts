@@ -1,5 +1,4 @@
 import GameActionManager from '../action/GameActionManager';
-import { mediumButton, escapeMenuBackground } from '../commons/CommonAssets';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { createButton } from '../utils/StyleUtils';
 import {
@@ -25,6 +24,7 @@ import { volumeContainerOptions } from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from '../assets/ImageAssets';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -41,7 +41,7 @@ class GameEscapeManager implements IGameUI {
       gameManager,
       screenCenter.x,
       screenCenter.y,
-      escapeMenuBackground.key
+      ImageAssets.escapeMenuBackground.key
     );
     escapeMenuBg.setDisplaySize(screenSize.x, screenSize.y);
     escapeMenuBg.setInteractive({ pixelPerfect: true });
@@ -86,7 +86,7 @@ class GameEscapeManager implements IGameUI {
           gameManager.scene.start('MainMenu');
         }
       },
-      mediumButton.key,
+      ImageAssets.mediumButton.key,
       { x: screenSize.x * 0.25, y: escapeButtonYPos },
       escapeTextOriX,
       escapeTextOriY,
@@ -101,7 +101,7 @@ class GameEscapeManager implements IGameUI {
           await GameActionManager.getInstance().popPhase();
         }
       },
-      mediumButton.key,
+      ImageAssets.mediumButton.key,
       { x: screenSize.x * 0.5, y: escapeButtonYPos },
       escapeTextOriX,
       escapeTextOriY,
@@ -112,7 +112,7 @@ class GameEscapeManager implements IGameUI {
       gameManager,
       'Apply Settings',
       () => this.applySettings(),
-      mediumButton.key,
+      ImageAssets.mediumButton.key,
       { x: screenSize.x * 0.75, y: escapeButtonYPos },
       escapeTextOriX,
       escapeTextOriY,

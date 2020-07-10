@@ -9,9 +9,9 @@ import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Character, SpeakerDetail, CharacterPosition } from './GameCharacterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
-import { speakerBox } from '../commons/CommonAssets';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from '../assets/ImageAssets';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
@@ -102,7 +102,7 @@ export default class CharacterManager {
       gameManager,
       screenCenter.x,
       screenCenter.y,
-      speakerBox.key
+      ImageAssets.speakerBox.key
     ).setAlpha(0.8);
 
     const speakerText = createBitmapText(

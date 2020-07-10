@@ -2,7 +2,6 @@ import RadioButtons from '../../commons/CommonRadioButtons';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
-import { settingsAssets, settingBanner, settingOption, settingBackground } from './SettingsAssets';
 import {
   volumeContainerOptions,
   optionTextStyle,
@@ -19,15 +18,14 @@ import {
   optionsXPos,
   volumeOptionYPos
 } from './SettingsConstants';
-import { mediumButton } from '../../commons/CommonAssets';
 import { createButton } from '../../utils/StyleUtils';
 import GameSaveManager from '../../save/GameSaveManager';
 import GameSoundManager from '../../sound/GameSoundManager';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { loadData } from '../../save/GameSaveRequests';
-import { toS3Path } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
+import ImageAssets from '../../assets/ImageAssets';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: RadioButtons | undefined;
@@ -44,7 +42,6 @@ class Settings extends Phaser.Scene {
   }
 
   public preload() {
-    this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
   }
@@ -57,23 +54,19 @@ class Settings extends Phaser.Scene {
     this.renderOptions();
   }
 
-  private preloadAssets() {
-    settingsAssets.forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-  }
-
   private renderBackground() {
     const background = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      settingBackground.key
+      ImageAssets.settingBackground.key
     );
 
     const settingBgImg = new Phaser.GameObjects.Image(
       this,
       screenCenter.x,
       screenCenter.y,
-      settingBanner.key
+      ImageAssets.settingBanner.key
     );
     this.layerManager.addToLayer(Layer.Background, background);
     this.layerManager.addToLayer(Layer.Background, settingBgImg);
@@ -85,7 +78,7 @@ class Settings extends Phaser.Scene {
       this,
       'Apply Settings',
       () => this.applySettings(this.volumeRadioButtons),
-      mediumButton.key,
+      ImageAssets.mediumButton.key,
       { x: screenCenter.x, y: screenSize.y * 0.925 },
       applySettingsAnchorX,
       applySettingsAnchorY,
@@ -109,7 +102,7 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       volumeUnderlineYPos,
-      settingOption.key
+      ImageAssets.settingOption.key
     );
     const volumeText = createBitmapText(
       this,

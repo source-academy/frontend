@@ -1,13 +1,4 @@
 import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
-import {
-  collectiblesMenu,
-  collectiblesPage,
-  collectiblesPageChosen,
-  collectiblesBanner,
-  arrow,
-  popUpFrame,
-  cookies
-} from '../commons/CommonAssets';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { screenCenter } from '../commons/CommonConstants';
@@ -39,6 +30,7 @@ import {
 } from './GameCollectiblesConstants';
 import { resize } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
+import ImageAssets from '../assets/ImageAssets';
 
 class GameCollectiblesManager {
   private scene: Phaser.Scene | undefined;
@@ -81,7 +73,7 @@ class GameCollectiblesManager {
       this.getScene(),
       0,
       0,
-      collectiblesMenu.key
+      ImageAssets.collectiblesMenu.key
     );
     this.collectibleContainer.add(collectiblesBg);
 
@@ -103,7 +95,7 @@ class GameCollectiblesManager {
       this.getScene(),
       arrowXMidPos - arrowXOffset,
       arrowDownYPos,
-      arrow.key
+      ImageAssets.arrow.key
     )
       .setScale(arrowXScale, arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
@@ -113,7 +105,7 @@ class GameCollectiblesManager {
       this.getScene(),
       arrowXMidPos + arrowXOffset,
       arrowDownYPos,
-      arrow.key
+      ImageAssets.arrow.key
     )
       .setScale(arrowXScale, arrowYScale)
       .setRotation((90 * Math.PI) / 180)
@@ -135,13 +127,13 @@ class GameCollectiblesManager {
       this.getScene(),
       collectiblePreviewXPos,
       collectiblePreviewYPos,
-      popUpFrame.key
+      ImageAssets.popUpFrame.key
     ).setScale(1.2);
     this.previewSprite = new Phaser.GameObjects.Sprite(
       this.getScene(),
       collectiblePreviewXPos,
       collectiblePreviewYPos,
-      cookies.key
+      ImageAssets.cookies.key
     ).setOrigin(0.428, 0.468);
     this.previewTitle = createBitmapText(
       this.getScene(),
@@ -242,14 +234,14 @@ class GameCollectiblesManager {
       this.getScene(),
       0,
       bannerYPos,
-      collectiblesPage.key
+      ImageAssets.collectiblesPage.key
     );
 
     const pageBannerChosen = new Phaser.GameObjects.Sprite(
       this.getScene(),
       0,
       bannerYPos,
-      collectiblesPageChosen.key
+      ImageAssets.collectiblesPageChosen.key
     );
 
     const bannerTextYPos = pageBannerYStartPos + index * pageBannerYSpacing;
@@ -330,7 +322,7 @@ class GameCollectiblesManager {
       this.getScene(),
       0,
       objBannerYPos,
-      collectiblesBanner.key
+      ImageAssets.collectiblesBanner.key
     );
     const objListText = createBitmapText(
       this.getScene(),
