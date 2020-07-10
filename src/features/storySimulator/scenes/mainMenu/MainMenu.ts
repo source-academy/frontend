@@ -6,22 +6,27 @@ import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from '../../StorySimulatorTypes';
-import { createBitmapText } from 'src/features/game/utils/TextUtils';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import ImageAssets from 'src/features/game/assets/ImageAssets';
 import SSImageAssets from '../../assets/ImageAssets';
 import FontAssets from 'src/features/game/assets/FontAssets';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
 
 class MainMenu extends Phaser.Scene {
+  private soundManager: GameSoundManager;
   private layerManager: GameLayerManager;
 
   constructor() {
     super('StorySimulatorMenu');
     this.layerManager = new GameLayerManager();
+    this.soundManager = new GameSoundManager();
   }
   public init() {
     getStorySimulatorGame().setStorySimProps({ mainMenuRef: this });
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this, getStorySimulatorGame());
   }
 
   public async preload() {
@@ -35,6 +40,7 @@ class MainMenu extends Phaser.Scene {
     Object.entries(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset[1].key, asset[1].pngPath, asset[1].fntPath)
     );
+    this.soundManager.loadSoundAssetMap(SoundAssets);
   }
 
   public async create() {
@@ -107,24 +113,19 @@ class MainMenu extends Phaser.Scene {
       (screenSize.x - mainMenuConstants.optButtonsXSpace + partitionXSpace) / 2 +
       buttonXIdx * partitionXSpace;
 
-    const buttonSprite = new Phaser.GameObjects.Image(
+    const button = createButton(
       this,
-      buttonXPos,
-      buttonYPos,
-      SSImageAssets.invertedButton.key
-    );
-    buttonSprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
-    buttonSprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
+      {
+        assetKey: SSImageAssets.invertedButton.key,
+        message: text,
+        textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+        bitMapTextStyle: mainMenuOptStyle,
+        onUp: callback
+      },
+      this.soundManager
+    ).setPosition(buttonXPos, buttonYPos);
 
-    const buttonText = createBitmapText(
-      this,
-      text,
-      buttonXPos,
-      buttonYPos,
-      mainMenuOptStyle
-    ).setOrigin(0.5, 0.5);
-
-    buttonContainer.add([buttonSprite, buttonText]);
+    buttonContainer.add(button);
     return buttonContainer;
   }
 

@@ -15,9 +15,11 @@ import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcompo
 import GameInputManager from 'src/features/game/input/GameInputManager';
 import { StorySimState } from '../../StorySimulatorTypes';
 import SSImageAssets from '../../assets/ImageAssets';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
+  public soundManager: GameSoundManager;
   public inputManager: GameInputManager;
   private transformManager: SSTransformManager;
   private cursorModes: SSCursorMode | undefined;
@@ -35,6 +37,7 @@ export default class ObjectPlacement extends Phaser.Scene {
   constructor() {
     super('ObjectPlacement');
     this.layerManager = new GameLayerManager();
+    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
@@ -49,6 +52,7 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   public init() {
     this.layerManager = new GameLayerManager();
+    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
@@ -63,6 +67,7 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   public create() {
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this, getStorySimulatorGame());
     this.inputManager.initialise(this);
     this.renderBackground();
     this.createUIButtons();
@@ -97,13 +102,15 @@ export default class ObjectPlacement extends Phaser.Scene {
         this.scene.start('StorySimulatorMenu');
       },
       0,
-      0
+      0,
+      this.soundManager
     );
 
     this.cursorModes = new SSCursorMode(
       this,
       objPlacementConstants.cursorModeXPos,
-      objPlacementConstants.cursorModeYPos
+      objPlacementConstants.cursorModeYPos,
+      this.soundManager
     );
     this.populateCursorModes();
 

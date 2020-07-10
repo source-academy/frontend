@@ -11,13 +11,23 @@ import checkpointConstants, { transitionTextStyle } from './CheckpointTransition
 import { sleep } from '../../utils/GameUtils';
 import { screenCenter } from '../../commons/CommonConstants';
 import { createBitmapText } from '../../utils/TextUtils';
+import GameSoundManager from '../../sound/GameSoundManager';
 
 class CheckpointTransition extends Phaser.Scene {
+  private soundManager: GameSoundManager;
+
   constructor() {
     super('CheckpointTransition');
+    this.soundManager = new GameSoundManager();
+  }
+
+  public preload() {
+    this.soundManager.initialise(this, getSourceAcademyGame());
   }
 
   public async create() {
+    this.soundManager.stopCurrBgMusic();
+
     const accountInfo = getSourceAcademyGame().getAccountInfo();
     const loadedGameState = await loadData(accountInfo);
     const chapterDetails = SampleChapters; // TODO: Fetch from backend

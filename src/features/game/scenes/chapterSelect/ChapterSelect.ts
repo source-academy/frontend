@@ -13,11 +13,13 @@ import { FullSaveState } from '../../save/GameSaveTypes';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import ImageAssets from '../../assets/ImageAssets';
 import { createButton } from '../../utils/ButtonUtils';
+import GameSoundManager from '../../sound/GameSoundManager';
 
 class ChapterSelect extends Phaser.Scene {
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
   private layerManager: GameLayerManager;
+  private soundManager: GameSoundManager;
   private loadedGameState: FullSaveState | undefined;
   private autoScrolling: boolean;
   private isScrollLeft: boolean;
@@ -32,6 +34,7 @@ class ChapterSelect extends Phaser.Scene {
     this.backButtonContainer = undefined;
     this.chapterDetails = [];
     this.layerManager = new GameLayerManager();
+    this.soundManager = new GameSoundManager();
     this.autoScrolling = true;
     this.isScrollLeft = false;
     this.isScrollRight = false;
@@ -41,6 +44,7 @@ class ChapterSelect extends Phaser.Scene {
     this.chapterDetails = SampleChapters;
     this.preloadAssets();
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this, getSourceAcademyGame());
     addLoadingScreen(this);
   }
 
@@ -66,6 +70,10 @@ class ChapterSelect extends Phaser.Scene {
       -chapConstants.imageDist * (this.chapterDetails.length - 1),
       0
     );
+  }
+
+  public getSoundManager() {
+    return this.soundManager;
   }
 
   private preloadAssets() {
@@ -102,7 +110,8 @@ class ChapterSelect extends Phaser.Scene {
         this.scene.start('MainMenu');
       },
       0,
-      0
+      0,
+      this.soundManager
     );
     this.chapterContainer = this.createChapterContainer();
     this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
@@ -114,19 +123,27 @@ class ChapterSelect extends Phaser.Scene {
       ImageAssets.chapterSelectBorder.key
     );
 
-    const leftArrow = createButton(this, {
-      assetKey: ImageAssets.chapterSelectArrow.key,
-      onDown: () => (this.isScrollLeft = true),
-      onUp: () => (this.isScrollLeft = false),
-      onOut: () => (this.isScrollLeft = false)
-    }).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
+    const leftArrow = createButton(
+      this,
+      {
+        assetKey: ImageAssets.chapterSelectArrow.key,
+        onDown: () => (this.isScrollLeft = true),
+        onUp: () => (this.isScrollLeft = false),
+        onOut: () => (this.isScrollLeft = false)
+      },
+      this.soundManager
+    ).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
 
-    const rightArrow = createButton(this, {
-      assetKey: ImageAssets.chapterSelectArrow.key,
-      onDown: () => (this.isScrollRight = true),
-      onUp: () => (this.isScrollRight = false),
-      onOut: () => (this.isScrollRight = false)
-    })
+    const rightArrow = createButton(
+      this,
+      {
+        assetKey: ImageAssets.chapterSelectArrow.key,
+        onDown: () => (this.isScrollRight = true),
+        onUp: () => (this.isScrollRight = false),
+        onOut: () => (this.isScrollRight = false)
+      },
+      this.soundManager
+    )
       .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
       .setScale(-1, 1);
 

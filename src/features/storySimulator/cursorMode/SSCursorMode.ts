@@ -5,17 +5,20 @@ import { Constants } from 'src/features/game/commons/CommonConstants';
 import SSImageAssets from '../assets/ImageAssets';
 import CommonTextHover from 'src/features/game/commons/CommonTextHover';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
   private currCursorMode: CursorMode;
   private cursorModes: Array<Phaser.GameObjects.Container>;
   private currActiveModeIdx: number;
+  private soundManager: GameSoundManager | undefined;
 
   constructor(
     scene: Phaser.Scene,
     x?: number,
     y?: number,
+    soundManager?: GameSoundManager,
     defaultCursorMode: CursorMode = CursorMode.DragResizeObj
   ) {
     super(scene, x, y);
@@ -23,6 +26,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     this.isModes = new Array<boolean>();
     this.cursorModes = new Array<Phaser.GameObjects.Container>();
     this.currActiveModeIdx = -1;
+    this.soundManager = soundManager;
   }
 
   public getCurrCursorMode() {
@@ -80,13 +84,17 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       onOut();
     };
 
-    const modeButton = createButton(scene, {
-      assetKey: SSImageAssets.iconBg.key,
-      onUp: onUp,
-      onHover: onHoverWrapper,
-      onOut: onOutWrapper,
-      onHoverEffect: false
-    });
+    const modeButton = createButton(
+      scene,
+      {
+        assetKey: SSImageAssets.iconBg.key,
+        onUp: onUp,
+        onHover: onHoverWrapper,
+        onOut: onOutWrapper,
+        onHoverEffect: false
+      },
+      this.soundManager
+    );
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(

@@ -5,6 +5,8 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { loadImage, loadSound } from 'src/features/game/utils/LoaderUtils';
 import { Constants } from '../../commons/CommonConstants';
+import GameSoundManager from '../../sound/GameSoundManager';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 type RoomPreviewProps = {
   studentCode: string;
@@ -12,6 +14,7 @@ type RoomPreviewProps = {
 
 export default class RoomPreview extends Phaser.Scene {
   private layerManager: GameLayerManager;
+  private soundManager: GameSoundManager;
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
@@ -21,12 +24,14 @@ export default class RoomPreview extends Phaser.Scene {
     this.preloadImageMap = new Map<string, string>();
     this.preloadSoundMap = new Map<string, string>();
     this.layerManager = new GameLayerManager();
+    this.soundManager = new GameSoundManager();
     this.studentCode = roomDefaultCode;
   }
 
   public init({ studentCode }: RoomPreviewProps) {
     this.studentCode = studentCode;
     this.layerManager.initialiseMainLayer(this);
+    this.soundManager.initialise(this, getSourceAcademyGame());
   }
 
   public async create() {
@@ -52,9 +57,11 @@ export default class RoomPreview extends Phaser.Scene {
         this.scene.start('MainMenu');
       },
       0,
-      0
+      0,
+      this.soundManager
     );
     this.add.existing(backButton);
+    this.soundManager.stopCurrBgMusic();
   }
 
   public update() {
