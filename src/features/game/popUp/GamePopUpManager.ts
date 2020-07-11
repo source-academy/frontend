@@ -4,7 +4,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import GameActionManager from '../action/GameActionManager';
 import { sleep } from '../utils/GameUtils';
 import popUpConstants from './GamePopUpConstants';
-import { resize } from '../utils/SpriteUtils';
+import { resizeUnderflow } from '../utils/SpriteUtils';
 import { Constants } from '../commons/CommonConstants';
 import ImageAssets from '../assets/ImageAssets';
 
@@ -46,15 +46,9 @@ class GamePopUpManager {
       this.popUpFrame.assetYPos + popUpConstants.imgYOffset,
       assetKey
     );
+    resizeUnderflow(popUpImage, popUpConstants.rect.width, popUpConstants.rect.height);
 
-    const resizedImage = popUpImage;
-    if (popUpImage.displayWidth > popUpImage.displayHeight) {
-      resize(popUpImage, popUpConstants.rect.width);
-    } else {
-      resize(popUpImage, 0, popUpConstants.rect.height);
-    }
-
-    container.add([popUpFrameImg, resizedImage]);
+    container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
     GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
 

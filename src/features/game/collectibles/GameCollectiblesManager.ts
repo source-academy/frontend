@@ -9,7 +9,7 @@ import collectibleConstants, {
   collectibleDescStyle,
   defaultCollectibleProp
 } from './GameCollectiblesConstants';
-import { resize } from '../utils/SpriteUtils';
+import { resizeUnderflow } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
@@ -145,11 +145,7 @@ class GameCollectiblesManager {
     if (!isAllValid) return;
 
     const preview = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
-    if (preview.displayWidth > preview.displayHeight) {
-      resize(preview, collectibleConstants.previewDim);
-    } else {
-      resize(preview, 0, collectibleConstants.previewDim);
-    }
+    resizeUnderflow(preview, collectibleConstants.previewDim, collectibleConstants.previewDim);
     preview
       .setPosition(this.previewSprite!.x, this.previewSprite!.y)
       .setOrigin(this.previewSprite!.originX, this.previewSprite!.originY);
