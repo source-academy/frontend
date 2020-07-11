@@ -74,7 +74,7 @@
       align-items: center;
 
       overflow-x: hidden;
-      overflow-y: auto;
+      overflow-y: scroll;
 
       list-style-type: none;
 
@@ -86,8 +86,8 @@
         // Card aspect ratio 6:1
         height: 5em;
         width: 30em;
-        margin-bottom: 1em;
         padding: 0;
+        margin-bottom: 0.8em;
 
         justify-content: center;
         align-items: center;
@@ -96,11 +96,13 @@
           display: flex;
 
           height: 5em;
-          width: 20%;
+          width: 6em;
           padding: 0 0 0 0.5em;
 
           justify-content: flex-start;
           align-items: center;
+
+          //border: dashed lightgreen;
         }
 
         .content {
@@ -109,7 +111,9 @@
           flex-direction: column;
 
           height: 5em;
-          width: 80%;
+          width: 24em;
+
+          //border: dashed lightcoral;
 
           .heading {
             display: flex;
@@ -124,6 +128,7 @@
 
             .hints {
               padding: 0 0 0 1em;
+              transform: scale(0.8);
             }
           }
 
@@ -137,13 +142,13 @@
 
             .ability {
               display: flex;
-              flex-basis: 55%;
+              flex: 0 1 55%;
             }
 
             .deadline {
               display: flex;
               flex-direction: row;
-              flex-basis: 25%;
+              flex: 0 1 25%;
               align-items: stretch;
 
               p {
@@ -154,7 +159,7 @@
             .exp {
               display: flex;
               flex-direction: row;
-              flex-basis: 20%;
+              flex: 0 1 20%;
               align-items: stretch;
 
               p {
@@ -166,126 +171,45 @@
           .progress {
             display: flex;
             height: 0.2em;
-            width: 95%;
+            width: 23em;
 
             align-items: flex-end;
           }
         }
       }
 
-      .dropdown-expanded {
+      .dropdown-container {
         display: flex;
         flex-direction: row;
-        height: 100%;
 
         .lines {
-          width: 10%;
-          position: flex;
           display: flex;
+          width: 10%;
           flex-direction: column;
 
-          .upper {
-            width: 100%;
+          margin: -2em 0 -1em;
+
+          .l-shape {
             height: 50%;
-            position: flex;
             border-bottom: 1px solid white;
             border-left: 1px solid white;
           }
 
-          .lower {
-            width: 100%;
+          .extend-bottom {
             height: 50%;
-            position: flex;
             border-left: 1px solid white;
           }
         }
 
-        // Prerequisite cards take 75% of normal card width
-        .prerequisite {
-          background-color: #333e50;
-          margin-bottom: 10px;
+        .dropdown-button {
+          display: flex;
 
           height: 5em;
-          width: 30em;
+          width: 4em;
 
-          display: flex;
-          flex-direction: column;
-
-          .main {
-            margin-top: -1.5em;
-            display: flex;
-            flex-direction: row;
-            flex-basis: 90%;
-
-            .padder {
-              flex-basis: 5%;
-            }
-
-            .display {
-              display: flex;
-              justify-content: center;
-              width: 100%;
-              flex-direction: column;
-
-              .heading {
-                display: flex;
-                flex-direction: row;
-
-                .title {
-                  flex-basis: 50%;
-                }
-
-                .hints {
-                  display: flex;
-                  justify-content: center;
-                  align-items: center;
-                }
-              }
-
-              .details {
-                display: flex;
-                flex-direction: row;
-
-                .ability {
-                  flex-basis: 50%;
-                }
-
-                .deadline {
-                  display: flex;
-                  flex-direction: row;
-                }
-
-                .exp {
-                  display: flex;
-                  margin-left: 5%;
-                  flex-direction: row;
-                }
-              }
-            }
-          }
-
-          .progress {
-            height: 0.3em;
-          }
+          justify-content: flex-start;
+          align-items: center;
         }
-      }
-
-      // Scroll Bar
-      ::-webkit-scrollbar {
-        width: 5px;
-      }
-
-      ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-        box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-        -webkit-border-radius: 10px;
-        border-radius: 10px;
-      }
-
-      ::-webkit-scrollbar-thumb {
-        -webkit-border-radius: 10px;
-        border-radius: 10px;
-        background: rgba(255, 255, 255, 1);
       }
     }
 
@@ -384,6 +308,24 @@
           flex-direction: row;
         }
       }
+    }
+
+    // Scroll Bar
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      -webkit-border-radius: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 1);
     }
   }
 }
