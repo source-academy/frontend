@@ -43,7 +43,7 @@ type TableFormatPosConfig = {
  * @param numItemLimit maximum number of item at a given row, optional
  * @param redistributeLast if true, items at the last row will have their location
  *                         calculated based on the number of items at the last row, optional
- * @returns {Array<Array<number>>} array of positions, in the format of
+ * @returns {Array<[number, number]>} array of positions, in the format of
  *                                 [[xPos0, yPos0], [xPos1, yPos1]...]
  */
 export function calcTableFormatPos({
@@ -52,8 +52,8 @@ export function calcTableFormatPos({
   maxYSpace = screenSize.y,
   numItemLimit = 0,
   redistributeLast = true
-}: TableFormatPosConfig): Array<Array<number>> {
-  const pos = new Array<Array<number>>();
+}: TableFormatPosConfig): Array<[number, number]> {
+  const pos = new Array<[number, number]>();
   const numOfRows = numItemLimit ? Math.ceil(numOfItems / numItemLimit) : 1;
   const numOfCols = numItemLimit ? numItemLimit : numOfItems;
   const numOfColsAtLastRow = numOfItems % numOfCols;
