@@ -25,7 +25,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     this.currCursorMode = defaultCursorMode;
     this.isModes = new Array<boolean>();
     this.cursorModes = new Array<Phaser.GameObjects.Container>();
-    this.currActiveModeIdx = -1;
+    this.currActiveModeIdx = Constants.nullSequenceNumber;
     this.soundManager = soundManager;
   }
 

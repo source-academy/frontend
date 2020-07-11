@@ -73,8 +73,8 @@ class GameManager extends Phaser.Scene {
     this.currentCheckpoint = undefined;
     this.fullSaveState = undefined;
     this.continueGame = false;
-    this.chapterNum = -1;
-    this.checkpointNum = -1;
+    this.chapterNum = Constants.nullSequenceNumber;
+    this.checkpointNum = Constants.nullSequenceNumber;
     this.currentLocationId = Constants.nullInteractionId;
     this.isStorySimulator = false;
 

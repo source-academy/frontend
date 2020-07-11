@@ -7,6 +7,7 @@ export const Constants = {
   fadeDuration: 600,
   nullFunction: () => {},
   nullInteractionId: '',
+  nullSequenceNumber: -1,
   popupDuration: 1000,
   defaultAssetPath: '/UI/wristDeviceButton.png',
   defaultFontStyle: {

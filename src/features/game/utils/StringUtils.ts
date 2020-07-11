@@ -3,20 +3,21 @@ export default class StringUtils {
    * Splits text into paragraphs containing header and body
    */
   public static splitToParagraph(lines: string[]) {
-    const splitToParagraph: [string, string[]][] = [];
+    const paragraphHeaderAndBodyLines: [string, string[]][] = [];
     lines.forEach((line: string) => {
       if (line.startsWith('\t') || line.startsWith('    ')) {
         const content = line.startsWith('\t') ? line.slice(1) : line.slice(4);
-        if (splitToParagraph.length === 0) {
+        if (paragraphHeaderAndBodyLines.length === 0) {
           console.error('Unexpected tabs');
           return;
         }
-        splitToParagraph[splitToParagraph.length - 1][1].push(content);
+        const bodyLines = paragraphHeaderAndBodyLines[paragraphHeaderAndBodyLines.length - 1][1];
+        bodyLines.push(content);
         return;
       }
-      splitToParagraph.push([line.trim(), []]);
+      paragraphHeaderAndBodyLines.push([line.trim(), []]);
     });
-    return splitToParagraph;
+    return paragraphHeaderAndBodyLines;
   }
 
   /*

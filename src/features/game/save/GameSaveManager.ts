@@ -3,6 +3,7 @@ import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyG
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { FullSaveState, SettingsJson, SaveManagerType } from './GameSaveTypes';
 import { createEmptySaveState } from './GameSaveConstants';
+import { Constants } from '../commons/CommonConstants';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
@@ -14,8 +15,8 @@ export default class GameSaveManager {
 
   constructor() {
     this.fullSaveState = createEmptySaveState();
-    this.chapterNum = -1;
-    this.checkpointNum = -1;
+    this.chapterNum = Constants.nullSequenceNumber;
+    this.checkpointNum = Constants.nullSequenceNumber;
     this.continueGame = false;
     this.version = SaveManagerType.None;
   }
