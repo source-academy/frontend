@@ -46,7 +46,7 @@ type TableFormatPosConfig = {
  * @returns {Array<Array<number>>} array of positions, in the format of
  *                                 [[xPos0, yPos0], [xPos1, yPos1]...]
  */
-export function getTableFormatPos({
+export function calcTableFormatPos({
   numOfItems,
   maxXSpace = screenSize.x,
   maxYSpace = screenSize.y,

@@ -12,6 +12,7 @@ import SSImageAssets from '../../assets/ImageAssets';
 import FontAssets from 'src/features/game/assets/FontAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 import SoundAssets from 'src/features/game/assets/SoundAssets';
 
 class MainMenu extends Phaser.Scene {
@@ -78,42 +79,30 @@ class MainMenu extends Phaser.Scene {
         }
       }
     ];
+
+    const buttonPositions = calcTableFormatPos({
+      numOfItems: buttons.length,
+      maxXSpace: mainMenuConstants.optButtonsXSpace,
+      maxYSpace: mainMenuConstants.optButtonsYSpace,
+      numItemLimit: mainMenuConstants.maxOptButtonsRow,
+      redistributeLast: true
+    });
+
     optionsContainer.add(
       buttons.map((button, index) =>
-        this.createOptionButton(button.text, index, buttons.length, button.callback)
+        this.createOptButton(
+          button.text,
+          buttonPositions[index][0],
+          buttonPositions[index][1],
+          button.callback
+        )
       )
     );
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
   }
 
-  private createOptionButton(
-    text: string,
-    buttonIndex: number,
-    numOfButtons: number,
-    callback: any
-  ): Phaser.GameObjects.Container {
-    const buttonContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const numOfRows = Math.ceil(numOfButtons / mainMenuConstants.maxOptButtonsRow);
-    const numOfButtonsAtLastRow =
-      numOfButtons % mainMenuConstants.maxOptButtonsRow || mainMenuConstants.maxOptButtonsRow;
-    const buttonYIdx = Math.floor(buttonIndex / mainMenuConstants.maxOptButtonsRow);
-    const buttonXIdx = buttonIndex % mainMenuConstants.maxOptButtonsRow;
-
-    const partitionYSpace = mainMenuConstants.optButtonsYSpace / numOfRows;
-    const buttonYPos =
-      (screenSize.y - mainMenuConstants.optButtonsYSpace + partitionYSpace) / 2 +
-      buttonYIdx * partitionYSpace;
-
-    const partitionXSpace =
-      buttonYIdx === numOfRows - 1
-        ? mainMenuConstants.optButtonsXSpace / numOfButtonsAtLastRow
-        : mainMenuConstants.optButtonsXSpace / mainMenuConstants.maxOptButtonsRow;
-
-    const buttonXPos =
-      (screenSize.x - mainMenuConstants.optButtonsXSpace + partitionXSpace) / 2 +
-      buttonXIdx * partitionXSpace;
-
-    const button = createButton(
+  private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
+    return createButton(
       this,
       {
         assetKey: SSImageAssets.invertedButton.key,
@@ -123,10 +112,7 @@ class MainMenu extends Phaser.Scene {
         onUp: callback
       },
       this.soundManager
-    ).setPosition(buttonXPos, buttonYPos);
-
-    buttonContainer.add(button);
-    return buttonContainer;
+    ).setPosition(xPos, yPos);
   }
 
   public callGameManager() {
