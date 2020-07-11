@@ -104,6 +104,7 @@ class MainMenu extends Phaser.Scene {
       }
     ];
   }
+
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(
       this,
