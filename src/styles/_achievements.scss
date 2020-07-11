@@ -8,11 +8,12 @@
 
   background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal.png);
   background-position: center;
+  background-repeat: no-repeat;
 
   .achievement-overview {
     display: flex;
 
-    margin: 1em 0;
+    height: 7%;
     width: 50%;
 
     flex-direction: row;
@@ -20,9 +21,6 @@
     align-items: center;
 
     color: white;
-
-    border-style: solid;
-    border-color: yellow;
 
     .level-progress {
       width: 15em;
@@ -32,12 +30,11 @@
   .achievement-main {
     display: flex;
 
+    height: 93%;
+
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-
-    border-style: dashed;
-    border-color: red;
 
     & > * {
       overflow-wrap: break-word;
@@ -53,9 +50,6 @@
       justify-content: space-evenly;
       align-items: center;
 
-      border-style: solid;
-      border-color: green;
-
       .filter-button {
         display: flex;
 
@@ -64,13 +58,15 @@
 
         line-height: 0.8em;
         color: white;
+
+        cursor: pointer;
       }
     }
 
     .cards-container {
       display: flex;
 
-      height: 56em;
+      height: 90%;
       width: 35%;
 
       flex-direction: column;
@@ -83,76 +79,91 @@
       overflow-x: hidden;
       overflow-y: auto;
 
-      // Achievement Card
-      .achievement {
+      list-style-type: none;
+
+      .achievement-card {
         display: flex;
 
-        flex-direction: column;
+        flex-direction: row;
 
         // Card aspect ratio 6:1
-        height: 7em;
+        height: 5em;
         width: 30em;
         margin-bottom: 1em;
+        padding: 0;
 
-        // This contains title, week, dropdown, etc
-        .main {
-          margin-top: -1em;
+        justify-content: center;
+        align-items: center;
+
+        .dropdown-button {
           display: flex;
-          flex-direction: row;
-          flex-basis: 80%;
 
-          .dropdown {
-            display: flex;
-            align-items: center;
-            flex-basis: 20%;
-          }
+          height: 5em;
+          width: 20%;
+          padding: 0 0 0 0.5em;
 
-          .display {
-            display: flex;
-            justify-content: center;
-            width: 100%;
-            flex-direction: column;
+          justify-content: flex-start;
+          align-items: center;
 
-            .heading {
-              display: flex;
-              flex-direction: row;
-
-              .title {
-                flex-basis: 50%;
-              }
-
-              .hints {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-              }
-            }
-
-            .details {
-              display: flex;
-              flex-direction: row;
-
-              .ability {
-                flex-basis: 50%;
-              }
-
-              .deadline {
-                display: flex;
-                flex-direction: row;
-              }
-
-              .exp {
-                display: flex;
-                margin-left: 5%;
-                flex-direction: row;
-              }
-            }
-          }
+          border-style: dotted;
+          border-color: lightcoral;
         }
 
-        // Separate div from Main for progress bar
-        .progress {
-          height: 0.3em;
+        .content {
+          display: flex;
+
+          flex-direction: column;
+
+          height: 5em;
+          width: 80%;
+
+          border-style: dotted;
+          border-color: lightgreen;
+
+          .heading {
+            display: flex;
+            flex-direction: row;
+
+            height: 3em;
+            align-items: flex-end;
+
+            border-style: dotted;
+            border-color: lightblue;
+
+            .title {
+              display: flex;
+              // flex-basis: 50%;
+            }
+
+            .hints {
+              display: flex;
+              // justify-content: center;
+              // align-items: center;
+            }
+          }
+
+          .details {
+            display: flex;
+            flex-direction: row;
+
+            .ability {
+              display: flex;
+              // flex-basis: 50%;
+            }
+
+            .deadline {
+              display: flex;
+            }
+
+            .exp {
+              display: flex;
+              // margin-left: 5%;
+            }
+          }
+          // Separate div from Main for progress bar
+          .progress {
+            display: flex;
+          }
         }
       }
 
@@ -185,10 +196,11 @@
 
         // Prerequisite cards take 75% of normal card width
         .prerequisite {
-          width: 75%;
           background-color: #333e50;
           margin-bottom: 10px;
-          height: 7.5em;
+
+          height: 5em;
+          width: 30em;
 
           display: flex;
           flex-direction: column;
@@ -197,7 +209,7 @@
             margin-top: -1.5em;
             display: flex;
             flex-direction: row;
-            flex-basis: 80%;
+            flex-basis: 90%;
 
             .padder {
               flex-basis: 5%;
