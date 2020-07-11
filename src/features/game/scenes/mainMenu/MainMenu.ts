@@ -51,11 +51,9 @@ class MainMenu extends Phaser.Scene {
   }
 
   private preloadAssets() {
-    Object.entries(ImageAssets).forEach(asset =>
-      this.load.image(asset[1].key, toS3Path(asset[1].path))
-    );
-    Object.entries(FontAssets).forEach(asset =>
-      this.load.bitmapFont(asset[1].key, asset[1].pngPath, asset[1].fntPath)
+    Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
+    Object.values(FontAssets).forEach(asset =>
+      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
   }
 
