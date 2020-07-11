@@ -92,11 +92,9 @@ function Achievement(props: DispatchProps & StateProps) {
           />
         </div>
 
-        <div className="cards">
-          <ul className="cards-container">
-            {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
-          </ul>
-        </div>
+        <ul className="cards-container">
+          {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
+        </ul>
 
         <AchievementModal
           generateBackgroundGradient={generateBackgroundGradient}

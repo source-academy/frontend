@@ -12,7 +12,7 @@
   .achievement-overview {
     display: flex;
 
-    height: 100%;
+    margin: 1em 0;
     width: 50%;
 
     flex-direction: row;
@@ -20,6 +20,9 @@
     align-items: center;
 
     color: white;
+
+    border-style: solid;
+    border-color: yellow;
 
     .level-progress {
       width: 15em;
@@ -32,6 +35,9 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
+
+    border-style: dashed;
+    border-color: red;
 
     & > * {
       overflow-wrap: break-word;
@@ -47,6 +53,9 @@
       justify-content: space-evenly;
       align-items: center;
 
+      border-style: solid;
+      border-color: green;
+
       .filter-button {
         display: flex;
 
@@ -58,19 +67,21 @@
       }
     }
 
-    .cards {
+    .cards-container {
       display: flex;
 
+      height: 56em;
       width: 35%;
 
-      // Container for Cards
-      .cards-container {
-        height: 800px; // help
-        max-height: 800px;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: center;
 
-        overflow-x: hidden;
-        overflow-y: auto;
-      }
+      border-style: solid;
+      border-color: green;
+
+      overflow-x: hidden;
+      overflow-y: auto;
 
       // Achievement Card
       .achievement {
