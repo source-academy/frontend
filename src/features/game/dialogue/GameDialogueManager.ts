@@ -3,7 +3,7 @@ import { Dialogue } from './GameDialogueTypes';
 import { Constants } from '../commons/CommonConstants';
 import { fadeIn } from '../effects/FadeEffect';
 import DialogueGenerator from './GameDialogueGenerator';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Layer } from '../layer/GameLayerTypes';
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueRenderer from './GameDialogueRenderer';
@@ -20,14 +20,14 @@ export default class DialogueManager {
     this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
   }
 
-  public async playDialogue(dialogueId: ItemId): Promise<void> {
+  public async showDialogue(dialogueId: ItemId): Promise<void> {
     const dialogue = this.dialogueMap.get(dialogueId);
 
     if (!dialogue || !dialogue.content) {
       return;
     }
 
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const generateDialogue = DialogueGenerator(dialogue);
 
     const dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
@@ -41,9 +41,7 @@ export default class DialogueManager {
       const lineWithName = line.replace('{name}', gameManager.getAccountInfo().name);
       dialogueRenderer.changeText(lineWithName);
       gameManager.characterManager.changeSpeakerTo(speakerDetail);
-      await GameActionManager.getInstance()
-        .getGameManager()
-        .actionExecuter.executeStoryActions(actionIds);
+      await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
       if (!lineWithName) {
         resolve();
         dialogueRenderer.destroy();

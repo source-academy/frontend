@@ -1,10 +1,10 @@
-import GameActionManager from '../../action/GameActionManager';
+import GameGlobalAPI from './GameGlobalAPI';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
 import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
-import GameActionExecuter from 'src/features/game/action/GameActionExecuter';
+import GameActionManager from 'src/features/game/action/GameActionManager';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GamePhaseManager from '../../phase/GamePhaseManager';
@@ -57,7 +57,7 @@ class GameManager extends Phaser.Scene {
   public objectManager: GameObjectManager;
   public characterManager: GameCharacterManager;
   public dialogueManager: GameDialogueManager;
-  public actionExecuter: GameActionExecuter;
+  public actionManager: GameActionManager;
   public userStateManager: GameUserStateManager;
   public boundingBoxManager: GameBBoxManager;
   public popUpManager: GamePopUpManager;
@@ -83,7 +83,7 @@ class GameManager extends Phaser.Scene {
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
-    this.actionExecuter = new GameActionExecuter();
+    this.actionManager = new GameActionManager();
     this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
@@ -119,7 +119,7 @@ class GameManager extends Phaser.Scene {
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
-    this.actionExecuter = new GameActionExecuter();
+    this.actionManager = new GameActionManager();
     this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
@@ -136,7 +136,7 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public preload() {
-    GameActionManager.getInstance().setGameManager(this);
+    GameGlobalAPI.getInstance().setGameManager(this);
     this.loadGameState();
 
     this.currentLocationId =
@@ -146,7 +146,7 @@ class GameManager extends Phaser.Scene {
     this.soundManager.initialise(this, this.parentGame || getSourceAcademyGame());
     this.dialogueManager.initialise(this);
     this.characterManager.initialise(this);
-    this.actionExecuter.initialise(this);
+    this.actionManager.initialise(this);
     this.inputManager.initialise(this);
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
@@ -189,11 +189,11 @@ class GameManager extends Phaser.Scene {
   public async create() {
     await this.userStateManager.loadAssessments();
     this.changeLocationTo(this.currentLocationId, true);
-    await GameActionManager.getInstance().saveGame();
+    await GameGlobalAPI.getInstance().saveGame();
   }
 
   private async renderLocation(locationId: LocationId, startAction: boolean) {
-    const gameLocation = GameActionManager.getInstance().getLocationAtId(locationId);
+    const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
     await this.soundManager.renderBackgroundMusic(gameLocation.bgmKey);
 
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
@@ -206,14 +206,14 @@ class GameManager extends Phaser.Scene {
 
     // Execute start actions, notif, then cutscene
     if (startAction) {
-      await this.actionExecuter.executeStoryActions(
+      await this.actionManager.processGameActions(
         this.getCurrentCheckpoint().map.getStartActions()
       );
     }
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
-      await GameActionManager.getInstance().bringUpUpdateNotif(gameLocation.name);
+      await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
-    await this.actionExecuter.executeStoryActions(gameLocation.actionIds);
+    await this.actionManager.processGameActions(gameLocation.actionIds);
 
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
@@ -252,9 +252,9 @@ class GameManager extends Phaser.Scene {
 
   public async checkpointTransition() {
     this.phaseManager.phaseMap.get(GamePhaseType.Menu)?.deactivateUI();
-    await this.actionExecuter.executeStoryActions(this.getCurrentCheckpoint().map.getEndActions());
+    await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
     this.cleanUp();
-    if (GameActionManager.getInstance().isStorySimulator()) {
+    if (GameGlobalAPI.getInstance().isStorySimulator()) {
       this.scene.start('StorySimulatorMenu');
     } else {
       this.scene.start('CheckpointTransition');

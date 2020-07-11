@@ -1,5 +1,5 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { ObjectProperty, ActivatableObject } from './GameObjectTypes';
 import { ItemId } from '../commons/CommonTypes';
 import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
@@ -20,23 +20,20 @@ class GameObjectManager implements StateObserver {
   }
 
   public initialise() {
-    GameActionManager.getInstance().subscribeState(this);
+    GameGlobalAPI.getInstance().subscribeState(this);
   }
 
   public notify(locationId: LocationId) {
-    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationId,
-      GameMode.Explore
-    );
-    const currLocationId = GameActionManager.getInstance().getCurrLocId();
+    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
+    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       this.renderObjectsLayerContainer(locationId);
     }
   }
 
   private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const objectPropMap = GameActionManager.getInstance().getObjPropertyMap();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     objectIds
@@ -53,13 +50,13 @@ class GameObjectManager implements StateObserver {
   }
 
   public renderObjectsLayerContainer(locationId: LocationId): void {
-    GameActionManager.getInstance().clearSeveralLayers([Layer.Objects]);
+    GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender =
-      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
+      GameGlobalAPI.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
 
     const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
 
-    GameActionManager.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
   public enableObjectAction(callbacks: any): void {
@@ -83,7 +80,7 @@ class GameObjectManager implements StateObserver {
     if (!object) {
       return;
     }
-    blink(GameActionManager.getInstance().getGameManager(), object.sprite.getContainer());
+    blink(GameGlobalAPI.getInstance().getGameManager(), object.sprite.getContainer());
   }
 
   private createObject(
@@ -100,7 +97,7 @@ class GameObjectManager implements StateObserver {
     }) {
       object.getClickArea().on('pointerup', async () => {
         onClick(interactionId);
-        await GameActionManager.getInstance().executeStoryAction(actionIds);
+        await GameGlobalAPI.getInstance().processGameActions(actionIds);
       });
       object.getClickArea().on('pointerover', () => {
         onHover(interactionId);

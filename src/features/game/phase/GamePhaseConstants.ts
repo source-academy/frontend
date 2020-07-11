@@ -3,7 +3,7 @@ import GameModeTalk from '../mode/talk/GameModeTalk';
 import GameModeMenu from '../mode/menu/GameModeMenu';
 import { IGameUI } from '../commons/CommonTypes';
 import { GamePhaseType } from './GamePhaseTypes';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameModeExplore from '../mode/explore/GameModeExplore';
 
 class GameModeSequence implements IGameUI {
@@ -18,6 +18,6 @@ export const createGamePhases = () =>
     [GamePhaseType.Explore, new GameModeExplore()],
     [GamePhaseType.None, new GameModeSequence()],
     [GamePhaseType.Talk, new GameModeTalk()],
-    [GamePhaseType.EscapeMenu, GameActionManager.getInstance().getGameManager().escapeManager],
+    [GamePhaseType.EscapeMenu, GameGlobalAPI.getInstance().getGameManager().escapeManager],
     [GamePhaseType.Move, new GameModeMove()]
   ]);

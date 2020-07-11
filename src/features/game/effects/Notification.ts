@@ -1,7 +1,7 @@
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import { fadeIn, fadeAndDestroy } from './FadeEffect';
 import { Constants, screenCenter } from '../commons/CommonConstants';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { BitmapFontStyle } from '../commons/CommonTypes';
@@ -20,11 +20,11 @@ const notifStyle: BitmapFontStyle = {
 const notifYPos = dialogueConstants.rect.y + notifStyle.size * 2;
 
 export async function displayNotification(message: string): Promise<void> {
-  const gameManager = GameActionManager.getInstance().getGameManager();
+  const gameManager = GameGlobalAPI.getInstance().getGameManager();
   const dialogueRenderer = new DialogueRenderer({});
   const container = dialogueRenderer.getDialogueContainer();
 
-  GameActionManager.getInstance().addContainerToLayer(Layer.Effects, container);
+  GameGlobalAPI.getInstance().addContainerToLayer(Layer.Effects, container);
   gameManager.add.tween(fadeIn([container], Constants.fadeDuration * 2));
 
   const notifText = createBitmapText(gameManager, message, screenCenter.x, notifYPos, notifStyle)

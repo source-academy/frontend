@@ -1,7 +1,7 @@
 import { GameButton, IGameUI } from '../../commons/CommonTypes';
 import modeMenuConstants, { modeButtonStyle, modeBannerRect } from './GameModeMenuConstants';
 import { sleep } from '../../utils/GameUtils';
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import { screenSize, Constants } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -22,10 +22,10 @@ class GameModeMenu implements IGameUI {
       // Refresh Buttons
       modes.sort().forEach(mode => {
         this.addModeButton(mode, () => {
-          GameActionManager.getInstance().pushPhase(gameModeToPhase[mode]);
+          GameGlobalAPI.getInstance().pushPhase(gameModeToPhase[mode]);
 
           if (mode !== GameMode.Talk) {
-            GameActionManager.getInstance()
+            GameGlobalAPI.getInstance()
               .getGameManager()
               .layerManager.fadeOutLayer(Layer.Character, 300);
           }
@@ -65,9 +65,9 @@ class GameModeMenu implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const currLocId = GameActionManager.getInstance().getCurrLocId();
-    let latestModesInLoc = GameActionManager.getInstance().getModesByLocId(currLocId);
-    const talkTopics = GameActionManager.getInstance().getLocationAttr(
+    const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
+    let latestModesInLoc = GameGlobalAPI.getInstance().getModesByLocId(currLocId);
+    const talkTopics = GameGlobalAPI.getInstance().getLocationAttr(
       GameLocationAttr.talkTopics,
       currLocId
     );
@@ -78,7 +78,7 @@ class GameModeMenu implements IGameUI {
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const modeBanner = new Phaser.GameObjects.Image(
@@ -113,10 +113,10 @@ class GameModeMenu implements IGameUI {
     this.uiContainer = undefined;
     this.gameButtons = [];
     this.fetchLatestState();
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     this.uiContainer = await this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
@@ -129,7 +129,7 @@ class GameModeMenu implements IGameUI {
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);

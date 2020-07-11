@@ -4,7 +4,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ItemId } from '../commons/CommonTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
@@ -61,7 +61,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
-    const currLocId = GameActionManager.getInstance().getCurrLocId();
+    const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
 
     this.locationHasUpdate.get(targetLocId)!.set(mode, true);
 

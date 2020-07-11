@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import { GamePhaseType } from './GamePhaseTypes';
 import { createGamePhases } from './GamePhaseConstants';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { IGameUI } from '../commons/CommonTypes';
 
 export default class GamePhaseManager {
@@ -42,18 +42,18 @@ export default class GamePhaseManager {
     // Transition to the next scene if possible
     if (
       _.isEqual(this.phaseStack, [GamePhaseType.Menu]) &&
-      GameActionManager.getInstance().isAllComplete()
+      GameGlobalAPI.getInstance().isAllComplete()
     ) {
       await this.phaseMap.get(prevPhase)!.deactivateUI();
-      await GameActionManager.getInstance().getGameManager().checkpointTransition();
+      await GameGlobalAPI.getInstance().getGameManager().checkpointTransition();
       return;
     }
-    GameActionManager.getInstance().enableKeyboardInput(false);
-    GameActionManager.getInstance().enableMouseInput(false);
+    GameGlobalAPI.getInstance().enableKeyboardInput(false);
+    GameGlobalAPI.getInstance().enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
     await this.phaseMap.get(newPhase)!.activateUI();
-    GameActionManager.getInstance().enableMouseInput(true);
-    GameActionManager.getInstance().enableKeyboardInput(true);
+    GameGlobalAPI.getInstance().enableMouseInput(true);
+    GameGlobalAPI.getInstance().enableKeyboardInput(true);
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {

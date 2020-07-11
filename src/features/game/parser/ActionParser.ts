@@ -130,7 +130,7 @@ export default class ActionParser {
       actionConditions: [],
       interactionId: actionId,
       isInteractive: false,
-      repeatable
+      isRepeatable: repeatable
     };
   }
 }

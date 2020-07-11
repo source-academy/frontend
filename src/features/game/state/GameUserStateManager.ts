@@ -3,7 +3,7 @@ import { emptyUserState, userStateStyle } from './GameStateConstants';
 import GameManager from '../scenes/gameManager/GameManager';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../utils/ButtonUtils';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
@@ -29,16 +29,16 @@ export default class GameUserStateManager {
   }
 
   public async doesIdExistInList(listName: string, id: string): Promise<boolean> {
-    if (listName === 'assessments' && GameActionManager.getInstance().isStorySimulator()) {
+    if (listName === 'assessments' && GameGlobalAPI.getInstance().isStorySimulator()) {
       return this.askAssessmentComplete(id);
     }
     return this.userState[listName].includes(id);
   }
 
   public async askAssessmentComplete(assessmentId: string): Promise<boolean> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const assessmentCheckContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, assessmentCheckContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, assessmentCheckContainer);
 
     const activateAssessmentContainer: Promise<boolean> = new Promise(resolve => {
       assessmentCheckContainer.add(
@@ -69,7 +69,7 @@ export default class GameUserStateManager {
   }
 
   public async loadAssessments() {
-    if (GameActionManager.getInstance().isStorySimulator()) {
+    if (GameGlobalAPI.getInstance().isStorySimulator()) {
       return;
     }
     const assessments = await getAssessmentOverviews(getSourceAcademyGame().getAccountInfo());

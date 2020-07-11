@@ -1,4 +1,4 @@
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { screenSize, screenCenter } from '../commons/CommonConstants';
 import { createButton } from '../utils/ButtonUtils';
 import escapeConstants, {
@@ -23,7 +23,7 @@ class GameEscapeManager implements IGameUI {
   }
 
   public activateUI() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const escapeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     const escapeMenuBg = new Phaser.GameObjects.Image(
@@ -43,9 +43,8 @@ class GameEscapeManager implements IGameUI {
       optTextStyle
     );
 
-    const userVol = GameActionManager.getInstance()
-      .getGameManager()
-      .saveManager.getLoadedUserState().settings.volume;
+    const userVol = GameGlobalAPI.getInstance().getGameManager().saveManager.getLoadedUserState()
+      .settings.volume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -76,8 +75,8 @@ class GameEscapeManager implements IGameUI {
     }).setPosition(screenSize.x * 0.25, escapeConstants.buttonYPos);
 
     const continueButton = this.createEscapeOptButton(gameManager, 'Continue', async () => {
-      if (GameActionManager.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        await GameActionManager.getInstance().popPhase();
+      if (GameGlobalAPI.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+        await GameGlobalAPI.getInstance().popPhase();
       }
     }).setPosition(screenSize.x * 0.5, escapeConstants.buttonYPos);
 
@@ -93,13 +92,11 @@ class GameEscapeManager implements IGameUI {
       continueButton,
       applySettingsButton
     ]);
-    GameActionManager.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 
   public deactivateUI() {
-    GameActionManager.getInstance()
-      .getGameManager()
-      .layerManager.clearSeveralLayers([Layer.Escape]);
+    GameGlobalAPI.getInstance().getGameManager().layerManager.clearSeveralLayers([Layer.Escape]);
   }
 
   private createEscapeOptButton(gameManager: GameManager, text: string, callback: any) {
@@ -120,11 +117,11 @@ class GameEscapeManager implements IGameUI {
     if (this.volumeOptions) {
       // Save settings
       const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await GameActionManager.getInstance().saveSettings({ volume: volumeVal });
+      await GameGlobalAPI.getInstance().saveSettings({ volume: volumeVal });
 
       // Apply settings
-      const newUserSetting = GameActionManager.getInstance().getLoadedUserState();
-      GameActionManager.getInstance().applySoundSettings(newUserSetting);
+      const newUserSetting = GameGlobalAPI.getInstance().getLoadedUserState();
+      GameGlobalAPI.getInstance().applySoundSettings(newUserSetting);
     }
   }
 }

@@ -1,4 +1,4 @@
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 import GameManager from '../scenes/gameManager/GameManager';
 import { screenSize } from '../commons/CommonConstants';
@@ -12,7 +12,7 @@ class DialogueRenderer {
   private blinkingDiamond: any;
 
   constructor(typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
       useHandCursor: true,
       pixelPerfect: true
@@ -22,7 +22,7 @@ class DialogueRenderer {
   }
 
   public getDialogueContainer() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0).setAlpha(0);
     container.add([this.dialogueBox, this.blinkingDiamond.container, this.typewriter.container]);
     return container;
@@ -44,7 +44,7 @@ class DialogueRenderer {
   }
 
   public destroy() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());

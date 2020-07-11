@@ -1,4 +1,4 @@
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import {
   magnifyingGlass,
@@ -18,7 +18,7 @@ class GameModeExplore implements IGameUI {
   public fetchLatestState(): void {}
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
@@ -26,14 +26,12 @@ class GameModeExplore implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().popPhase();
-        GameActionManager.getInstance()
-          .getGameManager()
-          .layerManager.fadeInLayer(Layer.Character, 300);
+        GameGlobalAPI.getInstance().popPhase();
+        GameGlobalAPI.getInstance().getGameManager().layerManager.fadeInLayer(Layer.Character, 300);
       },
       0,
       0,
-      GameActionManager.getInstance().getGameManager().soundManager
+      GameGlobalAPI.getInstance().getGameManager().soundManager
     );
     exploreMenuContainer.add(backButton);
 
@@ -41,12 +39,12 @@ class GameModeExplore implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     gameManager.input.setDefaultCursor(magnifyingGlass);
 
     this.uiContainer = this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
@@ -57,13 +55,13 @@ class GameModeExplore implements IGameUI {
       ...entryTweenProps
     });
 
-    GameActionManager.getInstance().enableObjectAction({
+    GameGlobalAPI.getInstance().enableObjectAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
     });
 
-    GameActionManager.getInstance().enableBBoxAction({
+    GameGlobalAPI.getInstance().enableBBoxAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
       onPointerout: this.explorePointerOut
@@ -73,10 +71,10 @@ class GameModeExplore implements IGameUI {
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     gameManager.input.setDefaultCursor('');
-    GameActionManager.getInstance().disableBBoxAction();
-    GameActionManager.getInstance().disableObjectAction();
+    GameGlobalAPI.getInstance().disableBBoxAction();
+    GameGlobalAPI.getInstance().disableObjectAction();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -95,8 +93,8 @@ class GameModeExplore implements IGameUI {
   }
 
   private explorePointerOver(id: ItemId) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const hasTriggered = GameActionManager.getInstance().hasTriggeredInteraction(id);
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
     if (hasTriggered) {
       gameManager.input.setDefaultCursor(magnifyingGlassChecked);
     } else {
@@ -105,13 +103,13 @@ class GameModeExplore implements IGameUI {
   }
 
   private explorePointerOut() {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 
   private explorePointerUp(id: string) {
     // Trigger action here
-    GameActionManager.getInstance().triggerInteraction(id);
+    GameGlobalAPI.getInstance().triggerInteraction(id);
   }
 }
 

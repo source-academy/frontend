@@ -1,7 +1,7 @@
 import { defaultLayerSequence, Layer } from './GameLayerTypes';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Constants } from '../commons/CommonConstants';
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
 
 class GameLayerManager {
@@ -38,7 +38,7 @@ class GameLayerManager {
   }
 
   public async fadeInLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const layerToFadeIn = this.layers.get(layerType)!;
 
     layerToFadeIn.setAlpha(0);
@@ -47,7 +47,7 @@ class GameLayerManager {
   }
 
   public async fadeOutLayer(layerType: Layer, fadeDuration = Constants.fadeDuration) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const layerToFadeOut = this.layers.get(layerType)!;
 
     layerToFadeOut.setAlpha(1);

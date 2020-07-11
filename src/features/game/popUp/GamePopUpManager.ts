@@ -1,7 +1,7 @@
 import { ItemId, GameSprite } from '../commons/CommonTypes';
 import { PopUpPosition } from './GamePopUpTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import GameActionManager from '../action/GameActionManager';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
 import popUpConstants from './GamePopUpConstants';
 import { resizeUnderflow } from '../utils/SpriteUtils';
@@ -25,7 +25,7 @@ class GamePopUpManager {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     // Frame
@@ -50,7 +50,7 @@ class GamePopUpManager {
 
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
-    GameActionManager.getInstance().addContainerToLayer(Layer.PopUp, container);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
 
     // TODO: Animate
 
@@ -81,7 +81,7 @@ class GamePopUpManager {
   }
 
   private getAssetKey(itemId: ItemId) {
-    const objectPropMap = GameActionManager.getInstance()
+    const objectPropMap = GameGlobalAPI.getInstance()
       .getGameManager()
       .getCurrentCheckpoint()
       .map.getObjects();

@@ -1,5 +1,5 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import { BBoxProperty, ActivatableBBox } from './GameBoundingBoxTypes';
 import { ItemId } from '../commons/CommonTypes';
@@ -19,32 +19,28 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   public initialise() {
-    GameActionManager.getInstance().subscribeState(this);
+    GameGlobalAPI.getInstance().subscribeState(this);
   }
 
   public notify(locationId: LocationId) {
-    const hasUpdate = GameActionManager.getInstance().hasLocationUpdate(
-      locationId,
-      GameMode.Explore
-    );
-    const currLocationId = GameActionManager.getInstance().getCurrLocId();
+    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
+    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       this.renderBBoxLayerContainer(locationId);
     }
   }
 
   public renderBBoxLayerContainer(locationId: LocationId): void {
-    GameActionManager.getInstance().clearSeveralLayers([Layer.BBox]);
+    GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender =
-      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) ||
-      [];
+      GameGlobalAPI.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) || [];
     const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
-    GameActionManager.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
   }
 
   public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
-    const bboxPropMap = GameActionManager.getInstance().getBBoxPropertyMap();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
     const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     this.bboxes = bboxIds
@@ -81,7 +77,7 @@ class GameBoundingBoxManager implements StateObserver {
     }) {
       bboxSprite.on('pointerup', async () => {
         onClick(interactionId);
-        await GameActionManager.getInstance().executeStoryAction(actionIds);
+        await GameGlobalAPI.getInstance().processGameActions(actionIds);
       });
       bboxSprite.on('pointerover', () => {
         onHover(interactionId);

@@ -4,7 +4,7 @@ import modeMoveConstants, {
   previewFill,
   previewFrame
 } from './GameModeMoveConstants';
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize } from '../../commons/CommonConstants';
@@ -36,11 +36,11 @@ class GameModeMove implements IGameUI {
     this.gameButtons = [];
 
     await navigation.forEach(locationId => {
-      const location = GameActionManager.getInstance().getLocationAtId(locationId);
+      const location = GameGlobalAPI.getInstance().getLocationAtId(locationId);
       if (location) {
         this.addMoveOptionButton(location.name, async () => {
-          await GameActionManager.getInstance().popPhase();
-          await GameActionManager.getInstance().changeLocationTo(location.id);
+          await GameGlobalAPI.getInstance().popPhase();
+          await GameGlobalAPI.getInstance().changeLocationTo(location.id);
         });
         this.locationAssetKeys.set(location.name, location.assetKey);
       }
@@ -78,8 +78,8 @@ class GameModeMove implements IGameUI {
   }
 
   public fetchLatestState(): void {
-    const locationId = GameActionManager.getInstance().getCurrLocId();
-    const latestLocationNav = GameActionManager.getInstance().getLocationAttr(
+    const locationId = GameGlobalAPI.getInstance().getCurrLocId();
+    const latestLocationNav = GameGlobalAPI.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
       locationId
     );
@@ -90,7 +90,7 @@ class GameModeMove implements IGameUI {
   }
 
   public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const previewFrame = new Phaser.GameObjects.Image(
@@ -147,10 +147,8 @@ class GameModeMove implements IGameUI {
     const backButton = new CommonBackButton(
       gameManager,
       () => {
-        GameActionManager.getInstance().popPhase();
-        GameActionManager.getInstance()
-          .getGameManager()
-          .layerManager.fadeInLayer(Layer.Character, 300);
+        GameGlobalAPI.getInstance().popPhase();
+        GameGlobalAPI.getInstance().getGameManager().layerManager.fadeInLayer(Layer.Character, 300);
       },
       0,
       0,
@@ -171,11 +169,11 @@ class GameModeMove implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     this.fetchLatestState();
     this.uiContainer = await this.getUIContainer();
-    GameActionManager.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setActive(true);
     this.uiContainer.setVisible(true);
@@ -188,7 +186,7 @@ class GameModeMove implements IGameUI {
   }
 
   public async deactivateUI(): Promise<void> {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);

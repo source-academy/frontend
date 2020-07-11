@@ -1,4 +1,4 @@
-import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import StringUtils from '../utils/StringUtils';
 
@@ -32,15 +32,14 @@ export default class CharacterManager {
 
   public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender =
-      GameActionManager.getInstance().getLocationAttr(GameLocationAttr.characters, locationId) ||
-      [];
+      GameGlobalAPI.getInstance().getLocationAttr(GameLocationAttr.characters, locationId) || [];
 
     const characterLayer = this.renderCharactersInLoc(idsToRender);
-    GameActionManager.getInstance().addContainerToLayer(Layer.Character, characterLayer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterLayer);
   }
 
   public renderCharactersInLoc(idsToRender: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const characterContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
     idsToRender.forEach(id => {
@@ -62,7 +61,7 @@ export default class CharacterManager {
   ) {
     const { defaultPosition, defaultExpression, expressions } = character;
 
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const characterXPosition = CharConstants.charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
@@ -79,7 +78,7 @@ export default class CharacterManager {
   }
 
   public showCharacterOnMap(characterId: ItemId) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const characterSprite = this.characterSpriteMap.get(characterId);
     if (characterSprite) {
       gameManager.add.tween(fadeIn([characterSprite]));
@@ -87,7 +86,7 @@ export default class CharacterManager {
   }
 
   public hideCharacterFromMap(characterId: ItemId) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const characterSprite = this.characterSpriteMap.get(characterId);
     if (characterSprite) {
       gameManager.add.tween(fadeOut([characterSprite]));
@@ -95,7 +94,7 @@ export default class CharacterManager {
   }
 
   private drawSpeakerBox(text: string, positionRight = false) {
-    const gameManager = GameActionManager.getInstance().getGameManager();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
     const rectangle = new Phaser.GameObjects.Image(
@@ -121,7 +120,7 @@ export default class CharacterManager {
     container.add([rectangle, speakerText]);
     speakerText.text = StringUtils.capitalize(text);
 
-    GameActionManager.getInstance().addContainerToLayer(Layer.DialogueLabel, container);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.DialogueLabel, container);
   }
 
   public changeSpeakerTo(speakerDetail: SpeakerDetail | undefined | null) {
@@ -133,7 +132,7 @@ export default class CharacterManager {
     if (this.currentSpeakerId) {
       this.showCharacterOnMap(this.currentSpeakerId);
     }
-    GameActionManager.getInstance().clearSeveralLayers([Layer.Speaker, Layer.DialogueLabel]);
+    GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.DialogueLabel]);
 
     if (speakerDetail === null) {
       return;
@@ -153,7 +152,7 @@ export default class CharacterManager {
         expression,
         speakerPosition
       );
-      GameActionManager.getInstance().addContainerToLayer(Layer.Speaker, characterSprite);
+      GameGlobalAPI.getInstance().addContainerToLayer(Layer.Speaker, characterSprite);
       this.drawSpeakerBox(speakerToShow.name);
       this.currentSpeakerId = speakerId;
     }
