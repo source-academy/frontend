@@ -1,7 +1,6 @@
 import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameButton } from '../../commons/CommonTypes';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
@@ -13,11 +12,11 @@ import ImageAssets from '../../assets/ImageAssets';
 import FontAssets from '../../assets/FontAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { createButton } from '../../utils/ButtonUtils';
+import { calcTableFormatPos } from '../../utils/StyleUtils';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;
-  private optionButtons: GameButton[];
   private roomCode: string;
 
   constructor() {
@@ -25,7 +24,6 @@ class MainMenu extends Phaser.Scene {
 
     this.layerManager = new GameLayerManager();
     this.soundManager = new GameSoundManager();
-    this.optionButtons = [];
     this.roomCode = Constants.nullInteractionId;
   }
 
@@ -34,7 +32,6 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.initialiseMainLayer(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.soundManager.loadSoundAssetMap(SoundAssets);
-    this.createOptionButtons();
     addLoadingScreen(this);
   }
 
@@ -76,105 +73,89 @@ class MainMenu extends Phaser.Scene {
 
   private renderOptionButtons() {
     const optionsContainer = new Phaser.GameObjects.Container(this, 0, 0);
+    const buttons = this.getOptionButtons();
 
-    this.optionButtons.forEach(button => {
-      const text = button.text || '';
-      const tweenOnHover = (target: Phaser.GameObjects.Container) => {
-        this.tweens.add({
-          targets: target,
-          ...mainMenuConstants.onFocusOptTween
-        });
-      };
-      const tweenOffHover = (target: Phaser.GameObjects.Container) => {
-        this.tweens.add({
-          targets: target,
-          ...mainMenuConstants.outFocusOptTween
-        });
-      };
-      const optButton: Phaser.GameObjects.Container = createButton(
-        this,
-        {
-          assetKey: button.assetKey,
-          message: text,
-          textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
-          bitMapTextStyle: button.bitmapStyle,
-          onUp: button.onInteract,
-          onHover: () => tweenOnHover(optButton),
-          onOut: () => tweenOffHover(optButton),
-          onHoverEffect: false
-        },
-        this.soundManager
-      ).setPosition(screenCenter.x + mainMenuConstants.bannerHide, button.assetYPos);
-      optionsContainer.add(optButton);
+    const buttonPositions = calcTableFormatPos({
+      numOfItems: buttons.length,
+      maxYSpace: mainMenuConstants.buttonYSpace,
+      numItemLimit: 1
     });
+
+    optionsContainer.add(
+      buttons.map((button, index) =>
+        this.createOptionButton(
+          button.text,
+          buttonPositions[index][0] + mainMenuConstants.bannerHide,
+          buttonPositions[index][1],
+          button.callback
+        )
+      )
+    );
 
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
   }
 
-  private createOptionButtons() {
-    this.optionButtons = [];
-    this.addOptionButton(
-      mainMenuConstants.optionsText.chapterSelect,
-      () => {
-        this.layerManager.clearAllLayers();
-        this.scene.start('ChapterSelect');
+  private createOptionButton(text: string, xPos: number, yPos: number, callback: any) {
+    const tweenOnHover = (target: Phaser.GameObjects.Container) => {
+      this.tweens.add({
+        targets: target,
+        ...mainMenuConstants.onFocusOptTween
+      });
+    };
+    const tweenOffHover = (target: Phaser.GameObjects.Container) => {
+      this.tweens.add({
+        targets: target,
+        ...mainMenuConstants.outFocusOptTween
+      });
+    };
+    const optButton: Phaser.GameObjects.Container = createButton(
+      this,
+      {
+        assetKey: ImageAssets.mainMenuOptBanner.key,
+        message: text,
+        textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
+        bitMapTextStyle: mainMenuStyle,
+        onUp: callback,
+        onHover: () => tweenOnHover(optButton),
+        onOut: () => tweenOffHover(optButton),
+        onHoverEffect: false
       },
-      Constants.nullInteractionId
-    );
-    this.addOptionButton(
-      mainMenuConstants.optionsText.collectible,
-      () => {
-        this.layerManager.clearAllLayers();
-        this.scene.start('MyRoom');
-      },
-      Constants.nullInteractionId
-    );
-    this.addOptionButton(
-      mainMenuConstants.optionsText.studentRoom,
-      () => {
-        this.layerManager.clearAllLayers();
-        this.scene.start('RoomPreview', { studentCode: this.roomCode });
-      },
-      Constants.nullInteractionId
-    );
-    this.addOptionButton(
-      mainMenuConstants.optionsText.settings,
-      () => {
-        this.layerManager.clearAllLayers();
-        this.scene.start('Settings');
-      },
-      Constants.nullInteractionId
-    );
+      this.soundManager
+    ).setPosition(xPos, yPos);
+    return optButton;
   }
 
-  private addOptionButton(name: string, callback: any, interactionId: string) {
-    const newNumberOfButtons = this.optionButtons.length + 1;
-    const partitionSize = mainMenuConstants.buttonYSpace / newNumberOfButtons;
-
-    const newYPos = (screenSize.y - mainMenuConstants.buttonYSpace + partitionSize) / 2;
-
-    // Rearrange existing buttons
-    for (let i = 0; i < this.optionButtons.length; i++) {
-      this.optionButtons[i] = {
-        ...this.optionButtons[i],
-        assetYPos: newYPos + i * partitionSize
-      };
-    }
-
-    // Add the new button
-    const newOptButton: GameButton = {
-      text: name,
-      bitmapStyle: mainMenuStyle,
-      assetKey: ImageAssets.mainMenuOptBanner.key,
-      assetXPos: screenSize.x - mainMenuConstants.optXOffset,
-      assetYPos: newYPos + this.optionButtons.length * partitionSize,
-      isInteractive: true,
-      onInteract: callback,
-      interactionId: interactionId
-    };
-
-    // Update
-    this.optionButtons.push(newOptButton);
+  private getOptionButtons() {
+    return [
+      {
+        text: mainMenuConstants.optionsText.chapterSelect,
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('ChapterSelect');
+        }
+      },
+      {
+        text: mainMenuConstants.optionsText.collectible,
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('MyRoom');
+        }
+      },
+      {
+        text: mainMenuConstants.optionsText.studentRoom,
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('RoomPreview', { studentCode: this.roomCode });
+        }
+      },
+      {
+        text: mainMenuConstants.optionsText.settings,
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('Settings');
+        }
+      }
+    ];
   }
 }
 

@@ -51,7 +51,31 @@ class MainMenu extends Phaser.Scene {
 
   private renderOptionButtons() {
     const optionsContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const buttons = [
+    const buttons = this.getOptionButtons();
+
+    const buttonPositions = calcTableFormatPos({
+      numOfItems: buttons.length,
+      maxXSpace: mainMenuConstants.optButtonsXSpace,
+      maxYSpace: mainMenuConstants.optButtonsYSpace,
+      numItemLimit: mainMenuConstants.maxOptButtonsRow,
+      redistributeLast: true
+    });
+
+    optionsContainer.add(
+      buttons.map((button, index) =>
+        this.createOptButton(
+          button.text,
+          buttonPositions[index][0],
+          buttonPositions[index][1],
+          button.callback
+        )
+      )
+    );
+    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+  }
+
+  private getOptionButtons() {
+    return [
       {
         text: 'Object Placement',
         callback: () => {
@@ -79,28 +103,7 @@ class MainMenu extends Phaser.Scene {
         }
       }
     ];
-
-    const buttonPositions = calcTableFormatPos({
-      numOfItems: buttons.length,
-      maxXSpace: mainMenuConstants.optButtonsXSpace,
-      maxYSpace: mainMenuConstants.optButtonsYSpace,
-      numItemLimit: mainMenuConstants.maxOptButtonsRow,
-      redistributeLast: true
-    });
-
-    optionsContainer.add(
-      buttons.map((button, index) =>
-        this.createOptButton(
-          button.text,
-          buttonPositions[index][0],
-          buttonPositions[index][1],
-          button.callback
-        )
-      )
-    );
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
   }
-
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(
       this,
