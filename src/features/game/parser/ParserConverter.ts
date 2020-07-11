@@ -38,8 +38,8 @@ const stringToLocAttrMap = {
 const stringToActionTypeMap = {
   move_character: GameActionType.MoveCharacter,
   update_character: GameActionType.UpdateCharacter,
-  collectible: GameActionType.Collectible,
-  complete_objective: GameActionType.UpdateChecklist,
+  obtain_collectible: GameActionType.ObtainCollectible,
+  complete_objective: GameActionType.CompleteObjective,
   change_location: GameActionType.LocationChange,
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,

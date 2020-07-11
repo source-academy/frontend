@@ -18,7 +18,7 @@ export default class GameActionManager {
   }
 
   public async processGameActions(actionIds?: ItemId[]): Promise<void> {
-    if (!actionIds || !actionIds.length) return;
+    if (!actionIds) return;
     for (const actionId of actionIds) {
       await this.processGameAction(actionId);
     }

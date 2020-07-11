@@ -46,14 +46,14 @@ export default class ActionParser {
     const actionParamObj: any = {};
 
     switch (gameActionType) {
-      case GameActionType.Collectible:
+      case GameActionType.ObtainCollectible:
         actionParamObj.id = Parser.validator.assertLocAttr(
           GameLocationAttr.collectibles,
           actionParams[0],
           actionType
         );
         break;
-      case GameActionType.UpdateChecklist:
+      case GameActionType.CompleteObjective:
         actionParamObj.id = Parser.validator.assertAttr(
           GameAttr.objectives,
           actionParams[0],

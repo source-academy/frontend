@@ -367,6 +367,14 @@ class GameGlobalAPI {
   public isCurrentPhase(gamePhaseType: GamePhaseType) {
     return this.getGameManager().phaseManager.isCurrentPhase(gamePhaseType);
   }
+
+  /////////////////////
+  //   Background    //
+  /////////////////////
+
+  public renderBackgroundLayerContainer(locationId: LocationId) {
+    this.getGameManager().backgroundManager.renderBackgroundLayerContainer(locationId);
+  }
 }
 
 export default GameGlobalAPI;

@@ -10,14 +10,12 @@ export default class GameActionExecuter {
         globalAPI.changeLocationTo(actionParams.id);
         return;
       case GameActionType.ChangeBackground:
-        globalAPI
-          .getGameManager()
-          .backgroundManager.renderBackgroundLayerContainer(actionParams.id);
+        globalAPI.renderBackgroundLayerContainer(actionParams.id);
         return;
-      case GameActionType.Collectible:
+      case GameActionType.ObtainCollectible:
         globalAPI.obtainCollectible(actionParams.id);
         return;
-      case GameActionType.UpdateChecklist:
+      case GameActionType.CompleteObjective:
         globalAPI.completeObjective(actionParams.id);
         return;
       case GameActionType.AddItem:
@@ -43,6 +41,8 @@ export default class GameActionExecuter {
         return;
       case GameActionType.MakeObjectGlow:
         await globalAPI.makeObjectGlow(actionParams.id);
+        return;
+      default:
         return;
     }
   }

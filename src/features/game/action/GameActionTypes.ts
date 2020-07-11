@@ -4,8 +4,8 @@ import { ItemId, TrackInteraction } from '../commons/CommonTypes';
 export enum GameActionType {
   MoveCharacter = 'MoveCharacter',
   UpdateCharacter = 'UpdateCharacter',
-  Collectible = 'Collectible',
-  UpdateChecklist = 'UpdateChecklist',
+  ObtainCollectible = 'ObtainCollectible',
+  CompleteObjective = 'CompleteObjective',
   LocationChange = 'LocationChange',
   AddItem = 'AddItem',
   RemoveItem = 'RemoveItem',
