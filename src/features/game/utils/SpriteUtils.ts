@@ -15,7 +15,7 @@ export function resize(
 
 /**
  * Resize the obj display size such that the shorter side fits
- * the width/height i.e. the other dimension will overflow
+ * the width/height i.e. the other dimension will overflow.
  *
  * @param obj obj to be resized
  * @param width width
@@ -35,7 +35,7 @@ export function resizeOverflow(
 
 /**
  * Resize the obj display size such that the longer side fits
- * the width/height i.e. the other dimension will underflow
+ * the width/height i.e. the other dimension will underflow.
  *
  * @param obj obj to be resized
  * @param width width
