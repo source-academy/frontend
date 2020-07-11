@@ -18,6 +18,7 @@ import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExec
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
+import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { Position, HighlightedLines } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -29,6 +30,7 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -66,6 +68,11 @@ export type DispatchProps = {
   handleToggleEditorAutorun: () => void;
   handleFetchChapter: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handlePersistenceOpenPicker: () => void;
+  handlePersistenceSaveFile: () => void;
+  handlePersistenceUpdateFile: (file: PersistenceFile) => void;
+  handlePersistenceInitialise: () => void;
+  handlePersistenceLogOut: () => void;
 };
 
 export type StateProps = {
@@ -93,11 +100,14 @@ export type StateProps = {
   websocketStatus: number;
   externalLibraryName: string;
   usingSubst: boolean;
+  persistenceUser: string | undefined;
+  persistenceFile: PersistenceFile | undefined;
 };
 
 const keyMap = { goGreen: 'h u l k' };
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
@@ -107,6 +117,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       goGreen: () => setIsGreen(!isGreen)
     }),
     [isGreen, setIsGreen]
+  );
+
+  const { handleEditorValueChange } = props;
+  const onEditorValueChange = React.useCallback(
+    val => {
+      setLastEdit(new Date());
+      handleEditorValueChange(val);
+    },
+    [handleEditorValueChange]
   );
 
   const { handleUsingSubst, handleReplOutputClear, sourceChapter } = props;
@@ -226,6 +245,37 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ),
     [props.handleReplEval, props.isRunning, selectedTab]
   );
+
+  const { persistenceUser, persistenceFile, handlePersistenceUpdateFile } = props;
+  // Compute this here to avoid re-rendering the button every keystroke
+  const persistenceIsDirty =
+    persistenceFile && (!persistenceFile.lastSaved || persistenceFile.lastSaved < lastEdit);
+  const persistenceButtons = React.useMemo(() => {
+    return (
+      <ControlBarPersistenceButtons
+        currentFile={persistenceFile}
+        loggedInAs={persistenceUser}
+        isDirty={persistenceIsDirty}
+        key="googledrive"
+        onClickSaveAs={props.handlePersistenceSaveFile}
+        onClickOpen={props.handlePersistenceOpenPicker}
+        onClickSave={
+          persistenceFile ? () => handlePersistenceUpdateFile(persistenceFile) : undefined
+        }
+        onClickLogOut={props.handlePersistenceLogOut}
+        onPopoverOpening={props.handlePersistenceInitialise}
+      />
+    );
+  }, [
+    persistenceUser,
+    persistenceFile,
+    persistenceIsDirty,
+    props.handlePersistenceSaveFile,
+    props.handlePersistenceOpenPicker,
+    props.handlePersistenceLogOut,
+    props.handlePersistenceInitialise,
+    handlePersistenceUpdateFile
+  ]);
 
   const { handleChangeExecTime, execTime } = props;
   const executionTime = React.useMemo(
@@ -365,6 +415,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         chapterSelect,
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
+        persistenceButtons,
         executionTime
       ],
       replButtons: [props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
@@ -377,7 +428,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       editorSessionId: props.editorSessionId,
       handleDeclarationNavigate: props.handleDeclarationNavigate,
       handleEditorEval: props.handleEditorEval,
-      handleEditorValueChange: props.handleEditorValueChange,
+      handleEditorValueChange: onEditorValueChange,
       handleSendReplInputToOutput: props.handleSendReplInputToOutput,
       handlePromptAutocomplete: props.handlePromptAutocomplete,
       handleFinishInvite: props.handleFinishInvite,

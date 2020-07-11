@@ -5,7 +5,7 @@ import {
   setEditorSessionId,
   setWebsocketStatus
 } from '../../collabEditing/CollabEditingActions';
-import { WorkspaceLocation, WorkspaceLocations } from '../../workspace/WorkspaceTypes';
+import { WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import {
   FINISH_INVITE,
   INIT_INVITE,
@@ -14,8 +14,8 @@ import {
   SET_WEBSOCKET_STATUS
 } from '../CollabEditingTypes';
 
-const gradingWorkspace: WorkspaceLocation = WorkspaceLocations.grading;
-const playgroundWorkspace: WorkspaceLocation = WorkspaceLocations.playground;
+const gradingWorkspace: WorkspaceLocation = 'grading';
+const playgroundWorkspace: WorkspaceLocation = 'playground';
 
 test('finishInvite generates correct action object', () => {
   const action = finishInvite(playgroundWorkspace);
