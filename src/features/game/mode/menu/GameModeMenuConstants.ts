@@ -19,7 +19,7 @@ export const modeBannerRect = {
 } as GameSprite;
 
 const modeMenuConstants = {
-  modeButtonYPos: screenSize.y * 0.8,
+  buttonYPosOffset: screenSize.y * 0.3,
   entryTweenProps: {
     y: 0,
     duration: 500,
