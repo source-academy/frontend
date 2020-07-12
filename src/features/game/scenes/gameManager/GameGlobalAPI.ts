@@ -219,10 +219,13 @@ class GameGlobalAPI {
     this.getGameManager().layerManager.addToLayer(layer, gameObj);
   }
 
-  public fadeInLayer(layer: Layer) {
-    this.getGameManager().layerManager.fadeInLayer(layer);
+  public fadeInLayer(layer: Layer, fadeDuration?: number) {
+    this.getGameManager().layerManager.fadeInLayer(layer, fadeDuration);
   }
 
+  public fadeOutLayer(layer: Layer, fadeDuration?: number) {
+    this.getGameManager().layerManager.fadeOutLayer(layer, fadeDuration);
+  }
   /////////////////////
   //  Location Notif //
   /////////////////////

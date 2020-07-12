@@ -9,7 +9,7 @@ import { GameLocationAttr } from '../../location/GameMapTypes';
 import ImageAssets from '../../assets/ImageAssets';
 import { createButton } from '../../utils/ButtonUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import GameManager from '../../scenes/gameManager/GameManager';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -51,7 +51,6 @@ class GameModeMenu implements IGameUI {
     modeMenuContainer.add(
       buttons.map((button, index) =>
         this.createModeButton(
-          gameManager,
           button.text,
           buttonPositions[index][0],
           buttonPositions[index][1] + modeMenuConstants.buttonYPosOffset,
@@ -69,22 +68,15 @@ class GameModeMenu implements IGameUI {
         callback: () => {
           GameGlobalAPI.getInstance().pushPhase(gameModeToPhase[mode]);
           if (mode !== GameMode.Talk) {
-            GameGlobalAPI.getInstance()
-              .getGameManager()
-              .layerManager.fadeOutLayer(Layer.Character, 300);
+            GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character, 300);
           }
         }
       };
     });
   }
 
-  private createModeButton(
-    gameManager: GameManager,
-    text: string,
-    xPos: number,
-    yPos: number,
-    callback: any
-  ) {
+  private createModeButton(text: string, xPos: number, yPos: number, callback: any) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     return createButton(
       gameManager,
       {
@@ -99,7 +91,7 @@ class GameModeMenu implements IGameUI {
   }
 
   public async activateUI(): Promise<void> {
-    if (this.uiContainer) this.uiContainer.destroy();
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
@@ -107,29 +99,24 @@ class GameModeMenu implements IGameUI {
     this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, screenSize.y);
 
-    GameGlobalAPI.getInstance()
-      .getGameManager()
-      .tweens.add({
-        targets: this.uiContainer,
-        ...modeMenuConstants.entryTweenProps
-      });
+    gameManager.tweens.add({
+      targets: this.uiContainer,
+      ...modeMenuConstants.entryTweenProps
+    });
   }
 
   public async deactivateUI(): Promise<void> {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .tweens.add({
-          targets: this.uiContainer,
-          ...modeMenuConstants.exitTweenProps
-        });
+      gameManager.tweens.add({
+        targets: this.uiContainer,
+        ...modeMenuConstants.exitTweenProps
+      });
 
       await sleep(500);
-      this.uiContainer.setVisible(false);
-      this.uiContainer.setActive(false);
-      this.uiContainer.destroy();
+      fadeAndDestroy(gameManager, this.uiContainer);
       this.uiContainer = undefined;
     }
   }
