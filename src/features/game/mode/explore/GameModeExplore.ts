@@ -10,44 +10,35 @@ import { screenSize } from '../../commons/CommonConstants';
 import { sleep } from '../../utils/GameUtils';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 
-  // Explore Mode does not require states
-  public fetchLatestState(): void {}
-
-  public getUIContainer(): Phaser.GameObjects.Container {
+  public createUIContainer(): Phaser.GameObjects.Container {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    // Add back button
     const backButton = new CommonBackButton(
       gameManager,
       () => {
         GameGlobalAPI.getInstance().popPhase();
-        GameGlobalAPI.getInstance().getGameManager().layerManager.fadeInLayer(Layer.Character, 300);
+        GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
       },
       0,
       0,
-      GameGlobalAPI.getInstance().getGameManager().soundManager
+      gameManager.soundManager
     );
     exploreMenuContainer.add(backButton);
-
     return exploreMenuContainer;
   }
 
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
-    gameManager.input.setDefaultCursor(magnifyingGlass);
-
-    this.uiContainer = this.getUIContainer();
+    this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
-    this.uiContainer.setActive(true);
-    this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
     gameManager.tweens.add({
@@ -85,10 +76,7 @@ class GameModeExplore implements IGameUI {
       });
 
       await sleep(500);
-      this.uiContainer.setVisible(false);
-      this.uiContainer.setActive(false);
-      this.uiContainer.destroy();
-      this.uiContainer = undefined;
+      fadeAndDestroy(gameManager, this.uiContainer);
     }
   }
 
@@ -108,7 +96,6 @@ class GameModeExplore implements IGameUI {
   }
 
   private explorePointerUp(id: string) {
-    // Trigger action here
     GameGlobalAPI.getInstance().triggerInteraction(id);
   }
 }

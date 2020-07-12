@@ -40,6 +40,7 @@ class GameModeMenu implements IGameUI {
       modeBannerRect.assetYPos,
       modeBannerRect.assetKey
     );
+    modeMenuContainer.add(modeBanner);
 
     const modes = this.getLatestLocationModes();
     const buttons = this.getModeButtons(modes);
@@ -47,7 +48,6 @@ class GameModeMenu implements IGameUI {
       numOfItems: buttons.length
     });
 
-    modeMenuContainer.add(modeBanner);
     modeMenuContainer.add(
       buttons.map((button, index) =>
         this.createModeButton(
@@ -95,8 +95,6 @@ class GameModeMenu implements IGameUI {
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
-    this.uiContainer.setActive(true);
-    this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, screenSize.y);
 
     gameManager.tweens.add({
@@ -107,6 +105,7 @@ class GameModeMenu implements IGameUI {
 
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
+
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
 
@@ -117,7 +116,6 @@ class GameModeMenu implements IGameUI {
 
       await sleep(500);
       fadeAndDestroy(gameManager, this.uiContainer);
-      this.uiContainer = undefined;
     }
   }
 }

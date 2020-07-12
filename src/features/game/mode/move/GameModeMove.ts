@@ -1,161 +1,24 @@
-import { IGameUI, GameSprite, GameButton } from '../../commons/CommonTypes';
-import modeMoveConstants, {
-  moveButtonStyle,
-  previewFill,
-  previewFrame
-} from './GameModeMoveConstants';
+import { IGameUI } from '../../commons/CommonTypes';
+import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../../utils/GameUtils';
-import { GameLocationAttr } from '../../location/GameMapTypes';
-import { screenSize } from '../../commons/CommonConstants';
+import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { screenSize, screenCenter } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import ImageAssets from '../../assets/ImageAssets';
 import { createButton } from '../../utils/ButtonUtils';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
+import { calcTableFormatPos } from '../../utils/StyleUtils';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private currentLocationAssetKey: string;
-  private locationAssetKeys: Map<string, string>;
-  private previewFill: GameSprite;
-  private previewFrame: GameSprite;
-  private gameButtons: GameButton[];
+  private currPreviewAssetKey: string;
 
   constructor() {
     this.uiContainer = undefined;
-    this.currentLocationAssetKey = ImageAssets.defaultLocationImg.key;
-    this.locationAssetKeys = new Map<string, string>();
-    this.previewFill = previewFill;
-    this.previewFrame = previewFrame;
-    this.gameButtons = [];
-  }
-
-  private async createGameButtons(navigation: string[]) {
-    // Refresh Buttons
-    this.gameButtons = [];
-
-    await navigation.forEach(locationId => {
-      const location = GameGlobalAPI.getInstance().getLocationAtId(locationId);
-      if (location) {
-        this.addMoveOptionButton(location.name, async () => {
-          await GameGlobalAPI.getInstance().popPhase();
-          await GameGlobalAPI.getInstance().changeLocationTo(location.id);
-        });
-        this.locationAssetKeys.set(location.name, location.assetKey);
-      }
-    });
-  }
-
-  private addMoveOptionButton(name: string, callback: any) {
-    const newNumberOfButtons = this.gameButtons.length + 1;
-    const partitionSize = modeMoveConstants.buttonYSpace / newNumberOfButtons;
-
-    const newYPos = (screenSize.y - modeMoveConstants.buttonYSpace) / 2 + partitionSize / 2;
-
-    // Rearrange existing buttons
-    for (let i = 0; i < this.gameButtons.length; i++) {
-      this.gameButtons[i] = {
-        ...this.gameButtons[i],
-        assetYPos: newYPos + i * partitionSize
-      };
-    }
-
-    // Add the new button
-    const newModeButton: GameButton = {
-      text: name,
-      bitmapStyle: moveButtonStyle,
-      assetKey: ImageAssets.longButton.key,
-      assetXPos: modeMoveConstants.buttonXPos,
-      assetYPos: newYPos + this.gameButtons.length * partitionSize,
-      isInteractive: true,
-      onInteract: callback,
-      interactionId: name
-    };
-
-    // Update
-    this.gameButtons.push(newModeButton);
-  }
-
-  public fetchLatestState(): void {
-    const locationId = GameGlobalAPI.getInstance().getCurrLocId();
-    const latestLocationNav = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.navigation,
-      locationId
-    );
-    if (!latestLocationNav) {
-      return;
-    }
-    this.createGameButtons(latestLocationNav);
-  }
-
-  public getUIContainer(): Phaser.GameObjects.Container {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    const previewFrame = new Phaser.GameObjects.Image(
-      gameManager,
-      modeMoveConstants.previewFrameXPos,
-      this.previewFrame.assetYPos,
-      this.previewFrame.assetKey
-    );
-    moveMenuContainer.add(previewFrame);
-
-    const previewFill = new Phaser.GameObjects.Sprite(
-      gameManager,
-      this.previewFill.assetXPos,
-      this.previewFill.assetYPos,
-      this.previewFill.assetKey
-    );
-
-    this.setPreview(previewFill, this.currentLocationAssetKey);
-    moveMenuContainer.add(previewFill);
-
-    this.gameButtons.forEach(locationButton => {
-      const text = locationButton.text ? locationButton.text : '';
-
-      const previewLoc = () => {
-        const assetKey = this.locationAssetKeys.get(text);
-        if (!assetKey || this.currentLocationAssetKey === assetKey) {
-          return;
-        }
-        this.setPreview(previewFill, assetKey);
-      };
-
-      const previewDefault = () => {
-        this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
-      };
-
-      const button = createButton(
-        gameManager,
-        {
-          assetKey: locationButton.assetKey,
-          message: text,
-          textConfig: { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
-          bitMapTextStyle: locationButton.bitmapStyle,
-          onUp: locationButton.onInteract,
-          onHover: previewLoc,
-          onOut: previewDefault
-        },
-        gameManager.soundManager
-      ).setPosition(locationButton.assetXPos, locationButton.assetYPos);
-
-      moveMenuContainer.add(button);
-    });
-
-    // Add back button
-    const backButton = new CommonBackButton(
-      gameManager,
-      () => {
-        GameGlobalAPI.getInstance().popPhase();
-        GameGlobalAPI.getInstance().getGameManager().layerManager.fadeInLayer(Layer.Character, 300);
-      },
-      0,
-      0,
-      gameManager.soundManager
-    );
-    moveMenuContainer.add(backButton);
-    return moveMenuContainer;
+    this.currPreviewAssetKey = ImageAssets.defaultLocationImg.key;
   }
 
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
@@ -165,18 +28,123 @@ class GameModeMove implements IGameUI {
       .setPosition(modeMoveConstants.previewXPos, modeMoveConstants.previewYPos);
 
     // Update
-    this.currentLocationAssetKey = assetKey;
+    this.currPreviewAssetKey = assetKey;
+  }
+
+  private getLatestNavigations() {
+    return GameGlobalAPI.getInstance().getLocationAttr(
+      GameLocationAttr.navigation,
+      GameGlobalAPI.getInstance().getCurrLocId()
+    );
+  }
+
+  private createUIContainer() {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
+    // Preview
+    const previewFrame = new Phaser.GameObjects.Sprite(
+      gameManager,
+      modeMoveConstants.previewFrameXPos,
+      screenCenter.y,
+      ImageAssets.locationPreviewFrame.key
+    );
+    const previewFill = new Phaser.GameObjects.Sprite(
+      gameManager,
+      screenCenter.x,
+      screenCenter.y,
+      ImageAssets.locationPreviewFill.key
+    );
+    moveMenuContainer.add([previewFrame, previewFill]);
+
+    const navigations = this.getLatestNavigations();
+    const buttons = this.getMoveButtons(navigations, previewFill);
+    const buttonPositions = calcTableFormatPos({
+      numOfItems: buttons.length,
+      numItemLimit: 1,
+      maxYSpace: modeMoveConstants.buttonYSpace
+    });
+
+    moveMenuContainer.add(
+      buttons.map((button, index) =>
+        this.createMoveButton(
+          button.text,
+          buttonPositions[index][0] + modeMoveConstants.buttonXPosOffset,
+          buttonPositions[index][1],
+          button.callback,
+          button.onHover,
+          button.onOut
+        )
+      )
+    );
+
+    const backButton = new CommonBackButton(
+      gameManager,
+      () => {
+        GameGlobalAPI.getInstance().popPhase();
+        GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+      },
+      0,
+      0,
+      gameManager.soundManager
+    );
+    moveMenuContainer.add(backButton);
+
+    // Initial setting
+    this.setPreview(previewFill, this.currPreviewAssetKey);
+
+    return moveMenuContainer;
+  }
+
+  private getMoveButtons(navigations: LocationId[], previewSprite: Phaser.GameObjects.Sprite) {
+    const previewLoc = (assetKey: string) => this.setPreview(previewSprite, assetKey);
+    const previewDefault = () => this.setPreview(previewSprite, ImageAssets.defaultLocationImg.key);
+
+    return navigations.map(nav => {
+      const location = GameGlobalAPI.getInstance().getLocationAtId(nav);
+      if (!location) throw new Error(`${nav} does not exist`);
+
+      return {
+        text: location.name,
+        callback: async () => {
+          await GameGlobalAPI.getInstance().popPhase();
+          await GameGlobalAPI.getInstance().changeLocationTo(nav);
+        },
+        onHover: () => previewLoc(location.assetKey),
+        onOut: () => previewDefault()
+      };
+    });
+  }
+
+  private createMoveButton(
+    text: string,
+    xPos: number,
+    yPos: number,
+    callback: any,
+    onHover: any,
+    onOut: any
+  ) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    return createButton(
+      gameManager,
+      {
+        assetKey: ImageAssets.longButton.key,
+        message: text,
+        textConfig: { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
+        bitMapTextStyle: moveButtonStyle,
+        onUp: callback,
+        onHover: onHover,
+        onOut: onOut
+      },
+      gameManager.soundManager
+    ).setPosition(xPos, yPos);
   }
 
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
-    this.fetchLatestState();
-    this.uiContainer = await this.getUIContainer();
+    this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
-    this.uiContainer.setActive(true);
-    this.uiContainer.setVisible(true);
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 
     gameManager.tweens.add({
@@ -197,10 +165,7 @@ class GameModeMove implements IGameUI {
       });
 
       await sleep(500);
-      this.uiContainer.setVisible(false);
-      this.uiContainer.setActive(false);
-      this.uiContainer.destroy();
-      this.uiContainer = undefined;
+      fadeAndDestroy(gameManager, this.uiContainer);
     }
   }
 }
