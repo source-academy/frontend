@@ -1,20 +1,13 @@
-import { CharacterPosition } from '../character/GameCharacterTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameActionType } from '../action/GameActionTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { PopUpPosition } from '../popUp/GamePopUpTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
+import { GamePosition } from '../commons/CommonTypes';
 
-const stringToCharPositionMap = {
-  left: CharacterPosition.Left,
-  middle: CharacterPosition.Middle,
-  right: CharacterPosition.Right
-};
-
-const stringToPopupPositionMap = {
-  left: PopUpPosition.Left,
-  middle: PopUpPosition.Middle,
-  right: PopUpPosition.Right
+const stringToPositionMap = {
+  left: GamePosition.Left,
+  middle: GamePosition.Middle,
+  right: GamePosition.Right
 };
 
 const stringToGameModeMap = {
@@ -58,12 +51,8 @@ const stringToGameStateStorageMap = {
 };
 
 export default class ParserConverter {
-  public static stringToCharPosition(str: string) {
-    return stringToCharPositionMap[str] || CharacterPosition.Middle;
-  }
-
-  public static stringToPopupPosition(str: string) {
-    return stringToPopupPositionMap[str] || PopUpPosition.Middle;
+  public static stringToPosition(str: string) {
+    return stringToPositionMap[str] || GamePosition.Middle;
   }
 
   public static stringToGameMode(str: string) {

@@ -38,7 +38,7 @@ export default class CharacterParser {
       name,
       expressions,
       defaultExpression,
-      defaultPosition: ParserConverter.stringToCharPosition(defaultPosition)
+      defaultPosition: ParserConverter.stringToPosition(defaultPosition)
     };
 
     // Add asset key to expression map

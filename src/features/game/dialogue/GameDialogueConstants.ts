@@ -1,9 +1,11 @@
 import { screenSize } from '../commons/CommonConstants';
-import { Color } from '../utils/StyleUtils';
+import { Color, HexColor } from '../utils/StyleUtils';
+import FontAssets from '../assets/FontAssets';
+import { BitmapFontStyle } from '../commons/CommonTypes';
 
 const dialogueRectMargin = 10;
 
-const dialogueConstants = {
+const DialogueConstants = {
   promptSize: {
     x: 30,
     y: 60
@@ -21,6 +23,10 @@ const dialogueConstants = {
   textPadding: {
     x: 100,
     y: 70
+  },
+  speakerRect: {
+    x: 320,
+    y: 745
   }
 };
 
@@ -32,8 +38,15 @@ export const textTypeWriterStyle = {
   lineSpacing: 10,
   wordWrap: {
     width:
-      dialogueConstants.rect.width - dialogueConstants.textPadding.x * 2 - dialogueRectMargin * 2
+      DialogueConstants.rect.width - DialogueConstants.textPadding.x * 2 - dialogueRectMargin * 2
   }
 };
 
-export default dialogueConstants;
+export const speakerTextStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 36,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+export default DialogueConstants;

@@ -60,14 +60,19 @@ dialogues
         Welcome to Source Academy!
 
         I'm glad you took the time to come in
+        
+
 
     unwelcome
         @scottie, sad
         Finish assessment 301 first and come back?
+        @you
+        Can I still go to places?
+        @scottie, happy
         Did you know that you can go to the classroom?
+
         ...
             change_location(classroom)
-        Did you know that?
 
     what, What should I do now, Scottie?
         @you

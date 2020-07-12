@@ -10,7 +10,7 @@ export default class SpeakerParser {
       rawStr.slice(1), // remove the @
       ','
     );
-    const speakerPosition = ParserConverter.stringToCharPosition(speakerPositionStr);
+    const speakerPosition = ParserConverter.stringToPosition(speakerPositionStr);
 
     this.addCharacterExprToMap(speakerId, expression);
 

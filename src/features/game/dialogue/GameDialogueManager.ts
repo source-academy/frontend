@@ -1,23 +1,28 @@
+import DialogueGenerator from './GameDialogueGenerator';
+import DialogueRenderer from './GameDialogueRenderer';
+import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import GameManager from '../scenes/gameManager/GameManager';
 import { ItemId } from '../commons/CommonTypes';
 import { Dialogue } from './GameDialogueTypes';
-import DialogueGenerator from './GameDialogueGenerator';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Layer } from '../layer/GameLayerTypes';
 import { textTypeWriterStyle } from './GameDialogueConstants';
-import DialogueRenderer from './GameDialogueRenderer';
-import GameManager from '../scenes/gameManager/GameManager';
-import { mandatory } from '../utils/GameUtils';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
+  private username: string;
+
+  private speakerRenderer?: DialogueSpeakerRenderer;
   private dialogueRenderer?: DialogueRenderer;
   private dialogueGenerator?: DialogueGenerator;
 
   constructor() {
     this.dialogueMap = new Map<ItemId, Dialogue>();
+    this.username = '';
   }
 
   public initialise(gameManager: GameManager) {
+    this.username = GameGlobalAPI.getInstance().getAccountInfo().name;
     this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
   }
 
@@ -26,37 +31,37 @@ export default class DialogueManager {
     if (!dialogue) return;
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
+    this.speakerRenderer = new DialogueSpeakerRenderer(this.username);
 
     GameGlobalAPI.getInstance().addContainerToLayer(
       Layer.Dialogue,
       this.dialogueRenderer.getDialogueContainer()
     );
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
+    await new Promise(resolve => this.playWholeDialogue(resolve));
+  }
 
-    await new Promise(async resolve => {
-      await this.showNextLine(resolve);
-      this.getDialogueRenderer()
-        .getDialogueBox()
-        .on(
-          Phaser.Input.Events.GAMEOBJECT_POINTER_UP,
-          async () => await this.showNextLine(resolve)
-        );
-    });
+  private async playWholeDialogue(resolve: () => void) {
+    await this.showNextLine(resolve);
+    this.getDialogueRenderer()
+      .getDialogueBox()
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await this.showNextLine(resolve));
   }
 
   private async showNextLine(resolve: () => void) {
     const { line, speakerDetail, actionIds } = this.getDialogueGenerator().generateNextLine();
-    const lineWithName = line.replace('{name}', GameGlobalAPI.getInstance().getAccountInfo().name);
+    const lineWithName = line.replace('{name}', this.username);
     this.getDialogueRenderer().changeText(lineWithName);
-    GameGlobalAPI.getInstance().changeSpeakerTo(speakerDetail);
+    this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     if (!line) {
       resolve();
       this.getDialogueRenderer().destroy();
-      GameGlobalAPI.getInstance().changeSpeakerTo(null);
+      this.getSpeakerRenderer().changeSpeakerTo(null);
     }
   }
 
-  private getDialogueGenerator = () => mandatory(this.dialogueGenerator) as DialogueGenerator;
-  private getDialogueRenderer = () => mandatory(this.dialogueRenderer) as DialogueRenderer;
+  private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;
+  private getDialogueRenderer = () => this.dialogueRenderer as DialogueRenderer;
+  private getSpeakerRenderer = () => this.speakerRenderer as DialogueSpeakerRenderer;
 }

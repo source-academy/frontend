@@ -1,5 +1,4 @@
-import { ItemId, GameSprite } from '../commons/CommonTypes';
-import { PopUpPosition } from './GamePopUpTypes';
+import { ItemId, GameSprite, GamePosition } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
@@ -9,19 +8,19 @@ import { Constants } from '../commons/CommonConstants';
 import ImageAssets from '../assets/ImageAssets';
 
 class GamePopUpManager {
-  private currPopUp: Map<PopUpPosition, Phaser.GameObjects.Container>;
+  private currPopUp: Map<GamePosition, Phaser.GameObjects.Container>;
   private popUpFrame: GameSprite;
 
   constructor() {
-    this.currPopUp = new Map<PopUpPosition, Phaser.GameObjects.Container>();
+    this.currPopUp = new Map<GamePosition, Phaser.GameObjects.Container>();
     this.popUpFrame = {
       assetKey: ImageAssets.popUpFrame.key,
-      assetXPos: popUpConstants.rect.x[PopUpPosition.Middle],
+      assetXPos: popUpConstants.rect.x[GamePosition.Middle],
       assetYPos: popUpConstants.rect.y
     };
   }
 
-  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration = Constants.popupDuration) {
+  public displayPopUp(itemId: ItemId, position: GamePosition, duration = Constants.popupDuration) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
@@ -66,7 +65,7 @@ class GamePopUpManager {
     });
   }
 
-  public async destroyPopUp(position: PopUpPosition) {
+  public async destroyPopUp(position: GamePosition) {
     const atPosContainer = this.currPopUp.get(position);
     if (!atPosContainer) return;
 

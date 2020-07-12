@@ -30,10 +30,3 @@ export function createMapWithKey<K, V>(list: any[], id: string) {
 export function toS3Path(fileName: string) {
   return Constants.assetsFolder + fileName;
 }
-
-export function mandatory(object: any) {
-  if (!object) {
-    throw new Error('Object not found');
-  }
-  return object;
-}

@@ -1,17 +1,15 @@
 import GameManager from './GameManager';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 import { GameLocationAttr, LocationId, GameLocation } from '../../location/GameMapTypes';
-import { ItemId } from '../../commons/CommonTypes';
+import { ItemId, GamePosition } from '../../commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { PopUpPosition } from '../../popUp/GamePopUpTypes';
 import { displayNotification } from '../../effects/Notification';
 import { AssetKey } from '../../commons/CommonTypes';
 import { StateObserver } from '../../state/GameStateTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
-import { SpeakerDetail } from '../../character/GameCharacterTypes';
 
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;
@@ -284,7 +282,7 @@ class GameGlobalAPI {
   //     Pop Up      //
   /////////////////////
 
-  public displayPopUp(itemId: ItemId, position: PopUpPosition, duration?: number) {
+  public displayPopUp(itemId: ItemId, position: GamePosition, duration?: number) {
     this.getGameManager().popUpManager.displayPopUp(itemId, position, duration);
   }
 
@@ -292,7 +290,7 @@ class GameGlobalAPI {
     this.getGameManager().popUpManager.destroyAllPopUps();
   }
 
-  public async destroyPopUp(position: PopUpPosition) {
+  public async destroyPopUp(position: GamePosition) {
     this.getGameManager().popUpManager.destroyPopUp(position);
   }
 
@@ -388,8 +386,28 @@ class GameGlobalAPI {
   //   Characters    //
   /////////////////////
 
-  public changeSpeakerTo(speakerDetail?: SpeakerDetail | null) {
-    this.getGameManager().characterManager.changeSpeakerTo(speakerDetail);
+  public hideCharacterFromMap(characterId: ItemId) {
+    this.getGameManager().characterManager.hideCharacterFromMap(characterId);
+  }
+
+  public showCharacterOnMap(characterId: ItemId) {
+    this.getGameManager().characterManager.showCharacterOnMap(characterId);
+  }
+
+  public createCharacterSprite(
+    characterId: ItemId,
+    overrideExpression?: string,
+    overridePosition?: GamePosition
+  ) {
+    return this.getGameManager().characterManager.createCharacterSprite(
+      characterId,
+      overrideExpression,
+      overridePosition
+    );
+  }
+
+  public getCharacterById(characterId: ItemId) {
+    return this.getGameManager().characterManager.getCharacterById(characterId);
   }
 }
 

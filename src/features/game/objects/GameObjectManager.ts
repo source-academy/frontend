@@ -51,11 +51,11 @@ class GameObjectManager implements StateObserver {
 
   public renderObjectsLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
-    const objIdsToRender =
-      GameGlobalAPI.getInstance().getLocationAttr(GameLocationAttr.objects, locationId) || [];
-
+    const objIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
+      GameLocationAttr.objects,
+      locationId
+    );
     const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
-
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 

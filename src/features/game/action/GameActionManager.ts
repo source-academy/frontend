@@ -1,7 +1,7 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import GameActionExecuter from './GameActionExecuter';
-import GameConditionChecker from './GameConditionChecker';
+import ActionConditionChecker from './GameActionConditionChecker';
 
 import { GameAction, ActionCondition } from './GameActionTypes';
 import { ItemId } from '../commons/CommonTypes';
@@ -47,7 +47,7 @@ export default class GameActionManager {
   ) {
     return (
       (isRepeatable || !GameGlobalAPI.getInstance().hasTriggeredInteraction(interactionId)) &&
-      (await GameConditionChecker.checkAllConditionsSatisfied(actionConditions))
+      (await ActionConditionChecker.checkAllConditionsSatisfied(actionConditions))
     );
   }
 

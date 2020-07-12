@@ -105,7 +105,7 @@ export default class ActionParser {
           actionParams[0],
           actionType
         );
-        actionParamObj.position = ParserConverter.stringToPopupPosition(actionParams[1]);
+        actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
         break;
       case GameActionType.MakeObjectBlink:
         actionParamObj.id = Parser.validator.assertLocAttr(

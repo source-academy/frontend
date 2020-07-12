@@ -201,7 +201,7 @@ class GameStateManager implements StateSubject {
 
   public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
     const location = this.getLocationById(locationId);
-    return Array.from(location[attr]);
+    return Array.from(location[attr]) || [];
   }
 
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {

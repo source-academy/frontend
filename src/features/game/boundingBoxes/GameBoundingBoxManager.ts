@@ -32,8 +32,10 @@ class GameBoundingBoxManager implements StateObserver {
 
   public renderBBoxLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
-    const bboxIdsToRender =
-      GameGlobalAPI.getInstance().getLocationAttr(GameLocationAttr.boundingBoxes, locationId) || [];
+    const bboxIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
+      GameLocationAttr.boundingBoxes,
+      locationId
+    );
     const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
   }

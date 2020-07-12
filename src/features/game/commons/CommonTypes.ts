@@ -36,3 +36,9 @@ export interface IGameUI {
   activateUI: () => Promise<void> | void;
   deactivateUI: () => Promise<void> | void;
 }
+
+export enum GamePosition {
+  Left = 'Left',
+  Middle = 'Middle',
+  Right = 'Right'
+}
