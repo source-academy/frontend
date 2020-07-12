@@ -29,6 +29,7 @@ type EditableAchievementCardProps = {
   addUnsavedChange: any;
   removeUnsavedChange: any;
   removeGoal: any;
+  removeAchievement: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
@@ -41,7 +42,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setAdderId,
     addUnsavedChange,
     removeUnsavedChange,
-    removeGoal
+    removeGoal,
+    removeAchievement
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
@@ -79,6 +81,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
+
+    removeAchievement(editableAchievement);
     updateAchievements();
 
     if (id === adderId) {

@@ -6,14 +6,16 @@ import {
   GET_ACHIEVEMENTS,
   UPDATE_ACHIEVEMENTS,
   EDIT_ACHIEVEMENT,
-  REMOVE_GOAL
+  REMOVE_GOAL,
+  REMOVE_ACHIEVEMENT
 } from './AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import {
   updateAchievements,
   getAchievements,
   editAchievement,
-  removeGoal
+  removeGoal,
+  removeAchievement
 } from '../sagas/RequestsSaga';
 
 export default function* AchievementSaga(): SagaIterator {
@@ -58,6 +60,23 @@ export default function* AchievementSaga(): SagaIterator {
     const achievement = action.payload;
 
     const resp = yield call(editAchievement, achievement, tokens);
+
+    if (!resp) {
+      return;
+    }
+  });
+
+  yield takeEvery(REMOVE_ACHIEVEMENT, function* (
+    action: ReturnType<typeof actions.removeAchievement>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const achievement = action.payload;
+
+    const resp = yield call(removeAchievement, achievement, tokens);
 
     if (!resp) {
       return;

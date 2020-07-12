@@ -8,7 +8,8 @@ import {
   updateAchievements,
   saveAchievements,
   editAchievement,
-  removeGoal
+  removeGoal,
+  removeAchievement
 } from '../../../commons/achievements/AchievementActions';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 
@@ -23,7 +24,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateAchievements: updateAchievements,
       handleSaveAchievements: saveAchievements,
       handleEditAchievement: editAchievement,
-      handleRemoveGoal: removeGoal
+      handleRemoveGoal: removeGoal,
+      handleRemoveAchievement: removeAchievement
     },
     dispatch
   );

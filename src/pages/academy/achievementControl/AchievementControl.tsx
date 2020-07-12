@@ -11,6 +11,7 @@ export type DispatchProps = {
   handleUpdateAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
   handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
+  handleRemoveAchievement: (achievement: AchievementItem) => void;
 };
 
 export type StateProps = {
@@ -24,7 +25,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleUpdateAchievements,
     handleSaveAchievements,
     handleEditAchievement,
-    handleRemoveGoal
+    handleRemoveGoal,
+    handleRemoveAchievement
   } = props;
 
   const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
@@ -75,6 +77,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           forceRender={forceRender}
           addUnsavedChange={addUnsavedChange}
           removeUnsavedChange={removeUnsavedChange}
+          removeAchievement={handleRemoveAchievement}
           removeGoal={handleRemoveGoal}
         />
       </div>

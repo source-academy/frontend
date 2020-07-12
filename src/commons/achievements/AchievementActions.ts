@@ -7,7 +7,8 @@ import {
   EDIT_ACHIEVEMENT,
   AchievementItem,
   AchievementGoal,
-  REMOVE_GOAL
+  REMOVE_GOAL,
+  REMOVE_ACHIEVEMENT
 } from './AchievementTypes';
 
 /*
@@ -24,6 +25,9 @@ export const saveAchievements = (achievements: AchievementItem[]) =>
   action(SAVE_ACHIEVEMENTS, achievements);
 
 export const getAchievements = () => action(GET_ACHIEVEMENTS);
+
+export const removeAchievement = (achievement: AchievementItem) =>
+  action(REMOVE_ACHIEVEMENT, achievement);
 
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);

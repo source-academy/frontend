@@ -213,6 +213,25 @@ export async function editAchievement(
 }
 
 /**
+ * DELETE /achievements
+ */
+export async function removeAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
  * DELETE /achievements/goals
  */
 export async function removeGoal(
