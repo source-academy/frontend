@@ -42,3 +42,5 @@ export enum GamePosition {
   Middle = 'Middle',
   Right = 'Right'
 }
+
+export type TextConfig = { x: number; y: number; oriX: number; oriY: number };

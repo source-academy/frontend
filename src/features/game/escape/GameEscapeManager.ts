@@ -7,20 +7,17 @@ import escapeConstants, {
   optTextStyle
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
-import CommonRadioButtons from '../commons/CommonRadioButtons';
+// import CommonRadioButtons from '../commons/CommonRadioButtons';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { calcTableFormatPos } from '../utils/StyleUtils';
+import CommonRadioButton from '../commons/CommonRadioButton';
 
 class GameEscapeManager implements IGameUI {
-  private volumeOptions: CommonRadioButtons | undefined;
-
-  constructor() {
-    this.volumeOptions = undefined;
-  }
+  private volumeOptions: CommonRadioButton | undefined;
 
   private createUIContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
@@ -35,37 +32,8 @@ class GameEscapeManager implements IGameUI {
       .setDisplaySize(screenSize.x, screenSize.y)
       .setInteractive({ pixelPerfect: true });
 
-    const volumeText = createBitmapText(
-      gameManager,
-      'Volume',
-      escapeConstants.optTextXPos,
-      escapeConstants.optTextYPos,
-      optTextStyle
-    );
-
-    const userVol = GameGlobalAPI.getInstance().getGameManager().saveManager.getLoadedUserState()
-      .settings.volume;
-    const userVolIdx = settingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === userVol
-    );
-    this.volumeOptions = new CommonRadioButtons(
-      gameManager,
-      settingsConstants.volContainerOpts,
-      userVolIdx,
-      escapeConstants.radioButtonsXSpace,
-      volumeRadioOptTextStyle,
-      escapeConstants.volOptXPos,
-      escapeConstants.volOptYPos,
-      escapeConstants.volOptTextAnchorX,
-      escapeConstants.volOptTextAnchorY,
-      15,
-      3,
-      10,
-      escapeConstants.volOptTextXOffset,
-      escapeConstants.volOptTextYOffset
-    );
-
-    escapeMenuContainer.add([escapeMenuBg, volumeText, this.volumeOptions]);
+    const volOpt = this.createVolOptContainer();
+    escapeMenuContainer.add([escapeMenuBg, volOpt]);
 
     const buttons = this.getOptButtons();
     const buttonPositions = calcTableFormatPos({
@@ -122,6 +90,45 @@ class GameEscapeManager implements IGameUI {
 
   public deactivateUI() {
     GameGlobalAPI.getInstance().getGameManager().layerManager.clearSeveralLayers([Layer.Escape]);
+  }
+
+  private createVolOptContainer() {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const volOptContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
+    const userVol = GameGlobalAPI.getInstance().getLoadedUserState().settings.volume;
+    const userVolIdx = settingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === userVol
+    );
+
+    const volumeText = createBitmapText(
+      gameManager,
+      'Volume',
+      escapeConstants.optTextXPos,
+      escapeConstants.optTextYPos,
+      optTextStyle
+    );
+
+    this.volumeOptions = new CommonRadioButton(
+      gameManager,
+      {
+        choices: settingsConstants.volContainerOpts,
+        defaultChoiceIdx: userVolIdx,
+        maxXSpace: escapeConstants.radioButtonsXSpace,
+        radioChoiceConfig: {
+          circleDim: 15,
+          checkedDim: 10,
+          outlineThickness: 3
+        },
+        choiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
+        bitmapTextStyle: volumeRadioOptTextStyle
+      },
+      escapeConstants.volOptXPos,
+      escapeConstants.volOptYPos
+    );
+
+    volOptContainer.add([volumeText, this.volumeOptions]);
+    return volOptContainer;
   }
 
   private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {

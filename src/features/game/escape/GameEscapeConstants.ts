@@ -34,11 +34,7 @@ const escapeConstants = {
   radioButtonsXSpace: screenSize.x * 0.2,
 
   volOptXPos: screenSize.x * 0.05,
-  volOptYPos: screenSize.y * 0.4,
-  volOptTextAnchorX: 0.5,
-  volOptTextAnchorY: 0.25,
-  volOptTextXOffset: 0,
-  volOptTextYOffset: -65
+  volOptYPos: -screenSize.y * 0.1
 };
 
 export default escapeConstants;

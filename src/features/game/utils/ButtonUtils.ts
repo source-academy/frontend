@@ -1,4 +1,4 @@
-import { BitmapFontStyle, AssetKey } from '../commons/CommonTypes';
+import { BitmapFontStyle, AssetKey, TextConfig } from '../commons/CommonTypes';
 import { createBitmapText } from './TextUtils';
 import { Constants } from '../commons/CommonConstants';
 import SoundAssets from '../assets/SoundAssets';
@@ -7,7 +7,7 @@ import GameSoundManager from '../sound/GameSoundManager';
 type ButtonConfig = {
   assetKey: AssetKey;
   message?: string;
-  textConfig?: ButtonTextConfig;
+  textConfig?: TextConfig;
   bitMapTextStyle?: BitmapFontStyle;
   onDown?: () => void;
   onUp?: () => void;
@@ -17,8 +17,6 @@ type ButtonConfig = {
   onClickSound?: AssetKey;
   onHoverSound?: AssetKey;
 };
-
-type ButtonTextConfig = { x: number; y: number; oriX: number; oriY: number };
 
 const onHoverAlpha = 1.0;
 const offHoverAlpha = 0.9;
