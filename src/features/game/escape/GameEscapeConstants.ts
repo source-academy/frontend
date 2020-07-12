@@ -27,7 +27,7 @@ export const optTextStyle: BitmapFontStyle = {
 const escapeConstants = {
   textOriX: 0.33,
   textOriY: 0.85,
-  buttonYPos: screenSize.y * 0.65,
+  buttonYPos: screenSize.y * 0.15,
 
   optTextXPos: screenSize.x * 0.38,
   optTextYPos: screenSize.y * 0.38,

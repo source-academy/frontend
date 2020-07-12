@@ -14,21 +14,12 @@ import { calcTableFormatPos } from '../../utils/StyleUtils';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private currPreviewAssetKey: string;
-
-  constructor() {
-    this.uiContainer = undefined;
-    this.currPreviewAssetKey = ImageAssets.defaultLocationImg.key;
-  }
 
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
     sprite
       .setTexture(assetKey)
       .setDisplaySize(modeMoveConstants.previewWidth, modeMoveConstants.previewHeight)
       .setPosition(modeMoveConstants.previewXPos, modeMoveConstants.previewYPos);
-
-    // Update
-    this.currPreviewAssetKey = assetKey;
   }
 
   private getLatestNavigations() {
@@ -91,7 +82,7 @@ class GameModeMove implements IGameUI {
     moveMenuContainer.add(backButton);
 
     // Initial setting
-    this.setPreview(previewFill, this.currPreviewAssetKey);
+    this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
 
     return moveMenuContainer;
   }

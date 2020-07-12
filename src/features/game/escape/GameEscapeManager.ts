@@ -13,7 +13,7 @@ import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
-import GameManager from '../scenes/gameManager/GameManager';
+import { calcTableFormatPos } from '../utils/StyleUtils';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButtons | undefined;
@@ -22,18 +22,18 @@ class GameEscapeManager implements IGameUI {
     this.volumeOptions = undefined;
   }
 
-  public activateUI() {
+  private createUIContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-
     const escapeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
+
     const escapeMenuBg = new Phaser.GameObjects.Image(
       gameManager,
       screenCenter.x,
       screenCenter.y,
       ImageAssets.escapeMenuBackground.key
-    );
-    escapeMenuBg.setDisplaySize(screenSize.x, screenSize.y);
-    escapeMenuBg.setInteractive({ pixelPerfect: true });
+    )
+      .setDisplaySize(screenSize.x, screenSize.y)
+      .setInteractive({ pixelPerfect: true });
 
     const volumeText = createBitmapText(
       gameManager,
@@ -65,33 +65,58 @@ class GameEscapeManager implements IGameUI {
       escapeConstants.volOptTextYOffset
     );
 
-    const mainMenuButton = this.createEscapeOptButton(gameManager, 'Main Menu', () => {
-      gameManager.cleanUp();
-      if (gameManager.isStorySimulator) {
-        gameManager.scene.start('StorySimulatorMenu');
-      } else {
-        gameManager.scene.start('MainMenu');
+    escapeMenuContainer.add([escapeMenuBg, volumeText, this.volumeOptions]);
+
+    const buttons = this.getOptButtons();
+    const buttonPositions = calcTableFormatPos({
+      numOfItems: buttons.length
+    });
+
+    escapeMenuContainer.add(
+      buttons.map((button, index) =>
+        this.createEscapeOptButton(
+          button.text,
+          buttonPositions[index][0],
+          buttonPositions[index][1] + escapeConstants.buttonYPos,
+          button.callback
+        )
+      )
+    );
+
+    return escapeMenuContainer;
+  }
+
+  public getOptButtons() {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    return [
+      {
+        text: 'Main Menu',
+        callback: () => {
+          gameManager.cleanUp();
+          if (gameManager.isStorySimulator) {
+            gameManager.scene.start('StorySimulatorMenu');
+          } else {
+            gameManager.scene.start('MainMenu');
+          }
+        }
+      },
+      {
+        text: 'Continue',
+        callback: async () => {
+          if (GameGlobalAPI.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+            await GameGlobalAPI.getInstance().popPhase();
+          }
+        }
+      },
+      {
+        text: 'Apply Settings',
+        callback: () => this.applySettings()
       }
-    }).setPosition(screenSize.x * 0.25, escapeConstants.buttonYPos);
+    ];
+  }
 
-    const continueButton = this.createEscapeOptButton(gameManager, 'Continue', async () => {
-      if (GameGlobalAPI.getInstance().isCurrentPhase(GamePhaseType.EscapeMenu)) {
-        await GameGlobalAPI.getInstance().popPhase();
-      }
-    }).setPosition(screenSize.x * 0.5, escapeConstants.buttonYPos);
-
-    const applySettingsButton = this.createEscapeOptButton(gameManager, 'Apply Settings', () =>
-      this.applySettings()
-    ).setPosition(screenSize.x * 0.75, escapeConstants.buttonYPos);
-
-    escapeMenuContainer.add([
-      escapeMenuBg,
-      volumeText,
-      this.volumeOptions,
-      mainMenuButton,
-      continueButton,
-      applySettingsButton
-    ]);
+  public activateUI() {
+    const escapeMenuContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Escape, escapeMenuContainer);
   }
 
@@ -99,18 +124,19 @@ class GameEscapeManager implements IGameUI {
     GameGlobalAPI.getInstance().getGameManager().layerManager.clearSeveralLayers([Layer.Escape]);
   }
 
-  private createEscapeOptButton(gameManager: GameManager, text: string, callback: any) {
+  private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     return createButton(
       gameManager,
       {
         assetKey: ImageAssets.mediumButton.key,
         message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.25, oriY: 0.7 },
+        textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
         bitMapTextStyle: escapeOptButtonStyle,
         onUp: callback
       },
       gameManager.soundManager
-    );
+    ).setPosition(xPos, yPos);
   }
 
   private async applySettings() {
