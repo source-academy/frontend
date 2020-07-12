@@ -11,6 +11,7 @@ type AchievementEditorProps = {
   forceRender: any;
   addUnsavedChange: any;
   removeUnsavedChange: any;
+  removeGoal: any;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
@@ -20,7 +21,8 @@ function AchievementEditor(props: AchievementEditorProps) {
     editAchievement,
     forceRender,
     addUnsavedChange,
-    removeUnsavedChange
+    removeUnsavedChange,
+    removeGoal
   } = props;
 
   const [adderId, setAdderId] = useState<number>(-1);
@@ -38,6 +40,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         setAdderId={setAdderId}
         addUnsavedChange={addUnsavedChange}
         removeUnsavedChange={removeUnsavedChange}
+        removeGoal={removeGoal}
       />
     ));
 

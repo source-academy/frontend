@@ -6,10 +6,11 @@ import EditableAchievementGoal from './EditableAchievementGoal';
 type EditableAchievementGoalsProps = {
   goals: AchievementGoal[];
   editGoals: any;
+  removeGoalFromBackend: any;
 };
 
 function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
-  const { goals, editGoals } = props;
+  const { goals, editGoals, removeGoalFromBackend } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -41,6 +42,7 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
       newGoals[id].goalId = id;
     }
 
+    removeGoalFromBackend(goal);
     setNewGoals(newGoals);
     editGoals(newGoals);
   };

@@ -3,13 +3,14 @@ import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
-import { AchievementItem } from '../../../commons/achievements/AchievementTypes';
+import { AchievementItem, AchievementGoal } from '../../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {
   handleFetchAchievements: () => void;
   handleSaveAchievements: (achievements: AchievementItem[]) => void;
   handleUpdateAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
+  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
 };
 
 export type StateProps = {
@@ -22,7 +23,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleFetchAchievements,
     handleUpdateAchievements,
     handleSaveAchievements,
-    handleEditAchievement
+    handleEditAchievement,
+    handleRemoveGoal
   } = props;
 
   const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
@@ -73,6 +75,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           forceRender={forceRender}
           addUnsavedChange={addUnsavedChange}
           removeUnsavedChange={removeUnsavedChange}
+          removeGoal={handleRemoveGoal}
         />
       </div>
     </>

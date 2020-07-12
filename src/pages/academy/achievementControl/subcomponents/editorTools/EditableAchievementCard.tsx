@@ -28,6 +28,7 @@ type EditableAchievementCardProps = {
   setAdderId: any;
   addUnsavedChange: any;
   removeUnsavedChange: any;
+  removeGoal: any;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
@@ -39,7 +40,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     adderId,
     setAdderId,
     addUnsavedChange,
-    removeUnsavedChange
+    removeUnsavedChange,
+    removeGoal
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
@@ -98,12 +100,18 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handleEditGoals = (goals: AchievementGoal[]) => {
+  const handleEditGoals = (goals: AchievementGoal[], shouldUpdate: boolean) => {
     setEditableAchievement({
       ...editableAchievement,
       goals: goals
     });
-    setUnsaved();
+
+    inferencer.modifyAchievement(editableAchievement);
+    editAchievement(editableAchievement);
+  };
+
+  const handleRemoveGoal = (goal: AchievementGoal) => {
+    removeGoal(goal, editableAchievement);
   };
 
   const handleChangeBackground = (backgroundImageUrl: string) => {
@@ -175,7 +183,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           setBackgroundImageUrl={handleChangeBackground}
         />
 
-        <EditableAchievementGoals goals={goals} editGoals={handleEditGoals} />
+        <EditableAchievementGoals
+          goals={goals}
+          editGoals={handleEditGoals}
+          removeGoalFromBackend={handleRemoveGoal}
+        />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 

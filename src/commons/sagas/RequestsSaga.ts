@@ -22,7 +22,11 @@ import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import { AchievementItem, AchievementAbility } from '../achievements/AchievementTypes';
+import {
+  AchievementItem,
+  AchievementAbility,
+  AchievementGoal
+} from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token
@@ -199,6 +203,26 @@ export async function editAchievement(
   const resp = await request(`achievements/update/`, 'POST', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/goals
+ */
+export async function removeGoal(
+  goal: AchievementGoal,
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { goal: goal, achievement: achievement },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
