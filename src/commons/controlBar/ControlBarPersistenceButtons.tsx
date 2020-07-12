@@ -1,9 +1,9 @@
-import { Popover, ButtonGroup, Tooltip, Intent, Classes } from '@blueprintjs/core';
+import { ButtonGroup, Classes, Intent, Popover, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { PersistenceFile, PersistenceState } from '../../features/persistence/PersistenceTypes';
 import controlButton from '../ControlButton';
-import { PersistenceState, PersistenceFile } from '../../features/persistence/PersistenceTypes';
 
 export type ControlBarPersistenceButtonsProps = {
   loggedInAs?: string;

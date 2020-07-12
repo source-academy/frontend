@@ -3,7 +3,6 @@ import { Reducer } from 'redux';
 import { defaultAcademy } from '../../commons/application/ApplicationTypes';
 import { LOG_OUT } from '../../commons/application/types/CommonsTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
-
 import { AcademyState, SAVE_CANVAS } from './AcademyTypes';
 
 export const AcademyReducer: Reducer<AcademyState> = (

@@ -1,6 +1,6 @@
-import * as React from 'react';
-import { Dialog, Classes, Button, IDialogProps, Intent, IButtonProps } from '@blueprintjs/core';
+import { Button, Classes, Dialog, IButtonProps, IDialogProps, Intent } from '@blueprintjs/core';
 import classNames from 'classnames';
+import * as React from 'react';
 
 export interface ConfirmDialogProps<T> {
   title?: string;
