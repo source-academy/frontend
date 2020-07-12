@@ -11,6 +11,7 @@ import { AssetKey } from '../../commons/CommonTypes';
 import { StateObserver } from '../../state/GameStateTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
+import { SpeakerDetail } from '../../character/GameCharacterTypes';
 
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;
@@ -57,6 +58,10 @@ class GameGlobalAPI {
 
   public checkpointTransition() {
     this.getGameManager().checkpointTransition();
+  }
+
+  public getAccountInfo() {
+    return this.getGameManager().getAccountInfo();
   }
 
   /////////////////////
@@ -377,6 +382,14 @@ class GameGlobalAPI {
 
   public renderBackgroundLayerContainer(locationId: LocationId) {
     this.getGameManager().backgroundManager.renderBackgroundLayerContainer(locationId);
+  }
+
+  /////////////////////
+  //   Characters    //
+  /////////////////////
+
+  public changeSpeakerTo(speakerDetail?: SpeakerDetail | null) {
+    this.getGameManager().characterManager.changeSpeakerTo(speakerDetail);
   }
 }
 

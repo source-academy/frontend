@@ -23,7 +23,7 @@ class DialogueRenderer {
 
   public getDialogueContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const container = new Phaser.GameObjects.Container(gameManager, 0, 0).setAlpha(0);
+    const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
     container.add([this.dialogueBox, this.blinkingDiamond.container, this.typewriter.container]);
     return container;
   }

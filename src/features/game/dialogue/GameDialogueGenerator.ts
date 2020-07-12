@@ -1,36 +1,32 @@
-import { DialogueLine, Dialogue } from './GameDialogueTypes';
+import { DialogueLine, DialogueObject } from './GameDialogueTypes';
 
-// Generates next line in dialogue based on Dialogue Object
-function dialogueGenerator(dialogue: Dialogue) {
-  const { content } = dialogue;
+export default class DialogueGenerator {
+  private currPart: string;
+  private currLineNum: number;
+  private dialogueContent: DialogueObject;
 
-  // first item in the map
-  let currPart = content.keys().next().value;
-  let currLineNum = 0;
+  public constructor(dialogueContent: DialogueObject) {
+    this.dialogueContent = dialogueContent;
+    this.currPart = dialogueContent.keys().next().value;
+    this.currLineNum = 0;
+  }
 
-  function generateDialogue(): DialogueLine {
-    // Get line
-    const dialogueLine = content.get(currPart)![currLineNum];
-
+  public generateNextLine(): DialogueLine {
+    const dialogueLine = this.dialogueContent.get(this.currPart)![this.currLineNum];
     if (!dialogueLine || !dialogueLine.line) {
       return { line: '' };
     }
 
-    // Advance pointer for next line
     if (dialogueLine.goto) {
-      if (content.get(dialogueLine.goto)) {
-        currPart = dialogueLine.goto;
-        currLineNum = 0;
+      if (this.dialogueContent.get(dialogueLine.goto)) {
+        this.currPart = dialogueLine.goto;
+        this.currLineNum = 0;
       } else {
         return { line: '' };
       }
     } else {
-      currLineNum++;
+      this.currLineNum++;
     }
-
     return dialogueLine;
   }
-  return generateDialogue;
 }
-
-export default dialogueGenerator;
