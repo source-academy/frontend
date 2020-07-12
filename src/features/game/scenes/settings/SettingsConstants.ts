@@ -30,9 +30,7 @@ const settingsConstants = {
   volUnderlineYPos: screenSize.y * 0.25,
   volTextXpos: screenSize.x * 0.25,
   volTextYPos: screenSize.y * 0.23,
-  volOptYPos: screenSize.y * 0.24,
-  volOptTextAnchorX: 0.5,
-  volOptTextAnchorY: 0.25,
+  volOptYPos: -screenSize.y * 0.26,
   volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0']
 };
 

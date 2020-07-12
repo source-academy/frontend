@@ -1,4 +1,3 @@
-import RadioButtons from '../../commons/CommonRadioButtons';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -15,9 +14,10 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 import { loadData } from '../../save/GameSaveRequests';
 import { createBitmapText } from '../../utils/TextUtils';
 import ImageAssets from '../../assets/ImageAssets';
+import CommonRadioButton from '../../commons/CommonRadioButton';
 
 class Settings extends Phaser.Scene {
-  private volumeRadioButtons: RadioButtons | undefined;
+  private volumeRadioButtons: CommonRadioButton | undefined;
   private layerManager: GameLayerManager;
   private settingsSaveManager: GameSaveManager;
   private soundManager: GameSoundManager;
@@ -107,28 +107,24 @@ class Settings extends Phaser.Scene {
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
-    this.volumeRadioButtons = new RadioButtons(
+    this.volumeRadioButtons = new CommonRadioButton(
       this,
-      settingsConstants.volContainerOpts,
-      userVolIdx,
-      settingsConstants.optXSpace,
-      optionTextStyle,
+      {
+        choices: settingsConstants.volContainerOpts,
+        defaultChoiceIdx: userVolIdx,
+        maxXSpace: settingsConstants.optXSpace,
+        choiceTextConfig: { x: 0, y: -50, oriX: 0.5, oriY: 0.25 },
+        bitmapTextStyle: optionTextStyle
+      },
       settingsConstants.optXPos,
-      settingsConstants.volOptYPos,
-      settingsConstants.volOptTextAnchorX,
-      settingsConstants.volOptTextAnchorY,
-      20,
-      5,
-      15,
-      0,
-      -70
+      settingsConstants.volOptYPos
     );
     this.layerManager.addToLayer(Layer.UI, volumeBg);
     this.layerManager.addToLayer(Layer.UI, volumeText);
     this.layerManager.addToLayer(Layer.UI, this.volumeRadioButtons);
   }
 
-  public async applySettings(volume?: RadioButtons) {
+  public async applySettings(volume?: CommonRadioButton) {
     if (volume) {
       // Save settings
       const volumeVal = parseFloat(volume.getChosenChoice());

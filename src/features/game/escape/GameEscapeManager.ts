@@ -7,7 +7,6 @@ import escapeConstants, {
   optTextStyle
 } from './GameEscapeConstants';
 import { Layer } from '../layer/GameLayerTypes';
-// import CommonRadioButtons from '../commons/CommonRadioButtons';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';

@@ -36,7 +36,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       maxXSpace = screenSize.x,
       radioChoiceConfig = {
         circleDim: 20,
-        checkedDim: 15,
+        checkedDim: 10,
         outlineThickness: 5
       },
       choiceTextConfig = { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
