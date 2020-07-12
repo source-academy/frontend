@@ -16,7 +16,7 @@ function AchievementLevel(props: AchievementLevelProps) {
   return (
     <>
       <h3>{level}</h3>
-      <ProgressBar className="progress" value={progressFrac} />
+      <ProgressBar className="level-progress" value={progressFrac} />
     </>
   );
 }

@@ -24,8 +24,7 @@ function AchievementCard(props: AchievementCardProps) {
     shouldPartiallyRender,
     isDropdownOpen,
     toggleDropdown,
-    displayModal,
-    handleGlow
+    displayModal
   } = props;
 
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
@@ -38,46 +37,42 @@ function AchievementCard(props: AchievementCardProps) {
 
   return (
     <Card
-      className="achievement"
+      className="achievement-card"
       style={{
-        ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
         background: `url(${backgroundImageUrl})`
       }}
+      interactive={true}
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      <div className="main">
-        {hasDropdown ? (
-          <div className="dropdown">
-            <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
-          </div>
-        ) : (
-          <div className="dropdown"></div>
-        )}
-
-        <div className="display">
-          <div className="heading">
-            <div className="title">
-              <h3>{title}</h3>
-            </div>
-
-            <AchievementHints release={release} />
-          </div>
-
-          <div className="details">
-            <div className="ability">
-              <p>{ability}</p>
-            </div>
-
-            <AchievementDeadline deadline={furthestDeadline} />
-
-            <AchievementExp exp={exp} />
-          </div>
+      {hasDropdown ? (
+        <div className="dropdown-button">
+          <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
         </div>
-      </div>
+      ) : (
+        <div className="dropdown-button"></div>
+      )}
 
-      <AchievementProgressBar progressFrac={progressFrac} shouldAnimate={!shouldPartiallyRender} />
+      <div className="content">
+        <div className="heading">
+          <h3>{title.toUpperCase()}</h3>
+          <AchievementHints release={release} />
+        </div>
+
+        <div className="details">
+          <div className="ability">
+            <p>{ability}</p>
+          </div>
+          <AchievementDeadline deadline={furthestDeadline} />
+          <AchievementExp exp={exp} />
+        </div>
+
+        <AchievementProgressBar
+          progressFrac={progressFrac}
+          shouldAnimate={!shouldPartiallyRender}
+        />
+      </div>
     </Card>
   );
 }

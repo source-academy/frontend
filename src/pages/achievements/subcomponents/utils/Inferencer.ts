@@ -51,12 +51,20 @@ class Node {
   }
 
   private generateStatus(deadline: Date | undefined, progressFrac: number) {
-    if (progressFrac === 1) {
-      return AchievementStatus.COMPLETED;
-    } else if (deadline !== undefined && deadline.getTime() < Date.now()) {
-      return AchievementStatus.EXPIRED;
+    if (deadline !== undefined && deadline.getTime() < new Date().getTime()) {
+      // deadline elapsed
+      if (progressFrac === 0) {
+        return AchievementStatus.EXPIRED; // not attempted
+      } else {
+        return AchievementStatus.COMPLETED; // attempted
+      }
     } else {
-      return AchievementStatus.ACTIVE;
+      // deadline not elapsed
+      if (progressFrac === 1) {
+        return AchievementStatus.COMPLETED; // fully completed
+      } else {
+        return AchievementStatus.ACTIVE; // not fully completed
+      }
     }
   }
 }

@@ -72,7 +72,6 @@ function Achievement(props: DispatchProps & StateProps) {
       </div>
       <div className="achievement-main">
         <div className="filters">
-          <div></div>
           <AchievementFilter
             filterStatus={FilterStatus.ALL}
             setFilterStatus={setFilterStatus}
@@ -93,9 +92,9 @@ function Achievement(props: DispatchProps & StateProps) {
           />
         </div>
 
-        <div className="cards">
-          <ul className="display-list">{mapAchievementIdsToTasks(inferencer.listTaskIds())}</ul>
-        </div>
+        <ul className="cards-container">
+          {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
+        </ul>
 
         <AchievementModal
           generateBackgroundGradient={generateBackgroundGradient}

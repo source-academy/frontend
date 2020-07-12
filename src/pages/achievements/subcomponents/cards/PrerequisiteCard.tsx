@@ -17,7 +17,7 @@ type PrerequisiteCardProps = {
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { isLast, id, inferencer, shouldPartiallyRender, displayModal, handleGlow } = props;
+  const { isLast, id, inferencer, shouldPartiallyRender, displayModal } = props;
 
   const { title, release, ability, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
@@ -26,50 +26,43 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
   const progressFrac = inferencer.getProgressFrac(id);
 
   return (
-    <div className="dropdown-expanded">
+    <div className="dropdown-container">
       <div className="lines">
-        <div className="upper"></div>
-        {isLast ? <></> : <div className="lower"></div>}
+        <div className="l-shape"></div>
+        {isLast ? <></> : <div className="extend-bottom"></div>}
       </div>
       <Card
-        className="prerequisite"
+        className="achievement-card"
         style={{
-          ...handleGlow(id),
           opacity: shouldPartiallyRender ? '20%' : '100%',
           background: `url(${backgroundImageUrl})`
         }}
+        interactive={true}
         onClick={() => displayModal(id)}
       >
-        <div className="main">
-          <div className="padder">
-            <p></p>
+        <div className="dropdown-button"></div>
+
+        <div className="content">
+          <div className="heading">
+            <h3>{title.toUpperCase()}</h3>
+            <AchievementHints release={release} />
           </div>
 
-          <div className="display">
-            <div className="heading">
-              <div className="title">
-                <h3>{title}</h3>
-              </div>
-
-              <AchievementHints release={release} />
+          <div className="details">
+            <div className="ability">
+              <p>{ability}</p>
             </div>
 
-            <div className="details">
-              <div className="ability">
-                <p>{ability}</p>
-              </div>
+            <AchievementDeadline deadline={furthestDeadline} />
 
-              <AchievementDeadline deadline={furthestDeadline} />
-
-              <AchievementExp exp={exp} />
-            </div>
+            <AchievementExp exp={exp} />
           </div>
+
+          <AchievementProgressBar
+            progressFrac={progressFrac}
+            shouldAnimate={!shouldPartiallyRender}
+          />
         </div>
-
-        <AchievementProgressBar
-          progressFrac={progressFrac}
-          shouldAnimate={!shouldPartiallyRender}
-        />
       </Card>
     </div>
   );
