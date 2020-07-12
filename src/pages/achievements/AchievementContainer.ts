@@ -9,7 +9,9 @@ import { withRouter } from 'react-router';
 // import { fetchMockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new Inferencer(state.achievements.achievements)
+  inferencer: new Inferencer(state.achievements.achievements),
+  name: state.session.name,
+  group: state.session.group
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

@@ -15,10 +15,12 @@ export type DispatchProps = {
 
 export type StateProps = {
   inferencer: Inferencer;
+  name?: string;
+  group: string | null;
 };
 
 function Achievement(props: DispatchProps & StateProps) {
-  const { inferencer, handleAchievementsFetch } = props;
+  const { inferencer, name, group, handleAchievementsFetch } = props;
 
   useEffect(() => {
     handleAchievementsFetch();
@@ -68,7 +70,11 @@ function Achievement(props: DispatchProps & StateProps) {
   return (
     <div className="Achievements">
       <div className="achievement-overview">
-        <AchievementOverview name={'Jet Kan'} studio={'T12-A'} inferencer={inferencer} />
+        <AchievementOverview
+          name={name}
+          studio={group === null ? 'Staff' : group}
+          inferencer={inferencer}
+        />
       </div>
       <div className="achievement-main">
         <div className="filters">
