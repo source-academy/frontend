@@ -19,7 +19,7 @@ exports[`AchievementExp component renders correctly 1`] = `
          /
          
         <Blueprint3.EditableText placeholder=\\"Enter your goal target here\\" value=\\"250\\" onChange={[Function: changeTarget]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
-          <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+          <div className=\\"bp3-editable-text\\" onFocus={[Function]} tabIndex={0}>
             <span className=\\"bp3-editable-text-content\\" style={{...}}>
               250
             </span>
@@ -31,7 +31,7 @@ exports[`AchievementExp component renders correctly 1`] = `
     </div>
     <div className=\\"goal-text\\">
       <Blueprint3.EditableText placeholder=\\"Enter your goal text here\\" value=\\"Complete Beyond the Second Dimension achievement\\" onChange={[Function: changeGoalText]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
-        <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+        <div className=\\"bp3-editable-text\\" onFocus={[Function]} tabIndex={0}>
           <span className=\\"bp3-editable-text-content\\" style={{...}}>
             Complete Beyond the Second Dimension achievement
           </span>
@@ -39,7 +39,7 @@ exports[`AchievementExp component renders correctly 1`] = `
       </Blueprint3.EditableText>
     </div>
     <Blueprint3.Button text=\\"Remove Goal\\" onClick={[Function: onClick]}>
-      <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={[undefined]} />
         <span className=\\"bp3-button-text\\">
           Remove Goal

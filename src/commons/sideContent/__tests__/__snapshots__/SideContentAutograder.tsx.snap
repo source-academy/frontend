@@ -3,8 +3,8 @@
 exports[`Autograder renders autograder results with different statuses correctly 1`] = `
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -32,8 +32,8 @@ exports[`Autograder renders autograder results with different statuses correctly
         </div>
       </div>
     </Blueprint3.Collapse>
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -194,8 +194,8 @@ exports[`Autograder renders autograder results with different statuses correctly
 exports[`Autograder renders hidden testcases with different statuses correctly 1`] = `
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -260,8 +260,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
           </div>
           <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-placeholder\\">
                     <pre className=\\"bp3-code-block testcase-placeholder\\">
                       Hidden testcase
@@ -273,8 +273,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard correct\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-placeholder\\">
                     <pre className=\\"bp3-code-block testcase-placeholder\\">
                       Hidden testcase
@@ -286,8 +286,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard wrong\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-placeholder\\">
                     <pre className=\\"bp3-code-block testcase-placeholder\\">
                       Hidden testcase
@@ -299,8 +299,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard wrong\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-placeholder\\">
                     <pre className=\\"bp3-code-block testcase-placeholder\\">
                       Hidden testcase
@@ -313,8 +313,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
         </div>
       </div>
     </Blueprint3.Collapse>
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -348,7 +348,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
 
 exports[`Autograder renders placeholders correctly when testcases and results are empty 1`] = `
 "<div className=\\"Autograder\\">
-  <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+  <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
     Testcases
   </Blueprint3.Button>
   <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -356,7 +356,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
       There are no testcases provided for this mission.
     </div>
   </Blueprint3.Collapse>
-  <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+  <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
     Autograder Results
   </Blueprint3.Button>
   <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
@@ -370,8 +370,8 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
 exports[`Autograder renders public testcases with different statuses correctly 1`] = `
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -436,8 +436,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           </div>
           <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard correct\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-program\\">
                     <pre className=\\"bp3-code-block testcase-program\\">
                       &quot;string&quot;;
@@ -459,8 +459,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-program\\">
                     <pre className=\\"bp3-code-block testcase-program\\">
                       fibonacci(2);
@@ -482,8 +482,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard correct\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-program\\">
                     <pre className=\\"bp3-code-block testcase-program\\">
                       fibonacci(3);
@@ -505,8 +505,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard wrong\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-program\\">
                     <pre className=\\"bp3-code-block testcase-program\\">
                       fibonacci(4);
@@ -528,8 +528,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           </SideContentAutograderCard>
           <SideContentAutograderCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
             <div className=\\"AutograderCard wrong\\">
-              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
-                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+              <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function]} interactive={false}>
+                <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function]}>
                   <Component className=\\"testcase-program\\">
                     <pre className=\\"bp3-code-block testcase-program\\">
                       fibonacci(5);
@@ -552,8 +552,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
         </div>
       </div>
     </Blueprint3.Collapse>
-    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>

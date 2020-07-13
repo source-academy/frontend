@@ -5,14 +5,14 @@ exports[`Application renders correctly 1`] = `
   <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
   <div className=\\"Application__main\\">
     <Switch>
-      <Route path=\\"/academy\\" component={[Function (anonymous)]} />
+      <Route path=\\"/academy\\" component={[Function]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
       <Route path=\\"/playground\\" component={[Function: C]} />
-      <Route path=\\"/login\\" render={[Function (anonymous)]} />
+      <Route path=\\"/login\\" render={[Function]} />
       <Route path=\\"/contributors\\" component={[function]} />
       <Route path=\\"/sourcecast\\" component={{...}} />
-      <Route path=\\"/achievements\\" component={[Function (anonymous)]} />
-      <Route exact={true} path=\\"/\\" render={[Function (anonymous)]} />
+      <Route path=\\"/achievements\\" component={[Function]} />
+      <Route exact={true} path=\\"/\\" render={[Function]} />
       <Route component={[Function: NotFound]} />
     </Switch>
   </div>
