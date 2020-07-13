@@ -31,6 +31,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { toS3Path } from '../../utils/GameUtils';
 import { Constants } from '../../commons/CommonConstants';
 import { createGamePhases } from './GameManagerHelper';
+import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -68,6 +69,7 @@ class GameManager extends Phaser.Scene {
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
   public inputManager: GameInputManager;
+  public collectibleManager: GameCollectiblesManager;
 
   constructor() {
     super('GameManager');
@@ -94,6 +96,7 @@ class GameManager extends Phaser.Scene {
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
     this.inputManager = new GameInputManager();
+    this.collectibleManager = new GameCollectiblesManager();
   }
 
   public init({
@@ -130,6 +133,7 @@ class GameManager extends Phaser.Scene {
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
     this.inputManager = new GameInputManager();
+    this.collectibleManager = new GameCollectiblesManager();
   }
 
   //////////////////////
@@ -153,7 +157,11 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.phaseManager.initialise(createGamePhases(this.escapeManager), this.inputManager);
+    this.collectibleManager.initialise(this, this.layerManager, this.soundManager);
+    this.phaseManager.initialise(
+      createGamePhases(this.escapeManager, this.collectibleManager),
+      this.inputManager
+    );
 
     this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.phaseManager.setCallback(async () => await this.checkpointTransition());
@@ -245,6 +253,13 @@ class GameManager extends Phaser.Scene {
         }
       }
     );
+    this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
+      if (this.phaseManager.isCurrentPhase(GamePhaseType.CollectibleMenu)) {
+        await this.phaseManager.popPhase();
+      } else {
+        await this.phaseManager.pushPhase(GamePhaseType.CollectibleMenu);
+      }
+    });
   }
 
   public cleanUp() {

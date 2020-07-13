@@ -1,7 +1,7 @@
 import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
-import { screenCenter } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import collectibleConstants, {
   pageBannerTextStyle,
@@ -14,11 +14,12 @@ import { resizeUnderflow } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
-import { limitNumber } from '../utils/GameUtils';
+import { limitNumber, sleep } from '../utils/GameUtils';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
 import GameSoundManager from '../sound/GameSoundManager';
+import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
@@ -88,15 +89,42 @@ class GameCollectiblesManager implements IGameUI {
     // Set initial page
     this.setPage(this.currActivePage);
 
-    this.uiContainer.setPosition(screenCenter.x, screenCenter.y);
+    this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
+
+    this.getScene().tweens.add({
+      targets: this.uiContainer,
+      ...entryTweenProps,
+      y: screenCenter.y
+    });
   }
 
   public async deactivateUI(): Promise<void> {
-    if (this.uiContainer) fadeAndDestroy(this.getScene(), this.uiContainer);
+    if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
+
+      this.getScene().tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(exitTweenProps.duration);
+      fadeAndDestroy(this.getScene(), this.uiContainer, { fadeDuration: 50 });
+    }
   }
 
   private createUIContainer() {
     const collectibleContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+
+    const blackUnderlay = new Phaser.GameObjects.Rectangle(
+      this.getScene(),
+      0,
+      0,
+      screenSize.x,
+      4 * screenSize.y,
+      0
+    )
+      .setAlpha(0.7)
+      .setInteractive();
 
     const collectiblesBg = new Phaser.GameObjects.Image(
       this.getScene(),
@@ -104,7 +132,7 @@ class GameCollectiblesManager implements IGameUI {
       0,
       ImageAssets.collectiblesMenu.key
     );
-    collectibleContainer.add(collectiblesBg);
+    collectibleContainer.add([blackUnderlay, collectiblesBg]);
 
     // Add options
     const pageOptButtons = Object.keys(CollectiblePage).map((page, index) => {
