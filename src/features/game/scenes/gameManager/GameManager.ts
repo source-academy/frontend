@@ -30,6 +30,7 @@ import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcompo
 import { Layer } from '../../layer/GameLayerTypes';
 import { toS3Path } from '../../utils/GameUtils';
 import { Constants } from '../../commons/CommonConstants';
+import { createGamePhases } from './GameManagerHelper';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;
@@ -137,6 +138,7 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     GameGlobalAPI.getInstance().setGameManager(this);
+    addLoadingScreen(this);
     this.loadGameState();
 
     this.currentLocationId =
@@ -151,12 +153,12 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.phaseManager.initialise();
-    this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
-    this.bindEscapeMenu();
+    this.phaseManager.initialise(createGamePhases(this.escapeManager), this.inputManager);
 
-    addLoadingScreen(this);
+    this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
+    this.phaseManager.setCallback(async () => await this.checkpointTransition());
     this.preloadLocationsAssets(this.getCurrentCheckpoint());
+    this.bindKeyboardTriggers();
   }
 
   private loadGameState() {
@@ -210,6 +212,7 @@ class GameManager extends Phaser.Scene {
         this.getCurrentCheckpoint().map.getStartActions()
       );
     }
+
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
     }
@@ -230,7 +233,7 @@ class GameManager extends Phaser.Scene {
     this.stateManager.triggerInteraction(locationId);
   }
 
-  private bindEscapeMenu() {
+  private bindKeyboardTriggers() {
     this.inputManager.registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
@@ -251,13 +254,15 @@ class GameManager extends Phaser.Scene {
   }
 
   public async checkpointTransition() {
-    this.phaseManager.phaseMap.get(GamePhaseType.Menu)?.deactivateUI();
-    await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
-    this.cleanUp();
-    if (GameGlobalAPI.getInstance().isStorySimulator()) {
-      this.scene.start('StorySimulatorMenu');
-    } else {
-      this.scene.start('CheckpointTransition');
+    // Transition to the next scene if possible
+    if (GameGlobalAPI.getInstance().isAllComplete()) {
+      await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
+      this.cleanUp();
+      if (GameGlobalAPI.getInstance().isStorySimulator()) {
+        this.scene.start('StorySimulatorMenu');
+      } else {
+        this.scene.start('CheckpointTransition');
+      }
     }
   }
 

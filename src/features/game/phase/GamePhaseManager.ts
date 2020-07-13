@@ -1,21 +1,27 @@
-import _ from 'lodash';
-
 import { GamePhaseType } from './GamePhaseTypes';
-import { createGamePhases } from './GamePhaseConstants';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { IGameUI } from '../commons/CommonTypes';
+import GameInputManager from '../input/GameInputManager';
+import { Constants } from '../commons/CommonConstants';
 
 export default class GamePhaseManager {
-  private phaseStack: GamePhaseType[];
   public phaseMap: Map<GamePhaseType, IGameUI>;
+  private phaseStack: GamePhaseType[];
+  private inputManager: GameInputManager | undefined;
+  private phaseTransitionCallback: () => void;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
     this.phaseMap = new Map<GamePhaseType, IGameUI>();
+    this.phaseTransitionCallback = Constants.nullFunction;
   }
 
-  public initialise() {
-    this.phaseMap = createGamePhases();
+  public initialise(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
+    this.phaseMap = phaseMap;
+    this.inputManager = inputManager;
+  }
+
+  public setCallback(fn: () => void) {
+    this.phaseTransitionCallback = fn;
   }
 
   public async popPhase(): Promise<void> {
@@ -38,22 +44,15 @@ export default class GamePhaseManager {
     await this.executePhaseTransition(prevPhase, newPhase);
   }
 
-  public async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    // Transition to the next scene if possible
-    if (
-      _.isEqual(this.phaseStack, [GamePhaseType.Menu]) &&
-      GameGlobalAPI.getInstance().isAllComplete()
-    ) {
-      await this.phaseMap.get(prevPhase)!.deactivateUI();
-      await GameGlobalAPI.getInstance().getGameManager().checkpointTransition();
-      return;
-    }
-    GameGlobalAPI.getInstance().enableKeyboardInput(false);
-    GameGlobalAPI.getInstance().enableMouseInput(false);
+  private async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
+    await this.phaseTransitionCallback();
+
+    this.getInputManager().enableKeyboardInput(false);
+    this.getInputManager().enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
     await this.phaseMap.get(newPhase)!.activateUI();
-    GameGlobalAPI.getInstance().enableMouseInput(true);
-    GameGlobalAPI.getInstance().enableKeyboardInput(true);
+    this.getInputManager().enableMouseInput(true);
+    this.getInputManager().enableKeyboardInput(true);
   }
 
   public isCurrentPhase(phase: GamePhaseType): boolean {
@@ -65,5 +64,12 @@ export default class GamePhaseManager {
       this.phaseStack = [GamePhaseType.None];
     }
     return this.phaseStack[this.phaseStack.length - 1];
+  }
+
+  public getInputManager() {
+    if (!this.inputManager) {
+      throw new Error(`Input manager does not exist!`);
+    }
+    return this.inputManager;
   }
 }

@@ -5,5 +5,6 @@ export enum GamePhaseType {
   Menu = 'Menu',
   EscapeMenu = 'EscapeMenu',
   None = 'None',
-  Sequence = 'Sequence'
+  Sequence = 'Sequence',
+  CollectibleMenu = 'CollectibleMenu'
 }
