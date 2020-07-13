@@ -13,7 +13,7 @@ class GameLayerManager {
     this.layers = new Map<Layer, Phaser.GameObjects.Container>();
   }
 
-  public initialiseMainLayer(scene: Phaser.Scene) {
+  public initialise(scene: Phaser.Scene) {
     this.mainLayer = new Phaser.GameObjects.Container(scene, 0, 0);
     scene.add.existing(this.mainLayer);
     for (const layerType of defaultLayerSequence) {

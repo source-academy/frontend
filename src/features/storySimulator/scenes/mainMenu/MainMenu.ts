@@ -26,7 +26,7 @@ class MainMenu extends Phaser.Scene {
   }
   public init() {
     getStorySimulatorGame().setStorySimProps({ mainMenuRef: this });
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager.initialise(this);
     this.soundManager.initialise(this, getStorySimulatorGame());
   }
 

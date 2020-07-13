@@ -150,7 +150,7 @@ class GameManager extends Phaser.Scene {
     this.inputManager.initialise(this);
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager.initialise(this);
     this.phaseManager.initialise();
     this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.bindEscapeMenu();

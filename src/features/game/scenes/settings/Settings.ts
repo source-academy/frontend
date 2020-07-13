@@ -31,7 +31,7 @@ class Settings extends Phaser.Scene {
   }
 
   public preload() {
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager.initialise(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
   }
 

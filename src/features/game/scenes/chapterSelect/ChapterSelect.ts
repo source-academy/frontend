@@ -43,7 +43,7 @@ class ChapterSelect extends Phaser.Scene {
   public preload() {
     this.chapterDetails = SampleChapters;
     this.preloadAssets();
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager.initialise(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
     addLoadingScreen(this);
   }

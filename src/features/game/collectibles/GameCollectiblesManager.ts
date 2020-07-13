@@ -17,10 +17,13 @@ import { createButton } from '../utils/ButtonUtils';
 import { limitNumber } from '../utils/GameUtils';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { calcListFormatPos } from '../utils/StyleUtils';
+import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
+import GameSoundManager from '../sound/GameSoundManager';
 
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
+  private soundManager: GameSoundManager | undefined;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewContainer: Phaser.GameObjects.Container | undefined;
   private itemsContainer: Phaser.GameObjects.Container | undefined;
@@ -33,9 +36,14 @@ class GameCollectiblesManager implements IGameUI {
     this.currActivePage = CollectiblePage.Collectibles;
   }
 
-  public initialise(scene: Phaser.Scene, layerManager: GameLayerManager) {
+  public initialise(
+    scene: Phaser.Scene,
+    layerManager: GameLayerManager,
+    soundManager: GameSoundManager
+  ) {
     this.scene = scene;
     this.layerManager = layerManager;
+    this.soundManager = soundManager;
 
     // Set initial page number to zero
     Object.keys(CollectiblePage).forEach((page, index) => {
@@ -87,7 +95,7 @@ class GameCollectiblesManager implements IGameUI {
     if (this.uiContainer) fadeAndDestroy(this.getScene(), this.uiContainer);
   }
 
-  public createUIContainer() {
+  private createUIContainer() {
     const collectibleContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
     const collectiblesBg = new Phaser.GameObjects.Image(
@@ -118,10 +126,14 @@ class GameCollectiblesManager implements IGameUI {
     );
 
     // Add page arrows
-    const arrowLeft = createButton(this.getScene(), {
-      assetKey: ImageAssets.arrow.key,
-      onUp: () => this.nextPage(false)
-    })
+    const arrowLeft = createButton(
+      this.getScene(),
+      {
+        assetKey: ImageAssets.arrow.key,
+        onUp: () => this.nextPage(false)
+      },
+      this.soundManager
+    )
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
@@ -129,10 +141,14 @@ class GameCollectiblesManager implements IGameUI {
         collectibleConstants.arrowDownYPos
       );
 
-    const arrowRight = createButton(this.getScene(), {
-      assetKey: ImageAssets.arrow.key,
-      onUp: () => this.nextPage(true)
-    })
+    const arrowRight = createButton(
+      this.getScene(),
+      {
+        assetKey: ImageAssets.arrow.key,
+        onUp: () => this.nextPage(true)
+      },
+      this.soundManager
+    )
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
@@ -230,13 +246,17 @@ class GameCollectiblesManager implements IGameUI {
   }
 
   private addPageOpt(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesPage.key,
-      message: text,
-      textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
-      bitMapTextStyle: pageBannerTextStyle,
-      onUp: callback
-    }).setPosition(xPos, yPos);
+    return createButton(
+      this.getScene(),
+      {
+        assetKey: ImageAssets.collectiblesPage.key,
+        message: text,
+        textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
+        bitMapTextStyle: pageBannerTextStyle,
+        onUp: callback
+      },
+      this.soundManager
+    ).setPosition(xPos, yPos);
   }
 
   private createItemsContainer() {
@@ -262,23 +282,27 @@ class GameCollectiblesManager implements IGameUI {
   }
 
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesBanner.key,
-      message: obj,
-      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
-      bitMapTextStyle: listBannerTextStyle,
-      onUp: callback
-    }).setPosition(xPos, yPos);
+    return createButton(
+      this.getScene(),
+      {
+        assetKey: ImageAssets.collectiblesBanner.key,
+        message: obj,
+        textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+        bitMapTextStyle: listBannerTextStyle,
+        onUp: callback
+      },
+      this.soundManager
+    ).setPosition(xPos, yPos);
   }
 
   private getItems(pageNum: number) {
     let itemList: string[];
     switch (this.currActivePage) {
       case CollectiblePage.Achievements:
-        itemList = this.getAchievements();
+        itemList = getAchievements();
         break;
       case CollectiblePage.Collectibles:
-        itemList = this.getCollectibles();
+        itemList = getCollectibles();
         break;
       default:
         itemList = [];
@@ -286,27 +310,6 @@ class GameCollectiblesManager implements IGameUI {
 
     const itemStartIdx = pageNum * collectibleConstants.itemsPerPage;
     return itemList.slice(itemStartIdx, itemStartIdx + collectibleConstants.itemsPerPage);
-  }
-
-  private getCollectibles() {
-    return ['collect1', 'collect2'];
-  }
-
-  private getAchievements() {
-    return [
-      'achievement1',
-      'achievement2',
-      'achievement3',
-      'achievement4',
-      'achievement5',
-      'achievement6',
-      'achievement7',
-      'achievement8',
-      'achievement9',
-      'achievement10',
-      'achievement11',
-      'achievement12'
-    ];
   }
 }
 

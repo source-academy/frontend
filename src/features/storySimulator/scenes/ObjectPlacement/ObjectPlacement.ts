@@ -66,7 +66,7 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public create() {
-    this.layerManager.initialiseMainLayer(this);
+    this.layerManager.initialise(this);
     this.soundManager.initialise(this, getStorySimulatorGame());
     this.inputManager.initialise(this);
     this.renderBackground();

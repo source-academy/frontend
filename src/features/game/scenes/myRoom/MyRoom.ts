@@ -2,26 +2,21 @@ import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 
 class MyRoom extends Phaser.Scene {
   private layerManager: GameLayerManager;
-  private collectiblesManager: GameCollectiblesManager;
 
   constructor() {
     super('MyRoom');
     this.layerManager = new GameLayerManager();
-    this.collectiblesManager = new GameCollectiblesManager();
   }
 
   public preload() {
     addLoadingScreen(this);
-    this.layerManager.initialiseMainLayer(this);
-    this.collectiblesManager.initialise(this, this.layerManager);
+    this.layerManager.initialise(this);
   }
 
   public create() {
-    this.collectiblesManager.activateUI();
     this.renderMyRoom();
   }
 
