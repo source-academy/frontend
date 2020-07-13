@@ -22,7 +22,8 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
   };
 
   const changeTarget = (goalTarget: string) => {
-    newGoal.goalTarget = parseInt(goalTarget);
+    const newGoalTarget = isNaN(parseInt(goalTarget)) ? 0 : parseInt(goalTarget);
+    newGoal.goalTarget = newGoalTarget;
     setNewGoal(newGoal);
     editGoal(newGoal);
   };
