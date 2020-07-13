@@ -16,7 +16,7 @@ import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
-import EditableAchievementGoals from './editableUtils/EditableAchievementGoals';
+import EditableAchievementGoals from './editableUtils/goals/EditableAchievementGoals';
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
