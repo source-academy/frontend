@@ -1,6 +1,5 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { loadImage, loadSound } from 'src/features/game/utils/LoaderUtils';
@@ -10,6 +9,13 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import GameInputManager from '../../input/GameInputManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import GamePhaseManager from '../../phase/GamePhaseManager';
+import GameSaveManager from '../../save/GameSaveManager';
+import GameEscapeManager from '../../escape/GameEscapeManager';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
+import { loadData } from '../../save/GameSaveRequests';
+import { createCMRGamePhases } from './RoomPreviewHelper';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 type RoomPreviewProps = {
   studentCode: string;
@@ -17,38 +23,68 @@ type RoomPreviewProps = {
 
 export default class RoomPreview extends Phaser.Scene {
   private layerManager: GameLayerManager;
+  private phaseManager: GamePhaseManager;
   private soundManager: GameSoundManager;
   private inputManager: GameInputManager;
+  private saveManager: GameSaveManager;
+  private escapeManager: GameEscapeManager;
   private collectibleManager: GameCollectiblesManager;
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
-
-  // TODO: Replace with phase manager
-  private isCollectibleMenuActive: boolean;
 
   constructor() {
     super('RoomPreview');
     this.preloadImageMap = new Map<string, string>();
     this.preloadSoundMap = new Map<string, string>();
     this.layerManager = new GameLayerManager();
+    this.phaseManager = new GamePhaseManager();
+    this.saveManager = new GameSaveManager();
     this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
+    this.escapeManager = new GameEscapeManager();
     this.collectibleManager = new GameCollectiblesManager();
     this.studentCode = roomDefaultCode;
-    this.isCollectibleMenuActive = false;
   }
 
   public init({ studentCode }: RoomPreviewProps) {
     this.studentCode = studentCode;
-    this.layerManager.initialise(this);
+    this.layerManager = new GameLayerManager();
+    this.phaseManager = new GamePhaseManager();
+    this.saveManager = new GameSaveManager();
+    this.soundManager = new GameSoundManager();
+    this.inputManager = new GameInputManager();
+    this.escapeManager = new GameEscapeManager();
+    this.collectibleManager = new GameCollectiblesManager();
+  }
+
+  public preload() {
+    addLoadingScreen(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
+    this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.collectibleManager.initialise(this, this.layerManager, this.soundManager);
+    this.phaseManager.initialise(
+      createCMRGamePhases(this.escapeManager, this.collectibleManager),
+      this.inputManager
+    );
+    this.escapeManager.initialise(
+      this,
+      this.layerManager,
+      this.phaseManager,
+      this.soundManager,
+      this.inputManager,
+      this.saveManager,
+      false
+    );
     this.bindKeyboardTriggers();
   }
 
   public async create() {
+    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    const fullSaveState = await loadData(accountInfo);
+    this.saveManager.initialiseForSettings(accountInfo, fullSaveState);
+
     await this.eval(`preload();`);
 
     await Promise.all(
@@ -64,17 +100,6 @@ export default class RoomPreview extends Phaser.Scene {
     );
 
     await this.eval(`create();`);
-    const backButton = new CommonBackButton(
-      this,
-      () => {
-        this.cleanUp();
-        this.scene.start('MainMenu');
-      },
-      0,
-      0,
-      this.soundManager
-    );
-    this.layerManager.addToLayer(Layer.UI, backButton);
     this.soundManager.stopCurrBgMusic();
   }
 
@@ -98,13 +123,22 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   private bindKeyboardTriggers() {
+    this.inputManager.registerKeyboardListener(
+      Phaser.Input.Keyboard.KeyCodes.ESC,
+      'up',
+      async () => {
+        if (this.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await this.phaseManager.popPhase();
+        } else {
+          await this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
+        }
+      }
+    );
     this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
-      if (this.isCollectibleMenuActive) {
-        await this.collectibleManager.deactivateUI();
-        this.isCollectibleMenuActive = false;
+      if (this.phaseManager.isCurrentPhase(GamePhaseType.CollectibleMenu)) {
+        await this.phaseManager.popPhase();
       } else {
-        await this.collectibleManager.activateUI();
-        this.isCollectibleMenuActive = true;
+        await this.phaseManager.pushPhase(GamePhaseType.CollectibleMenu);
       }
     });
   }

@@ -1,3 +1,7 @@
+import GameEscapeManager from '../../escape/GameEscapeManager';
+import GameModeSequence from '../../mode/sequence/GameModeSequence';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
@@ -26,3 +30,14 @@ function getStudentRoomCode(mission: Assessment | null) {
   }
   return roomDefaultCode;
 }
+
+export const createCMRGamePhases = (
+  escapeMenu: GameEscapeManager,
+  collectibleMenu: GameCollectiblesManager
+) => {
+  return new Map([
+    [GamePhaseType.None, new GameModeSequence()],
+    [GamePhaseType.EscapeMenu, escapeMenu],
+    [GamePhaseType.CollectibleMenu, collectibleMenu]
+  ]);
+};

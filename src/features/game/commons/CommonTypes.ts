@@ -11,21 +11,21 @@ export type GameSprite = {
   assetYPos: number;
 };
 
-export type GameText = {
-  text?: string;
-  bitmapStyle?: BitmapFontStyle;
-  style?: any;
-};
+// export type GameText = {
+// text?: string;
+// bitmapStyle?: BitmapFontStyle;
+// style?: any;
+// };
 
 export type ItemId = string;
 export type AssetKey = string;
 export type AssetPath = string;
 
-export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
+// export type GameButton = GameText & GameSprite & IGameInteractive & TrackInteraction;
 
-export interface IGameInteractive {
-  onInteract: () => void;
-}
+// export interface IGameInteractive {
+// onInteract: () => void;
+// }
 
 export type TrackInteraction = {
   isInteractive: boolean;
