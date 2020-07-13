@@ -62,7 +62,7 @@ export function createChapter(
       onHover: () => chapterRepeatHover.setVisible(true),
       onOut: () => chapterRepeatHover.setVisible(false)
     },
-    scene.getSoundManager()
+    scene.soundManager
   ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   const chapterContinue = createButton(
@@ -74,7 +74,7 @@ export function createChapter(
       onHover: () => chapterContinueHover.setVisible(true),
       onOut: () => chapterContinueHover.setVisible(false)
     },
-    scene.getSoundManager()
+    scene.soundManager
   ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   // Chapter Text

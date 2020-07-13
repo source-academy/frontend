@@ -2,7 +2,7 @@ import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IGameUI } from '../commons/CommonTypes';
+import { IGameUI, IBaseScene } from '../commons/CommonTypes';
 import collectibleConstants, {
   pageBannerTextStyle,
   listBannerTextStyle,
@@ -40,15 +40,10 @@ class GameCollectiblesManager implements IGameUI {
     this.currActivePage = CollectiblePage.Collectibles;
   }
 
-  public initialise(
-    scene: Phaser.Scene,
-    layerManager: GameLayerManager,
-    soundManager: GameSoundManager,
-    phaseManager: GamePhaseManager
-  ) {
+  public initialise(scene: IBaseScene, phaseManager: GamePhaseManager) {
     this.scene = scene;
-    this.layerManager = layerManager;
-    this.soundManager = soundManager;
+    this.layerManager = scene.layerManager;
+    this.soundManager = scene.soundManager;
     this.phaseManager = phaseManager;
 
     // Set initial page number to zero

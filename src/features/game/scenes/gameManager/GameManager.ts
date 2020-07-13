@@ -157,25 +157,12 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.collectibleManager.initialise(
-      this,
-      this.layerManager,
-      this.soundManager,
-      this.phaseManager
-    );
+    this.collectibleManager.initialise(this, this.phaseManager);
     this.phaseManager.initialise(
       createGamePhases(this.escapeManager, this.collectibleManager),
       this.inputManager
     );
-    this.escapeManager.initialise(
-      this,
-      this.layerManager,
-      this.phaseManager,
-      this.soundManager,
-      this.inputManager,
-      this.saveManager,
-      this.isStorySimulator
-    );
+    this.escapeManager.initialise(this, this.phaseManager, this.saveManager, this.isStorySimulator);
 
     this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.phaseManager.setCallback(async () => await this.checkpointTransition());

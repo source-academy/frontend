@@ -8,7 +8,7 @@ import escapeConstants, {
 import { Layer } from '../layer/GameLayerTypes';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import { IGameUI } from '../commons/CommonTypes';
+import { IGameUI, IBaseScene } from '../commons/CommonTypes';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { calcTableFormatPos } from '../utils/StyleUtils';
@@ -35,19 +35,16 @@ class GameEscapeManager implements IGameUI {
   }
 
   public initialise(
-    scene: Phaser.Scene,
-    layerManager: GameLayerManager,
+    scene: IBaseScene,
     phaseManager: GamePhaseManager,
-    soundManager: GameSoundManager,
-    inputManager: GameInputManager,
     saveManager: GameSaveManager,
     isStorySimulator: boolean
   ) {
     this.scene = scene;
-    this.layerManager = layerManager;
+    this.layerManager = scene.layerManager;
+    this.soundManager = scene.soundManager;
+    this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
-    this.soundManager = soundManager;
-    this.inputManager = inputManager;
     this.saveManager = saveManager;
     this.isStorySimulator = isStorySimulator;
   }

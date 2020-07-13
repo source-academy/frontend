@@ -1,3 +1,7 @@
+import GameSoundManager from '../sound/GameSoundManager';
+import GameLayerManager from '../layer/GameLayerManager';
+import GameInputManager from '../input/GameInputManager';
+
 export type BitmapFontStyle = {
   key: string;
   size: number;
@@ -32,3 +36,10 @@ export enum GamePosition {
 }
 
 export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
+
+export interface IBaseScene extends Phaser.Scene {
+  soundManager: GameSoundManager;
+  layerManager: GameLayerManager;
+  inputManager: GameInputManager;
+  cleanUp: () => void;
+}

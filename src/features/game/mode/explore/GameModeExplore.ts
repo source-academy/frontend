@@ -96,7 +96,10 @@ class GameModeExplore implements IGameUI {
   }
 
   private explorePointerUp(id: string) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    gameManager.input.setDefaultCursor('');
     GameGlobalAPI.getInstance().triggerInteraction(id);
+    gameManager.input.setDefaultCursor(magnifyingGlass);
   }
 }
 

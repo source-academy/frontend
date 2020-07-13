@@ -22,10 +22,11 @@ type RoomPreviewProps = {
 };
 
 export default class RoomPreview extends Phaser.Scene {
-  private layerManager: GameLayerManager;
+  public layerManager: GameLayerManager;
+  public soundManager: GameSoundManager;
+  public inputManager: GameInputManager;
+
   private phaseManager: GamePhaseManager;
-  private soundManager: GameSoundManager;
-  private inputManager: GameInputManager;
   private saveManager: GameSaveManager;
   private escapeManager: GameEscapeManager;
   private collectibleManager: GameCollectiblesManager;
@@ -63,25 +64,12 @@ export default class RoomPreview extends Phaser.Scene {
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
-    this.collectibleManager.initialise(
-      this,
-      this.layerManager,
-      this.soundManager,
-      this.phaseManager
-    );
+    this.collectibleManager.initialise(this, this.phaseManager);
     this.phaseManager.initialise(
       createCMRGamePhases(this.escapeManager, this.collectibleManager),
       this.inputManager
     );
-    this.escapeManager.initialise(
-      this,
-      this.layerManager,
-      this.phaseManager,
-      this.soundManager,
-      this.inputManager,
-      this.saveManager,
-      false
-    );
+    this.escapeManager.initialise(this, this.phaseManager, this.saveManager, false);
     this.bindKeyboardTriggers();
   }
 

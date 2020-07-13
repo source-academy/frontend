@@ -16,16 +16,16 @@ import { createButton } from '../../utils/ButtonUtils';
 import GameSoundManager from '../../sound/GameSoundManager';
 
 class ChapterSelect extends Phaser.Scene {
+  public layerManager: GameLayerManager;
+  public soundManager: GameSoundManager;
+  public chapterDetails: GameChapter[];
+
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
-  private layerManager: GameLayerManager;
-  private soundManager: GameSoundManager;
   private loadedGameState: FullSaveState | undefined;
   private autoScrolling: boolean;
   private isScrollLeft: boolean;
   private isScrollRight: boolean;
-
-  public chapterDetails: GameChapter[];
 
   constructor() {
     super('ChapterSelect');
@@ -41,11 +41,12 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public preload() {
-    this.chapterDetails = SampleChapters;
+    addLoadingScreen(this);
     this.preloadAssets();
+
+    this.chapterDetails = SampleChapters;
     this.layerManager.initialise(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
-    addLoadingScreen(this);
   }
 
   public async create() {
@@ -72,8 +73,11 @@ class ChapterSelect extends Phaser.Scene {
     );
   }
 
-  public getSoundManager() {
-    return this.soundManager;
+  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
+
+  public cleanUp() {
+    this.soundManager.stopCurrBgMusic();
+    this.layerManager.clearAllLayers();
   }
 
   private preloadAssets() {
@@ -106,7 +110,7 @@ class ChapterSelect extends Phaser.Scene {
     this.backButtonContainer = new CommonBackButton(
       this,
       () => {
-        this.layerManager.clearAllLayers();
+        this.cleanUp();
         this.scene.start('MainMenu');
       },
       0,
@@ -206,8 +210,6 @@ class ChapterSelect extends Phaser.Scene {
     });
     await sleep(scrollDuration);
   }
-
-  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
 }
 
 export default ChapterSelect;
