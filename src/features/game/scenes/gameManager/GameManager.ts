@@ -165,7 +165,9 @@ class GameManager extends Phaser.Scene {
     this.escapeManager.initialise(this, this.phaseManager, this.saveManager, this.isStorySimulator);
 
     this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
-    this.phaseManager.setCallback(async () => await this.checkpointTransition());
+    this.phaseManager.setCallback(
+      async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
+    );
     this.preloadLocationsAssets(this.getCurrentCheckpoint());
     this.bindKeyboardTriggers();
   }
@@ -269,9 +271,12 @@ class GameManager extends Phaser.Scene {
     this.layerManager.clearAllLayers();
   }
 
-  public async checkpointTransition() {
+  public async checkpointTransition(newPhase: GamePhaseType) {
+    const transitionToNextCheckpoint =
+      newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();
+
     // Transition to the next scene if possible
-    if (GameGlobalAPI.getInstance().isAllComplete()) {
+    if (transitionToNextCheckpoint) {
       await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
       this.cleanUp();
       if (GameGlobalAPI.getInstance().isStorySimulator()) {
