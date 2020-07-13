@@ -50,10 +50,6 @@ class GameGlobalAPI {
     return this.getGameManager().isStorySimulator;
   }
 
-  public checkpointTransition() {
-    this.getGameManager().checkpointTransition();
-  }
-
   public getAccountInfo() {
     return this.getGameManager().getAccountInfo();
   }

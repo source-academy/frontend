@@ -39,8 +39,6 @@ const chapConstants = {
   indexYOffset: -160,
   titleYOffset: -100,
   arrowXOffset: 875,
-  offHoverAlpha: 0.7,
-  onHoverAlpha: 1.0,
   maskRect: {
     x: -screenCenter.x + marginX,
     y: -screenCenter.y + marginY,
