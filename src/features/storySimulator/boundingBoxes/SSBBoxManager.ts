@@ -7,6 +7,7 @@ import { ItemId } from 'src/features/game/commons/CommonTypes';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 import { toIntString } from '../utils/SSUtils';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class SSBBoxManager implements ICheckpointLoggable {
   public checkpointTitle = 'boundingBoxes';
@@ -97,12 +98,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     return this.bboxDetailMap.get(itemId);
   }
 
-  private getObjectPlacement() {
-    if (!this.objectPlacement) {
-      throw new Error('No object placement parent scene');
-    }
-    return this.objectPlacement;
-  }
+  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
 
   public resizeWhileBeingDrawn(objectPlacement: ObjectPlacement) {
     if (

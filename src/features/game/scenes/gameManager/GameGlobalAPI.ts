@@ -10,6 +10,7 @@ import { AssetKey } from '../../commons/CommonTypes';
 import { StateObserver } from '../../state/GameStateTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
+import { mandatory } from '../../utils/GameUtils';
 
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;
@@ -31,12 +32,7 @@ class GameGlobalAPI {
   //   Game Manager  //
   /////////////////////
 
-  public getGameManager(): GameManager {
-    if (!this.gameManager) {
-      throw new Error('Game Manager not found');
-    }
-    return this.gameManager;
-  }
+  public getGameManager = () => mandatory(this.gameManager) as GameManager;
 
   public setGameManager(gameManagerRef: GameManager): void {
     this.gameManager = gameManagerRef;

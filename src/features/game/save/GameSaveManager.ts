@@ -4,6 +4,7 @@ import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { FullSaveState, SettingsJson, SaveManagerType } from './GameSaveTypes';
 import { createEmptySaveState } from './GameSaveConstants';
 import { Constants } from '../commons/CommonConstants';
+import { mandatory } from '../utils/GameUtils';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
@@ -103,10 +104,5 @@ export default class GameSaveManager {
     return this.fullSaveState.gameSaveStates[this.chapterNum].currentPhase;
   }
 
-  private getAccountInfo() {
-    if (!this.accountInfo) {
-      throw new Error('No account info');
-    }
-    return this.accountInfo;
-  }
+  private getAccountInfo = () => mandatory(this.accountInfo) as AccountInfo;
 }

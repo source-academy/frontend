@@ -3,6 +3,7 @@ import { loadImage } from '../../game/utils/LoaderUtils';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class SSBackgroundManager {
   private backgroundAssetPath: string | undefined;
@@ -52,12 +53,7 @@ export default class SSBackgroundManager {
     this.getObjectPlacement().layerManager.addToLayer(Layer.Background, backgroundSprite);
   }
 
-  private getObjectPlacement() {
-    if (!this.objectPlacement) {
-      throw new Error('No object placement parent scene');
-    }
-    return this.objectPlacement;
-  }
+  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
 
   public getBackgroundAssetPath() {
     return this.backgroundAssetPath;

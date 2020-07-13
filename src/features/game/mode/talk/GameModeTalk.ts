@@ -1,7 +1,7 @@
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
-import { sleep } from '../../utils/GameUtils';
+import { sleep, mandatory } from '../../utils/GameUtils';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { screenSize } from '../../commons/CommonConstants';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
@@ -11,6 +11,7 @@ import ImageAssets from '../../assets/ImageAssets';
 import { createButton } from '../../utils/ButtonUtils';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -75,8 +76,7 @@ class GameModeTalk implements IGameUI {
 
   private getTalkTopicButtons(dialogueIds: ItemId[]) {
     return dialogueIds.map(dialogueId => {
-      const dialogue = GameGlobalAPI.getInstance().getDialogue(dialogueId);
-      if (!dialogue) throw new Error(`${dialogueId} does not exist`);
+      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId)) as Dialogue;
       return {
         text: dialogue.title,
         callback: async () => {

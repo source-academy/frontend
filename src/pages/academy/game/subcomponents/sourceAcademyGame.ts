@@ -11,6 +11,7 @@ import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export type AccountInfo = {
   accessToken: string;
@@ -72,10 +73,7 @@ export class SourceAcademyGame extends Phaser.Game {
   }
 
   public getAccountInfo() {
-    if (!this.global.accountInfo) {
-      throw new Error('No account info');
-    }
-    return this.global.accountInfo;
+    return mandatory(this.global.accountInfo) as AccountInfo;
   }
 
   public setStorySimProps(storySimulatorProps: any) {
@@ -90,11 +88,7 @@ export class SourceAcademyGame extends Phaser.Game {
   }
 
   public getStorySimProps() {
-    const storySimProps = this.global.storySimulatorProps;
-    if (!storySimProps) {
-      throw new Error('Story Sim props not found');
-    }
-    return storySimProps;
+    return mandatory(this.global.storySimulatorProps) as StorySimulatorProps;
   }
 }
 

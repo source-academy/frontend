@@ -3,6 +3,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import transformConstants from './SSTransformManagerConstants';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class SSTransformManager {
   private activeSelection: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle | undefined;
@@ -117,12 +118,7 @@ export default class SSTransformManager {
     this.activeSelection = undefined;
   }
 
-  private getObjectPlacement() {
-    if (!this.objectPlacement) {
-      throw new Error('No object placement parent scene');
-    }
-    return this.objectPlacement;
-  }
+  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
 
   private bindDeleteKey() {
     const deleteKeys = [

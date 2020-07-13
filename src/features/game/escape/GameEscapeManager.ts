@@ -18,6 +18,7 @@ import GameLayerManager from '../layer/GameLayerManager';
 import GameSoundManager from '../sound/GameSoundManager';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import GameInputManager from '../input/GameInputManager';
+import { mandatory } from '../utils/GameUtils';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButton | undefined;
@@ -186,47 +187,12 @@ class GameEscapeManager implements IGameUI {
     }
   }
 
-  private getScene() {
-    if (!this.scene) {
-      throw new Error('Scene does not exist');
-    }
-    return this.scene;
-  }
-
-  private getLayerManager() {
-    if (!this.layerManager) {
-      throw new Error('Layer Manager does not exist');
-    }
-    return this.layerManager;
-  }
-
-  private getSoundManager() {
-    if (!this.soundManager) {
-      throw new Error('Sound Manager does not exist');
-    }
-    return this.soundManager;
-  }
-
-  private getSaveManager() {
-    if (!this.saveManager) {
-      throw new Error('Save Manager does not exist');
-    }
-    return this.saveManager;
-  }
-
-  private getPhaseManager() {
-    if (!this.phaseManager) {
-      throw new Error('Phase Manager does not exist');
-    }
-    return this.phaseManager;
-  }
-
-  private getInputManager() {
-    if (!this.inputManager) {
-      throw new Error('Input Manager does not exist');
-    }
-    return this.inputManager;
-  }
+  private getScene = () => mandatory(this.scene) as Phaser.Scene;
+  private getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  private getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
+  private getSaveManager = () => mandatory(this.saveManager) as GameSaveManager;
+  private getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
+  private getInputManager = () => mandatory(this.inputManager) as GameInputManager;
 
   private cleanUp() {
     this.getSoundManager().stopCurrBgMusic();

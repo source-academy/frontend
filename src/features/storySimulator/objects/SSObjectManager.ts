@@ -7,7 +7,7 @@ import { toIntString } from '../utils/SSUtils';
 import { loadImage } from '../../game/utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
-import { mapValues } from 'src/features/game/utils/GameUtils';
+import { mapValues, mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class SSObjectManager implements ICheckpointLoggable {
   public checkpointTitle = 'objects';
@@ -62,10 +62,9 @@ export default class SSObjectManager implements ICheckpointLoggable {
       this.getObjectPlacement().generateItemIdNumber()
     );
 
-    const assetShortPath = this.getObjectPlacement().getAssetPath(objectAssetKey);
-    if (!assetShortPath) {
-      throw new Error('Object asset path not recorded');
-    }
+    const assetShortPath = mandatory(
+      this.getObjectPlacement().getAssetPath(objectAssetKey)
+    ) as string;
 
     const objectDetail: SSObjectDetail = {
       id: itemId,
@@ -110,12 +109,7 @@ export default class SSObjectManager implements ICheckpointLoggable {
     );
   }
 
-  private getObjectPlacement() {
-    if (!this.objectPlacement) {
-      throw new Error('No object placement parent scene');
-    }
-    return this.objectPlacement;
-  }
+  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
 
   public setAttribute(
     gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,

@@ -1,6 +1,6 @@
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { sleep, toS3Path } from '../utils/GameUtils';
+import { sleep, toS3Path, mandatory } from '../utils/GameUtils';
 import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
 import { UserSaveState } from '../save/GameSaveTypes';
 import { SoundAsset, AssetMap } from '../assets/AssetsTypes';
@@ -115,19 +115,9 @@ class GameSoundManager {
     this.getBaseSoundManager().volume = volume;
   }
 
-  public getBaseSoundManager() {
-    if (!this.baseSoundManager) {
-      throw Error('No base sound manager');
-    }
-    return this.baseSoundManager;
-  }
-
-  public getParentGame() {
-    if (!this.parentGame) {
-      throw Error('No parent game');
-    }
-    return this.parentGame;
-  }
+  public getBaseSoundManager = () =>
+    mandatory(this.baseSoundManager) as Phaser.Sound.BaseSoundManager;
+  public getParentGame = () => mandatory(this.parentGame) as SourceAcademyGame;
 }
 
 export default GameSoundManager;

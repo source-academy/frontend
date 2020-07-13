@@ -14,7 +14,7 @@ import { resizeUnderflow } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
-import { limitNumber, sleep } from '../utils/GameUtils';
+import { limitNumber, sleep, mandatory } from '../utils/GameUtils';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
@@ -277,26 +277,9 @@ class GameCollectiblesManager implements IGameUI {
     }
   }
 
-  private getScene() {
-    if (!this.scene) {
-      throw console.error('Undefined scene');
-    }
-    return this.scene;
-  }
-
-  private getLayerManager() {
-    if (!this.layerManager) {
-      throw console.error('Undefined Layer Manager');
-    }
-    return this.layerManager;
-  }
-
-  private getPhaseManager() {
-    if (!this.phaseManager) {
-      throw new Error('Phase Manager does not exist');
-    }
-    return this.phaseManager;
-  }
+  private getScene = () => mandatory(this.scene) as Phaser.Scene;
+  private getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
+  private getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(

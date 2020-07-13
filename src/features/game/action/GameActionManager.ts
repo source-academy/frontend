@@ -5,6 +5,7 @@ import ActionConditionChecker from './GameActionConditionChecker';
 
 import { GameAction, ActionCondition } from './GameActionTypes';
 import { ItemId } from '../commons/CommonTypes';
+import { mandatory } from '../utils/GameUtils';
 
 export default class GameActionManager {
   private actionMap: Map<ItemId, GameAction>;
@@ -51,11 +52,6 @@ export default class GameActionManager {
     );
   }
 
-  private getActionFromId(actionId: ItemId): GameAction {
-    const action = this.actionMap.get(actionId);
-    if (!action) {
-      throw new Error('Action id was not found');
-    }
-    return action;
-  }
+  private getActionFromId = (actionId: ItemId) =>
+    mandatory(this.actionMap.get(actionId)) as GameAction;
 }

@@ -8,6 +8,7 @@ import StringUtils from 'src/features/game/utils/StringUtils';
 import { toIntString } from '../utils/SSUtils';
 import { loggableStyle } from './SSLogConstants';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
@@ -106,10 +107,5 @@ dialogues
     }
   }
 
-  private getObjectPlacement() {
-    if (!this.objectPlacement) {
-      throw new Error('No object placement parent scene');
-    }
-    return this.objectPlacement;
-  }
+  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
 }

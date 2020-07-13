@@ -16,6 +16,7 @@ import GameInputManager from 'src/features/game/input/GameInputManager';
 import { StorySimState } from '../../StorySimulatorTypes';
 import SSImageAssets from '../../assets/ImageAssets';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import { mandatory } from 'src/features/game/utils/GameUtils';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -198,12 +199,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     }
   }
 
-  public getCursorManager() {
-    if (!this.cursorModes) {
-      throw new Error('No cursor mode manager');
-    }
-    return this.cursorModes;
-  }
+  public getCursorManager = () => mandatory(this.cursorModes) as SSCursorMode;
 
   public getCoordinates(): number[] {
     return [this.input.x, this.input.y];

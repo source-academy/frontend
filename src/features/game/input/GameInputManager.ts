@@ -1,3 +1,5 @@
+import { mandatory } from '../utils/GameUtils';
+
 class GameInputManager {
   private scene: Phaser.Scene | undefined;
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
@@ -12,12 +14,7 @@ class GameInputManager {
     this.scene = scene;
   }
 
-  public getScene() {
-    if (!this.scene) {
-      throw console.error('Undefined scene');
-    }
-    return this.scene;
-  }
+  public getScene = () => mandatory(this.scene) as Phaser.Scene;
 
   public enableMouseInput(active: boolean) {
     this.getScene().input.mouse.enabled = active;

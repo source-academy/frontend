@@ -11,6 +11,7 @@ import { GameSaveState } from '../save/GameSaveTypes';
 import { StateSubject, StateObserver } from './GameStateTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 import { emptySet } from '../location/GameMapConstants';
+import { mandatory } from '../utils/GameUtils';
 
 class GameStateManager implements StateSubject {
   // Subscribers
@@ -88,21 +89,12 @@ class GameStateManager implements StateSubject {
     }
   }
 
-  private checkLocationsExist(locationIds: string[]): void {
-    locationIds.forEach(locationId => {
-      if (!this.locationStates.get(locationId)) {
-        throw console.error('Location ', locationId, ' does not exist!');
-      }
-    });
+  private checkLocationsExist(locIds: string[]): void {
+    locIds.forEach(locId => mandatory(this.locationStates.get(locId)));
   }
 
-  private getLocationById(locationId: LocationId): GameLocation {
-    const location = this.locationStates.get(locationId);
-    if (!location) {
-      throw console.error('Location does not exist');
-    }
-    return location;
-  }
+  private getLocationById = (locId: LocationId) =>
+    mandatory(this.locationStates.get(locId)) as GameLocation;
 
   ///////////////////////////////
   //        Preprocess         //

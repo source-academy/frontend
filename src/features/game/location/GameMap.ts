@@ -8,6 +8,7 @@ import { GameMode } from '../mode/GameModeTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { GameAction } from '../action/GameActionTypes';
 import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
+import { mandatory } from '../utils/GameUtils';
 
 class GameMap {
   private soundAssets: SoundAsset[];
@@ -118,23 +119,18 @@ class GameMap {
     this[listName].set(itemId, item);
   }
 
-  public setItemAt<T>(locationId: LocationId, listName: GameLocationAttr, itemId: string) {
-    const location = this.getLocationAtId(locationId);
+  public setItemAt<T>(locId: LocationId, listName: GameLocationAttr, itemId: string) {
+    const location = this.getLocationAtId(locId);
     location[listName].add(itemId);
   }
 
-  public setBGMusicAt(locationId: LocationId, soundKey: AssetKey) {
-    const location = this.getLocationAtId(locationId);
+  public setBGMusicAt(locId: LocationId, soundKey: AssetKey) {
+    const location = this.getLocationAtId(locId);
     location.bgmKey = soundKey;
   }
 
-  public getLocationAtId(locationId: LocationId): GameLocation {
-    const location = this.locations.get(locationId);
-    if (!location) {
-      throw new Error(`Location ${locationId} was not found`);
-    }
-    return location;
-  }
+  public getLocationAtId = (locId: LocationId) =>
+    mandatory(this.locations.get(locId)) as GameLocation;
 }
 
 export default GameMap;

@@ -9,6 +9,7 @@ import { Character } from './GameCharacterTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { resize } from '../utils/SpriteUtils';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
+import { mandatory } from '../utils/GameUtils';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
@@ -87,11 +88,6 @@ export default class CharacterManager {
     }
   }
 
-  public getCharacterById(characterId: ItemId) {
-    const character = this.characterMap.get(characterId);
-    if (!character) {
-      throw new Error(`Character ${characterId} not found!`);
-    }
-    return character;
-  }
+  public getCharacterById = (charId: ItemId) =>
+    mandatory(this.characterMap.get(charId)) as Character;
 }

@@ -93,8 +93,6 @@ class GameModeMove implements IGameUI {
 
     return navigations.map(nav => {
       const location = GameGlobalAPI.getInstance().getLocationAtId(nav);
-      if (!location) throw new Error(`${nav} does not exist`);
-
       return {
         text: location.name,
         callback: async () => {

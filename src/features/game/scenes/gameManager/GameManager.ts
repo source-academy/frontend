@@ -28,7 +28,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 import { Layer } from '../../layer/GameLayerTypes';
-import { toS3Path } from '../../utils/GameUtils';
+import { toS3Path, mandatory } from '../../utils/GameUtils';
 import { Constants } from '../../commons/CommonConstants';
 import { createGamePhases } from './GameManagerHelper';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
@@ -295,26 +295,9 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  private getParentGame() {
-    if (!this.parentGame) {
-      throw new Error('No parent game');
-    }
-    return this.parentGame;
-  }
-
-  public getCurrentCheckpoint() {
-    if (!this.currentCheckpoint) {
-      throw new Error('No loaded checkpoint');
-    }
-    return this.currentCheckpoint;
-  }
-
-  public getAccountInfo() {
-    if (!this.accountInfo) {
-      throw new Error('No account info');
-    }
-    return this.accountInfo;
-  }
+  public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint) as GameCheckpoint;
+  public getAccountInfo = () => mandatory(this.accountInfo) as AccountInfo;
+  private getParentGame = () => mandatory(this.parentGame) as SourceAcademyGame;
 }
 
 export default GameManager;

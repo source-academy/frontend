@@ -1,5 +1,5 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { limitNumber, sleep, toS3Path, mandatory } from 'src/features/game/utils/GameUtils';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import { SampleChapters } from './SampleChapters';
 import chapConstants from './ChapterSelectConstants';
@@ -207,12 +207,7 @@ class ChapterSelect extends Phaser.Scene {
     await sleep(scrollDuration);
   }
 
-  public getLoadedGameState() {
-    if (!this.loadedGameState) {
-      throw new Error('Cannot load game');
-    }
-    return this.loadedGameState;
-  }
+  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
 }
 
 export default ChapterSelect;

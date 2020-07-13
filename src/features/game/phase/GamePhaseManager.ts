@@ -2,6 +2,7 @@ import { GamePhaseType } from './GamePhaseTypes';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
 import { Constants } from '../commons/CommonConstants';
+import { mandatory } from '../utils/GameUtils';
 
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
@@ -66,10 +67,5 @@ export default class GamePhaseManager {
     return this.phaseStack[this.phaseStack.length - 1];
   }
 
-  public getInputManager() {
-    if (!this.inputManager) {
-      throw new Error(`Input manager does not exist!`);
-    }
-    return this.inputManager;
-  }
+  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
 }
