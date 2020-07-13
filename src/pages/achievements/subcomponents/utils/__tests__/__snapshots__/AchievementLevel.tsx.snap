@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementExp component renders correctly 1`] = `
+"<AchievementLevel studentExp={0}>
+  <h3>
+    0
+  </h3>
+  <Blueprint3.ProgressBar className=\\"level-progress\\" value={0}>
+    <div className=\\"bp3-progress-bar level-progress\\">
+      <div className=\\"bp3-progress-meter\\" style={{...}} />
+    </div>
+  </Blueprint3.ProgressBar>
+</AchievementLevel>"
+`;

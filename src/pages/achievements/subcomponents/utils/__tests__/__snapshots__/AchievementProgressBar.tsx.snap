@@ -1,0 +1,13 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementExp component renders correctly 1`] = `
+"<AchievementProgressBar progressFrac={0} shouldAnimate={false}>
+  <div>
+    <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0} animate={false}>
+      <div className=\\"bp3-progress-bar bp3-no-animation progress\\">
+        <div className=\\"bp3-progress-meter\\" style={{...}} />
+      </div>
+    </Blueprint3.ProgressBar>
+  </div>
+</AchievementProgressBar>"
+`;
