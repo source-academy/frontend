@@ -20,11 +20,14 @@ import { calcListFormatPos } from '../utils/StyleUtils';
 import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
 import GameSoundManager from '../sound/GameSoundManager';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
+import GamePhaseManager from '../phase/GamePhaseManager';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
   private soundManager: GameSoundManager | undefined;
+  private phaseManager: GamePhaseManager | undefined;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewContainer: Phaser.GameObjects.Container | undefined;
   private itemsContainer: Phaser.GameObjects.Container | undefined;
@@ -40,11 +43,13 @@ class GameCollectiblesManager implements IGameUI {
   public initialise(
     scene: Phaser.Scene,
     layerManager: GameLayerManager,
-    soundManager: GameSoundManager
+    soundManager: GameSoundManager,
+    phaseManager: GamePhaseManager
   ) {
     this.scene = scene;
     this.layerManager = layerManager;
     this.soundManager = soundManager;
+    this.phaseManager = phaseManager;
 
     // Set initial page number to zero
     Object.keys(CollectiblePage).forEach((page, index) => {
@@ -144,7 +149,7 @@ class GameCollectiblesManager implements IGameUI {
     const pageOptButtonPositions = this.getPageOptPositions();
     collectibleContainer.add(
       pageOptButtons.map((button, index) =>
-        this.addPageOpt(
+        this.createPageOpt(
           button.text,
           pageOptButtonPositions[index][0],
           pageOptButtonPositions[index][1] + collectibleConstants.pageYStartPos,
@@ -152,6 +157,19 @@ class GameCollectiblesManager implements IGameUI {
         )
       )
     );
+
+    // Add back button
+    const backButton = this.createPageOpt(
+      'Back',
+      0,
+      collectibleConstants.backButtonYPos,
+      async () => {
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.CollectibleMenu)) {
+          await this.getPhaseManager().popPhase();
+        }
+      }
+    );
+    collectibleContainer.add(backButton);
 
     // Add page arrows
     const arrowLeft = createButton(
@@ -273,7 +291,14 @@ class GameCollectiblesManager implements IGameUI {
     return this.layerManager;
   }
 
-  private addPageOpt(text: string, xPos: number, yPos: number, callback: any) {
+  private getPhaseManager() {
+    if (!this.phaseManager) {
+      throw new Error('Phase Manager does not exist');
+    }
+    return this.phaseManager;
+  }
+
+  private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(
       this.getScene(),
       {

@@ -157,7 +157,12 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.collectibleManager.initialise(this, this.layerManager, this.soundManager);
+    this.collectibleManager.initialise(
+      this,
+      this.layerManager,
+      this.soundManager,
+      this.phaseManager
+    );
     this.phaseManager.initialise(
       createGamePhases(this.escapeManager, this.collectibleManager),
       this.inputManager

@@ -63,7 +63,12 @@ export default class RoomPreview extends Phaser.Scene {
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
-    this.collectibleManager.initialise(this, this.layerManager, this.soundManager);
+    this.collectibleManager.initialise(
+      this,
+      this.layerManager,
+      this.soundManager,
+      this.phaseManager
+    );
     this.phaseManager.initialise(
       createCMRGamePhases(this.escapeManager, this.collectibleManager),
       this.inputManager

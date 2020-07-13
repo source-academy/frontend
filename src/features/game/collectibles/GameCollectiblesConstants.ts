@@ -42,6 +42,7 @@ export const defaultCollectibleProp: CollectibleProperty = {
 };
 
 const CollectibleConstants = {
+  backButtonYPos: screenSize.y * 0.3,
   pageYStartPos: -screenSize.y * 0.3,
   pageYSpacing: 150,
   pageTextXPos: screenSize.x * 0.3,
