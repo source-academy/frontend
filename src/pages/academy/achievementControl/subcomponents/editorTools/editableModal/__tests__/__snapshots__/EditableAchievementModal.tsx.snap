@@ -1,0 +1,22 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditableAchievementModal component renders correctly 1`] = `
+"<EditableAchievementModal title=\\"Sample Title\\" modal={{...}} changeModal={[Function: changeModal]}>
+  <div>
+    <div>
+      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <span className=\\"bp3-button-text\\">
+            Edit Modal
+          </span>
+          <Blueprint3.Icon icon={[undefined]} />
+        </button>
+      </Blueprint3.Button>
+    </div>
+    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
+      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+    </Blueprint3.Dialog>
+  </div>
+</EditableAchievementModal>"
+`;

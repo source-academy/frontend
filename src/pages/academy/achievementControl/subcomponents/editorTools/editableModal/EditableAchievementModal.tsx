@@ -4,7 +4,6 @@ import { AchievementModalItem } from '../../../../../../commons/achievements/Ach
 import EditableModalDescription from './EditableModalDescription';
 import EditableModalText from './EditableModalText';
 import EditableModalImage from './EditableModalImage';
-import { modalTemplate } from '../AchievementTemplate';
 
 type EditableAchievementModalProps = {
   title: string;
@@ -15,11 +14,9 @@ type EditableAchievementModalProps = {
 function EditableAchievementModal(props: EditableAchievementModalProps) {
   const { title, modal, changeModal } = props;
 
-  const renderModal = modal === undefined ? modalTemplate : modal;
-
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [modalData, setModalData] = useState<AchievementModalItem>(renderModal);
+  const [modalData, setModalData] = useState<AchievementModalItem>(modal);
 
   const { modalImageUrl, description, completionText } = modalData;
 
