@@ -31,14 +31,14 @@ export default class GamePhaseManager {
 
   public async pushPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase) return;
+    if (newPhase === prevPhase || this.isCurrentPhase(GamePhaseType.EscapeMenu)) return;
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
   }
 
   public async swapPhase(newPhase: GamePhaseType): Promise<void> {
     const prevPhase = this.getCurrentPhase();
-    if (newPhase === prevPhase) return;
+    if (newPhase === prevPhase || this.isCurrentPhase(GamePhaseType.EscapeMenu)) return;
     this.phaseStack.pop();
     this.phaseStack.push(newPhase);
     await this.executePhaseTransition(prevPhase, newPhase);
