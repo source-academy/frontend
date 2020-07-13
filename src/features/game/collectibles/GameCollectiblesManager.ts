@@ -2,6 +2,7 @@ import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import { screenCenter } from '../commons/CommonConstants';
+import { IGameUI } from '../commons/CommonTypes';
 import collectibleConstants, {
   pageBannerTextStyle,
   listBannerTextStyle,
@@ -13,21 +14,23 @@ import { resizeUnderflow } from '../utils/SpriteUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
+import { limitNumber } from '../utils/GameUtils';
+import { fadeAndDestroy } from '../effects/FadeEffect';
+import { calcListFormatPos } from '../utils/StyleUtils';
 
-class GameCollectiblesManager {
+class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
-  private currCollectiblePage: CollectiblePage;
   private layerManager: GameLayerManager | undefined;
-  private collectibleContainer: Phaser.GameObjects.Container | undefined;
-  private listContainer: Phaser.GameObjects.Container | undefined;
-  private previewSprite: Phaser.GameObjects.Sprite | undefined;
-  private previewTitle: Phaser.GameObjects.BitmapText | undefined;
-  private previewDesc: Phaser.GameObjects.Text | undefined;
-  private pageNumber: Map<CollectiblePage, number>;
+  private uiContainer: Phaser.GameObjects.Container | undefined;
+  private previewContainer: Phaser.GameObjects.Container | undefined;
+  private itemsContainer: Phaser.GameObjects.Container | undefined;
+  private pageChosenContainer: Phaser.GameObjects.Container | undefined;
+  private currActivePage: CollectiblePage;
+  private activePageNumber: Map<CollectiblePage, number>;
 
   constructor() {
-    this.currCollectiblePage = CollectiblePage.Collectibles;
-    this.pageNumber = new Map<CollectiblePage, number>();
+    this.activePageNumber = new Map<CollectiblePage, number>();
+    this.currActivePage = CollectiblePage.Collectibles;
   }
 
   public initialise(scene: Phaser.Scene, layerManager: GameLayerManager) {
@@ -35,44 +38,86 @@ class GameCollectiblesManager {
     this.layerManager = layerManager;
 
     // Set initial page number to zero
-    this.pageNumber.clear();
     Object.keys(CollectiblePage).forEach((page, index) => {
       const pageName = page as CollectiblePage;
-      this.pageNumber.set(pageName, 0);
+      this.activePageNumber.set(pageName, 0);
     });
   }
 
-  public renderCollectibleMenu() {
-    // Refresh everything
-    this.destroyCollectibleMenu();
+  private setPage(page: CollectiblePage) {
+    if (this.uiContainer) {
+      if (this.itemsContainer) this.itemsContainer.destroy();
+      if (this.pageChosenContainer) this.pageChosenContainer.destroy();
 
-    this.collectibleContainer = new Phaser.GameObjects.Container(
-      this.getScene(),
-      screenCenter.x,
-      screenCenter.y
-    );
+      // Update
+      this.currActivePage = page;
+      this.itemsContainer = this.createItemsContainer();
+      this.uiContainer.add(this.itemsContainer);
+
+      // Set chosen page banner
+      const bannerPos = this.getPageOptPositions();
+      const chosenIdx = Object.keys(CollectiblePage).findIndex(pg => pg === (page as string));
+      const bannerChosen = new Phaser.GameObjects.Sprite(
+        this.getScene(),
+        bannerPos[chosenIdx][0],
+        bannerPos[chosenIdx][1] + collectibleConstants.pageYStartPos,
+        ImageAssets.collectiblesPageChosen.key
+      );
+      this.pageChosenContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0, [
+        bannerChosen
+      ]);
+      this.uiContainer.add(this.pageChosenContainer);
+
+      // Set default preview
+      this.setPreview('', defaultCollectibleProp, '');
+    }
+  }
+
+  public async activateUI(): Promise<void> {
+    this.uiContainer = this.createUIContainer();
+    this.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
+
+    // Set initial page
+    this.setPage(this.currActivePage);
+
+    this.uiContainer.setPosition(screenCenter.x, screenCenter.y);
+  }
+
+  public async deactivateUI(): Promise<void> {
+    if (this.uiContainer) fadeAndDestroy(this.getScene(), this.uiContainer);
+  }
+
+  public createUIContainer() {
+    const collectibleContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+
     const collectiblesBg = new Phaser.GameObjects.Image(
       this.getScene(),
       0,
       0,
       ImageAssets.collectiblesMenu.key
     );
-    this.collectibleContainer.add(collectiblesBg);
+    collectibleContainer.add(collectiblesBg);
 
     // Add options
-    Object.keys(CollectiblePage).forEach((page, index) => {
-      const isChosen = page === (this.currCollectiblePage as string);
-      const pageOptContainer = this.addPageBanner(page, index, isChosen, () => {
-        const newPage = page as CollectiblePage;
-        if (newPage !== this.currCollectiblePage) {
-          this.currCollectiblePage = page as CollectiblePage;
-          this.renderCollectibleMenu();
-        }
-      });
-      this.collectibleContainer!.add(pageOptContainer);
+    const pageOptButtons = Object.keys(CollectiblePage).map((page, index) => {
+      return {
+        text: page,
+        callback: () => this.setPage(page as CollectiblePage)
+      };
     });
+    const pageOptButtonPositions = this.getPageOptPositions();
+    collectibleContainer.add(
+      pageOptButtons.map((button, index) =>
+        this.addPageOpt(
+          button.text,
+          pageOptButtonPositions[index][0],
+          pageOptButtonPositions[index][1] + collectibleConstants.pageYStartPos,
+          button.callback
+        )
+      )
+    );
 
-    // Add arrows
+    // Add page arrows
     const arrowLeft = createButton(this.getScene(), {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(false)
@@ -94,90 +139,80 @@ class GameCollectiblesManager {
         collectibleConstants.arrowXMidPos + collectibleConstants.arrowXOffset,
         collectibleConstants.arrowDownYPos
       );
+    collectibleContainer.add([arrowLeft, arrowRight]);
 
-    this.collectibleContainer.add([arrowLeft, arrowRight]);
-
-    // Add object list
-    this.listContainer = this.getCurrentPage(
-      this.currCollectiblePage,
-      this.pageNumber.get(this.currCollectiblePage)!
-    );
-    this.collectibleContainer.add(this.listContainer);
-
-    // Add preview
+    // Add preview frame
     const frame = new Phaser.GameObjects.Sprite(
       this.getScene(),
       collectibleConstants.previewXPos,
       collectibleConstants.previewYPos,
       ImageAssets.popUpFrame.key
     ).setScale(1.2);
-    this.previewSprite = new Phaser.GameObjects.Sprite(
-      this.getScene(),
-      collectibleConstants.previewXPos,
-      collectibleConstants.previewYPos,
-      ImageAssets.cookies.key
-    ).setOrigin(0.428, 0.468);
-    this.previewTitle = createBitmapText(
-      this.getScene(),
-      '',
-      collectibleConstants.previewXPos,
-      collectibleConstants.previewYPos + collectibleConstants.titleYOffset,
-      collectibleTitleStyle
-    ).setOrigin(0.35, 0.5);
-    this.previewDesc = new Phaser.GameObjects.Text(
-      this.getScene(),
-      collectibleConstants.previewXPos,
-      collectibleConstants.previewYPos + collectibleConstants.descYOffset,
-      '',
-      collectibleDescStyle
-    ).setOrigin(0.45, 0.0);
-    this.collectibleContainer.add([frame, this.previewSprite, this.previewTitle, this.previewDesc]);
+    collectibleContainer.add(frame);
 
-    this.getLayerManager().addToLayer(Layer.UI, this.collectibleContainer);
+    return collectibleContainer;
+  }
 
-    // Set default preview
-    this.setPreview('', defaultCollectibleProp, '');
+  private getPageOptPositions() {
+    return calcListFormatPos({
+      numOfItems: Object.keys(CollectiblePage).length,
+      xSpacing: 0,
+      ySpacing: collectibleConstants.pageYSpacing
+    });
   }
 
   private setPreview(title: string, prop: CollectibleProperty, description: string = '') {
-    const isAllValid =
-      this.collectibleContainer && this.previewSprite && this.previewDesc && this.previewTitle;
-    if (!isAllValid) return;
+    if (this.uiContainer) {
+      if (this.previewContainer) this.previewContainer.destroy();
+      this.previewContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
-    const preview = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
-    resizeUnderflow(preview, collectibleConstants.previewDim, collectibleConstants.previewDim);
-    preview
-      .setPosition(this.previewSprite!.x, this.previewSprite!.y)
-      .setOrigin(this.previewSprite!.originX, this.previewSprite!.originY);
-    this.previewSprite!.destroy();
-    this.previewSprite = preview;
-    this.collectibleContainer!.add(this.previewSprite);
+      // Preview image
+      const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
+      resizeUnderflow(
+        previewSprite,
+        collectibleConstants.previewDim,
+        collectibleConstants.previewDim
+      );
+      previewSprite
+        .setPosition(collectibleConstants.previewXPos, collectibleConstants.previewYPos)
+        .setOrigin(0.428, 0.468);
 
-    // Set text and description
-    this.previewTitle!.setText(title);
-    this.previewDesc!.setText(description);
-  }
+      // Preview title
+      const previewTitle = createBitmapText(
+        this.getScene(),
+        title,
+        collectibleConstants.previewXPos,
+        collectibleConstants.previewYPos + collectibleConstants.titleYOffset,
+        collectibleTitleStyle
+      ).setOrigin(0.35, 0.5);
 
-  private nextPage(next: boolean) {
-    const currPageNum = this.pageNumber.get(this.currCollectiblePage)!;
-    const newPageNum = next ? currPageNum + 1 : currPageNum - 1;
-    if (!this.listContainer || !this.collectibleContainer || newPageNum < 0) return;
+      // Preview description
+      const previewDesc = new Phaser.GameObjects.Text(
+        this.getScene(),
+        collectibleConstants.previewXPos,
+        collectibleConstants.previewYPos + collectibleConstants.descYOffset,
+        description,
+        collectibleDescStyle
+      ).setOrigin(0.45, 0.0);
 
-    const newListContainer = this.getCurrentPage(this.currCollectiblePage, newPageNum);
-    if (newListContainer.length > 0) {
-      this.listContainer.destroy();
-      this.listContainer = newListContainer;
-      this.collectibleContainer.add(this.listContainer);
-      this.pageNumber.set(this.currCollectiblePage, newPageNum);
+      this.previewContainer.add([previewSprite, previewTitle, previewDesc]);
+      this.uiContainer.add(this.previewContainer);
     }
   }
 
-  public destroyCollectibleMenu() {
-    if (this.collectibleContainer) this.collectibleContainer.destroy();
-    if (this.listContainer) this.listContainer.destroy();
-    if (this.previewSprite) this.previewSprite.destroy();
-    if (this.previewTitle) this.previewTitle.destroy();
-    if (this.previewDesc) this.previewDesc.destroy();
+  private nextPage(next: boolean) {
+    const currPageNum = this.activePageNumber.get(this.currActivePage)!;
+    const newPageNum = limitNumber(
+      next ? currPageNum + 1 : currPageNum - 1,
+      0,
+      Number.MAX_SAFE_INTEGER
+    );
+    const itemLength = this.getItems(newPageNum).length;
+
+    if (itemLength > 0) {
+      this.activePageNumber.set(this.currActivePage, newPageNum);
+      this.setPage(this.currActivePage);
+    }
   }
 
   private getScene() {
@@ -194,27 +229,63 @@ class GameCollectiblesManager {
     return this.layerManager;
   }
 
-  private addPageBanner(text: string, index: number, isChosen: boolean, callback: any) {
-    const bannerYPos =
-      collectibleConstants.pageYStartPos + index * collectibleConstants.pageYSpacing;
-
-    const banner = createButton(this.getScene(), {
+  private addPageOpt(text: string, xPos: number, yPos: number, callback: any) {
+    return createButton(this.getScene(), {
       assetKey: ImageAssets.collectiblesPage.key,
       message: text,
       textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
       bitMapTextStyle: pageBannerTextStyle,
       onUp: callback
-    }).setPosition(0, bannerYPos);
+    }).setPosition(xPos, yPos);
+  }
 
-    const bannerChosen = new Phaser.GameObjects.Sprite(
-      this.getScene(),
-      0,
-      0,
-      ImageAssets.collectiblesPageChosen.key
+  private createItemsContainer() {
+    const itemsContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+
+    const items = this.getItems(this.activePageNumber.get(this.currActivePage)!);
+    const itemPositions = calcListFormatPos({
+      numOfItems: items.length,
+      xSpacing: 0,
+      ySpacing: collectibleConstants.listYSpacing
+    });
+    itemsContainer.add(
+      items.map((item, index) =>
+        this.createItemButton(
+          item,
+          itemPositions[index][0],
+          itemPositions[index][1] + collectibleConstants.listYStartPos,
+          () => this.setPreview(item, defaultCollectibleProp)
+        )
+      )
     );
+    return itemsContainer;
+  }
 
-    if (isChosen) banner.add(bannerChosen);
-    return banner;
+  private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.collectiblesBanner.key,
+      message: obj,
+      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+      bitMapTextStyle: listBannerTextStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
+  }
+
+  private getItems(pageNum: number) {
+    let itemList: string[];
+    switch (this.currActivePage) {
+      case CollectiblePage.Achievements:
+        itemList = this.getAchievements();
+        break;
+      case CollectiblePage.Collectibles:
+        itemList = this.getCollectibles();
+        break;
+      default:
+        itemList = [];
+    }
+
+    const itemStartIdx = pageNum * collectibleConstants.itemsPerPage;
+    return itemList.slice(itemStartIdx, itemStartIdx + collectibleConstants.itemsPerPage);
   }
 
   private getCollectibles() {
@@ -236,49 +307,6 @@ class GameCollectiblesManager {
       'achievement11',
       'achievement12'
     ];
-  }
-
-  private getCurrentPage(page: CollectiblePage, pageNum: number) {
-    let objectList: string[];
-    switch (page) {
-      case CollectiblePage.Achievements:
-        objectList = this.getAchievements();
-        break;
-      case CollectiblePage.Collectibles:
-        objectList = this.getCollectibles();
-        break;
-      default:
-        objectList = [];
-    }
-
-    const pageContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-    const startingIdx = pageNum * collectibleConstants.itemsPerPage;
-    const endingIdx = startingIdx + collectibleConstants.itemsPerPage;
-
-    if (startingIdx < objectList.length) {
-      for (let i = startingIdx; i < objectList.length && i < endingIdx; i++) {
-        const objContainer = this.createObjContainer(objectList[i], i - startingIdx, () => {
-          // TODO: Use actual collectible prop
-          this.setPreview(objectList[i], defaultCollectibleProp);
-        });
-        pageContainer.add(objContainer);
-      }
-    }
-
-    return pageContainer;
-  }
-
-  private createObjContainer(obj: string, index: number, callback: any) {
-    const objBannerYPos =
-      collectibleConstants.listYStartPos + index * collectibleConstants.listYSpacing;
-
-    return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesBanner.key,
-      message: obj,
-      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
-      bitMapTextStyle: listBannerTextStyle,
-      onUp: callback
-    }).setPosition(0, objBannerYPos);
   }
 }
 

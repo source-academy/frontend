@@ -58,8 +58,6 @@ const CollectibleConstants = {
   arrowXOffset: 80,
   arrowXScale: 0.4,
   arrowYScale: 0.3,
-  onHoverAlpha: 1.0,
-  offHoverAlpha: 0.7,
   itemsPerPage: 7
 };
 

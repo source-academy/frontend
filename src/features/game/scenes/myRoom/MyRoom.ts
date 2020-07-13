@@ -21,7 +21,7 @@ class MyRoom extends Phaser.Scene {
   }
 
   public create() {
-    this.collectiblesManager.renderCollectibleMenu();
+    this.collectiblesManager.activateUI();
     this.renderMyRoom();
   }
 

@@ -82,3 +82,33 @@ export function calcTableFormatPos({
   }
   return pos;
 }
+
+type ListFormatPos = {
+  numOfItems: number;
+  xSpacing: number;
+  ySpacing: number;
+};
+
+/**
+ * Calculate x,y positions using a list format: mimic list-like
+ * positions, ordered sequentially.
+ *
+ * Each item will be offset by xSpaing and ySpacing.
+ *
+ * The first item will start at [0, 0] (top left) position.
+ *
+ * @param numOfItems total number of items
+ * @param xSpacing horizontal spacing between items
+ * @param ySpacing vertical spacing between items
+ * @returns {Array<[number, number]>} array of positions, in the format of
+ *                                 [[xPos0, yPos0], [xPos1, yPos1]...]
+ */
+export function calcListFormatPos({ numOfItems, xSpacing = 30, ySpacing = 30 }: ListFormatPos) {
+  const pos = new Array<[number, number]>();
+
+  for (let i = 0; i < numOfItems; i++) {
+    pos.push([i * xSpacing, i * ySpacing]);
+  }
+
+  return pos;
+}
