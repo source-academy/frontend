@@ -1,5 +1,6 @@
 import { Card, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
+
 import { SideContentTab, SideContentType } from './SideContentTypes';
 
 /**

@@ -9,7 +9,6 @@ import {
   testcaseTemplate
 } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
-
 import { getValueFromPath } from './EditingWorkspaceSideContentHelper';
 import TextAreaContent from './EditingWorkspaceSideContentTextAreaContent';
 

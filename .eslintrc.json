@@ -1,5 +1,6 @@
 {
   "extends": ["react-app", "plugin:@typescript-eslint/recommended"],
+  "plugins": ["simple-import-sort"],
   "rules": {
     "@typescript-eslint/no-empty-function": "off",
     "@typescript-eslint/interface-name-prefix": "off",
@@ -8,6 +9,7 @@
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/no-explicit-any": "off",
-    "@typescript-eslint/ban-ts-ignore": "warn"
+    "@typescript-eslint/ban-ts-ignore": "warn",
+    "simple-import-sort/sort": "error"
   }
 }

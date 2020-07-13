@@ -2,7 +2,6 @@ import { Reducer } from 'redux';
 
 import { defaultDashboard } from '../../commons/application/ApplicationTypes';
 import { SourceActionType } from '../../commons/utils/ActionsHelper';
-
 import { DashboardState, UPDATE_GROUP_GRADING_SUMMARY } from './DashboardTypes';
 
 export const DashboardReducer: Reducer<DashboardState> = (
