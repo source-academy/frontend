@@ -9,7 +9,7 @@ const expProps = {
 
 const undefinedExpProps = {
   exp: undefined
-}
+};
 
 test('AchievementExp component renders correctly', () => {
   const expPresent = <AchievementExp {...expProps} />;

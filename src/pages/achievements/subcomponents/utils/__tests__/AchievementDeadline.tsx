@@ -5,23 +5,23 @@ import AchievementDeadline from '../AchievementDeadline';
 
 const undefinedDeadlineProps = {
   deadline: undefined
-}
+};
 
 const expiredDeadlineProps = {
   deadline: new Date()
 };
 
 const urgentDeadlineProps = {
-  deadline: new Date(Date.now() + (1000 * 60 * 60 * 2))
-}
+  deadline: new Date(Date.now() + 1000 * 60 * 60 * 2)
+};
 
 const daysDeadlineProps = {
-  deadline: new Date(Date.now() + (1000 * 60 * 60 * 25))
-}
+  deadline: new Date(Date.now() + 1000 * 60 * 60 * 25)
+};
 
 const weeksDeadlineProps = {
-  deadline: new Date(Date.now() + (1000 * 60 * 60 * 200))
-}
+  deadline: new Date(Date.now() + 1000 * 60 * 60 * 200)
+};
 
 test('AchievementDeadline component renders correctly', () => {
   const expiredDeadline = <AchievementDeadline {...expiredDeadlineProps} />;
