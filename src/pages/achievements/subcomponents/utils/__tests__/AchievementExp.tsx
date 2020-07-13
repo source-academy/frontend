@@ -3,12 +3,20 @@ import React from 'react';
 
 import AchievementExp from '../AchievementExp';
 
-const mockProps = {
+const expProps = {
   exp: 0
 };
 
+const undefinedExpProps = {
+  exp: undefined
+}
+
 test('AchievementExp component renders correctly', () => {
-  const app = <AchievementExp {...mockProps} />;
-  const tree = mount(app);
+  const expPresent = <AchievementExp {...expProps} />;
+  const tree = mount(expPresent);
   expect(tree.debug()).toMatchSnapshot();
+
+  const expAbsent = <AchievementExp {...undefinedExpProps} />;
+  const tree_1 = mount(expAbsent);
+  expect(tree_1.debug()).toMatchSnapshot();
 });

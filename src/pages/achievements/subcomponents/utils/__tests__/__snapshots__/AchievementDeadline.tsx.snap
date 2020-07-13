@@ -19,3 +19,83 @@ exports[`AchievementDeadline component renders correctly 1`] = `
   </div>
 </AchievementDeadline>"
 `;
+
+exports[`AchievementDeadline component renders correctly 2`] = `
+"<AchievementDeadline deadline={{...}}>
+  <div className=\\"deadline\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\">
+      <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
+        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <desc>
+            stopwatch
+          </desc>
+          <path d=\\"M9 2v1.083A6.002 6.002 0 018 15 6 6 0 017 3.083V2H6a1 1 0 110-2h4a1 1 0 010 2H9zM8 5a4 4 0 104 4H8V5z\\" fillRule=\\"evenodd\\" />
+        </svg>
+      </span>
+    </Blueprint3.Icon>
+    <p>
+      2 Hours
+    </p>
+  </div>
+</AchievementDeadline>"
+`;
+
+exports[`AchievementDeadline component renders correctly 3`] = `
+"<AchievementDeadline deadline={{...}}>
+  <div className=\\"deadline\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\">
+      <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
+        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <desc>
+            stopwatch
+          </desc>
+          <path d=\\"M9 2v1.083A6.002 6.002 0 018 15 6 6 0 017 3.083V2H6a1 1 0 110-2h4a1 1 0 010 2H9zM8 5a4 4 0 104 4H8V5z\\" fillRule=\\"evenodd\\" />
+        </svg>
+      </span>
+    </Blueprint3.Icon>
+    <p>
+      2 Days
+    </p>
+  </div>
+</AchievementDeadline>"
+`;
+
+exports[`AchievementDeadline component renders correctly 4`] = `
+"<AchievementDeadline deadline={{...}}>
+  <div className=\\"deadline\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\">
+      <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
+        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <desc>
+            stopwatch
+          </desc>
+          <path d=\\"M9 2v1.083A6.002 6.002 0 018 15 6 6 0 017 3.083V2H6a1 1 0 110-2h4a1 1 0 010 2H9zM8 5a4 4 0 104 4H8V5z\\" fillRule=\\"evenodd\\" />
+        </svg>
+      </span>
+    </Blueprint3.Icon>
+    <p>
+      2 Weeks
+    </p>
+  </div>
+</AchievementDeadline>"
+`;
+
+exports[`AchievementDeadline component renders correctly 5`] = `
+"<AchievementDeadline deadline={[undefined]}>
+  <div className=\\"deadline\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\">
+      <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
+        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+          <desc>
+            stopwatch
+          </desc>
+          <path d=\\"M9 2v1.083A6.002 6.002 0 018 15 6 6 0 017 3.083V2H6a1 1 0 110-2h4a1 1 0 010 2H9zM8 5a4 4 0 104 4H8V5z\\" fillRule=\\"evenodd\\" />
+        </svg>
+      </span>
+    </Blueprint3.Icon>
+    <p>
+      Unlimited
+    </p>
+  </div>
+</AchievementDeadline>"
+`;

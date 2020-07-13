@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AchievementExp component renders correctly 1`] = `
+exports[`AchievementLevel component renders correctly 1`] = `
 "<AchievementLevel studentExp={0}>
   <h3>
     0

@@ -7,7 +7,7 @@ const mockProps = {
   studentExp: 0
 };
 
-test('AchievementExp component renders correctly', () => {
+test('AchievementLevel component renders correctly', () => {
   const app = <AchievementLevel {...mockProps} />;
   const tree = mount(app);
   expect(tree.debug()).toMatchSnapshot();
