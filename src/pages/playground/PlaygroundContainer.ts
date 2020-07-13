@@ -1,8 +1,7 @@
+import { Variant } from 'js-slang/dist/types';
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { withRouter } from 'react-router';
 import { bindActionCreators, Dispatch } from 'redux';
-
-import { Variant } from 'js-slang/dist/types';
 
 import {
   beginDebuggerPause,
@@ -10,6 +9,7 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
+import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -21,7 +21,6 @@ import {
 } from '../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
-import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import {
   browseReplHistoryDown,
   browseReplHistoryUp,
@@ -46,10 +45,10 @@ import {
 } from '../../commons/workspace/WorkspaceActions';
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 import {
+  persistenceInitialise,
   persistenceOpenPicker,
-  persistenceSaveFileAs,
   persistenceSaveFile,
-  persistenceInitialise
+  persistenceSaveFileAs
 } from '../../features/persistence/PersistenceActions';
 import {
   generateLzString,

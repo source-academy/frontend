@@ -1,11 +1,11 @@
 import { expectSaga } from 'redux-saga-test-plan';
 
-import { actions } from '../../../commons/utils/ActionsHelper';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
+import { actions } from '../../../commons/utils/ActionsHelper';
 import {
-  UPDATE_EDITOR_VALUE,
+  CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
-  CHANGE_EXTERNAL_LIBRARY
+  UPDATE_EDITOR_VALUE
 } from '../../../commons/workspace/WorkspaceTypes';
 import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground/PlaygroundTypes';
 
