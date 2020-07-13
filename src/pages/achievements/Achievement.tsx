@@ -6,7 +6,7 @@ import AchievementFilter from './subcomponents/AchievementFilter';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
-import { FilterStatus, AchievementAbility } from '../../commons/achievements/AchievementTypes';
+import { FilterStatus } from '../../commons/achievements/AchievementTypes';
 import AchievementOverview from './subcomponents/AchievementOverview';
 
 export type DispatchProps = {
@@ -29,6 +29,7 @@ function Achievement(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
+  /*
   const generateBackgroundGradient = (ability: AchievementAbility) => {
     switch (ability) {
       case 'Core':
@@ -43,6 +44,7 @@ function Achievement(props: DispatchProps & StateProps) {
         return ``;
     }
   };
+ */
 
   const handleGlow = (id: number) => {
     if (id === modalId) {
@@ -102,11 +104,7 @@ function Achievement(props: DispatchProps & StateProps) {
           {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
         </ul>
 
-        <AchievementModal
-          generateBackgroundGradient={generateBackgroundGradient}
-          id={modalId}
-          inferencer={inferencer}
-        />
+        <AchievementModal id={modalId} inferencer={inferencer} />
       </div>
     </div>
   );

@@ -7,30 +7,21 @@ import AchievementModalGoal from './modal/AchievementModalGoal';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 
 type AchievementModalProps = {
-  generateBackgroundGradient: any;
   id: number;
   inferencer: Inferencer;
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { generateBackgroundGradient, id, inferencer } = props;
+  const { id, inferencer } = props;
 
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { ability, title, deadline, goals, modal } = achievement;
+  const { title, deadline, goals, modal } = achievement;
   const { description, completionText, modalImageUrl } = modal;
 
   return (
-    <div
-      className="modal"
-      style={{
-        background: `${generateBackgroundGradient(ability)}`,
-        backgroundSize: '80% 100%',
-        backgroundRepeat: 'no-repeat',
-        backgroundPosition: 'center'
-      }}
-    >
+    <div className="modal">
       <Card
         className="modal-container"
         style={{

@@ -29,7 +29,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 1,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png',
@@ -62,7 +62,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png',
@@ -95,7 +95,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png',
@@ -151,7 +151,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 4,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingCircle.png',
@@ -184,7 +184,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingLine.png',
@@ -217,7 +217,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingJ.png',
@@ -250,7 +250,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 3,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/streamsDevice.png',
@@ -275,7 +275,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 2,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/singingCircle.png',
@@ -300,7 +300,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/singingCircle.png',
@@ -325,7 +325,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 5,
     backgroundImageUrl:
-      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/glowingOrb.png',

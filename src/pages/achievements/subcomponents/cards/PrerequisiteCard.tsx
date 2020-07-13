@@ -35,7 +35,9 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         className="achievement-card"
         style={{
           opacity: shouldPartiallyRender ? '20%' : '100%',
-          background: `url(${backgroundImageUrl})`
+          background: `url(${backgroundImageUrl})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
         }}
         interactive={true}
         onClick={() => displayModal(id)}
