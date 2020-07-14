@@ -197,6 +197,12 @@ class Inferencer {
     return this.nodeList.get(id)!.exp;
   }
 
+  public getStudentExp(id: number) {
+    const goals = this.nodeList.get(id)!.achievement.goals;
+
+    return goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
+  }
+
   // total achievable EXP of all published achievements
   public getTotalExp() {
     const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
@@ -205,7 +211,7 @@ class Inferencer {
   }
 
   // total EXP earned by the student
-  public getStudentExp() {
+  public getStudentTotalExp() {
     const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
 
     return publishedTask.reduce((totalProgress, node) => {

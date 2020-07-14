@@ -209,72 +209,66 @@
       }
     }
 
-    .modal {
-      width: 45%;
-      height: 50em;
+    .modal-container {
       display: flex;
+
+      height: 90%;
+      width: 50%;
+
       justify-content: center;
-      text-align: center;
 
-      .modal-container {
-        width: 80%;
+      .modal {
+        display: flex;
+
+        flex-direction: column;
         border: solid white;
-        text-align: center;
+        border-width: 1px;
+        box-shadow: 0 0 10px #9ecaed;
 
-        .completiom {
-          border: 1px solid white;
-          box-shadow: 0px 0px 3px white;
-          min-height: 5em;
+        color: white;
+        background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/background/annotated-background.png);
+        background-position: center;
 
+        .canvas {
           display: flex;
 
-          text-align: center;
+          flex-direction: column;
           align-items: center;
-          justify-content: center;
 
-          p {
-            color: white;
-          }
-        }
+          height: 20em;
+          width: 40em;
 
-        .modal-header {
-          margin-top: -1em;
-          position: relative;
-          text-align: center;
-          color: white;
+          margin: 0 0 0.5em 0;
 
-          .modal-padder {
-            min-height: 20em;
-            max-height: 20em;
+          h1 {
+            margin: 0.4em 0 0.2em 0;
           }
 
-          .modal-title {
-            text-align: center;
-            position: absolute;
-            top: -1em;
-            left: 0;
-            right: 0;
-          }
+          .deadline {
+            display: flex;
 
-          .modal-deadline {
-            text-align: center;
-            position: absolute;
-            margin: auto;
-            top: 2em;
-            left: 0;
-            right: 0;
-          }
+            flex-direction: row;
 
-          .modal-desc {
-            text-align: center;
-            position: absolute;
-            left: 0;
-            bottom: 1em;
-            right: 0;
+            align-items: baseline;
 
-            p {
-              color: yellow;
+            font-size: 1.1em;
+
+            .hints {
+              padding: 0 0 0 0.1em;
+              transform: scale(0.9);
             }
+          }
+
+          .description {
+            display: flex;
+
+            height: 100%;
+            width: 75%;
+
+            align-items: flex-end;
+
+            text-align: center;
+            color: yellow;
           }
         }
 
@@ -282,26 +276,41 @@
           display: flex;
           flex-direction: row;
 
+          padding: 0.5em 0;
+
           .goal-medal {
             display: flex;
             flex-direction: column;
-            flex-basis: 20%;
+            flex-basis: 18%;
 
+            justify-content: center;
             align-items: center;
+
+            .medal-text {
+              font-size: 0.7em;
+            }
           }
 
           .goal-text {
             display: flex;
-            text-align: center;
             align-items: center;
-            justify-content: center;
+            font-size: 1.1em;
           }
         }
 
-        .modal-exp {
-          justify-content: center;
-          display: flex;
-          flex-direction: row;
+        hr {
+          height: 1px;
+          width: 90%;
+          background-color: lightgrey;
+          border: none;
+          margin: 0.5em auto 0.5em;
+        }
+      }
+
+      .completion {
+        text-align: center;
+        h1 {
+          color: #ffc000;
         }
       }
     }

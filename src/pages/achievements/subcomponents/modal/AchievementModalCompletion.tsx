@@ -1,14 +1,16 @@
 import React from 'react';
 
 type AchievementModalCompletionProps = {
+  awardedExp: number;
   completionText: string;
 };
 
 function AchievementModalCompletion(props: AchievementModalCompletionProps) {
-  const { completionText } = props;
+  const { awardedExp, completionText } = props;
 
   return (
-    <div className="completiom">
+    <div className="completion">
+      <h1>{`AWARDED ${awardedExp}XP`}</h1>
       <p>{completionText}</p>
     </div>
   );

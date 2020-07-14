@@ -15,8 +15,8 @@ function AchievementModalGoal(props: AchievementModalGoalProps) {
     return (
       <div className="goal" key={goalId}>
         <div className="goal-medal">
-          <Icon color="#F0E68C" className="goal-award" iconSize={28} icon={IconNames.BADGE} />
-          <div>
+          <Icon color="#F0E68C" iconSize={28} icon={IconNames.BADGE} />
+          <div className="medal-text">
             {goalProgress} / {goalTarget} XP
           </div>
         </div>

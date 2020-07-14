@@ -21,7 +21,7 @@ const prettifyDate = (date: Date) => {
 function AchievementOverview(props: AchievementOverviewProps) {
   const { name, studio, inferencer } = props;
 
-  const studentExp = inferencer.getStudentExp();
+  const studentExp = inferencer.getStudentTotalExp();
 
   const now = new Date();
   const week = prettifyWeek(now);
