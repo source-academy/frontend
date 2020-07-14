@@ -56,13 +56,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     const currIdx = this.cursorModes.length - 1;
 
     // On hover text container
-    const hoverText = new CommonTextHover(
-      scene,
-      SSCursorModeConstants.altTextXPos,
-      SSCursorModeConstants.altTextYPos,
-      text,
-      altTextStyle
-    );
+    const hoverText = new CommonTextHover(scene, 0, 0, text, altTextStyle);
 
     const onUp = () => {
       if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;
@@ -92,6 +86,10 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
         onUp: onUp,
         onHover: onHoverWrapper,
         onOut: onOutWrapper,
+        onPointerMove: (pointer: Phaser.Input.Pointer) => {
+          hoverText.x = pointer.x - cursorModeContainer.x - 100;
+          hoverText.y = pointer.y - cursorModeContainer.y - 100;
+        },
         onHoverEffect: false
       },
       this.soundManager

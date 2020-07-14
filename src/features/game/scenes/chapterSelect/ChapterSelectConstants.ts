@@ -32,8 +32,6 @@ const chapConstants = {
   defaultScrollSpeed: 20,
   buttonsYOffset: 200,
   buttonsXOffset: 100,
-  altTextXOffset: 40,
-  altTextYOffset: -40,
   frameXOffset: 15,
   frameYOffset: -10,
   indexYOffset: -160,

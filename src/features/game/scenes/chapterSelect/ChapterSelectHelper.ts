@@ -41,15 +41,15 @@ export function createChapter(
   // Chapter Action Popup
   const chapterRepeatHover = new CommonTextHover(
     scene,
-    chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
-    chapConstants.buttonsYOffset + chapConstants.altTextYOffset,
+    chapConstants.buttonsXOffset,
+    chapConstants.buttonsYOffset,
     'Reset progress',
     chapterActionAltStyle
   );
   const chapterContinueHover = new CommonTextHover(
     scene,
-    -chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
-    chapConstants.buttonsYOffset + chapConstants.altTextYOffset,
+    -chapConstants.buttonsXOffset,
+    chapConstants.buttonsYOffset,
     'Play/Continue',
     chapterActionAltStyle
   );
@@ -61,7 +61,11 @@ export function createChapter(
       assetKey: ImageAssets.chapterRepeatButton.key,
       onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
       onHover: () => chapterRepeatHover.setVisible(true),
-      onOut: () => chapterRepeatHover.setVisible(false)
+      onOut: () => chapterRepeatHover.setVisible(false),
+      onPointerMove: (pointer: Phaser.Input.Pointer) => {
+        chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
+        chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
+      }
     },
     scene.soundManager
   ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
@@ -73,7 +77,11 @@ export function createChapter(
       onUp: () =>
         callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
       onHover: () => chapterContinueHover.setVisible(true),
-      onOut: () => chapterContinueHover.setVisible(false)
+      onOut: () => chapterContinueHover.setVisible(false),
+      onPointerMove: (pointer: Phaser.Input.Pointer) => {
+        chapterContinueHover.x = pointer.worldX - chapterContainer.x;
+        chapterContinueHover.y = pointer.worldY - chapterContainer.y;
+      }
     },
     scene.soundManager
   ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);

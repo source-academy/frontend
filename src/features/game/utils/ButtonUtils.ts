@@ -13,6 +13,7 @@ type ButtonConfig = {
   onUp?: () => void;
   onHover?: () => void;
   onOut?: () => void;
+  onPointerMove?: (pointer: Phaser.Input.Pointer) => void;
   onHoverEffect?: boolean;
   onClickSound?: AssetKey;
   onHoverSound?: AssetKey;
@@ -39,6 +40,7 @@ const offHoverAlpha = 0.9;
  * @param onUp callback to execute on onUp event, optional
  * @param onHover callback to execute on onHover event, optional
  * @param onOut callback to execute on onOut event, optional
+ * @param onPointerMove callback to execute on onPointerMove, optional
  * @param onHoverEffect if true, button will include onHover and onOut alpha changes, optional
  * @param onClickSound sound key to play when button is clicked, executed onUp, optional
  * @param onHoverSound sound key to play when button is hovered, optional
@@ -56,6 +58,7 @@ export function createButton(
     onUp = Constants.nullFunction,
     onHover = Constants.nullFunction,
     onOut = Constants.nullFunction,
+    onPointerMove = Constants.nullFunction,
     onHoverEffect = true,
     onClickSound = SoundAssets.buttonClick.key,
     onHoverSound = SoundAssets.buttonHover.key
@@ -84,6 +87,12 @@ export function createButton(
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
     onDown();
   });
+  button.addListener(
+    Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
+    (pointer: Phaser.Input.Pointer) => {
+      onPointerMove(pointer);
+    }
+  );
 
   // Set up text
   const text = createBitmapText(scene, message, x, y, bitMapTextStyle);
