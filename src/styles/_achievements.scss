@@ -220,13 +220,16 @@
       .modal {
         display: flex;
 
+        height: 50em;
+        width: 40em;
         flex-direction: column;
         border: solid white;
         border-width: 1px;
         box-shadow: 0 0 10px #9ecaed;
 
         color: white;
-        background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/background/annotated-background.png);
+        background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/background/exploration-background.png);
+        background-size: cover;
         background-position: center;
 
         .canvas {
