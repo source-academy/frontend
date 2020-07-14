@@ -34,7 +34,7 @@ class Node {
     this.dataIdx = dataIdx;
     this.exp = this.generateExp(goals);
     this.progressFrac = this.generateProgressFrac(goals);
-    this.status = this.generateStatus(deadline, this.progressFrac);
+    this.status = AchievementStatus.ACTIVE; // to be updated after the nodeList is constructed
     this.furthestDeadline = deadline;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
@@ -48,24 +48,6 @@ class Node {
     const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
     return Math.min(progress / this.exp, 1);
-  }
-
-  private generateStatus(deadline: Date | undefined, progressFrac: number) {
-    if (deadline !== undefined && deadline.getTime() < new Date().getTime()) {
-      // deadline elapsed
-      if (progressFrac === 0) {
-        return AchievementStatus.EXPIRED; // not attempted
-      } else {
-        return AchievementStatus.COMPLETED; // attempted
-      }
-    } else {
-      // deadline not elapsed
-      if (progressFrac === 1) {
-        return AchievementStatus.COMPLETED; // fully completed
-      } else {
-        return AchievementStatus.ACTIVE; // not fully completed
-      }
-    }
   }
 }
 
@@ -310,6 +292,7 @@ class Inferencer {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateFurthestDeadline(node);
+      this.generateStatus(node);
     });
   }
 
@@ -360,6 +343,25 @@ class Inferencer {
 
     // Reduces the temporary array to a single Date value
     node.furthestDeadline = descendantDeadlines.reduce(compareDeadlines, node.furthestDeadline);
+  }
+
+  private generateStatus(node: Node) {
+    const deadline = node.furthestDeadline;
+    if (deadline !== undefined && deadline.getTime() < new Date().getTime()) {
+      // deadline elapsed
+      if (node.progressFrac === 0) {
+        return (node.status = AchievementStatus.EXPIRED); // not attempted
+      } else {
+        return (node.status = AchievementStatus.COMPLETED); // attempted
+      }
+    } else {
+      // deadline not elapsed
+      if (node.progressFrac === 1) {
+        return (node.status = AchievementStatus.COMPLETED); // fully completed
+      } else {
+        return (node.status = AchievementStatus.ACTIVE); // not fully completed
+      }
+    }
   }
 
   // normalize positions
