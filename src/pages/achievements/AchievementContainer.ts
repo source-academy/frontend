@@ -6,9 +6,15 @@ import { getAchievements } from '../../commons/achievements/AchievementActions';
 import Inferencer from './subcomponents/utils/Inferencer';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { withRouter } from 'react-router';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
+
+const isTrue = (value?: string): boolean =>
+  typeof value === 'string' && value.toUpperCase() === 'TRUE';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new Inferencer(state.achievements.achievements),
+  inferencer: isTrue(process.env.REACT_APP_USE_BACKEND)
+    ? new Inferencer(state.achievements.achievements)
+    : new Inferencer(mockAchievements),
   name: state.session.name,
   group: state.session.group
 });
