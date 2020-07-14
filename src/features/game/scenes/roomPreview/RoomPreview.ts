@@ -130,7 +130,8 @@ export default class RoomPreview extends Phaser.Scene {
       achievements: this.userStateManager.getList('achievements')
     });
     context.externalContext = 'playground';
-    await runInContext(this.studentCode + append, context);
+    const result = await runInContext(this.studentCode + append, context);
+    console.log(result);
   }
 
   private bindKeyboardTriggers() {

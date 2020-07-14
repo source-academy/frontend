@@ -3,11 +3,11 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 
-class MyRoom extends Phaser.Scene {
+class Achievements extends Phaser.Scene {
   private layerManager: GameLayerManager;
 
   constructor() {
-    super('MyRoom');
+    super('Achievements');
     this.layerManager = new GameLayerManager();
   }
 
@@ -34,4 +34,4 @@ class MyRoom extends Phaser.Scene {
   }
 }
 
-export default MyRoom;
+export default Achievements;

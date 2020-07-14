@@ -1,11 +1,11 @@
 import * as Phaser from 'phaser';
 import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
+import Achievements from 'src/features/game/scenes/achievements/Achievements';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
-import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import Settings from 'src/features/game/scenes/settings/Settings';
 import { mandatory } from 'src/features/game/utils/GameUtils';
@@ -105,7 +105,15 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
-  scene: [MainMenu, Settings, ChapterSelect, GameManager, CheckpointTransition, MyRoom, RoomPreview]
+  scene: [
+    MainMenu,
+    Settings,
+    ChapterSelect,
+    GameManager,
+    CheckpointTransition,
+    Achievements,
+    RoomPreview
+  ]
 };
 
 let sourceAcademyGame: SourceAcademyGame;
