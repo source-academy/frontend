@@ -15,7 +15,7 @@ import {
   EDIT_ACHIEVEMENT,
   REMOVE_GOAL
 } from '../AchievementTypes';
-import { defaultMockAchievements } from 'src/commons/mocks/AchievementMocks';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 test('updateAchievements generates correct action object', () => {
   const action = updateAchievements([]);
@@ -44,31 +44,31 @@ test('getAchievements generates correct action object', () => {
 });
 
 test('removeAchievement generates correct action object', () => {
-  const action = removeAchievement(defaultMockAchievements[0]);
+  const action = removeAchievement(mockAchievements[0]);
 
   expect(action).toEqual({
     type: REMOVE_ACHIEVEMENT,
-    payload: defaultMockAchievements[0]
+    payload: mockAchievements[0]
   });
 });
 
 test('editAchievement generates correct action object', () => {
-  const action = editAchievement(defaultMockAchievements[0]);
+  const action = editAchievement(mockAchievements[0]);
 
   expect(action).toEqual({
     type: EDIT_ACHIEVEMENT,
-    payload: defaultMockAchievements[0]
+    payload: mockAchievements[0]
   });
 });
 
 test('removeGoal generates correct action object', () => {
-  const action = removeGoal(defaultMockAchievements[0].goals[0], defaultMockAchievements[0]);
+  const action = removeGoal(mockAchievements[0].goals[0], mockAchievements[0]);
 
   expect(action).toEqual({
     type: REMOVE_GOAL,
     payload: {
-      goal: defaultMockAchievements[0].goals[0],
-      achievement: defaultMockAchievements[0]
+      goal: mockAchievements[0].goals[0],
+      achievement: mockAchievements[0]
     }
   });
 });

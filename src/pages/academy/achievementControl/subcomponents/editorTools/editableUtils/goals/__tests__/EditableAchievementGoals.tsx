@@ -4,7 +4,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 
 import EditableAchievementGoals from '../EditableAchievementGoals';
-import { defaultMockAchievements } from 'src/commons/mocks/AchievementMocks';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const noGoalProps = {
   goals: [],
@@ -13,7 +13,7 @@ const noGoalProps = {
 };
 
 const goalProps = {
-  goals: defaultMockAchievements[0].goals,
+  goals: mockAchievements[0].goals,
   editGoals: () => {},
   removeGoalFromBackend: () => {}
 };
