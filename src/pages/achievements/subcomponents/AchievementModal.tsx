@@ -10,10 +10,11 @@ import { prettifyDate } from './utils/DateHelper';
 type AchievementModalProps = {
   id: number;
   inferencer: Inferencer;
+  handleGlow: any;
 };
 
 function AchievementModal(props: AchievementModalProps) {
-  const { id, inferencer } = props;
+  const { id, inferencer, handleGlow } = props;
 
   if (id < 0) return null;
 
@@ -26,7 +27,7 @@ function AchievementModal(props: AchievementModalProps) {
   const deadline = inferencer.getFurthestDeadline(id);
 
   return (
-    <div className="modal">
+    <div className="modal" style={{ ...handleGlow(id) }}>
       <div
         className="canvas"
         style={{

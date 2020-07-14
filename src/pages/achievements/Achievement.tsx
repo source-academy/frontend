@@ -6,7 +6,7 @@ import AchievementFilter from './subcomponents/AchievementFilter';
 import Inferencer from './subcomponents/utils/Inferencer';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
-import { FilterStatus } from '../../commons/achievements/AchievementTypes';
+import { FilterStatus, AchievementAbility } from '../../commons/achievements/AchievementTypes';
 import AchievementOverview from './subcomponents/AchievementOverview';
 
 export type DispatchProps = {
@@ -25,31 +25,34 @@ function Achievement(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
-  /*
-  const generateBackgroundGradient = (ability: AchievementAbility) => {
-    switch (ability) {
-      case 'Core':
-        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(98, 89, 0, 1))`;
-      case 'Community':
-        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(247, 3, 240, 1))`;
-      case 'Effort':
-        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(77, 77, 77, 1))`;
-      case 'Exploration':
-        return `radial-gradient(circle, rgba(255, 255, 255, 1), rgba(10, 125, 78, 1))`;
-      default:
-        return ``;
-    }
-  };
- */
-
   const handleGlow = (id: number) => {
     if (id === modalId) {
-      return {
-        border: '2px solid #9ecaed',
-        boxShadow: '0 0 10px #9ecaed'
-      };
+      const ability = inferencer.getAchievementItem(id).ability;
+      switch (ability) {
+        case AchievementAbility.CORE:
+          return {
+            border: '1px solid #ffb412',
+            boxShadow: '0 0 10px #ffb412'
+          };
+        case AchievementAbility.EFFORT:
+          return {
+            border: '1px solid #d28bf8',
+            boxShadow: '0 0 10px #d28bf8'
+          };
+        case AchievementAbility.EXPLORATION:
+          return {
+            border: '1px solid #9ecaed',
+            boxShadow: '0 0 10px #9ecaed'
+          };
+        case AchievementAbility.COMMUNITY:
+          return {
+            border: '1px solid #ff6780',
+            boxShadow: '0 0 10px #ff6780'
+          };
+        default:
+          return {};
+      }
     }
-
     return {};
   };
 
@@ -101,7 +104,7 @@ function Achievement(props: DispatchProps & StateProps) {
         </ul>
 
         <div className="modal-container">
-          <AchievementModal id={modalId} inferencer={inferencer} />
+          <AchievementModal id={modalId} inferencer={inferencer} handleGlow={handleGlow} />
         </div>
       </div>
     </div>
