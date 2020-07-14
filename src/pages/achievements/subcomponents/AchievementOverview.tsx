@@ -1,21 +1,12 @@
 import React from 'react';
-import { prettifyWeek } from './utils/AchievementWeek';
 import Inferencer from './utils/Inferencer';
 import AchievementLevel from './utils/AchievementLevel';
+import { prettifyDate, prettifyWeek } from './utils/DateHelper';
 
 type AchievementOverviewProps = {
   name?: string;
   studio?: string;
   inferencer: Inferencer;
-};
-
-// Converts Date to dd/mm/yyyy string format
-const prettifyDate = (date: Date) => {
-  const day = date.getDate();
-  const month = date.getMonth() + 1;
-  const year = date.getFullYear();
-
-  return day + '/' + month + '/' + year;
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {
