@@ -29,7 +29,6 @@ export function gameStateToJson(
     settings: { ...prevGameState.userState.settings },
     lastPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList('collectibles'),
-    achievements: userStateManager.getList('achievements'),
     lastCompletedChapter:
       prevGameState.userState.lastCompletedChapter === undefined
         ? -1

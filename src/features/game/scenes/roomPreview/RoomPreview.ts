@@ -11,23 +11,30 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { createEmptySaveState } from '../../save/GameSaveConstants';
 import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
+import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
+import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
 type RoomPreviewProps = {
   studentCode: string;
+  fullSaveState: FullSaveState;
 };
 
 export default class RoomPreview extends Phaser.Scene {
+  public fullSaveState: FullSaveState;
+
   public layerManager: GameLayerManager;
   public soundManager: GameSoundManager;
   public inputManager: GameInputManager;
 
   private phaseManager: GamePhaseManager;
+  private userStateManager: GameUserStateManager;
   private saveManager: GameSaveManager;
   private escapeManager: GameEscapeManager;
   private collectibleManager: GameCollectiblesManager;
@@ -45,12 +52,17 @@ export default class RoomPreview extends Phaser.Scene {
     this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
+    this.userStateManager = new GameUserStateManager();
     this.collectibleManager = new GameCollectiblesManager();
     this.studentCode = roomDefaultCode;
+    this.fullSaveState = createEmptySaveState();
   }
 
-  public init({ studentCode }: RoomPreviewProps) {
+  public init({ studentCode, fullSaveState }: RoomPreviewProps) {
     this.studentCode = studentCode;
+    this.fullSaveState = fullSaveState;
+
+    this.userStateManager = new GameUserStateManager();
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
     this.saveManager = new GameSaveManager();
@@ -62,6 +74,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
+    this.userStateManager.initialise(this.fullSaveState.userState);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);

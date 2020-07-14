@@ -1,5 +1,8 @@
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import {
+  AccountInfo,
+  getSourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
@@ -9,8 +12,9 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { loadData } from '../../save/GameSaveRequests';
+import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
-import { toS3Path } from '../../utils/GameUtils';
+import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
@@ -19,6 +23,8 @@ class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;
   private roomCode: string;
+
+  private loadedGameState?: FullSaveState;
 
   constructor() {
     super('MainMenu');
@@ -46,8 +52,14 @@ class MainMenu extends Phaser.Scene {
     this.renderOptionButtons();
 
     this.roomCode = await getRoomPreviewCode(accountInfo);
-    const fullSaveState = await loadData(accountInfo);
-    const volume = fullSaveState.userState ? fullSaveState.userState.settings.volume : 1;
+    await this.loadGameDataAndSettings(accountInfo);
+  }
+
+  private async loadGameDataAndSettings(accountInfo: AccountInfo) {
+    this.loadedGameState = await loadData(accountInfo);
+    const volume = this.loadedGameState.userState
+      ? this.loadedGameState.userState.settings.volume
+      : 1;
     this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
@@ -144,7 +156,10 @@ class MainMenu extends Phaser.Scene {
         text: mainMenuConstants.optionsText.studentRoom,
         callback: () => {
           this.layerManager.clearAllLayers();
-          this.scene.start('RoomPreview', { studentCode: this.roomCode });
+          this.scene.start('RoomPreview', {
+            studentCode: this.roomCode,
+            fullSaveState: this.getLoadedGameState()
+          });
         }
       },
       {
@@ -156,6 +171,8 @@ class MainMenu extends Phaser.Scene {
       }
     ];
   }
+
+  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
 }
 
 export default MainMenu;

@@ -148,7 +148,7 @@ class GameManager extends Phaser.Scene {
     this.currentLocationId =
       this.saveManager.getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
     this.stateManager.initialise(this);
-    this.userStateManager.initialise(this);
+    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
     this.soundManager.initialise(this, this.parentGame || getSourceAcademyGame());
     this.dialogueManager.initialise(this);
     this.characterManager.initialise(this);
@@ -201,6 +201,7 @@ class GameManager extends Phaser.Scene {
 
   public async create() {
     await this.userStateManager.loadAssessments();
+    await this.userStateManager.loadAchievements();
     this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
   }

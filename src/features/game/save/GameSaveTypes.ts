@@ -54,7 +54,6 @@ export type UserSaveState = {
   settings: SettingsJson;
   lastPlayedCheckpoint: [number, number];
   collectibles: string[];
-  achievements: string[];
   lastCompletedChapter: number;
 };
 

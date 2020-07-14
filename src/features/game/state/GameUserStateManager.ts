@@ -4,21 +4,22 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
+import { UserSaveState } from '../save/GameSaveTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import GameManager from '../scenes/gameManager/GameManager';
 import { createButton } from '../utils/ButtonUtils';
-import { emptyUserState, userStateStyle } from './GameStateConstants';
+import { mandatory } from '../utils/GameUtils';
+import { userStateStyle } from './GameStateConstants';
 import { UserState } from './GameStateTypes';
 
 export default class GameUserStateManager {
   private userState: UserState;
 
   constructor() {
-    this.userState = emptyUserState;
+    this.userState = {};
   }
 
-  public initialise(gameManager: GameManager) {
-    this.userState = gameManager.saveManager.getLoadedUserState() || emptyUserState;
+  public initialise(userSaveState: UserSaveState) {
+    this.userState.collectibles = userSaveState.collectibles || [];
   }
 
   public addToList(listName: string, id: string): void {
@@ -33,7 +34,7 @@ export default class GameUserStateManager {
     if (listName === 'assessments' && GameGlobalAPI.getInstance().isStorySimulator()) {
       return this.askAssessmentComplete(id);
     }
-    return this.userState[listName].includes(id);
+    return this.getUserState()[listName].includes(id);
   }
 
   public async askAssessmentComplete(assessmentId: string): Promise<boolean> {
@@ -78,4 +79,10 @@ export default class GameUserStateManager {
       ?.filter(assessment => assessment.status === 'submitted')
       .map(assessment => assessment.id.toString());
   }
+
+  public async loadAchievements() {
+    this.userState.achievements = [];
+  }
+
+  public getUserState = () => mandatory(this.userState) as UserSaveState;
 }
