@@ -91,6 +91,7 @@
 
         justify-content: center;
         align-items: center;
+        cursor: pointer;
 
         .dropdown-button {
           display: flex;
@@ -172,6 +173,11 @@
             align-items: flex-end;
           }
         }
+      }
+
+      .achievement-card:hover {
+        transition: all 0.2s ease-in;
+        box-shadow: 0 0 10px black;
       }
 
       .dropdown-container {

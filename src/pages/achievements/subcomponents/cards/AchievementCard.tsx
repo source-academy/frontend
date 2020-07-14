@@ -1,6 +1,6 @@
 import React from 'react';
 import Inferencer from '../utils/Inferencer';
-import { Card, Icon } from '@blueprintjs/core';
+import { Icon } from '@blueprintjs/core';
 import AchievementHints from '../utils/AchievementHints';
 import { IconNames } from '@blueprintjs/icons';
 import AchievementDeadline from '../utils/AchievementDeadline';
@@ -36,7 +36,7 @@ function AchievementCard(props: AchievementCardProps) {
   const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
 
   return (
-    <Card
+    <div
       className="achievement-card"
       style={{
         opacity: shouldPartiallyRender ? '20%' : '100%',
@@ -44,7 +44,6 @@ function AchievementCard(props: AchievementCardProps) {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}
-      interactive={true}
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
@@ -75,7 +74,7 @@ function AchievementCard(props: AchievementCardProps) {
           shouldAnimate={!shouldPartiallyRender}
         />
       </div>
-    </Card>
+    </div>
   );
 }
 

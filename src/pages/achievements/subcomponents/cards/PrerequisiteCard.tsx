@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { Card } from '@blueprintjs/core';
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import AchievementHints from '../utils/AchievementHints';
@@ -31,7 +30,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         <div className="l-shape"></div>
         {isLast ? <></> : <div className="extend-bottom"></div>}
       </div>
-      <Card
+      <div
         className="achievement-card"
         style={{
           opacity: shouldPartiallyRender ? '20%' : '100%',
@@ -39,7 +38,6 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
-        interactive={true}
         onClick={() => displayModal(id)}
       >
         <div className="dropdown-button"></div>
@@ -65,7 +63,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
             shouldAnimate={!shouldPartiallyRender}
           />
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
