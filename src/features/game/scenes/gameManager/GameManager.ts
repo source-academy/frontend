@@ -224,7 +224,6 @@ class GameManager extends Phaser.Scene {
         this.getCurrentCheckpoint().map.getStartActions()
       );
     }
-
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
     }

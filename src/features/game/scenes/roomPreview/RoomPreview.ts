@@ -88,24 +88,26 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public async create() {
+    // Process student's information
     const accountInfo = getSourceAcademyGame().getAccountInfo();
     const fullSaveState = await loadData(accountInfo);
     this.saveManager.initialiseForSettings(accountInfo, fullSaveState);
+    await this.userStateManager.loadAchievements();
 
+    // Preload all necessary assets
     await this.eval(`preload();`);
-
     await Promise.all(
       Array.from(this.preloadImageMap).map(async ([key, path]) => {
         await loadImage(this, key, path);
       })
     );
-
     await Promise.all(
       Array.from(this.preloadSoundMap).map(async ([key, path]) => {
         await loadSound(this, key, path);
       })
     );
 
+    // Execute create
     await this.eval(`create();`);
     this.soundManager.stopCurrBgMusic();
   }
@@ -124,7 +126,8 @@ export default class RoomPreview extends Phaser.Scene {
       layerTypes: Layer,
       remotePath: Constants.assetsFolder,
       screenSize: screenSize,
-      verify: (sprite: Phaser.GameObjects.Sprite) => this.attachVerificationTag(sprite)
+      verify: (sprite: Phaser.GameObjects.Sprite) => this.attachVerificationTag(sprite),
+      achievements: this.userStateManager.getList('achievements')
     });
     context.externalContext = 'playground';
     await runInContext(this.studentCode + append, context);

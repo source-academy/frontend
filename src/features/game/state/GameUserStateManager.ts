@@ -81,6 +81,7 @@ export default class GameUserStateManager {
   }
 
   public async loadAchievements() {
+    // TODO: Fetch from backend
     this.userState.achievements = [];
   }
 
