@@ -70,7 +70,12 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
         usePortal={false}
       >
         {newGoals.map(goal => (
-          <EditableAchievementGoal goal={goal} editGoal={editGoal} removeGoal={removeGoal} />
+          <EditableAchievementGoal
+            key={goal.goalId}
+            goal={goal}
+            editGoal={editGoal}
+            removeGoal={removeGoal}
+          />
         ))}
 
         {newGoalAdder()}
