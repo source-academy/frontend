@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import { IconNames } from '@blueprintjs/icons';
 
@@ -20,11 +20,7 @@ export type StateProps = {
 };
 
 function Achievement(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleAchievementsFetch } = props;
-
-  useEffect(() => {
-    handleAchievementsFetch();
-  }, [handleAchievementsFetch]);
+  const { inferencer, name, group } = props;
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
