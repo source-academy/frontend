@@ -6,15 +6,16 @@
   overflow-x: hidden;
   overflow-y: auto;
 
+  background-size: cover;
   background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal.png);
-  background-position: center;
   background-repeat: no-repeat;
+  background-attachment: fixed;
 
   .achievement-overview {
     display: flex;
 
     height: 7%;
-    width: 50%;
+    width: 40%;
 
     flex-direction: row;
     justify-content: space-evenly;
@@ -22,8 +23,69 @@
 
     color: white;
 
-    .level-progress {
-      width: 15em;
+    .level {
+      display: flex;
+
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      .level-badge {
+        display: flex;
+
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .level-icon {
+          height: 2.5em;
+          width: 2.5em;
+
+          background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/favicon.ico);
+          background-size: contain;
+        }
+
+        p {
+          padding: 0;
+          margin: 0;
+          font-size: 0.9em;
+          text-decoration: underline white;
+        }
+      }
+
+      .level-progress {
+        display: flex;
+
+        flex-direction: row;
+
+        align-items: center;
+
+        height: 1.2em;
+        width: 20em;
+
+        .progress-bar {
+          display: flex;
+
+          height: 1.2em;
+          width: 20em;
+        }
+
+        p {
+          display: inline-flex;
+
+          z-index: 1;
+
+          height: 1.2em;
+          width: 20em;
+
+          justify-content: center;
+          align-items: center;
+
+          padding: 0;
+          margin: 0 -20em 0;
+          color: #ffb412;
+        }
+      }
     }
   }
 

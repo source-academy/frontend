@@ -14,10 +14,23 @@ function AchievementLevel(props: AchievementLevelProps) {
   const progressFrac = progress / expPerLevel;
 
   return (
-    <>
-      <h3>{level}</h3>
-      <ProgressBar className="level-progress" value={progressFrac} />
-    </>
+    <div className="level">
+      <div className="level-badge">
+        <span className="level-icon" />
+        <p>{level}</p>
+      </div>
+      <span className="level-progress">
+        <ProgressBar
+          className="progress-bar"
+          value={progressFrac}
+          animate={false}
+          stripes={false}
+        />
+        <p>
+          {progress} / {expPerLevel} XP
+        </p>
+      </span>
+    </div>
   );
 }
 

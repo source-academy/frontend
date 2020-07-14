@@ -2,13 +2,26 @@
 
 exports[`AchievementLevel component renders correctly 1`] = `
 "<AchievementLevel studentExp={0}>
-  <h3>
-    0
-  </h3>
-  <Blueprint3.ProgressBar className=\\"level-progress\\" value={0}>
-    <div className=\\"bp3-progress-bar level-progress\\">
-      <div className=\\"bp3-progress-meter\\" style={{...}} />
+  <div className=\\"level\\">
+    <div className=\\"level-badge\\">
+      <span className=\\"level-icon\\" />
+      <p>
+        0
+      </p>
     </div>
-  </Blueprint3.ProgressBar>
+    <span className=\\"level-progress\\">
+      <Blueprint3.ProgressBar className=\\"progress-bar\\" value={0} animate={false} stripes={false}>
+        <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress-bar\\">
+          <div className=\\"bp3-progress-meter\\" style={{...}} />
+        </div>
+      </Blueprint3.ProgressBar>
+      <p>
+        0
+         / 
+        1000
+         XP
+      </p>
+    </span>
+  </div>
 </AchievementLevel>"
 `;
