@@ -10,6 +10,7 @@ import { fetchMockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: new Inferencer(fetchMockAchievements()),
+  // inferencer: new Inferencer(state.achievements.achievements), 
   name: state.session.name,
   group: state.session.group
 });
