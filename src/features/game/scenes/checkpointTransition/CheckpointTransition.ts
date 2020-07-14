@@ -27,8 +27,6 @@ class CheckpointTransition extends Phaser.Scene {
   }
 
   public async create() {
-    this.soundManager.stopCurrBgMusic();
-
     const accountInfo = getSourceAcademyGame().getAccountInfo();
     const loadedGameState = await loadData(accountInfo);
     const chapterDetails = SampleChapters; // TODO: Fetch from backend
