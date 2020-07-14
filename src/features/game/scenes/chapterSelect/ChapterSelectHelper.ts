@@ -62,7 +62,7 @@ export function createChapter(
       onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
       onHover: () => chapterRepeatHover.setVisible(true),
       onOut: () => chapterRepeatHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
+      onPointerMove: (pointer: Phaser.Input.Pointer) => {
         chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
         chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
       }
@@ -78,7 +78,7 @@ export function createChapter(
         callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
       onHover: () => chapterContinueHover.setVisible(true),
       onOut: () => chapterContinueHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
+      onPointerMove: (pointer: Phaser.Input.Pointer) => {
         chapterContinueHover.x = pointer.worldX - chapterContainer.x;
         chapterContinueHover.y = pointer.worldY - chapterContainer.y;
       }
