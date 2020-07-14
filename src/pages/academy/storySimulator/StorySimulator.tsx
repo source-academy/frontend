@@ -77,7 +77,9 @@ function StorySimulator() {
               />
             </>
           )}
-          {storySimState === StorySimState.ChapterSequence && <StorySimulatorChapterSequencer />}
+          {storySimState === StorySimState.ChapterSequence && (
+            <StorySimulatorChapterSequencer accessToken={session.accessToken} />
+          )}
         </div>
       </div>
     </>

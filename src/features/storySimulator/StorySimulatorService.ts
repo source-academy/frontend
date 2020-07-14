@@ -1,4 +1,4 @@
-import { createAssetRequest } from './StorySimulatorRequest';
+import { createAssetRequest, createStoryRequest } from './StorySimulatorRequest';
 
 export const s3AssetFolders = [
   'locations',
@@ -71,4 +71,9 @@ export async function uploadAsset(
   );
 
   return response ? response.text() : '';
+}
+
+export async function fetchChapters(accessToken: string = '') {
+  const response = await createStoryRequest(accessToken, '', 'GET');
+  return response.status === 200 ? response.json() : [];
 }
