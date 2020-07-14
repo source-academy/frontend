@@ -45,8 +45,8 @@ function Achievement(props: DispatchProps & StateProps) {
   const handleGlow = (id: number) => {
     if (id === modalId) {
       return {
-        border: '5px solid #4195fc',
-        boxShadow: '0px 0px 20px #4195fc'
+        border: '2px solid #9ecaed',
+        boxShadow: '0 0 10px #9ecaed'
       };
     }
 
