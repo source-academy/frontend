@@ -1,6 +1,7 @@
 import {
   AccountInfo,
-  getSourceAcademyGame} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+  getSourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { screenCenter } from '../../commons/CommonConstants';

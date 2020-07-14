@@ -1,4 +1,4 @@
-import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';

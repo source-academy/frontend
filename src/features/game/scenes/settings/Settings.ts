@@ -14,7 +14,8 @@ import { createBitmapText } from '../../utils/TextUtils';
 import settingsConstants, {
   applySettingsTextStyle,
   optionHeaderTextStyle,
-  optionTextStyle} from './SettingsConstants';
+  optionTextStyle
+} from './SettingsConstants';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: CommonRadioButton | undefined;

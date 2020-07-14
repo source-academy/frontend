@@ -1,7 +1,7 @@
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
-import { AssetKey,ItemId } from 'src/features/game/commons/CommonTypes';
+import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { mandatory,mapValues } from 'src/features/game/utils/GameUtils';
+import { mandatory, mapValues } from 'src/features/game/utils/GameUtils';
 
 import { loadImage } from '../../game/utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';

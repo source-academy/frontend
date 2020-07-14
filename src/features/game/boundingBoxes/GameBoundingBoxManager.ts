@@ -4,10 +4,10 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableBBox,BBoxProperty } from './GameBoundingBoxTypes';
+import { ActivatableBBox, BBoxProperty } from './GameBoundingBoxTypes';
 
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;

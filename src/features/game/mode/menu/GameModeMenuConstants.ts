@@ -1,7 +1,7 @@
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
-import { screenCenter,screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle,GameSprite } from '../../commons/CommonTypes';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { BitmapFontStyle, GameSprite } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
 
 export const modeButtonStyle: BitmapFontStyle = {

@@ -1,4 +1,4 @@
-import { screenCenter,screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 
 const charXOffset = 350;
 

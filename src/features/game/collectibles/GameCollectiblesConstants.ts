@@ -2,7 +2,7 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { Color,HexColor } from '../utils/StyleUtils';
+import { Color, HexColor } from '../utils/StyleUtils';
 import { CollectibleProperty } from './GameCollectiblesTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {

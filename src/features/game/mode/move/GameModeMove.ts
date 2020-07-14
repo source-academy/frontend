@@ -2,7 +2,7 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { screenCenter,screenSize } from '../../commons/CommonConstants';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';

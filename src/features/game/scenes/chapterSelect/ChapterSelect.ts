@@ -1,5 +1,5 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, mandatory,sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';

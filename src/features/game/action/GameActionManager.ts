@@ -4,7 +4,7 @@ import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
 import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
-import { ActionCondition,GameAction } from './GameActionTypes';
+import { ActionCondition, GameAction } from './GameActionTypes';
 
 export default class GameActionManager {
   private actionMap: Map<ItemId, GameAction>;

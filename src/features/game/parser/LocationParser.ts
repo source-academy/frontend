@@ -1,4 +1,4 @@
-import { GameLocation, GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';

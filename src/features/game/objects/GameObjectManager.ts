@@ -6,10 +6,10 @@ import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { blink } from '../effects/FadeEffect';
 import GlowingImage from '../effects/GlowingObject';
-import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableObject,ObjectProperty } from './GameObjectTypes';
+import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;

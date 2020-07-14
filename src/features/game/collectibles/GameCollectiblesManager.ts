@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IBaseScene,IGameUI } from '../commons/CommonTypes';
+import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import GameLayerManager from '../layer/GameLayerManager';
@@ -9,7 +9,7 @@ import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
-import { limitNumber, mandatory,sleep } from '../utils/GameUtils';
+import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
@@ -18,7 +18,8 @@ import collectibleConstants, {
   collectibleTitleStyle,
   defaultCollectibleProp,
   listBannerTextStyle,
-  pageBannerTextStyle} from './GameCollectiblesConstants';
+  pageBannerTextStyle
+} from './GameCollectiblesConstants';
 import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
 import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 

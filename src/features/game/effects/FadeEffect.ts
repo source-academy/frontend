@@ -1,6 +1,6 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
-import { Constants,screenCenter, screenSize } from '../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import { sleep } from '../utils/GameUtils';
 import { HexColor } from '../utils/StyleUtils';

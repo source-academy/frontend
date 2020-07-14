@@ -4,7 +4,7 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
-import { Constants,screenCenter, screenSize } from '../../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';

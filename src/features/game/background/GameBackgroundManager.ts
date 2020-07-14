@@ -1,4 +1,4 @@
-import { Constants,screenCenter, screenSize } from '../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
 import { AssetKey } from '../commons/CommonTypes';
 import { fadeIn } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';

@@ -2,10 +2,10 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { GamePosition,ItemId } from '../../commons/CommonTypes';
+import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { displayNotification } from '../../effects/Notification';
-import { GameLocation,GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';

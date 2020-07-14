@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
-import { screenCenter,screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 import CommonRadioButton from '../commons/CommonRadioButton';
-import { IBaseScene,IGameUI } from '../commons/CommonTypes';
+import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
@@ -17,7 +17,8 @@ import { createBitmapText } from '../utils/TextUtils';
 import escapeConstants, {
   escapeOptButtonStyle,
   optTextStyle,
-  volumeRadioOptTextStyle} from './GameEscapeConstants';
+  volumeRadioOptTextStyle
+} from './GameEscapeConstants';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButton | undefined;

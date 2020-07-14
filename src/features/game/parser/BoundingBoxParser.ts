@@ -1,5 +1,5 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import Parser from './Parser';

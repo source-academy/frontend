@@ -1,5 +1,5 @@
 import FontAssets from '../../assets/FontAssets';
-import { screenCenter,screenSize } from '../../commons/CommonConstants';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
 

@@ -11,7 +11,7 @@ import { GameSaveState } from '../save/GameSaveTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
-import { StateObserver,StateSubject } from './GameStateTypes';
+import { StateObserver, StateSubject } from './GameStateTypes';
 
 class GameStateManager implements StateSubject {
   // Subscribers

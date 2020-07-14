@@ -1,6 +1,6 @@
-import { Button, InputGroup,Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
+import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
 import * as React from 'react';
-import { s3AssetFolders,uploadAssets } from 'src/features/storySimulator/StorySimulatorService';
+import { s3AssetFolders, uploadAssets } from 'src/features/storySimulator/StorySimulatorService';
 
 type Props = {
   accessToken?: string;

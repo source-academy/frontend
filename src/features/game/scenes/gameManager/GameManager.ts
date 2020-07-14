@@ -14,7 +14,8 @@ import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import {
   AccountInfo,
   getSourceAcademyGame,
-  SourceAcademyGame} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+  SourceAcademyGame
+} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 import GameBackgroundManager from '../../background/GameBackgroundManager';
@@ -28,7 +29,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameSaveManager from '../../save/GameSaveManager';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
-import { mandatory,toS3Path } from '../../utils/GameUtils';
+import { mandatory, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
 

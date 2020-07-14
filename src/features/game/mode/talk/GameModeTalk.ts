@@ -10,9 +10,9 @@ import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
-import { mandatory,sleep } from '../../utils/GameUtils';
+import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { talkButtonStyle,talkButtonYSpace } from './GameModeTalkConstants';
+import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

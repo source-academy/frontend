@@ -5,7 +5,7 @@ import { mandatory } from '../utils/GameUtils';
 import { createEmptySaveState } from './GameSaveConstants';
 import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { saveData } from './GameSaveRequests';
-import { FullSaveState, SaveManagerType,SettingsJson } from './GameSaveTypes';
+import { FullSaveState, SaveManagerType, SettingsJson } from './GameSaveTypes';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;

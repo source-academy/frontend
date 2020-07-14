@@ -9,7 +9,7 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
 import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import { fadeAndDestroy,fadeIn } from './FadeEffect';
+import { fadeAndDestroy, fadeIn } from './FadeEffect';
 
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,

@@ -1,10 +1,10 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import { screenSize } from '../commons/CommonConstants';
-import { GamePosition,ItemId } from '../commons/CommonTypes';
+import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';
-import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
 import { resize } from '../utils/SpriteUtils';

@@ -1,4 +1,4 @@
-import { Icon,ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
+import { Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
 import * as _ from 'lodash';
 import * as React from 'react';
 import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';

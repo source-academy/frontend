@@ -10,7 +10,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
-import modeMenuConstants, { modeBannerRect,modeButtonStyle } from './GameModeMenuConstants';
+import modeMenuConstants, { modeBannerRect, modeButtonStyle } from './GameModeMenuConstants';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

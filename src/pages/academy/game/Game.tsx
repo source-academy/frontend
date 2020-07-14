@@ -6,7 +6,8 @@ import { resetData } from 'src/features/game/save/GameSaveRequests';
 import {
   AccountInfo,
   createSourceAcademyGame,
-  getSourceAcademyGame} from './subcomponents/sourceAcademyGame';
+  getSourceAcademyGame
+} from './subcomponents/sourceAcademyGame';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
