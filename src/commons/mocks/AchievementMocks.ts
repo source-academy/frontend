@@ -32,7 +32,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Rune Master achievement'
@@ -65,7 +65,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Beyond the Second Dimension achievement'
@@ -98,7 +98,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Colorful Carpet achievement'
@@ -116,7 +116,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description: '',
       completionText: ''
     }
@@ -154,7 +154,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Curve Wizard achievement'
@@ -187,7 +187,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Curve Introduction achievement'
@@ -220,7 +220,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Curve Manipulation achievement'
@@ -253,7 +253,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed The Source-rer achievement'
@@ -278,7 +278,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Power of Friendship achievement'
@@ -303,7 +303,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Piazza Guru achievement'
@@ -328,7 +328,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: "Congratulations! You have completed That's the Spirit achievement"

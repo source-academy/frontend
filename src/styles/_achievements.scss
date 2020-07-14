@@ -233,9 +233,6 @@
         flex-direction: column;
 
         color: white;
-        background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/background/exploration-background.png);
-        background-size: cover;
-        background-position: center;
 
         .canvas {
           display: flex;
@@ -249,7 +246,7 @@
           margin: 0 0 0.5em 0;
 
           h1 {
-            margin: 0.4em 0 0.2em 0;
+            margin: 0.5em 0 0.2em 0;
           }
 
           .deadline {
