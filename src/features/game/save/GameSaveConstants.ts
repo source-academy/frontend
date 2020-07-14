@@ -5,7 +5,6 @@ export const createEmptySaveState = (): FullSaveState => {
     gameSaveStates: {},
     userState: {
       collectibles: [],
-      achievements: [],
       settings: { volume: 1 },
       lastPlayedCheckpoint: [-1, -1],
       lastCompletedChapter: -1
