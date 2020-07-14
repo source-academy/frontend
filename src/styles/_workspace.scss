@@ -874,45 +874,16 @@ $code-color-error: #ff4444;
       }
     }
 
-    /* CSS animation styling for testcases when run */
-    @keyframes correct {
-      from {
-        background: rgba(125, 255, 125, 0.5);
-      }
-
-      to {
-        background: rgba(125, 255, 125, 0.2);
-      }
-    }
-
-    @keyframes wrong {
-      from {
-        background: rgba(255, 55, 55, 0.5);
-      }
-
-      to {
-        background: rgba(255, 55, 55, 0.2);
-      }
-    }
-
-    @keyframes private-revert {
-      to {
-        background: rgba(192, 192, 192, 0.2);
-      }
-    }
-
     &.private > .#{$ns}-card {
       background-color: rgba(192, 192, 192, 0.2);
     }
 
     &.correct > .#{$ns}-card {
-      animation: 4s correct;
       background-color: rgba(125, 255, 125, 0.2);
     }
 
     &.wrong {
       > .#{$ns}-card {
-        animation: 4s wrong;
         background-color: rgba(255, 55, 55, 0.2);
       }
 
@@ -920,14 +891,6 @@ $code-color-error: #ff4444;
       pre.result-actual {
         color: $code-color-error;
       }
-    }
-
-    &.correct.private > .#{$ns}-card {
-      animation: 4s correct, 4s private-revert 4s forwards;
-    }
-
-    &.wrong.private > .#{$ns}-card {
-      animation: 4s wrong, 4s private-revert 4s forwards;
     }
 
     &:not(:first-child) {
@@ -966,6 +929,49 @@ $code-color-error: #ff4444;
         height: 12rem !important;
         width: 12rem !important;
       }
+    }
+
+    /* CSS animation styling for testcases when run */
+    @keyframes correct {
+      from {
+        background: rgba(125, 255, 125, 0.5);
+      }
+
+      to {
+        background: rgba(125, 255, 125, 0.2);
+      }
+    }
+
+    @keyframes wrong {
+      from {
+        background: rgba(255, 55, 55, 0.5);
+      }
+
+      to {
+        background: rgba(255, 55, 55, 0.2);
+      }
+    }
+
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+    }
+
+    &.wrong > .#{$ns}-card {
+      animation: 4s wrong;
+    }
+
+    &.correct.private > .#{$ns}-card {
+      animation: 4s correct, 4s private-revert 4s forwards;
+    }
+
+    &.wrong.private > .#{$ns}-card {
+      animation: 4s wrong, 4s private-revert 4s forwards;
     }
   }
 
