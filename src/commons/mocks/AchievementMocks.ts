@@ -1,6 +1,6 @@
 import { AchievementAbility, AchievementItem } from '../achievements/AchievementTypes';
 
-export const defaultMockAchievements: AchievementItem[] = [
+export const mockAchievements: AchievementItem[] = [
   {
     id: 0,
     title: 'Rune Master',
@@ -62,10 +62,10 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/prereq-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Beyond the Second Dimension achievement'
@@ -95,10 +95,10 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/prereq-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Colorful Carpet achievement'
@@ -116,7 +116,7 @@ export const defaultMockAchievements: AchievementItem[] = [
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
       description: '',
       completionText: ''
     }
@@ -250,7 +250,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 3,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
@@ -325,7 +325,7 @@ export const defaultMockAchievements: AchievementItem[] = [
     ],
     position: 5,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
@@ -335,13 +335,3 @@ export const defaultMockAchievements: AchievementItem[] = [
     }
   }
 ];
-
-let mockAchievements = defaultMockAchievements;
-
-export const fetchMockAchievements = () => {
-  return mockAchievements;
-};
-
-export const updateMockAchievements = (newAchievements: AchievementItem[]) => {
-  mockAchievements = newAchievements;
-};
