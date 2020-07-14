@@ -4,7 +4,7 @@ exports[`EditableModalDescription component renders correctly 1`] = `
 "<EditableModalDescription description=\\"Sample Description\\" setDescription={[Function: setDescription]}>
   <h3>
     <Blueprint3.EditableText placeholder=\\"Enter your description here\\" value=\\"Sample Description\\" onChange={[Function: setDescription]} multiline={true} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} type=\\"text\\">
-      <div className=\\"bp3-editable-text bp3-multiline\\" onFocus={[Function]} tabIndex={0}>
+      <div className=\\"bp3-editable-text bp3-multiline\\" onFocus={[Function (anonymous)]} tabIndex={0}>
         <span className=\\"bp3-editable-text-content\\" style={{...}}>
           Sample Description
         </span>

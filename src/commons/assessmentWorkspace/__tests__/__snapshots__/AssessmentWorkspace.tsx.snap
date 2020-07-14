@@ -20,7 +20,7 @@ exports[`AssessmentWorkspace page with MCQ question renders correctly 1`] = `
         <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
           Confirm
         </Blueprint3.Button>
       </Blueprint3.ButtonGroup>
@@ -48,7 +48,7 @@ exports[`AssessmentWorkspace page with overdue assessment renders correctly 1`] 
         <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
           Confirm
         </Blueprint3.Button>
       </Blueprint3.ButtonGroup>
@@ -76,7 +76,7 @@ exports[`AssessmentWorkspace page with programming question renders correctly 1`
         <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
           Confirm
         </Blueprint3.Button>
       </Blueprint3.ButtonGroup>
@@ -104,7 +104,7 @@ exports[`AssessmentWorkspace renders Grading tab correctly if the question has b
         <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function: closeOverlay]}>
           Cancel
         </Blueprint3.Button>
-        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function]}>
+        <Blueprint3.Button disabled={false} fill={false} intent=\\"danger\\" minimal={false} className=\\"\\" type={[undefined]} onClick={[Function (anonymous)]}>
           Confirm
         </Blueprint3.Button>
       </Blueprint3.ButtonGroup>

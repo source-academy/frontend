@@ -5,7 +5,7 @@ exports[`AchievementExp component renders correctly 1`] = `
   <div>
     <div>
       <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint3.Icon icon={[undefined]} />
           <span className=\\"bp3-button-text\\">
             Edit Goals
@@ -26,7 +26,7 @@ exports[`AchievementExp component renders correctly 2`] = `
   <div>
     <div>
       <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function]} onKeyUp={[Function]} tabIndex={[undefined]}>
+        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint3.Icon icon={[undefined]} />
           <span className=\\"bp3-button-text\\">
             Edit Goals
