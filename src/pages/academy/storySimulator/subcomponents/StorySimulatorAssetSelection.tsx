@@ -1,8 +1,8 @@
-import * as React from 'react';
+import { Icon,ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
 import * as _ from 'lodash';
-import { ITreeNode, Tree, Tooltip, Icon } from '@blueprintjs/core';
-
+import * as React from 'react';
 import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
+
 import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
 type TreeState = {

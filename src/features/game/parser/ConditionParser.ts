@@ -1,9 +1,9 @@
-import ParserConverter from './ParserConverter';
-import StringUtils from '../utils/StringUtils';
 import { ActionCondition } from '../action/GameActionTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
-import { GameAttr } from './ParserValidator';
+import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
+import ParserConverter from './ParserConverter';
+import { GameAttr } from './ParserValidator';
 
 export default class ConditionParser {
   public static parse(conditionDetails: string): ActionCondition {

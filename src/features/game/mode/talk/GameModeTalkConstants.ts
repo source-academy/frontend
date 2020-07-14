@@ -1,7 +1,7 @@
+import FontAssets from '../../assets/FontAssets';
 import { screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
-import FontAssets from '../../assets/FontAssets';
 
 export const talkButtonYSpace = screenSize.y * 0.7;
 

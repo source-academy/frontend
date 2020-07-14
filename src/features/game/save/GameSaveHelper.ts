@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
-import { FullSaveState, GameSaveState, UserSaveState, SettingsJson } from './GameSaveTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+
 import { GameLocation, LocationId } from '../location/GameMapTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import { FullSaveState, GameSaveState, SettingsJson,UserSaveState } from './GameSaveTypes';
 
 export function gameStateToJson(
   prevGameState: FullSaveState,

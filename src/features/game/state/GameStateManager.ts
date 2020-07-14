@@ -1,17 +1,17 @@
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
+import { ItemId } from '../commons/CommonTypes';
+import { emptySet } from '../location/GameMapConstants';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
-import { ItemId } from '../commons/CommonTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
 import { GameSaveState } from '../save/GameSaveTypes';
-import { StateSubject, StateObserver } from './GameStateTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
-import { emptySet } from '../location/GameMapConstants';
 import { mandatory } from '../utils/GameUtils';
+import { StateObserver,StateSubject } from './GameStateTypes';
 
 class GameStateManager implements StateSubject {
   // Subscribers

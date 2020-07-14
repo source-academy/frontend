@@ -1,10 +1,11 @@
-import { saveData } from './GameSaveRequests';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
-import { FullSaveState, SettingsJson, SaveManagerType } from './GameSaveTypes';
-import { createEmptySaveState } from './GameSaveConstants';
+
 import { Constants } from '../commons/CommonConstants';
 import { mandatory } from '../utils/GameUtils';
+import { createEmptySaveState } from './GameSaveConstants';
+import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
+import { saveData } from './GameSaveRequests';
+import { FullSaveState, SaveManagerType,SettingsJson } from './GameSaveTypes';
 
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;

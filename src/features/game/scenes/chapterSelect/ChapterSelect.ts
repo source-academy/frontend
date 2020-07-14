@@ -1,19 +1,20 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, sleep, toS3Path, mandatory } from 'src/features/game/utils/GameUtils';
+import { limitNumber, mandatory,sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
+import ImageAssets from '../../assets/ImageAssets';
+import { GameChapter } from '../../chapter/GameChapterTypes';
+import CommonBackButton from '../../commons/CommonBackButton';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
-import { SampleChapters } from './SampleChapters';
-import chapConstants from './ChapterSelectConstants';
-import { createChapter } from './ChapterSelectHelper';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { GameChapter } from '../../chapter/GameChapterTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import ImageAssets from '../../assets/ImageAssets';
-import { createButton } from '../../utils/ButtonUtils';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { createButton } from '../../utils/ButtonUtils';
+import chapConstants from './ChapterSelectConstants';
+import { createChapter } from './ChapterSelectHelper';
+import { SampleChapters } from './SampleChapters';
 
 class ChapterSelect extends Phaser.Scene {
   public layerManager: GameLayerManager;

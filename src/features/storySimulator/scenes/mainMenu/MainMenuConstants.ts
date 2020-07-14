@@ -1,7 +1,7 @@
-import { screenSize } from 'src/features/game/commons/CommonConstants';
-import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 import FontAssets from 'src/features/game/assets/FontAssets';
+import { screenSize } from 'src/features/game/commons/CommonConstants';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 export const mainMenuOptStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

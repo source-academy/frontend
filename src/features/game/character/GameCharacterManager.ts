@@ -1,15 +1,15 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import GameManager from '../scenes/gameManager/GameManager';
-import CharConstants from './GameCharacterConstants';
 
 import { screenSize } from '../commons/CommonConstants';
-import { ItemId, GamePosition } from '../commons/CommonTypes';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { Character } from './GameCharacterTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { resize } from '../utils/SpriteUtils';
+import { GamePosition,ItemId } from '../commons/CommonTypes';
 import { fadeIn, fadeOut } from '../effects/FadeEffect';
+import { Layer } from '../layer/GameLayerTypes';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
+import { resize } from '../utils/SpriteUtils';
+import CharConstants from './GameCharacterConstants';
+import { Character } from './GameCharacterTypes';
 
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;

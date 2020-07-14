@@ -1,9 +1,10 @@
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { loadImage } from '../../game/utils/LoaderUtils';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+
+import { loadImage } from '../../game/utils/LoaderUtils';
+import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 
 export default class SSBackgroundManager {
   private backgroundAssetPath: string | undefined;

@@ -1,9 +1,10 @@
-import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { sleep, toS3Path, mandatory } from '../utils/GameUtils';
-import { musicFadeOutTween, bgMusicFadeDuration } from './GameSoundTypes';
+
+import { AssetMap,SoundAsset } from '../assets/AssetsTypes';
+import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { UserSaveState } from '../save/GameSaveTypes';
-import { SoundAsset, AssetMap } from '../assets/AssetsTypes';
+import { mandatory,sleep, toS3Path } from '../utils/GameUtils';
+import { bgMusicFadeDuration,musicFadeOutTween } from './GameSoundTypes';
 
 class GameSoundManager {
   private baseSoundManager: Phaser.Sound.BaseSoundManager | undefined;

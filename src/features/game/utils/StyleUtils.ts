@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+
 import { screenSize } from '../commons/CommonConstants';
 
 export const Color = {

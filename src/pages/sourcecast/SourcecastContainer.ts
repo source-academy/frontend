@@ -47,7 +47,6 @@ import {
   PlaybackData,
   PlaybackStatus
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-
 import Sourcecast, { DispatchProps, StateProps } from './Sourcecast';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

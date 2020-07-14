@@ -1,6 +1,6 @@
-import { HexColor } from '../../utils/StyleUtils';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
 import FontAssets from '../../assets/FontAssets';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { HexColor } from '../../utils/StyleUtils';
 
 export const transitionTextStyle: BitmapFontStyle = {
   key: FontAssets.alienCowsFont.key,

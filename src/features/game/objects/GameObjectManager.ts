@@ -1,14 +1,15 @@
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import { ObjectProperty, ActivatableObject } from './GameObjectTypes';
-import { ItemId } from '../commons/CommonTypes';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { StateObserver } from '../state/GameStateTypes';
-import { GameMode } from '../mode/GameModeTypes';
-import GlowingImage from '../effects/GlowingObject';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+
 import { Constants } from '../commons/CommonConstants';
+import { ItemId } from '../commons/CommonTypes';
 import { blink } from '../effects/FadeEffect';
+import GlowingImage from '../effects/GlowingObject';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameMode } from '../mode/GameModeTypes';
+import { StateObserver } from '../state/GameStateTypes';
+import { ActivatableObject,ObjectProperty } from './GameObjectTypes';
 
 class GameObjectManager implements StateObserver {
   public observerId: string;

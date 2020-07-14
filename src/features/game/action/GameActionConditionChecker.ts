@@ -1,6 +1,6 @@
-import { ActionCondition } from './GameActionTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GameStateStorage } from '../state/GameStateTypes';
+import { ActionCondition } from './GameActionTypes';
 
 export default class ActionConditionChecker {
   public static async checkAllConditionsSatisfied(actionConditions: ActionCondition[]) {

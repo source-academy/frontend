@@ -1,11 +1,12 @@
-import { AssetKey } from 'src/features/game/commons/CommonTypes';
-import { CursorMode } from './SSCursorModeTypes';
-import SSCursorModeConstants, { altTextStyle } from './SSCursorModeConstants';
 import { Constants } from 'src/features/game/commons/CommonConstants';
-import SSImageAssets from '../assets/ImageAssets';
 import CommonTextHover from 'src/features/game/commons/CommonTextHover';
-import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import { createButton } from 'src/features/game/utils/ButtonUtils';
+
+import SSImageAssets from '../assets/ImageAssets';
+import SSCursorModeConstants, { altTextStyle } from './SSCursorModeConstants';
+import { CursorMode } from './SSCursorModeTypes';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;

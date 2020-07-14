@@ -1,18 +1,19 @@
-import { screenCenter, screenSize, Constants } from '../../commons/CommonConstants';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { Layer } from '../../layer/GameLayerTypes';
-import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { loadData } from '../../save/GameSaveRequests';
-import { toS3Path } from '../../utils/GameUtils';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
-import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
-import ImageAssets from '../../assets/ImageAssets';
+
 import FontAssets from '../../assets/FontAssets';
+import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
+import { Constants,screenCenter, screenSize } from '../../commons/CommonConstants';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
+import GameLayerManager from '../../layer/GameLayerManager';
+import { Layer } from '../../layer/GameLayerTypes';
+import { loadData } from '../../save/GameSaveRequests';
 import { createButton } from '../../utils/ButtonUtils';
+import { toS3Path } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
+import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
+import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;

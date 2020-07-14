@@ -1,13 +1,13 @@
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-
-import { BBoxProperty, ActivatableBBox } from './GameBoundingBoxTypes';
-import { ItemId } from '../commons/CommonTypes';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { StateObserver } from '../state/GameStateTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+
 import { Constants } from '../commons/CommonConstants';
+import { ItemId } from '../commons/CommonTypes';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameMode } from '../mode/GameModeTypes';
+import { StateObserver } from '../state/GameStateTypes';
+import { ActivatableBBox,BBoxProperty } from './GameBoundingBoxTypes';
 
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;

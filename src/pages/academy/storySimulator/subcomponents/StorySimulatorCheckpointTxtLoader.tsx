@@ -1,6 +1,7 @@
-import * as React from 'react';
 import 'ace-builds/webpack-resolver';
-import { Tabs, Tab, Button, Popover, MenuItem, Menu, Position } from '@blueprintjs/core';
+
+import { Button, Menu, MenuItem, Popover, Position,Tab, Tabs } from '@blueprintjs/core';
+import * as React from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {

@@ -1,6 +1,6 @@
-import { blink } from './FadeEffect';
-import { HexColor } from '../utils/StyleUtils';
 import { resize } from '../utils/SpriteUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { blink } from './FadeEffect';
 
 export default class GlowingImage {
   private scene: Phaser.Scene;

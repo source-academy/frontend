@@ -1,15 +1,16 @@
-import { IGameUI } from '../../commons/CommonTypes';
-import modeMenuConstants, { modeButtonStyle, modeBannerRect } from './GameModeMenuConstants';
-import { sleep } from '../../utils/GameUtils';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import { GameMode, gameModeToPhase } from '../GameModeTypes';
+
+import ImageAssets from '../../assets/ImageAssets';
 import { screenSize } from '../../commons/CommonConstants';
+import { IGameUI } from '../../commons/CommonTypes';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
-import ImageAssets from '../../assets/ImageAssets';
 import { createButton } from '../../utils/ButtonUtils';
+import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
+import { GameMode, gameModeToPhase } from '../GameModeTypes';
+import modeMenuConstants, { modeBannerRect,modeButtonStyle } from './GameModeMenuConstants';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

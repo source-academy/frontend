@@ -1,37 +1,36 @@
-import GameGlobalAPI from './GameGlobalAPI';
-import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import GameActionManager from 'src/features/game/action/GameActionManager';
+import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
+import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
 import GameCharacterManager from 'src/features/game/character/GameCharacterManager';
 import GameDialogueManager from 'src/features/game/dialogue/GameDialogueManager';
-import GameStateManager from 'src/features/game/state/GameStateManager';
-import GameObjectManager from 'src/features/game/objects/GameObjectManager';
-import GameActionManager from 'src/features/game/action/GameActionManager';
-import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-import GameEscapeManager from '../../escape/GameEscapeManager';
-import GamePhaseManager from '../../phase/GamePhaseManager';
-import GameBBoxManager from 'src/features/game/boundingBoxes/GameBoundingBoxManager';
-import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
-import GameSoundManager from '../../sound/GameSoundManager';
-import GameSaveManager from '../../save/GameSaveManager';
-import GameBackgroundManager from '../../background/GameBackgroundManager';
-import GameInputManager from '../../input/GameInputManager';
-
-import { GameCheckpoint } from 'src/features/game/chapter/GameChapterTypes';
-import { LocationId } from 'src/features/game/location/GameMapTypes';
 import { blackFade } from 'src/features/game/effects/FadeEffect';
 import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { LocationId } from 'src/features/game/location/GameMapTypes';
+import GameObjectManager from 'src/features/game/objects/GameObjectManager';
+import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
+import GameStateManager from 'src/features/game/state/GameStateManager';
+import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import {
+  AccountInfo,
   getSourceAcademyGame,
-  SourceAcademyGame,
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { FullSaveState } from '../../save/GameSaveTypes';
+  SourceAcademyGame} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
-import { Layer } from '../../layer/GameLayerTypes';
-import { toS3Path, mandatory } from '../../utils/GameUtils';
-import { Constants } from '../../commons/CommonConstants';
-import { createGamePhases } from './GameManagerHelper';
+
+import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import { Constants } from '../../commons/CommonConstants';
+import GameEscapeManager from '../../escape/GameEscapeManager';
+import GameInputManager from '../../input/GameInputManager';
+import { Layer } from '../../layer/GameLayerTypes';
+import GamePhaseManager from '../../phase/GamePhaseManager';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import GameSaveManager from '../../save/GameSaveManager';
+import { FullSaveState } from '../../save/GameSaveTypes';
+import GameSoundManager from '../../sound/GameSoundManager';
+import { mandatory,toS3Path } from '../../utils/GameUtils';
+import GameGlobalAPI from './GameGlobalAPI';
+import { createGamePhases } from './GameManagerHelper';
 
 type GameManagerProps = {
   fullSaveState: FullSaveState;

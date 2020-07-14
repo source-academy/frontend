@@ -1,7 +1,7 @@
 import { LocationId } from '../location/GameMapTypes';
+import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
-import { GameSoundType } from '../sound/GameSoundTypes';
 
 export default class MusicParser {
   public static parse(locationId: LocationId, bgmList: string[], soundType: GameSoundType) {

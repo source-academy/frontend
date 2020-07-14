@@ -1,11 +1,12 @@
+import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
+import { getAssessment } from 'src/commons/sagas/RequestsSaga';
+import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
+import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
-import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 
 export async function getRoomPreviewCode(accInfo: AccountInfo) {
   const roomMissionId = getRoomMissionId();

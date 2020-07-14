@@ -1,17 +1,18 @@
 import * as Phaser from 'phaser';
-import { screenSize } from '../../../../features/game/commons/CommonConstants';
+import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
-import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
-import StorySimMainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import Settings from 'src/features/game/scenes/settings/Settings';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
+import GameManager from 'src/features/game/scenes/gameManager/GameManager';
+import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 import MyRoom from 'src/features/game/scenes/myRoom/MyRoom';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
-import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
-import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
+import Settings from 'src/features/game/scenes/settings/Settings';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import StorySimMainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
+
+import { screenSize } from '../../../../features/game/commons/CommonConstants';
 
 export type AccountInfo = {
   accessToken: string;

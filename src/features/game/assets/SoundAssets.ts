@@ -1,5 +1,5 @@
-import { AssetMap, SoundAsset } from './AssetsTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
+import { AssetMap, SoundAsset } from './AssetsTypes';
 
 const SoundAssets: AssetMap<SoundAsset> = {
   // SFX

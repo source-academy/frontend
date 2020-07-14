@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
-import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
+import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
+import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorChapterSequencer from './subcomponents/StorySimulatorChapterSequencer';
-
+import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
 import {
   createStorySimulatorGame,
   getStorySimulatorGame
 } from './subcomponents/storySimulatorGame';
-import { useSelector } from 'react-redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
-import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
-import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);

@@ -1,7 +1,7 @@
-import { BitmapFontStyle } from './CommonTypes';
-import { Constants } from './CommonConstants';
 import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
+import { Constants } from './CommonConstants';
+import { BitmapFontStyle } from './CommonTypes';
 
 const textPad = 10;
 

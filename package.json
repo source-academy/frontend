@@ -10,7 +10,7 @@
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "craco build",
+    "build": "cross-env EXTEND_ESLINT=true craco build",
     "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --ext \".js,.jsx,.ts,.tsx\" --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
@@ -40,6 +40,8 @@
     "array-move": "^2.2.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
+    "eslint": "6",
+    "eslint-plugin-simple-import-sort": "^5.0.3",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
     "js-slang": "^0.4.52",

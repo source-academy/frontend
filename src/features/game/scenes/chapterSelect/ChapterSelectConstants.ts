@@ -1,7 +1,7 @@
-import { HexColor } from '../../utils/StyleUtils';
+import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import FontAssets from '../../assets/FontAssets';
+import { HexColor } from '../../utils/StyleUtils';
 
 export const chapterIndexStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

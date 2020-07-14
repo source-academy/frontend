@@ -1,5 +1,5 @@
-import { HexColor } from '../utils/StyleUtils';
 import FontAssets from '../assets/FontAssets';
+import { HexColor } from '../utils/StyleUtils';
 
 export const Constants = {
   repoAssetsFolder: '../assets',

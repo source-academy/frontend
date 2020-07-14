@@ -1,13 +1,13 @@
-import { GameLocation, LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import { SoundAsset } from '../assets/AssetsTypes';
-import { ItemId, AssetKey, AssetPath } from '../commons/CommonTypes';
-import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { ObjectProperty } from '../objects/GameObjectTypes';
-import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameMode } from '../mode/GameModeTypes';
-import { Character } from '../character/GameCharacterTypes';
 import { GameAction } from '../action/GameActionTypes';
+import { SoundAsset } from '../assets/AssetsTypes';
+import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { Character } from '../character/GameCharacterTypes';
 import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
+import { AssetKey, AssetPath,ItemId } from '../commons/CommonTypes';
+import { Dialogue } from '../dialogue/GameDialogueTypes';
+import { GameLocation, GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameMode } from '../mode/GameModeTypes';
+import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
 
 class GameMap {

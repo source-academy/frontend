@@ -1,10 +1,11 @@
+import Constants from 'src/commons/utils/Constants';
 import {
   AccountInfo,
   getSourceAcademyGame
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import Constants from 'src/commons/utils/Constants';
-import { FullSaveState } from './GameSaveTypes';
+
 import { createEmptySaveState } from './GameSaveConstants';
+import { FullSaveState } from './GameSaveTypes';
 
 export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
   const options = {

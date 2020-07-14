@@ -1,5 +1,5 @@
-import { TrackInteraction } from '../commons/CommonTypes';
 import { IGameActionable } from '../action/GameActionTypes';
+import { TrackInteraction } from '../commons/CommonTypes';
 
 export type BBoxProperty = TrackInteraction &
   IGameActionable & {

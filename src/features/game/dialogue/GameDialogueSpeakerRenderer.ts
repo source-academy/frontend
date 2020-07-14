@@ -1,11 +1,11 @@
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
 import ImageAssets from '../assets/ImageAssets';
-import { createBitmapText } from '../utils/TextUtils';
-import StringUtils from '../utils/StringUtils';
-import { Layer } from '../layer/GameLayerTypes';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
-import { ItemId, GamePosition } from '../commons/CommonTypes';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { GamePosition,ItemId } from '../commons/CommonTypes';
+import { Layer } from '../layer/GameLayerTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import StringUtils from '../utils/StringUtils';
+import { createBitmapText } from '../utils/TextUtils';
 import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
 
 export default class DialogueSpeakerRenderer {

@@ -1,8 +1,8 @@
-import ParserConverter from './ParserConverter';
-import StringUtils from '../utils/StringUtils';
-import Parser from './Parser';
 import { SpeakerDetail } from '../character/GameCharacterTypes';
+import StringUtils from '../utils/StringUtils';
 import CharacterParser from './CharacterParser';
+import Parser from './Parser';
+import ParserConverter from './ParserConverter';
 
 export default class SpeakerParser {
   public static parse(rawStr: string): SpeakerDetail {

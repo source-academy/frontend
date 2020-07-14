@@ -1,6 +1,9 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
+import { AcademyState } from '../../features/academy/AcademyTypes';
+import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
+import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
@@ -12,10 +15,6 @@ import {
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-
-import { AcademyState } from '../../features/academy/AcademyTypes';
-import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {

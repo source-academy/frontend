@@ -1,24 +1,23 @@
-import { screenSize, screenCenter } from '../commons/CommonConstants';
+import ImageAssets from '../assets/ImageAssets';
+import { screenCenter,screenSize } from '../commons/CommonConstants';
+import CommonRadioButton from '../commons/CommonRadioButton';
+import { IBaseScene,IGameUI } from '../commons/CommonTypes';
+import GameInputManager from '../input/GameInputManager';
+import GameLayerManager from '../layer/GameLayerManager';
+import { Layer } from '../layer/GameLayerTypes';
+import GamePhaseManager from '../phase/GamePhaseManager';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
+import GameSaveManager from '../save/GameSaveManager';
+import settingsConstants from '../scenes/settings/SettingsConstants';
+import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
+import { mandatory } from '../utils/GameUtils';
+import { calcTableFormatPos } from '../utils/StyleUtils';
+import { createBitmapText } from '../utils/TextUtils';
 import escapeConstants, {
   escapeOptButtonStyle,
-  volumeRadioOptTextStyle,
-  optTextStyle
-} from './GameEscapeConstants';
-import { Layer } from '../layer/GameLayerTypes';
-import settingsConstants from '../scenes/settings/SettingsConstants';
-import { GamePhaseType } from '../phase/GamePhaseTypes';
-import { IGameUI, IBaseScene } from '../commons/CommonTypes';
-import { createBitmapText } from '../utils/TextUtils';
-import ImageAssets from '../assets/ImageAssets';
-import { calcTableFormatPos } from '../utils/StyleUtils';
-import CommonRadioButton from '../commons/CommonRadioButton';
-import GameSaveManager from '../save/GameSaveManager';
-import GameLayerManager from '../layer/GameLayerManager';
-import GameSoundManager from '../sound/GameSoundManager';
-import GamePhaseManager from '../phase/GamePhaseManager';
-import GameInputManager from '../input/GameInputManager';
-import { mandatory } from '../utils/GameUtils';
+  optTextStyle,
+  volumeRadioOptTextStyle} from './GameEscapeConstants';
 
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButton | undefined;

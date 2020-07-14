@@ -1,22 +1,23 @@
-import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
-import SSObjectManager from '../../objects/SSObjectManager';
-import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
 import CommonBackButton from 'src/features/game/commons/CommonBackButton';
-import SSCursorMode from '../../cursorMode/SSCursorMode';
-import objPlacementConstants from './ObjectPlacementConstants';
-import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
-import SSBackgroundManager from '../../background/SSBackgroundManager';
-import SSLogManager from '../../logger/SSLogManager';
-import SSTransformManager from '../../transform/SSTransformManager';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 import GameInputManager from 'src/features/game/input/GameInputManager';
-import { StorySimState } from '../../StorySimulatorTypes';
-import SSImageAssets from '../../assets/ImageAssets';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+
+import SSImageAssets from '../../assets/ImageAssets';
+import SSBackgroundManager from '../../background/SSBackgroundManager';
+import SSBBoxManager from '../../boundingBoxes/SSBBoxManager';
+import SSCursorMode from '../../cursorMode/SSCursorMode';
+import { CursorMode } from '../../cursorMode/SSCursorModeTypes';
+import SSLogManager from '../../logger/SSLogManager';
+import SSObjectManager from '../../objects/SSObjectManager';
+import { StorySimState } from '../../StorySimulatorTypes';
+import SSTransformManager from '../../transform/SSTransformManager';
+import objPlacementConstants from './ObjectPlacementConstants';
 
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;

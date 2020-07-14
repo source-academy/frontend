@@ -1,16 +1,17 @@
-import { IGameUI } from '../../commons/CommonTypes';
-import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import { sleep } from '../../utils/GameUtils';
-import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
-import { screenSize, screenCenter } from '../../commons/CommonConstants';
+
+import ImageAssets from '../../assets/ImageAssets';
+import CommonBackButton from '../../commons/CommonBackButton';
+import { screenCenter,screenSize } from '../../commons/CommonConstants';
+import { IGameUI } from '../../commons/CommonTypes';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
-import ImageAssets from '../../assets/ImageAssets';
+import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
+import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
+import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

@@ -1,11 +1,11 @@
-import GameModeMove from '../../mode/move/GameModeMove';
-import GameModeTalk from '../../mode/talk/GameModeTalk';
-import GameModeMenu from '../../mode/menu/GameModeMenu';
-import GameModeExplore from '../../mode/explore/GameModeExplore';
-import GameEscapeManager from '../../escape/GameEscapeManager';
-import GameModeSequence from '../../mode/sequence/GameModeSequence';
-import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameEscapeManager from '../../escape/GameEscapeManager';
+import GameModeExplore from '../../mode/explore/GameModeExplore';
+import GameModeMenu from '../../mode/menu/GameModeMenu';
+import GameModeMove from '../../mode/move/GameModeMove';
+import GameModeSequence from '../../mode/sequence/GameModeSequence';
+import GameModeTalk from '../../mode/talk/GameModeTalk';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
 export const createGamePhases = (
   escapeMenu: GameEscapeManager,

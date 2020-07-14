@@ -1,21 +1,22 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import GameLayerManager from '../../layer/GameLayerManager';
-import { roomDefaultCode } from './RoomPreviewConstants';
 import { loadImage, loadSound } from 'src/features/game/utils/LoaderUtils';
-import { Constants, screenSize } from '../../commons/CommonConstants';
-import GameSoundManager from '../../sound/GameSoundManager';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import { Constants, screenSize } from '../../commons/CommonConstants';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
+import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
+import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
-import GameSaveManager from '../../save/GameSaveManager';
-import GameEscapeManager from '../../escape/GameEscapeManager';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
-import { loadData } from '../../save/GameSaveRequests';
-import { createCMRGamePhases } from './RoomPreviewHelper';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import GameSaveManager from '../../save/GameSaveManager';
+import { loadData } from '../../save/GameSaveRequests';
+import GameSoundManager from '../../sound/GameSoundManager';
+import { roomDefaultCode } from './RoomPreviewConstants';
+import { createCMRGamePhases } from './RoomPreviewHelper';
 
 type RoomPreviewProps = {
   studentCode: string;

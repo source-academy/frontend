@@ -1,5 +1,5 @@
-import { SpeakerDetail } from '../character/GameCharacterTypes';
 import { IGameActionable } from '../action/GameActionTypes';
+import { SpeakerDetail } from '../character/GameCharacterTypes';
 
 export type PartName = string;
 

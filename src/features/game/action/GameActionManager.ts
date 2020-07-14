@@ -1,11 +1,10 @@
+import { ItemId } from '../commons/CommonTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
-import GameActionExecuter from './GameActionExecuter';
-import ActionConditionChecker from './GameActionConditionChecker';
-
-import { GameAction, ActionCondition } from './GameActionTypes';
-import { ItemId } from '../commons/CommonTypes';
 import { mandatory } from '../utils/GameUtils';
+import ActionConditionChecker from './GameActionConditionChecker';
+import GameActionExecuter from './GameActionExecuter';
+import { ActionCondition,GameAction } from './GameActionTypes';
 
 export default class GameActionManager {
   private actionMap: Map<ItemId, GameAction>;

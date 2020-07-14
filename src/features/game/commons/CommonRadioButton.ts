@@ -1,7 +1,7 @@
-import { TextConfig, BitmapFontStyle } from './CommonTypes';
-import { screenSize, Constants } from './CommonConstants';
 import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
+import { Constants,screenSize } from './CommonConstants';
+import { BitmapFontStyle,TextConfig } from './CommonTypes';
 
 type RadioButtonChoiceConfig = {
   circleDim: number;

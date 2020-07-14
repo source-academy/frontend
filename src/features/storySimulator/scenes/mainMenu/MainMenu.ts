@@ -1,19 +1,20 @@
-import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import GameLayerManager from 'src/features/game/layer/GameLayerManager';
-import Parser from 'src/features/game/parser/Parser';
-import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
-import { toS3Path } from 'src/features/game/utils/GameUtils';
-import { StorySimState } from '../../StorySimulatorTypes';
-import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
-import ImageAssets from 'src/features/game/assets/ImageAssets';
-import SSImageAssets from '../../assets/ImageAssets';
 import FontAssets from 'src/features/game/assets/FontAssets';
+import ImageAssets from 'src/features/game/assets/ImageAssets';
+import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
+import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
+import GameLayerManager from 'src/features/game/layer/GameLayerManager';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import Parser from 'src/features/game/parser/Parser';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
-import SoundAssets from 'src/features/game/assets/SoundAssets';
+import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+
+import SSImageAssets from '../../assets/ImageAssets';
+import { StorySimState } from '../../StorySimulatorTypes';
+import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
 class MainMenu extends Phaser.Scene {
   private soundManager: GameSoundManager;

@@ -1,6 +1,6 @@
-import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 import FontAssets from 'src/features/game/assets/FontAssets';
+import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 export const altTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,

@@ -1,10 +1,10 @@
-import Parser from './Parser';
-import StringUtils from '../utils/StringUtils';
-import ParserConverter from './ParserConverter';
-import { GameLocationAttr } from '../location/GameMapTypes';
 import { GameAction, GameActionType } from '../action/GameActionTypes';
 import { ItemId } from '../commons/CommonTypes';
+import { GameLocationAttr } from '../location/GameMapTypes';
+import StringUtils from '../utils/StringUtils';
 import ConditionParser from './ConditionParser';
+import Parser from './Parser';
+import ParserConverter from './ParserConverter';
 import { GameAttr } from './ParserValidator';
 
 export default class ActionParser {

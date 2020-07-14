@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { InputGroup, Intent } from '@blueprintjs/core';
+import * as React from 'react';
 
-import { ConfirmDialogProps, ConfirmDialog } from './ConfirmDialog';
+import { ConfirmDialog, ConfirmDialogProps } from './ConfirmDialog';
 
 export interface PromptDialogProps<T>
   extends Omit<ConfirmDialogProps<T>, 'onResponse' | 'choices'> {

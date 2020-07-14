@@ -1,13 +1,14 @@
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { CursorMode } from '../cursorMode/SSCursorModeTypes';
-import { resize } from 'src/features/game/utils/SpriteUtils';
-import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
-import { SSBBoxDetail } from './SSBBoxManagerTypes';
-import { toIntString } from '../utils/SSUtils';
-import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
+import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import { resize } from 'src/features/game/utils/SpriteUtils';
+import { HexColor } from 'src/features/game/utils/StyleUtils';
+
+import { CursorMode } from '../cursorMode/SSCursorModeTypes';
+import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
+import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
+import { toIntString } from '../utils/SSUtils';
+import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
 export default class SSBBoxManager implements ICheckpointLoggable {
   public checkpointTitle = 'boundingBoxes';

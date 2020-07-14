@@ -1,27 +1,26 @@
-import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
+import ImageAssets from '../assets/ImageAssets';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { IBaseScene,IGameUI } from '../commons/CommonTypes';
+import { fadeAndDestroy } from '../effects/FadeEffect';
+import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
-import { IGameUI, IBaseScene } from '../commons/CommonTypes';
-import collectibleConstants, {
-  pageBannerTextStyle,
-  listBannerTextStyle,
-  collectibleTitleStyle,
-  collectibleDescStyle,
-  defaultCollectibleProp
-} from './GameCollectiblesConstants';
-import { resizeUnderflow } from '../utils/SpriteUtils';
-import { createBitmapText } from '../utils/TextUtils';
-import ImageAssets from '../assets/ImageAssets';
-import { createButton } from '../utils/ButtonUtils';
-import { limitNumber, sleep, mandatory } from '../utils/GameUtils';
-import { fadeAndDestroy } from '../effects/FadeEffect';
-import { calcListFormatPos } from '../utils/StyleUtils';
-import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
-import GameSoundManager from '../sound/GameSoundManager';
-import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import GameSoundManager from '../sound/GameSoundManager';
+import { createButton } from '../utils/ButtonUtils';
+import { limitNumber, mandatory,sleep } from '../utils/GameUtils';
+import { resizeUnderflow } from '../utils/SpriteUtils';
+import { calcListFormatPos } from '../utils/StyleUtils';
+import { createBitmapText } from '../utils/TextUtils';
+import collectibleConstants, {
+  collectibleDescStyle,
+  collectibleTitleStyle,
+  defaultCollectibleProp,
+  listBannerTextStyle,
+  pageBannerTextStyle} from './GameCollectiblesConstants';
+import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
+import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;

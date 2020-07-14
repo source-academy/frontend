@@ -1,16 +1,17 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+
+import CommonBackButton from '../../commons/CommonBackButton';
+import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
+import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
+import { Layer } from '../../layer/GameLayerTypes';
+import { sleep } from '../../utils/GameUtils';
 import {
   magnifyingGlass,
   magnifyingGlassChecked,
   magnifyingGlassHighlight
 } from './GameModeExploreConstants';
-import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
-import { screenSize } from '../../commons/CommonConstants';
-import { sleep } from '../../utils/GameUtils';
-import { Layer } from '../../layer/GameLayerTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
 
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

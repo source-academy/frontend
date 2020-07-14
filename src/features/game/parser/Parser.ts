@@ -1,13 +1,12 @@
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import GameMap from '../location/GameMap';
 import GameObjective from '../objective/GameObjective';
+import StringUtils from '../utils/StringUtils';
+import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
-
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import StringUtils from '../utils/StringUtils';
 import ParserValidator, { GameAttr } from './ParserValidator';
-import ActionParser from './ActionParser';
 
 class Parser {
   public static checkpoint: GameCheckpoint;

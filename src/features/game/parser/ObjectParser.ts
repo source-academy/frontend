@@ -1,8 +1,8 @@
-import Parser from './Parser';
-import ActionParser from './ActionParser';
-import StringUtils from '../utils/StringUtils';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
+import StringUtils from '../utils/StringUtils';
+import ActionParser from './ActionParser';
+import Parser from './Parser';
 
 export default class ObjectParser {
   public static parse(locationId: LocationId, objectList: string[]) {

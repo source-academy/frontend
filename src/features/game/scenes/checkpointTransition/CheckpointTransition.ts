@@ -1,17 +1,17 @@
-import { loadData, saveData } from '../../save/GameSaveRequests';
 import {
-  getSourceAcademyGame,
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { SampleChapters } from '../chapterSelect/SampleChapters';
-import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+  AccountInfo,
+  getSourceAcademyGame} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import { GameChapter } from '../../chapter/GameChapterTypes';
-import { FullSaveState } from '../../save/GameSaveTypes';
-import checkpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
-import { sleep } from '../../utils/GameUtils';
 import { screenCenter } from '../../commons/CommonConstants';
-import { createBitmapText } from '../../utils/TextUtils';
+import { loadData, saveData } from '../../save/GameSaveRequests';
+import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { sleep } from '../../utils/GameUtils';
+import { createBitmapText } from '../../utils/TextUtils';
+import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import { SampleChapters } from '../chapterSelect/SampleChapters';
+import checkpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
 
 class CheckpointTransition extends Phaser.Scene {
   private soundManager: GameSoundManager;

@@ -1,16 +1,17 @@
+import { screenCenter } from 'src/features/game/commons/CommonConstants';
+
+import ImageAssets from '../../assets/ImageAssets';
+import { GameChapter } from '../../chapter/GameChapterTypes';
+import CommonTextHover from '../../commons/CommonTextHover';
+import { createButton } from '../../utils/ButtonUtils';
+import { createBitmapText } from '../../utils/TextUtils';
+import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import ChapterSelect from './ChapterSelect';
 import chapConstants, {
   chapterActionAltStyle,
   chapterIndexStyle,
   chapterTitleStyle
 } from './ChapterSelectConstants';
-import ChapterSelect from './ChapterSelect';
-import { screenCenter } from 'src/features/game/commons/CommonConstants';
-import { GameChapter } from '../../chapter/GameChapterTypes';
-import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
-import { createBitmapText } from '../../utils/TextUtils';
-import ImageAssets from '../../assets/ImageAssets';
-import { createButton } from '../../utils/ButtonUtils';
-import CommonTextHover from '../../commons/CommonTextHover';
 
 export function createChapter(
   scene: ChapterSelect,

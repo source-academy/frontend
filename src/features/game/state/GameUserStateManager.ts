@@ -1,13 +1,14 @@
-import { UserState } from './GameStateTypes';
-import { emptyUserState, userStateStyle } from './GameStateConstants';
-import GameManager from '../scenes/gameManager/GameManager';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { createButton } from '../utils/ButtonUtils';
+
+import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
-import ImageAssets from '../assets/ImageAssets';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import GameManager from '../scenes/gameManager/GameManager';
+import { createButton } from '../utils/ButtonUtils';
+import { emptyUserState, userStateStyle } from './GameStateConstants';
+import { UserState } from './GameStateTypes';
 
 export default class GameUserStateManager {
   private userState: UserState;

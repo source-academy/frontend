@@ -1,8 +1,8 @@
-import { GamePhaseType } from './GamePhaseTypes';
+import { Constants } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
-import { Constants } from '../commons/CommonConstants';
 import { mandatory } from '../utils/GameUtils';
+import { GamePhaseType } from './GamePhaseTypes';
 
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;

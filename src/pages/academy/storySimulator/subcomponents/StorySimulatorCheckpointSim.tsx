@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { Button } from '@blueprintjs/core';
-
+import * as React from 'react';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
+
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
 import { getStorySimulatorGame } from './storySimulatorGame';
 

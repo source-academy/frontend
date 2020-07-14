@@ -1,13 +1,14 @@
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Constants, screenCenter } from 'src/features/game/commons/CommonConstants';
+import { AssetKey,ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { SSObjectDetail } from './SSObjectManagerTypes';
-import { ItemId, AssetKey } from 'src/features/game/commons/CommonTypes';
-import { toIntString } from '../utils/SSUtils';
+import { mandatory,mapValues } from 'src/features/game/utils/GameUtils';
+
 import { loadImage } from '../../game/utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
-import { mapValues, mandatory } from 'src/features/game/utils/GameUtils';
+import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
+import { toIntString } from '../utils/SSUtils';
+import { SSObjectDetail } from './SSObjectManagerTypes';
 
 export default class SSObjectManager implements ICheckpointLoggable {
   public checkpointTitle = 'objects';

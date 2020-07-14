@@ -1,20 +1,20 @@
-import GameLayerManager from '../../layer/GameLayerManager';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { Layer } from '../../layer/GameLayerTypes';
-import settingsConstants, {
-  optionTextStyle,
-  optionHeaderTextStyle,
-  applySettingsTextStyle
-} from './SettingsConstants';
-import { createButton } from '../../utils/ButtonUtils';
-import GameSaveManager from '../../save/GameSaveManager';
-import GameSoundManager from '../../sound/GameSoundManager';
-import CommonBackButton from '../../commons/CommonBackButton';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { loadData } from '../../save/GameSaveRequests';
-import { createBitmapText } from '../../utils/TextUtils';
+
 import ImageAssets from '../../assets/ImageAssets';
+import CommonBackButton from '../../commons/CommonBackButton';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonRadioButton from '../../commons/CommonRadioButton';
+import GameLayerManager from '../../layer/GameLayerManager';
+import { Layer } from '../../layer/GameLayerTypes';
+import GameSaveManager from '../../save/GameSaveManager';
+import { loadData } from '../../save/GameSaveRequests';
+import GameSoundManager from '../../sound/GameSoundManager';
+import { createButton } from '../../utils/ButtonUtils';
+import { createBitmapText } from '../../utils/TextUtils';
+import settingsConstants, {
+  applySettingsTextStyle,
+  optionHeaderTextStyle,
+  optionTextStyle} from './SettingsConstants';
 
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: CommonRadioButton | undefined;

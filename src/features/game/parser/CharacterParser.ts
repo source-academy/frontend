@@ -1,8 +1,8 @@
-import StringUtils from '../utils/StringUtils';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import Parser from './Parser';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, ItemId } from '../commons/CommonTypes';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import StringUtils from '../utils/StringUtils';
+import Parser from './Parser';
 import ParserConverter from './ParserConverter';
 
 export default class CharacterParser {

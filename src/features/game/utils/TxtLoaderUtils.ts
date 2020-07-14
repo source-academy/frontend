@@ -1,9 +1,10 @@
-import { loadData } from '../save/GameSaveRequests';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import Parser from '../parser/Parser';
 import { loadText } from 'src/features/game/utils/LoaderUtils';
-import { GameChapter } from '../chapter/GameChapterTypes';
+import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import TextAssets from '../assets/TextAssets';
+import { GameChapter } from '../chapter/GameChapterTypes';
+import Parser from '../parser/Parser';
+import { loadData } from '../save/GameSaveRequests';
 
 export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,

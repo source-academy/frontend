@@ -1,11 +1,11 @@
-import { ItemId, GameSprite, GamePosition } from '../commons/CommonTypes';
+import ImageAssets from '../assets/ImageAssets';
+import { Constants } from '../commons/CommonConstants';
+import { GamePosition,GameSprite, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
-import popUpConstants from './GamePopUpConstants';
 import { resizeUnderflow } from '../utils/SpriteUtils';
-import { Constants } from '../commons/CommonConstants';
-import ImageAssets from '../assets/ImageAssets';
+import popUpConstants from './GamePopUpConstants';
 
 class GamePopUpManager {
   private currPopUp: Map<GamePosition, Phaser.GameObjects.Container>;

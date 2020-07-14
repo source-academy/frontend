@@ -1,8 +1,8 @@
-import { BitmapFontStyle, AssetKey, TextConfig } from '../commons/CommonTypes';
-import { createBitmapText } from './TextUtils';
-import { Constants } from '../commons/CommonConstants';
 import SoundAssets from '../assets/SoundAssets';
+import { Constants } from '../commons/CommonConstants';
+import { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
 import GameSoundManager from '../sound/GameSoundManager';
+import { createBitmapText } from './TextUtils';
 
 type ButtonConfig = {
   assetKey: AssetKey;

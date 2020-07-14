@@ -1,7 +1,7 @@
 import CommonBackButton from '../../commons/CommonBackButton';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
 
 class MyRoom extends Phaser.Scene {
   private layerManager: GameLayerManager;

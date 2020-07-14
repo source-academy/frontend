@@ -1,17 +1,18 @@
-import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import { talkButtonYSpace, talkButtonStyle } from './GameModeTalkConstants';
-import { sleep, mandatory } from '../../utils/GameUtils';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+
+import ImageAssets from '../../assets/ImageAssets';
+import CommonBackButton from '../../commons/CommonBackButton';
 import { screenSize } from '../../commons/CommonConstants';
+import { IGameUI, ItemId } from '../../commons/CommonTypes';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
+import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import CommonBackButton from '../../commons/CommonBackButton';
-import ImageAssets from '../../assets/ImageAssets';
+import { GameLocationAttr } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
-import { fadeAndDestroy } from '../../effects/FadeEffect';
+import { mandatory,sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { Dialogue } from '../../dialogue/GameDialogueTypes';
+import { talkButtonStyle,talkButtonYSpace } from './GameModeTalkConstants';
 
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;

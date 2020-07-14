@@ -1,6 +1,6 @@
-import Parser from './Parser';
-import StringUtils from '../utils/StringUtils';
 import { createEmptyLocation } from '../location/GameMapHelper';
+import StringUtils from '../utils/StringUtils';
+import Parser from './Parser';
 
 export default class LocationDetailsParser {
   public static parse(locationDetails: string[]) {

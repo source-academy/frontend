@@ -1,9 +1,10 @@
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { CursorMode } from '../cursorMode/SSCursorModeTypes';
-import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
-import transformConstants from './SSTransformManagerConstants';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
+
+import { CursorMode } from '../cursorMode/SSCursorModeTypes';
+import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
+import transformConstants from './SSTransformManagerConstants';
 
 export default class SSTransformManager {
   private activeSelection: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle | undefined;

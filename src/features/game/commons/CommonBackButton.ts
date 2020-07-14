@@ -1,10 +1,10 @@
-import { screenCenter } from './CommonConstants';
-import { HexColor } from '../utils/StyleUtils';
-import { BitmapFontStyle } from './CommonTypes';
-import ImageAssets from '../assets/ImageAssets';
 import FontAssets from '../assets/FontAssets';
-import { createButton } from '../utils/ButtonUtils';
+import ImageAssets from '../assets/ImageAssets';
 import GameSoundManager from '../sound/GameSoundManager';
+import { createButton } from '../utils/ButtonUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { screenCenter } from './CommonConstants';
+import { BitmapFontStyle } from './CommonTypes';
 
 const backText = 'Back';
 const backTextYPos = -screenCenter.y * 0.975;

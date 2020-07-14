@@ -1,9 +1,9 @@
-import Parser from './Parser';
+import { Dialogue, DialogueLine, PartName } from '../dialogue/GameDialogueTypes';
+import { GameLocationAttr } from '../location/GameMapTypes';
+import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
-import { mapValues } from '../utils/GameUtils';
-import { GameLocationAttr } from '../location/GameMapTypes';
-import { DialogueLine, Dialogue, PartName } from '../dialogue/GameDialogueTypes';
+import Parser from './Parser';
 import SpeakerParser from './SpeakerParser';
 
 export default class DialogueParser {

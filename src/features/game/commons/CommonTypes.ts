@@ -1,6 +1,6 @@
-import GameSoundManager from '../sound/GameSoundManager';
-import GameLayerManager from '../layer/GameLayerManager';
 import GameInputManager from '../input/GameInputManager';
+import GameLayerManager from '../layer/GameLayerManager';
+import GameSoundManager from '../sound/GameSoundManager';
 
 export type BitmapFontStyle = {
   key: string;

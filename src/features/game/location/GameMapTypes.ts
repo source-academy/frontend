@@ -1,6 +1,6 @@
-import { GameMode } from '../mode/GameModeTypes';
-import { ItemId, AssetKey } from '../commons/CommonTypes';
 import { IGameActionable } from '../action/GameActionTypes';
+import { AssetKey,ItemId } from '../commons/CommonTypes';
+import { GameMode } from '../mode/GameModeTypes';
 
 export type LocationId = string;
 

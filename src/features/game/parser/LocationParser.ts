@@ -1,14 +1,14 @@
-import { LocationId, GameLocation, GameLocationAttr } from '../location/GameMapTypes';
-import Parser from './Parser';
+import { GameLocation, GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
-import ObjectParser from './ObjectParser';
 import BoundingBoxParser from './BoundingBoxParser';
 import CharacterParser from './CharacterParser';
-import ParserConverter from './ParserConverter';
 import MusicParser from './MusicParser';
+import ObjectParser from './ObjectParser';
+import Parser from './Parser';
+import ParserConverter from './ParserConverter';
 import { GameAttr } from './ParserValidator';
-import { GameSoundType } from '../sound/GameSoundTypes';
 
 export default class LocationParser {
   public static parse(locationId: LocationId, locationBody: string[]) {

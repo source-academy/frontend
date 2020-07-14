@@ -1,16 +1,17 @@
-import GameManager from './GameManager';
-import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import { GameLocationAttr, LocationId, GameLocation } from '../../location/GameMapTypes';
-import { ItemId, GamePosition } from '../../commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
+import { GameMode } from 'src/features/game/mode/GameModeTypes';
+
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
-import { displayNotification } from '../../effects/Notification';
+import { GamePosition,ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
-import { StateObserver } from '../../state/GameStateTypes';
+import { displayNotification } from '../../effects/Notification';
+import { GameLocation,GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
+import { StateObserver } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
+import GameManager from './GameManager';
 
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;

@@ -1,14 +1,15 @@
-import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
-import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
+import { AssetPath } from 'src/features/game/commons/CommonTypes';
+import { mandatory } from 'src/features/game/utils/GameUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
 // import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
-import { AssetPath } from 'src/features/game/commons/CommonTypes';
-import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
-import StringUtils from 'src/features/game/utils/StringUtils';
+import { createBitmapText } from 'src/features/game/utils/TextUtils';
+
+import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { toIntString } from '../utils/SSUtils';
 import { loggableStyle } from './SSLogConstants';
-import { createBitmapText } from 'src/features/game/utils/TextUtils';
-import { mandatory } from 'src/features/game/utils/GameUtils';
+import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
+import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
 
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;

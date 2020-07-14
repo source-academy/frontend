@@ -1,9 +1,10 @@
 import * as Phaser from 'phaser';
-import { screenSize } from '../../../../features/game/commons/CommonConstants';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
-import { SourceAcademyGame } from '../../game/subcomponents/sourceAcademyGame';
-import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
+import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
+
+import { screenSize } from '../../../../features/game/commons/CommonConstants';
+import { SourceAcademyGame } from '../../game/subcomponents/sourceAcademyGame';
 
 const config = {
   debug: true,

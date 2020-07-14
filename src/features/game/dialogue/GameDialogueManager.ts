@@ -1,12 +1,12 @@
+import { ItemId } from '../commons/CommonTypes';
+import { Layer } from '../layer/GameLayerTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import GameManager from '../scenes/gameManager/GameManager';
+import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import GameManager from '../scenes/gameManager/GameManager';
-import { ItemId } from '../commons/CommonTypes';
 import { Dialogue } from './GameDialogueTypes';
-import { Layer } from '../layer/GameLayerTypes';
-import { textTypeWriterStyle } from './GameDialogueConstants';
 
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;

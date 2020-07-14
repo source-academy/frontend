@@ -1,14 +1,15 @@
-import DialogueRenderer from '../dialogue/GameDialogueRenderer';
-import { fadeIn, fadeAndDestroy } from './FadeEffect';
-import { Constants, screenCenter } from '../commons/CommonConstants';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import { sleep } from '../utils/GameUtils';
-import { BitmapFontStyle } from '../commons/CommonTypes';
-import { HexColor } from '../utils/StyleUtils';
-import dialogueConstants from '../dialogue/GameDialogueConstants';
-import { createBitmapText } from '../utils/TextUtils';
+
 import FontAssets from '../assets/FontAssets';
+import { Constants, screenCenter } from '../commons/CommonConstants';
+import { BitmapFontStyle } from '../commons/CommonTypes';
+import dialogueConstants from '../dialogue/GameDialogueConstants';
+import DialogueRenderer from '../dialogue/GameDialogueRenderer';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import { sleep } from '../utils/GameUtils';
+import { HexColor } from '../utils/StyleUtils';
+import { createBitmapText } from '../utils/TextUtils';
+import { fadeAndDestroy,fadeIn } from './FadeEffect';
 
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,

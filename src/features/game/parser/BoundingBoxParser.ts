@@ -1,8 +1,8 @@
-import StringUtils from '../utils/StringUtils';
-import { LocationId, GameLocationAttr } from '../location/GameMapTypes';
-import Parser from './Parser';
-import ActionParser from './ActionParser';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { GameLocationAttr,LocationId } from '../location/GameMapTypes';
+import StringUtils from '../utils/StringUtils';
+import ActionParser from './ActionParser';
+import Parser from './Parser';
 
 export default class BoundingBoxParser {
   public static parse(locationId: LocationId, boundingBoxList: string[]) {

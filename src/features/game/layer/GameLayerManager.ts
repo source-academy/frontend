@@ -1,8 +1,9 @@
-import { defaultLayerSequence, Layer } from './GameLayerTypes';
-import { fadeIn, fadeOut } from '../effects/FadeEffect';
-import { Constants } from '../commons/CommonConstants';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
+
+import { Constants } from '../commons/CommonConstants';
+import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { sleep } from '../utils/GameUtils';
+import { defaultLayerSequence, Layer } from './GameLayerTypes';
 
 class GameLayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;

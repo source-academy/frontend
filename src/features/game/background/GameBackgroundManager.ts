@@ -1,9 +1,9 @@
-import { screenCenter, screenSize, Constants } from '../commons/CommonConstants';
-import { LocationId } from '../location/GameMapTypes';
+import { Constants,screenCenter, screenSize } from '../commons/CommonConstants';
 import { AssetKey } from '../commons/CommonTypes';
-import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { Layer } from '../layer/GameLayerTypes';
 import { fadeIn } from '../effects/FadeEffect';
+import { Layer } from '../layer/GameLayerTypes';
+import { LocationId } from '../location/GameMapTypes';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 
 export default class GameBackgroundManager {
   public observerId: string;

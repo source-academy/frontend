@@ -1,8 +1,8 @@
-import { GameMode } from '../mode/GameModeTypes';
 import { GameActionType } from '../action/GameActionTypes';
-import { GameStateStorage } from '../state/GameStateTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
 import { GamePosition } from '../commons/CommonTypes';
+import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameMode } from '../mode/GameModeTypes';
+import { GameStateStorage } from '../state/GameStateTypes';
 
 const stringToPositionMap = {
   left: GamePosition.Left,
