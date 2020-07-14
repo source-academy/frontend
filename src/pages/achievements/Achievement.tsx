@@ -23,7 +23,12 @@ function Achievement(props: DispatchProps & StateProps) {
   const { inferencer, name, group, handleAchievementsFetch } = props;
 
   useEffect(() => {
-    handleAchievementsFetch();
+    const isTrue = (value?: string): boolean =>
+      typeof value === 'string' && value.toUpperCase() === 'TRUE';
+
+    if (isTrue(process.env.REACT_APP_USE_BACKEND)) {
+      handleAchievementsFetch();
+    }
   }, [handleAchievementsFetch]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
