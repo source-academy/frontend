@@ -41,15 +41,15 @@ export function createChapter(
   // Chapter Action Popup
   const chapterRepeatHover = new CommonTextHover(
     scene,
-    chapConstants.buttonsXOffset,
-    chapConstants.buttonsYOffset,
+    0,
+    0,
     'Reset progress',
     chapterActionAltStyle
   );
   const chapterContinueHover = new CommonTextHover(
     scene,
-    -chapConstants.buttonsXOffset,
-    chapConstants.buttonsYOffset,
+    0,
+    0,
     'Play/Continue',
     chapterActionAltStyle
   );
@@ -62,7 +62,7 @@ export function createChapter(
       onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
       onHover: () => chapterRepeatHover.setVisible(true),
       onOut: () => chapterRepeatHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      onPointerMove: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
         chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
         chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
       }
@@ -78,7 +78,7 @@ export function createChapter(
         callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
       onHover: () => chapterContinueHover.setVisible(true),
       onOut: () => chapterContinueHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      onPointerMove: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
         chapterContinueHover.x = pointer.worldX - chapterContainer.x;
         chapterContinueHover.y = pointer.worldY - chapterContainer.y;
       }

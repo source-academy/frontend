@@ -13,7 +13,7 @@ type ButtonConfig = {
   onUp?: () => void;
   onHover?: () => void;
   onOut?: () => void;
-  onPointerMove?: (pointer: Phaser.Input.Pointer) => void;
+  onPointerMove?: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => void;
   onHoverEffect?: boolean;
   onClickSound?: AssetKey;
   onHoverSound?: AssetKey;
@@ -89,8 +89,8 @@ export function createButton(
   });
   button.addListener(
     Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
-    (pointer: Phaser.Input.Pointer) => {
-      onPointerMove(pointer);
+    (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
+      onPointerMove(pointer, localX, localY);
     }
   );
 
