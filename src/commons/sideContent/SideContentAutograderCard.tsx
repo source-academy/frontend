@@ -48,6 +48,8 @@ class SideContentAutograderCard extends React.Component<SideContentAutograderCar
           </Card>
         </div>
       );
+    } else if (this.props.testcase.type === TestcaseTypes.private) {
+      cardClasses.push('private');
     }
 
     return (

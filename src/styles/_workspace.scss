@@ -895,11 +895,25 @@ $code-color-error: #ff4444;
       }
     }
 
+    @keyframes private-revert {
+      to {
+        background: rgba(192, 192, 192, 0.2);
+      }
+    }
+
+    &.private > .#{$ns}-card {
+      background-color: rgba(192, 192, 192, 0.2);
+    }
+
+    &.correct > .#{$ns}-card {
+      animation: 4s correct;
+      background-color: rgba(125, 255, 125, 0.2);
+    }
+
     &.wrong {
       > .#{$ns}-card {
+        animation: 4s wrong;
         background-color: rgba(255, 55, 55, 0.2);
-        animation-name: wrong;
-        animation-duration: 4s;
       }
 
       pre.testcase-actual,
@@ -908,17 +922,17 @@ $code-color-error: #ff4444;
       }
     }
 
-    &.correct {
-      > .#{$ns}-card {
-        background: rgba(125, 255, 125, 0.2);
-        animation-name: correct;
-        animation-duration: 4s;
-      }
+    &.correct.private > .#{$ns}-card {
+      animation: 4s correct, 4s private-revert 4s forwards;
+    }
+
+    &.wrong.private > .#{$ns}-card {
+      animation: 4s wrong, 4s private-revert 4s forwards;
     }
 
     &:not(:first-child) {
       border-top-style: solid;
-      border-top-width: 2px;
+      border-top-width: 1px;
       border-color: #1a2530;
     }
   }
