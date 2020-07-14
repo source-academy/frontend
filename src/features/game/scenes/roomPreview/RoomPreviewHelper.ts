@@ -2,15 +2,19 @@ import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/Assessm
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import FontAssets from '../../assets/FontAssets';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
-import { BitmapFontStyle } from '../../commons/CommonTypes';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { HexColor } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
-import { roomDefaultCode } from './RoomPreviewConstants';
+import RoomPreview from './RoomPreview';
+import {
+  roomDefaultCode,
+  startTextXPos,
+  verifiedStyle,
+  verifiedText
+} from './RoomPreviewConstants';
 
 export async function getRoomPreviewCode(accInfo: AccountInfo) {
   const roomMissionId = getRoomMissionId();
@@ -47,16 +51,13 @@ export const createCMRGamePhases = (
   ]);
 };
 
-const verifiedStyle: BitmapFontStyle = {
-  key: FontAssets.educatedDeersFont.key,
-  size: 40,
-  fill: HexColor.paleYellow,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
-};
-const verifiedText = 'VERIFIED';
-const startTextXPos = verifiedText.length * verifiedStyle.size * 0.4;
-
-export const createVerifiedHoverContainer = (scene: Phaser.Scene) => {
+/**
+ * Create a verification container and its mask.
+ *
+ * @param scene room preview scene
+ * @returns {[Phaser.GameObjects.Container, Phaser.GameObjects.Graphics]} verification container, and its mask
+ */
+export const createVerifiedHoverContainer = (scene: RoomPreview) => {
   const hoverContainer = new Phaser.GameObjects.Container(scene, 0, 0);
   const hoverTextBg = new Phaser.GameObjects.Rectangle(
     scene,
@@ -69,12 +70,18 @@ export const createVerifiedHoverContainer = (scene: Phaser.Scene) => {
     .setOrigin(0.0, 0.5)
     .setAlpha(0.8);
 
+  const hoverMask = new Phaser.GameObjects.Graphics(scene)
+    .fillRect(
+      hoverTextBg.x - hoverTextBg.height * hoverTextBg.originX * 0.5,
+      hoverTextBg.y - hoverTextBg.width * hoverTextBg.originY * 0.5,
+      hoverTextBg.width,
+      hoverTextBg.height
+    )
+    .setAlpha(0);
+
   const hoverText = createBitmapText(scene, verifiedText, 0, 0, verifiedStyle)
     .setOrigin(0.0, 0.35)
     .setPosition(startTextXPos, 0);
-  const shape = new Phaser.GameObjects.Graphics(scene);
-  shape.fillRect(hoverTextBg.x, hoverTextBg.y, hoverTextBg.width, hoverTextBg.height);
-  hoverText.setMask(shape.createGeometryMask());
 
   scene.tweens.add({
     targets: hoverText,
@@ -86,6 +93,7 @@ export const createVerifiedHoverContainer = (scene: Phaser.Scene) => {
   });
 
   hoverContainer.add([hoverTextBg, hoverText]);
-  // hoverContainer.setVisible(false);
-  return hoverContainer;
+  hoverContainer.setMask(hoverMask.createGeometryMask());
+  hoverContainer.setVisible(false);
+  return [hoverContainer, hoverMask];
 };

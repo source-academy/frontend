@@ -1,6 +1,5 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import { loadImage, loadSound } from 'src/features/game/utils/LoaderUtils';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
@@ -15,6 +14,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
@@ -94,8 +94,6 @@ export default class RoomPreview extends Phaser.Scene {
     );
 
     await this.eval(`create();`);
-    const verif = createVerifiedHoverContainer(this).setPosition(1920 / 2, 1080 / 2);
-    this.layerManager.addToLayer(Layer.UI, verif);
     this.soundManager.stopCurrBgMusic();
   }
 
@@ -112,7 +110,8 @@ export default class RoomPreview extends Phaser.Scene {
       layerManager: this.layerManager,
       layerTypes: Layer,
       remotePath: Constants.assetsFolder,
-      screenSize: screenSize
+      screenSize: screenSize,
+      verify: (sprite: Phaser.GameObjects.Sprite) => this.attachVerificationTag(sprite)
     });
     context.externalContext = 'playground';
     await runInContext(this.studentCode + append, context);
@@ -143,5 +142,29 @@ export default class RoomPreview extends Phaser.Scene {
     this.soundManager.stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
+  }
+
+  private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {
+    const [verifCont, verifMask] = createVerifiedHoverContainer(this);
+
+    sprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
+      verifCont.setVisible(true)
+    );
+    sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
+      verifCont.setVisible(false)
+    );
+    sprite.addListener(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
+      (pointer: Phaser.Input.Pointer) => {
+        verifCont.x = pointer.x + 10;
+        verifCont.y = pointer.y - 10;
+        verifMask.x = pointer.x + 10;
+        verifMask.y = pointer.y - 10;
+      }
+    );
+
+    this.layerManager.addToLayer(Layer.UI, verifCont);
+    return sprite;
   }
 }

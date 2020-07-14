@@ -1,3 +1,7 @@
+import FontAssets from '../../assets/FontAssets';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { HexColor } from '../../utils/StyleUtils';
+
 export const roomDefaultCode = `
 import { prepend_remote_url, get_screen_width, get_screen_height, load_image, create_image, create_text, create_rect, add, set_display_size, set_alpha, set_origin } from 'game';
 
@@ -27,3 +31,13 @@ function create() {
 
 function update() {}
 `;
+
+export const verifiedStyle: BitmapFontStyle = {
+  key: FontAssets.educatedDeersFont.key,
+  size: 40,
+  fill: HexColor.paleYellow,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+export const verifiedText = 'VERIFIED';
+export const startTextXPos = verifiedText.length * verifiedStyle.size * 0.4;
