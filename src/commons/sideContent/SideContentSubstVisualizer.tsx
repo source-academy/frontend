@@ -1,4 +1,3 @@
-/* eslint-disable */
 import { Card, Classes, Divider, Pre, Slider } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
