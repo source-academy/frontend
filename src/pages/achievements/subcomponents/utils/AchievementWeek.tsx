@@ -2,8 +2,8 @@ import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
 import { semester1Weeks } from 'src/commons/achievements/AchievementTypes';
 
-type AchievementHintsProps = {
-  release?: Date;
+type AchievementWeekProps = {
+  week?: Date;
 };
 
 // Converts Date to user friendly week string
@@ -31,17 +31,15 @@ export const prettifyWeek = (date: Date) => {
   }
 };
 
-function AchievementHints(props: AchievementHintsProps) {
-  const { release } = props;
+function AchievementWeek(props: AchievementWeekProps) {
+  const { week } = props;
 
   return (
-    <div className="hints">
+    <div className="week">
       <div>
-        {release === undefined ? (
-          <></>
-        ) : (
+        {week === undefined ? null : (
           <Tag intent={Intent.WARNING} round={true}>
-            {prettifyWeek(release)}
+            {prettifyWeek(week)}
           </Tag>
         )}
       </div>
@@ -49,4 +47,4 @@ function AchievementHints(props: AchievementHintsProps) {
   );
 }
 
-export default AchievementHints;
+export default AchievementWeek;

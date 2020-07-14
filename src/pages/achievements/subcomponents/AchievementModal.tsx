@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Inferencer from './utils/Inferencer';
-import AchievementHints from './utils/AchievementHints';
+import AchievementWeek from './utils/AchievementWeek';
 import AchievementModalGoal from './modal/AchievementModalGoal';
 import { AchievementStatus } from 'src/commons/achievements/AchievementTypes';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
@@ -72,9 +72,7 @@ function AchievementModal(props: AchievementModalProps) {
         {deadline !== undefined ? (
           <div className="deadline">
             <p>{`Deadline: ${prettifyDeadline(deadline)}`}</p>
-            <div className="hints">
-              <AchievementHints release={deadline} />
-            </div>
+            <AchievementWeek week={deadline} />
           </div>
         ) : null}
         <div className="description">

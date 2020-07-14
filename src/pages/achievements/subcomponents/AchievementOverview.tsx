@@ -1,5 +1,5 @@
 import React from 'react';
-import { prettifyWeek } from './utils/AchievementHints';
+import { prettifyWeek } from './utils/AchievementWeek';
 import Inferencer from './utils/Inferencer';
 import AchievementLevel from './utils/AchievementLevel';
 

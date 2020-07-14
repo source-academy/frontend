@@ -2,7 +2,7 @@ import React from 'react';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
-import AchievementHints from '../utils/AchievementHints';
+import AchievementWeek from '../utils/AchievementWeek';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
 import Inferencer from '../utils/Inferencer';
 
@@ -45,7 +45,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         <div className="content">
           <div className="heading">
             <h3>{title.toUpperCase()}</h3>
-            <AchievementHints release={release} />
+            <AchievementWeek week={release} />
           </div>
 
           <div className="details">

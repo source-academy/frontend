@@ -1,7 +1,7 @@
 import React from 'react';
 import Inferencer from '../utils/Inferencer';
 import { Icon } from '@blueprintjs/core';
-import AchievementHints from '../utils/AchievementHints';
+import AchievementWeek from '../utils/AchievementWeek';
 import { IconNames } from '@blueprintjs/icons';
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
@@ -58,7 +58,7 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          <AchievementHints release={release} />
+          <AchievementWeek week={release} />
         </div>
 
         <div className="details">
