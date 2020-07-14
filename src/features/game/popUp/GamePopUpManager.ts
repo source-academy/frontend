@@ -2,6 +2,7 @@ import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
 import { GamePosition, GameSprite, ItemId } from '../commons/CommonTypes';
+import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
@@ -21,7 +22,11 @@ class GamePopUpManager {
     };
   }
 
-  public displayPopUp(itemId: ItemId, position: GamePosition, duration = Constants.popupDuration) {
+  public async displayPopUp(
+    itemId: ItemId,
+    position: GamePosition,
+    duration = Constants.popupDuration
+  ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
@@ -53,10 +58,12 @@ class GamePopUpManager {
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
     GameGlobalAPI.getInstance().playSound(SoundAssets.popUpEnter.key);
 
-    // TODO: Animate
-
     container.setActive(true);
     container.setVisible(true);
+    container.setScale(1.0, 0);
+
+    gameManager.tweens.add(scrollEntry([container], popUpConstants.tweenDuration));
+    await sleep(popUpConstants.tweenDuration);
 
     setTimeout(() => this.destroyPopUp(position), duration);
   }
@@ -71,9 +78,11 @@ class GamePopUpManager {
     const atPosContainer = this.currPopUp.get(position);
     if (!atPosContainer) return;
 
-    // TODO: Animate out
+    GameGlobalAPI.getInstance()
+      .getGameManager()
+      .tweens.add(scrollExit([atPosContainer], popUpConstants.tweenDuration));
+    await sleep(popUpConstants.tweenDuration);
 
-    await sleep(200);
     atPosContainer.setVisible(false);
     atPosContainer.setActive(false);
     atPosContainer.destroy();
