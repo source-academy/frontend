@@ -1,6 +1,7 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import ImageAssets from '../../assets/ImageAssets';
+import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
@@ -98,8 +99,7 @@ class GameModeTalk implements IGameUI {
         message: text,
         textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
         bitMapTextStyle: talkButtonStyle,
-        onUp: callback,
-        onHoverEffect: false
+        onUp: callback
       },
       gameManager.soundManager
     ).setPosition(xPos, yPos);
@@ -116,6 +116,7 @@ class GameModeTalk implements IGameUI {
       targets: this.uiContainer,
       ...entryTweenProps
     });
+    GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
   public async deactivateUI(): Promise<void> {

@@ -1,4 +1,5 @@
 import ImageAssets from '../assets/ImageAssets';
+import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
 import { GamePosition, GameSprite, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
@@ -50,6 +51,7 @@ class GamePopUpManager {
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
+    GameGlobalAPI.getInstance().playSound(SoundAssets.popUpEnter.key);
 
     // TODO: Animate
 
@@ -77,6 +79,7 @@ class GamePopUpManager {
     atPosContainer.destroy();
 
     this.currPopUp.delete(position);
+    GameGlobalAPI.getInstance().playSound(SoundAssets.popUpExit.key);
   }
 
   private getAssetKey(itemId: ItemId) {

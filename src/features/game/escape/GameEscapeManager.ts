@@ -1,4 +1,5 @@
 import ImageAssets from '../assets/ImageAssets';
+import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import CommonRadioButton from '../commons/CommonRadioButton';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
@@ -113,10 +114,12 @@ class GameEscapeManager implements IGameUI {
 
   public activateUI() {
     const escapeMenuContainer = this.createUIContainer();
+    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
     this.getLayerManager().addToLayer(Layer.Escape, escapeMenuContainer);
   }
 
   public deactivateUI() {
+    this.getSoundManager().playSound(SoundAssets.menuExit.key);
     this.getLayerManager().clearSeveralLayers([Layer.Escape]);
   }
 
@@ -151,7 +154,8 @@ class GameEscapeManager implements IGameUI {
         bitmapTextStyle: volumeRadioOptTextStyle
       },
       escapeConstants.volOptXPos,
-      escapeConstants.volOptYPos
+      escapeConstants.volOptYPos,
+      this.soundManager
     );
 
     volOptContainer.add([volumeText, this.volumeOptions]);

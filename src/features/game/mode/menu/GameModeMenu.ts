@@ -1,6 +1,7 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import ImageAssets from '../../assets/ImageAssets';
+import SoundAssets from '../../assets/SoundAssets';
 import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
@@ -102,6 +103,7 @@ class GameModeMenu implements IGameUI {
       targets: this.uiContainer,
       ...modeMenuConstants.entryTweenProps
     });
+    GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
   public async deactivateUI(): Promise<void> {

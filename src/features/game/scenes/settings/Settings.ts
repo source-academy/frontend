@@ -118,7 +118,8 @@ class Settings extends Phaser.Scene {
         bitmapTextStyle: optionTextStyle
       },
       settingsConstants.optXPos,
-      settingsConstants.volOptYPos
+      settingsConstants.volOptYPos,
+      this.soundManager
     );
     this.layerManager.addToLayer(Layer.UI, volumeBg);
     this.layerManager.addToLayer(Layer.UI, volumeText);

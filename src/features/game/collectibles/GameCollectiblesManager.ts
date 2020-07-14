@@ -1,4 +1,5 @@
 import ImageAssets from '../assets/ImageAssets';
+import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
@@ -85,6 +86,7 @@ class GameCollectiblesManager implements IGameUI {
   public async activateUI(): Promise<void> {
     this.uiContainer = this.createUIContainer();
     this.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
+    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
 
     // Set initial page
     this.setPage(this.currActivePage);
@@ -101,6 +103,7 @@ class GameCollectiblesManager implements IGameUI {
   public async deactivateUI(): Promise<void> {
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
+      this.getSoundManager().playSound(SoundAssets.menuExit.key);
 
       this.getScene().tweens.add({
         targets: this.uiContainer,
@@ -275,6 +278,7 @@ class GameCollectiblesManager implements IGameUI {
   private getScene = () => mandatory(this.scene) as Phaser.Scene;
   private getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
   private getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
+  private getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(

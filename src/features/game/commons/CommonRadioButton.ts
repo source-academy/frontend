@@ -1,7 +1,9 @@
+import SoundAssets from '../assets/SoundAssets';
+import GameSoundManager from '../sound/GameSoundManager';
 import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';
-import { BitmapFontStyle, TextConfig } from './CommonTypes';
+import { AssetKey, BitmapFontStyle, TextConfig } from './CommonTypes';
 
 type RadioButtonChoiceConfig = {
   circleDim: number;
@@ -19,6 +21,9 @@ type RadioButtonConfig = {
 };
 
 class CommonRadioButton extends Phaser.GameObjects.Container {
+  private soundManager: GameSoundManager | undefined;
+  private buttonClickSoundKey: AssetKey;
+
   private activeChoice: Phaser.GameObjects.Container | undefined;
   private activeChoiceIdx: number;
   private choices: string[];
@@ -43,7 +48,9 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       bitmapTextStyle = Constants.defaultFontStyle
     }: RadioButtonConfig,
     x?: number,
-    y?: number
+    y?: number,
+    soundManager?: GameSoundManager,
+    buttonClickSoundKey: AssetKey = SoundAssets.radioButtonClick.key
   ) {
     super(scene, x, y);
     this.activeChoiceIdx = defaultChoiceIdx;
@@ -51,6 +58,8 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     this.choiceTextConfig = choiceTextConfig;
     this.bitmapTextStyle = bitmapTextStyle;
     this.radioChoiceConfig = radioChoiceConfig;
+    this.soundManager = soundManager;
+    this.buttonClickSoundKey = buttonClickSoundKey;
 
     const buttons = this.getRadioButtons(choices);
     this.buttonPositions = calcTableFormatPos({
@@ -104,7 +113,10 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     )
       .setStrokeStyle(radioChoiceConfig.outlineThickness, HexColor.darkBlue)
       .setInteractive({ useHandCursor: true })
-      .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, callback);
+      .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
+        if (this.soundManager) this.soundManager.playSound(this.buttonClickSoundKey);
+        callback();
+      });
   }
 
   private activate(id: number): void {

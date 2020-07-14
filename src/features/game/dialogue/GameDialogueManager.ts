@@ -1,3 +1,4 @@
+import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -45,7 +46,10 @@ export default class DialogueManager {
     await this.showNextLine(resolve);
     this.getDialogueRenderer()
       .getDialogueBox()
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await this.showNextLine(resolve));
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+        GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
+        await this.showNextLine(resolve);
+      });
   }
 
   private async showNextLine(resolve: () => void) {

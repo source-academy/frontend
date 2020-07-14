@@ -1,4 +1,5 @@
 import ImageAssets from '../../assets/ImageAssets';
+import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
@@ -154,6 +155,7 @@ class GameModeMove implements IGameUI {
       targets: [this.uiContainer, this.previewMask],
       ...entryTweenProps
     });
+    GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
   public async deactivateUI(): Promise<void> {

@@ -1,5 +1,6 @@
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
+import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
@@ -60,6 +61,7 @@ class GameModeExplore implements IGameUI {
     });
 
     gameManager.input.setDefaultCursor(magnifyingGlass);
+    GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
   public async deactivateUI(): Promise<void> {
