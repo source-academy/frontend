@@ -6,10 +6,9 @@ import { getAchievements } from '../../commons/achievements/AchievementActions';
 import Inferencer from './subcomponents/utils/Inferencer';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { withRouter } from 'react-router';
-import { fetchMockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new Inferencer(fetchMockAchievements()),
+  inferencer: new Inferencer(state.achievements.achievements),
   name: state.session.name,
   group: state.session.group
 });
