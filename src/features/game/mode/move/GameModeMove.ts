@@ -1,5 +1,3 @@
-import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
@@ -8,19 +6,22 @@ import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
+import { resizeOverflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
+  private previewMask: Phaser.GameObjects.Graphics | undefined;
 
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
     sprite
       .setTexture(assetKey)
-      .setDisplaySize(modeMoveConstants.previewWidth, modeMoveConstants.previewHeight)
       .setPosition(modeMoveConstants.previewXPos, modeMoveConstants.previewYPos);
+    resizeOverflow(sprite, modeMoveConstants.previewWidth, modeMoveConstants.previewHeight);
   }
 
   private getLatestNavigations() {
@@ -35,6 +36,14 @@ class GameModeMove implements IGameUI {
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     // Preview
+    const previewMask = new Phaser.GameObjects.Graphics(gameManager)
+      .fillRect(
+        modeMoveConstants.previewXPos - modeMoveConstants.previewWidth / 2,
+        modeMoveConstants.previewYPos - modeMoveConstants.previewHeight / 2,
+        modeMoveConstants.previewWidth,
+        modeMoveConstants.previewHeight
+      )
+      .setAlpha(0);
     const previewFrame = new Phaser.GameObjects.Sprite(
       gameManager,
       modeMoveConstants.previewFrameXPos,
@@ -46,7 +55,7 @@ class GameModeMove implements IGameUI {
       screenCenter.x,
       screenCenter.y,
       ImageAssets.locationPreviewFill.key
-    );
+    ).setMask(previewMask.createGeometryMask());
     moveMenuContainer.add([previewFrame, previewFill]);
 
     const navigations = this.getLatestNavigations();
@@ -84,6 +93,9 @@ class GameModeMove implements IGameUI {
 
     // Initial setting
     this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
+
+    // Keep reference to mask for tweening
+    this.previewMask = previewMask;
 
     return moveMenuContainer;
   }
@@ -136,9 +148,10 @@ class GameModeMove implements IGameUI {
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+    this.previewMask!.setPosition(this.uiContainer.x, -screenSize.y);
 
     gameManager.tweens.add({
-      targets: this.uiContainer,
+      targets: [this.uiContainer, this.previewMask],
       ...entryTweenProps
     });
   }
@@ -148,14 +161,16 @@ class GameModeMove implements IGameUI {
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
+      this.previewMask!.setPosition(this.uiContainer.x, 0);
 
       gameManager.tweens.add({
-        targets: this.uiContainer,
+        targets: [this.uiContainer, this.previewMask],
         ...exitTweenProps
       });
 
       await sleep(500);
       fadeAndDestroy(gameManager, this.uiContainer);
+      this.previewMask!.destroy();
     }
   }
 }
