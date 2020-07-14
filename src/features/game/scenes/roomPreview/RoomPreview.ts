@@ -16,7 +16,7 @@ import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
 import GameSoundManager from '../../sound/GameSoundManager';
 import { roomDefaultCode } from './RoomPreviewConstants';
-import { createCMRGamePhases } from './RoomPreviewHelper';
+import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
 type RoomPreviewProps = {
   studentCode: string;
@@ -94,6 +94,8 @@ export default class RoomPreview extends Phaser.Scene {
     );
 
     await this.eval(`create();`);
+    const verif = createVerifiedHoverContainer(this).setPosition(1920 / 2, 1080 / 2);
+    this.layerManager.addToLayer(Layer.UI, verif);
     this.soundManager.stopCurrBgMusic();
   }
 
