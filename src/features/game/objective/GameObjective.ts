@@ -1,3 +1,9 @@
+/**
+ * The class encapsulates data on all the objectives that students must complete
+ * and also keeps track of which objectives have already been completed.
+ *
+ * This is other main part of the game checkpoint, besides the game map.
+ */
 class GameObjective {
   private objective: Map<string, boolean>;
   private totalNumOfObjectives: number;

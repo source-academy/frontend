@@ -9,6 +9,10 @@ import { sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import popUpConstants from './GamePopUpConstants';
 
+/**
+ * Manager in charge of keeping track of the the popups in
+ * a game
+ */
 class GamePopUpManager {
   private currPopUp: Map<GamePosition, Phaser.GameObjects.Container>;
 

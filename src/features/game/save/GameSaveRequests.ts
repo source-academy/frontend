@@ -7,13 +7,23 @@ import {
 import { createEmptySaveState } from './GameSaveConstants';
 import { FullSaveState } from './GameSaveTypes';
 
-export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
+/**
+ * This function saves data to the backend.
+ * Currently saves the entire game data in the "collectibles" field
+ * just because that is the format accepted by the backend
+ *
+ * TODO: Change backend endpoint to accept fullSaveState
+ *
+ * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
+ * @param accountInfo - the account information of the student
+ */
+export async function saveData(accountInfo: AccountInfo, fullSaveState: FullSaveState) {
   const options = {
     method: 'PUT',
     headers: createHeaders(accountInfo.accessToken),
     body: JSON.stringify({
       gameStates: {
-        collectibles: gameState,
+        collectibles: fullSaveState,
         completed_quests: []
       }
     })
@@ -26,6 +36,16 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullSaveStat
   return;
 }
 
+/**
+ * This function loads data to the backend.
+ * Currently saves the loads game data from the "collectibles" field
+ * just because that is the format accepted by the backend
+ *
+ * TODO: Change backend endpoint to accept fullSaveState
+ *
+ * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
+ * @param accountInfo - the account information of the student
+ */
 export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
   const options = {
     method: 'GET',
@@ -39,6 +59,9 @@ export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState>
   return json.gameStates.collectibles;
 }
 
+/**
+ * This function clears the entire game object from the backend
+ */
 export async function clearData(accountInfo: AccountInfo) {
   const options = {
     method: 'PUT',
@@ -53,6 +76,9 @@ export async function clearData(accountInfo: AccountInfo) {
   }
 }
 
+/**
+ * This function resets the data in the backend to a fresh user state.
+ */
 export async function resetData() {
   const resp = await saveData(getSourceAcademyGame().getAccountInfo(), createEmptySaveState());
   if (resp && resp.ok) {

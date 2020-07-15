@@ -1,5 +1,11 @@
 import { FullSaveState } from './GameSaveTypes';
 
+/**
+ * Function to create an empty save state
+ * Used for resetting game data of students
+ *
+ * @returns {FullSaveState} - an empty save state to begin with
+ */
 export const createEmptySaveState = (): FullSaveState => {
   return {
     gameSaveStates: {},

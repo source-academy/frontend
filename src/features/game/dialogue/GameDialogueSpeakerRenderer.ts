@@ -41,7 +41,7 @@ export default class DialogueSpeakerRenderer {
 
   private hidePreviousSpeaker(previousSpeakerId?: ItemId) {
     if (previousSpeakerId) {
-      GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.DialogueLabel]);
+      GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
       GameGlobalAPI.getInstance().showCharacterOnMap(previousSpeakerId);
     }
   }
@@ -61,7 +61,7 @@ export default class DialogueSpeakerRenderer {
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
             GamePosition.Left
           );
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.DialogueLabel, speakerContainer);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.SpeakerBox, speakerContainer);
   }
 
   private drawSpeakerSprite({ speakerId, speakerPosition, expression }: SpeakerDetail) {
