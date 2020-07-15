@@ -19,7 +19,14 @@ export const achievementTemplate: AchievementItem = {
   isTask: false,
   release: new Date(),
   prerequisiteIds: [],
-  goals: [],
+  goals: [
+    {
+      goalId: 0,
+      goalText: 'Sample GOal',
+      goalProgress: 0,
+      goalTarget: 0
+    }
+  ],
   position: 0,
   backgroundImageUrl:
     'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',

@@ -200,7 +200,7 @@ export async function editAchievement(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/update/`, 'POST', {
+  const resp = await request(`achievements/${achievement.id}`, 'POST', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -219,7 +219,7 @@ export async function removeAchievement(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -239,7 +239,7 @@ export async function removeGoal(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}/goals/${goal.goalId}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { goal: goal, achievement: achievement },
     noHeaderAccept: true,
