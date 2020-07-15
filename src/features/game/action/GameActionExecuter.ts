@@ -1,7 +1,16 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { GameActionType } from './GameActionTypes';
 
+/**
+ * This class executes game actions by calling the right functions
+ * from global API
+ */
 export default class GameActionExecuter {
+  /**
+   * Executes the game action based on given type and parameters
+   * @actionType the type of action that will be executed
+   * @actionParams an object containing all the parameters
+   */
   public static async executeGameAction(actionType: GameActionType, actionParams: any) {
     const globalAPI = GameGlobalAPI.getInstance();
 

@@ -15,6 +15,14 @@ const backButtonStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
+/**
+ * This class renders the back button onto the scene.
+ * @scene scene to render on
+ * @callback onUp specifies what happens when button is clicked
+ * @x x coordinate of button
+ * @y y coordinate of button
+ * @soundManager reference to soundManager to play sounds when clicked
+ */
 class CommonBackButton extends Phaser.GameObjects.Container {
   constructor(
     scene: Phaser.Scene,
