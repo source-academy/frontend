@@ -37,7 +37,7 @@ function AchievementModal(props: AchievementModalProps) {
         };
       case AchievementAbility.EFFORT:
         return {
-          background: `url(${assetUrl}/annotated-background.png) no-repeat center`
+          background: `url(${assetUrl}/effort-background.png) no-repeat center`
         };
       case AchievementAbility.EXPLORATION:
         return {

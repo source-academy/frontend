@@ -62,10 +62,10 @@ export const mockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/prereq-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Beyond the Second Dimension achievement'
@@ -95,10 +95,10 @@ export const mockAchievements: AchievementItem[] = [
     ],
     position: 0,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/prereq-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
     modal: {
       modalImageUrl:
-        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: 'Congratulations! You have completed Colorful Carpet achievement'
@@ -250,7 +250,7 @@ export const mockAchievements: AchievementItem[] = [
     ],
     position: 3,
     backgroundImageUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
     modal: {
       modalImageUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
