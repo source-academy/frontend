@@ -49,6 +49,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
@@ -695,6 +696,11 @@ export function* evalCode(
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+  }
+
+  // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
+  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 
   /** If successful, then continue to run all testcases IFF evalCode was triggered from

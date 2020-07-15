@@ -353,13 +353,15 @@ class AssessmentWorkspace extends React.Component<
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
         body: <Markdown content={props.assessment!.questions[questionId].content} />,
-        id: SideContentType.questionOverview
+        id: SideContentType.questionOverview,
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Briefing`,
         iconName: IconNames.BRIEFCASE,
         body: <Markdown content={props.assessment!.longSummary} />,
-        id: SideContentType.briefing
+        id: SideContentType.briefing,
+        toSpawn: () => true
       },
       {
         label: `${props.assessment!.category} Autograder`,
@@ -371,7 +373,8 @@ class AssessmentWorkspace extends React.Component<
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
-        id: SideContentType.autograder
+        id: SideContentType.autograder,
+        toSpawn: () => true
       }
     ];
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
@@ -390,7 +393,8 @@ class AssessmentWorkspace extends React.Component<
             comments={props.assessment!.questions[questionId].comments}
           />
         ),
-        id: SideContentType.grading
+        id: SideContentType.grading,
+        toSpawn: () => true
       });
     }
 
@@ -400,13 +404,15 @@ class AssessmentWorkspace extends React.Component<
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
-        id: SideContentType.toneMatrix
+        id: SideContentType.toneMatrix,
+        toSpawn: () => true
       });
     }
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
-      tabs
+      tabs,
+      workspaceLocation: 'assessment'
     };
   };
 
