@@ -4,13 +4,16 @@ import {
   getSourceAcademyGame
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
+import { AssetObject } from '../../assets/AssetsTypes';
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
+import TextAssets from '../../assets/TextAssets';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import AssetParser from '../../parser/AssetParser';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
@@ -25,6 +28,7 @@ class MainMenu extends Phaser.Scene {
   private roomCode: string;
 
   private loadedGameState?: FullSaveState;
+  private defaultAssets?: AssetObject;
 
   constructor() {
     super('MainMenu');
@@ -39,6 +43,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.initialise(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.soundManager.loadSoundAssetMap(SoundAssets);
+    this.load.text(TextAssets.defaultAssets.key, TextAssets.defaultAssets.path);
     addLoadingScreen(this);
   }
 
@@ -53,6 +58,7 @@ class MainMenu extends Phaser.Scene {
 
     this.roomCode = await getRoomPreviewCode(accountInfo);
     await this.loadGameDataAndSettings(accountInfo);
+    await this.loadAssetObject();
   }
 
   private async loadGameDataAndSettings(accountInfo: AccountInfo) {
@@ -61,6 +67,12 @@ class MainMenu extends Phaser.Scene {
       ? this.loadedGameState.userState.settings.volume
       : 1;
     this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
+  }
+
+  private async loadAssetObject() {
+    const assetText = this.cache.text.get(TextAssets.defaultAssets.key);
+    this.defaultAssets = AssetParser.parse(assetText);
+    console.log(this.defaultAssets);
   }
 
   private preloadAssets() {

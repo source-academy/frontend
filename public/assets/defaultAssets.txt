@@ -1,0 +1,8 @@
+collectibles
+    cookies, /images/cookies.png
+    computer, /images/cmd-commentsTerminal.png
+
+achievements
+    place, /images/2d-2018-1st-place.png
+    popular, /images/2d-2018-1st-popular.png
+

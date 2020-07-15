@@ -1,3 +1,4 @@
+import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 
 export type ImageAssetMap = {
@@ -33,4 +34,10 @@ export type FontAsset = {
 export type TextAsset = {
   key: string;
   path: string;
+};
+
+export type AssetObject = {
+  assetsMap: Map<AssetKey, AssetPath>;
+  collectibles: Map<ItemId, AssetKey>;
+  achievements: Map<ItemId, AssetKey>;
 };
