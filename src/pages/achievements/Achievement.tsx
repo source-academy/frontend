@@ -81,7 +81,7 @@ function Achievement(props: DispatchProps & StateProps) {
     <div className="Achievements">
       <div className="achievement-overview">
         <AchievementOverview
-          name={name}
+          name={name === undefined ? 'User' : name}
           studio={group === null ? 'Staff' : group}
           inferencer={inferencer}
         />
