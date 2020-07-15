@@ -21,6 +21,12 @@ const notifStyle: BitmapFontStyle = {
 
 const notifYPos = dialogueConstants.rect.y + notifStyle.size * 2;
 
+/**
+ * A function to display a notifications such as location-change notification
+ *
+ * @param message - the string you want to display
+ * @returns {Promise} - a promise that resolves when notification is clicked
+ */
 export async function displayNotification(message: string): Promise<void> {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
   const dialogueRenderer = new DialogueRenderer({});

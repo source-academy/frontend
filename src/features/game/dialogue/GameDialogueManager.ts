@@ -10,7 +10,9 @@ import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
 import { Dialogue } from './GameDialogueTypes';
 
 /**
- * Manager in charge of playing the correct dialogue given a dialogue Id
+ * Manager in charge of playing the correct dialogue lines given a dialogue Id
+ * and in charge of showing the next line, speaker, and actions
+ * whenever players click on the dialogue box
  */
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
@@ -32,6 +34,8 @@ export default class DialogueManager {
 
   /**
    * @param dialogueId the dialogue Id of the dialogue you want to play
+   *
+   * @returns {Promise} the promise that resolves when the entire dialogue has been played
    */
   public async showDialogue(dialogueId: ItemId): Promise<void> {
     const dialogue = this.dialogueMap.get(dialogueId);

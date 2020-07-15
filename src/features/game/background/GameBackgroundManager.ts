@@ -6,7 +6,7 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 
 /**
  * Manager for game's background.
- * Loads the background for a location on navigate and locationChange action.
+ * Loads the background for a location on navigate and change_location action.
  */
 export default class GameBackgroundManager {
   public observerId: string;
