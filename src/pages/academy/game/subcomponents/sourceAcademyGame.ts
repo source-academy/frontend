@@ -73,9 +73,7 @@ export class SourceAcademyGame extends Phaser.Game {
     this.global.accountInfo = acc;
   }
 
-  public getAccountInfo() {
-    return mandatory(this.global.accountInfo) as AccountInfo;
-  }
+  public getAccountInfo = () => mandatory(this.global.accountInfo);
 
   public setStorySimProps(storySimulatorProps: any) {
     this.global.storySimulatorProps = {
@@ -88,9 +86,7 @@ export class SourceAcademyGame extends Phaser.Game {
     this.getStorySimProps().setStorySimState(state);
   }
 
-  public getStorySimProps() {
-    return mandatory(this.global.storySimulatorProps) as StorySimulatorProps;
-  }
+  public getStorySimProps = () => mandatory(this.global.storySimulatorProps);
 }
 
 const config = {

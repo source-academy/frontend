@@ -287,9 +287,9 @@ class GameManager extends Phaser.Scene {
     }
   }
 
-  public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint) as GameCheckpoint;
-  public getAccountInfo = () => mandatory(this.accountInfo) as AccountInfo;
-  private getParentGame = () => mandatory(this.parentGame) as SourceAcademyGame;
+  public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint);
+  public getAccountInfo = () => mandatory(this.accountInfo);
+  private getParentGame = () => mandatory(this.parentGame);
 }
 
 export default GameManager;

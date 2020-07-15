@@ -1,13 +1,14 @@
 /**
- * Resize the obj display size. Preserves the ratio of image.
- * This function can resize purely by height, i.e. resize width will 
- * be determined by using image dimension, if width is 0.
- * 
- * Will cause error if both width and height argument is 0.
- * 
- * @param obj obj to be resized 
- * @param width width
- * @param height height
+ * Resize a displayed object to given width and height
+ * if both dimensions are specified.
+ *
+ * If either one of width or height is zero/undefined,
+ * then only the given dimension will be used to scale the image
+ * proportionally according to aspect-ratio
+ *
+ * @param obj object to be resized
+ * @param width desired width of object
+ * @param height desired height of object
  */
 export function resize(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
@@ -64,15 +65,12 @@ export function resizeUnderflow(
   }
 }
 
-export function resizeSquare(
-  obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
-  width: number,
-  height?: number
-) {
-  obj.displayWidth = width;
-  obj.displayHeight = height || width;
-}
-
+/**
+ * Multiplies sprite dimension by factor
+ *
+ * @param obj obj to be resized
+ * @param factor number of times to multiply the object's width and height by.
+ */
 export function multiplyDimensions(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
   factor: number

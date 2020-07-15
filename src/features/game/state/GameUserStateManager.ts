@@ -85,5 +85,5 @@ export default class GameUserStateManager {
     this.userState.achievements = [];
   }
 
-  public getUserState = () => mandatory(this.userState) as UserSaveState;
+  public getUserState = () => mandatory(this.userState);
 }

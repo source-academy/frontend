@@ -73,7 +73,7 @@ class ChapterSelect extends Phaser.Scene {
     );
   }
 
-  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
+  public getLoadedGameState = () => mandatory(this.loadedGameState);
 
   public cleanUp() {
     this.soundManager.stopCurrBgMusic();

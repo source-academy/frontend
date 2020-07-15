@@ -93,8 +93,7 @@ class GameStateManager implements StateSubject {
     locIds.forEach(locId => mandatory(this.locationStates.get(locId)));
   }
 
-  private getLocationById = (locId: LocationId) =>
-    mandatory(this.locationStates.get(locId)) as GameLocation;
+  private getLocationById = (locId: LocationId) => mandatory(this.locationStates.get(locId));
 
   ///////////////////////////////
   //        Preprocess         //

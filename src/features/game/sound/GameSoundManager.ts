@@ -116,9 +116,8 @@ class GameSoundManager {
     this.getBaseSoundManager().volume = volume;
   }
 
-  public getBaseSoundManager = () =>
-    mandatory(this.baseSoundManager) as Phaser.Sound.BaseSoundManager;
-  public getParentGame = () => mandatory(this.parentGame) as SourceAcademyGame;
+  public getBaseSoundManager = () => mandatory(this.baseSoundManager);
+  public getParentGame = () => mandatory(this.parentGame);
 }
 
 export default GameSoundManager;

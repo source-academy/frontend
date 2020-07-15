@@ -14,7 +14,7 @@ class GameInputManager {
     this.scene = scene;
   }
 
-  public getScene = () => mandatory(this.scene) as Phaser.Scene;
+  public getScene = () => mandatory(this.scene);
 
   public enableMouseInput(active: boolean) {
     this.getScene().input.mouse.enabled = active;

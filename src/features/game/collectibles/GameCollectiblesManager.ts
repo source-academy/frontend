@@ -275,10 +275,10 @@ class GameCollectiblesManager implements IGameUI {
     }
   }
 
-  private getScene = () => mandatory(this.scene) as Phaser.Scene;
-  private getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
-  private getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
-  private getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
+  private getScene = () => mandatory(this.scene);
+  private getLayerManager = () => mandatory(this.layerManager);
+  private getPhaseManager = () => mandatory(this.phaseManager);
+  private getSoundManager = () => mandatory(this.soundManager);
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(

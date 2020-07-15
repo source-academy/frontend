@@ -5,7 +5,6 @@ import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
-import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -78,7 +77,7 @@ class GameModeTalk implements IGameUI {
 
   private getTalkTopicButtons(dialogueIds: ItemId[]) {
     return dialogueIds.map(dialogueId => {
-      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId)) as Dialogue;
+      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId));
       return {
         text: dialogue.title,
         callback: async () => {

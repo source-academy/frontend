@@ -51,6 +51,5 @@ export default class GameActionManager {
     );
   }
 
-  private getActionFromId = (actionId: ItemId) =>
-    mandatory(this.actionMap.get(actionId)) as GameAction;
+  private getActionFromId = (actionId: ItemId) => mandatory(this.actionMap.get(actionId));
 }

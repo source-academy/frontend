@@ -33,7 +33,7 @@ class GameGlobalAPI {
   //   Game Manager  //
   /////////////////////
 
-  public getGameManager = () => mandatory(this.gameManager) as GameManager;
+  public getGameManager = () => mandatory(this.gameManager);
 
   public setGameManager(gameManagerRef: GameManager): void {
     this.gameManager = gameManagerRef;

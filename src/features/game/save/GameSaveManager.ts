@@ -105,5 +105,5 @@ export default class GameSaveManager {
     return this.fullSaveState.gameSaveStates[this.chapterNum].currentPhase;
   }
 
-  private getAccountInfo = () => mandatory(this.accountInfo) as AccountInfo;
+  private getAccountInfo = () => mandatory(this.accountInfo);
 }

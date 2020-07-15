@@ -172,7 +172,7 @@ class MainMenu extends Phaser.Scene {
     ];
   }
 
-  public getLoadedGameState = () => mandatory(this.loadedGameState) as FullSaveState;
+  public getLoadedGameState = () => mandatory(this.loadedGameState);
 }
 
 export default MainMenu;
