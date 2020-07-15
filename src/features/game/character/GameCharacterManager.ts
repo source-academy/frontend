@@ -88,6 +88,5 @@ export default class CharacterManager {
     }
   }
 
-  public getCharacterById = (charId: ItemId) =>
-    mandatory(this.characterMap.get(charId)) as Character;
+  public getCharacterById = (charId: ItemId) => mandatory(this.characterMap.get(charId));
 }

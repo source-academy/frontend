@@ -99,7 +99,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     return this.bboxDetailMap.get(itemId);
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   public resizeWhileBeingDrawn(objectPlacement: ObjectPlacement) {
     if (

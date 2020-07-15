@@ -188,12 +188,12 @@ class GameEscapeManager implements IGameUI {
     }
   }
 
-  private getScene = () => mandatory(this.scene) as Phaser.Scene;
-  private getLayerManager = () => mandatory(this.layerManager) as GameLayerManager;
-  private getSoundManager = () => mandatory(this.soundManager) as GameSoundManager;
-  private getSaveManager = () => mandatory(this.saveManager) as GameSaveManager;
-  private getPhaseManager = () => mandatory(this.phaseManager) as GamePhaseManager;
-  private getInputManager = () => mandatory(this.inputManager) as GameInputManager;
+  private getScene = () => mandatory(this.scene);
+  private getLayerManager = () => mandatory(this.layerManager);
+  private getSoundManager = () => mandatory(this.soundManager);
+  private getSaveManager = () => mandatory(this.saveManager);
+  private getPhaseManager = () => mandatory(this.phaseManager);
+  private getInputManager = () => mandatory(this.inputManager);
 
   private cleanUp() {
     this.getSoundManager().stopCurrBgMusic();

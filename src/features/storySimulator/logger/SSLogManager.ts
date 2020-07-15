@@ -1,7 +1,6 @@
 import { AssetPath } from 'src/features/game/commons/CommonTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
-// import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
@@ -108,5 +107,5 @@ dialogues
     }
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 }

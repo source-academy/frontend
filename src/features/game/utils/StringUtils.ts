@@ -1,6 +1,20 @@
 export default class StringUtils {
   /*
-   * Splits text into paragraphs containing header and body
+   * Splits text into several paragraphs, each containing header
+   * string and body string array
+   *
+   * Example input:
+   * ["objectives",
+   * "    talkToHartin"
+   * "    completeQuest"]
+   *
+   * Example output:
+   * [ ["objectives"], ["talkToHartin", "completeQuest"] ]
+   */
+
+  /**
+   * @param lines raw text strings
+   * @returns several parargraphs that have been split into head and body
    */
   public static splitToParagraph(lines: string[]) {
     const paragraphHeaderAndBodyLines: [string, string[]][] = [];

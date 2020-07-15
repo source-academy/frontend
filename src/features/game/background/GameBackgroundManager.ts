@@ -1,6 +1,5 @@
-import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { AssetKey } from '../commons/CommonTypes';
-import { fadeIn } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -20,18 +19,15 @@ export default class GameBackgroundManager {
 
   private renderBackgroundImage(assetKey: AssetKey) {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Background]);
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     const backgroundAsset = new Phaser.GameObjects.Image(
-      gameManager,
+      GameGlobalAPI.getInstance().getGameManager(),
       screenCenter.x,
       screenCenter.y,
       assetKey
-    )
-      .setDisplaySize(screenSize.x, screenSize.y)
-      .setAlpha(0);
+    ).setDisplaySize(screenSize.x, screenSize.y);
 
-    gameManager.add.tween(fadeIn([backgroundAsset], Constants.fadeDuration));
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Background, backgroundAsset);
+    GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
   }
 }

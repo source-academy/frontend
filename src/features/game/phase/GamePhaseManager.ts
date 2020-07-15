@@ -67,5 +67,5 @@ export default class GamePhaseManager {
     return this.phaseStack[this.phaseStack.length - 1];
   }
 
-  public getInputManager = () => mandatory(this.inputManager) as GameInputManager;
+  public getInputManager = () => mandatory(this.inputManager);
 }

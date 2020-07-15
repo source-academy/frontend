@@ -129,8 +129,7 @@ class GameMap {
     location.bgmKey = soundKey;
   }
 
-  public getLocationAtId = (locId: LocationId) =>
-    mandatory(this.locations.get(locId)) as GameLocation;
+  public getLocationAtId = (locId: LocationId) => mandatory(this.locations.get(locId));
 }
 
 export default GameMap;

@@ -200,7 +200,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     }
   }
 
-  public getCursorManager = () => mandatory(this.cursorModes) as SSCursorMode;
+  public getCursorManager = () => mandatory(this.cursorModes);
 
   public getCoordinates(): number[] {
     return [this.input.x, this.input.y];
