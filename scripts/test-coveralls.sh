@@ -3,5 +3,6 @@
 set -euo pipefail
 
 ./scripts/coverage-fix.sh do && \
-  craco test --coverage --coverageReporters=text-lcov | \
+  craco test --coverage --coverageReporters=text-lcov \
+    --collectCoverageFrom='!**/src/features/game/**' | \
   coveralls
