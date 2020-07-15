@@ -20,9 +20,9 @@ function AchievementOverview(props: AchievementOverviewProps) {
 
   return (
     <>
+      <AchievementLevel studentExp={studentExp} />
       <h3>{name}</h3>
       <h3>{studio}</h3>
-      <AchievementLevel studentExp={studentExp} />
       <h3>{week}</h3>
       <h3>{date}</h3>
     </>
