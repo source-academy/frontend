@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery, race, delay } from 'redux-saga/effects';
+import { call, delay, put, race, select, takeEvery } from 'redux-saga/effects';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
