@@ -86,6 +86,20 @@ function Achievement(props: DispatchProps & StateProps) {
           inferencer={inferencer}
         />
       </div>
+      <h3
+        style={{
+          display: 'inline',
+          position: 'absolute',
+          overflow: 'nowrap',
+          zIndex: 3,
+          right: '20px',
+          padding: '2px 6px',
+          border: 'solid red',
+          color: 'red'
+        }}
+      >
+        BETA TESTING
+      </h3>
       <div className="achievement-main">
         <div className="filters">
           <AchievementFilter
