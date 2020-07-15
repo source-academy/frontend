@@ -92,10 +92,9 @@
       .milestone {
         display: flex;
 
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
 
-        height: 18%;
+        height: 22%;
         width: 20%;
 
         margin: 7% 0 0 0;
@@ -105,6 +104,27 @@
         background-color: rgba(0, 0, 0, 0.7);
         border: 1px solid #90ff12;
         box-shadow: 0 0 10px #90ff12;
+
+        h2 {
+          text-align: center;
+          text-decoration: underline;
+        }
+
+        .details {
+          display: flex;
+
+          flex-direction: row;
+
+          align-items: center;
+
+          padding: 0 0 1em 3.5em;
+
+          .description {
+            display: flex;
+
+            padding: 1em 0 0 1em;
+          }
+        }
       }
     }
   }
