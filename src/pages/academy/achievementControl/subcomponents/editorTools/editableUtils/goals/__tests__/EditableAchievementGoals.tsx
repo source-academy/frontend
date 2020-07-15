@@ -2,9 +2,9 @@
 
 import { mount } from 'enzyme';
 import React from 'react';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import EditableAchievementGoals from '../EditableAchievementGoals';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const noGoalProps = {
   goals: [],

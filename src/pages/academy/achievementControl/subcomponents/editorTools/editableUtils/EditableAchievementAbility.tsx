@@ -1,11 +1,10 @@
+import { Button, Classes, MenuItem } from '@blueprintjs/core';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { MenuItem, Button, Classes } from '@blueprintjs/core';
-
 import {
-  AchievementAbility,
-  achievementAbilities
+  achievementAbilities,
+  AchievementAbility
 } from '../../../../../../commons/achievements/AchievementTypes';
 
 type EditableAchievementAbilityProps = {

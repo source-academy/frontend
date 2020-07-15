@@ -1,8 +1,8 @@
 import { mount } from 'enzyme';
 import React from 'react';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import EditableAchievementModal from '../EditableAchievementModal';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const mockProps = {
   title: 'Sample Title',

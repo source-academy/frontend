@@ -1,21 +1,20 @@
+import { Card } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
-import { Card } from '@blueprintjs/core';
-
 import {
-  AchievementItem,
   AchievementAbility,
-  AchievementModalItem,
-  AchievementGoal
+  AchievementGoal,
+  AchievementItem,
+  AchievementModalItem
 } from '../../../../../commons/achievements/AchievementTypes';
-import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
-import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
-import EditableAchievementDate from './editableUtils/EditableAchievementDate';
-import EditableAchievementModal from './editableModal/EditableAchievementModal';
-import AchievementUploader from './editableUtils/AchievementUploader';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
+import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
+import AchievementUploader from './editableUtils/AchievementUploader';
+import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
 import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
+import EditableAchievementDate from './editableUtils/EditableAchievementDate';
+import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementGoals from './editableUtils/goals/EditableAchievementGoals';
 
 type EditableAchievementCardProps = {

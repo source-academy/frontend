@@ -1,6 +1,7 @@
 import { Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
+import { defaultAchievements } from '../achievements/AchievementTypes';
 import {
   defaultAcademy,
   defaultApplication,
@@ -10,7 +11,6 @@ import {
   defaultWorkspaceManager,
   OverallState
 } from '../application/ApplicationTypes';
-import { defaultAchievements } from '../achievements/AchievementTypes';
 
 export function mockInitialStore<P>(): Store<OverallState> {
   const createStore = (mockStore as any)();

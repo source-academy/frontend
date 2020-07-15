@@ -1,7 +1,6 @@
-import React from 'react';
-
-import { IconNames } from '@blueprintjs/icons';
 import { InputGroup } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
 
 type EditableAchievementExpProps = {
   exp: number;

@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react';
-
+import { Button, MenuItem } from '@blueprintjs/core';
+import { ItemRenderer, Select } from '@blueprintjs/select';
+import React, { useEffect, useState } from 'react';
 import { AchievementItem } from 'src/commons/achievements/AchievementTypes';
 import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
-import { Button, MenuItem } from '@blueprintjs/core';
-import { Select, ItemRenderer } from '@blueprintjs/select';
 
 type TaskPositionInserterProps = {
   editableAchievement: AchievementItem;

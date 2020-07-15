@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Button, Dialog, Popover, Position, PopoverInteractionKind } from '@blueprintjs/core';
+import { Button, Dialog, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
+import React, { useState } from 'react';
 
 type EditableAchievementDateProps = {
   type: string;

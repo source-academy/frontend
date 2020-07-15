@@ -1,6 +1,6 @@
 import {
-  AchievementItem,
   AchievementAbility,
+  AchievementItem,
   AchievementModalItem
 } from '../../../../../commons/achievements/AchievementTypes';
 

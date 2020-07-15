@@ -1,5 +1,5 @@
+import { Button, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { EditableText, Button } from '@blueprintjs/core';
 
 type EditableModalImageProps = {
   modalImageUrl: string;

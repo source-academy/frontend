@@ -17,16 +17,16 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
+import {
+  AchievementAbility,
+  AchievementGoal,
+  AchievementItem
+} from '../achievements/AchievementTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import {
-  AchievementItem,
-  AchievementAbility,
-  AchievementGoal
-} from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token

@@ -1,7 +1,7 @@
+import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
+import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import { MenuItem, Button, Classes, Dialog } from '@blueprintjs/core';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 
 type PrerequisiteSwapperProps = {

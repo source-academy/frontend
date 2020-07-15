@@ -1,8 +1,9 @@
 import React from 'react';
-import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
-import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
+
 import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
+import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
+import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 
 type AchievementControlPanelProps = {
   inferencer: Inferencer;

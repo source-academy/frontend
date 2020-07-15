@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
 import { Button } from '@blueprintjs/core';
+import React, { useState } from 'react';
 
 import { AchievementItem } from '../../../../../../commons/achievements/AchievementTypes';
-import AchievementSelector from './AchievementSelector';
 import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
+import AchievementSelector from './AchievementSelector';
 
 type PrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;

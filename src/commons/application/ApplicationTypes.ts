@@ -5,6 +5,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { AchievementState } from '../achievements/AchievementTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -17,7 +18,6 @@ import {
 } from '../workspace/WorkspaceTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
 import { SessionState } from './types/SessionTypes';
-import { AchievementState } from '../achievements/AchievementTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
