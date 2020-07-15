@@ -74,7 +74,7 @@ export default class StringUtils {
   }
 
   /*
-   * Splits text into string array and removes lines with only newlines
+   * Splits text into string array and removes lines with only whitespaces
    */
   public static splitToLines(text: string): string[] {
     return text
