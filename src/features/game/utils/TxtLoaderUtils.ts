@@ -2,18 +2,18 @@ import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourc
 
 import TextAssets from '../assets/TextAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
-import { loadText } from '../utils/LoaderUtils';
 import Parser from '../parser/Parser';
 import { loadData } from '../save/GameSaveRequests';
+import { loadText } from '../utils/LoaderUtils';
 
 /**
- * Starts a new checkpoint with the given chapter number 
- * and checkpoint number. The chapter/checkpoint file 
+ * Starts a new checkpoint with the given chapter number
+ * and checkpoint number. The chapter/checkpoint file
  * will also be appended with the default checkpoint text.
- * 
+ *
  * As this function also fetches students information,
- * this method should be 'await'-ed in order to function properly. 
- * 
+ * this method should be 'await'-ed in order to function properly.
+ *
  * @param scene previous scene that calls this function
  * @param chapterDetails mapping to be used to determine the chapter/checkpoint file
  * @param continueGame if true, will load the last checkpoint. Else, restart the chapter.

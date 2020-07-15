@@ -7,12 +7,12 @@ export default class StringUtils {
    * ["objectives",
    * "    talkToHartin"
    * "    completeQuest"]
-   * 
+   *
    * Example output:
    * [ ["objectives"], ["talkToHartin", "completeQuest"] ]
-   * 
+   *
    * @param lines raw text strings
-   * @returns {Array<[string, string[]]>} several parargraphs that have 
+   * @returns {Array<[string, string[]]>} several parargraphs that have
    *                                      been split into head and body
    */
   public static splitToParagraph(lines: string[]) {
@@ -36,10 +36,10 @@ export default class StringUtils {
   /**
    * Given an array of lines, returns a Map where the keys are the headings
    * and the value are the lines below each heading.
-   * 
+   *
    * @param lines lines to be processed
-   * @param isHeaderFunction predicate that determines the header syntax. This 
-   *                         will be ran against every line, so take into account if you want 
+   * @param isHeaderFunction predicate that determines the header syntax. This
+   *                         will be ran against every line, so take into account if you want
    *                         to detect header in the middle of line/in between lines.
    * @returns {Map<string, string>}
    */
@@ -68,7 +68,7 @@ export default class StringUtils {
    * TODO: Clarify
    * Split using punctuation, trim, and limit split to number of characters
    * e.g "cat,dog,   cow, goat" with limit 2 -> ["cat", "dog", "cow, goat"]
-   * 
+   *
    * @param line line to be split
    * @param sep separator to be used
    * @param limit
@@ -85,10 +85,10 @@ export default class StringUtils {
   }
 
   /**
-   * Splits text into string array and removes 
+   * Splits text into string array and removes
    * lines with only newlines.
-   * 
-   * @param text text to split 
+   *
+   * @param text text to split
    * @returns {Array<string>}
    */
   public static splitToLines(text: string): string[] {
@@ -100,9 +100,9 @@ export default class StringUtils {
 
   /**
    * Capitalise first letter.
-   * 
+   *
    * @param word text to be capitalized
-   * @returns {string} 
+   * @returns {string}
    */
   public static capitalize(word: string) {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -112,7 +112,7 @@ export default class StringUtils {
    * Turns snake case to capitalized case.
    * Only accounts for letters, i.e. numbers and symbols will be discarded.
    * e.g. snake_case_to_capitalized -> Snake Case To Capitalized
-   * 
+   *
    * @param name text to be capitalized
    * @returns {string}
    */

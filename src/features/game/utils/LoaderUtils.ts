@@ -1,7 +1,7 @@
 import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 
 /**
- * The files below loads assets, and and only resolves
+ * The functions below loads assets, and and only resolves
  * once the assets are loaded.
  * If the assets have already been loaded previously,
  * then the promise is resolved instantly.
