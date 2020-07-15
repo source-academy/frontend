@@ -82,14 +82,15 @@ export const prettifyDate = (deadline: Date) => {
 // Converts Date to deadline countdown
 export const prettifyDeadline = (deadline: Date | undefined) => {
   /* ---------- Date constants ---------- */
+  const now = new Date();
   const daysPerWeek = 7;
   const hoursPerDay = 24;
   const millisecondsPerHour = 3600000;
 
   /* -------- Helper for Deadline -------- */
-  const isExpired = (deadline: Date): boolean => deadline.getTime() < new Date().getTime();
+  const isExpired = (deadline: Date): boolean => deadline.getTime() < now.getTime();
   const getHoursAway = (deadline: Date): number =>
-    (deadline.getTime() - new Date().getTime()) / millisecondsPerHour;
+    (deadline.getTime() - now.getTime()) / millisecondsPerHour;
   const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;
   const getWeeksAway = (deadline: Date): number => getDaysAway(deadline) / daysPerWeek;
 

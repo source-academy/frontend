@@ -346,8 +346,9 @@ class Inferencer {
   }
 
   private generateStatus(node: Node) {
+    const now = new Date();
     const deadline = node.furthestDeadline;
-    if (deadline !== undefined && deadline.getTime() < new Date().getTime()) {
+    if (deadline !== undefined && deadline.getTime() < now.getTime()) {
       // deadline elapsed
       if (node.progressFrac === 0) {
         return (node.status = AchievementStatus.EXPIRED); // not attempted
