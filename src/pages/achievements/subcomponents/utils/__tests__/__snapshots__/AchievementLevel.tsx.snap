@@ -3,7 +3,7 @@
 exports[`AchievementLevel component renders correctly 1`] = `
 "<AchievementLevel studentExp={0}>
   <div className=\\"level\\">
-    <div className=\\"level-badge\\">
+    <div className=\\"level-badge\\" onMouseEnter={[Function: displayMilestone]} onMouseLeave={[Function: hideMilestone]}>
       <span className=\\"level-icon\\" />
       <p>
         0

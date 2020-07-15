@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ProgressBar } from '@blueprintjs/core';
+import AchievementMilestone from './AchievementMilestone';
 
 type AchievementLevelProps = {
   studentExp: number;
@@ -8,6 +9,10 @@ type AchievementLevelProps = {
 function AchievementLevel(props: AchievementLevelProps) {
   const { studentExp } = props;
 
+  const [showMilestone, setShowMilestone] = useState<boolean>(false);
+  const displayMilestone = () => setShowMilestone(true);
+  const hideMilestone = () => setShowMilestone(false);
+
   const expPerLevel = 1000;
   const level = Math.floor(studentExp / expPerLevel);
   const progress = studentExp % expPerLevel;
@@ -15,7 +20,7 @@ function AchievementLevel(props: AchievementLevelProps) {
 
   return (
     <div className="level">
-      <div className="level-badge">
+      <div className="level-badge" onMouseEnter={displayMilestone} onMouseLeave={hideMilestone}>
         <span className="level-icon" />
         <p>{level}</p>
       </div>
@@ -30,6 +35,7 @@ function AchievementLevel(props: AchievementLevelProps) {
           {progress} / {expPerLevel} XP
         </p>
       </span>
+      {showMilestone ? <AchievementMilestone /> : null}
     </div>
   );
 }

@@ -88,6 +88,24 @@
           color: #ffb412;
         }
       }
+
+      .milestone {
+        display: flex;
+
+        justify-content: center;
+        align-items: center;
+
+        height: 18%;
+        width: 20%;
+
+        margin: 7% 0 0 0;
+        position: absolute;
+        z-index: 2;
+
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #90ff12;
+        box-shadow: 0 0 10px #90ff12;
+      }
     }
   }
 
