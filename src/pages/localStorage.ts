@@ -1,11 +1,11 @@
 import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
+import { AchievementItem } from '../commons/achievements/AchievementTypes';
 import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
 import { showWarningMessage } from '../commons/utils/NotificationsHelper';
-import { AchievementItem } from '../commons/achievements/AchievementTypes';
 
 export type SavedState = {
   session: Partial<SessionState>;
