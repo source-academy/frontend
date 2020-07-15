@@ -47,7 +47,10 @@ const ImageAssets: AssetMap<ImageAsset> = {
   // Settings
   settingBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
   settingBanner: { key: 'settings-bg', path: '/ui/settingsBg.png' },
-  settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' }
+  settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' },
+
+  // Room Preview
+  verifiedFrame: { key: 'verified-frame', path: '/ui/verifiedFrame.png' }
 };
 
 export default ImageAssets;
