@@ -109,7 +109,7 @@ const toAcademy = (props: ApplicationProps) =>
  */
 const toAchievements = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
-    ? () => <AchievementContainer /> // Replace with <Redirect to="/login" /> during prod
+    ? () => <Redirect to="/login" />
     : () => <AchievementContainer />;
 
 const toLogin = (props: ApplicationProps) => () => {

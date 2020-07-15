@@ -14,7 +14,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
 
   const studentExp = inferencer.getStudentTotalExp();
 
-  const now = new Date(2020, 7, 31, 1, 0, 0);
+  const now = new Date();
   const week = prettifyWeek(now);
   const date = prettifyDate(now);
 
