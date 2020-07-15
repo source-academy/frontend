@@ -10,11 +10,10 @@ import {
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
+import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
-import { stringify } from 'js-slang/dist/utils/stringify';
-
-import { Variant } from 'js-slang/dist/types';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,

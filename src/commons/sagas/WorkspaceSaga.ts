@@ -16,6 +16,7 @@ import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
+import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
@@ -478,7 +479,10 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = { runes: {} };
+    action.payload.library.moduleParams = {
+      runes: {},
+      phaser: Phaser
+    };
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });

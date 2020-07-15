@@ -1,14 +1,14 @@
 import { action } from 'typesafe-actions';
 
+import { PersistenceFile } from '../persistence/PersistenceTypes';
 import {
   CHANGE_QUERY_STRING,
   GENERATE_LZ_STRING,
+  PLAYGROUND_UPDATE_PERSISTENCE_FILE,
   SHORTEN_URL,
   TOGGLE_USING_SUBST,
-  UPDATE_SHORT_URL,
-  PLAYGROUND_UPDATE_PERSISTENCE_FILE
+  UPDATE_SHORT_URL
 } from './PlaygroundTypes';
-import { PersistenceFile } from '../persistence/PersistenceTypes';
 
 export const generateLzString = () => action(GENERATE_LZ_STRING);
 

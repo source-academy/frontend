@@ -6,6 +6,7 @@ import { SET_GAME_STATE } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   SessionState,
+  SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
   UPDATE_ASSESSMENT,
@@ -13,8 +14,7 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS,
-  SET_GOOGLE_USER
+  UPDATE_NOTIFICATIONS
 } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (

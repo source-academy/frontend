@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { Testcase } from '../assessment/AssessmentTypes';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -25,6 +24,7 @@ import {
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
 import {
   FINISH_INVITE,
   INIT_INVITE,

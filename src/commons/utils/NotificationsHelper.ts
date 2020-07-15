@@ -1,4 +1,4 @@
-import { Intent, Position, Toaster, IToastProps } from '@blueprintjs/core';
+import { Intent, IToastProps, Position, Toaster } from '@blueprintjs/core';
 
 const notification = Toaster.create({
   position: Position.TOP

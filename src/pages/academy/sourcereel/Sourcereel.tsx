@@ -1,9 +1,8 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
-
 import { Variant } from 'js-slang/dist/types';
+import * as React from 'react';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';

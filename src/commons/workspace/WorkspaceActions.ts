@@ -1,7 +1,6 @@
-import { action } from 'typesafe-actions';
-
 import { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
+import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
