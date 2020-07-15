@@ -33,11 +33,15 @@ function update() {}
 `;
 
 export const verifiedStyle: BitmapFontStyle = {
-  key: FontAssets.educatedDeersFont.key,
-  size: 40,
+  key: FontAssets.pixelFont.key,
+  size: 25,
   fill: HexColor.paleYellow,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const verifiedText = 'VERIFIED';
-export const startTextXPos = verifiedText.length * verifiedStyle.size * 0.4;
+export const roomConstants = {
+  verifiedText: 'VERIFIED',
+  tagWidth: 128,
+  tagHeight: 50,
+  startTextXPos: 200
+};

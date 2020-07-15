@@ -2,6 +2,7 @@ import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/Assessm
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
+import ImageAssets from '../../assets/ImageAssets';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
@@ -9,12 +10,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { HexColor } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import RoomPreview from './RoomPreview';
-import {
-  roomDefaultCode,
-  startTextXPos,
-  verifiedStyle,
-  verifiedText
-} from './RoomPreviewConstants';
+import { roomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewConstants';
 
 export async function getRoomPreviewCode(accInfo: AccountInfo) {
   const roomMissionId = getRoomMissionId();
@@ -63,12 +59,18 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     scene,
     0,
     0,
-    startTextXPos,
-    verifiedStyle.size * 1.5,
+    roomConstants.tagWidth,
+    roomConstants.tagHeight,
     HexColor.darkBlue
   )
     .setOrigin(0.0, 0.5)
     .setAlpha(0.8);
+  const hoverTextFrame = new Phaser.GameObjects.Sprite(
+    scene,
+    0,
+    0,
+    ImageAssets.verifiedFrame.key
+  ).setOrigin(0.0, 0.5);
 
   const hoverMask = new Phaser.GameObjects.Graphics(scene)
     .fillRect(
@@ -79,21 +81,21 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     )
     .setAlpha(0);
 
-  const hoverText = createBitmapText(scene, verifiedText, 0, 0, verifiedStyle)
-    .setOrigin(0.0, 0.35)
-    .setPosition(startTextXPos, 0);
+  const hoverText = createBitmapText(scene, roomConstants.verifiedText, 0, 0, verifiedStyle)
+    .setOrigin(0.0, 0.6)
+    .setPosition(roomConstants.startTextXPos, 0)
+    .setMask(hoverMask.createGeometryMask());
 
   scene.tweens.add({
     targets: hoverText,
-    x: -startTextXPos,
-    duration: 3000,
+    x: -roomConstants.startTextXPos,
+    duration: 4000,
     ease: 'Power0',
     loop: -1,
-    onLoop: () => (hoverText.x = startTextXPos + 50)
+    onLoop: () => (hoverText.x = roomConstants.startTextXPos + 50)
   });
 
-  hoverContainer.add([hoverTextBg, hoverText]);
-  hoverContainer.setMask(hoverMask.createGeometryMask());
+  hoverContainer.add([hoverTextBg, hoverText, hoverTextFrame]);
   hoverContainer.setVisible(false);
   return [hoverContainer, hoverMask];
 };

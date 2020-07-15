@@ -110,6 +110,10 @@ export default class RoomPreview extends Phaser.Scene {
     // Execute create
     await this.eval(`create();`);
     this.soundManager.stopCurrBgMusic();
+
+    const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
+    this.attachVerificationTag(cookie);
+    this.layerManager.addToLayer(Layer.Objects, cookie);
   }
 
   public update() {
