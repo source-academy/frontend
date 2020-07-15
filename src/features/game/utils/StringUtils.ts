@@ -65,23 +65,36 @@ export default class StringUtils {
   }
 
   /**
-   * TODO: Clarify
-   * Split using punctuation, trim, and limit split to number of characters
-   * e.g "cat,dog,   cow, goat" with limit 2 -> ["cat", "dog", "cow, goat"]
+   * Split using separator, but limit number of separators to split with.
+   * After splitting, trim each entry to get rid of whitespaces.
+   *
+   * Example input: splitByChar("whatHappened, What Happened, Scottie?\n", ",", 1)
+   * Example output: ["whatHappened", "What Happened, Scottie?"]
+   * Explanation: This splits the string only using the first 1 comma then trims whitespaces
    *
    * @param line line to be split
    * @param sep separator to be used
-   * @param limit
+   * @param limit the number of separators to split the string, undefined if use all separators
    * @param {Array<string>}
    */
   public static splitByChar(line: string, sep: string, limit?: number): string[] {
+    let lines = [];
     if (limit) {
-      return line
-        .split(new RegExp((sep + '(.+)').repeat(limit)))
-        .map((phrase: string) => phrase.trim());
+      let currWord = '';
+      for (let i = 0; i < line.length; i++) {
+        const letter = line[i];
+        if (letter === sep && lines.length < limit) {
+          lines.push(currWord);
+          currWord = '';
+        } else {
+          currWord += letter;
+        }
+      }
+      lines.push(currWord);
     } else {
-      return line.split(sep).map((phrase: string) => phrase.trim());
+      lines = line.split(sep);
     }
+    return lines.map((phrase: string) => phrase.trim());
   }
 
   /**

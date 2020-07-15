@@ -16,7 +16,7 @@ import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
  * @param scene scene where to load this asset
  * @param assetKey the key to be used
  * @param assetPath the path to the file
- * @returns Promise that resolves when image is loaded.
+ * @returns {Promise} promise that resolves when image is loaded.
  */
 export const loadImage = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
   new Promise<AssetKey>(resolve => {
@@ -35,7 +35,7 @@ export const loadImage = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
  * @param scene scene where to load this asset
  * @param assetKey the key to be used
  * @param assetPath the path to the file
- * @returns Promise that resolves when text is loaded.
+ * @returns {Promise} promise that resolves when text is loaded.
  */
 export const loadText = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
   new Promise<AssetKey>(resolve => {
@@ -54,7 +54,7 @@ export const loadText = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: Ass
  * @param scene scene where to load this asset
  * @param assetKey the key to be used
  * @param assetPath the path to the file
- * @returns Promise that resolves when sound is loaded.
+ * @returns {Promise} promise that resolves when sound is loaded.
  */
 export const loadSound = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: AssetPath) =>
   new Promise<AssetKey>(resolve => {
