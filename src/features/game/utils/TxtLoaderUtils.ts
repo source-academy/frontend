@@ -8,6 +8,7 @@ import { loadText } from '../utils/LoaderUtils';
 
 /**
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
  * Starts a new checkpoint with the given chapter number
  * and checkpoint number. The chapter/checkpoint file
  * will also be appended with the default checkpoint text.
@@ -21,12 +22,17 @@ import { loadText } from '../utils/LoaderUtils';
  * @param chapterNum chapter number
  * @param checkpointNum checkpoint number
 =======
+=======
+>>>>>>> Stashed changes
  *
  * @scene the scene calling the function
  * @chapterDetails chapterDetails passed to
  *
  * To use these functions, call the line "await loadImage(...)"
  * inside an async function
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
  */
 export async function callGameManagerOnTxtLoad(

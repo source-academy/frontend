@@ -1,7 +1,6 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { ItemId } from '../commons/CommonTypes';
-import { emptySet } from '../location/GameMapConstants';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
@@ -169,7 +168,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   public getLocationMode(locationId: LocationId): GameMode[] {
-    return Array.from(this.checkpoint.map.getLocationAtId(locationId).modes || emptySet);
+    return Array.from(this.checkpoint.map.getLocationAtId(locationId).modes) || [];
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode) {
