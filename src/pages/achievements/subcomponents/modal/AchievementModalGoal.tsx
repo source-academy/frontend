@@ -1,6 +1,4 @@
 import React from 'react';
-import { Icon } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import { AchievementGoal } from 'src/commons/achievements/AchievementTypes';
 
 type AchievementModalGoalProps = {
@@ -15,7 +13,7 @@ function AchievementModalGoal(props: AchievementModalGoalProps) {
     return (
       <div className="goal" key={goalId}>
         <div className="goal-medal">
-          <Icon color="#F0E68C" iconSize={28} icon={IconNames.BADGE} />
+          <span className="medal-icon" />
           <div className="medal-text">
             {goalProgress} / {goalTarget} XP
           </div>

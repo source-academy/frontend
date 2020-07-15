@@ -360,6 +360,7 @@
 
             text-align: center;
             color: yellow;
+            font-size: 0.85em;
           }
         }
 
@@ -377,6 +378,14 @@
             justify-content: center;
             align-items: center;
 
+            .medal-icon {
+              height: 2em;
+              width: 2em;
+
+              background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/xp-icon.png);
+              background-size: contain;
+            }
+
             .medal-text {
               font-size: 0.7em;
             }
@@ -385,7 +394,6 @@
           .goal-text {
             display: flex;
             align-items: center;
-            font-size: 1.1em;
           }
         }
 
