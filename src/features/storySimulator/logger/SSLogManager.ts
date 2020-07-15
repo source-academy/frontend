@@ -5,7 +5,6 @@ import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { toIntString } from '../utils/SSUtils';
 import { loggableStyle } from './SSLogConstants';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
@@ -96,7 +95,7 @@ dialogues
     return Object.entries(loggable)
       .map(
         ([key, value]) =>
-          `${key}: ${typeof value === 'number' ? toIntString(value) : value.toString()}`
+          `${key}: ${typeof value === 'number' ? StringUtils.toIntString(value) : value.toString()}`
       )
       .join('\n');
   }

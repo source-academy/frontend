@@ -2,12 +2,12 @@ import { ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { resize } from 'src/features/game/utils/SpriteUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { toIntString } from '../utils/SSUtils';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
 export default class SSBBoxManager implements ICheckpointLoggable {
@@ -120,10 +120,10 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     this.bboxDetailMap.forEach((bboxDetail: SSBBoxDetail) => {
       const bboxDetailArray = [
         '+' + bboxDetail.id,
-        toIntString(bboxDetail.x),
-        toIntString(bboxDetail.y),
-        toIntString(bboxDetail.width),
-        toIntString(bboxDetail.height)
+        StringUtils.toIntString(bboxDetail.x),
+        StringUtils.toIntString(bboxDetail.y),
+        StringUtils.toIntString(bboxDetail.width),
+        StringUtils.toIntString(bboxDetail.height)
       ];
 
       map.push(bboxDetailArray.join(', '));

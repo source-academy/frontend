@@ -121,4 +121,14 @@ export default class StringUtils {
 
     return words.map(StringUtils.capitalize).join(' ');
   }
+
+  /**
+   * Converts the given number into string. The given number
+   * is rounded down.
+   *
+   * @param num number to be converted
+   */
+  public static toIntString(num: number) {
+    return Math.floor(num).toString();
+  }
 }

@@ -2,12 +2,12 @@ import { Constants, screenCenter } from 'src/features/game/commons/CommonConstan
 import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
 
 import { loadImage } from '../../game/utils/LoaderUtils';
 import { getIdFromShortPath } from '../logger/SSLogManagerHelper';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { toIntString } from '../utils/SSUtils';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 
 export default class SSObjectManager implements ICheckpointLoggable {
@@ -95,12 +95,12 @@ export default class SSObjectManager implements ICheckpointLoggable {
       const objectDetailArray = [
         '+' + objectDetail.id,
         objectDetail.assetPath,
-        toIntString(objectDetail.x),
-        toIntString(objectDetail.y)
+        StringUtils.toIntString(objectDetail.x),
+        StringUtils.toIntString(objectDetail.y)
       ];
       if (objectDetail.width) {
-        objectDetailArray.push(toIntString(objectDetail.width));
-        objectDetailArray.push(toIntString(objectDetail.height!));
+        objectDetailArray.push(StringUtils.toIntString(objectDetail.width));
+        objectDetailArray.push(StringUtils.toIntString(objectDetail.height!));
       }
       return objectDetailArray.join(', ');
     });
