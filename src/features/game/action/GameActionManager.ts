@@ -6,6 +6,10 @@ import ActionConditionChecker from './GameActionConditionChecker';
 import GameActionExecuter from './GameActionExecuter';
 import { ActionCondition, GameAction } from './GameActionTypes';
 
+/**
+ * This class manages all game actions, and is called whenever
+ * entities need to perform actions.
+ */
 export default class GameActionManager {
   private actionMap: Map<ItemId, GameAction>;
 

@@ -21,6 +21,12 @@ const backButtonStyle: BitmapFontStyle = {
  *
  * The style and colours are fixed.
  * It is not recommended to change the position of the container.
+ * 
+ * @scene scene to render on
+ * @callback onUp specifies what happens when button is clicked
+ * @x x coordinate of button
+ * @y y coordinate of button
+ * @soundManager reference to soundManager to play sounds when clicked
  */
 class CommonBackButton extends Phaser.GameObjects.Container {
   /**

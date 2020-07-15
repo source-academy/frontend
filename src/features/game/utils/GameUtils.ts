@@ -6,7 +6,7 @@ import { Constants } from '../commons/CommonConstants';
  * the next line by that number of milliseconds.
  *
  * @param ms number of milliseconds to delay next line.
- * @returns a promise which resolves in ms milliseconds.
+ * @returns {Promise} promise which resolves in ms milliseconds.
  */
 export function sleep(ms: number) {
   return new Promise(resolve => setTimeout(resolve, ms));
@@ -23,9 +23,9 @@ export function sleep(ms: number) {
  * @param map the Map that you'd like to iterate over
  * @param fn the binary function that produces the new
  *           value of the map using (value, key) as input
- * @returns the new Map with mapped values
+ * @returns {Map<K, R>} new Map with mapped values
  */
-export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R) {
+export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R): Map<K, R> {
   const newMap = new Map<K, R>();
   map.forEach((value: V, key: K) => {
     const result: R = fn(value, key);
@@ -41,7 +41,7 @@ export function mapValues<K, V, R>(map: Map<K, V>, fn: (value: V, key?: K) => R)
  * @param min the minimum value of the number
  * @param max the maximum value of the number
  *
- * @returns the number which is capped based on boundaries
+ * @returns {number} number which is capped based on boundaries
  */
 export function limitNumber(value: number, min: number, max: number) {
   return Math.min(Math.max(value, min), max);
@@ -51,7 +51,7 @@ export function limitNumber(value: number, min: number, max: number) {
  * Appends the s3 file path to a short path name
  *
  * @param filename the short path of a filename
- * @returns the new path to file including full s3 link
+ * @returns {string} new path to file including full s3 link
  */
 export function toS3Path(fileName: string) {
   return Constants.assetsFolder + fileName;
@@ -61,8 +61,8 @@ export function toS3Path(fileName: string) {
  * Throws an error when the property is not found.
  *
  * @param object the property that you would like to get
- * @returns the object if it is found.
- * @error if object is undefined
+ * @returns {object} the object if it is found.
+ * @throws {Error} if object is undefined
  */
 export function mandatory<T>(object: T) {
   if (!object) {
