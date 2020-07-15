@@ -8,6 +8,13 @@ import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
 
+/**
+ * Class that manages speakerbox portion of the dialgoue box
+ * Rendering it in the right place and placing the right name
+ *
+ * This class also signals the character manager to render speaker sprites in front
+ * And hide them from the map if they are the ones speaking
+ */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
   private username: string;
@@ -16,6 +23,15 @@ export default class DialogueSpeakerRenderer {
     this.username = username;
   }
 
+  /**
+   * Changes the speaker shown in the speaker box and the speaker rendered on screen
+   *
+   * @param newSpeakerDetail the details about the new speaker,
+   * including his characaterId, expression and position.
+   *
+   * Undefined - if no speaker changes are involved in the dialogue line.
+   * Null - if there is no speaker for the line
+   */
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 

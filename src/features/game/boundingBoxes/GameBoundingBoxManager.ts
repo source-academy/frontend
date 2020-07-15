@@ -9,6 +9,9 @@ import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { ActivatableBBox, BBoxProperty } from './GameBoundingBoxTypes';
 
+/**
+ * Manager for rendering interactive bounding boxes in the location.
+ */
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
   private bboxes: ActivatableBBox[];
@@ -30,6 +33,9 @@ class GameBoundingBoxManager implements StateObserver {
     }
   }
 
+  /**
+   * @param locationId id of the location whose bounding boxes you want to render
+   */
   public renderBBoxLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
@@ -40,7 +46,7 @@ class GameBoundingBoxManager implements StateObserver {
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
   }
 
-  public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
+  private createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
     const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);

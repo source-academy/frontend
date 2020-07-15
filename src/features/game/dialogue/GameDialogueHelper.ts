@@ -3,6 +3,9 @@ import { screenCenter } from '../commons/CommonConstants';
 import Typewriter from '../effects/Typewriter';
 import dialogueConstants from './GameDialogueConstants';
 
+/**
+ * Helper function to render the green box shown in every dialogue/ notification popup
+ */
 export function createDialogueBox(scene: Phaser.Scene) {
   const dialogueBox = new Phaser.GameObjects.Image(
     scene,
@@ -13,6 +16,11 @@ export function createDialogueBox(scene: Phaser.Scene) {
   return dialogueBox;
 }
 
+/**
+ * Helper function to to generate the typewriter effect used by the dialogue renderer
+ * @param scene the scene on which to place the typewriter effect
+ * @param style the style of the typewriter
+ */
 export function createTypewriter(
   scene: Phaser.Scene,
   style: Phaser.Types.GameObjects.Text.TextStyle

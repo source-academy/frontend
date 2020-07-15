@@ -11,6 +11,9 @@ import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
 import { Character } from './GameCharacterTypes';
 
+/**
+ * Manager for rendering characters in the location.
+ */
 export default class CharacterManager {
   private characterMap: Map<ItemId, Character>;
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;

@@ -24,6 +24,9 @@ import collectibleConstants, {
 import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
 import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 
+/**
+ * Manager for rendering collectibles and achievements popup in the location.
+ */
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
