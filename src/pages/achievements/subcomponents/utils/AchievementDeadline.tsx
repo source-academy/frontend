@@ -1,6 +1,7 @@
-import React from 'react';
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
+
 import { prettifyDeadline } from './DateHelper';
 
 type AchievementDeadlineProps = {

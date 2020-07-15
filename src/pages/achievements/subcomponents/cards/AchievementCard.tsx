@@ -1,11 +1,12 @@
-import React from 'react';
-import Inferencer from '../utils/Inferencer';
 import { Icon } from '@blueprintjs/core';
-import AchievementWeek from '../utils/AchievementWeek';
 import { IconNames } from '@blueprintjs/icons';
+import React from 'react';
+
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
+import AchievementWeek from '../utils/AchievementWeek';
+import Inferencer from '../utils/Inferencer';
 
 type AchievementCardProps = {
   id: number;

@@ -1,5 +1,5 @@
-import React from 'react';
 import { ProgressBar } from '@blueprintjs/core';
+import React from 'react';
 
 type AchievementProgressBarProps = {
   progressFrac: number;

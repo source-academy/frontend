@@ -1,5 +1,6 @@
 import { Intent, Tag } from '@blueprintjs/core';
 import React from 'react';
+
 import { prettifyWeek } from './DateHelper';
 
 type AchievementWeekProps = {

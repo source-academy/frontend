@@ -1,11 +1,11 @@
 import React from 'react';
+import { AchievementAbility, AchievementStatus } from 'src/commons/achievements/AchievementTypes';
 
-import Inferencer from './utils/Inferencer';
-import AchievementWeek from './utils/AchievementWeek';
-import AchievementModalGoal from './modal/AchievementModalGoal';
-import { AchievementStatus, AchievementAbility } from 'src/commons/achievements/AchievementTypes';
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
+import AchievementModalGoal from './modal/AchievementModalGoal';
+import AchievementWeek from './utils/AchievementWeek';
 import { prettifyDate } from './utils/DateHelper';
+import Inferencer from './utils/Inferencer';
 
 type AchievementModalProps = {
   id: number;

@@ -1,12 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
-import { bindActionCreators, Dispatch } from 'redux';
-
-import Achievement, { DispatchProps, StateProps } from './Achievement';
-import { getAchievements } from '../../commons/achievements/AchievementActions';
-import Inferencer from './subcomponents/utils/Inferencer';
-import { OverallState } from '../../commons/application/ApplicationTypes';
 import { withRouter } from 'react-router';
+import { bindActionCreators, Dispatch } from 'redux';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
+
+import { getAchievements } from '../../commons/achievements/AchievementActions';
+import { OverallState } from '../../commons/application/ApplicationTypes';
+import Achievement, { DispatchProps, StateProps } from './Achievement';
+import Inferencer from './subcomponents/utils/Inferencer';
 
 const isTrue = (value?: string): boolean =>
   typeof value === 'string' && value.toUpperCase() === 'TRUE';

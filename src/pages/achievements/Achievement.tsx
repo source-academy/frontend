@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
-
 import { IconNames } from '@blueprintjs/icons';
+import React, { useEffect, useState } from 'react';
 
+import { AchievementAbility, FilterStatus } from '../../commons/achievements/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
-import Inferencer from './subcomponents/utils/Inferencer';
-import AchievementTask from './subcomponents/AchievementTask';
 import AchievementModal from './subcomponents/AchievementModal';
-import { FilterStatus, AchievementAbility } from '../../commons/achievements/AchievementTypes';
 import AchievementOverview from './subcomponents/AchievementOverview';
+import AchievementTask from './subcomponents/AchievementTask';
+import Inferencer from './subcomponents/utils/Inferencer';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;

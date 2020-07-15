@@ -1,21 +1,21 @@
-import {
-  updateAchievements,
-  saveAchievements,
-  getAchievements,
-  removeAchievement,
-  editAchievement,
-  removeGoal
-} from '../AchievementActions';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import {
-  UPDATE_ACHIEVEMENTS,
-  SAVE_ACHIEVEMENTS,
+  editAchievement,
+  getAchievements,
+  removeAchievement,
+  removeGoal,
+  saveAchievements,
+  updateAchievements
+} from '../AchievementActions';
+import {
+  EDIT_ACHIEVEMENT,
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
-  EDIT_ACHIEVEMENT,
-  REMOVE_GOAL
+  REMOVE_GOAL,
+  SAVE_ACHIEVEMENTS,
+  UPDATE_ACHIEVEMENTS
 } from '../AchievementTypes';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 test('updateAchievements generates correct action object', () => {
   const action = updateAchievements([]);

@@ -1,14 +1,14 @@
 import { action } from 'typesafe-actions';
 
 import {
-  UPDATE_ACHIEVEMENTS,
-  SAVE_ACHIEVEMENTS,
-  GET_ACHIEVEMENTS,
-  EDIT_ACHIEVEMENT,
-  AchievementItem,
   AchievementGoal,
+  AchievementItem,
+  EDIT_ACHIEVEMENT,
+  GET_ACHIEVEMENTS,
+  REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  REMOVE_ACHIEVEMENT
+  SAVE_ACHIEVEMENTS,
+  UPDATE_ACHIEVEMENTS
 } from './AchievementTypes';
 
 /*
