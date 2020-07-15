@@ -103,8 +103,6 @@ export default class ObjectPlacement extends Phaser.Scene {
         getStorySimulatorGame().setStorySimState(StorySimState.Default);
         this.scene.start('StorySimulatorMenu');
       },
-      0,
-      0,
       this.soundManager
     );
 

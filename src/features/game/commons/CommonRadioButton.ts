@@ -20,6 +20,17 @@ type RadioButtonConfig = {
   bitmapTextStyle?: BitmapFontStyle;
 };
 
+/**
+ * A container that is contains radio buttons.
+ * Radio buttons only allows user to choose only one of the
+ * predefined set of mutually exclusive options.
+ *
+ * The radio buttons will be arranged horizontally,
+ * with even spacing.
+ *
+ * The radio button's choice will only be displayed when
+ * the given radio button is selected so as to not clutter the display.
+ */
 class CommonRadioButton extends Phaser.GameObjects.Container {
   private soundManager: GameSoundManager | undefined;
   private buttonClickSoundKey: AssetKey;
@@ -33,6 +44,25 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
   private choiceTextConfig: TextConfig;
   private bitmapTextStyle: BitmapFontStyle;
 
+  /**
+   * @param scene scene for the container to attach to
+   * @param choices displayed choices, in string, for the radio buttons.
+   * @param defaultChoiceIdx index of default choice, optional
+   * @param maxXSpace maximum horizontal space to be used by the radio buttons, optional
+   * @param circleDim diameter of the radio button, optional
+   * @param checkedDim diameter of the 'checked' radio button; commonly smaller than circleDim, optional
+   * @param outlineThickness if not 0, apply stroke effect on the radio button, optional
+   * @param choiceTextConfig text config to be applied to the displayed choice.
+   *                         The X, Y are relative to each individual radio button.
+   *                         Using this, we can specify where the choice should appear
+   *                         e.g. on top of the radio button, on the side of radio button, optional
+   * @param bitmapTextStyle style to be applied to the choices, optional
+   * @param x x coordinate of the container, optional
+   * @param y y coordinate of the container, optional
+   * @param soundManager if defined, the radio button will play sounds when clicked, optional
+   * @param buttonClickSoundKey require soundManager to be defined; Sound key to be played when
+   *                            button is clicked, optioanl
+   */
   constructor(
     scene: Phaser.Scene,
     {

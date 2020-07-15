@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, GameSprite, ItemId } from '../commons/CommonTypes';
+import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -11,15 +11,9 @@ import popUpConstants from './GamePopUpConstants';
 
 class GamePopUpManager {
   private currPopUp: Map<GamePosition, Phaser.GameObjects.Container>;
-  private popUpFrame: GameSprite;
 
   constructor() {
     this.currPopUp = new Map<GamePosition, Phaser.GameObjects.Container>();
-    this.popUpFrame = {
-      assetKey: ImageAssets.popUpFrame.key,
-      assetXPos: popUpConstants.rect.x[GamePosition.Middle],
-      assetYPos: popUpConstants.rect.y
-    };
   }
 
   public async displayPopUp(
@@ -37,8 +31,8 @@ class GamePopUpManager {
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position],
-      this.popUpFrame.assetYPos,
-      this.popUpFrame.assetKey
+      popUpConstants.rect.y,
+      ImageAssets.popUpFrame.key
     );
 
     // Get assetKey
@@ -48,7 +42,7 @@ class GamePopUpManager {
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
-      this.popUpFrame.assetYPos + popUpConstants.imgYOffset,
+      popUpConstants.rect.y + popUpConstants.imgYOffset,
       assetKey
     );
     resizeUnderflow(popUpImage, popUpConstants.rect.width, popUpConstants.rect.height);

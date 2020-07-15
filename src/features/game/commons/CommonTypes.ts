@@ -9,12 +9,6 @@ export type BitmapFontStyle = {
   align: number;
 };
 
-export type GameSprite = {
-  assetKey: string;
-  assetXPos: number;
-  assetYPos: number;
-};
-
 export type ItemId = string;
 export type AssetKey = string;
 export type AssetPath = string;

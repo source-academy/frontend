@@ -113,8 +113,6 @@ class ChapterSelect extends Phaser.Scene {
         this.cleanUp();
         this.scene.start('MainMenu');
       },
-      0,
-      0,
       this.soundManager
     );
     this.chapterContainer = this.createChapterContainer();

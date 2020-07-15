@@ -21,15 +21,10 @@ class Achievements extends Phaser.Scene {
   }
 
   private renderMyRoom() {
-    const backButton = new CommonBackButton(
-      this,
-      () => {
-        this.layerManager.clearAllLayers();
-        this.scene.start('MainMenu');
-      },
-      0,
-      0
-    );
+    const backButton = new CommonBackButton(this, () => {
+      this.layerManager.clearAllLayers();
+      this.scene.start('MainMenu');
+    });
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 }

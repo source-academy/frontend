@@ -15,15 +15,21 @@ const backButtonStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
+/**
+ * A container that is a back button that is located
+ * at the top, center of the screen.
+ *
+ * The style and colours are fixed.
+ * It is not recommended to change the position of the container.
+ */
 class CommonBackButton extends Phaser.GameObjects.Container {
-  constructor(
-    scene: Phaser.Scene,
-    callback: any,
-    x?: number,
-    y?: number,
-    soundManager?: GameSoundManager
-  ) {
-    super(scene, x, y);
+  /**
+   * @param scene scene for the button to be attached to
+   * @param callback callback to be executed on onClick
+   * @param soundManager if defined, the button will play sound onHover and onClick
+   */
+  constructor(scene: Phaser.Scene, callback: any, soundManager?: GameSoundManager) {
+    super(scene, 0, 0);
     this.renderBackButton(callback, soundManager);
   }
 

@@ -2,7 +2,7 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
-import { screenSize } from '../../commons/CommonConstants';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -11,7 +11,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
-import modeMenuConstants, { modeBannerRect, modeButtonStyle } from './GameModeMenuConstants';
+import modeMenuConstants, { modeButtonStyle } from './GameModeMenuConstants';
 
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -38,9 +38,9 @@ class GameModeMenu implements IGameUI {
 
     const modeBanner = new Phaser.GameObjects.Image(
       gameManager,
-      modeBannerRect.assetXPos,
-      modeBannerRect.assetYPos,
-      modeBannerRect.assetKey
+      screenCenter.x,
+      screenCenter.y,
+      ImageAssets.modeMenuBanner.key
     );
     modeMenuContainer.add(modeBanner);
 

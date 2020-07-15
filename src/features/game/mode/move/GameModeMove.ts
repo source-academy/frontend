@@ -86,8 +86,6 @@ class GameModeMove implements IGameUI {
         GameGlobalAPI.getInstance().popPhase();
         GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
       },
-      0,
-      0,
       gameManager.soundManager
     );
     moveMenuContainer.add(backButton);
