@@ -1,3 +1,5 @@
+import { action as generateAction } from 'typesafe-actions';
+
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import {
@@ -15,7 +17,6 @@ import {
 } from '../../SourceRecorderTypes';
 import { SourcecastReducer } from '../SourcecastReducer';
 import { UPDATE_SOURCECAST_INDEX } from '../SourcecastTypes';
-import { action as generateAction } from 'typesafe-actions';
 
 describe('SAVE_SOURCECAST_DATA', () => {
   test('saves sourcecastData correctly', () => {

@@ -59,7 +59,6 @@ import {
   timerStart,
   timerStop
 } from '../../../features/sourceRecorder/sourcereel/SourcereelActions';
-
 import Sourcereel, { DispatchProps, StateProps } from './Sourcereel';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

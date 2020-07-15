@@ -1,3 +1,6 @@
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+
 import {
   Button,
   Colors,
@@ -11,11 +14,10 @@ import {
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { ValueFormatterParams } from 'ag-grid-community/dist/lib/entities/colDef';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 import { AgGridReact } from 'ag-grid-react';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
+import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
 import { Role } from '../../../commons/application/ApplicationTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
@@ -37,8 +39,6 @@ import GradingUnsubmitCell from './subcomponents/GradingUnsubmitCell';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import GradingXPCell from './subcomponents/GradingXPCell';
-
-import { GradingNavLinkProps, GradingWorkspaceParams } from 'src/features/grading/GradingTypes';
 
 type GradingProps = DispatchProps & StateProps & RouteComponentProps<GradingWorkspaceParams>;
 

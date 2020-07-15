@@ -1,10 +1,9 @@
 import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import { RouteComponentProps } from 'react-router';
-
-import { Variant } from 'js-slang/dist/types';
 
 import {
   SourceLanguage,

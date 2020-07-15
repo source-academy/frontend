@@ -1,10 +1,8 @@
+/* eslint-disable simple-import-sort/sort */
 import { require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
-import * as React from 'react';
-import AceEditor, { IAceEditorProps } from 'react-ace';
-import { HotKeys } from 'react-hotkeys';
-import sharedbAce from 'sharedb-ace';
+import 'js-slang/dist/editors/ace/theme/source';
 
 import {
   createContext,
@@ -14,8 +12,11 @@ import {
   hasDeclaration
 } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
+import * as React from 'react';
+import AceEditor, { IAceEditorProps } from 'react-ace';
+import { HotKeys } from 'react-hotkeys';
+import sharedbAce from 'sharedb-ace';
 
 import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
 import { Documentation } from '../documentation/Documentation';

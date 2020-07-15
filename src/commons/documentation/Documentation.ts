@@ -1,4 +1,5 @@
 import { SourceDocumentation } from 'js-slang';
+
 import { externalLibraries } from '../application/types/ExternalTypes';
 
 const externalLibrariesDocumentation = {};

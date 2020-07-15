@@ -1,7 +1,8 @@
-import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
-import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
+
+import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
+import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
 import * as React from 'react';
 

@@ -1,9 +1,8 @@
 import { Button, Classes, Divider, MenuItem, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import * as React from 'react';
-
 import { Variant } from 'js-slang/dist/types';
+import * as React from 'react';
 
 import { sourceLanguages, styliseChapter } from '../application/ApplicationTypes';
 import { Chapter } from '../application/types/ChapterTypes';
