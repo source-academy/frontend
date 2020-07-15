@@ -45,8 +45,8 @@ function Achievement(props: DispatchProps & StateProps) {
           };
         case AchievementAbility.EFFORT:
           return {
-            border: '1px solid #d28bf8',
-            boxShadow: '0 0 10px #d28bf8'
+            border: '1px solid #b5ff61',
+            boxShadow: '0 0 10px #b5ff61'
           };
         case AchievementAbility.EXPLORATION:
           return {
