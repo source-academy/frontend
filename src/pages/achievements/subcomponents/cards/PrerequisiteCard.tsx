@@ -21,7 +21,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { title, release, ability, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
   const exp = inferencer.getExp(id);
-  const furthestDeadline = inferencer.getFurthestDeadline(id);
+  const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
   return (
@@ -54,7 +54,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
               <p>{ability}</p>
             </div>
 
-            <AchievementDeadline deadline={furthestDeadline} />
+            <AchievementDeadline deadline={displayDeadline} />
 
             <AchievementExp exp={exp} />
           </div>

@@ -13,7 +13,7 @@ import {
  * @param {number} exp total achievable EXP of the achievement
  * @param {number} progressFrac progress percentage in fraction
  * @param {AchievementStatus} status the achievement status
- * @param {Date | undefined} furthestDeadline furthestDeadline of the achievement and all of its descendant prerequities
+ * @param {Date | undefined} displayDeadline deadline displayed on the achievement card & modal
  * @param {Set<number>} children a set of immediate prerequisites id
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
@@ -23,7 +23,7 @@ class Node {
   exp: number;
   progressFrac: number;
   status: AchievementStatus;
-  furthestDeadline?: Date;
+  displayDeadline?: Date;
   children: Set<number>;
   descendant: Set<number>;
 
@@ -35,7 +35,7 @@ class Node {
     this.exp = this.generateExp(goals);
     this.progressFrac = this.generateProgressFrac(goals);
     this.status = AchievementStatus.ACTIVE; // to be updated after the nodeList is constructed
-    this.furthestDeadline = deadline;
+    this.displayDeadline = deadline;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
   }
@@ -211,8 +211,8 @@ class Inferencer {
     return this.nodeList.get(id)!.status;
   }
 
-  public getFurthestDeadline(id: number) {
-    return this.nodeList.get(id)!.furthestDeadline;
+  public getDisplayDeadline(id: number) {
+    return this.nodeList.get(id)!.displayDeadline;
   }
 
   public isImmediateChild(id: number, childId: number) {
@@ -291,7 +291,7 @@ class Inferencer {
     this.constructNodeList();
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
-      this.generateFurthestDeadline(node);
+      this.generateDisplayDeadline(node);
       this.generateStatus(node);
     });
   }
@@ -318,19 +318,23 @@ class Inferencer {
     }
   }
 
-  // Set the node's furthest deadline by comparing with all descendants' deadlines
-  private generateFurthestDeadline(node: Node) {
+  // Set the node's display deadline by comparing with all descendants' deadlines
+  private generateDisplayDeadline(node: Node) {
+    const now = new Date();
+
     // Comparator of two deadlines
     const compareDeadlines = (
-      furthestDeadline: Date | undefined,
+      displayDeadline: Date | undefined,
       currentDeadline: Date | undefined
     ) => {
       if (currentDeadline === undefined) {
-        return furthestDeadline;
-      } else if (furthestDeadline === undefined) {
+        return displayDeadline;
+      } else if (displayDeadline === undefined) {
         return currentDeadline;
       } else {
-        return furthestDeadline >= currentDeadline ? furthestDeadline : currentDeadline;
+        return now < currentDeadline && currentDeadline <= displayDeadline
+          ? currentDeadline
+          : displayDeadline;
       }
     };
 
@@ -342,12 +346,12 @@ class Inferencer {
     }
 
     // Reduces the temporary array to a single Date value
-    node.furthestDeadline = descendantDeadlines.reduce(compareDeadlines, node.furthestDeadline);
+    node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
   }
 
   private generateStatus(node: Node) {
     const now = new Date();
-    const deadline = node.furthestDeadline;
+    const deadline = node.displayDeadline;
     if (deadline !== undefined && deadline.getTime() < now.getTime()) {
       // deadline elapsed
       if (node.progressFrac === 0) {

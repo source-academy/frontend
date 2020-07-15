@@ -24,7 +24,7 @@ function AchievementModal(props: AchievementModalProps) {
 
   const status = inferencer.getStatus(id);
   const awardedExp = inferencer.getStudentExp(id);
-  const deadline = inferencer.getFurthestDeadline(id);
+  const deadline = inferencer.getDisplayDeadline(id);
 
   // Entire modal background
   const handleBackground = (ability: AchievementAbility) => {

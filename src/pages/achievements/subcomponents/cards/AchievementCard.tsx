@@ -31,7 +31,7 @@ function AchievementCard(props: AchievementCardProps) {
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
   const exp = inferencer.getExp(id);
-  const furthestDeadline = inferencer.getFurthestDeadline(id);
+  const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
   const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
@@ -67,7 +67,7 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="ability">
             <p>{ability}</p>
           </div>
-          <AchievementDeadline deadline={furthestDeadline} />
+          <AchievementDeadline deadline={displayDeadline} />
           <AchievementExp exp={exp} />
         </div>
 
