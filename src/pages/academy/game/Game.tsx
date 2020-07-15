@@ -12,7 +12,6 @@ import {
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
   const [isResetThere, setIsResetThere] = React.useState(false);
-  const [sessionLoaded, setSessionLoaded] = React.useState(false);
 
   React.useEffect(() => {
     createSourceAcademyGame();
@@ -22,10 +21,6 @@ function Game() {
   }, []);
 
   React.useEffect(() => {
-    if (sessionLoaded || !session) {
-      return;
-    }
-
     getSourceAcademyGame().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
@@ -36,9 +31,7 @@ function Game() {
     if (session.name === 'Test Student') {
       setIsResetThere(true);
     }
-
-    setSessionLoaded(true);
-  }, [sessionLoaded, session]);
+  }, [session]);
 
   return (
     <>
