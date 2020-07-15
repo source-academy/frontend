@@ -30,7 +30,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
-  const exp = inferencer.getExp(id);
+  const displayExp = inferencer.getDisplayExp(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
@@ -68,7 +68,7 @@ function AchievementCard(props: AchievementCardProps) {
             <p>{ability}</p>
           </div>
           <AchievementDeadline deadline={displayDeadline} />
-          <AchievementExp exp={exp} />
+          <AchievementExp exp={displayExp} />
         </div>
 
         <AchievementProgressBar

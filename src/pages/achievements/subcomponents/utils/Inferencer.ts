@@ -10,7 +10,7 @@ import {
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
- * @param {number} exp total achievable EXP of the achievement
+ * @param {number} displayExp total achievable EXP of the achievement
  * @param {number} progressFrac progress percentage in fraction
  * @param {AchievementStatus} status the achievement status
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card & modal
@@ -20,7 +20,7 @@ import {
 class Node {
   achievement: AchievementItem;
   dataIdx: number;
-  exp: number;
+  displayExp: number;
   progressFrac: number;
   status: AchievementStatus;
   displayDeadline?: Date;
@@ -32,7 +32,7 @@ class Node {
 
     this.achievement = achievement;
     this.dataIdx = dataIdx;
-    this.exp = this.generateExp(goals);
+    this.displayExp = this.generateDisplayExp(goals);
     this.progressFrac = this.generateProgressFrac(goals);
     this.status = AchievementStatus.ACTIVE; // to be updated after the nodeList is constructed
     this.displayDeadline = deadline;
@@ -40,14 +40,14 @@ class Node {
     this.descendant = new Set(prerequisiteIds);
   }
 
-  private generateExp(goals: AchievementGoal[]) {
+  private generateDisplayExp(goals: AchievementGoal[]) {
     return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
   }
 
   private generateProgressFrac(goals: AchievementGoal[]) {
     const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
-    return Math.min(progress / this.exp, 1);
+    return Math.min(progress / this.displayExp, 1);
   }
 }
 
@@ -175,8 +175,8 @@ class Inferencer {
     this.normalizePositions();
   }
 
-  public getExp(id: number) {
-    return this.nodeList.get(id)!.exp;
+  public getDisplayExp(id: number) {
+    return this.nodeList.get(id)!.displayExp;
   }
 
   public getStudentExp(id: number) {
@@ -189,7 +189,7 @@ class Inferencer {
   public getTotalExp() {
     const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
 
-    return publishedTask.reduce((totalExp, node) => totalExp + node.exp, 0);
+    return publishedTask.reduce((totalExp, node) => totalExp + node.displayExp, 0);
   }
 
   // total EXP earned by the student
