@@ -1,3 +1,14 @@
+/**
+ * Resize the obj display size. Preserves the ratio of image.
+ * This function can resize purely by height, i.e. resize width will 
+ * be determined by using image dimension, if width is 0.
+ * 
+ * Will cause error if both width and height argument is 0.
+ * 
+ * @param obj obj to be resized 
+ * @param width width
+ * @param height height
+ */
 export function resize(
   obj: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
   width: number,

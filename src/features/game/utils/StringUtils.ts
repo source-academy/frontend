@@ -1,6 +1,10 @@
 export default class StringUtils {
-  /*
+  
+  /**
    * Splits text into paragraphs containing header and body
+   * 
+   * @param lines lines to be processed
+   * @returns Array<[string, string[]]>
    */
   public static splitToParagraph(lines: string[]) {
     const paragraphHeaderAndBodyLines: [string, string[]][] = [];
@@ -20,9 +24,15 @@ export default class StringUtils {
     return paragraphHeaderAndBodyLines;
   }
 
-  /*
+  /**
    * Given an array of lines, returns a Map where the keys are the headings
    * and the value are the lines below each heading.
+   * 
+   * @param lines lines to be processed
+   * @param isHeaderFunction predicate that determines the header syntax. This 
+   *                         will be ran against every line, so take into account if you want 
+   *                         to detect header in the middle of line/in between lines.
+   * @returns {Map<string, string>}
    */
   public static mapByHeader(
     lines: string[],
@@ -45,9 +55,15 @@ export default class StringUtils {
     return map;
   }
 
-  /*
+  /**
+   * TODO: Clarify
    * Split using punctuation, trim, and limit split to number of characters
-   * Example: "cat,dog,   cow, goat" with limit 2 -> ["cat", "dog", "cow, goat"]
+   * e.g "cat,dog,   cow, goat" with limit 2 -> ["cat", "dog", "cow, goat"]
+   * 
+   * @param line line to be split
+   * @param sep separator to be used
+   * @param limit
+   * @param {Array<string>}
    */
   public static splitByChar(line: string, sep: string, limit?: number): string[] {
     if (limit) {
@@ -59,8 +75,12 @@ export default class StringUtils {
     }
   }
 
-  /*
-   * Splits text into string array and removes lines with only newlines
+  /**
+   * Splits text into string array and removes 
+   * lines with only newlines.
+   * 
+   * @param text text to split 
+   * @returns {Array<string>}
    */
   public static splitToLines(text: string): string[] {
     return text
@@ -69,16 +89,23 @@ export default class StringUtils {
       .filter(line => line !== '');
   }
 
-  /*
-   * Capitalise first letter
+  /**
+   * Capitalise first letter.
+   * 
+   * @param word text to be capitalized
+   * @returns {string} 
    */
   public static capitalize(word: string) {
     return word.charAt(0).toUpperCase() + word.slice(1);
   }
 
-  /*
-   * Turns snake case to capitalized case
-   * Example: snake_case_to_capitalized -> Snake Case To Capitalized
+  /**
+   * Turns snake case to capitalized case.
+   * Only accounts for letters, i.e. numbers and symbols will be discarded.
+   * e.g. snake_case_to_capitalized -> Snake Case To Capitalized
+   * 
+   * @param name text to be capitalized
+   * @returns {string}
    */
   public static toCapitalizedWords(name: string) {
     const words = name.match(/[A-Za-z][a-z]*/g) || [];

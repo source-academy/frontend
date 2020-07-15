@@ -1,11 +1,25 @@
-import { loadText } from 'src/features/game/utils/LoaderUtils';
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import TextAssets from '../assets/TextAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
+import { loadText } from '../utils/LoaderUtils';
 import Parser from '../parser/Parser';
 import { loadData } from '../save/GameSaveRequests';
 
+/**
+ * Starts a new checkpoint with the given chapter number 
+ * and checkpoint number. The chapter/checkpoint file 
+ * will also be appended with the default checkpoint text.
+ * 
+ * As this function also fetches students information,
+ * this method should be 'await'-ed in order to function properly. 
+ * 
+ * @param scene previous scene that calls this function
+ * @param chapterDetails mapping to be used to determine the chapter/checkpoint file
+ * @param continueGame if true, will load the last checkpoint. Else, restart the chapter.
+ * @param chapterNum chapter number
+ * @param checkpointNum checkpoint number
+ */
 export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,
   chapterDetails: GameChapter[],
