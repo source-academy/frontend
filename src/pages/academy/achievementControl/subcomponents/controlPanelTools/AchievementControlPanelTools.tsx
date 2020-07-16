@@ -1,11 +1,11 @@
 import React from 'react';
 
-import PrerequisiteDeleter from './controlPanelUtils/PrerequisiteDeleter';
-import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
 import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
-import TaskDeleter from './controlPanelUtils/TaskDeleter';
 import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
+import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
+import PrerequisiteDeleter from './controlPanelUtils/PrerequisiteDeleter';
 import PrerequisitePositionEditor from './controlPanelUtils/PrerequisitePositionEditor';
+import TaskDeleter from './controlPanelUtils/TaskDeleter';
 import TaskPositionInserter from './controlPanelUtils/TaskPositionInserter';
 
 type AchievementControlPanelToolsProps = {

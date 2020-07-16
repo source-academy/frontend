@@ -1,21 +1,14 @@
 import { action } from 'typesafe-actions';
 
 import {
-  UPDATE_ACHIEVEMENTS,
-  SAVE_ACHIEVEMENTS,
-  GET_ACHIEVEMENTS,
-  EDIT_ACHIEVEMENT,
-  AchievementItem,
   AchievementGoal,
+  AchievementItem,
+  EDIT_ACHIEVEMENT,
+  GET_ACHIEVEMENTS,
+  REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  REMOVE_ACHIEVEMENT
+  SAVE_ACHIEVEMENTS
 } from './AchievementTypes';
-
-/*
-  Note: This Updates the Achievements in the Backend. 
-*/
-export const updateAchievements = (achievements: AchievementItem[]) =>
-  action(UPDATE_ACHIEVEMENTS, achievements);
 
 /*
   Note: This Updates the store for our Achievements in the frontend. 

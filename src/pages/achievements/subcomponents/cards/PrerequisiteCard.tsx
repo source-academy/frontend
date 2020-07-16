@@ -2,8 +2,8 @@ import React from 'react';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
-import AchievementWeek from '../utils/AchievementWeek';
 import AchievementProgressBar from '../utils/AchievementProgressBar';
+import AchievementWeek from '../utils/AchievementWeek';
 import Inferencer from '../utils/Inferencer';
 
 type PrerequisiteCardProps = {

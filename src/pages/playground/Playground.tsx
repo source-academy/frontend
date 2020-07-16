@@ -1,12 +1,11 @@
 import { Classes } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
+import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
-
-import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
-import { Variant } from 'js-slang/dist/types';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -16,9 +15,9 @@ import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearB
 import { ControlBarEvalButton } from '../../commons/controlBar/ControlBarEvalButton';
 import { ControlBarExecutionTime } from '../../commons/controlBar/ControlBarExecutionTime';
 import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/ControlBarExternalLibrarySelect';
+import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
-import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -355,7 +354,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction
+      id: SideContentType.introduction,
+      toSpawn: () => true
     }),
     [props.sourceChapter, props.sourceVariant]
   );
@@ -395,7 +395,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         label: 'Substituter',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer
+        id: SideContentType.substVisualizer,
+        toSpawn: () => true
       });
     }
     return tabs;
@@ -486,7 +487,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       defaultSelectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
-      tabs
+      tabs,
+      workspaceLocation: 'playground'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -506,33 +508,38 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
+  toSpawn: () => true
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />
+  body: <SideContentVideoDisplay />,
+  toSpawn: () => true
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <SideContentFaceapiDisplay />
+  body: <SideContentFaceapiDisplay />,
+  toSpawn: () => true
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
+  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
+  toSpawn: () => true
 };
 
 export default Playground;

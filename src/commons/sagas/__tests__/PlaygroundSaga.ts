@@ -17,6 +17,8 @@ import { showSuccessMessage, showWarningMessage } from '../../utils/Notification
 import PlaygroundSaga, { shortenURLRequest } from '../PlaygroundSaga';
 
 describe('Playground saga tests', () => {
+  const errMsg = 'Something went wrong trying to create the link.';
+
   test('puts changeQueryString action with undefined argument when passed the default value', () => {
     return expectSaga(PlaygroundSaga)
       .withState(defaultState)
@@ -120,10 +122,7 @@ describe('Playground saga tests', () => {
         payload: ''
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
-      .not.call(
-        showWarningMessage,
-        'Something went wrong trying to shorten the url. Please try again'
-      )
+      .not.call(showWarningMessage, errMsg)
       .not.call(showSuccessMessage, mockResp.message)
       .put(updateShortURL(mockResp.shorturl))
       .silentRun();
@@ -175,10 +174,7 @@ describe('Playground saga tests', () => {
         payload: 'tester'
       })
       .provide([[call(shortenURLRequest, queryString, 'tester'), mockResp]])
-      .not.call(
-        showWarningMessage,
-        'Something went wrong trying to shorten the url. Please try again'
-      )
+      .not.call(showWarningMessage, errMsg)
       .not.call(showSuccessMessage, mockResp.message)
       .put(updateShortURL(mockResp.shorturl))
       .silentRun();
@@ -214,7 +210,7 @@ describe('Playground saga tests', () => {
         payload: ''
       })
       .provide([[call(shortenURLRequest, queryString, ''), null]])
-      .call(showWarningMessage, 'Something went wrong trying to shorten the url. Please try again')
+      .call(showWarningMessage, errMsg)
       .put(updateShortURL('ERROR'))
       .silentRun();
   });
@@ -268,10 +264,7 @@ describe('Playground saga tests', () => {
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .call(showSuccessMessage, mockResp.message)
-      .not.call(
-        showWarningMessage,
-        'Something went wrong trying to shorten the url. Please try again'
-      )
+      .not.call(showWarningMessage, errMsg)
       .put(updateShortURL(mockResp.shorturl))
       .silentRun();
   });
@@ -315,6 +308,46 @@ describe('Playground saga tests', () => {
       })
       .provide([[call(shortenURLRequest, queryString, ''), mockResp]])
       .call(showWarningMessage, mockResp.message)
+      .put(updateShortURL('ERROR'))
+      .silentRun();
+  });
+
+  test('returns errMsg when API call timesout', () => {
+    const dummyEditorValue: string = '1 + 1;';
+    const dummyState: OverallState = {
+      ...defaultState,
+      workspaces: {
+        ...defaultWorkspaceManager,
+        playground: {
+          ...createDefaultWorkspace('playground'),
+          externalLibrary: ExternalLibraryName.NONE,
+          editorValue: dummyEditorValue,
+          usingSubst: false
+        }
+      }
+    };
+    const queryString = createQueryString(dummyEditorValue, dummyState);
+    const nxState: OverallState = {
+      ...dummyState,
+      playground: {
+        queryString,
+        ...dummyState.playground
+      }
+    };
+
+    return expectSaga(PlaygroundSaga)
+      .withState(nxState)
+      .dispatch({
+        type: SHORTEN_URL,
+        payload: ''
+      })
+      .provide({
+        race: () => ({
+          result: undefined,
+          hasTimedOut: true
+        })
+      })
+      .call(showWarningMessage, errMsg)
       .put(updateShortURL('ERROR'))
       .silentRun();
   });

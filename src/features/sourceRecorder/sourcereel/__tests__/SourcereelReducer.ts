@@ -1,3 +1,5 @@
+import { action as generateAction } from 'typesafe-actions';
+
 import { defaultWorkspaceManager } from '../../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../../commons/application/types/ExternalTypes';
 import { CodeDelta, Input, PlaybackData, RecordingStatus } from '../../SourceRecorderTypes';
@@ -11,7 +13,6 @@ import {
   TIMER_START,
   TIMER_STOP
 } from '../SourcereelTypes';
-import { action as generateAction } from 'typesafe-actions';
 
 describe('RECORD_INIT', () => {
   test('records editorInitValue correctly', () => {

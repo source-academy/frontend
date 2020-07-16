@@ -1,8 +1,8 @@
 import { mount } from 'enzyme';
 import React from 'react';
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import EditableAchievementGoal from '../EditableAchievementGoal';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 const mockProps = {
   goal: mockAchievements[0].goals[0],

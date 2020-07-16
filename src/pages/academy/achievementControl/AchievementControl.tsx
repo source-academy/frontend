@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from 'react';
+
+import { AchievementGoal, AchievementItem } from '../../../commons/achievements/AchievementTypes';
+import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
-
-import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
-import { AchievementItem, AchievementGoal } from '../../../commons/achievements/AchievementTypes';
 
 export type DispatchProps = {
   handleFetchAchievements: () => void;
   handleSaveAchievements: (achievements: AchievementItem[]) => void;
-  handleUpdateAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
   handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
   handleRemoveAchievement: (achievement: AchievementItem) => void;
@@ -22,7 +21,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const {
     inferencer,
     handleFetchAchievements,
-    handleUpdateAchievements,
     handleSaveAchievements,
     handleEditAchievement,
     handleRemoveGoal,
@@ -47,7 +45,9 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const removeUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges - 1);
 
   const updateAchievements = () => {
-    handleUpdateAchievements(inferencer.getAchievements());
+    for (const achievement of inferencer.getAchievements()) {
+      editAchievement(achievement);
+    }
   };
 
   const editAchievement = (achievement: AchievementItem) => {

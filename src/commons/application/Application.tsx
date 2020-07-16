@@ -1,8 +1,8 @@
+import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-
-import { Variant } from 'js-slang/dist/types';
+import AchievementContainer from 'src/pages/achievements/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
@@ -17,7 +17,6 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-import AchievementContainer from 'src/pages/achievements/AchievementContainer';
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {

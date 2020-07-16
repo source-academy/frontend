@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
+import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
-import Inferencer from '../../../achievements/subcomponents/utils/Inferencer';
 
 type AchievementEditorProps = {
   inferencer: Inferencer;

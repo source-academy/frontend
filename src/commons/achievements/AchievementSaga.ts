@@ -1,22 +1,20 @@
 import { SagaIterator } from 'redux-saga';
-import { takeEvery, select, put, call } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { actions } from '../utils/ActionsHelper';
-import {
-  GET_ACHIEVEMENTS,
-  UPDATE_ACHIEVEMENTS,
-  EDIT_ACHIEVEMENT,
-  REMOVE_GOAL,
-  REMOVE_ACHIEVEMENT
-} from './AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import {
-  updateAchievements,
-  getAchievements,
   editAchievement,
-  removeGoal,
-  removeAchievement
+  getAchievements,
+  removeAchievement,
+  removeGoal
 } from '../sagas/RequestsSaga';
+import { actions } from '../utils/ActionsHelper';
+import {
+  EDIT_ACHIEVEMENT,
+  GET_ACHIEVEMENTS,
+  REMOVE_ACHIEVEMENT,
+  REMOVE_GOAL
+} from './AchievementTypes';
 
 export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(GET_ACHIEVEMENTS, function* () {
@@ -30,25 +28,6 @@ export default function* AchievementSaga(): SagaIterator {
     if (achievements) {
       yield put(actions.saveAchievements(achievements));
     }
-  });
-
-  yield takeEvery(UPDATE_ACHIEVEMENTS, function* (
-    action: ReturnType<typeof actions.updateAchievements>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const achievements = action.payload;
-
-    const resp = yield call(updateAchievements, achievements, tokens);
-
-    if (!resp) {
-      return;
-    }
-
-    yield put(actions.saveAchievements(achievements));
   });
 
   yield takeEvery(EDIT_ACHIEVEMENT, function* (action: ReturnType<typeof actions.editAchievement>) {

@@ -1,30 +1,19 @@
-import {
-  updateAchievements,
-  saveAchievements,
-  getAchievements,
-  removeAchievement,
-  editAchievement,
-  removeGoal
-} from '../AchievementActions';
-
-import {
-  UPDATE_ACHIEVEMENTS,
-  SAVE_ACHIEVEMENTS,
-  GET_ACHIEVEMENTS,
-  REMOVE_ACHIEVEMENT,
-  EDIT_ACHIEVEMENT,
-  REMOVE_GOAL
-} from '../AchievementTypes';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
-test('updateAchievements generates correct action object', () => {
-  const action = updateAchievements([]);
-
-  expect(action).toEqual({
-    type: UPDATE_ACHIEVEMENTS,
-    payload: []
-  });
-});
+import {
+  editAchievement,
+  getAchievements,
+  removeAchievement,
+  removeGoal,
+  saveAchievements
+} from '../AchievementActions';
+import {
+  EDIT_ACHIEVEMENT,
+  GET_ACHIEVEMENTS,
+  REMOVE_ACHIEVEMENT,
+  REMOVE_GOAL,
+  SAVE_ACHIEVEMENTS
+} from '../AchievementTypes';
 
 test('saveAchievements generates correct action object', () => {
   const action = saveAchievements([]);

@@ -1,7 +1,7 @@
 import {
+  AchievementGoal,
   AchievementItem,
   AchievementStatus,
-  AchievementGoal,
   FilterStatus
 } from 'src/commons/achievements/AchievementTypes';
 

@@ -17,16 +17,16 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
+import {
+  AchievementAbility,
+  AchievementGoal,
+  AchievementItem
+} from '../achievements/AchievementTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
 import Constants from '../utils/Constants';
 import { showWarningMessage } from '../utils/NotificationsHelper';
-import {
-  AchievementItem,
-  AchievementAbility,
-  AchievementGoal
-} from '../achievements/AchievementTypes';
 
 /**
  * @property accessToken - backend access token
@@ -200,7 +200,7 @@ export async function editAchievement(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/update/`, 'POST', {
+  const resp = await request(`achievements/${achievement.id}`, 'POST', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -219,7 +219,7 @@ export async function removeAchievement(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -239,7 +239,7 @@ export async function removeGoal(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}/goals/${goal.goalId}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { goal: goal, achievement: achievement },
     noHeaderAccept: true,
