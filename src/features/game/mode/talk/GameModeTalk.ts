@@ -11,7 +11,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos } from '../../utils/StyleUtils';
+import { calcTableFormatPosRowWise } from '../../utils/StyleUtils';
 import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
 
 /**
@@ -35,7 +35,7 @@ class GameModeTalk implements IGameUI {
 
     const talkTopics = this.getLatestTalkTopics();
     const buttons = this.getTalkTopicButtons(talkTopics);
-    const buttonPositions = calcTableFormatPos({
+    const buttonPositions = calcTableFormatPosRowWise({
       numOfItems: buttons.length,
       maxYSpace: talkButtonYSpace
     });

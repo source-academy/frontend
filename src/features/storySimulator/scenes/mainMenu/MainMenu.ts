@@ -9,7 +9,7 @@ import Parser from 'src/features/game/parser/Parser';
 import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
-import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
+import { calcTableFormatPosRowWise } from 'src/features/game/utils/StyleUtils';
 import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
@@ -56,7 +56,7 @@ class MainMenu extends Phaser.Scene {
     const optionsContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const buttons = this.getOptionButtons();
 
-    const buttonPositions = calcTableFormatPos({
+    const buttonPositions = calcTableFormatPosRowWise({
       numOfItems: buttons.length,
       maxXSpace: mainMenuConstants.optButtonsXSpace,
       maxYSpace: mainMenuConstants.optButtonsYSpace,
