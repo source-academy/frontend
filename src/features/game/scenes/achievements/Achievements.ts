@@ -85,11 +85,10 @@ class Achievements extends Phaser.Scene {
 
     let newXPos = this.backgroundTile.x;
     if (this.isScrollRight) {
-      newXPos -= 20;
+      newXPos -= AchievementConstants.defaultScrollSpeed;
     } else if (this.isScrollLeft) {
-      newXPos += 20;
+      newXPos += AchievementConstants.defaultScrollSpeed;
     }
-    // TODO: Find scroll lim
     newXPos = limitNumber(newXPos, -this.scrollLim, 0);
 
     this.backgroundTile.tilePositionX = newXPos;
@@ -121,9 +120,7 @@ class Achievements extends Phaser.Scene {
     if (this.achievementsContainer) this.achievementsContainer.destroy();
 
     this.achievementsContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const achievements = this.getAchievements(
-      this.userStateManager.getList(UserStateTypes.achievements)
-    );
+    const achievements = this.getAchievements();
     const achievementsPos = calcTableFormatPosColWise({
       numOfItems: achievements.length,
       maxXSpace: this.scrollLim
@@ -137,7 +134,8 @@ class Achievements extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Objects, this.achievementsContainer);
   }
 
-  private getAchievements(achievements: string[]) {
+  private getAchievements() {
+    const achievements = this.userStateManager.getList(UserStateTypes.achievements);
     // TODO: Find the mapping to the asset, attach callbacks, etc
     return achievements;
   }
