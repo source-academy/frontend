@@ -9,6 +9,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameSoundManager from '../sound/GameSoundManager';
+import { UserStateTypes } from '../state/GameStateTypes';
 import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
 import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
@@ -344,10 +345,10 @@ class GameCollectiblesManager implements IGameUI {
     let itemList: string[];
     switch (this.currActivePage) {
       case CollectiblePage.Achievements:
-        itemList = this.getUserStateManager().getList('achievements');
+        itemList = this.getUserStateManager().getList(UserStateTypes.achievements);
         break;
       case CollectiblePage.Collectibles:
-        itemList = this.getUserStateManager().getList('collectibles');
+        itemList = this.getUserStateManager().getList(UserStateTypes.collectibles);
         break;
       default:
         itemList = [];

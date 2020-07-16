@@ -9,7 +9,7 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
 import { userStateStyle } from './GameStateConstants';
-import { UserState } from './GameStateTypes';
+import { UserState, UserStateTypes } from './GameStateTypes';
 
 export default class GameUserStateManager {
   private userState: UserState;
@@ -19,15 +19,19 @@ export default class GameUserStateManager {
   }
 
   public initialise(userSaveState: UserSaveState) {
-    this.userState.collectibles = userSaveState.collectibles || [];
+    this.userState.collectibles = userSaveState.collectibles;
   }
 
-  public addToList(listName: string, id: string): void {
-    this.userState[listName].push(id);
+  public addToList(listName: UserStateTypes, id: string): void {
+    if (!this.userState[listName]) this.userState[listName] = [];
+
+    this.userState[listName]!.push(id);
   }
 
-  public getList(listName: string): string[] {
-    return this.userState[listName];
+  public getList(listName: UserStateTypes): string[] {
+    if (!this.userState[listName]) this.userState[listName] = [];
+
+    return this.userState[listName]!;
   }
 
   public async doesIdExistInList(listName: string, id: string): Promise<boolean> {

@@ -5,10 +5,14 @@ export enum GameStateStorage {
   ChecklistState = 'ChecklistState'
 }
 
+export enum UserStateTypes {
+  collectibles = 'collectibles',
+  assessments = 'assessments',
+  achievements = 'achievements'
+}
+
 export type UserState = {
-  collectibles?: string[];
-  assessments?: string[];
-  achievements?: string[];
+  [K in UserStateTypes]?: string[];
 };
 
 export type StateObserver = {
