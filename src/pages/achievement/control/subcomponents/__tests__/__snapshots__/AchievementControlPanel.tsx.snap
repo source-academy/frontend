@@ -40,11 +40,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             Core
                           </p>
                         </div>
-                        <AchievementDeadline deadline={{...}}>
+                        <AchievementDeadline deadline={{...}} ability=\\"Core\\">
                           <div className=\\"deadline\\">
-                            <Blueprint3.Icon icon=\\"stopwatch\\">
+                            <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                               <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                                <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                   <desc>
                                     stopwatch
                                   </desc>
@@ -52,9 +52,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                                 </svg>
                               </span>
                             </Blueprint3.Icon>
-                            <p>
-                              5 Weeks
-                            </p>
+                            <span style={{...}}>
+                              <p>
+                                5 Weeks
+                              </p>
+                            </span>
                           </div>
                         </AchievementDeadline>
                         <AchievementExp exp={600}>
@@ -230,11 +232,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             Community
                           </p>
                         </div>
-                        <AchievementDeadline deadline={[undefined]}>
+                        <AchievementDeadline deadline={[undefined]} ability=\\"Community\\">
                           <div className=\\"deadline\\">
-                            <Blueprint3.Icon icon=\\"stopwatch\\">
+                            <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                               <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                                <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                   <desc>
                                     stopwatch
                                   </desc>
@@ -242,9 +244,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                                 </svg>
                               </span>
                             </Blueprint3.Icon>
-                            <p>
-                              Unlimited
-                            </p>
+                            <span style={{...}}>
+                              <p>
+                                Unlimited
+                              </p>
+                            </span>
                           </div>
                         </AchievementDeadline>
                         <AchievementExp exp={100}>
@@ -421,11 +425,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             Effort
                           </p>
                         </div>
-                        <AchievementDeadline deadline={{...}}>
+                        <AchievementDeadline deadline={{...}} ability=\\"Effort\\">
                           <div className=\\"deadline\\">
-                            <Blueprint3.Icon icon=\\"stopwatch\\">
+                            <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                               <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                                <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                   <desc>
                                     stopwatch
                                   </desc>
@@ -433,9 +437,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                                 </svg>
                               </span>
                             </Blueprint3.Icon>
-                            <p>
-                              5 Weeks
-                            </p>
+                            <span style={{...}}>
+                              <p>
+                                5 Weeks
+                              </p>
+                            </span>
                           </div>
                         </AchievementDeadline>
                         <AchievementExp exp={400}>
@@ -623,11 +629,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             Core
                           </p>
                         </div>
-                        <AchievementDeadline deadline={{...}}>
+                        <AchievementDeadline deadline={{...}} ability=\\"Core\\">
                           <div className=\\"deadline\\">
-                            <Blueprint3.Icon icon=\\"stopwatch\\">
+                            <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                               <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                                <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                   <desc>
                                     stopwatch
                                   </desc>
@@ -635,9 +641,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                                 </svg>
                               </span>
                             </Blueprint3.Icon>
-                            <p>
-                              6 Weeks
-                            </p>
+                            <span style={{...}}>
+                              <p>
+                                6 Weeks
+                              </p>
+                            </span>
                           </div>
                         </AchievementDeadline>
                         <AchievementExp exp={600}>
@@ -802,11 +810,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             Exploration
                           </p>
                         </div>
-                        <AchievementDeadline deadline={[undefined]}>
+                        <AchievementDeadline deadline={[undefined]} ability=\\"Exploration\\">
                           <div className=\\"deadline\\">
-                            <Blueprint3.Icon icon=\\"stopwatch\\">
+                            <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                               <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                                <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                                <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                                   <desc>
                                     stopwatch
                                   </desc>
@@ -814,9 +822,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                                 </svg>
                               </span>
                             </Blueprint3.Icon>
-                            <p>
-                              Unlimited
-                            </p>
+                            <span style={{...}}>
+                              <p>
+                                Unlimited
+                              </p>
+                            </span>
                           </div>
                         </AchievementDeadline>
                         <AchievementExp exp={100}>

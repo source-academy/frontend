@@ -54,7 +54,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
               <p>{ability}</p>
             </div>
 
-            <AchievementDeadline deadline={displayDeadline} />
+            <AchievementDeadline deadline={displayDeadline} ability={ability} />
 
             <AchievementExp exp={displayExp} />
           </div>

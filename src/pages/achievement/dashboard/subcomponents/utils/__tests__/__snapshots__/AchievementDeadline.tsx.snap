@@ -3,9 +3,9 @@
 exports[`AchievementDeadline component renders correctly 1`] = `
 "<AchievementDeadline deadline={{...}}>
   <div className=\\"deadline\\">
-    <Blueprint3.Icon icon=\\"stopwatch\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
       <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+        <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
           <desc>
             stopwatch
           </desc>
@@ -13,9 +13,11 @@ exports[`AchievementDeadline component renders correctly 1`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <p>
-      Expired
-    </p>
+    <span style={{...}}>
+      <p>
+        Expired
+      </p>
+    </span>
   </div>
 </AchievementDeadline>"
 `;
@@ -23,9 +25,9 @@ exports[`AchievementDeadline component renders correctly 1`] = `
 exports[`AchievementDeadline component renders correctly 2`] = `
 "<AchievementDeadline deadline={{...}}>
   <div className=\\"deadline\\">
-    <Blueprint3.Icon icon=\\"stopwatch\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
       <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+        <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
           <desc>
             stopwatch
           </desc>
@@ -33,9 +35,11 @@ exports[`AchievementDeadline component renders correctly 2`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <p>
-      2 Hours
-    </p>
+    <span style={{...}}>
+      <p>
+        2 Hours
+      </p>
+    </span>
   </div>
 </AchievementDeadline>"
 `;
@@ -43,9 +47,9 @@ exports[`AchievementDeadline component renders correctly 2`] = `
 exports[`AchievementDeadline component renders correctly 3`] = `
 "<AchievementDeadline deadline={{...}}>
   <div className=\\"deadline\\">
-    <Blueprint3.Icon icon=\\"stopwatch\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
       <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+        <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
           <desc>
             stopwatch
           </desc>
@@ -53,9 +57,11 @@ exports[`AchievementDeadline component renders correctly 3`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <p>
-      2 Days
-    </p>
+    <span style={{...}}>
+      <p>
+        2 Days
+      </p>
+    </span>
   </div>
 </AchievementDeadline>"
 `;
@@ -63,9 +69,9 @@ exports[`AchievementDeadline component renders correctly 3`] = `
 exports[`AchievementDeadline component renders correctly 4`] = `
 "<AchievementDeadline deadline={{...}}>
   <div className=\\"deadline\\">
-    <Blueprint3.Icon icon=\\"stopwatch\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
       <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+        <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
           <desc>
             stopwatch
           </desc>
@@ -73,9 +79,11 @@ exports[`AchievementDeadline component renders correctly 4`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <p>
-      2 Weeks
-    </p>
+    <span style={{...}}>
+      <p>
+        2 Weeks
+      </p>
+    </span>
   </div>
 </AchievementDeadline>"
 `;
@@ -83,9 +91,9 @@ exports[`AchievementDeadline component renders correctly 4`] = `
 exports[`AchievementDeadline component renders correctly 5`] = `
 "<AchievementDeadline deadline={[undefined]}>
   <div className=\\"deadline\\">
-    <Blueprint3.Icon icon=\\"stopwatch\\">
+    <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
       <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+        <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
           <desc>
             stopwatch
           </desc>
@@ -93,9 +101,11 @@ exports[`AchievementDeadline component renders correctly 5`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <p>
-      Unlimited
-    </p>
+    <span style={{...}}>
+      <p>
+        Unlimited
+      </p>
+    </span>
   </div>
 </AchievementDeadline>"
 `;

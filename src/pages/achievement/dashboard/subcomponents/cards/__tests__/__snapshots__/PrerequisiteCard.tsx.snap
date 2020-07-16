@@ -38,11 +38,11 @@ exports[`PrerequisiteCard component renders correctly 1`] = `
               Core
             </p>
           </div>
-          <AchievementDeadline deadline={{...}}>
+          <AchievementDeadline deadline={{...}} ability=\\"Core\\">
             <div className=\\"deadline\\">
-              <Blueprint3.Icon icon=\\"stopwatch\\">
+              <Blueprint3.Icon icon=\\"stopwatch\\" color=\\"#000000\\">
                 <span icon=\\"stopwatch\\" className=\\"bp3-icon bp3-icon-stopwatch\\" title={[undefined]}>
-                  <svg fill={[undefined]} data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                  <svg fill=\\"#000000\\" data-icon=\\"stopwatch\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
                     <desc>
                       stopwatch
                     </desc>
@@ -50,9 +50,11 @@ exports[`PrerequisiteCard component renders correctly 1`] = `
                   </svg>
                 </span>
               </Blueprint3.Icon>
-              <p>
-                5 Weeks
-              </p>
+              <span style={{...}}>
+                <p>
+                  5 Weeks
+                </p>
+              </span>
             </div>
           </AchievementDeadline>
           <AchievementExp exp={250}>
