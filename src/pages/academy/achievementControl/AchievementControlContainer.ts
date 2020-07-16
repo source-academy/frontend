@@ -6,8 +6,7 @@ import {
   getAchievements,
   removeAchievement,
   removeGoal,
-  saveAchievements,
-  updateAchievements
+  saveAchievements
 } from '../../../commons/achievements/AchievementActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
@@ -21,7 +20,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleFetchAchievements: getAchievements,
-      handleUpdateAchievements: updateAchievements,
       handleSaveAchievements: saveAchievements,
       handleEditAchievement: editAchievement,
       handleRemoveGoal: removeGoal,

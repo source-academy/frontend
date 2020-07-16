@@ -7,15 +7,8 @@ import {
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  SAVE_ACHIEVEMENTS,
-  UPDATE_ACHIEVEMENTS
+  SAVE_ACHIEVEMENTS
 } from './AchievementTypes';
-
-/*
-  Note: This Updates the Achievements in the Backend. 
-*/
-export const updateAchievements = (achievements: AchievementItem[]) =>
-  action(UPDATE_ACHIEVEMENTS, achievements);
 
 /*
   Note: This Updates the store for our Achievements in the frontend. 

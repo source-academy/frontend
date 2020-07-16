@@ -5,26 +5,15 @@ import {
   getAchievements,
   removeAchievement,
   removeGoal,
-  saveAchievements,
-  updateAchievements
+  saveAchievements
 } from '../AchievementActions';
 import {
   EDIT_ACHIEVEMENT,
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  SAVE_ACHIEVEMENTS,
-  UPDATE_ACHIEVEMENTS
+  SAVE_ACHIEVEMENTS
 } from '../AchievementTypes';
-
-test('updateAchievements generates correct action object', () => {
-  const action = updateAchievements([]);
-
-  expect(action).toEqual({
-    type: UPDATE_ACHIEVEMENTS,
-    payload: []
-  });
-});
 
 test('saveAchievements generates correct action object', () => {
   const action = saveAchievements([]);
