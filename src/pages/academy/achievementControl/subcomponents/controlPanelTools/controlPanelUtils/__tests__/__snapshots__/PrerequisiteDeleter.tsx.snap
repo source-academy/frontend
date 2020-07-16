@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrerequisiteDeleter component renders correctly 1`] = `
+"<PrerequisiteDeleter editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+  <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: toggleDialogOpen]} text=\\"Delete A Prerequisite\\">
+    <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <Blueprint3.Icon icon={[undefined]} />
+      <span className=\\"bp3-button-text\\">
+        Delete A Prerequisite
+      </span>
+      <Blueprint3.Icon icon={[undefined]} />
+    </button>
+  </Blueprint3.Button>
+  <AchievementSelector selections={{...}} inferencer={{...}} selectedId={2} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Delete Prerequisite\\" dialogHeader=\\"Delete A Prerequisite\\" emptySelectionsMessage=\\"You have no more prerequisites to delete\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: deleteAction]}>
+    <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Delete A Prerequisite\\" canOutsideClickClose={true}>
+      <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Delete A Prerequisite\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+    </Blueprint3.Dialog>
+  </AchievementSelector>
+</PrerequisiteDeleter>"
+`;
