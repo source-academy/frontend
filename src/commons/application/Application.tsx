@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import Achievement from 'src/pages/achievements/AchievementContainer';
+import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';

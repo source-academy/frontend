@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AchievementTask from 'src/pages/achievements/dashboard/subcomponents/AchievementTask';
-import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
+import AchievementTask from 'src/pages/achievement/dashboard/subcomponents/AchievementTask';
+import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
 import {
   AchievementItem,

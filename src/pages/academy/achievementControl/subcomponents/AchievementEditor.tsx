@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import AchievementAdder from './editorTools/editableUtils/AchievementAdder';

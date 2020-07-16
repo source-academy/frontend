@@ -1,7 +1,7 @@
 import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
-import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
 type PrerequisiteSwapperProps = {
   prerequisiteIdDs: number[];

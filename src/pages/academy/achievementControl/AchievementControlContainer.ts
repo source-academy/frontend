@@ -1,6 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
 import {
   editAchievement,

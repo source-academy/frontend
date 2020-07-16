@@ -1,6 +1,6 @@
 import { Card } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
 import {
   AchievementAbility,
