@@ -1,6 +1,6 @@
 import 'ace-builds/webpack-resolver';
 
-import { Button, Menu, MenuItem, Popover, Position, Tab, Tabs } from '@blueprintjs/core';
+import { Tab, Tabs } from '@blueprintjs/core';
 import * as React from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 
@@ -18,10 +18,6 @@ function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Pro
       assetPath => assetPath.slice(8) // remove /stories
     );
 
-  const [filename, setFilename] = React.useState(
-    useDefaultChapter ? 'defaultCheckpoint.txt' : textAssets[0]
-  );
-
   function onLoadTxt(e: React.ChangeEvent<HTMLInputElement>) {
     if (!e.target.files) return;
     const [file] = e.target.files;
@@ -29,33 +25,22 @@ function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Pro
   }
 
   async function changeChosenFilename(e: any) {
-    if (!e.target.innerHTML) return;
-
-    const filename = e.target.innerHTML;
-    setFilename('Loading');
+    const filename = e.target.value;
     const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);
     const txt = await response.text();
-    setFilename(filename);
     sessionStorage.setItem(storageName, txt);
   }
 
-  const uploadButton = (
-    <>
-      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
-    </>
-  );
+  const uploadButton = <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />;
 
   const chooseS3Txt = (
-    <>
-      <Popover position={Position.BOTTOM}>
-        <Button text={filename} />
-        <Menu>
-          {textAssets.map(file => (
-            <MenuItem onClick={changeChosenFilename} id={file} key={file} text={file} />
-          ))}
-        </Menu>
-      </Popover>
-    </>
+    <select className="bp3-menu" onChange={changeChosenFilename}>
+      {textAssets.map(file => (
+        <option value={file} key={file}>
+          {file}
+        </option>
+      ))}
+    </select>
   );
 
   return (
