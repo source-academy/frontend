@@ -8,12 +8,12 @@ import {
   removeAchievement,
   removeGoal,
   saveAchievements
-} from '../../../commons/achievements/AchievementActions';
+} from '../../../commons/achievement/AchievementActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new Inferencer(state.achievements.achievements)
+  inferencer: new Inferencer(state.achievement.achievements)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

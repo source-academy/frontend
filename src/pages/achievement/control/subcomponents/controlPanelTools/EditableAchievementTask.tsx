@@ -2,10 +2,7 @@ import React, { useState } from 'react';
 import AchievementTask from 'src/pages/achievement/dashboard/subcomponents/AchievementTask';
 import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
-import {
-  AchievementItem,
-  FilterStatus
-} from '../../../../../commons/achievements/AchievementTypes';
+import { AchievementItem, FilterStatus } from '../../../../../commons/achievement/AchievementTypes';
 import AchievementControlPanelTools from './AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {

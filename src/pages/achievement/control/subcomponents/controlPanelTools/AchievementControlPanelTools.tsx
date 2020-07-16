@@ -1,7 +1,7 @@
 import React from 'react';
 import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
 
-import { AchievementItem } from '../../../../../commons/achievements/AchievementTypes';
+import { AchievementItem } from '../../../../../commons/achievement/AchievementTypes';
 import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
 import PrerequisiteDeleter from './controlPanelUtils/PrerequisiteDeleter';
 import PrerequisitePositionEditor from './controlPanelUtils/PrerequisitePositionEditor';

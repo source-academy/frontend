@@ -1,5 +1,5 @@
 import React from 'react';
-import { AchievementAbility, AchievementStatus } from 'src/commons/achievements/AchievementTypes';
+import { AchievementAbility, AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 import AchievementModalGoal from './modal/AchievementModalGoal';

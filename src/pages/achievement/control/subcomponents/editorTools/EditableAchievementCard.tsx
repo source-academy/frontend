@@ -7,7 +7,7 @@ import {
   AchievementGoal,
   AchievementItem,
   AchievementModalItem
-} from '../../../../../commons/achievements/AchievementTypes';
+} from '../../../../../commons/achievement/AchievementTypes';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import AchievementUploader from './editableUtils/AchievementUploader';

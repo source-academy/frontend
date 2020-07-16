@@ -1,4 +1,4 @@
-import { AchievementAbility, AchievementItem } from '../achievements/AchievementTypes';
+import { AchievementAbility, AchievementItem } from '../achievement/AchievementTypes';
 
 export const mockAchievements: AchievementItem[] = [
   {

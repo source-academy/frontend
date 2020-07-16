@@ -1,7 +1,7 @@
 import { Variant } from 'js-slang/dist/types';
 import { compressToUTF16, decompressFromUTF16 } from 'lz-string';
 
-import { AchievementItem } from '../commons/achievements/AchievementTypes';
+import { AchievementItem } from '../commons/achievement/AchievementTypes';
 import { OverallState } from '../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../commons/application/types/ExternalTypes';
 import { SessionState } from '../commons/application/types/SessionTypes';
@@ -43,7 +43,7 @@ export const saveState = (state: OverallState) => {
         role: state.session.role,
         name: state.session.name
       },
-      achievements: state.achievements.achievements,
+      achievements: state.achievement.achievements,
       playgroundEditorValue: state.workspaces.playground.editorValue,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,
       playgroundSourceChapter: state.workspaces.playground.context.chapter,

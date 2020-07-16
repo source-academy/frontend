@@ -21,7 +21,7 @@ import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem
-} from '../achievements/AchievementTypes';
+} from '../achievement/AchievementTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';

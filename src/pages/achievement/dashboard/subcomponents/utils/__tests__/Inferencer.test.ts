@@ -2,7 +2,7 @@ import {
   AchievementAbility,
   AchievementItem,
   FilterStatus
-} from 'src/commons/achievements/AchievementTypes';
+} from 'src/commons/achievement/AchievementTypes';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import Inferencer from '../Inferencer';

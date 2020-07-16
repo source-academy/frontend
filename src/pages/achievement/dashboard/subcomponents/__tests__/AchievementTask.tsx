@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { FilterStatus } from 'src/commons/achievements/AchievementTypes';
+import { FilterStatus } from 'src/commons/achievement/AchievementTypes';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import AchievementTask from '../AchievementTask';

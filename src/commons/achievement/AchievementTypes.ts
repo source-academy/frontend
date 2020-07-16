@@ -93,6 +93,6 @@ export type AchievementState = {
   achievements: AchievementItem[];
 };
 
-export const defaultAchievements: AchievementState = {
+export const defaultAchievement: AchievementState = {
   achievements: []
 };

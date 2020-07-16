@@ -5,7 +5,7 @@ import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { AchievementState } from '../achievements/AchievementTypes';
+import { AchievementState } from '../achievement/AchievementTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
@@ -21,7 +21,7 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
-  readonly achievements: AchievementState;
+  readonly achievement: AchievementState;
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -164,7 +164,7 @@ export const defaultDashboard: DashboardState = {
   gradingSummary: []
 };
 
-export const defaultAchievements: AchievementState = {
+export const defaultAchievement: AchievementState = {
   achievements: []
 };
 
@@ -297,7 +297,7 @@ export const defaultSession: SessionState = {
 
 export const defaultState: OverallState = {
   academy: defaultAcademy,
-  achievements: defaultAchievements,
+  achievement: defaultAchievement,
   application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,

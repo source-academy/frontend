@@ -1,6 +1,6 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { AchievementAbility } from 'src/commons/achievements/AchievementTypes';
+import { AchievementAbility } from 'src/commons/achievement/AchievementTypes';
 
 import EditableAchievementAbility from '../EditableAchievementAbility';
 
