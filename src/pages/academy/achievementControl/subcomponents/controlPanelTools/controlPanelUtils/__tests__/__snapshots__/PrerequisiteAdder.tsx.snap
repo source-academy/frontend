@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrerequisiteAdder component renders correctly 1`] = `
+"<PrerequisiteAdder editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+  <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: toggleDialogOpen]} text=\\"Add A Prerequisite\\">
+    <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <Blueprint3.Icon icon={[undefined]} />
+      <span className=\\"bp3-button-text\\">
+        Add A Prerequisite
+      </span>
+      <Blueprint3.Icon icon={[undefined]} />
+    </button>
+  </Blueprint3.Button>
+  <AchievementSelector selections={{...}} inferencer={{...}} selectedId={3} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Add Prerequisite\\" dialogHeader=\\"Add A Prerequisite\\" emptySelectionsMessage=\\"You have no more prerequisites to add\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: addAction]}>
+    <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Add A Prerequisite\\" canOutsideClickClose={true}>
+      <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Add A Prerequisite\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+    </Blueprint3.Dialog>
+  </AchievementSelector>
+</PrerequisiteAdder>"
+`;
