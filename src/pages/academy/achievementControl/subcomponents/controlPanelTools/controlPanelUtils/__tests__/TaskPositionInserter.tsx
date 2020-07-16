@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
-import Inferencer from 'src/pages/achievements/subcomponents/utils/Inferencer';
+import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
 
 import TaskPositionInserter from '../TaskPositionInserter';
 
