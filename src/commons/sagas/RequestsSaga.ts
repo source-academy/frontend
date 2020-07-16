@@ -135,6 +135,8 @@ export async function putUserGameState(
 
 /**
  * GET /achievements
+ *
+ * Will be updated after a separate db for student progress is ready
  */
 export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
   const resp = await request('achievements/', 'GET', {
@@ -175,26 +177,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
- * POST /achievements
- */
-export async function updateAchievements(
-  achievements: AchievementItem[],
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request(`achievements/`, 'POST', {
-    accessToken: tokens.accessToken,
-    body: { achievements: achievements },
-    noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
-  });
-
-  return resp;
-}
-
-/**
- * POST /achievements/update
+ * POST /achievements/:achievement_id
  */
 export async function editAchievement(
   achievement: AchievementItem,
@@ -213,7 +196,7 @@ export async function editAchievement(
 }
 
 /**
- * DELETE /achievements
+ * DELETE /achievements/:achievement_id
  */
 export async function removeAchievement(
   achievement: AchievementItem,
