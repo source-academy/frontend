@@ -77,7 +77,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     ));
 
   return (
-    <div className="Achievements">
+    <div className="AchievementDashboard">
       <div className="achievement-overview">
         <AchievementOverview
           name={name === undefined ? 'User' : name}
