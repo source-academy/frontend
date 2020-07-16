@@ -56,11 +56,10 @@ class GameSoundManager {
   }
 
   public playSound(soundKey: AssetKey) {
-    if (this.scene) {
-      const soundAsset = this.getParentGame().getSoundAsset(soundKey);
-      if (soundAsset) {
-        this.getBaseSoundManager().play(soundAsset.key, soundAsset.config);
-      }
+    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
+    if (soundAsset) {
+      soundAsset.config.volume = this.getBaseSoundManager().volume;
+      this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config });
     }
   }
 
