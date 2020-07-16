@@ -1,0 +1,71 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementModal component renders correctly 1`] = `
+"<AchievementModal id={1} inferencer={{...}} handleGlow={[Function: handleGlow]}>
+  <div className=\\"modal\\" style={{...}}>
+    <div className=\\"canvas\\" style={{...}}>
+      <h1>
+        BEYOND THE SECOND DIMENSION
+      </h1>
+      <div className=\\"deadline\\">
+        <p>
+          Deadline: 21 August 2020
+        </p>
+        <AchievementWeek week={{...}}>
+          <div className=\\"week\\">
+            <div>
+              <Blueprint3.Tag intent=\\"warning\\" round={true}>
+                <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+                  <Blueprint3.Icon icon={[undefined]} />
+                  <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+                    <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+                      Week 2
+                    </span>
+                  </Blueprint3.Text>
+                  <Blueprint3.Icon icon={[undefined]} />
+                </span>
+              </Blueprint3.Tag>
+            </div>
+          </div>
+        </AchievementWeek>
+      </div>
+      <div className=\\"description\\">
+        <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+        </p>
+      </div>
+    </div>
+    <AchievementModalGoal goals={{...}}>
+      <div className=\\"goal\\">
+        <div className=\\"goal-medal\\">
+          <span className=\\"medal-icon\\" />
+          <div className=\\"medal-text\\">
+            100
+             / 
+            100
+             XP
+          </div>
+        </div>
+        <div className=\\"goal-text\\">
+          Complete Beyond the Second Dimension mission
+        </div>
+      </div>
+      <div className=\\"goal\\">
+        <div className=\\"goal-medal\\">
+          <span className=\\"medal-icon\\" />
+          <div className=\\"medal-text\\">
+            113
+             / 
+            150
+             XP
+          </div>
+        </div>
+        <div className=\\"goal-text\\">
+          Score earned from Beyond the Second Dimension mission
+        </div>
+      </div>
+    </AchievementModalGoal>
+    <hr />
+  </div>
+</AchievementModal>"
+`;

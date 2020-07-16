@@ -1,0 +1,14 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementModalCompletion component renders correctly 1`] = `
+"<AchievementModalCompletion awardedExp={0} completionText=\\"string\\">
+  <div className=\\"completion\\">
+    <h1>
+      AWARDED 0XP
+    </h1>
+    <p>
+      string
+    </p>
+  </div>
+</AchievementModalCompletion>"
+`;

@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementModal component renders correctly 1`] = `
+"<AchievementOverview name=\\"Sample Name\\" studio=\\"08A\\" inferencer={{...}}>
+  <AchievementLevel studentExp={712}>
+    <div className=\\"level\\">
+      <div className=\\"level-badge\\" onMouseEnter={[Function: displayMilestone]} onMouseLeave={[Function: hideMilestone]}>
+        <span className=\\"level-icon\\" />
+        <p>
+          0
+        </p>
+      </div>
+      <span className=\\"level-progress\\">
+        <Blueprint3.ProgressBar className=\\"progress-bar\\" value={0.712} animate={false} stripes={false}>
+          <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress-bar\\">
+            <div className=\\"bp3-progress-meter\\" style={{...}} />
+          </div>
+        </Blueprint3.ProgressBar>
+        <p>
+          712
+           / 
+          1000
+           XP
+        </p>
+      </span>
+    </div>
+  </AchievementLevel>
+  <h3>
+    Sample Name
+  </h3>
+  <h3>
+    08A
+  </h3>
+  <h3>
+    Week 0
+  </h3>
+  <h3>
+    16 July 2020
+  </h3>
+</AchievementOverview>"
+`;
