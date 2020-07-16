@@ -16,8 +16,6 @@ class AssetParser {
     const assetLines = StringUtils.splitToLines(assetText);
     const assetParagraphs = StringUtils.splitToParagraph(assetLines);
 
-    console.log(assetParagraphs);
-
     assetParagraphs.forEach(([header, body]: [string, string[]]) => {
       AssetParser.parseAssetParagraphs(header, body);
     });
@@ -26,7 +24,6 @@ class AssetParser {
 
   public static parseAssetParagraphs(header: string, body: string[]) {
     body.forEach(asset => {
-      console.log(header);
       const [itemId, assetPath] = StringUtils.splitByChar(asset, ',');
       AssetParser.assetObject.assetsMap.set(
         AssetParser.assetKeyGenerator(assetPath),

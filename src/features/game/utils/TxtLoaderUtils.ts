@@ -9,6 +9,7 @@ import { loadText } from '../utils/LoaderUtils';
 /**
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
  * Starts a new checkpoint with the given chapter number
  * and checkpoint number. The chapter/checkpoint file
  * will also be appended with the default checkpoint text.
@@ -24,6 +25,8 @@ import { loadText } from '../utils/LoaderUtils';
 =======
 =======
 >>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
  *
  * @scene the scene calling the function
  * @chapterDetails chapterDetails passed to
@@ -31,6 +34,9 @@ import { loadText } from '../utils/LoaderUtils';
  * To use these functions, call the line "await loadImage(...)"
  * inside an async function
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 =======
 >>>>>>> Stashed changes

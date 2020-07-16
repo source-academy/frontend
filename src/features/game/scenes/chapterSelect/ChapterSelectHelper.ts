@@ -103,7 +103,7 @@ export function createChapter(
     chapterTitleStyle
   ).setOrigin(0.5, 0.5);
 
-  const chapterDone = index <= scene.getLoadedGameState().userState.lastCompletedChapter + 1;
+  const chapterDone = index <= scene.getLoadedGameState().userSaveState.lastCompletedChapter + 1;
 
   const blackTint = new Phaser.GameObjects.Rectangle(
     scene,
