@@ -16,6 +16,7 @@ import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
@@ -151,7 +152,7 @@ export default class RoomPreview extends Phaser.Scene {
       remotePath: Constants.assetsFolder,
       screenSize: screenSize,
       verify: (sprite: Phaser.GameObjects.Sprite) => this.attachVerificationTag(sprite),
-      achievements: this.userStateManager.getList('achievements')
+      achievements: this.userStateManager.getList(UserStateTypes.achievements)
     });
     context.externalContext = 'playground';
 

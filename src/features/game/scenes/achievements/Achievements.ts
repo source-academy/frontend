@@ -1,5 +1,6 @@
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
+import { AssetObject } from '../../assets/AssetsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -9,6 +10,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { createEmptySaveState } from '../../save/GameSaveHelper';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
+import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { limitNumber } from '../../utils/GameUtils';
 import { calcTableFormatPosColWise } from '../../utils/StyleUtils';
@@ -16,6 +18,7 @@ import { AchievementConstants } from './AchievementConstants';
 
 type AchievementsProps = {
   fullSaveState: FullSaveState;
+  defaultAssets: AssetObject;
 };
 
 /**
@@ -50,7 +53,7 @@ class Achievements extends Phaser.Scene {
     this.scrollLim = 0;
   }
 
-  public init({ fullSaveState }: AchievementsProps) {
+  public init({ fullSaveState, defaultAssets }: AchievementsProps) {
     this.fullSaveState = fullSaveState;
 
     this.layerManager = new GameLayerManager();
@@ -67,7 +70,7 @@ class Achievements extends Phaser.Scene {
     this.inputManager.initialise(this);
     this.scrollLim =
       Math.ceil(
-        this.userStateManager.getList('achievements').length /
+        this.userStateManager.getList(UserStateTypes.achievements).length /
           AchievementConstants.maxAchievementPerCol
       ) * AchievementConstants.achievementXSpacing;
   }
@@ -118,7 +121,9 @@ class Achievements extends Phaser.Scene {
     if (this.achievementsContainer) this.achievementsContainer.destroy();
 
     this.achievementsContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const achievements = this.getAchievements(this.userStateManager.getList('achievements'));
+    const achievements = this.getAchievements(
+      this.userStateManager.getList(UserStateTypes.achievements)
+    );
     const achievementsPos = calcTableFormatPosColWise({
       numOfItems: achievements.length,
       maxXSpace: this.scrollLim

@@ -33,7 +33,7 @@ class MainMenu extends Phaser.Scene {
   private roomCode: string;
 
   private loadedGameState?: FullSaveState;
-  private defaultAssets?: AssetObject;
+  public defaultAssets?: AssetObject;
 
   constructor() {
     super('MainMenu');
@@ -77,7 +77,6 @@ class MainMenu extends Phaser.Scene {
   private async loadAssetObject() {
     const assetText = this.cache.text.get(TextAssets.defaultAssets.key);
     this.defaultAssets = AssetParser.parse(assetText);
-    console.log(this.defaultAssets);
   }
 
   private preloadAssets() {
@@ -167,7 +166,8 @@ class MainMenu extends Phaser.Scene {
         callback: () => {
           this.layerManager.clearAllLayers();
           this.scene.start('Achievements', {
-            fullSaveState: this.getLoadedGameState()
+            fullSaveState: this.getLoadedGameState(),
+            defaultAssets: this.getDefaultAssets()
           });
         }
       },
@@ -192,6 +192,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   public getLoadedGameState = () => mandatory(this.loadedGameState);
+  public getDefaultAssets = () => mandatory(this.defaultAssets);
 }
 
 export default MainMenu;
