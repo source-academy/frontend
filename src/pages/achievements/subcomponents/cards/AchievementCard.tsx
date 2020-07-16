@@ -1,10 +1,9 @@
-import { Icon } from '@blueprintjs/core';
+import { Icon, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
-import AchievementProgressBar from '../utils/AchievementProgressBar';
 import AchievementWeek from '../utils/AchievementWeek';
 import Inferencer from '../utils/Inferencer';
 
@@ -72,9 +71,12 @@ function AchievementCard(props: AchievementCardProps) {
           <AchievementExp exp={displayExp} />
         </div>
 
-        <AchievementProgressBar
-          progressFrac={progressFrac}
-          shouldAnimate={!shouldPartiallyRender}
+        <ProgressBar
+          className="progress"
+          intent={progressFrac === 1 ? 'success' : undefined}
+          value={progressFrac}
+          animate={false}
+          stripes={false}
         />
       </div>
     </div>
