@@ -43,9 +43,9 @@ class GameSoundManager {
   }
 
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
-    Object.entries(assetMap).forEach(asset => {
-      this.getParentGame().addSoundAsset(asset[1]);
-      this.loadSound(asset[1].key, toS3Path(asset[1].path));
+    Object.values(assetMap).forEach(asset => {
+      this.getParentGame().addSoundAsset(asset);
+      this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 

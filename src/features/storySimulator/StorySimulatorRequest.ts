@@ -1,6 +1,6 @@
 import Constants from 'src/commons/utils/Constants';
 
-const createRequest = (route: string) => async (
+const sendRequest = (route: string) => async (
   accessToken: string = '',
   requestPath: string,
   method: string,
@@ -24,8 +24,8 @@ const createRequest = (route: string) => async (
   }
 };
 
-export const createAssetRequest = createRequest('assets/');
-export const createStoryRequest = createRequest('stories');
+export const sendAssetRequest = sendRequest('assets/');
+export const sendStoryRequest = sendRequest('stories');
 
 export function createHeaders(accessToken: string): Headers {
   const headers = new Headers();

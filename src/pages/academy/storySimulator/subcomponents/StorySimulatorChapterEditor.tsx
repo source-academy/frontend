@@ -2,7 +2,12 @@ import { Button } from '@blueprintjs/core';
 import arrayMove from 'array-move';
 import React from 'react';
 import { SortableContainer, SortableElement } from 'react-sortable-hoc';
-import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
+import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
+
+type ChapterSimProps = {
+  chapterDetail: ChapterDetail;
+  allCheckpointFilenames: string[];
+};
 
 const SortableItem = SortableElement(({ value }: any) => (
   <div>
@@ -20,19 +25,7 @@ const SortableList = SortableContainer(({ items }: any) => {
   );
 });
 
-type ChapterSequencerProps = {
-  accessToken?: string;
-};
-
-export default function ChapterSequencer({ accessToken }: ChapterSequencerProps) {
-  const [chapters, setChapters] = React.useState<string[]>([]);
-
-  React.useEffect(() => {
-    (async () => {
-      setChapters(await fetchChapters(accessToken));
-    })();
-  }, [accessToken]);
-
+export default function ChapterEditor({ chapterDetail, allCheckpointFilenames }: ChapterSimProps) {
   const [itemList, setItemList] = React.useState([
     'Item 1',
     'Item 2',
@@ -50,15 +43,7 @@ export default function ChapterSequencer({ accessToken }: ChapterSequencerProps)
   }
   return (
     <>
-      <h3>Chapter Sequencer</h3>
-      <select className="bp3-menu">
-        {chapters.map(chapter => {
-          console.log(chapter);
-          return <option value={chapter.toString()} />;
-        })}
-      </select>
       <SortableList items={itemList} onSortEnd={onSortEnd} />
-      <br />
       <Button onClick={saveOrder}>Save</Button>
     </>
   );

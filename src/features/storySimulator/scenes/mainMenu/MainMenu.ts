@@ -102,7 +102,7 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Chapter Sequencer',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.ChapterSequence);
+          getStorySimulatorGame().setStorySimState(StorySimState.ChapterSim);
         }
       }
     ];

@@ -7,7 +7,7 @@ import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
-import StorySimulatorChapterSequencer from './subcomponents/StorySimulatorChapterSequencer';
+import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
 import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
 import {
   createStorySimulatorGame,
@@ -77,8 +77,8 @@ function StorySimulator() {
               />
             </>
           )}
-          {storySimState === StorySimState.ChapterSequence && (
-            <StorySimulatorChapterSequencer accessToken={session.accessToken} />
+          {storySimState === StorySimState.ChapterSim && (
+            <StorySimulatorChapterSim accessToken={session.accessToken} />
           )}
         </div>
       </div>
