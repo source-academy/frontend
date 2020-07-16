@@ -371,6 +371,226 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
 </div>"
 `;
 
+exports[`Autograder renders private testcases with different statuses correctly 1`] = `
+"<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+  <div className=\\"Autograder\\">
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={{...}}>
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Testcases
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+      <div className=\\"bp3-collapse\\" style={{...}}>
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <div>
+            <div className=\\"testcases-header\\">
+              <div className=\\"header-fn\\">
+                <Blueprint3.Icon icon=\\"caret-down\\">
+                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                      <desc>
+                        caret-down
+                      </desc>
+                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                    </svg>
+                  </span>
+                </Blueprint3.Icon>
+                Testcase (click to run)
+              </div>
+              <div className=\\"header-expected\\">
+                <Blueprint3.Icon icon=\\"caret-down\\">
+                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                      <desc>
+                        caret-down
+                      </desc>
+                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                    </svg>
+                  </span>
+                </Blueprint3.Icon>
+                Expected result
+              </div>
+              <div className=\\"header-actual\\">
+                <Blueprint3.Icon icon=\\"caret-down\\">
+                  <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+                    <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                      <desc>
+                        caret-down
+                      </desc>
+                      <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+                    </svg>
+                  </span>
+                </Blueprint3.Icon>
+                Actual result
+              </div>
+            </div>
+            <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+              <div className=\\"AutograderCard correct private\\">
+                <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+                    <Component className=\\"testcase-program\\">
+                      <pre className=\\"bp3-code-block testcase-program\\">
+                        &quot;lorem&quot;;
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-expected\\">
+                      <pre className=\\"bp3-code-block testcase-expected\\">
+                        &quot;lorem&quot;
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-actual\\">
+                      <pre className=\\"bp3-code-block testcase-actual\\">
+                        &quot;lorem&quot;
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentAutograderCard>
+            <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+              <div className=\\"AutograderCard private\\">
+                <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+                    <Component className=\\"testcase-program\\">
+                      <pre className=\\"bp3-code-block testcase-program\\">
+                        is_prime(2);
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-expected\\">
+                      <pre className=\\"bp3-code-block testcase-expected\\">
+                        true
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-actual\\">
+                      <pre className=\\"bp3-code-block testcase-actual\\">
+                        No Answer
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentAutograderCard>
+            <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+              <div className=\\"AutograderCard correct private\\">
+                <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+                    <Component className=\\"testcase-program\\">
+                      <pre className=\\"bp3-code-block testcase-program\\">
+                        is_prime(3);
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-expected\\">
+                      <pre className=\\"bp3-code-block testcase-expected\\">
+                        true
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-actual\\">
+                      <pre className=\\"bp3-code-block testcase-actual\\">
+                        true
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentAutograderCard>
+            <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+              <div className=\\"AutograderCard wrong private\\">
+                <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+                    <Component className=\\"testcase-program\\">
+                      <pre className=\\"bp3-code-block testcase-program\\">
+                        is_prime(4);
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-expected\\">
+                      <pre className=\\"bp3-code-block testcase-expected\\">
+                        false
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-actual\\">
+                      <pre className=\\"bp3-code-block testcase-actual\\">
+                        true
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentAutograderCard>
+            <SideContentAutograderCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+              <div className=\\"AutograderCard wrong private\\">
+                <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
+                    <Component className=\\"testcase-program\\">
+                      <pre className=\\"bp3-code-block testcase-program\\">
+                        is_prime(5);
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-expected\\">
+                      <pre className=\\"bp3-code-block testcase-expected\\">
+                        true
+                      </pre>
+                    </Component>
+                    <Component className=\\"testcase-actual\\">
+                      <pre className=\\"bp3-code-block testcase-actual\\">
+                        Line 3: Name a not declared.
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentAutograderCard>
+          </div>
+        </div>
+      </div>
+    </Blueprint3.Collapse>
+    <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={{...}}>
+          <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
+            <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
+              <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+                <desc>
+                  caret-down
+                </desc>
+                <path d=\\"M12 6.5c0-.28-.22-.5-.5-.5h-7a.495.495 0 00-.37.83l3.5 4c.09.1.22.17.37.17s.28-.07.37-.17l3.5-4c.08-.09.13-.2.13-.33z\\" fillRule=\\"evenodd\\" />
+              </svg>
+            </span>
+          </Blueprint3.Icon>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Autograder Results
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Collapse isOpen={true} component=\\"div\\" keepChildrenMounted={false} transitionDuration={200}>
+      <div className=\\"bp3-collapse\\" style={{...}}>
+        <div className=\\"bp3-collapse-body\\" style={{...}} aria-hidden={false}>
+          <div className=\\"noResults\\">
+            There are no results to show.
+          </div>
+        </div>
+      </div>
+    </Blueprint3.Collapse>
+  </div>
+</SideContentAutograder>"
+`;
+
 exports[`Autograder renders public testcases with different statuses correctly 1`] = `
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
