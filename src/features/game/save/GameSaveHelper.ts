@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 
 import { GameLocation, LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import { UserStateTypes } from '../state/GameStateTypes';
 import { FullSaveState, GameSaveState, SettingsJson, UserSaveState } from './GameSaveTypes';
 
 /**
@@ -38,7 +39,7 @@ export function gameStateToJson(
   const userSaveState: UserSaveState = {
     settings: { ...prevGameState.userSaveState.settings },
     lastPlayedCheckpoint: [chapterNum, checkpointNum],
-    collectibles: userStateManager.getList('collectibles'),
+    collectibles: userStateManager.getList(UserStateTypes.collectibles),
     lastCompletedChapter:
       prevGameState.userSaveState.lastCompletedChapter === undefined
         ? -1

@@ -9,6 +9,8 @@ import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameSoundManager from '../sound/GameSoundManager';
+import { UserStateTypes } from '../state/GameStateTypes';
+import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
 import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
@@ -21,7 +23,6 @@ import collectibleConstants, {
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameCollectiblesConstants';
-import { getAchievements, getCollectibles } from './GameCollectiblesHelper';
 import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 
 /**
@@ -31,6 +32,7 @@ class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
   private soundManager: GameSoundManager | undefined;
+  private userStateManager: GameUserStateManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewContainer: Phaser.GameObjects.Container | undefined;
@@ -44,10 +46,15 @@ class GameCollectiblesManager implements IGameUI {
     this.currActivePage = CollectiblePage.Collectibles;
   }
 
-  public initialise(scene: IBaseScene, phaseManager: GamePhaseManager) {
+  public initialise(
+    scene: IBaseScene,
+    userStateManager: GameUserStateManager,
+    phaseManager: GamePhaseManager
+  ) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
     this.soundManager = scene.soundManager;
+    this.userStateManager = userStateManager;
     this.phaseManager = phaseManager;
 
     // Set initial page number to zero
@@ -282,6 +289,7 @@ class GameCollectiblesManager implements IGameUI {
   private getLayerManager = () => mandatory(this.layerManager);
   private getPhaseManager = () => mandatory(this.phaseManager);
   private getSoundManager = () => mandatory(this.soundManager);
+  private getUserStateManager = () => mandatory(this.userStateManager);
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(
@@ -337,10 +345,10 @@ class GameCollectiblesManager implements IGameUI {
     let itemList: string[];
     switch (this.currActivePage) {
       case CollectiblePage.Achievements:
-        itemList = getAchievements();
+        itemList = this.getUserStateManager().getList(UserStateTypes.achievements);
         break;
       case CollectiblePage.Collectibles:
-        itemList = getCollectibles();
+        itemList = this.getUserStateManager().getList(UserStateTypes.collectibles);
         break;
       default:
         itemList = [];

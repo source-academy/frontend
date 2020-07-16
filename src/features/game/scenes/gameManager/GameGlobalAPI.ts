@@ -9,7 +9,7 @@ import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameM
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
-import { StateObserver } from '../../state/GameStateTypes';
+import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -195,7 +195,7 @@ class GameGlobalAPI {
   //   User State    //
   /////////////////////
 
-  public addToUserStateList(listName: string, id: string): void {
+  public addToUserStateList(listName: UserStateTypes, id: string): void {
     this.getGameManager().userStateManager.addToList(listName, id);
   }
 
@@ -268,7 +268,7 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    this.getGameManager().userStateManager.addToList('collectibles', collectibleId);
+    this.getGameManager().userStateManager.addToList(UserStateTypes.collectibles, collectibleId);
   }
 
   /////////////////////
