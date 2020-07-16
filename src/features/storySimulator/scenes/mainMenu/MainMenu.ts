@@ -16,6 +16,12 @@ import SSImageAssets from '../../assets/ImageAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
+/**
+ * Entry point for story simulator.
+ *
+ * User can access different story simulator
+ * functionalities from here.
+ */
 class MainMenu extends Phaser.Scene {
   private soundManager: GameSoundManager;
   private layerManager: GameLayerManager;

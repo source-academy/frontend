@@ -19,6 +19,10 @@ import { StorySimState } from '../../StorySimulatorTypes';
 import SSTransformManager from '../../transform/SSTransformManager';
 import objPlacementConstants from './ObjectPlacementConstants';
 
+/**
+ * Allow users to position objects, set backgrounds, and get
+ * the coordinates of the objects.
+ */
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public soundManager: GameSoundManager;

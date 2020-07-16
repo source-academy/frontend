@@ -18,10 +18,10 @@ import checkpointConstants, { transitionTextStyle } from './CheckpointTransition
  * This scene is triggered in between checkpoints/chapters.
  * From user's perspective, it is when the in-between scene that is triggered
  * after they completed a checkpoint.
- * 
+ *
  * Internally, we use this scene to fully load students information
  * as well as get the next checkpoint, before finally loading the next scene.
- * 
+ *
  * We cannot load these informations at the GameManager as
  * it can alter the sequencing of preload() and create() in the GameManager.
  */

@@ -44,10 +44,10 @@ type GameManagerProps = {
 
 /**
  * Main scene that plays the checkpoint.
- * 
- * It processes checkpoint objects and loads 
+ *
+ * It processes checkpoint objects and loads
  * the chapter exclusive assets (location image, sounds).
- * 
+ *
  * It also handles main gameplay loop, e.g. switching between modes,
  * activation of escape or collectible menu, location switching,
  * triggering actions, etc.

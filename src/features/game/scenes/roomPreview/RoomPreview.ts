@@ -28,8 +28,8 @@ type RoomPreviewProps = {
 
 /**
  * This scene uses the students code as part of its code.
- * 
- * Additionally, the scene shares some common functionality as 
+ *
+ * Additionally, the scene shares some common functionality as
  * GameManager, in that it incorporates escape menu and collectible
  * menu.
  */
@@ -105,10 +105,10 @@ export default class RoomPreview extends Phaser.Scene {
      * We don't use .eval('preload();') at preload() as
      * .eval() is not awaited by the preload() method i.e. it does not
      * wait for student's preload function to finish.
-     * 
+     *
      * Instead, the students' 'preload()' function simply populate a map
      * of assets key and path to be loaded.
-     * 
+     *
      * We await the students .eval('preload();') at create()
      * to ensure that the .eval('preload();') is fully resolved.
      */
