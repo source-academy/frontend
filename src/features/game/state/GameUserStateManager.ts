@@ -82,8 +82,8 @@ export default class GameUserStateManager {
 
   public async loadAchievements() {
     // TODO: Fetch from backend
-    this.userState.achievements = [];
-    this.userState.collectibles = [];
+    this.userState.achievements = Array.from(new Array(20), (val, index) => `achievement${index}`);
+    this.userState.collectibles = Array.from(new Array(5), (val, index) => `collectible${index}`);
   }
 
   public getUserState = () => mandatory(this.userState);
