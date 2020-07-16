@@ -17,7 +17,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
-import { calcTableFormatPosRowWise } from '../../utils/StyleUtils';
+import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
@@ -100,10 +100,10 @@ class MainMenu extends Phaser.Scene {
     const optionsContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const buttons = this.getOptionButtons();
 
-    const buttonPositions = calcTableFormatPosRowWise({
+    const buttonPositions = calcTableFormatPos({
+      direction: Direction.Column,
       numOfItems: buttons.length,
-      maxYSpace: mainMenuConstants.buttonYSpace,
-      numItemLimit: 1
+      maxYSpace: mainMenuConstants.buttonYSpace
     });
 
     optionsContainer.add(

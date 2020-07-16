@@ -164,7 +164,7 @@ export const createEmptySaveState = (): FullSaveState => {
     gameSaveStates: {},
     userSaveState: {
       collectibles: [],
-      settings: { volume: 1 },
+      settings: { volume: 0 },
       lastPlayedCheckpoint: [-1, -1],
       lastCompletedChapter: -1
     }

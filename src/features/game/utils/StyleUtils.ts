@@ -24,12 +24,18 @@ const hex = (str: string) => parseInt(str.slice(1), 16);
 export const HexColor = _.mapValues(Color, hex);
 
 type TableFormatPosConfig = {
+  direction?: Direction;
   numOfItems: number;
   maxXSpace?: number;
   maxYSpace?: number;
   numItemLimit?: number;
   redistributeLast?: boolean;
 };
+
+export enum Direction {
+  Row = 'Row',
+  Column = 'Column'
+}
 
 /**
  * Calculate x,y positions using a table format: mimic table-like
@@ -47,94 +53,47 @@ type TableFormatPosConfig = {
  * @returns {Array<[number, number]>} array of positions, in the format of
  *                                 [[xPos0, yPos0], [xPos1, yPos1]...]
  */
-export function calcTableFormatPosRowWise({
+export function calcTableFormatPos({
+  direction = Direction.Row,
   numOfItems,
   maxXSpace = screenSize.x,
   maxYSpace = screenSize.y,
   numItemLimit = 0,
   redistributeLast = true
 }: TableFormatPosConfig): Array<[number, number]> {
-  const pos = new Array<[number, number]>();
-  const numOfRows = numItemLimit ? Math.ceil(numOfItems / numItemLimit) : 1;
-  const numOfCols = numItemLimit ? numItemLimit : numOfItems;
-  const numOfColsAtLastRow = numOfItems % numOfCols;
+  let itemsPerList = numItemLimit || numOfItems;
+  const numOfLists = Math.ceil(numOfItems / itemsPerList);
 
-  // Calculate partition size
-  const partitionXSpace = maxXSpace / numOfCols;
-  const partitionYSpace = maxYSpace / numOfRows;
-  const partitionLastXSpace = redistributeLast
-    ? maxXSpace / (numOfColsAtLastRow || numOfCols)
-    : partitionXSpace;
+  return Array(numOfItems)
+    .fill(0)
+    .map((_, itemNumber) => {
+      const itemIndexInList = itemNumber % itemsPerList;
+      const listIndex = Math.floor(itemNumber / itemsPerList);
 
-  for (let i = 0; i < numOfItems; i++) {
-    // Get item position in terms of index
-    const itemXIdx = i % numOfCols;
-    const itemYIdx = Math.floor(i / numOfCols) % numOfRows;
+      if (redistributeLast && listIndex === numOfLists - 1) {
+        itemsPerList = numOfItems % numOfLists || itemsPerList;
+      }
 
-    // Determine item final position
-    const itemXPos =
-      itemXIdx === numOfRows - 1
-        ? (screenSize.x - maxXSpace + partitionLastXSpace) / 2 + itemXIdx * partitionLastXSpace
-        : (screenSize.x - maxXSpace + partitionXSpace) / 2 + itemXIdx * partitionXSpace;
-    const itemYPos = (screenSize.y - maxYSpace + partitionYSpace) / 2 + itemYIdx * partitionYSpace;
-
-    // Update
-    pos.push([itemXPos, itemYPos]);
-  }
-  return pos;
+      return direction === Direction.Row
+        ? [
+            indexToCoordinate(screenSize.x, maxXSpace, itemIndexInList, itemsPerList),
+            indexToCoordinate(screenSize.y, maxYSpace, listIndex, numOfLists)
+          ]
+        : [
+            indexToCoordinate(screenSize.x, maxXSpace, listIndex, numOfLists),
+            indexToCoordinate(screenSize.y, maxYSpace, itemIndexInList, itemsPerList)
+          ];
+    });
 }
 
-/**
- * Calculate x,y positions using a table format: mimic table-like
- * positions, with rows and columns.
- *
- * The positions will be ordered from TOP to BOTTOM before
- * moving to the next column i.e. column-wise.
- *
- * @param numOfItems total number of items
- * @param maxXSpace maximum X space to be used, optional
- * @param maxYSpace maximum Y space to be used, optional
- * @param numItemLimit maximum number of item at a given row, optional
- * @param redistributeLast if true, items at the last row will have their location
- *                         calculated based on the number of items at the last row, optional
- * @returns {Array<[number, number]>} array of positions, in the format of
- *                                 [[xPos0, yPos0], [xPos1, yPos1]...]
- */
-export function calcTableFormatPosColWise({
-  numOfItems,
-  maxXSpace = screenSize.x,
-  maxYSpace = screenSize.y,
-  numItemLimit = 0,
-  redistributeLast = true
-}: TableFormatPosConfig): Array<[number, number]> {
-  const pos = new Array<[number, number]>();
-  const numOfCols = numItemLimit ? Math.ceil(numOfItems / numItemLimit) : 1;
-  const numOfRows = numItemLimit ? numItemLimit : numOfItems;
-  const numOfRowsAtLastRow = numOfItems % numOfRows;
-
-  // Calculate partition size
-  const partitionXSpace = maxXSpace / numOfCols;
-  const partitionYSpace = maxYSpace / numOfRows;
-  const partitionLastYSpace = redistributeLast
-    ? maxYSpace / (numOfRowsAtLastRow || numOfRows)
-    : partitionYSpace;
-
-  for (let i = 0; i < numOfItems; i++) {
-    // Get item position in terms of index
-    const itemYIdx = i % numOfRows;
-    const itemXIdx = Math.floor(i / numOfRows) % numOfCols;
-
-    // Determine item final position
-    const itemYPos =
-      itemYIdx === numOfRows - 1
-        ? (screenSize.y - maxYSpace + partitionLastYSpace) / 2 + itemYIdx * partitionLastYSpace
-        : (screenSize.y - maxYSpace + partitionYSpace) / 2 + itemYIdx * partitionYSpace;
-    const itemXPos = (screenSize.x - maxXSpace + partitionXSpace) / 2 + itemXIdx * partitionXSpace;
-
-    // Update
-    pos.push([itemXPos, itemYPos]);
-  }
-  return pos;
+function indexToCoordinate(
+  screenSpace: number,
+  listSpace: number,
+  index: number,
+  maxItems: number
+) {
+  const partitionSpace = listSpace / maxItems;
+  return (screenSpace - listSpace + partitionSpace) / 2 + partitionSpace * index;
 }
 
 type ListFormatPos = {

@@ -9,7 +9,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { GameLocationAttr } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
-import { calcTableFormatPosRowWise } from '../../utils/StyleUtils';
+import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import modeMenuConstants, { modeButtonStyle } from './GameModeMenuConstants';
 
@@ -52,7 +52,7 @@ class GameModeMenu implements IGameUI {
 
     const modes = this.getLatestLocationModes();
     const buttons = this.getModeButtons(modes);
-    const buttonPositions = calcTableFormatPosRowWise({
+    const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length
     });
 

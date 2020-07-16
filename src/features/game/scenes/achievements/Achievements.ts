@@ -12,7 +12,7 @@ import GameSoundManager from '../../sound/GameSoundManager';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { limitNumber } from '../../utils/GameUtils';
-import { calcTableFormatPosColWise } from '../../utils/StyleUtils';
+import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { AchievementConstants } from './AchievementConstants';
 
 type AchievementsProps = {
@@ -119,7 +119,7 @@ class Achievements extends Phaser.Scene {
 
     this.achievementsContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const achievements = this.getAchievements();
-    const achievementsPos = calcTableFormatPosColWise({
+    const achievementsPos = calcTableFormatPos({
       numOfItems: achievements.length,
       maxXSpace: this.scrollLim
     });
