@@ -22,6 +22,11 @@ import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
+/**
+ * User entry point into the game.
+ * 
+ * User can navigate to other scenes from here.
+ */
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
   private soundManager: GameSoundManager;

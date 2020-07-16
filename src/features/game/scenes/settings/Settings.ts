@@ -17,6 +17,10 @@ import settingsConstants, {
   optionTextStyle
 } from './SettingsConstants';
 
+/**
+ * Settings scene, in which students can control
+ * different settings of the game.
+ */
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: CommonRadioButton | undefined;
   private layerManager: GameLayerManager;

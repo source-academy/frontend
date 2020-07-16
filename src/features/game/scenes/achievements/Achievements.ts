@@ -3,6 +3,9 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 
+/**
+ * This scenes display all students achievement.
+ */
 class Achievements extends Phaser.Scene {
   private layerManager: GameLayerManager;
 

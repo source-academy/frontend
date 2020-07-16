@@ -16,6 +16,10 @@ import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 import { SampleChapters } from './SampleChapters';
 
+/**
+ * The Chapter Select scene.
+ * Player is able to choose which chapter to play from here.
+ */
 class ChapterSelect extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public soundManager: GameSoundManager;

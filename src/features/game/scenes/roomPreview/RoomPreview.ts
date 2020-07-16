@@ -26,6 +26,13 @@ type RoomPreviewProps = {
   fullSaveState: FullSaveState;
 };
 
+/**
+ * This scene uses the students code as part of its code.
+ * 
+ * Additionally, the scene shares some common functionality as 
+ * GameManager, in that it incorporates escape menu and collectible
+ * menu.
+ */
 export default class RoomPreview extends Phaser.Scene {
   public fullSaveState: FullSaveState;
 
@@ -94,8 +101,20 @@ export default class RoomPreview extends Phaser.Scene {
     this.saveManager.initialiseForSettings(accountInfo, fullSaveState);
     await this.userStateManager.loadAchievements();
 
-    // Preload all necessary assets
+    /**
+     * We don't use .eval('preload();') at preload() as
+     * .eval() is not awaited by the preload() method i.e. it does not
+     * wait for student's preload function to finish.
+     * 
+     * Instead, the students' 'preload()' function simply populate a map
+     * of assets key and path to be loaded.
+     * 
+     * We await the students .eval('preload();') at create()
+     * to ensure that the .eval('preload();') is fully resolved.
+     */
     await this.eval(`preload();`);
+
+    // Preload all necessary assets
     await Promise.all(
       Array.from(this.preloadImageMap).map(async ([key, path]) => {
         await loadImage(this, key, path);
@@ -121,6 +140,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   private async eval(append: string) {
+    // Pass necessary information to the library as context
     const context: Context = createContext(4, [], {}, 'gpu', {
       scene: this,
       phaser: Phaser,
@@ -134,11 +154,13 @@ export default class RoomPreview extends Phaser.Scene {
       achievements: this.userStateManager.getList('achievements')
     });
     context.externalContext = 'playground';
-    const result = await runInContext(this.studentCode + append, context);
-    console.log(result);
+
+    // Wait for students code to finish
+    await runInContext(this.studentCode + append, context);
   }
 
   private bindKeyboardTriggers() {
+    // Bind escape menu
     this.inputManager.registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
@@ -150,6 +172,7 @@ export default class RoomPreview extends Phaser.Scene {
         }
       }
     );
+    // Bind collectible menu
     this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
       if (this.phaseManager.isCurrentPhase(GamePhaseType.CollectibleMenu)) {
         await this.phaseManager.popPhase();
