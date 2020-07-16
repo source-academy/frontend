@@ -1,42 +1,38 @@
-import { AssetObject } from '../assets/AssetsTypes';
-import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
+import { AwardProperty } from '../award/AwardTypes';
+import { ItemId } from '../commons/CommonTypes';
 import { toS3Path } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
+import ParserConverter from './ParserConverter';
 
-class AssetParser {
-  public static assetObject: AssetObject;
+class AwardParser {
+  public static awardsMapping: Map<ItemId, AwardProperty>;
 
-  public static parse(assetText: string): AssetObject {
-    AssetParser.assetObject = {
-      assetsMap: new Map<AssetKey, AssetPath>(),
-      collectibles: new Map<ItemId, AssetKey>(),
-      achievements: new Map<ItemId, AssetKey>()
-    };
+  public static parse(assetText: string): Map<ItemId, AwardProperty> {
+    AwardParser.awardsMapping = new Map<ItemId, AwardProperty>();
 
     const assetLines = StringUtils.splitToLines(assetText);
     const assetParagraphs = StringUtils.splitToParagraph(assetLines);
 
-    assetParagraphs.forEach(([header, body]: [string, string[]]) => {
-      AssetParser.parseAssetParagraphs(header, body);
+    assetParagraphs.forEach(([awardType, awardBody]: [string, string[]]) => {
+      AwardParser.parseAwardParagraphs(awardType, awardBody);
     });
-    return this.assetObject;
+    return this.awardsMapping;
   }
 
-  public static parseAssetParagraphs(header: string, body: string[]) {
-    body.forEach(asset => {
-      const [itemId, assetPath] = StringUtils.splitByChar(asset, ',');
-      AssetParser.assetObject.assetsMap.set(
-        AssetParser.assetKeyGenerator(assetPath),
-        toS3Path(assetPath)
-      );
-      AssetParser.assetObject[header].set(itemId, assetPath);
+  public static parseAwardParagraphs(awardType: string, awardBody: string[]) {
+    const awardParagraph = StringUtils.splitToParagraph(awardBody);
+    awardParagraph.forEach(([id, awardProperty]: [ItemId, string[]]) => {
+      const [assetKey, assetPath, title, description] = awardProperty;
+      AwardParser.awardsMapping.set(id, {
+        id,
+        assetKey,
+        assetPath: toS3Path(assetPath),
+        title,
+        description,
+        awardType: ParserConverter.stringToUserState(awardType)
+      });
     });
-  }
-
-  public static assetKeyGenerator(assetPath: string) {
-    const assetPathArray = assetPath.split('/');
-    return assetPathArray[assetPathArray.length - 1];
   }
 }
 
-export default AssetParser;
+export default AwardParser;

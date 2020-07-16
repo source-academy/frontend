@@ -12,7 +12,13 @@ import { createBitmapText } from '../../utils/TextUtils';
 import RoomPreview from './RoomPreview';
 import { roomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewConstants';
 
-export async function getRoomPreviewCode(accInfo: AccountInfo) {
+/**
+ * Async function that obtains students code for Create-My-Room mission
+ *
+ * @param {AccountInfo} accInfo - students' account information
+ * @returns {Promise<string>} - promise of students code
+ */
+export async function getRoomPreviewCode(accInfo: AccountInfo): Promise<string> {
   const roomMissionId = getRoomMissionId();
   const mission = await getAssessment(roomMissionId, {
     accessToken: accInfo.accessToken,
@@ -22,6 +28,11 @@ export async function getRoomPreviewCode(accInfo: AccountInfo) {
   return studentCode;
 }
 
+/**
+ * Function that generates the correct mission id of students
+ *
+ * @param {AccountInfo} accInfo - students' account information
+ */
 function getRoomMissionId() {
   // TODO: Change to non-hardcode
   return 405;

@@ -11,7 +11,7 @@ import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { resizeOverflow } from '../../utils/SpriteUtils';
-import { calcTableFormatPosRowWise } from '../../utils/StyleUtils';
+import { calcTableFormatPos } from '../../utils/StyleUtils';
 import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 
 /**
@@ -66,7 +66,7 @@ class GameModeMove implements IGameUI {
 
     const navigations = this.getLatestNavigations();
     const buttons = this.getMoveButtons(navigations, previewFill);
-    const buttonPositions = calcTableFormatPosRowWise({
+    const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
       numItemLimit: 1,
       maxYSpace: modeMoveConstants.buttonYSpace

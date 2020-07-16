@@ -13,7 +13,7 @@ import settingsConstants from '../scenes/settings/SettingsConstants';
 import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
-import { calcTableFormatPosRowWise } from '../utils/StyleUtils';
+import { calcTableFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import escapeConstants, {
   escapeOptButtonStyle,
@@ -77,7 +77,7 @@ class GameEscapeManager implements IGameUI {
     escapeMenuContainer.add([escapeMenuBg, volOpt]);
 
     const buttons = this.getOptButtons();
-    const buttonPositions = calcTableFormatPosRowWise({
+    const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length
     });
 

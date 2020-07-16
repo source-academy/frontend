@@ -13,6 +13,14 @@ import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
+/**
+ * This class exposes all the public API's of managers
+ * in the Game Manager scene.
+ *
+ * It allows managers to access services globally
+ * through GameGlobalAPI.getInstance().function() without
+ * having to keep a reference to the gameManager.
+ */
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;
 

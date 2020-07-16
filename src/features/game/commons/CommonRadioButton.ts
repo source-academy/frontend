@@ -1,6 +1,6 @@
 import SoundAssets from '../assets/SoundAssets';
 import GameSoundManager from '../sound/GameSoundManager';
-import { calcTableFormatPosRowWise, HexColor } from '../utils/StyleUtils';
+import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';
 import { AssetKey, BitmapFontStyle, TextConfig } from './CommonTypes';
@@ -92,7 +92,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     this.buttonClickSoundKey = buttonClickSoundKey;
 
     const buttons = this.getRadioButtons(choices);
-    this.buttonPositions = calcTableFormatPosRowWise({
+    this.buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
       maxXSpace: maxXSpace
     });
