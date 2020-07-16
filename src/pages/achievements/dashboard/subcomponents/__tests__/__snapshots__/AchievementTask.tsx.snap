@@ -48,7 +48,7 @@ exports[`AchievementModal component renders correctly 1`] = `
                   </span>
                 </Blueprint3.Icon>
                 <p>
-                  6 Weeks
+                  5 Weeks
                 </p>
               </div>
             </AchievementDeadline>
