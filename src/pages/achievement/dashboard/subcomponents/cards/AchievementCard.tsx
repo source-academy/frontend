@@ -1,6 +1,7 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
+import { AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
@@ -30,6 +31,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
 
+  const status = inferencer.getStatus(id);
   const displayExp = inferencer.getDisplayExp(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
@@ -60,7 +62,11 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          <AchievementWeek week={release} intent={Intent.WARNING} />
+          {status === AchievementStatus.COMPLETED ? (
+            <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} style={{ paddingLeft: '1em' }} />
+          ) : (
+            <AchievementWeek week={release} intent={Intent.WARNING} />
+          )}
         </div>
 
         <div className="details">
