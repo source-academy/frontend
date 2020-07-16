@@ -1,6 +1,4 @@
-import { AssetMap, TextAsset } from './AssetsTypes';
-
-const TextAssets: AssetMap<TextAsset> = {
+const TextAssets = {
   defaultCheckpoint: { key: 'default-chap', path: '../assets/defaultCheckpoint.txt' },
   awardsMapping: { key: 'awards-mapping', path: '../assets/awardsMapping.sa' }
 };

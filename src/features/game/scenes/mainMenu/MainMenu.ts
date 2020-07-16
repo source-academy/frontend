@@ -46,7 +46,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.initialise(this);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.soundManager.loadSoundAssetMap(SoundAssets);
-    this.load.text(TextAssets.defaultAssets.key, TextAssets.defaultAssets.path);
+    this.load.text(TextAssets.awardsMapping.key, TextAssets.awardsMapping.path);
     addLoadingScreen(this);
   }
 
