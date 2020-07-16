@@ -11,11 +11,11 @@ exports[`AchievementModal component renders correctly 1`] = `
         <p>
           Deadline: 21 August 2020
         </p>
-        <AchievementWeek week={{...}}>
+        <AchievementWeek week={{...}} intent=\\"danger\\">
           <div className=\\"week\\">
             <div>
-              <Blueprint3.Tag intent=\\"warning\\" round={true}>
-                <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+              <Blueprint3.Tag intent=\\"danger\\" round={true}>
+                <span className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                   <Blueprint3.Icon icon={[undefined]} />
                   <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
                     <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>

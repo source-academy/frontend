@@ -28,7 +28,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                         <h3>
                           RUNE MASTER
                         </h3>
-                        <AchievementWeek week={[undefined]}>
+                        <AchievementWeek week={[undefined]} intent=\\"warning\\">
                           <div className=\\"week\\">
                             <div />
                           </div>
@@ -218,7 +218,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                         <h3>
                           POWER OF FRIENDSHIP
                         </h3>
-                        <AchievementWeek week={[undefined]}>
+                        <AchievementWeek week={[undefined]} intent=\\"warning\\">
                           <div className=\\"week\\">
                             <div />
                           </div>
@@ -397,7 +397,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                         <h3>
                           THE SOURCE-RER
                         </h3>
-                        <AchievementWeek week={{...}}>
+                        <AchievementWeek week={{...}} intent=\\"warning\\">
                           <div className=\\"week\\">
                             <div>
                               <Blueprint3.Tag intent=\\"warning\\" round={true}>
@@ -599,7 +599,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                         <h3>
                           CURVE WIZARD
                         </h3>
-                        <AchievementWeek week={{...}}>
+                        <AchievementWeek week={{...}} intent=\\"warning\\">
                           <div className=\\"week\\">
                             <div>
                               <Blueprint3.Tag intent=\\"warning\\" round={true}>
@@ -790,7 +790,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                         <h3>
                           THAT&#39;S THE SPIRIT
                         </h3>
-                        <AchievementWeek week={[undefined]}>
+                        <AchievementWeek week={[undefined]} intent=\\"warning\\">
                           <div className=\\"week\\">
                             <div />
                           </div>

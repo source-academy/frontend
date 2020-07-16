@@ -1,4 +1,4 @@
-import { ProgressBar } from '@blueprintjs/core';
+import { Intent, ProgressBar } from '@blueprintjs/core';
 import React from 'react';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
@@ -46,7 +46,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         <div className="content">
           <div className="heading">
             <h3>{title.toUpperCase()}</h3>
-            <AchievementWeek week={release} />
+            <AchievementWeek week={release} intent={Intent.WARNING} />
           </div>
 
           <div className="details">

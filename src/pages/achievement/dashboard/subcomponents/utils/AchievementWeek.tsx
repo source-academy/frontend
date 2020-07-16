@@ -5,16 +5,17 @@ import { prettifyWeek } from './DateHelper';
 
 type AchievementWeekProps = {
   week?: Date;
+  intent: Intent;
 };
 
 function AchievementWeek(props: AchievementWeekProps) {
-  const { week } = props;
+  const { week, intent } = props;
 
   return (
     <div className="week">
       <div>
         {week === undefined ? null : (
-          <Tag intent={Intent.WARNING} round={true}>
+          <Tag intent={intent} round={true}>
             {prettifyWeek(week)}
           </Tag>
         )}

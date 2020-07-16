@@ -25,7 +25,7 @@ exports[`EditableAchievementTask component renders correctly 1`] = `
                   <h3>
                     RUNE MASTER
                   </h3>
-                  <AchievementWeek week={[undefined]}>
+                  <AchievementWeek week={[undefined]} intent=\\"warning\\">
                     <div className=\\"week\\">
                       <div />
                     </div>

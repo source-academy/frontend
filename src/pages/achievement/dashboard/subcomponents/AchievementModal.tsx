@@ -1,3 +1,4 @@
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import { AchievementAbility, AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
@@ -67,7 +68,7 @@ function AchievementModal(props: AchievementModalProps) {
         {deadline !== undefined ? (
           <div className="deadline">
             <p>{`Deadline: ${prettifyDate(deadline)}`}</p>
-            <AchievementWeek week={deadline} />
+            <AchievementWeek week={deadline} intent={Intent.DANGER} />
           </div>
         ) : null}
         <div className="description">

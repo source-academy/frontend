@@ -1,4 +1,4 @@
-import { Icon, ProgressBar } from '@blueprintjs/core';
+import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
@@ -60,7 +60,7 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          <AchievementWeek week={release} />
+          <AchievementWeek week={release} intent={Intent.WARNING} />
         </div>
 
         <div className="details">

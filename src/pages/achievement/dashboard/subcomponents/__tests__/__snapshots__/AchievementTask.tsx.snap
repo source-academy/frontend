@@ -11,7 +11,7 @@ exports[`AchievementModal component renders correctly 1`] = `
             <h3>
               BEYOND THE SECOND DIMENSION
             </h3>
-            <AchievementWeek week={{...}}>
+            <AchievementWeek week={{...}} intent=\\"warning\\">
               <div className=\\"week\\">
                 <div>
                   <Blueprint3.Tag intent=\\"warning\\" round={true}>
