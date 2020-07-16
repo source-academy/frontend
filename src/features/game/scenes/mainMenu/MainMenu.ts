@@ -73,7 +73,7 @@ class MainMenu extends Phaser.Scene {
   }
 
   private async loadAwardsMapping() {
-    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMappingTxt.key);
+    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
     getSourceAcademyGame().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
   }
 
