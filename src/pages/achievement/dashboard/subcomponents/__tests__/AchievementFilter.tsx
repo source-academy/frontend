@@ -12,6 +12,7 @@ test('AchievementFilter component renders correctly', () => {
       setFilterStatus={() => {}}
       icon={IconNames.LOCATE}
       count={0}
+      handleFilterColor={() => {}}
     />
   );
   const tree = mount(sampleComponent);

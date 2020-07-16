@@ -33,6 +33,10 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [modalId, setModalId] = useState<number>(-1);
 
+  const handleFilterColor = (status: FilterStatus) => {
+    return status === filterStatus ? '#2dd1f9' : '#ffffff';
+  };
+
   const handleGlow = (id: number) => {
     if (id === modalId) {
       const ability = inferencer.getAchievementItem(id).ability;
@@ -92,18 +96,21 @@ function Dashboard(props: DispatchProps & StateProps) {
             setFilterStatus={setFilterStatus}
             icon={IconNames.GLOBE}
             count={inferencer.getFilterCount(FilterStatus.ALL)}
+            handleFilterColor={handleFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.ACTIVE}
             setFilterStatus={setFilterStatus}
             icon={IconNames.LOCATE}
             count={inferencer.getFilterCount(FilterStatus.ACTIVE)}
+            handleFilterColor={handleFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.COMPLETED}
             setFilterStatus={setFilterStatus}
             icon={IconNames.ENDORSED}
             count={inferencer.getFilterCount(FilterStatus.COMPLETED)}
+            handleFilterColor={handleFilterColor}
           />
         </div>
 

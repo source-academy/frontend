@@ -8,10 +8,11 @@ type AchievementFilterProps = {
   setFilterStatus: any;
   icon: IconName;
   count: number;
+  handleFilterColor: any;
 };
 
 function AchievementFilter(props: AchievementFilterProps) {
-  const { filterStatus, setFilterStatus, icon, count } = props;
+  const { filterStatus, setFilterStatus, icon, count, handleFilterColor } = props;
 
   /**
    * Changes the filter status for the achievement page.
@@ -20,11 +21,15 @@ function AchievementFilter(props: AchievementFilterProps) {
     setFilterStatus(filterStatus);
   };
 
+  const filterColor = handleFilterColor(filterStatus);
+
   return (
     <div className="filter-button" onClick={changeFilterStatus}>
-      <Icon color={'#ffffff'} iconSize={40} icon={icon} />
+      <Icon iconSize={40} icon={icon} color={filterColor} />
       <br />
-      {filterStatus} [{count}]
+      <span style={{ color: filterColor }}>
+        {filterStatus} [{count}]
+      </span>
     </div>
   );
 }
