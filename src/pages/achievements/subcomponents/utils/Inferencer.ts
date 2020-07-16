@@ -344,6 +344,7 @@ class Inferencer {
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
+    descendantDeadlines.sort();
 
     // Reduces the temporary array to a single Date value
     node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
