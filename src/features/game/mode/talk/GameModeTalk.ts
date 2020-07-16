@@ -15,8 +15,8 @@ import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
 
 /**
- * The class in charge of showing the "Talk" UI
- * to display a selection of all the dialogues that players can
+ * The class renders the "Talk" UI which displays
+ * a selection of all the dialogues that players can
  * talk about in a location
  */
 class GameModeTalk implements IGameUI {

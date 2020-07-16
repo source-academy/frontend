@@ -1,10 +1,10 @@
 import { IGameUI } from '../../commons/CommonTypes';
 
 /**
- * This is the phase that is active when dialogues,
- * notifications, and popups are playing.
+ * This is the phase that is active when none of
+ * the mode UI's are being shown.
  *
- * None of the UI's are being shown at during this phase.
+ * It is used for dialogue/popups and notifications
  */
 class GameModeSequence implements IGameUI {
   public activateUI() {}

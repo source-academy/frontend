@@ -39,11 +39,10 @@ export async function saveData(accountInfo: AccountInfo, fullSaveState: FullSave
 /**
  * This function loads data to the backend.
  * Currently saves the loads game data from the "collectibles" field
- * just because that is the format accepted by the backend
+ * just because that is the format stored by the backend
  *
- * TODO: Change backend endpoint to accept fullSaveState
+ * TODO: Change backend endpoint to store fullSaveState
  *
- * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
  * @param accountInfo - the account information of the student
  */
 export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
@@ -60,7 +59,9 @@ export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState>
 }
 
 /**
- * This function clears the entire game object from the backend
+ * This function clears the entire game object from the database
+ *
+ * @param accountInfo - the account information of the student
  */
 export async function clearData(accountInfo: AccountInfo) {
   const options = {
@@ -77,7 +78,10 @@ export async function clearData(accountInfo: AccountInfo) {
 }
 
 /**
- * This function resets the data in the backend to a fresh user state.
+ * This function resets the data in the backend to a fresh user state
+ * which includes default user settings
+ *
+ * @param accountInfo - the account information of the student
  */
 export async function resetData() {
   const resp = await saveData(getSourceAcademyGame().getAccountInfo(), createEmptySaveState());

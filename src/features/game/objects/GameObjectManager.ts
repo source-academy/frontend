@@ -17,7 +17,7 @@ import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
  *
  * It provides the activate/and deactivate interfaces
  * for Explore mode to call, as well as
- * provide API for make_object_glow and make_object_blink actions
+ * provides API for make_object_glow and make_object_blink actions
  */
 class GameObjectManager implements StateObserver {
   public observerId: string;

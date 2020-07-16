@@ -10,8 +10,8 @@ import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
 import { Dialogue } from './GameDialogueTypes';
 
 /**
- * Manager in charge of playing the correct dialogue lines given a dialogue Id
- * and in charge of showing the next line, speaker, and actions
+ * Given a dialogue Id, this manager renders the correct dialogue.
+ * It displays the lines, speakers, and performs actions
  * whenever players click on the dialogue box
  */
 export default class DialogueManager {

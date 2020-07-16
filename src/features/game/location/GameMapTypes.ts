@@ -9,12 +9,13 @@ export type LocationId = string;
 
 /**
  * @typedef {GameLocation} - encapsulates data about a location in a GameMap
+ * @prop {ItemId[]} actionIds - ids of all actions that play when that location is visited
  * @prop {LocationId} id - the id to indentify that location
  * @prop {string} name - the name of the location as shown in the Move Menu
  * @prop {AssetKey} assetKey - the asset key for the background image of the location
  * @prop {Set<GameMode>} modes - the game modes that are available in the location
  * @prop {Set<ItemId>} talkTopics - the dialogue id of topics that players can talk about in Talk menu of that location
- * @prop {Set<ItemId>} objects - the object id of images of objects rendered in the location, some may be clickable
+ * @prop {Set<ItemId>} objects - the object id of objects rendered in the location
  * @prop {Set<ItemId>} boundingBoxes - the id of the bounding boxes (invisible rectangles) in that location
  * @prop {AssetKey} bgmKey - the asset key of background music being played in that location
  */
