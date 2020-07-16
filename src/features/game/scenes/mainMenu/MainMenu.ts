@@ -166,7 +166,9 @@ class MainMenu extends Phaser.Scene {
         text: mainMenuConstants.optionsText.collectible,
         callback: () => {
           this.layerManager.clearAllLayers();
-          this.scene.start('Achievements');
+          this.scene.start('Achievements', {
+            fullSaveState: this.getLoadedGameState()
+          });
         }
       },
       {
