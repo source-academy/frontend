@@ -2,7 +2,7 @@ import { GameActionType } from '../action/GameActionTypes';
 import { GamePosition } from '../commons/CommonTypes';
 import { GameLocationAttr } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameStateStorage } from '../state/GameStateTypes';
+import { GameStateStorage, UserStateTypes } from '../state/GameStateTypes';
 
 const stringToPositionMap = {
   left: GamePosition.Left,
@@ -50,6 +50,11 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState
 };
 
+const stringToUserStateMap = {
+  achievements: UserStateTypes.achievements,
+  collectibles: UserStateTypes.collectibles
+};
+
 export default class ParserConverter {
   public static stringToPosition(str: string) {
     return stringToPositionMap[str] || GamePosition.Middle;
@@ -83,6 +88,14 @@ export default class ParserConverter {
     const result = stringToLocAttrMap[str];
     if (!result) {
       throw new Error(`Invalid entity type, ${str}`);
+    }
+    return result;
+  }
+
+  public static stringToUserState(str: string) {
+    const result = stringToUserStateMap[str];
+    if (!result) {
+      throw new Error(`Invalid user state type, ${str}`);
     }
     return result;
   }

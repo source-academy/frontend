@@ -6,6 +6,10 @@ import { UserSaveState } from '../save/GameSaveTypes';
 import { mandatory, sleep, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
 
+/**
+ * This class manages the sounds for the entire game
+ * It proxies the game's sound manager
+ */
 class GameSoundManager {
   private baseSoundManager: Phaser.Sound.BaseSoundManager | undefined;
   private scene: Phaser.Scene | undefined;

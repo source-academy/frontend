@@ -1,6 +1,5 @@
 import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import { AssetObject } from '../../assets/AssetsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -18,7 +17,6 @@ import { AchievementConstants } from './AchievementConstants';
 
 type AchievementsProps = {
   fullSaveState: FullSaveState;
-  defaultAssets: AssetObject;
 };
 
 /**
@@ -53,7 +51,7 @@ class Achievements extends Phaser.Scene {
     this.scrollLim = 0;
   }
 
-  public init({ fullSaveState, defaultAssets }: AchievementsProps) {
+  public init({ fullSaveState }: AchievementsProps) {
     this.fullSaveState = fullSaveState;
 
     this.layerManager = new GameLayerManager();

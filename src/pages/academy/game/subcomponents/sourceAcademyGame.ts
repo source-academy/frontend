@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
-import { AssetKey } from 'src/features/game/commons/CommonTypes';
+import { AwardProperty } from 'src/features/game/award/AwardTypes';
+import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import Achievements from 'src/features/game/scenes/achievements/Achievements';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
@@ -31,6 +32,7 @@ type GlobalGameProps = {
   soundAssetMap: Map<AssetKey, SoundAsset>;
   accountInfo: AccountInfo | undefined;
   storySimulatorProps?: StorySimulatorProps;
+  awardsMapping: Map<ItemId, AwardProperty>;
 };
 
 export class SourceAcademyGame extends Phaser.Game {
@@ -39,6 +41,7 @@ export class SourceAcademyGame extends Phaser.Game {
   constructor(config: Phaser.Types.Core.GameConfig) {
     super(config);
     this.global = {
+      awardsMapping: new Map<ItemId, AwardProperty>(),
       currBgMusicKey: undefined,
       soundAssetMap: new Map<AssetKey, SoundAsset>(),
       accountInfo: undefined
@@ -73,6 +76,11 @@ export class SourceAcademyGame extends Phaser.Game {
     this.global.accountInfo = acc;
   }
 
+  public setAwardsMapping(awardsMapping: Map<ItemId, AwardProperty>) {
+    this.global.awardsMapping = awardsMapping;
+  }
+
+  public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
 
   public setStorySimProps(storySimulatorProps: any) {

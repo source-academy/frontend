@@ -4,7 +4,6 @@ import {
   getSourceAcademyGame
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import { AssetObject } from '../../assets/AssetsTypes';
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
@@ -13,7 +12,7 @@ import { Constants, screenCenter, screenSize } from '../../commons/CommonConstan
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import AssetParser from '../../parser/AssetParser';
+import AwardParser from '../../parser/AssetParser';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
@@ -33,7 +32,6 @@ class MainMenu extends Phaser.Scene {
   private roomCode: string;
 
   private loadedGameState?: FullSaveState;
-  public defaultAssets?: AssetObject;
 
   constructor() {
     super('MainMenu');
@@ -63,7 +61,7 @@ class MainMenu extends Phaser.Scene {
 
     this.roomCode = await getRoomPreviewCode(accountInfo);
     await this.loadGameDataAndSettings(accountInfo);
-    await this.loadAssetObject();
+    await this.loadAwardsMapping();
   }
 
   private async loadGameDataAndSettings(accountInfo: AccountInfo) {
@@ -74,9 +72,9 @@ class MainMenu extends Phaser.Scene {
     this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
-  private async loadAssetObject() {
-    const assetText = this.cache.text.get(TextAssets.defaultAssets.key);
-    this.defaultAssets = AssetParser.parse(assetText);
+  private async loadAwardsMapping() {
+    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMappingTxt.key);
+    getSourceAcademyGame().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
   }
 
   private preloadAssets() {
@@ -166,8 +164,7 @@ class MainMenu extends Phaser.Scene {
         callback: () => {
           this.layerManager.clearAllLayers();
           this.scene.start('Achievements', {
-            fullSaveState: this.getLoadedGameState(),
-            defaultAssets: this.getDefaultAssets()
+            fullSaveState: this.getLoadedGameState()
           });
         }
       },
@@ -192,7 +189,6 @@ class MainMenu extends Phaser.Scene {
   }
 
   public getLoadedGameState = () => mandatory(this.loadedGameState);
-  public getDefaultAssets = () => mandatory(this.defaultAssets);
 }
 
 export default MainMenu;
