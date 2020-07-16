@@ -1,15 +1,13 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
-import { HotKeys } from 'react-hotkeys';
-
 import { parseError } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
-
 import ReplInput, { ReplInputProps } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 

@@ -9,13 +9,12 @@ import { HistoryHelper } from '../../commons/utils/HistoryHelper';
 import { assessmentCategoryLink } from '../../commons/utils/ParamParseHelper';
 import { assessmentRegExp, gradingRegExp } from '../../features/academy/AcademyTypes';
 import DashboardContainer from './dashboard/DashboardContainer';
-import Grading from './grading/GradingContainer';
-import Sourcereel from './sourcereel/SourcereelContainer';
-import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
-
 import Game from './game/Game';
+import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
+import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
+import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 

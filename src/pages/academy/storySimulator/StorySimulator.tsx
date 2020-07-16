@@ -1,40 +1,86 @@
-import { Button } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import JsonUpload from './subcomponents/JsonUpload';
-import StoryXmlLoader from './subcomponents/StoryXmlLoader';
+import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
+import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
+import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
+import StorySimulatorChapterSequencer from './subcomponents/StorySimulatorChapterSequencer';
+import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
+import {
+  createStorySimulatorGame,
+  getStorySimulatorGame
+} from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
-  const handleTest = React.useCallback(() => {
-    window.open('/academy/game');
+  const session = useSelector((state: OverallState) => state.session);
+
+  const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
+  const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
+
+  React.useEffect(() => {
+    createStorySimulatorGame().setStorySimProps({ setStorySimState });
   }, []);
 
+  React.useEffect(() => {
+    getStorySimulatorGame().setAccountInfo({
+      accessToken: session.accessToken,
+      refreshToken: session.refreshToken,
+      role: session.role,
+      name: session.name
+    } as AccountInfo);
+  }, [session]);
+
+  React.useEffect(() => {
+    (async () => {
+      setAssetPaths(await fetchAssetPaths(session.accessToken, s3AssetFolders));
+    })();
+  }, [session]);
+
   return (
-    <div className="ContentDisplay row center-xs ">
-      <div className="col-xs-10 contentdisplay-content-parent">
-        <div className="WhiteBackground VerticalStack">
-          <h2>Story Simulator</h2>
-
-          <div className="Horizontal">
-            <div className="Column">
-              <StoryXmlLoader />
-            </div>
-            <div className="Column">
-              <JsonUpload />
-            </div>
-          </div>
-
-          <div>
-            <h3>XML to be loaded</h3>
-            {'mission-1'}
-          </div>
-          <Button icon={IconNames.MOUNTAIN} onClick={handleTest}>
-            <div className="ag-grid-button-text hidden-xs">Play Story</div>
-          </Button>
+    <>
+      <div className="StorySimulatorWrapper">
+        <div id="game-display" />
+        <div className="LeftAlign StorySimulatorPanel">
+          {storySimState === StorySimState.Default && (
+            <>
+              <h3>Welcome to story simulator!</h3>
+            </>
+          )}
+          {storySimState === StorySimState.CheckpointSim && (
+            <StorySimulatorCheckpointSim
+              accessToken={session.accessToken}
+              assetPaths={assetPaths}
+            />
+          )}
+          {storySimState === StorySimState.ObjectPlacement && (
+            <>
+              <h3>Asset Selection</h3>
+              <StorySimulatorAssetSelection
+                folders={s3AssetFolders}
+                assetPaths={assetPaths}
+                accessToken={session.accessToken}
+              />
+            </>
+          )}
+          {storySimState === StorySimState.AssetUploader && (
+            <>
+              <h3>Asset uploader</h3>
+              <StorySimulatorAssetFileUploader accessToken={session.accessToken} />
+              <h3>Asset Viewer</h3>
+              <StorySimulatorAssetSelection
+                folders={s3AssetFolders}
+                assetPaths={assetPaths}
+                accessToken={session.accessToken}
+              />
+            </>
+          )}
+          {storySimState === StorySimState.ChapterSequence && <StorySimulatorChapterSequencer />}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 
