@@ -19,12 +19,11 @@ function AchievementModal(props: AchievementModalProps) {
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, goals, modal } = achievement;
+  const { title, ability, deadline, goals, modal } = achievement;
   const { modalImageUrl, description, completionText } = modal;
 
   const status = inferencer.getStatus(id);
   const awardedExp = inferencer.getStudentExp(id);
-  const deadline = inferencer.getDisplayDeadline(id);
 
   // Entire modal background
   const handleBackground = (ability: AchievementAbility) => {

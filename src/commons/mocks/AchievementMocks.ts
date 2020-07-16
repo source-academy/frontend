@@ -125,7 +125,7 @@ export const mockAchievements: AchievementItem[] = [
     id: 4,
     title: 'Curve Wizard',
     ability: AchievementAbility.CORE,
-    deadline: new Date(2020, 8, 5, 0, 0, 0),
+    deadline: new Date(2020, 8, 15, 0, 0, 0),
     release: new Date(2020, 8, 1, 0, 0, 0),
     isTask: true,
     prerequisiteIds: [5, 6],
