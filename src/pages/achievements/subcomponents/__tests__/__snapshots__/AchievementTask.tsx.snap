@@ -70,15 +70,11 @@ exports[`AchievementModal component renders correctly 1`] = `
               </div>
             </AchievementExp>
           </div>
-          <AchievementProgressBar progressFrac={0.852} shouldAnimate={true}>
-            <div>
-              <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.852} animate={true}>
-                <div className=\\"bp3-progress-bar progress\\">
-                  <div className=\\"bp3-progress-meter\\" style={{...}} />
-                </div>
-              </Blueprint3.ProgressBar>
+          <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.852} animate={false} stripes={false}>
+            <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress\\">
+              <div className=\\"bp3-progress-meter\\" style={{...}} />
             </div>
-          </AchievementProgressBar>
+          </Blueprint3.ProgressBar>
         </div>
       </div>
     </AchievementCard>

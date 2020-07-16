@@ -1,0 +1,121 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementExp component renders correctly 1`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Week 0
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;
+
+exports[`AchievementExp component renders correctly 2`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Recess Week
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;
+
+exports[`AchievementExp component renders correctly 3`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Reading Week
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;
+
+exports[`AchievementExp component renders correctly 4`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Examination Week 1
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;
+
+exports[`AchievementExp component renders correctly 5`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Examination Week 2
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;
+
+exports[`AchievementExp component renders correctly 6`] = `
+"<AchievementWeek week={{...}}>
+  <div className=\\"week\\">
+    <div>
+      <Blueprint3.Tag intent=\\"warning\\" round={true}>
+        <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+            <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
+              Vacation
+            </span>
+          </Blueprint3.Text>
+          <Blueprint3.Icon icon={[undefined]} />
+        </span>
+      </Blueprint3.Tag>
+    </div>
+  </div>
+</AchievementWeek>"
+`;

@@ -4,27 +4,27 @@ import React from 'react';
 import AchievementWeek from '../AchievementWeek';
 
 const normalWeekProps = {
-  release: new Date()
+  week: new Date()
 };
 
 const recessWeekProps = {
-  release: new Date(2020, 8, 19, 0, 0, 0)
+  week: new Date(2020, 8, 19, 0, 0, 0)
 };
 
 const readingWeekProps = {
-  release: new Date(2020, 10, 14, 0, 0, 0)
+  week: new Date(2020, 10, 14, 0, 0, 0)
 };
 
 const examWeekOneProps = {
-  release: new Date(2020, 10, 21, 0, 0, 0)
+  week: new Date(2020, 10, 21, 0, 0, 0)
 };
 
 const examWeekTwoProps = {
-  release: new Date(2020, 10, 28, 0, 0, 0)
+  week: new Date(2020, 10, 28, 0, 0, 0)
 };
 
 const vacationWeekProps = {
-  release: new Date(2020, 11, 6, 0, 0, 0)
+  week: new Date(2020, 11, 6, 0, 0, 0)
 };
 
 test('AchievementExp component renders correctly', () => {

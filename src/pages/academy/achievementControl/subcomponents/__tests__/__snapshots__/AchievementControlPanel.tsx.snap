@@ -75,15 +75,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                           </div>
                         </AchievementExp>
                       </div>
-                      <AchievementProgressBar progressFrac={0.355} shouldAnimate={true}>
-                        <div>
-                          <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.355} animate={true}>
-                            <div className=\\"bp3-progress-bar progress\\">
-                              <div className=\\"bp3-progress-meter\\" style={{...}} />
-                            </div>
-                          </Blueprint3.ProgressBar>
+                      <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.355} animate={false} stripes={false}>
+                        <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress\\">
+                          <div className=\\"bp3-progress-meter\\" style={{...}} />
                         </div>
-                      </AchievementProgressBar>
+                      </Blueprint3.ProgressBar>
                     </div>
                   </div>
                 </AchievementCard>
@@ -269,15 +265,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                           </div>
                         </AchievementExp>
                       </div>
-                      <AchievementProgressBar progressFrac={0.4} shouldAnimate={true}>
-                        <div>
-                          <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.4} animate={true}>
-                            <div className=\\"bp3-progress-bar progress\\">
-                              <div className=\\"bp3-progress-meter\\" style={{...}} />
-                            </div>
-                          </Blueprint3.ProgressBar>
+                      <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.4} animate={false} stripes={false}>
+                        <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress\\">
+                          <div className=\\"bp3-progress-meter\\" style={{...}} />
                         </div>
-                      </AchievementProgressBar>
+                      </Blueprint3.ProgressBar>
                     </div>
                   </div>
                 </AchievementCard>
@@ -464,15 +456,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                           </div>
                         </AchievementExp>
                       </div>
-                      <AchievementProgressBar progressFrac={0.4725} shouldAnimate={true}>
-                        <div>
-                          <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.4725} animate={true}>
-                            <div className=\\"bp3-progress-bar progress\\">
-                              <div className=\\"bp3-progress-meter\\" style={{...}} />
-                            </div>
-                          </Blueprint3.ProgressBar>
+                      <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.4725} animate={false} stripes={false}>
+                        <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress\\">
+                          <div className=\\"bp3-progress-meter\\" style={{...}} />
                         </div>
-                      </AchievementProgressBar>
+                      </Blueprint3.ProgressBar>
                     </div>
                   </div>
                 </AchievementCard>
@@ -670,15 +658,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                           </div>
                         </AchievementExp>
                       </div>
-                      <AchievementProgressBar progressFrac={0.2833333333333333} shouldAnimate={true}>
-                        <div>
-                          <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.2833333333333333} animate={true}>
-                            <div className=\\"bp3-progress-bar progress\\">
-                              <div className=\\"bp3-progress-meter\\" style={{...}} />
-                            </div>
-                          </Blueprint3.ProgressBar>
+                      <Blueprint3.ProgressBar className=\\"progress\\" intent={[undefined]} value={0.2833333333333333} animate={false} stripes={false}>
+                        <div className=\\"bp3-progress-bar bp3-no-animation bp3-no-stripes progress\\">
+                          <div className=\\"bp3-progress-meter\\" style={{...}} />
                         </div>
-                      </AchievementProgressBar>
+                      </Blueprint3.ProgressBar>
                     </div>
                   </div>
                 </AchievementCard>
@@ -853,15 +837,11 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                           </div>
                         </AchievementExp>
                       </div>
-                      <AchievementProgressBar progressFrac={1} shouldAnimate={true}>
-                        <div>
-                          <Blueprint3.ProgressBar className=\\"progress\\" intent=\\"success\\" value={1} animate={true}>
-                            <div className=\\"bp3-progress-bar bp3-intent-success progress\\">
-                              <div className=\\"bp3-progress-meter\\" style={{...}} />
-                            </div>
-                          </Blueprint3.ProgressBar>
+                      <Blueprint3.ProgressBar className=\\"progress\\" intent=\\"success\\" value={1} animate={false} stripes={false}>
+                        <div className=\\"bp3-progress-bar bp3-intent-success bp3-no-animation bp3-no-stripes progress\\">
+                          <div className=\\"bp3-progress-meter\\" style={{...}} />
                         </div>
-                      </AchievementProgressBar>
+                      </Blueprint3.ProgressBar>
                     </div>
                   </div>
                 </AchievementCard>
