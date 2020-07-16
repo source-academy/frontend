@@ -1,5 +1,9 @@
 import { mandatory } from '../utils/GameUtils';
 
+/**
+ * Manager that keeps track of all the event listeners and is
+ * in charge of deactivating them when the scene ends
+ */
 class GameInputManager {
   private scene: Phaser.Scene | undefined;
   private keyboardListeners: Phaser.Input.Keyboard.Key[];

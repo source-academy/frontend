@@ -14,6 +14,11 @@ import { resizeOverflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import modeMoveConstants, { moveButtonStyle } from './GameModeMoveConstants';
 
+/**
+ * The class in charge of showing the "Move" UI
+ * to show the images and titles of navigable
+ * locations from one location
+ */
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewMask: Phaser.GameObjects.Graphics | undefined;

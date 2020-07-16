@@ -4,6 +4,10 @@ import { Layer } from '../layer/GameLayerTypes';
 import { LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 
+/**
+ * Manager for game's background.
+ * Loads the background for a location on navigate and change_location action.
+ */
 export default class GameBackgroundManager {
   public observerId: string;
 
@@ -11,6 +15,9 @@ export default class GameBackgroundManager {
     this.observerId = 'GameBackgroundManager';
   }
 
+  /**
+   * @param locationId id of the location whose background you want to render
+   */
   public renderBackgroundLayerContainer(locationId: LocationId) {
     const assetKey = GameGlobalAPI.getInstance().getLocationAtId(locationId).assetKey;
 

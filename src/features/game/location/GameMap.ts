@@ -10,6 +10,12 @@ import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
 
+/**
+ * Game map is the class that encapsulates data about
+ * all the locations and items in the map in a checkpoint
+ *
+ * Mainly used by game checkpoint
+ */
 class GameMap {
   private soundAssets: SoundAsset[];
   private mapAssets: Map<AssetKey, AssetPath>;

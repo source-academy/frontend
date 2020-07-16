@@ -4,6 +4,15 @@ import { GameLocation, LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { FullSaveState, GameSaveState, SettingsJson, UserSaveState } from './GameSaveTypes';
 
+/**
+ * Function that obtains data from game manager,
+ * game state manager, user state manager, as
+ * well as phase manager and saves game data into Json 'snapshot' format
+ *
+ * @param prevGameState - the snapshot of the game the during the last save point
+ * @param chapterNum - the chapterNumber of the game
+ * @param checkpointNUm - the checkpoint of the game
+ */
 export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,

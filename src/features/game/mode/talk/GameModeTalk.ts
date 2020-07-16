@@ -14,6 +14,11 @@ import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
 
+/**
+ * The class renders the "Talk" UI which displays
+ * a selection of all the dialogues that players can
+ * talk about in a location
+ */
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 

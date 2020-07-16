@@ -7,6 +7,17 @@ import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { saveData } from './GameSaveRequests';
 import { FullSaveState, SaveManagerType, SettingsJson } from './GameSaveTypes';
 
+/**
+ * The manager provides API for loading and saving data from the backend
+ * and is in charge of keeping record of the last save point, so that
+ * players can make new save data based on the last one.
+ *
+ * Polymorphic class that works different ways based on SaveManagerType
+ *   Game - loads/saves both games and settings while players are playing the game
+ *   Simulator - does not load/save any data
+ *   Settings - used when you just want to load and save settings
+ *   None - default type of the save manager before initialisation
+ */
 export default class GameSaveManager {
   private accountInfo: AccountInfo | undefined;
   private fullSaveState: FullSaveState;

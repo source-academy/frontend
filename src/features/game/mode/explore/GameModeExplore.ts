@@ -14,6 +14,11 @@ import {
   magnifyingGlassHighlight
 } from './GameModeExploreConstants';
 
+/**
+ * The class in charge of showing "Explore" mode UI
+ * which comprises back button, attaching magnifying glass cursor and
+ * making objects and bounding boxes active during Explore mode
+ */
 class GameModeExplore implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 

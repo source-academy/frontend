@@ -4,6 +4,14 @@ import GameInputManager from '../input/GameInputManager';
 import { mandatory } from '../utils/GameUtils';
 import { GamePhaseType } from './GamePhaseTypes';
 
+/**
+ * State machine in charge of keeping track
+ * of phases in the game, and is in charge of making phase
+ * transitions from one phase to another.
+ *
+ * It keeps phases in a stack to keep track of states
+ * that have been previously visited
+ */
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];

@@ -22,7 +22,6 @@ class Parser {
     Parser.actionIdNum = 0;
 
     Parser.checkpoint = {
-      configuration: '',
       map: new GameMap(),
       startingLoc: '',
       objectives: new GameObjective()

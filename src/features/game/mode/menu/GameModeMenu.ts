@@ -13,6 +13,12 @@ import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
 import modeMenuConstants, { modeButtonStyle } from './GameModeMenuConstants';
 
+/**
+ * The class in charge of showing the "Menu" mode UI
+ * which displays the menu for players
+ * to choose the game mode they want to play
+ * in a location
+ */
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 

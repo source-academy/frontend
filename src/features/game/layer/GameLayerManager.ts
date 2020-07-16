@@ -5,6 +5,10 @@ import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { sleep } from '../utils/GameUtils';
 import { defaultLayerSequence, Layer } from './GameLayerTypes';
 
+/**
+ * Manager in charge of placing ordering the layers
+ * as specified in Game Layer types
+ */
 class GameLayerManager {
   private mainLayer: Phaser.GameObjects.Container | undefined;
   private layers: Map<Layer, Phaser.GameObjects.Container>;

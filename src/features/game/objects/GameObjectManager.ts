@@ -11,6 +11,14 @@ import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
 
+/**
+ * Manager that renders objects in a location
+ * and also attaches actions as onClick callbacks to objects
+ *
+ * It provides the activate/and deactivate interfaces
+ * for Explore mode to call, as well as
+ * provides API for make_object_glow and make_object_blink actions
+ */
 class GameObjectManager implements StateObserver {
   public observerId: string;
   private objects: Map<ItemId, ActivatableObject>;

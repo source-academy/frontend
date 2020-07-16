@@ -21,6 +21,9 @@ import escapeConstants, {
   volumeRadioOptTextStyle
 } from './GameEscapeConstants';
 
+/**
+ * Manager in charge of rendering and destroying the escape manager in a scene
+ */
 class GameEscapeManager implements IGameUI {
   private volumeOptions: CommonRadioButton | undefined;
   private scene: Phaser.Scene | undefined;
@@ -35,6 +38,14 @@ class GameEscapeManager implements IGameUI {
     this.isStorySimulator = false;
   }
 
+  /**
+   * Initialises the escape manager UI
+   *
+   * @param scene - the scene to add escape manager
+   * @param phaseManager - the phase manager of the scene
+   * @param saveManager - the save manager of the scene
+   * @param isStorySimulator - whether or not this scene is the story simulator
+   */
   public initialise(
     scene: IBaseScene,
     phaseManager: GamePhaseManager,
