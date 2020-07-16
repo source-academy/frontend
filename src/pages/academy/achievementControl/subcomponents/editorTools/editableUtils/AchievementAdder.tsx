@@ -1,7 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import React from 'react';
+import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
 
-import Inferencer from '../../../../../achievements/subcomponents/utils/Inferencer';
 import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {

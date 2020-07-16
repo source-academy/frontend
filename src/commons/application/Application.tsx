@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
-import AchievementContainer from 'src/pages/achievements/AchievementContainer';
+import Achievement from 'src/pages/achievements/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
@@ -77,7 +77,7 @@ class Application extends React.Component<ApplicationProps, {}> {
               <Route path="/login" render={toLogin(this.props)} />
               <Route path="/contributors" component={Contributors} />
               <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route path="/achievements" component={toAchievements(this.props)} />
+              <Route path="/achievement" component={toAchievement(this.props)} />
               <Route exact={true} path="/" render={this.redirectToAcademy} />
               <Route component={NotFound} />
             </Switch>
@@ -106,10 +106,10 @@ const toAcademy = (props: ApplicationProps) =>
  *  1. If the user is logged in, render the Achievements component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAchievements = (props: ApplicationProps) =>
+const toAchievement = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
-    : () => <AchievementContainer />;
+    : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);

@@ -65,10 +65,10 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         <NavLink
           activeClassName={Classes.ACTIVE}
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-          to="/achievements"
+          to="/achievement"
         >
           <Icon icon={IconNames.MOUNTAIN} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Achievements</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Achievement</div>
         </NavLink>
       )}
     </NavbarGroup>

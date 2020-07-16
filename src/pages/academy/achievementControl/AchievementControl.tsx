@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
 
 import { AchievementGoal, AchievementItem } from '../../../commons/achievements/AchievementTypes';
-import Inferencer from '../../achievements/subcomponents/utils/Inferencer';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
 import AchievementEditor from './subcomponents/AchievementEditor';
 

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import AchievementTask from 'src/pages/achievements/dashboard/subcomponents/AchievementTask';
+import Inferencer from 'src/pages/achievements/dashboard/subcomponents/utils/Inferencer';
 
 import {
   AchievementItem,
   FilterStatus
 } from '../../../../../commons/achievements/AchievementTypes';
-import AchievementTask from '../../../../achievements/subcomponents/AchievementTask';
-import Inferencer from '../../../../achievements/subcomponents/utils/Inferencer';
 import AchievementControlPanelTools from './AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {
