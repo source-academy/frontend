@@ -11,7 +11,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { createEmptySaveState } from '../../save/GameSaveConstants';
+import { createEmptySaveState } from '../../save/GameSaveHelper';
 import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
@@ -81,7 +81,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise(this.fullSaveState.userState);
+    this.userStateManager.initialise(this.fullSaveState.userSaveState);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);

@@ -68,8 +68,8 @@ class MainMenu extends Phaser.Scene {
 
   private async loadGameDataAndSettings(accountInfo: AccountInfo) {
     this.loadedGameState = await loadData(accountInfo);
-    const volume = this.loadedGameState.userState
-      ? this.loadedGameState.userState.settings.volume
+    const volume = this.loadedGameState.userSaveState
+      ? this.loadedGameState.userSaveState.settings.volume
       : 1;
     this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }

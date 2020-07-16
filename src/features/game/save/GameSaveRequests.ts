@@ -4,7 +4,7 @@ import {
   getSourceAcademyGame
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import { createEmptySaveState } from './GameSaveConstants';
+import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
 
 /**

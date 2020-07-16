@@ -5,13 +5,14 @@ import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { FullSaveState, GameSaveState, SettingsJson, UserSaveState } from './GameSaveTypes';
 
 /**
- * Function that obtains data from game manager,
- * game state manager, user state manager, as
- * well as phase manager and saves game data into Json 'snapshot' format
+ * Function that saves game data as a 'snapshot' in FullSaveState
+ * json format by collecting game data from game manager,
+ * game state manager, user state manager, and phase manager
  *
  * @param prevGameState - the snapshot of the game the during the last save point
  * @param chapterNum - the chapterNumber of the game
  * @param checkpointNUm - the checkpoint of the game
+ * @returns {FullSaveState} - the new 'snapshot' of the game
  */
 export function gameStateToJson(
   prevGameState: FullSaveState,
@@ -34,38 +35,52 @@ export function gameStateToJson(
     lastCheckpointPlayed: checkpointNum
   };
 
-  const userState: UserSaveState = {
-    settings: { ...prevGameState.userState.settings },
+  const userSaveState: UserSaveState = {
+    settings: { ...prevGameState.userSaveState.settings },
     lastPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList('collectibles'),
     lastCompletedChapter:
-      prevGameState.userState.lastCompletedChapter === undefined
+      prevGameState.userSaveState.lastCompletedChapter === undefined
         ? -1
-        : prevGameState.userState.lastCompletedChapter
+        : prevGameState.userSaveState.lastCompletedChapter
   };
 
   const newGameStoryStates = { ...prevGameState.gameSaveStates, [chapterNum]: gameStoryState };
 
   const newGameState = {
     gameSaveStates: newGameStoryStates,
-    userState
+    userSaveState
   };
 
   return newGameState;
 }
 
+/**
+ * Function that saves user settings into FullSaveState
+ * by overwriting just the settings portion of the game
+ *
+ * @param prevGameState - the snapshot of the game the during the last save point
+ * @param settingsJson - the settings to be saved
+ * @returns {FullSaveState} - the new snapshot of the game
+ */
 export function userSettingsToJson(
   prevGameState: FullSaveState,
   settingsJson: SettingsJson
 ): FullSaveState {
   const newGameState = {
     gameSaveStates: prevGameState.gameSaveStates,
-    userState: { ...prevGameState.userState, settings: settingsJson }
+    userSaveState: { ...prevGameState.userSaveState, settings: settingsJson }
   };
 
   return newGameState;
 }
 
+/**
+ * Converts a javascript Map into object format
+ *
+ * @param map - Javascript Map that you want to convert
+ * @returns {object} - Map as an object format
+ */
 function mapToJsObject<K, V>(map: Map<K, V>): any {
   const jsObject = {};
   map.forEach((value: V, key: K) => {
@@ -74,9 +89,33 @@ function mapToJsObject<K, V>(map: Map<K, V>): any {
   return jsObject;
 }
 
-function locationStatesToJson(map: Map<LocationId, GameLocation>): any {
+/**
+ * Converts a an object into javascript Map format
+ *
+ * @param obj - Object that you want to convert
+ * @returns {Map<string, any>} - Map as a json format
+ */
+export function jsObjectToMap(obj: any): Map<string, any> {
+  const map = new Map<string, any>();
+
+  if (Object.keys(obj).length) {
+    Object.keys(obj).forEach((key: string) => {
+      map.set(key, obj[key]);
+    });
+  }
+
+  return map;
+}
+
+/**
+ * Converts the locationStates Map into a json object
+ *
+ * @param locationStates - location states map
+ * @returns {object} - The location states map as an object
+ */
+function locationStatesToJson(locationStates: Map<LocationId, GameLocation>): any {
   const jsObject = {};
-  map.forEach((location: GameLocation, locationId: LocationId) => {
+  locationStates.forEach((location: GameLocation, locationId: LocationId) => {
     const locationWithArrays = _.mapValues(location, locationProperty => {
       if (locationProperty instanceof Set) {
         return Array.from(locationProperty);
@@ -88,6 +127,12 @@ function locationStatesToJson(map: Map<LocationId, GameLocation>): any {
   return jsObject;
 }
 
+/**
+ * Converts the locationStates from a saved json object to a map that can be played
+ *
+ * @param obj - location states map as a json object
+ * @returns {Map<LocationId, GameLocation>} - The location states map as a json object
+ */
 export function jsonToLocationStates(obj: any): Map<LocationId, GameLocation> {
   const map = new Map<LocationId, any>();
 
@@ -107,14 +152,20 @@ export function jsonToLocationStates(obj: any): Map<LocationId, GameLocation> {
   return map;
 }
 
-export function jsObjectToMap(obj: any): Map<string, any> {
-  const map = new Map<string, any>();
-
-  if (Object.keys(obj).length) {
-    Object.keys(obj).forEach((key: string) => {
-      map.set(key, obj[key]);
-    });
-  }
-
-  return map;
-}
+/**
+ * Function to create an empty save state
+ * Used for resetting game data of students
+ *
+ * @returns {FullSaveState} - an empty save state for starting players
+ */
+export const createEmptySaveState = (): FullSaveState => {
+  return {
+    gameSaveStates: {},
+    userSaveState: {
+      collectibles: [],
+      settings: { volume: 1 },
+      lastPlayedCheckpoint: [-1, -1],
+      lastCompletedChapter: -1
+    }
+  };
+};

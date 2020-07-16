@@ -2,8 +2,7 @@ import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyG
 
 import { Constants } from '../commons/CommonConstants';
 import { mandatory } from '../utils/GameUtils';
-import { createEmptySaveState } from './GameSaveConstants';
-import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
+import { createEmptySaveState, gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { saveData } from './GameSaveRequests';
 import { FullSaveState, SaveManagerType, SettingsJson } from './GameSaveTypes';
 
@@ -93,7 +92,7 @@ export default class GameSaveManager {
   }
 
   public getLoadedUserState() {
-    return this.fullSaveState.userState;
+    return this.fullSaveState.userSaveState;
   }
 
   public getLoadedGameStoryState() {

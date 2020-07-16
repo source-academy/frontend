@@ -191,7 +191,7 @@ class ChapterSelect extends Phaser.Scene {
 
   private async autoScroll() {
     const chapterIdx = Math.min(
-      this.getLoadedGameState().userState.lastCompletedChapter + 1,
+      this.getLoadedGameState().userSaveState.lastCompletedChapter + 1,
       SampleChapters.length - 1
     );
 

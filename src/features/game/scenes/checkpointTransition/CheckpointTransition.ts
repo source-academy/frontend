@@ -42,7 +42,7 @@ class CheckpointTransition extends Phaser.Scene {
     const loadedGameState = await loadData(accountInfo);
     const chapterDetails = SampleChapters; // TODO: Fetch from backend
 
-    const [currChapter, currCheckpoint] = loadedGameState.userState.lastPlayedCheckpoint;
+    const [currChapter, currCheckpoint] = loadedGameState.userSaveState.lastPlayedCheckpoint;
 
     if (this.isLastCheckpoint(chapterDetails, currChapter, currCheckpoint)) {
       await this.saveChapterComplete(loadedGameState, accountInfo, currChapter);
@@ -94,8 +94,8 @@ class CheckpointTransition extends Phaser.Scene {
     accountInfo: AccountInfo,
     currChapter: number
   ) {
-    loadedGameState.userState.lastCompletedChapter = Math.max(
-      loadedGameState.userState.lastCompletedChapter,
+    loadedGameState.userSaveState.lastCompletedChapter = Math.max(
+      loadedGameState.userSaveState.lastCompletedChapter,
       currChapter
     );
     await saveData(accountInfo, loadedGameState);

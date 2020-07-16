@@ -6,7 +6,7 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { createEmptySaveState } from '../../save/GameSaveConstants';
+import { createEmptySaveState } from '../../save/GameSaveHelper';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import GameSoundManager from '../../sound/GameSoundManager';
 import GameUserStateManager from '../../state/GameUserStateManager';
@@ -61,7 +61,7 @@ class Achievements extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise(this.fullSaveState.userState);
+    this.userStateManager.initialise(this.fullSaveState.userSaveState);
     this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
