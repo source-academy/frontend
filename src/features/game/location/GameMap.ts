@@ -1,8 +1,8 @@
 import { GameAction } from '../action/GameActionTypes';
 import { SoundAsset } from '../assets/AssetsTypes';
+import { CollectibleProperty } from '../awards/GameAwardsTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
-import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';

@@ -3,7 +3,7 @@ import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
-import { CollectibleProperty } from './GameCollectiblesTypes';
+import { CollectibleProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -19,14 +19,14 @@ export const listBannerTextStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
-export const collectibleTitleStyle: BitmapFontStyle = {
+export const awardTitleStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 50,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const collectibleDescStyle = {
+export const awardDescStyle = {
   fontFamily: 'Verdana',
   fontSize: '25px',
   fill: Color.lightBlue,
@@ -35,13 +35,13 @@ export const collectibleDescStyle = {
   wordWrap: { width: 500 }
 };
 
-export const defaultCollectibleProp: CollectibleProperty = {
+export const defaultAwardProp: CollectibleProperty = {
   assetKey: ImageAssets.cookies.key,
   x: 0,
   y: 0
 };
 
-const CollectibleConstants = {
+const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
   pageYStartPos: -screenSize.y * 0.3,
   pageYSpacing: 150,
@@ -62,4 +62,4 @@ const CollectibleConstants = {
   itemsPerPage: 7
 };
 
-export default CollectibleConstants;
+export default AwardsConstants;

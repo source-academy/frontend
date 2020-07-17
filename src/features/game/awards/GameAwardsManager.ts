@@ -17,19 +17,19 @@ import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import collectibleConstants, {
-  collectibleDescStyle,
-  collectibleTitleStyle,
-  defaultCollectibleProp,
+import awardsConstants, {
+  awardDescStyle,
+  awardTitleStyle,
+  defaultAwardProp,
   listBannerTextStyle,
   pageBannerTextStyle
-} from './GameCollectiblesConstants';
-import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
+} from './GameAwardsConstants';
+import { AwardPage, CollectibleProperty } from './GameAwardsTypes';
 
 /**
  * Manager for rendering collectibles and achievements popup in the location.
  */
-class GameCollectiblesManager implements IGameUI {
+class GameAwardsManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
   private userStateManager: GameUserStateManager | undefined;
@@ -38,12 +38,12 @@ class GameCollectiblesManager implements IGameUI {
   private previewContainer: Phaser.GameObjects.Container | undefined;
   private itemsContainer: Phaser.GameObjects.Container | undefined;
   private pageChosenContainer: Phaser.GameObjects.Container | undefined;
-  private currActivePage: CollectiblePage;
-  private activePageNumber: Map<CollectiblePage, number>;
+  private currActivePage: AwardPage;
+  private activePageNumber: Map<AwardPage, number>;
 
   constructor() {
-    this.activePageNumber = new Map<CollectiblePage, number>();
-    this.currActivePage = CollectiblePage.Collectibles;
+    this.activePageNumber = new Map<AwardPage, number>();
+    this.currActivePage = AwardPage.Collectibles;
   }
 
   public initialise(
@@ -57,13 +57,13 @@ class GameCollectiblesManager implements IGameUI {
     this.phaseManager = phaseManager;
 
     // Set initial page number to zero
-    Object.keys(CollectiblePage).forEach((page, index) => {
-      const pageName = page as CollectiblePage;
+    Object.keys(AwardPage).forEach((page, index) => {
+      const pageName = page as AwardPage;
       this.activePageNumber.set(pageName, 0);
     });
   }
 
-  private setPage(page: CollectiblePage) {
+  private setPage(page: AwardPage) {
     if (this.uiContainer) {
       if (this.itemsContainer) this.itemsContainer.destroy();
       if (this.pageChosenContainer) this.pageChosenContainer.destroy();
@@ -75,12 +75,12 @@ class GameCollectiblesManager implements IGameUI {
 
       // Set chosen page banner
       const bannerPos = this.getPageOptPositions();
-      const chosenIdx = Object.keys(CollectiblePage).findIndex(pg => pg === (page as string));
+      const chosenIdx = Object.keys(AwardPage).findIndex(pg => pg === (page as string));
       const bannerChosen = new Phaser.GameObjects.Sprite(
         this.getScene(),
         bannerPos[chosenIdx][0],
-        bannerPos[chosenIdx][1] + collectibleConstants.pageYStartPos,
-        ImageAssets.collectiblesPageChosen.key
+        bannerPos[chosenIdx][1] + awardsConstants.pageYStartPos,
+        ImageAssets.awardsPageChosen.key
       );
       this.pageChosenContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0, [
         bannerChosen
@@ -88,7 +88,7 @@ class GameCollectiblesManager implements IGameUI {
       this.uiContainer.add(this.pageChosenContainer);
 
       // Set default preview
-      this.setPreview('', defaultCollectibleProp, '');
+      this.setPreview('', defaultAwardProp, '');
     }
   }
 
@@ -125,7 +125,7 @@ class GameCollectiblesManager implements IGameUI {
   }
 
   private createUIContainer() {
-    const collectibleContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+    const awardContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
     const blackUnderlay = new Phaser.GameObjects.Rectangle(
       this.getScene(),
@@ -138,87 +138,77 @@ class GameCollectiblesManager implements IGameUI {
       .setAlpha(0.7)
       .setInteractive();
 
-    const collectiblesBg = new Phaser.GameObjects.Image(
-      this.getScene(),
-      0,
-      0,
-      ImageAssets.collectiblesMenu.key
-    );
-    collectibleContainer.add([blackUnderlay, collectiblesBg]);
+    const awardBg = new Phaser.GameObjects.Image(this.getScene(), 0, 0, ImageAssets.awardsMenu.key);
+    awardContainer.add([blackUnderlay, awardBg]);
 
     // Add options
-    const pageOptButtons = Object.keys(CollectiblePage).map((page, index) => {
+    const pageOptButtons = Object.keys(AwardPage).map((page, index) => {
       return {
         text: page,
-        callback: () => this.setPage(page as CollectiblePage)
+        callback: () => this.setPage(page as AwardPage)
       };
     });
     const pageOptButtonPositions = this.getPageOptPositions();
-    collectibleContainer.add(
+    awardContainer.add(
       pageOptButtons.map((button, index) =>
         this.createPageOpt(
           button.text,
           pageOptButtonPositions[index][0],
-          pageOptButtonPositions[index][1] + collectibleConstants.pageYStartPos,
+          pageOptButtonPositions[index][1] + awardsConstants.pageYStartPos,
           button.callback
         )
       )
     );
 
     // Add back button
-    const backButton = this.createPageOpt(
-      'Back',
-      0,
-      collectibleConstants.backButtonYPos,
-      async () => {
-        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.CollectibleMenu)) {
-          await this.getPhaseManager().popPhase();
-        }
+    const backButton = this.createPageOpt('Back', 0, awardsConstants.backButtonYPos, async () => {
+      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+        await this.getPhaseManager().popPhase();
       }
-    );
-    collectibleContainer.add(backButton);
+    });
+    awardContainer.add(backButton);
 
     // Add page arrows
     const arrowLeft = createButton(this.getScene(), {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(false)
     })
-      .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
+      .setScale(awardsConstants.arrowXScale, awardsConstants.arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
-        collectibleConstants.arrowXMidPos - collectibleConstants.arrowXOffset,
-        collectibleConstants.arrowDownYPos
+        awardsConstants.arrowXMidPos - awardsConstants.arrowXOffset,
+        awardsConstants.arrowDownYPos
       );
 
     const arrowRight = createButton(this.getScene(), {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(true)
     })
-      .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
+      .setScale(awardsConstants.arrowXScale, awardsConstants.arrowYScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
-        collectibleConstants.arrowXMidPos + collectibleConstants.arrowXOffset,
-        collectibleConstants.arrowDownYPos
+        awardsConstants.arrowXMidPos + awardsConstants.arrowXOffset,
+        awardsConstants.arrowDownYPos
       );
-    collectibleContainer.add([arrowLeft, arrowRight]);
+    awardContainer.add([arrowLeft, arrowRight]);
 
     // Add preview frame
     const frame = new Phaser.GameObjects.Sprite(
       this.getScene(),
-      collectibleConstants.previewXPos,
-      collectibleConstants.previewYPos,
+      awardsConstants.previewXPos,
+      awardsConstants.previewYPos,
       ImageAssets.popUpFrame.key
     ).setScale(1.2);
-    collectibleContainer.add(frame);
+    awardContainer.add(frame);
 
-    return collectibleContainer;
+    return awardContainer;
   }
 
   private getPageOptPositions() {
     return calcListFormatPos({
-      numOfItems: Object.keys(CollectiblePage).length,
+      numOfItems: Object.keys(AwardPage).length,
       xSpacing: 0,
-      ySpacing: collectibleConstants.pageYSpacing
+      ySpacing: awardsConstants.pageYSpacing
     });
   }
 
@@ -229,31 +219,27 @@ class GameCollectiblesManager implements IGameUI {
 
       // Preview image
       const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
-      resizeUnderflow(
-        previewSprite,
-        collectibleConstants.previewDim,
-        collectibleConstants.previewDim
-      );
+      resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
       previewSprite
-        .setPosition(collectibleConstants.previewXPos, collectibleConstants.previewYPos)
+        .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
         .setOrigin(0.428, 0.468);
 
       // Preview title
       const previewTitle = createBitmapText(
         this.getScene(),
         title,
-        collectibleConstants.previewXPos,
-        collectibleConstants.previewYPos + collectibleConstants.titleYOffset,
-        collectibleTitleStyle
+        awardsConstants.previewXPos,
+        awardsConstants.previewYPos + awardsConstants.titleYOffset,
+        awardTitleStyle
       ).setOrigin(0.35, 0.5);
 
       // Preview description
       const previewDesc = new Phaser.GameObjects.Text(
         this.getScene(),
-        collectibleConstants.previewXPos,
-        collectibleConstants.previewYPos + collectibleConstants.descYOffset,
+        awardsConstants.previewXPos,
+        awardsConstants.previewYPos + awardsConstants.descYOffset,
         description,
-        collectibleDescStyle
+        awardDescStyle
       ).setOrigin(0.45, 0.0);
 
       this.previewContainer.add([previewSprite, previewTitle, previewDesc]);
@@ -284,9 +270,9 @@ class GameCollectiblesManager implements IGameUI {
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesPage.key,
+      assetKey: ImageAssets.awardsPage.key,
       message: text,
-      textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
+      textConfig: { x: awardsConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
       bitMapTextStyle: pageBannerTextStyle,
       onUp: callback
     }).setPosition(xPos, yPos);
@@ -299,15 +285,15 @@ class GameCollectiblesManager implements IGameUI {
     const itemPositions = calcListFormatPos({
       numOfItems: items.length,
       xSpacing: 0,
-      ySpacing: collectibleConstants.listYSpacing
+      ySpacing: awardsConstants.listYSpacing
     });
     itemsContainer.add(
       items.map((item, index) =>
         this.createItemButton(
           item,
           itemPositions[index][0],
-          itemPositions[index][1] + collectibleConstants.listYStartPos,
-          () => this.setPreview(item, defaultCollectibleProp)
+          itemPositions[index][1] + awardsConstants.listYStartPos,
+          () => this.setPreview(item, defaultAwardProp)
         )
       )
     );
@@ -316,9 +302,9 @@ class GameCollectiblesManager implements IGameUI {
 
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesBanner.key,
+      assetKey: ImageAssets.awardsBanner.key,
       message: obj,
-      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+      textConfig: { x: awardsConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
       bitMapTextStyle: listBannerTextStyle,
       onUp: callback
     }).setPosition(xPos, yPos);
@@ -327,19 +313,19 @@ class GameCollectiblesManager implements IGameUI {
   private getItems(pageNum: number) {
     let itemList: string[];
     switch (this.currActivePage) {
-      case CollectiblePage.Achievements:
+      case AwardPage.Achievements:
         itemList = this.getUserStateManager().getList(UserStateTypes.achievements);
         break;
-      case CollectiblePage.Collectibles:
+      case AwardPage.Collectibles:
         itemList = this.getUserStateManager().getList(UserStateTypes.collectibles);
         break;
       default:
         itemList = [];
     }
 
-    const itemStartIdx = pageNum * collectibleConstants.itemsPerPage;
-    return itemList.slice(itemStartIdx, itemStartIdx + collectibleConstants.itemsPerPage);
+    const itemStartIdx = pageNum * awardsConstants.itemsPerPage;
+    return itemList.slice(itemStartIdx, itemStartIdx + awardsConstants.itemsPerPage);
   }
 }
 
-export default GameCollectiblesManager;
+export default GameAwardsManager;
