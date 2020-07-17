@@ -4,8 +4,10 @@ import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
 
 export const bindingConstants = {
-  keyIconXPos: screenCenter.x - 300,
-  keyDescXPos: screenCenter.x + 300
+  keyIconXPos: screenCenter.x - 100,
+  keyDescXPos: screenCenter.x + 100,
+  keyStartYPos: screenCenter.y * 0.9,
+  keyYSpacing: 150
 };
 
 export const keyStyle: BitmapFontStyle = {

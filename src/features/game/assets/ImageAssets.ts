@@ -50,7 +50,12 @@ const ImageAssets: AssetMap<ImageAsset> = {
   settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' },
 
   // Room Preview
-  verifiedFrame: { key: 'verified-frame', path: '/ui/verifiedFrame.png' }
+  verifiedFrame: { key: 'verified-frame', path: '/ui/verifiedFrame.png' },
+
+  // Bindings
+  bindingsBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
+  squareKeyboardIcon: { key: 'keyboard-key-square', path: '/ui/keyboardKeyIcon.png' },
+  medKeyboardIcon: { key: 'keyboard-key-medium', path: '/ui/TabIcon.png' }
 };
 
 export default ImageAssets;
