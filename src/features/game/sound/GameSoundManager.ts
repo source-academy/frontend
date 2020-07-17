@@ -22,8 +22,8 @@ class GameSoundManager {
   }
 
   public applyUserSettings(settings: SettingsJson) {
-    this.bgmVol = settings.bgmVolume;
-    this.sfxVol = settings.sfxVolume;
+    this.bgmVol = settings.bgmVolume !== undefined ? settings.bgmVolume : 1;
+    this.sfxVol = settings.sfxVolume !== undefined ? settings.sfxVolume : 1;
 
     // Modify currently playing BGM, if any
     if (this.currBgMusicKey) {
@@ -32,7 +32,7 @@ class GameSoundManager {
       ) as Phaser.Sound.HTML5AudioSound;
       if (bgm.isPlaying) {
         const soundAsset = mandatory(this.getSoundAsset(this.currBgMusicKey));
-        const bgmVol = soundAsset.config.volume || 1;
+        const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
         bgm.setVolume(bgmVol * this.bgmVol);
       }
     }
@@ -79,7 +79,7 @@ class GameSoundManager {
   public playSound(soundKey: AssetKey) {
     const soundAsset = this.getSoundAsset(soundKey);
     if (soundAsset) {
-      const vol = soundAsset.config.volume || 1;
+      const vol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
       this.getBaseSoundManager().play(soundAsset.key, {
         ...soundAsset.config,
         volume: vol * this.sfxVol
@@ -97,7 +97,7 @@ class GameSoundManager {
     this.stopCurrBgMusic();
     const soundAsset = mandatory(this.getSoundAsset(soundKey));
 
-    const bgmVol = soundAsset.config.volume || 1;
+    const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
     this.getBaseSoundManager().play(soundAsset.key, {
       ...soundAsset.config,
       volume: bgmVol * this.bgmVol
