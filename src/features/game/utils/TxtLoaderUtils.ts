@@ -1,4 +1,4 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import TextAssets from '../assets/TextAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
@@ -42,7 +42,7 @@ export async function callGameManagerOnTxtLoad(
   if (!accountInfo) {
     return;
   }
-  const fullSaveState = await loadData(accountInfo);
+  const fullSaveState = await loadData();
   Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);
   const gameCheckpoint = Parser.checkpoint;

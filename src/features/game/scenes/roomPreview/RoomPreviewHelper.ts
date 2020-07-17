@@ -1,6 +1,6 @@
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import { AccountInfo } from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';

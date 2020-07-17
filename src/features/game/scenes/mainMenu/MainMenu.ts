@@ -1,6 +1,4 @@
-import SourceAcademyGame, {
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
@@ -56,12 +54,12 @@ class MainMenu extends Phaser.Scene {
     this.renderOptionButtons();
 
     this.roomCode = await getRoomPreviewCode(accountInfo);
-    await this.loadGameDataAndSettings(accountInfo);
+    await this.loadGameDataAndSettings();
     await this.loadAwardsMapping();
   }
 
-  private async loadGameDataAndSettings(accountInfo: AccountInfo) {
-    this.loadedGameState = await loadData(accountInfo);
+  private async loadGameDataAndSettings() {
+    this.loadedGameState = await loadData();
     const volume = this.loadedGameState.userSaveState
       ? this.loadedGameState.userSaveState.settings.volume
       : 1;

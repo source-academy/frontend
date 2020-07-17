@@ -1,7 +1,8 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
+import { SoundAsset } from '../../assets/AssetsTypes';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
@@ -9,7 +10,7 @@ import { displayNotification } from '../../effects/Notification';
 import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
+import { SettingsJson } from '../../save/GameSaveTypes';
 import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
@@ -301,15 +302,15 @@ class GameGlobalAPI {
   /////////////////////
 
   public async saveGame() {
-    await this.getGameManager().saveManager.saveGame();
+    await this.getGameManager().getSaveManager().saveGame();
   }
 
   public async saveSettings(settingsJson: SettingsJson) {
-    await this.getGameManager().saveManager.saveSettings(settingsJson);
+    await this.getGameManager().getSaveManager().saveSettings(settingsJson);
   }
 
   public getLoadedUserState() {
-    return this.getGameManager().saveManager.getLoadedUserState();
+    return this.getGameManager().getSaveManager().getLoadedUserState();
   }
 
   /////////////////////
@@ -340,8 +341,12 @@ class GameGlobalAPI {
     SourceAcademyGame.getInstance().getSoundManager().continueCurrBgMusic();
   }
 
-  public applySoundSettings(userSetting: UserSaveState) {
-    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSetting);
+  public applySoundSettings(userSettings: SettingsJson) {
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
+  }
+
+  public loadSounds(soundAssets: SoundAsset[]) {
+    SourceAcademyGame.getInstance().getSoundManager().loadSounds(soundAssets);
   }
 
   /////////////////////

@@ -1,4 +1,4 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';

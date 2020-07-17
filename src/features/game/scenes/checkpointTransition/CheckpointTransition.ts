@@ -1,6 +1,4 @@
-import SourceAcademyGame, {
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { screenCenter } from '../../commons/CommonConstants';
@@ -33,14 +31,13 @@ class CheckpointTransition extends Phaser.Scene {
   }
 
   public async create() {
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    const loadedGameState = await loadData(accountInfo);
+    const loadedGameState = await loadData();
     const chapterDetails = SampleChapters; // TODO: Fetch from backend
 
     const [currChapter, currCheckpoint] = loadedGameState.userSaveState.lastPlayedCheckpoint;
 
     if (this.isLastCheckpoint(chapterDetails, currChapter, currCheckpoint)) {
-      await this.saveChapterComplete(loadedGameState, accountInfo, currChapter);
+      await this.saveChapterComplete(loadedGameState, currChapter);
       if (currChapter >= chapterDetails.length - 1) {
         this.scene.start('MainMenu');
         return;
@@ -84,16 +81,13 @@ class CheckpointTransition extends Phaser.Scene {
     await sleep(checkpointConstants.tweenDuration);
   }
 
-  private async saveChapterComplete(
-    loadedGameState: FullSaveState,
-    accountInfo: AccountInfo,
-    currChapter: number
-  ) {
+  private async saveChapterComplete(loadedGameState: FullSaveState, currChapter: number) {
     loadedGameState.userSaveState.lastCompletedChapter = Math.max(
       loadedGameState.userSaveState.lastCompletedChapter,
       currChapter
     );
-    await saveData(accountInfo, loadedGameState);
+    console.log(loadedGameState);
+    await saveData(loadedGameState);
   }
 
   private isLastCheckpoint(

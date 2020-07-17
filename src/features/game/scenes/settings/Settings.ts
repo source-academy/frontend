@@ -1,4 +1,4 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
@@ -6,8 +6,7 @@ import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonRadioButton from '../../commons/CommonRadioButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import GameSaveManager from '../../save/GameSaveManager';
-import { loadData } from '../../save/GameSaveRequests';
+import { createSettingsManager, SettingsSaveManager } from '../../save/GameSettingsSaveManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import settingsConstants, {
@@ -23,13 +22,13 @@ import settingsConstants, {
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: CommonRadioButton | undefined;
   private layerManager: GameLayerManager;
-  private settingsSaveManager: GameSaveManager;
+  private settingsSaveManager: SettingsSaveManager;
 
   constructor() {
     super('Settings');
     this.layerManager = new GameLayerManager();
     this.volumeRadioButtons = undefined;
-    this.settingsSaveManager = new GameSaveManager();
+    this.settingsSaveManager = createSettingsManager();
   }
   public preload() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
@@ -38,9 +37,7 @@ class Settings extends Phaser.Scene {
 
   public async create() {
     this.renderBackground();
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    const fullSaveState = await loadData(accountInfo);
-    this.settingsSaveManager.initialiseForSettings(accountInfo, fullSaveState);
+    await this.settingsSaveManager.loadSettings();
     this.renderOptions();
   }
 
@@ -94,7 +91,7 @@ class Settings extends Phaser.Scene {
       settingsConstants.volTextYPos,
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
-    const userVol = this.settingsSaveManager.getLoadedUserState().settings.volume;
+    const userVol = this.settingsSaveManager.getSettings().volume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -122,8 +119,9 @@ class Settings extends Phaser.Scene {
       await this.settingsSaveManager.saveSettings({ volume: volumeVal });
 
       // Apply settings
-      const newUserSetting = this.settingsSaveManager.getLoadedUserState();
-      SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(newUserSetting);
+      SourceAcademyGame.getInstance()
+        .getSoundManager()
+        .applyUserSettings(this.settingsSaveManager.getSettings());
     }
   }
 }

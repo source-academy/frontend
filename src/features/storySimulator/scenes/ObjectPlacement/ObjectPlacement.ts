@@ -5,7 +5,7 @@ import GameInputManager from 'src/features/game/input/GameInputManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import SSBackgroundManager from '../../background/SSBackgroundManager';

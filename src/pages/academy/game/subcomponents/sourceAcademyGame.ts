@@ -20,34 +20,38 @@ export type AccountInfo = {
   name: string;
 };
 
+export enum GameType {
+  Simulator = 'Simulator',
+  Game = 'Game'
+}
+
 type GlobalGameProps = {
   accountInfo: AccountInfo | undefined;
   setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
   currentSceneRef?: Phaser.Scene;
-  soundManager?: GameSoundManager;
+  soundManager: GameSoundManager;
+  gameType: GameType;
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
   protected global: GlobalGameProps;
   static instance: SourceAcademyGame;
 
-  constructor(config: Phaser.Types.Core.GameConfig) {
+  constructor(config: Phaser.Types.Core.GameConfig, gameType: GameType) {
     super(config);
+    SourceAcademyGame.instance = this;
     this.global = {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       accountInfo: undefined,
       setStorySimState: Constants.nullFunction,
-      currentSceneRef: undefined
+      currentSceneRef: undefined,
+      soundManager: new GameSoundManager(),
+      gameType
     };
-    SourceAcademyGame.instance = this;
   }
 
   static getInstance = () => mandatory(SourceAcademyGame.instance);
-
-  public init() {
-    this.global.soundManager = new GameSoundManager();
-  }
 
   public stopAllSounds() {
     this.sound.stopAll();
@@ -65,6 +69,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getSoundManager = () => mandatory(this.global.soundManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
+  public isGameType = (gameType: GameType) => this.global.gameType === gameType;
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
@@ -103,7 +108,5 @@ const config = {
 };
 
 export const createSourceAcademyGame = () => {
-  const game = new SourceAcademyGame(config);
-  game.init();
-  return game;
+  return new SourceAcademyGame(config, GameType.Game);
 };
