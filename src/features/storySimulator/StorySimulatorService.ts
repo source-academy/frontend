@@ -15,6 +15,14 @@ export const s3AssetFolders = [
   'stories'
 ];
 
+export function obtainTextAssets(assetPaths: string[]) {
+  return assetPaths
+    .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
+    .map(
+      assetPath => assetPath.slice(8) // remove /stories
+    );
+}
+
 /**
  * Request to fetches assets from all S3 folders
  *

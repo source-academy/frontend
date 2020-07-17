@@ -5,20 +5,12 @@ import React from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {
-  useDefaultChapter: boolean;
   storageName: string;
-  accessToken?: string;
-  assetPaths: string[];
+  textAssets: string[];
 };
 
-function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Props) {
-  const textAssets = assetPaths
-    .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
-    .map(
-      assetPath => assetPath.slice(8) // remove /stories
-    );
-
-  function onLoadTxt(e: React.ChangeEvent<HTMLInputElement>) {
+function CheckpointTxtLoader({ storageName, textAssets }: Props) {
+  function onLoadTxt(e: any) {
     if (!e.target.files) return;
     const [file] = e.target.files;
     loadFileLocally(storageName, file);

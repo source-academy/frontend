@@ -1,82 +1,79 @@
 import { Button } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import arrayMove from 'array-move';
 import React from 'react';
-import { SortableContainer, SortableElement } from 'react-sortable-hoc';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
+import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { useInput } from './StorySimulatorFormHook';
+import { useInput } from './StorySimulatorInputHook';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;
-  allCheckpointFilenames?: string[];
+  textAssets?: string[];
 };
 
-const SortableItem = SortableElement(({ value }: any) => (
-  <div>
-    <Button>{value}</Button>
-  </div>
-));
+export default function ChapterEditor({ chapterDetail, textAssets }: ChapterSimProps) {
+  const { value: title, bind: bindTitle } = useInput(chapterDetail, 'title');
+  const { value: imageUrl, bind: bindImageUrl } = useInput(chapterDetail, 'imageUrl');
+  const { value: openDate, onDateChange } = useInput(chapterDetail, 'openAt');
+  const { itemList, setItemList, bind: bindSortable } = useSortableList([]);
 
-const SortableList = SortableContainer(({ items }: any) => {
-  return (
-    <div>
-      {items.map((value: any, index: number) => (
-        <SortableItem key={`item-${value}`} index={index} value={value} />
-      ))}
-    </div>
-  );
-});
-
-export default function ChapterEditor({ chapterDetail, allCheckpointFilenames }: ChapterSimProps) {
-  const [openDate, setOpenDate] = React.useState<Date>();
-  const { value: title, setValue: setTitle, bind: bindTitle } = useInput(chapterDetail, 'title');
-  const { value: imageUrl, setValue: setImageUrl, bind: bindImageUrl } = useInput(
-    chapterDetail,
-    'imageUrl'
-  );
-
-  const [itemList, setItemList] = React.useState<string[]>([]);
-
-  const onSortEnd = ({ oldIndex, newIndex }: any) => {
-    setItemList(prevState => arrayMove(prevState, oldIndex, newIndex));
-  };
+  const [allTxts, setAllTxts] = React.useState<Map<string, boolean>>();
 
   React.useEffect(() => {
     if (!chapterDetail) {
-      setOpenDate(undefined);
+      setItemList([]);
       return;
     }
-    setOpenDate(new Date(chapterDetail.openAt));
-  }, [chapterDetail, setImageUrl, setTitle]);
+    setItemList(chapterDetail.filenames);
+  }, [chapterDetail, setItemList]);
 
-  const handleDateChange = React.useCallback((date: Date) => {
-    setOpenDate(date);
-  }, []);
+  React.useEffect(() => {
+    if (!textAssets) return;
+    setAllTxts(new Map(textAssets.map(textAssets => [textAssets, false])));
+  }, [textAssets]);
 
-  const onViewClick = (e: any) => {
-    window.open(imageUrl);
-  };
+  function toggleFileSelection(txtFile: string, added: boolean) {
+    added
+      ? setItemList(prevItemList => prevItemList.filter(item => item !== txtFile))
+      : setItemList(prevItemList => [...prevItemList, txtFile]);
+
+    allTxts && setAllTxts(allTxts.set(txtFile, !added));
+  }
 
   function saveOrder() {
     console.log(title);
     console.log(itemList);
   }
+
   return (
     <>
       <h4>
         Title: <input className="bp3-input" type="text" {...bindTitle} />
       </h4>
       <b>Open date: </b>
-      {openDate && getStandardDateTime(openDate.toString())}
-      <DatePicker onChange={handleDateChange} />
+      {openDate && getStandardDateTime(openDate)}
+      <DatePicker onChange={onDateChange} />
       <h4>
         Image url: <input className="bp3-input" type="text" {...bindImageUrl} />
-        <Button onClick={onViewClick}>View</Button>
+        <Button onClick={(_: any) => window.open(imageUrl)}>View</Button>
       </h4>
       <b>Checkpoint txt files</b>
-      <SortableList items={itemList} onSortEnd={onSortEnd} />
+      <SortableList {...bindSortable} />
+      <br />
+      <b>All txt files</b>
+      {allTxts &&
+        Array.from(allTxts).map(([txtFile, added]) => (
+          <div>
+            <Button
+              icon={added ? 'trash' : 'add'}
+              onClick={() => toggleFileSelection(txtFile, added)}
+            >
+              {txtFile}
+            </Button>
+          </div>
+        ))}
+      <br />
       <Button onClick={saveOrder}>Save</Button>
     </>
   );

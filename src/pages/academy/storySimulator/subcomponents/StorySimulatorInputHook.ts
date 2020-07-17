@@ -2,7 +2,7 @@ import React from 'react';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
 export const useInput = (chapterDetail: ChapterDetail, field: string) => {
-  const [value, setValue] = React.useState('');
+  const [value, setValue] = React.useState<any>('');
 
   React.useEffect(() => {
     if (!chapterDetail) {
@@ -20,6 +20,9 @@ export const useInput = (chapterDetail: ChapterDetail, field: string) => {
       onChange: (event: any) => {
         setValue(event.target.value);
       }
+    },
+    onDateChange: (date: Date) => {
+      setValue(date.toString());
     }
   };
 };

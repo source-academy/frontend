@@ -8,10 +8,10 @@ import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 import StorySimulatorChapterEditor from './StorySimulatorChapterEditor';
 
 type ChapterSequencerProps = {
-  allCheckpointFilenames?: string[];
+  textAssets?: string[];
 };
 
-export default function ChapterSim({ allCheckpointFilenames }: ChapterSequencerProps) {
+export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
   const [chapters, setChapters] = React.useState<ChapterDetail[]>([]);
   const [chosenIndex, setChosenIndex] = React.useState(-1);
 
@@ -25,15 +25,14 @@ export default function ChapterSim({ allCheckpointFilenames }: ChapterSequencerP
     alert(await createChapterRequest());
   };
 
-  const onChangeChapter = (e: any) => {
-    setChosenIndex(e.target.value);
-  };
-
   return (
     <>
       <h3>Chapter Simulator</h3>
-
-      <select className="bp3-menu" defaultValue={0} onChange={onChangeChapter}>
+      <select
+        className="bp3-menu"
+        defaultValue={0}
+        onChange={(e: any) => setChosenIndex(e.target.value)}
+      >
         {chapters.map((chapter, index) => {
           return (
             <option value={index} key={index}>
@@ -46,10 +45,7 @@ export default function ChapterSim({ allCheckpointFilenames }: ChapterSequencerP
         </option>
       </select>
       <br />
-      <StorySimulatorChapterEditor
-        chapterDetail={chapters[chosenIndex]}
-        allCheckpointFilenames={allCheckpointFilenames}
-      />
+      <StorySimulatorChapterEditor chapterDetail={chapters[chosenIndex]} textAssets={textAssets} />
     </>
   );
 }

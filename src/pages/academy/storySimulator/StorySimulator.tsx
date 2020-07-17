@@ -2,7 +2,11 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
-import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import {
+  fetchAssetPaths,
+  obtainTextAssets,
+  s3AssetFolders
+} from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
@@ -14,6 +18,8 @@ import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
+  const [textAssets, setTextAssets] = React.useState<string[]>([]);
+
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {
@@ -23,7 +29,9 @@ function StorySimulator() {
   React.useEffect(() => {
     (async () => {
       SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
-      setAssetPaths(await fetchAssetPaths(s3AssetFolders));
+      const paths = await fetchAssetPaths(s3AssetFolders);
+      setAssetPaths(paths);
+      setTextAssets(obtainTextAssets(paths));
     })();
   }, [session]);
 
@@ -38,7 +46,7 @@ function StorySimulator() {
             </>
           )}
           {storySimState === StorySimState.CheckpointSim && (
-            <StorySimulatorCheckpointSim assetPaths={assetPaths} />
+            <StorySimulatorCheckpointSim textAssets={textAssets} />
           )}
           {storySimState === StorySimState.ObjectPlacement && (
             <>
@@ -55,7 +63,7 @@ function StorySimulator() {
             </>
           )}
           {storySimState === StorySimState.ChapterSim && (
-            <StorySimulatorChapterSim allCheckpointFilenames={assetPaths} />
+            <StorySimulatorChapterSim textAssets={textAssets} />
           )}
         </div>
       </div>

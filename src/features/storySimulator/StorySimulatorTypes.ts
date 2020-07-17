@@ -10,7 +10,7 @@ export type ChapterDetail = {
   openAt: string;
   closeAt: string;
   title: string;
-  filenames: string;
+  filenames: string[];
   isPublished: string;
   imageUrl: string;
 };
