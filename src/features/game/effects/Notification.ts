@@ -1,5 +1,4 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -8,6 +7,7 @@ import { BitmapFontStyle } from '../commons/CommonTypes';
 import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';

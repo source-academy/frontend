@@ -1,6 +1,5 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
@@ -11,6 +10,7 @@ import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameM
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';

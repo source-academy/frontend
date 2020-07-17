@@ -1,9 +1,9 @@
 import { Button } from '@blueprintjs/core';
 import * as React from 'react';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 
-import SourceAcademyGame from '../../game/subcomponents/SourceAcademyGame';
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
 
 type Props = {

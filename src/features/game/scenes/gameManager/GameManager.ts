@@ -9,11 +9,9 @@ import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
+import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-import SourceAcademyGame, {
-  GameType
-} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';

@@ -1,8 +1,7 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { SettingsJson } from '../save/GameSaveTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory, sleep, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
 

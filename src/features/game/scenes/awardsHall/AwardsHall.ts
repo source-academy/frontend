@@ -1,5 +1,3 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';
@@ -7,6 +5,7 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { createButton } from '../../utils/ButtonUtils';

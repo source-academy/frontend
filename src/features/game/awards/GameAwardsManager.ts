@@ -1,5 +1,3 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -10,6 +8,7 @@ import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { UserStateTypes } from '../state/GameStateTypes';
 import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';

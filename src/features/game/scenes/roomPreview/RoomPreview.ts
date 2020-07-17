@@ -1,6 +1,5 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
@@ -11,6 +10,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';

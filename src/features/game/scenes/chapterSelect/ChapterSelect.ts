@@ -1,6 +1,5 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
@@ -10,6 +9,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';

@@ -1,12 +1,10 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import SourceAcademyGame, {
-  GameType
-} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
 import { userStateStyle } from './GameStateConstants';

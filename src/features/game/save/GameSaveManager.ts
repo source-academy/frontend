@@ -1,8 +1,5 @@
-import SourceAcademyGame, {
-  GameType
-} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import GameManager from '../scenes/gameManager/GameManager';
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
 import { createEmptySaveState, gameStateToJson, userSettingsToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';

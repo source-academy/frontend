@@ -1,11 +1,10 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonRadioButton from '../../commons/CommonRadioButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import settingsConstants, {

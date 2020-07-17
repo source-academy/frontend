@@ -1,12 +1,12 @@
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { HexColor } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import RoomPreview from './RoomPreview';

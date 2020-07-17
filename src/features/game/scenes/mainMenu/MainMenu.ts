@@ -1,5 +1,3 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
@@ -10,6 +8,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import AwardParser from '../../parser/AwardParser';
 import { FullSaveState } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
 import { loadImage } from '../../utils/LoaderUtils';

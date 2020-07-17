@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
+import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
 import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import SourceAcademyGame, { AccountInfo } from '../game/subcomponents/SourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';

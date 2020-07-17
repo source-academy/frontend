@@ -1,9 +1,8 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import TextAssets from '../assets/TextAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
 import Parser from '../parser/Parser';
 import { loadData } from '../save/GameSaveRequests';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { loadText } from '../utils/LoaderUtils';
 
 /**

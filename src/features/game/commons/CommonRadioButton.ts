@@ -1,6 +1,5 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import SoundAssets from '../assets/SoundAssets';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';

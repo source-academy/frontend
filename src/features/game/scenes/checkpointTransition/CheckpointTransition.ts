@@ -1,9 +1,8 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { screenCenter } from '../../commons/CommonConstants';
 import { loadData, saveData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';

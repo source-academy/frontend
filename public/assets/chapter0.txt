@@ -18,17 +18,17 @@ room
         card, /sfx/card.mp3, 0.5
     
     objects
-        +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+        + emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             make_object_glow*(emergency1)
-        +chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
+        + chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
             show_dialogue(addHallway)
             add_mode*(hallway, talk)
     boundingBoxes
-        +bbox#0, 536, 420, 373, 402
+        + bbox#0, 536, 420, 373, 402
             show_dialogue(click)
 
     boundingBoxes
-        +bbox1, 10, 10, 30, 30
+        + bbox1, 10, 10, 30, 30
 
     characters
         +scottie, Scottie, sad, left

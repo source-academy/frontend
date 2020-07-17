@@ -1,6 +1,6 @@
 import Constants from 'src/commons/utils/Constants';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
+import SourceAcademyGame from '../SourceAcademyGame';
 import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
 

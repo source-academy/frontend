@@ -2,11 +2,10 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { resetData } from 'src/features/game/save/GameSaveRequests';
-
 import SourceAcademyGame, {
   AccountInfo,
   createSourceAcademyGame
-} from './subcomponents/SourceAcademyGame';
+} from 'src/features/game/SourceAcademyGame';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);

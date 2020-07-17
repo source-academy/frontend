@@ -6,10 +6,10 @@ import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import Parser from 'src/features/game/parser/Parser';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import { StorySimState } from '../../StorySimulatorTypes';

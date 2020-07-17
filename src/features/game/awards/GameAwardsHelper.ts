@@ -1,6 +1,5 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import { ItemId } from '../commons/CommonTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
 import { AwardProperty } from './GameAwardsTypes';
 

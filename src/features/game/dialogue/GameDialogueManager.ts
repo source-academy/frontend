@@ -1,10 +1,9 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
-
 import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
