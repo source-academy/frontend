@@ -13,7 +13,7 @@ type ChapterSequencerProps = {
 
 export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
   const [chapters, setChapters] = React.useState<ChapterDetail[]>([]);
-  const [chosenIndex, setChosenIndex] = React.useState(0);
+  const [chosenIndex, setChosenIndex] = React.useState(-1);
 
   React.useEffect(() => {
     (async () => {
@@ -25,7 +25,7 @@ export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
     alert(await createChapterRequest(accessToken));
   }, [accessToken]);
 
-  const onChange = React.useCallback((e: any) => {
+  const onChangeChapter = React.useCallback((e: any) => {
     setChosenIndex(e.target.value);
   }, []);
 
@@ -33,7 +33,7 @@ export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
     <>
       <h3>Chapter Simulator</h3>
 
-      <select className="bp3-menu" onChange={onChange}>
+      <select className="bp3-menu" defaultValue={0} onChange={onChangeChapter}>
         {chapters.map((chapter, index) => {
           return (
             <option value={index} key={index}>
@@ -41,7 +41,7 @@ export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
             </option>
           );
         })}
-        <option onClick={onCreateButtonClick} value={'create'} key={'create'}>
+        <option onClick={onCreateButtonClick} value={-1} key={-1}>
           {`Create new chapter`}
         </option>
       </select>

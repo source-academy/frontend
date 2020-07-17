@@ -14,8 +14,6 @@ room
     modes: talk, explore
     bgm
         heavyHitter, /bgm/HeavyHitter.mp3, 0.5
-    sfx
-        card, /sfx/card.mp3, 0.5
     
     objects
         + emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
@@ -48,7 +46,9 @@ classroom
     talkTopics: what
     objects
         +classroomChair, /objects/yourChair/normal.png, 30, 30
-            complete_objective(finish)
+            play_sfx(card)
+    sfx
+        card, /sfx/dialogueAdvance.mp3, 0.5
 
 emergency
     modes: move
