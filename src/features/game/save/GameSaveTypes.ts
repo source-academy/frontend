@@ -79,5 +79,6 @@ export type UserSaveState = {
  * @prop {number} volume - volume that students play the game with
  */
 export type SettingsJson = {
-  volume: number;
+  bgmVolume: number;
+  sfxVolume: number;
 };

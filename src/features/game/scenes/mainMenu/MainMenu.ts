@@ -54,15 +54,17 @@ class MainMenu extends Phaser.Scene {
     this.roomCode = await getRoomPreviewCode();
     await this.loadGameDataAndSettings();
     await this.preloadAwards();
+
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 
   private async loadGameDataAndSettings() {
+    // Load settings
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
-    const volume = SourceAcademyGame.getInstance().getSaveManager().getSettings().volume;
 
-    SourceAcademyGame.getInstance()
-      .getSoundManager()
-      .playBgMusic(SoundAssets.galacticHarmony.key, volume);
+    // Apply settings
+    const userSettings = SourceAcademyGame.getInstance().getSaveManager().getSettings();
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
   }
 
   private async preloadAwards() {

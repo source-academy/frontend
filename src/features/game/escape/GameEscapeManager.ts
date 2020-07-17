@@ -12,7 +12,7 @@ import settingsConstants from '../scenes/settings/SettingsConstants';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
-import { calcTableFormatPos } from '../utils/StyleUtils';
+import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import escapeConstants, {
   escapeOptButtonStyle,
@@ -24,7 +24,8 @@ import escapeConstants, {
  * Manager in charge of rendering and destroying the escape manager in a scene
  */
 class GameEscapeManager implements IGameUI {
-  private volumeOptions: CommonRadioButton | undefined;
+  private bgmVolumeRadioButtons: CommonRadioButton | undefined;
+  private sfxVolumeRadioButtons: CommonRadioButton | undefined;
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
@@ -55,9 +56,40 @@ class GameEscapeManager implements IGameUI {
     )
       .setDisplaySize(screenSize.x, screenSize.y)
       .setInteractive({ pixelPerfect: true });
+    escapeMenuContainer.add(escapeMenuBg);
 
-    const volOpt = this.createVolOptContainer();
-    escapeMenuContainer.add([escapeMenuBg, volOpt]);
+    // Settings header
+    const settings = this.getSettings();
+    const settingsPos = calcTableFormatPos({
+      direction: Direction.Column,
+      numOfItems: settings.length,
+      maxYSpace: escapeConstants.settingsYSpace
+    });
+    escapeMenuContainer.add(
+      settings.map((setting, index) =>
+        createBitmapText(
+          this.getScene(),
+          setting,
+          escapeConstants.optTextXPos,
+          settingsPos[index][1] + escapeConstants.settingsYOffset,
+          optTextStyle
+        ).setOrigin(0.0, 0.5)
+      )
+    );
+
+    const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
+    const sfxVolIdx = settingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === sfxVolume
+    );
+    const bgmVolIdx = settingsConstants.volContainerOpts.findIndex(
+      value => parseFloat(value) === bgmVolume
+    );
+
+    // SFX Radio buttons
+    this.sfxVolumeRadioButtons = this.createSettingsRadioOptions(sfxVolIdx, settingsPos[0][1]);
+    // BGM Radio buttons
+    this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
+    escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
 
     const buttons = this.getOptButtons();
     const buttonPositions = calcTableFormatPos({
@@ -78,7 +110,31 @@ class GameEscapeManager implements IGameUI {
     return escapeMenuContainer;
   }
 
-  public getOptButtons() {
+  private getSettings() {
+    return ['SFX', 'BGM'];
+  }
+
+  private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
+    return new CommonRadioButton(
+      this.getScene(),
+      {
+        choices: settingsConstants.volContainerOpts,
+        defaultChoiceIdx: defaultChoiceIdx,
+        maxXSpace: escapeConstants.radioButtonsXSpace,
+        radioChoiceConfig: {
+          circleDim: 15,
+          checkedDim: 10,
+          outlineThickness: 3
+        },
+        choiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
+        bitmapTextStyle: volumeRadioOptTextStyle
+      },
+      escapeConstants.volOptXPos,
+      -screenCenter.y + yPos + escapeConstants.settingsYOffset
+    );
+  }
+
+  private getOptButtons() {
     return [
       {
         text: 'Main Menu',
@@ -117,44 +173,6 @@ class GameEscapeManager implements IGameUI {
     this.getLayerManager().clearSeveralLayers([Layer.Escape]);
   }
 
-  private createVolOptContainer() {
-    const volOptContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
-
-    const userVol = this.getSettingsSaveManager().getSettings().volume;
-    const userVolIdx = settingsConstants.volContainerOpts.findIndex(
-      value => parseFloat(value) === userVol
-    );
-
-    const volumeText = createBitmapText(
-      this.getScene(),
-      'Volume',
-      escapeConstants.optTextXPos,
-      escapeConstants.optTextYPos,
-      optTextStyle
-    );
-
-    this.volumeOptions = new CommonRadioButton(
-      this.getScene(),
-      {
-        choices: settingsConstants.volContainerOpts,
-        defaultChoiceIdx: userVolIdx,
-        maxXSpace: escapeConstants.radioButtonsXSpace,
-        radioChoiceConfig: {
-          circleDim: 15,
-          checkedDim: 10,
-          outlineThickness: 3
-        },
-        choiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
-        bitmapTextStyle: volumeRadioOptTextStyle
-      },
-      escapeConstants.volOptXPos,
-      escapeConstants.volOptYPos
-    );
-
-    volOptContainer.add([volumeText, this.volumeOptions]);
-    return volOptContainer;
-  }
-
   private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
       assetKey: ImageAssets.mediumButton.key,
@@ -166,14 +184,20 @@ class GameEscapeManager implements IGameUI {
   }
 
   private async applySettings() {
-    if (this.volumeOptions) {
-      // Save settings
-      const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await this.getSettingsSaveManager().saveSettings({ volume: volumeVal });
+    const sfxVol = this.sfxVolumeRadioButtons
+      ? parseFloat(this.sfxVolumeRadioButtons.getChosenChoice())
+      : 1;
+    const bgmVol = this.bgmVolumeRadioButtons
+      ? parseFloat(this.bgmVolumeRadioButtons.getChosenChoice())
+      : 1;
 
-      // Apply settings
-      this.getSoundManager().applyUserSettings(this.getSettingsSaveManager().getSettings());
-    }
+    // Save settings
+    await this.getSettingsSaveManager().saveSettings({ bgmVolume: bgmVol, sfxVolume: sfxVol });
+
+    // Apply settings
+    SourceAcademyGame.getInstance()
+      .getSoundManager()
+      .applyUserSettings(this.getSettingsSaveManager().getSettings());
   }
 
   private getScene = () => mandatory(this.scene);
