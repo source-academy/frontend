@@ -3,6 +3,7 @@ import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
 import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';
+import Bindings from 'src/features/game/scenes/bindings/Bindings';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
@@ -98,7 +99,8 @@ const config = {
     GameManager,
     CheckpointTransition,
     AwardsHall,
-    RoomPreview
+    RoomPreview,
+    Bindings
   ]
 };
 

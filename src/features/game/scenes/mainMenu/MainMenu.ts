@@ -186,6 +186,13 @@ class MainMenu extends Phaser.Scene {
           this.layerManager.clearAllLayers();
           this.scene.start('Settings');
         }
+      },
+      {
+        text: mainMenuConstants.optionsText.bindings,
+        callback: () => {
+          this.layerManager.clearAllLayers();
+          this.scene.start('Bindings');
+        }
       }
     ];
   }

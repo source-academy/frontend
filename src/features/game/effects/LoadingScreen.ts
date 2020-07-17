@@ -20,6 +20,8 @@ export function addLoadingScreen(scene: Phaser.Scene) {
   let progressBar: Phaser.GameObjects.Graphics;
   let progressBox: Phaser.GameObjects.Graphics;
 
+  if (scene.load.isReady()) return;
+
   scene.load.on('start', () => {
     progressBar = scene.add.graphics();
     progressBox = scene.add.graphics();

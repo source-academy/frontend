@@ -18,7 +18,8 @@ const mainMenuConstants = {
     chapterSelect: 'Play Chapter',
     studentRoom: 'Go to My Room',
     awards: 'Awards Hall',
-    settings: 'Settings'
+    settings: 'Settings',
+    bindings: 'Key Bindings'
   },
   buttonYSpace: screenSize.y * 0.5,
   optXOffset: 80,

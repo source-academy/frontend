@@ -1,3 +1,6 @@
+import ImageAssets from '../../assets/ImageAssets';
+import CommonBackButton from '../../commons/CommonBackButton';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -25,7 +28,24 @@ class Bindings extends Phaser.Scene {
     this.renderBindings();
   }
 
-  private renderBackground() {}
+  private renderBackground() {
+    const background = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      ImageAssets.settingBackground.key
+    );
+    const blackOverlay = new Phaser.GameObjects.Rectangle(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      screenSize.x,
+      screenSize.y,
+      0
+    ).setAlpha(0.3);
+    this.layerManager.addToLayer(Layer.Background, background);
+    this.layerManager.addToLayer(Layer.Background, blackOverlay);
+  }
 
   private renderBindings() {
     const bindingsContainer = new Phaser.GameObjects.Container(this, 0, 0);
@@ -34,7 +54,7 @@ class Bindings extends Phaser.Scene {
     const bindingPositions = calcListFormatPos({
       numOfItems: bindings.length,
       xSpacing: 0,
-      ySpacing: 100
+      ySpacing: bindingConstants.keyYSpacing
     });
 
     bindingsContainer.add(
@@ -43,11 +63,17 @@ class Bindings extends Phaser.Scene {
           binding.key,
           binding.text,
           bindingPositions[index][0],
-          bindingPositions[index][1]
+          bindingPositions[index][1] + bindingConstants.keyStartYPos
         )
       )
     );
+    const backButton = new CommonBackButton(this, () => {
+      this.layerManager.clearAllLayers();
+      this.scene.start('MainMenu');
+    });
+
     this.layerManager.addToLayer(Layer.UI, bindingsContainer);
+    this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
   private getBindings() {
@@ -71,18 +97,30 @@ class Bindings extends Phaser.Scene {
       this,
       bindingConstants.keyIconXPos,
       0,
-      'defaultKeyIcon'
+      ImageAssets.squareKeyboardIcon.key
     );
     switch (key) {
       case 'Tab':
-        keyIcon.setTexture('mediumKeyIcon');
+        keyIcon.setTexture(ImageAssets.medKeyboardIcon.key);
         break;
       default:
         break;
     }
 
-    const keyText = createBitmapText(this, key, bindingConstants.keyIconXPos, 0, keyStyle);
-    const keyDesc = createBitmapText(this, desc, bindingConstants.keyDescXPos, 0, keyDescStyle);
+    const keyText = createBitmapText(
+      this,
+      key,
+      bindingConstants.keyIconXPos,
+      0,
+      keyStyle
+    ).setOrigin(0.5, 0.5);
+    const keyDesc = createBitmapText(
+      this,
+      desc,
+      bindingConstants.keyDescXPos,
+      0,
+      keyDescStyle
+    ).setOrigin(0.5, 0.5);
 
     bindingContainer.add([keyIcon, keyText, keyDesc]);
     return bindingContainer;
