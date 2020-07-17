@@ -120,7 +120,7 @@ class GameEscapeManager implements IGameUI {
   private createVolOptContainer() {
     const volOptContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
-    const userVol = this.getSettingsSaveManager().getSettings().volume;
+    const userVol = this.getSettingsSaveManager().getSettings().bgmVolume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -169,7 +169,7 @@ class GameEscapeManager implements IGameUI {
     if (this.volumeOptions) {
       // Save settings
       const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await this.getSettingsSaveManager().saveSettings({ volume: volumeVal });
+      await this.getSettingsSaveManager().saveSettings({ bgmVolume: volumeVal, sfxVolume: 0 });
 
       // Apply settings
       this.getSoundManager().applyUserSettings(this.getSettingsSaveManager().getSettings());

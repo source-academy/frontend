@@ -160,9 +160,7 @@ class GameManager extends Phaser.Scene {
 
   private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
-    await SourceAcademyGame.getInstance()
-      .getSoundManager()
-      .renderBackgroundMusic(gameLocation.bgmKey);
+    await GameGlobalAPI.getInstance().playBgMusic(gameLocation.bgmKey);
 
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);

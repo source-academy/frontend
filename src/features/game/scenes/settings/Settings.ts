@@ -56,6 +56,7 @@ class Settings extends Phaser.Scene {
 
   private renderOptions() {
     this.renderVolumeOptions();
+
     const applySettingsButton = createButton(this, {
       assetKey: ImageAssets.mediumButton.key,
       message: 'Apply Settings',
@@ -86,7 +87,7 @@ class Settings extends Phaser.Scene {
       settingsConstants.volTextYPos,
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
-    const userVol = this.getSaveManager().getSettings().volume;
+    const userVol = this.getSaveManager().getSettings().bgmVolume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -111,7 +112,7 @@ class Settings extends Phaser.Scene {
     if (volume) {
       // Save settings
       const volumeVal = parseFloat(volume.getChosenChoice());
-      await this.getSaveManager().saveSettings({ volume: volumeVal });
+      await this.getSaveManager().saveSettings({ bgmVolume: volumeVal, sfxVolume: 0 });
 
       // Apply settings
       SourceAcademyGame.getInstance()
