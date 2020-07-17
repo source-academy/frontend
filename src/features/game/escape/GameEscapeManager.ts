@@ -1,3 +1,5 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -10,7 +12,6 @@ import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameSaveManager from '../save/GameSaveManager';
 import settingsConstants from '../scenes/settings/SettingsConstants';
-import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
 import { calcTableFormatPos } from '../utils/StyleUtils';
@@ -29,7 +30,6 @@ class GameEscapeManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
-  private soundManager: GameSoundManager | undefined;
   private inputManager: GameInputManager | undefined;
   private saveManager: GameSaveManager | undefined;
   private isStorySimulator: boolean;
@@ -54,7 +54,6 @@ class GameEscapeManager implements IGameUI {
   ) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
-    this.soundManager = scene.soundManager;
     this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
     this.saveManager = saveManager;
@@ -165,8 +164,7 @@ class GameEscapeManager implements IGameUI {
         bitmapTextStyle: volumeRadioOptTextStyle
       },
       escapeConstants.volOptXPos,
-      escapeConstants.volOptYPos,
-      this.soundManager
+      escapeConstants.volOptYPos
     );
 
     volOptContainer.add([volumeText, this.volumeOptions]);
@@ -174,17 +172,13 @@ class GameEscapeManager implements IGameUI {
   }
 
   private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.mediumButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
-        bitMapTextStyle: escapeOptButtonStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.mediumButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
+      bitMapTextStyle: escapeOptButtonStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   private async applySettings() {
@@ -201,7 +195,7 @@ class GameEscapeManager implements IGameUI {
 
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
-  private getSoundManager = () => mandatory(this.soundManager);
+  private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
   private getSaveManager = () => mandatory(this.saveManager);
   private getPhaseManager = () => mandatory(this.phaseManager);
   private getInputManager = () => mandatory(this.inputManager);

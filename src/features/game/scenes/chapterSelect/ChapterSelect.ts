@@ -1,6 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
@@ -10,7 +10,6 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import GameSoundManager from '../../sound/GameSoundManager';
 import { createButton } from '../../utils/ButtonUtils';
 import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
@@ -22,7 +21,6 @@ import { SampleChapters } from './SampleChapters';
  */
 class ChapterSelect extends Phaser.Scene {
   public layerManager: GameLayerManager;
-  public soundManager: GameSoundManager;
   public chapterDetails: GameChapter[];
 
   private chapterContainer: Phaser.GameObjects.Container | undefined;
@@ -39,10 +37,13 @@ class ChapterSelect extends Phaser.Scene {
     this.backButtonContainer = undefined;
     this.chapterDetails = [];
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.autoScrolling = true;
     this.isScrollLeft = false;
     this.isScrollRight = false;
+  }
+
+  public init() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
   }
 
   public preload() {
@@ -50,11 +51,10 @@ class ChapterSelect extends Phaser.Scene {
     addLoadingScreen(this);
     this.preloadAssets();
     this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getSourceAcademyGame());
   }
 
   public async create() {
-    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
     this.loadedGameState = await loadData(accountInfo);
     this.renderBackground();
     this.renderChapters();
@@ -80,7 +80,7 @@ class ChapterSelect extends Phaser.Scene {
   public getLoadedGameState = () => mandatory(this.loadedGameState);
 
   public cleanUp() {
-    this.soundManager.stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.layerManager.clearAllLayers();
   }
 
@@ -111,14 +111,10 @@ class ChapterSelect extends Phaser.Scene {
 
   private renderChapters() {
     const mask = this.createMask();
-    this.backButtonContainer = new CommonBackButton(
-      this,
-      () => {
-        this.cleanUp();
-        this.scene.start('MainMenu');
-      },
-      this.soundManager
-    );
+    this.backButtonContainer = new CommonBackButton(this, () => {
+      this.cleanUp();
+      this.scene.start('MainMenu');
+    });
     this.chapterContainer = this.createChapterContainer();
     this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
 
@@ -129,27 +125,19 @@ class ChapterSelect extends Phaser.Scene {
       ImageAssets.chapterSelectBorder.key
     );
 
-    const leftArrow = createButton(
-      this,
-      {
-        assetKey: ImageAssets.chapterSelectArrow.key,
-        onDown: () => (this.isScrollLeft = true),
-        onUp: () => (this.isScrollLeft = false),
-        onOut: () => (this.isScrollLeft = false)
-      },
-      this.soundManager
-    ).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
+    const leftArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollLeft = true),
+      onUp: () => (this.isScrollLeft = false),
+      onOut: () => (this.isScrollLeft = false)
+    }).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
 
-    const rightArrow = createButton(
-      this,
-      {
-        assetKey: ImageAssets.chapterSelectArrow.key,
-        onDown: () => (this.isScrollRight = true),
-        onUp: () => (this.isScrollRight = false),
-        onOut: () => (this.isScrollRight = false)
-      },
-      this.soundManager
-    )
+    const rightArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollRight = true),
+      onUp: () => (this.isScrollRight = false),
+      onOut: () => (this.isScrollRight = false)
+    })
       .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
       .setScale(-1, 1);
 

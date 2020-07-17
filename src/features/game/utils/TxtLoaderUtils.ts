@@ -1,4 +1,4 @@
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import TextAssets from '../assets/TextAssets';
 import { GameChapter } from '../chapter/GameChapterTypes';
@@ -38,7 +38,7 @@ export async function callGameManagerOnTxtLoad(
   const text = scene.cache.text.get(chapterKey);
   const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key);
 
-  const accountInfo = getSourceAcademyGame().getAccountInfo();
+  const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
   if (!accountInfo) {
     return;
   }

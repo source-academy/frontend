@@ -1,5 +1,6 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { GamePosition, ItemId } from '../../commons/CommonTypes';
@@ -316,31 +317,31 @@ class GameGlobalAPI {
   /////////////////////
 
   public playSound(soundKey: AssetKey) {
-    this.getGameManager().soundManager.playSound(soundKey);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
   }
 
   public playBgMusic(soundKey: AssetKey) {
-    this.getGameManager().soundManager.playSound(soundKey);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
   }
 
   public async stopCurrBgMusic(fadeDuration?: number) {
-    this.getGameManager().soundManager.stopCurrBgMusic(fadeDuration);
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic(fadeDuration);
   }
 
   public async stopAllSound() {
-    this.getGameManager().soundManager.stopAllSound();
+    SourceAcademyGame.getInstance().getSoundManager().stopAllSound();
   }
 
   public pauseCurrBgMusic() {
-    this.getGameManager().soundManager.pauseCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().pauseCurrBgMusic();
   }
 
   public continueCurrBgMusic() {
-    this.getGameManager().soundManager.continueCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().continueCurrBgMusic();
   }
 
   public applySoundSettings(userSetting: UserSaveState) {
-    this.getGameManager().soundManager.applyUserSettings(userSetting);
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSetting);
   }
 
   /////////////////////

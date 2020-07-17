@@ -1,3 +1,5 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -8,7 +10,6 @@ import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameSoundManager from '../sound/GameSoundManager';
 import { UserStateTypes } from '../state/GameStateTypes';
 import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
@@ -31,7 +32,6 @@ import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
-  private soundManager: GameSoundManager | undefined;
   private userStateManager: GameUserStateManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -53,7 +53,6 @@ class GameCollectiblesManager implements IGameUI {
   ) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
-    this.soundManager = scene.soundManager;
     this.userStateManager = userStateManager;
     this.phaseManager = phaseManager;
 
@@ -180,14 +179,10 @@ class GameCollectiblesManager implements IGameUI {
     collectibleContainer.add(backButton);
 
     // Add page arrows
-    const arrowLeft = createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.arrow.key,
-        onUp: () => this.nextPage(false)
-      },
-      this.soundManager
-    )
+    const arrowLeft = createButton(this.getScene(), {
+      assetKey: ImageAssets.arrow.key,
+      onUp: () => this.nextPage(false)
+    })
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
@@ -195,14 +190,10 @@ class GameCollectiblesManager implements IGameUI {
         collectibleConstants.arrowDownYPos
       );
 
-    const arrowRight = createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.arrow.key,
-        onUp: () => this.nextPage(true)
-      },
-      this.soundManager
-    )
+    const arrowRight = createButton(this.getScene(), {
+      assetKey: ImageAssets.arrow.key,
+      onUp: () => this.nextPage(true)
+    })
       .setScale(collectibleConstants.arrowXScale, collectibleConstants.arrowYScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
@@ -288,21 +279,17 @@ class GameCollectiblesManager implements IGameUI {
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
   private getPhaseManager = () => mandatory(this.phaseManager);
-  private getSoundManager = () => mandatory(this.soundManager);
+  private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
   private getUserStateManager = () => mandatory(this.userStateManager);
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.collectiblesPage.key,
-        message: text,
-        textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
-        bitMapTextStyle: pageBannerTextStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.collectiblesPage.key,
+      message: text,
+      textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
+      bitMapTextStyle: pageBannerTextStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   private createItemsContainer() {
@@ -328,17 +315,13 @@ class GameCollectiblesManager implements IGameUI {
   }
 
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.collectiblesBanner.key,
-        message: obj,
-        textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
-        bitMapTextStyle: listBannerTextStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.collectiblesBanner.key,
+      message: obj,
+      textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+      bitMapTextStyle: listBannerTextStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   private getItems(pageNum: number) {

@@ -1,6 +1,6 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
@@ -15,7 +15,6 @@ import { createEmptySaveState } from '../../save/GameSaveHelper';
 import GameSaveManager from '../../save/GameSaveManager';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import GameSoundManager from '../../sound/GameSoundManager';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
@@ -38,7 +37,6 @@ export default class RoomPreview extends Phaser.Scene {
   public fullSaveState: FullSaveState;
 
   public layerManager: GameLayerManager;
-  public soundManager: GameSoundManager;
   public inputManager: GameInputManager;
 
   private phaseManager: GamePhaseManager;
@@ -57,7 +55,6 @@ export default class RoomPreview extends Phaser.Scene {
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
     this.saveManager = new GameSaveManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.userStateManager = new GameUserStateManager();
@@ -67,6 +64,8 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public init({ studentCode, fullSaveState }: RoomPreviewProps) {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+
     this.studentCode = studentCode;
     this.fullSaveState = fullSaveState;
 
@@ -74,7 +73,6 @@ export default class RoomPreview extends Phaser.Scene {
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
     this.saveManager = new GameSaveManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.collectibleManager = new GameCollectiblesManager();
@@ -83,7 +81,6 @@ export default class RoomPreview extends Phaser.Scene {
   public preload() {
     addLoadingScreen(this);
     this.userStateManager.initialise(this.fullSaveState.userSaveState);
-    this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.collectibleManager.initialise(this, this.userStateManager, this.phaseManager);
@@ -97,7 +94,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   public async create() {
     // Process student's information
-    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
     const fullSaveState = await loadData(accountInfo);
     this.saveManager.initialiseForSettings(accountInfo, fullSaveState);
     await this.userStateManager.loadAchievements();
@@ -129,7 +126,7 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Execute create
     await this.eval(`create();`);
-    this.soundManager.stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
 
     const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
     this.attachVerificationTag(cookie);
@@ -184,7 +181,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public cleanUp() {
-    this.soundManager.stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }

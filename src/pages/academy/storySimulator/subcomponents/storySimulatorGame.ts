@@ -4,7 +4,7 @@ import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/ObjectPlacement';
 
 import { screenSize } from '../../../../features/game/commons/CommonConstants';
-import { SourceAcademyGame } from '../../game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from '../../game/subcomponents/sourceAcademyGame';
 
 const config = {
   debug: true,
@@ -20,15 +20,11 @@ const config = {
   }
 };
 
-let storySimulatorGame: SourceAcademyGame;
-export const getStorySimulatorGame = () => {
-  return storySimulatorGame;
-};
-
 export const createStorySimulatorGame = () => {
-  storySimulatorGame = new SourceAcademyGame(config);
-  storySimulatorGame.scene.add('StorySimulatorMenu', MainMenu, true);
-  storySimulatorGame.scene.add('ObjectPlacement', ObjectPlacement);
-  storySimulatorGame.scene.add('GameManager', GameManager);
-  return storySimulatorGame;
+  const game = new SourceAcademyGame(config);
+  game.scene.add('StorySimulatorMenu', MainMenu, true);
+  game.scene.add('ObjectPlacement', ObjectPlacement);
+  game.scene.add('GameManager', GameManager);
+  game.init();
+  return game;
 };

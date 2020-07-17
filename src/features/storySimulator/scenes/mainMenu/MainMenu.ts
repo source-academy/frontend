@@ -6,11 +6,10 @@ import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import Parser from 'src/features/game/parser/Parser';
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
@@ -23,18 +22,15 @@ import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
  * functionalities from here.
  */
 class MainMenu extends Phaser.Scene {
-  private soundManager: GameSoundManager;
   private layerManager: GameLayerManager;
 
   constructor() {
     super('StorySimulatorMenu');
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
   }
   public init() {
-    getStorySimulatorGame().setStorySimProps({ mainMenuRef: this });
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getStorySimulatorGame());
   }
 
   public async preload() {
@@ -44,7 +40,7 @@ class MainMenu extends Phaser.Scene {
     Object.values(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
-    this.soundManager.loadSoundAssetMap(SoundAssets);
+    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
 
   public async create() {
@@ -82,7 +78,7 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.ObjectPlacement);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ObjectPlacement);
           this.layerManager.clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
@@ -90,36 +86,32 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Simulate Checkpoint',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.CheckpointSim);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.CheckpointSim);
         }
       },
       {
         text: 'Asset Uploader',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.AssetUploader);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.AssetUploader);
         }
       },
       {
         text: 'Chapter Sequencer',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.ChapterSim);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ChapterSim);
         }
       }
     ];
   }
 
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this,
-      {
-        assetKey: SSImageAssets.invertedButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-        bitMapTextStyle: mainMenuOptStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this, {
+      assetKey: SSImageAssets.invertedButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+      bitMapTextStyle: mainMenuOptStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   public callGameManager() {

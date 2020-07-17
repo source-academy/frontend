@@ -1,7 +1,8 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
 import { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
-import GameSoundManager from '../sound/GameSoundManager';
 import { createBitmapText } from './TextUtils';
 
 type ButtonConfig = {
@@ -62,8 +63,7 @@ export function createButton(
     onHoverEffect = true,
     onClickSound = SoundAssets.buttonClick.key,
     onHoverSound = SoundAssets.buttonHover.key
-  }: ButtonConfig,
-  soundManager?: GameSoundManager
+  }: ButtonConfig
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
   const { x, y, oriX, oriY } = textConfig;
@@ -72,11 +72,11 @@ export function createButton(
   const button = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey);
   button.setInteractive({ pixelPerfect: true, useHandCursor: true });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-    if (soundManager) soundManager.playSound(onClickSound);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(onClickSound);
     onUp();
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-    if (soundManager) soundManager.playSound(onHoverSound);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(onHoverSound);
     if (onHoverEffect) container.setAlpha(onHoverAlpha);
     onHover();
   });

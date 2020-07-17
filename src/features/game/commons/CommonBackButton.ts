@@ -1,6 +1,5 @@
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
-import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
 import { HexColor } from '../utils/StyleUtils';
 import { screenCenter } from './CommonConstants';
@@ -26,25 +25,20 @@ class CommonBackButton extends Phaser.GameObjects.Container {
   /**
    * @param scene scene for the button to be attached to
    * @param callback callback to be executed on onClick
-   * @param soundManager if defined, the button will play sound onHover and onClick
    */
-  constructor(scene: Phaser.Scene, callback: any, soundManager?: GameSoundManager) {
+  constructor(scene: Phaser.Scene, callback: any) {
     super(scene, 0, 0);
-    this.renderBackButton(callback, soundManager);
+    this.renderBackButton(callback);
   }
 
-  private renderBackButton(callback: any, soundManager?: GameSoundManager) {
-    const backButton = createButton(
-      this.scene,
-      {
-        assetKey: ImageAssets.topButton.key,
-        message: backText,
-        textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
-        bitMapTextStyle: backButtonStyle,
-        onUp: callback
-      },
-      soundManager
-    ).setPosition(screenCenter.x, screenCenter.y);
+  private renderBackButton(callback: any) {
+    const backButton = createButton(this.scene, {
+      assetKey: ImageAssets.topButton.key,
+      message: backText,
+      textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
+      bitMapTextStyle: backButtonStyle,
+      onUp: callback
+    }).setPosition(screenCenter.x, screenCenter.y);
     this.add(backButton);
   }
 }

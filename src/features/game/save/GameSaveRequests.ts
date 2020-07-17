@@ -1,7 +1,6 @@
 import Constants from 'src/commons/utils/Constants';
-import {
-  AccountInfo,
-  getSourceAcademyGame
+import SourceAcademyGame, {
+  AccountInfo
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import { createEmptySaveState } from './GameSaveHelper';
@@ -84,7 +83,10 @@ export async function clearData(accountInfo: AccountInfo) {
  * @param accountInfo - the account information of the student
  */
 export async function resetData() {
-  const resp = await saveData(getSourceAcademyGame().getAccountInfo(), createEmptySaveState());
+  const resp = await saveData(
+    SourceAcademyGame.getInstance().getAccountInfo(),
+    createEmptySaveState()
+  );
   if (resp && resp.ok) {
     alert('Game data reset!');
     return;
