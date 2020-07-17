@@ -53,14 +53,15 @@ class AwardsHall extends Phaser.Scene {
     this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
+  }
+
+  public async create() {
+    await this.userStateManager.loadAchievements();
     this.scrollLim =
       Math.ceil(
         this.userStateManager.getList(UserStateTypes.achievements).length /
           AwardsHallConstants.maxAwardsPerCol
       ) * AwardsHallConstants.awardsXSpacing;
-  }
-
-  public create() {
     this.renderBackground();
     this.renderAchievements();
   }

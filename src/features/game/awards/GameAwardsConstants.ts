@@ -40,9 +40,8 @@ export const defaultAwardProp: AwardProperty = {
   id: 'ult-cookie-award',
   assetKey: ImageAssets.cookies.key,
   assetPath: ImageAssets.cookies.path,
-  title: 'Ultimate Cookie',
-  description:
-    'One Cookie to rule them all, One Cookie to find them, One Ring to bring them all, and in pantry bind them',
+  title: '',
+  description: '',
   awardType: UserStateTypes.collectibles
 };
 
