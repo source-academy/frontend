@@ -1,7 +1,5 @@
-import { Icon, ITreeNode, Tooltip } from '@blueprintjs/core';
+import { ITreeNode } from '@blueprintjs/core';
 import _ from 'lodash';
-import React from 'react';
-import { deleteS3File, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
 /**
  * This function applies a function fn to every node in a blueprint core Tree
@@ -18,18 +16,6 @@ export function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) =>
 }
 
 /**
- * This function brings up a confirmation to delete an S3 file given the short filepath
- *
- * @param filePath - the file path e.g. "stories/chapter0.txt"
- */
-const deleteFile = (filePath: string) => async () => {
-  const confirm = window.confirm(
-    `Are you sure you want to delete ${filePath}?\nThere is no undoing this action!`
-  );
-  alert(confirm ? await deleteS3File(filePath) : 'Whew');
-};
-
-/**
  * This function takes a list of filepaths
  * (e.g. ["locations/hallway/normal.png", "locations/hallway/emergency.png"]) and returns a
  * blueprint core tree, where each node represents a folder/file.
@@ -37,12 +23,20 @@ const deleteFile = (filePath: string) => async () => {
  * The child of each folder node are the files/folders inside it.
  *
  * @param assetPaths - a list of all filepaths
+ * @param iconRenderer - Function that dictates what JSX Element/icon to render beside
+ *                       all blueprint core nodes basded on the file path
+ * @param rootFolders - a default list of parent folder names that you want to display regardless of
+ *                      whether or not they have contents
  * @returns {ITreeNode[]} - a blueprint core tree parent nodes
  */
-export function assetPathsToTree(assetPaths: string[]): ITreeNode[] {
+export function assetPathsToTree(
+  assetPaths: string[],
+  iconRenderer: (pathName: string) => JSX.Element,
+  rootFolders: string[] = []
+): ITreeNode[] {
   const assetObj = {};
   assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
-  s3AssetFolders.forEach(folder => {
+  rootFolders.forEach(folder => {
     if (!assetObj[folder] || assetObj[folder] === 'FILE') {
       assetObj[folder] = [];
     }
@@ -54,11 +48,7 @@ export function assetPathsToTree(assetPaths: string[]): ITreeNode[] {
       return {
         id: shortPath,
         label: file,
-        secondaryLabel: (
-          <Tooltip content="Delete">
-            <Icon icon="trash" onClick={deleteFile(shortPath)} />
-          </Tooltip>
-        ),
+        secondaryLabel: iconRenderer(shortPath),
         childNodes:
           assetObj[file] === 'FILE' ? undefined : helper([...parentFolders, file], assetObj[file])
       };

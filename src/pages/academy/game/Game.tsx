@@ -20,7 +20,6 @@ function Game() {
 
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
-
     if (session.name === 'Test Student') {
       setIsResetThere(true);
     }
