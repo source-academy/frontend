@@ -1,4 +1,4 @@
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameCollectiblesManager from '../../awards/GameAwardsManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeExplore from '../../mode/explore/GameModeExplore';
 import GameModeMenu from '../../mode/menu/GameModeMenu';

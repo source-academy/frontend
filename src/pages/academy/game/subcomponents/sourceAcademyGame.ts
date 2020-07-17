@@ -2,7 +2,7 @@ import * as Phaser from 'phaser';
 import { AwardProperty } from 'src/features/game/award/AwardTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
-import Achievements from 'src/features/game/scenes/achievements/Achievements';
+import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
@@ -97,7 +97,7 @@ const config = {
     ChapterSelect,
     GameManager,
     CheckpointTransition,
-    Achievements,
+    AwardsHall,
     RoomPreview
   ]
 };

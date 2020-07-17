@@ -3,7 +3,7 @@ import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameCollectiblesManager from '../../awards/GameAwardsManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';

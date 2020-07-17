@@ -15,8 +15,8 @@ import SourceAcademyGame, {
   AccountInfo
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
+import GameCollectiblesManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import { Constants } from '../../commons/CommonConstants';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';

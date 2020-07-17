@@ -2,7 +2,7 @@ import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameCollectiblesManager from '../../awards/GameAwardsManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';

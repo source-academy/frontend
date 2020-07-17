@@ -1,7 +1,7 @@
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 import { resize } from '../utils/SpriteUtils';
-import { CollectibleProperty } from './GameCollectiblesTypes';
+import { CollectibleProperty } from './GameAwardsTypes';
 
 export default class GameCollectibleRenderer {
   public createCollectible(

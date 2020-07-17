@@ -18,13 +18,13 @@ import { resizeUnderflow } from '../utils/SpriteUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import collectibleConstants, {
-  collectibleDescStyle,
-  collectibleTitleStyle,
-  defaultCollectibleProp,
+  awardDescStyle,
+  awardTitleStyle,
+  defaultAwardProp,
   listBannerTextStyle,
   pageBannerTextStyle
-} from './GameCollectiblesConstants';
-import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
+} from './GameAwardsConstants';
+import { CollectiblePage, CollectibleProperty } from './GameAwardsTypes';
 
 /**
  * Manager for rendering collectibles and achievements popup in the location.
@@ -80,7 +80,7 @@ class GameCollectiblesManager implements IGameUI {
         this.getScene(),
         bannerPos[chosenIdx][0],
         bannerPos[chosenIdx][1] + collectibleConstants.pageYStartPos,
-        ImageAssets.collectiblesPageChosen.key
+        ImageAssets.awardsPageChosen.key
       );
       this.pageChosenContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0, [
         bannerChosen
@@ -88,7 +88,7 @@ class GameCollectiblesManager implements IGameUI {
       this.uiContainer.add(this.pageChosenContainer);
 
       // Set default preview
-      this.setPreview('', defaultCollectibleProp, '');
+      this.setPreview('', defaultAwardProp, '');
     }
   }
 
@@ -142,7 +142,7 @@ class GameCollectiblesManager implements IGameUI {
       this.getScene(),
       0,
       0,
-      ImageAssets.collectiblesMenu.key
+      ImageAssets.awardsMenu.key
     );
     collectibleContainer.add([blackUnderlay, collectiblesBg]);
 
@@ -244,7 +244,7 @@ class GameCollectiblesManager implements IGameUI {
         title,
         collectibleConstants.previewXPos,
         collectibleConstants.previewYPos + collectibleConstants.titleYOffset,
-        collectibleTitleStyle
+        awardTitleStyle
       ).setOrigin(0.35, 0.5);
 
       // Preview description
@@ -253,7 +253,7 @@ class GameCollectiblesManager implements IGameUI {
         collectibleConstants.previewXPos,
         collectibleConstants.previewYPos + collectibleConstants.descYOffset,
         description,
-        collectibleDescStyle
+        awardDescStyle
       ).setOrigin(0.45, 0.0);
 
       this.previewContainer.add([previewSprite, previewTitle, previewDesc]);
@@ -284,7 +284,7 @@ class GameCollectiblesManager implements IGameUI {
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesPage.key,
+      assetKey: ImageAssets.awardsPage.key,
       message: text,
       textConfig: { x: collectibleConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
       bitMapTextStyle: pageBannerTextStyle,
@@ -307,7 +307,7 @@ class GameCollectiblesManager implements IGameUI {
           item,
           itemPositions[index][0],
           itemPositions[index][1] + collectibleConstants.listYStartPos,
-          () => this.setPreview(item, defaultCollectibleProp)
+          () => this.setPreview(item, defaultAwardProp)
         )
       )
     );
@@ -316,7 +316,7 @@ class GameCollectiblesManager implements IGameUI {
 
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
-      assetKey: ImageAssets.collectiblesBanner.key,
+      assetKey: ImageAssets.awardsBanner.key,
       message: obj,
       textConfig: { x: collectibleConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
       bitMapTextStyle: listBannerTextStyle,

@@ -12,16 +12,16 @@ import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { limitNumber } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { AchievementConstants } from './AchievementConstants';
+import { AwardsHallConstants } from './AwardsHallConstants';
 
-type AchievementsProps = {
+type AwardsProps = {
   fullSaveState: FullSaveState;
 };
 
 /**
  * This scenes display all students achievement.
  */
-class Achievements extends Phaser.Scene {
+class AwardsHall extends Phaser.Scene {
   public fullSaveState: FullSaveState;
 
   public layerManager: GameLayerManager;
@@ -36,7 +36,7 @@ class Achievements extends Phaser.Scene {
   private scrollLim: number;
 
   constructor() {
-    super('Achievements');
+    super('AwardsHall');
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
 
     this.layerManager = new GameLayerManager();
@@ -50,7 +50,7 @@ class Achievements extends Phaser.Scene {
     this.scrollLim = 0;
   }
 
-  public init({ fullSaveState }: AchievementsProps) {
+  public init({ fullSaveState }: AwardsProps) {
     this.fullSaveState = fullSaveState;
 
     this.layerManager = new GameLayerManager();
@@ -66,8 +66,8 @@ class Achievements extends Phaser.Scene {
     this.scrollLim =
       Math.ceil(
         this.userStateManager.getList(UserStateTypes.achievements).length /
-          AchievementConstants.maxAchievementPerCol
-      ) * AchievementConstants.achievementXSpacing;
+          AwardsHallConstants.maxAwardsPerCol
+      ) * AwardsHallConstants.awardsXSpacing;
   }
 
   public create() {
@@ -80,9 +80,9 @@ class Achievements extends Phaser.Scene {
 
     let newXPos = this.backgroundTile.x;
     if (this.isScrollRight) {
-      newXPos -= AchievementConstants.defaultScrollSpeed;
+      newXPos -= AwardsHallConstants.defaultScrollSpeed;
     } else if (this.isScrollLeft) {
-      newXPos += AchievementConstants.defaultScrollSpeed;
+      newXPos += AwardsHallConstants.defaultScrollSpeed;
     }
     newXPos = limitNumber(newXPos, -this.scrollLim, 0);
 
@@ -98,8 +98,8 @@ class Achievements extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      AchievementConstants.tileDim,
-      AchievementConstants.tileDim,
+      AwardsHallConstants.tileDim,
+      AwardsHallConstants.tileDim,
       'a'
     );
     this.layerManager.addToLayer(Layer.Background, this.backgroundTile);
@@ -148,4 +148,4 @@ class Achievements extends Phaser.Scene {
   }
 }
 
-export default Achievements;
+export default AwardsHall;
