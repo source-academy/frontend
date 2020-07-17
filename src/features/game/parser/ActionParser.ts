@@ -121,6 +121,12 @@ export default class ActionParser {
           actionType
         );
         break;
+      case GameActionType.PlayBGM:
+        actionParamObj.id = Parser.validator.assertAttr(GameAttr.bgms, actionParams[0], actionType);
+        break;
+      case GameActionType.PlaySFX:
+        actionParamObj.id = Parser.validator.assertAttr(GameAttr.sfxs, actionParams[0], actionType);
+        break;
     }
 
     const actionId = Parser.generateActionId();

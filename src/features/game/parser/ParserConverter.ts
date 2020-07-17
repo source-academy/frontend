@@ -42,7 +42,9 @@ const stringToActionTypeMap = {
   remove_mode: GameActionType.RemoveLocationMode,
   add_popup: GameActionType.AddPopup,
   make_object_glow: GameActionType.MakeObjectGlow,
-  make_object_blink: GameActionType.MakeObjectBlink
+  make_object_blink: GameActionType.MakeObjectBlink,
+  play_bgm: GameActionType.PlayBGM,
+  play_sfx: GameActionType.PlaySFX
 };
 
 const stringToGameStateStorageMap = {

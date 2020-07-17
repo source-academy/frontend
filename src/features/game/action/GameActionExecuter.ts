@@ -1,4 +1,5 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { GameActionType } from './GameActionTypes';
 
 /**
@@ -50,6 +51,12 @@ export default class GameActionExecuter {
         return;
       case GameActionType.MakeObjectGlow:
         await globalAPI.makeObjectGlow(actionParams.id);
+        return;
+      case GameActionType.PlayBGM:
+        await SourceAcademyGame.getInstance().getSoundManager().playBgMusic(actionParams.id);
+        return;
+      case GameActionType.PlaySFX:
+        await SourceAcademyGame.getInstance().getSoundManager().playSound(actionParams.id);
         return;
       default:
         return;

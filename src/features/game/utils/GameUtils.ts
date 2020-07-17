@@ -64,9 +64,9 @@ export function toS3Path(fileName: string) {
  * @returns {object} the object if it is found.
  * @throws {Error} if object is undefined
  */
-export function mandatory<T>(object: T) {
+export function mandatory<T>(object: T, errorMsg?: string) {
   if (object === undefined) {
-    throw new Error('Object not found');
+    throw new Error(errorMsg || 'Object not found');
   }
   return (object as T)!;
 }
