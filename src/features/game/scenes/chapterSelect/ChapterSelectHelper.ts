@@ -55,36 +55,28 @@ export function createChapter(
   );
 
   // Chapter Actions
-  const chapterRepeat = createButton(
-    scene,
-    {
-      assetKey: ImageAssets.chapterRepeatButton.key,
-      onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
-      onHover: () => chapterRepeatHover.setVisible(true),
-      onOut: () => chapterRepeatHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer) => {
-        chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
-        chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
-      }
-    },
-    scene.soundManager
-  ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterRepeat = createButton(scene, {
+    assetKey: ImageAssets.chapterRepeatButton.key,
+    onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
+    onHover: () => chapterRepeatHover.setVisible(true),
+    onOut: () => chapterRepeatHover.setVisible(false),
+    onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
+      chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
+    }
+  }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
-  const chapterContinue = createButton(
-    scene,
-    {
-      assetKey: ImageAssets.chapterContinueButton.key,
-      onUp: () =>
-        callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
-      onHover: () => chapterContinueHover.setVisible(true),
-      onOut: () => chapterContinueHover.setVisible(false),
-      onPointerMove: (pointer: Phaser.Input.Pointer) => {
-        chapterContinueHover.x = pointer.worldX - chapterContainer.x;
-        chapterContinueHover.y = pointer.worldY - chapterContainer.y;
-      }
-    },
-    scene.soundManager
-  ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterContinue = createButton(scene, {
+    assetKey: ImageAssets.chapterContinueButton.key,
+    onUp: () =>
+      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
+    onHover: () => chapterContinueHover.setVisible(true),
+    onOut: () => chapterContinueHover.setVisible(false),
+    onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      chapterContinueHover.x = pointer.worldX - chapterContainer.x;
+      chapterContinueHover.y = pointer.worldY - chapterContainer.y;
+    }
+  }).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(

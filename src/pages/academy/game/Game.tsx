@@ -3,10 +3,9 @@ import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { resetData } from 'src/features/game/save/GameSaveRequests';
 
-import {
+import SourceAcademyGame, {
   AccountInfo,
-  createSourceAcademyGame,
-  getSourceAcademyGame
+  createSourceAcademyGame
 } from './subcomponents/sourceAcademyGame';
 
 function Game() {
@@ -16,12 +15,12 @@ function Game() {
   React.useEffect(() => {
     createSourceAcademyGame();
     return () => {
-      getSourceAcademyGame().stopAllSounds();
+      SourceAcademyGame.getInstance().stopAllSounds();
     };
   }, []);
 
   React.useEffect(() => {
-    getSourceAcademyGame().setAccountInfo({
+    SourceAcademyGame.getInstance().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       name: session.name,

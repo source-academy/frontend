@@ -11,12 +11,9 @@ import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
-import {
-  AccountInfo,
-  getSourceAcademyGame,
-  SourceAcademyGame
+import SourceAcademyGame, {
+  AccountInfo
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 import GameBackgroundManager from '../../background/GameBackgroundManager';
 import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
@@ -28,7 +25,6 @@ import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameSaveManager from '../../save/GameSaveManager';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import GameSoundManager from '../../sound/GameSoundManager';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
@@ -54,7 +50,6 @@ type GameManagerProps = {
  */
 class GameManager extends Phaser.Scene {
   public currentLocationId: LocationId;
-  public parentGame: SourceAcademyGame | undefined;
   public isStorySimulator: boolean;
 
   private currentCheckpoint: GameCheckpoint | undefined;
@@ -74,7 +69,6 @@ class GameManager extends Phaser.Scene {
   public boundingBoxManager: GameBBoxManager;
   public popUpManager: GamePopUpManager;
   public saveManager: GameSaveManager;
-  public soundManager: GameSoundManager;
   public escapeManager: GameEscapeManager;
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
@@ -101,7 +95,6 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
-    this.soundManager = new GameSoundManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
@@ -117,8 +110,9 @@ class GameManager extends Phaser.Scene {
     checkpointNum,
     isStorySimulator
   }: GameManagerProps) {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+
     this.isStorySimulator = isStorySimulator;
-    this.parentGame = isStorySimulator ? getStorySimulatorGame() : getSourceAcademyGame();
     this.currentCheckpoint = gameCheckpoint;
     this.fullSaveState = fullSaveState;
     this.continueGame = continueGame;
@@ -138,7 +132,6 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
     this.saveManager = new GameSaveManager();
-    this.soundManager = new GameSoundManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
@@ -159,7 +152,6 @@ class GameManager extends Phaser.Scene {
       this.saveManager.getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
     this.stateManager.initialise(this);
     this.userStateManager.initialise(this.saveManager.getLoadedUserState());
-    this.soundManager.initialise(this, this.parentGame || getSourceAcademyGame());
     this.dialogueManager.initialise(this);
     this.characterManager.initialise(this);
     this.actionManager.initialise(this);
@@ -174,7 +166,10 @@ class GameManager extends Phaser.Scene {
     );
     this.escapeManager.initialise(this, this.phaseManager, this.saveManager, this.isStorySimulator);
 
-    this.soundManager.loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
+    SourceAcademyGame.getInstance()
+      .getSoundManager()
+      .loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
+
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
     );
@@ -183,7 +178,7 @@ class GameManager extends Phaser.Scene {
   }
 
   private loadGameState() {
-    this.accountInfo = this.getParentGame().getAccountInfo();
+    this.accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
     if (this.isStorySimulator && this.accountInfo.role === 'staff') {
       this.saveManager.initialiseForStaff(this.accountInfo);
     } else if (!this.isStorySimulator && this.accountInfo.role === 'student') {
@@ -218,7 +213,9 @@ class GameManager extends Phaser.Scene {
 
   private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
-    await this.soundManager.renderBackgroundMusic(gameLocation.bgmKey);
+    await SourceAcademyGame.getInstance()
+      .getSoundManager()
+      .renderBackgroundMusic(gameLocation.bgmKey);
 
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
@@ -276,7 +273,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public cleanUp() {
-    this.soundManager.stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }
@@ -299,7 +296,6 @@ class GameManager extends Phaser.Scene {
 
   public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint);
   public getAccountInfo = () => mandatory(this.accountInfo);
-  private getParentGame = () => mandatory(this.parentGame);
 }
 
 export default GameManager;

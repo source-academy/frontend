@@ -79,7 +79,6 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     }: RadioButtonConfig,
     x?: number,
     y?: number,
-    soundManager?: GameSoundManager,
     buttonClickSoundKey: AssetKey = SoundAssets.radioButtonClick.key
   ) {
     super(scene, x, y);
@@ -88,7 +87,6 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     this.choiceTextConfig = choiceTextConfig;
     this.bitmapTextStyle = bitmapTextStyle;
     this.radioChoiceConfig = radioChoiceConfig;
-    this.soundManager = soundManager;
     this.buttonClickSoundKey = buttonClickSoundKey;
 
     const buttons = this.getRadioButtons(choices);

@@ -1,6 +1,7 @@
 import * as Phaser from 'phaser';
 import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
 import { AwardProperty } from 'src/features/game/award/AwardTypes';
+import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
 import Achievements from 'src/features/game/scenes/achievements/Achievements';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
@@ -9,11 +10,9 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import MainMenu from 'src/features/game/scenes/mainMenu/MainMenu';
 import RoomPreview from 'src/features/game/scenes/roomPreview/RoomPreview';
 import Settings from 'src/features/game/scenes/settings/Settings';
+import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import StorySimMainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
-
-import { screenSize } from '../../../../features/game/commons/CommonConstants';
 
 export type AccountInfo = {
   accessToken: string;
@@ -22,21 +21,19 @@ export type AccountInfo = {
   name: string;
 };
 
-type StorySimulatorProps = {
-  setStorySimState: (value: React.SetStateAction<string>) => void;
-  mainMenuRef: StorySimMainMenu;
-};
-
 type GlobalGameProps = {
   currBgMusicKey: AssetKey | undefined;
   soundAssetMap: Map<AssetKey, SoundAsset>;
   accountInfo: AccountInfo | undefined;
-  storySimulatorProps?: StorySimulatorProps;
+  setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
+  currentSceneRef?: Phaser.Scene;
+  soundManager?: GameSoundManager;
 };
 
-export class SourceAcademyGame extends Phaser.Game {
-  public global: GlobalGameProps;
+export default class SourceAcademyGame extends Phaser.Game {
+  protected global: GlobalGameProps;
+  static instance: SourceAcademyGame;
 
   constructor(config: Phaser.Types.Core.GameConfig) {
     super(config);
@@ -44,8 +41,17 @@ export class SourceAcademyGame extends Phaser.Game {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       currBgMusicKey: undefined,
       soundAssetMap: new Map<AssetKey, SoundAsset>(),
-      accountInfo: undefined
+      accountInfo: undefined,
+      setStorySimState: Constants.nullFunction,
+      currentSceneRef: undefined
     };
+    SourceAcademyGame.instance = this;
+  }
+
+  static getInstance = () => mandatory(SourceAcademyGame.instance);
+
+  public init() {
+    this.global.soundManager = new GameSoundManager();
   }
 
   public stopAllSounds() {
@@ -82,19 +88,20 @@ export class SourceAcademyGame extends Phaser.Game {
 
   public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
+  public getSoundManager = () => mandatory(this.global.soundManager);
+  public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
 
-  public setStorySimProps(storySimulatorProps: any) {
-    this.global.storySimulatorProps = {
-      ...this.global.storySimulatorProps,
-      ...storySimulatorProps
-    };
+  public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
+    this.setStorySimState = setStorySimState;
   }
 
   public setStorySimState(state: StorySimState) {
-    this.getStorySimProps().setStorySimState(state);
+    this.global.setStorySimState(state);
   }
 
-  public getStorySimProps = () => mandatory(this.global.storySimulatorProps);
+  public setCurrentSceneRef(scene: Phaser.Scene) {
+    this.global.currentSceneRef = scene;
+  }
 }
 
 const config = {
@@ -120,11 +127,8 @@ const config = {
   ]
 };
 
-let sourceAcademyGame: SourceAcademyGame;
-export const getSourceAcademyGame = () => {
-  return sourceAcademyGame;
-};
-
 export const createSourceAcademyGame = () => {
-  sourceAcademyGame = new SourceAcademyGame(config);
+  const game = new SourceAcademyGame(config);
+  game.init();
+  return game;
 };

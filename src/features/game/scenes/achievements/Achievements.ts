@@ -1,4 +1,4 @@
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';
@@ -8,7 +8,6 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { createEmptySaveState } from '../../save/GameSaveHelper';
 import { FullSaveState } from '../../save/GameSaveTypes';
-import GameSoundManager from '../../sound/GameSoundManager';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { limitNumber } from '../../utils/GameUtils';
@@ -26,7 +25,6 @@ class Achievements extends Phaser.Scene {
   public fullSaveState: FullSaveState;
 
   public layerManager: GameLayerManager;
-  public soundManager: GameSoundManager;
   public inputManager: GameInputManager;
   private userStateManager: GameUserStateManager;
 
@@ -39,8 +37,9 @@ class Achievements extends Phaser.Scene {
 
   constructor() {
     super('Achievements');
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.userStateManager = new GameUserStateManager();
 
@@ -55,7 +54,6 @@ class Achievements extends Phaser.Scene {
     this.fullSaveState = fullSaveState;
 
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.userStateManager = new GameUserStateManager();
   }
@@ -63,7 +61,6 @@ class Achievements extends Phaser.Scene {
   public preload() {
     addLoadingScreen(this);
     this.userStateManager.initialise(this.fullSaveState.userSaveState);
-    this.soundManager.initialise(this, getSourceAcademyGame());
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.scrollLim =
@@ -145,7 +142,7 @@ class Achievements extends Phaser.Scene {
   }
 
   private cleanUp() {
-    this.soundManager.stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }

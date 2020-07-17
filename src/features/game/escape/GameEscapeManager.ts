@@ -54,7 +54,6 @@ class GameEscapeManager implements IGameUI {
   ) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
-    this.soundManager = scene.soundManager;
     this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
     this.saveManager = saveManager;
@@ -165,8 +164,7 @@ class GameEscapeManager implements IGameUI {
         bitmapTextStyle: volumeRadioOptTextStyle
       },
       escapeConstants.volOptXPos,
-      escapeConstants.volOptYPos,
-      this.soundManager
+      escapeConstants.volOptYPos
     );
 
     volOptContainer.add([volumeText, this.volumeOptions]);
@@ -174,17 +172,13 @@ class GameEscapeManager implements IGameUI {
   }
 
   private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this.getScene(),
-      {
-        assetKey: ImageAssets.mediumButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
-        bitMapTextStyle: escapeOptButtonStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this.getScene(), {
+      assetKey: ImageAssets.mediumButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
+      bitMapTextStyle: escapeOptButtonStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   private async applySettings() {

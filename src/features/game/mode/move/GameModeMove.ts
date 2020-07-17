@@ -85,14 +85,10 @@ class GameModeMove implements IGameUI {
       )
     );
 
-    const backButton = new CommonBackButton(
-      gameManager,
-      () => {
-        GameGlobalAPI.getInstance().popPhase();
-        GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
-      },
-      gameManager.soundManager
-    );
+    const backButton = new CommonBackButton(gameManager, () => {
+      GameGlobalAPI.getInstance().popPhase();
+      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+    });
     moveMenuContainer.add(backButton);
 
     // Initial setting
@@ -131,19 +127,15 @@ class GameModeMove implements IGameUI {
     onOut: any
   ) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    return createButton(
-      gameManager,
-      {
-        assetKey: ImageAssets.longButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
-        bitMapTextStyle: moveButtonStyle,
-        onUp: callback,
-        onHover: onHover,
-        onOut: onOut
-      },
-      gameManager.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(gameManager, {
+      assetKey: ImageAssets.longButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.4, oriY: 0.15 },
+      bitMapTextStyle: moveButtonStyle,
+      onUp: callback,
+      onHover: onHover,
+      onOut: onOut
+    }).setPosition(xPos, yPos);
   }
 
   public async activateUI(): Promise<void> {
