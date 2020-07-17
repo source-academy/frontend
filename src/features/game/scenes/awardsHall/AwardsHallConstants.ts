@@ -5,5 +5,7 @@ export const AwardsHallConstants = {
   maxAwardsPerCol: 4,
   awardsXSpacing: 200,
   arrowXOffset: 875,
-  awardYStartPos: 100
+  awardYStartPos: 100,
+  hoverWidth: 300,
+  hoverHeight: 300
 };
