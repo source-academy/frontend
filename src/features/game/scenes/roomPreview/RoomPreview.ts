@@ -1,8 +1,11 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 
+import ImageAssets from '../../assets/ImageAssets';
+import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
+import { ItemId } from '../../commons/CommonTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
@@ -132,8 +135,7 @@ export default class RoomPreview extends Phaser.Scene {
       layerTypes: Layer,
       remotePath: Constants.assetsFolder,
       screenSize: screenSize,
-      verify: (sprite: Phaser.GameObjects.Sprite) => this.attachVerificationTag(sprite),
-      achievements: this.userStateManager.getList(UserStateTypes.achievements)
+      createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
     });
     context.externalContext = 'playground';
 
@@ -172,6 +174,17 @@ export default class RoomPreview extends Phaser.Scene {
     SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
+  }
+
+  private createAward(x: number, y: number, awardKey: ItemId) {
+    const achievements = this.userStateManager.getList(UserStateTypes.achievements);
+    const collectibles = this.userStateManager.getList(UserStateTypes.collectibles);
+    if (achievements.includes(awardKey) || collectibles.includes(awardKey)) {
+      const awardProp = getAwardProp(awardKey);
+      const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
+      return this.attachVerificationTag(award);
+    }
+    return new Phaser.GameObjects.Sprite(this, x, y, ImageAssets.cookies.key);
   }
 
   private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {

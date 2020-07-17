@@ -19,6 +19,7 @@ const ImageAssets: AssetMap<ImageAsset> = {
   diamond: { key: 'diamond', path: '/ui/zircon.png' },
   arrow: { key: 'arrow', path: '/ui/arrow.png' },
   cookies: { key: 'cookies', path: '/images/cookies.png' },
+  scrollFrame: { key: 'scroll-frame', path: '/ui/scrollFrame.png' },
 
   // Escape Menu
   escapeMenuBackground: { key: 'escape-bg', path: '/ui/escapeMenu.png' },

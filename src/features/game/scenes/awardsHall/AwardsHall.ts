@@ -12,6 +12,7 @@ import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
+import { resizeUnderflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { AwardsHallConstants } from './AwardsHallConstants';
 import { createAwardsHoverContainer } from './AwardsHelper';
@@ -30,6 +31,7 @@ class AwardsHall extends Phaser.Scene {
   private isScrollLeft: boolean;
   private isScrollRight: boolean;
   private scrollLim: number;
+  private awardXSpace: number;
 
   constructor() {
     super('AwardsHall');
@@ -42,6 +44,7 @@ class AwardsHall extends Phaser.Scene {
     this.isScrollLeft = false;
     this.isScrollRight = false;
     this.scrollLim = 0;
+    this.awardXSpace = 0;
   }
 
   public init() {
@@ -64,11 +67,13 @@ class AwardsHall extends Phaser.Scene {
     // on maximum number of achievement/collectible
     const achievementLength = this.userStateManager.getList(UserStateTypes.achievements).length;
     const collectibleLength = this.userStateManager.getList(UserStateTypes.achievements).length;
-    this.scrollLim =
+    this.awardXSpace =
       Math.ceil(
         Math.max(achievementLength, collectibleLength) / AwardsHallConstants.maxAwardsPerCol
       ) * AwardsHallConstants.awardsXSpacing;
 
+    // Scroll limit is anything that exceed the screen size
+    this.scrollLim = this.awardXSpace < screenSize.x ? 0 : this.awardXSpace - screenSize.x;
     this.renderBackground();
     this.renderAwards();
   }
@@ -137,8 +142,8 @@ class AwardsHall extends Phaser.Scene {
     const achievementsPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: achievements.length,
-      maxXSpace: this.scrollLim,
-      maxYSpace: screenSize.y / 2
+      maxXSpace: this.awardXSpace,
+      maxYSpace: AwardsHallConstants.awardYSpace
     });
 
     this.awardsContainer.add(
@@ -146,7 +151,7 @@ class AwardsHall extends Phaser.Scene {
         this.createAward(
           achievement,
           achievementsPos[index][0],
-          achievementsPos[index][1] + AwardsHallConstants.awardYStartPos
+          achievementsPos[index][1] + AwardsHallConstants.awardYStartPos - screenCenter.y
         )
       )
     );
@@ -156,8 +161,8 @@ class AwardsHall extends Phaser.Scene {
     const collectiblesPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: collectibles.length,
-      maxXSpace: this.scrollLim,
-      maxYSpace: screenSize.y / 2
+      maxXSpace: this.awardXSpace,
+      maxYSpace: AwardsHallConstants.awardYSpace
     });
 
     this.awardsContainer.add(
@@ -165,7 +170,7 @@ class AwardsHall extends Phaser.Scene {
         this.createAward(
           collectible,
           collectiblesPos[index][0],
-          collectiblesPos[index][1] + AwardsHallConstants.awardYStartPos + screenCenter.y
+          collectiblesPos[index][1] + AwardsHallConstants.awardYStartPos
         )
       )
     );
@@ -181,8 +186,10 @@ class AwardsHall extends Phaser.Scene {
 
   private createAward(award: AwardProperty, xPos: number, yPos: number) {
     const awardCont = new Phaser.GameObjects.Container(this, xPos, yPos);
-    const image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey);
+    const image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey).setOrigin(0.5);
     const hoverCont = createAwardsHoverContainer(this, award);
+
+    resizeUnderflow(image, AwardsHallConstants.awardDim, AwardsHallConstants.awardDim);
 
     image.setInteractive({ pixelPerfect: true, useHandCursor: true });
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
@@ -199,7 +206,8 @@ class AwardsHall extends Phaser.Scene {
       }
     );
 
-    awardCont.add([image]);
+    this.layerManager.addToLayer(Layer.UI, hoverCont);
+    awardCont.add(image);
     return awardCont;
   }
 
