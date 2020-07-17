@@ -113,7 +113,7 @@ export const prettifyDeadline = (deadline: Date | undefined) => {
   } else if (hoursAway > 1) {
     prettifiedDeadline = hoursAway + ' Hours';
   } else {
-    prettifiedDeadline = 'Less than 1 hour';
+    prettifiedDeadline = '1 Hour';
   }
 
   return prettifiedDeadline;
