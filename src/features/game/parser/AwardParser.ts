@@ -1,4 +1,4 @@
-import { AwardProperty } from '../award/AwardTypes';
+import { AwardProperty } from '../awards/GameAwardsTypes';
 import { ItemId } from '../commons/CommonTypes';
 import { toS3Path } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';

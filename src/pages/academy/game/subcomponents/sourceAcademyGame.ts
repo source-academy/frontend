@@ -1,5 +1,5 @@
 import * as Phaser from 'phaser';
-import { AwardProperty } from 'src/features/game/award/AwardTypes';
+import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
 import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';

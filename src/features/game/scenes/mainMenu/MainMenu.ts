@@ -10,7 +10,7 @@ import { Constants, screenCenter, screenSize } from '../../commons/CommonConstan
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import AwardParser from '../../parser/AssetParser';
+import AwardParser from '../../parser/AwardParser';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
