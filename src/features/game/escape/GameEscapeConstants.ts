@@ -1,5 +1,5 @@
 import FontAssets from '../assets/FontAssets';
-import { screenSize } from '../commons/CommonConstants';
+import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { HexColor } from '../utils/StyleUtils';
 
@@ -28,6 +28,9 @@ const escapeConstants = {
   textOriX: 0.33,
   textOriY: 0.85,
   buttonYPos: screenSize.y * 0.15,
+
+  settingsYOffset: -screenCenter.y * 0.1,
+  settingsYSpace: screenSize.y * 0.3,
 
   optTextXPos: screenSize.x * 0.38,
   optTextYPos: screenSize.y * 0.38,
