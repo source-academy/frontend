@@ -1,5 +1,6 @@
 import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
+import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { screenCenter } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -8,6 +9,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
+import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { AwardsHallConstants } from './AwardsHallConstants';
@@ -51,14 +53,15 @@ class AwardsHall extends Phaser.Scene {
     this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
+  }
+
+  public async create() {
+    await this.userStateManager.loadAchievements();
     this.scrollLim =
       Math.ceil(
         this.userStateManager.getList(UserStateTypes.achievements).length /
           AwardsHallConstants.maxAwardsPerCol
       ) * AwardsHallConstants.awardsXSpacing;
-  }
-
-  public create() {
     this.renderBackground();
     this.renderAchievements();
   }
@@ -92,10 +95,28 @@ class AwardsHall extends Phaser.Scene {
     );
     this.layerManager.addToLayer(Layer.Background, this.backgroundTile);
 
+    const leftArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollLeft = true),
+      onUp: () => (this.isScrollLeft = false),
+      onOut: () => (this.isScrollLeft = false)
+    }).setPosition(screenCenter.x - AwardsHallConstants.arrowXOffset, screenCenter.y);
+
+    const rightArrow = createButton(this, {
+      assetKey: ImageAssets.chapterSelectArrow.key,
+      onDown: () => (this.isScrollRight = true),
+      onUp: () => (this.isScrollRight = false),
+      onOut: () => (this.isScrollRight = false)
+    })
+      .setPosition(screenCenter.x + AwardsHallConstants.arrowXOffset, screenCenter.y)
+      .setScale(-1, 1);
+
     const backButton = new CommonBackButton(this, () => {
       this.cleanUp();
       this.scene.start('MainMenu');
     });
+    this.layerManager.addToLayer(Layer.UI, leftArrow);
+    this.layerManager.addToLayer(Layer.UI, rightArrow);
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 

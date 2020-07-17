@@ -1,12 +1,12 @@
 collectibles
     cookies
-        cookies, /images/cookies.png, Cookies, Cookies are delicious!
+        cookies-award, /images/cookies.png, Cookies, Cookies are delicious!
     computer
-        computer, /images/cmd-commentsTerminal.png, Computer, Computer is advanced technology
+        computer-award, /images/cmd-commentsTerminal.png, Computer, Computer is advanced technology
 
 achievements
     301
-        place, /images/2d-2018-1st-place.png, Rune Master, This is an award you get for obtaining rune master
+        place-award, /images/2d-2018-1st-place.png, Rune Master, This is an award you get for obtaining rune master
     302
-        popular, /images/2d-2018-1st-popular.png, Popular, Wow, Mr. Popular! :)
+        popular-award, /images/2d-2018-1st-popular.png, Popular, Wow, Mr. Popular! :)
 

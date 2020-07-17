@@ -24,6 +24,7 @@ import awardsConstants, {
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
+import { getAwardProps } from './GameAwardsHelper';
 import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
@@ -288,12 +289,12 @@ class GameAwardsManager implements IGameUI {
       ySpacing: awardsConstants.listYSpacing
     });
     itemsContainer.add(
-      items.map((item, index) =>
+      items.map((awardProp, index) =>
         this.createItemButton(
-          item,
+          awardProp.title,
           itemPositions[index][0],
           itemPositions[index][1] + awardsConstants.listYStartPos,
-          () => this.setPreview(defaultAwardProp)
+          () => this.setPreview(awardProp)
         )
       )
     );
@@ -311,18 +312,19 @@ class GameAwardsManager implements IGameUI {
   }
 
   private getItems(pageNum: number) {
-    let itemList: string[];
+    let keys: string[];
     switch (this.currActivePage) {
       case AwardPage.Achievements:
-        itemList = this.getUserStateManager().getList(UserStateTypes.achievements);
+        keys = this.getUserStateManager().getList(UserStateTypes.achievements);
         break;
       case AwardPage.Collectibles:
-        itemList = this.getUserStateManager().getList(UserStateTypes.collectibles);
+        keys = this.getUserStateManager().getList(UserStateTypes.collectibles);
         break;
       default:
-        itemList = [];
+        keys = [];
     }
 
+    const itemList = getAwardProps(keys);
     const itemStartIdx = pageNum * awardsConstants.itemsPerPage;
     return itemList.slice(itemStartIdx, itemStartIdx + awardsConstants.itemsPerPage);
   }
