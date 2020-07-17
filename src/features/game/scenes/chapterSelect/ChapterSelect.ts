@@ -42,9 +42,11 @@ class ChapterSelect extends Phaser.Scene {
     this.isScrollRight = false;
   }
 
-  public preload() {
+  public init() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+  }
 
+  public preload() {
     this.chapterDetails = SampleChapters;
     addLoadingScreen(this);
     this.preloadAssets();

@@ -1,8 +1,7 @@
 import * as Phaser from 'phaser';
-import { SoundAsset } from 'src/features/game/assets/AssetsTypes';
 import { AwardProperty } from 'src/features/game/award/AwardTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
-import { AssetKey, ItemId } from 'src/features/game/commons/CommonTypes';
+import { ItemId } from 'src/features/game/commons/CommonTypes';
 import Achievements from 'src/features/game/scenes/achievements/Achievements';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
@@ -22,8 +21,6 @@ export type AccountInfo = {
 };
 
 type GlobalGameProps = {
-  currBgMusicKey: AssetKey | undefined;
-  soundAssetMap: Map<AssetKey, SoundAsset>;
   accountInfo: AccountInfo | undefined;
   setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
@@ -39,8 +36,6 @@ export default class SourceAcademyGame extends Phaser.Game {
     super(config);
     this.global = {
       awardsMapping: new Map<ItemId, AwardProperty>(),
-      currBgMusicKey: undefined,
-      soundAssetMap: new Map<AssetKey, SoundAsset>(),
       accountInfo: undefined,
       setStorySimState: Constants.nullFunction,
       currentSceneRef: undefined
@@ -56,26 +51,6 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public stopAllSounds() {
     this.sound.stopAll();
-  }
-
-  public setCurrBgMusicKey(key: AssetKey | undefined) {
-    this.global.currBgMusicKey = key;
-  }
-
-  public getCurrBgMusicKey() {
-    return this.global.currBgMusicKey;
-  }
-
-  public addSoundAsset(soundAsset: SoundAsset) {
-    this.global.soundAssetMap.set(soundAsset.key, soundAsset);
-  }
-
-  public clearSoundAssetMap() {
-    this.global.soundAssetMap.clear();
-  }
-
-  public getSoundAsset(key: AssetKey) {
-    return this.global.soundAssetMap.get(key);
   }
 
   public setAccountInfo(acc: AccountInfo | undefined) {

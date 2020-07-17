@@ -1,3 +1,5 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
@@ -8,7 +10,6 @@ import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameSoundManager from '../sound/GameSoundManager';
 import { UserStateTypes } from '../state/GameStateTypes';
 import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
@@ -31,7 +32,6 @@ import { CollectiblePage, CollectibleProperty } from './GameCollectiblesTypes';
 class GameCollectiblesManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
   private layerManager: GameLayerManager | undefined;
-  private soundManager: GameSoundManager | undefined;
   private userStateManager: GameUserStateManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
   private uiContainer: Phaser.GameObjects.Container | undefined;
@@ -279,7 +279,7 @@ class GameCollectiblesManager implements IGameUI {
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
   private getPhaseManager = () => mandatory(this.phaseManager);
-  private getSoundManager = () => mandatory(this.soundManager);
+  private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
   private getUserStateManager = () => mandatory(this.userStateManager);
 
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {

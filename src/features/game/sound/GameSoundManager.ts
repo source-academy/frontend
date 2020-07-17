@@ -11,6 +11,13 @@ import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
  * It proxies the game's sound manager
  */
 class GameSoundManager {
+  currBgMusicKey?: AssetKey;
+  soundAssetMap: Map<AssetKey, SoundAsset>;
+
+  constructor() {
+    this.soundAssetMap = new Map<AssetKey, SoundAsset>();
+  }
+
   public applyUserSettings(userSaveState: UserSaveState) {
     this.setGlobalVolume(userSaveState.settings.volume);
   }
@@ -20,20 +27,36 @@ class GameSoundManager {
     this.playBgMusic(bgmKey);
   }
 
-  public clearSoundAssets() {
-    this.getParentGame().clearSoundAssetMap();
+  public setCurrBgMusicKey(key: AssetKey | undefined) {
+    this.currBgMusicKey = key;
+  }
+
+  public getCurrBgMusicKey() {
+    return this.currBgMusicKey;
+  }
+
+  public addSoundAsset(soundAsset: SoundAsset) {
+    this.soundAssetMap.set(soundAsset.key, soundAsset);
+  }
+
+  public clearSoundAssetMap() {
+    this.soundAssetMap.clear();
+  }
+
+  public getSoundAsset(key: AssetKey) {
+    return this.soundAssetMap.get(key);
   }
 
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
-      this.getParentGame().addSoundAsset(asset);
+      this.addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
     Object.values(assetMap).forEach(asset => {
-      this.getParentGame().addSoundAsset(asset);
+      this.addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
@@ -43,7 +66,7 @@ class GameSoundManager {
   }
 
   public playSound(soundKey: AssetKey) {
-    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
+    const soundAsset = this.getSoundAsset(soundKey);
     if (soundAsset) {
       soundAsset.config.volume = this.getBaseSoundManager().volume;
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config });
@@ -52,22 +75,22 @@ class GameSoundManager {
 
   public playBgMusic(soundKey: AssetKey, volume = 1.5) {
     // If same music is already playing, skip
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
+    const currBgMusicKey = this.getCurrBgMusicKey();
     if (currBgMusicKey && currBgMusicKey === soundKey) {
       return;
     }
 
-    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
+    const soundAsset = this.getSoundAsset(soundKey);
 
     if (soundAsset) {
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });
-      this.getParentGame().setCurrBgMusicKey(soundAsset.key);
+      this.setCurrBgMusicKey(soundAsset.key);
     }
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    this.getParentGame().setCurrBgMusicKey(undefined);
+    const currBgMusicKey = this.getCurrBgMusicKey();
+    this.setCurrBgMusicKey(undefined);
     if (this.getCurrentScene() && currBgMusicKey) {
       // Fade out current music
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
@@ -87,7 +110,7 @@ class GameSoundManager {
   }
 
   public pauseCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
+    const currBgMusicKey = this.getCurrBgMusicKey();
     if (this.getCurrentScene() && currBgMusicKey) {
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
       if (currBgMusic.isPlaying) currBgMusic.pause();
@@ -95,7 +118,7 @@ class GameSoundManager {
   }
 
   public continueCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
+    const currBgMusicKey = this.getCurrBgMusicKey();
     if (this.getCurrentScene() && currBgMusicKey) {
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
       if (currBgMusic.isPaused) currBgMusic.play();
@@ -107,7 +130,6 @@ class GameSoundManager {
   }
 
   public getBaseSoundManager = () => mandatory(SourceAcademyGame.getInstance().sound);
-  public getParentGame = () => mandatory(SourceAcademyGame.getInstance());
   public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
 }
 

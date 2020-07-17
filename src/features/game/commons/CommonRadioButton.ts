@@ -1,5 +1,6 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+
 import SoundAssets from '../assets/SoundAssets';
-import GameSoundManager from '../sound/GameSoundManager';
 import { calcTableFormatPos, HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { Constants, screenSize } from './CommonConstants';
@@ -32,7 +33,6 @@ type RadioButtonConfig = {
  * the given radio button is selected so as to not clutter the display.
  */
 class CommonRadioButton extends Phaser.GameObjects.Container {
-  private soundManager: GameSoundManager | undefined;
   private buttonClickSoundKey: AssetKey;
 
   private activeChoice: Phaser.GameObjects.Container | undefined;
@@ -142,7 +142,7 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
       .setStrokeStyle(radioChoiceConfig.outlineThickness, HexColor.darkBlue)
       .setInteractive({ useHandCursor: true })
       .addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-        if (this.soundManager) this.soundManager.playSound(this.buttonClickSoundKey);
+        SourceAcademyGame.getInstance().getSoundManager().playSound(this.buttonClickSoundKey);
         callback();
       });
   }
