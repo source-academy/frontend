@@ -85,17 +85,13 @@ class GameModeMenu implements IGameUI {
 
   private createModeButton(text: string, xPos: number, yPos: number, callback: any) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    return createButton(
-      gameManager,
-      {
-        assetKey: ImageAssets.shortButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.25 },
-        bitMapTextStyle: modeButtonStyle,
-        onUp: callback
-      },
-      gameManager.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(gameManager, {
+      assetKey: ImageAssets.shortButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.25 },
+      bitMapTextStyle: modeButtonStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   public async activateUI(): Promise<void> {

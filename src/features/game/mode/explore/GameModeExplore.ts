@@ -26,14 +26,10 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    const backButton = new CommonBackButton(
-      gameManager,
-      () => {
-        GameGlobalAPI.getInstance().popPhase();
-        GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
-      },
-      gameManager.soundManager
-    );
+    const backButton = new CommonBackButton(gameManager, () => {
+      GameGlobalAPI.getInstance().popPhase();
+      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+    });
     exploreMenuContainer.add(backButton);
     return exploreMenuContainer;
   }

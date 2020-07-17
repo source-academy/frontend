@@ -1,4 +1,4 @@
-import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
@@ -11,15 +11,11 @@ import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
  * It proxies the game's sound manager
  */
 class GameSoundManager {
-  private baseSoundManager: Phaser.Sound.BaseSoundManager | undefined;
-  private scene: Phaser.Scene | undefined;
-  private parentGame: SourceAcademyGame | undefined;
+  currBgMusicKey?: AssetKey;
+  soundAssetMap: Map<AssetKey, SoundAsset>;
 
-  public initialise(scene: Phaser.Scene, parentGame: SourceAcademyGame) {
-    this.scene = scene;
-    this.parentGame = parentGame;
-    this.baseSoundManager = this.parentGame.sound;
-    this.baseSoundManager.pauseOnBlur = true;
+  constructor() {
+    this.soundAssetMap = new Map<AssetKey, SoundAsset>();
   }
 
   public applyUserSettings(userSaveState: UserSaveState) {
@@ -31,32 +27,46 @@ class GameSoundManager {
     this.playBgMusic(bgmKey);
   }
 
-  public clearSoundAssets() {
-    this.getParentGame().clearSoundAssetMap();
+  public setCurrBgMusicKey(key: AssetKey | undefined) {
+    this.currBgMusicKey = key;
+  }
+
+  public getCurrBgMusicKey() {
+    return this.currBgMusicKey;
+  }
+
+  public addSoundAsset(soundAsset: SoundAsset) {
+    this.soundAssetMap.set(soundAsset.key, soundAsset);
+  }
+
+  public clearSoundAssetMap() {
+    this.soundAssetMap.clear();
+  }
+
+  public getSoundAsset(key: AssetKey) {
+    return this.soundAssetMap.get(key);
   }
 
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
-      this.getParentGame().addSoundAsset(asset);
+      this.addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
     Object.values(assetMap).forEach(asset => {
-      this.getParentGame().addSoundAsset(asset);
+      this.addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
   private loadSound(assetKey: AssetKey, assetPath: AssetPath) {
-    if (this.scene) {
-      this.scene.load.audio(assetKey, assetPath);
-    }
+    this.getCurrentScene().load.audio(assetKey, assetPath);
   }
 
   public playSound(soundKey: AssetKey) {
-    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
+    const soundAsset = this.getSoundAsset(soundKey);
     if (soundAsset) {
       soundAsset.config.volume = this.getBaseSoundManager().volume;
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config });
@@ -65,26 +75,26 @@ class GameSoundManager {
 
   public playBgMusic(soundKey: AssetKey, volume = 1.5) {
     // If same music is already playing, skip
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
+    const currBgMusicKey = this.getCurrBgMusicKey();
     if (currBgMusicKey && currBgMusicKey === soundKey) {
       return;
     }
 
-    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
+    const soundAsset = this.getSoundAsset(soundKey);
 
     if (soundAsset) {
       this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });
-      this.getParentGame().setCurrBgMusicKey(soundAsset.key);
+      this.setCurrBgMusicKey(soundAsset.key);
     }
   }
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    this.getParentGame().setCurrBgMusicKey(undefined);
-    if (this.scene && currBgMusicKey) {
+    const currBgMusicKey = this.getCurrBgMusicKey();
+    this.setCurrBgMusicKey(undefined);
+    if (this.getCurrentScene() && currBgMusicKey) {
       // Fade out current music
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      this.scene.tweens.add({
+      this.getCurrentScene().tweens.add({
         targets: currBgMusic,
         ...musicFadeOutTween,
         duration: fadeDuration
@@ -100,16 +110,16 @@ class GameSoundManager {
   }
 
   public pauseCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    if (this.scene && currBgMusicKey) {
+    const currBgMusicKey = this.getCurrBgMusicKey();
+    if (this.getCurrentScene() && currBgMusicKey) {
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
       if (currBgMusic.isPlaying) currBgMusic.pause();
     }
   }
 
   public continueCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    if (this.scene && currBgMusicKey) {
+    const currBgMusicKey = this.getCurrBgMusicKey();
+    if (this.getCurrentScene() && currBgMusicKey) {
       const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
       if (currBgMusic.isPaused) currBgMusic.play();
     }
@@ -119,8 +129,8 @@ class GameSoundManager {
     this.getBaseSoundManager().volume = volume;
   }
 
-  public getBaseSoundManager = () => mandatory(this.baseSoundManager);
-  public getParentGame = () => mandatory(this.parentGame);
+  public getBaseSoundManager = () => mandatory(SourceAcademyGame.getInstance().sound);
+  public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
 }
 
 export default GameSoundManager;

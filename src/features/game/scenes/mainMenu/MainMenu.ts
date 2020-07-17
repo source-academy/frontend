@@ -1,7 +1,5 @@
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
-import {
-  AccountInfo,
-  getSourceAcademyGame
+import SourceAcademyGame, {
+  AccountInfo
 } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import FontAssets from '../../assets/FontAssets';
@@ -28,7 +26,6 @@ import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
  */
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
-  private soundManager: GameSoundManager;
   private roomCode: string;
 
   private loadedGameState?: FullSaveState;
@@ -37,21 +34,20 @@ class MainMenu extends Phaser.Scene {
     super('MainMenu');
 
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.roomCode = Constants.nullInteractionId;
   }
 
   public preload() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     this.preloadAssets();
     this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getSourceAcademyGame());
-    this.soundManager.loadSoundAssetMap(SoundAssets);
+    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
     this.load.text(TextAssets.awardsMapping.key, TextAssets.awardsMapping.path);
     addLoadingScreen(this);
   }
 
   public async create() {
-    const accountInfo = getSourceAcademyGame().getAccountInfo();
+    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
     if (accountInfo.role === 'staff') {
       console.log('Staff do not have accounts');
       return;
@@ -69,12 +65,14 @@ class MainMenu extends Phaser.Scene {
     const volume = this.loadedGameState.userSaveState
       ? this.loadedGameState.userSaveState.settings.volume
       : 1;
-    this.soundManager.playBgMusic(SoundAssets.galacticHarmony.key, volume);
+    SourceAcademyGame.getInstance()
+      .getSoundManager()
+      .playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
   private async loadAwardsMapping() {
     const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
-    getSourceAcademyGame().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
+    SourceAcademyGame.getInstance().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
   }
 
   private preloadAssets() {
@@ -133,20 +131,16 @@ class MainMenu extends Phaser.Scene {
         ...mainMenuConstants.outFocusOptTween
       });
     };
-    const optButton: Phaser.GameObjects.Container = createButton(
-      this,
-      {
-        assetKey: ImageAssets.mainMenuOptBanner.key,
-        message: text,
-        textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
-        bitMapTextStyle: mainMenuStyle,
-        onUp: callback,
-        onHover: () => tweenOnHover(optButton),
-        onOut: () => tweenOffHover(optButton),
-        onHoverEffect: false
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    const optButton: Phaser.GameObjects.Container = createButton(this, {
+      assetKey: ImageAssets.mainMenuOptBanner.key,
+      message: text,
+      textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
+      bitMapTextStyle: mainMenuStyle,
+      onUp: callback,
+      onHover: () => tweenOnHover(optButton),
+      onOut: () => tweenOffHover(optButton),
+      onHoverEffect: false
+    }).setPosition(xPos, yPos);
     return optButton;
   }
 

@@ -1,5 +1,5 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import { getSourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
@@ -78,7 +78,9 @@ export default class GameUserStateManager {
     if (GameGlobalAPI.getInstance().isStorySimulator()) {
       return;
     }
-    const assessments = await getAssessmentOverviews(getSourceAcademyGame().getAccountInfo());
+    const assessments = await getAssessmentOverviews(
+      SourceAcademyGame.getInstance().getAccountInfo()
+    );
     this.userState.assessments = assessments
       ?.filter(assessment => assessment.status === 'submitted')
       .map(assessment => assessment.id.toString());

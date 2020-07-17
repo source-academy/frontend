@@ -69,10 +69,8 @@ class GameModeTalk implements IGameUI {
       }
     });
 
-    const backButton = new CommonBackButton(
-      gameManager,
-      () => GameGlobalAPI.getInstance().popPhase(),
-      gameManager.soundManager
+    const backButton = new CommonBackButton(gameManager, () =>
+      GameGlobalAPI.getInstance().popPhase()
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;
@@ -94,17 +92,13 @@ class GameModeTalk implements IGameUI {
 
   private createTalkTopicButton(text: string, xPos: number, yPos: number, callback: any) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    return createButton(
-      gameManager,
-      {
-        assetKey: ImageAssets.talkOptButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
-        bitMapTextStyle: talkButtonStyle,
-        onUp: callback
-      },
-      gameManager.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(gameManager, {
+      assetKey: ImageAssets.talkOptButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.2 },
+      bitMapTextStyle: talkButtonStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
   public async activateUI(): Promise<void> {

@@ -1,9 +1,10 @@
 import { Button } from '@blueprintjs/core';
 import * as React from 'react';
+import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 
+import SourceAcademyGame from '../../game/subcomponents/sourceAcademyGame';
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
-import { getStorySimulatorGame } from './storySimulatorGame';
 
 type Props = {
   accessToken?: string;
@@ -12,7 +13,7 @@ type Props = {
 
 export default function CheckpointSim({ accessToken, assetPaths }: Props) {
   function simulateCheckpoint() {
-    getStorySimulatorGame().getStorySimProps().mainMenuRef.callGameManager();
+    (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).callGameManager();
   }
 
   return (

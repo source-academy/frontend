@@ -4,9 +4,8 @@ import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 import GameInputManager from 'src/features/game/input/GameInputManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import SSBackgroundManager from '../../background/SSBackgroundManager';
@@ -25,7 +24,6 @@ import objPlacementConstants from './ObjectPlacementConstants';
  */
 export default class ObjectPlacement extends Phaser.Scene {
   public layerManager: GameLayerManager;
-  public soundManager: GameSoundManager;
   public inputManager: GameInputManager;
   private transformManager: SSTransformManager;
   private cursorModes: SSCursorMode | undefined;
@@ -43,7 +41,6 @@ export default class ObjectPlacement extends Phaser.Scene {
   constructor() {
     super('ObjectPlacement');
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
@@ -58,7 +55,6 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   public init() {
     this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
     this.inputManager = new GameInputManager();
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
@@ -72,8 +68,9 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public create() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+
     this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getStorySimulatorGame());
     this.inputManager.initialise(this);
     this.renderBackground();
     this.createUIButtons();
@@ -100,21 +97,16 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   private createUIButtons() {
     const uiContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const backButton = new CommonBackButton(
-      this,
-      () => {
-        this.cleanUp();
-        getStorySimulatorGame().setStorySimState(StorySimState.Default);
-        this.scene.start('StorySimulatorMenu');
-      },
-      this.soundManager
-    );
+    const backButton = new CommonBackButton(this, () => {
+      this.cleanUp();
+      SourceAcademyGame.getInstance().setStorySimState(StorySimState.Default);
+      this.scene.start('StorySimulatorMenu');
+    });
 
     this.cursorModes = new SSCursorMode(
       this,
       objPlacementConstants.cursorModeXPos,
-      objPlacementConstants.cursorModeYPos,
-      this.soundManager
+      objPlacementConstants.cursorModeYPos
     );
     this.populateCursorModes();
 

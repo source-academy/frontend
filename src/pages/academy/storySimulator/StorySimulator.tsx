@@ -4,15 +4,12 @@ import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame, { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
 import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
-import {
-  createStorySimulatorGame,
-  getStorySimulatorGame
-} from './subcomponents/storySimulatorGame';
+import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
@@ -21,11 +18,11 @@ function StorySimulator() {
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {
-    createStorySimulatorGame().setStorySimProps({ setStorySimState });
+    createStorySimulatorGame().setStorySimStateSetter(setStorySimState);
   }, []);
 
   React.useEffect(() => {
-    getStorySimulatorGame().setAccountInfo({
+    SourceAcademyGame.getInstance().setAccountInfo({
       accessToken: session.accessToken,
       refreshToken: session.refreshToken,
       role: session.role,
