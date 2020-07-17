@@ -1,7 +1,7 @@
 import { Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
 import * as _ from 'lodash';
-import * as React from 'react';
-import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
+import React from 'react';
+import { deleteS3File, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
 import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
@@ -11,34 +11,27 @@ type TreeState = {
 
 type Props = {
   assetPaths: string[];
-  accessToken?: string;
-  folders: string[];
 };
 
-function StorySimulatorAssetSelection({ assetPaths, accessToken, folders }: Props) {
+const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
   const [currentAsset, setCurrentAsset] = React.useState('');
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
-    if (!accessToken) return;
+    setAssetTree({ nodes: assetPathsToTree(assetPaths) });
+  }, [assetPaths]);
 
-    setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken, folders) });
-  }, [accessToken, assetPaths, folders]);
-
-  const handleNodeClick = React.useCallback(
-    (nodeData: ITreeNode) => {
-      treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
-      nodeData.isSelected = !nodeData.isSelected;
-      nodeData.isExpanded = !nodeData.isExpanded;
-      const selectedPath = nodeData.id.toString();
-      if (!nodeData.childNodes) {
-        setCurrentAsset(selectedPath);
-        sessionStorage.setItem('selectedAsset', selectedPath);
-      }
-      setAssetTree({ ...assetTree });
-    },
-    [assetTree, setCurrentAsset]
-  );
+  const handleNodeClick = (nodeData: ITreeNode) => {
+    treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
+    nodeData.isSelected = !nodeData.isSelected;
+    nodeData.isExpanded = !nodeData.isExpanded;
+    const selectedPath = nodeData.id.toString();
+    if (!nodeData.childNodes) {
+      setCurrentAsset(selectedPath);
+      sessionStorage.setItem('selectedAsset', selectedPath);
+    }
+    setAssetTree({ ...assetTree });
+  };
 
   return (
     <>
@@ -46,7 +39,7 @@ function StorySimulatorAssetSelection({ assetPaths, accessToken, folders }: Prop
       <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
     </>
   );
-}
+};
 
 export default StorySimulatorAssetSelection;
 
@@ -58,21 +51,17 @@ function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) => void) 
     });
 }
 
-const deleteFile = (filePath: string, accessToken: string) => async () => {
+const deleteFile = (filePath: string) => async () => {
   const confirm = window.confirm(
     `Are you sure you want to delete ${filePath}?\nThere is no undoing this action!`
   );
-  alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
+  alert(confirm ? await deleteS3File(filePath) : 'Whew');
 };
 
-function assetPathsToTree(
-  assetPaths: string[],
-  accessToken: string,
-  folders: string[]
-): ITreeNode[] {
+function assetPathsToTree(assetPaths: string[]): ITreeNode[] {
   const assetObj = {};
   assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
-  folders.forEach(folder => {
+  s3AssetFolders.forEach(folder => {
     if (!assetObj[folder] || assetObj[folder] === 'FILE') {
       assetObj[folder] = [];
     }
@@ -86,7 +75,7 @@ function assetPathsToTree(
         label: file,
         secondaryLabel: (
           <Tooltip content="Delete">
-            <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
+            <Icon icon="trash" onClick={deleteFile(shortPath)} />
           </Tooltip>
         ),
         childNodes:

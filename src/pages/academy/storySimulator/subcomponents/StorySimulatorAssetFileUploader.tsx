@@ -1,22 +1,18 @@
 import { Button, InputGroup, Menu, MenuItem, Popover, Position } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { s3AssetFolders, uploadAssets } from 'src/features/storySimulator/StorySimulatorService';
-
-type Props = {
-  accessToken?: string;
-};
 
 const specifyFolderText = 'Specify own folder...';
 const folderOverwritePlaceholder = "Or specify your own, e.g. 'locations/hallway'";
 
-function AssetFileUploader({ accessToken }: Props) {
+const AssetFileUploader = () => {
   const [fileList, setFileList] = React.useState<FileList>();
   const [folder, setFolder] = React.useState<string>('locations');
 
   const [showfolderOverwrite, setShowFolderOverwrite] = React.useState<boolean>(false);
   const [folderOverwrite, setFolderOverwrite] = React.useState<string>();
 
-  function onLoadFile(e: React.ChangeEvent<HTMLInputElement>) {
+  function onLoadFile(e: any) {
     if (!e.target.files) return;
     const loadedFiles = e.target.files;
     setFileList(loadedFiles);
@@ -24,8 +20,8 @@ function AssetFileUploader({ accessToken }: Props) {
 
   async function onUploadButtonClick() {
     const finalFolder = folderOverwrite || folder;
-    if (!accessToken || !fileList || !finalFolder) return;
-    const resp = await uploadAssets(accessToken, fileList, finalFolder);
+    if (!fileList || !finalFolder) return;
+    const resp = await uploadAssets(fileList, finalFolder);
     alert(resp);
   }
 
@@ -71,6 +67,6 @@ function AssetFileUploader({ accessToken }: Props) {
       <Button onClick={onUploadButtonClick}>Upload</Button>
     </div>
   );
-}
+};
 
 export default AssetFileUploader;

@@ -1,13 +1,16 @@
 import Constants from 'src/commons/utils/Constants';
 
+import SourceAcademyGame from '../game/SourceAcademyGame';
+
 const sendRequest = (route: string) => async (
-  accessToken: string = '',
   requestPath: string,
   method: string,
   headerConfig: object = {},
   requestDetails: object = {}
 ) => {
   try {
+    const accessToken = SourceAcademyGame.getInstance().getAccountInfo().accessToken || '';
+
     const headers = createHeaders(accessToken);
     Object.entries(headerConfig).forEach(([key, value]: string[]) => {
       headers.append(key, value);

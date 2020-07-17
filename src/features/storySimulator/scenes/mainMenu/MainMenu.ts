@@ -33,7 +33,7 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.initialise(this);
   }
 
-  public async preload() {
+  public preload() {
     addLoadingScreen(this);
     Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     Object.values(SSImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
@@ -88,7 +88,7 @@ class MainMenu extends Phaser.Scene {
         }
       },
       {
-        text: 'Simulate Checkpoint',
+        text: 'Checkpoint Simulator',
         callback: () => {
           SourceAcademyGame.getInstance().setStorySimState(StorySimState.CheckpointSim);
         }
@@ -100,7 +100,7 @@ class MainMenu extends Phaser.Scene {
         }
       },
       {
-        text: 'Chapter Sequencer',
+        text: 'Chapter Simulator',
         callback: () => {
           SourceAcademyGame.getInstance().setStorySimState(StorySimState.ChapterSim);
         }

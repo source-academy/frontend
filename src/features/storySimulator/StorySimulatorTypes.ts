@@ -12,4 +12,5 @@ export type ChapterDetail = {
   title: string;
   filenames: string;
   isPublished: string;
+  imageUrl: string;
 };

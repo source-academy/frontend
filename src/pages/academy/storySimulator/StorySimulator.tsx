@@ -13,7 +13,6 @@ import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
@@ -22,17 +21,9 @@ function StorySimulator() {
   }, []);
 
   React.useEffect(() => {
-    SourceAcademyGame.getInstance().setAccountInfo({
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-      role: session.role,
-      name: session.name
-    } as AccountInfo);
-  }, [session]);
-
-  React.useEffect(() => {
     (async () => {
-      setAssetPaths(await fetchAssetPaths(session.accessToken, s3AssetFolders));
+      SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
+      setAssetPaths(await fetchAssetPaths(s3AssetFolders));
     })();
   }, [session]);
 
@@ -47,35 +38,24 @@ function StorySimulator() {
             </>
           )}
           {storySimState === StorySimState.CheckpointSim && (
-            <StorySimulatorCheckpointSim
-              accessToken={session.accessToken}
-              assetPaths={assetPaths}
-            />
+            <StorySimulatorCheckpointSim assetPaths={assetPaths} />
           )}
           {storySimState === StorySimState.ObjectPlacement && (
             <>
               <h3>Asset Selection</h3>
-              <StorySimulatorAssetSelection
-                folders={s3AssetFolders}
-                assetPaths={assetPaths}
-                accessToken={session.accessToken}
-              />
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
             </>
           )}
           {storySimState === StorySimState.AssetUploader && (
             <>
               <h3>Asset uploader</h3>
-              <StorySimulatorAssetFileUploader accessToken={session.accessToken} />
+              <StorySimulatorAssetFileUploader />
               <h3>Asset Viewer</h3>
-              <StorySimulatorAssetSelection
-                folders={s3AssetFolders}
-                assetPaths={assetPaths}
-                accessToken={session.accessToken}
-              />
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
             </>
           )}
           {storySimState === StorySimState.ChapterSim && (
-            <StorySimulatorChapterSim accessToken={session.accessToken} />
+            <StorySimulatorChapterSim allCheckpointFilenames={assetPaths} />
           )}
         </div>
       </div>

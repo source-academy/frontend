@@ -1,7 +1,7 @@
 import 'ace-builds/webpack-resolver';
 
 import { Tab, Tabs } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {

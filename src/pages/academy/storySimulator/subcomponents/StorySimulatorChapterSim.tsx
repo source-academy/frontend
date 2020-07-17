@@ -8,26 +8,26 @@ import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 import StorySimulatorChapterEditor from './StorySimulatorChapterEditor';
 
 type ChapterSequencerProps = {
-  accessToken?: string;
+  allCheckpointFilenames?: string[];
 };
 
-export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
+export default function ChapterSim({ allCheckpointFilenames }: ChapterSequencerProps) {
   const [chapters, setChapters] = React.useState<ChapterDetail[]>([]);
   const [chosenIndex, setChosenIndex] = React.useState(-1);
 
   React.useEffect(() => {
     (async () => {
-      setChapters(await fetchChapters(accessToken));
+      setChapters(await fetchChapters());
     })();
-  }, [accessToken]);
-
-  const onCreateButtonClick = React.useCallback(async () => {
-    alert(await createChapterRequest(accessToken));
-  }, [accessToken]);
-
-  const onChangeChapter = React.useCallback((e: any) => {
-    setChosenIndex(e.target.value);
   }, []);
+
+  const onCreateButtonClick = async () => {
+    alert(await createChapterRequest());
+  };
+
+  const onChangeChapter = (e: any) => {
+    setChosenIndex(e.target.value);
+  };
 
   return (
     <>
@@ -48,7 +48,7 @@ export default function ChapterSim({ accessToken }: ChapterSequencerProps) {
       <br />
       <StorySimulatorChapterEditor
         chapterDetail={chapters[chosenIndex]}
-        allCheckpointFilenames={[]}
+        allCheckpointFilenames={allCheckpointFilenames}
       />
     </>
   );
