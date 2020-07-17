@@ -24,7 +24,7 @@ import awardsConstants, {
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
-import { AwardPage, CollectibleProperty } from './GameAwardsTypes';
+import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
  * Manager for rendering collectibles and achievements popup in the location.
@@ -88,7 +88,7 @@ class GameAwardsManager implements IGameUI {
       this.uiContainer.add(this.pageChosenContainer);
 
       // Set default preview
-      this.setPreview('', defaultAwardProp, '');
+      this.setPreview(defaultAwardProp);
     }
   }
 
@@ -212,13 +212,13 @@ class GameAwardsManager implements IGameUI {
     });
   }
 
-  private setPreview(title: string, prop: CollectibleProperty, description: string = '') {
+  private setPreview(award: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
       this.previewContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
       // Preview image
-      const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, prop.assetKey);
+      const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, award.assetKey);
       resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
       previewSprite
         .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
@@ -227,7 +227,7 @@ class GameAwardsManager implements IGameUI {
       // Preview title
       const previewTitle = createBitmapText(
         this.getScene(),
-        title,
+        award.title,
         awardsConstants.previewXPos,
         awardsConstants.previewYPos + awardsConstants.titleYOffset,
         awardTitleStyle
@@ -238,7 +238,7 @@ class GameAwardsManager implements IGameUI {
         this.getScene(),
         awardsConstants.previewXPos,
         awardsConstants.previewYPos + awardsConstants.descYOffset,
-        description,
+        award.description,
         awardDescStyle
       ).setOrigin(0.45, 0.0);
 
@@ -293,7 +293,7 @@ class GameAwardsManager implements IGameUI {
           item,
           itemPositions[index][0],
           itemPositions[index][1] + awardsConstants.listYStartPos,
-          () => this.setPreview(item, defaultAwardProp)
+          () => this.setPreview(defaultAwardProp)
         )
       )
     );

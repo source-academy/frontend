@@ -2,8 +2,9 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
+import { UserStateTypes } from '../state/GameStateTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
-import { CollectibleProperty } from './GameAwardsTypes';
+import { AwardProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -30,15 +31,19 @@ export const awardDescStyle = {
   fontFamily: 'Verdana',
   fontSize: '25px',
   fill: Color.lightBlue,
-  align: 'center',
+  align: 'justify',
   lineSpacing: 10,
   wordWrap: { width: 500 }
 };
 
-export const defaultAwardProp: CollectibleProperty = {
+export const defaultAwardProp: AwardProperty = {
+  id: 'ult-cookie-award',
   assetKey: ImageAssets.cookies.key,
-  x: 0,
-  y: 0
+  assetPath: ImageAssets.cookies.path,
+  title: 'Ultimate Cookie',
+  description:
+    'One Cookie to rule them all, One Cookie to find them, One Ring to bring them all, and in pantry bind them',
+  awardType: UserStateTypes.collectibles
 };
 
 const AwardsConstants = {
