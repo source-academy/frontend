@@ -107,18 +107,21 @@ class GameSoundManager {
 
   public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
     const currBgMusicKey = this.getCurrBgMusicKey();
-    this.setCurrBgMusicKey(undefined);
-    if (this.getCurrentScene() && currBgMusicKey) {
-      // Fade out current music
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      this.getCurrentScene().tweens.add({
-        targets: currBgMusic,
-        ...musicFadeOutTween,
-        duration: fadeDuration
-      });
 
-      await sleep(fadeDuration);
-      this.getBaseSoundManager().stopByKey(currBgMusicKey);
+    if (this.getCurrentScene() && currBgMusicKey) {
+      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
+      if (currBgMusic.isPlaying) {
+        // Fade out current music
+        this.getCurrentScene().tweens.add({
+          targets: currBgMusic,
+          ...musicFadeOutTween,
+          duration: fadeDuration
+        });
+
+        await sleep(fadeDuration);
+        this.getBaseSoundManager().stopByKey(currBgMusicKey);
+        this.setCurrBgMusicKey(undefined);
+      }
     }
   }
 
