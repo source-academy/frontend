@@ -2,7 +2,7 @@ collectibles
     cookies
         cookies-award, /images/cookies.png, Cookies, Cookies are delicious!
     computer
-        computer-award, /images/cmd-commentsTerminal.png, Computer, Computer is advanced technology
+        computer-award, /objects/cmd-monitor03/normal.png, Computer, Computer is advanced technology
 
 achievements
     301
