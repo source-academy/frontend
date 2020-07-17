@@ -15,6 +15,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
+import { loadImage } from '../../utils/LoaderUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
@@ -57,7 +58,7 @@ class MainMenu extends Phaser.Scene {
 
     this.roomCode = await getRoomPreviewCode(accountInfo);
     await this.loadGameDataAndSettings(accountInfo);
-    await this.loadAwardsMapping();
+    await this.preloadAwards();
   }
 
   private async loadGameDataAndSettings(accountInfo: AccountInfo) {
@@ -70,9 +71,16 @@ class MainMenu extends Phaser.Scene {
       .playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
-  private async loadAwardsMapping() {
+  private async preloadAwards() {
     const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
-    SourceAcademyGame.getInstance().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
+    const awardsMapping = AwardParser.parse(awardsMappingTxt);
+    SourceAcademyGame.getInstance().setAwardsMapping(awardsMapping);
+
+    await Promise.all(
+      Array.from(awardsMapping.values()).map(
+        async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath)
+      )
+    );
   }
 
   private preloadAssets() {
