@@ -21,8 +21,12 @@ class AwardParser {
 
   public static parseAwardParagraphs(awardType: string, awardBody: string[]) {
     const awardParagraph = StringUtils.splitToParagraph(awardBody);
-    awardParagraph.forEach(([id, awardProperty]: [ItemId, string[]]) => {
-      const [assetKey, assetPath, title, description] = awardProperty;
+    awardParagraph.forEach(([id, awardProperties]: [ItemId, string[]]) => {
+      const [assetKey, assetPath, title, description] = StringUtils.splitByChar(
+        awardProperties[0],
+        ',',
+        3
+      );
       AwardParser.awardsMapping.set(id, {
         id,
         assetKey,
