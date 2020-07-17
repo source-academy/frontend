@@ -4,5 +4,6 @@ export const AwardsHallConstants = {
   tileDim: 2048,
   maxAwardsPerCol: 4,
   awardsXSpacing: 200,
-  arrowXOffset: 875
+  arrowXOffset: 875,
+  awardYStartPos: 100
 };

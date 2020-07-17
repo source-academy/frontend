@@ -1,8 +1,10 @@
 import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
+import { getAwardProps } from '../../awards/GameAwardsHelper';
+import { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { screenCenter } from '../../commons/CommonConstants';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
@@ -11,7 +13,7 @@ import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
-import { calcTableFormatPos } from '../../utils/StyleUtils';
+import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { AwardsHallConstants } from './AwardsHallConstants';
 
 /**
@@ -23,7 +25,7 @@ class AwardsHall extends Phaser.Scene {
   private userStateManager: GameUserStateManager;
 
   private backgroundTile: Phaser.GameObjects.TileSprite | undefined;
-  private achievementsContainer: Phaser.GameObjects.Container | undefined;
+  private awardsContainer: Phaser.GameObjects.Container | undefined;
 
   private isScrollLeft: boolean;
   private isScrollRight: boolean;
@@ -57,17 +59,22 @@ class AwardsHall extends Phaser.Scene {
 
   public async create() {
     await this.userStateManager.loadAchievements();
+
+    // Calculate the maximum horizontal space required based
+    // on maximum number of achievement/collectible
+    const achievementLength = this.userStateManager.getList(UserStateTypes.achievements).length;
+    const collectibleLength = this.userStateManager.getList(UserStateTypes.achievements).length;
     this.scrollLim =
       Math.ceil(
-        this.userStateManager.getList(UserStateTypes.achievements).length /
-          AwardsHallConstants.maxAwardsPerCol
+        Math.max(achievementLength, collectibleLength) / AwardsHallConstants.maxAwardsPerCol
       ) * AwardsHallConstants.awardsXSpacing;
+
     this.renderBackground();
-    this.renderAchievements();
+    this.renderAwards();
   }
 
   public update() {
-    if (!this.backgroundTile || !this.achievementsContainer) return;
+    if (!this.backgroundTile || !this.awardsContainer) return;
 
     let newXPos = this.backgroundTile.x;
     if (this.isScrollRight) {
@@ -78,7 +85,7 @@ class AwardsHall extends Phaser.Scene {
     newXPos = limitNumber(newXPos, -this.scrollLim, 0);
 
     this.backgroundTile.tilePositionX = newXPos;
-    this.achievementsContainer.x = newXPos;
+    this.awardsContainer.x = newXPos;
   }
 
   private renderBackground() {
@@ -120,32 +127,61 @@ class AwardsHall extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
-  private renderAchievements() {
-    if (this.achievementsContainer) this.achievementsContainer.destroy();
+  private renderAwards() {
+    if (this.awardsContainer) this.awardsContainer.destroy();
 
-    this.achievementsContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const achievements = this.getAchievements();
+    this.awardsContainer = new Phaser.GameObjects.Container(this, 0, 0);
+
+    // Achievement
+    const achievements = this.getAwards(UserStateTypes.achievements);
     const achievementsPos = calcTableFormatPos({
+      direction: Direction.Column,
       numOfItems: achievements.length,
-      maxXSpace: this.scrollLim
+      maxXSpace: this.scrollLim,
+      maxYSpace: screenSize.y / 2
     });
 
-    this.achievementsContainer.add(
+    this.awardsContainer.add(
       achievements.map((achievement, index) =>
-        this.createAchievement(achievement, achievementsPos[index][0], achievementsPos[index][1])
+        this.createAward(
+          achievement,
+          achievementsPos[index][0],
+          achievementsPos[index][1] + AwardsHallConstants.awardYStartPos
+        )
       )
     );
-    this.layerManager.addToLayer(Layer.Objects, this.achievementsContainer);
+
+    // Collectible
+    const collectibles = this.getAwards(UserStateTypes.collectibles);
+    const collectiblesPos = calcTableFormatPos({
+      direction: Direction.Column,
+      numOfItems: collectibles.length,
+      maxXSpace: this.scrollLim,
+      maxYSpace: screenSize.y / 2
+    });
+
+    this.awardsContainer.add(
+      collectibles.map((collectible, index) =>
+        this.createAward(
+          collectible,
+          collectiblesPos[index][0],
+          collectiblesPos[index][1] + AwardsHallConstants.awardYStartPos + screenCenter.y
+        )
+      )
+    );
+
+    this.layerManager.addToLayer(Layer.Objects, this.awardsContainer);
   }
 
-  private getAchievements() {
-    const achievements = this.userStateManager.getList(UserStateTypes.achievements);
-    // TODO: Find the mapping to the asset, attach callbacks, etc
-    return achievements;
+  private getAwards(type: UserStateTypes) {
+    const keys = this.userStateManager.getList(type);
+    const awardProps = getAwardProps(keys);
+    return awardProps;
   }
 
-  private createAchievement(achievement: string, xPos: number, yPos: number) {
+  private createAward(award: AwardProperty, xPos: number, yPos: number) {
     const achievementCont = new Phaser.GameObjects.Container(this, xPos, yPos);
+
     // TODO: Use asset
     return achievementCont;
   }
