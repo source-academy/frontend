@@ -4,7 +4,7 @@ import { OverallState } from 'src/commons/application/ApplicationTypes';
 import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import SourceAcademyGame, { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame, { AccountInfo } from '../game/subcomponents/SourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
 import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';

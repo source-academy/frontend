@@ -1,6 +1,4 @@
-import SourceAcademyGame, {
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
@@ -11,7 +9,6 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import AwardParser from '../../parser/AwardParser';
-import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
@@ -48,24 +45,22 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    if (accountInfo.role === 'staff') {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
       console.log('Staff do not have accounts');
       return;
     }
     this.renderBackground();
     this.renderOptionButtons();
 
-    this.roomCode = await getRoomPreviewCode(accountInfo);
-    await this.loadGameDataAndSettings(accountInfo);
+    this.roomCode = await getRoomPreviewCode();
+    await this.loadGameDataAndSettings();
     await this.preloadAwards();
   }
 
-  private async loadGameDataAndSettings(accountInfo: AccountInfo) {
-    this.loadedGameState = await loadData(accountInfo);
-    const volume = this.loadedGameState.userSaveState
-      ? this.loadedGameState.userSaveState.settings.volume
-      : 1;
+  private async loadGameDataAndSettings() {
+    await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
+    const volume = SourceAcademyGame.getInstance().getSaveManager().getSettings().volume;
+
     SourceAcademyGame.getInstance()
       .getSoundManager()
       .playBgMusic(SoundAssets.galacticHarmony.key, volume);
@@ -165,9 +160,7 @@ class MainMenu extends Phaser.Scene {
         text: mainMenuConstants.optionsText.awards,
         callback: () => {
           this.layerManager.clearAllLayers();
-          this.scene.start('AwardsHall', {
-            fullSaveState: this.getLoadedGameState()
-          });
+          this.scene.start('AwardsHall');
         }
       },
       {
@@ -175,8 +168,7 @@ class MainMenu extends Phaser.Scene {
         callback: () => {
           this.layerManager.clearAllLayers();
           this.scene.start('RoomPreview', {
-            studentCode: this.roomCode,
-            fullSaveState: this.getLoadedGameState()
+            studentCode: this.roomCode
           });
         }
       },

@@ -1,6 +1,5 @@
 import { GameAction } from '../action/GameActionTypes';
 import { SoundAsset } from '../assets/AssetsTypes';
-import { CollectibleProperty } from '../awards/GameAwardsTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
@@ -26,7 +25,6 @@ class GameMap {
   private boundingBoxes: Map<ItemId, BBoxProperty>;
   private characters: Map<ItemId, Character>;
   private actions: Map<ItemId, GameAction>;
-  private collectibles: Map<ItemId, CollectibleProperty>;
   private startActions: ItemId[];
   private endActions: ItemId[];
 
@@ -40,7 +38,6 @@ class GameMap {
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
-    this.collectibles = new Map<ItemId, CollectibleProperty>();
     this.startActions = [];
     this.endActions = [];
   }
@@ -115,10 +112,6 @@ class GameMap {
 
   public getSoundAssets(): SoundAsset[] {
     return this.soundAssets;
-  }
-
-  public getCollectibles(): Map<ItemId, CollectibleProperty> {
-    return this.collectibles;
   }
 
   public addItemToMap<T>(listName: GameLocationAttr, itemId: string, item: T) {

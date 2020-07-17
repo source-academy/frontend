@@ -9,7 +9,7 @@ import Parser from 'src/features/game/parser/Parser';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
@@ -44,6 +44,10 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'student') {
+      console.log('Students cannot use story sim');
+      return;
+    }
     this.renderBackground();
     this.renderOptionButtons();
   }
@@ -130,10 +134,7 @@ class MainMenu extends Phaser.Scene {
     const gameCheckpoint = Parser.checkpoint;
 
     this.scene.start('GameManager', {
-      isStorySimulator: true,
-      fullSaveState: undefined,
       gameCheckpoint,
-      continueGame: false,
       chapterNum: -1,
       checkpointNum: -1
     });

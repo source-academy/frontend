@@ -1,4 +1,4 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';

@@ -1,4 +1,5 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import FontAssets from '../assets/FontAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -40,7 +41,7 @@ export async function displayNotification(message: string): Promise<void> {
     .setAlpha(0);
   container.add(notifText);
 
-  GameGlobalAPI.getInstance().playSound(SoundAssets.notifEnter.key);
+  SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
   gameManager.add.tween(fadeIn([notifText], Constants.fadeDuration * 2));
 
   // Wait for fade in to finish
@@ -48,7 +49,7 @@ export async function displayNotification(message: string): Promise<void> {
 
   const showNotification = new Promise(resolve => {
     dialogueRenderer.getDialogueBox().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-      GameGlobalAPI.getInstance().playSound(SoundAssets.notifExit.key);
+      SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
       fadeAndDestroy(gameManager, notifText, { fadeDuration: Constants.fadeDuration / 4 });
       dialogueRenderer.destroy();
       resolve();

@@ -1,8 +1,8 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
-import { UserSaveState } from '../save/GameSaveTypes';
+import { SettingsJson } from '../save/GameSaveTypes';
 import { mandatory, sleep, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
 
@@ -18,8 +18,8 @@ class GameSoundManager {
     this.soundAssetMap = new Map<AssetKey, SoundAsset>();
   }
 
-  public applyUserSettings(userSaveState: UserSaveState) {
-    this.setGlobalVolume(userSaveState.settings.volume);
+  public applyUserSettings(settings: SettingsJson) {
+    this.setGlobalVolume(settings.volume);
   }
 
   public renderBackgroundMusic(bgmKey: AssetKey) {

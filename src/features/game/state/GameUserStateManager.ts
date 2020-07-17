@@ -1,10 +1,11 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame, {
+  GameType
+} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
-import { UserSaveState } from '../save/GameSaveTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
@@ -18,8 +19,10 @@ export default class GameUserStateManager {
     this.userState = {};
   }
 
-  public initialise(userSaveState: UserSaveState) {
-    this.userState.collectibles = userSaveState.collectibles;
+  public initialise() {
+    this.userState.collectibles = SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getFullSaveState().userSaveState.collectibles;
   }
 
   public addToList(listName: UserStateTypes, id: string): void {
@@ -35,7 +38,10 @@ export default class GameUserStateManager {
   }
 
   public async doesIdExistInList(listName: string, id: string): Promise<boolean> {
-    if (listName === 'assessments' && GameGlobalAPI.getInstance().isStorySimulator()) {
+    if (
+      listName === 'assessments' &&
+      SourceAcademyGame.getInstance().isGameType(GameType.Simulator)
+    ) {
       return this.askAssessmentComplete(id);
     }
     return this.getUserState()[listName].includes(id);
@@ -75,7 +81,7 @@ export default class GameUserStateManager {
   }
 
   public async loadAssessments() {
-    if (GameGlobalAPI.getInstance().isStorySimulator()) {
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
       return;
     }
     const assessments = await getAssessmentOverviews(

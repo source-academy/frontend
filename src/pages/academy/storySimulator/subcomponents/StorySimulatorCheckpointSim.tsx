@@ -3,7 +3,7 @@ import * as React from 'react';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
 
-import SourceAcademyGame from '../../game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from '../../game/subcomponents/SourceAcademyGame';
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
 
 type Props = {

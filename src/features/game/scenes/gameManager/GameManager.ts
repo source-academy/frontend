@@ -12,8 +12,8 @@ import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 import SourceAcademyGame, {
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+  GameType
+} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
@@ -24,18 +24,15 @@ import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameSaveManager from '../../save/GameSaveManager';
-import { FullSaveState } from '../../save/GameSaveTypes';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
 
 type GameManagerProps = {
-  fullSaveState: FullSaveState;
-  gameCheckpoint: GameCheckpoint;
   continueGame: boolean;
   chapterNum: number;
   checkpointNum: number;
-  isStorySimulator: boolean;
+  gameCheckpoint: GameCheckpoint;
 };
 
 /**
@@ -50,14 +47,7 @@ type GameManagerProps = {
  */
 class GameManager extends Phaser.Scene {
   public currentLocationId: LocationId;
-  public isStorySimulator: boolean;
-
   private currentCheckpoint: GameCheckpoint | undefined;
-  private accountInfo: AccountInfo | undefined;
-  private fullSaveState: FullSaveState | undefined;
-  private continueGame: boolean;
-  private chapterNum: number;
-  private checkpointNum: number;
 
   public layerManager: GameLayerManager;
   public stateManager: GameStateManager;
@@ -68,7 +58,7 @@ class GameManager extends Phaser.Scene {
   public userStateManager: GameUserStateManager;
   public boundingBoxManager: GameBBoxManager;
   public popUpManager: GamePopUpManager;
-  public saveManager: GameSaveManager;
+  public saveManager?: GameSaveManager;
   public escapeManager: GameEscapeManager;
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
@@ -78,12 +68,7 @@ class GameManager extends Phaser.Scene {
   constructor() {
     super('GameManager');
     this.currentCheckpoint = undefined;
-    this.fullSaveState = undefined;
-    this.continueGame = false;
-    this.chapterNum = Constants.nullSequenceNumber;
-    this.checkpointNum = Constants.nullSequenceNumber;
     this.currentLocationId = Constants.nullInteractionId;
-    this.isStorySimulator = false;
 
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
@@ -94,7 +79,6 @@ class GameManager extends Phaser.Scene {
     this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
-    this.saveManager = new GameSaveManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
@@ -102,26 +86,12 @@ class GameManager extends Phaser.Scene {
     this.awardsManager = new GameAwardsManager();
   }
 
-  public init({
-    gameCheckpoint,
-    fullSaveState,
-    continueGame,
-    chapterNum,
-    checkpointNum,
-    isStorySimulator
-  }: GameManagerProps) {
+  public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-
-    this.isStorySimulator = isStorySimulator;
+    SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentCheckpoint = gameCheckpoint;
-    this.fullSaveState = fullSaveState;
-    this.continueGame = continueGame;
-    this.chapterNum = chapterNum;
-    this.checkpointNum = checkpointNum;
-    this.initialiseManagers();
-  }
-
-  private initialiseManagers() {
     this.layerManager = new GameLayerManager();
     this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
@@ -131,7 +101,6 @@ class GameManager extends Phaser.Scene {
     this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
-    this.saveManager = new GameSaveManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
@@ -146,12 +115,11 @@ class GameManager extends Phaser.Scene {
   public preload() {
     GameGlobalAPI.getInstance().setGameManager(this);
     addLoadingScreen(this);
-    this.loadGameState();
 
     this.currentLocationId =
-      this.saveManager.getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
+      this.getSaveManager().getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
     this.stateManager.initialise(this);
-    this.userStateManager.initialise(this.saveManager.getLoadedUserState());
+    this.userStateManager.initialise();
     this.dialogueManager.initialise(this);
     this.characterManager.initialise(this);
     this.actionManager.initialise(this);
@@ -164,34 +132,15 @@ class GameManager extends Phaser.Scene {
       createGamePhases(this.escapeManager, this.awardsManager),
       this.inputManager
     );
-    this.escapeManager.initialise(this, this.phaseManager, this.saveManager, this.isStorySimulator);
+    this.escapeManager.initialise(this, this.phaseManager);
 
-    SourceAcademyGame.getInstance()
-      .getSoundManager()
-      .loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
+    GameGlobalAPI.getInstance().loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
 
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
     );
     this.preloadLocationsAssets(this.getCurrentCheckpoint());
     this.bindKeyboardTriggers();
-  }
-
-  private loadGameState() {
-    this.accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    if (this.isStorySimulator && this.accountInfo.role === 'staff') {
-      this.saveManager.initialiseForStaff(this.accountInfo);
-    } else if (!this.isStorySimulator && this.accountInfo.role === 'student') {
-      this.saveManager.initialiseForGame(
-        this.accountInfo,
-        this.fullSaveState,
-        this.chapterNum,
-        this.checkpointNum,
-        this.continueGame
-      );
-    } else {
-      throw new Error('Mismatch of roles');
-    }
   }
 
   private preloadLocationsAssets(chapter: GameCheckpoint) {
@@ -290,7 +239,7 @@ class GameManager extends Phaser.Scene {
     if (transitionToNextCheckpoint) {
       await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
       this.cleanUp();
-      if (GameGlobalAPI.getInstance().isStorySimulator()) {
+      if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
         this.scene.start('StorySimulatorMenu');
       } else {
         this.scene.start('CheckpointTransition');
@@ -299,7 +248,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint);
-  public getAccountInfo = () => mandatory(this.accountInfo);
+  public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
 }
 
 export default GameManager;

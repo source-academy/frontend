@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
+import GameSaveManager from 'src/features/game/save/GameSaveManager';
 import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';
 import Bindings from 'src/features/game/scenes/bindings/Bindings';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
@@ -21,34 +22,40 @@ export type AccountInfo = {
   name: string;
 };
 
+export enum GameType {
+  Simulator = 'Simulator',
+  Game = 'Game'
+}
+
 type GlobalGameProps = {
   accountInfo: AccountInfo | undefined;
   setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
   currentSceneRef?: Phaser.Scene;
-  soundManager?: GameSoundManager;
+  soundManager: GameSoundManager;
+  saveManager: GameSaveManager;
+  gameType: GameType;
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
   protected global: GlobalGameProps;
   static instance: SourceAcademyGame;
 
-  constructor(config: Phaser.Types.Core.GameConfig) {
+  constructor(config: Phaser.Types.Core.GameConfig, gameType: GameType) {
     super(config);
+    SourceAcademyGame.instance = this;
     this.global = {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       accountInfo: undefined,
       setStorySimState: Constants.nullFunction,
-      currentSceneRef: undefined
+      currentSceneRef: undefined,
+      soundManager: new GameSoundManager(),
+      saveManager: new GameSaveManager(),
+      gameType
     };
-    SourceAcademyGame.instance = this;
   }
 
   static getInstance = () => mandatory(SourceAcademyGame.instance);
-
-  public init() {
-    this.global.soundManager = new GameSoundManager();
-  }
 
   public stopAllSounds() {
     this.sound.stopAll();
@@ -65,7 +72,9 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
+  public isGameType = (gameType: GameType) => this.global.gameType === gameType;
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
@@ -105,7 +114,5 @@ const config = {
 };
 
 export const createSourceAcademyGame = () => {
-  const game = new SourceAcademyGame(config);
-  game.init();
-  return game;
+  return new SourceAcademyGame(config, GameType.Game);
 };

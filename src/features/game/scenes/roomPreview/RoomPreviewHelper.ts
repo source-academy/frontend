@@ -1,6 +1,6 @@
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import GameAwardsManager from '../../awards/GameAwardsManager';
@@ -18,12 +18,12 @@ import { roomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewCons
  * @param {AccountInfo} accInfo - students' account information
  * @returns {Promise<string>} - promise of students code
  */
-export async function getRoomPreviewCode(accInfo: AccountInfo): Promise<string> {
+export async function getRoomPreviewCode(): Promise<string> {
   const roomMissionId = getRoomMissionId();
-  const mission = await getAssessment(roomMissionId, {
-    accessToken: accInfo.accessToken,
-    refreshToken: accInfo.refreshToken
-  });
+  const mission = await getAssessment(
+    roomMissionId,
+    SourceAcademyGame.getInstance().getAccountInfo()
+  );
   const studentCode = getStudentRoomCode(mission);
   return studentCode;
 }

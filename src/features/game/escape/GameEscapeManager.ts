@@ -1,4 +1,6 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame, {
+  GameType
+} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -10,7 +12,6 @@ import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import GameSaveManager from '../save/GameSaveManager';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
@@ -31,12 +32,6 @@ class GameEscapeManager implements IGameUI {
   private layerManager: GameLayerManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
   private inputManager: GameInputManager | undefined;
-  private saveManager: GameSaveManager | undefined;
-  private isStorySimulator: boolean;
-
-  constructor() {
-    this.isStorySimulator = false;
-  }
 
   /**
    * Initialises the escape manager UI
@@ -44,20 +39,12 @@ class GameEscapeManager implements IGameUI {
    * @param scene - the scene to add escape manager
    * @param phaseManager - the phase manager of the scene
    * @param saveManager - the save manager of the scene
-   * @param isStorySimulator - whether or not this scene is the story simulator
    */
-  public initialise(
-    scene: IBaseScene,
-    phaseManager: GamePhaseManager,
-    saveManager: GameSaveManager,
-    isStorySimulator: boolean
-  ) {
+  public initialise(scene: IBaseScene, phaseManager: GamePhaseManager) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
     this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
-    this.saveManager = saveManager;
-    this.isStorySimulator = isStorySimulator;
   }
 
   private createUIContainer() {
@@ -100,7 +87,7 @@ class GameEscapeManager implements IGameUI {
         text: 'Main Menu',
         callback: () => {
           this.cleanUp();
-          if (this.isStorySimulator) {
+          if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
             this.getScene().scene.start('StorySimulatorMenu');
           } else {
             this.getScene().scene.start('MainMenu');
@@ -136,7 +123,7 @@ class GameEscapeManager implements IGameUI {
   private createVolOptContainer() {
     const volOptContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
-    const userVol = this.getSaveManager().getLoadedUserState().settings.volume;
+    const userVol = this.getSettingsSaveManager().getSettings().volume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -185,18 +172,17 @@ class GameEscapeManager implements IGameUI {
     if (this.volumeOptions) {
       // Save settings
       const volumeVal = parseFloat(this.volumeOptions.getChosenChoice());
-      await this.getSaveManager().saveSettings({ volume: volumeVal });
+      await this.getSettingsSaveManager().saveSettings({ volume: volumeVal });
 
       // Apply settings
-      const newUserSetting = this.getSaveManager().getLoadedUserState();
-      this.getSoundManager().applyUserSettings(newUserSetting);
+      this.getSoundManager().applyUserSettings(this.getSettingsSaveManager().getSettings());
     }
   }
 
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
-  private getSaveManager = () => mandatory(this.saveManager);
+  private getSettingsSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   private getPhaseManager = () => mandatory(this.phaseManager);
   private getInputManager = () => mandatory(this.inputManager);
 

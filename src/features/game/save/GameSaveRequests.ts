@@ -1,7 +1,5 @@
 import Constants from 'src/commons/utils/Constants';
-import SourceAcademyGame, {
-  AccountInfo
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
@@ -16,10 +14,10 @@ import { FullSaveState } from './GameSaveTypes';
  * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
  * @param accountInfo - the account information of the student
  */
-export async function saveData(accountInfo: AccountInfo, fullSaveState: FullSaveState) {
+export async function saveData(fullSaveState: FullSaveState) {
   const options = {
     method: 'PUT',
-    headers: createHeaders(accountInfo.accessToken),
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken),
     body: JSON.stringify({
       gameStates: {
         collectibles: fullSaveState,
@@ -44,10 +42,10 @@ export async function saveData(accountInfo: AccountInfo, fullSaveState: FullSave
  *
  * @param accountInfo - the account information of the student
  */
-export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
+export async function loadData(): Promise<FullSaveState> {
   const options = {
     method: 'GET',
-    headers: createHeaders(accountInfo.accessToken)
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
   };
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/`, options);
@@ -62,10 +60,10 @@ export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState>
  *
  * @param accountInfo - the account information of the student
  */
-export async function clearData(accountInfo: AccountInfo) {
+export async function clearData() {
   const options = {
     method: 'PUT',
-    headers: createHeaders(accountInfo.accessToken)
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
   };
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/clear`, options);
@@ -83,10 +81,7 @@ export async function clearData(accountInfo: AccountInfo) {
  * @param accountInfo - the account information of the student
  */
 export async function resetData() {
-  const resp = await saveData(
-    SourceAcademyGame.getInstance().getAccountInfo(),
-    createEmptySaveState()
-  );
+  const resp = await saveData(createEmptySaveState());
   if (resp && resp.ok) {
     alert('Game data reset!');
     return;

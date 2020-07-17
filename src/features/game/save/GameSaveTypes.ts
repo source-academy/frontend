@@ -1,16 +1,4 @@
 /**
- * This enum describes SaveManager type
- * and determines the behaviour of the polymorphic
- * Save Manager
- */
-export enum SaveManagerType {
-  Game = 'Game',
-  Settings = 'Settings',
-  Simulator = 'Simulator',
-  None = 'None'
-}
-
-/**
  * @typedef {FullSaveState} - this type encapsulates the the entire json object
  * that is being saved in the backend
  * @prop {Object<number, GameSaveState>} gameSaveStates - the object that stores game state of player at every last played checkpoint of the chapter

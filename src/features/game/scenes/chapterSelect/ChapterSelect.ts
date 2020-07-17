@@ -1,6 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
@@ -54,8 +54,7 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public async create() {
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    this.loadedGameState = await loadData(accountInfo);
+    this.loadedGameState = await loadData();
     this.renderBackground();
     this.renderChapters();
     this.autoScroll();

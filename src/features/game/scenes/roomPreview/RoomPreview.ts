@@ -1,6 +1,6 @@
 import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
@@ -11,10 +11,6 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { createEmptySaveState } from '../../save/GameSaveHelper';
-import GameSaveManager from '../../save/GameSaveManager';
-import { loadData } from '../../save/GameSaveRequests';
-import { FullSaveState } from '../../save/GameSaveTypes';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
@@ -23,7 +19,6 @@ import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreview
 
 type RoomPreviewProps = {
   studentCode: string;
-  fullSaveState: FullSaveState;
 };
 
 /**
@@ -34,14 +29,11 @@ type RoomPreviewProps = {
  * menu.
  */
 export default class RoomPreview extends Phaser.Scene {
-  public fullSaveState: FullSaveState;
-
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
 
   private phaseManager: GamePhaseManager;
   private userStateManager: GameUserStateManager;
-  private saveManager: GameSaveManager;
   private escapeManager: GameEscapeManager;
   private awardManager: GameAwardsManager;
   private studentCode: string;
@@ -54,25 +46,21 @@ export default class RoomPreview extends Phaser.Scene {
     this.preloadSoundMap = new Map<string, string>();
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
-    this.saveManager = new GameSaveManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.userStateManager = new GameUserStateManager();
     this.awardManager = new GameAwardsManager();
     this.studentCode = roomDefaultCode;
-    this.fullSaveState = createEmptySaveState();
   }
 
-  public init({ studentCode, fullSaveState }: RoomPreviewProps) {
+  public init({ studentCode }: RoomPreviewProps) {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
 
     this.studentCode = studentCode;
-    this.fullSaveState = fullSaveState;
 
     this.userStateManager = new GameUserStateManager();
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
-    this.saveManager = new GameSaveManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.awardManager = new GameAwardsManager();
@@ -80,7 +68,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise(this.fullSaveState.userSaveState);
+    this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.awardManager.initialise(this, this.userStateManager, this.phaseManager);
@@ -88,15 +76,11 @@ export default class RoomPreview extends Phaser.Scene {
       createCMRGamePhases(this.escapeManager, this.awardManager),
       this.inputManager
     );
-    this.escapeManager.initialise(this, this.phaseManager, this.saveManager, false);
+    this.escapeManager.initialise(this, this.phaseManager);
     this.bindKeyboardTriggers();
   }
 
   public async create() {
-    // Process student's information
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    const fullSaveState = await loadData(accountInfo);
-    this.saveManager.initialiseForSettings(accountInfo, fullSaveState);
     await this.userStateManager.loadAchievements();
 
     /**

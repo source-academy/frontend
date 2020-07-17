@@ -1,3 +1,5 @@
+import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
+
 import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
@@ -28,7 +30,7 @@ export default class DialogueManager {
   }
 
   public initialise(gameManager: GameManager) {
-    this.username = GameGlobalAPI.getInstance().getAccountInfo().name;
+    this.username = SourceAcademyGame.getInstance().getAccountInfo().name;
     this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
   }
 
