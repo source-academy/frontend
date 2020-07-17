@@ -3,5 +3,13 @@ export enum StorySimState {
   ObjectPlacement = 'ObjectPlacement',
   AssetUploader = 'AssetUploader',
   CheckpointSim = 'CheckpointSim',
-  ChapterSequence = 'ChapterSequence'
+  ChapterSim = 'ChapterSim'
 }
+
+export type ChapterDetail = {
+  openAt: string;
+  closeAt: string;
+  title: string;
+  filenames: string;
+  isPublished: string;
+};

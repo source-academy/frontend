@@ -25,7 +25,7 @@ function AssetFileUploader({ accessToken }: Props) {
   async function onUploadButtonClick() {
     const finalFolder = folderOverwrite || folder;
     if (!accessToken || !fileList || !finalFolder) return;
-    const resp = await uploadAssets(accessToken, fileList, finalFolder, ['image', 'audio', 'text']);
+    const resp = await uploadAssets(accessToken, fileList, finalFolder);
     alert(resp);
   }
 

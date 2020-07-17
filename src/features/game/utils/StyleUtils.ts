@@ -64,26 +64,24 @@ export function calcTableFormatPos({
   let itemsPerList = numItemLimit || numOfItems;
   const numOfLists = Math.ceil(numOfItems / itemsPerList);
 
-  return Array(numOfItems)
-    .fill(0)
-    .map((_, itemNumber) => {
-      const itemIndexInList = itemNumber % itemsPerList;
-      const listIndex = Math.floor(itemNumber / itemsPerList);
+  return _.times(numOfItems, itemNumber => {
+    const itemIndexInList = itemNumber % itemsPerList;
+    const listIndex = Math.floor(itemNumber / itemsPerList);
 
-      if (redistributeLast && listIndex === numOfLists - 1) {
-        itemsPerList = numOfItems % numOfLists || itemsPerList;
-      }
+    if (redistributeLast && listIndex === numOfLists - 1) {
+      itemsPerList = numOfItems % numOfLists || itemsPerList;
+    }
 
-      return direction === Direction.Row
-        ? [
-            indexToCoordinate(screenSize.x, maxXSpace, itemIndexInList, itemsPerList),
-            indexToCoordinate(screenSize.y, maxYSpace, listIndex, numOfLists)
-          ]
-        : [
-            indexToCoordinate(screenSize.x, maxXSpace, listIndex, numOfLists),
-            indexToCoordinate(screenSize.y, maxYSpace, itemIndexInList, itemsPerList)
-          ];
-    });
+    return direction === Direction.Row
+      ? [
+          indexToCoordinate(screenSize.x, maxXSpace, itemIndexInList, itemsPerList),
+          indexToCoordinate(screenSize.y, maxYSpace, listIndex, numOfLists)
+        ]
+      : [
+          indexToCoordinate(screenSize.x, maxXSpace, listIndex, numOfLists),
+          indexToCoordinate(screenSize.y, maxYSpace, itemIndexInList, itemsPerList)
+        ];
+  });
 }
 
 function indexToCoordinate(
