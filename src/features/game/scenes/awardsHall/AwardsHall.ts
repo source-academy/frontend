@@ -15,6 +15,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { AwardsHallConstants } from './AwardsHallConstants';
+import { createAwardsHoverContainer } from './AwardsHelper';
 
 /**
  * This scenes display all students achievement.
@@ -180,10 +181,27 @@ class AwardsHall extends Phaser.Scene {
   }
 
   private createAward(award: AwardProperty, xPos: number, yPos: number) {
-    const achievementCont = new Phaser.GameObjects.Container(this, xPos, yPos);
+    const awardCont = new Phaser.GameObjects.Container(this, xPos, yPos);
+    const image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey);
+    const hoverCont = createAwardsHoverContainer(this, award);
 
-    // TODO: Use asset
-    return achievementCont;
+    image.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
+      hoverCont.setVisible(true)
+    );
+    image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OUT, () =>
+      hoverCont.setVisible(false)
+    );
+    image.addListener(
+      Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
+      (pointer: Phaser.Input.Pointer) => {
+        hoverCont.x = pointer.x + 10;
+        hoverCont.y = pointer.y - 10;
+      }
+    );
+
+    awardCont.add([image]);
+    return awardCont;
   }
 
   private cleanUp() {
