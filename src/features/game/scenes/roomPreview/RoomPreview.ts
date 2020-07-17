@@ -2,7 +2,7 @@ import { Context, runInContext } from 'js-slang';
 import { createContext } from 'src/commons/utils/JsSlangHelper';
 import SourceAcademyGame from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import GameCollectiblesManager from '../../awards/GameAwardsManager';
+import GameAwardsManager from '../../awards/GameAwardsManager';
 import { Constants, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -43,7 +43,7 @@ export default class RoomPreview extends Phaser.Scene {
   private userStateManager: GameUserStateManager;
   private saveManager: GameSaveManager;
   private escapeManager: GameEscapeManager;
-  private collectibleManager: GameCollectiblesManager;
+  private awardManager: GameAwardsManager;
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
@@ -58,7 +58,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.userStateManager = new GameUserStateManager();
-    this.collectibleManager = new GameCollectiblesManager();
+    this.awardManager = new GameAwardsManager();
     this.studentCode = roomDefaultCode;
     this.fullSaveState = createEmptySaveState();
   }
@@ -75,7 +75,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.saveManager = new GameSaveManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
-    this.collectibleManager = new GameCollectiblesManager();
+    this.awardManager = new GameAwardsManager();
   }
 
   public preload() {
@@ -83,9 +83,9 @@ export default class RoomPreview extends Phaser.Scene {
     this.userStateManager.initialise(this.fullSaveState.userSaveState);
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
-    this.collectibleManager.initialise(this, this.userStateManager, this.phaseManager);
+    this.awardManager.initialise(this, this.userStateManager, this.phaseManager);
     this.phaseManager.initialise(
-      createCMRGamePhases(this.escapeManager, this.collectibleManager),
+      createCMRGamePhases(this.escapeManager, this.awardManager),
       this.inputManager
     );
     this.escapeManager.initialise(this, this.phaseManager, this.saveManager, false);
@@ -172,10 +172,10 @@ export default class RoomPreview extends Phaser.Scene {
     );
     // Bind collectible menu
     this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
-      if (this.phaseManager.isCurrentPhase(GamePhaseType.CollectibleMenu)) {
+      if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
         await this.phaseManager.popPhase();
       } else {
-        await this.phaseManager.pushPhase(GamePhaseType.CollectibleMenu);
+        await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
       }
     });
   }

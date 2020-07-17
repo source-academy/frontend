@@ -1,4 +1,4 @@
-export enum CollectiblePage {
+export enum AwardPage {
   Collectibles = 'Collectibles',
   Achievements = 'Achievements'
 }
