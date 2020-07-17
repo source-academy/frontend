@@ -1,4 +1,4 @@
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeExplore from '../../mode/explore/GameModeExplore';
 import GameModeMenu from '../../mode/menu/GameModeMenu';
@@ -7,10 +7,7 @@ import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import GameModeTalk from '../../mode/talk/GameModeTalk';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 
-export const createGamePhases = (
-  escapeMenu: GameEscapeManager,
-  collectibleMenu: GameCollectiblesManager
-) => {
+export const createGamePhases = (escapeMenu: GameEscapeManager, awardMenu: GameAwardsManager) => {
   return new Map([
     [GamePhaseType.Menu, new GameModeMenu()],
     [GamePhaseType.Move, new GameModeMove()],
@@ -19,6 +16,6 @@ export const createGamePhases = (
     [GamePhaseType.Sequence, new GameModeSequence()],
     [GamePhaseType.None, new GameModeSequence()],
     [GamePhaseType.EscapeMenu, escapeMenu],
-    [GamePhaseType.CollectibleMenu, collectibleMenu]
+    [GamePhaseType.AwardMenu, awardMenu]
   ]);
 };

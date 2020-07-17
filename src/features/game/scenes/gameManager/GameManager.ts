@@ -15,8 +15,8 @@ import SourceAcademyGame, {
   GameType
 } from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
+import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
 import { Constants } from '../../commons/CommonConstants';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
@@ -60,7 +60,7 @@ class GameManager extends Phaser.Scene {
   public phaseManager: GamePhaseManager;
   public backgroundManager: GameBackgroundManager;
   public inputManager: GameInputManager;
-  public collectibleManager: GameCollectiblesManager;
+  public awardsManager: GameAwardsManager;
 
   constructor() {
     super('GameManager');
@@ -80,7 +80,7 @@ class GameManager extends Phaser.Scene {
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
     this.inputManager = new GameInputManager();
-    this.collectibleManager = new GameCollectiblesManager();
+    this.awardsManager = new GameAwardsManager();
   }
 
   public init({
@@ -111,7 +111,7 @@ class GameManager extends Phaser.Scene {
     this.phaseManager = new GamePhaseManager();
     this.backgroundManager = new GameBackgroundManager();
     this.inputManager = new GameInputManager();
-    this.collectibleManager = new GameCollectiblesManager();
+    this.awardsManager = new GameAwardsManager();
   }
 
   //////////////////////
@@ -133,9 +133,9 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager.initialise();
     this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.collectibleManager.initialise(this, this.userStateManager, this.phaseManager);
+    this.awardsManager.initialise(this, this.userStateManager, this.phaseManager);
     this.phaseManager.initialise(
-      createGamePhases(this.escapeManager, this.collectibleManager),
+      createGamePhases(this.escapeManager, this.awardsManager),
       this.inputManager
     );
     this.escapeManager.initialise(this, this.phaseManager, this.getSaveManager());
@@ -219,10 +219,10 @@ class GameManager extends Phaser.Scene {
       }
     );
     this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
-      if (this.phaseManager.isCurrentPhase(GamePhaseType.CollectibleMenu)) {
+      if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
         await this.phaseManager.popPhase();
       } else {
-        await this.phaseManager.pushPhase(GamePhaseType.CollectibleMenu);
+        await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
       }
     });
   }

@@ -23,14 +23,14 @@ const ImageAssets: AssetMap<ImageAsset> = {
   // Escape Menu
   escapeMenuBackground: { key: 'escape-bg', path: '/ui/escapeMenu.png' },
 
-  // Collectibles Menu
-  collectiblesMenu: { key: 'collect-bg', path: '/ui/collectiblesBg.png' },
-  collectiblesBanner: { key: 'collect-banner', path: '/ui/collectiblesBanner.png' },
-  collectiblesPageChosen: {
-    key: 'collect-pg-chosen',
+  // Awards Menu
+  awardsMenu: { key: 'award-bg', path: '/ui/collectiblesBg.png' },
+  awardsBanner: { key: 'award-banner', path: '/ui/collectiblesBanner.png' },
+  awardsPageChosen: {
+    key: 'award-pg-chosen',
     path: '/ui/collectiblesPageOptChosen.png'
   },
-  collectiblesPage: { key: 'collect-pg-opt', path: '/ui/collectiblesPageOpt.png' },
+  awardsPage: { key: 'award-pg-opt', path: '/ui/collectiblesPageOpt.png' },
 
   // Chapter Select
   chapterSelectBackground: { key: 'chapter-select-bg', path: '/locations/yourRoom-dim/normal.png' },

@@ -8,11 +8,12 @@ import { Constants, screenCenter, screenSize } from '../../commons/CommonConstan
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import AwardParser from '../../parser/AssetParser';
+import AwardParser from '../../parser/AwardParser';
 import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, toS3Path } from '../../utils/GameUtils';
+import { loadImage } from '../../utils/LoaderUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
@@ -54,7 +55,7 @@ class MainMenu extends Phaser.Scene {
 
     this.roomCode = await getRoomPreviewCode();
     await this.loadGameDataAndSettings();
-    await this.loadAwardsMapping();
+    await this.preloadAwards();
   }
 
   private async loadGameDataAndSettings() {
@@ -67,9 +68,16 @@ class MainMenu extends Phaser.Scene {
       .playBgMusic(SoundAssets.galacticHarmony.key, volume);
   }
 
-  private async loadAwardsMapping() {
+  private async preloadAwards() {
     const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
-    SourceAcademyGame.getInstance().setAwardsMapping(AwardParser.parse(awardsMappingTxt));
+    const awardsMapping = AwardParser.parse(awardsMappingTxt);
+    SourceAcademyGame.getInstance().setAwardsMapping(awardsMapping);
+
+    await Promise.all(
+      Array.from(awardsMapping.values()).map(
+        async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath)
+      )
+    );
   }
 
   private preloadAssets() {
@@ -151,10 +159,10 @@ class MainMenu extends Phaser.Scene {
         }
       },
       {
-        text: mainMenuConstants.optionsText.collectible,
+        text: mainMenuConstants.optionsText.awards,
         callback: () => {
           this.layerManager.clearAllLayers();
-          this.scene.start('Achievements', {
+          this.scene.start('AwardsHall', {
             fullSaveState: this.getLoadedGameState()
           });
         }

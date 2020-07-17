@@ -3,7 +3,7 @@ import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../../assets/ImageAssets';
-import GameCollectiblesManager from '../../collectibles/GameCollectiblesManager';
+import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
@@ -49,12 +49,12 @@ function getStudentRoomCode(mission: Assessment | null) {
 
 export const createCMRGamePhases = (
   escapeMenu: GameEscapeManager,
-  collectibleMenu: GameCollectiblesManager
+  awardMenu: GameAwardsManager
 ) => {
   return new Map([
     [GamePhaseType.None, new GameModeSequence()],
     [GamePhaseType.EscapeMenu, escapeMenu],
-    [GamePhaseType.CollectibleMenu, collectibleMenu]
+    [GamePhaseType.AwardMenu, awardMenu]
   ]);
 };
 

@@ -1,5 +1,6 @@
 import { GameAction } from '../action/GameActionTypes';
 import { SoundAsset } from '../assets/AssetsTypes';
+import { CollectibleProperty } from '../awards/GameAwardsTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';

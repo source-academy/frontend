@@ -2,8 +2,9 @@ import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
+import { UserStateTypes } from '../state/GameStateTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
-import { CollectibleProperty } from './GameCollectiblesTypes';
+import { AwardProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -19,29 +20,33 @@ export const listBannerTextStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
-export const collectibleTitleStyle: BitmapFontStyle = {
+export const awardTitleStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 50,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const collectibleDescStyle = {
+export const awardDescStyle = {
   fontFamily: 'Verdana',
   fontSize: '25px',
   fill: Color.lightBlue,
-  align: 'center',
+  align: 'justify',
   lineSpacing: 10,
   wordWrap: { width: 500 }
 };
 
-export const defaultCollectibleProp: CollectibleProperty = {
+export const defaultAwardProp: AwardProperty = {
+  id: 'ult-cookie-award',
   assetKey: ImageAssets.cookies.key,
-  x: 0,
-  y: 0
+  assetPath: ImageAssets.cookies.path,
+  title: 'Ultimate Cookie',
+  description:
+    'One Cookie to rule them all, One Cookie to find them, One Ring to bring them all, and in pantry bind them',
+  awardType: UserStateTypes.collectibles
 };
 
-const CollectibleConstants = {
+const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
   pageYStartPos: -screenSize.y * 0.3,
   pageYSpacing: 150,
@@ -62,4 +67,4 @@ const CollectibleConstants = {
   itemsPerPage: 7
 };
 
-export default CollectibleConstants;
+export default AwardsConstants;
