@@ -171,13 +171,17 @@ export default class RoomPreview extends Phaser.Scene {
       }
     );
     // Bind collectible menu
-    this.inputManager.registerKeyboardListener(Phaser.Input.Keyboard.KeyCodes.I, 'up', async () => {
-      if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
-        await this.phaseManager.popPhase();
-      } else {
-        await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
+    this.inputManager.registerKeyboardListener(
+      Phaser.Input.Keyboard.KeyCodes.TAB,
+      'up',
+      async () => {
+        if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
+          await this.phaseManager.popPhase();
+        } else {
+          await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
+        }
       }
-    });
+    );
   }
 
   public cleanUp() {
