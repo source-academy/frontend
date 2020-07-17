@@ -1,4 +1,5 @@
 import { Card, Classes, Elevation, Pre } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { parseError } from 'js-slang';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
@@ -29,31 +30,28 @@ const renderResult = (value: any) => {
 
 class SideContentAutograderCard extends React.Component<SideContentAutograderCardProps, {}> {
   public render() {
-    const cardClasses = ['AutograderCard'];
+    const isEvaluated = this.props.testcase.result !== undefined || this.props.testcase.errors;
+    const isEqual = stringify(this.props.testcase.result) === this.props.testcase.answer;
 
-    if (this.props.testcase.result !== undefined || this.props.testcase.errors) {
-      if (stringify(this.props.testcase.result) === this.props.testcase.answer) {
-        cardClasses.push('correct');
-      } else {
-        cardClasses.push('wrong');
-      }
-    }
+    const extraClasses = {
+      correct: isEvaluated && isEqual,
+      wrong: isEvaluated && !isEqual,
+      private: this.props.testcase.type === TestcaseTypes.private
+    };
 
     // Render a placeholder cell in place of the actual testcase data for hidden testcases
     if (this.props.testcase.type === TestcaseTypes.hidden) {
       return (
-        <div className={cardClasses.join(' ')}>
+        <div className={classNames('AutograderCard', extraClasses)}>
           <Card className="bp3-interactive" elevation={Elevation.ONE} onClick={this.evalSelf}>
             <Pre className="testcase-placeholder">Hidden testcase</Pre>
           </Card>
         </div>
       );
-    } else if (this.props.testcase.type === TestcaseTypes.private) {
-      cardClasses.push('private');
     }
 
     return (
-      <div className={cardClasses.join(' ')}>
+      <div className={classNames('AutograderCard', extraClasses)}>
         <Card className={Classes.INTERACTIVE} elevation={Elevation.ONE} onClick={this.evalSelf}>
           <Pre className="testcase-program">{this.props.testcase.program}</Pre>
           <Pre className="testcase-expected">{this.props.testcase.answer}</Pre>
