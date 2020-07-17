@@ -11,8 +11,7 @@ export const AwardsHallConstants = {
   awardYStartPos: 300,
   awardYSpace: screenCenter.y - 40,
   awardDim: 200,
-  hoverWidth: 300,
-  hoverHeight: 300
+  hoverWidth: 300
 };
 
 export const awardHoverTitleStyle = {

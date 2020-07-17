@@ -1,3 +1,4 @@
+import ImageAssets from '../../assets/ImageAssets';
 import { AwardProperty } from '../../awards/GameAwardsTypes';
 import { HexColor } from '../../utils/StyleUtils';
 import {
@@ -37,7 +38,27 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     .setOrigin(0.0, 0.0)
     .setAlpha(0.8);
 
-  hoverContainer.add([hoverTextBg, awardTitle, awardAssetKey, awardDesc]);
+  const scrollFrameTop = new Phaser.GameObjects.Sprite(
+    scene,
+    AwardsHallConstants.hoverWidth / 2,
+    0,
+    ImageAssets.scrollFrame.key
+  );
+  const scrollFrameBot = new Phaser.GameObjects.Sprite(
+    scene,
+    AwardsHallConstants.hoverWidth / 2,
+    hoverTextBg.getBounds().bottom,
+    ImageAssets.scrollFrame.key
+  );
+
+  hoverContainer.add([
+    hoverTextBg,
+    awardTitle,
+    awardAssetKey,
+    awardDesc,
+    scrollFrameTop,
+    scrollFrameBot
+  ]);
   hoverContainer.setVisible(false);
   return hoverContainer;
 };
