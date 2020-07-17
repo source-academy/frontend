@@ -1,4 +1,6 @@
-import SourceAcademyGame from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
+import SourceAcademyGame, {
+  GameType
+} from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
@@ -32,11 +34,6 @@ class GameEscapeManager implements IGameUI {
   private phaseManager: GamePhaseManager | undefined;
   private inputManager: GameInputManager | undefined;
   private settingsSaveManager: SettingsSaveManager | undefined;
-  private isStorySimulator: boolean;
-
-  constructor() {
-    this.isStorySimulator = false;
-  }
 
   /**
    * Initialises the escape manager UI
@@ -44,20 +41,17 @@ class GameEscapeManager implements IGameUI {
    * @param scene - the scene to add escape manager
    * @param phaseManager - the phase manager of the scene
    * @param saveManager - the save manager of the scene
-   * @param isStorySimulator - whether or not this scene is the story simulator
    */
   public initialise(
     scene: IBaseScene,
     phaseManager: GamePhaseManager,
-    settingsManager: SettingsSaveManager,
-    isStorySimulator: boolean
+    settingsManager: SettingsSaveManager
   ) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
     this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
     this.settingsSaveManager = settingsManager;
-    this.isStorySimulator = isStorySimulator;
   }
 
   private createUIContainer() {
@@ -100,7 +94,7 @@ class GameEscapeManager implements IGameUI {
         text: 'Main Menu',
         callback: () => {
           this.cleanUp();
-          if (this.isStorySimulator) {
+          if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
             this.getScene().scene.start('StorySimulatorMenu');
           } else {
             this.getScene().scene.start('MainMenu');

@@ -86,7 +86,7 @@ export default class RoomPreview extends Phaser.Scene {
       createCMRGamePhases(this.escapeManager, this.collectibleManager),
       this.inputManager
     );
-    this.escapeManager.initialise(this, this.phaseManager, this.settingsManager, false);
+    this.escapeManager.initialise(this, this.phaseManager, this.settingsManager);
     this.bindKeyboardTriggers();
   }
 

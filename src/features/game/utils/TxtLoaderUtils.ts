@@ -48,7 +48,6 @@ export async function callGameManagerOnTxtLoad(
   const gameCheckpoint = Parser.checkpoint;
 
   scene.scene.start('GameManager', {
-    isStorySimulator: false,
     fullSaveState,
     gameCheckpoint,
     continueGame,

@@ -57,14 +57,6 @@ class GameGlobalAPI {
     return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
   }
 
-  public isStorySimulator() {
-    return this.getGameManager().isStorySimulator;
-  }
-
-  public getAccountInfo() {
-    return this.getGameManager().getAccountInfo();
-  }
-
   /////////////////////
   //    Game Mode    //
   /////////////////////
