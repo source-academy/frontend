@@ -45,15 +45,14 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-    if (accountInfo.role === 'staff') {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
       console.log('Staff do not have accounts');
       return;
     }
     this.renderBackground();
     this.renderOptionButtons();
 
-    this.roomCode = await getRoomPreviewCode(accountInfo);
+    this.roomCode = await getRoomPreviewCode();
     await this.loadGameDataAndSettings();
     await this.loadAwardsMapping();
   }

@@ -8,6 +8,9 @@ export type SettingsSaveManager = {
   getSettings: () => SettingsJson;
 };
 
+/**
+ * A mini save manager to just load and save settings
+ */
 export function createSettingsManager() {
   let loadedGameState: FullSaveState;
 

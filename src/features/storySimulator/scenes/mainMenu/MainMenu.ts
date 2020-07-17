@@ -44,6 +44,10 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'student') {
+      console.log('Students cannot use story sim');
+      return;
+    }
     this.renderBackground();
     this.renderOptionButtons();
   }
