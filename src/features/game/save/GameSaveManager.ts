@@ -37,7 +37,7 @@ export default class GameSaveManager {
   public async saveGame() {
     if (
       SourceAcademyGame.getInstance().isGameType(GameType.Game) &&
-      SourceAcademyGame.getInstance().getCurrentSceneRef instanceof GameManager
+      SourceAcademyGame.getInstance().getCurrentSceneRef() instanceof GameManager
     ) {
       this.fullSaveState = gameStateToJson(
         this.fullSaveState,
