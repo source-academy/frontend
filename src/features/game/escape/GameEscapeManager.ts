@@ -12,7 +12,6 @@ import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
 import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import { SettingsSaveManager } from '../save/GameSettingsSaveManager';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
@@ -33,7 +32,6 @@ class GameEscapeManager implements IGameUI {
   private layerManager: GameLayerManager | undefined;
   private phaseManager: GamePhaseManager | undefined;
   private inputManager: GameInputManager | undefined;
-  private settingsSaveManager: SettingsSaveManager | undefined;
 
   /**
    * Initialises the escape manager UI
@@ -42,16 +40,11 @@ class GameEscapeManager implements IGameUI {
    * @param phaseManager - the phase manager of the scene
    * @param saveManager - the save manager of the scene
    */
-  public initialise(
-    scene: IBaseScene,
-    phaseManager: GamePhaseManager,
-    settingsManager: SettingsSaveManager
-  ) {
+  public initialise(scene: IBaseScene, phaseManager: GamePhaseManager) {
     this.scene = scene;
     this.layerManager = scene.layerManager;
     this.inputManager = scene.inputManager;
     this.phaseManager = phaseManager;
-    this.settingsSaveManager = settingsManager;
   }
 
   private createUIContainer() {
@@ -189,7 +182,7 @@ class GameEscapeManager implements IGameUI {
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
-  private getSettingsSaveManager = () => mandatory(this.settingsSaveManager);
+  private getSettingsSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   private getPhaseManager = () => mandatory(this.phaseManager);
   private getInputManager = () => mandatory(this.inputManager);
 

@@ -11,9 +11,6 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { createEmptySaveState } from '../../save/GameSaveHelper';
-import { FullSaveState } from '../../save/GameSaveTypes';
-import { createSettingsManager, SettingsSaveManager } from '../../save/GameSettingsSaveManager';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
@@ -22,7 +19,6 @@ import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreview
 
 type RoomPreviewProps = {
   studentCode: string;
-  fullSaveState: FullSaveState;
 };
 
 /**
@@ -33,14 +29,11 @@ type RoomPreviewProps = {
  * menu.
  */
 export default class RoomPreview extends Phaser.Scene {
-  public fullSaveState: FullSaveState;
-
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
 
   private phaseManager: GamePhaseManager;
   private userStateManager: GameUserStateManager;
-  private settingsManager: SettingsSaveManager;
   private escapeManager: GameEscapeManager;
   private awardManager: GameAwardsManager;
   private studentCode: string;
@@ -58,15 +51,12 @@ export default class RoomPreview extends Phaser.Scene {
     this.userStateManager = new GameUserStateManager();
     this.awardManager = new GameAwardsManager();
     this.studentCode = roomDefaultCode;
-    this.settingsManager = createSettingsManager();
-    this.fullSaveState = createEmptySaveState();
   }
 
-  public init({ studentCode, fullSaveState }: RoomPreviewProps) {
+  public init({ studentCode }: RoomPreviewProps) {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
 
     this.studentCode = studentCode;
-    this.fullSaveState = fullSaveState;
 
     this.userStateManager = new GameUserStateManager();
     this.layerManager = new GameLayerManager();
@@ -78,7 +68,7 @@ export default class RoomPreview extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise(this.fullSaveState.userSaveState);
+    this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.awardManager.initialise(this, this.userStateManager, this.phaseManager);
@@ -86,12 +76,11 @@ export default class RoomPreview extends Phaser.Scene {
       createCMRGamePhases(this.escapeManager, this.awardManager),
       this.inputManager
     );
-    this.escapeManager.initialise(this, this.phaseManager, this.settingsManager);
+    this.escapeManager.initialise(this, this.phaseManager);
     this.bindKeyboardTriggers();
   }
 
   public async create() {
-    this.settingsManager = await createSettingsManager();
     await this.userStateManager.loadAchievements();
 
     /**

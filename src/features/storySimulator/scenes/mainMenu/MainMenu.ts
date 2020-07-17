@@ -6,7 +6,6 @@ import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import Parser from 'src/features/game/parser/Parser';
-import { createEmptySaveState } from 'src/features/game/save/GameSaveHelper';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
@@ -135,7 +134,6 @@ class MainMenu extends Phaser.Scene {
     const gameCheckpoint = Parser.checkpoint;
 
     this.scene.start('GameManager', {
-      fullSaveState: createEmptySaveState(),
       gameCheckpoint,
       chapterNum: -1,
       checkpointNum: -1

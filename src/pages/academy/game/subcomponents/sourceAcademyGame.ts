@@ -2,6 +2,7 @@ import * as Phaser from 'phaser';
 import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
 import { ItemId } from 'src/features/game/commons/CommonTypes';
+import GameSaveManager from 'src/features/game/save/GameSaveManager';
 import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';
 import ChapterSelect from 'src/features/game/scenes/chapterSelect/ChapterSelect';
 import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
@@ -31,6 +32,7 @@ type GlobalGameProps = {
   awardsMapping: Map<ItemId, AwardProperty>;
   currentSceneRef?: Phaser.Scene;
   soundManager: GameSoundManager;
+  saveManager: GameSaveManager;
   gameType: GameType;
 };
 
@@ -47,6 +49,7 @@ export default class SourceAcademyGame extends Phaser.Game {
       setStorySimState: Constants.nullFunction,
       currentSceneRef: undefined,
       soundManager: new GameSoundManager(),
+      saveManager: new GameSaveManager(),
       gameType
     };
   }
@@ -68,6 +71,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
   public isGameType = (gameType: GameType) => this.global.gameType === gameType;
 

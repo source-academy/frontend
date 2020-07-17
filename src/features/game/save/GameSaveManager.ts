@@ -2,49 +2,55 @@ import SourceAcademyGame, {
   GameType
 } from 'src/pages/academy/game/subcomponents/SourceAcademyGame';
 
-import { Constants } from '../commons/CommonConstants';
-import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
-import { saveData } from './GameSaveRequests';
+import { mandatory } from '../utils/GameUtils';
+import { createEmptySaveState, gameStateToJson, userSettingsToJson } from './GameSaveHelper';
+import { loadData, saveData } from './GameSaveRequests';
 import { FullSaveState, SettingsJson } from './GameSaveTypes';
-import { SettingsSaveManager } from './GameSettingsSaveManager';
-
-export type SaveManagerProps = {
-  fullSaveState: FullSaveState;
-  chapterNum: number;
-  checkpointNum: number;
-  continueGame: boolean;
-};
 
 /**
  * The manager provides API for loading and saving data from the backend
  * and is in charge of keeping record of the last save point, so that
  * players can make new save data based on the last one.
  */
-export default class GameSaveManager implements SettingsSaveManager {
+export default class GameSaveManager {
   private fullSaveState: FullSaveState;
-  private chapterNum: number;
-  private checkpointNum: number;
-  private continueGame: boolean;
 
-  constructor({ fullSaveState, chapterNum, checkpointNum, continueGame }: SaveManagerProps) {
+  private chapterNum?: number;
+  private checkpointNum?: number;
+  private continueGame?: boolean;
+
+  constructor() {
+    this.fullSaveState = createEmptySaveState();
+  }
+
+  async loadLastSaveState() {
+    this.fullSaveState = await loadData();
+  }
+
+  public registerGameInfo(chapterNum: number, checkpointNum: number, continueGame: boolean) {
     this.chapterNum = chapterNum;
     this.checkpointNum = checkpointNum;
-    this.fullSaveState = fullSaveState;
     this.continueGame = continueGame;
   }
 
   public async saveGame() {
     if (SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
-      this.fullSaveState = gameStateToJson(this.fullSaveState, this.chapterNum, this.checkpointNum);
+      this.fullSaveState = gameStateToJson(
+        this.fullSaveState,
+        this.getChapterNum(),
+        this.getCheckpointNum()
+      );
       await saveData(this.fullSaveState);
     }
   }
 
-  public loadSettings = Constants.nullFunction;
-
   public getSettings() {
     return this.fullSaveState.userSaveState.settings;
   }
+
+  public getChapterNum = () => mandatory(this.chapterNum);
+  public getCheckpointNum = () => mandatory(this.checkpointNum);
+  public getFullSaveState = () => mandatory(this.fullSaveState);
 
   public async saveSettings(settingsJson: SettingsJson) {
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
@@ -57,21 +63,21 @@ export default class GameSaveManager implements SettingsSaveManager {
 
   public getLoadedGameStoryState() {
     if (this.continueGame) {
-      return this.fullSaveState.gameSaveStates[this.chapterNum];
+      return this.fullSaveState.gameSaveStates[this.getChapterNum()];
     } else {
       return undefined;
     }
   }
 
   public getLoadedLocation() {
-    if (this.continueGame && this.fullSaveState.gameSaveStates[this.chapterNum]) {
-      return this.fullSaveState.gameSaveStates[this.chapterNum].currentLocation;
+    if (this.continueGame && this.fullSaveState.gameSaveStates[this.getChapterNum()]) {
+      return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentLocation;
     } else {
       return;
     }
   }
 
   public getLoadedPhase() {
-    return this.fullSaveState.gameSaveStates[this.chapterNum].currentPhase;
+    return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentPhase;
   }
 }

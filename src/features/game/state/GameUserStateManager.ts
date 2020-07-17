@@ -6,7 +6,6 @@ import SourceAcademyGame, {
 import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
-import { UserSaveState } from '../save/GameSaveTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../utils/ButtonUtils';
 import { mandatory } from '../utils/GameUtils';
@@ -20,8 +19,10 @@ export default class GameUserStateManager {
     this.userState = {};
   }
 
-  public initialise(userSaveState: UserSaveState) {
-    this.userState.collectibles = userSaveState.collectibles;
+  public initialise() {
+    this.userState.collectibles = SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getFullSaveState().userSaveState.collectibles;
   }
 
   public addToList(listName: UserStateTypes, id: string): void {

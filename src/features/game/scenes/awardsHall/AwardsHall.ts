@@ -6,24 +6,16 @@ import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { createEmptySaveState } from '../../save/GameSaveHelper';
-import { FullSaveState } from '../../save/GameSaveTypes';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
 import { limitNumber } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { AwardsHallConstants } from './AwardsHallConstants';
 
-type AwardsProps = {
-  fullSaveState: FullSaveState;
-};
-
 /**
  * This scenes display all students achievement.
  */
 class AwardsHall extends Phaser.Scene {
-  public fullSaveState: FullSaveState;
-
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
   private userStateManager: GameUserStateManager;
@@ -43,16 +35,12 @@ class AwardsHall extends Phaser.Scene {
     this.inputManager = new GameInputManager();
     this.userStateManager = new GameUserStateManager();
 
-    this.fullSaveState = createEmptySaveState();
-
     this.isScrollLeft = false;
     this.isScrollRight = false;
     this.scrollLim = 0;
   }
 
-  public init({ fullSaveState }: AwardsProps) {
-    this.fullSaveState = fullSaveState;
-
+  public init() {
     this.layerManager = new GameLayerManager();
     this.inputManager = new GameInputManager();
     this.userStateManager = new GameUserStateManager();
@@ -60,7 +48,7 @@ class AwardsHall extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise(this.fullSaveState.userSaveState);
+    this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
     this.scrollLim =

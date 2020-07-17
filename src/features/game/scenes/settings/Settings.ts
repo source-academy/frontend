@@ -6,7 +6,6 @@ import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import CommonRadioButton from '../../commons/CommonRadioButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { createSettingsManager, SettingsSaveManager } from '../../save/GameSettingsSaveManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import settingsConstants, {
@@ -22,13 +21,11 @@ import settingsConstants, {
 class Settings extends Phaser.Scene {
   private volumeRadioButtons: CommonRadioButton | undefined;
   private layerManager: GameLayerManager;
-  private settingsSaveManager: SettingsSaveManager;
 
   constructor() {
     super('Settings');
     this.layerManager = new GameLayerManager();
     this.volumeRadioButtons = undefined;
-    this.settingsSaveManager = createSettingsManager();
   }
   public preload() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
@@ -37,7 +34,6 @@ class Settings extends Phaser.Scene {
 
   public async create() {
     this.renderBackground();
-    await this.settingsSaveManager.loadSettings();
     this.renderOptions();
   }
 
@@ -91,7 +87,7 @@ class Settings extends Phaser.Scene {
       settingsConstants.volTextYPos,
       optionHeaderTextStyle
     ).setOrigin(0.5, 0.25);
-    const userVol = this.settingsSaveManager.getSettings().volume;
+    const userVol = this.getSaveManager().getSettings().volume;
     const userVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === userVol
     );
@@ -116,14 +112,16 @@ class Settings extends Phaser.Scene {
     if (volume) {
       // Save settings
       const volumeVal = parseFloat(volume.getChosenChoice());
-      await this.settingsSaveManager.saveSettings({ volume: volumeVal });
+      await this.getSaveManager().saveSettings({ volume: volumeVal });
 
       // Apply settings
       SourceAcademyGame.getInstance()
         .getSoundManager()
-        .applyUserSettings(this.settingsSaveManager.getSettings());
+        .applyUserSettings(this.getSaveManager().getSettings());
     }
   }
+
+  public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
 }
 
 export default Settings;
