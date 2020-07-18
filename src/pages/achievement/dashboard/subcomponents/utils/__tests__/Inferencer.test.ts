@@ -44,10 +44,10 @@ describe('Achievements change when', () => {
     const inferencer = new AchievementInferencer(mockAchievements);
 
     inferencer.insertAchievement(sampleAchievement);
-    expect(inferencer.getAchievements().length).toEqual(12);
+    expect(inferencer.getAchievements().length).toEqual(13);
 
     inferencer.removeAchievement(0);
-    expect(inferencer.getAchievements().length).toEqual(11);
+    expect(inferencer.getAchievements().length).toEqual(12);
   });
 });
 
@@ -73,8 +73,8 @@ describe('Filter Count activated when', () => {
     const inferencer = new AchievementInferencer(mockAchievements);
     expect(inferencer.getFilterCount(FilterStatus.COMPLETED)).toEqual(1);
 
-    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(6);
+    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(7);
 
-    expect(inferencer.getFilterCount(FilterStatus.ALL)).toEqual(7);
+    expect(inferencer.getFilterCount(FilterStatus.ALL)).toEqual(8);
   });
 });
