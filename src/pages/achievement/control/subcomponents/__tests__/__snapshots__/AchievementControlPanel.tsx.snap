@@ -54,7 +54,7 @@ exports[`AchievementControlPanel component renders correctly 1`] = `
                             </Blueprint3.Icon>
                             <span style={{...}}>
                               <p>
-                                5 Weeks
+                                4 Weeks
                               </p>
                             </span>
                           </div>
