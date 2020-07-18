@@ -258,31 +258,20 @@ class AchievementInferencer {
     }
   }
 
-  // TODO: Replace swap operation with insert
+  // NOTE: positions of achievements are 1-indexed.
   public insertAchievementPosition(oldPosition: number, newPosition: number) {
-    const taskIds = this.listTaskIds();
+    const achievements = this.getAchievements()
+      .filter(a => a.isTask)
+      .sort((a, b) => a.position - b.position);
 
-    if (oldPosition < newPosition) {
-      for (let i = oldPosition - 1; i < newPosition - 1; i++) {
-        this.swapAchievementPositions(
-          this.getAchievementItem(taskIds[i]),
-          this.getAchievementItem(taskIds[i + 1])
-        );
-      }
-    } else {
-      for (let i = newPosition - 1; i < oldPosition - 1; i++) {
-        this.swapAchievementPositions(
-          this.getAchievementItem(taskIds[i]),
-          this.getAchievementItem(taskIds[i + 1])
-        );
-      }
+    const achievement = achievements.splice(oldPosition - 1, 1)[0];
+    achievements.splice(newPosition - 1, 0, achievement);
+
+    for (let i = 0; i < achievements.length; i++) {
+      const editedAchievement = achievements[i];
+      editedAchievement.position = i + 1;
+      this.modifyAchievement(editedAchievement);
     }
-  }
-
-  public swapAchievementPositions(achievement1: AchievementItem, achievement2: AchievementItem) {
-    [achievement1.position, achievement2.position] = [achievement2.position, achievement1.position];
-    this.modifyAchievement(achievement1);
-    this.modifyAchievement(achievement2);
   }
 
   private processData() {
