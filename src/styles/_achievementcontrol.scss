@@ -62,11 +62,152 @@
       .main-cards {
         flex-basis: 90%;
         height: 100%;
+
+        .achievement-card {
+          display: flex;
+
+          flex-direction: row;
+
+          // Card aspect ratio 6:1
+          height: 5em;
+          width: 30em;
+          padding: 0;
+          margin-bottom: 0.8em;
+
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          transition: box-shadow 0.2s ease-out;
+          box-shadow: 0;
+
+          .dropdown-button {
+            display: flex;
+
+            height: 5em;
+            width: 6em;
+            padding: 0 0 0 0.5em;
+
+            justify-content: flex-start;
+            align-items: center;
+          }
+
+          .content {
+            display: flex;
+
+            flex-direction: column;
+
+            height: 5em;
+            width: 24em;
+
+            .heading {
+              display: flex;
+              flex-direction: row;
+
+              height: 2.8em;
+
+              justify-content: flex-start;
+              align-items: center;
+
+              padding: 0.2em 0 0 0;
+
+              font-size: 0.7vw;
+
+              .week {
+                padding: 0 0 0 1em;
+                transform: scale(0.8);
+              }
+            }
+
+            .details {
+              display: flex;
+              flex-direction: row;
+
+              height: 1.9em;
+
+              font-size: 0.85em;
+
+              .ability {
+                display: flex;
+                flex: 0 1 55%;
+              }
+
+              .deadline {
+                display: flex;
+                flex-direction: row;
+                flex: 0 1 25%;
+                align-items: stretch;
+
+                p {
+                  padding-left: 0.3em;
+                }
+              }
+
+              .exp {
+                display: flex;
+                flex-direction: row;
+                flex: 0 1 20%;
+                align-items: stretch;
+
+                p {
+                  padding-left: 0.3em;
+                }
+              }
+            }
+
+            .progress {
+              display: flex;
+              height: 0.2em;
+              width: 23em;
+
+              align-items: flex-end;
+            }
+          }
+        }
+
+        .achievement-card:hover {
+          transition: box-shadow 0.2s ease-in;
+          box-shadow: 0 0 10px black;
+        }
+
+        .dropdown-container {
+          display: flex;
+          flex-direction: row;
+
+          .lines {
+            display: flex;
+            width: 10%;
+            flex-direction: column;
+
+            margin: -0.8em -0.8em 0 0.8em;
+
+            .l-shape {
+              height: 50%;
+              width: 60%;
+              border-bottom: 1px solid white;
+              border-left: 1px solid white;
+            }
+
+            .extend-bottom {
+              height: 50%;
+              border-left: 1px solid white;
+            }
+          }
+
+          .dropdown-button {
+            display: flex;
+
+            height: 5em;
+            width: 4em;
+
+            justify-content: flex-start;
+            align-items: center;
+          }
+        }
       }
 
       .editor-buttons {
         flex-basis: 25%;
-        height: 100%;
+        height: 10em;
         margin-bottom: 0.5em;
 
         display: flex;
@@ -88,155 +229,6 @@
           .move-editor-buttons {
             display: flex;
             flex-direction: row;
-          }
-        }
-      }
-    }
-
-    .achievement {
-      width: 90%;
-      background-color: #d9d9d9;
-
-      height: 20%;
-      margin-bottom: 10px;
-
-      display: flex;
-      flex-direction: column;
-
-      .hints {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      .delete {
-        width: 10%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-basis: 10%;
-      }
-
-      .main {
-        display: flex;
-        flex-direction: row;
-        flex-basis: 80%;
-
-        .dropdown {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .icon {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .display {
-          display: flex;
-          justify-content: center;
-          margin-left: 10%;
-          width: 100%;
-          flex-direction: column;
-
-          .details {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-
-            .ability {
-              flex-basis: 40%;
-            }
-
-            .deadline {
-              display: flex;
-              flex-direction: row;
-              flex-basis: 30%;
-            }
-
-            .exp {
-              display: flex;
-              margin-left: 5%;
-              flex-direction: row;
-              flex-basis: 30%;
-            }
-          }
-        }
-      }
-    }
-
-    .node {
-      display: flex;
-      flex-direction: row;
-
-      .prerequisite {
-        width: 81%;
-        background-color: #333e50;
-
-        margin-bottom: 10px;
-
-        display: flex;
-        flex-direction: column;
-
-        .delete {
-          width: 10%;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .hints {
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-
-        .main {
-          display: flex;
-          flex-direction: row;
-          flex-basis: 80%;
-
-          .display {
-            display: flex;
-            justify-content: center;
-            margin-left: 10%;
-            width: 100%;
-            flex-direction: column;
-
-            .details {
-              display: flex;
-              flex-direction: row;
-              justify-content: space-evenly;
-
-              .path {
-                flex-basis: 40%;
-              }
-
-              .deadline {
-                display: flex;
-                flex-direction: row;
-                flex-basis: 30%;
-
-                .deadline-details {
-                  display: flex;
-                  flex-direction: column;
-                }
-              }
-
-              .exp {
-                display: flex;
-                margin-left: 5%;
-                flex-direction: row;
-                flex-basis: 30%;
-              }
-            }
           }
         }
       }
