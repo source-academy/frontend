@@ -313,12 +313,15 @@ class AchievementInferencer {
       displayDeadline: Date | undefined,
       currentDeadline: Date | undefined
     ) => {
-      if (currentDeadline === undefined) {
+      if (currentDeadline === undefined || currentDeadline <= now) {
+        // currentDeadline undefined or expired, nothing change
         return displayDeadline;
       } else if (displayDeadline === undefined) {
         return currentDeadline;
       } else {
-        return now < currentDeadline && currentDeadline <= displayDeadline
+        // currentDeadline unexpired, displayDeadline may be expired or unexpired
+        // display the closest unexpired deadline
+        return displayDeadline <= now || currentDeadline < displayDeadline
           ? currentDeadline
           : displayDeadline;
       }
@@ -330,7 +333,6 @@ class AchievementInferencer {
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
-    descendantDeadlines.sort();
 
     // Reduces the temporary array to a single Date value
     node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
