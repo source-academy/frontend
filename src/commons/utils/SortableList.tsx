@@ -20,17 +20,17 @@ export const SortableList = SortableContainer(({ items }: any) => {
 });
 
 export const useSortableList = (initialValue: string[]) => {
-  const [itemList, setItemList] = React.useState<string[]>(initialValue);
+  const [list, setList] = React.useState<string[]>(initialValue);
 
   const onSortEnd = ({ oldIndex, newIndex }: any) => {
-    setItemList(prevState => arrayMove(prevState, oldIndex, newIndex));
+    setList(prevState => arrayMove(prevState, oldIndex, newIndex));
   };
 
   return {
-    itemList,
-    setItemList,
+    list,
+    setList,
     bind: {
-      items: itemList,
+      items: list,
       onSortEnd
     }
   };

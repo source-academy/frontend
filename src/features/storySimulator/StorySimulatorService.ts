@@ -112,32 +112,21 @@ export async function fetchChapters(): Promise<ChapterDetail[]> {
   const response = await sendStoryRequest('', 'GET');
   return response.status === 200 ? response.json() : [];
 }
-const openAt = new Date();
-const closeAt = new Date();
-closeAt.setMonth(closeAt.getMonth() + 2);
 
 /**
  * Creates a chapter
  *
- * @param accessToken - staff access token
  * @returns {Promise<string>} - Response
  */
-export async function createChapterRequest() {
+export async function updateChapterRequest(id: string, body: object) {
   const response = await sendStoryRequest(
-    '',
+    id,
     'POST',
     {
       'Content-Type': 'application/json'
     },
     {
-      body: JSON.stringify({
-        openAt: openAt.toISOString(),
-        closeAt: closeAt.toISOString(),
-        title: 'Some title',
-        filenames: [],
-        imageUrl: '...',
-        isPublished: false
-      })
+      body: JSON.stringify(body)
     }
   );
   return response.status === 200 ? 'Chapter successfully created' : response.text();

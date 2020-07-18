@@ -22,12 +22,12 @@ const sendRequest = (route: string) => async (
       ...requestDetails
     };
 
-    return fetch(Constants.backendUrl + `/v1/${route}` + requestPath, config);
+    return fetch(Constants.backendUrl + `/v1/${route}/` + requestPath, config);
   } finally {
   }
 };
 
-export const sendAssetRequest = sendRequest('assets/');
+export const sendAssetRequest = sendRequest('assets');
 export const sendStoryRequest = sendRequest('stories');
 
 export function createHeaders(accessToken: string): Headers {

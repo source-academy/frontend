@@ -1,8 +1,5 @@
 import React from 'react';
-import {
-  createChapterRequest,
-  fetchChapters
-} from 'src/features/storySimulator/StorySimulatorService';
+import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import StorySimulatorChapterEditor from './StorySimulatorChapterEditor';
@@ -21,10 +18,6 @@ export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
     })();
   }, []);
 
-  const onCreateButtonClick = async () => {
-    alert(await createChapterRequest());
-  };
-
   return (
     <>
       <h3>Chapter Simulator</h3>
@@ -40,11 +33,11 @@ export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
             </option>
           );
         })}
-        <option onClick={onCreateButtonClick} value={-1} key={-1}>
+        <option value={-1} key={-1}>
           {`Create new chapter`}
         </option>
       </select>
-      <br />
+      <hr />
       <StorySimulatorChapterEditor chapterDetail={chapters[chosenIndex]} textAssets={textAssets} />
     </>
   );
