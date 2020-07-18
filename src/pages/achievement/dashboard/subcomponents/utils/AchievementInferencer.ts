@@ -270,7 +270,6 @@ class AchievementInferencer {
     for (let i = 0; i < achievements.length; i++) {
       const editedAchievement = achievements[i];
       editedAchievement.position = i + 1;
-      this.modifyAchievement(editedAchievement);
     }
   }
 
