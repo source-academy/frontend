@@ -5,7 +5,8 @@ export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
 
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 
-// TODO: Rename abilities
+export const expPerLevel = 1000;
+
 export enum AchievementAbility {
   CORE = 'Core',
   EFFORT = 'Effort',
