@@ -102,8 +102,7 @@ class AchievementInferencer {
   }
 
   public removeAchievement(id: number) {
-    const hasChild = (achievement: AchievementItem) =>
-      achievement.prerequisiteIds.reduce((hasChild, child) => hasChild || child === id, false);
+    const hasChild = (achievement: AchievementItem) => achievement.prerequisiteIds.includes(id);
 
     const removeChild = (achievement: AchievementItem) =>
       achievement.prerequisiteIds.filter(child => child !== id);
