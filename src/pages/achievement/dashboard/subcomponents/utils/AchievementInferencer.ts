@@ -15,7 +15,7 @@ import {
  * @param {number} displayExp total achievable EXP of the achievement
  * @param {number} progressFrac progress percentage in fraction
  * @param {AchievementStatus} status the achievement status
- * @param {Date | undefined} displayDeadline deadline displayed on the achievement card & modal
+ * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
  * @param {Set<number>} children a set of immediate prerequisites id
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
@@ -354,7 +354,7 @@ class AchievementInferencer {
   private generateStatus(node: InferencerNode) {
     const now = new Date();
     const deadline = node.displayDeadline;
-    if (deadline !== undefined && deadline.getTime() < now.getTime()) {
+    if (deadline !== undefined && deadline.getTime() <= now.getTime()) {
       // deadline elapsed
       if (node.progressFrac === 0) {
         return (node.status = AchievementStatus.EXPIRED); // not attempted

@@ -88,7 +88,7 @@ export const prettifyDeadline = (deadline: Date | undefined) => {
   const millisecondsPerHour = 3600000;
 
   /* -------- Helper for Deadline -------- */
-  const isExpired = (deadline: Date): boolean => deadline.getTime() < now.getTime();
+  const isExpired = (deadline: Date): boolean => deadline.getTime() <= now.getTime();
   const getHoursAway = (deadline: Date): number =>
     (deadline.getTime() - now.getTime()) / millisecondsPerHour;
   const getDaysAway = (deadline: Date): number => getHoursAway(deadline) / hoursPerDay;

@@ -15,11 +15,12 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
 
   const oneDay = 86400000;
   const now = new Date();
+  // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
     ability === AchievementAbility.CORE &&
     deadline !== undefined &&
     now < deadline &&
-    deadline.getTime() - now.getTime() < 2 * oneDay
+    deadline.getTime() - now.getTime() <= 2 * oneDay
       ? '#ff0000'
       : '#000000';
 
