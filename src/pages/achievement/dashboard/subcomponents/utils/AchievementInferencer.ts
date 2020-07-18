@@ -6,7 +6,7 @@ import {
 } from '../../../../../commons/achievement/AchievementTypes';
 
 /**
- * A Node item encapsulates all important information of an achievement item
+ * An InferencerNode item encapsulates all important information of an achievement item
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
@@ -17,7 +17,7 @@ import {
  * @param {Set<number>} children a set of immediate prerequisites id
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
-class Node {
+class InferencerNode {
   public achievement: AchievementItem;
   public dataIdx: number;
   public displayExp: number;
@@ -53,7 +53,7 @@ class Node {
 
 class AchievementInferencer {
   private achievements: AchievementItem[] = []; // note: the achievement_id might not be the same as its array index
-  private nodeList: Map<number, Node> = new Map(); // key = achievement_id, value = achievement node
+  private nodeList: Map<number, InferencerNode> = new Map(); // key = achievement_id, value = achievement node
 
   constructor(achievements: AchievementItem[]) {
     this.achievements = achievements;
@@ -300,12 +300,12 @@ class AchievementInferencer {
     this.nodeList = new Map();
     for (let idx = 0; idx < this.achievements.length; idx++) {
       const achievement = this.achievements[idx];
-      this.nodeList.set(achievement.id, new Node(achievement, idx));
+      this.nodeList.set(achievement.id, new InferencerNode(achievement, idx));
     }
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
-  private generateDescendant(node: Node) {
+  private generateDescendant(node: InferencerNode) {
     for (const childId of node.descendant) {
       if (childId === node.achievement.id) {
         console.error('Circular dependency detected');
@@ -319,7 +319,7 @@ class AchievementInferencer {
   }
 
   // Set the node's display deadline by comparing with all descendants' deadlines
-  private generateDisplayDeadline(node: Node) {
+  private generateDisplayDeadline(node: InferencerNode) {
     const now = new Date();
 
     // Comparator of two deadlines
@@ -350,7 +350,7 @@ class AchievementInferencer {
     node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
   }
 
-  private generateStatus(node: Node) {
+  private generateStatus(node: InferencerNode) {
     const now = new Date();
     const deadline = node.displayDeadline;
     if (deadline !== undefined && deadline.getTime() < now.getTime()) {
@@ -396,7 +396,7 @@ class AchievementInferencer {
         arr.push(this.nodeList.get(child)!); // including immediate prerequisites
       }
       return arr;
-    }, [] as Node[]);
+    }, [] as InferencerNode[]);
   }
 }
 
