@@ -8428,10 +8428,10 @@ js-slang@^0.4.52:
     source-map "^0.7.3"
     xmlhttprequest-ts "^1.0.1"
 
-js-slang@^0.4.53:
-  version "0.4.53"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.53.tgz#86cec1890cb0abf7b010a15d7ee9cdc1630091ef"
-  integrity sha512-tIDBsDtKLFlItPj02TifjcDxleiT3LQ5PG9ejKmiJNVXBgoEA6eh+bONViWS7/PkOCeRPsCue2VeMUJGCjAmPw==
+js-slang@^0.4.54:
+  version "0.4.54"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.54.tgz#7c01352316c8133c26ef3bc1204311b879c9e041"
+  integrity sha512-SGDzcHsYkvpwbb6cVLAENwUn9KN4L2e0+Fotu00QzOzouNVKuEDyX8m8XKGP1mbOpLuwrsu9aYsFIdEOl9jLVQ==
   dependencies:
     "@types/estree" "0.0.45"
     acorn "^7.3.1"
