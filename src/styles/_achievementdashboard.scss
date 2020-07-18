@@ -7,7 +7,7 @@
   overflow-y: auto;
 
   background-size: cover;
-  background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/galaxy/normal.png);
+  background-image: url('#{$achievement-assets}/background.png');
   background-repeat: no-repeat;
   background-attachment: fixed;
 
@@ -43,7 +43,7 @@
           height: 2.5em;
           width: 2.5em;
 
-          background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/favicon.ico);
+          background-image: url('#{$achievement-assets}/level-icon.png');
           background-size: contain;
         }
 
@@ -401,7 +401,7 @@
               height: 2em;
               width: 2em;
 
-              background-image: url(https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/xp-icon.png);
+              background-image: url('#{$achievement-assets}/xp-icon.png');
               background-size: contain;
             }
 
