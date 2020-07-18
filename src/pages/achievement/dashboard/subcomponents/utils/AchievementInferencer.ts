@@ -111,17 +111,16 @@ class AchievementInferencer {
     // 1. does not contain the removed achievement
     // 2. does not contain reference of the removed achievement in other achievement's prerequisite
     const newAchievements: AchievementItem[] = [];
-
-    this.achievements.reduce((arr, parent) => {
-      if (parent.id === id) {
-        return arr; // removed item not included in the new achievements
-      } else if (hasChild(parent)) {
-        parent.prerequisiteIds = removeChild(parent); // reference of the removed item is filtered out
+    this.achievements.forEach(parent => {
+      if (hasChild(parent)) {
+        // reference of the removed item is filtered out
+        parent.prerequisiteIds = removeChild(parent);
       }
-      arr.push(parent);
-      return arr;
-    }, newAchievements);
-
+      if (parent.id !== id) {
+        // removed achievement is not included in the new achievements
+        newAchievements.push(parent);
+      }
+    });
     this.achievements = newAchievements;
 
     // finally, reconstruct the nodeList
