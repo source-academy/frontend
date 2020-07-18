@@ -259,13 +259,13 @@ class AchievementInferencer {
   }
 
   // NOTE: positions of achievements are 1-indexed.
-  public insertAchievementPosition(oldPosition: number, newPosition: number) {
+  public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
     const achievements = this.getAchievements()
       .filter(a => a.isTask)
       .sort((a, b) => a.position - b.position);
 
-    const achievement = achievements.splice(oldPosition - 1, 1)[0];
-    achievements.splice(newPosition - 1, 0, achievement);
+    const movedAchievement = achievements.splice(achievement.position - 1, 1)[0];
+    achievements.splice(newPosition - 1, 0, movedAchievement);
 
     for (let i = 0; i < achievements.length; i++) {
       const editedAchievement = achievements[i];

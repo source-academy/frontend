@@ -37,7 +37,7 @@ function TaskPositionInserter(props: TaskPositionInserterProps) {
   };
 
   const action = () => {
-    inferencer.insertAchievementPosition(editableAchievement.position, newPosition);
+    inferencer.changeAchievementPosition(editableAchievement, newPosition);
     saveChanges();
   };
 
