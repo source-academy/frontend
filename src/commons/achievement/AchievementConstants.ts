@@ -13,6 +13,8 @@ export const abilityColor = (ability: AchievementAbility) => {
       return '#9ecaed';
     case AchievementAbility.COMMUNITY:
       return '#ff6780';
+    case AchievementAbility.FLEX:
+      return '#ffffff';
     default:
       return '#ffffff';
   }
@@ -37,6 +39,10 @@ export const abilityBackground = (ability: AchievementAbility) => {
     case AchievementAbility.COMMUNITY:
       return {
         background: `url(${backgroundUrl}/community-background.png) no-repeat center`
+      };
+    case AchievementAbility.FLEX:
+      return {
+        background: `black`
       };
     default:
       return {

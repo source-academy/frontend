@@ -9,14 +9,16 @@ export enum AchievementAbility {
   CORE = 'Core',
   EFFORT = 'Effort',
   EXPLORATION = 'Exploration',
-  COMMUNITY = 'Community'
+  COMMUNITY = 'Community',
+  FLEX = 'Flex'
 }
 
 export const achievementAbilities = [
   AchievementAbility.CORE,
   AchievementAbility.EFFORT,
   AchievementAbility.EXPLORATION,
-  AchievementAbility.COMMUNITY
+  AchievementAbility.COMMUNITY,
+  AchievementAbility.FLEX
 ];
 
 export enum AchievementStatus {

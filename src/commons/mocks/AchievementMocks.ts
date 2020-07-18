@@ -333,5 +333,22 @@ export const mockAchievements: AchievementItem[] = [
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
       completionText: "Congratulations! You have completed That's the Spirit achievement"
     }
+  },
+  {
+    id: 11,
+    title: 'Kool Kidz',
+    ability: AchievementAbility.FLEX,
+    isTask: true,
+    prerequisiteIds: [],
+    goals: [],
+    position: 6,
+    backgroundImageUrl:
+      'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+    modal: {
+      modalImageUrl:
+        'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
+      description: 'Diz for teh K00L K1dz',
+      completionText: 'U SO G00D'
+    }
   }
 ];
