@@ -13,13 +13,13 @@ type AchievementDeadlineProps = {
 function AchievementDeadline(props: AchievementDeadlineProps) {
   const { deadline, ability } = props;
 
-  const one_day = 86400000;
+  const oneDay = 86400000;
   const now = new Date();
   const deadlineColor =
     ability === AchievementAbility.CORE &&
     deadline !== undefined &&
     now < deadline &&
-    deadline.getTime() - now.getTime() < 2 * one_day
+    deadline.getTime() - now.getTime() < 2 * oneDay
       ? '#ff0000'
       : '#000000';
 
