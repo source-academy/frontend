@@ -1,12 +1,12 @@
 import { mount } from 'enzyme';
 import React from 'react';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import AchievementAdder from '../AchievementAdder';
 
 const mockProps = {
-  inferencer: new Inferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements),
   adderId: 0,
   setAdderId: () => {}
 };

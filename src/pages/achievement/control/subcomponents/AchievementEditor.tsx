@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   updateAchievements: any;
   editAchievement: any;
   forceRender: any;

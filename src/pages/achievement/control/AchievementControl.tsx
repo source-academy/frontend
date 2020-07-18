@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementGoal, AchievementItem } from '../../../commons/achievement/AchievementTypes';
 import AchievementControlPanel from './subcomponents/AchievementControlPanel';
@@ -14,7 +14,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {

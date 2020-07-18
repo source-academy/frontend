@@ -1,11 +1,11 @@
 import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import AchievementSelector from './AchievementSelector';
 
 export type TaskAdderProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

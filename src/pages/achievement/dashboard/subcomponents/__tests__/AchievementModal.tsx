@@ -3,11 +3,11 @@ import React from 'react';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import AchievementModal from '../AchievementModal';
-import Inferencer from '../utils/Inferencer';
+import AchievementInferencer from '../utils/AchievementInferencer';
 
 const mockProps = {
   id: 1,
-  inferencer: new Inferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements),
   handleGlow: () => {}
 };
 

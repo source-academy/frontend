@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementItem } from '../../../../../../commons/achievement/AchievementTypes';
 import AchievementSelector from './AchievementSelector';
@@ -8,7 +8,7 @@ import AchievementSelector from './AchievementSelector';
 type PrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

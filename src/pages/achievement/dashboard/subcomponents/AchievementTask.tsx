@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { AchievementStatus, FilterStatus } from '../../../../commons/achievement/AchievementTypes';
 import AchievementCard from './cards/AchievementCard';
 import PrerequisiteCard from './cards/PrerequisiteCard';
-import Inferencer from './utils/Inferencer';
+import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementTaskProps = {
   id: number;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   filterStatus: FilterStatus;
   displayModal: any;
   handleGlow: any;

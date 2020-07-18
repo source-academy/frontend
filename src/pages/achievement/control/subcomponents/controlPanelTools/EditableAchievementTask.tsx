@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import AchievementTask from 'src/pages/achievement/dashboard/subcomponents/AchievementTask';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementItem, FilterStatus } from '../../../../../commons/achievement/AchievementTypes';
 import AchievementControlPanelTools from './AchievementControlPanelTools';
 
 type EditableAchievementTaskProps = {
   achievement: AchievementItem;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

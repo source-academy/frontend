@@ -1,13 +1,13 @@
 import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementItem } from '../../../../../../commons/achievement/AchievementTypes';
 import PrerequisiteSwapper from './PrerequisiteSwapper';
 
 type PrerequisitesPositionEditorProps = {
   editableAchievement: AchievementItem;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

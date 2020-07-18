@@ -2,12 +2,12 @@ import { mount } from 'enzyme';
 import React from 'react';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
-import Inferencer from '../../utils/Inferencer';
+import AchievementInferencer from '../../utils/AchievementInferencer';
 import AchievementCard from '../AchievementCard';
 
 const mockProps = {
   id: 1,
-  inferencer: new Inferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements),
   shouldPartiallyRender: true,
   isDropdownOpen: true,
   toggleDropdown: () => {},

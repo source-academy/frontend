@@ -4,13 +4,13 @@ import { AchievementAbility, AchievementStatus } from 'src/commons/achievement/A
 
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 import AchievementModalGoal from './modal/AchievementModalGoal';
+import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementWeek from './utils/AchievementWeek';
 import { prettifyDate } from './utils/DateHelper';
-import Inferencer from './utils/Inferencer';
 
 type AchievementModalProps = {
   id: number;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   handleGlow: any;
 };
 

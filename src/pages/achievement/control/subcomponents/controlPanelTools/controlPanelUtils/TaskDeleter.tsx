@@ -1,12 +1,12 @@
 import { Button } from '@blueprintjs/core';
 import React from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementItem } from '../../../../../../commons/achievement/AchievementTypes';
 
 type TaskDeleterProps = {
   editableAchievement: AchievementItem;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

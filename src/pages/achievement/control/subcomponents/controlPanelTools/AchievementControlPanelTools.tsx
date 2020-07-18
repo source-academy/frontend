@@ -1,5 +1,5 @@
 import React from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import { AchievementItem } from '../../../../../commons/achievement/AchievementTypes';
 import PrerequisiteAdder from './controlPanelUtils/PrerequisiteAdder';
@@ -11,7 +11,7 @@ import TaskPositionInserter from './controlPanelUtils/TaskPositionInserter';
 type AchievementControlPanelToolsProps = {
   editableAchievement: AchievementItem;
   setEditableAchievement: any;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   saveChanges: any;
 };
 

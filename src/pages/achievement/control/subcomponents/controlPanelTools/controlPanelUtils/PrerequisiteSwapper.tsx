@@ -1,11 +1,11 @@
 import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 type PrerequisiteSwapperProps = {
   prerequisiteIdDs: number[];
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
 
   setDialogOpen: any;
   isDialogOpen: boolean;

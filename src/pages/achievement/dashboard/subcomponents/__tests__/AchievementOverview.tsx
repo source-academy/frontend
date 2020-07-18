@@ -3,12 +3,12 @@ import React from 'react';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
 import AchievementOverview from '../AchievementOverview';
-import Inferencer from '../utils/Inferencer';
+import AchievementInferencer from '../utils/AchievementInferencer';
 
 const mockProps = {
   name: 'Sample Name',
   studio: '08A',
-  inferencer: new Inferencer(mockAchievements)
+  inferencer: new AchievementInferencer(mockAchievements)
 };
 
 test('AchievementModal component renders correctly', () => {

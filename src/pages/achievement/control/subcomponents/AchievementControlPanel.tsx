@@ -1,12 +1,12 @@
 import React from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 
 type AchievementControlPanelProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   updateAchievements: any;
   forceRender: any;
   isDisabled: boolean;

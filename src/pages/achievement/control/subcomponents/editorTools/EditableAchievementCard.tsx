@@ -1,6 +1,6 @@
 import { Card } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import {
   AchievementAbility,
@@ -19,7 +19,7 @@ import EditableAchievementGoals from './editableUtils/goals/EditableAchievementG
 
 type EditableAchievementCardProps = {
   achievement: AchievementItem;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   updateAchievements: any;
   editAchievement: any;
   forceRender: any;

@@ -51,7 +51,7 @@ class Node {
   }
 }
 
-class Inferencer {
+class AchievementInferencer {
   private achievements: AchievementItem[] = []; // note: the achievement_id might not be the same as its array index
   private nodeList: Map<number, Node> = new Map(); // key = achievement_id, value = achievement node
 
@@ -400,4 +400,4 @@ class Inferencer {
   }
 }
 
-export default Inferencer;
+export default AchievementInferencer;

@@ -5,15 +5,15 @@ import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 import { getAchievements } from '../../../commons/achievement/AchievementActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import Dashboard, { DispatchProps, StateProps } from './Dashboard';
-import Inferencer from './subcomponents/utils/Inferencer';
+import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 
 const isTrue = (value?: string): boolean =>
   typeof value === 'string' && value.toUpperCase() === 'TRUE';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: isTrue(process.env.REACT_APP_USE_BACKEND)
-    ? new Inferencer(state.achievement.achievements)
-    : new Inferencer(mockAchievements),
+    ? new AchievementInferencer(state.achievement.achievements)
+    : new AchievementInferencer(mockAchievements),
   name: state.session.name,
   group: state.session.group
 });

@@ -1,13 +1,13 @@
 import React from 'react';
 
+import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementLevel from './utils/AchievementLevel';
 import { prettifyDate, prettifyWeek } from './utils/DateHelper';
-import Inferencer from './utils/Inferencer';
 
 type AchievementOverviewProps = {
   name?: string;
   studio?: string;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {

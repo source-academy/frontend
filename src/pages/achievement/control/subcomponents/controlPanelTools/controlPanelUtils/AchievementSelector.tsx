@@ -1,10 +1,10 @@
 import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
-import Inferencer from 'src/pages/achievement/dashboard/subcomponents/utils/Inferencer';
+import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 type AchievementSelectorProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   dialogHeader: string;
   selections: number[];
   selectedId: number;

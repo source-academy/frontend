@@ -6,14 +6,14 @@ import AchievementFilter from './subcomponents/AchievementFilter';
 import AchievementModal from './subcomponents/AchievementModal';
 import AchievementOverview from './subcomponents/AchievementOverview';
 import AchievementTask from './subcomponents/AchievementTask';
-import Inferencer from './subcomponents/utils/Inferencer';
+import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
 };
 
 export type StateProps = {
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   name?: string;
   group: string | null;
 };

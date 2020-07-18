@@ -5,13 +5,13 @@ import { AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
+import AchievementInferencer from '../utils/AchievementInferencer';
 import AchievementWeek from '../utils/AchievementWeek';
-import Inferencer from '../utils/Inferencer';
 
 type PrerequisiteCardProps = {
   isLast: boolean;
   id: number;
-  inferencer: Inferencer;
+  inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
   displayModal: any;
   handleGlow: any;
