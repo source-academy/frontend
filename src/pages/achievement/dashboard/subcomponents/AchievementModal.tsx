@@ -1,5 +1,6 @@
 import { Intent } from '@blueprintjs/core';
 import React from 'react';
+import { backgroundUrl } from 'src/commons/achievement/AchievementConstants';
 import { AchievementAbility, AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
@@ -28,24 +29,22 @@ function AchievementModal(props: AchievementModalProps) {
 
   // Entire modal background
   const handleBackground = (ability: AchievementAbility) => {
-    const assetUrl =
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/background';
     switch (ability) {
       case AchievementAbility.CORE:
         return {
-          background: `url(${assetUrl}/core-background.png) no-repeat center`
+          background: `url(${backgroundUrl}/core-background.png) no-repeat center`
         };
       case AchievementAbility.EFFORT:
         return {
-          background: `url(${assetUrl}/effort-background.png) no-repeat center`
+          background: `url(${backgroundUrl}/effort-background.png) no-repeat center`
         };
       case AchievementAbility.EXPLORATION:
         return {
-          background: `url(${assetUrl}/exploration-background.png) no-repeat center`
+          background: `url(${backgroundUrl}/exploration-background.png) no-repeat center`
         };
       case AchievementAbility.COMMUNITY:
         return {
-          background: `url(${assetUrl}/community-background.png) no-repeat center`
+          background: `url(${backgroundUrl}/community-background.png) no-repeat center`
         };
       default:
         return {

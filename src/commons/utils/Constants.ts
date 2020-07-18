@@ -45,6 +45,7 @@ export enum Links {
   luminus = 'https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/announcements/active',
   piazza = 'https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/forum',
   shareDBServer = 'api2.sourceacademy.nus.edu.sg/',
+  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
   sourceDocs = 'https://sicp.comp.nus.edu.sg/source/',
   sourceDocsChapter2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
   sourceDocsChapter3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
