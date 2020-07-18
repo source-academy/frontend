@@ -592,10 +592,10 @@ export function* evalCode(
       return code.trim() === TRY_AGAIN
         ? call(resume, lastNonDetResult)
         : call(runInContext, code, context, {
-          executionMethod: 'interpreter',
-          originalMaxExecTime: execTime,
-          useSubst: substActiveAndCorrectChapter
-        });
+            executionMethod: 'interpreter',
+            originalMaxExecTime: execTime,
+            useSubst: substActiveAndCorrectChapter
+          });
     } else if (variant === 'lazy') {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
@@ -625,8 +625,8 @@ export function* evalCode(
       actionType === DEBUG_RESUME
         ? call(resume, lastDebuggerResult)
         : isNonDet || isLazy || isWasm
-          ? call_variant(context.variant)
-          : call(runInContext, code, context, {
+        ? call_variant(context.variant)
+        : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
             useSubst: substActiveAndCorrectChapter
