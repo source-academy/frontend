@@ -4,7 +4,6 @@ import { Role } from 'src/commons/application/ApplicationTypes';
 
 import AchievementControl from './control/AchievementControlContainer';
 import Dashboard from './dashboard/DashboardContainer';
-import Leaderboard from './leaderboard/LeaderboardContainer';
 
 export type DispatchProps = {};
 
@@ -25,7 +24,6 @@ function Achievement(props: AchievementProps) {
     <Switch>
       <Route exact={true} path="/achievement" component={Dashboard}></Route>
       <Route path="/achievement/control" component={toAchievementControl}></Route>
-      <Route path="/achievement/leaderboard" component={Leaderboard}></Route>
       <Route component={redirectTo404} />
     </Switch>
   );

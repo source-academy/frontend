@@ -35,7 +35,7 @@ exports[`AchievementModal component renders correctly 1`] = `
     Week 0
   </h3>
   <h3>
-    17 July 2020
+    18 July 2020
   </h3>
 </AchievementOverview>"
 `;
