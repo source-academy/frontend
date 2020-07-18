@@ -1,7 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import React from 'react';
-import { backgroundUrl } from 'src/commons/achievement/AchievementConstants';
-import { AchievementAbility, AchievementStatus } from 'src/commons/achievement/AchievementTypes';
+import { abilityBackground } from 'src/commons/achievement/AchievementConstants';
+import { AchievementStatus } from 'src/commons/achievement/AchievementTypes';
 
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 import AchievementModalGoal from './modal/AchievementModalGoal';
@@ -27,34 +27,8 @@ function AchievementModal(props: AchievementModalProps) {
   const status = inferencer.getStatus(id);
   const awardedExp = inferencer.getStudentExp(id);
 
-  // Entire modal background
-  const handleBackground = (ability: AchievementAbility) => {
-    switch (ability) {
-      case AchievementAbility.CORE:
-        return {
-          background: `url(${backgroundUrl}/core-background.png) no-repeat center`
-        };
-      case AchievementAbility.EFFORT:
-        return {
-          background: `url(${backgroundUrl}/effort-background.png) no-repeat center`
-        };
-      case AchievementAbility.EXPLORATION:
-        return {
-          background: `url(${backgroundUrl}/exploration-background.png) no-repeat center`
-        };
-      case AchievementAbility.COMMUNITY:
-        return {
-          background: `url(${backgroundUrl}/community-background.png) no-repeat center`
-        };
-      default:
-        return {
-          background: 'black'
-        };
-    }
-  };
-
   return (
-    <div className="modal" style={{ ...handleGlow(id), ...handleBackground(ability) }}>
+    <div className="modal" style={{ ...handleGlow(id), ...abilityBackground(ability) }}>
       <div
         className="canvas"
         style={{

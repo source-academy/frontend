@@ -1,7 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 
-import { AchievementAbility, FilterStatus } from '../../../commons/achievement/AchievementTypes';
+import { abilityColor } from '../../../commons/achievement/AchievementConstants';
+import { FilterStatus } from '../../../commons/achievement/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
 import AchievementModal from './subcomponents/AchievementModal';
 import AchievementOverview from './subcomponents/AchievementOverview';
@@ -40,30 +41,10 @@ function Dashboard(props: DispatchProps & StateProps) {
   const handleGlow = (id: number) => {
     if (id === modalId) {
       const ability = inferencer.getAchievementItem(id).ability;
-      switch (ability) {
-        case AchievementAbility.CORE:
-          return {
-            border: '1px solid #ffb412',
-            boxShadow: '0 0 10px #ffb412'
-          };
-        case AchievementAbility.EFFORT:
-          return {
-            border: '1px solid #b5ff61',
-            boxShadow: '0 0 10px #b5ff61'
-          };
-        case AchievementAbility.EXPLORATION:
-          return {
-            border: '1px solid #9ecaed',
-            boxShadow: '0 0 10px #9ecaed'
-          };
-        case AchievementAbility.COMMUNITY:
-          return {
-            border: '1px solid #ff6780',
-            boxShadow: '0 0 10px #ff6780'
-          };
-        default:
-          return {};
-      }
+      return {
+        border: `1px solid ${abilityColor(ability)}`,
+        boxShadow: `0 0 10px ${abilityColor(ability)}`
+      };
     }
     return {};
   };
