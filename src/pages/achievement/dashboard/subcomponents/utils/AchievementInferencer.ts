@@ -1,3 +1,5 @@
+import { assert } from 'console';
+
 import {
   AchievementGoal,
   AchievementItem,
@@ -69,7 +71,7 @@ class AchievementInferencer {
   }
 
   public getAchievementItem(id: number) {
-    // asserts: the achievement id already exist in nodeList
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.achievement;
   }
 
@@ -93,7 +95,7 @@ class AchievementInferencer {
 
   public modifyAchievement(achievement: AchievementItem) {
     // directly modify the achievement element in achievements
-    // asserts: the achievement id already exists in nodeList
+    assert(this.nodeList.has(achievement.id));
     const idx = this.nodeList.get(achievement.id)!.dataIdx;
     this.achievements[idx] = achievement;
 
@@ -174,10 +176,12 @@ class AchievementInferencer {
   }
 
   public getDisplayExp(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.displayExp;
   }
 
   public getStudentExp(id: number) {
+    assert(this.nodeList.has(id));
     const goals = this.nodeList.get(id)!.achievement.goals;
 
     return goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
@@ -202,22 +206,27 @@ class AchievementInferencer {
   }
 
   public getProgressFrac(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.progressFrac;
   }
 
   public getStatus(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.status;
   }
 
   public getDisplayDeadline(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.displayDeadline;
   }
 
   public isImmediateChild(id: number, childId: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.children.has(childId);
   }
 
   public getImmediateChildren(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.children;
   }
 
@@ -226,10 +235,12 @@ class AchievementInferencer {
   }
 
   public isDescendant(id: number, childId: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.descendant.has(childId);
   }
 
   public getDescendants(id: number) {
+    assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.descendant;
   }
 
@@ -296,6 +307,7 @@ class AchievementInferencer {
       if (childId === node.achievement.id) {
         console.error('Circular dependency detected');
       }
+      assert(this.nodeList.has(childId));
       for (const grandchildId of this.nodeList.get(childId)!.descendant) {
         // Newly added grandchild is appended to the back of the set.
         node.descendant.add(grandchildId);
@@ -330,6 +342,7 @@ class AchievementInferencer {
     // Temporary array of all descendants' deadlines
     const descendantDeadlines = [];
     for (const childId of node.descendant) {
+      assert(this.nodeList.has(childId));
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
@@ -378,9 +391,11 @@ class AchievementInferencer {
   private listPublishedNodes() {
     // returns an array of Node that are published to the achievement page
     return this.listTaskIds().reduce((arr, id) => {
+      assert(this.nodeList.has(id));
       const node = this.nodeList.get(id)!;
       arr.push(node); // including task achievement
       for (const child of node.children) {
+        assert(this.nodeList.has(child));
         arr.push(this.nodeList.get(child)!); // including immediate prerequisites
       }
       return arr;
