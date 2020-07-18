@@ -267,7 +267,7 @@ class AchievementInferencer {
     const movedAchievement = achievements.splice(achievement.position - 1, 1)[0];
     achievements.splice(newPosition - 1, 0, movedAchievement);
 
-    for (let i = newPosition - 1; i < achievements.length; i++) {
+    for (let i = Math.min(newPosition - 1, achievement.position); i < achievements.length; i++) {
       const editedAchievement = achievements[i];
       editedAchievement.position = i + 1;
     }
