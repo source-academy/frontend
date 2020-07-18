@@ -3,7 +3,7 @@ import {
   AchievementItem,
   AchievementStatus,
   FilterStatus
-} from 'src/commons/achievement/AchievementTypes';
+} from '../../../../../commons/achievement/AchievementTypes';
 
 /**
  * A Node item encapsulates all important information of an achievement item
