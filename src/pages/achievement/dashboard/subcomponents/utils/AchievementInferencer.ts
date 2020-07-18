@@ -18,14 +18,14 @@ import {
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
 class Node {
-  achievement: AchievementItem;
-  dataIdx: number;
-  displayExp: number;
-  progressFrac: number;
-  status: AchievementStatus;
-  displayDeadline?: Date;
-  children: Set<number>;
-  descendant: Set<number>;
+  public achievement: AchievementItem;
+  public dataIdx: number;
+  public displayExp: number;
+  public progressFrac: number;
+  public status: AchievementStatus;
+  public displayDeadline?: Date;
+  public children: Set<number>;
+  public descendant: Set<number>;
 
   constructor(achievement: AchievementItem, dataIdx: number) {
     const { deadline, prerequisiteIds, goals } = achievement;
