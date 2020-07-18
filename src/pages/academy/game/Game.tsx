@@ -19,13 +19,7 @@ function Game() {
   }, []);
 
   React.useEffect(() => {
-    SourceAcademyGame.getInstance().setAccountInfo({
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-      name: session.name,
-      role: session.role
-    } as AccountInfo);
-
+    SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
     if (session.name === 'Test Student') {
       setIsResetThere(true);
     }

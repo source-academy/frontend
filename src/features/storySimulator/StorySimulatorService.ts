@@ -15,17 +15,24 @@ export const s3AssetFolders = [
   'stories'
 ];
 
+export function obtainTextAssets(assetPaths: string[]) {
+  return assetPaths
+    .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
+    .map(
+      assetPath => assetPath.slice(8) // remove /stories
+    );
+}
+
 /**
  * Request to fetches assets from all S3 folders
  *
- * @param accessToken - staff access token
  * @param folders - S3 folders to fetch from
  * @returns {Promise<string[]>} - full concatenated list of files in the given S3 folders
  */
-export async function fetchAssetPaths(accessToken: string = '', folders: string[]) {
+export async function fetchAssetPaths(folders: string[]) {
   const files = await Promise.all(
     folders.map(async folderName => {
-      const files = await fetchFolder(accessToken, folderName);
+      const files = await fetchFolder(folderName);
       return files.length ? files : [`${folderName}`];
     })
   );
@@ -35,12 +42,11 @@ export async function fetchAssetPaths(accessToken: string = '', folders: string[
 /**
  * Request to fetches assets from one S3 folders
  *
- * @param accessToken - staff access token
  * @param folderName - S3 folder to fetch from
  * @returns {Promise<string[]>} - list of files in S3 folder
  */
-async function fetchFolder(accessToken: string, folderName: string) {
-  const response = await sendAssetRequest(accessToken, folderName, 'GET', {
+async function fetchFolder(folderName: string) {
+  const response = await sendAssetRequest(folderName, 'GET', {
     'Content-Type': 'application/json'
   });
   return response.status === 200 ? response.json() : [];
@@ -49,12 +55,11 @@ async function fetchFolder(accessToken: string, folderName: string) {
 /**
  * Request to delete an S3 file
  *
- * @param accessToken - staff access token
  * @param assetPath - file path to delete
  * @returns {Promise<string>} - request response
  */
-export async function deleteS3File(accessToken: string, assetPath: string) {
-  const response = await sendAssetRequest(accessToken, assetPath, 'DELETE');
+export async function deleteS3File(assetPath: string) {
+  const response = await sendAssetRequest(assetPath, 'DELETE');
   const message = await response.text();
   return message || 'Successfully Deleted';
 }
@@ -62,15 +67,14 @@ export async function deleteS3File(accessToken: string, assetPath: string) {
 /**
  * Request to upload a group of files into a chosen S3 folder
  *
- * @param accessToken - staff access token
  * @param fileList - the files to upload
  * @param folderName - which folder to upload to
  * @returns {Promise<string>} - Request responses, concatentated together
  */
-export async function uploadAssets(accessToken: string, fileList: FileList, folderName: string) {
+export async function uploadAssets(fileList: FileList, folderName: string) {
   const responses = await Promise.all(
     Array.from(fileList).map(async file => {
-      const response = await uploadAsset(accessToken, file, folderName);
+      const response = await uploadAsset(file, folderName);
       return file.name + ' => ' + response;
     })
   );
@@ -80,17 +84,15 @@ export async function uploadAssets(accessToken: string, fileList: FileList, fold
 /**
  * Uploads just one file into S3 folder
  *
- * @param accessToken - staff access token
  * @param file - file to delete
  * @param folderName - file path to delete
  * @returns {Promise<string>} - Request response
  */
-export async function uploadAsset(accessToken: string, file: File, folderName: string) {
+export async function uploadAsset(file: File, folderName: string) {
   const formData = new FormData();
   formData.set('upload', file);
 
   const response = await sendAssetRequest(
-    accessToken,
     `${folderName}/${file.name}`,
     'POST',
     {},
@@ -106,37 +108,25 @@ export async function uploadAsset(accessToken: string, file: File, folderName: s
  * @param accessToken - staff access token
  * @returns {Promise<object[]>} - All the chapter objects in a list
  */
-export async function fetchChapters(accessToken: string = ''): Promise<ChapterDetail[]> {
-  const response = await sendStoryRequest(accessToken, '', 'GET');
+export async function fetchChapters(): Promise<ChapterDetail[]> {
+  const response = await sendStoryRequest('', 'GET');
   return response.status === 200 ? response.json() : [];
 }
-const openAt = new Date();
-const closeAt = new Date();
-closeAt.setMonth(closeAt.getMonth() + 2);
 
 /**
  * Creates a chapter
  *
- * @param accessToken - staff access token
  * @returns {Promise<string>} - Response
  */
-export async function createChapterRequest(accessToken: string = '') {
+export async function updateChapterRequest(id: string, body: object) {
   const response = await sendStoryRequest(
-    accessToken,
-    '',
+    id,
     'POST',
     {
       'Content-Type': 'application/json'
     },
     {
-      body: JSON.stringify({
-        openAt: openAt.toISOString(),
-        closeAt: closeAt.toISOString(),
-        title: 'Some title',
-        filenames: [],
-        imageUrl: '...',
-        isPublished: false
-      })
+      body: JSON.stringify(body)
     }
   );
   return response.status === 200 ? 'Chapter successfully created' : response.text();

@@ -7,9 +7,11 @@ export enum StorySimState {
 }
 
 export type ChapterDetail = {
+  id: string;
   openAt: string;
   closeAt: string;
   title: string;
-  filenames: string;
+  filenames: string[];
   isPublished: string;
+  imageUrl: string;
 };

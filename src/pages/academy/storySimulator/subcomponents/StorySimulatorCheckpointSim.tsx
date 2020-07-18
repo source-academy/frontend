@@ -1,5 +1,5 @@
 import { Button } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
@@ -7,11 +7,10 @@ import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainM
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
 
 type Props = {
-  accessToken?: string;
-  assetPaths: string[];
+  textAssets: string[];
 };
 
-export default function CheckpointSim({ accessToken, assetPaths }: Props) {
+export default function CheckpointSim({ textAssets }: Props) {
   function simulateCheckpoint() {
     (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).callGameManager();
   }
@@ -21,17 +20,13 @@ export default function CheckpointSim({ accessToken, assetPaths }: Props) {
       <h3>Checkpoint Text Loader</h3>
       <b>Step 1: Choose default checkpoint</b>
       <CheckpointTxtLoader
-        assetPaths={assetPaths}
-        useDefaultChapter={true}
+        textAssets={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
-        accessToken={accessToken}
       />
       <b>Step 2: Choose checkpoint text</b>
       <CheckpointTxtLoader
-        assetPaths={assetPaths}
-        useDefaultChapter={false}
+        textAssets={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.checkpointTxt}
-        accessToken={accessToken}
       />
       <br />
       <Button onClick={simulateCheckpoint} icon="play">
