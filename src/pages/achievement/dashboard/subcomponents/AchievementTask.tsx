@@ -61,9 +61,8 @@ function AchievementTask(props: AchievementTaskProps) {
   return (
     <>
       {shouldRenderTask(id) ? (
-        <li>
+        <li key={id}>
           <AchievementCard
-            key={id}
             id={id}
             inferencer={inferencer}
             shouldPartiallyRender={!shouldRender(id)}
@@ -75,10 +74,9 @@ function AchievementTask(props: AchievementTaskProps) {
           {isDropdownOpen ? (
             <div className="prerequisite-container">
               {inferencer.listImmediateChildren(id).map(prerequisite => (
-                <div className="prerequisite">
+                <div className="prerequisite" key={prerequisite}>
                   <div className="dropdown-lines"></div>
                   <AchievementCard
-                    key={prerequisite}
                     id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}
