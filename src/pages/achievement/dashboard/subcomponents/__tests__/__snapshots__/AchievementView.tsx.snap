@@ -2,7 +2,7 @@
 
 exports[`AchievementView component renders correctly 1`] = `
 "<AchievementView id={1} inferencer={{...}} handleGlow={[Function: handleGlow]}>
-  <div className=\\"modal\\" style={{...}}>
+  <div className=\\"view\\" style={{...}}>
     <div className=\\"canvas\\" style={{...}}>
       <h1>
         BEYOND THE SECOND DIMENSION

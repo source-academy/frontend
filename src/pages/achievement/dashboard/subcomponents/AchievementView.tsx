@@ -28,7 +28,7 @@ function AchievementView(props: AchievementViewProps) {
   const awardedExp = inferencer.getStudentExp(id);
 
   return (
-    <div className="modal" style={{ ...handleGlow(id), ...abilityBackground(ability) }}>
+    <div className="view" style={{ ...handleGlow(id), ...abilityBackground(ability) }}>
       <div
         className="canvas"
         style={{

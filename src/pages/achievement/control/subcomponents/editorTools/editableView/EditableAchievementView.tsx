@@ -56,7 +56,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
         title={'Edit View'}
         usePortal={false}
       >
-        <div className="modal-editor">
+        <div className="view-editor">
           <Card className="background-card">
             <h1>{title} </h1>
 

@@ -12,7 +12,7 @@ exports[`EditableViewImage component renders correctly 1`] = `
         <Blueprint3.Icon icon={[undefined]} />
       </button>
     </Blueprint3.Button>
-    <img className=\\"modal-img\\" src=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png\\" alt=\\"Sample Title\\" />
+    <img className=\\"view-img\\" src=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png\\" alt=\\"Sample Title\\" />
   </div>
 </EditableViewImage>"
 `;

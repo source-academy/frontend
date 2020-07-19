@@ -26,7 +26,7 @@ function EditableViewImage(props: EditableViewImageProps) {
           multiline={true}
         />
       ) : (
-        <img className="modal-img" src={canvasUrl} alt={title} />
+        <img className="view-img" src={canvasUrl} alt={title} />
       )}
     </div>
   );

@@ -99,7 +99,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
         </ul>
 
-        <div className="modal-container">
+        <div className="view-container">
           <AchievementView id={modalId} inferencer={inferencer} handleGlow={handleGlow} />
         </div>
       </div>
