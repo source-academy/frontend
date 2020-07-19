@@ -7,7 +7,7 @@ import EditableAchievementView from '../EditableAchievementView';
 const mockProps = {
   title: 'Sample Title',
   modal: mockAchievements[0].modal,
-  changeModal: () => {}
+  changeView: () => {}
 };
 
 test('EditableAchievementView component renders correctly', () => {

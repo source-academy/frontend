@@ -9,11 +9,11 @@ import EditableViewText from './EditableViewText';
 type EditableAchievementViewProps = {
   title: string;
   modal: AchievementModalItem;
-  changeModal: any;
+  changeView: any;
 };
 
 function EditableAchievementView(props: EditableAchievementViewProps) {
-  const { title, modal, changeModal } = props;
+  const { title, modal, changeView } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -26,7 +26,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
       ...modalData,
       description: description
     });
-    changeModal(modalData);
+    changeView(modalData);
   };
 
   const setCompletionText = (completionText: string) => {
@@ -34,7 +34,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
       ...modalData,
       completionText: completionText
     });
-    changeModal(modalData);
+    changeView(modalData);
   };
 
   const setcanvasUrl = (canvasUrl: string) => {
@@ -42,7 +42,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
       ...modalData,
       canvasUrl: canvasUrl
     });
-    changeModal(modalData);
+    changeView(modalData);
   };
 
   return (

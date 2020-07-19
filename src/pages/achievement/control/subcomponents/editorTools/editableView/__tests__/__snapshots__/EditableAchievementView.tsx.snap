@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditableAchievementView component renders correctly 1`] = `
-"<EditableAchievementView title=\\"Sample Title\\" modal={{...}} changeModal={[Function: changeModal]}>
+"<EditableAchievementView title=\\"Sample Title\\" modal={{...}} changeView={[Function: changeView]}>
   <div>
     <div>
       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
