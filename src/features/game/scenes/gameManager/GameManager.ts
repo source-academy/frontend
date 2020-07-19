@@ -222,7 +222,6 @@ class GameManager extends Phaser.Scene {
   }
 
   public cleanUp() {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }

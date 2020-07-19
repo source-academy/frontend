@@ -208,7 +208,6 @@ class GameEscapeManager implements IGameUI {
   private getInputManager = () => mandatory(this.inputManager);
 
   private cleanUp() {
-    this.getSoundManager().stopCurrBgMusic();
     this.getInputManager().clearListeners();
     this.getLayerManager().clearAllLayers();
   }

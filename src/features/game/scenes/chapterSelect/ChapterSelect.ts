@@ -79,7 +79,6 @@ class ChapterSelect extends Phaser.Scene {
   public getLoadedGameState = () => mandatory(this.loadedGameState);
 
   public cleanUp() {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.layerManager.clearAllLayers();
   }
 

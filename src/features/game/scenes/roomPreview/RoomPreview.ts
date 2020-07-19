@@ -113,7 +113,7 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Execute create
     await this.eval(`create();`);
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(Constants.nullInteractionId);
 
     const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
     this.attachVerificationTag(cookie);
@@ -171,7 +171,6 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public cleanUp() {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }

@@ -317,10 +317,6 @@ class GameGlobalAPI {
     SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
   }
 
-  public async stopCurrBgMusic(fadeDuration?: number) {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic(fadeDuration);
-  }
-
   public async stopAllSound() {
     SourceAcademyGame.getInstance().getSoundManager().stopAllSound();
   }
