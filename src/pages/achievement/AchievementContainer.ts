@@ -1,7 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { OverallState } from 'src/commons/application/ApplicationTypes';
 
+import { OverallState } from '../../commons/application/ApplicationTypes';
 import Achievement, { DispatchProps, StateProps } from './Achievement';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

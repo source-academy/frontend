@@ -1,12 +1,12 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
+
 import {
   EDIT_ACHIEVEMENT,
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL
-} from 'src/features/achievement/AchievementTypes';
-
+} from '../../features/achievement/AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import { editAchievement, getAchievements, removeAchievement, removeGoal } from './RequestsSaga';

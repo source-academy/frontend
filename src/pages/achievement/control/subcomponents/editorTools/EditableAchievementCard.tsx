@@ -1,6 +1,5 @@
 import { Card } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
 import {
   AchievementAbility,
@@ -8,6 +7,7 @@ import {
   AchievementItem,
   AchievementModalItem
 } from '../../../../../features/achievement/AchievementTypes';
+import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import AchievementUploader from './editableUtils/AchievementUploader';

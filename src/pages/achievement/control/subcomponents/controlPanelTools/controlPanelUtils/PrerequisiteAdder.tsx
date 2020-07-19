@@ -1,8 +1,8 @@
 import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
+import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
+import AchievementInferencer from '../../../..//dashboard/subcomponents/utils/AchievementInferencer';
 import AchievementSelector from './AchievementSelector';
 
 type PrerequisiteAdderProps = {

@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
+import { mockAchievements } from '../../../../../../commons/mocks/AchievementMocks';
 import AchievementInferencer from '../../utils/AchievementInferencer';
 import AchievementCard from '../AchievementCard';
 

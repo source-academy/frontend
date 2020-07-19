@@ -1,5 +1,6 @@
 import React from 'react';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
+
+import { AchievementGoal } from '../../../../../features/achievement/AchievementTypes';
 
 type AchievementModalGoalProps = {
   goals: AchievementGoal[];

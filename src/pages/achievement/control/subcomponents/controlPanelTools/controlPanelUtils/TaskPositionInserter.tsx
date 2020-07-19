@@ -1,8 +1,9 @@
 import { Button, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useEffect, useState } from 'react';
-import { AchievementItem } from 'src/features/achievement/AchievementTypes';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
+
+import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
+import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
 
 type TaskPositionInserterProps = {
   editableAchievement: AchievementItem;

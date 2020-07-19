@@ -2,8 +2,8 @@
 
 import { mount } from 'enzyme';
 import React from 'react';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
+import { mockAchievements } from '../../../../../../../../commons/mocks/AchievementMocks';
 import EditableAchievementGoals from '../EditableAchievementGoals';
 
 const noGoalProps = {

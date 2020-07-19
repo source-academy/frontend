@@ -1,7 +1,7 @@
 import { Button, Dialog } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
+import { AchievementGoal } from '../../../../../../../features/achievement/AchievementTypes';
 import EditableAchievementGoal from './EditableAchievementGoal';
 
 type EditableAchievementGoalsProps = {

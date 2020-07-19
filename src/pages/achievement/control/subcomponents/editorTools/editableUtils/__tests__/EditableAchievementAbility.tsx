@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
+import { AchievementAbility } from '../../../../../../../features/achievement/AchievementTypes';
 import EditableAchievementAbility from '../EditableAchievementAbility';
 
 const mockProps = {

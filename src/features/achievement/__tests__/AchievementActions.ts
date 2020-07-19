@@ -1,5 +1,4 @@
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
-
+import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
 import {
   editAchievement,
   getAchievements,

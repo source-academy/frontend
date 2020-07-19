@@ -1,8 +1,8 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
+import { mockAchievements } from '../../../../../../..//commons/mocks/AchievementMocks';
+import AchievementInferencer from '../../../../../dashboard/subcomponents/utils/AchievementInferencer';
 import PrerequisiteDeleter from '../PrerequisiteDeleter';
 
 const mockProps = {

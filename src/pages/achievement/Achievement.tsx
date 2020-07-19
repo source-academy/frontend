@@ -1,7 +1,7 @@
 import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
-import { Role } from 'src/commons/application/ApplicationTypes';
 
+import { Role } from '../../commons/application/ApplicationTypes';
 import AchievementControl from './control/AchievementControlContainer';
 import Dashboard from './dashboard/DashboardContainer';
 

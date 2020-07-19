@@ -1,7 +1,8 @@
 import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
+
+import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
 
 type AchievementSelectorProps = {
   inferencer: AchievementInferencer;

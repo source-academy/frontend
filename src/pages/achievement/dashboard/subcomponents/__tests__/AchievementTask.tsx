@@ -1,8 +1,8 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
-import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
+import { mockAchievements } from '../../../../../commons/mocks/AchievementMocks';
+import { FilterStatus } from '../../../../../features/achievement/AchievementTypes';
 import AchievementTask from '../AchievementTask';
 import AchievementInferencer from '../utils/AchievementInferencer';
 

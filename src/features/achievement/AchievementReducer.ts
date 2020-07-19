@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
-import { SourceActionType } from 'src/commons/utils/ActionsHelper';
 
+import { SourceActionType } from '../../commons/utils/ActionsHelper';
 import { AchievementState, defaultAchievement, SAVE_ACHIEVEMENTS } from './AchievementTypes';
 
 export const AchievementReducer: Reducer<AchievementState> = (

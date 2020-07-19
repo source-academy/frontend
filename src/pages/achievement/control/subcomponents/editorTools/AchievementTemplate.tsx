@@ -1,5 +1,4 @@
-import { canvasUrl, cardTileUrl } from 'src/features/achievement/AchievementConstants';
-
+import { canvasUrl, cardTileUrl } from '../../../../../features/achievement/AchievementConstants';
 import {
   AchievementAbility,
   AchievementItem,

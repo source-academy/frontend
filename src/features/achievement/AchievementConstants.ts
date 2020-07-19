@@ -1,5 +1,4 @@
-import { Links } from 'src/commons/utils/Constants';
-
+import { Links } from '../../commons/utils/Constants';
 import { AchievementAbility } from './AchievementTypes';
 
 export const expPerLevel = 1000;

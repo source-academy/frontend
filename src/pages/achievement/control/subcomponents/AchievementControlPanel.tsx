@@ -1,6 +1,6 @@
 import React from 'react';
-import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
+import AchievementInferencer from '../../dashboard/subcomponents/utils/AchievementInferencer';
 import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
