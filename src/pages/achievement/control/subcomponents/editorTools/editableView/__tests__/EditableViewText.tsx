@@ -8,7 +8,7 @@ const mockProps = {
   setGoalText: () => {}
 };
 
-test('EditableViewlImage component renders correctly', () => {
+test('EditableViewText component renders correctly', () => {
   const text = <EditableViewText {...mockProps} />;
   const tree = mount(text);
   expect(tree.debug()).toMatchSnapshot();

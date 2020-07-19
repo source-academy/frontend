@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`EditableViewlImage component renders correctly 1`] = `
+exports[`EditableViewImage component renders correctly 1`] = `
 "<EditableViewText goalText=\\"Goal Text\\" setGoalText={[Function: setGoalText]}>
   <Blueprint3.EditableText placeholder=\\"Enter your goal text here\\" value=\\"Goal Text\\" onChange={[Function: setGoalText]} multiline={true} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} type=\\"text\\">
     <div className=\\"bp3-editable-text bp3-multiline\\" onFocus={[Function (anonymous)]} tabIndex={0}>

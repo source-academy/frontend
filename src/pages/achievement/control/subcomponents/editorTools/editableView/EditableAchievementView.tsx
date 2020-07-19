@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { AchievementModalItem } from '../../../../../../features/achievement/AchievementTypes';
 import EditableViewescription from './EditableViewDescription';
-import EditableViewlImage from './EditableViewlImage';
+import EditableViewImage from './EditableViewImage';
 import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
@@ -60,7 +60,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
           <Card className="background-card">
             <h1>{title} </h1>
 
-            <EditableViewlImage
+            <EditableViewImage
               modalImageUrl={modalImageUrl}
               title={title}
               setModalImageUrl={setModalImageUrl}
