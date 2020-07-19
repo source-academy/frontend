@@ -32,14 +32,14 @@ function Dashboard(props: DispatchProps & StateProps) {
   }, [handleAchievementsFetch]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
-  const [modalId, setModalId] = useState<number>(-1);
+  const [viewId, setViewId] = useState<number>(-1);
 
   const handleFilterColor = (status: FilterStatus) => {
     return status === filterStatus ? '#2dd1f9' : '#ffffff';
   };
 
   const handleGlow = (id: number) => {
-    if (id === modalId) {
+    if (id === viewId) {
       const ability = inferencer.getAchievementItem(id).ability;
       return {
         border: `1px solid ${abilityColor(ability)}`,
@@ -56,7 +56,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         id={id}
         inferencer={inferencer}
         filterStatus={filterStatus}
-        displayView={setModalId}
+        displayView={setViewId}
         handleGlow={handleGlow}
       />
     ));
@@ -100,7 +100,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         </ul>
 
         <div className="view-container">
-          <AchievementView id={modalId} inferencer={inferencer} handleGlow={handleGlow} />
+          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
         </div>
       </div>
     </div>
