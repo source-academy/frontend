@@ -17,32 +17,32 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [modalData, setModalData] = useState<AchievementViewItem>(modal);
+  const [viewData, setViewData] = useState<AchievementViewItem>(modal);
 
-  const { canvasUrl, description, completionText } = modalData;
+  const { canvasUrl, description, completionText } = viewData;
 
   const setDescription = (description: string) => {
-    setModalData({
-      ...modalData,
+    setViewData({
+      ...viewData,
       description: description
     });
-    changeView(modalData);
+    changeView(viewData);
   };
 
   const setCompletionText = (completionText: string) => {
-    setModalData({
-      ...modalData,
+    setViewData({
+      ...viewData,
       completionText: completionText
     });
-    changeView(modalData);
+    changeView(viewData);
   };
 
   const setcanvasUrl = (canvasUrl: string) => {
-    setModalData({
-      ...modalData,
+    setViewData({
+      ...viewData,
       canvasUrl: canvasUrl
     });
-    changeView(modalData);
+    changeView(viewData);
   };
 
   return (
