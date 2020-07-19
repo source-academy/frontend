@@ -1,9 +1,9 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AchievementView component renders correctly 1`] = `
-"<AchievementTask id={1} inferencer={{...}} filterStatus=\\"ALL\\" displayModal={[Function: displayModal]} handleGlow={[Function: handleGlow]}>
+"<AchievementTask id={1} inferencer={{...}} filterStatus=\\"ALL\\" displayView={[Function: displayView]} handleGlow={[Function: handleGlow]}>
   <li>
-    <AchievementCard id={1} inferencer={{...}} shouldPartiallyRender={false} displayModal={[Function: displayModal]} handleGlow={[Function: handleGlow]} isDropdownOpen={false} toggleDropdown={[Function: toggleDropdown]}>
+    <AchievementCard id={1} inferencer={{...}} shouldPartiallyRender={false} displayView={[Function: displayView]} handleGlow={[Function: handleGlow]} isDropdownOpen={false} toggleDropdown={[Function: toggleDropdown]}>
       <div className=\\"achievement-card\\" style={{...}} onClick={[Function: onClick]} onClickCapture={[Function: toggleDropdown]}>
         <div className=\\"dropdown-button\\" />
         <div className=\\"content\\">

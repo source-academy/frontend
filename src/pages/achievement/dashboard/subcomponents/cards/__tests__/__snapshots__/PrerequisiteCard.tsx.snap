@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`PrerequisiteCard component renders correctly 1`] = `
-"<PrerequisiteCard id={1} inferencer={{...}} shouldPartiallyRender={true} isDropdownOpen={true} isLast={false} displayModal={[Function: displayModal]} handleGlow={[Function: handleGlow]}>
+"<PrerequisiteCard id={1} inferencer={{...}} shouldPartiallyRender={true} isDropdownOpen={true} isLast={false} displayView={[Function: displayView]} handleGlow={[Function: handleGlow]}>
   <div className=\\"dropdown-container\\">
     <div className=\\"lines\\">
       <div className=\\"l-shape\\" />

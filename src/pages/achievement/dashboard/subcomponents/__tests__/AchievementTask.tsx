@@ -10,7 +10,7 @@ const mockProps = {
   id: 1,
   inferencer: new AchievementInferencer(mockAchievements),
   filterStatus: FilterStatus.ALL,
-  displayModal: () => {},
+  displayView: () => {},
   handleGlow: () => {}
 };
 

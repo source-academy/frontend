@@ -12,7 +12,7 @@ type AchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
-  displayModal: any;
+  displayView: any;
   handleGlow: any;
   isDropdownOpen?: boolean;
   toggleDropdown?: any;
@@ -23,7 +23,7 @@ function AchievementCard(props: AchievementCardProps) {
     id,
     inferencer,
     shouldPartiallyRender,
-    displayModal,
+    displayView,
     handleGlow,
     isDropdownOpen,
     toggleDropdown
@@ -50,7 +50,7 @@ function AchievementCard(props: AchievementCardProps) {
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}
-      onClick={() => displayModal(id)}
+      onClick={() => displayView(id)}
       onClickCapture={toggleDropdown}
     >
       <div className="dropdown-button">

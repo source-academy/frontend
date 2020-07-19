@@ -56,7 +56,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         id={id}
         inferencer={inferencer}
         filterStatus={filterStatus}
-        displayModal={setModalId}
+        displayView={setModalId}
         handleGlow={handleGlow}
       />
     ));

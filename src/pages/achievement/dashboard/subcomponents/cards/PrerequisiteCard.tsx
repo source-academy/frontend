@@ -13,12 +13,12 @@ type PrerequisiteCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
-  displayModal: any;
+  displayView: any;
   handleGlow: any;
 };
 
 function PrerequisiteCard(props: PrerequisiteCardProps) {
-  const { isLast, id, inferencer, shouldPartiallyRender, displayModal, handleGlow } = props;
+  const { isLast, id, inferencer, shouldPartiallyRender, displayView, handleGlow } = props;
 
   const { title, release, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
@@ -42,7 +42,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
-        onClick={() => displayModal(id)}
+        onClick={() => displayView(id)}
       >
         <div className="dropdown-button"></div>
 

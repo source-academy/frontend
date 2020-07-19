@@ -8,12 +8,12 @@ type AchievementTaskProps = {
   id: number;
   inferencer: AchievementInferencer;
   filterStatus: FilterStatus;
-  displayModal: any;
+  displayView: any;
   handleGlow: any;
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { id, inferencer, filterStatus, displayModal, handleGlow } = props;
+  const { id, inferencer, filterStatus, displayView, handleGlow } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => {
@@ -67,7 +67,7 @@ function AchievementTask(props: AchievementTaskProps) {
             id={id}
             inferencer={inferencer}
             shouldPartiallyRender={!shouldRender(id)}
-            displayModal={displayModal}
+            displayView={displayView}
             handleGlow={handleGlow}
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={toggleDropdown}
@@ -82,7 +82,7 @@ function AchievementTask(props: AchievementTaskProps) {
                     id={prerequisite}
                     inferencer={inferencer}
                     shouldPartiallyRender={!shouldRender(prerequisite)}
-                    displayModal={displayModal}
+                    displayView={displayView}
                     handleGlow={handleGlow}
                   />
                 </div>

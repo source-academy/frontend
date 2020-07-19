@@ -11,7 +11,7 @@ const mockProps = {
   shouldPartiallyRender: true,
   isDropdownOpen: true,
   isLast: false,
-  displayModal: () => {},
+  displayView: () => {},
   handleGlow: () => {}
 };
 
