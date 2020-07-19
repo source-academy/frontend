@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AchievementModal component renders correctly 1`] = `
+exports[`AchievementView component renders correctly 1`] = `
 "<AchievementTask id={1} inferencer={{...}} filterStatus=\\"ALL\\" displayModal={[Function: displayModal]} handleGlow={[Function: handleGlow]}>
   <li>
     <AchievementCard id={1} inferencer={{...}} shouldPartiallyRender={false} displayModal={[Function: displayModal]} handleGlow={[Function: handleGlow]} isDropdownOpen={false} toggleDropdown={[Function: toggleDropdown]}>

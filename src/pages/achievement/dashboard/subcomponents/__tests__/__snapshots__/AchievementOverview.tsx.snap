@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`AchievementModal component renders correctly 1`] = `
+exports[`AchievementView component renders correctly 1`] = `
 "<AchievementOverview name=\\"Sample Name\\" studio=\\"08A\\" inferencer={{...}}>
   <AchievementLevel studentExp={712}>
     <div className=\\"level\\">
