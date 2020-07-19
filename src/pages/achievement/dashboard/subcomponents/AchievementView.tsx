@@ -22,7 +22,7 @@ function AchievementView(props: AchievementViewProps) {
 
   const achievement = inferencer.getAchievementItem(id);
   const { title, ability, deadline, goals, modal } = achievement;
-  const { modalImageUrl, description, completionText } = modal;
+  const { canvasUrl, description, completionText } = modal;
 
   const status = inferencer.getStatus(id);
   const awardedExp = inferencer.getStudentExp(id);
@@ -32,7 +32,7 @@ function AchievementView(props: AchievementViewProps) {
       <div
         className="canvas"
         style={{
-          backgroundImage: `url(${modalImageUrl})`,
+          backgroundImage: `url(${canvasUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

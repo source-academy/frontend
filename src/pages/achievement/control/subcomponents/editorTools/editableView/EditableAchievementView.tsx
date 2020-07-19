@@ -19,7 +19,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const [modalData, setModalData] = useState<AchievementModalItem>(modal);
 
-  const { modalImageUrl, description, completionText } = modalData;
+  const { canvasUrl, description, completionText } = modalData;
 
   const setDescription = (description: string) => {
     setModalData({
@@ -37,10 +37,10 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
     changeModal(modalData);
   };
 
-  const setModalImageUrl = (modalImageUrl: string) => {
+  const setcanvasUrl = (canvasUrl: string) => {
     setModalData({
       ...modalData,
-      modalImageUrl: modalImageUrl
+      canvasUrl: canvasUrl
     });
     changeModal(modalData);
   };
@@ -60,11 +60,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
           <Card className="background-card">
             <h1>{title} </h1>
 
-            <EditableViewImage
-              modalImageUrl={modalImageUrl}
-              title={title}
-              setModalImageUrl={setModalImageUrl}
-            />
+            <EditableViewImage canvasUrl={canvasUrl} title={title} setcanvasUrl={setcanvasUrl} />
 
             <EditableViewescription description={description} setDescription={setDescription} />
             <EditableViewText goalText={completionText} setGoalText={setCompletionText} />

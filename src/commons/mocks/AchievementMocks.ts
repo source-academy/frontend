@@ -28,10 +28,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 1,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -61,10 +61,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -94,10 +94,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -112,10 +112,10 @@ export const mockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     goals: [],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
       description: '',
       completionText: ''
@@ -150,10 +150,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 4,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -183,10 +183,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -216,10 +216,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -249,10 +249,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 3,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -274,10 +274,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 2,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -299,10 +299,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 0,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -324,10 +324,10 @@ export const mockAchievements: AchievementItem[] = [
       }
     ],
     position: 5,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud',
@@ -342,10 +342,10 @@ export const mockAchievements: AchievementItem[] = [
     prerequisiteIds: [],
     goals: [],
     position: 6,
-    backgroundImageUrl:
+    cardTileUrl:
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
     modal: {
-      modalImageUrl:
+      canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description: 'Diz for teh K00L K1dz',
       completionText: 'U SO G00D'

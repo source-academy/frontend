@@ -6,7 +6,7 @@ import {
 } from '../../../../../features/achievement/AchievementTypes';
 
 export const modalTemplate: AchievementModalItem = {
-  modalImageUrl: `${canvasUrl}/annotated-canvas.png`,
+  canvasUrl: `${canvasUrl}/annotated-canvas.png`,
   description: 'Modal Description here',
   completionText: 'Completion Text here'
 };
@@ -28,6 +28,6 @@ export const achievementTemplate: AchievementItem = {
     }
   ],
   position: 0,
-  backgroundImageUrl: `${cardTileUrl}/annotated-tile.png`,
+  cardTileUrl: `${cardTileUrl}/annotated-tile.png`,
   modal: modalTemplate
 };

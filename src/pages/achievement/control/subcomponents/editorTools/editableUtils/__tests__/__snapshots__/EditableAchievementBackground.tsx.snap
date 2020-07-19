@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`EditableAchievementBackground component renders correctly 1`] = `
-"<EditableAchievementBackground backgroundImageUrl=\\"\\" setBackgroundImageUrl={[Function: setBackgroundImageUrl]}>
+"<EditableAchievementBackground cardTileUrl=\\"\\" setcardTileUrl={[Function: setcardTileUrl]}>
   <div>
     <div>
       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>

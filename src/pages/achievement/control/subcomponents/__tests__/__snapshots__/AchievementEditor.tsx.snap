@@ -30,7 +30,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -243,7 +243,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -456,7 +456,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -669,7 +669,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -882,7 +882,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -1095,7 +1095,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -1308,7 +1308,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -1521,7 +1521,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -1734,7 +1734,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -1947,7 +1947,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -2160,7 +2160,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -2373,7 +2373,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground backgroundImageUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>

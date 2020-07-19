@@ -14,10 +14,10 @@ const sampleAchievement: AchievementItem = {
   prerequisiteIds: [],
   goals: [],
   position: 0,
-  backgroundImageUrl:
+  cardTileUrl:
     'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
   modal: {
-    modalImageUrl:
+    canvasUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
     description: '',
     completionText: ''

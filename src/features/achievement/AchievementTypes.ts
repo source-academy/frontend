@@ -39,7 +39,7 @@ export enum FilterStatus {
  * @param {number} id unique id, primary key of the achievement item
  * @param {string} title title of the achievement item
  * @param {AchievementAbility} ability ability of the achievement item
- * @param {String} backgroundImageUrl background image of the achievement's card
+ * @param {String} cardTileUrl background image of the achievement's card
  * @param {Date} deadline Optional, the deadline of the achievement item
  * @param {Date} release Optional, the release date of the achievement item
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
@@ -52,7 +52,7 @@ export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
-  backgroundImageUrl: string;
+  cardTileUrl: string;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
@@ -80,12 +80,12 @@ export type AchievementGoal = {
 /**
  * Information of an achievement in a modal
  *
- * @param {string} modalImageUrl URL of the modal image
+ * @param {string} canvasUrl URL of the modal image
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
 export type AchievementModalItem = {
-  modalImageUrl: string;
+  canvasUrl: string;
   description: string;
   completionText: string;
 };

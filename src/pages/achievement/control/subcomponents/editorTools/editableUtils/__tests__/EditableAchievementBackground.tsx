@@ -4,8 +4,8 @@ import React from 'react';
 import EditableAchievementBackground from '../EditableAchievementBackground';
 
 const mockProps = {
-  backgroundImageUrl: '',
-  setBackgroundImageUrl: () => {}
+  cardTileUrl: '',
+  setcardTileUrl: () => {}
 };
 
 test('EditableAchievementBackground component renders correctly', () => {

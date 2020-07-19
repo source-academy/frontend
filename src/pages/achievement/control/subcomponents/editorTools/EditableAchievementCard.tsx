@@ -46,7 +46,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, deadline, backgroundImageUrl, release, goals } = editableAchievement;
+  const { id, title, ability, deadline, cardTileUrl, release, goals } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -117,10 +117,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     removeGoal(goal, editableAchievement);
   };
 
-  const handleChangeBackground = (backgroundImageUrl: string) => {
+  const handleChangeBackground = (cardTileUrl: string) => {
     setEditableAchievement({
       ...editableAchievement,
-      backgroundImageUrl: backgroundImageUrl
+      cardTileUrl: cardTileUrl
     });
     setUnsaved();
   };
@@ -161,7 +161,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     <Card
       className="editable-achievement"
       style={{
-        background: `url(${backgroundImageUrl})`
+        background: `url(${cardTileUrl})`
       }}
     >
       <div className="top-bar">
@@ -182,8 +182,8 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
       <div className="main">
         <EditableAchievementBackground
-          backgroundImageUrl={backgroundImageUrl}
-          setBackgroundImageUrl={handleChangeBackground}
+          cardTileUrl={cardTileUrl}
+          setcardTileUrl={handleChangeBackground}
         />
 
         <EditableAchievementGoals

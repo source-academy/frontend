@@ -2,13 +2,13 @@ import { Button, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 type EditableViewImageProps = {
-  modalImageUrl: string;
+  canvasUrl: string;
   title: string;
-  setModalImageUrl: any;
+  setcanvasUrl: any;
 };
 
 function EditableViewImage(props: EditableViewImageProps) {
-  const { modalImageUrl, title, setModalImageUrl } = props;
+  const { canvasUrl, title, setcanvasUrl } = props;
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -21,12 +21,12 @@ function EditableViewImage(props: EditableViewImageProps) {
       {isEditing ? (
         <EditableText
           placeholder={`Enter your image URL here`}
-          value={modalImageUrl}
-          onChange={setModalImageUrl}
+          value={canvasUrl}
+          onChange={setcanvasUrl}
           multiline={true}
         />
       ) : (
-        <img className="modal-img" src={modalImageUrl} alt={title} />
+        <img className="modal-img" src={canvasUrl} alt={title} />
       )}
     </div>
   );

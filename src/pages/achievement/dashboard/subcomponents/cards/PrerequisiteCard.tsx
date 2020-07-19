@@ -20,7 +20,7 @@ type PrerequisiteCardProps = {
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { isLast, id, inferencer, shouldPartiallyRender, displayModal, handleGlow } = props;
 
-  const { title, release, ability, backgroundImageUrl } = inferencer.getAchievementItem(id);
+  const { title, release, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
   const displayExp = inferencer.getDisplayExp(id);
@@ -38,7 +38,7 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         style={{
           ...handleGlow(id),
           opacity: shouldPartiallyRender ? '20%' : '100%',
-          background: `url(${backgroundImageUrl})`,
+          background: `url(${cardTileUrl})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}

@@ -2,12 +2,12 @@ import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 type EditableAchievementBackgroundProps = {
-  backgroundImageUrl: string;
-  setBackgroundImageUrl: any;
+  cardTileUrl: string;
+  setcardTileUrl: any;
 };
 
 function EditableAchievementBackground(props: EditableAchievementBackgroundProps) {
-  const { backgroundImageUrl, setBackgroundImageUrl } = props;
+  const { cardTileUrl, setcardTileUrl } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -24,8 +24,8 @@ function EditableAchievementBackground(props: EditableAchievementBackgroundProps
       >
         <EditableText
           placeholder={`Enter your image URL here`}
-          value={backgroundImageUrl}
-          onChange={setBackgroundImageUrl}
+          value={cardTileUrl}
+          onChange={setcardTileUrl}
           multiline={true}
         />
       </Dialog>

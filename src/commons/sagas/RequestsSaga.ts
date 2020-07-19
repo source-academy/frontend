@@ -157,7 +157,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     achievement.release = new Date(achievement.openAt);
 
     achievement.modal = {};
-    achievement.modal.modalImageUrl = achievement.modalImageUrl ? achievement.modalImageUrl : '';
+    achievement.modal.canvasUrl = achievement.canvasUrl ? achievement.canvasUrl : '';
     achievement.modal.description = achievement.description ? achievement.description : '';
     achievement.modal.goalText = achievement.goalText ? achievement.goalText : '';
     achievement.modal.completionText = achievement.completionText ? achievement.completionText : '';

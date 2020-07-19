@@ -29,7 +29,7 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown
   } = props;
 
-  const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
+  const { title, ability, release, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
   const displayExp = inferencer.getDisplayExp(id);
@@ -46,7 +46,7 @@ function AchievementCard(props: AchievementCardProps) {
       style={{
         ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
-        background: `url(${backgroundImageUrl})`,
+        background: `url(${cardTileUrl})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center'
       }}

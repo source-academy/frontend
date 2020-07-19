@@ -26,7 +26,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
         <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
       </div>
       <div className=\\"main\\">
-        <EditableAchievementBackground backgroundImageUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png\\" setBackgroundImageUrl={[Function: handleChangeBackground]}>
+        <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
           <div>
             <div>
               <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
