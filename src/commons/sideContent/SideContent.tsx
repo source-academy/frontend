@@ -57,6 +57,12 @@ const SideContent = (props: SideContentProps) => {
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
   const workspaces = useSelector((state: OverallState) => state.workspaces);
 
+  React.useEffect(() => {
+    // Set initial sideContentActiveTab for this workspace
+    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // Fetch debuggerContext from store
   let debuggerContext: DebuggerContext;
   if (props.workspaceLocation) {
@@ -142,11 +148,6 @@ const SideContent = (props: SideContentProps) => {
       resetAlert(prevTabId);
     }
   };
-
-  React.useEffect(() => {
-    // Set initial sideContentActiveTab for this workspace
-    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
-  }, [defaultSelectedTabId, handleActiveTabChange, tabs]);
 
   return (
     <div className="side-content">
