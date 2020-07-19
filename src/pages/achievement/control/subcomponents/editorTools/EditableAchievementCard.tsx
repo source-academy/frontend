@@ -8,7 +8,7 @@ import {
   AchievementModalItem
 } from '../../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../../../dashboard/subcomponents/utils/AchievementInferencer';
-import EditableAchievementModal from './editableModal/EditableAchievementModal';
+import EditableAchievementView from './editableModal/EditableAchievementView';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import AchievementUploader from './editableUtils/AchievementUploader';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
@@ -165,7 +165,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       }}
     >
       <div className="top-bar">
-        <EditableAchievementModal
+        <EditableAchievementView
           title={title}
           modal={achievement.modal}
           changeModal={handleChangeModal}

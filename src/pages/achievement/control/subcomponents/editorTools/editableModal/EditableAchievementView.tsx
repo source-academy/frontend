@@ -12,7 +12,7 @@ type EditableAchievementModalProps = {
   changeModal: any;
 };
 
-function EditableAchievementModal(props: EditableAchievementModalProps) {
+function EditableAchievementView(props: EditableAchievementModalProps) {
   const { title, modal, changeModal } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
@@ -75,4 +75,4 @@ function EditableAchievementModal(props: EditableAchievementModalProps) {
   );
 }
 
-export default EditableAchievementModal;
+export default EditableAchievementView;

@@ -2,7 +2,7 @@ import { mount } from 'enzyme';
 import React from 'react';
 
 import { mockAchievements } from '../../../../../../../commons/mocks/AchievementMocks';
-import EditableAchievementModal from '../EditableAchievementModal';
+import EditableAchievementView from '../EditableAchievementView';
 
 const mockProps = {
   title: 'Sample Title',
@@ -10,8 +10,8 @@ const mockProps = {
   changeModal: () => {}
 };
 
-test('EditableAchievementModal component renders correctly', () => {
-  const modal = <EditableAchievementModal {...mockProps} />;
+test('EditableAchievementView component renders correctly', () => {
+  const modal = <EditableAchievementView {...mockProps} />;
   const tree = mount(modal);
   expect(tree.debug()).toMatchSnapshot();
 });

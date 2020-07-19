@@ -5,7 +5,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
   <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
     <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
       <div className=\\"top-bar\\">
-        <EditableAchievementModal title=\\"Rune Master\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
+        <EditableAchievementView title=\\"Rune Master\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
           <div>
             <div>
               <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
@@ -22,7 +22,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
               <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
             </Blueprint3.Dialog>
           </div>
-        </EditableAchievementModal>
+        </EditableAchievementView>
         <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
       </div>
       <div className=\\"main\\">
