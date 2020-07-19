@@ -42,28 +42,28 @@ export enum Links {
   githubOrg = 'https://github.com/source-academy',
 
   moduleDetails = 'https://www.comp.nus.edu.sg/~cs1101s',
-  luminus = 'https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/announcements/active',
-  piazza = 'https://luminus.nus.edu.sg/modules/b1340bf4-fc99-4898-be2a-2c20e38c065f/forum',
+  luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
+  piazza = 'https://piazza.com/class/kas136yscf8605',
   shareDBServer = 'api2.sourceacademy.nus.edu.sg/',
-  sourceDocs = 'https://sicp.comp.nus.edu.sg/source/',
-  sourceDocsChapter2_2 = 'https://sicp.comp.nus.edu.sg/chapters/29',
-  sourceDocsChapter3_2 = 'https://sicp.comp.nus.edu.sg/chapters/52',
+  sourceDocs = 'https://source-academy.github.io/source/',
+  sourceDocsChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
+  sourceDocsChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
-  textbook = 'https://sicp.comp.nus.edu.sg/',
+  textbook = 'https://source-academy.github.io/sicp/',
 
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
 
-  source_1 = 'https://sicp.comp.nus.edu.sg/source/source_1/',
-  source_1_Lazy = 'https://sicp.comp.nus.edu.sg/source/source_1_lazy/',
-  source_1_Wasm = 'https://sicp.comp.nus.edu.sg/source/source_1_wasm/',
-  source_2 = 'https://sicp.comp.nus.edu.sg/source/source_2/',
-  source_2_Lazy = 'https://sicp.comp.nus.edu.sg/source/source_2_lazy/',
-  source_3 = 'https://sicp.comp.nus.edu.sg/source/source_1/',
-  source_3_Concurrent = 'https://sicp.comp.nus.edu.sg/source/source_3_concurrent/',
-  source_3_Nondet = 'https://sicp.comp.nus.edu.sg/source/source_3_non-det/',
-  source_4 = 'https://sicp.comp.nus.edu.sg/source/source_4/',
-  source_4_Gpu = 'https://sicp.comp.nus.edu.sg/source/source_4_gpu/'
+  source_1 = 'https://source-academy.github.io/source/source_1/',
+  source_1_Lazy = 'https://source-academy.github.io/source/source_1_lazy/',
+  source_1_Wasm = 'https://source-academy.github.io/source/source_1_wasm/',
+  source_2 = 'https://source-academy.github.io/source/source_2/',
+  source_2_Lazy = 'https://source-academy.github.io/source/source_2_lazy/',
+  source_3 = 'https://source-academy.github.io/source/source_1/',
+  source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
+  source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
+  source_4 = 'https://source-academy.github.io/source/source_4/',
+  source_4_Gpu = 'https://source-academy.github.io/source/source_4_gpu/'
 }
 
 const Constants = {
