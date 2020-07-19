@@ -21,8 +21,8 @@ function AchievementView(props: AchievementViewProps) {
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, deadline, goals, modal } = achievement;
-  const { canvasUrl, description, completionText } = modal;
+  const { title, ability, deadline, goals, view } = achievement;
+  const { canvasUrl, description, completionText } = view;
 
   const status = inferencer.getStatus(id);
   const awardedExp = inferencer.getStudentExp(id);

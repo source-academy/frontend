@@ -156,11 +156,11 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     achievement.deadline = new Date(achievement.closeAt);
     achievement.release = new Date(achievement.openAt);
 
-    achievement.modal = {};
-    achievement.modal.canvasUrl = achievement.canvasUrl ? achievement.canvasUrl : '';
-    achievement.modal.description = achievement.description ? achievement.description : '';
-    achievement.modal.goalText = achievement.goalText ? achievement.goalText : '';
-    achievement.modal.completionText = achievement.completionText ? achievement.completionText : '';
+    achievement.view = {};
+    achievement.view.canvasUrl = achievement.canvasUrl ? achievement.canvasUrl : '';
+    achievement.view.description = achievement.description ? achievement.description : '';
+    achievement.view.goalText = achievement.goalText ? achievement.goalText : '';
+    achievement.view.completionText = achievement.completionText ? achievement.completionText : '';
 
     if (achievement.goals === null || achievement.goals === undefined) {
       achievement.goals = [];

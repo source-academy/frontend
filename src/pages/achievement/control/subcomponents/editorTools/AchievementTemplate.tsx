@@ -5,9 +5,9 @@ import {
   AchievementViewItem
 } from '../../../../../features/achievement/AchievementTypes';
 
-export const modalTemplate: AchievementViewItem = {
+export const viewTemplate: AchievementViewItem = {
   canvasUrl: `${canvasUrl}/annotated-canvas.png`,
-  description: 'Modal Description here',
+  description: 'View Description here',
   completionText: 'Completion Text here'
 };
 
@@ -29,5 +29,5 @@ export const achievementTemplate: AchievementItem = {
   ],
   position: 0,
   cardTileUrl: `${cardTileUrl}/annotated-tile.png`,
-  modal: modalTemplate
+  view: viewTemplate
 };

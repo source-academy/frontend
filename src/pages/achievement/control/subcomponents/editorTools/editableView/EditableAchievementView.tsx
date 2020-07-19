@@ -8,16 +8,16 @@ import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
   title: string;
-  modal: AchievementViewItem;
+  view: AchievementViewItem;
   changeView: any;
 };
 
 function EditableAchievementView(props: EditableAchievementViewProps) {
-  const { title, modal, changeView } = props;
+  const { title, view, changeView } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [viewData, setViewData] = useState<AchievementViewItem>(modal);
+  const [viewData, setViewData] = useState<AchievementViewItem>(view);
 
   const { canvasUrl, description, completionText } = viewData;
 

@@ -16,7 +16,7 @@ const sampleAchievement: AchievementItem = {
   position: 0,
   cardTileUrl:
     'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
-  modal: {
+  view: {
     canvasUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
     description: '',

@@ -149,10 +149,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handlechangeView = (modal: AchievementViewItem) => {
+  const handlechangeView = (view: AchievementViewItem) => {
     setEditableAchievement({
       ...editableAchievement,
-      modal: modal
+      view: view
     });
     setUnsaved();
   };
@@ -167,7 +167,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       <div className="top-bar">
         <EditableAchievementView
           title={title}
-          modal={achievement.modal}
+          view={achievement.view}
           changeView={handlechangeView}
         />
 

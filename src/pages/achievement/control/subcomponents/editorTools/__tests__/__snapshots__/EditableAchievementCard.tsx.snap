@@ -5,7 +5,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
   <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
     <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
       <div className=\\"top-bar\\">
-        <EditableAchievementView title=\\"Rune Master\\" modal={{...}} changeView={[Function: handlechangeView]}>
+        <EditableAchievementView title=\\"Rune Master\\" view={{...}} changeView={[Function: handlechangeView]}>
           <div>
             <div>
               <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>

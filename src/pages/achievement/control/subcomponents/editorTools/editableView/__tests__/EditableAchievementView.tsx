@@ -6,12 +6,12 @@ import EditableAchievementView from '../EditableAchievementView';
 
 const mockProps = {
   title: 'Sample Title',
-  modal: mockAchievements[0].modal,
+  view: mockAchievements[0].view,
   changeView: () => {}
 };
 
 test('EditableAchievementView component renders correctly', () => {
-  const modal = <EditableAchievementView {...mockProps} />;
-  const tree = mount(modal);
+  const view = <EditableAchievementView {...mockProps} />;
+  const tree = mount(view);
   expect(tree.debug()).toMatchSnapshot();
 });

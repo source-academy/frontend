@@ -30,7 +30,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 1,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -63,7 +63,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -96,7 +96,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -114,7 +114,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
       description: '',
@@ -152,7 +152,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 4,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -185,7 +185,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -218,7 +218,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -251,7 +251,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 3,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -276,7 +276,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 2,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -301,7 +301,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 0,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -326,7 +326,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 5,
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description:
@@ -344,7 +344,7 @@ export const mockAchievements: AchievementItem[] = [
     position: 6,
     cardTileUrl:
       'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
-    modal: {
+    view: {
       canvasUrl:
         'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/sample-canvas.png',
       description: 'Diz for teh K00L K1dz',
