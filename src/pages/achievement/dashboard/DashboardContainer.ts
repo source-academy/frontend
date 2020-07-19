@@ -3,15 +3,13 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
+import Constants from '../../../commons/utils/Constants';
 import { getAchievements } from '../../../features/achievement/AchievementActions';
 import Dashboard, { DispatchProps, StateProps } from './Dashboard';
 import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 
-const isTrue = (value?: string): boolean =>
-  typeof value === 'string' && value.toUpperCase() === 'TRUE';
-
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: isTrue(process.env.REACT_APP_USE_BACKEND)
+  inferencer: Constants.useBackend
     ? new AchievementInferencer(state.achievement.achievements)
     : new AchievementInferencer(mockAchievements),
   name: state.session.name,

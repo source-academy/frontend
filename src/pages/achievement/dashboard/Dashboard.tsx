@@ -1,6 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 
+import Constants from '../../../commons/utils/Constants';
 import { abilityColor } from '../../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
@@ -23,10 +24,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   const { inferencer, name, group, handleAchievementsFetch } = props;
 
   useEffect(() => {
-    const isTrue = (value?: string): boolean =>
-      typeof value === 'string' && value.toUpperCase() === 'TRUE';
-
-    if (isTrue(process.env.REACT_APP_USE_BACKEND)) {
+    if (Constants.useBackend) {
       handleAchievementsFetch();
     }
   }, [handleAchievementsFetch]);
