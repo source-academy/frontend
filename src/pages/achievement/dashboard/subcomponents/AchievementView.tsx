@@ -15,7 +15,7 @@ type AchievementModalProps = {
   handleGlow: any;
 };
 
-function AchievementModal(props: AchievementModalProps) {
+function AchievementView(props: AchievementModalProps) {
   const { id, inferencer, handleGlow } = props;
 
   if (id < 0) return null;
@@ -57,4 +57,4 @@ function AchievementModal(props: AchievementModalProps) {
   );
 }
 
-export default AchievementModal;
+export default AchievementView;

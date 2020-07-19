@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { abilityColor } from '../../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
-import AchievementModal from './subcomponents/AchievementModal';
 import AchievementOverview from './subcomponents/AchievementOverview';
 import AchievementTask from './subcomponents/AchievementTask';
+import AchievementView from './subcomponents/AchievementView';
 import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 
 export type DispatchProps = {
@@ -100,7 +100,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         </ul>
 
         <div className="modal-container">
-          <AchievementModal id={modalId} inferencer={inferencer} handleGlow={handleGlow} />
+          <AchievementView id={modalId} inferencer={inferencer} handleGlow={handleGlow} />
         </div>
       </div>
     </div>

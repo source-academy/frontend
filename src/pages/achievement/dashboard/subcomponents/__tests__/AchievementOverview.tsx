@@ -11,7 +11,7 @@ const mockProps = {
   inferencer: new AchievementInferencer(mockAchievements)
 };
 
-test('AchievementModal component renders correctly', () => {
+test('AchievementView component renders correctly', () => {
   const sampleComponent = <AchievementOverview {...mockProps} />;
   const tree = mount(sampleComponent);
   expect(tree.debug()).toMatchSnapshot();

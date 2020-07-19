@@ -14,7 +14,7 @@ const mockProps = {
   handleGlow: () => {}
 };
 
-test('AchievementModal component renders correctly', () => {
+test('AchievementView component renders correctly', () => {
   const sampleComponent = <AchievementTask {...mockProps} />;
   const tree = mount(sampleComponent);
   expect(tree.debug()).toMatchSnapshot();
