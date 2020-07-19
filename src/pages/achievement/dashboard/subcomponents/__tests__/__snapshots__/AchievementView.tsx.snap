@@ -35,7 +35,7 @@ exports[`AchievementView component renders correctly 1`] = `
         </p>
       </div>
     </div>
-    <AchievementModalGoal goals={{...}}>
+    <AchievementViewGoal goals={{...}}>
       <div className=\\"goal\\">
         <div className=\\"goal-medal\\">
           <span className=\\"medal-icon\\" />
@@ -64,7 +64,7 @@ exports[`AchievementView component renders correctly 1`] = `
           Score earned from Beyond the Second Dimension mission
         </div>
       </div>
-    </AchievementModalGoal>
+    </AchievementViewGoal>
     <hr />
   </div>
 </AchievementView>"

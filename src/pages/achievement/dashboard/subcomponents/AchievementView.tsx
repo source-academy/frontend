@@ -3,19 +3,19 @@ import React from 'react';
 
 import { abilityBackground } from '../../../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../../../features/achievement/AchievementTypes';
-import AchievementModalCompletion from './modal/AchievementModalCompletion';
-import AchievementModalGoal from './modal/AchievementModalGoal';
+import AchievementViewCompletion from './modal/AchievementViewCompletion';
+import AchievementViewGoal from './modal/AchievementViewGoal';
 import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementWeek from './utils/AchievementWeek';
 import { prettifyDate } from './utils/DateHelper';
 
-type AchievementModalProps = {
+type AchievementViewProps = {
   id: number;
   inferencer: AchievementInferencer;
   handleGlow: any;
 };
 
-function AchievementView(props: AchievementModalProps) {
+function AchievementView(props: AchievementViewProps) {
   const { id, inferencer, handleGlow } = props;
 
   if (id < 0) return null;
@@ -48,10 +48,10 @@ function AchievementView(props: AchievementModalProps) {
           <p>{description}</p>
         </div>
       </div>
-      <AchievementModalGoal goals={goals} />
+      <AchievementViewGoal goals={goals} />
       <hr />
       {status === AchievementStatus.COMPLETED ? (
-        <AchievementModalCompletion awardedExp={awardedExp} completionText={completionText} />
+        <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
       ) : null}
     </div>
   );

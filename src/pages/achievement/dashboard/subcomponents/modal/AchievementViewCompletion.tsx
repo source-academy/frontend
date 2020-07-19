@@ -1,11 +1,11 @@
 import React from 'react';
 
-type AchievementModalCompletionProps = {
+type AchievementViewCompletionProps = {
   awardedExp: number;
   completionText: string;
 };
 
-function AchievementModalCompletion(props: AchievementModalCompletionProps) {
+function AchievementViewCompletion(props: AchievementViewCompletionProps) {
   const { awardedExp, completionText } = props;
 
   return (
@@ -16,4 +16,4 @@ function AchievementModalCompletion(props: AchievementModalCompletionProps) {
   );
 }
 
-export default AchievementModalCompletion;
+export default AchievementViewCompletion;

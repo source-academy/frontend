@@ -6,13 +6,13 @@ import EditableModalDescription from './EditableModalDescription';
 import EditableModalImage from './EditableModalImage';
 import EditableModalText from './EditableModalText';
 
-type EditableAchievementModalProps = {
+type EditableAchievementViewProps = {
   title: string;
   modal: AchievementModalItem;
   changeModal: any;
 };
 
-function EditableAchievementView(props: EditableAchievementModalProps) {
+function EditableAchievementView(props: EditableAchievementViewProps) {
   const { title, modal, changeModal } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);

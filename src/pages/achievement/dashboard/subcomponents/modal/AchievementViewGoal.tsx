@@ -2,11 +2,11 @@ import React from 'react';
 
 import { AchievementGoal } from '../../../../../features/achievement/AchievementTypes';
 
-type AchievementModalGoalProps = {
+type AchievementViewGoalProps = {
   goals: AchievementGoal[];
 };
 
-function AchievementModalGoal(props: AchievementModalGoalProps) {
+function AchievementViewGoal(props: AchievementViewGoalProps) {
   const { goals } = props;
 
   const mapGoalToJSX = (goal: AchievementGoal) => {
@@ -27,4 +27,4 @@ function AchievementModalGoal(props: AchievementModalGoalProps) {
   return <>{goals.map(goal => mapGoalToJSX(goal))}</>;
 }
 
-export default AchievementModalGoal;
+export default AchievementViewGoal;
