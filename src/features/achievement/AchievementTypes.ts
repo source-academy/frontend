@@ -45,7 +45,7 @@ export enum FilterStatus {
  * @param {boolean} isTask the achievement item is rendered as an achievement task if true
  * @param {number[]} prerequisiteIds an array of the prerequisites id
  * @param {AchievementGoal[]} goals an array of achievement goals
- * @param {AchievementModalItem} modal modal item of the achievement
+ * @param {AchievementViewItem} modal modal item of the achievement
  * @param {number} position ordering position of the achievement, value is 0 for non-tasks
  */
 export type AchievementItem = {
@@ -58,7 +58,7 @@ export type AchievementItem = {
   isTask: boolean;
   prerequisiteIds: number[];
   goals: AchievementGoal[];
-  modal: AchievementModalItem;
+  modal: AchievementViewItem;
   position: number;
 };
 
@@ -84,7 +84,7 @@ export type AchievementGoal = {
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
-export type AchievementModalItem = {
+export type AchievementViewItem = {
   canvasUrl: string;
   description: string;
   completionText: string;

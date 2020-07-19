@@ -5,7 +5,7 @@ import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
-  AchievementModalItem
+  AchievementViewItem
 } from '../../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../../../dashboard/subcomponents/utils/AchievementInferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
@@ -149,7 +149,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handlechangeView = (modal: AchievementModalItem) => {
+  const handlechangeView = (modal: AchievementViewItem) => {
     setEditableAchievement({
       ...editableAchievement,
       modal: modal

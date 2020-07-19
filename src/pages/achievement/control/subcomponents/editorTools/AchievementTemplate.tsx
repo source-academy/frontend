@@ -2,10 +2,10 @@ import { canvasUrl, cardTileUrl } from '../../../../../features/achievement/Achi
 import {
   AchievementAbility,
   AchievementItem,
-  AchievementModalItem
+  AchievementViewItem
 } from '../../../../../features/achievement/AchievementTypes';
 
-export const modalTemplate: AchievementModalItem = {
+export const modalTemplate: AchievementViewItem = {
   canvasUrl: `${canvasUrl}/annotated-canvas.png`,
   description: 'Modal Description here',
   completionText: 'Completion Text here'

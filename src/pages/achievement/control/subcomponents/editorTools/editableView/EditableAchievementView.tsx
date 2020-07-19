@@ -1,14 +1,14 @@
 import { Button, Card, Dialog } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
-import { AchievementModalItem } from '../../../../../../features/achievement/AchievementTypes';
+import { AchievementViewItem } from '../../../../../../features/achievement/AchievementTypes';
 import EditableViewescription from './EditableViewDescription';
 import EditableViewImage from './EditableViewImage';
 import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
   title: string;
-  modal: AchievementModalItem;
+  modal: AchievementViewItem;
   changeView: any;
 };
 
@@ -17,7 +17,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [modalData, setModalData] = useState<AchievementModalItem>(modal);
+  const [modalData, setModalData] = useState<AchievementViewItem>(modal);
 
   const { canvasUrl, description, completionText } = modalData;
 
