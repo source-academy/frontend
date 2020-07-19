@@ -131,8 +131,6 @@ export async function putUserGameState(
   return resp;
 }
 
-/* START OF ACHIEVEMENT REQUESTS */
-
 /**
  * GET /achievements
  *
@@ -233,8 +231,6 @@ export async function removeGoal(
 
   return resp;
 }
-
-/* END OF ACHIEVEMENT REQUESTS */
 
 /**
  * GET /assessments

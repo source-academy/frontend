@@ -1,3 +1,5 @@
+import { canvasUrl, cardTileUrl } from 'src/features/achievement/AchievementConstants';
+
 import {
   AchievementAbility,
   AchievementItem,
@@ -5,8 +7,7 @@ import {
 } from '../../../../../features/achievement/AchievementTypes';
 
 export const modalTemplate: AchievementModalItem = {
-  modalImageUrl:
-    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/images/sourceAcademy%40x2.png',
+  modalImageUrl: `${canvasUrl}/annotated-canvas.png`,
   description: 'Modal Description here',
   completionText: 'Completion Text here'
 };
@@ -22,13 +23,12 @@ export const achievementTemplate: AchievementItem = {
   goals: [
     {
       goalId: 0,
-      goalText: 'Sample GOal',
+      goalText: 'Sample Goal',
       goalProgress: 0,
       goalTarget: 0
     }
   ],
   position: 0,
-  backgroundImageUrl:
-    'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+  backgroundImageUrl: `${cardTileUrl}/annotated-tile.png`,
   modal: modalTemplate
 };

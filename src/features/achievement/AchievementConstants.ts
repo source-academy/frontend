@@ -21,7 +21,10 @@ export const abilityColor = (ability: AchievementAbility) => {
   }
 };
 
-export const backgroundUrl = `${Links.sourceAcademyAssets}/achievement/background`;
+export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
+export const backgroundUrl = `${achievementAssets}/background`;
+export const canvasUrl = `${achievementAssets}/canvas`;
+export const cardTileUrl = `${achievementAssets}/card-tile`;
 
 export const abilityBackground = (ability: AchievementAbility) => {
   switch (ability) {
