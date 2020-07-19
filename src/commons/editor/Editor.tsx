@@ -23,6 +23,7 @@ import { Documentation } from '../documentation/Documentation';
 import { Links } from '../utils/Constants';
 import AceRange from './EditorAceRange';
 import { Position } from './EditorTypes';
+import { externalLibraries } from '../application/types/ExternalTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -424,6 +425,10 @@ class Editor extends React.PureComponent<EditorProps, {}> {
   private handleTypeInferenceDisplay = (): void => {
     const chapter = this.props.sourceChapter;
     const code = this.props.editorValue;
+    const externals =
+      this.props.externalLibraryName === undefined
+        ? []
+        : externalLibraries.get(this.props.externalLibraryName);
     const editor = this.AceEditor.current!.editor;
     const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
@@ -448,7 +453,7 @@ class Editor extends React.PureComponent<EditorProps, {}> {
         }
         const str = getTypeInformation(
           code,
-          createContext(chapter),
+          createContext(chapter, 'default', externals),
           { line: pos.row + 1, column: pos.column },
           token.value
         );
