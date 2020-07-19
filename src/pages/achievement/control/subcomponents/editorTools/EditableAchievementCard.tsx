@@ -7,7 +7,7 @@ import {
   AchievementItem,
   AchievementModalItem
 } from '../../../../../features/achievement/AchievementTypes';
-import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
+import AchievementInferencer from '../../../dashboard/subcomponents/utils/AchievementInferencer';
 import EditableAchievementModal from './editableModal/EditableAchievementModal';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import AchievementUploader from './editableUtils/AchievementUploader';
