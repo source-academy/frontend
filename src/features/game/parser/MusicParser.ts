@@ -11,7 +11,7 @@ export default class MusicParser {
         key: id,
         path: assetPath,
         config: {
-          volume: parseInt(volume),
+          volume: parseFloat(volume),
           loop: soundType === GameSoundType.BGM
         },
         soundType

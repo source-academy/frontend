@@ -314,7 +314,7 @@ class GameGlobalAPI {
   }
 
   public playBgMusic(soundKey: AssetKey) {
-    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(soundKey);
   }
 
   public async stopAllSound() {
