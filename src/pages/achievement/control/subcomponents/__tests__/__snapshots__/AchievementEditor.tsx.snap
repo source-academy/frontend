@@ -12,18 +12,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Rune Master\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -225,18 +225,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Beyond the Second Dimension\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -438,18 +438,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Colorful Carpet\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -651,18 +651,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Unpublished\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -864,18 +864,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Curve Wizard\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -1077,18 +1077,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Curve Introduction\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -1290,18 +1290,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Curve Manipulation\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -1503,18 +1503,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"The Source-rer\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -1716,18 +1716,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Power of Friendship\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -1929,18 +1929,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Piazza Guru\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -2142,18 +2142,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"That\\\\'s the Spirit\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>
@@ -2355,18 +2355,18 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <EditableAchievementView title=\\"Kool Kidz\\" modal={{...}} changeModal={[Function: handleChangeModal]}>
                   <div>
                     <div>
-                      <Blueprint3.Button text=\\"Edit Modal\\" onClick={[Function: onClick]}>
+                      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
                         <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
-                            Edit Modal
+                            Edit View
                           </span>
                           <Blueprint3.Icon icon={[undefined]} />
                         </button>
                       </Blueprint3.Button>
                     </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Modal\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
+                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementView>

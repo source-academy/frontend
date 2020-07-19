@@ -48,12 +48,12 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
   return (
     <div>
       <div>
-        <Button text={'Edit Modal'} onClick={() => setDialogOpen(!isDialogOpen)} />
+        <Button text={'Edit View'} onClick={() => setDialogOpen(!isDialogOpen)} />
       </div>
       <Dialog
         onClose={() => setDialogOpen(!isDialogOpen)}
         isOpen={isDialogOpen}
-        title={'Edit Modal'}
+        title={'Edit View'}
         usePortal={false}
       >
         <div className="modal-editor">
