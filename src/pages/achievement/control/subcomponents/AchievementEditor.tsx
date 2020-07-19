@@ -27,6 +27,18 @@ function AchievementEditor(props: AchievementEditorProps) {
     removeAchievement
   } = props;
 
+  /**
+   * NOTE: This helps us to ensure that only ONE achievement is added
+   * every time.
+   *
+   * Refering to AchievementAdder, if the adderId is -1, this
+   * means that currently no achievement is being added and the admin is able to
+   * add a new achievement.
+   *
+   * Alternatievly, if the adderId is not -1, this means that currently an achievement
+   * is being added to the systen and the admin is not allowed to add two achievements
+   * at one go.
+   */
   const [adderId, setAdderId] = useState<number>(-1);
 
   const mapAchievementIdsToEditableCard = (achievementIds: number[]) =>

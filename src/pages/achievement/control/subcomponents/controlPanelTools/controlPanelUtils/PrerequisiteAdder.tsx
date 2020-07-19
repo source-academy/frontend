@@ -26,11 +26,18 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
     return newAchievement;
   };
 
+  /**
+   * If there are no more prerequisites to add to this achievement,
+   * it will be set to a default value of 0.
+   *
+   * Else, it will always take the first available prerequisite id.
+   */
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
     nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
   );
 
-  const addAction = () => {
+  // This actions adds a new prerequisite to the achievement.
+  const addPrerequisiteAction = () => {
     setEditableAchievement(addPrerequisite(addedPrerequisiteID));
     inferencer.modifyAchievement(editableAchievement);
 
@@ -52,7 +59,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
         emptySelectionsMessage={'You have no more prerequisites to add'}
         toggleDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        action={addAction}
+        action={addPrerequisiteAction}
       />
     </>
   );

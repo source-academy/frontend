@@ -15,6 +15,12 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
+  /**
+   * Note: every goal's position is always matched based on its goalId.
+   *
+   * For example, a goal with goalId 0 will be the first goal
+   * in this array of new goals.
+   */
   const [newGoals, setNewGoals] = useState<AchievementGoal[]>(goals);
 
   const createNewGoal = () => {
