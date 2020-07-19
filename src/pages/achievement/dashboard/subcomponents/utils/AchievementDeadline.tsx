@@ -1,7 +1,7 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import { AchievementAbility } from 'src/commons/achievement/AchievementTypes';
+import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
 import { prettifyDeadline } from './DateHelper';
 

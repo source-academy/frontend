@@ -1,9 +1,9 @@
+import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 import {
   AchievementAbility,
   AchievementItem,
   FilterStatus
-} from 'src/commons/achievement/AchievementTypes';
-import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
+} from 'src/features/achievement/AchievementTypes';
 
 import AchievementInferencer from '../AchievementInferencer';
 

@@ -1,7 +1,7 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
-import { AchievementStatus } from 'src/commons/achievement/AchievementTypes';
+import { AchievementStatus } from 'src/features/achievement/AchievementTypes';
 
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';

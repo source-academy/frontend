@@ -13,15 +13,15 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
-import { GradingSummary } from '../../features/dashboard/DashboardTypes';
-import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
-import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { store } from '../../pages/createStore';
 import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem
-} from '../achievement/AchievementTypes';
+} from '../../features/achievement/AchievementTypes';
+import { GradingSummary } from '../../features/dashboard/DashboardTypes';
+import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
+import { store } from '../../pages/createStore';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';

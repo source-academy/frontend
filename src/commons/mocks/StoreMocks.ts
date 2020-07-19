@@ -1,7 +1,7 @@
 import { Store } from 'redux';
 import mockStore from 'redux-mock-store';
 
-import { defaultAchievement } from '../achievement/AchievementTypes';
+import { defaultAchievement } from '../../features/achievement/AchievementTypes';
 import {
   defaultAcademy,
   defaultApplication,

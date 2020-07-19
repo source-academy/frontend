@@ -1,8 +1,8 @@
 import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 
-import { abilityColor } from '../../../commons/achievement/AchievementConstants';
-import { FilterStatus } from '../../../commons/achievement/AchievementTypes';
+import { abilityColor } from '../../../features/achievement/AchievementConstants';
+import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
 import AchievementModal from './subcomponents/AchievementModal';
 import AchievementOverview from './subcomponents/AchievementOverview';

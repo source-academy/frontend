@@ -5,7 +5,7 @@ import {
   AchievementItem,
   AchievementStatus,
   FilterStatus
-} from '../../../../../commons/achievement/AchievementTypes';
+} from '../../../../../features/achievement/AchievementTypes';
 
 /**
  * An InferencerNode item encapsulates all important information of an achievement item

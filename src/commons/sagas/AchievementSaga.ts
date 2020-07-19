@@ -1,20 +1,15 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-
-import { OverallState } from '../application/ApplicationTypes';
-import {
-  editAchievement,
-  getAchievements,
-  removeAchievement,
-  removeGoal
-} from '../sagas/RequestsSaga';
-import { actions } from '../utils/ActionsHelper';
 import {
   EDIT_ACHIEVEMENT,
   GET_ACHIEVEMENTS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL
-} from './AchievementTypes';
+} from 'src/features/achievement/AchievementTypes';
+
+import { OverallState } from '../application/ApplicationTypes';
+import { actions } from '../utils/ActionsHelper';
+import { editAchievement, getAchievements, removeAchievement, removeGoal } from './RequestsSaga';
 
 export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(GET_ACHIEVEMENTS, function* () {

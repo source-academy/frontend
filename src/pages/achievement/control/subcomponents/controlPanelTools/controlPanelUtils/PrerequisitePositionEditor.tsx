@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import AchievementInferencer from 'src/pages/achievement/dashboard/subcomponents/utils/AchievementInferencer';
 
-import { AchievementItem } from '../../../../../../commons/achievement/AchievementTypes';
+import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
 import PrerequisiteSwapper from './PrerequisiteSwapper';
 
 type PrerequisitesPositionEditorProps = {

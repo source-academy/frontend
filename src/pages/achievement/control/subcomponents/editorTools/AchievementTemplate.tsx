@@ -2,7 +2,7 @@ import {
   AchievementAbility,
   AchievementItem,
   AchievementModalItem
-} from '../../../../../commons/achievement/AchievementTypes';
+} from '../../../../../features/achievement/AchievementTypes';
 
 export const modalTemplate: AchievementModalItem = {
   modalImageUrl:

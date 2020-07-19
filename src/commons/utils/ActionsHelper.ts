@@ -6,6 +6,7 @@ import * as SessionActions from '../../commons/application/actions/SessionAction
 import * as CollabEditingActions from '../../commons/collabEditing/CollabEditingActions';
 import * as WorkspaceActions from '../../commons/workspace/WorkspaceActions';
 import * as AcademyActions from '../../features/academy/AcademyActions';
+import * as AchievementActions from '../../features/achievement/AchievementActions';
 import * as DashboardActions from '../../features/dashboard/DashboardActions';
 import * as GroundControlActions from '../../features/groundControl/GroundControlActions';
 import * as PersistenceActions from '../../features/persistence/PersistenceActions';
@@ -13,7 +14,6 @@ import * as PlaygroundActions from '../../features/playground/PlaygroundActions'
 import * as SourcecastActions from '../../features/sourceRecorder/sourcecast/SourcecastActions';
 import * as SourceRecorderActions from '../../features/sourceRecorder/SourceRecorderActions';
 import * as SourcereelActions from '../../features/sourceRecorder/sourcereel/SourcereelActions';
-import * as AchievementActions from '../achievement/AchievementActions';
 
 export const actions = {
   ...AchievementActions,

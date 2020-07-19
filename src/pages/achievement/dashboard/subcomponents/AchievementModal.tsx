@@ -1,7 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import React from 'react';
-import { abilityBackground } from 'src/commons/achievement/AchievementConstants';
-import { AchievementStatus } from 'src/commons/achievement/AchievementTypes';
+import { abilityBackground } from 'src/features/achievement/AchievementConstants';
+import { AchievementStatus } from 'src/features/achievement/AchievementTypes';
 
 import AchievementModalCompletion from './modal/AchievementModalCompletion';
 import AchievementModalGoal from './modal/AchievementModalGoal';

@@ -5,7 +5,7 @@ import React from 'react';
 import {
   achievementAbilities,
   AchievementAbility
-} from '../../../../../../commons/achievement/AchievementTypes';
+} from '../../../../../../features/achievement/AchievementTypes';
 
 type EditableAchievementAbilityProps = {
   ability: AchievementAbility;

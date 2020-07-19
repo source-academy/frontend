@@ -1,7 +1,7 @@
 import { IconNames } from '@blueprintjs/icons';
 import { mount } from 'enzyme';
 import React from 'react';
-import { FilterStatus } from 'src/commons/achievement/AchievementTypes';
+import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
 import AchievementFilter from '../AchievementFilter';
 

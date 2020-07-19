@@ -2,8 +2,8 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
 
-import { getAchievements } from '../../../commons/achievement/AchievementActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { getAchievements } from '../../../features/achievement/AchievementActions';
 import Dashboard, { DispatchProps, StateProps } from './Dashboard';
 import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 

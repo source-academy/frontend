@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { AchievementStatus, FilterStatus } from '../../../../commons/achievement/AchievementTypes';
+import { AchievementStatus, FilterStatus } from '../../../../features/achievement/AchievementTypes';
 import AchievementCard from './cards/AchievementCard';
 import AchievementInferencer from './utils/AchievementInferencer';
 

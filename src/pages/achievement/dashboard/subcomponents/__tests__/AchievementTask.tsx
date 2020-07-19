@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
-import { FilterStatus } from 'src/commons/achievement/AchievementTypes';
 import { mockAchievements } from 'src/commons/mocks/AchievementMocks';
+import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 
 import AchievementTask from '../AchievementTask';
 import AchievementInferencer from '../utils/AchievementInferencer';
