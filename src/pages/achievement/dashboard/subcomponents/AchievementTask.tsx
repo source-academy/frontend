@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 
 import { AchievementStatus, FilterStatus } from '../../../../commons/achievement/AchievementTypes';
 import AchievementCard from './cards/AchievementCard';
-import PrerequisiteCard from './cards/PrerequisiteCard';
 import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementTaskProps = {
@@ -15,21 +14,18 @@ type AchievementTaskProps = {
 
 function AchievementTask(props: AchievementTaskProps) {
   const { id, inferencer, filterStatus, displayModal, handleGlow } = props;
-  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  /* -------- Helper for Renderer -------- */
-
   /**
-   * Checks whether the AchievementItem (can be a task or prereq) should be rendered based on
-   * the achivement page filterStatus.
+   * Checks whether the AchievementItem (can be a task or prereq) should be rendered
+   * based on the achivement page filterStatus.
    */
   const shouldRender = (id: number): boolean => {
     const status = inferencer.getStatus(id);
-
     switch (filterStatus) {
       case FilterStatus.ALL:
         return true;
@@ -56,10 +52,12 @@ function AchievementTask(props: AchievementTaskProps) {
     }, false);
   };
 
+  /**
+   * If the main achievement or any of the prerequisites need to be rendered,
+   * the whole achievement task will be rendered
+   */
   const shouldRenderTask = (id: number) => shouldRender(id) || shouldRenderPrerequisites(id);
 
-  // if the main achievement or any of the prerequisites need to be rendered,
-  // the whole achievement task will be rendered
   return (
     <>
       {shouldRenderTask(id) ? (
@@ -69,28 +67,27 @@ function AchievementTask(props: AchievementTaskProps) {
             id={id}
             inferencer={inferencer}
             shouldPartiallyRender={!shouldRender(id)}
-            isDropdownOpen={isDropdownOpen}
-            toggleDropdown={toggleDropdown}
             displayModal={displayModal}
             handleGlow={handleGlow}
+            isDropdownOpen={isDropdownOpen}
+            toggleDropdown={toggleDropdown}
           />
           {isDropdownOpen ? (
-            <>
+            <div className="prerequisite-container">
               {inferencer.listImmediateChildren(id).map(prerequisite => (
-                <PrerequisiteCard
-                  key={prerequisite}
-                  id={prerequisite}
-                  inferencer={inferencer}
-                  shouldPartiallyRender={!shouldRender(prerequisite)}
-                  displayModal={displayModal}
-                  handleGlow={handleGlow}
-                  isLast={
-                    inferencer.listImmediateChildren(id).findIndex(x => x === prerequisite) ===
-                    inferencer.listImmediateChildren(id).length - 1
-                  }
-                />
+                <div className="prerequisite">
+                  <div className="dropdown-lines"></div>
+                  <AchievementCard
+                    key={prerequisite}
+                    id={prerequisite}
+                    inferencer={inferencer}
+                    shouldPartiallyRender={!shouldRender(prerequisite)}
+                    displayModal={displayModal}
+                    handleGlow={handleGlow}
+                  />
+                </div>
               ))}
-            </>
+            </div>
           ) : null}
         </li>
       ) : null}

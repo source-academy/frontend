@@ -164,7 +164,7 @@
       }
     }
 
-    .cards-container {
+    .list-container {
       display: flex;
 
       height: 90%;
@@ -188,7 +188,6 @@
         height: 5em;
         width: 30em;
         padding: 0;
-        margin-bottom: 0.8em;
 
         justify-content: center;
         align-items: center;
@@ -285,38 +284,42 @@
         box-shadow: 0 0 10px black;
       }
 
-      .dropdown-container {
+      .prerequisite-container {
         display: flex;
-        flex-direction: row;
+        flex-direction: column;
 
-        .lines {
+        padding-left: 0.8em;
+        padding-right: -0.8em;
+
+        .prerequisite {
           display: flex;
-          width: 10%;
-          flex-direction: column;
+          flex-direction: row;
 
-          margin: -0.8em -0.8em 0 0.8em;
+          .dropdown-lines {
+            display: flex;
+            flex-direction: column;
 
-          .l-shape {
-            height: 50%;
-            width: 60%;
-            border-bottom: 1px solid white;
+            height: 6em;
+            width: 2em;
+
+            margin-top: -3em;
+            margin-right: -2em;
+            margin-bottom: 2em;
             border-left: 1px solid white;
+            border-bottom: 1px solid white;
           }
 
-          .extend-bottom {
-            height: 50%;
-            border-left: 1px solid white;
+          .achievement-card {
+            transform: scale(0.9);
           }
         }
 
-        .dropdown-button {
-          display: flex;
+        .prerequisite:first-child {
+          .dropdown-lines {
+            height: 3em;
 
-          height: 5em;
-          width: 4em;
-
-          justify-content: flex-start;
-          align-items: center;
+            margin-top: 0;
+          }
         }
       }
     }

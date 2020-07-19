@@ -12,10 +12,10 @@ type AchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
-  isDropdownOpen: boolean;
-  toggleDropdown: any;
   displayModal: any;
   handleGlow: any;
+  isDropdownOpen?: boolean;
+  toggleDropdown?: any;
 };
 
 function AchievementCard(props: AchievementCardProps) {
@@ -23,10 +23,10 @@ function AchievementCard(props: AchievementCardProps) {
     id,
     inferencer,
     shouldPartiallyRender,
-    isDropdownOpen,
-    toggleDropdown,
     displayModal,
-    handleGlow
+    handleGlow,
+    isDropdownOpen,
+    toggleDropdown
   } = props;
 
   const { title, ability, release, backgroundImageUrl } = inferencer.getAchievementItem(id);
@@ -36,7 +36,9 @@ function AchievementCard(props: AchievementCardProps) {
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
-  const hasDropdown: boolean = inferencer.getImmediateChildren(id).size > 0;
+  // Only task card with prerequisites has dropdown button
+  const hasDropdown =
+    isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
 
   return (
     <div
@@ -51,13 +53,11 @@ function AchievementCard(props: AchievementCardProps) {
       onClick={() => displayModal(id)}
       onClickCapture={toggleDropdown}
     >
-      {hasDropdown ? (
-        <div className="dropdown-button">
+      <div className="dropdown-button">
+        {hasDropdown ? (
           <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
-        </div>
-      ) : (
-        <div className="dropdown-button"></div>
-      )}
+        ) : null}
+      </div>
 
       <div className="content">
         <div className="heading">
