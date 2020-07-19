@@ -1,15 +1,15 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import EditableModalText from '../EditableModalText';
+import EditableViewText from '../EditableViewText';
 
 const mockProps = {
   goalText: 'Goal Text',
   setGoalText: () => {}
 };
 
-test('EditableModalImage component renders correctly', () => {
-  const text = <EditableModalText {...mockProps} />;
+test('EditableViewlImage component renders correctly', () => {
+  const text = <EditableViewText {...mockProps} />;
   const tree = mount(text);
   expect(tree.debug()).toMatchSnapshot();
 });

@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import EditableModalImage from '../EditableModalImage';
+import EditableViewlImage from '../EditableViewlImage';
 
 const mockProps = {
   modalImageUrl:
@@ -10,8 +10,8 @@ const mockProps = {
   setModalImageUrl: () => {}
 };
 
-test('EditableModalImage component renders correctly', () => {
-  const image = <EditableModalImage {...mockProps} />;
+test('EditableViewlImage component renders correctly', () => {
+  const image = <EditableViewlImage {...mockProps} />;
   const tree = mount(image);
   expect(tree.debug()).toMatchSnapshot();
 });

@@ -2,9 +2,9 @@ import { Button, Card, Dialog } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 import { AchievementModalItem } from '../../../../../../features/achievement/AchievementTypes';
-import EditableModalDescription from './EditableModalDescription';
-import EditableModalImage from './EditableModalImage';
-import EditableModalText from './EditableModalText';
+import EditableViewescription from './EditableViewDescription';
+import EditableViewlImage from './EditableViewlImage';
+import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
   title: string;
@@ -60,14 +60,14 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
           <Card className="background-card">
             <h1>{title} </h1>
 
-            <EditableModalImage
+            <EditableViewlImage
               modalImageUrl={modalImageUrl}
               title={title}
               setModalImageUrl={setModalImageUrl}
             />
 
-            <EditableModalDescription description={description} setDescription={setDescription} />
-            <EditableModalText goalText={completionText} setGoalText={setCompletionText} />
+            <EditableViewescription description={description} setDescription={setDescription} />
+            <EditableViewText goalText={completionText} setGoalText={setCompletionText} />
           </Card>
         </div>
       </Dialog>

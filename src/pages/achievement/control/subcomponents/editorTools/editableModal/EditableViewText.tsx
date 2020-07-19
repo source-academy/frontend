@@ -1,12 +1,12 @@
 import { EditableText } from '@blueprintjs/core';
 import React from 'react';
 
-type EditableModalTextProps = {
+type EditableViewTextProps = {
   goalText: string;
   setGoalText: any;
 };
 
-function EditableModalText(props: EditableModalTextProps) {
+function EditableViewText(props: EditableViewTextProps) {
   const { goalText, setGoalText } = props;
 
   return (
@@ -21,4 +21,4 @@ function EditableModalText(props: EditableModalTextProps) {
   );
 }
 
-export default EditableModalText;
+export default EditableViewText;

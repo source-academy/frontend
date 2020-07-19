@@ -1,15 +1,15 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import EditableModalDescription from '../EditableModalDescription';
+import EditableViewDescription from '../EditableViewDescription';
 
 const mockProps = {
   description: 'Sample Description',
   setDescription: () => {}
 };
 
-test('EditableModalDescription component renders correctly', () => {
-  const description = <EditableModalDescription {...mockProps} />;
+test('EditableViewDescription component renders correctly', () => {
+  const description = <EditableViewDescription {...mockProps} />;
   const tree = mount(description);
   expect(tree.debug()).toMatchSnapshot();
 });
