@@ -3,11 +3,11 @@ import React from 'react';
 
 import { abilityBackground } from '../../../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../../../features/achievement/AchievementTypes';
-import AchievementViewCompletion from './modal/AchievementViewCompletion';
-import AchievementViewGoal from './modal/AchievementViewGoal';
 import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementWeek from './utils/AchievementWeek';
 import { prettifyDate } from './utils/DateHelper';
+import AchievementViewCompletion from './view/AchievementViewCompletion';
+import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
   id: number;
