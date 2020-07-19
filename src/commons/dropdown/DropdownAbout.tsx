@@ -24,8 +24,8 @@ const DropdownAbout: React.SFC<DialogProps> = props => (
           The <i>Source Academy</i> is a computer-mediated learning environment for studying the
           structure and interpretation of computer programs. Students write and run their programs
           in their web browser, using sublanguages of JavaScript called{' '}
-          <a href={Links.sourceDocs}>Source §1, Source §2, Source §3 and Source §4</a>, designed for
-          the first four chapters of the textbook{' '}
+          <a href={Links.sourceDocs}>Source</a>, designed for
+          the textbook{' '}
           <a href={Links.textbook}>
             Structure and Interpretation of Computer Programs, JavaScript Adaptation
           </a>
