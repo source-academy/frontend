@@ -49,6 +49,7 @@ export enum Links {
   sourceDocsChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
   sourceDocsChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
+  techSVCNumber = '6516 2736',
   textbook = 'https://source-academy.github.io/sicp/',
 
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
