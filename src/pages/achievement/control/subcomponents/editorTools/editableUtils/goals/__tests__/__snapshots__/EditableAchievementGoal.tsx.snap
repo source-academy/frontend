@@ -17,7 +17,6 @@ exports[`AchievementExp component renders correctly 1`] = `
       <div>
         213
          /
-         
         <Blueprint3.EditableText placeholder=\\"Enter your goal target here\\" value=\\"250\\" onChange={[Function: changeTarget]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
           <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
             <span className=\\"bp3-editable-text-content\\" style={{...}}>
@@ -25,7 +24,6 @@ exports[`AchievementExp component renders correctly 1`] = `
             </span>
           </div>
         </Blueprint3.EditableText>
-         
         XP
       </div>
     </div>
