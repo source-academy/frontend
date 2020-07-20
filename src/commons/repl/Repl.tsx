@@ -70,7 +70,7 @@ export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
         </Card>
       );
     case 'result':
-      // We check if we are using Substituter, so we can process the REPL results properly
+      // We check if we are using Stepper, so we can process the REPL results properly
       if (props.usingSubst && props.output.value instanceof Array) {
         return (
           <Card>
