@@ -114,7 +114,7 @@ export async function fetchChapters(): Promise<ChapterDetail[]> {
 }
 
 /**
- * Creates a chapter
+ * Creates or updates a chapter
  *
  * @returns {Promise<string>} - Response
  */
@@ -129,5 +129,15 @@ export async function updateChapterRequest(id: string, body: object) {
       body: JSON.stringify(body)
     }
   );
-  return response.status === 200 ? 'Chapter successfully created' : response.text();
+  return response.status === 200 ? 'Chapter successfully created/updated' : response.text();
+}
+
+/**
+ * Creates a chapter
+ *
+ * @returns {Promise<string>} - Response
+ */
+export async function deleteChapterRequest(id: string) {
+  const response = await sendStoryRequest(id, 'DELETE');
+  return response.status === 204 ? 'Chapter successfully deleted' : response.text();
 }
