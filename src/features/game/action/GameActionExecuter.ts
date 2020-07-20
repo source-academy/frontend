@@ -17,7 +17,7 @@ export default class GameActionExecuter {
 
     switch (actionType) {
       case GameActionType.LocationChange:
-        globalAPI.changeLocationTo(actionParams.id);
+        await globalAPI.changeLocationTo(actionParams.id);
         return;
       case GameActionType.ChangeBackground:
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
