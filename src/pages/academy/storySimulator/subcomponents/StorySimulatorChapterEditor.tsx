@@ -139,7 +139,9 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
       <br />
       <br />
       <Button onClick={saveChapter}>Save Changes</Button>
-      <Button onClick={clearChanges}>Clear Changes</Button>
+      <Button intent={Intent.WARNING} onClick={clearChanges}>
+        Clear Changes
+      </Button>
       <br />
       <Button icon="trash" intent={Intent.DANGER} onClick={deleteChapter}>
         Delete Chapter
