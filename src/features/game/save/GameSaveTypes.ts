@@ -63,15 +63,15 @@ export type GameSaveState = {
 /**
  * @typedef {UserSaveState} - this encapsulates data about students player account throughout the game
  * @prop {SettingsJson} settings - settings json object that contains user settings
- * @prop {[number, number]} lastPlayedCheckpoint - the chapter and checkpoint where the student left off (can be used for continue game)
+ * @prop {[number, number]} recentlyPlayedCheckpoint - the chapter and checkpoint where the student left off (can be used for continue game)
  * @prop {string[]} collectibles - the ItemIds of all collectibles that students have completed
- * @prop {number} lastCompletedChapter - the largest chapter number which the students have played (used black tinting chapters in chapter select)
+ * @prop {number} largestCompletedChapter - the largest chapter number which the students have played (used black tinting chapters in chapter select)
  */
 export type UserSaveState = {
   settings: SettingsJson;
-  lastPlayedCheckpoint: [number, number];
+  recentlyPlayedCheckpoint: [number, number];
   collectibles: string[];
-  lastCompletedChapter: number;
+  largestCompletedChapter: number;
 };
 
 /**

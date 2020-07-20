@@ -1,7 +1,8 @@
-import { Constants, screenCenter } from '../../../game/commons/CommonConstants';
+import { screenCenter } from '../../../game/commons/CommonConstants';
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonTextHover from '../../commons/CommonTextHover';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
@@ -11,8 +12,6 @@ import chapConstants, {
   chapterIndexStyle,
   chapterTitleStyle
 } from './ChapterSelectConstants';
-
-export const toStoryPath = (path: string) => `${Constants.assetsFolder}/stories/${path}`;
 
 export function createChapter(
   scene: ChapterSelect,
@@ -56,7 +55,7 @@ export function createChapter(
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
     assetKey: ImageAssets.chapterRepeatButton.key,
-    onUp: () => callGameManagerOnTxtLoad(scene, scene.gameChapters, false, index, 0),
+    onUp: () => callGameManagerOnTxtLoad(scene, false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
     onOut: () => chapterRepeatHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -67,8 +66,7 @@ export function createChapter(
 
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
-    onUp: () =>
-      callGameManagerOnTxtLoad(scene, scene.gameChapters, true, index, lastCheckpointsIdx),
+    onUp: () => callGameManagerOnTxtLoad(scene, true, index, lastCheckpointsIdx),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -94,7 +92,8 @@ export function createChapter(
     chapterTitleStyle
   ).setOrigin(0.5, 0.5);
 
-  const chapterDone = index <= scene.getLoadedGameState().userSaveState.lastCompletedChapter + 1;
+  const chapterDone =
+    index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapter() + 1;
 
   const blackTint = new Phaser.GameObjects.Rectangle(
     scene,

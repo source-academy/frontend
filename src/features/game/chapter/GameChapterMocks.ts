@@ -1,6 +1,6 @@
-import { GameChapter } from '../../chapter/GameChapterTypes';
+import { GameChapter } from './GameChapterTypes';
 
-export const SampleChapters: GameChapter[] = [
+const GameChapterMocks: GameChapter[] = [
   {
     title: 'Spaceship Emergency',
     imageUrl: '/locations/planet-y-orbit/crashing.png',
@@ -17,3 +17,4 @@ export const SampleChapters: GameChapter[] = [
     filenames: ['../assets/chapter2.txt']
   }
 ];
+export default GameChapterMocks;

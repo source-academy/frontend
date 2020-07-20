@@ -1,7 +1,5 @@
 import TextAssets from '../assets/TextAssets';
-import { GameChapter } from '../chapter/GameChapterTypes';
 import Parser from '../parser/Parser';
-import { loadData } from '../save/GameSaveRequests';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { loadText } from '../utils/LoaderUtils';
 
@@ -21,33 +19,26 @@ import { loadText } from '../utils/LoaderUtils';
  */
 export async function callGameManagerOnTxtLoad(
   scene: Phaser.Scene,
-  chapterDetails: GameChapter[],
   continueGame: boolean,
   chapterNum: number,
   checkpointNum: number
 ) {
-  const filename = chapterDetails[chapterNum].filenames[checkpointNum];
+  const gameChapters = SourceAcademyGame.getInstance().getGameChapters();
+  const filename = gameChapters[chapterNum].filenames[checkpointNum];
   if (!filename) {
     return;
   }
-  const chapterKey = `#${filename}`;
-  await loadText(scene, chapterKey, filename);
+  await loadText(scene, filename, filename);
   await loadText(scene, TextAssets.defaultCheckpoint.key, TextAssets.defaultCheckpoint.path);
 
-  const text = scene.cache.text.get(chapterKey);
+  const text = scene.cache.text.get(filename);
   const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key);
 
-  const accountInfo = SourceAcademyGame.getInstance().getAccountInfo();
-  if (!accountInfo) {
-    return;
-  }
-  const fullSaveState = await loadData();
   Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);
   const gameCheckpoint = Parser.checkpoint;
 
   scene.scene.start('GameManager', {
-    fullSaveState,
     gameCheckpoint,
     continueGame,
     chapterNum,

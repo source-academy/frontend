@@ -15,6 +15,10 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
+import { fetchChapters } from '../storySimulator/StorySimulatorService';
+import { toTxtPath } from './assets/TextAssets';
+import { GameChapter } from './chapter/GameChapterTypes';
+
 export type AccountInfo = {
   accessToken: string;
   refreshToken: string;
@@ -35,6 +39,7 @@ type GlobalGameProps = {
   soundManager: GameSoundManager;
   saveManager: GameSaveManager;
   gameType: GameType;
+  gameChapters: GameChapter[];
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
@@ -53,7 +58,8 @@ export default class SourceAcademyGame extends Phaser.Game {
       currentSceneRef: undefined,
       soundManager: new GameSoundManager(),
       saveManager: new GameSaveManager(),
-      gameType
+      gameType,
+      gameChapters: []
     };
   }
 
@@ -77,9 +83,17 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
   public isGameType = (gameType: GameType) => this.global.gameType === gameType;
+  public getGameChapters = () => this.global.gameChapters;
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
+  }
+
+  public async loadGameChapters() {
+    const chapters = await fetchChapters();
+    chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
+    this.global.gameChapters = chapters;
+    return chapters;
   }
 
   public setStorySimState(state: StorySimState) {
