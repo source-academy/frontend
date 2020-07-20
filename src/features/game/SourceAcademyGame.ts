@@ -38,12 +38,14 @@ type GlobalGameProps = {
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
-  protected global: GlobalGameProps;
   static instance: SourceAcademyGame;
+  protected global: GlobalGameProps;
+  public isMounted: boolean;
 
   constructor(config: Phaser.Types.Core.GameConfig, gameType: GameType) {
     super(config);
     SourceAcademyGame.instance = this;
+    this.isMounted = true;
     this.global = {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       accountInfo: undefined,

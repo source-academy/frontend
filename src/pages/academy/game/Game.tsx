@@ -14,6 +14,7 @@ function Game() {
   React.useEffect(() => {
     createSourceAcademyGame();
     return () => {
+      SourceAcademyGame.getInstance().isMounted = false;
       SourceAcademyGame.getInstance().stopAllSounds();
     };
   }, []);

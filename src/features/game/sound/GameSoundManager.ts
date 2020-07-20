@@ -110,6 +110,12 @@ class GameSoundManager {
    * @param fadeDuration duration to fade out previous background music
    */
   public async playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
+    // Game is no longer mounted, do not play the music
+    if (!SourceAcademyGame.getInstance().isMounted) {
+      return;
+    }
+
+    // Requested soundKey is empty, stop current BGM
     if (soundKey === Constants.nullInteractionId) {
       await this.stopCurrBgMusic(fadeDuration);
       return;
