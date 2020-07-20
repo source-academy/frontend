@@ -392,7 +392,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (props.sourceChapter <= 2 && props.sourceVariant !== 'wasm') {
       // Enable Subst Visualizer for Source 1 & 2
       tabs.push({
-        label: 'Substituter',
+        label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
         id: SideContentType.substVisualizer,
