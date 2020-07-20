@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../dashboard/subcomponents/utils/AchievementInferencer';
@@ -33,16 +33,28 @@ function AchievementControl(props: DispatchProps & StateProps) {
   useEffect(() => {
     if (editorUnsavedChanges !== 0 || panelPendingUpload) {
       window.onbeforeunload = () => true;
-    }
-
-    if (editorUnsavedChanges === 0 && !panelPendingUpload) {
+    } else {
       handleFetchAchievements();
       window.onbeforeunload = null;
     }
   }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
 
-  const addUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges + 1);
-  const removeUnsavedChange = () => setEditorUnsavedChanges(editorUnsavedChanges - 1);
+  const setUpload = useCallback(
+    bool => {
+      setPanelPendingUpload(bool);
+    },
+    [setPanelPendingUpload]
+  );
+
+  const addUnsavedChanges = useCallback(
+    n => {
+      setEditorUnsavedChanges(c => c + n);
+    },
+    [setEditorUnsavedChanges]
+  );
+
+  const addUnsavedChange = () => addUnsavedChanges(1);
+  const removeUnsavedChange = () => addUnsavedChanges(-1);
 
   const updateAchievements = () => {
     for (const achievement of inferencer.getAchievements()) {
@@ -66,7 +78,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
           forceRender={forceRender}
           isDisabled={editorUnsavedChanges !== 0}
           pendingUpload={panelPendingUpload}
-          setPendingUpload={setPanelPendingUpload}
+          setPendingUpload={setUpload}
           saveAchievementsToFrontEnd={handleSaveAchievements}
         />
 
