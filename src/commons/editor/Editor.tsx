@@ -4,7 +4,6 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
-// import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
@@ -17,7 +16,8 @@ import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
-// Temporary: Should refactor into EditorBase + different variants.
+// TODO: Should further refactor into EditorBase + different variants.
+// Ideally, hooks should be specified by the parent component instead.
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
@@ -59,7 +59,7 @@ type StateProps = {
   breakpoints: string[];
   editorSessionId: string;
   editorValue: string;
-  highlightedLines: HighlightedLines[]; // FIXME type this better??
+  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
   sharedbAceInitValue?: string;
@@ -157,7 +157,8 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
       callback();
       return;
     }
-    // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
+
+    // Cursor col is insertion location i.e. last char col + 1
     handlePromptAutocomplete(pos.row + 1, pos.column, callback);
   }
 });
@@ -313,8 +314,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   );
 });
 
-// in a real usage, hooks would be specified by the parent component
-export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
+const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   <EditorBase
     {...props}
     hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor]}
@@ -322,5 +322,4 @@ export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   />
 ));
 
-// real export
-// export default EditorBase;
+export default Editor;
