@@ -13,7 +13,7 @@ import {
  * @param {AchievementItem} achievement the achievement item
  * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
  * @param {number} displayExp total achievable EXP of the achievement
- * @param {number} progressFrac progress percentage in fraction
+ * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
  * @param {Set<number>} children a set of immediate prerequisites id
@@ -150,12 +150,9 @@ class AchievementInferencer {
   }
 
   public listNonTaskIds() {
-    return this.achievements.reduce((nonTaskIds, achievement) => {
-      if (!achievement.isTask) {
-        nonTaskIds.push(achievement.id);
-      }
-      return nonTaskIds;
-    }, [] as number[]);
+    return this.achievements
+      .filter(achievement => !achievement.isTask)
+      .map(achievement => achievement.id);
   }
 
   public setTask(achievement: AchievementItem) {

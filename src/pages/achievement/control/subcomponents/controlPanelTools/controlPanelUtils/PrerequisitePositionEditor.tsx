@@ -19,6 +19,12 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
 
   const prereqs = editableAchievement.prerequisiteIds;
 
+  /**
+   * NOTE: The two IDs refer to the prerequisite IDs of the particular achievement.
+   *
+   * So when a swap occurs, these two achievement prerequisites will have their positions swapped,
+   * wuthin the prerequisite array of the parent achievement.
+   */
   const [firstID, setFirstID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
   const [secondID, setSecondID] = useState<number>(prereqs.length === 0 ? 0 : prereqs[0]);
 
