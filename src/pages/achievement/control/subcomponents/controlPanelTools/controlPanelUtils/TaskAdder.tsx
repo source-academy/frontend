@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
-import AchievementSelector from './AchievementSelector';
+import AchievementSelection from './AchievementSelection';
 
 export type TaskAdderProps = {
   inferencer: AchievementInferencer;
@@ -36,7 +36,7 @@ function TaskAdder(props: TaskAdderProps) {
   return (
     <>
       <Button className="main-adder" onClick={toggleDialogOpen} text={'Add A Task'} />
-      <AchievementSelector
+      <AchievementSelection
         selections={nonTaskIDs}
         inferencer={inferencer}
         selectedId={addedTaskID}

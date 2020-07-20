@@ -4,7 +4,7 @@ import React from 'react';
 
 import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
 
-type AchievementSelectorProps = {
+type AchievementSelectionProps = {
   inferencer: AchievementInferencer;
   dialogHeader: string;
   selections: number[];
@@ -17,7 +17,7 @@ type AchievementSelectorProps = {
   toggleDialogOpen: any;
 };
 
-function AchievementSelector(props: AchievementSelectorProps) {
+function AchievementSelection(props: AchievementSelectionProps) {
   const {
     inferencer,
     dialogHeader,
@@ -104,4 +104,4 @@ function AchievementSelector(props: AchievementSelectorProps) {
   );
 }
 
-export default AchievementSelector;
+export default AchievementSelection;

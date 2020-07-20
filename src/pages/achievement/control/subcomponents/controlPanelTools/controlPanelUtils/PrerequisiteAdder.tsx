@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
-import AchievementSelector from './AchievementSelector';
+import AchievementSelection from './AchievementSelection';
 
 type PrerequisiteAdderProps = {
   editableAchievement: AchievementItem;
@@ -49,7 +49,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Add A Prerequisite'} />
-      <AchievementSelector
+      <AchievementSelection
         selections={nonPrerequisites}
         inferencer={inferencer}
         selectedId={addedPrerequisiteID}

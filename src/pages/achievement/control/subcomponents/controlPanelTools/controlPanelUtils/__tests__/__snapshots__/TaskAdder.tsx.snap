@@ -11,10 +11,10 @@ exports[`TaskAdder component renders correctly 1`] = `
       <Blueprint3.Icon icon={[undefined]} />
     </button>
   </Blueprint3.Button>
-  <AchievementSelector selections={{...}} inferencer={{...}} selectedId={1} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Add Task\\" dialogHeader=\\"Add A Task\\" emptySelectionsMessage=\\"You have no more tasks to add\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: addAction]}>
+  <AchievementSelection selections={{...}} inferencer={{...}} selectedId={1} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Add Task\\" dialogHeader=\\"Add A Task\\" emptySelectionsMessage=\\"You have no more tasks to add\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: addAction]}>
     <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Add A Task\\" canOutsideClickClose={true}>
       <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Add A Task\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
     </Blueprint3.Dialog>
-  </AchievementSelector>
+  </AchievementSelection>
 </TaskAdder>"
 `;

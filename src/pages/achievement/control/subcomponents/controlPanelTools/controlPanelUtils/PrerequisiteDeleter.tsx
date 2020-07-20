@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
-import AchievementSelector from './AchievementSelector';
+import AchievementSelection from './AchievementSelection';
 
 type PrerequisiteDeleterProps = {
   editableAchievement: AchievementItem;
@@ -42,7 +42,7 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
   return (
     <>
       <Button className="editor-button" onClick={toggleDialogOpen} text={'Delete A Prerequisite'} />
-      <AchievementSelector
+      <AchievementSelection
         selections={prerequisites}
         inferencer={inferencer}
         selectedId={deletedPrerequisiteID}
