@@ -16,7 +16,7 @@ export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];
   private inputManager: GameInputManager | undefined;
-  private phaseTransitionCallback: (newPhase: GamePhaseType) => void;
+  private phaseTransitionCallback: (newPhase: GamePhaseType) => boolean | void;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
@@ -54,7 +54,9 @@ export default class GamePhaseManager {
   }
 
   private async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    await this.phaseTransitionCallback(newPhase);
+    if (await this.phaseTransitionCallback(newPhase)) {
+      return;
+    }
 
     this.getInputManager().enableKeyboardInput(false);
     this.getInputManager().enableMouseInput(false);

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import Constants from 'src/commons/utils/Constants';
 
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -52,13 +53,12 @@ export async function loadData(): Promise<FullSaveState> {
   const message = await resp.text();
   const json = JSON.parse(message);
 
-  return json.gameStates.collectibles;
+  const loadedData = json.gameStates.collectibles;
+  return _.isEmpty(loadedData) ? createEmptySaveState() : loadedData;
 }
 
 /**
  * This function clears the entire game object from the database
- *
- * @param accountInfo - the account information of the student
  */
 export async function clearData() {
   const options = {
@@ -70,20 +70,6 @@ export async function clearData() {
 
   if (resp && resp.ok) {
     alert('Game cleared!');
-    return;
-  }
-}
-
-/**
- * This function resets the data in the backend to a fresh user state
- * which includes default user settings
- *
- * @param accountInfo - the account information of the student
- */
-export async function resetData() {
-  const resp = await saveData(createEmptySaveState());
-  if (resp && resp.ok) {
-    alert('Game data reset!');
     return;
   }
 }

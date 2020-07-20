@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { resetData } from 'src/features/game/save/GameSaveRequests';
+import { clearData } from 'src/features/game/save/GameSaveRequests';
 import SourceAcademyGame, {
   AccountInfo,
   createSourceAcademyGame
@@ -32,10 +32,10 @@ function Game() {
       {isResetThere && (
         <button
           onClick={async () => {
-            await resetData();
+            await clearData();
           }}
         >
-          Reset
+          Clear data
         </button>
       )}
     </>
