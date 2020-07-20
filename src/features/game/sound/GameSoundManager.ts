@@ -111,7 +111,7 @@ class GameSoundManager {
    */
   public async playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
     if (soundKey === Constants.nullInteractionId) {
-      this.stopCurrBgMusic(fadeDuration);
+      await this.stopCurrBgMusic(fadeDuration);
       return;
     }
 
