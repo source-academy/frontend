@@ -1,5 +1,7 @@
-import { screenCenter } from '../../commons/CommonConstants';
-import { Color } from '../../utils/StyleUtils';
+import FontAssets from '../../assets/FontAssets';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { Color, HexColor } from '../../utils/StyleUtils';
 
 export const AwardsHallConstants = {
   defaultScrollSpeed: 20,
@@ -11,7 +13,16 @@ export const AwardsHallConstants = {
   awardYStartPos: 300,
   awardYSpace: screenCenter.y - 40,
   awardDim: 200,
-  hoverWidth: 300
+  hoverWidth: 300,
+  bannerXOffset: -screenSize.x * 0.28,
+  bannerTextXOffset: 30
+};
+
+export const awardBannerTextStyle: BitmapFontStyle = {
+  key: FontAssets.alienLeagueFont.key,
+  size: 35,
+  fill: HexColor.lightBlue,
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 export const awardHoverTitleStyle = {

@@ -14,7 +14,8 @@ import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
 import { resizeUnderflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
-import { AwardsHallConstants } from './AwardsHallConstants';
+import { createBitmapText } from '../../utils/TextUtils';
+import { awardBannerTextStyle, AwardsHallConstants } from './AwardsHallConstants';
 import { createAwardsHoverContainer } from './AwardsHelper';
 
 /**
@@ -107,6 +108,17 @@ class AwardsHall extends Phaser.Scene {
     );
     this.layerManager.addToLayer(Layer.Background, this.backgroundTile);
 
+    // Add banners
+    const banners = ['Achievements', 'Collectibles'];
+    const bannerPos = calcTableFormatPos({
+      direction: Direction.Column,
+      numOfItems: banners.length
+    });
+    banners.forEach((banner, index) => {
+      const bannerCont = this.createBanner(banner, bannerPos[index][1]);
+      this.layerManager.addToLayer(Layer.UI, bannerCont);
+    });
+
     const leftArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
       onDown: () => (this.isScrollLeft = true),
@@ -127,6 +139,7 @@ class AwardsHall extends Phaser.Scene {
       this.cleanUp();
       this.scene.start('MainMenu');
     });
+
     this.layerManager.addToLayer(Layer.UI, leftArrow);
     this.layerManager.addToLayer(Layer.UI, rightArrow);
     this.layerManager.addToLayer(Layer.UI, backButton);
@@ -214,6 +227,25 @@ class AwardsHall extends Phaser.Scene {
   private cleanUp() {
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
+  }
+
+  private createBanner(text: string, yPos: number) {
+    const bannerContainer = new Phaser.GameObjects.Container(this, 0, yPos);
+    const bannerBg = new Phaser.GameObjects.Sprite(
+      this,
+      AwardsHallConstants.bannerXOffset,
+      0,
+      ImageAssets.awardsPage.key
+    );
+    const bannerText = createBitmapText(
+      this,
+      text,
+      AwardsHallConstants.bannerTextXOffset,
+      0,
+      awardBannerTextStyle
+    ).setOrigin(0.0, 0.5);
+    bannerContainer.add([bannerBg, bannerText]);
+    return bannerContainer;
   }
 }
 
