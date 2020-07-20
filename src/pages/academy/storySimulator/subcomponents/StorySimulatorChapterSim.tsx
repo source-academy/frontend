@@ -9,23 +9,22 @@ type ChapterSequencerProps = {
   textAssets?: string[];
 };
 
+export const createChapterIndex = -1;
+
 /**
- * This components renders
+ * This components renders the chapter editor/chapter creator component
+ * based on the chapter chosen in the dropdown.
  *
  * @param textAssets - the list of all text assets on S3 to choose from
  */
 export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
-  const [chosenIndex, setChosenIndex] = React.useState(-1);
+  const [chosenIndex, setChosenIndex] = React.useState(createChapterIndex);
 
   return (
     <>
       <h3>Chapter Simulator</h3>
-      <select
-        className="bp3-menu"
-        defaultValue={0}
-        onChange={(e: any) => setChosenIndex(e.target.value)}
-      >
+      <select className="bp3-menu" onChange={(e: any) => setChosenIndex(e.target.value)}>
         {chapters.map((chapter, index) => {
           return (
             <option value={index} key={index}>
@@ -33,7 +32,7 @@ export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
             </option>
           );
         })}
-        <option value={-1} key={-1}>
+        <option value={createChapterIndex} key={createChapterIndex}>
           {`Create new chapter`}
         </option>
       </select>

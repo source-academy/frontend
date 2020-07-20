@@ -1,13 +1,17 @@
-import { Button } from '@blueprintjs/core';
+import { Button, Intent } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import arrayMove from 'array-move';
 import React from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
-import { SortableList } from 'src/commons/utils/SortableList';
-import ToggleButton from 'src/commons/utils/ToggleButton';
 import { useField } from 'src/commons/utils/UseFieldHook';
-import { updateChapterRequest } from 'src/features/storySimulator/StorySimulatorService';
+import {
+  deleteChapterRequest,
+  updateChapterRequest
+} from 'src/features/storySimulator/StorySimulatorService';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
+
+import { createChapterIndex } from './StorySimulatorChapterSim';
+import { StorySimulatorSortableList } from './StorySimulatorSortableList';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;
@@ -16,13 +20,13 @@ type ChapterSimProps = {
 
 const inAYear = (oldDate: string) => {
   const closeAt = new Date(oldDate);
-  closeAt.setMonth(closeAt.getMonth() + 7);
+  closeAt.setFullYear(closeAt.getFullYear() + 1);
   return closeAt;
 };
 
 const emptyStringArray: string[] = [];
 
-export default function ChapterEditor({ chapterDetail, textAssets }: ChapterSimProps) {
+const ChapterEditor = ({ chapterDetail, textAssets }: ChapterSimProps) => {
   const { value: title, inputProps: titleProps } = useField(chapterDetail, 'title', '');
   const { value: imageUrl, inputProps: imageUrlProps } = useField(chapterDetail, 'imageUrl', '');
   const { value: openDate, setValue: setOpenDate } = useField(chapterDetail, 'openAt', '');
@@ -32,6 +36,12 @@ export default function ChapterEditor({ chapterDetail, textAssets }: ChapterSimP
     'filenames',
     emptyStringArray
   );
+  const [txtsNotChosen, setTxtsNotChosen] = React.useState<string[]>([]);
+
+  React.useEffect(() => {
+    if (!textAssets) return;
+    setTxtsNotChosen(textAssets.filter(textAsset => !chosenFiles.includes(textAsset)));
+  }, [chosenFiles, textAssets]);
 
   const onSortEnd = React.useCallback(
     ({ oldIndex, newIndex }: any) => {
@@ -40,31 +50,52 @@ export default function ChapterEditor({ chapterDetail, textAssets }: ChapterSimP
     [setChosenFiles]
   );
 
-  const toggleFileSelection = React.useCallback(
-    (txtFile: string, added: boolean) => {
-      added
-        ? setChosenFiles(prevItemList => prevItemList.filter(item => item !== txtFile))
-        : setChosenFiles(prevItemList => [...prevItemList, txtFile]);
+  const deleteFileFromChosen = React.useCallback(
+    (txtFile: string) => {
+      setChosenFiles(prevItemList => prevItemList.filter(item => item !== txtFile));
+      setTxtsNotChosen(prevItemList => [...prevItemList, txtFile]);
+    },
+    [setChosenFiles]
+  );
+
+  const addFileToChosen = React.useCallback(
+    (txtFile: string) => {
+      setChosenFiles(prevItemList => [...prevItemList, txtFile]);
+      setTxtsNotChosen(prevItemList => prevItemList.filter(item => item !== txtFile));
     },
     [setChosenFiles]
   );
 
   const saveChapter = async () => {
-    const response = await updateChapterRequest(parseInt(id) >= 0 ? id : '', {
+    if (!openDate) {
+      alert('No open date set');
+      return;
+    }
+
+    const updatedChapter = {
       openAt: new Date(openDate).toISOString(),
       closeAt: inAYear(openDate).toISOString(),
       title,
-      filenames: [],
+      filenames: chosenFiles,
       imageUrl,
       isPublished: false
-    });
+    };
+
+    const response =
+      parseInt(id) === createChapterIndex
+        ? await updateChapterRequest('', updatedChapter)
+        : await updateChapterRequest(id, { story: updatedChapter });
+
+    alert(response);
+  };
+
+  const deleteChapter = async () => {
+    const response = await deleteChapterRequest(id);
     alert(response);
   };
 
   return (
     <>
-      <Button onClick={saveChapter}>Simulate Chapter</Button>
-
       <h4>
         Title: <input className="bp3-input" type="text" {...titleProps} />
       </h4>
@@ -79,22 +110,39 @@ export default function ChapterEditor({ chapterDetail, textAssets }: ChapterSimP
         Image url: <input className="bp3-input" type="text" {...imageUrlProps} />
         <Button onClick={(_: any) => window.open(imageUrl)}>View</Button>
       </h4>
-      <b>Checkpoint txt files</b>
-      <SortableList items={chosenFiles} onSortEnd={onSortEnd} />
+      <b>Checkpoint Txt Files</b>
+      <StorySimulatorSortableList
+        items={chosenFiles}
+        onSortEnd={onSortEnd}
+        deleteFileFromChosen={deleteFileFromChosen}
+      />
       <br />
-      <b>All txt files</b>
-      {textAssets &&
-        textAssets.map(textFile => (
-          <ToggleButton
-            key={textFile}
-            value={textFile}
-            toggleEffect={toggleFileSelection}
-            toggleIcons={['trash', 'add']}
-          />
+      <b>All Txt Files</b>
+      {txtsNotChosen &&
+        txtsNotChosen.map(textFile => (
+          <div>
+            <Button
+              key={`choice-${textFile}`}
+              onClick={() => addFileToChosen(textFile)}
+              icon={'add'}
+            >
+              {textFile}
+            </Button>
+          </div>
         ))}
       <br />
+      <Button icon="play" onClick={saveChapter}>
+        Simulate Chapter
+      </Button>
+      <br />
       <Button onClick={saveChapter}>Save Changes</Button>
-      <Button onClick={saveChapter}>Delete</Button>
+      <br />
+      <br />
+      <Button icon="trash" intent={Intent.WARNING} onClick={deleteChapter}>
+        Delete Chapter
+      </Button>
     </>
   );
-}
+};
+
+export default ChapterEditor;
