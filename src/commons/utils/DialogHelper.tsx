@@ -1,9 +1,9 @@
+import { Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import { Intent } from '@blueprintjs/core';
 
 import { ConfirmDialog, ConfirmDialogProps } from '../dialogs/ConfirmDialog';
-import { PromptDialogProps, PromptDialog } from '../dialogs/PromptDialog';
+import { PromptDialog, PromptDialogProps } from '../dialogs/PromptDialog';
 
 // The below is based off the Blueprint Toaster:
 // https://github.com/palantir/blueprint/blob/develop/packages/core/src/components/toast/toaster.tsx

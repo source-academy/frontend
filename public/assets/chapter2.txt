@@ -1,0 +1,12 @@
+startingLoc: emergency
+
+objectives
+    finish
+
+emergency
+    actions
+        show_dialogue(chapter2)
+
+dialogues
+    chapter2
+        Hold it, we have an emergency. You're now at chapter 2!

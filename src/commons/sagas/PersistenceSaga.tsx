@@ -1,29 +1,29 @@
+import { Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { Intent } from '@blueprintjs/core';
+import { playgroundUpdatePersistenceFile } from 'src/features/playground/PlaygroundActions';
 
 import {
+  PERSISTENCE_INITIALISE,
   PERSISTENCE_OPEN_PICKER,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PersistenceFile,
-  PERSISTENCE_INITIALISE
+  PersistenceFile
 } from '../../features/persistence/PersistenceTypes';
+import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { LOGOUT_GOOGLE } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
-import {
-  showSuccessMessage,
-  showWarningMessage,
-  showMessage,
-  dismiss
-} from '../utils/NotificationsHelper';
-import { store } from '../../pages/createStore';
-import { playgroundUpdatePersistenceFile } from 'src/features/playground/PlaygroundActions';
 import { showSimpleConfirmDialog, showSimplePromptDialog } from '../utils/DialogHelper';
+import {
+  dismiss,
+  showMessage,
+  showSuccessMessage,
+  showWarningMessage
+} from '../utils/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];

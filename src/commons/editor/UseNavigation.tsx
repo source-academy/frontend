@@ -1,9 +1,9 @@
 import { createContext, hasDeclaration } from 'js-slang';
 import * as React from 'react';
-import { Links } from '../utils/Constants';
 
-import { EditorHook } from './Editor';
 import { Documentation } from '../documentation/Documentation';
+import { Links } from '../utils/Constants';
+import { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:

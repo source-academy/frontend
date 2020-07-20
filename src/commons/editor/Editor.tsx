@@ -1,28 +1,28 @@
-/* tslint-disable no-unused-vars */
-import { require as acequire, Ace /*, Range*/ } from 'ace-builds';
+/* eslint-disable simple-import-sort/sort */
+import { Ace, require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
+import 'js-slang/dist/editors/ace/theme/source';
+
+// import { createContext, getAllOccurrencesInScope } from 'js-slang';
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-// import { createContext, getAllOccurrencesInScope } from 'js-slang';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import 'js-slang/dist/editors/ace/theme/source';
-import { Variant } from 'js-slang/dist/types';
-
 import { Documentation } from '../documentation/Documentation';
 import { useMergedRef } from '../utils/Hooks';
-import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
+import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
-import useTypeInference from './UseTypeInference';
-import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
+import useShareAce from './UseShareAce';
+import useTypeInference from './UseTypeInference';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (

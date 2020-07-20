@@ -5,7 +5,7 @@ import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcere
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
-import { Position, HighlightedLines } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
 export const BEGIN_CLEAR_CONTEXT = 'BEGIN_CLEAR_CONTEXT';
@@ -104,10 +104,19 @@ export type WorkspaceState = {
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
+  readonly debuggerContext: DebuggerContext;
 };
 
 type ReplHistory = {
   browseIndex: null | number; // [0, 49] if browsing, else null
   records: string[];
   originalValue: string;
+};
+
+export type DebuggerContext = {
+  result: any;
+  lastDebuggerResult: any;
+  code: string;
+  context: Context;
+  workspaceLocation?: WorkspaceLocation;
 };
