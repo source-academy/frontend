@@ -1,3 +1,4 @@
+import { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
@@ -6,7 +7,7 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED, SideContentType } from '../sideContent/SideContentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
@@ -257,4 +258,19 @@ export const promptAutocomplete = (
     row,
     column,
     callback
+  });
+
+export const notifyProgramEvaluated = (
+  result: any,
+  lastDebuggerResult: any,
+  code: string,
+  context: Context,
+  workspaceLocation?: WorkspaceLocation
+) =>
+  action(NOTIFY_PROGRAM_EVALUATED, {
+    result,
+    lastDebuggerResult,
+    code,
+    context,
+    workspaceLocation
   });

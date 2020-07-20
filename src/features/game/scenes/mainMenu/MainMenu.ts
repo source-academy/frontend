@@ -38,7 +38,6 @@ class MainMenu extends Phaser.Scene {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     this.preloadAssets();
     this.layerManager.initialise(this);
-    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
     this.load.text(TextAssets.awardsMapping.key, TextAssets.awardsMapping.path);
     addLoadingScreen(this);
     this.load.once('filecomplete', (assetkey: string) => `finished loading ${assetkey}`);
@@ -86,6 +85,7 @@ class MainMenu extends Phaser.Scene {
     Object.values(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
+    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
 
   private renderBackground() {

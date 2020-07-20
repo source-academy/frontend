@@ -85,7 +85,6 @@ class CheckpointTransition extends Phaser.Scene {
       loadedGameState.userSaveState.lastCompletedChapter,
       currChapter
     );
-    console.log(loadedGameState);
     await saveData(loadedGameState);
   }
 

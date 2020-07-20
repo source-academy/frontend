@@ -133,7 +133,6 @@ class GameManager extends Phaser.Scene {
     this.escapeManager.initialise(this, this.phaseManager);
 
     GameGlobalAPI.getInstance().loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
-
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
     );
@@ -222,7 +221,6 @@ class GameManager extends Phaser.Scene {
   }
 
   public cleanUp() {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic();
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }

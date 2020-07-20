@@ -314,11 +314,7 @@ class GameGlobalAPI {
   }
 
   public playBgMusic(soundKey: AssetKey) {
-    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
-  }
-
-  public async stopCurrBgMusic(fadeDuration?: number) {
-    SourceAcademyGame.getInstance().getSoundManager().stopCurrBgMusic(fadeDuration);
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(soundKey);
   }
 
   public async stopAllSound() {

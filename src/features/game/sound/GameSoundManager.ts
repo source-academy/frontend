@@ -1,4 +1,5 @@
 import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
+import { Constants } from '../commons/CommonConstants';
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { SettingsJson } from '../save/GameSaveTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -87,14 +88,38 @@ class GameSoundManager {
     }
   }
 
-  public playBgMusic(soundKey: AssetKey) {
+  /**
+   * Play a background music. Only one background music is able
+   * to be played at any one time; hence calling this method will
+   * also stop the previous background music.
+   *
+   * If the provided soundKey is the same as the the currently
+   * playing background music, it will be skipped (to avoid strange
+   * stopping and playing of the same music).
+   *
+   * To play no music, the parameter can be set to empty string i.e. ''.
+   *
+   * NOTE:
+   * Calling playBgMusic in rapid succession can lead
+   * to race conditions and undefined behaviour. However, there should
+   * not be a situation where you need to call playBgMusic in succession.
+   *
+   * @param soundKey key to the background music to be played.
+   * @param fadeDuration duration to fade out previous background music
+   */
+  public playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
+    if (soundKey === Constants.nullInteractionId) {
+      this.stopCurrBgMusic(fadeDuration);
+      return;
+    }
+
     // If same music is already playing, skip
     const currBgMusicKey = this.getCurrBgMusicKey();
     if (currBgMusicKey && currBgMusicKey === soundKey) {
       return;
     }
 
-    this.stopCurrBgMusic();
+    this.stopCurrBgMusic(fadeDuration);
     const soundAsset = mandatory(this.getSoundAsset(soundKey));
 
     const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
@@ -105,20 +130,32 @@ class GameSoundManager {
     this.setCurrBgMusicKey(soundAsset.key);
   }
 
-  public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
+  /**
+   * Stop the currently playing background music.
+   *
+   * NOTE:
+   * This method is made private because calling it
+   * back-to-back with playBgMusic causes race conditions.
+   *
+   * @param fadeDuration duration to fade out the background music
+   */
+  private async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
     const currBgMusicKey = this.getCurrBgMusicKey();
-    this.setCurrBgMusicKey(undefined);
-    if (this.getCurrentScene() && currBgMusicKey) {
-      // Fade out current music
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      this.getCurrentScene().tweens.add({
-        targets: currBgMusic,
-        ...musicFadeOutTween,
-        duration: fadeDuration
-      });
 
-      await sleep(fadeDuration);
-      this.getBaseSoundManager().stopByKey(currBgMusicKey);
+    if (this.getCurrentScene() && currBgMusicKey) {
+      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
+      if (currBgMusic.isPlaying) {
+        // Fade out current music
+        this.getCurrentScene().tweens.add({
+          targets: currBgMusic,
+          ...musicFadeOutTween,
+          duration: fadeDuration
+        });
+
+        await sleep(fadeDuration);
+        this.getBaseSoundManager().stopByKey(currBgMusicKey);
+        this.setCurrBgMusicKey(undefined);
+      }
     }
   }
 

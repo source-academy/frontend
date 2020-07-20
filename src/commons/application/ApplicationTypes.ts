@@ -10,6 +10,7 @@ import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
   WorkspaceState
@@ -208,7 +209,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isEditorAutorun: false,
   isRunning: false,
   isDebugging: false,
-  enableDebugging: true
+  enableDebugging: true,
+  debuggerContext: {} as DebuggerContext
 });
 
 export const defaultRoomId = null;
