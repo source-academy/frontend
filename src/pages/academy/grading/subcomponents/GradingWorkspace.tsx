@@ -19,7 +19,7 @@ import { ControlBarNextButton } from '../../../../commons/controlBar/ControlBarN
 import { ControlBarPreviousButton } from '../../../../commons/controlBar/ControlBarPreviousButton';
 import { ControlBarQuestionViewButton } from '../../../../commons/controlBar/ControlBarQuestionViewButton';
 import { ControlBarRunButton } from '../../../../commons/controlBar/ControlBarRunButton';
-import { Position } from '../../../../commons/editor/EditorTypes';
+import { HighlightedLines, Position } from '../../../../commons/editor/EditorTypes';
 import Markdown from '../../../../commons/Markdown';
 import { SideContentProps } from '../../../../commons/sideContent/SideContent';
 import SideContentAutograder from '../../../../commons/sideContent/SideContentAutograder';
@@ -76,7 +76,7 @@ export type StateProps = {
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
