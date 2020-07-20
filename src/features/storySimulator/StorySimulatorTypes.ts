@@ -12,6 +12,6 @@ export type ChapterDetail = {
   closeAt: string;
   title: string;
   filenames: string[];
-  isPublished: string;
+  isPublished: boolean;
   imageUrl: string;
 };

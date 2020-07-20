@@ -1,5 +1,6 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
 import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
 
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
@@ -11,6 +12,7 @@ import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
+import { loadImage } from '../../utils/LoaderUtils';
 import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
 import { SampleChapters } from './SampleChapters';
@@ -21,7 +23,7 @@ import { SampleChapters } from './SampleChapters';
  */
 class ChapterSelect extends Phaser.Scene {
   public layerManager: GameLayerManager;
-  public chapterDetails: GameChapter[];
+  public gameChapters: GameChapter[];
 
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
@@ -35,7 +37,7 @@ class ChapterSelect extends Phaser.Scene {
 
     this.chapterContainer = undefined;
     this.backButtonContainer = undefined;
-    this.chapterDetails = [];
+    this.gameChapters = [];
     this.layerManager = new GameLayerManager();
     this.autoScrolling = true;
     this.isScrollLeft = false;
@@ -47,14 +49,14 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public preload() {
-    this.chapterDetails = SampleChapters;
     addLoadingScreen(this);
-    this.preloadAssets();
     this.layerManager.initialise(this);
   }
 
   public async create() {
+    this.gameChapters = await fetchChapters();
     this.loadedGameState = await loadData();
+    await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();
     this.autoScroll();
@@ -71,7 +73,7 @@ class ChapterSelect extends Phaser.Scene {
     }
     this.chapterContainer.x = limitNumber(
       newXPos,
-      -chapConstants.imageDist * (this.chapterDetails.length - 1),
+      -chapConstants.imageDist * (this.gameChapters.length - 1),
       0
     );
   }
@@ -82,10 +84,13 @@ class ChapterSelect extends Phaser.Scene {
     this.layerManager.clearAllLayers();
   }
 
-  private preloadAssets() {
-    this.chapterDetails.forEach((chapter, index) => {
-      this.load.image(`chapterImage${index}`, toS3Path(chapter.previewBgPath));
-    });
+  private async preloadChapterAssets() {
+    await Promise.all(
+      this.gameChapters.map(
+        async chapterDetail =>
+          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl))
+      )
+    );
   }
 
   private renderBackground() {
@@ -163,7 +168,7 @@ class ChapterSelect extends Phaser.Scene {
   private createChapterContainer() {
     const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
     chapterContainer.add(
-      this.chapterDetails.map((chapterDetail, chapterIndex) => {
+      this.gameChapters.map((chapterDetail, chapterIndex) => {
         // Use latest checkpoint if it exist
         let lastCheckpoint = 0;
         if (this.loadedGameState && this.loadedGameState.gameSaveStates[chapterIndex]) {

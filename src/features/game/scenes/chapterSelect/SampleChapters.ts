@@ -3,17 +3,17 @@ import { GameChapter } from '../../chapter/GameChapterTypes';
 export const SampleChapters: GameChapter[] = [
   {
     title: 'Spaceship Emergency',
-    previewBgPath: '/locations/planet-y-orbit/crashing.png',
-    checkpointsFilenames: ['../assets/chapter0.txt', '../assets/chapter0.1.txt']
+    imageUrl: '/locations/planet-y-orbit/crashing.png',
+    filenames: ['../assets/chapter0.txt', '../assets/chapter0.1.txt']
   },
   {
     title: 'Alien Attack',
-    previewBgPath: '/locations/telebay/emergency.png',
-    checkpointsFilenames: ['../assets/chapter1.txt']
+    imageUrl: '/locations/telebay/emergency.png',
+    filenames: ['../assets/chapter1.txt']
   },
   {
     title: 'Jedi Master',
-    previewBgPath: '/locations/classroom/normal.png',
-    checkpointsFilenames: ['../assets/chapter2.txt']
+    imageUrl: '/locations/classroom/normal.png',
+    filenames: ['../assets/chapter2.txt']
   }
 ];

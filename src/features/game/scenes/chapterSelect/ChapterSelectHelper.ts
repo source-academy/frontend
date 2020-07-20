@@ -15,7 +15,7 @@ import chapConstants, {
 
 export function createChapter(
   scene: ChapterSelect,
-  { title }: GameChapter,
+  { title, imageUrl }: GameChapter,
   index: number,
   lastCheckpointsIdx: number
 ) {
@@ -23,12 +23,10 @@ export function createChapter(
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
 
   // Chapter Preview
-  const chapterPreview = new Phaser.GameObjects.Image(
-    scene,
-    0,
-    0,
-    `chapterImage${index}`
-  ).setDisplaySize(chapConstants.imageRect.width, chapConstants.imageRect.height);
+  const chapterPreview = new Phaser.GameObjects.Image(scene, 0, 0, imageUrl).setDisplaySize(
+    chapConstants.imageRect.width,
+    chapConstants.imageRect.height
+  );
 
   // Chapter Frame
   const chapterFrame = new Phaser.GameObjects.Sprite(
@@ -57,7 +55,7 @@ export function createChapter(
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
     assetKey: ImageAssets.chapterRepeatButton.key,
-    onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
+    onUp: () => callGameManagerOnTxtLoad(scene, scene.gameChapters, false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
     onOut: () => chapterRepeatHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -69,7 +67,7 @@ export function createChapter(
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
     onUp: () =>
-      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
+      callGameManagerOnTxtLoad(scene, scene.gameChapters, true, index, lastCheckpointsIdx),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {

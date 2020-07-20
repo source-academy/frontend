@@ -93,7 +93,7 @@ class CheckpointTransition extends Phaser.Scene {
     currChapter: number,
     currCheckpoint: number
   ) {
-    return currCheckpoint >= chapterDetails[currChapter].checkpointsFilenames.length - 1;
+    return currCheckpoint >= chapterDetails[currChapter].filenames.length - 1;
   }
 }
 

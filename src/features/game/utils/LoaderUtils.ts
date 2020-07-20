@@ -24,7 +24,8 @@ export const loadImage = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
       resolve(assetKey);
     } else {
       scene.load.image(assetKey, assetPath);
-      scene.load.once('filecomplete', resolve);
+      scene.load.once(`filecomplete-image-${assetKey}`, resolve);
+      scene.load.once(`loaderror`, resolve);
       scene.load.start();
     }
   });
@@ -43,7 +44,7 @@ export const loadText = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: Ass
       resolve(assetKey);
     } else {
       scene.load.text(assetKey, assetPath);
-      scene.load.once('filecomplete', resolve);
+      scene.load.once(`filecomplete-text-${assetKey}`, resolve);
       scene.load.start();
     }
   });
@@ -62,7 +63,7 @@ export const loadSound = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
       resolve(assetKey);
     } else {
       scene.load.audio(assetKey, assetPath);
-      scene.load.once('filecomplete', resolve);
+      scene.load.once(`filecomplete-text-${assetKey}`, resolve);
       scene.load.start();
     }
   });

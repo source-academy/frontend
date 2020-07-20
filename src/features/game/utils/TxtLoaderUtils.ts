@@ -26,7 +26,7 @@ export async function callGameManagerOnTxtLoad(
   chapterNum: number,
   checkpointNum: number
 ) {
-  const filename = chapterDetails[chapterNum].checkpointsFilenames[checkpointNum];
+  const filename = chapterDetails[chapterNum].filenames[checkpointNum];
   if (!filename) {
     return;
   }

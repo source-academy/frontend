@@ -11,7 +11,8 @@ export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
 
   React.useEffect(() => {
     (async () => {
-      setValue(await requestFn());
+      const fetchedValue = await requestFn();
+      setValue(fetchedValue);
     })();
   }, [requestFn]);
 
