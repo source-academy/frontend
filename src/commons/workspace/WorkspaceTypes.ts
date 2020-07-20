@@ -104,10 +104,19 @@ export type WorkspaceState = {
   readonly sideContentHeight?: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
+  readonly debuggerContext: DebuggerContext;
 };
 
 type ReplHistory = {
   browseIndex: null | number; // [0, 49] if browsing, else null
   records: string[];
   originalValue: string;
+};
+
+export type DebuggerContext = {
+  result: any;
+  lastDebuggerResult: any;
+  code: string;
+  context: Context;
+  workspaceLocation?: WorkspaceLocation;
 };

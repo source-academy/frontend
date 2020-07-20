@@ -354,7 +354,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           openLinksInNewWindow={true}
         />
       ),
-      id: SideContentType.introduction
+      id: SideContentType.introduction,
+      toSpawn: () => true
     }),
     [props.sourceChapter, props.sourceVariant]
   );
@@ -394,7 +395,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         label: 'Substituter',
         iconName: IconNames.FLOW_REVIEW,
         body: <SideContentSubstVisualizer content={processStepperOutput(props.output)} />,
-        id: SideContentType.substVisualizer
+        id: SideContentType.substVisualizer,
+        toSpawn: () => true
       });
     }
     return tabs;
@@ -485,7 +487,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       defaultSelectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
-      tabs
+      tabs,
+      workspaceLocation: 'playground'
     },
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
@@ -505,33 +508,38 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
+  toSpawn: () => true
 };
 
 const videoDisplayTab: SideContentTab = {
   label: 'Video Display',
   iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />
+  body: <SideContentVideoDisplay />,
+  toSpawn: () => true
 };
 
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
-  body: <SideContentFaceapiDisplay />
+  body: <SideContentFaceapiDisplay />,
+  toSpawn: () => true
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
+  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
+  toSpawn: () => true
 };
 
 export default Playground;

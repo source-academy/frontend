@@ -35,7 +35,7 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
 
   public render() {
     const testcasesHeader = (
-      <div className="testcases-header" key={-1}>
+      <div className="testcases-header">
         <div className="header-fn">
           <Icon icon={IconNames.CARET_DOWN} />
           Testcase (click to run)
@@ -52,7 +52,7 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
     );
 
     const resultsHeader = (
-      <div className="results-header" key={-1}>
+      <div className="results-header">
         <div className="header-data">
           <div className="header-sn">
             <Icon icon={IconNames.CARET_DOWN} />
@@ -76,27 +76,29 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
 
     const testcases =
       this.props.testcases.length > 0 ? (
-        [testcasesHeader].concat(
-          this.props.testcases.map((testcase, index) => (
+        <div>
+          {testcasesHeader}
+          {this.props.testcases.map((testcase, index) => (
             <SideContentAutograderCard
               key={index}
               index={index}
               testcase={testcase}
               handleTestcaseEval={this.props.handleTestcaseEval}
             />
-          ))
-        )
+          ))}
+        </div>
       ) : (
-        <div className="noResults">There are no testcases provided for this mission.</div>
+        <div className="noResults">There are no testcases provided for this question.</div>
       );
 
     const results =
       this.props.autogradingResults.length > 0 ? (
-        [resultsHeader].concat(
-          this.props.autogradingResults.map((result, index) => (
+        <div>
+          {resultsHeader}
+          {this.props.autogradingResults.map((result, index) => (
             <SideContentResultCard key={index} index={index} result={result} />
-          ))
-        )
+          ))}
+        </div>
       ) : (
         <div className="noResults">There are no results to show.</div>
       );
