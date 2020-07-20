@@ -1,5 +1,5 @@
 import React from 'react';
-import { useRequest } from 'src/commons/utils/UseFieldHook';
+import { useRequest } from 'src/commons/utils/Hooks';
 import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
@@ -9,7 +9,21 @@ type ChapterSequencerProps = {
   textAssets?: string[];
 };
 
+export const inAYear = (date: Date) => {
+  date.setFullYear(date.getFullYear() + 1);
+  return date;
+};
+
 export const createChapterIndex = -1;
+const defaultChapter = {
+  id: createChapterIndex,
+  title: 'title goes here',
+  imageUrl: 'https://example.com',
+  openAt: new Date().toISOString(),
+  closeAt: inAYear(new Date()).toISOString(),
+  isPublished: false,
+  filenames: []
+};
 
 /**
  * This components renders the chapter editor/chapter creator component
@@ -17,7 +31,7 @@ export const createChapterIndex = -1;
  *
  * @param textAssets - the list of all text assets on S3 to choose from
  */
-export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
+const ChapterSim = React.memo(({ textAssets }: ChapterSequencerProps) => {
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
   const [chosenIndex, setChosenIndex] = React.useState(createChapterIndex);
 
@@ -37,7 +51,11 @@ export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
         </option>
       </select>
       <hr />
-      <StorySimulatorChapterEditor chapterDetail={chapters[chosenIndex]} textAssets={textAssets} />
+      <StorySimulatorChapterEditor
+        chapterDetail={chapters[chosenIndex] || defaultChapter}
+        textAssets={textAssets}
+      />
     </>
   );
-}
+});
+export default ChapterSim;
