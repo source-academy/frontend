@@ -4,6 +4,7 @@ import { AssetKey, AssetPath } from '../commons/CommonTypes';
 import { SettingsJson } from '../save/GameSaveTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory, sleep, toS3Path } from '../utils/GameUtils';
+import StringUtils from '../utils/StringUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
 
 /**
@@ -11,13 +12,14 @@ import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
  * It proxies the game's sound manager
  */
 class GameSoundManager {
-  private currBgMusicKey: AssetKey | undefined;
+  private currBgMusicKey: AssetKey;
   private soundAssetMap: Map<AssetKey, SoundAsset>;
   private bgmVol: number;
   private sfxVol: number;
 
   constructor() {
     this.soundAssetMap = new Map<AssetKey, SoundAsset>();
+    this.currBgMusicKey = Constants.nullInteractionId;
     this.bgmVol = 1;
     this.sfxVol = 1;
   }
@@ -27,7 +29,7 @@ class GameSoundManager {
     this.sfxVol = settings.sfxVolume !== undefined ? settings.sfxVolume : 1;
 
     // Modify currently playing BGM, if any
-    if (this.currBgMusicKey) {
+    if (this.isNonEmptyBGMKey()) {
       const bgm = this.getBaseSoundManager().get(
         this.currBgMusicKey
       ) as Phaser.Sound.HTML5AudioSound;
@@ -39,7 +41,7 @@ class GameSoundManager {
     }
   }
 
-  public setCurrBgMusicKey(key: AssetKey | undefined) {
+  private setCurrBgMusicKey(key: AssetKey) {
     this.currBgMusicKey = key;
   }
 
@@ -107,19 +109,20 @@ class GameSoundManager {
    * @param soundKey key to the background music to be played.
    * @param fadeDuration duration to fade out previous background music
    */
-  public playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
+  public async playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
     if (soundKey === Constants.nullInteractionId) {
       this.stopCurrBgMusic(fadeDuration);
       return;
     }
 
     // If same music is already playing, skip
-    const currBgMusicKey = this.getCurrBgMusicKey();
-    if (currBgMusicKey && currBgMusicKey === soundKey) {
+    if (this.getCurrBgMusicKey() === soundKey) {
       return;
     }
 
-    this.stopCurrBgMusic(fadeDuration);
+    // We need to await to ensure this.currBgMusicKey has finished updating
+    await this.stopCurrBgMusic(fadeDuration);
+
     const soundAsset = mandatory(this.getSoundAsset(soundKey));
 
     const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
@@ -140,10 +143,8 @@ class GameSoundManager {
    * @param fadeDuration duration to fade out the background music
    */
   private async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    const currBgMusicKey = this.getCurrBgMusicKey();
-
-    if (this.getCurrentScene() && currBgMusicKey) {
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
+    if (this.getCurrentScene() && this.isNonEmptyBGMKey()) {
+      const currBgMusic = this.getBaseSoundManager().get(this.getCurrBgMusicKey());
       if (currBgMusic.isPlaying) {
         // Fade out current music
         this.getCurrentScene().tweens.add({
@@ -153,8 +154,8 @@ class GameSoundManager {
         });
 
         await sleep(fadeDuration);
-        this.getBaseSoundManager().stopByKey(currBgMusicKey);
-        this.setCurrBgMusicKey(undefined);
+        this.getBaseSoundManager().stopByKey(this.getCurrBgMusicKey());
+        this.setCurrBgMusicKey(Constants.nullInteractionId);
       }
     }
   }
@@ -164,23 +165,22 @@ class GameSoundManager {
   }
 
   public pauseCurrBgMusic() {
-    const currBgMusicKey = this.getCurrBgMusicKey();
-    if (this.getCurrentScene() && currBgMusicKey) {
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
+    if (this.getCurrentScene() && this.isNonEmptyBGMKey()) {
+      const currBgMusic = this.getBaseSoundManager().get(this.getCurrBgMusicKey());
       if (currBgMusic.isPlaying) currBgMusic.pause();
     }
   }
 
   public continueCurrBgMusic() {
-    const currBgMusicKey = this.getCurrBgMusicKey();
-    if (this.getCurrentScene() && currBgMusicKey) {
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
+    if (this.getCurrentScene() && this.isNonEmptyBGMKey()) {
+      const currBgMusic = this.getBaseSoundManager().get(this.getCurrBgMusicKey());
       if (currBgMusic.isPaused) currBgMusic.play();
     }
   }
 
   public getBaseSoundManager = () => mandatory(SourceAcademyGame.getInstance().sound);
   public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
+  public isNonEmptyBGMKey = () => !StringUtils.isEmptyString(this.getCurrBgMusicKey());
 }
 
 export default GameSoundManager;

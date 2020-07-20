@@ -1,3 +1,5 @@
+import { Constants } from '../commons/CommonConstants';
+
 export default class StringUtils {
   /**
    * Splits text into several paragraphs, each containing header
@@ -143,5 +145,14 @@ export default class StringUtils {
    */
   public static toIntString(num: number) {
     return Math.floor(num).toString();
+  }
+
+  /**
+   * Check whether given string is empty string.
+   *
+   * @param str string to check
+   */
+  public static isEmptyString(str: string) {
+    return str === Constants.nullInteractionId;
   }
 }
