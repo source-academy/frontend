@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRequest } from 'src/commons/utils/UseFieldHook';
 import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
@@ -8,15 +9,14 @@ type ChapterSequencerProps = {
   textAssets?: string[];
 };
 
+/**
+ * This components renders
+ *
+ * @param textAssets - the list of all text assets on S3 to choose from
+ */
 export default function ChapterSim({ textAssets }: ChapterSequencerProps) {
-  const [chapters, setChapters] = React.useState<ChapterDetail[]>([]);
+  const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
   const [chosenIndex, setChosenIndex] = React.useState(-1);
-
-  React.useEffect(() => {
-    (async () => {
-      setChapters(await fetchChapters());
-    })();
-  }, []);
 
   return (
     <>

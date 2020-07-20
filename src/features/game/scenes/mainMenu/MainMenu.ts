@@ -40,9 +40,11 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.initialise(this);
     this.load.text(TextAssets.awardsMapping.key, TextAssets.awardsMapping.path);
     addLoadingScreen(this);
+    this.load.once('filecomplete', (assetkey: string) => `finished loading ${assetkey}`);
   }
 
   public async create() {
+    console.log('create');
     if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
       console.log('Staff do not have accounts');
       return;
