@@ -149,29 +149,24 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
-  return achievements.map((achievement: any) => {
-    achievement.id = achievement.inferencer_id;
-    achievement.ability = achievement.ability as AchievementAbility;
-
-    achievement.deadline = new Date(achievement.closeAt);
-    achievement.release = new Date(achievement.openAt);
-
-    achievement.view = {};
-    achievement.view.canvasUrl = achievement.canvasUrl ? achievement.canvasUrl : '';
-    achievement.view.description = achievement.description ? achievement.description : '';
-    achievement.view.goalText = achievement.goalText ? achievement.goalText : '';
-    achievement.view.completionText = achievement.completionText ? achievement.completionText : '';
-
-    if (achievement.goals === null || achievement.goals === undefined) {
-      achievement.goals = [];
-    }
-
-    if (achievement.prerequisiteIds === null) {
-      achievement.prerequisiteIds = [];
-    }
-
-    return achievement as AchievementItem;
-  });
+  return achievements.map(
+    (achievement: any) =>
+      ({
+        ...achievement,
+        id: achievement.inferencer_id,
+        ability: achievement.ability as AchievementAbility,
+        deadline: new Date(achievement.closeAt),
+        release: new Date(achievement.openAt),
+        view: {
+          canvasUrl: achievement.canvasUrl || '',
+          description: achievement.description || '',
+          goalText: achievement.goalText || '',
+          completionText: achievement.completionText || ''
+        },
+        goals: achievement.goals || [],
+        prerequisiteIds: achievement.prerequisiteIds || []
+      } as AchievementItem)
+  );
 }
 
 /**

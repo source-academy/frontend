@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 import { AchievementItem } from '../../../../../../features/achievement/AchievementTypes';
-import AchievementInferencer from '../../../..//dashboard/subcomponents/utils/AchievementInferencer';
+import AchievementInferencer from '../../../../dashboard/subcomponents/utils/AchievementInferencer';
 import AchievementSelector from './AchievementSelector';
 
 type PrerequisiteAdderProps = {
@@ -33,7 +33,7 @@ function PrerequisiteAdder(props: PrerequisiteAdderProps) {
    * Else, it will always take the first available prerequisite id.
    */
   const [addedPrerequisiteID, setAddedPrerequisiteID] = useState<number>(
-    nonPrerequisites.length === 0 ? 0 : nonPrerequisites[0]
+    nonPrerequisites.length === -1 ? 0 : nonPrerequisites[0]
   );
 
   // This actions adds a new prerequisite to the achievement.

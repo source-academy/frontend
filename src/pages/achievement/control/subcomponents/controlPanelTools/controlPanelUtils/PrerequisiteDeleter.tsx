@@ -22,13 +22,7 @@ function PrerequisiteDeleter(props: PrerequisiteDeleterProps) {
 
   const deletePrerequisite = (prerequisiteID: number) => {
     const newAchievement = editableAchievement;
-
-    for (let i = 0; i < newAchievement.prerequisiteIds.length; i++) {
-      if (newAchievement.prerequisiteIds[i] === prerequisiteID) {
-        newAchievement.prerequisiteIds.splice(i, 1);
-      }
-    }
-
+    newAchievement.prerequisiteIds.filter(id => id !== prerequisiteID);
     return newAchievement;
   };
 

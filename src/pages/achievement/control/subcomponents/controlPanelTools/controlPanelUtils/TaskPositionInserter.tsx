@@ -25,7 +25,10 @@ function TaskPositionInserter(props: TaskPositionInserterProps) {
     setNewPosition(position);
   };
 
-  const items = Array.from(Array(inferencer.listTaskIds().length), (_, i) => i + 1);
+  const items = Array.from(
+    Array(inferencer.listTaskIds().length),
+    (_, taskInferencerId) => taskInferencerId + 1
+  );
 
   const selectionsRenderer: ItemRenderer<number> = (position, { handleClick }) => {
     return <MenuItem active={false} key={position} onClick={handleClick} text={position} />;

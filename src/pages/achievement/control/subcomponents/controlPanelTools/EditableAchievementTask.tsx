@@ -20,12 +20,14 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
 
+  const noOp = () => {};
+
   const task = (
     <AchievementTask
       id={id}
       inferencer={inferencer}
       filterStatus={FilterStatus.ALL}
-      displayView={() => {}}
+      displayView={noOp}
       handleGlow={(id: number) => {}}
     />
   );

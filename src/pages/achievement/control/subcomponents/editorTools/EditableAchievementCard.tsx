@@ -68,6 +68,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setHasChanges(false);
     setPendingUpload(true);
 
+    // It means that there is currently an item being added.
+    // Once this item is added, we can reset it to -1, which means
+    // that there is no achievement being added.
+    // indicating to the system that there is no achievement
+    // being added.
     if (id === adderId) {
       setAdderId(-1);
     }
