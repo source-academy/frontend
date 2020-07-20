@@ -44,7 +44,6 @@ class MainMenu extends Phaser.Scene {
   }
 
   public async create() {
-    console.log('create');
     if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
       console.log('Staff do not have accounts');
       return;

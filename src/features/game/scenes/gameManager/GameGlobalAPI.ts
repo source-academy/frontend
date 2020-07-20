@@ -81,8 +81,8 @@ class GameGlobalAPI {
     return this.getGameManager().stateManager.hasLocationUpdate(locationId, mode);
   }
 
-  public changeLocationTo(locationName: string) {
-    this.getGameManager().changeLocationTo(locationName);
+  public async changeLocationTo(locationName: string) {
+    await this.getGameManager().changeLocationTo(locationName);
   }
 
   /////////////////////

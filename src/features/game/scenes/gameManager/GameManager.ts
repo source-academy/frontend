@@ -153,7 +153,7 @@ class GameManager extends Phaser.Scene {
   public async create() {
     await this.userStateManager.loadAssessments();
     await this.userStateManager.loadAchievements();
-    this.changeLocationTo(this.currentLocationId, true);
+    await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
   }
 

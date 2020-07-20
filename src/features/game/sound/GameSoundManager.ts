@@ -22,6 +22,7 @@ class GameSoundManager {
     this.currBgMusicKey = Constants.nullInteractionId;
     this.bgmVol = 1;
     this.sfxVol = 1;
+    (this.getBaseSoundManager() as Phaser.Sound.HTML5AudioSoundManager).unlock();
   }
 
   public applyUserSettings(settings: SettingsJson) {
@@ -115,14 +116,14 @@ class GameSoundManager {
       return;
     }
 
-    // Requested soundKey is empty, stop current BGM
-    if (soundKey === Constants.nullInteractionId) {
-      await this.stopCurrBgMusic(fadeDuration);
+    // If same music is already playing, skip
+    if (this.getCurrBgMusicKey() === soundKey) {
       return;
     }
 
-    // If same music is already playing, skip
-    if (this.getCurrBgMusicKey() === soundKey) {
+    // Requested soundKey is empty, stop current BGM
+    if (soundKey === Constants.nullInteractionId) {
+      await this.stopCurrBgMusic(fadeDuration);
       return;
     }
 
