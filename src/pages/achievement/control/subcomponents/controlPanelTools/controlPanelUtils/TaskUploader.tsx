@@ -11,7 +11,7 @@ function TaskUploader(props: TaskUploaderProps) {
 
   return (
     <>
-      {pendingUpload ? (
+      {pendingUpload && (
         <Button
           className={'main-adder'}
           icon={'export'}
@@ -19,7 +19,7 @@ function TaskUploader(props: TaskUploaderProps) {
           intent={'primary'}
           onClick={uploadChanges}
         />
-      ) : null}
+      )}
     </>
   );
 }

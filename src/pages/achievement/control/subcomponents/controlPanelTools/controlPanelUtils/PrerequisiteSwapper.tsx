@@ -10,7 +10,7 @@ type PrerequisiteSwapperProps = {
 
   setDialogOpen: any;
   isDialogOpen: boolean;
-  action: any;
+  swapPrerequisitePositionAction: any;
 
   firstID: number;
   setFirstID: any;
@@ -24,7 +24,7 @@ function PrerequisiteSwapper(props: PrerequisiteSwapperProps) {
     inferencer,
     setDialogOpen,
     isDialogOpen,
-    action,
+    swapPrerequisitePositionAction,
     firstID,
     setFirstID,
     secondID,
@@ -100,7 +100,11 @@ function PrerequisiteSwapper(props: PrerequisiteSwapperProps) {
                 </div>
 
                 <div>
-                  <Button className="editor-button" onClick={action} text={'swap'} />
+                  <Button
+                    className="editor-button"
+                    onClick={swapPrerequisitePositionAction}
+                    text={'swap'}
+                  />
                 </div>
               </div>
             </>

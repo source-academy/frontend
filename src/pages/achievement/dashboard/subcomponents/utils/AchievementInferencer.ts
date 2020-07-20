@@ -53,6 +53,9 @@ class InferencerNode {
   }
 }
 
+/**
+ * Main Class which handles the assignment of ids to each and every Achievement in the system.
+ */
 class AchievementInferencer {
   private achievements: AchievementItem[] = []; // note: the achievement_id might not be the same as its array index
   private nodeList: Map<number, InferencerNode> = new Map(); // key = achievement_id, value = achievement node

@@ -98,7 +98,7 @@ exports[`AchievementControlPanelTools component renders correctly 1`] = `
         <Blueprint3.Icon icon={[undefined]} />
       </button>
     </Blueprint3.Button>
-    <PrerequisiteSwapper prerequisiteIdDs={{...}} inferencer={{...}} setDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: swapAction]} firstID={2} setFirstID={[Function: bound dispatchAction]} secondID={2} setSecondID={[Function: bound dispatchAction]}>
+    <PrerequisiteSwapper prerequisiteIdDs={{...}} inferencer={{...}} setDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} swapPrerequisitePositionAction={[Function: swapAction]} firstID={2} setFirstID={[Function: bound dispatchAction]} secondID={2} setSecondID={[Function: bound dispatchAction]}>
       <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true}>
         <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
       </Blueprint3.Dialog>

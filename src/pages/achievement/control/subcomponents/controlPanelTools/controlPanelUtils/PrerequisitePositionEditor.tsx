@@ -56,7 +56,7 @@ function PrerequisitePositionEditor(props: PrerequisitesPositionEditorProps) {
         inferencer={inferencer}
         setDialogOpen={toggleDialogOpen}
         isDialogOpen={isDialogOpen}
-        action={swapAction}
+        swapPrerequisitePositionAction={swapAction}
         firstID={firstID}
         setFirstID={setFirstID}
         secondID={secondID}

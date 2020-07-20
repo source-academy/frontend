@@ -34,12 +34,12 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
       <div className="goal-medal">
         <Icon color="#F0E68C" className="goal-award" iconSize={44} icon={IconNames.BADGE} />
         <div>
-          {goalProgress} /{' '}
+          {goalProgress} /
           <EditableText
             placeholder={`Enter your goal target here`}
             value={goalTarget.toString()}
             onChange={changeTarget}
-          />{' '}
+          />
           XP
         </div>
       </div>
