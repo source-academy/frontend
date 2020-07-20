@@ -113,14 +113,14 @@ class AchievementInferencer {
     // 1. does not contain the removed achievement
     // 2. does not contain reference of the removed achievement in other achievement's prerequisite
     const newAchievements: AchievementItem[] = [];
-    this.achievements.forEach(parent => {
-      if (hasChild(parent)) {
+    this.achievements.forEach(achievement => {
+      if (hasChild(achievement)) {
         // reference of the removed item is filtered out
-        parent.prerequisiteIds = removeChild(parent);
+        achievement.prerequisiteIds = removeChild(achievement);
       }
-      if (parent.id !== id) {
+      if (achievement.id !== id) {
         // removed achievement is not included in the new achievements
-        newAchievements.push(parent);
+        newAchievements.push(achievement);
       }
     });
     this.achievements = newAchievements;
@@ -134,25 +134,18 @@ class AchievementInferencer {
   }
 
   public listTaskIds() {
-    return this.achievements.reduce((taskIds, achievement) => {
-      if (achievement.isTask) {
-        taskIds.push(achievement.id);
-      }
-      return taskIds;
-    }, [] as number[]);
+    return this.achievements.filter(achievement => achievement.isTask).map(task => task.id);
   }
 
   public listTaskIdsbyPosition() {
-    const tasks = this.listTaskIds().map(id => this.getAchievementItem(id));
-
-    tasks.sort((a, b) => a.position - b.position);
-    return tasks.map(task => task.id);
+    return this.achievements
+      .filter(achievement => achievement.isTask)
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .map(task => task.id);
   }
 
   public listNonTaskIds() {
-    return this.achievements
-      .filter(achievement => !achievement.isTask)
-      .map(achievement => achievement.id);
+    return this.achievements.filter(achievement => !achievement.isTask).map(nonTask => nonTask.id);
   }
 
   public setTask(achievement: AchievementItem) {
@@ -269,8 +262,8 @@ class AchievementInferencer {
   // NOTE: positions of achievements are 1-indexed.
   public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
     const achievements = this.getAchievements()
-      .filter(a => a.isTask)
-      .sort((a, b) => a.position - b.position);
+      .filter(achievement => achievement.isTask)
+      .sort((taskA, taskB) => taskA.position - taskB.position);
 
     const movedAchievement = achievements.splice(achievement.position - 1, 1)[0];
     achievements.splice(newPosition - 1, 0, movedAchievement);
