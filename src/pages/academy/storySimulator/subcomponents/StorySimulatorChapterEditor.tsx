@@ -76,6 +76,12 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
       isPublished
     };
 
+    const confirm = window.confirm(
+      `Are you sure you want to save changes to ${JSON.stringify(updatedChapter)}`
+    );
+    if (!confirm) {
+      return;
+    }
     const response =
       parseInt(id) === createChapterIndex
         ? await updateChapterRequest('', updatedChapter)

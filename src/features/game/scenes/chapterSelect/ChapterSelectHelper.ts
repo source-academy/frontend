@@ -1,5 +1,4 @@
-import { screenCenter } from 'src/features/game/commons/CommonConstants';
-
+import { Constants, screenCenter } from '../../../game/commons/CommonConstants';
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonTextHover from '../../commons/CommonTextHover';
@@ -12,6 +11,8 @@ import chapConstants, {
   chapterIndexStyle,
   chapterTitleStyle
 } from './ChapterSelectConstants';
+
+export const toStoryPath = (path: string) => `${Constants.assetsFolder}/stories/${path}`;
 
 export function createChapter(
   scene: ChapterSelect,

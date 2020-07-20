@@ -14,7 +14,7 @@ import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { loadImage } from '../../utils/LoaderUtils';
 import chapConstants from './ChapterSelectConstants';
-import { createChapter } from './ChapterSelectHelper';
+import { createChapter, toStoryPath } from './ChapterSelectHelper';
 import { SampleChapters } from './SampleChapters';
 
 /**
@@ -54,12 +54,18 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public async create() {
-    this.gameChapters = await fetchChapters();
+    this.gameChapters = await this.getGameChapters();
     this.loadedGameState = await loadData();
     await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();
     this.autoScroll();
+  }
+
+  private async getGameChapters(): Promise<GameChapter[]> {
+    const chapters = await fetchChapters();
+    chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toStoryPath)));
+    return chapters;
   }
 
   public update() {

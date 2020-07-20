@@ -1,6 +1,6 @@
 const TextAssets = {
-  defaultCheckpoint: { key: 'default-chap', path: '../assets/defaultCheckpoint.txt' },
-  awardsMapping: { key: 'awards-mapping', path: '../assets/awardsMapping.txt' }
+  defaultCheckpoint: { key: 'default-chap', path: 'defaultCheckpoint.txt' },
+  awardsMapping: { key: 'awards-mapping', path: 'awardsMapping.txt' }
 };
 
 export default TextAssets;
