@@ -10,9 +10,11 @@ import AchievementTask from './subcomponents/AchievementTask';
 import AchievementView from './subcomponents/AchievementView';
 import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
 
-const Colors = {
+export const AchievementColors = {
   blue: '#2dd1f9',
-  white: '#ffffff'
+  red: '#ff0000',
+  white: '#ffffff',
+  black: '#000000'
 };
 
 export type DispatchProps = {
@@ -38,7 +40,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [viewId, setViewId] = useState<number>(-1);
 
   const handleFilterColor = (status: FilterStatus) => {
-    return status === filterStatus ? Colors.blue : Colors.white;
+    return status === filterStatus ? AchievementColors.blue : AchievementColors.white;
   };
 
   const handleGlow = (id: number) => {
