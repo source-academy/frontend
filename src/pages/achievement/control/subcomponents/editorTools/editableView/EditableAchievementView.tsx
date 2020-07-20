@@ -2,7 +2,7 @@ import { Button, Card, Dialog } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 import { AchievementViewItem } from '../../../../../../features/achievement/AchievementTypes';
-import EditableViewescription from './EditableViewDescription';
+import EditableViewDescription from './EditableViewDescription';
 import EditableViewImage from './EditableViewImage';
 import EditableViewText from './EditableViewText';
 
@@ -62,7 +62,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
             <EditableViewImage canvasUrl={canvasUrl} title={title} setcanvasUrl={setcanvasUrl} />
 
-            <EditableViewescription description={description} setDescription={setDescription} />
+            <EditableViewDescription description={description} setDescription={setDescription} />
             <EditableViewText goalText={completionText} setGoalText={setCompletionText} />
           </Card>
         </div>
