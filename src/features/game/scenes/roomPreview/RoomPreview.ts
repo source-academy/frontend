@@ -16,6 +16,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { UserStateTypes } from '../../state/GameStateTypes';
 import GameUserStateManager from '../../state/GameUserStateManager';
+import { mandatory } from '../../utils/GameUtils';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
@@ -42,6 +43,9 @@ export default class RoomPreview extends Phaser.Scene {
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
+
+  private verifCont: Phaser.GameObjects.Container | undefined;
+  private verifMask: Phaser.GameObjects.Graphics | undefined;
 
   constructor() {
     super('RoomPreview');
@@ -81,6 +85,10 @@ export default class RoomPreview extends Phaser.Scene {
     );
     this.escapeManager.initialise(this, this.phaseManager);
     this.bindKeyboardTriggers();
+
+    const [verifCont, verifMask] = createVerifiedHoverContainer(this);
+    this.verifCont = verifCont as Phaser.GameObjects.Container;
+    this.verifMask = verifMask as Phaser.GameObjects.Graphics;
   }
 
   public async create() {
@@ -118,6 +126,9 @@ export default class RoomPreview extends Phaser.Scene {
     const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
     this.attachVerificationTag(cookie);
     this.layerManager.addToLayer(Layer.Objects, cookie);
+
+    // Add verified tag
+    this.layerManager.addToLayer(Layer.UI, this.getVerifCont());
   }
 
   public update() {
@@ -187,7 +198,8 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {
-    const [verifCont, verifMask] = createVerifiedHoverContainer(this);
+    const verifCont = this.getVerifCont();
+    const verifMask = this.getVerifMask();
 
     sprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
@@ -205,8 +217,9 @@ export default class RoomPreview extends Phaser.Scene {
         verifMask.y = pointer.y - 10;
       }
     );
-
-    this.layerManager.addToLayer(Layer.UI, verifCont);
     return sprite;
   }
+
+  private getVerifCont = () => mandatory(this.verifCont);
+  private getVerifMask = () => mandatory(this.verifMask);
 }

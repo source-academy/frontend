@@ -100,7 +100,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
   scene.tweens.add({
     targets: hoverText,
     x: -roomConstants.startTextXPos,
-    duration: 4000,
+    duration: 5000,
     ease: 'Power0',
     loop: -1,
     onLoop: () => (hoverText.x = roomConstants.startTextXPos + 50)
