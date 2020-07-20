@@ -123,10 +123,6 @@ export default class RoomPreview extends Phaser.Scene {
     await this.eval(`create();`);
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(Constants.nullInteractionId);
 
-    const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
-    this.attachVerificationTag(cookie);
-    this.layerManager.addToLayer(Layer.Objects, cookie);
-
     // Add verified tag
     this.layerManager.addToLayer(Layer.UI, this.getVerifCont());
   }
