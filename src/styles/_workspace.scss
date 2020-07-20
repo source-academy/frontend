@@ -388,7 +388,7 @@ $code-color-error: #ff4444;
       }
     }
 
-    // Specific CSS for the Substituter tab, since REPL is hidden
+    // Specific CSS for the Stepper tab, since REPL is hidden
     ##{$ns}-tab-panel_side-content-tabs_subst_visualiser {
       height: calc(100% - 60px);
       margin-top: -45px;
