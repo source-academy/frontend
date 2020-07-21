@@ -18,7 +18,7 @@ export const createChapterIndex = -1;
 const defaultChapter = {
   id: createChapterIndex,
   title: 'title goes here',
-  imageUrl: 'https://example.com',
+  imageUrl: '/locations/telebay/emergency.png',
   openAt: new Date().toISOString(),
   closeAt: inAYear(new Date()).toISOString(),
   isPublished: false,
@@ -39,13 +39,11 @@ const ChapterSim = React.memo(({ textAssets }: ChapterSequencerProps) => {
     <>
       <h3>Chapter Simulator</h3>
       <select className="bp3-menu" onChange={(e: any) => setChosenIndex(e.target.value)}>
-        {chapters.map((chapter, index) => {
-          return (
-            <option value={index} key={index}>
-              {`Chapter ${index}: ${chapter.title}`}
-            </option>
-          );
-        })}
+        {chapters.map((chapter, chapterIndex) => (
+          <option value={chapterIndex} key={chapterIndex}>
+            {`Chapter ${chapterIndex}: ${chapter.title}`}
+          </option>
+        ))}
         <option value={createChapterIndex} key={createChapterIndex}>
           {`Create new chapter`}
         </option>

@@ -239,6 +239,7 @@ class GameManager extends Phaser.Scene {
         this.scene.start('CheckpointTransition');
       }
     }
+    return transitionToNextCheckpoint;
   }
 
   public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint);

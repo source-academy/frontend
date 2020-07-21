@@ -1,8 +1,8 @@
-import { screenCenter } from 'src/features/game/commons/CommonConstants';
-
+import { screenCenter } from '../../../game/commons/CommonConstants';
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonTextHover from '../../commons/CommonTextHover';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
@@ -15,7 +15,7 @@ import chapConstants, {
 
 export function createChapter(
   scene: ChapterSelect,
-  { title }: GameChapter,
+  { title, imageUrl }: GameChapter,
   index: number,
   lastCheckpointsIdx: number
 ) {
@@ -23,12 +23,10 @@ export function createChapter(
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
 
   // Chapter Preview
-  const chapterPreview = new Phaser.GameObjects.Image(
-    scene,
-    0,
-    0,
-    `chapterImage${index}`
-  ).setDisplaySize(chapConstants.imageRect.width, chapConstants.imageRect.height);
+  const chapterPreview = new Phaser.GameObjects.Image(scene, 0, 0, imageUrl).setDisplaySize(
+    chapConstants.imageRect.width,
+    chapConstants.imageRect.height
+  );
 
   // Chapter Frame
   const chapterFrame = new Phaser.GameObjects.Sprite(
@@ -57,7 +55,7 @@ export function createChapter(
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
     assetKey: ImageAssets.chapterRepeatButton.key,
-    onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
+    onUp: () => callGameManagerOnTxtLoad(scene, false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
     onOut: () => chapterRepeatHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -68,8 +66,7 @@ export function createChapter(
 
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
-    onUp: () =>
-      callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
+    onUp: () => callGameManagerOnTxtLoad(scene, true, index, lastCheckpointsIdx),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -95,7 +92,8 @@ export function createChapter(
     chapterTitleStyle
   ).setOrigin(0.5, 0.5);
 
-  const chapterDone = index <= scene.getLoadedGameState().userSaveState.lastCompletedChapter + 1;
+  const chapterDone =
+    index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapter() + 1;
 
   const blackTint = new Phaser.GameObjects.Rectangle(
     scene,

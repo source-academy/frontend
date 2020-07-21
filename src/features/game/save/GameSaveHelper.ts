@@ -38,12 +38,9 @@ export function gameStateToJson(
 
   const userSaveState: UserSaveState = {
     settings: { ...prevGameState.userSaveState.settings },
-    lastPlayedCheckpoint: [chapterNum, checkpointNum],
+    recentlyPlayedCheckpoint: [chapterNum, checkpointNum],
     collectibles: userStateManager.getList(UserStateTypes.collectibles),
-    lastCompletedChapter:
-      prevGameState.userSaveState.lastCompletedChapter === undefined
-        ? -1
-        : prevGameState.userSaveState.lastCompletedChapter
+    largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter
   };
 
   const newGameStoryStates = { ...prevGameState.gameSaveStates, [chapterNum]: gameStoryState };
@@ -165,8 +162,8 @@ export const createEmptySaveState = (): FullSaveState => {
     userSaveState: {
       collectibles: [],
       settings: { bgmVolume: 1, sfxVolume: 1 },
-      lastPlayedCheckpoint: [-1, -1],
-      lastCompletedChapter: -1
+      recentlyPlayedCheckpoint: [-1, -1],
+      largestCompletedChapter: -1
     }
   };
 };

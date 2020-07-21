@@ -1,19 +1,17 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
 
 import ImageAssets from '../../assets/ImageAssets';
-import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { loadData } from '../../save/GameSaveRequests';
 import { FullSaveState } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
+import { loadImage } from '../../utils/LoaderUtils';
 import chapConstants from './ChapterSelectConstants';
 import { createChapter } from './ChapterSelectHelper';
-import { SampleChapters } from './SampleChapters';
 
 /**
  * The Chapter Select scene.
@@ -21,7 +19,6 @@ import { SampleChapters } from './SampleChapters';
  */
 class ChapterSelect extends Phaser.Scene {
   public layerManager: GameLayerManager;
-  public chapterDetails: GameChapter[];
 
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
@@ -35,7 +32,6 @@ class ChapterSelect extends Phaser.Scene {
 
     this.chapterContainer = undefined;
     this.backButtonContainer = undefined;
-    this.chapterDetails = [];
     this.layerManager = new GameLayerManager();
     this.autoScrolling = true;
     this.isScrollLeft = false;
@@ -47,14 +43,13 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public preload() {
-    this.chapterDetails = SampleChapters;
     addLoadingScreen(this);
-    this.preloadAssets();
     this.layerManager.initialise(this);
   }
 
   public async create() {
-    this.loadedGameState = await loadData();
+    await SourceAcademyGame.getInstance().loadGameChapters();
+    await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();
     this.autoScroll();
@@ -71,21 +66,22 @@ class ChapterSelect extends Phaser.Scene {
     }
     this.chapterContainer.x = limitNumber(
       newXPos,
-      -chapConstants.imageDist * (this.chapterDetails.length - 1),
+      -chapConstants.imageDist * (this.getGameChapters().length - 1),
       0
     );
   }
-
-  public getLoadedGameState = () => mandatory(this.loadedGameState);
 
   public cleanUp() {
     this.layerManager.clearAllLayers();
   }
 
-  private preloadAssets() {
-    this.chapterDetails.forEach((chapter, index) => {
-      this.load.image(`chapterImage${index}`, toS3Path(chapter.previewBgPath));
-    });
+  private async preloadChapterAssets() {
+    await Promise.all(
+      this.getGameChapters().map(
+        async chapterDetail =>
+          await loadImage(this, chapterDetail.imageUrl, toS3Path(chapterDetail.imageUrl))
+      )
+    );
   }
 
   private renderBackground() {
@@ -163,7 +159,7 @@ class ChapterSelect extends Phaser.Scene {
   private createChapterContainer() {
     const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
     chapterContainer.add(
-      this.chapterDetails.map((chapterDetail, chapterIndex) => {
+      this.getGameChapters().map((chapterDetail, chapterIndex) => {
         // Use latest checkpoint if it exist
         let lastCheckpoint = 0;
         if (this.loadedGameState && this.loadedGameState.gameSaveStates[chapterIndex]) {
@@ -177,13 +173,15 @@ class ChapterSelect extends Phaser.Scene {
 
   private async autoScroll() {
     const chapterIdx = Math.min(
-      this.getLoadedGameState().userSaveState.lastCompletedChapter + 1,
-      SampleChapters.length - 1
+      SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapter() + 1,
+      this.getGameChapters().length - 1
     );
 
     await this.scrollToIndex(chapterIdx);
     this.autoScrolling = false;
   }
+
+  public getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
 
   private async scrollToIndex(id: number) {
     if (!this.chapterContainer) return;

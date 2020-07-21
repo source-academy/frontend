@@ -1,9 +1,10 @@
-import { Button, Intent } from '@blueprintjs/core';
+import { Button, Intent, Switch } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import arrayMove from 'array-move';
 import React from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
+import { toS3Path } from 'src/features/game/utils/GameUtils';
 import {
   deleteChapterRequest,
   updateChapterRequest
@@ -25,6 +26,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
   const { value: imageUrl, setValue: setImageUrl, inputProps: imageUrlProps } = useInput('');
 
+  const [isPublished, setIsPublished] = React.useState(false);
   const [openDate, setOpenDate] = React.useState<Date>(new Date());
   const [chosenFiles, setChosenFiles] = React.useState<string[]>(emptyStringArray);
   const [txtsNotChosen, setTxtsNotChosen] = React.useState<string[]>([]);
@@ -35,10 +37,10 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
     setImageUrl(chapterDetail.imageUrl);
     setOpenDate(new Date(chapterDetail.openAt));
     setChosenFiles(chapterDetail.filenames);
-    textAssets &&
-      setTxtsNotChosen(
-        textAssets.filter(textAsset => !chapterDetail.filenames.includes(textAsset))
-      );
+    setIsPublished(chapterDetail.isPublished);
+    setTxtsNotChosen(
+      (textAssets || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
+    );
   }, [chapterDetail, setChosenFiles, setImageUrl, setOpenDate, setTitle, textAssets, rerender]);
 
   const onSortEnd = React.useCallback(
@@ -71,9 +73,15 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
       title,
       filenames: chosenFiles,
       imageUrl,
-      isPublished: false
+      isPublished
     };
 
+    const confirm = window.confirm(
+      `Are you sure you want to save changes to ${JSON.stringify(updatedChapter)}`
+    );
+    if (!confirm) {
+      return;
+    }
     const response =
       parseInt(id) === createChapterIndex
         ? await updateChapterRequest('', updatedChapter)
@@ -93,6 +101,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
   const clearChanges = () => {
     const confirm = window.confirm('Are you you want to clear changes for this chapter?');
     if (confirm) {
+      // Change render to random variable to trigger rerender of component
       setRender(Math.random());
       alert('Cleared changes');
     }
@@ -112,7 +121,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
       />
       <h4>
         Image url: <input className="bp3-input" type="text" {...imageUrlProps} />
-        <Button onClick={(_: any) => window.open(imageUrl)}>View</Button>
+        <Button onClick={(_: any) => window.open(toS3Path(imageUrl))}>View</Button>
       </h4>
       <b>Checkpoint Txt Files</b>
       <StorySimulatorSortableList
@@ -138,10 +147,16 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
       </Button>
       <br />
       <br />
+      <Switch
+        checked={isPublished}
+        labelElement={'Published'}
+        onChange={() => setIsPublished(!isPublished)}
+      />
       <Button onClick={saveChapter}>Save Changes</Button>
       <Button intent={Intent.WARNING} onClick={clearChanges}>
         Clear Changes
       </Button>
+      <br />
       <br />
       <Button icon="trash" intent={Intent.DANGER} onClick={deleteChapter}>
         Delete Chapter

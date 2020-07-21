@@ -62,6 +62,10 @@ export default class GameSaveManager {
     return this.fullSaveState.userSaveState;
   }
 
+  public getLargestCompletedChapter() {
+    return this.fullSaveState.userSaveState.largestCompletedChapter;
+  }
+
   public getLoadedGameStoryState() {
     if (this.continueGame) {
       return this.fullSaveState.gameSaveStates[this.getChapterNum()];

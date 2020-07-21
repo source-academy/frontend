@@ -41,11 +41,9 @@ class MainMenu extends Phaser.Scene {
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
     SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
-    this.load.once('filecomplete', (assetkey: string) => `finished loading ${assetkey}`);
   }
 
   public async create() {
-    console.log('create');
     if (SourceAcademyGame.getInstance().getAccountInfo().role === 'student') {
       console.log('Students cannot use story sim');
       return;

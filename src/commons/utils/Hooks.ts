@@ -26,7 +26,7 @@ import React from 'react';
 
 // The following hook is from
 // https://github.com/jaredLunde/react-hook/blob/master/packages/merged-ref/src/index.tsx
-const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback<T> => (
+export const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback<T> => (
   element: T
 ) =>
   refs.forEach(ref => {
@@ -35,8 +35,6 @@ const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback
   });
 
 // End
-
-export { useMergedRef };
 
 /**
  * This hook sends a request to the backend to fetch the initial state of the field
@@ -49,7 +47,8 @@ export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
 
   React.useEffect(() => {
     (async () => {
-      setValue(await requestFn());
+      const fetchedValue = await requestFn();
+      setValue(fetchedValue);
     })();
   }, [requestFn]);
 

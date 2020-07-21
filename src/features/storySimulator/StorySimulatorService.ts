@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 import { sendAssetRequest, sendStoryRequest } from './StorySimulatorRequest';
 import { ChapterDetail } from './StorySimulatorTypes';
 
@@ -110,7 +112,8 @@ export async function uploadAsset(file: File, folderName: string) {
  */
 export async function fetchChapters(): Promise<ChapterDetail[]> {
   const response = await sendStoryRequest('', 'GET');
-  return response.status === 200 ? response.json() : [];
+  const chapterDetails = response.status === 200 ? await response.json() : [];
+  return _.sortBy(chapterDetails, (chapterDetail: ChapterDetail) => new Date(chapterDetail.openAt));
 }
 
 /**
