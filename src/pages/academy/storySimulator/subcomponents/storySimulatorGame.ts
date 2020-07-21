@@ -1,5 +1,6 @@
 import * as Phaser from 'phaser';
 import { screenSize } from 'src/features/game/commons/CommonConstants';
+import CheckpointTransition from 'src/features/game/scenes/checkpointTransition/CheckpointTransition';
 import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
@@ -24,5 +25,6 @@ export const createStorySimulatorGame = () => {
   game.scene.add('StorySimulatorMenu', MainMenu, true);
   game.scene.add('ObjectPlacement', ObjectPlacement);
   game.scene.add('GameManager', GameManager);
+  game.scene.add('CheckpointTransition', CheckpointTransition);
   return game;
 };

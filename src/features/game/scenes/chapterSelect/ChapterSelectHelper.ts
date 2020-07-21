@@ -55,7 +55,7 @@ export function createChapter(
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
     assetKey: ImageAssets.chapterRepeatButton.key,
-    onUp: () => callGameManagerOnTxtLoad(scene, false, index, 0),
+    onUp: async () => await callGameManagerOnTxtLoad(false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
     onOut: () => chapterRepeatHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {
@@ -64,9 +64,11 @@ export function createChapter(
     }
   }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
+  console.log(index, lastCheckpointsIdx);
+
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
-    onUp: () => callGameManagerOnTxtLoad(scene, true, index, lastCheckpointsIdx),
+    onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointsIdx),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {

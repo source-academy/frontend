@@ -45,6 +45,16 @@ export default class GameSaveManager {
     }
   }
 
+  public async saveChapterComplete(completedChapter: number) {
+    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return;
+    }
+    if (completedChapter > this.fullSaveState.userSaveState.largestCompletedChapter) {
+      this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
+      await saveData(this.fullSaveState);
+    }
+  }
+
   public getSettings() {
     return this.fullSaveState.userSaveState.settings;
   }

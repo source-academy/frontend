@@ -9,7 +9,7 @@ import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { LocationId } from 'src/features/game/location/GameMapTypes';
 import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
-import SourceAcademyGame, { GameType } from 'src/features/game/SourceAcademyGame';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import GameStateManager from 'src/features/game/state/GameStateManager';
 import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 
@@ -233,11 +233,7 @@ class GameManager extends Phaser.Scene {
     if (transitionToNextCheckpoint) {
       await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
       this.cleanUp();
-      if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
-        this.scene.start('StorySimulatorMenu');
-      } else {
-        this.scene.start('CheckpointTransition');
-      }
+      this.scene.start('CheckpointTransition');
     }
     return transitionToNextCheckpoint;
   }

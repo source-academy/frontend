@@ -11,7 +11,7 @@ type Props = {
 };
 
 function CheckpointTxtLoader({ storageName, textAssets }: Props) {
-  const [chosenFilename, setChosenFilename] = React.useState('');
+  const [chosenFilename, setChosenFilename] = React.useState(textAssets[0]);
 
   function onLoadTxt(e: any) {
     if (!e.target.files) return;
@@ -22,7 +22,9 @@ function CheckpointTxtLoader({ storageName, textAssets }: Props) {
   async function changeChosenFilename(e: any) {
     const filename = e.target.value;
     setChosenFilename(filename);
-    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);
+    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`, {
+      headers: createHeadersWithCors()
+    });
     const txt = await response.text();
     sessionStorage.setItem(storageName, txt);
   }
@@ -66,3 +68,9 @@ const loadFileLocally = (storageName: string, txtFile: File) => {
 };
 
 export default CheckpointTxtLoader;
+
+function createHeadersWithCors(): Headers {
+  const headers = new Headers();
+  headers.append('Access-Control-Allow-Origin', '*');
+  return headers;
+}

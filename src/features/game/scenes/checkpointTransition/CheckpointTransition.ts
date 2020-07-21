@@ -1,10 +1,9 @@
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import { screenCenter } from '../../commons/CommonConstants';
-import { FullSaveState } from '../../save/GameSaveTypes';
-import SourceAcademyGame from '../../SourceAcademyGame';
+import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
-import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
+import { callGameManagerForSim, callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import checkpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
 
 /**
@@ -28,24 +27,30 @@ class CheckpointTransition extends Phaser.Scene {
   }
 
   public async create() {
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
+      await this.showTransitionText(checkpointConstants.checkpointText);
+      await callGameManagerForSim();
+      return;
+    }
+
     const loadedGameState = SourceAcademyGame.getInstance().getSaveManager().getFullSaveState();
     const chapterDetails = SourceAcademyGame.getInstance().getGameChapters();
 
     const [currChapter, currCheckpoint] = loadedGameState.userSaveState.recentlyPlayedCheckpoint;
 
     if (this.isLastCheckpoint(chapterDetails, currChapter, currCheckpoint)) {
-      await this.saveChapterComplete(loadedGameState, currChapter);
-      if (currChapter >= chapterDetails.length - 1) {
+      await SourceAcademyGame.getInstance().getSaveManager().saveChapterComplete(currChapter);
+      if (this.isLastChapter(chapterDetails, currChapter)) {
         this.scene.start('MainMenu');
         return;
       } else {
         await this.showTransitionText(checkpointConstants.chapterText);
-        await callGameManagerOnTxtLoad(this, true, currChapter + 1, 0);
+        await callGameManagerOnTxtLoad(true, currChapter + 1, 0);
         return;
       }
     } else {
       await this.showTransitionText(checkpointConstants.checkpointText);
-      await callGameManagerOnTxtLoad(this, false, currChapter, currCheckpoint + 1);
+      await callGameManagerOnTxtLoad(false, currChapter, currCheckpoint + 1);
       return;
     }
   }
@@ -78,20 +83,16 @@ class CheckpointTransition extends Phaser.Scene {
     await sleep(checkpointConstants.tweenDuration);
   }
 
-  private async saveChapterComplete(loadedGameState: FullSaveState, currChapter: number) {
-    loadedGameState.userSaveState.largestCompletedChapter = Math.max(
-      loadedGameState.userSaveState.largestCompletedChapter,
-      currChapter
-    );
-    await SourceAcademyGame.getInstance().getSaveManager().saveGame();
-  }
-
   private isLastCheckpoint(
     chapterDetails: GameChapter[],
     currChapter: number,
     currCheckpoint: number
   ) {
     return currCheckpoint >= chapterDetails[currChapter].filenames.length - 1;
+  }
+
+  public isLastChapter(chapterDetails: GameChapter[], currChapter: number) {
+    return currChapter >= chapterDetails.length - 1;
   }
 }
 
