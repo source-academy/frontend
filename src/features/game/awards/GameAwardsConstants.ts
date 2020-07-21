@@ -1,10 +1,7 @@
 import FontAssets from '../assets/FontAssets';
-import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { UserStateTypes } from '../state/GameStateTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
-import { AwardProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -27,22 +24,20 @@ export const awardTitleStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const awardDescStyle = {
-  fontFamily: 'Verdana',
-  fontSize: '25px',
-  fill: Color.lightBlue,
-  align: 'justify',
-  lineSpacing: 10,
-  wordWrap: { width: 500 }
+export const awardKeyStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 25,
+  fill: HexColor.offWhite,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const defaultAwardProp: AwardProperty = {
-  id: 'ult-cookie-award',
-  assetKey: ImageAssets.cookies.key,
-  assetPath: ImageAssets.cookies.path,
-  title: '',
-  description: '',
-  awardType: UserStateTypes.collectibles
+export const awardDescStyle = {
+  fontFamily: 'Verdana',
+  fontSize: '20px',
+  fill: Color.lightBlue,
+  align: 'center',
+  lineSpacing: 10,
+  wordWrap: { width: 500 }
 };
 
 const AwardsConstants = {
@@ -57,7 +52,8 @@ const AwardsConstants = {
   previewYPos: -screenSize.y * 0.05,
   previewDim: 430,
   titleYOffset: -275,
-  descYOffset: 275,
+  keyYOffset: 275,
+  descYOffset: 310,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
   arrowXOffset: 80,

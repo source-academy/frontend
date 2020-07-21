@@ -13,7 +13,17 @@ import { mandatory } from '../utils/GameUtils';
  * Game map is the class that encapsulates data about
  * all the locations and items in the map in a checkpoint
  *
- * Mainly used by game checkpoint
+ * Mainly used by game checkpoint.
+ *
+ * All possible assets should be stored within the soundAssets
+ * and mapAssets; while mapping from ItemId to other properties
+ * are stored separately.
+ *
+ * Lastly, the GameLocation should only refer to the ItemIDs,
+ * and not the actual property.
+ *
+ * GameManager, along other managers, will process this class
+ * as when as its needed.
  */
 class GameMap {
   private soundAssets: SoundAsset[];

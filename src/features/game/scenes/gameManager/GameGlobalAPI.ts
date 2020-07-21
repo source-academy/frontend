@@ -209,8 +209,8 @@ class GameGlobalAPI {
   //   Game Layer    //
   /////////////////////
 
-  public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
-    this.getGameManager().layerManager.clearSeveralLayers(layerTypes, withFade);
+  public clearSeveralLayers(layerTypes: Layer[]) {
+    this.getGameManager().layerManager.clearSeveralLayers(layerTypes);
   }
 
   public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
