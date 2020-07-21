@@ -21,16 +21,29 @@ export default class GameSaveManager {
     this.fullSaveState = createEmptySaveState();
   }
 
-  async loadLastSaveState() {
+  /**
+   * Fetches the FullSaveState based on the current account ID.
+   */
+  public async loadLastSaveState() {
     this.fullSaveState = await loadData();
   }
 
+  /**
+   * Update the property of the manager.
+   * 
+   * @param chapterNum chapter number
+   * @param checkpointNum checkpoint number
+   * @param continueGame whether user wants to continue or restart the chapter.
+   */
   public registerGameInfo(chapterNum: number, checkpointNum: number, continueGame: boolean) {
     this.chapterNum = chapterNum;
     this.checkpointNum = checkpointNum;
     this.continueGame = continueGame;
   }
 
+  /**
+   * Save the current game state to the backend.
+   */
   public async saveGame() {
     if (
       SourceAcademyGame.getInstance().isGameType(GameType.Game) &&
