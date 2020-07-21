@@ -13,6 +13,22 @@ import chapConstants, {
   chapterTitleStyle
 } from './ChapterSelectConstants';
 
+/**
+ * Create a chapter selection and formats it.
+ *
+ * It will use the chapter preview background and set it as the
+ * chapter selection background.
+ *
+ * Additionally, this method attach a 'Play/Continue' button and
+ * 'Reset Progress' button to the chapter selection; with an already
+ * set up button functionality.
+ *
+ * @param scene scene for the chapter selection container to attach to
+ * @param title title of the chapter
+ * @param imageUrl url of the preview image
+ * @param index index of chapter
+ * @param lastCheckpointsIdx last checkpoint to continue users' progression from
+ */
 export function createChapter(
   scene: ChapterSelect,
   { title, imageUrl }: GameChapter,
@@ -63,8 +79,6 @@ export function createChapter(
       chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
     }
   }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
-
-  console.log(index, lastCheckpointsIdx);
 
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,

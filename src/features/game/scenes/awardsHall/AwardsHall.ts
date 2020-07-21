@@ -19,7 +19,7 @@ import { awardBannerTextStyle, AwardsHallConstants } from './AwardsHallConstants
 import { createAwardsHoverContainer } from './AwardsHelper';
 
 /**
- * This scenes display all students achievement.
+ * This scenes display all students awards (collectibles and achievements).
  */
 class AwardsHall extends Phaser.Scene {
   public layerManager: GameLayerManager;
@@ -82,6 +82,7 @@ class AwardsHall extends Phaser.Scene {
   public update() {
     if (!this.backgroundTile || !this.awardsContainer) return;
 
+    // Scroll the awards hall if button is currently clicked/held down
     let newXPos = this.awardsContainer.x;
     if (this.isScrollRight) {
       newXPos -= AwardsHallConstants.defaultScrollSpeed;
@@ -90,10 +91,15 @@ class AwardsHall extends Phaser.Scene {
     }
     newXPos = limitNumber(newXPos, -this.scrollLim, 0);
 
+    // To achieve seamless background, we need to scroll on .tilePosition for background
     this.backgroundTile.tilePositionX = -newXPos;
     this.awardsContainer.x = newXPos;
   }
 
+  /**
+   * Render background of this scene, as well as its
+   * UI elements (arrows, backbutton, as well as the 'Collectible' and 'Achievement' banner).
+   */
   private renderBackground() {
     if (this.backgroundTile) this.backgroundTile.destroy();
 
@@ -144,6 +150,9 @@ class AwardsHall extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
+  /**
+   * Render all the awards that student has.
+   */
   private renderAwards() {
     if (this.awardsContainer) this.awardsContainer.destroy();
 
@@ -158,6 +167,7 @@ class AwardsHall extends Phaser.Scene {
       maxYSpace: AwardsHallConstants.awardYSpace
     });
 
+    // Achievement is positioned on the upper half of the screen
     this.awardsContainer.add(
       achievements.map((achievement, index) =>
         this.createAward(
@@ -177,6 +187,7 @@ class AwardsHall extends Phaser.Scene {
       maxYSpace: AwardsHallConstants.awardYSpace
     });
 
+    // Collectible is positioned on the lower half of the screen
     this.awardsContainer.add(
       collectibles.map((collectible, index) =>
         this.createAward(
@@ -190,12 +201,25 @@ class AwardsHall extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Objects, this.awardsContainer);
   }
 
+  /**
+   * Fetch awardProps based on the type from the user state manager.
+   * @param type
+   */
   private getAwards(type: UserStateTypes) {
     const keys = this.userStateManager.getList(type);
     const awardProps = getAwardProps(keys);
     return awardProps;
   }
 
+  /**
+   * Format the given award; giving it a pop up hover of its
+   * description, resize it to the correct size, and position it
+   * based on the given xPos and yPos.
+   *
+   * @param award awardProperty to be used
+   * @param xPos x position of the award
+   * @param yPos y position of the award
+   */
   private createAward(award: AwardProperty, xPos: number, yPos: number) {
     const awardCont = new Phaser.GameObjects.Container(this, xPos, yPos);
     const image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey).setOrigin(0.5);
@@ -203,6 +227,7 @@ class AwardsHall extends Phaser.Scene {
 
     resizeUnderflow(image, AwardsHallConstants.awardDim, AwardsHallConstants.awardDim);
 
+    // Set up the pop up
     image.setInteractive({ pixelPerfect: true, useHandCursor: true });
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
       hoverCont.setVisible(true)
@@ -223,11 +248,23 @@ class AwardsHall extends Phaser.Scene {
     return awardCont;
   }
 
+  /**
+   * Clean up of related managers
+   */
   private cleanUp() {
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }
 
+  /**
+   * Format the given text with banner style.
+   *
+   * In-game, this is the achievement & collectible banner
+   * that is positioned on the left hand side.
+   *
+   * @param text text to be put on the banner
+   * @param yPos y position of the banner
+   */
   private createBanner(text: string, yPos: number) {
     const bannerContainer = new Phaser.GameObjects.Container(this, 0, yPos);
     const bannerBg = new Phaser.GameObjects.Sprite(

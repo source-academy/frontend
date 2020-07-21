@@ -58,6 +58,7 @@ class ChapterSelect extends Phaser.Scene {
   public update() {
     if (!this.chapterContainer || this.autoScrolling) return;
 
+    // Scroll the chapter select if button is currently clicked/held down
     let newXPos = this.chapterContainer.x;
     if (this.isScrollRight) {
       newXPos -= chapConstants.defaultScrollSpeed;
@@ -71,10 +72,16 @@ class ChapterSelect extends Phaser.Scene {
     );
   }
 
+  /**
+   * Clean up of related managers.
+   */
   public cleanUp() {
     this.layerManager.clearAllLayers();
   }
 
+  /**
+   * Load the chapter previews assets to be shown.
+   */
   private async preloadChapterAssets() {
     await Promise.all(
       this.getGameChapters().map(
@@ -84,6 +91,9 @@ class ChapterSelect extends Phaser.Scene {
     );
   }
 
+  /**
+   * Render the background of this scene.
+   */
   private renderBackground() {
     const background = new Phaser.GameObjects.Image(
       this,
@@ -103,6 +113,10 @@ class ChapterSelect extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, blackOverlay);
   }
 
+  /**
+   * Render all the chapter selections and UI elements
+   * (the gray frame, the left and right arrow, and back button.)
+   */
   private renderChapters() {
     const mask = this.createMask();
     this.backButtonContainer = new CommonBackButton(this, () => {
@@ -156,6 +170,13 @@ class ChapterSelect extends Phaser.Scene {
     return mask;
   }
 
+  /**
+   * Create a chapter selection based on its detail; as well as
+   * attach it with the necessary information (user progress).
+   *
+   * The information will be used/mutated depending on whether
+   * the user decide tocontinue or reset the progress.
+   */
   private createChapterContainer() {
     const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
     chapterContainer.add(
@@ -171,6 +192,10 @@ class ChapterSelect extends Phaser.Scene {
     return chapterContainer;
   }
 
+  /**
+   * Auto scroll to the largest (not latest!) completed chapter.
+   * The chapter will be scrolled until it is at the middle of the screen.
+   */
   private async autoScroll() {
     const chapterIdx = Math.min(
       SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapter() + 1,
@@ -183,6 +208,12 @@ class ChapterSelect extends Phaser.Scene {
 
   public getGameChapters = () => SourceAcademyGame.getInstance().getGameChapters();
 
+  /**
+   * Scroll the screen to a chapter index, so that its chapter selection
+   * is at the middle of the screen.
+   *
+   * @param id index of chapter
+   */
   private async scrollToIndex(id: number) {
     if (!this.chapterContainer) return;
     const xTarget = -id * chapConstants.imageDist;

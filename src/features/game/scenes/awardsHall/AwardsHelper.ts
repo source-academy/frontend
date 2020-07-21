@@ -8,6 +8,15 @@ import {
   AwardsHallConstants
 } from './AwardsHallConstants';
 
+/**
+ * Create a pop up text that appear when user hover over an award.
+ * The hover container will display information based on the award property;
+ * e.g. its title, its asset-key, as well as its description.
+ *
+ * @param scene scene for the hover to attach to
+ * @param award awardProperty to be used
+ * @returns {Phaser.GameObjects.Container}
+ */
 export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProperty) => {
   const hoverContainer = new Phaser.GameObjects.Container(scene, 0, 0);
 

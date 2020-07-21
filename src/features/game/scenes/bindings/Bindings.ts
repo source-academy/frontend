@@ -8,6 +8,10 @@ import { calcListFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { bindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
 
+/**
+ * Displays various bindings of the game.
+ * Static scene.
+ */
 class Bindings extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
@@ -28,6 +32,9 @@ class Bindings extends Phaser.Scene {
     this.renderBindings();
   }
 
+  /**
+   * Render the background of the scene
+   */
   private renderBackground() {
     const background = new Phaser.GameObjects.Image(
       this,
@@ -47,6 +54,9 @@ class Bindings extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, blackOverlay);
   }
 
+  /**
+   * Render the various binding and add it to the scene.
+   */
   private renderBindings() {
     const bindingsContainer = new Phaser.GameObjects.Container(this, 0, 0);
 
@@ -76,6 +86,9 @@ class Bindings extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
+  /**
+   * Encapsulate information of the available bindings within the game.
+   */
   private getBindings() {
     return [
       {
@@ -89,6 +102,15 @@ class Bindings extends Phaser.Scene {
     ];
   }
 
+  /**
+   * Formats the binding information and add it to the scene.
+   *
+   * @param key name of the keyboard key associated with the description
+   * @param desc description to be shown next to the binding
+   * @param xPos x position of the container
+   * @param yPos y position of the container
+   * @returns {Phaser.GameObjects.Container}
+   */
   private createBinding(key: string, desc: string, xPos: number, yPos: number) {
     const bindingContainer = new Phaser.GameObjects.Container(this, xPos, yPos);
 
