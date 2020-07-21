@@ -43,7 +43,7 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateSublanguage, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
 import {
   CHANGE_SUBLANGUAGE,
   FETCH_SUBLANGUAGE,

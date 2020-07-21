@@ -8,28 +8,28 @@ exports[`Grading NavLink does NOT renders for Role.Student 1`] = `
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"manual\\" />
@@ -49,28 +49,28 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"manual\\" />
@@ -104,7 +104,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
       <div className=\\"navbar-button-text hidden-xs\\">
         Grading
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"crown\\" />
@@ -124,28 +124,28 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
       <div className=\\"navbar-button-text hidden-xs\\">
         Missions
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"lightbulb\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Quests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"predictive-analysis\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Paths
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"comparison\\" />
       <div className=\\"navbar-button-text hidden-xs\\">
         Contests
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"manual\\" />
@@ -179,7 +179,7 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
       <div className=\\"navbar-button-text hidden-xs\\">
         Grading
       </div>
-      <Connect(NotificationBadge) notificationFilter={[Function]} disableHover={true} />
+      <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
     </NavLink>
     <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"crown\\" />

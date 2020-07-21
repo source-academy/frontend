@@ -3,7 +3,6 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { changeSublanguage, fetchSublanguage } from '../../../commons/workspace/WorkspaceActions';
-
 import AcademyDefaultChapter, { DispatchProps, StateProps } from './AcademyDefaultChapter';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

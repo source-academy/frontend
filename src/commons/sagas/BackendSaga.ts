@@ -3,7 +3,7 @@
 import { SagaIterator } from 'redux-saga';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
-import { SourceLanguage, OverallState, Role } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role, SourceLanguage } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,

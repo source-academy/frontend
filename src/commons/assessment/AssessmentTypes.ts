@@ -1,4 +1,5 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
+
 import { ExternalLibrary, ExternalLibraryName } from '../application/types/ExternalTypes';
 
 export const FETCH_ASSESSMENT_OVERVIEWS = 'FETCH_ASSESSMENT_OVERVIEWS';
@@ -145,6 +146,7 @@ export type Library = {
     1: any;
     2?: string; // For mission control
   }>;
+  moduleParams?: any;
 };
 
 export type Testcase = {

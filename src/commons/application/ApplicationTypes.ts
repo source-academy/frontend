@@ -1,21 +1,21 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
+import { AcademyState } from '../../features/academy/AcademyTypes';
+import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
+import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
 import {
+  DebuggerContext,
   WorkspaceLocation,
   WorkspaceManagerState,
   WorkspaceState
 } from '../workspace/WorkspaceTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-
-import { AcademyState } from '../../features/academy/AcademyTypes';
-import { DashboardState } from '../../features/dashboard/DashboardTypes';
-import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
@@ -215,7 +215,8 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   isEditorAutorun: false,
   isRunning: false,
   isDebugging: false,
-  enableDebugging: true
+  enableDebugging: true,
+  debuggerContext: {} as DebuggerContext
 });
 
 export const defaultRoomId = null;

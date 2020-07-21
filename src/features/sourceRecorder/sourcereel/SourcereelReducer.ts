@@ -1,6 +1,5 @@
 import { SourceActionType } from '../../../commons/utils/ActionsHelper';
 import { RecordingStatus } from '../SourceRecorderTypes';
-
 import {
   RECORD_INIT,
   RECORD_INPUT,

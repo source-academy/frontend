@@ -1,9 +1,8 @@
-import { Button, Classes, MenuItem } from '@blueprintjs/core';
+import { Button, Classes, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
-import * as React from 'react';
-
+import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/types';
+import * as React from 'react';
 
 import {
   SourceLanguage,
@@ -28,6 +27,25 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
   const chapterRenderer: ItemRenderer<SourceLanguage> = (lang, { handleClick }) => (
     <MenuItem active={false} key={lang.displayName} onClick={handleClick} text={lang.displayName} />
   );
+
+  const chapterListRenderer: ItemListRenderer<SourceLanguage> = ({
+    items,
+    itemsParentRef,
+    query,
+    renderItem
+  }) => {
+    const defaultLangs = items.filter(item => item.variant === 'default').map(renderItem);
+    const variantLangs = items.filter(item => item.variant !== 'default').map(renderItem);
+
+    return (
+      <Menu ulRef={itemsParentRef}>
+        {defaultLangs}
+        <MenuItem active={false} key="variant-menu" text="Variant" icon="cog">
+          {variantLangs}
+        </MenuItem>
+      </Menu>
+    );
+  };
 
   const ChapterSelectComponent = Select.ofType<SourceLanguage>();
 
@@ -55,6 +73,7 @@ export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
       items={sourceLanguages}
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
+      itemListRenderer={chapterListRenderer}
       filterable={false}
       disabled={disabled || false}
     >

@@ -1,6 +1,6 @@
-import { action } from 'typesafe-actions';
-
+import { Context } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
+import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SourceLanguage } from '../application/ApplicationTypes';
@@ -8,17 +8,17 @@ import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
-import { SideContentType } from '../sideContent/SideContentTypes';
+import { NOTIFY_PROGRAM_EVALUATED, SideContentType } from '../sideContent/SideContentTypes';
 import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_SUBLANGUAGE,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -38,13 +38,13 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_SUBLANGUAGE,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SUBLANGUAGE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -259,4 +259,19 @@ export const promptAutocomplete = (
     row,
     column,
     callback
+  });
+
+export const notifyProgramEvaluated = (
+  result: any,
+  lastDebuggerResult: any,
+  code: string,
+  context: Context,
+  workspaceLocation?: WorkspaceLocation
+) =>
+  action(NOTIFY_PROGRAM_EVALUATED, {
+    result,
+    lastDebuggerResult,
+    code,
+    context,
+    workspaceLocation
   });

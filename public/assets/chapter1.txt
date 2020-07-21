@@ -1,0 +1,14 @@
+startingLoc: hallway
+
+objectives
+    finish
+
+hallway
+    actions
+        show_dialogue(chapter1)
+        complete_objective(finish)
+
+dialogues
+    chapter1, What?
+        You're now in chapter 1.
+        I'm glad you're part of it

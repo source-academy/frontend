@@ -4,8 +4,8 @@ import { call } from 'redux-saga/effects';
 
 import {
   GameState,
-  styliseSublanguage,
-  SourceLanguage
+  SourceLanguage,
+  styliseSublanguage
 } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {

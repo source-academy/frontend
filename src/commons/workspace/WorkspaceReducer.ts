@@ -1,5 +1,4 @@
 import { Reducer } from 'redux';
-import { Testcase } from '../assessment/AssessmentTypes';
 
 import { SourcecastReducer } from '../../features/sourceRecorder/sourcecast/SourcecastReducer';
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
@@ -25,12 +24,14 @@ import {
   HANDLE_CONSOLE_LOG,
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
+import { Testcase } from '../assessment/AssessmentTypes';
 import {
   FINISH_INVITE,
   INIT_INVITE,
   SET_EDITOR_SESSION_ID,
   SET_WEBSOCKET_STATUS
 } from '../collabEditing/CollabEditingTypes';
+import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
 import { createContext } from '../utils/JsSlangHelper';
@@ -54,12 +55,12 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_SUBLANGUAGE,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SUBLANGUAGE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
@@ -259,7 +260,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.chapter,
             action.payload.library.external.symbols,
             workspaceLocation,
-            action.payload.library.variant
+            action.payload.library.variant,
+            action.payload.library.moduleParams
           ),
           globals: action.payload.library.globals
         }
@@ -658,7 +660,21 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           }
         }
       };
-
+    case NOTIFY_PROGRAM_EVALUATED:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          debuggerContext: {
+            ...state[workspaceLocation].debuggerContext,
+            result: action.payload.result,
+            lastDebuggerResult: action.payload.lastDebuggerResult,
+            code: action.payload.code,
+            context: action.payload.context,
+            workspaceLocation: action.payload.workspaceLocation
+          }
+        }
+      };
     default:
       return state;
   }

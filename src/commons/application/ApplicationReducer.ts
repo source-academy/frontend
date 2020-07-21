@@ -1,4 +1,5 @@
 import { Action, Reducer } from 'redux';
+
 import { ApplicationState, defaultApplication } from './ApplicationTypes';
 
 export const ApplicationReducer: Reducer<ApplicationState> = (

@@ -1,9 +1,8 @@
 import { Classes, Pre } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
-import * as React from 'react';
-
 import { Variant } from 'js-slang/dist/types';
+import * as React from 'react';
 
 import { InterpreterOutput } from '../../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
@@ -309,7 +308,8 @@ class Sourcereel extends React.Component<SourcereelProps> {
                 />
               </div>
             ),
-            id: SideContentType.sourcereel
+            id: SideContentType.sourcereel,
+            toSpawn: () => true
           },
           {
             label: 'Sourcecast Table',
@@ -323,12 +323,14 @@ class Sourcereel extends React.Component<SourcereelProps> {
                 />
               </div>
             ),
-            id: SideContentType.introduction
+            id: SideContentType.introduction,
+            toSpawn: () => true
           },
           listVisualizerTab,
           inspectorTab,
           envVisualizerTab
-        ]
+        ],
+        workspaceLocation: 'sourcereel'
       }
     };
     const sourcecastControlbarProps: SourceRecorderControlBarProps = {
@@ -375,21 +377,24 @@ const listVisualizerTab: SideContentTab = {
   label: 'Data Visualizer',
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
-  id: SideContentType.dataVisualiser
+  id: SideContentType.dataVisualiser,
+  toSpawn: () => true
 };
 
 const inspectorTab: SideContentTab = {
   label: 'Inspector',
   iconName: IconNames.SEARCH,
   body: <SideContentInspector />,
-  id: SideContentType.inspector
+  id: SideContentType.inspector,
+  toSpawn: () => true
 };
 
 const envVisualizerTab: SideContentTab = {
   label: 'Env Visualizer',
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
-  id: SideContentType.envVisualiser
+  id: SideContentType.envVisualiser,
+  toSpawn: () => true
 };
 
 export default Sourcereel;
