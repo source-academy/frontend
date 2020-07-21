@@ -19,7 +19,7 @@ export default class ActionParser {
    * inside the game map, and returns the corresponding actionIds.
    *
    * @param fullActionStrings raw action strings, eg ["show_dialogue(done)", "change_location(room) if gamestate.finish"]
-   * @returns {Array<ItemId>} returns actionIds of the parsed actions, as actions are stored in the game map.
+   * @returns {Array<ItemId>} returns actionIds of the parsed actions with actions are stored in the game map.
    */
   public static parseActions(fullActionStrings: string[]): ItemId[] {
     return fullActionStrings.map(fullActionString => this.parseAction(fullActionString));
@@ -53,8 +53,14 @@ export default class ActionParser {
   }
 
   /**
+   * This funciton converts action strings eg "show_dialogue(hello)"
+   * (excluding conditionals) into Game Action objects
    *
-   * @param actionString This class
+   * Note that this function also validates the parameters to make
+   * sure that they are used correctly.
+   *
+   * @param actionString the action string to be parsed
+   * @returns {GameAction} resulting action that can be stored in the game map
    */
   public static parseActionContent(actionString: string): GameAction {
     const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');

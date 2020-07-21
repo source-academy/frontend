@@ -15,6 +15,25 @@ type AssertionDetail = {
   actionType?: string;
 };
 
+/**
+ * This class acts as a validator to ensure that all the ids
+ * that are used as arguments inside actions or in the txt are correct ids
+ * that have been declared in other parts of the txt.
+ *
+ * e.g. it ensures that if make_object_glow(door) is called,
+ * then this class asserts that "door" is an object id that
+ * was declared in object paragraphs somewhere in the txt.
+ *
+ * This helps story writers ensure the validity of their txt file
+ * and also prevents game engine from running into id-not-found error
+ *
+ * How it works: Since the action "make_object_glow(door)" can be declared before the
+ * object "door" is declared, when the action it parsed, this class
+ * stores and remembers the assertion that "door" must be a objectId,
+ * Once the parser finishes parsing the entire txt,
+ * you can run the verifyAssertions function of this class
+ * to check all the assertions made.
+ */
 export default class ParserValidator {
   private locAttrAssertions: Map<GameLocationAttr, AssertionDetail[]>;
   private attrAssertions: Map<GameAttr, AssertionDetail[]>;
@@ -24,6 +43,16 @@ export default class ParserValidator {
     this.attrAssertions = new Map<GameAttr, AssertionDetail[]>();
   }
 
+  /**
+   * This class stores an assertion that a certain ItemId is
+   * of a certain type, e.g. assertLocAttr('objects', 'door')
+   * ensures that 'door' is a valid object Id.
+   *
+   * @param locAttr The attribute that the itemId needs to be
+   * @param itemId the itemId that needs to be checked for validity
+   * @param actionType Action type e.g. make_object_glow if the assertion
+   *                   was made while parsing an action
+   */
   public assertLocAttr(locAttr: GameLocationAttr, itemId: ItemId, actionType?: string) {
     if (!this.locAttrAssertions.get(locAttr)) {
       this.locAttrAssertions.set(locAttr, []);
@@ -32,6 +61,12 @@ export default class ParserValidator {
     return itemId;
   }
 
+  /**
+   *
+   * @param gameAttr
+   * @param itemId
+   * @param actionType
+   */
   public assertAttr(gameAttr: GameAttr, itemId: ItemId, actionType?: string) {
     if (!this.attrAssertions.get(gameAttr)) {
       this.attrAssertions.set(gameAttr, []);

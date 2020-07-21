@@ -40,7 +40,7 @@ export default class SpeakerParser {
 
     Parser.checkpoint.map.addMapAsset(
       CharacterParser.characterAssetKey(charId, charExpression),
-      CharacterParser.characterAssetValue(charId, charExpression)
+      CharacterParser.characterAssetPath(charId, charExpression)
     );
   }
 }

@@ -8,6 +8,16 @@ import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
 import ParserValidator, { GameAttr } from './ParserValidator';
 
+/**
+ * This class converts a checkpoint txt file into a Checkpoint
+ * object.
+ *
+ * A Checkpoint object encapsulates data about the map including all
+ * the locations inside it, as well as the objectives in that checkpoint,
+ * basically everything the game engine needs to know to render
+ * the entire checkpoint for players to play.
+ *
+ */
 class Parser {
   public static checkpoint: GameCheckpoint;
   private static actionIdNum: number;
