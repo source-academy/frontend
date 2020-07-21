@@ -22,14 +22,18 @@ export default class GameSaveManager {
   }
 
   /**
-   * Fetches the FullSaveState based on the current account ID.
+   * Fetches the FullSaveState of the student at the start of the game
+   * and stores this internally as full save state
    */
   public async loadLastSaveState() {
     this.fullSaveState = await loadData();
   }
 
   /**
-   * Update the property of the manager.
+   * Updates the save manager with chapter number and checkpoint number
+   * if player has chosen a chapter/checkpoint to play with.
+   *
+   * Chapter number and checkpoint number can be -1 if inside the Story Simulator,
    *
    * @param chapterNum chapter number
    * @param checkpointNum checkpoint number
@@ -41,8 +45,18 @@ export default class GameSaveManager {
     this.continueGame = continueGame;
   }
 
+  ///////////////////////////////
+  //          Saving          //
+  ///////////////////////////////
+
   /**
-   * Save the current game state to the backend.
+   * Save the current game state as a JSON 'snapshot' to the backend.
+   * Can only be called inside the GameManager scene because this function retrieves
+   * informtion from GameManager, GameStateManager, or other in-game managers,
+   * and converts them into JSON format to be saved to backend.
+   *
+   * Only called when playing the Game (not Story Simulator), because Story Simulator
+   * shouldn't save game state to backend.
    */
   public async saveGame() {
     if (
@@ -58,37 +72,64 @@ export default class GameSaveManager {
     }
   }
 
+  /**
+   * This function is called during CheckpointTransition to update
+   * and save that largest chapter that the player has completed
+   * so far.
+   *
+   * @param completedChapter the number of the completed chapter
+   */
   public async saveChapterComplete(completedChapter: number) {
     if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
       return;
     }
-    if (completedChapter > this.fullSaveState.userSaveState.largestCompletedChapter) {
+    if (completedChapter > this.getLargestCompletedChapterNum()) {
       this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
       await saveData(this.fullSaveState);
     }
   }
 
-  public getSettings() {
-    return this.fullSaveState.userSaveState.settings;
-  }
-
-  public getChapterNum = () => mandatory(this.chapterNum);
-  public getCheckpointNum = () => mandatory(this.checkpointNum);
-  public getFullSaveState = () => mandatory(this.fullSaveState);
-
+  /**
+   * This function is called by the Escape Manager and Settings scene
+   * to store new user settings to the backend
+   *
+   * @param settingsJson the newest settings of the user
+   */
   public async saveSettings(settingsJson: SettingsJson) {
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
     await saveData(this.fullSaveState);
   }
 
+  ///////////////////////////////
+  //         Getters           //
+  ///////////////////////////////
+
+  /**
+   * Obtains user settings from full save state
+   *
+   * @returns User settings
+   */
+  public getSettings(): SettingsJson {
+    return this.fullSaveState.userSaveState.settings;
+  }
+
+  /**
+   * Obtains user state from full save state
+   */
   public getLoadedUserState() {
     return this.fullSaveState.userSaveState;
   }
 
-  public getLargestCompletedChapter() {
+  /**
+   * Obtains the largest completed chapter number by the player
+   */
+  public getLargestCompletedChapterNum(): number {
     return this.fullSaveState.userSaveState.largestCompletedChapter;
   }
 
+  /**
+   * Gets user's gamestate for this chapter
+   */
   public getLoadedGameStoryState() {
     if (this.continueGame) {
       return this.fullSaveState.gameSaveStates[this.getChapterNum()];
@@ -97,6 +138,9 @@ export default class GameSaveManager {
     }
   }
 
+  /**
+   * Gets user's location for this chapter
+   */
   public getLoadedLocation() {
     if (this.continueGame && this.fullSaveState.gameSaveStates[this.getChapterNum()]) {
       return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentLocation;
@@ -105,7 +149,14 @@ export default class GameSaveManager {
     }
   }
 
+  /**
+   * Get user's phase (see GamePhaseManager for phase types) for this chapter
+   */
   public getLoadedPhase() {
     return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentPhase;
   }
+
+  public getChapterNum = () => mandatory(this.chapterNum);
+  public getCheckpointNum = () => mandatory(this.checkpointNum);
+  public getFullSaveState = () => mandatory(this.fullSaveState);
 }

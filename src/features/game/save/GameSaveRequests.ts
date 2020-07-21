@@ -13,7 +13,6 @@ import { FullSaveState } from './GameSaveTypes';
  * TODO: Change backend endpoint to accept fullSaveState
  *
  * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
- * @param accountInfo - the account information of the student
  */
 export async function saveData(fullSaveState: FullSaveState) {
   const options = {
@@ -35,13 +34,11 @@ export async function saveData(fullSaveState: FullSaveState) {
 }
 
 /**
- * This function fetches data to the backend.
- * Currently saves the loads game data from the "collectibles" field
+ * This function fetches data from the backend.
+ * Currently saves the loaded game data from the "collectibles" field
  * just because that is the format stored by the backend
  *
  * TODO: Change backend endpoint to store fullSaveState
- *
- * @param accountInfo - the account information of the student
  */
 export async function loadData(): Promise<FullSaveState> {
   const options = {

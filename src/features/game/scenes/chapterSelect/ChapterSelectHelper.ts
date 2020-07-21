@@ -109,7 +109,7 @@ export function createChapter(
   ).setOrigin(0.5, 0.5);
 
   const chapterDone =
-    index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapter() + 1;
+    index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1;
 
   const blackTint = new Phaser.GameObjects.Rectangle(
     scene,

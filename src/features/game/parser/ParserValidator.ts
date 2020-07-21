@@ -20,19 +20,19 @@ type AssertionDetail = {
  * that are used as arguments inside actions or in the txt are correct ids
  * that have been declared in other parts of the txt.
  *
- * e.g. it ensures that if make_object_glow(door) is called,
- * then this class asserts that "door" is an object id that
- * was declared in object paragraphs somewhere in the txt.
+ * e.g. this class ensures that if make_object_glow(door) is called,
+ * "door" is an object id that as declared in 'objects' paragraph
+ * somewhere in the txt.
  *
  * This helps story writers ensure the validity of their txt file
  * and also prevents game engine from running into id-not-found error
  *
- * How it works: Since the action "make_object_glow(door)" can be declared before the
- * object "door" is declared, when the action it parsed, this class
- * stores and remembers the assertion that "door" must be a objectId,
+ * How it works: Since the action "make_object_glow(door)" might be declared before the
+ * object "door" is even declared, when the action is parsed, you can call this class
+ * to store and remember the assertion that "door" must be a objectId,
  * Once the parser finishes parsing the entire txt,
  * you can run the verifyAssertions function of this class
- * to check all the assertions made.
+ * to check all the assertions made is true.
  */
 export default class ParserValidator {
   private locAttrAssertions: Map<GameLocationAttr, AssertionDetail[]>;

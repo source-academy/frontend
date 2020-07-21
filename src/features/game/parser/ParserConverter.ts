@@ -60,7 +60,11 @@ const stringToUserStateMap = {
 /**
  * This class is in charge of converting strings from
  * the txt into enums that can be stored in the Checkpoint
- * object understood by the game engine.
+ * object, which can be read and played by the game engine.
+ *
+ * This also acts as a validity checker to ensure that
+ * strings such as action types (eg 'show_dialogue') and
+ * game modes (eg 'explore') are actually valid enums
  */
 export default class ParserConverter {
   public static stringToPosition(str: string) {

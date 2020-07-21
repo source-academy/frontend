@@ -18,7 +18,7 @@ export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];
   private inputManager: GameInputManager | undefined;
-  private phaseTransitionCallback: (newPhase: GamePhaseType) => boolean | void;
+  private phaseTransitionCallback: (newPhase: GamePhaseType) => Promise<boolean> | void;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
