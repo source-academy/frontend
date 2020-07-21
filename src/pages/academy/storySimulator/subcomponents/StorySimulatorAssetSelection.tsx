@@ -15,19 +15,19 @@ type Props = {
 
 /**
  * This component takes in all the asset paths and renders them in a folder format
- * where each folder can be opened and closed
+ * where contents of folders are listed, and each folder can be opened/closed.
  *
- * When items are selected, filename is stored in session storage, so that
- * Story Simulator's Object Placement can read the filename
+ * When a file is selected, its filename is stored in session storage, so that
+ * Story Simulator's Object Placement can read the filename and load the image.
  *
- * @param assetPaths
+ * @param assetPaths all the paths of assets in the S3 folder
  */
 const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
   const [currentAsset, setCurrentAsset] = React.useState('');
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
-    setAssetTree({ nodes: assetPathsToTree(assetPaths, fileTools, s3AssetFolders) });
+    setAssetTree({ nodes: assetPathsToTree(assetPaths, toolIcons, s3AssetFolders) });
   }, [assetPaths]);
 
   const handleNodeClick = (nodeData: ITreeNode) => {
@@ -51,18 +51,19 @@ const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
 };
 
 /**
- * Tools that are added to asset selection, includes: delete function
+ * Tools that are added to asset selection, includes: trash-can delete tool
  *
  * @param filePath the file path you want to supply tools for
+ * @returns {JSX.Element} A trash can that deletes the file given the asset path
  */
-const fileTools = (filePath: string) => (
+const toolIcons = (filePath: string) => (
   <Tooltip content="Delete">
     <Icon icon="trash" onClick={deleteFile(filePath)} />
   </Tooltip>
 );
 
 /**
- * This function brings up a confirmation to delete an S3 file given the short filepath
+ * This function deletes an S3 file given the short filepath
  *
  * @param filePath - the file path e.g. "stories/chapter0.txt"
  */
