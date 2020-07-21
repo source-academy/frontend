@@ -17,8 +17,8 @@ export function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) =>
 
 /**
  * This function takes a list of filepaths
- * (e.g. ["locations/hallway/normal.png", "locations/hallway/emergency.png"]) and returns a
- * blueprint core tree, where each node represents a folder/file.
+ * (e.g. ["locations/hallway/normal.png", "locations/hallway/emergency.png"]) and returns
+ * blueprint core tree nodes, where each node represents a folder/file.
  *
  * The child of each folder node are the files/folders inside it.
  *

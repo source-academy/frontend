@@ -73,10 +73,10 @@ export async function deleteS3File(assetPath: string) {
  * @param folderName - which folder to upload to
  * @returns {Promise<string>} - Request responses, concatentated together
  */
-export async function uploadAssets(fileList: FileList, folderName: string) {
+export async function uploadAssetsToS3(fileList: FileList, folderName: string) {
   const responses = await Promise.all(
     Array.from(fileList).map(async file => {
-      const response = await uploadAsset(file, folderName);
+      const response = await uploadAssetToS3(file, folderName);
       return file.name + ' => ' + response;
     })
   );
@@ -90,7 +90,7 @@ export async function uploadAssets(fileList: FileList, folderName: string) {
  * @param folderName - file path to delete
  * @returns {Promise<string>} - Request response
  */
-export async function uploadAsset(file: File, folderName: string) {
+export async function uploadAssetToS3(file: File, folderName: string) {
   const formData = new FormData();
   formData.set('upload', file);
 

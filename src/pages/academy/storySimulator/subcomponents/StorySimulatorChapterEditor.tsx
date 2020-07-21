@@ -23,6 +23,13 @@ type ChapterSimProps = {
 
 const emptyStringArray: string[] = [];
 
+/**
+ * This is the Chapter editor form users can either create
+ * or udpate chapters for the game.
+ *
+ * @param chapterDetail the starting state of the form
+ * @param textAssets the list of all text files to choose from
+ */
 const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps) => {
   const { id } = chapterDetail;
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
@@ -32,7 +39,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
   const [openDate, setOpenDate] = React.useState<Date>(new Date());
   const [chosenFiles, setChosenFiles] = React.useState<string[]>(emptyStringArray);
   const [txtsNotChosen, setTxtsNotChosen] = React.useState<string[]>([]);
-  const [rerender, setRender] = React.useState(0);
+  const [rerender, setRender] = React.useState(false);
 
   React.useEffect(() => {
     setTitle(chapterDetail.title);
@@ -103,8 +110,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
   const clearChanges = () => {
     const confirm = window.confirm('Are you you want to clear changes for this chapter?');
     if (confirm) {
-      // Change render to random variable to trigger rerender of component
-      setRender(Math.random());
+      setRender(!rerender);
       alert('Cleared changes');
     }
   };
