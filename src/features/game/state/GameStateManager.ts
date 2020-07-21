@@ -170,14 +170,14 @@ class GameStateManager implements StateSubject {
   /**
    * Load GameSaveState and use it as the values of GameStateManager's attributes.
    *
-   * @param gameStoryState state to load
+   * @param gameSaveState state to load
    */
-  private loadFromGameStoryState(gameStoryState: GameSaveState) {
-    this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
-    this.locationStates = jsonToLocationStates(gameStoryState.locationStates);
-    this.objectPropertyMap = jsObjectToMap(gameStoryState.objectPropertyMap);
-    this.bboxPropertyMap = jsObjectToMap(gameStoryState.bboxPropertyMap);
-    this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
+  private loadFromGameStoryState(gameSaveState: GameSaveState) {
+    this.checkpointObjective.setObjectives(jsObjectToMap(gameSaveState.chapterObjective));
+    this.locationStates = jsonToLocationStates(gameSaveState.locationStates);
+    this.objectPropertyMap = jsObjectToMap(gameSaveState.objectPropertyMap);
+    this.bboxPropertyMap = jsObjectToMap(gameSaveState.bboxPropertyMap);
+    this.triggeredInteractions = jsObjectToMap(gameSaveState.triggeredInteractions);
   }
 
   /**

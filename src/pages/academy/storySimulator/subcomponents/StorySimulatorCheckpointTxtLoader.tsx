@@ -7,11 +7,19 @@ import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {
   storageName: string;
-  textAssets: string[];
+  s3TxtFiles: string[];
 };
 
-function CheckpointTxtLoader({ storageName, textAssets }: Props) {
-  const [chosenFilename, setChosenFilename] = React.useState(textAssets[0]);
+/**
+ * This component enables story writers to upload their txt file contents
+ * to the browser, or load a file from S3 and store the txt contents
+ * in the browser. So that GameManager can read from these txt files
+ *
+ * @param storageName the field in browser storage where the loaded/fetched txt files get stored temporarily
+ * @param s3TxtFiles the list of S3 txt files to choose from
+ */
+function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
+  const [chosenFilename, setChosenFilename] = React.useState(s3TxtFiles[0]);
 
   function onLoadTxt(e: any) {
     if (!e.target.files) return;
@@ -34,7 +42,7 @@ function CheckpointTxtLoader({ storageName, textAssets }: Props) {
   const chooseS3Txt = (
     <>
       <select className="bp3-menu" onChange={changeChosenFilename}>
-        {textAssets.map(file => (
+        {s3TxtFiles.map(file => (
           <option value={file} key={file}>
             {file}
           </option>

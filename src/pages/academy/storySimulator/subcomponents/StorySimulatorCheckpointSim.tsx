@@ -10,6 +10,14 @@ type Props = {
   textAssets: string[];
 };
 
+/**
+ * This component helps one simulate a checkpoint by
+ * supplying two txt files - the default txt file
+ * and the checkpoint txt file
+ *
+ * @param textAssets these are the list of text files on S3, if storywriter's simulation
+ *                   involves S3 text files.
+ */
 export default function CheckpointSim({ textAssets }: Props) {
   function simulateCheckpoint() {
     (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
@@ -20,12 +28,12 @@ export default function CheckpointSim({ textAssets }: Props) {
       <h3>Checkpoint Text Loader</h3>
       <b>Step 1: Choose default checkpoint</b>
       <CheckpointTxtLoader
-        textAssets={textAssets}
+        s3TxtFiles={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
       />
       <b>Step 2: Choose checkpoint text</b>
       <CheckpointTxtLoader
-        textAssets={textAssets}
+        s3TxtFiles={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.checkpointTxt}
       />
       <br />

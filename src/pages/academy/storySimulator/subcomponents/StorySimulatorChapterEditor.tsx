@@ -18,19 +18,22 @@ import { StorySimulatorSortableList } from './StorySimulatorSortableList';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;
-  textAssets?: string[];
+  checkpointFilenames?: string[];
 };
 
 const emptyStringArray: string[] = [];
 
 /**
- * This is the Chapter editor form users can either create
+ * This is the Chapter Editor Form that
+ * storywriters use to either create
  * or udpate chapters for the game.
  *
- * @param chapterDetail the starting state of the form
- * @param textAssets the list of all text files to choose from
+ * @param chapterDetail the starting state of the form,
+ *                      either loaded from defaultChapter if user wants to create a new chapter
+ *                      or loaded from the existing chapter if user wants to edit the chapter
+ * @param checkpointFilenames the list of all checkpoint text files to choose from
  */
-const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps) => {
+const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: ChapterSimProps) => {
   const { id } = chapterDetail;
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
   const { value: imageUrl, setValue: setImageUrl, inputProps: imageUrlProps } = useInput('');
@@ -48,9 +51,17 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
     setChosenFiles(chapterDetail.filenames);
     setIsPublished(chapterDetail.isPublished);
     setTxtsNotChosen(
-      (textAssets || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
+      (checkpointFilenames || []).filter(textAsset => !chapterDetail.filenames.includes(textAsset))
     );
-  }, [chapterDetail, setChosenFiles, setImageUrl, setOpenDate, setTitle, textAssets, rerender]);
+  }, [
+    chapterDetail,
+    setChosenFiles,
+    setImageUrl,
+    setOpenDate,
+    setTitle,
+    checkpointFilenames,
+    rerender
+  ]);
 
   const onSortEnd = React.useCallback(
     ({ oldIndex, newIndex }: any) => {

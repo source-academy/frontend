@@ -11,10 +11,13 @@ import checkpointConstants, { transitionTextStyle } from './CheckpointTransition
  * From user's perspective, it is when the in-between scene that is triggered
  * after they completed a checkpoint.
  *
- * Internally, we use this scene to fully load students information
- * as well as get the next checkpoint, before finally loading the next scene.
+ * Internally, we use this scene to fully load the next checkpoint,
+ * before finally loading the next scene.
  *
- * We cannot load these informations at the GameManager as
+ * In story simulator, the next checkpoint is loaded based on the
+ * chapterSimStack using the callGameManagerForSim function.
+ *
+ * We cannot load these informations at the start of GameManager as
  * it can alter the sequencing of preload() and create() in the GameManager.
  */
 class CheckpointTransition extends Phaser.Scene {

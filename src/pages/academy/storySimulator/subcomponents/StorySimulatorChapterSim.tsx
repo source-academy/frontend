@@ -51,7 +51,7 @@ const ChapterSim = React.memo(({ textAssets }: ChapterSequencerProps) => {
       <hr />
       <StorySimulatorChapterEditor
         chapterDetail={chapters[chosenIndex] || defaultChapter}
-        textAssets={textAssets}
+        checkpointFilenames={textAssets}
       />
     </>
   );

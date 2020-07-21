@@ -53,7 +53,7 @@ const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
 /**
  * Tools that are added to asset selection, includes: trash-can delete tool
  *
- * @param filePath the file path you want to supply tools for
+ * @param filePath the path to asset you want to supply tools for
  * @returns {JSX.Element} A trash can that deletes the file given the asset path
  */
 const toolIcons = (filePath: string) => (

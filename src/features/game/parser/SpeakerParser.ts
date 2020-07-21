@@ -6,8 +6,11 @@ import ParserConverter from './ParserConverter';
 
 /**
  * This classes parses the speaker portion of the dialogue
- * and loads the character expressions into the Character entity
- * in the game map
+ * and returns SpeakerDetail object encapsulating information
+ * about speakers in a dialogue.
+ *
+ * This class also loads the character expressions into the
+ * Character entity in the game map
  */
 export default class SpeakerParser {
   /**
