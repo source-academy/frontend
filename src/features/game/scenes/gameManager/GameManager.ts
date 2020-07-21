@@ -132,7 +132,6 @@ class GameManager extends Phaser.Scene {
     );
     this.escapeManager.initialise(this, this.phaseManager);
 
-    GameGlobalAPI.getInstance().loadSounds(this.getCurrentCheckpoint().map.getSoundAssets());
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
     );
@@ -140,8 +139,14 @@ class GameManager extends Phaser.Scene {
     this.bindKeyboardTriggers();
   }
 
-  private preloadLocationsAssets(chapter: GameCheckpoint) {
-    chapter.map.getMapAssets().forEach((assetPath, assetKey) => {
+  /**
+   * Preload all assets (image and sounds) exclusive to the checkpoint.
+   *
+   * @param checkpoint checkpoint to have its assets loaded
+   */
+  private preloadLocationsAssets(checkpoint: GameCheckpoint) {
+    GameGlobalAPI.getInstance().loadSounds(checkpoint.map.getSoundAssets());
+    checkpoint.map.getMapAssets().forEach((assetPath, assetKey) => {
       this.load.image(assetKey, toS3Path(assetPath));
     });
   }
