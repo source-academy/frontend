@@ -33,6 +33,9 @@ const ImageAssets: AssetMap<ImageAsset> = {
   },
   awardsPage: { key: 'award-pg-opt', path: '/ui/collectiblesPageOpt.png' },
 
+  // Awards Hall
+  awardsBackground: { key: 'award-hall-bg', path: '/ui/awardsHall.png' },
+
   // Chapter Select
   chapterSelectBackground: { key: 'chapter-select-bg', path: '/locations/yourRoom-dim/normal.png' },
   chapterRepeatButton: { key: 'chapter-repeat', path: '/ui/chapterRepeat.png' },

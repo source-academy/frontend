@@ -82,7 +82,7 @@ class AwardsHall extends Phaser.Scene {
   public update() {
     if (!this.backgroundTile || !this.awardsContainer) return;
 
-    let newXPos = this.backgroundTile.x;
+    let newXPos = this.awardsContainer.x;
     if (this.isScrollRight) {
       newXPos -= AwardsHallConstants.defaultScrollSpeed;
     } else if (this.isScrollLeft) {
@@ -90,22 +90,21 @@ class AwardsHall extends Phaser.Scene {
     }
     newXPos = limitNumber(newXPos, -this.scrollLim, 0);
 
-    this.backgroundTile.tilePositionX = newXPos;
+    this.backgroundTile.tilePositionX = -newXPos;
     this.awardsContainer.x = newXPos;
   }
 
   private renderBackground() {
     if (this.backgroundTile) this.backgroundTile.destroy();
 
-    // TODO: Find proper background
     this.backgroundTile = new Phaser.GameObjects.TileSprite(
       this,
-      screenCenter.x,
-      screenCenter.y,
+      0,
+      0,
       AwardsHallConstants.tileDim,
       AwardsHallConstants.tileDim,
-      'a'
-    );
+      ImageAssets.awardsBackground.key
+    ).setOrigin(0, 0.25);
     this.layerManager.addToLayer(Layer.Background, this.backgroundTile);
 
     // Add banners

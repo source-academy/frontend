@@ -11,7 +11,7 @@ export const AwardsHallConstants = {
   awardsXSpacing: 300,
   arrowXOffset: 875,
   awardYStartPos: 300,
-  awardYSpace: screenCenter.y - 40,
+  awardYSpace: screenCenter.y - 50,
   awardDim: 200,
   hoverWidth: 300,
   bannerXOffset: -screenSize.x * 0.28,
