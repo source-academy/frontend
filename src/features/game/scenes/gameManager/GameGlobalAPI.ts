@@ -129,12 +129,12 @@ class GameGlobalAPI {
   //  Game Objects   //
   /////////////////////
 
-  public makeObjectGlow(objectId: ItemId) {
-    this.getGameManager().objectManager.makeObjectGlow(objectId);
+  public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().objectManager.makeObjectGlow(objectId, turnOn);
   }
 
-  public makeObjectBlink(objectId: ItemId) {
-    this.getGameManager().objectManager.makeObjectBlink(objectId);
+  public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().objectManager.makeObjectBlink(objectId, turnOn);
   }
 
   public getObjPropertyMap() {

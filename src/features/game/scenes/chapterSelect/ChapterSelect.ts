@@ -48,7 +48,6 @@ class ChapterSelect extends Phaser.Scene {
   }
 
   public async create() {
-    await SourceAcademyGame.getInstance().loadGameChapters();
     await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();

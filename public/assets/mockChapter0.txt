@@ -3,13 +3,6 @@ startingLoc: room
 objectives
     finish
 
-startActions
-    show_dialogue*(unwelcome) if !userstate.assessments.301
-    show_dialogue(welcome) if userstate.assessments.301
-
-endActions
-    show_dialogue(done)
-
 room
     modes: talk, explore
     bgm
@@ -17,28 +10,25 @@ room
     
     objects
         + emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
-            make_object_glow*(emergency1)
+            make_object_blink*(emergency1)
         + chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
+            make_object_blink*(emergency1, false)
             show_dialogue(addHallway)
             add_mode*(hallway, talk)
     boundingBoxes
         + bbox#0, 536, 420, 373, 402
-            show_dialogue(click)
 
     boundingBoxes
         + bbox1, 10, 10, 30, 30
 
     characters
-        +scottie, Scottie, sad, left
+        + scottie, Scottie, sad, left
 
 hallway
     modes: talk, move
     talkTopics: welcomeToHallway
     actions
         complete_objective(finish)
-    objects
-        +emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
-            complete_objective(finish)
 
 
 classroom

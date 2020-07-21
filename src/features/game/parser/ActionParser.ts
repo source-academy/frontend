@@ -113,6 +113,7 @@ export default class ActionParser {
           actionParams[0],
           actionType
         );
+        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
         break;
       case GameActionType.MakeObjectGlow:
         actionParamObj.id = Parser.validator.assertLocAttr(
@@ -120,6 +121,7 @@ export default class ActionParser {
           actionParams[0],
           actionType
         );
+        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
         break;
       case GameActionType.PlayBGM:
         actionParamObj.id = Parser.validator.assertAttr(GameAttr.bgms, actionParams[0], actionType);
