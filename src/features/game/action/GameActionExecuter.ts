@@ -47,10 +47,10 @@ export default class GameActionExecuter {
         await globalAPI.displayPopUp(actionParams.id, actionParams.position, actionParams.duration);
         return;
       case GameActionType.MakeObjectBlink:
-        await globalAPI.makeObjectBlink(actionParams.id);
+        await globalAPI.makeObjectBlink(actionParams.id, actionParams.turnOn);
         return;
       case GameActionType.MakeObjectGlow:
-        await globalAPI.makeObjectGlow(actionParams.id);
+        await globalAPI.makeObjectGlow(actionParams.id, actionParams.turnOn);
         return;
       case GameActionType.PlayBGM:
         SourceAcademyGame.getInstance().getSoundManager().playBgMusic(actionParams.id);

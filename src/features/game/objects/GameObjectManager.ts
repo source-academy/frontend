@@ -4,7 +4,6 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
-import { blink } from '../effects/FadeEffect';
 import GlowingImage from '../effects/GlowingObject';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
@@ -126,12 +125,16 @@ class GameObjectManager implements StateObserver {
    *
    * @param objectId id of the object
    */
-  public makeObjectGlow(objectId: ItemId) {
+  public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
     const object = this.objects.get(objectId);
     if (!object) {
       return;
     }
-    (object.sprite as GlowingImage).startGlow();
+    if (turnOn) {
+      (object.sprite as GlowingImage).startGlow();
+    } else {
+      (object.sprite as GlowingImage).clearGlow();
+    }
   }
 
   /**
@@ -139,12 +142,16 @@ class GameObjectManager implements StateObserver {
    *
    * @param objectId id of the object
    */
-  public makeObjectBlink(objectId: ItemId) {
+  public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
     const object = this.objects.get(objectId);
     if (!object) {
       return;
     }
-    blink(GameGlobalAPI.getInstance().getGameManager(), object.sprite.getContainer());
+    if (turnOn) {
+      (object.sprite as GlowingImage).startBlink();
+    } else {
+      (object.sprite as GlowingImage).clearBlink();
+    }
   }
 
   /**

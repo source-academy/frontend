@@ -17,6 +17,7 @@ import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import { fetchChapters } from '../storySimulator/StorySimulatorService';
 import { toTxtPath } from './assets/TextAssets';
+import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
 
 export type AccountInfo = {
@@ -97,6 +98,11 @@ export default class SourceAcademyGame extends Phaser.Game {
     chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
     this.global.gameChapters = chapters;
     return chapters;
+  }
+
+  public async loadMockChapters() {
+    this.global.gameChapters = GameChapterMocks;
+    return GameChapterMocks;
   }
 
   public setStorySimState(state: StorySimState) {
