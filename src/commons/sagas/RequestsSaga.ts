@@ -153,10 +153,10 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
     (achievement: any) =>
       ({
         ...achievement,
-        id: achievement.inferencer_id,
+        id: achievement.id,
         ability: achievement.ability as AchievementAbility,
-        deadline: new Date(achievement.closeAt),
-        release: new Date(achievement.openAt),
+        deadline: new Date(achievement.deadline),
+        release: new Date(achievement.release),
         view: {
           canvasUrl: achievement.canvasUrl || '',
           description: achievement.description || '',
