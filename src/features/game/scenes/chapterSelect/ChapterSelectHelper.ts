@@ -64,6 +64,8 @@ export function createChapter(
     }
   }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
+  console.log(index, lastCheckpointsIdx);
+
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
     onUp: () => callGameManagerOnTxtLoad(scene, true, index, lastCheckpointsIdx),

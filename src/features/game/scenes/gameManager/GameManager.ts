@@ -85,6 +85,7 @@ class GameManager extends Phaser.Scene {
   }
 
   public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
+    console.log(gameCheckpoint.objectives.getObjectives());
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     SourceAcademyGame.getInstance()
       .getSaveManager()
