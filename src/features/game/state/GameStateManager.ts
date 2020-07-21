@@ -12,6 +12,15 @@ import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
 import { StateObserver, StateSubject } from './GameStateTypes';
 
+/**
+ * Manages all states related to story, chapter, or checkpoint;
+ * e.g. checkpoint objectives, objects' property, bboxes' property.
+ *
+ * Other than this manager, all other manager should not need to
+ * manage their own state.
+ *
+ * Employs observer pattern, and notifies its subjects on state update.
+ */
 class GameStateManager implements StateSubject {
   // Subscribers
   public subscribers: Array<StateObserver>;
@@ -44,14 +53,29 @@ class GameStateManager implements StateSubject {
   //        Subscribers        //
   ///////////////////////////////
 
+  /**
+   * Update all subscribers that there is an update at the location ID.
+   *
+   * @param locationId ID of location that has an update.
+   */
   public update(locationId: LocationId) {
     this.subscribers.forEach(observer => observer.notify(locationId));
   }
 
+  /**
+   * Allow a StateObserver implementer to subscribe to change of states.
+   *
+   * @param observer the instance of the implementer
+   */
   public subscribe(observer: StateObserver) {
     this.subscribers.push(observer);
   }
 
+  /**
+   * Allow a StateObserver implementer to unsubscribe to change of states.
+   *
+   * @param observer the instance of the implementer
+   */
   public unsubscribe(observer: StateObserver) {
     this.subscribers = this.subscribers.filter(obs => obs.observerId !== observer.observerId);
   }
@@ -60,6 +84,13 @@ class GameStateManager implements StateSubject {
   //          Helpers          //
   ///////////////////////////////
 
+  /**
+   * Update a location ID's state based on its GameMode.
+   * Also notifies subjects.
+   *
+   * @param targetLocId the id of to be upDated location
+   * @param mode mode that has been updated
+   */
   private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
 
@@ -74,24 +105,42 @@ class GameStateManager implements StateSubject {
     this.update(targetLocId);
   }
 
-  private updateLocationStateAttr(targetLocName: string, attr: GameLocationAttr): void {
+  /**
+   * Update a location ID's state based on its attribute.
+   * Also notifies subjects.
+   *
+   * @param targetLocId the id of to be upDated location
+   * @param attr attribute that has been updated
+   */
+  private updateLocationStateAttr(targetLocId: LocationId, attr: GameLocationAttr): void {
     switch (attr) {
       case GameLocationAttr.navigation:
-        return this.updateLocationStateMode(targetLocName, GameMode.Move);
+        return this.updateLocationStateMode(targetLocId, GameMode.Move);
       case GameLocationAttr.talkTopics:
-        return this.updateLocationStateMode(targetLocName, GameMode.Talk);
+        return this.updateLocationStateMode(targetLocId, GameMode.Talk);
       case GameLocationAttr.boundingBoxes:
       case GameLocationAttr.objects:
-        return this.updateLocationStateMode(targetLocName, GameMode.Explore);
+        return this.updateLocationStateMode(targetLocId, GameMode.Explore);
       default:
         return;
     }
   }
 
+  /**
+   * Check whether an location ID exist.
+   * Throw error if it does not exist.
+   *
+   * @param locIds id to check
+   */
   private checkLocationsExist(locIds: string[]): void {
     locIds.forEach(locId => mandatory(this.locationStates.get(locId)));
   }
 
+  /**
+   * Return a location based on its ID.
+   * @param locId id of the location
+   * @returns {GameLocation}
+   */
   private getLocationById = (locId: LocationId) => mandatory(this.locationStates.get(locId));
 
   ///////////////////////////////
@@ -118,6 +167,11 @@ class GameStateManager implements StateSubject {
     });
   }
 
+  /**
+   * Load GameSaveState and use it as the values of GameStateManager's attributes.
+   *
+   * @param gameStoryState state to load
+   */
   private loadFromGameStoryState(gameStoryState: GameSaveState) {
     this.checkpointObjective.setObjectives(jsObjectToMap(gameStoryState.chapterObjective));
     this.locationStates = jsonToLocationStates(gameStoryState.locationStates);
@@ -126,6 +180,9 @@ class GameStateManager implements StateSubject {
     this.triggeredInteractions = jsObjectToMap(gameStoryState.triggeredInteractions);
   }
 
+  /**
+   * Initialise GameStateManager's attributes with fresh states.
+   */
   private loadNewGameStoryState() {
     this.checkpointObjective = this.checkpoint.objectives;
     this.locationStates = this.checkpoint.map.getLocations();
@@ -138,10 +195,21 @@ class GameStateManager implements StateSubject {
   //        Interaction        //
   ///////////////////////////////
 
+  /**
+   * Record that an interaction has been triggered.
+   *
+   * @param id id of interaction
+   */
   public triggerInteraction(id: string): void {
     this.triggeredInteractions.set(id, true);
   }
 
+  /**
+   * Checks whether an interaction ID has been triggered or not.
+   *
+   * @param id id of interaction
+   * @returns {boolean}
+   */
   public hasTriggeredInteraction(id: string): boolean | undefined {
     return this.triggeredInteractions.get(id);
   }
@@ -150,6 +218,18 @@ class GameStateManager implements StateSubject {
   //       State Check         //
   ///////////////////////////////
 
+  /**
+   * Checks whether a location has any update.
+   * A location has an update if any of its mode has been updated since
+   * last user interaction.
+   *
+   * If the mode parameter is specified, only that specific mode is checked.
+   * If the mode parameter is not specified, update to any mode will return true.
+   *
+   * @param locationId location ID
+   * @param mode mode to check
+   * @returns {boolean}
+   */
   public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
     this.checkLocationsExist([locationId]);
     if (mode) {
@@ -167,10 +247,22 @@ class GameStateManager implements StateSubject {
   //    Location Mode State    //
   ///////////////////////////////
 
+  /**
+   * Get modes available to a location based on the location ID.
+   *
+   * @param locationId location ID
+   * @returns {GameMode[]} game modes
+   */
   public getLocationMode(locationId: LocationId): GameMode[] {
     return Array.from(this.checkpoint.map.getLocationAtId(locationId).modes) || [];
   }
 
+  /**
+   * Add a mode to a location.
+   *
+   * @param locationId location ID
+   * @param mode game mode to add
+   */
   public addLocationMode(locationId: LocationId, mode: GameMode) {
     const location = this.getLocationById(locationId);
     location.modes!.add(mode);
@@ -178,6 +270,14 @@ class GameStateManager implements StateSubject {
     this.updateLocationStateMode(locationId, GameMode.Menu);
   }
 
+  /**
+   * Remove a mode from a location.
+   * If the mode is not present at the location, nothing
+   * will be executed.
+   *
+   * @param locationId location ID
+   * @param mode game mode to remove
+   */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
     const location = this.getLocationById(locationId);
     if (!location.modes) return;
@@ -189,11 +289,25 @@ class GameStateManager implements StateSubject {
   //    Location Attr State    //
   ///////////////////////////////
 
+  /**
+   * Get an IDs of an attribute of a location.
+   *
+   * @param attr location attribute
+   * @param locationId id of location
+   * @param {ItemId[]}
+   */
   public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
     const location = this.getLocationById(locationId);
     return Array.from(location[attr]) || [];
   }
 
+  /**
+   * Add an item ID to an attribute of the location.
+   *
+   * @param attr attribute to add to
+   * @param locationId id of location
+   * @param attrElem item ID to be added
+   */
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
     const location = this.getLocationById(locationId);
     !location[attr] && (location[attr] = []);
@@ -201,6 +315,14 @@ class GameStateManager implements StateSubject {
     this.updateLocationStateAttr(locationId, attr);
   }
 
+  /**
+   * Remove an item ID from an attribute of the location.
+   * If ID is not found within the attribute, nothing will be executed.
+   *
+   * @param attr attribute to remove from
+   * @param locationId id of location
+   * @param attrElem item ID to be removed
+   */
   public removeLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
     const location = this.getLocationById(locationId);
     if (!location[attr]) return;
@@ -212,10 +334,21 @@ class GameStateManager implements StateSubject {
   //    Chapter Objectives     //
   ///////////////////////////////
 
+  /**
+   * Checks whether all the checkpoint objectives has been completed.
+   * @returns {boolean}
+   */
   public isAllComplete(): boolean {
     return this.checkpointObjective.isAllComplete();
   }
 
+  /**
+   * Checks whether a specific objective has been completed.
+   * If the objective does not exist, this method still return true.
+   *
+   * @param key objective name
+   * @returns {boolean}
+   */
   public isObjectiveComplete(key: string): boolean {
     const isComplete = this.checkpointObjective.getObjectiveState(key);
     if (isComplete === undefined || isComplete) {
@@ -224,12 +357,25 @@ class GameStateManager implements StateSubject {
     return false;
   }
 
+  /**
+   * Check whether the objectives are complete or not.
+   * All specified objectives must be complete for this method
+   * to return true.
+   *
+   * @param keys objective names
+   * @returns {boolean}
+   */
   public areObjectivesComplete(keys: string[]): boolean {
     let result = true;
     keys.forEach(key => (result = result && this.isObjectiveComplete(key)));
     return result;
   }
 
+  /**
+   * Record that an objective has been completed.
+   *
+   * @param key objective name
+   */
   public completeObjective(key: string): void {
     this.checkpointObjective.setObjective(key, true);
   }
@@ -238,10 +384,22 @@ class GameStateManager implements StateSubject {
   //       Obj Property        //
   ///////////////////////////////
 
+  /**
+   * Get object property map.
+   *
+   * @returns {Map<ItemId, ObjectProperty>}
+   */
   public getObjPropertyMap() {
     return this.objectPropertyMap;
   }
 
+  /**
+   * Replace an object property of the given ID with the new object
+   * property. Commonly used to update a specific object property.
+   *
+   * @param id id of object to change
+   * @param newObjProp new object property to replace the old one
+   */
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.objectPropertyMap.set(id, newObjProp);
 
@@ -257,10 +415,22 @@ class GameStateManager implements StateSubject {
   //       BBox Property       //
   ///////////////////////////////
 
+  /**
+   * Get bbox property map.
+   *
+   * @returns {Map<ItemId, BBoxProperty>}
+   */
   public getBBoxPropertyMap() {
     return this.bboxPropertyMap;
   }
 
+  /**
+   * Replace a bbox property of the given ID with the new bbox
+   * property. Commonly used to update a specific bbox property.
+   *
+   * @param id id of object to change
+   * @param newBBoxProp new object property to replace the old one
+   */
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.bboxPropertyMap.set(id, newBBoxProp);
 
@@ -276,14 +446,30 @@ class GameStateManager implements StateSubject {
   //          Saving           //
   ///////////////////////////////
 
+  /**
+   * Return a map of game locations; with its location ID as key.
+   *
+   * @returns {Map<LocationId, GameLocation>}
+   */
   public getLocationStates() {
     return this.locationStates;
   }
 
+  /**
+   * Get the current checkpoint objectives.
+   *
+   * @returns {GameObjective}
+   */
   public getCheckpointObjectives() {
     return this.checkpointObjective;
   }
 
+  /**
+   * Return a map of interactions and whether they has been triggered
+   * or not.
+   *
+   * @returns {Map<string, boolean>}
+   */
   public getTriggeredInteractions() {
     return this.triggeredInteractions;
   }
