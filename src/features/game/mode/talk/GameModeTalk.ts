@@ -17,11 +17,14 @@ import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
 /**
  * The class renders the "Talk" UI which displays
  * a selection of all the dialogues that players can
- * talk about in a location
+ * talk about in a location.
  */
 class GameModeTalk implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 
+  /**
+   * Fetches the talk topics of the current location id.
+   */
   private getLatestTalkTopics() {
     return GameGlobalAPI.getInstance().getLocationAttr(
       GameLocationAttr.talkTopics,
@@ -29,10 +32,16 @@ class GameModeTalk implements IGameUI {
     );
   }
 
+  /**
+   * Create the container that encapsulate the 'Talk' mode UI,
+   * i.e. the talk topics, the back button, as well the checked
+   * icon for triggered talk topics.
+   */
   private createUIContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const talkMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
+    // Add talk topics of the location
     const talkTopics = this.getLatestTalkTopics();
     const buttons = this.getTalkTopicButtons(talkTopics);
     const buttonPositions = calcTableFormatPos({
@@ -76,6 +85,13 @@ class GameModeTalk implements IGameUI {
     return talkMenuContainer;
   }
 
+  /**
+   * Get the talk topics button preset to be formatted later.
+   * The preset includes the text to be displayed on the button and
+   * its functionality (dialogue callback).
+   *
+   * @param dialogueIds dialogue IDs to create talk topics from
+   */
   private getTalkTopicButtons(dialogueIds: ItemId[]) {
     return dialogueIds.map(dialogueId => {
       const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId));
@@ -90,6 +106,15 @@ class GameModeTalk implements IGameUI {
     });
   }
 
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   */
   private createTalkTopicButton(text: string, xPos: number, yPos: number, callback: any) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     return createButton(gameManager, {
@@ -101,6 +126,12 @@ class GameModeTalk implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Activate the 'Talk' mode UI.
+   *
+   * Usually only called by the phase manager when 'Talk' phase is
+   * pushed.
+   */
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
@@ -115,6 +146,12 @@ class GameModeTalk implements IGameUI {
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
+  /**
+   * Deactivate the 'Talk' mode UI.
+   *
+   * Usually only called by the phase manager when 'Talk' phase is
+   * transitioned out.
+   */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     if (this.uiContainer) {

@@ -309,6 +309,10 @@ class GameGlobalAPI {
   //      Sound      //
   /////////////////////
 
+  public getSoundManager() {
+    return SourceAcademyGame.getInstance().getSoundManager();
+  }
+
   public playSound(soundKey: AssetKey) {
     SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
   }
