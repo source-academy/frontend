@@ -18,8 +18,8 @@ import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import awardsConstants, {
   awardDescStyle,
+  awardKeyStyle,
   awardTitleStyle,
-  defaultAwardProp,
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
@@ -27,7 +27,10 @@ import { getAwardProps } from './GameAwardsHelper';
 import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
- * Manager for rendering collectibles and achievements popup in the location.
+ * Manager for the 'Award Menu'.
+ *
+ * Here, achievements and collectibles are listed and
+ * available for browsing.
  */
 class GameAwardsManager implements IGameUI {
   private scene: Phaser.Scene | undefined;
@@ -56,13 +59,22 @@ class GameAwardsManager implements IGameUI {
     this.userStateManager = userStateManager;
     this.phaseManager = phaseManager;
 
-    // Set initial page number to zero
+    // Set all initial pages number to zero
     Object.keys(AwardPage).forEach((page, index) => {
       const pageName = page as AwardPage;
       this.activePageNumber.set(pageName, 0);
     });
   }
 
+  /**
+   * Change the current page in view to a new page.
+   *
+   * Internally, destroy and replace the containers to reflect
+   * the new page; also sets up the blue outline that denotes
+   * that the page is chosen.
+   *
+   * @param page new page
+   */
   private setPage(page: AwardPage) {
     if (this.uiContainer) {
       if (this.itemsContainer) this.itemsContainer.destroy();
@@ -88,42 +100,13 @@ class GameAwardsManager implements IGameUI {
       this.uiContainer.add(this.pageChosenContainer);
 
       // Set default preview
-      this.setPreview(defaultAwardProp);
+      this.setPreview();
     }
   }
 
-  public async activateUI(): Promise<void> {
-    this.uiContainer = this.createUIContainer();
-    this.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
-    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
-
-    // Set initial page
-    this.setPage(this.currActivePage);
-
-    this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
-
-    this.getScene().tweens.add({
-      targets: this.uiContainer,
-      ...entryTweenProps,
-      y: screenCenter.y
-    });
-  }
-
-  public async deactivateUI(): Promise<void> {
-    if (this.uiContainer) {
-      this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
-      this.getSoundManager().playSound(SoundAssets.menuExit.key);
-
-      this.getScene().tweens.add({
-        targets: this.uiContainer,
-        ...exitTweenProps
-      });
-
-      await sleep(exitTweenProps.duration);
-      fadeAndDestroy(this.getScene(), this.uiContainer, { fadeDuration: 50 });
-    }
-  }
-
+  /**
+   * Create the container that encapsulate the 'Award Menu' UI.
+   */
   private createUIContainer() {
     const awardContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
@@ -204,6 +187,9 @@ class GameAwardsManager implements IGameUI {
     return awardContainer;
   }
 
+  /**
+   * Get positions of the page options.
+   */
   private getPageOptPositions() {
     return calcListFormatPos({
       numOfItems: Object.keys(AwardPage).length,
@@ -212,41 +198,74 @@ class GameAwardsManager implements IGameUI {
     });
   }
 
-  private setPreview(award: AwardProperty) {
+  /**
+   * Set the preview of the award; shown on the left side of the menu.
+   *
+   * The preview include the title of achievement, object asset, asset key,
+   * as well as asset description.
+   *
+   * @param award award to preview
+   */
+  private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
       this.previewContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
-      // Preview image
-      const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, award.assetKey);
-      resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
-      previewSprite
-        .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
-        .setOrigin(0.428, 0.468);
+      if (award) {
+        // Preview image
+        const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, award.assetKey);
+        resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
+        previewSprite
+          .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
+          .setOrigin(0.428, 0.468);
 
-      // Preview title
-      const previewTitle = createBitmapText(
-        this.getScene(),
-        award.title,
-        awardsConstants.previewXPos,
-        awardsConstants.previewYPos + awardsConstants.titleYOffset,
-        awardTitleStyle
-      ).setOrigin(0.35, 0.5);
+        // Preview title
+        const previewTitle = createBitmapText(
+          this.getScene(),
+          award.title,
+          awardsConstants.previewXPos,
+          awardsConstants.previewYPos + awardsConstants.titleYOffset,
+          awardTitleStyle
+        ).setOrigin(0.3, 0.5);
 
-      // Preview description
-      const previewDesc = new Phaser.GameObjects.Text(
-        this.getScene(),
-        awardsConstants.previewXPos,
-        awardsConstants.previewYPos + awardsConstants.descYOffset,
-        award.description,
-        awardDescStyle
-      ).setOrigin(0.45, 0.0);
+        // Preview asset key
+        const previewKey = createBitmapText(
+          this.getScene(),
+          award.assetKey,
+          awardsConstants.previewXPos,
+          awardsConstants.previewYPos + awardsConstants.keyYOffset,
+          awardKeyStyle
+        ).setOrigin(0.3, 0.5);
 
-      this.previewContainer.add([previewSprite, previewTitle, previewDesc]);
+        // Preview description
+        const previewDesc = new Phaser.GameObjects.Text(
+          this.getScene(),
+          awardsConstants.previewXPos,
+          awardsConstants.previewYPos + awardsConstants.descYOffset,
+          award.description,
+          awardDescStyle
+        ).setOrigin(0.4, 0.0);
+
+        this.previewContainer.add([previewSprite, previewTitle, previewKey, previewDesc]);
+      }
+
       this.uiContainer.add(this.previewContainer);
     }
   }
 
+  /**
+   * Flip the page.
+   *
+   * The minimum page number is 0, which represent the
+   * start of the list.
+   *
+   * This method is only able to flip forward (increment the page number)
+   * if there is still items to be shown on the list after what is
+   * shown currently.
+   *
+   * @param next if next is set to true, page number will be incremented
+   *             by one; else it will be decremented by one.
+   */
   private nextPage(next: boolean) {
     const currPageNum = this.activePageNumber.get(this.currActivePage)!;
     const newPageNum = limitNumber(
@@ -262,12 +281,16 @@ class GameAwardsManager implements IGameUI {
     }
   }
 
-  private getScene = () => mandatory(this.scene);
-  private getLayerManager = () => mandatory(this.layerManager);
-  private getPhaseManager = () => mandatory(this.phaseManager);
-  private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
-  private getUserStateManager = () => mandatory(this.userStateManager);
-
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality. This button represent the page option button,
+   * whether it is 'collectible' or 'achievement'.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   */
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
       assetKey: ImageAssets.awardsPage.key,
@@ -278,15 +301,22 @@ class GameAwardsManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Create a container that represent the list of objects
+   * to be selected on the screen.
+   */
   private createItemsContainer() {
     const itemsContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
+    // Use the previously active page number of the page
     const items = this.getItems(this.activePageNumber.get(this.currActivePage)!);
     const itemPositions = calcListFormatPos({
       numOfItems: items.length,
       xSpacing: 0,
       ySpacing: awardsConstants.listYSpacing
     });
+
+    // Populate container with all the item buttons
     itemsContainer.add(
       items.map((awardProp, index) =>
         this.createItemButton(
@@ -300,6 +330,16 @@ class GameAwardsManager implements IGameUI {
     return itemsContainer;
   }
 
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality. This button represent the object selection
+   * button.
+   *
+   * @param obj name of object to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   */
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
       assetKey: ImageAssets.awardsBanner.key,
@@ -310,6 +350,16 @@ class GameAwardsManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Get the list of objects to be shown on the UI.
+   *
+   * List items is dependent on the active page;
+   * and is only limited to a number of items due to UI
+   * size. Hence, which section of list is taken is
+   * dependent on the parameter pageNum.
+   *
+   * @param pageNum page number
+   */
   private getItems(pageNum: number) {
     let keys: string[];
     switch (this.currActivePage) {
@@ -327,6 +377,56 @@ class GameAwardsManager implements IGameUI {
     const itemStartIdx = pageNum * awardsConstants.itemsPerPage;
     return itemList.slice(itemStartIdx, itemStartIdx + awardsConstants.itemsPerPage);
   }
+
+  /**
+   * Activate the 'Award Menu' UI.
+   *
+   * Usually only called by the phase manager when 'Award' phase is
+   * pushed.
+   */
+  public async activateUI(): Promise<void> {
+    this.uiContainer = this.createUIContainer();
+    this.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
+    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
+
+    // Set initial page
+    this.setPage(this.currActivePage);
+
+    this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
+
+    this.getScene().tweens.add({
+      targets: this.uiContainer,
+      ...entryTweenProps,
+      y: screenCenter.y
+    });
+  }
+
+  /**
+   * Deactivate the 'Award Menu' UI.
+   *
+   * Usually only called by the phase manager when 'Award' phase is
+   * transitioned out.
+   */
+  public async deactivateUI(): Promise<void> {
+    if (this.uiContainer) {
+      this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
+      this.getSoundManager().playSound(SoundAssets.menuExit.key);
+
+      this.getScene().tweens.add({
+        targets: this.uiContainer,
+        ...exitTweenProps
+      });
+
+      await sleep(exitTweenProps.duration);
+      fadeAndDestroy(this.getScene(), this.uiContainer, { fadeDuration: 50 });
+    }
+  }
+
+  private getScene = () => mandatory(this.scene);
+  private getLayerManager = () => mandatory(this.layerManager);
+  private getPhaseManager = () => mandatory(this.phaseManager);
+  private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
+  private getUserStateManager = () => mandatory(this.userStateManager);
 }
 
 export default GameAwardsManager;

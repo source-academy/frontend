@@ -45,6 +45,10 @@ class GameEscapeManager implements IGameUI {
     this.phaseManager = phaseManager;
   }
 
+  /**
+   * Create the container that encapsulate the 'Escape Menu' UI,
+   * i.e. the background, the buttons, and the options.
+   */
   private createUIContainer() {
     const escapeMenuContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
 
@@ -77,6 +81,7 @@ class GameEscapeManager implements IGameUI {
       )
     );
 
+    // Get user settings, to use as default choice in the radio buttons
     const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
     const sfxVolIdx = settingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === sfxVolume
@@ -91,6 +96,7 @@ class GameEscapeManager implements IGameUI {
     this.bgmVolumeRadioButtons = this.createSettingsRadioOptions(bgmVolIdx, settingsPos[1][1]);
     escapeMenuContainer.add([this.sfxVolumeRadioButtons, this.bgmVolumeRadioButtons]);
 
+    // Get all the buttons
     const buttons = this.getOptButtons();
     const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length
@@ -110,10 +116,22 @@ class GameEscapeManager implements IGameUI {
     return escapeMenuContainer;
   }
 
+  /**
+   * Returns all the option available in the escape menu.
+   *
+   * For SFX and BGM, these are pure headers as the options, interactivity, and functionality
+   * are handled separately (radio buttons)
+   */
   private getSettings() {
     return ['SFX', 'BGM'];
   }
 
+  /**
+   * Create radio buttons matching the escape menu style.
+   *
+   * @param defaultChoiceIdx default option for the radio button
+   * @param yPos y position of the radio buttons
+   */
   private createSettingsRadioOptions(defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this.getScene(),
@@ -134,6 +152,11 @@ class GameEscapeManager implements IGameUI {
     );
   }
 
+  /**
+   * Get the escape options buttons preset to be formatted later.
+   * The preset includes the text to be displayed on the button and
+   * its functionality.
+   */
   private getOptButtons() {
     return [
       {
@@ -162,17 +185,15 @@ class GameEscapeManager implements IGameUI {
     ];
   }
 
-  public activateUI() {
-    const escapeMenuContainer = this.createUIContainer();
-    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
-    this.getLayerManager().addToLayer(Layer.Escape, escapeMenuContainer);
-  }
-
-  public deactivateUI() {
-    this.getSoundManager().playSound(SoundAssets.menuExit.key);
-    this.getLayerManager().clearSeveralLayers([Layer.Escape]);
-  }
-
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   */
   private createEscapeOptButton(text: string, xPos: number, yPos: number, callback: any) {
     return createButton(this.getScene(), {
       assetKey: ImageAssets.mediumButton.key,
@@ -183,6 +204,10 @@ class GameEscapeManager implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Process the current settings on escape menu, save, and apply the settings.
+   * Escape Menu is responsible in contacting various managers to apply the settings.
+   */
   private async applySettings() {
     const sfxVol = this.sfxVolumeRadioButtons
       ? parseFloat(this.sfxVolumeRadioButtons.getChosenChoice())
@@ -200,17 +225,43 @@ class GameEscapeManager implements IGameUI {
       .applyUserSettings(this.getSettingsSaveManager().getSettings());
   }
 
+  /**
+   * Cleaning up of related managers.
+   */
+  private cleanUp() {
+    this.getInputManager().clearListeners();
+    this.getLayerManager().clearAllLayers();
+  }
+
+  /**
+   * Activate the 'Escape Menu' UI.
+   *
+   * Usually only called by the phase manager when 'Escape' phase is
+   * pushed.
+   */
+  public activateUI() {
+    const escapeMenuContainer = this.createUIContainer();
+    this.getSoundManager().playSound(SoundAssets.menuEnter.key);
+    this.getLayerManager().addToLayer(Layer.Escape, escapeMenuContainer);
+  }
+
+  /**
+   * Deactivate the 'Escape Menu' UI.
+   *
+   * Usually only called by the phase manager when 'Escape' phase is
+   * transitioned out.
+   */
+  public deactivateUI() {
+    this.getSoundManager().playSound(SoundAssets.menuExit.key);
+    this.getLayerManager().clearSeveralLayers([Layer.Escape]);
+  }
+
   private getScene = () => mandatory(this.scene);
   private getLayerManager = () => mandatory(this.layerManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
   private getSettingsSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   private getPhaseManager = () => mandatory(this.phaseManager);
   private getInputManager = () => mandatory(this.inputManager);
-
-  private cleanUp() {
-    this.getInputManager().clearListeners();
-    this.getLayerManager().clearAllLayers();
-  }
 }
 
 export default GameEscapeManager;

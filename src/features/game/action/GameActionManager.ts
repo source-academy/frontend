@@ -21,6 +21,13 @@ export default class GameActionManager {
     this.actionMap = gameManager.getCurrentCheckpoint().map.getActions();
   }
 
+  /**
+   * Process an array of actions, denoted by their IDs.
+   *
+   * NOTE: Saves the game after all the actions are executed.
+   *
+   * @param actionIds ids of the actions
+   */
   public async processGameActions(actionIds?: ItemId[]): Promise<void> {
     if (!actionIds) return;
     for (const actionId of actionIds) {
@@ -29,6 +36,11 @@ export default class GameActionManager {
     await GameGlobalAPI.getInstance().saveGame();
   }
 
+  /**
+   * Process an action, denoted by its ID.
+   *
+   * @param actionId id of the action
+   */
   public async processGameAction(actionId: ItemId) {
     const {
       actionType,
@@ -44,6 +56,17 @@ export default class GameActionManager {
     }
   }
 
+  /**
+   * Check whether an action is playable.
+   *
+   * An action is playable if:
+   *  - Has not been triggered & has all of its condition fulfilled
+   *  - Has been triggered, but repeatable & & has all of its condition fulfilled
+   *
+   * @param isRepeatable whether the action is repeatable
+   * @param interactionId id of the interaction
+   * @param actionConditions condition to be fulfilled to play the action
+   */
   private async checkCanPlayAction(
     isRepeatable: boolean,
     interactionId: string,
