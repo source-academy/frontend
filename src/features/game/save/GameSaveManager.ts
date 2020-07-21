@@ -30,7 +30,7 @@ export default class GameSaveManager {
 
   /**
    * Update the property of the manager.
-   * 
+   *
    * @param chapterNum chapter number
    * @param checkpointNum checkpoint number
    * @param continueGame whether user wants to continue or restart the chapter.

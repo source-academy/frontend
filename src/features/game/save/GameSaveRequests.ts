@@ -76,7 +76,7 @@ export async function clearData() {
 
 /**
  * Format a header object.
- * 
+ *
  * @param accessToken access token to be used
  */
 function createHeaders(accessToken: string): Headers {

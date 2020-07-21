@@ -20,6 +20,16 @@ class GamePopUpManager {
     this.currPopUp = new Map<GamePosition, Phaser.GameObjects.Container>();
   }
 
+  /**
+   * Display a popup image on the screen.
+   * The image is based the given ID, while its position
+   * is based on the given position.
+   *
+   * @param itemId item ID to be shown on the pop up
+   * @param position position of the pop up
+   * @param duration duration in which the pop up to be shown. Afterwards, the popup will
+   *                 be destroyed.
+   */
   public async displayPopUp(
     itemId: ItemId,
     position: GamePosition,
@@ -43,6 +53,7 @@ class GamePopUpManager {
     const assetKey = this.getAssetKey(itemId);
     if (!assetKey) return;
 
+    // Set up images
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
@@ -66,12 +77,20 @@ class GamePopUpManager {
     setTimeout(() => this.destroyPopUp(position), duration);
   }
 
+  /**
+   * Destroy all active pop ups at all positions.
+   */
   public destroyAllPopUps() {
     this.currPopUp.forEach((popUp, position, map) => {
       this.destroyPopUp(position);
     });
   }
 
+  /**
+   * Destroy a pop up at the given position, if any.
+   *
+   * @param position position of thhe pop up to be destroyed
+   */
   public async destroyPopUp(position: GamePosition) {
     const atPosContainer = this.currPopUp.get(position);
     if (!atPosContainer) return;
@@ -89,6 +108,11 @@ class GamePopUpManager {
     GameGlobalAPI.getInstance().playSound(SoundAssets.popUpExit.key);
   }
 
+  /**
+   * Get the asset key of the item ID.
+   *
+   * @param itemId item ID
+   */
   private getAssetKey(itemId: ItemId) {
     const objectPropMap = GameGlobalAPI.getInstance()
       .getGameManager()

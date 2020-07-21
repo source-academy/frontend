@@ -18,6 +18,8 @@ import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
  * It provides the activate/and deactivate interfaces
  * for Explore mode to call, as well as
  * provides API for make_object_glow and make_object_blink actions
+ *
+ * It is a subject/listener of GameStateManager.
  */
 class GameObjectManager implements StateObserver {
   public observerId: string;
@@ -32,14 +34,29 @@ class GameObjectManager implements StateObserver {
     GameGlobalAPI.getInstance().subscribeState(this);
   }
 
+  /**
+   * Part of observer pattern. Receives notification from GameStateManager.
+   *
+   * On notify, will rerender all the objects on the location to reflect
+   * the update to the state if applicable.
+   *
+   * @param locationId id of the location being updated
+   */
   public notify(locationId: LocationId) {
+    // Only inquire on Explore mode, as it is the only mode related to ObjectManager
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
+      // If the update is on the current location, we rerender to reflect the update
       this.renderObjectsLayerContainer(locationId);
     }
   }
 
+  /**
+   * Create a container filled with the objects related to the itemIDs.
+   *
+   * @param objectIds object IDs to be created
+   */
   private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
@@ -58,6 +75,12 @@ class GameObjectManager implements StateObserver {
     return objectContainer;
   }
 
+  /**
+   * Clear the layers, and render all the objects available to the location.
+   * Will immediately be shown on the screen.
+   *
+   * @param locationId location in which to render objects at
+   */
   public renderObjectsLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
@@ -68,14 +91,41 @@ class GameObjectManager implements StateObserver {
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
   }
 
+  /**
+   * Allow objects to be interacted with i.e. add listeners to the objects.
+   *
+   * There are three type of callbacks can be supplied:
+   *  - onClick: (ItemId) => void, to be executed when object is clicked
+   *  - onHover: (ItemId) => void, to be executed when object is hovered over
+   *  - onOut: (ItemId) => void, to be executed when object is out of hover
+   *
+   * The three callbacks are optional; if it is not provided, a null function
+   * will be executed instead.
+   *
+   * The three callbacks will be added on top of the existing action
+   * attached to the callbacks.
+   *
+   * @param callbacks { onClick?: (id?: ItemId) => void,
+   *                    onHover?: (id?: ItemId) => void,
+   *                    onOut?: (id?: ItemId) => void
+   *                  }
+   */
   public enableObjectAction(callbacks: any): void {
     this.objects.forEach(object => object.activate(callbacks));
   }
 
+  /**
+   * Remove interactivity of the objects, i.e remove listeners from the objects.
+   */
   public disableObjectAction() {
     this.objects.forEach(object => object.deactivate());
   }
 
+  /**
+   * Apply glowing effect around the object.
+   *
+   * @param objectId id of the object
+   */
   public makeObjectGlow(objectId: ItemId) {
     const object = this.objects.get(objectId);
     if (!object) {
@@ -84,6 +134,11 @@ class GameObjectManager implements StateObserver {
     (object.sprite as GlowingImage).startGlow();
   }
 
+  /**
+   * Apply blinking effect on the object.
+   *
+   * @param objectId id of the object
+   */
   public makeObjectBlink(objectId: ItemId) {
     const object = this.objects.get(objectId);
     if (!object) {
@@ -92,6 +147,23 @@ class GameObjectManager implements StateObserver {
     blink(GameGlobalAPI.getInstance().getGameManager(), object.sprite.getContainer());
   }
 
+  /**
+   * Create the object from the given object property.
+   * All objects created with this function will have
+   * `.activate()` and `.deactivate()`; which is internally used
+   * by `.enableObjectActions()` and `.disableObjectActions()`.
+   *
+   * The method `.activate(callbacks)` receive a callbacks argument,
+   * which encapsulate three different callbacks.
+   *
+   * callbacks = { onClick?: (id?: ItemId) => void,
+   *               onHover?: (id?: ItemId) => void,
+   *               onOut?: (id?: ItemId) => void
+   *             }
+   *
+   * @param gameManager game manager
+   * @param objectProperty object property to be used
+   */
   private createObject(
     gameManager: GameManager,
     objectProperty: ObjectProperty
