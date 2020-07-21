@@ -23,6 +23,12 @@ class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewMask: Phaser.GameObjects.Graphics | undefined;
 
+  /**
+   * Set the location preview sprite to the given asset key.
+   *
+   * @param sprite sprite for which its texture will be replaced with the new preview
+   * @param assetKey asset key of the new preview
+   */
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
     sprite
       .setTexture(assetKey)
@@ -30,6 +36,9 @@ class GameModeMove implements IGameUI {
     resizeOverflow(sprite, modeMoveConstants.previewWidth, modeMoveConstants.previewHeight);
   }
 
+  /**
+   * Fetches the navigations of the current location id.
+   */
   private getLatestNavigations() {
     return GameGlobalAPI.getInstance().getLocationAttr(
       GameLocationAttr.navigation,
@@ -37,6 +46,11 @@ class GameModeMove implements IGameUI {
     );
   }
 
+  /**
+   * Create the container that encapsulate the 'Move' mode UI,
+   * i.e. the navigation, the back button, as well the preview of
+   * the location.
+   */
   private createUIContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -64,6 +78,7 @@ class GameModeMove implements IGameUI {
     ).setMask(previewMask.createGeometryMask());
     moveMenuContainer.add([previewFrame, previewFill]);
 
+    // Add all navigation buttons
     const navigations = this.getLatestNavigations();
     const buttons = this.getMoveButtons(navigations, previewFill);
     const buttonPositions = calcTableFormatPos({
@@ -100,6 +115,15 @@ class GameModeMove implements IGameUI {
     return moveMenuContainer;
   }
 
+  /**
+   * Get the move buttons preset to be formatted later.
+   * The preset includes the text to be displayed on the button and
+   * its functionality (change location callback).
+   *
+   * @param navigations navigations from the current location
+   * @param previewSprite the sprite in which to show the location preview, to be included
+   *                      in the callback
+   */
   private getMoveButtons(navigations: LocationId[], previewSprite: Phaser.GameObjects.Sprite) {
     const previewLoc = (assetKey: string) => this.setPreview(previewSprite, assetKey);
     const previewDefault = () => this.setPreview(previewSprite, ImageAssets.defaultLocationImg.key);
@@ -118,6 +142,17 @@ class GameModeMove implements IGameUI {
     });
   }
 
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   * @param onHover callback to be executed on hover
+   * @param onOut callback to be executed on out hover
+   */
   private createMoveButton(
     text: string,
     xPos: number,
@@ -138,6 +173,12 @@ class GameModeMove implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Activate the 'Move' mode UI.
+   *
+   * Usually only called by the phase manager when 'Move' phase is
+   * pushed.
+   */
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
@@ -153,6 +194,12 @@ class GameModeMove implements IGameUI {
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
+  /**
+   * Deactivate the 'Move' mode UI.
+   *
+   * Usually only called by the phase manager when 'Move' phase is
+   * transitioned out.
+   */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 

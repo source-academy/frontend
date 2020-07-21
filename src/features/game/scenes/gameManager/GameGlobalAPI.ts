@@ -201,7 +201,7 @@ class GameGlobalAPI {
     this.getGameManager().userStateManager.addToList(listName, id);
   }
 
-  public async existsInUserStateList(listName: string, id: string): Promise<boolean> {
+  public async existsInUserStateList(listName: UserStateTypes, id: string): Promise<boolean> {
     return await this.getGameManager().userStateManager.doesIdExistInList(listName, id);
   }
 
@@ -308,6 +308,10 @@ class GameGlobalAPI {
   /////////////////////
   //      Sound      //
   /////////////////////
+
+  public getSoundManager() {
+    return SourceAcademyGame.getInstance().getSoundManager();
+  }
 
   public playSound(soundKey: AssetKey) {
     SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);

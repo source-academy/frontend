@@ -22,6 +22,9 @@ import modeMenuConstants, { modeButtonStyle } from './GameModeMenuConstants';
 class GameModeMenu implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
 
+  /**
+   * Fetches the game modes of the current location id.
+   */
   private getLatestLocationModes() {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
     let latestModesInLoc = GameGlobalAPI.getInstance().getModesByLocId(currLocId);
@@ -38,6 +41,10 @@ class GameModeMenu implements IGameUI {
     return latestModesInLoc;
   }
 
+  /**
+   * Create the container that encapsulate the 'Menu' mode UI,
+   * i.e. the modes selection.
+   */
   private createUIContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const modeMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -69,6 +76,13 @@ class GameModeMenu implements IGameUI {
     return modeMenuContainer;
   }
 
+  /**
+   * Get the mode buttons preset to be formatted later.
+   * The preset includes the text to be displayed on the button and
+   * its functionality (phase change callback).
+   *
+   * @param modes modes to be shown
+   */
   private getModeButtons(modes: GameMode[]) {
     return modes.sort().map(mode => {
       return {
@@ -83,6 +97,15 @@ class GameModeMenu implements IGameUI {
     });
   }
 
+  /**
+   * Format the button information to a UI container, complete with
+   * styling and functionality.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be executed on click
+   */
   private createModeButton(text: string, xPos: number, yPos: number, callback: any) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     return createButton(gameManager, {
@@ -94,6 +117,12 @@ class GameModeMenu implements IGameUI {
     }).setPosition(xPos, yPos);
   }
 
+  /**
+   * Activate the 'Menu' mode UI.
+   *
+   * Usually only called by the phase manager when 'Menu' phase is
+   * pushed.
+   */
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
@@ -108,6 +137,12 @@ class GameModeMenu implements IGameUI {
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
+  /**
+   * Deactivate the 'Menu' mode UI.
+   *
+   * Usually only called by the phase manager when 'Menu' phase is
+   * transitioned out.
+   */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 

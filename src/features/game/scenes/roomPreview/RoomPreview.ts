@@ -86,6 +86,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.escapeManager.initialise(this, this.phaseManager);
     this.bindKeyboardTriggers();
 
+    // Initialise one verified tag to be used throughout the CMR
     const [verifCont, verifMask] = createVerifiedHoverContainer(this);
     this.verifCont = verifCont as Phaser.GameObjects.Container;
     this.verifMask = verifMask as Phaser.GameObjects.Graphics;
@@ -150,6 +151,9 @@ export default class RoomPreview extends Phaser.Scene {
     await runInContext(this.studentCode + append, context);
   }
 
+  /**
+   * Bind the escape menu and awards menu to keyboard keys.
+   */
   private bindKeyboardTriggers() {
     // Bind escape menu
     this.inputManager.registerKeyboardListener(
@@ -177,11 +181,31 @@ export default class RoomPreview extends Phaser.Scene {
     );
   }
 
+  /**
+   * Clean up on related managers
+   */
   public cleanUp() {
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }
 
+  /**
+   * Create an award based on the given award key.
+   * The award key is associated with an awardProperty,
+   * which in turn will be used as the source of information for
+   * the award.
+   *
+   * If the award is a valid key and the student already has
+   * the award, the resulting object will have a verification
+   * tag that pops up when student hovers over it.
+   *
+   * Else, we return a default image of a cookie; without
+   * the verification tag.
+   *
+   * @param x x position of the award
+   * @param y y position of the award
+   * @param awardKey key associated with the award
+   */
   private createAward(x: number, y: number, awardKey: ItemId) {
     const achievements = this.userStateManager.getList(UserStateTypes.achievements);
     const collectibles = this.userStateManager.getList(UserStateTypes.collectibles);
@@ -193,6 +217,15 @@ export default class RoomPreview extends Phaser.Scene {
     return new Phaser.GameObjects.Sprite(this, x, y, ImageAssets.cookies.key);
   }
 
+  /**
+   * Attach a verification tag to the sprite.
+   * When user hovers on the sprite, a verification will appear
+   * on the image.
+   *
+   * Used to verify autheticity of the award.
+   *
+   * @param sprite sprite to attach the verification tag to
+   */
   private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {
     const verifCont = this.getVerifCont();
     const verifMask = this.getVerifMask();

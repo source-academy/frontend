@@ -35,7 +35,7 @@ export async function saveData(fullSaveState: FullSaveState) {
 }
 
 /**
- * This function loads data to the backend.
+ * This function fetches data to the backend.
  * Currently saves the loads game data from the "collectibles" field
  * just because that is the format stored by the backend
  *
@@ -74,6 +74,11 @@ export async function clearData() {
   }
 }
 
+/**
+ * Format a header object.
+ *
+ * @param accessToken access token to be used
+ */
 function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
   headers.append('Accept', 'application/json');
