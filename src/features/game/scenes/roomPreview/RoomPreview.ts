@@ -47,6 +47,8 @@ export default class RoomPreview extends Phaser.Scene {
   private verifCont: Phaser.GameObjects.Container | undefined;
   private verifMask: Phaser.GameObjects.Graphics | undefined;
 
+  private context?: Context;
+
   constructor() {
     super('RoomPreview');
     this.preloadImageMap = new Map<string, string>();
@@ -71,6 +73,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
     this.awardManager = new GameAwardsManager();
+    this.createContext();
   }
 
   public preload() {
@@ -132,9 +135,8 @@ export default class RoomPreview extends Phaser.Scene {
     this.eval(`\nupdate();`);
   }
 
-  private async eval(append: string) {
-    // Pass necessary information to the library as context
-    const context: Context = createContext(4, [], {}, 'gpu', {
+  public createContext() {
+    this.context = createContext(4, [], {}, 'gpu', {
       scene: this,
       phaser: Phaser,
       preloadImageMap: this.preloadImageMap,
@@ -145,10 +147,11 @@ export default class RoomPreview extends Phaser.Scene {
       screenSize: screenSize,
       createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
     });
-    context.externalContext = 'playground';
+    this.context.externalContext = 'playground';
+  }
 
-    // Wait for students code to finish
-    await runInContext(this.studentCode + append, context);
+  private async eval(append: string) {
+    await runInContext(this.studentCode + append, this.context!);
   }
 
   /**
