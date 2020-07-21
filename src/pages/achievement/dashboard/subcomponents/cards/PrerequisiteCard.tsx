@@ -6,7 +6,6 @@ import { AchievementStatus } from '../../../../../features/achievement/Achieveme
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import AchievementInferencer from '../utils/AchievementInferencer';
-import AchievementWeek from '../utils/AchievementWeek';
 
 type PrerequisiteCardProps = {
   isLast: boolean;
@@ -20,7 +19,7 @@ type PrerequisiteCardProps = {
 function PrerequisiteCard(props: PrerequisiteCardProps) {
   const { isLast, id, inferencer, shouldPartiallyRender, displayView, handleGlow } = props;
 
-  const { title, release, ability, cardTileUrl } = inferencer.getAchievementItem(id);
+  const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
   const displayExp = inferencer.getDisplayExp(id);
@@ -49,14 +48,12 @@ function PrerequisiteCard(props: PrerequisiteCardProps) {
         <div className="content">
           <div className="heading">
             <h3>{title.toUpperCase()}</h3>
-            {status === AchievementStatus.COMPLETED ? (
+            {status === AchievementStatus.COMPLETED && (
               <Icon
                 icon={IconNames.CONFIRM}
                 intent={Intent.SUCCESS}
                 style={{ paddingLeft: '1em' }}
               />
-            ) : (
-              <AchievementWeek week={release} intent={Intent.WARNING} />
             )}
           </div>
 

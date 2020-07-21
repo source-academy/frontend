@@ -2,7 +2,7 @@ import React from 'react';
 
 import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementLevel from './utils/AchievementLevel';
-import { prettifyDate, prettifyWeek } from './utils/DateHelper';
+import { prettifyDate } from './utils/DateHelper';
 
 type AchievementOverviewProps = {
   name?: string;
@@ -16,7 +16,6 @@ function AchievementOverview(props: AchievementOverviewProps) {
   const studentExp = inferencer.getStudentTotalExp();
 
   const now = new Date();
-  const week = prettifyWeek(now);
   const date = prettifyDate(now);
 
   return (
@@ -24,12 +23,6 @@ function AchievementOverview(props: AchievementOverviewProps) {
       <AchievementLevel studentExp={studentExp} />
       <h3>{name}</h3>
       <h3>{studio}</h3>
-      <h3
-        style={{ cursor: 'pointer' }}
-        onClick={() => window.open('http://www.nus.edu.sg/registrar/info/calendar/AY2020-2021.pdf')}
-      >
-        {week}
-      </h3>
       <h3>{date}</h3>
     </>
   );

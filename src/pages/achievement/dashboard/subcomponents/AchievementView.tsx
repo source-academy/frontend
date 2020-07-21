@@ -1,10 +1,8 @@
-import { Intent } from '@blueprintjs/core';
 import React from 'react';
 
 import { abilityBackground } from '../../../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from './utils/AchievementInferencer';
-import AchievementWeek from './utils/AchievementWeek';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
@@ -38,12 +36,11 @@ function AchievementView(props: AchievementViewProps) {
         }}
       >
         <h1>{title.toUpperCase()}</h1>
-        {deadline !== undefined ? (
+        {deadline && (
           <div className="deadline">
             <p>{`Deadline: ${prettifyDate(deadline)}`}</p>
-            <AchievementWeek week={deadline} intent={Intent.DANGER} />
           </div>
-        ) : null}
+        )}
         <div className="description">
           <p>{description}</p>
         </div>

@@ -11,23 +11,6 @@ exports[`AchievementView component renders correctly 1`] = `
             <h3>
               BEYOND THE SECOND DIMENSION
             </h3>
-            <AchievementWeek week={{...}} intent=\\"warning\\">
-              <div className=\\"week\\">
-                <div>
-                  <Blueprint3.Tag intent=\\"warning\\" round={true}>
-                    <span className=\\"bp3-tag bp3-intent-warning bp3-round\\" tabIndex={[undefined]}>
-                      <Blueprint3.Icon icon={[undefined]} />
-                      <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
-                        <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
-                          Week 2
-                        </span>
-                      </Blueprint3.Text>
-                      <Blueprint3.Icon icon={[undefined]} />
-                    </span>
-                  </Blueprint3.Tag>
-                </div>
-              </div>
-            </AchievementWeek>
           </div>
           <div className=\\"details\\">
             <div className=\\"ability\\">

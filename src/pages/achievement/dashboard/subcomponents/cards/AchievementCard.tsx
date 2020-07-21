@@ -6,7 +6,6 @@ import { AchievementStatus } from '../../../../../features/achievement/Achieveme
 import AchievementDeadline from '../utils/AchievementDeadline';
 import AchievementExp from '../utils/AchievementExp';
 import AchievementInferencer from '../utils/AchievementInferencer';
-import AchievementWeek from '../utils/AchievementWeek';
 
 type AchievementCardProps = {
   id: number;
@@ -29,7 +28,7 @@ function AchievementCard(props: AchievementCardProps) {
     toggleDropdown
   } = props;
 
-  const { title, ability, release, cardTileUrl } = inferencer.getAchievementItem(id);
+  const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
   const displayExp = inferencer.getDisplayExp(id);
@@ -62,10 +61,8 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          {status === AchievementStatus.COMPLETED ? (
+          {status === AchievementStatus.COMPLETED && (
             <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} style={{ paddingLeft: '1em' }} />
-          ) : (
-            <AchievementWeek week={release} intent={Intent.WARNING} />
           )}
         </div>
 
