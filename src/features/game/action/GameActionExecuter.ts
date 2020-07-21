@@ -53,7 +53,7 @@ export default class GameActionExecuter {
         await globalAPI.makeObjectGlow(actionParams.id);
         return;
       case GameActionType.PlayBGM:
-        await SourceAcademyGame.getInstance().getSoundManager().playBgMusic(actionParams.id);
+        SourceAcademyGame.getInstance().getSoundManager().playBgMusic(actionParams.id);
         return;
       case GameActionType.PlaySFX:
         await SourceAcademyGame.getInstance().getSoundManager().playSound(actionParams.id);
