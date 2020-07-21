@@ -4,7 +4,9 @@ import arrayMove from 'array-move';
 import React from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
+import { callGameManagerForSim } from 'src/features/game/utils/TxtLoaderUtils';
 import {
   deleteChapterRequest,
   updateChapterRequest
@@ -107,6 +109,11 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
     }
   };
 
+  const simulateChapter = async () => {
+    SourceAcademyGame.getInstance().setChapterSimStack(chosenFiles);
+    await callGameManagerForSim();
+  };
+
   return (
     <>
       <h4>
@@ -142,7 +149,7 @@ const ChapterEditor = React.memo(({ chapterDetail, textAssets }: ChapterSimProps
           );
         })}
       <br />
-      <Button icon="play" onClick={() => {}}>
+      <Button icon="play" onClick={simulateChapter}>
         Simulate Chapter
       </Button>
       <br />

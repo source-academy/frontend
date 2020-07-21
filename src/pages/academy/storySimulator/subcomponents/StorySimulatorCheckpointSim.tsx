@@ -12,7 +12,7 @@ type Props = {
 
 export default function CheckpointSim({ textAssets }: Props) {
   function simulateCheckpoint() {
-    (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).callGameManager();
+    (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
   }
 
   return (

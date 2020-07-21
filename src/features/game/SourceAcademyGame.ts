@@ -40,6 +40,7 @@ type GlobalGameProps = {
   saveManager: GameSaveManager;
   gameType: GameType;
   gameChapters: GameChapter[];
+  ssChapterSimFilenames: string[];
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
@@ -59,7 +60,8 @@ export default class SourceAcademyGame extends Phaser.Game {
       soundManager: new GameSoundManager(),
       saveManager: new GameSaveManager(),
       gameType,
-      gameChapters: []
+      gameChapters: [],
+      ssChapterSimFilenames: []
     };
   }
 
@@ -84,6 +86,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
   public isGameType = (gameType: GameType) => this.global.gameType === gameType;
   public getGameChapters = () => this.global.gameChapters;
+  public getSSChapterSimFilenames = () => this.global.ssChapterSimFilenames;
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
@@ -102,6 +105,10 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public setCurrentSceneRef(scene: Phaser.Scene) {
     this.global.currentSceneRef = scene;
+  }
+
+  public setChapterSimStack(checkpointFilenames: string[]) {
+    this.global.ssChapterSimFilenames = checkpointFilenames.reverse();
   }
 }
 

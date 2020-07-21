@@ -70,3 +70,16 @@ export function mandatory<T>(object: T, errorMsg?: string) {
   }
   return (object as T)!;
 }
+
+/**
+ * Returns the last element in the array
+ *
+ * @param array array you want to access
+ * @returns the final element of the array
+ */
+export function lastElement<T>(array: T[]): T {
+  if (array.length === 0) {
+    throw new Error('Array is empty');
+  }
+  return array[array.length - 1];
+}

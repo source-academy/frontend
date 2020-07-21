@@ -118,7 +118,7 @@ class MainMenu extends Phaser.Scene {
     }).setPosition(xPos, yPos);
   }
 
-  public callGameManager() {
+  public simulateCheckpoint() {
     const defaultChapterText =
       sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.defaultChapter) || '';
     const checkpointTxt =

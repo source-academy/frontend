@@ -1,4 +1,3 @@
-import CheckpointTransition from '../scenes/checkpointTransition/CheckpointTransition';
 import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
@@ -33,14 +32,25 @@ export default class GameSaveManager {
   }
 
   public async saveGame() {
-    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) return;
-    const currScene = SourceAcademyGame.getInstance().getCurrentSceneRef();
-    if (currScene instanceof GameManager || currScene instanceof CheckpointTransition) {
+    if (
+      SourceAcademyGame.getInstance().isGameType(GameType.Game) &&
+      SourceAcademyGame.getInstance().getCurrentSceneRef() instanceof GameManager
+    ) {
       this.fullSaveState = gameStateToJson(
         this.fullSaveState,
         this.getChapterNum(),
         this.getCheckpointNum()
       );
+      await saveData(this.fullSaveState);
+    }
+  }
+
+  public async saveChapterComplete(completedChapter: number) {
+    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return;
+    }
+    if (completedChapter > this.fullSaveState.userSaveState.largestCompletedChapter) {
+      this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
       await saveData(this.fullSaveState);
     }
   }

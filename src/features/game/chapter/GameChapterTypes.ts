@@ -19,7 +19,7 @@ export type GameCheckpoint = {
  *
  * @prop {string} title - title of the chapter as shown in Chapter Select
  * @prop {string} imageUrl - image preview of the chapter as shown in Chapter Select
- * @prop {string[]} checkpointsFilenames - the filenames of the checkpoint that comprise the chapter
+ * @prop {string[]} filenames - the filenames of the checkpoint that comprise the chapter
  */
 export type GameChapter = {
   imageUrl: string;
