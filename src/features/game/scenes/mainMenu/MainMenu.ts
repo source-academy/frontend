@@ -57,6 +57,9 @@ class MainMenu extends Phaser.Scene {
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 
+  /**
+   * Load save state and settings; then applying them.
+   */
   private async loadGameDataAndSettings() {
     // Load settings
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
@@ -66,6 +69,10 @@ class MainMenu extends Phaser.Scene {
     SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
   }
 
+  /**
+   * Fetch the awardsMapping text, set it as global variable,
+   * and load all the necessary assets.
+   */
   private async preloadAwards() {
     const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
     const awardsMapping = AwardParser.parse(awardsMappingTxt);
@@ -78,6 +85,9 @@ class MainMenu extends Phaser.Scene {
     );
   }
 
+  /**
+   * Preload all image assets, font assets, and sound assets into the game.
+   */
   private preloadAssets() {
     Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     Object.values(FontAssets).forEach(asset =>
@@ -86,6 +96,9 @@ class MainMenu extends Phaser.Scene {
     SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
 
+  /**
+   * Render background image for the main menu.
+   */
   private renderBackground() {
     const backgroundImg = new Phaser.GameObjects.Image(
       this,
@@ -98,6 +111,10 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
   }
 
+  /**
+   * Render all the buttons for the main menu.
+   * Selection of buttons is detailed at getOptionButtons().
+   */
   private renderOptionButtons() {
     const optionsContainer = new Phaser.GameObjects.Container(this, 0, 0);
     const buttons = this.getOptionButtons();
@@ -122,7 +139,17 @@ class MainMenu extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, optionsContainer);
   }
 
+  /**
+   * Format a main menu button with the given text; attach a callback
+   * and position it at the given xPos and yPos.
+   *
+   * @param text text to be displayed on the button
+   * @param xPos x position of the button
+   * @param yPos y position of the button
+   * @param callback callback to be attached to the button
+   */
   private createOptionButton(text: string, xPos: number, yPos: number, callback: any) {
+    // Animation to trigger on Hover and off Hover
     const tweenOnHover = (target: Phaser.GameObjects.Container) => {
       this.tweens.add({
         targets: target,
@@ -135,6 +162,8 @@ class MainMenu extends Phaser.Scene {
         ...mainMenuConstants.outFocusOptTween
       });
     };
+
+    // Create button with main menu style
     const optButton: Phaser.GameObjects.Container = createButton(this, {
       assetKey: ImageAssets.mainMenuOptBanner.key,
       message: text,
@@ -145,9 +174,14 @@ class MainMenu extends Phaser.Scene {
       onOut: () => tweenOffHover(optButton),
       onHoverEffect: false
     }).setPosition(xPos, yPos);
+
     return optButton;
   }
 
+  /**
+   * Return all the buttons available at main menu,
+   * as well as their callbacks.
+   */
   private getOptionButtons() {
     return [
       {

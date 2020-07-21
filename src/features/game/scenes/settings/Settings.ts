@@ -37,6 +37,9 @@ class Settings extends Phaser.Scene {
     this.renderOptions();
   }
 
+  /**
+   * Set up the background and add it to the background layer.
+   */
   private renderBackground() {
     const background = new Phaser.GameObjects.Image(
       this,
@@ -55,6 +58,10 @@ class Settings extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.Background, settingBgImg);
   }
 
+  /**
+   * Add various settings that user can use.
+   * Sets up the header and the radio buttons, and add it to the screen.
+   */
   private renderOptions() {
     // Create Headers
     const optCont = new Phaser.GameObjects.Container(this, 0, 0);
@@ -82,6 +89,7 @@ class Settings extends Phaser.Scene {
     // Create BGM Radio Buttons
     this.bgmVolumeRadioButtons = this.createOptRadioOptions(bgmVolIdx, optHeaderPos[1][1]);
 
+    // Create apply settings button
     const applySettingsButton = createButton(this, {
       assetKey: ImageAssets.mediumButton.key,
       message: 'Apply Settings',
@@ -90,6 +98,7 @@ class Settings extends Phaser.Scene {
       onUp: () => this.applySettings()
     }).setPosition(screenCenter.x, screenSize.y * 0.925);
 
+    // Create back button to main menu
     const backButton = new CommonBackButton(this, () => {
       this.layerManager.clearAllLayers();
       this.scene.start('MainMenu');
@@ -102,10 +111,20 @@ class Settings extends Phaser.Scene {
     this.layerManager.addToLayer(Layer.UI, backButton);
   }
 
+  /**
+   * Options header to display.
+   */
   private getSettingsHeader() {
     return ['SFX', 'BGM'];
   }
 
+  /**
+   * Formats the header text as well as the blue arrow and
+   * underline, and place it based on the given yPos.
+   *
+   * @param header text for the header
+   * @param yPos y position of the option
+   */
   private createOptionHeader(header: string, yPos: number) {
     const optHeaderCont = new Phaser.GameObjects.Container(this, 0, yPos);
     const headerDiv = new Phaser.GameObjects.Image(
@@ -125,6 +144,12 @@ class Settings extends Phaser.Scene {
     return optHeaderCont;
   }
 
+  /**
+   * Create a radio buttons, formatted with settings' style.
+   *
+   * @param defaultChoiceIdx default choice of the radio button
+   * @param yPos y position of the radio button
+   */
   private createOptRadioOptions(defaultChoiceIdx: number, yPos: number) {
     return new CommonRadioButton(
       this,
@@ -140,6 +165,12 @@ class Settings extends Phaser.Scene {
     );
   }
 
+  /**
+   * Fetch the current radio buttons value, save it, then apply it.
+   *
+   * This method is responsible in contacting the managers that
+   * need to be aware of the update.
+   */
   public async applySettings() {
     const sfxVol = this.sfxVolumeRadioButtons
       ? parseFloat(this.sfxVolumeRadioButtons.getChosenChoice())

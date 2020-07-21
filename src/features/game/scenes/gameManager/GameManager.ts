@@ -157,10 +157,25 @@ class GameManager extends Phaser.Scene {
     await GameGlobalAPI.getInstance().saveGame();
   }
 
+  /**
+   * Render a location, the assets related to it (objects, character);
+   * before executing the following in order (if available):
+   *
+   * Start Action, Notification, Cutscene
+   *
+   * Start action is only played whe startAction argument is set to true;
+   * commonly only the first time user loads the checkpoint.
+   *
+   * @param locationId id of the location to render
+   * @param startAction if set to true, startAction will be executed
+   */
   private async renderLocation(locationId: LocationId, startAction: boolean) {
     const gameLocation = GameGlobalAPI.getInstance().getLocationAtId(locationId);
+
+    // Play the BGM attached to the location
     await GameGlobalAPI.getInstance().playBgMusic(gameLocation.bgmKey);
 
+    // Render all assets related to the location
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
     this.objectManager.renderObjectsLayerContainer(locationId);
     this.boundingBoxManager.renderBBoxLayerContainer(locationId);
@@ -183,18 +198,30 @@ class GameManager extends Phaser.Scene {
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
 
+  /**
+   * Change the current location to another location, based on the ID.
+   * This will properly clean up the previous location. It is highly
+   * encouraged to only change location of the game using this method.
+   *
+   * @param locationId id of location to be changed into
+   * @param startAction if set to true, start action will be triggered
+   */
   public async changeLocationTo(locationId: LocationId, startAction: boolean = false) {
     this.currentLocationId = locationId;
 
+    // Transition to the new location
     await blackFade(this, 300, 500, async () => {
       await this.layerManager.clearAllLayers();
       await this.renderLocation(locationId, startAction);
     });
 
-    // Update state after location is fully rendered
+    // Update state after location is fully rendered, location has been visited
     this.stateManager.triggerInteraction(locationId);
   }
 
+  /**
+   * Bind escape menu and awards menu to keyboard triggers.
+   */
   private bindKeyboardTriggers() {
     this.inputManager.registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
@@ -220,11 +247,28 @@ class GameManager extends Phaser.Scene {
     );
   }
 
+  /**
+   * Clean up on related managers
+   */
   public cleanUp() {
     this.inputManager.clearListeners();
     this.layerManager.clearAllLayers();
   }
 
+  /**
+   * Checks whether game is able to transition to the next checkpoint.
+   * Game is only able to transition to the next checkpoint
+   * if all of the objectives of the current checkpoint has been cleared.
+   *
+   * Additionally, game will only transition if the newPhase is a Menu phase;
+   * in order to ensure that we don't transition to the next checkpoint
+   * during dialogue/cutscene.
+   *
+   * This method is passed to the phase manager, to be executed on
+   * every phase transition.
+   *
+   * @param newPhase new phase to transition to
+   */
   public async checkpointTransition(newPhase: GamePhaseType) {
     const transitionToNextCheckpoint =
       newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();

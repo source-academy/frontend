@@ -38,6 +38,16 @@ function getRoomMissionId() {
   return 405;
 }
 
+/**
+ * Fetches the student code based on the mission.
+ * If student has not attempted the mission; will return
+ * the answer template instead.
+ *
+ * If the mission is invalid (e.g. invalid ID, typo), the
+ * default code for the room will be returned instead.
+ *
+ * @param mission
+ */
 function getStudentRoomCode(mission: Assessment | null) {
   if (mission) {
     const progQn = mission.questions[0] as IProgrammingQuestion;
@@ -47,6 +57,12 @@ function getStudentRoomCode(mission: Assessment | null) {
   return roomDefaultCode;
 }
 
+/**
+ * CMR Game Phases for the phase manager.
+ *
+ * @param escapeMenu escape menu tied to CMR
+ * @param awardMenu award menu tied to CMR
+ */
 export const createCMRGamePhases = (
   escapeMenu: GameEscapeManager,
   awardMenu: GameAwardsManager
