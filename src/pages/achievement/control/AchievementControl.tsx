@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../dashboard/subcomponents/utils/AchievementInferencer';
@@ -39,21 +39,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
     }
   }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
 
-  const setUpload = useCallback(
-    bool => {
-      setPanelPendingUpload(bool);
-    },
-    [setPanelPendingUpload]
-  );
+  const setUpload = (bool: boolean) => setPanelPendingUpload(bool);
+  const addUnsavedChanges = (changes: number) =>
+    setEditorUnsavedChanges(editorUnsavedChanges + changes);
 
-  const addUnsavedChanges = useCallback(
-    n => {
-      setEditorUnsavedChanges(c => c + n);
-    },
-    [setEditorUnsavedChanges]
-  );
-
-  const addUnsavedChange = () => addUnsavedChanges(1);
+  const addUnsavedChange = () => setEditorUnsavedChanges(1);
   const removeUnsavedChange = () => addUnsavedChanges(-1);
 
   const updateAchievements = () => {
