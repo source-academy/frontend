@@ -137,8 +137,6 @@ class GameManager extends Phaser.Scene {
 
   /**
    * Preload all assets (image and sounds) exclusive to the checkpoint's gamemap.
-   *
-   * @param gameMap gameMap which contains assets to be loaded
    */
   private preloadLocationsAssets() {
     const gameMap = this.getStateManager().getGameMap();
