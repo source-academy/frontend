@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
-import { CodeDelta, Input } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { CodeDelta, Input, KeyboardCommand } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -169,6 +169,14 @@ class AssessmentWorkspace extends React.Component<
     this.checkWorkspaceReset(this.props);
   }
 
+  // TODO: Implemenet THis for Keystroke Logging!
+  public uploadLogs = () => {
+    if (this.state.logs !== []) {
+      console.log(this.state.logs);
+      this.setState({ logs: [] });
+    }
+  };
+
   public render() {
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
@@ -250,7 +258,6 @@ class AssessmentWorkspace extends React.Component<
 
         logsCopy.push(input);
         this.setState({ logs: logsCopy });
-        console.log(this.state.logs);
       }
     };
 
@@ -355,6 +362,7 @@ class AssessmentWorkspace extends React.Component<
       }
     }
 
+    this.uploadLogs();
     this.props.handleEditorUpdateBreakpoints([]);
     this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     this.props.handleResetWorkspace({
@@ -453,11 +461,18 @@ class AssessmentWorkspace extends React.Component<
       this.props.assessment!.questions.length
     ];
 
-    const onClickPrevious = () =>
+    const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-    const onClickNext = () =>
+      this.uploadLogs();
+    };
+    const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-    const onClickReturn = () => history.push(listingPath);
+      this.uploadLogs();
+    };
+    const onClickReturn = () => {
+      history.push(listingPath);
+      this.uploadLogs();
+    };
 
     // Returns a nullary function that defers the navigation of the browser window, until the
     // student's answer passes some checks - presently only used for Paths
@@ -490,11 +505,13 @@ class AssessmentWorkspace extends React.Component<
       };
     };
 
-    const onClickSave = () =>
+    const onClickSave = () => {
       this.props.handleSave(
         this.props.assessment!.questions[questionId].id,
         this.props.editorValue!
       );
+      this.uploadLogs();
+    };
     const onClickResetTemplate = () => {
       this.setState({ showResetTemplateOverlay: true });
     };
@@ -551,7 +568,18 @@ class AssessmentWorkspace extends React.Component<
     // TODO: Add Handler to Save Run
     const handleEval = () => {
       this.props.handleEditorEval();
-      console.log('run');
+      if (this.props.assessment!.category !== 'Practical') {
+        const input: Input = {
+          time: Date.now(),
+          type: 'keyboardCommand',
+          data: KeyboardCommand.run
+        };
+
+        const logsCopy = this.state.logs;
+
+        logsCopy.push(input);
+        this.setState({ logs: logsCopy });
+      }
     };
 
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
