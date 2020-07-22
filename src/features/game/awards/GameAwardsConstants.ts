@@ -40,6 +40,9 @@ export const awardDescStyle = {
   wordWrap: { width: 500 }
 };
 
+const previewXPos = -screenSize.x * 0.3;
+const previewYPos = -screenSize.y * 0.05;
+
 const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
   pageYStartPos: -screenSize.y * 0.3,
@@ -48,12 +51,12 @@ const AwardsConstants = {
   listYStartPos: -screenSize.y * 0.31,
   listYSpacing: 100,
   listTextXPos: -screenSize.x * 0.09,
-  previewXPos: -screenSize.x * 0.3,
-  previewYPos: -screenSize.y * 0.05,
+  previewXPos: previewXPos,
+  previewYPos: previewYPos,
   previewDim: 430,
-  titleYOffset: -275,
-  keyYOffset: 275,
-  descYOffset: 310,
+  previewTitleTextConfig: { x: previewXPos, y: previewYPos - 275, oriX: 0.3, oriY: 0.5 },
+  previewKeyTextConfig: { x: previewXPos, y: previewYPos + 275, oriX: 0.3, oriY: 0.5 },
+  previewDescTextYOffset: 310,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
   arrowXOffset: 80,

@@ -91,10 +91,9 @@ export default class DialogueSpeakerRenderer {
     const speakerText = createBitmapText(
       gameManager,
       '',
-      DialogueConstants.speakerRect.x,
-      DialogueConstants.speakerRect.y,
+      DialogueConstants.speakerTextConfig,
       speakerTextStyle
-    ).setOrigin(0.5, 0.5);
+    );
 
     if (position === GamePosition.Right) {
       rectangle.displayWidth *= -1;

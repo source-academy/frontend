@@ -79,12 +79,9 @@ dialogues
       const loggerText = createBitmapText(
         this.getObjectPlacement(),
         this.formatObjectDetails(loggable),
-        loggable.x + 20,
-        loggable.y + 10,
+        { x: loggable.x + 20, y: loggable.y + 10, oriX: 0.0, oriY: 0.6 },
         loggableStyle
-      )
-        .setLetterSpacing(3)
-        .setOrigin(0.0, 0.6);
+      ).setLetterSpacing(3);
 
       this.detailMapContainer!.add([loggerRectangle, loggerText]);
     });

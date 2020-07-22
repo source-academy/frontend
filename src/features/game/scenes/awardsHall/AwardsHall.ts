@@ -276,10 +276,9 @@ class AwardsHall extends Phaser.Scene {
     const bannerText = createBitmapText(
       this,
       text,
-      AwardsHallConstants.bannerTextXOffset,
-      0,
+      AwardsHallConstants.bannerTextConfig,
       awardBannerTextStyle
-    ).setOrigin(0.0, 0.5);
+    );
     bannerContainer.add([bannerBg, bannerText]);
     return bannerContainer;
   }

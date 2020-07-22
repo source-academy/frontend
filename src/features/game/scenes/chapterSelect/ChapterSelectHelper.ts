@@ -95,18 +95,16 @@ export function createChapter(
   const chapterIndexText = createBitmapText(
     scene,
     `Chapter ${index}`,
-    0,
-    chapConstants.indexYOffset,
+    chapConstants.indexTextConfig,
     chapterIndexStyle
-  ).setOrigin(0.5, 0.5);
+  );
 
   const chapterTitleText = createBitmapText(
     scene,
     title,
-    0,
-    chapConstants.titleYOffset,
+    chapConstants.titleTextConfig,
     chapterTitleStyle
-  ).setOrigin(0.5, 0.5);
+  );
 
   const chapterDone =
     index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1;

@@ -20,7 +20,12 @@ const notifStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-const notifYPos = dialogueConstants.rect.y + notifStyle.size * 2;
+const notifTextConfig = {
+  x: screenCenter.x,
+  y: dialogueConstants.rect.y + notifStyle.size * 2,
+  oriX: 0.5,
+  oriY: 0.9
+};
 
 /**
  * A function to display a notifications such as location-change notification
@@ -36,9 +41,7 @@ export async function displayNotification(message: string): Promise<void> {
   GameGlobalAPI.getInstance().addContainerToLayer(Layer.Effects, container);
   GameGlobalAPI.getInstance().fadeInLayer(Layer.Effects);
 
-  const notifText = createBitmapText(gameManager, message, screenCenter.x, notifYPos, notifStyle)
-    .setOrigin(0.5, 0.9)
-    .setAlpha(0);
+  const notifText = createBitmapText(gameManager, message, notifTextConfig, notifStyle).setAlpha(0);
   container.add(notifText);
 
   SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);

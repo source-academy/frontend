@@ -15,7 +15,7 @@ export const AwardsHallConstants = {
   awardDim: 200,
   hoverWidth: 300,
   bannerXOffset: -screenSize.x * 0.28,
-  bannerTextXOffset: 30
+  bannerTextConfig: { x: 30, y: 0, oriX: 0.0, oriY: 0.5 }
 };
 
 export const awardBannerTextStyle: BitmapFontStyle = {

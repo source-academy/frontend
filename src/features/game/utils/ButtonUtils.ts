@@ -65,7 +65,6 @@ export function createButton(
   }: ButtonConfig
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
-  const { x, y, oriX, oriY } = textConfig;
 
   // Set up button functionality
   const button = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey);
@@ -94,8 +93,7 @@ export function createButton(
   );
 
   // Set up text
-  const text = createBitmapText(scene, message, x, y, bitMapTextStyle);
-  text.setOrigin(oriX, oriY);
+  const text = createBitmapText(scene, message, textConfig, bitMapTextStyle);
 
   container.add([button, text]);
   if (onHoverEffect) container.setAlpha(offHoverAlpha);

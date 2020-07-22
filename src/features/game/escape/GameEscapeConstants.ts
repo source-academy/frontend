@@ -25,15 +25,14 @@ export const optTextStyle: BitmapFontStyle = {
 };
 
 const escapeConstants = {
-  textOriX: 0.33,
-  textOriY: 0.85,
   buttonYPos: screenSize.y * 0.15,
+  escapeOptTextConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
 
+  settingsTextConfig: { x: screenSize.x * 0.38, y: -screenCenter.y * 0.1, oriX: 0.0, oriY: 0.5 },
   settingsYOffset: -screenCenter.y * 0.1,
   settingsYSpace: screenSize.y * 0.3,
 
-  optTextXPos: screenSize.x * 0.38,
-  optTextYPos: screenSize.y * 0.38,
+  radioChoiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
   radioButtonsXSpace: screenSize.x * 0.2,
 
   volOptXPos: screenSize.x * 0.05,

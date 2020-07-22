@@ -43,5 +43,6 @@ export const roomConstants = {
   verifiedText: 'VERIFIED',
   tagWidth: 128,
   tagHeight: 50,
-  startTextXPos: 200
+  startTextXPos: 200,
+  hoverTagTextConfig: { x: 0, y: 0, oriX: 0.0, oriY: 0.6 }
 };

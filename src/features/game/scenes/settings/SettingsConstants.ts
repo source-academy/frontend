@@ -25,10 +25,10 @@ export const applySettingsTextStyle: BitmapFontStyle = {
 };
 
 const settingsConstants = {
+  optHeaderTextConfig: { x: screenSize.x * 0.25, y: 0, oriX: 0.5, oriY: 0.75 },
   optXSpace: screenSize.x * 0.4,
   optYSpace: screenSize.y * 0.7,
   optXPos: 140,
-  optTextXPos: screenSize.x * 0.25,
   volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0']
 };
 

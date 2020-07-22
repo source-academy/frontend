@@ -160,10 +160,9 @@ class CommonRadioButton extends Phaser.GameObjects.Container {
     const choiceText = createBitmapText(
       this.scene,
       this.choices[id],
-      this.choiceTextConfig.x,
-      this.choiceTextConfig.y,
+      this.choiceTextConfig,
       this.bitmapTextStyle
-    ).setOrigin(this.choiceTextConfig.oriX, this.choiceTextConfig.oriY);
+    );
     const optionChecked = new Phaser.GameObjects.Ellipse(
       this.scene,
       0,

@@ -74,10 +74,12 @@ class GameEscapeManager implements IGameUI {
         createBitmapText(
           this.getScene(),
           setting,
-          escapeConstants.optTextXPos,
-          settingsPos[index][1] + escapeConstants.settingsYOffset,
+          {
+            ...escapeConstants.settingsTextConfig,
+            y: settingsPos[index][1] + escapeConstants.settingsTextConfig.y
+          },
           optTextStyle
-        ).setOrigin(0.0, 0.5)
+        )
       )
     );
 
@@ -144,7 +146,7 @@ class GameEscapeManager implements IGameUI {
           checkedDim: 10,
           outlineThickness: 3
         },
-        choiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
+        choiceTextConfig: escapeConstants.radioChoiceTextConfig,
         bitmapTextStyle: volumeRadioOptTextStyle
       },
       escapeConstants.volOptXPos,
@@ -198,7 +200,7 @@ class GameEscapeManager implements IGameUI {
     return createButton(this.getScene(), {
       assetKey: ImageAssets.mediumButton.key,
       message: text,
-      textConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
+      textConfig: escapeConstants.escapeOptTextConfig,
       bitMapTextStyle: escapeOptButtonStyle,
       onUp: callback
     }).setPosition(xPos, yPos);

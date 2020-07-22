@@ -108,8 +108,12 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     )
     .setAlpha(0);
 
-  const hoverText = createBitmapText(scene, roomConstants.verifiedText, 0, 0, verifiedStyle)
-    .setOrigin(0.0, 0.6)
+  const hoverText = createBitmapText(
+    scene,
+    roomConstants.verifiedText,
+    roomConstants.hoverTagTextConfig,
+    verifiedStyle
+  )
     .setPosition(roomConstants.startTextXPos, 0)
     .setMask(hoverMask.createGeometryMask());
 

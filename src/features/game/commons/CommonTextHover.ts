@@ -46,7 +46,12 @@ class CommonTextHover extends Phaser.GameObjects.Container {
     )
       .setOrigin(0.0, 0.5)
       .setAlpha(0.8);
-    const hoverText = createBitmapText(this.scene, text, textPad, 0, style).setOrigin(0.0, 0.5);
+    const hoverText = createBitmapText(
+      this.scene,
+      text,
+      { x: textPad, y: 0, oriX: 0.0, oriY: 0.5 },
+      style
+    );
     this.add([hoverTextBg, hoverText]);
     this.setVisible(false);
   }

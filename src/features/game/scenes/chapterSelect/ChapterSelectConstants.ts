@@ -34,8 +34,8 @@ const chapConstants = {
   buttonsXOffset: 100,
   frameXOffset: 15,
   frameYOffset: -10,
-  indexYOffset: -160,
-  titleYOffset: -100,
+  indexTextConfig: { x: 0, y: -160, oriX: 0.5, oriY: 0.5 },
+  titleTextConfig: { x: 0, y: -100, oriX: 0.5, oriY: 0.5 },
   arrowXOffset: 875,
   maskRect: {
     x: -screenCenter.x + marginX,

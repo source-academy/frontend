@@ -129,20 +129,8 @@ class Bindings extends Phaser.Scene {
         break;
     }
 
-    const keyText = createBitmapText(
-      this,
-      key,
-      bindingConstants.keyIconXPos,
-      0,
-      keyStyle
-    ).setOrigin(0.5, 0.5);
-    const keyDesc = createBitmapText(
-      this,
-      desc,
-      bindingConstants.keyDescXPos,
-      0,
-      keyDescStyle
-    ).setOrigin(0.5, 0.5);
+    const keyText = createBitmapText(this, key, bindingConstants.keyTextConfig, keyStyle);
+    const keyDesc = createBitmapText(this, desc, bindingConstants.keyDescTextConfig, keyDescStyle);
 
     bindingContainer.add([keyIcon, keyText, keyDesc]);
     return bindingContainer;
