@@ -97,7 +97,7 @@ class GameGlobalAPI {
   }
 
   /////////////////////
-  //    Game Attr    //
+  //    Game Items   //
   /////////////////////
 
   public watchGameItemType(gameItemType: GameItemType, stateObserver: StateObserver) {
@@ -108,16 +108,16 @@ class GameGlobalAPI {
     return this.getGameManager().getStateManager().getGameMap();
   }
 
-  public getLocationAttr(attr: GameItemType, locationId: LocationId): ItemId[] {
-    return this.getGameManager().getStateManager().getLocationAttr(attr, locationId);
+  public getLocationAttr(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
+    return this.getGameManager().getStateManager().getLocationAttr(gameItemType, locationId);
   }
 
-  public addLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    this.getGameManager().getStateManager().addLocationAttr(attr, locationId, attrElem);
+  public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    this.getGameManager().getStateManager().addItem(gameItemType, locationId, itemId);
   }
 
-  public removeLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    return this.getGameManager().getStateManager().removeLocationAttr(attr, locationId, attrElem);
+  public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    return this.getGameManager().getStateManager().removeItem(gameItemType, locationId, itemId);
   }
 
   /////////////////////

@@ -175,7 +175,8 @@ class GameStateManager {
 
   /**
    * Function to check if current location is the given locationId
-   * @param locationId
+   *
+   * @param locationId locationId that you want to check whether is current one
    */
   public isCurrentLocation(locationId: LocationId) {
     return locationId !== GameGlobalAPI.getInstance().getCurrLocId();
@@ -199,11 +200,11 @@ class GameStateManager {
   /**
    * Add an item ID to an attribute of the location.
    *
-   * @param attr attribute to add to
-   * @param locationId id of location
-   * @param attrElem item ID to be added
+   * @param gameItemType attribute to add to
+   * @param locationId id of location to add items to
+   * @param itemId item ID to be added
    */
-  public addLocationAttr(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId) {
+  public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId) {
     this.gameMap.getLocationAtId(locationId)[gameItemType].add(itemId);
 
     this.isCurrentLocation(locationId)
@@ -215,11 +216,11 @@ class GameStateManager {
    * Remove an item ID from an attribute of the location.
    * If ID is not found within the attribute, nothing will be executed.
    *
-   * @param attr attribute to remove from
-   * @param locationId id of location
-   * @param attrElem item ID to be removed
+   * @param gameItemType attribute to remove from
+   * @param locationId id of location to remove items from
+   * @param itemId item ID to be removed
    */
-  public removeLocationAttr(gameItemType: GameItemType, locationId: LocationId, itemId: string) {
+  public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: string) {
     const location = this.gameMap.getLocationAtId(locationId);
     location[gameItemType] = location[gameItemType].filter((oldItem: string) => oldItem !== itemId);
 
@@ -346,8 +347,6 @@ class GameStateManager {
   }
 
   public getGameMap = () => this.gameMap;
-  public getObjPropertyMap = () => this.gameMap.getObjectPropMap();
-  public getBBoxPropertyMap = () => this.gameMap.getBBoxPropMap();
 }
 
 export default GameStateManager;

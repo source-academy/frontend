@@ -22,10 +22,10 @@ export default class GameActionExecuter {
 
     switch (actionType) {
       case GameActionType.AddItem:
-        globalAPI.addLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
+        globalAPI.addItem(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.RemoveItem:
-        globalAPI.removeLocationAttr(actionParams.attr, actionParams.locationId, actionParams.id);
+        globalAPI.removeItem(actionParams.attr, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.AddLocationMode:
         globalAPI.addLocationMode(actionParams.locationId, actionParams.mode);
