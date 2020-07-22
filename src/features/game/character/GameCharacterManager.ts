@@ -4,7 +4,7 @@ import { screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { StateChangeType, StateObserver } from '../state/GameStateTypes';
+import { StateObserver } from '../state/GameStateTypes';
 import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
 
@@ -12,44 +12,11 @@ import CharConstants from './GameCharacterConstants';
  * Manager for rendering characters in the location.
  */
 export default class CharacterManager implements StateObserver {
-  public observerId: string;
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
 
   constructor() {
-    this.observerId = 'GameCharacterManager';
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
-    GameGlobalAPI.getInstance().subscribeState(this);
-  }
-
-  /**
-   * Part of observer pattern. Receives notification from GameStateManager.
-   *
-   * On notify, will rerender all the characters on the location to reflect
-   * the update to the state if applicable.
-   *
-   * @param changeType type of change
-   * @param locationId id of the location being updated
-   * @param id id of item being updated
-   */
-  public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
-      locationId,
-      GameItemType.characters
-    );
-    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
-    if (hasUpdate && locationId === currLocationId) {
-      // Inform state manager that update has been consumed
-      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameItemType.characters);
-
-      // If the update is on the current location, we rerender to reflect the update
-      if (id) {
-        // If Id is provided, we only need to address the specific character
-        this.handleCharacterChange(changeType, id);
-      } else {
-        // Else, rerender the whole layer
-        this.renderCharacterLayerContainer(locationId);
-      }
-    }
+    GameGlobalAPI.getInstance().watchGameItemType(GameItemType.characters, this);
   }
 
   /**
@@ -101,32 +68,12 @@ export default class CharacterManager implements StateObserver {
   }
 
   /**
-   * Handle change of a specific character ID.
-   *
-   * @param changeType type of change
-   * @param id id of affected character
-   */
-  private handleCharacterChange(changeType: StateChangeType, id: ItemId) {
-    switch (changeType) {
-      case StateChangeType.Add:
-        return this.handleAdd(id);
-      case StateChangeType.Mutate:
-        return this.handleMutate(id);
-      case StateChangeType.Delete:
-        return this.handleDelete(id);
-    }
-  }
-
-  /**
    * Add the character, specified by the ID, into the scene
    * and keep track of it within the mapping.
    *
-   * Throws error if the  character is not available
-   * in the mapping.
-   *
    * @param id id of character
    */
-  private handleAdd(id: ItemId) {
+  public handleAdd(id: ItemId) {
     const characterSprite = this.createCharacterSprite(id);
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterSprite);
     this.characterSpriteMap.set(id, characterSprite);
@@ -141,7 +88,7 @@ export default class CharacterManager implements StateObserver {
    *
    * @param id id of characer
    */
-  private handleMutate(id: ItemId) {
+  public handleMutate(id: ItemId) {
     this.handleDelete(id);
     this.handleAdd(id);
   }
@@ -152,8 +99,13 @@ export default class CharacterManager implements StateObserver {
    *
    * @param id id of the bbox
    */
-  private handleDelete(id: ItemId) {
+  public handleDelete(id: ItemId) {
     const char = this.characterSpriteMap.get(id);
-    if (char) char.destroy();
+    if (char) {
+      this.characterSpriteMap.delete(id);
+      char.destroy();
+      return true;
+    }
+    return false;
   }
 }

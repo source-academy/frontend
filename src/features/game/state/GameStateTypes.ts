@@ -1,4 +1,4 @@
-import { LocationId } from '../location/GameMapTypes';
+import { ItemId } from '../commons/CommonTypes';
 
 export enum GameStateStorage {
   UserState = 'UserState',
@@ -21,29 +21,8 @@ export type UserState = {
   [K in UserStateTypes]?: string[];
 };
 
-/**
- * Represent the changes done to the state.
- */
-export enum StateChangeType {
-  Add,
-  Mutate,
-  Delete
+export interface StateObserver {
+  handleAdd: (itemId: ItemId) => any;
+  handleDelete: (itemId: ItemId) => boolean;
+  handleMutate: (itemId: ItemId) => void;
 }
-
-/**
- * Observer pattern, the observer side.
- */
-export type StateObserver = {
-  observerId: string;
-  notify: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
-};
-
-/**
- * Observer pattern, the subject side.
- */
-export type StateSubject = {
-  subscribers: Array<StateObserver>;
-  update: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
-  subscribe: (observer: StateObserver) => void;
-  unsubscribe: (observer: StateObserver) => void;
-};

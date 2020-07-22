@@ -27,7 +27,7 @@ class GameModeMenu implements IGameUI {
    */
   private getLatestLocationModes() {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
-    let latestModesInLoc = GameGlobalAPI.getInstance().getModesByLocId(currLocId);
+    let latestModesInLoc = GameGlobalAPI.getInstance().getLocationModes(currLocId);
     const talkTopics = GameGlobalAPI.getInstance().getLocationAttr(
       GameItemType.talkTopics,
       currLocId
