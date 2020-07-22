@@ -70,7 +70,7 @@ class GameBoundingBoxManager implements StateObserver {
     // Refresh mapping
     this.bboxes.clear();
 
-    // Add all the objects
+    // Add all the bbox
     bboxIdsToRender.map(id => this.handleAdd(id));
   }
 
@@ -182,7 +182,7 @@ class GameBoundingBoxManager implements StateObserver {
    * Throws error if the bbox property is not available
    * in the mapping.
    *
-   * @param id id of object
+   * @param id id of bbox
    */
   private handleAdd(id: ItemId) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
@@ -205,7 +205,7 @@ class GameBoundingBoxManager implements StateObserver {
    * Internally, will delete and re-add the bbox with
    * the updated property.
    *
-   * @param id id of object
+   * @param id id of bbox
    */
   private handleMutate(id: ItemId) {
     this.handleDelete(id);

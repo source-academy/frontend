@@ -34,7 +34,7 @@ export default class CharacterManager implements StateObserver {
   /**
    * Part of observer pattern. Receives notification from GameStateManager.
    *
-   * On notify, will rerender all the objects on the location to reflect
+   * On notify, will rerender all the characters on the location to reflect
    * the update to the state if applicable.
    *
    * @param changeType type of change
@@ -49,44 +49,33 @@ export default class CharacterManager implements StateObserver {
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // If the update is on the current location, we rerender to reflect the update
-      this.renderCharacterLayerContainer(locationId);
+      if (id) {
+        // If Id is provided, we only need to address the specific character
+        this.handleCharacterChange(changeType, id);
+      } else {
+        // Else, rerender the whole layer
+        this.renderCharacterLayerContainer(locationId);
+      }
     }
-  }
-
-  /**
-   * Create a container filled with the characters related to the itemIDs.
-   *
-   * @param objectIds object IDs to be created
-   */
-  private createCharacterContainer(charIds: ItemId[]): Phaser.GameObjects.Container {
-    const characterContainer = new Phaser.GameObjects.Container(
-      GameGlobalAPI.getInstance().getGameManager(),
-      0,
-      0
-    );
-
-    charIds.forEach(id => {
-      const characterSprite = this.createCharacterSprite(id);
-      characterContainer.add(characterSprite);
-      this.characterSpriteMap.set(id, characterSprite);
-    });
-
-    return characterContainer;
   }
 
   /**
    * Clear the layers, and render all the characters available to the location.
    * Will immediately be shown on the screen.
    *
-   * @param locationId location in which to render bboxes at
+   * @param locationId location in which to render characters at
    */
   public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender = GameGlobalAPI.getInstance().getLocationAttr(
       GameLocationAttr.characters,
       locationId
     );
-    const characterLayer = this.createCharacterContainer(idsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterLayer);
+
+    // Refresh mapping
+    this.characterSpriteMap.clear();
+
+    // Add all the characters
+    idsToRender.map(id => this.handleAdd(id));
   }
 
   /**
@@ -116,6 +105,63 @@ export default class CharacterManager implements StateObserver {
 
     resize(characterSprite, CharConstants.charWidth);
     return characterSprite;
+  }
+
+  /**
+   * Handle change of a specific character ID.
+   *
+   * @param changeType type of change
+   * @param id id of affected character
+   */
+  private handleCharacterChange(changeType: StateChangeType, id: ItemId) {
+    switch (changeType) {
+      case StateChangeType.Add:
+        return this.handleAdd(id);
+      case StateChangeType.Mutate:
+        return this.handleMutate(id);
+      case StateChangeType.Delete:
+        return this.handleDelete(id);
+    }
+  }
+
+  /**
+   * Add the character, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * Throws error if the  character is not available
+   * in the mapping.
+   *
+   * @param id id of character
+   */
+  private handleAdd(id: ItemId) {
+    const characterSprite = this.createCharacterSprite(id);
+    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterSprite);
+    this.characterSpriteMap.set(id, characterSprite);
+    return characterSprite;
+  }
+
+  /**
+   * Mutate the character of the given id.
+   *
+   * Internally, will delete and re-add the character with
+   * the updated property.
+   *
+   * @param id id of characer
+   */
+  private handleMutate(id: ItemId) {
+    this.handleDelete(id);
+    this.handleAdd(id);
+  }
+
+  /**
+   * Delete the character of the given id, if
+   * applicable.
+   *
+   * @param id id of the bbox
+   */
+  private handleDelete(id: ItemId) {
+    const char = this.characterSpriteMap.get(id);
+    if (char) char.destroy();
   }
 
   /**
