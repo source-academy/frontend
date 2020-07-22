@@ -94,9 +94,9 @@ export default class ActionParser {
           actionType
         );
         break;
-      case GameActionType.BringUpDialogue:
+      case GameActionType.ShowDialogue:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.talkTopics,
+          GameItemType.dialogues,
           actionParams[0],
           actionType
         );
