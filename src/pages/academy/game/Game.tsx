@@ -9,7 +9,8 @@ import SourceAcademyGame, {
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
-  const [isResetThere, setIsResetThere] = React.useState(false);
+  const [isTestStudent, setIsTestStudent] = React.useState(false);
+  const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
     createSourceAcademyGame();
@@ -22,21 +23,33 @@ function Game() {
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
     if (session.name === 'Test Student') {
-      setIsResetThere(true);
+      setIsTestStudent(true);
+      setIsUsingMock(true);
+      SourceAcademyGame.getInstance().toggleUsingMock();
     }
   }, [session]);
 
   return (
     <>
       <div id="game-display"></div>
-      {isResetThere && (
-        <button
-          onClick={async () => {
-            await clearData();
-          }}
-        >
-          Clear data
-        </button>
+      {isTestStudent && (
+        <div className="Horizontal">
+          <button
+            onClick={async () => {
+              await clearData();
+            }}
+          >
+            Clear data
+          </button>
+          <button
+            onClick={() => {
+              setIsUsingMock(!isUsingMock);
+              SourceAcademyGame.getInstance().toggleUsingMock();
+            }}
+          >
+            {isUsingMock ? 'Use Actual' : 'Use Mocks'}
+          </button>
+        </div>
       )}
     </>
   );

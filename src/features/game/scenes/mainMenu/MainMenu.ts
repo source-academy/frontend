@@ -61,7 +61,7 @@ class MainMenu extends Phaser.Scene {
    * Load save state and settings; then applying them.
    */
   private async loadGameDataAndSettings() {
-    await SourceAcademyGame.getInstance().loadMockChapters();
+    await SourceAcademyGame.getInstance().loadGameChapters();
     // Load settings
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
 
