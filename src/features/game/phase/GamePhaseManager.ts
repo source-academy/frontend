@@ -34,11 +34,11 @@ export default class GamePhaseManager {
   /**
    * Set the callback of the phase manager. The callback will be executed
    * before every phase transition. The function signature must accept a
-   * GamePhaseType and returns a void.
+   * GamePhaseType and returns a boolean.
    *
    * @param fn callback
    */
-  public setCallback(fn: (newPhase: GamePhaseType) => void) {
+  public setCallback(fn: (newPhase: GamePhaseType) => Promise<boolean>) {
     this.phaseTransitionCallback = fn;
   }
 
@@ -93,15 +93,20 @@ export default class GamePhaseManager {
    * @param newPhase new phase to activate
    */
   private async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    // Execute phase transition callback. If executed, we no longer do phase transition.
-    if (await this.phaseTransitionCallback(newPhase)) {
-      return;
-    }
-
     // Disable inputs to avoid user input mutating the stack
     this.getInputManager().enableKeyboardInput(false);
     this.getInputManager().enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
+
+    // Execute phase transition callback.
+    // If executed, we no longer do transition to the new phase.
+    if (await this.phaseTransitionCallback(newPhase)) {
+      this.getInputManager().enableMouseInput(true);
+      this.getInputManager().enableKeyboardInput(true);
+      return;
+    }
+
+    // Transition to new phase
     await this.phaseMap.get(newPhase)!.activateUI();
     this.getInputManager().enableMouseInput(true);
     this.getInputManager().enableKeyboardInput(true);
