@@ -13,6 +13,7 @@ import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
+import { CodeDelta, Input, PlaybackData } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -81,6 +82,11 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+
+  handleTimerStart: () => void;
+  handleTimerStop: () => void;
+  handleTimerReset: () => void;
+  handleRecordInput: (input: Input) => void;
 };
 
 export type OwnProps = {
@@ -111,6 +117,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
+  playbackData: PlaybackData;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -229,31 +236,47 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
+    // TODO: Add Handler to Save key stroke
+    const onChangeMethod = (newCode: string, delta: CodeDelta) => {
+      if (this.props.handleUpdateHasUnsavedChanges) {
+        this.props.handleUpdateHasUnsavedChanges(true);
+      }
+
+      this.props.handleEditorValueChange(newCode);
+
+      if (this.props.assessment!.category !== 'Practical') {
+        console.log(delta);
+      }
+    };
+
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
         ? this.props.assessment.questions.length - 1
         : this.props.questionId;
     const question: Question = this.props.assessment.questions[questionId];
+    const editorProps =
+      question.type === QuestionTypes.programming
+        ? {
+            editorSessionId: '',
+            editorValue: this.props.editorValue!,
+            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+            handleEditorEval: this.props.handleEditorEval,
+            handleEditorValueChange: this.props.handleEditorValueChange,
+            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+            breakpoints: this.props.breakpoints,
+            highlightedLines: this.props.highlightedLines,
+            newCursorPosition: this.props.newCursorPosition,
+            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+            isEditorAutorun: false,
+            onChangeMethod: onChangeMethod
+          }
+        : undefined;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
-      editorProps:
-        question.type === QuestionTypes.programming
-          ? {
-              editorSessionId: '',
-              editorValue: this.props.editorValue!,
-              handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-              handleEditorEval: this.props.handleEditorEval,
-              handleEditorValueChange: this.props.handleEditorValueChange,
-              handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-              breakpoints: this.props.breakpoints,
-              highlightedLines: this.props.highlightedLines,
-              newCursorPosition: this.props.newCursorPosition,
-              handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-              handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
-            }
-          : undefined,
+      editorProps: editorProps,
+
       editorHeight: this.props.editorHeight,
       editorWidth: this.props.editorWidth,
       handleEditorHeightChange: this.props.handleEditorHeightChange,
@@ -520,9 +543,13 @@ class AssessmentWorkspace extends React.Component<
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    const runButton = (
-      <ControlBarRunButton handleEditorEval={this.props.handleEditorEval} key="run" />
-    );
+    // TODO: Add Handler to Save Run
+    const handleEval = () => {
+      this.props.handleEditorEval();
+      console.log('run');
+    };
+
+    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
 
     const saveButton =
       !beforeNow(this.props.closeDate) &&

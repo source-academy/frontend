@@ -68,6 +68,7 @@ type StateProps = {
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
+  onChangeMethod?: any; // TODO: Add to help with keystroke logging
 };
 
 const getMarkers = (
@@ -308,7 +309,11 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   return (
     <HotKeys className="Editor" handlers={handlers}>
       <div className="row editor-react-ace">
-        <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
+        <AceEditor
+          {...aceEditorProps}
+          onChange={props.onChangeMethod}
+          ref={useMergedRef(reactAceRef, forwardedRef)}
+        />
       </div>
     </HotKeys>
   );
