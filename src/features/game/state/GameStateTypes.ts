@@ -22,7 +22,7 @@ export type UserState = {
 };
 
 export interface StateObserver {
-  handleAdd: (itemId: ItemId) => any;
+  handleAdd: (itemId: ItemId) => boolean;
   handleDelete: (itemId: ItemId) => boolean;
-  handleMutate: (itemId: ItemId) => void;
+  handleMutate: (itemId: ItemId) => boolean;
 }

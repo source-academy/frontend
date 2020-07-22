@@ -35,7 +35,7 @@ export default class CharacterManager implements StateObserver {
     this.characterSpriteMap.clear();
 
     // Add all the characters
-    idsToRender.map(id => this.handleAdd(id));
+    idsToRender.forEach(id => this.handleAdd(id));
   }
 
   /**
@@ -72,12 +72,14 @@ export default class CharacterManager implements StateObserver {
    * and keep track of it within the mapping.
    *
    * @param id id of character
+   * @return {boolean} true if successful, false otherwise
+
    */
-  public handleAdd(id: ItemId) {
+  public handleAdd(id: ItemId): boolean {
     const characterSprite = this.createCharacterSprite(id);
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterSprite);
     this.characterSpriteMap.set(id, characterSprite);
-    return characterSprite;
+    return true;
   }
 
   /**
@@ -86,18 +88,20 @@ export default class CharacterManager implements StateObserver {
    * Internally, will delete and re-add the character with
    * the updated property.
    *
-   * @param id id of characer
+   * @param id id of character
+   * @return {boolean} true if successful, false otherwise
+
    */
-  public handleMutate(id: ItemId) {
-    this.handleDelete(id);
-    this.handleAdd(id);
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
   }
 
   /**
    * Delete the character of the given id, if
    * applicable.
    *
-   * @param id id of the bbox
+   * @param id id of the character
+   *  @return {boolean} true if successful, false otherwise
    */
   public handleDelete(id: ItemId) {
     const char = this.characterSpriteMap.get(id);

@@ -179,7 +179,7 @@ class GameStateManager {
    * @param locationId locationId that you want to check whether is current one
    */
   public isCurrentLocation(locationId: LocationId) {
-    return locationId !== GameGlobalAPI.getInstance().getCurrLocId();
+    return locationId === GameGlobalAPI.getInstance().getCurrLocId();
   }
 
   ///////////////////////////////

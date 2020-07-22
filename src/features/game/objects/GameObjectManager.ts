@@ -43,7 +43,7 @@ class GameObjectManager implements StateObserver {
     this.objects.clear();
 
     // Add all the objects
-    objIdsToRender.map(id => this.handleAdd(id));
+    objIdsToRender.forEach(id => this.handleAdd(id));
   }
 
   /**
@@ -149,8 +149,9 @@ class GameObjectManager implements StateObserver {
    * and keep track of it within the mapping.
    *
    * @param id id of object
+   * @return {boolean} true if successful, false otherwise
    */
-  public handleAdd(id: ItemId) {
+  public handleAdd(id: ItemId): boolean {
     const objectProp = GameGlobalAPI.getInstance().getObjectById(id);
     const object = this.createObject(objectProp);
     GameGlobalAPI.getInstance().addContainerToLayer(
@@ -158,7 +159,7 @@ class GameObjectManager implements StateObserver {
       (object.sprite as GlowingImage).getContainer()
     );
     this.objects.set(id, object);
-    return object;
+    return true;
   }
 
   /**
@@ -168,11 +169,10 @@ class GameObjectManager implements StateObserver {
    * the updated property.
    *
    * @param id id of object
+   * @return {boolean} true if successful, false otherwise
    */
-  public handleMutate(id: ItemId) {
-    if (this.handleDelete(id)) {
-      this.handleAdd(id);
-    }
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
   }
 
   /**
@@ -180,6 +180,7 @@ class GameObjectManager implements StateObserver {
    * applicable.
    *
    * @param id id of the object
+   * @return {boolean} true if successful, false otherwise
    */
   public handleDelete(id: ItemId): boolean {
     const object = this.objects.get(id);

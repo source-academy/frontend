@@ -36,7 +36,7 @@ class GameBoundingBoxManager implements StateObserver {
     this.bboxes.clear();
 
     // Add all the bbox
-    bboxIdsToRender.map(id => this.handleAdd(id));
+    bboxIdsToRender.forEach(id => this.handleAdd(id));
   }
 
   /**
@@ -114,8 +114,9 @@ class GameBoundingBoxManager implements StateObserver {
    * in the mapping.
    *
    * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
    */
-  public handleAdd(id: ItemId) {
+  public handleAdd(id: ItemId): boolean {
     const bboxProp = GameGlobalAPI.getInstance().getBBoxById(id);
     const bbox = this.createBBox(bboxProp);
     GameGlobalAPI.getInstance().addContainerToLayer(
@@ -123,7 +124,7 @@ class GameBoundingBoxManager implements StateObserver {
       bbox.sprite as Phaser.GameObjects.Rectangle
     );
     this.bboxes.set(id, bbox);
-    return bbox;
+    return true;
   }
 
   /**
@@ -133,11 +134,10 @@ class GameBoundingBoxManager implements StateObserver {
    * the updated property.
    *
    * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
    */
-  public handleMutate(id: ItemId) {
-    if (this.handleDelete(id)) {
-      this.handleAdd(id);
-    }
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
   }
 
   /**
@@ -145,6 +145,7 @@ class GameBoundingBoxManager implements StateObserver {
    * applicable.
    *
    * @param id id of the bbox
+   * @return {boolean} true if successful, false otherwise
    */
   public handleDelete(id: ItemId): boolean {
     const bbox = this.bboxes.get(id);
