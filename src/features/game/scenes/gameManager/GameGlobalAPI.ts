@@ -142,11 +142,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
-    this.getGameManager().objectManager.makeObjectGlow(objectId, turnOn);
+    this.getGameManager().getObjectManager().makeObjectGlow(objectId, turnOn);
   }
 
   public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
-    this.getGameManager().objectManager.makeObjectBlink(objectId, turnOn);
+    this.getGameManager().getObjectManager().makeObjectBlink(objectId, turnOn);
   }
 
   public getObjPropertyMap() {
@@ -158,11 +158,11 @@ class GameGlobalAPI {
   }
 
   public enableObjectAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().objectManager.enableObjectAction(callbacks);
+    this.getGameManager().getObjectManager().enableObjectAction(callbacks);
   }
 
   public disableObjectAction() {
-    this.getGameManager().objectManager.disableObjectAction();
+    this.getGameManager().getObjectManager().disableObjectAction();
   }
 
   /////////////////////
@@ -178,11 +178,11 @@ class GameGlobalAPI {
   }
 
   public enableBBoxAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().boundingBoxManager.enableBBoxAction(callbacks);
+    this.getGameManager().getBBoxManager().enableBBoxAction(callbacks);
   }
 
   public disableBBoxAction() {
-    this.getGameManager().boundingBoxManager.disableBBoxAction();
+    this.getGameManager().getBBoxManager().disableBBoxAction();
   }
 
   /////////////////////
@@ -210,11 +210,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public addToUserStateList(listName: UserStateTypes, id: string): void {
-    this.getGameManager().userStateManager.addToList(listName, id);
+    this.getGameManager().getUserStateManager().addToList(listName, id);
   }
 
   public async existsInUserStateList(listName: UserStateTypes, id: string): Promise<boolean> {
-    return await this.getGameManager().userStateManager.doesIdExistInList(listName, id);
+    return await this.getGameManager().getUserStateManager().doesIdExistInList(listName, id);
   }
 
   /////////////////////
@@ -259,12 +259,12 @@ class GameGlobalAPI {
 
   public async processGameActions(actionIds: ItemId[] | undefined) {
     await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
-    await this.getGameManager().actionManager.processGameActions(actionIds);
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
     await this.getGameManager().phaseManager.popPhase();
   }
 
   public async processGameActionsInSamePhase(actionIds: ItemId[] | undefined) {
-    await this.getGameManager().actionManager.processGameActions(actionIds);
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
   }
 
   /////////////////////
@@ -273,16 +273,12 @@ class GameGlobalAPI {
 
   public async showDialogue(dialogueId: ItemId) {
     await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
-    await this.getGameManager().dialogueManager.showDialogue(dialogueId);
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
     await this.getGameManager().phaseManager.popPhase();
   }
 
   public async showDialogueInSamePhase(dialogueId: ItemId) {
-    await this.getGameManager().dialogueManager.showDialogue(dialogueId);
-  }
-
-  public getDialogueById(dialogueId: ItemId) {
-    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
   /////////////////////
@@ -290,7 +286,9 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    this.getGameManager().userStateManager.addToList(UserStateTypes.collectibles, collectibleId);
+    this.getGameManager()
+      .getUserStateManager()
+      .addToList(UserStateTypes.collectibles, collectibleId);
   }
 
   /////////////////////
@@ -410,15 +408,25 @@ class GameGlobalAPI {
     overrideExpression?: string,
     overridePosition?: GamePosition
   ) {
-    return this.getGameManager().characterManager.createCharacterSprite(
-      characterId,
-      overrideExpression,
-      overridePosition
-    );
+    return this.getGameManager()
+      .getCharacterManager()
+      .createCharacterSprite(characterId, overrideExpression, overridePosition);
+  }
+
+  /////////////////////
+  //  Item retrieval //
+  /////////////////////
+
+  public getDialogueById(dialogueId: ItemId) {
+    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
   }
 
   public getCharacterById(characterId: ItemId) {
     return mandatory(this.getGameMap().getCharacterMap().get(characterId));
+  }
+
+  public getActionById(actionId: ItemId) {
+    return mandatory(this.getGameMap().getActionMap().get(actionId));
   }
 }
 

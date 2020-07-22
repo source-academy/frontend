@@ -117,7 +117,7 @@ class GameMap {
     return this.characters;
   }
 
-  public getActions(): Map<ItemId, GameAction> {
+  public getActionMap(): Map<ItemId, GameAction> {
     return this.actions;
   }
 

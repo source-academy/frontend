@@ -18,9 +18,6 @@ export default class CharacterManager implements StateObserver {
   constructor() {
     this.observerId = 'GameCharacterManager';
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
-  }
-
-  public initialise() {
     GameGlobalAPI.getInstance().subscribeState(this);
   }
 

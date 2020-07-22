@@ -27,9 +27,6 @@ class GameObjectManager implements StateObserver {
   constructor() {
     this.observerId = 'GameObjectManager';
     this.objects = new Map<ItemId, ActivatableSprite>();
-  }
-
-  public initialise() {
     GameGlobalAPI.getInstance().subscribeState(this);
   }
 
