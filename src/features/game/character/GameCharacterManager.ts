@@ -3,7 +3,7 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 import { screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import GameManager from '../scenes/gameManager/GameManager';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
@@ -43,12 +43,12 @@ export default class CharacterManager implements StateObserver {
   public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
-      GameLocationAttr.characters
+      GameItemType.characters
     );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // Inform state manager that update has been consumed
-      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameLocationAttr.characters);
+      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameItemType.characters);
 
       // If the update is on the current location, we rerender to reflect the update
       if (id) {
@@ -69,7 +69,7 @@ export default class CharacterManager implements StateObserver {
    */
   public renderCharacterLayerContainer(locationId: LocationId): void {
     const idsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.characters,
+      GameItemType.characters,
       locationId
     );
 

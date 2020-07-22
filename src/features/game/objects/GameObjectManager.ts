@@ -5,7 +5,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
 import { ActivatableSprite, ActivateSpriteCallbacks, ObjectProperty } from './GameObjectTypes';
@@ -46,12 +46,12 @@ class GameObjectManager implements StateObserver {
   public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
-      GameLocationAttr.objects
+      GameItemType.objects
     );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // Inform state manager that update has been consumed
-      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameLocationAttr.objects);
+      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameItemType.objects);
 
       // If the update is on the current location, we rerender to reflect the update
       if (id) {
@@ -73,7 +73,7 @@ class GameObjectManager implements StateObserver {
   public renderObjectsLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
     const objIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.objects,
+      GameItemType.objects,
       locationId
     );
 

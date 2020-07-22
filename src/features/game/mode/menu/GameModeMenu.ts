@@ -6,7 +6,7 @@ import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
@@ -29,7 +29,7 @@ class GameModeMenu implements IGameUI {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
     let latestModesInLoc = GameGlobalAPI.getInstance().getModesByLocId(currLocId);
     const talkTopics = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
+      GameItemType.talkTopics,
       currLocId
     );
 

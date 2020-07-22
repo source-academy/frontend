@@ -1,6 +1,6 @@
 import { GameActionType } from '../action/GameActionTypes';
 import { GamePosition } from '../commons/CommonTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameStateStorage, UserStateTypes } from '../state/GameStateTypes';
 
@@ -18,14 +18,14 @@ const stringToGameModeMap = {
 };
 
 const stringToLocAttrMap = {
-  navigation: GameLocationAttr.navigation,
-  talkTopics: GameLocationAttr.talkTopics,
-  objects: GameLocationAttr.objects,
-  boundingBoxes: GameLocationAttr.boundingBoxes,
-  characters: GameLocationAttr.characters,
-  actions: GameLocationAttr.actions,
-  bgmKey: GameLocationAttr.bgmKey,
-  collectibles: GameLocationAttr.collectibles
+  navigation: GameItemType.navigation,
+  talkTopics: GameItemType.talkTopics,
+  objects: GameItemType.objects,
+  boundingBoxes: GameItemType.boundingBoxes,
+  characters: GameItemType.characters,
+  actions: GameItemType.actions,
+  bgmKey: GameItemType.bgmKey,
+  collectibles: GameItemType.collectibles
 };
 
 const stringToActionTypeMap = {
