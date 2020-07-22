@@ -9,6 +9,7 @@ gameStartActions
 
 room
     modes: explore
+    talkTopics: canNowTalk
     bgm
         heavyHitter, /bgm/HeavyHitter.mp3, 0.5
     sfx
@@ -52,14 +53,13 @@ classroom
         + classroomChair, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             complete_objective(finish)
             play_sfx(card)
-    
 
 emergency
     modes: move
     nav: classroom
 
 dialogues
-    canNowTalk
+    canNowTalk, you can now talk!
         @scottie
         Thanks for clicking the navigator, you can now talk to me via the talk mode.
             change_background(emergency)

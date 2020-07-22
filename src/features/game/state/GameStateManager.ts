@@ -5,10 +5,10 @@ import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapT
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ObjectProperty } from '../objects/GameObjectTypes';
-import { jsObjectToMap, jsonToLocationStates } from '../save/GameSaveHelper';
-import { GameSaveState } from '../save/GameSaveTypes';
+import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
 import { StateChangeType, StateObserver, StateSubject } from './GameStateTypes';
 
@@ -29,12 +29,14 @@ class GameStateManager implements StateSubject {
   private checkpoint: GameCheckpoint;
   private checkpointObjective: GameObjective;
   private locationHasUpdate: Map<string, Map<GameLocationAttr, boolean>>;
+
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
   private bboxPropertyMap: Map<ItemId, BBoxProperty>;
 
   // Triggered Interactions
   private triggeredInteractions: Map<ItemId, boolean>;
+  private triggeredActions: ItemId[];
 
   constructor() {
     this.subscribers = new Array<StateObserver>();
@@ -42,6 +44,8 @@ class GameStateManager implements StateSubject {
     this.checkpoint = {} as GameCheckpoint;
     this.checkpointObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameLocationAttr, boolean>>();
+    this.triggeredActions = [];
+
     this.locationStates = new Map<string, GameLocation>();
     this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
     this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
@@ -166,17 +170,16 @@ class GameStateManager implements StateSubject {
 
   public initialise(gameManager: GameManager): void {
     this.checkpoint = gameManager.getCurrentCheckpoint();
-    const gameSaveState = gameManager.getSaveManager().getLoadedGameStoryState();
     this.checkpointObjective = this.checkpoint.objectives;
 
-    if (gameSaveState) {
-      this.loadFromGameStoryState(gameSaveState);
-    } else {
-      this.loadNewGameStoryState();
-    }
+    this.locationStates = this.checkpoint.map.getLocations();
+    this.objectPropertyMap = this.checkpoint.map.getObjects();
+    this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
+
+    this.loadStatesFromSaveManager();
 
     // Register every attribute of each location under the chapter
-    this.locationStates.forEach((location, locationId) => {
+    this.locationStates.forEach((_location, locationId) => {
       this.locationHasUpdate.set(locationId, new Map<GameLocationAttr, boolean>());
       Object.values(GameLocationAttr).forEach(value =>
         this.locationHasUpdate.get(locationId)!.set(value, false)
@@ -185,27 +188,20 @@ class GameStateManager implements StateSubject {
   }
 
   /**
-   * Load GameSaveState and use it as the values of GameStateManager's attributes.
-   *
-   * @param gameSaveState state to load
+   * Loads some game states from the save manager
    */
-  private loadFromGameStoryState(gameSaveState: GameSaveState) {
-    this.checkpointObjective.setObjectives(jsObjectToMap(gameSaveState.chapterObjective));
-    this.locationStates = jsonToLocationStates(gameSaveState.locationStates);
-    this.objectPropertyMap = jsObjectToMap(gameSaveState.objectPropertyMap);
-    this.bboxPropertyMap = jsObjectToMap(gameSaveState.bboxPropertyMap);
-    this.triggeredInteractions = jsObjectToMap(gameSaveState.triggeredInteractions);
-  }
+  public loadStatesFromSaveManager() {
+    this.triggeredActions = SourceAcademyGame.getInstance().getSaveManager().getTriggeredActions();
 
-  /**
-   * Initialise GameStateManager's attributes with fresh states.
-   */
-  private loadNewGameStoryState() {
-    this.checkpointObjective = this.checkpoint.objectives;
-    this.locationStates = this.checkpoint.map.getLocations();
-    this.objectPropertyMap = this.checkpoint.map.getObjects();
-    this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
-    this.triggeredInteractions.clear();
+    SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getTriggeredInteractions()
+      .forEach(interactionId => this.triggerInteraction(interactionId));
+
+    SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getCompletedObjectives()
+      .forEach(objective => this.checkpointObjective.setObjective(objective, true));
   }
 
   ///////////////////////////////
@@ -219,6 +215,15 @@ class GameStateManager implements StateSubject {
    */
   public triggerInteraction(id: string): void {
     this.triggeredInteractions.set(id, true);
+  }
+
+  /**
+   * Record that an action has been triggered.
+   *
+   * @param actionId actionId of interaction
+   */
+  public triggerAction(actionId: ItemId): void {
+    this.triggeredActions.push(actionId);
   }
 
   /**
@@ -520,31 +525,30 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   /**
-   * Return a map of game locations; with its location ID as key.
+   * Gets array of all objectives that have been completed.
    *
-   * @returns {Map<LocationId, GameLocation>}
+   * @returns {ItemId[]}
    */
-  public getLocationStates() {
-    return this.locationStates;
+  public getCompletedObjectives(): ItemId[] {
+    return convertMapToArray(this.checkpointObjective.getObjectives());
   }
 
   /**
-   * Get the current checkpoint objectives.
+   * Return an array interactions that have been triggered
    *
-   * @returns {GameObjective}
+   * @returns {string[]}
    */
-  public getCheckpointObjectives() {
-    return this.checkpointObjective;
+  public getTriggeredInteractions(): string[] {
+    return convertMapToArray(this.triggeredInteractions);
   }
 
   /**
-   * Return a map of interactions and whether they has been triggered
-   * or not.
+   * Return an array interactions of actions that have been triggered
    *
-   * @returns {Map<string, boolean>}
+   * @returns {string[]}
    */
-  public getTriggeredInteractions() {
-    return this.triggeredInteractions;
+  public getTriggeredActions(): string[] {
+    return this.triggeredActions;
   }
 }
 
