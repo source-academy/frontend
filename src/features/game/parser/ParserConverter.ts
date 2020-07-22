@@ -37,7 +37,7 @@ const stringToActionTypeMap = {
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,
-  show_dialogue: GameActionType.BringUpDialogue,
+  show_dialogue: GameActionType.ShowDialogue,
   add_mode: GameActionType.AddLocationMode,
   remove_mode: GameActionType.RemoveLocationMode,
   add_popup: GameActionType.AddPopup,

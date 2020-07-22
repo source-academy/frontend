@@ -9,7 +9,7 @@ export enum GameActionType {
   LocationChange = 'LocationChange',
   AddItem = 'AddItem',
   RemoveItem = 'RemoveItem',
-  BringUpDialogue = 'BringUpDialogue',
+  ShowDialogue = 'ShowDialogue',
   ChangeBackground = 'ChangeBackground',
   RemoveLocationMode = 'RemoveLocationMode',
   AddLocationMode = 'AddLocationMode',

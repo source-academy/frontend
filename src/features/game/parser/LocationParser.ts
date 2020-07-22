@@ -60,7 +60,7 @@ export default class LocationParser {
         break;
       case 'talkTopics':
         const talkTopics = configValues;
-        Parser.validator.assertLocAttrs(GameItemType.talkTopics, talkTopics);
+        Parser.validator.assertLocAttrs(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
       default:
