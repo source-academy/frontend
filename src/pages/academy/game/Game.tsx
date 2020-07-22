@@ -47,7 +47,7 @@ function Game() {
               SourceAcademyGame.getInstance().toggleUsingMock();
             }}
           >
-            {isUsingMock ? 'Use Actual' : 'Use Mocks'}
+            {isUsingMock ? 'Use Game Chapters' : 'Use Mock Chapters'}
           </button>
         </div>
       )}

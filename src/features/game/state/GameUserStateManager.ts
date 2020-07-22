@@ -24,7 +24,7 @@ export default class GameUserStateManager {
   public initialise() {
     this.userState.collectibles = SourceAcademyGame.getInstance()
       .getSaveManager()
-      .getFullSaveState().userSaveState.collectibles;
+      .getLoadedUserState().collectibles;
   }
 
   /**
