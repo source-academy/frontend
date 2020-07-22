@@ -1,7 +1,7 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import GameMap from '../location/GameMap';
+import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import GameObjective from '../objective/GameObjective';
 import { ObjectProperty } from '../objects/GameObjectTypes';
@@ -9,7 +9,6 @@ import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { mandatory } from '../utils/GameUtils';
 import { StateChangeType, StateObserver, StateSubject } from './GameStateTypes';
 
 /**
@@ -26,31 +25,21 @@ class GameStateManager implements StateSubject {
   public subscribers: Array<StateObserver>;
 
   // Game State
-  private checkpoint: GameCheckpoint;
+  private gameMap: GameMap;
   private checkpointObjective: GameObjective;
-  private locationHasUpdate: Map<string, Map<GameLocationAttr, boolean>>;
-
-  private locationStates: Map<string, GameLocation>;
-  private objectPropertyMap: Map<ItemId, ObjectProperty>;
-  private bboxPropertyMap: Map<ItemId, BBoxProperty>;
 
   // Triggered Interactions
+  private locationHasUpdate: Map<string, Map<GameLocationAttr, boolean>>;
   private triggeredInteractions: Map<ItemId, boolean>;
   private triggeredActions: ItemId[];
 
   constructor() {
     this.subscribers = new Array<StateObserver>();
-
-    this.checkpoint = {} as GameCheckpoint;
+    this.gameMap = new GameMap();
     this.checkpointObjective = new GameObjective();
     this.locationHasUpdate = new Map<string, Map<GameLocationAttr, boolean>>();
-    this.triggeredActions = [];
-
-    this.locationStates = new Map<string, GameLocation>();
-    this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
-    this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
-
     this.triggeredInteractions = new Map<ItemId, boolean>();
+    this.triggeredActions = [];
   }
 
   ///////////////////////////////
@@ -147,39 +136,18 @@ class GameStateManager implements StateSubject {
     this.update(changeType, targetLocId, attrId);
   }
 
-  /**
-   * Check whether an location ID exist.
-   * Throw error if it does not exist.
-   *
-   * @param locIds id to check
-   */
-  private checkLocationsExist(locIds: string[]): void {
-    locIds.forEach(locId => mandatory(this.locationStates.get(locId)));
-  }
-
-  /**
-   * Return a location based on its ID.
-   * @param locId id of the location
-   * @returns {GameLocation}
-   */
-  private getLocationById = (locId: LocationId) => mandatory(this.locationStates.get(locId));
-
   ///////////////////////////////
   //        Preprocess         //
   ///////////////////////////////
 
   public initialise(gameManager: GameManager): void {
-    this.checkpoint = gameManager.getCurrentCheckpoint();
-    this.checkpointObjective = this.checkpoint.objectives;
-
-    this.locationStates = this.checkpoint.map.getLocations();
-    this.objectPropertyMap = this.checkpoint.map.getObjects();
-    this.bboxPropertyMap = this.checkpoint.map.getBBoxes();
+    this.gameMap = gameManager.getCurrentCheckpoint().map;
+    this.checkpointObjective = gameManager.getCurrentCheckpoint().objectives;
 
     this.loadStatesFromSaveManager();
 
     // Register every attribute of each location under the chapter
-    this.locationStates.forEach((_location, locationId) => {
+    this.gameMap.getLocations().forEach((_location, locationId) => {
       this.locationHasUpdate.set(locationId, new Map<GameLocationAttr, boolean>());
       Object.values(GameLocationAttr).forEach(value =>
         this.locationHasUpdate.get(locationId)!.set(value, false)
@@ -288,7 +256,7 @@ class GameStateManager implements StateSubject {
     locationId: LocationId,
     attr?: GameLocationAttr
   ): boolean | undefined {
-    this.checkLocationsExist([locationId]);
+    this.gameMap.checkLocationExists(locationId);
     if (attr) {
       return this.locationHasUpdate.get(locationId)!.get(attr);
     }
@@ -307,7 +275,7 @@ class GameStateManager implements StateSubject {
    * @param attr attribute which update has been consumed
    */
   public consumedLocationUpdate(locationId: LocationId, attr: GameLocationAttr) {
-    this.checkLocationsExist([locationId]);
+    this.gameMap.checkLocationExists(locationId);
     this.locationHasUpdate.get(locationId)!.set(attr, false);
   }
 
@@ -322,7 +290,7 @@ class GameStateManager implements StateSubject {
    * @returns {GameMode[]} game modes
    */
   public getLocationMode(locationId: LocationId): GameMode[] {
-    return Array.from(this.checkpoint.map.getLocationAtId(locationId).modes) || [];
+    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
   }
 
   /**
@@ -332,9 +300,9 @@ class GameStateManager implements StateSubject {
    * @param mode game mode to add
    */
   public addLocationMode(locationId: LocationId, mode: GameMode) {
-    const location = this.getLocationById(locationId);
+    const location = this.gameMap.getLocationAtId(locationId);
     location.modes!.add(mode);
-    this.locationStates.get(locationId)!.modes!.add(mode);
+    this.gameMap.getLocations().get(locationId)!.modes!.add(mode);
     this.updateLocationStateMode(StateChangeType.Add, locationId, GameMode.Menu);
   }
 
@@ -347,7 +315,7 @@ class GameStateManager implements StateSubject {
    * @param mode game mode to remove
    */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
-    const location = this.getLocationById(locationId);
+    const location = this.gameMap.getLocationAtId(locationId);
     if (!location.modes) return;
     location.modes.delete(mode);
     this.updateLocationStateMode(StateChangeType.Delete, locationId, GameMode.Menu);
@@ -365,7 +333,7 @@ class GameStateManager implements StateSubject {
    * @param {ItemId[]}
    */
   public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
-    const location = this.getLocationById(locationId);
+    const location = this.gameMap.getLocationAtId(locationId);
     return Array.from(location[attr]) || [];
   }
 
@@ -377,7 +345,7 @@ class GameStateManager implements StateSubject {
    * @param attrElem item ID to be added
    */
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    const location = this.getLocationById(locationId);
+    const location = this.gameMap.getLocationAtId(locationId);
     if (!location[attr]) location[attr] = new Set([]);
     location[attr].add(attrElem);
     this.updateLocationStateAttr(StateChangeType.Add, locationId, attr, attrElem);
@@ -392,7 +360,7 @@ class GameStateManager implements StateSubject {
    * @param attrElem item ID to be removed
    */
   public removeLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
-    const location = this.getLocationById(locationId);
+    const location = this.gameMap.getLocationAtId(locationId);
     if (!location[attr]) return;
     location[attr] = location[attr].filter((oldAttr: string) => oldAttr !== attrElem);
     this.updateLocationStateAttr(StateChangeType.Delete, locationId, attr, attrElem);
@@ -458,7 +426,7 @@ class GameStateManager implements StateSubject {
    * @returns {Map<ItemId, ObjectProperty>}
    */
   public getObjPropertyMap() {
-    return this.objectPropertyMap;
+    return this.gameMap.getObjects();
   }
 
   /**
@@ -469,10 +437,10 @@ class GameStateManager implements StateSubject {
    * @param newObjProp new object property to replace the old one
    */
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
-    this.objectPropertyMap.set(id, newObjProp);
+    this.gameMap.addItemToMap(GameLocationAttr.objects, id, newObjProp);
 
     // Update every location that uses it
-    this.locationStates.forEach((location, locationId) => {
+    this.gameMap.getLocations().forEach((location, locationId) => {
       if (location.objects && location.objects.has(id)) {
         this.updateLocationStateAttr(
           StateChangeType.Mutate,
@@ -494,7 +462,7 @@ class GameStateManager implements StateSubject {
    * @returns {Map<ItemId, BBoxProperty>}
    */
   public getBBoxPropertyMap() {
-    return this.bboxPropertyMap;
+    return this.gameMap.getBBoxes();
   }
 
   /**
@@ -505,10 +473,10 @@ class GameStateManager implements StateSubject {
    * @param newBBoxProp new object property to replace the old one
    */
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
-    this.bboxPropertyMap.set(id, newBBoxProp);
+    this.gameMap.addItemToMap(GameLocationAttr.boundingBoxes, id, newBBoxProp);
 
     // Update every location that uses it
-    this.locationStates.forEach((location, locationId) => {
+    this.gameMap.getLocations().forEach((location, locationId) => {
       if (location.boundingBoxes && location.boundingBoxes.delete(id)) {
         this.updateLocationStateAttr(
           StateChangeType.Mutate,

@@ -140,6 +140,8 @@ class GameMap {
 
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
+
+  public checkLocationExists = this.getLocationAtId;
 }
 
 export default GameMap;
