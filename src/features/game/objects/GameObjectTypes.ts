@@ -27,13 +27,13 @@ export type ObjectLayerProps = {
 };
 
 /**
- * @typedef {ActivatableObject} - data that represents the object on screen
+ * @typedef {ActivatableSprite} - data that represents the object on screen
  * @prop {GlowingImage} sprite - The clickable object sprite which can be made to glow and blink
  * @prop {Function} activate - The function to be called when you want to enable listeners for the object
  * @prop {Void Function} deactivate - The function to be called when you want to disable listeners for an object
  */
-export type ActivatableObject = {
-  sprite: GlowingImage;
+export type ActivatableSprite = {
+  sprite: GlowingImage | Phaser.GameObjects.Rectangle;
   activate: Function;
   deactivate: Function;
 };

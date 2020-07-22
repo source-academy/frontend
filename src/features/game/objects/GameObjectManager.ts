@@ -7,7 +7,7 @@ import { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
+import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
 
 /**
  * Manager that renders objects in a location
@@ -21,11 +21,11 @@ import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
  */
 class GameObjectManager implements StateObserver {
   public observerId: string;
-  private objects: Map<ItemId, ActivatableObject>;
+  private objects: Map<ItemId, ActivatableSprite>;
 
   constructor() {
     this.observerId = 'GameObjectManager';
-    this.objects = new Map<ItemId, ActivatableObject>();
+    this.objects = new Map<ItemId, ActivatableSprite>();
   }
 
   public initialise() {
@@ -62,6 +62,7 @@ class GameObjectManager implements StateObserver {
     const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
     const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
+    this.objects.clear();
     objectIds
       .map(id => objectPropMap.get(id))
       .filter(objectProp => objectProp !== undefined)
@@ -175,7 +176,7 @@ class GameObjectManager implements StateObserver {
   private createObject(
     gameManager: GameManager,
     objectProperty: ObjectProperty
-  ): ActivatableObject {
+  ): ActivatableSprite {
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
     const object = new GlowingImage(gameManager, x, y, assetKey, width, height);
 
