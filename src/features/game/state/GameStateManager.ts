@@ -153,6 +153,40 @@ class GameStateManager {
   }
 
   ///////////////////////////////
+  //       Location Mode       //
+  ///////////////////////////////
+
+  /**
+   * Add a mode to a location.
+   *
+   * @param locationId location ID
+   * @param mode game mode to add
+   */
+  public addLocationMode(locationId: LocationId, mode: GameMode) {
+    this.gameMap.getLocationAtId(locationId).modes.add(mode);
+  }
+
+  /**
+   * Remove a mode from a location.
+   *
+   * @param locationId location ID
+   * @param mode game mode to remove
+   */
+  public removeLocationMode(locationId: LocationId, mode: GameMode) {
+    this.gameMap.getLocationAtId(locationId).modes.delete(mode);
+  }
+
+  /**
+   * Get modes available to a location based on the location ID.
+   *
+   * @param locationId location ID
+   * @returns {GameMode[]} game modes
+   */
+  public getLocationModes(locationId: LocationId): GameMode[] {
+    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
+  }
+
+  ///////////////////////////////
   //        State Check        //
   ///////////////////////////////
 
@@ -233,40 +267,6 @@ class GameStateManager {
   public setCharacterProperty(id: ItemId, newCharacter: Character) {
     this.gameMap.setItemInMap(GameItemType.boundingBoxes, id, newCharacter);
     this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
-  }
-
-  ///////////////////////////////
-  //       Location Mode       //
-  ///////////////////////////////
-
-  /**
-   * Add a mode to a location.
-   *
-   * @param locationId location ID
-   * @param mode game mode to add
-   */
-  public addLocationMode(locationId: LocationId, mode: GameMode) {
-    this.gameMap.getLocationAtId(locationId).modes.add(mode);
-  }
-
-  /**
-   * Remove a mode from a location.
-   *
-   * @param locationId location ID
-   * @param mode game mode to remove
-   */
-  public removeLocationMode(locationId: LocationId, mode: GameMode) {
-    this.gameMap.getLocationAtId(locationId).modes.delete(mode);
-  }
-
-  /**
-   * Get modes available to a location based on the location ID.
-   *
-   * @param locationId location ID
-   * @returns {GameMode[]} game modes
-   */
-  public getLocationModes(locationId: LocationId): GameMode[] {
-    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
   }
 
   ///////////////////////////////
