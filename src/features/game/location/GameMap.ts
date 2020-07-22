@@ -35,8 +35,8 @@ class GameMap {
   private boundingBoxes: Map<ItemId, BBoxProperty>;
   private characters: Map<ItemId, Character>;
   private actions: Map<ItemId, GameAction>;
-  private startActions: ItemId[];
-  private endActions: ItemId[];
+  private gameStartActions: ItemId[];
+  private checkpointCompleteActions: ItemId[];
 
   constructor() {
     this.soundAssets = [];
@@ -48,8 +48,8 @@ class GameMap {
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
-    this.startActions = [];
-    this.endActions = [];
+    this.gameStartActions = [];
+    this.checkpointCompleteActions = [];
   }
 
   public addSoundAsset(soundAsset: SoundAsset) {
@@ -80,20 +80,20 @@ class GameMap {
     return this.getLocationAtId(id).navigation;
   }
 
-  public setStartActions(actionIds: ItemId[]) {
-    this.startActions = actionIds;
+  public setGameStartActions(actionIds: ItemId[]) {
+    this.gameStartActions = actionIds;
   }
 
-  public setEndActions(actionIds: ItemId[]) {
-    this.endActions = actionIds;
+  public setCheckpointCompleteActions(actionIds: ItemId[]) {
+    this.checkpointCompleteActions = actionIds;
   }
 
   public getStartActions() {
-    return this.startActions;
+    return this.gameStartActions;
   }
 
   public getEndActions() {
-    return this.endActions;
+    return this.checkpointCompleteActions;
   }
 
   public getLocations(): Map<LocationId, GameLocation> {

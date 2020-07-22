@@ -80,11 +80,11 @@ class Parser {
       case 'locations':
         LocationsParser.parse(body);
         break;
-      case 'startActions':
-        Parser.checkpoint.map.setStartActions(ActionParser.parseActions(body));
+      case 'gameStartActions':
+        Parser.checkpoint.map.setGameStartActions(ActionParser.parseActions(body));
         break;
-      case 'endActions':
-        Parser.checkpoint.map.setEndActions(ActionParser.parseActions(body));
+      case 'checkpointCompleteActions':
+        Parser.checkpoint.map.setCheckpointCompleteActions(ActionParser.parseActions(body));
         break;
       case 'dialogues':
         DialoguesParser.parse(body);
