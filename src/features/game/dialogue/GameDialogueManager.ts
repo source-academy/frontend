@@ -4,6 +4,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame from '../SourceAcademyGame';
+import { mandatory } from '../utils/GameUtils';
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
@@ -39,8 +40,8 @@ export default class DialogueManager {
    * @returns {Promise} the promise that resolves when the entire dialogue has been played
    */
   public async showDialogue(dialogueId: ItemId): Promise<void> {
-    const dialogue = this.dialogueMap.get(dialogueId);
-    if (!dialogue) return;
+    const dialogue = mandatory(this.dialogueMap.get(dialogueId));
+
     this.dialogueRenderer = new DialogueRenderer(textTypeWriterStyle);
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
     this.speakerRenderer = new DialogueSpeakerRenderer(this.username);
@@ -49,8 +50,15 @@ export default class DialogueManager {
       Layer.Dialogue,
       this.dialogueRenderer.getDialogueContainer()
     );
+
+    GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
+
     await new Promise(resolve => this.playWholeDialogue(resolve));
+
+    GameGlobalAPI.getInstance().showLayer(Layer.Character);
+    this.getDialogueRenderer().destroy();
+    this.getSpeakerRenderer().changeSpeakerTo(null);
   }
 
   private async playWholeDialogue(resolve: () => void) {
@@ -69,11 +77,7 @@ export default class DialogueManager {
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
-    if (!line) {
-      resolve();
-      this.getDialogueRenderer().destroy();
-      this.getSpeakerRenderer().changeSpeakerTo(null);
-    }
+    if (!line) resolve();
   }
 
   private getDialogueGenerator = () => this.dialogueGenerator as DialogueGenerator;

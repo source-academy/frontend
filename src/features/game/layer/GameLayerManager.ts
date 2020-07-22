@@ -69,7 +69,7 @@ class GameLayerManager {
 
     layerToFadeIn.setAlpha(0);
     gameManager.tweens.add(fadeIn([layerToFadeIn], fadeDuration));
-    sleep(fadeDuration);
+    await sleep(fadeDuration);
   }
 
   /**
@@ -84,7 +84,7 @@ class GameLayerManager {
 
     layerToFadeOut.setAlpha(1);
     gameManager.tweens.add(fadeOut([layerToFadeOut], fadeDuration));
-    sleep(fadeDuration);
+    await sleep(fadeDuration);
   }
 
   /**

@@ -61,14 +61,14 @@ class GameModeExplore implements IGameUI {
     GameGlobalAPI.getInstance().enableObjectAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
-      onPointerout: this.explorePointerOut
+      onOut: this.explorePointerOut
     });
 
     // Activate bbox action and make them itneractable
     GameGlobalAPI.getInstance().enableBBoxAction({
       onClick: this.explorePointerUp,
       onHover: this.explorePointerOver,
-      onPointerout: this.explorePointerOut
+      onOut: this.explorePointerOut
     });
 
     // Change default icon

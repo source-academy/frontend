@@ -10,10 +10,8 @@ import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
 
 /**
  * Class that manages speakerbox portion of the dialgoue box
- * Rendering it in the right place and placing the right name
+ * And renders the characters in Speaker Layer
  *
- * This class also signals the character manager to render speaker sprites in front
- * And hide them from the map if they are the ones speaking
  */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
@@ -42,7 +40,6 @@ export default class DialogueSpeakerRenderer {
   private hidePreviousSpeaker(previousSpeakerId?: ItemId) {
     if (previousSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
-      GameGlobalAPI.getInstance().showCharacterOnMap(previousSpeakerId);
     }
   }
 
@@ -68,7 +65,6 @@ export default class DialogueSpeakerRenderer {
     if (speakerId === 'you' || speakerId === 'narrator') {
       return;
     }
-    GameGlobalAPI.getInstance().hideCharacterFromMap(speakerId);
     const speakerSprite = GameGlobalAPI.getInstance().createCharacterSprite(
       speakerId,
       expression,

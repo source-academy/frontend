@@ -5,7 +5,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { ActivatableSprite } from '../objects/GameObjectTypes';
+import { ActivatableSprite, ActivateSpriteCallbacks } from '../objects/GameObjectTypes';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
 import { BBoxProperty } from './GameBoundingBoxTypes';
@@ -81,25 +81,12 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   /**
-   * Allow objects to be interacted with i.e. add listeners to the bboxes.
+   * Allow objects to be interacted with i.e. enable listeners objects.
    *
-   * There are three type of callbacks can be supplied:
-   *  - onClick: (ItemId) => void, to be executed when bboxes is clicked
-   *  - onHover: (ItemId) => void, to be executed when bboxes is hovered over
-   *  - onOut: (ItemId) => void, to be executed when bboxes is out of hover
-   *
-   * The three callbacks are optional; if it is not provided, a null function
-   * will be executed instead.
-   *
-   * The three callbacks will be added on top of the existing action
-   * attached to the callbacks.
-   *
-   * @param callbacks { onClick?: (id?: ItemId) => void,
-   *                    onHover?: (id?: ItemId) => void,
-   *                    onOut?: (id?: ItemId) => void
-   *                  }
+   * @param {ActivateSpriteCallbacks} callbacks callbacks to objects
+   *                enable them to have extra interactions when clicked
    */
-  public enableBBoxAction(callbacks: any): void {
+  public enableBBoxAction(callbacks: ActivateSpriteCallbacks): void {
     this.bboxes.forEach(bbox => bbox.activate(callbacks));
   }
 
@@ -134,11 +121,7 @@ class GameBoundingBoxManager implements StateObserver {
       bboxSprite.setInteractive();
     }
 
-    function activate({
-      onClick = (id?: ItemId) => {},
-      onPointerout = (id?: ItemId) => {},
-      onHover = (id?: ItemId) => {}
-    }) {
+    function activate({ onClick, onHover, onOut }: ActivateSpriteCallbacks) {
       bboxSprite.on('pointerup', async () => {
         onClick(interactionId);
         await GameGlobalAPI.getInstance().processGameActions(actionIds);
@@ -147,7 +130,7 @@ class GameBoundingBoxManager implements StateObserver {
         onHover(interactionId);
       });
       bboxSprite.on('pointerout', () => {
-        onPointerout(interactionId);
+        onOut(interactionId);
       });
     }
 

@@ -7,7 +7,7 @@ import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { displayNotification } from '../../effects/Notification';
 import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
-import { ObjectProperty } from '../../objects/GameObjectTypes';
+import { ActivateSpriteCallbacks, ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -156,7 +156,7 @@ class GameGlobalAPI {
     this.getGameManager().stateManager.setObjProperty(id, newObjProp);
   }
 
-  public enableObjectAction(callbacks: any) {
+  public enableObjectAction(callbacks: ActivateSpriteCallbacks) {
     this.getGameManager().objectManager.enableObjectAction(callbacks);
   }
 
@@ -176,7 +176,7 @@ class GameGlobalAPI {
     this.getGameManager().stateManager.setBBoxProperty(id, newBBoxProp);
   }
 
-  public enableBBoxAction(callbacks: any) {
+  public enableBBoxAction(callbacks: ActivateSpriteCallbacks) {
     this.getGameManager().boundingBoxManager.enableBBoxAction(callbacks);
   }
 
@@ -228,12 +228,20 @@ class GameGlobalAPI {
     this.getGameManager().layerManager.addToLayer(layer, gameObj);
   }
 
-  public fadeInLayer(layer: Layer, fadeDuration?: number) {
-    this.getGameManager().layerManager.fadeInLayer(layer, fadeDuration);
+  public showLayer(layer: Layer) {
+    this.getGameManager().layerManager.showLayer(layer);
   }
 
-  public fadeOutLayer(layer: Layer, fadeDuration?: number) {
-    this.getGameManager().layerManager.fadeOutLayer(layer, fadeDuration);
+  public hideLayer(layer: Layer) {
+    this.getGameManager().layerManager.hideLayer(layer);
+  }
+
+  public async fadeInLayer(layer: Layer, fadeDuration?: number) {
+    await this.getGameManager().layerManager.fadeInLayer(layer, fadeDuration);
+  }
+
+  public async fadeOutLayer(layer: Layer, fadeDuration?: number) {
+    await this.getGameManager().layerManager.fadeOutLayer(layer, fadeDuration);
   }
   /////////////////////
   //  Location Notif //
@@ -395,14 +403,6 @@ class GameGlobalAPI {
   /////////////////////
   //   Characters    //
   /////////////////////
-
-  public hideCharacterFromMap(characterId: ItemId) {
-    this.getGameManager().characterManager.hideCharacterFromMap(characterId);
-  }
-
-  public showCharacterOnMap(characterId: ItemId) {
-    this.getGameManager().characterManager.showCharacterOnMap(characterId);
-  }
 
   public createCharacterSprite(
     characterId: ItemId,

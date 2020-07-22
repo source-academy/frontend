@@ -2,7 +2,6 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import { screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
-import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import GameManager from '../scenes/gameManager/GameManager';
@@ -165,37 +164,6 @@ export default class CharacterManager implements StateObserver {
   private handleDelete(id: ItemId) {
     const char = this.characterSpriteMap.get(id);
     if (char) char.destroy();
-  }
-
-  /**
-   * Show a character by fading in the character into the screen.
-   * Assumes that the character is already added to the scene.
-   *
-   * @param characterId
-   */
-  public showCharacterOnMap(characterId: ItemId) {
-    const characterSprite = this.characterSpriteMap.get(characterId);
-    if (characterSprite) {
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .add.tween(fadeIn([characterSprite]));
-    }
-  }
-
-  /**
-   * Hide a character by fading out the character from the screen.
-   * Assumes that the character is already added to the scene.
-   * Does NOT remove the character from the scene.
-   *
-   * @param characterId
-   */
-  public hideCharacterFromMap(characterId: ItemId) {
-    const characterSprite = this.characterSpriteMap.get(characterId);
-    if (characterSprite) {
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .add.tween(fadeOut([characterSprite]));
-    }
   }
 
   public getCharacterById = (charId: ItemId) => mandatory(this.characterMap.get(charId));

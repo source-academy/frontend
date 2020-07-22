@@ -17,9 +17,9 @@ room
     objects
         + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
             make_object_blink*(carpet)
-        + terminal, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
+        + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
             add_item(objects, room, classroomChair)
-        + computerOnShelf, /objects/cmd-console/emergency.png, 557, 906, 526, 263
+        + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263
             make_object_blink*(carpet, false)
             show_dialogue(addHallway)
         + navigatorgGuy, /objects/cmd-navigator/emergency.png, 504, 568, 117, 277

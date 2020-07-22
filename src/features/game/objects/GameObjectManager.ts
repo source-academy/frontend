@@ -8,7 +8,7 @@ import GlowingImage from '../effects/GlowingObject';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
-import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
+import { ActivatableSprite, ActivateSpriteCallbacks, ObjectProperty } from './GameObjectTypes';
 
 /**
  * Manager that renders objects in a location
@@ -85,25 +85,12 @@ class GameObjectManager implements StateObserver {
   }
 
   /**
-   * Allow objects to be interacted with i.e. add listeners to the objects.
+   * Allow objects to be interacted with i.e. enable listeners objects.
    *
-   * There are three type of callbacks can be supplied:
-   *  - onClick: (ItemId) => void, to be executed when object is clicked
-   *  - onHover: (ItemId) => void, to be executed when object is hovered over
-   *  - onOut: (ItemId) => void, to be executed when object is out of hover
-   *
-   * The three callbacks are optional; if it is not provided, a null function
-   * will be executed instead.
-   *
-   * The three callbacks will be added on top of the existing action
-   * attached to the callbacks.
-   *
-   * @param callbacks { onClick?: (id?: ItemId) => void,
-   *                    onHover?: (id?: ItemId) => void,
-   *                    onOut?: (id?: ItemId) => void
-   *                  }
+   * @param {ActivatableSpriteCallbacks} callbacks callbacks to objects
+   *                enable them to have extra interactions when clicked
    */
-  public enableObjectAction(callbacks: any): void {
+  public enableObjectAction(callbacks: ActivateSpriteCallbacks): void {
     this.objects.forEach(object => object.activate(callbacks));
   }
 
@@ -172,11 +159,7 @@ class GameObjectManager implements StateObserver {
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
     const object = new GlowingImage(gameManager, x, y, assetKey, width, height);
 
-    function activate({
-      onClick = (id?: ItemId) => {},
-      onPointerout = (id?: ItemId) => {},
-      onHover = (id?: ItemId) => {}
-    }) {
+    function activate({ onClick, onHover, onOut }: ActivateSpriteCallbacks) {
       object.getClickArea().on('pointerup', async () => {
         onClick(interactionId);
         await GameGlobalAPI.getInstance().processGameActions(actionIds);
@@ -185,7 +168,7 @@ class GameObjectManager implements StateObserver {
         onHover(interactionId);
       });
       object.getClickArea().on('pointerout', () => {
-        onPointerout(interactionId);
+        onOut(interactionId);
       });
     }
 
