@@ -1,100 +1,34 @@
-import FontAssets from '../../assets/FontAssets';
 import ImageAssets from '../../assets/ImageAssets';
-import SoundAssets from '../../assets/SoundAssets';
-import TextAssets from '../../assets/TextAssets';
-import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
+import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import AwardParser from '../../parser/AwardParser';
-import { FullSaveState } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
-import { mandatory, toS3Path } from '../../utils/GameUtils';
-import { loadImage } from '../../utils/LoaderUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
-import { getRoomPreviewCode } from '../roomPreview/RoomPreviewHelper';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
 /**
- * User entry point into the game.
+ * Main Menu
  *
  * User can navigate to other scenes from here.
  */
 class MainMenu extends Phaser.Scene {
   private layerManager: GameLayerManager;
-  private roomCode: string;
-
-  private loadedGameState?: FullSaveState;
 
   constructor() {
     super('MainMenu');
 
     this.layerManager = new GameLayerManager();
-    this.roomCode = Constants.nullInteractionId;
   }
 
   public preload() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-    this.preloadAssets();
     this.layerManager.initialise(this);
-    this.load.text(TextAssets.awardsMapping.key, TextAssets.awardsMapping.path);
-    addLoadingScreen(this);
   }
 
   public async create() {
-    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
-      console.log('Staff do not have accounts');
-      return;
-    }
     this.renderBackground();
     this.renderOptionButtons();
-
-    this.roomCode = await getRoomPreviewCode();
-    await this.loadGameDataAndSettings();
-    await this.preloadAwards();
-
-    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
-  }
-
-  /**
-   * Load save state and settings; then applying them.
-   */
-  private async loadGameDataAndSettings() {
-    await SourceAcademyGame.getInstance().loadGameChapters();
-    // Load settings
-    await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
-
-    // Apply settings
-    const userSettings = SourceAcademyGame.getInstance().getSaveManager().getSettings();
-    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
-  }
-
-  /**
-   * Fetch the awardsMapping text, set it as global variable,
-   * and load all the necessary assets.
-   */
-  private async preloadAwards() {
-    const awardsMappingTxt = this.cache.text.get(TextAssets.awardsMapping.key);
-    const awardsMapping = AwardParser.parse(awardsMappingTxt);
-    SourceAcademyGame.getInstance().setAwardsMapping(awardsMapping);
-
-    await Promise.all(
-      Array.from(awardsMapping.values()).map(
-        async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath)
-      )
-    );
-  }
-
-  /**
-   * Preload all image assets, font assets, and sound assets into the game.
-   */
-  private preloadAssets() {
-    Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
-    Object.values(FontAssets).forEach(asset =>
-      this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
-    );
-    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
 
   /**
@@ -203,9 +137,7 @@ class MainMenu extends Phaser.Scene {
         text: mainMenuConstants.optionsText.studentRoom,
         callback: () => {
           this.layerManager.clearAllLayers();
-          this.scene.start('RoomPreview', {
-            studentCode: this.roomCode
-          });
+          this.scene.start('RoomPreview');
         }
       },
       {
@@ -224,8 +156,6 @@ class MainMenu extends Phaser.Scene {
       }
     ];
   }
-
-  public getLoadedGameState = () => mandatory(this.loadedGameState);
 }
 
 export default MainMenu;

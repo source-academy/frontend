@@ -19,6 +19,8 @@ import { fetchChapters } from '../storySimulator/StorySimulatorService';
 import { toTxtPath } from './assets/TextAssets';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
+import EntryScene from './scenes/entry/EntryScene';
+import { getRoomPreviewCode } from './scenes/roomPreview/RoomPreviewHelper';
 
 export type AccountInfo = {
   accessToken: string;
@@ -43,6 +45,7 @@ type GlobalGameProps = {
   gameChapters: GameChapter[];
   ssChapterSimFilenames: string[];
   isUsingMock: boolean;
+  roomCode: string;
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
@@ -64,7 +67,8 @@ export default class SourceAcademyGame extends Phaser.Game {
       gameType,
       gameChapters: [],
       ssChapterSimFilenames: [],
-      isUsingMock: false
+      isUsingMock: false,
+      roomCode: ''
     };
   }
 
@@ -82,30 +86,18 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.awardsMapping = awardsMapping;
   }
 
-  public getAwardsMapping = () => mandatory(this.global.awardsMapping);
-  public getAccountInfo = () => mandatory(this.global.accountInfo);
-  public getSoundManager = () => mandatory(this.global.soundManager);
-  public getSaveManager = () => mandatory(this.global.saveManager);
-  public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
-  public isGameType = (gameType: GameType) => this.global.gameType === gameType;
-  public getGameChapters = () => this.global.gameChapters;
-  public getSSChapterSimFilenames = () => this.global.ssChapterSimFilenames;
-  public getIsUsingMock = () => this.global.isUsingMock;
-
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
   }
 
   public async loadGameChapters() {
-    if (this.getIsUsingMock()) {
-      this.global.gameChapters = GameChapterMocks;
-      return GameChapterMocks;
-    } else {
-      const chapters = await fetchChapters();
-      chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
-      this.global.gameChapters = chapters;
-      return chapters;
-    }
+    const chapters = await fetchChapters();
+    chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
+    this.global.gameChapters = chapters;
+  }
+
+  public async loadRoomCode() {
+    this.global.roomCode = await getRoomPreviewCode();
   }
 
   public setStorySimState(state: StorySimState) {
@@ -123,6 +115,18 @@ export default class SourceAcademyGame extends Phaser.Game {
   public setChapterSimStack(checkpointFilenames: string[]) {
     this.global.ssChapterSimFilenames = checkpointFilenames.reverse();
   }
+
+  public getAwardsMapping = () => mandatory(this.global.awardsMapping);
+  public getAccountInfo = () => mandatory(this.global.accountInfo);
+  public getSoundManager = () => mandatory(this.global.soundManager);
+  public getSaveManager = () => mandatory(this.global.saveManager);
+  public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
+  public isGameType = (gameType: GameType) => this.global.gameType === gameType;
+  public getSSChapterSimFilenames = () => this.global.ssChapterSimFilenames;
+  public getIsUsingMock = () => this.global.isUsingMock;
+  public getRoomCode = () => this.global.roomCode;
+  public getGameChapters = () =>
+    this.global.isUsingMock ? GameChapterMocks : this.global.gameChapters;
 }
 
 const config = {
@@ -138,6 +142,7 @@ const config = {
     parent: 'game-display'
   },
   scene: [
+    EntryScene,
     MainMenu,
     Settings,
     ChapterSelect,

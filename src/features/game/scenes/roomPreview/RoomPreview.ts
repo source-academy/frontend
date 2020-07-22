@@ -21,10 +21,6 @@ import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
-type RoomPreviewProps = {
-  studentCode: string;
-};
-
 /**
  * This scene uses the students code as part of its code.
  *
@@ -62,10 +58,10 @@ export default class RoomPreview extends Phaser.Scene {
     this.studentCode = roomDefaultCode;
   }
 
-  public init({ studentCode }: RoomPreviewProps) {
+  public init() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
 
-    this.studentCode = studentCode;
+    this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
 
     this.userStateManager = new GameUserStateManager();
     this.layerManager = new GameLayerManager();
