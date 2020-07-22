@@ -349,8 +349,8 @@ class GameStateManager implements StateSubject {
    */
   public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string) {
     const location = this.getLocationById(locationId);
-    !location[attr] && (location[attr] = []);
-    location[attr].push(attrElem);
+    if (!location[attr]) location[attr] = new Set([]);
+    location[attr].add(attrElem);
     this.updateLocationStateAttr(locationId, attr);
   }
 

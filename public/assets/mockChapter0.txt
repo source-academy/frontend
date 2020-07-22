@@ -11,6 +11,7 @@ room
     objects
         + emergency1, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             make_object_blink*(emergency1)
+            add_item(objects, room, classroomChair)
         + chieftain2, /avatars/chieftain/chieftain.angry.png, 1400, 526, 697, 744
             make_object_blink*(emergency1, false)
             show_dialogue(addHallway)
