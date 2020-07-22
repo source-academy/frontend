@@ -21,7 +21,7 @@ export default class CharacterManager implements StateObserver {
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
 
   constructor() {
-    this.observerId = 'GameObjectManager';
+    this.observerId = 'GameCharacterManager';
     this.characterMap = new Map<ItemId, Character>();
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
   }
