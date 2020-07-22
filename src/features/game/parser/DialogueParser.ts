@@ -42,6 +42,7 @@ export default class DialogueParser {
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };
 
+    // Add fallback title
     if (!dialogue.title) {
       dialogue.title = StringUtils.toCapitalizedWords(dialogueId);
     }
