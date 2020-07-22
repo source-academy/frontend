@@ -42,6 +42,10 @@ export default class DialogueParser {
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };
 
+    if (!dialogue.title) {
+      dialogue.title = StringUtils.toCapitalizedWords(dialogueId);
+    }
+
     Parser.checkpoint.map.setItemInMap(GameItemType.dialogues, dialogueId, dialogue);
   }
 
