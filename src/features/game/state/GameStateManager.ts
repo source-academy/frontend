@@ -57,9 +57,10 @@ class GameStateManager implements StateSubject {
    * Update all subscribers that there is an update at the location ID.
    *
    * @param locationId ID of location that has an update.
+   * @param id id of item related to the update
    */
-  public update(locationId: LocationId) {
-    this.subscribers.forEach(observer => observer.notify(locationId));
+  public update(locationId: LocationId, id?: string) {
+    this.subscribers.forEach(observer => observer.notify(locationId, id));
   }
 
   /**
@@ -114,8 +115,9 @@ class GameStateManager implements StateSubject {
    *
    * @param targetLocId the id of to be upDated location
    * @param attr attribute that has been updated
+   * @param attrId id of the attribute element being added
    */
-  private updateLocationStateAttr(targetLocId: LocationId, attr: GameLocationAttr): void {
+  private updateLocationStateAttr(targetLocId: LocationId, attr: GameLocationAttr, attrId?: string): void {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
 
     this.locationHasUpdate.get(targetLocId)!.set(attr, true);
@@ -127,7 +129,7 @@ class GameStateManager implements StateSubject {
     }
 
     // Notify subscribers
-    this.update(targetLocId);
+    this.update(targetLocId, attrId);
   }
 
   /**
@@ -351,7 +353,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     if (!location[attr]) location[attr] = new Set([]);
     location[attr].add(attrElem);
-    this.updateLocationStateAttr(locationId, attr);
+    this.updateLocationStateAttr(locationId, attr, attrElem);
   }
 
   /**
@@ -366,7 +368,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     if (!location[attr]) return;
     location[attr] = location[attr].filter((oldAttr: string) => oldAttr !== attrElem);
-    this.updateLocationStateAttr(locationId, attr);
+    this.updateLocationStateAttr(locationId, attr, attrElem);
   }
 
   ///////////////////////////////
@@ -445,7 +447,7 @@ class GameStateManager implements StateSubject {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId) => {
       if (location.objects && location.objects.has(id)) {
-        this.updateLocationStateAttr(locationId, GameLocationAttr.objects);
+        this.updateLocationStateAttr(locationId, GameLocationAttr.objects, id);
       }
     });
   }
@@ -476,7 +478,7 @@ class GameStateManager implements StateSubject {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId) => {
       if (location.boundingBoxes && location.boundingBoxes.delete(id)) {
-        this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes);
+        this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes, id);
       }
     });
   }

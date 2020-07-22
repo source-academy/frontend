@@ -38,8 +38,9 @@ export default class CharacterManager implements StateObserver {
    * the update to the state if applicable.
    *
    * @param locationId id of the location being updated
+   * @param id id of item being updated
    */
-  public notify(locationId: LocationId) {
+  public notify(locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
       GameLocationAttr.characters
