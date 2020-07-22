@@ -1,4 +1,5 @@
 import FontAssets from '../../assets/FontAssets';
+import { screenCenter } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
 
@@ -14,6 +15,7 @@ const tweenDuration = 1500;
 const checkpointConstants = {
   chapterText: 'Chapter completed.',
   checkpointText: 'Checkpoint reached.',
+  transitionTextConfig: { x: screenCenter.x, y: screenCenter.y, oriX: 0.5, oriY: 0.5 },
   tweenDuration: tweenDuration,
   entryTween: {
     alpha: 1,

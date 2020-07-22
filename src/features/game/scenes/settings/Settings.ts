@@ -136,10 +136,9 @@ class Settings extends Phaser.Scene {
     const headerText = createBitmapText(
       this,
       header,
-      settingsConstants.optTextXPos,
-      0,
+      settingsConstants.optHeaderTextConfig,
       optionHeaderTextStyle
-    ).setOrigin(0.5, 0.75);
+    );
     optHeaderCont.add([headerDiv, headerText]);
     return optHeaderCont;
   }

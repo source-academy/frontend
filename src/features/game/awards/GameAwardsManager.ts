@@ -223,25 +223,23 @@ class GameAwardsManager implements IGameUI {
         const previewTitle = createBitmapText(
           this.getScene(),
           award.title,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.titleYOffset,
+          awardsConstants.previewTitleTextConfig,
           awardTitleStyle
-        ).setOrigin(0.3, 0.5);
+        );
 
         // Preview asset key
         const previewKey = createBitmapText(
           this.getScene(),
           award.assetKey,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.keyYOffset,
+          awardsConstants.previewKeyTextConfig,
           awardKeyStyle
-        ).setOrigin(0.3, 0.5);
+        );
 
         // Preview description
         const previewDesc = new Phaser.GameObjects.Text(
           this.getScene(),
           awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.descYOffset,
+          awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
           award.description,
           awardDescStyle
         ).setOrigin(0.4, 0.0);

@@ -1,4 +1,4 @@
-import { BitmapFontStyle } from '../commons/CommonTypes';
+import { BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
 
 /**
  * Create bitmap text with the given style.
@@ -13,17 +13,10 @@ import { BitmapFontStyle } from '../commons/CommonTypes';
 export const createBitmapText = (
   scene: Phaser.Scene,
   text: string,
-  x: number,
-  y: number,
+  { x, y, oriX, oriY }: TextConfig,
   style: BitmapFontStyle
 ) => {
-  return new Phaser.GameObjects.BitmapText(
-    scene,
-    x,
-    y,
-    style.key,
-    text,
-    style.size,
-    style.align
-  ).setTintFill(style.fill);
+  return new Phaser.GameObjects.BitmapText(scene, x, y, style.key, text, style.size, style.align)
+    .setTintFill(style.fill)
+    .setOrigin(oriX, oriY);
 };

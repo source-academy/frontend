@@ -1,5 +1,4 @@
 import { GameChapter } from '../../chapter/GameChapterTypes';
-import { screenCenter } from '../../commons/CommonConstants';
 import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
@@ -72,12 +71,9 @@ class CheckpointTransition extends Phaser.Scene {
     const transitionText = createBitmapText(
       this,
       text,
-      screenCenter.x,
-      screenCenter.y,
+      checkpointConstants.transitionTextConfig,
       transitionTextStyle
-    )
-      .setOrigin(0.5, 0.5)
-      .setAlpha(0);
+    ).setAlpha(0);
 
     this.add.existing(transitionText);
 
