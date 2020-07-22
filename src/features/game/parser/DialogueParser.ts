@@ -42,7 +42,7 @@ export default class DialogueParser {
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };
 
-    Parser.checkpoint.map.setItemInMap(GameItemType.talkTopics, dialogueId, dialogue);
+    Parser.checkpoint.map.setItemInMap(GameItemType.dialogues, dialogueId, dialogue);
   }
 
   /**
