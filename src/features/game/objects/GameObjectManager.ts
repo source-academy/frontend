@@ -36,7 +36,7 @@ class GameObjectManager implements StateObserver {
   /**
    * Part of observer pattern. Receives notification from GameStateManager.
    *
-   * On notify, will rerender all the objects on the location to reflect
+   * On notify, will rerender objects on the location to reflect
    * the update to the state if applicable.
    *
    * @param changeType type of change
@@ -76,6 +76,8 @@ class GameObjectManager implements StateObserver {
 
     // Refresh mapping
     this.objects.clear();
+
+    // Add all the objects
     objIdsToRender.map(id => this.handleAdd(id));
   }
 
@@ -214,6 +216,15 @@ class GameObjectManager implements StateObserver {
     }
   }
 
+  /**
+   * Add the object, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * Throws error if the object property is not available
+   * in the mapping.
+   *
+   * @param id id of object
+   */
   private handleAdd(id: ItemId) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
@@ -229,11 +240,25 @@ class GameObjectManager implements StateObserver {
     return object;
   }
 
+  /**
+   * Mutate the object of the given id.
+   *
+   * Internally, will delete and re-add the object with
+   * the updated property.
+   *
+   * @param id id of object
+   */
   private handleMutate(id: ItemId) {
     this.handleDelete(id);
     this.handleAdd(id);
   }
 
+  /**
+   * Delete the object of the given id, if
+   * applicable.
+   *
+   * @param id id of the object
+   */
   private handleDelete(id: ItemId) {
     const object = this.objects.get(id);
     if (object) (object.sprite as GlowingImage).getContainer().destroy();

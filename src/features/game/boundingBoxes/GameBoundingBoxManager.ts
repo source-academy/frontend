@@ -7,6 +7,7 @@ import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ActivatableSprite } from '../objects/GameObjectTypes';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
+import { mandatory } from '../utils/GameUtils';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**
@@ -42,32 +43,15 @@ class GameBoundingBoxManager implements StateObserver {
     );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
-      this.renderBBoxLayerContainer(locationId);
+      // If the update is on the current location, we rerender to reflect the update
+      if (id) {
+        // If Id is provided, we only need to address the specific bbox
+        this.handleBBoxChange(changeType, id);
+      } else {
+        // Else, rerender the whole layer
+        this.renderBBoxLayerContainer(locationId);
+      }
     }
-  }
-
-  /**
-   * Create a container filled with the bounding boxes related to the itemIDs.
-   *
-   * @param bboxIds bbox IDs to be created
-   */
-  private createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
-    const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    this.bboxes.clear();
-    bboxIds
-      .map(id => bboxPropMap.get(id))
-      .filter(bboxProp => bboxProp !== undefined)
-      .map(bboxProp => {
-        const bbox = this.createBBox(gameManager, bboxProp!);
-        bboxContainer.add(bbox.sprite as Phaser.GameObjects.Rectangle);
-        this.bboxes.set(bboxProp!.interactionId, bbox);
-        return bbox;
-      });
-
-    return bboxContainer;
   }
 
   /**
@@ -82,8 +66,12 @@ class GameBoundingBoxManager implements StateObserver {
       GameLocationAttr.boundingBoxes,
       locationId
     );
-    const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
+
+    // Refresh mapping
+    this.bboxes.clear();
+
+    // Add all the objects
+    bboxIdsToRender.map(id => this.handleAdd(id));
   }
 
   /**
@@ -168,6 +156,71 @@ class GameBoundingBoxManager implements StateObserver {
       activate: actionIds ? activate : Constants.nullFunction,
       deactivate
     };
+  }
+
+  /**
+   * Handle change of a specific bbox ID.
+   *
+   * @param changeType type of change
+   * @param id id of affected bbox
+   */
+  private handleBBoxChange(changeType: StateChangeType, id: ItemId) {
+    switch (changeType) {
+      case StateChangeType.Add:
+        return this.handleAdd(id);
+      case StateChangeType.Mutate:
+        return this.handleMutate(id);
+      case StateChangeType.Delete:
+        return this.handleDelete(id);
+    }
+  }
+
+  /**
+   * Add the bbox, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * Throws error if the bbox property is not available
+   * in the mapping.
+   *
+   * @param id id of object
+   */
+  private handleAdd(id: ItemId) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
+
+    const bboxProp = mandatory(bboxPropMap.get(id));
+    const bbox = this.createBBox(gameManager, bboxProp);
+    GameGlobalAPI.getInstance().addContainerToLayer(
+      Layer.BBox,
+      bbox.sprite as Phaser.GameObjects.Rectangle
+    );
+    this.bboxes.set(id, bbox);
+
+    return bbox;
+  }
+
+  /**
+   * Mutate the bbox of the given id.
+   *
+   * Internally, will delete and re-add the bbox with
+   * the updated property.
+   *
+   * @param id id of object
+   */
+  private handleMutate(id: ItemId) {
+    this.handleDelete(id);
+    this.handleAdd(id);
+  }
+
+  /**
+   * Delete the bbox of the given id, if
+   * applicable.
+   *
+   * @param id id of the bbox
+   */
+  private handleDelete(id: ItemId) {
+    const bbox = this.bboxes.get(id);
+    if (bbox) (bbox.sprite as Phaser.GameObjects.Rectangle).destroy();
   }
 }
 
