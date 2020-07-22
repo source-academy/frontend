@@ -171,7 +171,7 @@ class AssessmentWorkspace extends React.Component<
 
   // TODO: Implemenet THis for Keystroke Logging!
   public uploadLogs = () => {
-    if (this.state.logs !== []) {
+    if (this.state.logs && this.state.logs.length > 0) {
       console.log(this.state.logs);
       this.setState({ logs: [] });
     }
