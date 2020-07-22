@@ -4,29 +4,23 @@ import { screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
-import GameManager from '../scenes/gameManager/GameManager';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
-import { mandatory } from '../utils/GameUtils';
 import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
-import { Character } from './GameCharacterTypes';
 
 /**
  * Manager for rendering characters in the location.
  */
 export default class CharacterManager implements StateObserver {
   public observerId: string;
-  private characterMap: Map<ItemId, Character>;
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
 
   constructor() {
     this.observerId = 'GameCharacterManager';
-    this.characterMap = new Map<ItemId, Character>();
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
   }
 
-  public initialise(gameManager: GameManager) {
-    this.characterMap = gameManager.getCurrentCheckpoint().map.getCharacters();
+  public initialise() {
     GameGlobalAPI.getInstance().subscribeState(this);
   }
 
@@ -93,7 +87,7 @@ export default class CharacterManager implements StateObserver {
     overrideExpression?: string,
     overridePosition?: GamePosition
   ) {
-    const character = this.getCharacterById(characterId);
+    const character = GameGlobalAPI.getInstance().getCharacterById(characterId);
     const { defaultPosition, defaultExpression, expressions } = character;
     const characterXPosition = CharConstants.charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
@@ -165,6 +159,4 @@ export default class CharacterManager implements StateObserver {
     const char = this.characterSpriteMap.get(id);
     if (char) char.destroy();
   }
-
-  public getCharacterById = (charId: ItemId) => mandatory(this.characterMap.get(charId));
 }

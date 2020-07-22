@@ -54,7 +54,7 @@ class GameGlobalAPI {
   }
 
   public getLocationAtId(locationId: LocationId): GameLocation {
-    return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
+    return this.getGameManager().getStateManager().getGameMap().getLocationAtId(locationId);
   }
 
   /////////////////////
@@ -62,15 +62,15 @@ class GameGlobalAPI {
   /////////////////////
 
   public getModesByLocId(locationId: LocationId): GameMode[] {
-    return this.getGameManager().stateManager.getLocationMode(locationId);
+    return this.getGameManager().getStateManager().getLocationMode(locationId);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
-    this.getGameManager().stateManager.addLocationMode(locationId, mode);
+    this.getGameManager().getStateManager().addLocationMode(locationId, mode);
   }
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
-    this.getGameManager().stateManager.removeLocationMode(locationId, mode);
+    this.getGameManager().getStateManager().removeLocationMode(locationId, mode);
   }
 
   /////////////////////
@@ -78,11 +78,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public hasLocationUpdateAttr(locationId: LocationId, attr?: GameItemType): boolean | undefined {
-    return this.getGameManager().stateManager.hasLocationUpdateAttr(locationId, attr);
+    return this.getGameManager().getStateManager().hasLocationUpdateAttr(locationId, attr);
   }
 
   public hasLocationUpdateMode(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    return this.getGameManager().stateManager.hasLocationUpdateMode(locationId, mode);
+    return this.getGameManager().getStateManager().hasLocationUpdateMode(locationId, mode);
   }
 
   public async changeLocationTo(locationName: string) {
@@ -94,43 +94,47 @@ class GameGlobalAPI {
   /////////////////////
 
   public hasTriggeredInteraction(id: string): boolean | undefined {
-    return this.getGameManager().stateManager.hasTriggeredInteraction(id);
+    return this.getGameManager().getStateManager().hasTriggeredInteraction(id);
   }
 
   public triggerAction(actionId: ItemId): void {
-    this.getGameManager().stateManager.triggerAction(actionId);
+    this.getGameManager().getStateManager().triggerAction(actionId);
   }
 
   public triggerInteraction(id: string): void {
-    this.getGameManager().stateManager.triggerInteraction(id);
+    this.getGameManager().getStateManager().triggerInteraction(id);
   }
 
   /////////////////////
   //    Game Attr    //
   /////////////////////
 
+  public getGameMap() {
+    return this.getGameManager().getStateManager().getGameMap();
+  }
+
   public consumedLocationUpdate(locationId: LocationId, attr: GameItemType) {
-    return this.getGameManager().stateManager.consumedLocationUpdate(locationId, attr);
+    return this.getGameManager().getStateManager().consumedLocationUpdate(locationId, attr);
   }
 
   public getLocationAttr(attr: GameItemType, locationId: LocationId): ItemId[] {
-    return this.getGameManager().stateManager.getLocationAttr(attr, locationId);
+    return this.getGameManager().getStateManager().getLocationAttr(attr, locationId);
   }
 
   public addLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    this.getGameManager().stateManager.addLocationAttr(attr, locationId, attrElem);
+    this.getGameManager().getStateManager().addLocationAttr(attr, locationId, attrElem);
   }
 
   public removeLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    return this.getGameManager().stateManager.removeLocationAttr(attr, locationId, attrElem);
+    return this.getGameManager().getStateManager().removeLocationAttr(attr, locationId, attrElem);
   }
 
   public subscribeState(observer: StateObserver) {
-    this.getGameManager().stateManager.subscribe(observer);
+    this.getGameManager().getStateManager().subscribe(observer);
   }
 
   public unsubscribeState(observer: StateObserver) {
-    this.getGameManager().stateManager.unsubscribe(observer);
+    this.getGameManager().getStateManager().unsubscribe(observer);
   }
 
   /////////////////////
@@ -146,11 +150,11 @@ class GameGlobalAPI {
   }
 
   public getObjPropertyMap() {
-    return this.getGameManager().stateManager.getObjPropertyMap();
+    return this.getGameManager().getStateManager().getObjPropertyMap();
   }
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
-    this.getGameManager().stateManager.setObjProperty(id, newObjProp);
+    this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
   }
 
   public enableObjectAction(callbacks: ActivateSpriteCallbacks) {
@@ -166,11 +170,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public getBBoxPropertyMap() {
-    return this.getGameManager().stateManager.getBBoxPropertyMap();
+    return this.getGameManager().getStateManager().getBBoxPropertyMap();
   }
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
-    this.getGameManager().stateManager.setBBoxProperty(id, newBBoxProp);
+    this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
   }
 
   public enableBBoxAction(callbacks: ActivateSpriteCallbacks) {
@@ -186,19 +190,19 @@ class GameGlobalAPI {
   /////////////////////
 
   public isAllComplete(): boolean {
-    return this.getGameManager().stateManager.isAllComplete();
+    return this.getGameManager().getStateManager().isAllComplete();
   }
 
   public isObjectiveComplete(key: string): boolean {
-    return this.getGameManager().stateManager.isObjectiveComplete(key);
+    return this.getGameManager().getStateManager().isObjectiveComplete(key);
   }
 
   public areObjectivesComplete(keys: string[]): boolean {
-    return this.getGameManager().stateManager.areObjectivesComplete(keys);
+    return this.getGameManager().getStateManager().areObjectivesComplete(keys);
   }
 
   public completeObjective(key: string): void {
-    this.getGameManager().stateManager.completeObjective(key);
+    this.getGameManager().getStateManager().completeObjective(key);
   }
 
   /////////////////////
@@ -277,8 +281,8 @@ class GameGlobalAPI {
     await this.getGameManager().dialogueManager.showDialogue(dialogueId);
   }
 
-  public getDialogue(dialogueId: ItemId) {
-    return this.getGameManager().getCurrentCheckpoint().map.getDialogueMap().get(dialogueId);
+  public getDialogueById(dialogueId: ItemId) {
+    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
   }
 
   /////////////////////
@@ -414,7 +418,7 @@ class GameGlobalAPI {
   }
 
   public getCharacterById(characterId: ItemId) {
-    return this.getGameManager().characterManager.getCharacterById(characterId);
+    return mandatory(this.getGameMap().getCharacterMap().get(characterId));
   }
 }
 

@@ -113,7 +113,7 @@ class GameMap {
     return this.dialogues;
   }
 
-  public getCharacters(): Map<ItemId, Character> {
+  public getCharacterMap(): Map<ItemId, Character> {
     return this.characters;
   }
 

@@ -94,7 +94,7 @@ class GameModeTalk implements IGameUI {
    */
   private getTalkTopicButtons(dialogueIds: ItemId[]) {
     return dialogueIds.map(dialogueId => {
-      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId));
+      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogueById(dialogueId));
       return {
         text: dialogue.title,
         callback: async () => {

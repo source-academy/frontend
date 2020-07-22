@@ -18,7 +18,7 @@ export function gameStateToJson(
   checkpointNum: number
 ): FullSaveState {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
-  const gameStateManager = gameManager.stateManager;
+  const gameStateManager = gameManager.getStateManager();
   const userStateManager = gameManager.userStateManager;
   const phaseManager = gameManager.phaseManager;
 

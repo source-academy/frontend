@@ -18,7 +18,7 @@ export default class GameActionManager {
   }
 
   public initialise(gameManager: GameManager) {
-    this.actionMap = gameManager.getCurrentCheckpoint().map.getActions();
+    this.actionMap = gameManager.getStateManager().getGameMap().getActions();
   }
 
   /**

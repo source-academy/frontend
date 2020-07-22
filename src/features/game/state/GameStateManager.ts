@@ -1,4 +1,5 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
+import { GameCheckpoint } from '../chapter/GameChapterTypes';
 import { ItemId } from '../commons/CommonTypes';
 import GameMap from '../location/GameMap';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
@@ -7,7 +8,6 @@ import GameObjective from '../objective/GameObjective';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { convertMapToArray } from '../save/GameSaveHelper';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { StateChangeType, StateObserver, StateSubject } from './GameStateTypes';
 
@@ -33,13 +33,47 @@ class GameStateManager implements StateSubject {
   private triggeredInteractions: Map<ItemId, boolean>;
   private triggeredActions: ItemId[];
 
-  constructor() {
+  constructor(gameCheckpoint: GameCheckpoint) {
     this.subscribers = new Array<StateObserver>();
-    this.gameMap = new GameMap();
-    this.checkpointObjective = new GameObjective();
+
+    this.gameMap = gameCheckpoint.map;
+    this.checkpointObjective = gameCheckpoint.objectives;
+
     this.locationHasUpdate = new Map<string, Map<GameItemType, boolean>>();
     this.triggeredInteractions = new Map<ItemId, boolean>();
     this.triggeredActions = [];
+
+    this.loadStatesFromSaveManager();
+    this.registerAllItems();
+  }
+
+  /**
+   * Loads some game states from the save manager
+   */
+  private loadStatesFromSaveManager() {
+    this.triggeredActions = SourceAcademyGame.getInstance().getSaveManager().getTriggeredActions();
+
+    SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getTriggeredInteractions()
+      .forEach(interactionId => this.triggerInteraction(interactionId));
+
+    SourceAcademyGame.getInstance()
+      .getSaveManager()
+      .getCompletedObjectives()
+      .forEach(objective => this.checkpointObjective.setObjective(objective, true));
+  }
+
+  /**
+   * Register every attribute of each location under the chapter
+   */
+  private registerAllItems() {
+    this.gameMap.getLocations().forEach((_location, locationId) => {
+      this.locationHasUpdate.set(locationId, new Map<GameItemType, boolean>());
+      Object.values(GameItemType).forEach(value =>
+        this.locationHasUpdate.get(locationId)!.set(value, false)
+      );
+    });
   }
 
   ///////////////////////////////
@@ -134,42 +168,6 @@ class GameStateManager implements StateSubject {
 
     // Notify subscribers
     this.update(changeType, targetLocId, attrId);
-  }
-
-  ///////////////////////////////
-  //        Preprocess         //
-  ///////////////////////////////
-
-  public initialise(gameManager: GameManager): void {
-    this.gameMap = gameManager.getCurrentCheckpoint().map;
-    this.checkpointObjective = gameManager.getCurrentCheckpoint().objectives;
-
-    this.loadStatesFromSaveManager();
-
-    // Register every attribute of each location under the chapter
-    this.gameMap.getLocations().forEach((_location, locationId) => {
-      this.locationHasUpdate.set(locationId, new Map<GameItemType, boolean>());
-      Object.values(GameItemType).forEach(value =>
-        this.locationHasUpdate.get(locationId)!.set(value, false)
-      );
-    });
-  }
-
-  /**
-   * Loads some game states from the save manager
-   */
-  public loadStatesFromSaveManager() {
-    this.triggeredActions = SourceAcademyGame.getInstance().getSaveManager().getTriggeredActions();
-
-    SourceAcademyGame.getInstance()
-      .getSaveManager()
-      .getTriggeredInteractions()
-      .forEach(interactionId => this.triggerInteraction(interactionId));
-
-    SourceAcademyGame.getInstance()
-      .getSaveManager()
-      .getCompletedObjectives()
-      .forEach(objective => this.checkpointObjective.setObjective(objective, true));
   }
 
   ///////////////////////////////
@@ -510,6 +508,8 @@ class GameStateManager implements StateSubject {
   public getTriggeredActions(): string[] {
     return this.triggeredActions;
   }
+
+  public getGameMap = () => this.gameMap;
 }
 
 export default GameStateManager;
