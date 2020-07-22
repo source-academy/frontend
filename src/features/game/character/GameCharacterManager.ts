@@ -6,7 +6,7 @@ import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import GameManager from '../scenes/gameManager/GameManager';
-import { StateObserver } from '../state/GameStateTypes';
+import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
 import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
@@ -37,10 +37,11 @@ export default class CharacterManager implements StateObserver {
    * On notify, will rerender all the objects on the location to reflect
    * the update to the state if applicable.
    *
+   * @param changeType type of change
    * @param locationId id of the location being updated
    * @param id id of item being updated
    */
-  public notify(locationId: LocationId, id?: string) {
+  public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
       GameLocationAttr.characters

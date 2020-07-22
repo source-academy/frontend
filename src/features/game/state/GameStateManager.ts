@@ -10,7 +10,7 @@ import { GameSaveState } from '../save/GameSaveTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
 import { mandatory } from '../utils/GameUtils';
-import { StateObserver, StateSubject } from './GameStateTypes';
+import { StateChangeType, StateObserver, StateSubject } from './GameStateTypes';
 
 /**
  * Manages all states related to story, chapter, or checkpoint;
@@ -56,11 +56,12 @@ class GameStateManager implements StateSubject {
   /**
    * Update all subscribers that there is an update at the location ID.
    *
+   * @param changeType type of change
    * @param locationId ID of location that has an update.
    * @param id id of item related to the update
    */
-  public update(locationId: LocationId, id?: string) {
-    this.subscribers.forEach(observer => observer.notify(locationId, id));
+  public update(changeType: StateChangeType, locationId: LocationId, id?: string) {
+    this.subscribers.forEach(observer => observer.notify(changeType, locationId, id));
   }
 
   /**
@@ -92,17 +93,21 @@ class GameStateManager implements StateSubject {
    * @param targetLocId the id of to be upDated location
    * @param mode mode that has been updated
    */
-  private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
+  private updateLocationStateMode(
+    changeType: StateChangeType,
+    targetLocId: LocationId,
+    mode: GameMode
+  ): void {
     switch (mode) {
       case GameMode.Explore:
-        this.updateLocationStateAttr(targetLocId, GameLocationAttr.boundingBoxes);
-        this.updateLocationStateAttr(targetLocId, GameLocationAttr.objects);
+        this.updateLocationStateAttr(changeType, targetLocId, GameLocationAttr.boundingBoxes);
+        this.updateLocationStateAttr(changeType, targetLocId, GameLocationAttr.objects);
         return;
       case GameMode.Move:
-        this.updateLocationStateAttr(targetLocId, GameLocationAttr.navigation);
+        this.updateLocationStateAttr(changeType, targetLocId, GameLocationAttr.navigation);
         return;
       case GameMode.Talk:
-        this.updateLocationStateAttr(targetLocId, GameLocationAttr.talkTopics);
+        this.updateLocationStateAttr(changeType, targetLocId, GameLocationAttr.talkTopics);
         return;
       default:
         return;
@@ -113,11 +118,17 @@ class GameStateManager implements StateSubject {
    * Update a location ID's state based on its attribute.
    * Also notifies subjects.
    *
+   * @param changeType type of change
    * @param targetLocId the id of to be upDated location
    * @param attr attribute that has been updated
    * @param attrId id of the attribute element being added
    */
-  private updateLocationStateAttr(targetLocId: LocationId, attr: GameLocationAttr, attrId?: string): void {
+  private updateLocationStateAttr(
+    changeType: StateChangeType,
+    targetLocId: LocationId,
+    attr: GameLocationAttr,
+    attrId?: string
+  ): void {
     const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
 
     this.locationHasUpdate.get(targetLocId)!.set(attr, true);
@@ -129,7 +140,7 @@ class GameStateManager implements StateSubject {
     }
 
     // Notify subscribers
-    this.update(targetLocId, attrId);
+    this.update(changeType, targetLocId, attrId);
   }
 
   /**
@@ -308,7 +319,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     location.modes!.add(mode);
     this.locationStates.get(locationId)!.modes!.add(mode);
-    this.updateLocationStateMode(locationId, GameMode.Menu);
+    this.updateLocationStateMode(StateChangeType.Add, locationId, GameMode.Menu);
   }
 
   /**
@@ -323,7 +334,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     if (!location.modes) return;
     location.modes.delete(mode);
-    this.updateLocationStateMode(locationId, GameMode.Menu);
+    this.updateLocationStateMode(StateChangeType.Delete, locationId, GameMode.Menu);
   }
 
   ///////////////////////////////
@@ -353,7 +364,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     if (!location[attr]) location[attr] = new Set([]);
     location[attr].add(attrElem);
-    this.updateLocationStateAttr(locationId, attr, attrElem);
+    this.updateLocationStateAttr(StateChangeType.Add, locationId, attr, attrElem);
   }
 
   /**
@@ -368,7 +379,7 @@ class GameStateManager implements StateSubject {
     const location = this.getLocationById(locationId);
     if (!location[attr]) return;
     location[attr] = location[attr].filter((oldAttr: string) => oldAttr !== attrElem);
-    this.updateLocationStateAttr(locationId, attr, attrElem);
+    this.updateLocationStateAttr(StateChangeType.Delete, locationId, attr, attrElem);
   }
 
   ///////////////////////////////
@@ -447,7 +458,12 @@ class GameStateManager implements StateSubject {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId) => {
       if (location.objects && location.objects.has(id)) {
-        this.updateLocationStateAttr(locationId, GameLocationAttr.objects, id);
+        this.updateLocationStateAttr(
+          StateChangeType.Mutate,
+          locationId,
+          GameLocationAttr.objects,
+          id
+        );
       }
     });
   }
@@ -478,7 +494,12 @@ class GameStateManager implements StateSubject {
     // Update every location that uses it
     this.locationStates.forEach((location, locationId) => {
       if (location.boundingBoxes && location.boundingBoxes.delete(id)) {
-        this.updateLocationStateAttr(locationId, GameLocationAttr.boundingBoxes, id);
+        this.updateLocationStateAttr(
+          StateChangeType.Mutate,
+          locationId,
+          GameLocationAttr.boundingBoxes,
+          id
+        );
       }
     });
   }

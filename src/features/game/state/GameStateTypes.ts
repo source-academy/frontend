@@ -22,11 +22,20 @@ export type UserState = {
 };
 
 /**
+ * Represent the changes done to the state.
+ */
+export enum StateChangeType {
+  Add,
+  Mutate,
+  Delete
+}
+
+/**
  * Observer pattern, the observer side.
  */
 export type StateObserver = {
   observerId: string;
-  notify: (locationId: LocationId, id?: string) => void;
+  notify: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
 };
 
 /**
@@ -34,7 +43,7 @@ export type StateObserver = {
  */
 export type StateSubject = {
   subscribers: Array<StateObserver>;
-  update: (locationId: LocationId, id?: string) => void;
+  update: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
   subscribe: (observer: StateObserver) => void;
   unsubscribe: (observer: StateObserver) => void;
 };

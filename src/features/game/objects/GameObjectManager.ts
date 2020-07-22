@@ -6,7 +6,8 @@ import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { StateObserver } from '../state/GameStateTypes';
+import { StateChangeType, StateObserver } from '../state/GameStateTypes';
+import { mandatory } from '../utils/GameUtils';
 import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
 
 /**
@@ -38,10 +39,11 @@ class GameObjectManager implements StateObserver {
    * On notify, will rerender all the objects on the location to reflect
    * the update to the state if applicable.
    *
+   * @param changeType type of change
    * @param locationId id of the location being updated
    * @param id id of item being updated
    */
-  public notify(locationId: LocationId, id?: string) {
+  public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
       GameLocationAttr.objects
@@ -49,32 +51,14 @@ class GameObjectManager implements StateObserver {
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // If the update is on the current location, we rerender to reflect the update
-      this.renderObjectsLayerContainer(locationId);
+      if (id) {
+        // If Id is provided, we only need to address the specific object
+        this.handleObjectChange(changeType, id);
+      } else {
+        // Else, rerender the whole layer
+        this.renderObjectsLayerContainer(locationId);
+      }
     }
-  }
-
-  /**
-   * Create a container filled with the objects related to the itemIDs.
-   *
-   * @param objectIds object IDs to be created
-   */
-  private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
-    const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    this.objects.clear();
-    objectIds
-      .map(id => objectPropMap.get(id))
-      .filter(objectProp => objectProp !== undefined)
-      .forEach(objectProp => {
-        const object = this.createObject(gameManager, objectProp!);
-        objectContainer.add((object.sprite as GlowingImage).getContainer());
-        this.objects.set(objectProp!.interactionId, object);
-        return object;
-      });
-
-    return objectContainer;
   }
 
   /**
@@ -89,8 +73,10 @@ class GameObjectManager implements StateObserver {
       GameLocationAttr.objects,
       locationId
     );
-    const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
+
+    // Refresh mapping
+    this.objects.clear();
+    objIdsToRender.map(id => this.handleAdd(id));
   }
 
   /**
@@ -209,6 +195,48 @@ class GameObjectManager implements StateObserver {
       activate: actionIds ? activate : Constants.nullFunction,
       deactivate
     };
+  }
+
+  /**
+   * Handle change of a specific object ID.
+   *
+   * @param changeType type of change
+   * @param id id of affected object
+   */
+  private handleObjectChange(changeType: StateChangeType, id: ItemId) {
+    switch (changeType) {
+      case StateChangeType.Add:
+        return this.handleAdd(id);
+      case StateChangeType.Mutate:
+        return this.handleMutate(id);
+      case StateChangeType.Delete:
+        return this.handleDelete(id);
+    }
+  }
+
+  private handleAdd(id: ItemId) {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
+
+    const objectProp = mandatory(objectPropMap.get(id));
+    const object = this.createObject(gameManager, objectProp);
+    GameGlobalAPI.getInstance().addContainerToLayer(
+      Layer.Objects,
+      (object.sprite as GlowingImage).getContainer()
+    );
+    this.objects.set(id, object);
+
+    return object;
+  }
+
+  private handleMutate(id: ItemId) {
+    this.handleDelete(id);
+    this.handleAdd(id);
+  }
+
+  private handleDelete(id: ItemId) {
+    const object = this.objects.get(id);
+    if (object) (object.sprite as GlowingImage).getContainer().destroy();
   }
 }
 

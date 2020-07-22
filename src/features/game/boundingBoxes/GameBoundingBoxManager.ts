@@ -6,7 +6,7 @@ import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
 import { ActivatableSprite } from '../objects/GameObjectTypes';
-import { StateObserver } from '../state/GameStateTypes';
+import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**
@@ -31,10 +31,11 @@ class GameBoundingBoxManager implements StateObserver {
    * On notify, will rerender all the bounding boxes on the location to reflect
    * the update to the state if applicable.
    *
+   * @param changeType type of change
    * @param locationId id of the location being updated
    * @param id id of item being updated
    */
-  public notify(locationId: LocationId, id?: string) {
+  public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
       GameLocationAttr.boundingBoxes
