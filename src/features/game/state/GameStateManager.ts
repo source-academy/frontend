@@ -157,6 +157,16 @@ class GameStateManager {
   ///////////////////////////////
 
   /**
+   * Get modes available to a location based on the location ID.
+   *
+   * @param locationId location ID
+   * @returns {GameMode[]} game modes
+   */
+  public getLocationModes(locationId: LocationId): GameMode[] {
+    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
+  }
+
+  /**
    * Add a mode to a location.
    *
    * @param locationId location ID
@@ -174,16 +184,6 @@ class GameStateManager {
    */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.delete(mode);
-  }
-
-  /**
-   * Get modes available to a location based on the location ID.
-   *
-   * @param locationId location ID
-   * @returns {GameMode[]} game modes
-   */
-  public getLocationModes(locationId: LocationId): GameMode[] {
-    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
   }
 
   ///////////////////////////////
