@@ -259,7 +259,7 @@ class GameStateManager {
 
   /**
    * Replace a character of the given ID with the new character
-   * property. Commonly used to update a specific bbox property.
+   * property. Commonly used to update a specific character property.
    *
    * @param id id of object to change
    * @param newCharacter new object property to replace the old one

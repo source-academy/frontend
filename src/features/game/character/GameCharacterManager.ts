@@ -35,7 +35,7 @@ export default class CharacterManager implements StateObserver {
     this.characterSpriteMap.clear();
 
     // Add all the characters
-    idsToRender.forEach(id => this.handleAdd(id));
+    idsToRender.map(id => this.handleAdd(id));
   }
 
   /**

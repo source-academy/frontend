@@ -43,7 +43,7 @@ class GameObjectManager implements StateObserver {
     this.objects.clear();
 
     // Add all the objects
-    objIdsToRender.forEach(id => this.handleAdd(id));
+    objIdsToRender.map(id => this.handleAdd(id));
   }
 
   /**

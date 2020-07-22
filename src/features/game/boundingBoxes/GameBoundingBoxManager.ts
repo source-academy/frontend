@@ -36,7 +36,7 @@ class GameBoundingBoxManager implements StateObserver {
     this.bboxes.clear();
 
     // Add all the bbox
-    bboxIdsToRender.forEach(id => this.handleAdd(id));
+    bboxIdsToRender.map(id => this.handleAdd(id));
   }
 
   /**
