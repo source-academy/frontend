@@ -45,6 +45,7 @@ class GameAwardsManager implements IGameUI {
 
   public initialise(scene: IBaseScene) {
     this.scene = scene;
+    this.scene.phaseManager.addPhaseToMap(GamePhaseType.AwardMenu, this);
 
     // Set all initial pages number to zero
     Object.keys(AwardPage).forEach((page, index) => {

@@ -32,6 +32,7 @@ class GameEscapeManager implements IGameUI {
    */
   public initialise(scene: IBaseScene) {
     this.scene = scene;
+    this.scene.phaseManager.addPhaseToMap(GamePhaseType.EscapeMenu, this);
   }
 
   /**
