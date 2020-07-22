@@ -42,6 +42,7 @@ type GlobalGameProps = {
   gameType: GameType;
   gameChapters: GameChapter[];
   ssChapterSimFilenames: string[];
+  isUsingMock: boolean;
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
@@ -62,7 +63,8 @@ export default class SourceAcademyGame extends Phaser.Game {
       saveManager: new GameSaveManager(),
       gameType,
       gameChapters: [],
-      ssChapterSimFilenames: []
+      ssChapterSimFilenames: [],
+      isUsingMock: false
     };
   }
 
@@ -88,21 +90,22 @@ export default class SourceAcademyGame extends Phaser.Game {
   public isGameType = (gameType: GameType) => this.global.gameType === gameType;
   public getGameChapters = () => this.global.gameChapters;
   public getSSChapterSimFilenames = () => this.global.ssChapterSimFilenames;
+  public getIsUsingMock = () => this.global.isUsingMock;
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
   }
 
   public async loadGameChapters() {
-    const chapters = await fetchChapters();
-    chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
-    this.global.gameChapters = chapters;
-    return chapters;
-  }
-
-  public async loadMockChapters() {
-    this.global.gameChapters = GameChapterMocks;
-    return GameChapterMocks;
+    if (this.getIsUsingMock()) {
+      this.global.gameChapters = GameChapterMocks;
+      return GameChapterMocks;
+    } else {
+      const chapters = await fetchChapters();
+      chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
+      this.global.gameChapters = chapters;
+      return chapters;
+    }
   }
 
   public setStorySimState(state: StorySimState) {
@@ -111,6 +114,10 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public setCurrentSceneRef(scene: Phaser.Scene) {
     this.global.currentSceneRef = scene;
+  }
+
+  public toggleUsingMock() {
+    this.global.isUsingMock = !this.global.isUsingMock;
   }
 
   public setChapterSimStack(checkpointFilenames: string[]) {
