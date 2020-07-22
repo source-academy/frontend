@@ -1,7 +1,14 @@
 import GameInputManager from '../input/GameInputManager';
 import GameLayerManager from '../layer/GameLayerManager';
-import GameSoundManager from '../sound/GameSoundManager';
 
+/**
+ * Encapsulate style of bitmap text.
+ *
+ * @prop {string} key - key to the bitmap text
+ * @prop {number} size - font size
+ * @prop {number} fill = text color, in hex
+ * @prop {number} align - text alignment, from Phaser.GameObjects.BitmapText.ALIGN_*
+ */
 export type BitmapFontStyle = {
   key: string;
   size: number;
@@ -9,36 +16,70 @@ export type BitmapFontStyle = {
   align: number;
 };
 
-export type GameSprite = {
-  assetKey: string;
-  assetXPos: number;
-  assetYPos: number;
-};
-
+/**
+ * @typedef {string} ItemId - id associated with an item.
+ * Item can be any of the following:
+ * (Dialogue | ObjectProperty | BboxProperty | Character | Action | CollectibleProperty)
+ */
 export type ItemId = string;
+
+/** @typedef {string} AssetKey - key associated with an asset */
 export type AssetKey = string;
+
+/** @typedef {string} AssetPath - path associated with an asset */
 export type AssetPath = string;
 
+/**
+ * Encapsulate tracked interaction.
+ *
+ * @prop {boolean} isInteractive whether an object is interactive
+ * @prop {string} interactionId id of interaction. Must be unique across all interactions.
+ */
 export type TrackInteraction = {
   isInteractive: boolean;
   interactionId: string;
 };
 
+/**
+ * Interface for classes that represents a UI.
+ * The UI must be able to be activated and deactivated.
+ *
+ * @interface
+ */
 export interface IGameUI {
   activateUI: () => Promise<void> | void;
   deactivateUI: () => Promise<void> | void;
 }
 
+/**
+ * Enum for common game positions.
+ * @readonly
+ * @enum {string}
+ */
 export enum GamePosition {
   Left = 'Left',
   Middle = 'Middle',
   Right = 'Right'
 }
 
+/**
+ * Encapsulate text configuration.
+ *
+ * @prop {number} x x coordinate of the text
+ * @prop {number} y y coordinate of the text
+ * @prop {number} oriX originX of the text
+ * @prop {number} oriY originY of the text
+ */
 export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
 
+/**
+ * Interface for basic scene, which incorporates input, sound, and layer manager.
+ * Due to the three managers, the scene should also provide a way to clean up
+ * the necessary managers.
+ *
+ * @interface
+ */
 export interface IBaseScene extends Phaser.Scene {
-  soundManager: GameSoundManager;
   layerManager: GameLayerManager;
   inputManager: GameInputManager;
   cleanUp: () => void;

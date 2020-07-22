@@ -1,56 +1,55 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { resetData } from 'src/features/game/save/GameSaveRequests';
-
-import {
+import { clearData } from 'src/features/game/save/GameSaveRequests';
+import SourceAcademyGame, {
   AccountInfo,
-  createSourceAcademyGame,
-  getSourceAcademyGame
-} from './subcomponents/sourceAcademyGame';
+  createSourceAcademyGame
+} from 'src/features/game/SourceAcademyGame';
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
-  const [isResetThere, setIsResetThere] = React.useState(false);
-  const [sessionLoaded, setSessionLoaded] = React.useState(false);
+  const [isTestStudent, setIsTestStudent] = React.useState(false);
+  const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
     createSourceAcademyGame();
     return () => {
-      getSourceAcademyGame().stopAllSounds();
+      SourceAcademyGame.getInstance().isMounted = false;
+      SourceAcademyGame.getInstance().stopAllSounds();
     };
   }, []);
 
   React.useEffect(() => {
-    if (sessionLoaded || !session) {
-      return;
-    }
-
-    getSourceAcademyGame().setAccountInfo({
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-      name: session.name,
-      role: session.role
-    } as AccountInfo);
-
+    SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
     if (session.name === 'Test Student') {
-      setIsResetThere(true);
+      setIsTestStudent(true);
+      setIsUsingMock(true);
+      SourceAcademyGame.getInstance().toggleUsingMock();
     }
-
-    setSessionLoaded(true);
-  }, [sessionLoaded, session]);
+  }, [session]);
 
   return (
     <>
       <div id="game-display"></div>
-      {isResetThere && (
-        <button
-          onClick={async () => {
-            await resetData();
-          }}
-        >
-          Reset
-        </button>
+      {isTestStudent && (
+        <div className="Horizontal">
+          <button
+            onClick={async () => {
+              await clearData();
+            }}
+          >
+            Clear data
+          </button>
+          <button
+            onClick={() => {
+              setIsUsingMock(!isUsingMock);
+              SourceAcademyGame.getInstance().toggleUsingMock();
+            }}
+          >
+            {isUsingMock ? 'Use Game Chapters' : 'Use Mock Chapters'}
+          </button>
+        </div>
       )}
     </>
   );

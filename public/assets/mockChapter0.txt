@@ -1,0 +1,106 @@
+startingLoc: room
+
+objectives
+    finish
+
+gameStartActions
+    show_dialogue(welcome) if userstate.assessments.301
+    show_dialogue(unwelcome) if !userstate.assessments.301
+
+room
+    modes: explore
+    bgm
+        heavyHitter, /bgm/HeavyHitter.mp3, 0.5
+    sfx
+        card, /sfx/dialogueAdvance.mp3, 0.5
+    
+    objects
+        + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
+            make_object_blink*(carpet)
+        + terminal, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
+            add_item(objects, room, classroomChair)
+        + computerOnShelf, /objects/cmd-console/emergency.png, 557, 906, 526, 263
+            make_object_blink*(carpet, false)
+            show_dialogue(addHallway)
+        + navigatorgGuy, /objects/cmd-navigator/emergency.png, 504, 568, 117, 277
+            show_dialogue(canNowTalk)
+            add_mode(room, talk)
+        + todaysTopic, /objects/cr-todaysTopic/emergency.png, 188, 286, 289, 128
+        + bigMug, /objects/yourMug/emergency.png, 1355, 526, 136, 169
+            make_object_glow*(bigMug)
+        + bottomDoor, /objects/dc-bttm_door02/normal.png, 653, 735, 345, 68
+            play_sfx(card)
+        + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            add_popup(sideDoor)
+
+    boundingBoxes
+        + bbox1, 10, 10, 30, 30
+
+
+    characters
+        + scottie, Scottie, sad, left
+
+hallway
+    modes: talk, move
+    talkTopics: welcomeToHallway
+
+
+classroom
+    modes: explore, talk
+    talkTopics: what
+    objects
+        + classroomChair, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
+            complete_objective(finish)
+            play_sfx(card)
+    
+
+emergency
+    modes: move
+    nav: classroom
+
+dialogues
+    canNowTalk
+        @scottie
+        Thanks for clicking the navigator, you can now talk to me via the talk mode.
+            change_background(emergency)
+        @you
+        Did I just transport to antoher world?
+
+    welcome
+        @scottie, happy
+        Welcome to Source Academy!
+
+        I'm glad you took the time to come in
+        
+
+
+    unwelcome
+        @scottie, sad
+        Finish assessment 301 first and come back?
+        @you
+        Can I still go to places?
+        @scottie, happy
+        Yes, you can remain here.
+
+
+    what, What should I do now, Scottie?
+        @you
+        What should I do now?
+
+        @scottie
+        I'm glad you asked!
+    
+    done
+        Well, what do you know, you finished the game.
+    
+    welcomeToHallway
+        Welcome to the Hallway, we've got fun and games.
+
+    found
+        You found the object!
+
+    click
+        You found the hidden BBox!
+
+    addHallway
+        I'm adding a super secret mode in the hallway

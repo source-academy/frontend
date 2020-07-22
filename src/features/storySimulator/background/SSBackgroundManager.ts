@@ -54,7 +54,7 @@ export default class SSBackgroundManager {
     this.getObjectPlacement().layerManager.addToLayer(Layer.Background, backgroundSprite);
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   public getBackgroundAssetPath() {
     return this.backgroundAssetPath;

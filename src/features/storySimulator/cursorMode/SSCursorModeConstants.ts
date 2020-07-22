@@ -17,10 +17,7 @@ const SSCursorModeConstants = {
   iconSpacing: 15,
   inactiveAlpha: 0.7,
   onHoverAlpha: 1.0,
-  activeAlpha: 0.9,
-  altTextXPos: iconBgSize * 0.8,
-  altTextYPos: -iconBgSize * 0.4,
-  altTextMargin: 10
+  activeAlpha: 0.9
 };
 
 export default SSCursorModeConstants;

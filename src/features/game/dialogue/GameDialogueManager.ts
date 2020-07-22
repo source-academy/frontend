@@ -1,13 +1,20 @@
+import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import GameManager from '../scenes/gameManager/GameManager';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { textTypeWriterStyle } from './GameDialogueConstants';
 import DialogueGenerator from './GameDialogueGenerator';
 import DialogueRenderer from './GameDialogueRenderer';
 import DialogueSpeakerRenderer from './GameDialogueSpeakerRenderer';
 import { Dialogue } from './GameDialogueTypes';
 
+/**
+ * Given a dialogue Id, this manager renders the correct dialogue.
+ * It displays the lines, speakers, and performs actions
+ * whenever players click on the dialogue box
+ */
 export default class DialogueManager {
   private dialogueMap: Map<ItemId, Dialogue>;
   private username: string;
@@ -22,10 +29,15 @@ export default class DialogueManager {
   }
 
   public initialise(gameManager: GameManager) {
-    this.username = GameGlobalAPI.getInstance().getAccountInfo().name;
+    this.username = SourceAcademyGame.getInstance().getAccountInfo().name;
     this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
   }
 
+  /**
+   * @param dialogueId the dialogue Id of the dialogue you want to play
+   *
+   * @returns {Promise} the promise that resolves when the entire dialogue has been played
+   */
   public async showDialogue(dialogueId: ItemId): Promise<void> {
     const dialogue = this.dialogueMap.get(dialogueId);
     if (!dialogue) return;
@@ -45,7 +57,10 @@ export default class DialogueManager {
     await this.showNextLine(resolve);
     this.getDialogueRenderer()
       .getDialogueBox()
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await this.showNextLine(resolve));
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
+        GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
+        await this.showNextLine(resolve);
+      });
   }
 
   private async showNextLine(resolve: () => void) {

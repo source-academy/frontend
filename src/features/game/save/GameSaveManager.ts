@@ -1,109 +1,162 @@
-import { AccountInfo } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-
-import { Constants } from '../commons/CommonConstants';
+import GameManager from '../scenes/gameManager/GameManager';
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
-import { createEmptySaveState } from './GameSaveConstants';
-import { gameStateToJson, userSettingsToJson } from './GameSaveHelper';
-import { saveData } from './GameSaveRequests';
-import { FullSaveState, SaveManagerType, SettingsJson } from './GameSaveTypes';
+import { createEmptySaveState, gameStateToJson, userSettingsToJson } from './GameSaveHelper';
+import { loadData, saveData } from './GameSaveRequests';
+import { FullSaveState, SettingsJson } from './GameSaveTypes';
 
+/**
+ * The manager provides API for loading and saving data from the backend
+ * and is in charge of keeping record of the last save point, so that
+ * players can make new save data based on the last one.
+ */
 export default class GameSaveManager {
-  private accountInfo: AccountInfo | undefined;
   private fullSaveState: FullSaveState;
-  private chapterNum: number;
-  private checkpointNum: number;
-  private continueGame: boolean;
-  private version: SaveManagerType;
+
+  private chapterNum?: number;
+  private checkpointNum?: number;
+  private continueGame?: boolean;
 
   constructor() {
     this.fullSaveState = createEmptySaveState();
-    this.chapterNum = Constants.nullSequenceNumber;
-    this.checkpointNum = Constants.nullSequenceNumber;
-    this.continueGame = false;
-    this.version = SaveManagerType.None;
   }
 
-  public async initialiseForGame(
-    accountInfo: AccountInfo,
-    fullSaveState: FullSaveState | undefined,
-    chapterNum: number,
-    checkpointNum: number,
-    continueGame: boolean
-  ) {
-    if (accountInfo.role !== 'student') {
-      throw Error('This initalisation method is for students playing games');
-    }
-    this.accountInfo = accountInfo;
+  /**
+   * Fetches the FullSaveState of the student at the start of the game
+   * and stores this internally as full save state
+   */
+  public async loadLastSaveState() {
+    this.fullSaveState = await loadData();
+  }
+
+  /**
+   * Updates the save manager with chapter number and checkpoint number
+   * if player has chosen a chapter/checkpoint to play with.
+   *
+   * Chapter number and checkpoint number can be -1 if inside the Story Simulator,
+   *
+   * @param chapterNum chapter number
+   * @param checkpointNum checkpoint number
+   * @param continueGame whether user wants to continue or restart the chapter.
+   */
+  public registerGameInfo(chapterNum: number, checkpointNum: number, continueGame: boolean) {
     this.chapterNum = chapterNum;
     this.checkpointNum = checkpointNum;
-    if (!fullSaveState) {
-      throw Error('No loaded state');
-    }
-    this.fullSaveState = fullSaveState;
     this.continueGame = continueGame;
-    this.version = SaveManagerType.Game;
   }
 
-  public async initialiseForSettings(
-    accountInfo: AccountInfo,
-    fullSaveState: FullSaveState | undefined
-  ) {
-    this.accountInfo = accountInfo;
-    if (!fullSaveState) {
-      throw Error('No loaded state');
-    }
-    this.fullSaveState = fullSaveState;
-    this.continueGame = false;
-    this.version = SaveManagerType.Settings;
-  }
+  ///////////////////////////////
+  //          Saving          //
+  ///////////////////////////////
 
-  public async initialiseForStaff(accountInfo: AccountInfo) {
-    if (accountInfo.role !== 'staff') {
-      throw Error('This initalisation method is for staff testing simulator');
-    }
-    this.accountInfo = accountInfo;
-    this.version = SaveManagerType.Simulator;
-  }
-
+  /**
+   * Save the current game state as a JSON 'snapshot' to the backend.
+   * Can only be called inside the GameManager scene because this function retrieves
+   * informtion from GameManager, GameStateManager, or other in-game managers,
+   * and converts them into JSON format to be saved to backend.
+   *
+   * Only called when playing the Game (not Story Simulator), because Story Simulator
+   * shouldn't save game state to backend.
+   */
   public async saveGame() {
-    if (this.version === SaveManagerType.Game) {
-      this.fullSaveState = gameStateToJson(this.fullSaveState, this.chapterNum, this.checkpointNum);
-      await saveData(this.getAccountInfo(), this.fullSaveState);
-    } else if (this.version === SaveManagerType.Simulator) {
-      return;
-    } else {
-      throw new Error('Only used during gameplay');
+    if (
+      SourceAcademyGame.getInstance().isGameType(GameType.Game) &&
+      SourceAcademyGame.getInstance().getCurrentSceneRef() instanceof GameManager
+    ) {
+      this.fullSaveState = gameStateToJson(
+        this.fullSaveState,
+        this.getChapterNum(),
+        this.getCheckpointNum()
+      );
+      await saveData(this.fullSaveState);
     }
   }
 
+  /**
+   * This function is called during CheckpointTransition to update
+   * and save that largest chapter that the player has completed
+   * so far.
+   *
+   * @param completedChapter the number of the completed chapter
+   */
+  public async saveChapterComplete(completedChapter: number) {
+    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return;
+    }
+    if (completedChapter > this.getLargestCompletedChapterNum()) {
+      this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
+      await saveData(this.fullSaveState);
+    }
+  }
+
+  /**
+   * This function is called by the Escape Manager and Settings scene
+   * to store new user settings to the backend
+   *
+   * @param settingsJson the newest settings of the user
+   */
   public async saveSettings(settingsJson: SettingsJson) {
     this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
-    await saveData(this.getAccountInfo(), this.fullSaveState);
+    await saveData(this.fullSaveState);
   }
 
+  ///////////////////////////////
+  //         Getters           //
+  ///////////////////////////////
+
+  /**
+   * Obtains user settings from full save state
+   *
+   * @returns User settings
+   */
+  public getSettings(): SettingsJson {
+    return this.fullSaveState.userSaveState.settings;
+  }
+
+  /**
+   * Obtains user state from full save state
+   */
   public getLoadedUserState() {
-    return this.fullSaveState.userState;
+    return this.fullSaveState.userSaveState;
   }
 
+  /**
+   * Obtains the largest completed chapter number by the player
+   */
+  public getLargestCompletedChapterNum(): number {
+    return this.fullSaveState.userSaveState.largestCompletedChapter;
+  }
+
+  /**
+   * Gets user's gamestate for this chapter
+   */
   public getLoadedGameStoryState() {
     if (this.continueGame) {
-      return this.fullSaveState.gameSaveStates[this.chapterNum];
+      return this.fullSaveState.gameSaveStates[this.getChapterNum()];
     } else {
       return undefined;
     }
   }
 
+  /**
+   * Gets user's location for this chapter
+   */
   public getLoadedLocation() {
-    if (this.continueGame && this.fullSaveState.gameSaveStates[this.chapterNum]) {
-      return this.fullSaveState.gameSaveStates[this.chapterNum].currentLocation;
+    if (this.continueGame && this.fullSaveState.gameSaveStates[this.getChapterNum()]) {
+      return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentLocation;
     } else {
       return;
     }
   }
 
+  /**
+   * Get user's phase (see GamePhaseManager for phase types) for this chapter
+   */
   public getLoadedPhase() {
-    return this.fullSaveState.gameSaveStates[this.chapterNum].currentPhase;
+    return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentPhase;
   }
 
-  private getAccountInfo = () => mandatory(this.accountInfo) as AccountInfo;
+  public getChapterNum = () => mandatory(this.chapterNum);
+  public getCheckpointNum = () => mandatory(this.checkpointNum);
+  public getFullSaveState = () => mandatory(this.fullSaveState);
 }

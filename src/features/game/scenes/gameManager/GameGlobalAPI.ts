@@ -1,6 +1,7 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 
+import { SoundAsset } from '../../assets/AssetsTypes';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
@@ -8,11 +9,20 @@ import { displayNotification } from '../../effects/Notification';
 import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
 import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
-import { SettingsJson, UserSaveState } from '../../save/GameSaveTypes';
-import { StateObserver } from '../../state/GameStateTypes';
+import { SettingsJson } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
+import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
+/**
+ * This class exposes all the public API's of managers
+ * in the Game Manager scene.
+ *
+ * It allows managers to access services globally
+ * through GameGlobalAPI.getInstance().function() without
+ * having to keep a reference to the gameManager.
+ */
 class GameGlobalAPI {
   private gameManager: GameManager | undefined;
 
@@ -33,7 +43,7 @@ class GameGlobalAPI {
   //   Game Manager  //
   /////////////////////
 
-  public getGameManager = () => mandatory(this.gameManager) as GameManager;
+  public getGameManager = () => mandatory(this.gameManager);
 
   public setGameManager(gameManagerRef: GameManager): void {
     this.gameManager = gameManagerRef;
@@ -45,14 +55,6 @@ class GameGlobalAPI {
 
   public getLocationAtId(locationId: LocationId): GameLocation {
     return this.getGameManager().getCurrentCheckpoint().map.getLocationAtId(locationId);
-  }
-
-  public isStorySimulator() {
-    return this.getGameManager().isStorySimulator;
-  }
-
-  public getAccountInfo() {
-    return this.getGameManager().getAccountInfo();
   }
 
   /////////////////////
@@ -75,12 +77,19 @@ class GameGlobalAPI {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    return this.getGameManager().stateManager.hasLocationUpdate(locationId, mode);
+  public hasLocationUpdateAttr(
+    locationId: LocationId,
+    attr?: GameLocationAttr
+  ): boolean | undefined {
+    return this.getGameManager().stateManager.hasLocationUpdateAttr(locationId, attr);
   }
 
-  public changeLocationTo(locationName: string) {
-    this.getGameManager().changeLocationTo(locationName);
+  public hasLocationUpdateMode(locationId: LocationId, mode?: GameMode): boolean | undefined {
+    return this.getGameManager().stateManager.hasLocationUpdateMode(locationId, mode);
+  }
+
+  public async changeLocationTo(locationName: string) {
+    await this.getGameManager().changeLocationTo(locationName);
   }
 
   /////////////////////
@@ -98,6 +107,10 @@ class GameGlobalAPI {
   /////////////////////
   //    Game Attr    //
   /////////////////////
+
+  public consumedLocationUpdate(locationId: LocationId, attr: GameLocationAttr) {
+    return this.getGameManager().stateManager.consumedLocationUpdate(locationId, attr);
+  }
 
   public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
     return this.getGameManager().stateManager.getLocationAttr(attr, locationId);
@@ -127,12 +140,12 @@ class GameGlobalAPI {
   //  Game Objects   //
   /////////////////////
 
-  public makeObjectGlow(objectId: ItemId) {
-    this.getGameManager().objectManager.makeObjectGlow(objectId);
+  public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().objectManager.makeObjectGlow(objectId, turnOn);
   }
 
-  public makeObjectBlink(objectId: ItemId) {
-    this.getGameManager().objectManager.makeObjectBlink(objectId);
+  public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().objectManager.makeObjectBlink(objectId, turnOn);
   }
 
   public getObjPropertyMap() {
@@ -195,11 +208,11 @@ class GameGlobalAPI {
   //   User State    //
   /////////////////////
 
-  public addToUserStateList(listName: string, id: string): void {
+  public addToUserStateList(listName: UserStateTypes, id: string): void {
     this.getGameManager().userStateManager.addToList(listName, id);
   }
 
-  public async existsInUserStateList(listName: string, id: string): Promise<boolean> {
+  public async existsInUserStateList(listName: UserStateTypes, id: string): Promise<boolean> {
     return await this.getGameManager().userStateManager.doesIdExistInList(listName, id);
   }
 
@@ -207,8 +220,8 @@ class GameGlobalAPI {
   //   Game Layer    //
   /////////////////////
 
-  public clearSeveralLayers(layerTypes: Layer[], withFade = false) {
-    this.getGameManager().layerManager.clearSeveralLayers(layerTypes, withFade);
+  public clearSeveralLayers(layerTypes: Layer[]) {
+    this.getGameManager().layerManager.clearSeveralLayers(layerTypes);
   }
 
   public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
@@ -268,7 +281,7 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    this.getGameManager().userStateManager.addToList('collectibles', collectibleId);
+    this.getGameManager().userStateManager.addToList(UserStateTypes.collectibles, collectibleId);
   }
 
   /////////////////////
@@ -292,47 +305,51 @@ class GameGlobalAPI {
   /////////////////////
 
   public async saveGame() {
-    await this.getGameManager().saveManager.saveGame();
+    await this.getGameManager().getSaveManager().saveGame();
   }
 
   public async saveSettings(settingsJson: SettingsJson) {
-    await this.getGameManager().saveManager.saveSettings(settingsJson);
+    await this.getGameManager().getSaveManager().saveSettings(settingsJson);
   }
 
   public getLoadedUserState() {
-    return this.getGameManager().saveManager.getLoadedUserState();
+    return this.getGameManager().getSaveManager().getLoadedUserState();
   }
 
   /////////////////////
   //      Sound      //
   /////////////////////
 
+  public getSoundManager() {
+    return SourceAcademyGame.getInstance().getSoundManager();
+  }
+
   public playSound(soundKey: AssetKey) {
-    this.getGameManager().soundManager.playSound(soundKey);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
   }
 
   public playBgMusic(soundKey: AssetKey) {
-    this.getGameManager().soundManager.playSound(soundKey);
-  }
-
-  public async stopCurrBgMusic(fadeDuration?: number) {
-    this.getGameManager().soundManager.stopCurrBgMusic(fadeDuration);
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(soundKey);
   }
 
   public async stopAllSound() {
-    this.getGameManager().soundManager.stopAllSound();
+    SourceAcademyGame.getInstance().getSoundManager().stopAllSound();
   }
 
   public pauseCurrBgMusic() {
-    this.getGameManager().soundManager.pauseCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().pauseCurrBgMusic();
   }
 
   public continueCurrBgMusic() {
-    this.getGameManager().soundManager.continueCurrBgMusic();
+    SourceAcademyGame.getInstance().getSoundManager().continueCurrBgMusic();
   }
 
-  public applySoundSettings(userSetting: UserSaveState) {
-    this.getGameManager().soundManager.applyUserSettings(userSetting);
+  public applySoundSettings(userSettings: SettingsJson) {
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
+  }
+
+  public loadSounds(soundAssets: SoundAsset[]) {
+    SourceAcademyGame.getInstance().getSoundManager().loadSounds(soundAssets);
   }
 
   /////////////////////

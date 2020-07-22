@@ -1,3 +1,13 @@
+/**
+ * @typedef {TypewriterProps} - properties describing a typewriter
+ *
+ * @prop {number} x - x coordinate of the left edge of the typewriter
+ * @prop {number} y - y coordinate of the top edge of the typewriter
+ * @prop {Phaser.Types.GameObjects.Text.TextStyle} textStyle
+ *       the text config to specify the text propertoes of the typewriter text
+ * @prop {number} typeWriterInterval - how long is the interval between
+ *                                     each letter's appearance
+ */
 type TypewriterProps = {
   x?: number;
   y?: number;
@@ -5,7 +15,12 @@ type TypewriterProps = {
   typeWriterInterval?: number;
 };
 
-/* Text sprite manager to produce typewriter effect */
+/**
+ * Text sprite manager to produce typewriter effect
+ *
+ * @param scene - scene to add the typewriter sprite
+ * @param typeWriterProps - properties to describe the appearance and animation of the typewriter
+ */
 export function Typewriter(
   scene: Phaser.Scene,
   { x = 0, y = 0, textStyle = {}, typeWriterInterval = 1 }: TypewriterProps

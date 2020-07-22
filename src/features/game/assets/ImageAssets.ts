@@ -19,18 +19,22 @@ const ImageAssets: AssetMap<ImageAsset> = {
   diamond: { key: 'diamond', path: '/ui/zircon.png' },
   arrow: { key: 'arrow', path: '/ui/arrow.png' },
   cookies: { key: 'cookies', path: '/images/cookies.png' },
+  scrollFrame: { key: 'scroll-frame', path: '/ui/scrollFrame.png' },
 
   // Escape Menu
   escapeMenuBackground: { key: 'escape-bg', path: '/ui/escapeMenu.png' },
 
-  // Collectibles Menu
-  collectiblesMenu: { key: 'collect-bg', path: '/ui/collectiblesBg.png' },
-  collectiblesBanner: { key: 'collect-banner', path: '/ui/collectiblesBanner.png' },
-  collectiblesPageChosen: {
-    key: 'collect-pg-chosen',
+  // Awards Menu
+  awardsMenu: { key: 'award-bg', path: '/ui/collectiblesBg.png' },
+  awardsBanner: { key: 'award-banner', path: '/ui/collectiblesBanner.png' },
+  awardsPageChosen: {
+    key: 'award-pg-chosen',
     path: '/ui/collectiblesPageOptChosen.png'
   },
-  collectiblesPage: { key: 'collect-pg-opt', path: '/ui/collectiblesPageOpt.png' },
+  awardsPage: { key: 'award-pg-opt', path: '/ui/collectiblesPageOpt.png' },
+
+  // Awards Hall
+  awardsBackground: { key: 'award-hall-bg', path: '/ui/awardsHall.png' },
 
   // Chapter Select
   chapterSelectBackground: { key: 'chapter-select-bg', path: '/locations/yourRoom-dim/normal.png' },
@@ -47,7 +51,15 @@ const ImageAssets: AssetMap<ImageAsset> = {
   // Settings
   settingBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
   settingBanner: { key: 'settings-bg', path: '/ui/settingsBg.png' },
-  settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' }
+  settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' },
+
+  // Room Preview
+  verifiedFrame: { key: 'verified-frame', path: '/ui/verifiedFrame.png' },
+
+  // Bindings
+  bindingsBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
+  squareKeyboardIcon: { key: 'keyboard-key-square', path: '/ui/keyboardKeyIcon.png' },
+  medKeyboardIcon: { key: 'keyboard-key-medium', path: '/ui/TabIcon.png' }
 };
 
 export default ImageAssets;

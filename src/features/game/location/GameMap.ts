@@ -2,7 +2,6 @@ import { GameAction } from '../action/GameActionTypes';
 import { SoundAsset } from '../assets/AssetsTypes';
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
-import { CollectibleProperty } from '../collectibles/GameCollectiblesTypes';
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
 import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
@@ -10,6 +9,22 @@ import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
 
+/**
+ * Game map is the class that encapsulates data about
+ * all the locations and items in the map in a checkpoint
+ *
+ * Mainly used by game checkpoint.
+ *
+ * All possible assets should be stored within the soundAssets
+ * and mapAssets; while mapping from ItemId to other properties
+ * are stored separately.
+ *
+ * Lastly, the GameLocation should only refer to the ItemIDs,
+ * and not the actual property.
+ *
+ * GameManager, along other managers, will process this class
+ * as when as its needed.
+ */
 class GameMap {
   private soundAssets: SoundAsset[];
   private mapAssets: Map<AssetKey, AssetPath>;
@@ -20,9 +35,8 @@ class GameMap {
   private boundingBoxes: Map<ItemId, BBoxProperty>;
   private characters: Map<ItemId, Character>;
   private actions: Map<ItemId, GameAction>;
-  private collectibles: Map<ItemId, CollectibleProperty>;
-  private startActions: ItemId[];
-  private endActions: ItemId[];
+  private gameStartActions: ItemId[];
+  private checkpointCompleteActions: ItemId[];
 
   constructor() {
     this.soundAssets = [];
@@ -34,9 +48,8 @@ class GameMap {
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
-    this.collectibles = new Map<ItemId, CollectibleProperty>();
-    this.startActions = [];
-    this.endActions = [];
+    this.gameStartActions = [];
+    this.checkpointCompleteActions = [];
   }
 
   public addSoundAsset(soundAsset: SoundAsset) {
@@ -67,20 +80,20 @@ class GameMap {
     return this.getLocationAtId(id).navigation;
   }
 
-  public setStartActions(actionIds: ItemId[]) {
-    this.startActions = actionIds;
+  public setGameStartActions(actionIds: ItemId[]) {
+    this.gameStartActions = actionIds;
   }
 
-  public setEndActions(actionIds: ItemId[]) {
-    this.endActions = actionIds;
+  public setCheckpointCompleteActions(actionIds: ItemId[]) {
+    this.checkpointCompleteActions = actionIds;
   }
 
   public getStartActions() {
-    return this.startActions;
+    return this.gameStartActions;
   }
 
   public getEndActions() {
-    return this.endActions;
+    return this.checkpointCompleteActions;
   }
 
   public getLocations(): Map<LocationId, GameLocation> {
@@ -111,10 +124,6 @@ class GameMap {
     return this.soundAssets;
   }
 
-  public getCollectibles(): Map<ItemId, CollectibleProperty> {
-    return this.collectibles;
-  }
-
   public addItemToMap<T>(listName: GameLocationAttr, itemId: string, item: T) {
     this[listName].set(itemId, item);
   }
@@ -130,7 +139,7 @@ class GameMap {
   }
 
   public getLocationAtId = (locId: LocationId) =>
-    mandatory(this.locations.get(locId)) as GameLocation;
+    mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
 }
 
 export default GameMap;
