@@ -116,6 +116,7 @@ class GameStateManager implements StateSubject {
     switch (attr) {
       case GameLocationAttr.navigation:
         return this.updateLocationStateMode(targetLocId, GameMode.Move);
+      case GameLocationAttr.characters:
       case GameLocationAttr.talkTopics:
         return this.updateLocationStateMode(targetLocId, GameMode.Talk);
       case GameLocationAttr.boundingBoxes:
