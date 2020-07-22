@@ -58,7 +58,7 @@ export default class GameUserStateManager {
    */
   public async doesIdExistInList(listName: UserStateTypes, id: string): Promise<boolean> {
     if (
-      listName === UserStateTypes.achievements &&
+      listName === UserStateTypes.assessments &&
       SourceAcademyGame.getInstance().isGameType(GameType.Simulator)
     ) {
       return this.askAssessmentComplete(id);

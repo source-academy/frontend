@@ -70,6 +70,8 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     [setChosenFiles]
   );
 
+  const deleteAllFromChosen = () => chosenFiles.map(deleteFileFromChosen);
+
   const deleteFileFromChosen = React.useCallback(
     (txtFile: string) => {
       setChosenFiles(prevItemList => prevItemList.filter(item => item !== txtFile));
@@ -153,6 +155,12 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
         onSortEnd={onSortEnd}
         deleteFileFromChosen={deleteFileFromChosen}
       />
+      <br />
+      {chosenFiles.length > 0 && (
+        <Button icon={'delete'} onClick={deleteAllFromChosen}>
+          Clear checkpoint files
+        </Button>
+      )}
       <br />
       <b>All Txt Files</b>
       {txtsNotChosen &&

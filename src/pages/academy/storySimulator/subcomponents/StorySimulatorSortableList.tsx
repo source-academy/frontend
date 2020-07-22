@@ -6,12 +6,6 @@ const StorySimulatorSortableItem = React.memo(
   SortableElement(({ value, deleteFileFromChosen }: any) => (
     <div>
       <Button>{value}</Button>{' '}
-      <Button
-        icon={'delete'}
-        onClick={() => {
-          deleteFileFromChosen(value);
-        }}
-      />
     </div>
   ))
 );
