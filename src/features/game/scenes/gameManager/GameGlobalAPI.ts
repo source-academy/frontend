@@ -77,8 +77,15 @@ class GameGlobalAPI {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    return this.getGameManager().stateManager.hasLocationUpdate(locationId, mode);
+  public hasLocationUpdateAttr(
+    locationId: LocationId,
+    attr?: GameLocationAttr
+  ): boolean | undefined {
+    return this.getGameManager().stateManager.hasLocationUpdateAttr(locationId, attr);
+  }
+
+  public hasLocationUpdateMode(locationId: LocationId, mode?: GameMode): boolean | undefined {
+    return this.getGameManager().stateManager.hasLocationUpdateMode(locationId, mode);
   }
 
   public async changeLocationTo(locationName: string) {

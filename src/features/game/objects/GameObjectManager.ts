@@ -6,7 +6,6 @@ import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
 
@@ -42,8 +41,10 @@ class GameObjectManager implements StateObserver {
    * @param locationId id of the location being updated
    */
   public notify(locationId: LocationId) {
-    // Only inquire on Explore mode, as it is the only mode related to ObjectManager
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
+    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
+      locationId,
+      GameLocationAttr.objects
+    );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // If the update is on the current location, we rerender to reflect the update

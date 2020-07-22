@@ -28,7 +28,7 @@ class GameStateManager implements StateSubject {
   // Game State
   private checkpoint: GameCheckpoint;
   private checkpointObjective: GameObjective;
-  private locationHasUpdate: Map<string, Map<GameMode, boolean>>;
+  private locationHasUpdate: Map<string, Map<GameLocationAttr, boolean>>;
   private locationStates: Map<string, GameLocation>;
   private objectPropertyMap: Map<ItemId, ObjectProperty>;
   private bboxPropertyMap: Map<ItemId, BBoxProperty>;
@@ -41,7 +41,7 @@ class GameStateManager implements StateSubject {
 
     this.checkpoint = {} as GameCheckpoint;
     this.checkpointObjective = new GameObjective();
-    this.locationHasUpdate = new Map<string, Map<GameMode, boolean>>();
+    this.locationHasUpdate = new Map<string, Map<GameLocationAttr, boolean>>();
     this.locationStates = new Map<string, GameLocation>();
     this.objectPropertyMap = new Map<ItemId, ObjectProperty>();
     this.bboxPropertyMap = new Map<ItemId, BBoxProperty>();
@@ -92,17 +92,20 @@ class GameStateManager implements StateSubject {
    * @param mode mode that has been updated
    */
   private updateLocationStateMode(targetLocId: LocationId, mode: GameMode): void {
-    const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
-
-    this.locationHasUpdate.get(targetLocId)!.set(mode, true);
-
-    // Location has an update to its state, reset its interaction back to not triggered
-    if (currLocId !== targetLocId) {
-      this.triggeredInteractions.set(targetLocId, false);
+    switch (mode) {
+      case GameMode.Explore:
+        this.updateLocationStateAttr(targetLocId, GameLocationAttr.boundingBoxes);
+        this.updateLocationStateAttr(targetLocId, GameLocationAttr.objects);
+        return;
+      case GameMode.Move:
+        this.updateLocationStateAttr(targetLocId, GameLocationAttr.navigation);
+        return;
+      case GameMode.Talk:
+        this.updateLocationStateAttr(targetLocId, GameLocationAttr.talkTopics);
+        return;
+      default:
+        return;
     }
-
-    // Notify subscribers
-    this.update(targetLocId);
   }
 
   /**
@@ -113,18 +116,18 @@ class GameStateManager implements StateSubject {
    * @param attr attribute that has been updated
    */
   private updateLocationStateAttr(targetLocId: LocationId, attr: GameLocationAttr): void {
-    switch (attr) {
-      case GameLocationAttr.navigation:
-        return this.updateLocationStateMode(targetLocId, GameMode.Move);
-      case GameLocationAttr.characters:
-      case GameLocationAttr.talkTopics:
-        return this.updateLocationStateMode(targetLocId, GameMode.Talk);
-      case GameLocationAttr.boundingBoxes:
-      case GameLocationAttr.objects:
-        return this.updateLocationStateMode(targetLocId, GameMode.Explore);
-      default:
-        return;
+    const currLocId = GameGlobalAPI.getInstance().getCurrLocId();
+
+    this.locationHasUpdate.get(targetLocId)!.set(attr, true);
+
+    // Only update if player is not already at the location
+    if (currLocId !== targetLocId) {
+      // Location has an update to its state, reset its interaction back to not triggered
+      this.triggeredInteractions.set(targetLocId, false);
     }
+
+    // Notify subscribers
+    this.update(targetLocId);
   }
 
   /**
@@ -159,12 +162,12 @@ class GameStateManager implements StateSubject {
       this.loadNewGameStoryState();
     }
 
-    // Register every mode of each location under the chapter
-    this.locationStates.forEach((location, locationId, map) => {
-      this.locationHasUpdate.set(locationId, new Map<GameMode, boolean>());
-      if (location.modes) {
-        location.modes.forEach(mode => this.locationHasUpdate.get(locationId)!.set(mode, true));
-      }
+    // Register every attribute of each location under the chapter
+    this.locationStates.forEach((location, locationId) => {
+      this.locationHasUpdate.set(locationId, new Map<GameLocationAttr, boolean>());
+      Object.values(GameLocationAttr).forEach(value =>
+        this.locationHasUpdate.get(locationId)!.set(value, true)
+      );
     });
   }
 
@@ -220,7 +223,7 @@ class GameStateManager implements StateSubject {
   ///////////////////////////////
 
   /**
-   * Checks whether a location has any update.
+   * Checks whether a location has any update based on the modes.
    * A location has an update if any of its mode has been updated since
    * last user interaction.
    *
@@ -231,16 +234,51 @@ class GameStateManager implements StateSubject {
    * @param mode mode to check
    * @returns {boolean}
    */
-  public hasLocationUpdate(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    this.checkLocationsExist([locationId]);
+  public hasLocationUpdateMode(locationId: LocationId, mode?: GameMode): boolean | undefined {
     if (mode) {
-      return this.locationHasUpdate.get(locationId)!.get(mode);
+      switch (mode) {
+        case GameMode.Explore:
+          this.hasLocationUpdateAttr(locationId, GameLocationAttr.boundingBoxes);
+          this.hasLocationUpdateAttr(locationId, GameLocationAttr.objects);
+          return;
+        case GameMode.Move:
+          this.hasLocationUpdateAttr(locationId, GameLocationAttr.navigation);
+          return;
+        case GameMode.Talk:
+          this.hasLocationUpdateAttr(locationId, GameLocationAttr.talkTopics);
+          return;
+        default:
+          return;
+      }
+    }
+    return this.hasLocationUpdateAttr(locationId);
+  }
+
+  /**
+   * Checks whether a location has any update based on the attributes.
+   * A location has an update if any of its attributes has been updated since
+   * last user interaction.
+   *
+   * If the mode parameter is specified, only that specific mode is checked.
+   * If the mode parameter is not specified, update to any mode will return true.
+   *
+   * @param locationId location ID
+   * @param mode mode to check
+   * @returns {boolean}
+   */
+  public hasLocationUpdateAttr(
+    locationId: LocationId,
+    attr?: GameLocationAttr
+  ): boolean | undefined {
+    this.checkLocationsExist([locationId]);
+    if (attr) {
+      return this.locationHasUpdate.get(locationId)!.get(attr);
     }
 
-    // If no mode is specified, update to any mode will return true
+    // If no attr is specified, update to any attr will return true
     let result = false;
     const locationModeState = this.locationHasUpdate.get(locationId);
-    locationModeState!.forEach((hasUpdate, mode, map) => (result = result || hasUpdate));
+    locationModeState!.forEach((hasUpdate, attr, map) => (result = result || hasUpdate));
     return result;
   }
 

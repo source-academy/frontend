@@ -40,8 +40,10 @@ export default class CharacterManager implements StateObserver {
    * @param locationId id of the location being updated
    */
   public notify(locationId: LocationId) {
-    // TODO: Inquire on correct attributes
-    const hasUpdate = true;
+    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
+      locationId,
+      GameLocationAttr.characters
+    );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // If the update is on the current location, we rerender to reflect the update

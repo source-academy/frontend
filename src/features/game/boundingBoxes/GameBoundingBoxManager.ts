@@ -5,7 +5,6 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { ActivatableBBox, BBoxProperty } from './GameBoundingBoxTypes';
 
@@ -34,7 +33,10 @@ class GameBoundingBoxManager implements StateObserver {
    * @param locationId id of the location being updated
    */
   public notify(locationId: LocationId) {
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
+    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
+      locationId,
+      GameLocationAttr.boundingBoxes
+    );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       this.renderBBoxLayerContainer(locationId);
