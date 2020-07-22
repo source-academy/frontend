@@ -49,6 +49,7 @@ class GameModeExplore implements IGameUI {
 
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character, 300);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 

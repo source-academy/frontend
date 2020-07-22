@@ -87,12 +87,7 @@ class GameModeMenu implements IGameUI {
     return modes.sort().map(mode => {
       return {
         text: mode,
-        callback: () => {
-          GameGlobalAPI.getInstance().pushPhase(gameModeToPhase[mode]);
-          if (mode !== GameMode.Talk) {
-            GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character, 300);
-          }
-        }
+        callback: () => GameGlobalAPI.getInstance().pushPhase(gameModeToPhase[mode])
       };
     });
   }
