@@ -15,10 +15,14 @@ import { StateObserver } from './GameStateTypes';
 
 /**
  * Manages all states related to story, chapter, or checkpoint;
+ * e.g. checkpoint objectives, objects' property, bboxes' property.
  *
  * Other than this manager, all other manager should not need to
  * manage their own state.
+ *
+ * Employs observer pattern, and notifies its subjects on state update.
  */
+
 class GameStateManager {
   // Subscribers
   private subscribers: Map<GameItemType, StateObserver>;
@@ -63,6 +67,29 @@ class GameStateManager {
   }
 
   ///////////////////////////////
+  //        Subscribers        //
+  ///////////////////////////////
+
+  /**
+   * This function is called to set state observers
+   *
+   * @param gameItemType Type of game item the observer wants to watch
+   * @param stateObserver reference to state observer
+   */
+  public watchGameItemType(gameItemType: GameItemType, stateObserver: StateObserver) {
+    this.subscribers.set(gameItemType, stateObserver);
+  }
+
+  /**
+   * Obtains the subscriber that watches the game item
+   *
+   * @param gameItemType the type of item being watched
+   */
+  public getSubscriberForItemType(gameItemType: GameItemType) {
+    return mandatory(this.subscribers.get(gameItemType));
+  }
+
+  ///////////////////////////////
   //        Interaction        //
   ///////////////////////////////
 
@@ -95,64 +122,7 @@ class GameStateManager {
   }
 
   ///////////////////////////////
-  //       Location Mode       //
-  ///////////////////////////////
-
-  /**
-   * Add a mode to a location.
-   *
-   * @param locationId location ID
-   * @param mode game mode to add
-   */
-  public addLocationMode(locationId: LocationId, mode: GameMode) {
-    this.gameMap.getLocationAtId(locationId).modes.add(mode);
-  }
-
-  /**
-   * Remove a mode from a location.
-   *
-   * @param locationId location ID
-   * @param mode game mode to remove
-   */
-  public removeLocationMode(locationId: LocationId, mode: GameMode) {
-    this.gameMap.getLocationAtId(locationId).modes.delete(mode);
-  }
-
-  /**
-   * Get modes available to a location based on the location ID.
-   *
-   * @param locationId location ID
-   * @returns {GameMode[]} game modes
-   */
-  public getLocationModes(locationId: LocationId): GameMode[] {
-    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
-  }
-
-  ///////////////////////////////
-  //        Subscribing        //
-  ///////////////////////////////
-
-  /**
-   * This function is called to set state observers
-   *
-   * @param gameItemType Type of game item the observer wants to watch
-   * @param stateObserver reference to state observer
-   */
-  public watchGameItemType(gameItemType: GameItemType, stateObserver: StateObserver) {
-    this.subscribers.set(gameItemType, stateObserver);
-  }
-
-  /**
-   * Obtains the subscriber that watches the game item
-   *
-   * @param gameItemType the type of item being watched
-   */
-  public getSubscriberForItemType(gameItemType: GameItemType) {
-    return mandatory(this.subscribers.get(gameItemType));
-  }
-
-  ///////////////////////////////
-  //      Location Helpers     //
+  //          Notifs          //
   ///////////////////////////////
 
   /**
@@ -263,6 +233,40 @@ class GameStateManager {
   public setCharacterProperty(id: ItemId, newCharacter: Character) {
     this.gameMap.setItemInMap(GameItemType.boundingBoxes, id, newCharacter);
     this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+  }
+
+  ///////////////////////////////
+  //       Location Mode       //
+  ///////////////////////////////
+
+  /**
+   * Add a mode to a location.
+   *
+   * @param locationId location ID
+   * @param mode game mode to add
+   */
+  public addLocationMode(locationId: LocationId, mode: GameMode) {
+    this.gameMap.getLocationAtId(locationId).modes.add(mode);
+  }
+
+  /**
+   * Remove a mode from a location.
+   *
+   * @param locationId location ID
+   * @param mode game mode to remove
+   */
+  public removeLocationMode(locationId: LocationId, mode: GameMode) {
+    this.gameMap.getLocationAtId(locationId).modes.delete(mode);
+  }
+
+  /**
+   * Get modes available to a location based on the location ID.
+   *
+   * @param locationId location ID
+   * @returns {GameMode[]} game modes
+   */
+  public getLocationModes(locationId: LocationId): GameMode[] {
+    return Array.from(this.gameMap.getLocationAtId(locationId).modes) || [];
   }
 
   ///////////////////////////////

@@ -21,6 +21,10 @@ export type UserState = {
   [K in UserStateTypes]?: string[];
 };
 
+/**
+ * State observer is a renderer that can reflect the changes
+ * to the current scene
+ */
 export interface StateObserver {
   handleAdd: (itemId: ItemId) => boolean;
   handleDelete: (itemId: ItemId) => boolean;
