@@ -5,19 +5,20 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { ActivatableSprite } from '../objects/GameObjectTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableBBox, BBoxProperty } from './GameBoundingBoxTypes';
+import { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**
  * Manager for rendering interactive bounding boxes in the location.
  */
 class GameBoundingBoxManager implements StateObserver {
   public observerId: string;
-  private bboxes: ActivatableBBox[];
+  private bboxes: Map<ItemId, ActivatableSprite>;
 
   constructor() {
     this.observerId = 'GameBoundingBoxManager';
-    this.bboxes = [];
+    this.bboxes = new Map<ItemId, ActivatableSprite>();
   }
 
   public initialise() {
@@ -53,12 +54,14 @@ class GameBoundingBoxManager implements StateObserver {
     const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
     const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
-    this.bboxes = bboxIds
+    this.bboxes.clear();
+    bboxIds
       .map(id => bboxPropMap.get(id))
       .filter(bboxProp => bboxProp !== undefined)
       .map(bboxProp => {
         const bbox = this.createBBox(gameManager, bboxProp!);
-        bboxContainer.add(bbox.sprite);
+        bboxContainer.add(bbox.sprite as Phaser.GameObjects.Rectangle);
+        this.bboxes.set(bboxProp!.interactionId, bbox);
         return bbox;
       });
 
@@ -128,7 +131,7 @@ class GameBoundingBoxManager implements StateObserver {
    * @param gameManager game manager
    * @param objectProperty object property to be used
    */
-  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableBBox {
+  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableSprite {
     const { x, y, width, height, actionIds, interactionId } = bboxProperty;
     const bboxSprite = new Phaser.GameObjects.Rectangle(gameManager, x, y, width, height, 0, 0);
     if (bboxProperty.isInteractive) {

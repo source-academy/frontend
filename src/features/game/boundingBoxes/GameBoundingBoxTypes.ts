@@ -16,18 +16,3 @@ export type BBoxProperty = TrackInteraction &
     width: number;
     height: number;
   };
-
-/**
- * Bounding box as a Phaser Game object that can be activated
- * using activate and deactivate during Explore mode
- *
- * @prop {Phaser.GameObjects.Rectangle} sprite - the clickable rectangle representing the bounding box
- * @prop {Function} activate - the function to activate the bbox and enable listeners
- *                             this may be called with additional onUp, onHover and onOut parameters.
- * @prop {Function} deactivate - the function to deactivate the bbox and disable all listeners
- */
-export type ActivatableBBox = {
-  sprite: Phaser.GameObjects.Rectangle;
-  activate: Function;
-  deactivate: Function;
-};
