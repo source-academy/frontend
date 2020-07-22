@@ -1,12 +1,5 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
-import { Input } from 'src/features/sourceRecorder/SourceRecorderTypes';
-import {
-  recordInput,
-  timerReset,
-  timerStart,
-  timerStop
-} from 'src/features/sourceRecorder/sourcereel/SourcereelActions';
 
 import {
   beginDebuggerPause,
@@ -65,9 +58,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion,
-
-    playbackData: state.workspaces.sourcereel.playbackData
+    storedQuestionId: state.workspaces.assessment.currentQuestion
   };
 };
 
@@ -110,12 +101,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback),
-
-      handleTimerStart: () => timerStart(workspaceLocation),
-      handleTimerStop: () => timerStop(workspaceLocation),
-      handleTimerReset: () => timerReset(workspaceLocation),
-      handleRecordInput: (input: Input) => recordInput(input, workspaceLocation)
+        promptAutocomplete(workspaceLocation, row, col, callback)
     },
     dispatch
   );

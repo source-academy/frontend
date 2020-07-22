@@ -13,7 +13,7 @@ import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
-import { CodeDelta, Input, PlaybackData } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import { CodeDelta, Input } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -52,7 +52,6 @@ import { assessmentCategoryLink } from '../utils/ParamParseHelper';
 import Workspace, { WorkspaceProps } from '../workspace/Workspace';
 import { WorkspaceState } from '../workspace/WorkspaceTypes';
 import AssessmentWorkspaceGradingResult from './AssessmentWorkspaceGradingResult';
-
 export type AssessmentWorkspaceProps = DispatchProps & StateProps & OwnProps;
 
 export type DispatchProps = {
@@ -82,11 +81,6 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-
-  handleTimerStart: () => void;
-  handleTimerStop: () => void;
-  handleTimerReset: () => void;
-  handleRecordInput: (input: Input) => void;
 };
 
 export type OwnProps = {
@@ -117,19 +111,20 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  playbackData: PlaybackData;
 };
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetTemplateOverlay: boolean }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean; logs: Input[] }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetTemplateOverlay: false
+      showResetTemplateOverlay: false,
+      logs: []
     };
+
     this.props.handleEditorValueChange('');
   }
 
@@ -245,7 +240,17 @@ class AssessmentWorkspace extends React.Component<
       this.props.handleEditorValueChange(newCode);
 
       if (this.props.assessment!.category !== 'Practical') {
-        console.log(delta);
+        const input: Input = {
+          time: Date.now(),
+          type: 'codeDelta',
+          data: delta
+        };
+
+        const logsCopy = this.state.logs;
+
+        logsCopy.push(input);
+        this.setState({ logs: logsCopy });
+        console.log(this.state.logs);
       }
     };
 
