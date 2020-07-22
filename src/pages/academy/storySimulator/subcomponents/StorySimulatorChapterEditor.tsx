@@ -1,9 +1,9 @@
 import { Button, Intent, Switch } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
-import arrayMove from 'array-move';
 import React from 'react';
 import { getStandardDateTime } from 'src/commons/utils/DateHelper';
 import { useInput } from 'src/commons/utils/Hooks';
+import { SortableList, useSortableList } from 'src/commons/utils/SortableList';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { toS3Path } from 'src/features/game/utils/GameUtils';
 import { callGameManagerForSim } from 'src/features/game/utils/TxtLoaderUtils';
@@ -14,14 +14,11 @@ import {
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import { createChapterIndex, inAYear } from './StorySimulatorChapterSim';
-import { StorySimulatorSortableList } from './StorySimulatorSortableList';
 
 type ChapterSimProps = {
   chapterDetail: ChapterDetail;
   checkpointFilenames?: string[];
 };
-
-const emptyStringArray: string[] = [];
 
 /**
  * This is the Chapter Editor Form that
@@ -37,10 +34,10 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
   const { id } = chapterDetail;
   const { value: title, setValue: setTitle, inputProps: titleProps } = useInput('');
   const { value: imageUrl, setValue: setImageUrl, inputProps: imageUrlProps } = useInput('');
+  const { items: chosenFiles, setItems: setChosenFiles, onSortEnd } = useSortableList();
 
   const [isPublished, setIsPublished] = React.useState(false);
   const [openDate, setOpenDate] = React.useState<Date>(new Date());
-  const [chosenFiles, setChosenFiles] = React.useState<string[]>(emptyStringArray);
   const [txtsNotChosen, setTxtsNotChosen] = React.useState<string[]>([]);
   const [rerender, setRender] = React.useState(false);
 
@@ -62,13 +59,6 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
     checkpointFilenames,
     rerender
   ]);
-
-  const onSortEnd = React.useCallback(
-    ({ oldIndex, newIndex }: any) => {
-      setChosenFiles(prevState => arrayMove(prevState, oldIndex, newIndex));
-    },
-    [setChosenFiles]
-  );
 
   const deleteAllFromChosen = () => chosenFiles.map(deleteFileFromChosen);
 
@@ -150,11 +140,7 @@ const ChapterEditor = React.memo(({ chapterDetail, checkpointFilenames }: Chapte
         <Button onClick={(_: any) => window.open(toS3Path(imageUrl))}>View</Button>
       </h4>
       <b>Checkpoint Txt Files</b>
-      <StorySimulatorSortableList
-        items={chosenFiles}
-        onSortEnd={onSortEnd}
-        deleteFileFromChosen={deleteFileFromChosen}
-      />
+      <SortableList items={chosenFiles} onSortEnd={onSortEnd} />
       <br />
       {chosenFiles.length > 0 && (
         <Button icon={'delete'} onClick={deleteAllFromChosen}>
