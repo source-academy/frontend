@@ -4,13 +4,9 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
-import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
-import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { UserStateTypes } from '../state/GameStateTypes';
-import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
 import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
@@ -33,10 +29,8 @@ import { AwardPage, AwardProperty } from './GameAwardsTypes';
  * available for browsing.
  */
 class GameAwardsManager implements IGameUI {
-  private scene: Phaser.Scene | undefined;
-  private layerManager: GameLayerManager | undefined;
-  private userStateManager: GameUserStateManager | undefined;
-  private phaseManager: GamePhaseManager | undefined;
+  private scene?: IBaseScene;
+
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewContainer: Phaser.GameObjects.Container | undefined;
   private itemsContainer: Phaser.GameObjects.Container | undefined;
@@ -49,15 +43,8 @@ class GameAwardsManager implements IGameUI {
     this.currActivePage = AwardPage.Collectibles;
   }
 
-  public initialise(
-    scene: IBaseScene,
-    userStateManager: GameUserStateManager,
-    phaseManager: GamePhaseManager
-  ) {
+  public initialise(scene: IBaseScene) {
     this.scene = scene;
-    this.layerManager = scene.layerManager;
-    this.userStateManager = userStateManager;
-    this.phaseManager = phaseManager;
 
     // Set all initial pages number to zero
     Object.keys(AwardPage).forEach((page, index) => {
@@ -362,10 +349,10 @@ class GameAwardsManager implements IGameUI {
     let keys: string[];
     switch (this.currActivePage) {
       case AwardPage.Achievements:
-        keys = this.getUserStateManager().getList(UserStateTypes.achievements);
+        keys = this.getUserStateManager().getAchievements();
         break;
       case AwardPage.Collectibles:
-        keys = this.getUserStateManager().getList(UserStateTypes.collectibles);
+        keys = this.getUserStateManager().getCollectibles();
         break;
       default:
         keys = [];
@@ -421,10 +408,10 @@ class GameAwardsManager implements IGameUI {
   }
 
   private getScene = () => mandatory(this.scene);
-  private getLayerManager = () => mandatory(this.layerManager);
-  private getPhaseManager = () => mandatory(this.phaseManager);
+  private getLayerManager = () => mandatory(this.getScene().layerManager);
+  private getPhaseManager = () => mandatory(this.getScene().phaseManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
-  private getUserStateManager = () => mandatory(this.userStateManager);
+  private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 }
 
 export default GameAwardsManager;

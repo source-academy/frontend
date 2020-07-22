@@ -21,6 +21,7 @@ import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
 import EntryScene from './scenes/entry/EntryScene';
 import { getRoomPreviewCode } from './scenes/roomPreview/RoomPreviewHelper';
+import GameUserStateManager from './state/GameUserStateManager';
 
 export type AccountInfo = {
   accessToken: string;
@@ -41,6 +42,7 @@ type GlobalGameProps = {
   currentSceneRef?: Phaser.Scene;
   soundManager: GameSoundManager;
   saveManager: GameSaveManager;
+  userStateManager: GameUserStateManager;
   gameType: GameType;
   gameChapters: GameChapter[];
   ssChapterSimFilenames: string[];
@@ -64,6 +66,7 @@ export default class SourceAcademyGame extends Phaser.Game {
       currentSceneRef: undefined,
       soundManager: new GameSoundManager(),
       saveManager: new GameSaveManager(),
+      userStateManager: new GameUserStateManager(),
       gameType,
       gameChapters: [],
       ssChapterSimFilenames: [],
@@ -119,6 +122,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getUserStateManager = () => mandatory(this.global.userStateManager);
   public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);
   public isGameType = (gameType: GameType) => this.global.gameType === gameType;

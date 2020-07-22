@@ -2,7 +2,7 @@ import { GameActionType } from '../action/GameActionTypes';
 import { GamePosition } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameStateStorage, UserStateTypes } from '../state/GameStateTypes';
+import { GameStateStorage } from '../state/GameStateTypes';
 
 const stringToPositionMap = {
   left: GamePosition.Left,
@@ -52,11 +52,6 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState
 };
 
-const stringToUserStateMap = {
-  achievements: UserStateTypes.achievements,
-  collectibles: UserStateTypes.collectibles
-};
-
 /**
  * This class is in charge of converting strings from
  * the txt into enums that can be stored in the Checkpoint
@@ -99,14 +94,6 @@ export default class ParserConverter {
     const result = stringToLocAttrMap[str];
     if (!result) {
       throw new Error(`Invalid entity type, ${str}`);
-    }
-    return result;
-  }
-
-  public static stringToUserState(str: string) {
-    const result = stringToUserStateMap[str];
-    if (!result) {
-      throw new Error(`Invalid user state type, ${str}`);
     }
     return result;
   }

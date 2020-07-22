@@ -1,5 +1,6 @@
 import GameInputManager from '../input/GameInputManager';
 import GameLayerManager from '../layer/GameLayerManager';
+import GamePhaseManager from '../phase/GamePhaseManager';
 
 /**
  * Encapsulate style of bitmap text.
@@ -82,5 +83,6 @@ export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
 export interface IBaseScene extends Phaser.Scene {
   layerManager: GameLayerManager;
   inputManager: GameInputManager;
+  phaseManager: GamePhaseManager;
   cleanUp: () => void;
 }

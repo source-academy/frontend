@@ -14,8 +14,6 @@ import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { UserStateTypes } from '../../state/GameStateTypes';
-import GameUserStateManager from '../../state/GameUserStateManager';
 import { mandatory } from '../../utils/GameUtils';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
@@ -31,9 +29,8 @@ import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreview
 export default class RoomPreview extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
+  public phaseManager: GamePhaseManager;
 
-  private phaseManager: GamePhaseManager;
-  private userStateManager: GameUserStateManager;
   private escapeManager: GameEscapeManager;
   private awardManager: GameAwardsManager;
   private studentCode: string;
@@ -53,7 +50,6 @@ export default class RoomPreview extends Phaser.Scene {
     this.phaseManager = new GamePhaseManager();
     this.inputManager = new GameInputManager();
     this.escapeManager = new GameEscapeManager();
-    this.userStateManager = new GameUserStateManager();
     this.awardManager = new GameAwardsManager();
     this.studentCode = roomDefaultCode;
   }
@@ -63,7 +59,6 @@ export default class RoomPreview extends Phaser.Scene {
 
     this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
 
-    this.userStateManager = new GameUserStateManager();
     this.layerManager = new GameLayerManager();
     this.phaseManager = new GamePhaseManager();
     this.inputManager = new GameInputManager();
@@ -74,15 +69,11 @@ export default class RoomPreview extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
-    this.awardManager.initialise(this, this.userStateManager, this.phaseManager);
-    this.phaseManager.initialise(
-      createCMRGamePhases(this.escapeManager, this.awardManager),
-      this.inputManager
-    );
-    this.escapeManager.initialise(this, this.phaseManager);
+    this.phaseManager.initialise(createCMRGamePhases(), this.inputManager);
+    this.awardManager.initialise(this);
+    this.escapeManager.initialise(this);
     this.bindKeyboardTriggers();
 
     // Initialise one verified tag to be used throughout the CMR
@@ -92,8 +83,6 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public async create() {
-    await this.userStateManager.loadAchievements();
-
     // Run student code once to update the context
     await this.eval(this.studentCode);
 
@@ -210,8 +199,8 @@ export default class RoomPreview extends Phaser.Scene {
    * @param awardKey key associated with the award
    */
   private createAward(x: number, y: number, awardKey: ItemId) {
-    const achievements = this.userStateManager.getList(UserStateTypes.achievements);
-    const collectibles = this.userStateManager.getList(UserStateTypes.collectibles);
+    const achievements = this.getUserStateManager().getAchievements();
+    const collectibles = this.getUserStateManager().getCollectibles();
     if (achievements.includes(awardKey) || collectibles.includes(awardKey)) {
       const awardProp = getAwardProp(awardKey);
       const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
@@ -254,4 +243,6 @@ export default class RoomPreview extends Phaser.Scene {
 
   private getVerifCont = () => mandatory(this.verifCont);
   private getVerifMask = () => mandatory(this.verifMask);
+
+  private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 }

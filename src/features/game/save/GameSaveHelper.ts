@@ -1,5 +1,5 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { UserStateTypes } from '../state/GameStateTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { FullSaveState, SettingsJson } from './GameSaveTypes';
 
 /**
@@ -19,7 +19,6 @@ export function gameStateToJson(
 ): FullSaveState {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
   const gameStateManager = gameManager.getStateManager();
-  const userStateManager = gameManager.getUserStateManager();
   const phaseManager = gameManager.phaseManager;
 
   return {
@@ -37,7 +36,7 @@ export function gameStateToJson(
     userSaveState: {
       settings: prevGameState.userSaveState.settings,
       recentlyPlayedCheckpoint: [chapterNum, checkpointNum],
-      collectibles: userStateManager.getList(UserStateTypes.collectibles),
+      collectibles: SourceAcademyGame.getInstance().getUserStateManager().getCollectibles(),
       largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter
     }
   };

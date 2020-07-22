@@ -8,8 +8,6 @@ import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { UserStateTypes } from '../../state/GameStateTypes';
-import GameUserStateManager from '../../state/GameUserStateManager';
 import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber } from '../../utils/GameUtils';
 import { resizeUnderflow } from '../../utils/SpriteUtils';
@@ -24,7 +22,6 @@ import { createAwardsHoverContainer } from './AwardsHelper';
 class AwardsHall extends Phaser.Scene {
   public layerManager: GameLayerManager;
   public inputManager: GameInputManager;
-  private userStateManager: GameUserStateManager;
 
   private backgroundTile: Phaser.GameObjects.TileSprite | undefined;
   private awardsContainer: Phaser.GameObjects.Container | undefined;
@@ -40,7 +37,6 @@ class AwardsHall extends Phaser.Scene {
 
     this.layerManager = new GameLayerManager();
     this.inputManager = new GameInputManager();
-    this.userStateManager = new GameUserStateManager();
 
     this.isScrollLeft = false;
     this.isScrollRight = false;
@@ -51,23 +47,19 @@ class AwardsHall extends Phaser.Scene {
   public init() {
     this.layerManager = new GameLayerManager();
     this.inputManager = new GameInputManager();
-    this.userStateManager = new GameUserStateManager();
   }
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise();
     this.layerManager.initialise(this);
     this.inputManager.initialise(this);
   }
 
   public async create() {
-    await this.userStateManager.loadAchievements();
-
     // Calculate the maximum horizontal space required based
     // on maximum number of achievement/collectible
-    const achievementLength = this.userStateManager.getList(UserStateTypes.achievements).length;
-    const collectibleLength = this.userStateManager.getList(UserStateTypes.achievements).length;
+    const achievementLength = this.getUserStateManager().getAchievements().length;
+    const collectibleLength = this.getUserStateManager().getCollectibles().length;
     this.awardXSpace =
       Math.ceil(
         Math.max(achievementLength, collectibleLength) / AwardsHallConstants.maxAwardsPerCol
@@ -159,7 +151,7 @@ class AwardsHall extends Phaser.Scene {
     this.awardsContainer = new Phaser.GameObjects.Container(this, 0, 0);
 
     // Achievement
-    const achievements = this.getAwards(UserStateTypes.achievements);
+    const achievements = this.getAwards(this.getUserStateManager().getAchievements());
     const achievementsPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: achievements.length,
@@ -179,7 +171,7 @@ class AwardsHall extends Phaser.Scene {
     );
 
     // Collectible
-    const collectibles = this.getAwards(UserStateTypes.collectibles);
+    const collectibles = this.getAwards(this.getUserStateManager().getCollectibles());
     const collectiblesPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: collectibles.length,
@@ -202,11 +194,10 @@ class AwardsHall extends Phaser.Scene {
   }
 
   /**
-   * Fetch awardProps based on the type from the user state manager.
-   * @param type
+   * Fetch awardProps based on the type string[]
+   * @param keys
    */
-  private getAwards(type: UserStateTypes) {
-    const keys = this.userStateManager.getList(type);
+  private getAwards(keys: string[]) {
     const awardProps = getAwardProps(keys);
     return awardProps;
   }
@@ -282,6 +273,8 @@ class AwardsHall extends Phaser.Scene {
     bannerContainer.add([bannerBg, bannerText]);
     return bannerContainer;
   }
+
+  public getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 }
 
 export default AwardsHall;

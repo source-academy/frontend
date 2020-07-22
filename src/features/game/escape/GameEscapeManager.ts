@@ -3,10 +3,7 @@ import SoundAssets from '../assets/SoundAssets';
 import { screenCenter, screenSize } from '../commons/CommonConstants';
 import CommonRadioButton from '../commons/CommonRadioButton';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
-import GameInputManager from '../input/GameInputManager';
-import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
-import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import settingsConstants from '../scenes/settings/SettingsConstants';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
@@ -26,23 +23,15 @@ import escapeConstants, {
 class GameEscapeManager implements IGameUI {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
-  private scene: Phaser.Scene | undefined;
-  private layerManager: GameLayerManager | undefined;
-  private phaseManager: GamePhaseManager | undefined;
-  private inputManager: GameInputManager | undefined;
+  private scene?: IBaseScene;
 
   /**
    * Initialises the escape manager UI
    *
    * @param scene - the scene to add escape manager
-   * @param phaseManager - the phase manager of the scene
-   * @param saveManager - the save manager of the scene
    */
-  public initialise(scene: IBaseScene, phaseManager: GamePhaseManager) {
+  public initialise(scene: IBaseScene) {
     this.scene = scene;
-    this.layerManager = scene.layerManager;
-    this.inputManager = scene.inputManager;
-    this.phaseManager = phaseManager;
   }
 
   /**
@@ -259,11 +248,11 @@ class GameEscapeManager implements IGameUI {
   }
 
   private getScene = () => mandatory(this.scene);
-  private getLayerManager = () => mandatory(this.layerManager);
+  private getLayerManager = () => mandatory(this.getScene().layerManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
   private getSettingsSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
-  private getPhaseManager = () => mandatory(this.phaseManager);
-  private getInputManager = () => mandatory(this.inputManager);
+  private getPhaseManager = () => mandatory(this.getScene().phaseManager);
+  private getInputManager = () => mandatory(this.getScene().inputManager);
 }
 
 export default GameEscapeManager;

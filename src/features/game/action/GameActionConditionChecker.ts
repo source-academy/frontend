@@ -30,12 +30,22 @@ export default class ActionConditionChecker {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:
-        return (
-          (await GameGlobalAPI.getInstance().existsInUserStateList(
-            conditionParams.listName,
-            conditionParams.id
-          )) === boolean
-        );
+        switch (conditionParams.listName) {
+          case 'collectibles':
+            return GameGlobalAPI.getInstance().hasCollectible(conditionParams.id) === boolean;
+          case 'achievements':
+            return (
+              (await GameGlobalAPI.getInstance().isAchievementUnlocked(conditionParams.id)) ===
+              boolean
+            );
+          case 'assessments':
+            return (
+              (await GameGlobalAPI.getInstance().isAssessmentComplete(conditionParams.id)) ===
+              boolean
+            );
+        }
+        return false;
+
       case GameStateStorage.ChecklistState:
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
       default:

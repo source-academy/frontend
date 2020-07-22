@@ -14,7 +14,7 @@ import { ActivateSpriteCallbacks, ObjectProperty } from '../../objects/GameObjec
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { StateObserver, UserStateTypes } from '../../state/GameStateTypes';
+import { StateObserver } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -184,12 +184,20 @@ class GameGlobalAPI {
   //   User State    //
   /////////////////////
 
-  public addToUserStateList(listName: UserStateTypes, id: string): void {
-    this.getGameManager().getUserStateManager().addToList(listName, id);
+  public addCollectible(id: string): void {
+    SourceAcademyGame.getInstance().getUserStateManager().addCollectible(id);
   }
 
-  public async existsInUserStateList(listName: UserStateTypes, id: string): Promise<boolean> {
-    return await this.getGameManager().getUserStateManager().doesIdExistInList(listName, id);
+  public hasCollectible(id: string): boolean {
+    return SourceAcademyGame.getInstance().getUserStateManager().hasCollectible(id);
+  }
+
+  public async isAssessmentComplete(id: string): Promise<boolean> {
+    return await SourceAcademyGame.getInstance().getUserStateManager().isAssessmentComplete(id);
+  }
+
+  public async isAchievementUnlocked(id: string): Promise<boolean> {
+    return await SourceAcademyGame.getInstance().getUserStateManager().isAchievementUnlocked(id);
   }
 
   /////////////////////
@@ -261,9 +269,7 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    this.getGameManager()
-      .getUserStateManager()
-      .addToList(UserStateTypes.collectibles, collectibleId);
+    SourceAcademyGame.getInstance().getUserStateManager().addCollectible(collectibleId);
   }
 
   /////////////////////
