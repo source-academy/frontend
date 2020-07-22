@@ -94,6 +94,9 @@ export default class RoomPreview extends Phaser.Scene {
   public async create() {
     await this.userStateManager.loadAchievements();
 
+    // Run student code once to update the context
+    await this.eval(this.studentCode);
+
     /**
      * We don't use .eval('preload();') at preload() as
      * .eval() is not awaited by the preload() method i.e. it does not
@@ -128,7 +131,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public update() {
-    this.eval(`\nupdate();`);
+    this.eval(`update();`);
   }
 
   public createContext() {
@@ -146,8 +149,9 @@ export default class RoomPreview extends Phaser.Scene {
     this.context.externalContext = 'playground';
   }
 
-  private async eval(append: string) {
-    await runInContext(this.studentCode + append, this.context!);
+  private async eval(code: string) {
+    // runInContext also automatically updates the context
+    await runInContext(code, this.context!);
   }
 
   /**
