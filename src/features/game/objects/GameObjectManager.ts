@@ -50,6 +50,9 @@ class GameObjectManager implements StateObserver {
     );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
+      // Inform state manager that update has been consumed
+      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameLocationAttr.objects);
+
       // If the update is on the current location, we rerender to reflect the update
       if (id) {
         // If Id is provided, we only need to address the specific object

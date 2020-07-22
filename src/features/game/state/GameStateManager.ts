@@ -179,7 +179,7 @@ class GameStateManager implements StateSubject {
     this.locationStates.forEach((location, locationId) => {
       this.locationHasUpdate.set(locationId, new Map<GameLocationAttr, boolean>());
       Object.values(GameLocationAttr).forEach(value =>
-        this.locationHasUpdate.get(locationId)!.set(value, true)
+        this.locationHasUpdate.get(locationId)!.set(value, false)
       );
     });
   }
@@ -293,6 +293,17 @@ class GameStateManager implements StateSubject {
     const locationModeState = this.locationHasUpdate.get(locationId);
     locationModeState!.forEach((hasUpdate, attr, map) => (result = result || hasUpdate));
     return result;
+  }
+
+  /**
+   * Inform state manager that an attribute's update has been noted of.
+   *
+   * @param locationId location ID
+   * @param attr attribute which update has been consumed
+   */
+  public consumedLocationUpdate(locationId: LocationId, attr: GameLocationAttr) {
+    this.checkLocationsExist([locationId]);
+    this.locationHasUpdate.get(locationId)!.set(attr, false);
   }
 
   ///////////////////////////////

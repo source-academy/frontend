@@ -49,7 +49,6 @@ export default class GameActionManager {
       isRepeatable,
       interactionId
     } = this.getActionFromId(actionId);
-
     if (await this.checkCanPlayAction(isRepeatable, interactionId, actionConditions)) {
       await GameActionExecuter.executeGameAction(actionType, actionParams);
       GameGlobalAPI.getInstance().triggerInteraction(actionId);

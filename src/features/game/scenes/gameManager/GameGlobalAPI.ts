@@ -108,6 +108,10 @@ class GameGlobalAPI {
   //    Game Attr    //
   /////////////////////
 
+  public consumedLocationUpdate(locationId: LocationId, attr: GameLocationAttr) {
+    return this.getGameManager().stateManager.consumedLocationUpdate(locationId, attr);
+  }
+
   public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
     return this.getGameManager().stateManager.getLocationAttr(attr, locationId);
   }
