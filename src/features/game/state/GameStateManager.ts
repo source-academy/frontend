@@ -42,7 +42,7 @@ class GameStateManager {
     this.gameMap = gameCheckpoint.map;
     this.checkpointObjective = gameCheckpoint.objectives;
 
-    this.updatedLocations = new Set<LocationId>();
+    this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
     this.triggeredActions = [];
 
@@ -144,6 +144,15 @@ class GameStateManager {
   }
 
   /**
+   * Gets whether or not the location has a notif
+   *
+   * @param locationId locationId of location you want to find out if got notif
+   */
+  public hasLocationNotif(locationId: LocationId) {
+    return this.updatedLocations.has(locationId);
+  }
+
+  /**
    * Function to check if current location is the given locationId
    *
    * @param locationId locationId that you want to check whether is current one
@@ -225,8 +234,7 @@ class GameStateManager {
    * @param itemId item ID to be removed
    */
   public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: string) {
-    const location = this.gameMap.getLocationAtId(locationId);
-    location[gameItemType] = location[gameItemType].filter((oldItem: string) => oldItem !== itemId);
+    this.gameMap.getLocationAtId(locationId)[gameItemType].delete(itemId);
 
     this.isCurrentLocation(locationId)
       ? this.getSubscriberForItemType(gameItemType).handleDelete(itemId)

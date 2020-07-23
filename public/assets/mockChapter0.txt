@@ -42,8 +42,11 @@ room
         + scottie, Scottie, sad, left
 
 hallway
-    modes: talk, move
+    modes: move, explore
     talkTopics: welcomeToHallway
+    objects
+        + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            remove_item(objects, room, computerOnShelf)
 
 
 classroom
