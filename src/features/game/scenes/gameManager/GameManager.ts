@@ -162,17 +162,7 @@ class GameManager extends Phaser.Scene {
     this.layerManager.showLayer(Layer.Character);
 
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
-
-    if (startAction) {
-      // Execute fast forward actions
-      await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredActions()
-      );
-      // Execute start actions, notif, then cutscene
-      await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getGameStartActions()
-      );
-    }
+    startAction && (await this.playStartActions());
 
     if (!this.getStateManager().hasTriggeredInteraction(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
@@ -180,8 +170,23 @@ class GameManager extends Phaser.Scene {
     }
 
     await this.getActionManager().processGameActions(gameLocation.actionIds);
-
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
+  }
+
+  /**
+   * Play starting actions for the game, which includes a fast forward replay
+   * of previous actions, as well as gameStartActions, which are actions
+   * played whenever user opens this game chapter
+   */
+  private async playStartActions() {
+    // Execute fast forward actions
+    await this.getActionManager().fastForwardGameActions(
+      this.getStateManager().getTriggeredActions()
+    );
+    // Execute start actions, notif, then cutscene
+    await this.getActionManager().processGameActions(
+      this.getStateManager().getGameMap().getGameStartActions()
+    );
   }
 
   /**

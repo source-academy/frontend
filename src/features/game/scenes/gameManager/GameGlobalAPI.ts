@@ -192,12 +192,12 @@ class GameGlobalAPI {
     return SourceAcademyGame.getInstance().getUserStateManager().hasCollectible(id);
   }
 
-  public async isAssessmentComplete(id: string): Promise<boolean> {
-    return await SourceAcademyGame.getInstance().getUserStateManager().isAssessmentComplete(id);
+  public isAssessmentComplete(id: string): boolean {
+    return SourceAcademyGame.getInstance().getUserStateManager().isAssessmentComplete(id);
   }
 
-  public async isAchievementUnlocked(id: string): Promise<boolean> {
-    return await SourceAcademyGame.getInstance().getUserStateManager().isAchievementUnlocked(id);
+  public isAchievementUnlocked(id: string): boolean {
+    return SourceAcademyGame.getInstance().getUserStateManager().isAchievementUnlocked(id);
   }
 
   /////////////////////

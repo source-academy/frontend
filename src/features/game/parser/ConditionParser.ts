@@ -33,7 +33,7 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.UserState,
           conditionParams: {
-            listName: condParams[0],
+            userStateList: condParams[0],
             id: condParams[1]
           },
           boolean: !hasExclamation
