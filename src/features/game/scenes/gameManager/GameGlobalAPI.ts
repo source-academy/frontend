@@ -1,10 +1,13 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { GameMode } from 'src/features/game/mode/GameModeTypes';
 
+import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
+import { Character } from '../../character/GameCharacterTypes';
 import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayNotification } from '../../effects/Notification';
 import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { ActivateSpriteCallbacks, ObjectProperty } from '../../objects/GameObjectTypes';
@@ -57,12 +60,16 @@ class GameGlobalAPI {
     return this.getGameManager().getStateManager().getGameMap().getLocationAtId(locationId);
   }
 
+  public async changeLocationTo(locationName: string) {
+    await this.getGameManager().changeLocationTo(locationName);
+  }
+
   /////////////////////
   //    Game Mode    //
   /////////////////////
 
-  public getModesByLocId(locationId: LocationId): GameMode[] {
-    return this.getGameManager().getStateManager().getLocationMode(locationId);
+  public getLocationModes(locationId: LocationId): GameMode[] {
+    return this.getGameManager().getStateManager().getLocationModes(locationId);
   }
 
   public addLocationMode(locationId: LocationId, mode: GameMode): void {
@@ -71,22 +78,6 @@ class GameGlobalAPI {
 
   public removeLocationMode(locationId: LocationId, mode: GameMode): void {
     this.getGameManager().getStateManager().removeLocationMode(locationId, mode);
-  }
-
-  /////////////////////
-  //  Game Locations //
-  /////////////////////
-
-  public hasLocationUpdateAttr(locationId: LocationId, attr?: GameItemType): boolean | undefined {
-    return this.getGameManager().getStateManager().hasLocationUpdateAttr(locationId, attr);
-  }
-
-  public hasLocationUpdateMode(locationId: LocationId, mode?: GameMode): boolean | undefined {
-    return this.getGameManager().getStateManager().hasLocationUpdateMode(locationId, mode);
-  }
-
-  public async changeLocationTo(locationName: string) {
-    await this.getGameManager().changeLocationTo(locationName);
   }
 
   /////////////////////
@@ -106,35 +97,27 @@ class GameGlobalAPI {
   }
 
   /////////////////////
-  //    Game Attr    //
+  //    Game Items   //
   /////////////////////
+
+  public watchGameItemType(gameItemType: GameItemType, stateObserver: StateObserver) {
+    this.getGameManager().getStateManager().watchGameItemType(gameItemType, stateObserver);
+  }
 
   public getGameMap() {
     return this.getGameManager().getStateManager().getGameMap();
   }
 
-  public consumedLocationUpdate(locationId: LocationId, attr: GameItemType) {
-    return this.getGameManager().getStateManager().consumedLocationUpdate(locationId, attr);
+  public getLocationAttr(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
+    return this.getGameManager().getStateManager().getLocationAttr(gameItemType, locationId);
   }
 
-  public getLocationAttr(attr: GameItemType, locationId: LocationId): ItemId[] {
-    return this.getGameManager().getStateManager().getLocationAttr(attr, locationId);
+  public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    this.getGameManager().getStateManager().addItem(gameItemType, locationId, itemId);
   }
 
-  public addLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    this.getGameManager().getStateManager().addLocationAttr(attr, locationId, attrElem);
-  }
-
-  public removeLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
-    return this.getGameManager().getStateManager().removeLocationAttr(attr, locationId, attrElem);
-  }
-
-  public subscribeState(observer: StateObserver) {
-    this.getGameManager().getStateManager().subscribe(observer);
-  }
-
-  public unsubscribeState(observer: StateObserver) {
-    this.getGameManager().getStateManager().unsubscribe(observer);
+  public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    return this.getGameManager().getStateManager().removeItem(gameItemType, locationId, itemId);
   }
 
   /////////////////////
@@ -142,15 +125,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
-    this.getGameManager().objectManager.makeObjectGlow(objectId, turnOn);
+    this.getGameManager().getObjectManager().makeObjectGlow(objectId, turnOn);
   }
 
   public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
-    this.getGameManager().objectManager.makeObjectBlink(objectId, turnOn);
-  }
-
-  public getObjPropertyMap() {
-    return this.getGameManager().getStateManager().getObjPropertyMap();
+    this.getGameManager().getObjectManager().makeObjectBlink(objectId, turnOn);
   }
 
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
@@ -158,31 +137,27 @@ class GameGlobalAPI {
   }
 
   public enableObjectAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().objectManager.enableObjectAction(callbacks);
+    this.getGameManager().getObjectManager().enableObjectAction(callbacks);
   }
 
   public disableObjectAction() {
-    this.getGameManager().objectManager.disableObjectAction();
+    this.getGameManager().getObjectManager().disableObjectAction();
   }
 
   /////////////////////
   //    Game BBox    //
   /////////////////////
 
-  public getBBoxPropertyMap() {
-    return this.getGameManager().getStateManager().getBBoxPropertyMap();
-  }
-
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
   }
 
   public enableBBoxAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().boundingBoxManager.enableBBoxAction(callbacks);
+    this.getGameManager().getBBoxManager().enableBBoxAction(callbacks);
   }
 
   public disableBBoxAction() {
-    this.getGameManager().boundingBoxManager.disableBBoxAction();
+    this.getGameManager().getBBoxManager().disableBBoxAction();
   }
 
   /////////////////////
@@ -210,11 +185,11 @@ class GameGlobalAPI {
   /////////////////////
 
   public addToUserStateList(listName: UserStateTypes, id: string): void {
-    this.getGameManager().userStateManager.addToList(listName, id);
+    this.getGameManager().getUserStateManager().addToList(listName, id);
   }
 
   public async existsInUserStateList(listName: UserStateTypes, id: string): Promise<boolean> {
-    return await this.getGameManager().userStateManager.doesIdExistInList(listName, id);
+    return await this.getGameManager().getUserStateManager().doesIdExistInList(listName, id);
   }
 
   /////////////////////
@@ -259,12 +234,12 @@ class GameGlobalAPI {
 
   public async processGameActions(actionIds: ItemId[] | undefined) {
     await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
-    await this.getGameManager().actionManager.processGameActions(actionIds);
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
     await this.getGameManager().phaseManager.popPhase();
   }
 
   public async processGameActionsInSamePhase(actionIds: ItemId[] | undefined) {
-    await this.getGameManager().actionManager.processGameActions(actionIds);
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
   }
 
   /////////////////////
@@ -273,16 +248,12 @@ class GameGlobalAPI {
 
   public async showDialogue(dialogueId: ItemId) {
     await this.getGameManager().phaseManager.pushPhase(GamePhaseType.Sequence);
-    await this.getGameManager().dialogueManager.showDialogue(dialogueId);
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
     await this.getGameManager().phaseManager.popPhase();
   }
 
   public async showDialogueInSamePhase(dialogueId: ItemId) {
-    await this.getGameManager().dialogueManager.showDialogue(dialogueId);
-  }
-
-  public getDialogueById(dialogueId: ItemId) {
-    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
   }
 
   /////////////////////
@@ -290,7 +261,9 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
-    this.getGameManager().userStateManager.addToList(UserStateTypes.collectibles, collectibleId);
+    this.getGameManager()
+      .getUserStateManager()
+      .addToList(UserStateTypes.collectibles, collectibleId);
   }
 
   /////////////////////
@@ -410,15 +383,33 @@ class GameGlobalAPI {
     overrideExpression?: string,
     overridePosition?: GamePosition
   ) {
-    return this.getGameManager().characterManager.createCharacterSprite(
-      characterId,
-      overrideExpression,
-      overridePosition
-    );
+    return this.getGameManager()
+      .getCharacterManager()
+      .createCharacterSprite(characterId, overrideExpression, overridePosition);
   }
 
-  public getCharacterById(characterId: ItemId) {
+  /////////////////////
+  //  Item retrieval //
+  /////////////////////
+
+  public getDialogueById(dialogueId: ItemId): Dialogue {
+    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
+  }
+
+  public getCharacterById(characterId: ItemId): Character {
     return mandatory(this.getGameMap().getCharacterMap().get(characterId));
+  }
+
+  public getActionById(actionId: ItemId): GameAction {
+    return mandatory(this.getGameMap().getActionMap().get(actionId));
+  }
+
+  public getObjectById(objectId: ItemId): ObjectProperty {
+    return mandatory(this.getGameMap().getObjectPropMap().get(objectId));
+  }
+
+  public getBBoxById(bboxId: ItemId): BBoxProperty {
+    return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
   }
 }
 
