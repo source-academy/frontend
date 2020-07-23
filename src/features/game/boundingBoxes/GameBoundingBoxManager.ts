@@ -40,19 +40,11 @@ class GameBoundingBoxManager implements StateObserver {
 
   /**
    * Create the bbox from the given bbox property.
-   * All bbox created with this function will have
-   * `.activate()` and `.deactivate()`; which is internally used
-   * by `.enableBBoxActions()` and `.disableBBoxActions()`.
+   * Because we want this sprite to be activatable
+   * by Explore Mode UI, we expose its actionIds
+   * and interactionId
    *
-   * The method `.activate(callbacks)` receive a callbacks argument,
-   * which encapsulate three different callbacks.
-   *
-   * callbacks = { onClick?: (id?: ItemId) => void,
-   *               onHover?: (id?: ItemId) => void,
-   *               onOut?: (id?: ItemId) => void
-   *             }
-   *
-   * @param objectProperty object property to be used
+   * @param bboxProperty bbox property to be used
    */
   private createBBox(bboxProperty: BBoxProperty): ActivatableSprite {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
@@ -122,7 +114,8 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   /**
-   * Get all the sprites which can be activated
+   * Get all the rectanlge sprites which can be activated
+   * by external Explore Mode UI
    */
   public getActivatables() {
     return Array.from(this.bboxes.values());

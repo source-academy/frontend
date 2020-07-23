@@ -81,6 +81,9 @@ class GameObjectManager implements StateObserver {
 
   /**
    * Create the object from the given object property.
+   * Because we want this sprite to be activatable
+   * by Explore Mode UI, we expose its actionIds
+   * and interactionId
    *
    * @param objectProperty object property to be used
    */
@@ -146,7 +149,8 @@ class GameObjectManager implements StateObserver {
   }
 
   /**
-   * Get all the sprites which can be activated
+   * Get all the rectanlge sprites which can be activated
+   * by external Explore Mode UI
    */
   public getActivatables() {
     return Array.from(this.objects.values());
