@@ -211,7 +211,9 @@ class GameStateManager {
   }
 
   /**
-   * Add an item ID of a game item type in a location.
+   * Add an item ID of a game item type in gamemap's location.
+   *
+   * Either render the change instantly, or place a notification inside another location
    *
    * @param gameItemType type of game item
    * @param locationId id of location to add items to
@@ -226,8 +228,10 @@ class GameStateManager {
   }
 
   /**
-   * Remove an item ID from game items in a location.
+   * Remove an item ID from game items in gamemap's location.
    * If ID is not found within the game item list, nothing will be executed.
+   *
+   * Either render the change instantly, or place a notification inside another location
    *
    * @param gameItemType type of game item to remove
    * @param locationId id of location to remove items from
