@@ -83,7 +83,7 @@ class GameStateManager {
    *
    * @param gameItemType the type of item being watched
    */
-  public getSubscriberForItemType(gameItemType: GameItemType) {
+  private getSubscriberForItemType(gameItemType: GameItemType) {
     return mandatory(this.subscribers.get(gameItemType));
   }
 

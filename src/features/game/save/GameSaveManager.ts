@@ -1,7 +1,7 @@
 import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
-import { createEmptySaveState, gameStateToJson, userSettingsToJson } from './GameSaveHelper';
+import { createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';
 import { FullSaveState, GameSaveState, SettingsJson } from './GameSaveTypes';
 
@@ -97,7 +97,7 @@ export default class GameSaveManager {
    * @param settingsJson the newest settings of the user
    */
   public async saveSettings(settingsJson: SettingsJson) {
-    this.fullSaveState = userSettingsToJson(this.fullSaveState, settingsJson);
+    this.fullSaveState.userSaveState.settings = settingsJson;
     await saveData(this.fullSaveState);
   }
 

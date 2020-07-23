@@ -1,6 +1,6 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { FullSaveState, SettingsJson } from './GameSaveTypes';
+import { FullSaveState } from './GameSaveTypes';
 
 /**
  * Function that saves game data as a 'snapshot' in FullSaveState
@@ -39,24 +39,6 @@ export function gameStateToJson(
       collectibles: SourceAcademyGame.getInstance().getUserStateManager().getCollectibles(),
       largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter
     }
-  };
-}
-
-/**
- * Function that saves user settings into FullSaveState
- * by overwriting just the settings portion of the game
- *
- * @param prevGameState - the snapshot of the game the during the last save point
- * @param settingsJson - the settings to be saved
- * @returns {FullSaveState} - the new snapshot of the game
- */
-export function userSettingsToJson(
-  prevGameState: FullSaveState,
-  settingsJson: SettingsJson
-): FullSaveState {
-  return {
-    gameSaveStates: prevGameState.gameSaveStates,
-    userSaveState: { ...prevGameState.userSaveState, settings: settingsJson }
   };
 }
 
