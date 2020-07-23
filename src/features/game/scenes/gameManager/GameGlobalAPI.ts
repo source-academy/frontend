@@ -92,6 +92,10 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().triggerAction(actionId);
   }
 
+  public triggerAction(actionId: ItemId): void {
+    this.getGameManager().stateManager.triggerAction(actionId);
+  }
+
   public triggerInteraction(id: string): void {
     this.getGameManager().getStateManager().triggerInteraction(id);
   }
