@@ -88,11 +88,11 @@ class GameMap {
     this.checkpointCompleteActions = actionIds;
   }
 
-  public getStartActions() {
+  public getGameStartActions() {
     return this.gameStartActions;
   }
 
-  public getEndActions() {
+  public getCheckpointCompleteActions() {
     return this.checkpointCompleteActions;
   }
 

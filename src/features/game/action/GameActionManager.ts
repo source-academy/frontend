@@ -22,6 +22,20 @@ export default class GameActionManager {
   }
 
   /**
+   * Process an array of actions, denoted by their IDs,
+   * but only replays those actions that have no visible effects
+   *
+   * @param actionIds ids of the actions
+   */
+  public async fastForwardGameActions(actionIds?: ItemId[]): Promise<void> {
+    if (!actionIds) return;
+    for (const actionId of actionIds) {
+      const { actionType, actionParams } = this.getActionFromId(actionId);
+      await GameActionExecuter.executeGameAction(actionType, actionParams, true);
+    }
+  }
+
+  /**
    * Process an array of actions, denoted by their IDs.
    *
    * NOTE: Saves the game after all the actions are executed.
@@ -52,6 +66,7 @@ export default class GameActionManager {
     if (await this.checkCanPlayAction(isRepeatable, interactionId, actionConditions)) {
       await GameActionExecuter.executeGameAction(actionType, actionParams);
       GameGlobalAPI.getInstance().triggerInteraction(actionId);
+      GameGlobalAPI.getInstance().triggerAction(actionId);
     }
   }
 

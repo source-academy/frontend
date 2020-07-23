@@ -190,9 +190,12 @@ class GameManager extends Phaser.Scene {
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 
     // Execute start actions, notif, then cutscene
+    await this.actionManager.fastForwardGameActions(this.stateManager.getTriggeredActions());
+
+    // Execute start actions, notif, then cutscene
     if (startAction) {
       await this.actionManager.processGameActions(
-        this.getCurrentCheckpoint().map.getStartActions()
+        this.getCurrentCheckpoint().map.getCheckpointCompleteActions()
       );
     }
     if (!this.stateManager.hasTriggeredInteraction(locationId)) {
@@ -280,7 +283,9 @@ class GameManager extends Phaser.Scene {
 
     // Transition to the next scene if possible
     if (transitionToNextCheckpoint) {
-      await this.actionManager.processGameActions(this.getCurrentCheckpoint().map.getEndActions());
+      await this.actionManager.processGameActions(
+        this.getCurrentCheckpoint().map.getCheckpointCompleteActions()
+      );
       this.cleanUp();
       this.scene.start('CheckpointTransition');
     }

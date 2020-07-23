@@ -11,53 +11,22 @@ export type FullSaveState = {
 
 /**
  * @typedef {GameSaveState} - this encapsulates data of students' progress in the game in one checkpoint
+ * @prop {number} lastCheckpointPlayed - the last checkpoint played in the chapter
  * @prop {string} currentLocation - location of student during save
  * @prop {string} currentPhase - phase student is in during last save
- * @prop {Object<string, boolean>} chapterObjective - object where the keys are objective ids and value is whether or not student have completed the objective
- * @prop {number} lastCheckpointPlayed - the last checkpoint played in the chapter
- * @prop {Object<LocationId, Location>} locationStates - information about each location as of the save point
- * @prop {Object<ItemId, ObjectProperty>} objectPropertyMap - information about each object in the map as of the save point
- * @prop {Object<ItemId, BBoxProperty>} bboxPropertyMap - information about each bounding box in the map as of the save point
- * @prop {Object<string, boolean>} triggeredInteractions - object where keys are interactionIds and values are whether or not these interactions have been triggered
+ *
+ * @prop {string[]} completedObjectives - list of objectives that have been completed by player
+ * @prop {string[]} triggeredInteractions - list of itemIds that have been triggered by player
+ * @prop {string[]} triggeredActions - list of actions that have been triggered by player
  */
 export type GameSaveState = {
+  lastCheckpointPlayed: number;
   currentLocation: string;
   currentPhase: string;
-  chapterObjective: { [objective: string]: boolean };
-  lastCheckpointPlayed: number;
-  locationStates: {
-    [locationId: string]: {
-      id: string;
-      name: string;
-      assetKey: string;
-      modes?: string[];
-      navigation?: string[];
-      talkTopics?: string[];
-      objects?: string[];
-      boundingBoxes?: string[];
-    };
-  };
-  objectPropertyMap: {
-    [itemId: string]: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isInteractive: boolean;
-      interactionId: string;
-    };
-  };
-  bboxPropertyMap: {
-    [itemId: string]: {
-      x: number;
-      y: number;
-      width: number;
-      height: number;
-      isInteractive: boolean;
-      interactionId: string;
-    };
-  };
-  triggeredInteractions: { [interactionId: string]: boolean };
+
+  completedObjectives: string[];
+  triggeredInteractions: string[];
+  triggeredActions: string[];
 };
 
 /**
