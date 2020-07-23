@@ -125,18 +125,16 @@ class GameMap {
     return this.soundAssets;
   }
 
-  public setItemInMap(listName: GameItemType, itemId: string, item: any) {
-    this[listName].set(itemId, item);
+  public setItemInMap(gameItemType: GameItemType, itemId: string, item: any) {
+    this[gameItemType].set(itemId, item);
   }
 
-  public addItemToLocation(locId: LocationId, listName: GameItemType, itemId: string) {
-    const location = this.getLocationAtId(locId);
-    location[listName].add(itemId);
+  public addItemToLocation(locId: LocationId, gameItemType: GameItemType, itemId: string) {
+    this.getLocationAtId(locId)[gameItemType].add(itemId);
   }
 
   public setBGMusicAt(locId: LocationId, soundKey: AssetKey) {
-    const location = this.getLocationAtId(locId);
-    location.bgmKey = soundKey;
+    this.getLocationAtId(locId).bgmKey = soundKey;
   }
 
   public getLocationAtId = (locId: LocationId) =>
