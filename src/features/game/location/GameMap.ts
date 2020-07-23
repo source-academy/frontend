@@ -145,8 +145,6 @@ class GameMap {
   public getLocationIds(): LocationId[] {
     return Array.from(this.locations.keys());
   }
-
-  public checkLocationExists = this.getLocationAtId;
 }
 
 export default GameMap;
