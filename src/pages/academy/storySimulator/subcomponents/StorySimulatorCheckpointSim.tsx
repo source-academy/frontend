@@ -1,14 +1,12 @@
 import { Button } from '@blueprintjs/core';
 import React from 'react';
+import { useRequest } from 'src/commons/utils/Hooks';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
+import { fetchTextAssets } from 'src/features/storySimulator/StorySimulatorService';
 
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
-
-type Props = {
-  textAssets: string[];
-};
 
 /**
  * This component helps one simulate a checkpoint by
@@ -18,7 +16,9 @@ type Props = {
  * @param textAssets these are the list of text files on S3, if storywriter's simulation
  *                   involves S3 text files.
  */
-export default function CheckpointSim({ textAssets }: Props) {
+export default function CheckpointSim() {
+  const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
+
   function simulateCheckpoint() {
     (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
   }

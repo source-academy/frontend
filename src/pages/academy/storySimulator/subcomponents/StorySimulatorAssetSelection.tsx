@@ -1,16 +1,17 @@
 import { Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
 import React from 'react';
-import { deleteS3File, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import { useRequest } from 'src/commons/utils/Hooks';
+import {
+  deleteS3File,
+  fetchAssetPaths,
+  s3AssetFolders
+} from 'src/features/storySimulator/StorySimulatorService';
 
 import { assetPathsToTree, treeMap } from './StorySimulatorAssetSelectionHelper';
 import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
 type TreeState = {
   nodes: ITreeNode[];
-};
-
-type Props = {
-  assetPaths: string[];
 };
 
 /**
@@ -22,7 +23,9 @@ type Props = {
  *
  * @param assetPaths all the paths of assets in the S3 folder
  */
-const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
+const StorySimulatorAssetSelection = () => {
+  const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);
+
   const [currentAsset, setCurrentAsset] = React.useState('');
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
