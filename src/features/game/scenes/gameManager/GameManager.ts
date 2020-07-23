@@ -141,6 +141,10 @@ class GameManager extends Phaser.Scene {
     await this.getUserStateManager().loadAssessments();
     await this.getUserStateManager().loadAchievements();
     await this.changeLocationTo(this.currentLocationId, true);
+    // Execute fast forward actions
+    await this.getActionManager().fastForwardGameActions(
+      this.getStateManager().getTriggeredActions()
+    );
     await GameGlobalAPI.getInstance().saveGame();
   }
 
@@ -172,17 +176,13 @@ class GameManager extends Phaser.Scene {
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 
     if (startAction) {
-      // Execute fast forward actions
-      await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredActions()
-      );
       // Execute start actions, notif, then cutscene
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getCheckpointCompleteActions()
       );
     }
 
-    if (!this.getStateManager().hasTriggeredInteraction(locationId)) {
+    if (this.getStateManager().hasLocationNotif(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
       this.getStateManager().removeLocationNotif(locationId);
     }
