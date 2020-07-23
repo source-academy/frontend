@@ -192,12 +192,12 @@ class GameGlobalAPI {
     return SourceAcademyGame.getInstance().getUserStateManager().hasCollectible(id);
   }
 
-  public isAssessmentComplete(id: string): boolean {
-    return SourceAcademyGame.getInstance().getUserStateManager().isAssessmentComplete(id);
+  public hasAssessment(id: string): boolean {
+    return SourceAcademyGame.getInstance().getUserStateManager().hasAssessment(id);
   }
 
-  public isAchievementUnlocked(id: string): boolean {
-    return SourceAcademyGame.getInstance().getUserStateManager().isAchievementUnlocked(id);
+  public hasAchievement(id: string): boolean {
+    return SourceAcademyGame.getInstance().getUserStateManager().hasAchievement(id);
   }
 
   /////////////////////

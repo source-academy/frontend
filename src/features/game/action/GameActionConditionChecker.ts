@@ -30,14 +30,11 @@ export default class ActionConditionChecker {
           case 'collectibles':
             return GameGlobalAPI.getInstance().hasCollectible(conditionParams.id) === boolean;
           case 'achievements':
-            return (
-              GameGlobalAPI.getInstance().isAchievementUnlocked(conditionParams.id) === boolean
-            );
+            return GameGlobalAPI.getInstance().hasAchievement(conditionParams.id) === boolean;
           case 'assessments':
-            return GameGlobalAPI.getInstance().isAssessmentComplete(conditionParams.id) === boolean;
+            return GameGlobalAPI.getInstance().hasAssessment(conditionParams.id) === boolean;
         }
-        return false;
-
+        return true;
       case GameStateStorage.ChecklistState:
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
       default:

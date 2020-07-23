@@ -37,33 +37,6 @@ export default class GameUserStateManager {
   }
 
   /**
-   * Checks whether the given ID exists in the collectible list
-   *
-   * @param collectibleId - collectible you want to check if present
-   */
-  public hasCollectible(collectibleId: ItemId): boolean {
-    return this.collectibles.has(collectibleId);
-  }
-
-  /**
-   * Check whether the given assessment ID is complete
-   *
-   * @param id id of the assessment
-   */
-  public isAssessmentComplete(id: string): boolean {
-    return this.assessments.has(id);
-  }
-
-  /**
-   * Check whether the given achievement ID is complete
-   *
-   * @param id id of the achievement
-   */
-  public isAchievementUnlocked(id: string): boolean {
-    return this.achievements.has(id);
-  }
-
-  /**
    * Fetches assessment overview of the student; based on
    * the account information.
    *
@@ -95,4 +68,8 @@ export default class GameUserStateManager {
   public getCollectibles = () => Array.from(this.collectibles);
   public getAchievements = () => Array.from(this.achievements);
   public getAssessments = () => Array.from(this.assessments);
+
+  public hasCollectible = (id: ItemId) => this.collectibles.has(id);
+  public hasAssessment = (id: ItemId) => this.assessments.has(id);
+  public hasAchievement = (id: ItemId) => this.achievements.has(id);
 }
