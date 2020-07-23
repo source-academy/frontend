@@ -44,7 +44,8 @@ const stringToActionTypeMap = {
   make_object_glow: GameActionType.MakeObjectGlow,
   make_object_blink: GameActionType.MakeObjectBlink,
   play_bgm: GameActionType.PlayBGM,
-  play_sfx: GameActionType.PlaySFX
+  play_sfx: GameActionType.PlaySFX,
+  show_object_layer: GameActionType.ShowObjectLayer
 };
 
 const stringToGameStateStorageMap = {
@@ -96,5 +97,9 @@ export default class ParserConverter {
       throw new Error(`Invalid entity type, ${str}`);
     }
     return result;
+  }
+
+  public static stringToBoolean(str: string) {
+    return str === 'false' ? false : true;
   }
 }

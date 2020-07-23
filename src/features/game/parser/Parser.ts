@@ -6,7 +6,7 @@ import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
-import ParserValidator, { GameAttr } from './ParserValidator';
+import ParserValidator, { GameEntityType } from './ParserValidator';
 
 /**
  * This class converts a checkpoint txt file into a Checkpoint
@@ -63,7 +63,7 @@ class Parser {
     const [key, value] = StringUtils.splitByChar(checkpointConfig, ':');
     switch (key) {
       case 'startingLoc':
-        Parser.validator.assertAttr(GameAttr.locations, value);
+        Parser.validator.assert(GameEntityType.locations, value);
         Parser.checkpoint.startingLoc = value;
         break;
       default:

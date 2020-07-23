@@ -17,7 +17,7 @@ room
     
     objects
         + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
-            make_object_blink*(carpet) if userstate.collectibles.cookies
+            add_popup(computerOnShelf, middle, 10)
         + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
             add_item(objects, room, classroomChair)
         + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263
@@ -62,6 +62,12 @@ emergency
     nav: classroom
 
 dialogues
+    hello
+        @scottie
+        You can actually change the change the background of the scene.
+            change_background(hallway)
+        Let's now pretend we're in the hallway.
+
     canNowTalk, you can now talk!
         @scottie
         Thanks for clicking the navigator, you can now talk to me via the talk mode.

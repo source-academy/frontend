@@ -8,7 +8,7 @@ import MusicParser from './MusicParser';
 import ObjectParser from './ObjectParser';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
-import { GameAttr } from './ParserValidator';
+import { GameEntityType } from './ParserValidator';
 
 /**
  * This class parses data for one specific location.
@@ -54,13 +54,13 @@ export default class LocationParser {
         break;
       case 'nav':
         configValues.forEach(otherLocationId => {
-          Parser.validator.assertAttr(GameAttr.locations, otherLocationId);
+          Parser.validator.assert(GameEntityType.locations, otherLocationId);
           location.navigation.add(otherLocationId);
         });
         break;
       case 'talkTopics':
         const talkTopics = configValues;
-        Parser.validator.assertLocAttrs(GameItemType.dialogues, talkTopics);
+        Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
       default:

@@ -17,7 +17,8 @@ export enum GameActionType {
   MakeObjectBlink = 'MakeObjectBlink',
   MakeObjectGlow = 'MakeObjectGlow',
   PlayBGM = 'PlayBGM',
-  PlaySFX = 'PlaySFX'
+  PlaySFX = 'PlaySFX',
+  ShowObjectLayer = 'ShowObjectLayer'
 }
 
 export interface IGameActionable {

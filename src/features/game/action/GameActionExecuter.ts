@@ -1,3 +1,4 @@
+import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { GameActionType } from './GameActionTypes';
@@ -22,10 +23,10 @@ export default class GameActionExecuter {
 
     switch (actionType) {
       case GameActionType.AddItem:
-        globalAPI.addItem(actionParams.attr, actionParams.locationId, actionParams.id);
+        globalAPI.addItem(actionParams.gameItemType, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.RemoveItem:
-        globalAPI.removeItem(actionParams.attr, actionParams.locationId, actionParams.id);
+        globalAPI.removeItem(actionParams.gameItemType, actionParams.locationId, actionParams.id);
         return;
       case GameActionType.AddLocationMode:
         globalAPI.addLocationMode(actionParams.locationId, actionParams.mode);
@@ -67,6 +68,9 @@ export default class GameActionExecuter {
         return;
       case GameActionType.PlaySFX:
         await SourceAcademyGame.getInstance().getSoundManager().playSound(actionParams.id);
+        return;
+      case GameActionType.ShowObjectLayer:
+        actionParams.show ? globalAPI.showLayer(Layer.Objects) : globalAPI.hideLayer(Layer.Objects);
         return;
       default:
         return;

@@ -5,7 +5,7 @@ import StringUtils from '../utils/StringUtils';
 import ConditionParser from './ConditionParser';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
-import { GameAttr } from './ParserValidator';
+import { GameEntityType } from './ParserValidator';
 
 /**
  * The Action Parser parses actions for all entities.
@@ -73,87 +73,76 @@ export default class ActionParser {
 
     switch (gameActionType) {
       case GameActionType.ObtainCollectible:
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.collectibles,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.collectibles, actionParams[0], actionType);
         break;
+
       case GameActionType.CompleteObjective:
-        actionParamObj.id = Parser.validator.assertAttr(
-          GameAttr.objectives,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assert(GameEntityType.objectives, actionParams[0], actionType);
         break;
+
       case GameActionType.LocationChange:
       case GameActionType.ChangeBackground:
-        actionParamObj.id = Parser.validator.assertAttr(
-          GameAttr.locations,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
         break;
+
       case GameActionType.ShowDialogue:
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.dialogues,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.dialogues, actionParams[0], actionType);
         break;
+
       case GameActionType.AddItem:
       case GameActionType.RemoveItem:
-        const gameLocAttr = ParserConverter.stringToGameItemType(actionParams[0]);
-        actionParamObj.attr = gameLocAttr;
-        actionParamObj.locationId = Parser.validator.assertAttr(
-          GameAttr.locations,
-          actionParams[1],
-          actionType
-        );
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          gameLocAttr,
-          actionParams[2],
-          actionType
-        );
+        const gameItemType = ParserConverter.stringToGameItemType(actionParams[0]);
+        actionParamObj.gameItemType = gameItemType;
+
+        actionParamObj.locationId = actionParams[1];
+        Parser.validator.assert(GameEntityType.locations, actionParams[1], actionType);
+
+        actionParamObj.id = actionParams[2];
+        Parser.validator.assertItemType(gameItemType, actionParams[2], actionType);
         break;
+
       case GameActionType.AddLocationMode:
       case GameActionType.RemoveLocationMode:
-        actionParamObj.locationId = Parser.validator.assertAttr(
-          GameAttr.locations,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.locationId = actionParams[0];
+        Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
         actionParamObj.mode = ParserConverter.stringToGameMode(actionParams[1]);
         break;
+
       case GameActionType.AddPopup:
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.objects,
-          actionParams[0],
-          actionType
-        );
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
+        actionParamObj.duration = parseInt(actionParams[2]) * 1000;
         break;
+
       case GameActionType.MakeObjectBlink:
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.objects,
-          actionParams[0],
-          actionType
-        );
-        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
+        actionParamObj.turnOn = ParserConverter.stringToBoolean(actionParams[1]);
         break;
+
       case GameActionType.MakeObjectGlow:
-        actionParamObj.id = Parser.validator.assertLocAttr(
-          GameItemType.objects,
-          actionParams[0],
-          actionType
-        );
-        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
+        actionParamObj.turnOn = ParserConverter.stringToBoolean(actionParams[1]);
         break;
+
       case GameActionType.PlayBGM:
-        actionParamObj.id = Parser.validator.assertAttr(GameAttr.bgms, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assert(GameEntityType.bgms, actionParams[0], actionType);
         break;
+
       case GameActionType.PlaySFX:
-        actionParamObj.id = Parser.validator.assertAttr(GameAttr.sfxs, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
+        Parser.validator.assert(GameEntityType.sfxs, actionParams[0], actionType);
+        break;
+
+      case GameActionType.ShowObjectLayer:
+        actionParamObj.show = ParserConverter.stringToBoolean(actionParams[0]);
         break;
     }
 
