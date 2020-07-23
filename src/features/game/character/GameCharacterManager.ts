@@ -26,7 +26,7 @@ export default class CharacterManager implements StateObserver {
    * @param locationId location in which to render characters at
    */
   public renderCharacterLayerContainer(locationId: LocationId): void {
-    const idsToRender = GameGlobalAPI.getInstance().getLocationAttr(
+    const idsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.characters,
       locationId
     );

@@ -40,7 +40,7 @@ class GameModeMove implements IGameUI {
    * Fetches the navigations of the current location id.
    */
   private getLatestNavigations() {
-    return GameGlobalAPI.getInstance().getLocationAttr(
+    return GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.navigation,
       GameGlobalAPI.getInstance().getCurrLocId()
     );

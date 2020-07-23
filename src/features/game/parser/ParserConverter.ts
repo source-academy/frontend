@@ -17,7 +17,7 @@ const stringToGameModeMap = {
   menu: GameMode.Menu
 };
 
-const stringToLocAttrMap = {
+const stringToGameItemMap = {
   navigation: GameItemType.navigation,
   talkTopics: GameItemType.talkTopics,
   objects: GameItemType.objects,
@@ -90,8 +90,8 @@ export default class ParserConverter {
     return result;
   }
 
-  public static stringToLocAttr(str: string) {
-    const result = stringToLocAttrMap[str];
+  public static stringToGameItemType(str: string) {
+    const result = stringToGameItemMap[str];
     if (!result) {
       throw new Error(`Invalid entity type, ${str}`);
     }

@@ -108,8 +108,8 @@ class GameGlobalAPI {
     return this.getGameManager().getStateManager().getGameMap();
   }
 
-  public getLocationAttr(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
-    return this.getGameManager().getStateManager().getLocationAttr(gameItemType, locationId);
+  public getGameItemsInLocation(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
+    return this.getGameManager().getStateManager().getGameItemsInLocation(gameItemType, locationId);
   }
 
   public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {

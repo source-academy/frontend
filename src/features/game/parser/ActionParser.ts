@@ -103,7 +103,7 @@ export default class ActionParser {
         break;
       case GameActionType.AddItem:
       case GameActionType.RemoveItem:
-        const gameLocAttr = ParserConverter.stringToLocAttr(actionParams[0]);
+        const gameLocAttr = ParserConverter.stringToGameItemType(actionParams[0]);
         actionParamObj.attr = gameLocAttr;
         actionParamObj.locationId = Parser.validator.assertAttr(
           GameAttr.locations,

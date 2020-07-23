@@ -26,7 +26,7 @@ class GameModeTalk implements IGameUI {
    * Fetches the talk topics of the current location id.
    */
   private getLatestTalkTopics() {
-    return GameGlobalAPI.getInstance().getLocationAttr(
+    return GameGlobalAPI.getInstance().getGameItemsInLocation(
       GameItemType.talkTopics,
       GameGlobalAPI.getInstance().getCurrLocId()
     );

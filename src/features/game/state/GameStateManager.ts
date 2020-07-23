@@ -200,20 +200,20 @@ class GameStateManager {
   ///////////////////////////////
 
   /**
-   * Get an IDs of an attribute of a location.
+   * Get all IDs of a type of game item in a location.
    *
-   * @param gameItemType location attribute
+   * @param gameItemType type of game item
    * @param locationId id of location
-   * @returns {ItemId[]}
+   * @returns {ItemId[]} items IDS of all game items of that type in the location
    */
-  public getLocationAttr(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
+  public getGameItemsInLocation(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
     return Array.from(this.gameMap.getLocationAtId(locationId)[gameItemType]) || [];
   }
 
   /**
-   * Add an item ID to an attribute of the location.
+   * Add an item ID of a game item type in a location.
    *
-   * @param gameItemType attribute to add to
+   * @param gameItemType type of game item
    * @param locationId id of location to add items to
    * @param itemId item ID to be added
    */
@@ -226,10 +226,10 @@ class GameStateManager {
   }
 
   /**
-   * Remove an item ID from an attribute of the location.
-   * If ID is not found within the attribute, nothing will be executed.
+   * Remove an item ID from game items in a location.
+   * If ID is not found within the game item list, nothing will be executed.
    *
-   * @param gameItemType attribute to remove from
+   * @param gameItemType type of game item to remove
    * @param locationId id of location to remove items from
    * @param itemId item ID to be removed
    */
