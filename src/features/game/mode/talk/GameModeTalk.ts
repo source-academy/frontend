@@ -8,7 +8,7 @@ import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
@@ -27,7 +27,7 @@ class GameModeTalk implements IGameUI {
    */
   private getLatestTalkTopics() {
     return GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
+      GameItemType.talkTopics,
       GameGlobalAPI.getInstance().getCurrLocId()
     );
   }

@@ -1,4 +1,4 @@
-import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -60,7 +60,7 @@ export default class LocationParser {
         break;
       case 'talkTopics':
         const talkTopics = configValues;
-        Parser.validator.assertLocAttrs(GameLocationAttr.talkTopics, talkTopics);
+        Parser.validator.assertLocAttrs(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
       default:

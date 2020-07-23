@@ -31,7 +31,7 @@ export default class DialogueManager {
 
   public initialise(gameManager: GameManager) {
     this.username = SourceAcademyGame.getInstance().getAccountInfo().name;
-    this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogues();
+    this.dialogueMap = gameManager.getCurrentCheckpoint().map.getDialogueMap();
   }
 
   /**

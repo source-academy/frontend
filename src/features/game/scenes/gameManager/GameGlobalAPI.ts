@@ -6,7 +6,7 @@ import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { GamePosition, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { displayNotification } from '../../effects/Notification';
-import { GameLocation, GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { ActivateSpriteCallbacks, ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
@@ -77,10 +77,7 @@ class GameGlobalAPI {
   //  Game Locations //
   /////////////////////
 
-  public hasLocationUpdateAttr(
-    locationId: LocationId,
-    attr?: GameLocationAttr
-  ): boolean | undefined {
+  public hasLocationUpdateAttr(locationId: LocationId, attr?: GameItemType): boolean | undefined {
     return this.getGameManager().stateManager.hasLocationUpdateAttr(locationId, attr);
   }
 
@@ -112,23 +109,19 @@ class GameGlobalAPI {
   //    Game Attr    //
   /////////////////////
 
-  public consumedLocationUpdate(locationId: LocationId, attr: GameLocationAttr) {
+  public consumedLocationUpdate(locationId: LocationId, attr: GameItemType) {
     return this.getGameManager().stateManager.consumedLocationUpdate(locationId, attr);
   }
 
-  public getLocationAttr(attr: GameLocationAttr, locationId: LocationId): ItemId[] {
+  public getLocationAttr(attr: GameItemType, locationId: LocationId): ItemId[] {
     return this.getGameManager().stateManager.getLocationAttr(attr, locationId);
   }
 
-  public addLocationAttr(attr: GameLocationAttr, locationId: LocationId, attrElem: string): void {
+  public addLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
     this.getGameManager().stateManager.addLocationAttr(attr, locationId, attrElem);
   }
 
-  public removeLocationAttr(
-    attr: GameLocationAttr,
-    locationId: LocationId,
-    attrElem: string
-  ): void {
+  public removeLocationAttr(attr: GameItemType, locationId: LocationId, attrElem: string): void {
     return this.getGameManager().stateManager.removeLocationAttr(attr, locationId, attrElem);
   }
 
@@ -285,7 +278,7 @@ class GameGlobalAPI {
   }
 
   public getDialogue(dialogueId: ItemId) {
-    return this.getGameManager().getCurrentCheckpoint().map.getDialogues().get(dialogueId);
+    return this.getGameManager().getCurrentCheckpoint().map.getDialogueMap().get(dialogueId);
   }
 
   /////////////////////

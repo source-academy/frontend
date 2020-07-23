@@ -4,7 +4,7 @@ import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ActivatableSprite, ActivateSpriteCallbacks } from '../objects/GameObjectTypes';
 import { StateChangeType, StateObserver } from '../state/GameStateTypes';
 import { mandatory } from '../utils/GameUtils';
@@ -39,15 +39,12 @@ class GameBoundingBoxManager implements StateObserver {
   public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
     const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
       locationId,
-      GameLocationAttr.boundingBoxes
+      GameItemType.boundingBoxes
     );
     const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
     if (hasUpdate && locationId === currLocationId) {
       // Inform state manager that update has been consumed
-      GameGlobalAPI.getInstance().consumedLocationUpdate(
-        locationId,
-        GameLocationAttr.boundingBoxes
-      );
+      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameItemType.boundingBoxes);
 
       // If the update is on the current location, we rerender to reflect the update
       if (id) {
@@ -69,7 +66,7 @@ class GameBoundingBoxManager implements StateObserver {
   public renderBBoxLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
     const bboxIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.boundingBoxes,
+      GameItemType.boundingBoxes,
       locationId
     );
 

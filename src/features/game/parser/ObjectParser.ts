@@ -1,4 +1,4 @@
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -78,9 +78,9 @@ export default class ObjectParser {
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), this.objectPath(shortPath));
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, objectProperty);
+    Parser.checkpoint.map.setItemInMap(GameItemType.objects, objectId, objectProperty);
     if (addToLoc) {
-      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
+      Parser.checkpoint.map.addItemToLocation(locationId, GameItemType.objects, objectId);
     }
 
     return objectProperty;

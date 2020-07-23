@@ -1,5 +1,5 @@
 import { Dialogue, DialogueLine, PartName } from '../dialogue/GameDialogueTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -47,7 +47,7 @@ export default class DialogueParser {
       dialogue.title = StringUtils.toCapitalizedWords(dialogueId);
     }
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.talkTopics, dialogueId, dialogue);
+    Parser.checkpoint.map.setItemInMap(GameItemType.dialogues, dialogueId, dialogue);
   }
 
   /**

@@ -1,5 +1,5 @@
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import Parser from './Parser';
 
@@ -35,11 +35,11 @@ type AssertionDetail = {
  * to check all the assertions made is true.
  */
 export default class ParserValidator {
-  private locAttrAssertions: Map<GameLocationAttr, AssertionDetail[]>;
+  private locAttrAssertions: Map<GameItemType, AssertionDetail[]>;
   private attrAssertions: Map<GameAttr, AssertionDetail[]>;
 
   constructor() {
-    this.locAttrAssertions = new Map<GameLocationAttr, AssertionDetail[]>();
+    this.locAttrAssertions = new Map<GameItemType, AssertionDetail[]>();
     this.attrAssertions = new Map<GameAttr, AssertionDetail[]>();
   }
 
@@ -53,7 +53,7 @@ export default class ParserValidator {
    * @param actionType Action type e.g. make_object_glow if the assertion
    *                   was made while parsing an action
    */
-  public assertLocAttr(locAttr: GameLocationAttr, itemId: ItemId, actionType?: string) {
+  public assertLocAttr(locAttr: GameItemType, itemId: ItemId, actionType?: string) {
     if (!this.locAttrAssertions.get(locAttr)) {
       this.locAttrAssertions.set(locAttr, []);
     }
@@ -75,7 +75,7 @@ export default class ParserValidator {
     return itemId;
   }
 
-  public assertLocAttrs(locAttr: GameLocationAttr, itemIds: ItemId[], actionType?: string) {
+  public assertLocAttrs(locAttr: GameItemType, itemIds: ItemId[], actionType?: string) {
     itemIds.forEach(itemId => this.assertLocAttr(locAttr, itemId, actionType));
   }
 
@@ -86,7 +86,7 @@ export default class ParserValidator {
 
   private verifyLocAttrAssertions() {
     this.locAttrAssertions.forEach(
-      (assertionDetails: AssertionDetail[], gameLocationAttr: GameLocationAttr) => {
+      (assertionDetails: AssertionDetail[], gameLocationAttr: GameItemType) => {
         assertionDetails.forEach((assertionDetail: AssertionDetail) => {
           const { itemId, actionType } = assertionDetail;
           if (!Parser.checkpoint.map[gameLocationAttr].has(itemId)) {

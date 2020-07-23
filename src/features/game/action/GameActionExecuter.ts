@@ -50,7 +50,7 @@ export default class GameActionExecuter {
       case GameActionType.CompleteObjective:
         globalAPI.completeObjective(actionParams.id);
         return;
-      case GameActionType.BringUpDialogue:
+      case GameActionType.ShowDialogue:
         await globalAPI.showDialogueInSamePhase(actionParams.id);
         return;
       case GameActionType.AddPopup:

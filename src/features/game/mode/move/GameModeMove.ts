@@ -6,7 +6,7 @@ import { IGameUI } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameLocationAttr, LocationId } from '../../location/GameMapTypes';
+import { GameItemType, LocationId } from '../../location/GameMapTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
@@ -41,7 +41,7 @@ class GameModeMove implements IGameUI {
    */
   private getLatestNavigations() {
     return GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.navigation,
+      GameItemType.navigation,
       GameGlobalAPI.getInstance().getCurrLocId()
     );
   }

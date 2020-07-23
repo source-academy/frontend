@@ -1,6 +1,6 @@
 import { GameAction, GameActionType } from '../action/GameActionTypes';
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import StringUtils from '../utils/StringUtils';
 import ConditionParser from './ConditionParser';
 import Parser from './Parser';
@@ -43,11 +43,7 @@ export default class ActionParser {
       ).map(condition => ConditionParser.parse(condition));
     }
 
-    Parser.checkpoint.map.addItemToMap(
-      GameLocationAttr.actions,
-      gameAction.interactionId,
-      gameAction
-    );
+    Parser.checkpoint.map.setItemInMap(GameItemType.actions, gameAction.interactionId, gameAction);
 
     return gameAction.interactionId;
   }
@@ -78,7 +74,7 @@ export default class ActionParser {
     switch (gameActionType) {
       case GameActionType.ObtainCollectible:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameLocationAttr.collectibles,
+          GameItemType.collectibles,
           actionParams[0],
           actionType
         );
@@ -98,9 +94,9 @@ export default class ActionParser {
           actionType
         );
         break;
-      case GameActionType.BringUpDialogue:
+      case GameActionType.ShowDialogue:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameLocationAttr.talkTopics,
+          GameItemType.dialogues,
           actionParams[0],
           actionType
         );
@@ -131,7 +127,7 @@ export default class ActionParser {
         break;
       case GameActionType.AddPopup:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameLocationAttr.objects,
+          GameItemType.objects,
           actionParams[0],
           actionType
         );
@@ -139,7 +135,7 @@ export default class ActionParser {
         break;
       case GameActionType.MakeObjectBlink:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameLocationAttr.objects,
+          GameItemType.objects,
           actionParams[0],
           actionType
         );
@@ -147,7 +143,7 @@ export default class ActionParser {
         break;
       case GameActionType.MakeObjectGlow:
         actionParamObj.id = Parser.validator.assertLocAttr(
-          GameLocationAttr.objects,
+          GameItemType.objects,
           actionParams[0],
           actionType
         );
