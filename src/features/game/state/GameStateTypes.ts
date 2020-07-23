@@ -15,13 +15,6 @@ export enum UserStateTypes {
 }
 
 /**
- * Encapsulate all user state lists.
- */
-export type UserState = {
-  [K in UserStateTypes]?: string[];
-};
-
-/**
  * State observer is a renderer that can reflect the changes
  * to the current scene
  */

@@ -1,4 +1,5 @@
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { GameStateStorage } from '../state/GameStateTypes';
 import { ActionCondition } from './GameActionTypes';
 
@@ -8,34 +9,32 @@ import { ActionCondition } from './GameActionTypes';
  */
 export default class ActionConditionChecker {
   /**
-   * Checks whether all action conditions are met
-   * @param actionConditions Array of action conditions
-   * @returns {Promise<boolean>} True if all conditions are met
-   */
-  public static async checkAllConditionsSatisfied(actionConditions: ActionCondition[]) {
-    const allConditions = await Promise.all(
-      actionConditions.map(
-        async actionCondition => await this.checkConditionSatisfied(actionCondition)
-      )
-    );
-    return allConditions.every(condition => condition === true);
-  }
-
-  /**
    * Checks whether one action conditions is met
+   * Also stubs the user state
+   *
    * @param conditional The action condition
-   * @returns {Promise<boolean>} True if condition is met
+   * @returns {boolean} True if condition is met
    */
-  private static async checkConditionSatisfied(conditional: ActionCondition) {
+  public static checkConditionSatisfied(conditional: ActionCondition) {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:
-        return (
-          (await GameGlobalAPI.getInstance().existsInUserStateList(
-            conditionParams.listName,
-            conditionParams.id
-          )) === boolean
-        );
+        if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
+          return (
+            window.confirm(
+              `Does user have ${conditionParams.userStateList} ${conditionParams.id}?`
+            ) === boolean
+          );
+        }
+        switch (conditionParams.userStateList) {
+          case 'collectibles':
+            return GameGlobalAPI.getInstance().hasCollectible(conditionParams.id) === boolean;
+          case 'achievements':
+            return GameGlobalAPI.getInstance().hasAchievement(conditionParams.id) === boolean;
+          case 'assessments':
+            return GameGlobalAPI.getInstance().hasAssessment(conditionParams.id) === boolean;
+        }
+        return true;
       case GameStateStorage.ChecklistState:
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
       default:

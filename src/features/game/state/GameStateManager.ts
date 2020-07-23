@@ -42,7 +42,7 @@ class GameStateManager {
     this.gameMap = gameCheckpoint.map;
     this.checkpointObjective = gameCheckpoint.objectives;
 
-    this.updatedLocations = new Set<LocationId>();
+    this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
     this.triggeredActions = [];
 
@@ -64,8 +64,6 @@ class GameStateManager {
       .getSaveManager()
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
-
-    this.gameMap.getLocationIds().forEach(locationId => this.addLocationNotif(locationId));
   }
 
   ///////////////////////////////
@@ -148,7 +146,7 @@ class GameStateManager {
   /**
    * Gets whether or not the location has a notif
    *
-   * @param locationId locationId of location you want to add notif to
+   * @param locationId locationId of location you want to find out if got notif
    */
   public hasLocationNotif(locationId: LocationId) {
     return this.updatedLocations.has(locationId);

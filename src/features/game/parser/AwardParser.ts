@@ -2,7 +2,6 @@ import { AwardProperty } from '../awards/GameAwardsTypes';
 import { ItemId } from '../commons/CommonTypes';
 import { toS3Path } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
-import ParserConverter from './ParserConverter';
 
 /**
  * This class parses the awardsMapping.txt, and creates a
@@ -49,8 +48,7 @@ class AwardParser {
         assetKey,
         assetPath: toS3Path(assetPath),
         title,
-        description,
-        awardType: ParserConverter.stringToUserState(awardType)
+        description
       });
     });
   }

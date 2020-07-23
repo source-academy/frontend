@@ -31,6 +31,10 @@ export default class GamePhaseManager {
     this.inputManager = inputManager;
   }
 
+  public addPhaseToMap(gamePhaseType: GamePhaseType, gameUI: IGameUI) {
+    this.phaseMap.set(gamePhaseType, gameUI);
+  }
+
   /**
    * Set the callback of the phase manager. The callback will be executed
    * before every phase transition. The function signature must accept a

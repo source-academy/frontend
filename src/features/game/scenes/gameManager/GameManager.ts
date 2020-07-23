@@ -11,7 +11,6 @@ import GameObjectManager from 'src/features/game/objects/GameObjectManager';
 import GamePopUpManager from 'src/features/game/popUp/GamePopUpManager';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import GameStateManager from 'src/features/game/state/GameStateManager';
-import GameUserStateManager from 'src/features/game/state/GameUserStateManager';
 
 import GameAwardsManager from '../../awards/GameAwardsManager';
 import GameBackgroundManager from '../../background/GameBackgroundManager';
@@ -52,7 +51,6 @@ class GameManager extends Phaser.Scene {
   public characterManager?: GameCharacterManager;
   public dialogueManager?: GameDialogueManager;
   public actionManager?: GameActionManager;
-  public userStateManager?: GameUserStateManager;
   public boundingBoxManager?: GameBBoxManager;
   public popUpManager: GamePopUpManager;
   public saveManager?: GameSaveManager;
@@ -78,9 +76,7 @@ class GameManager extends Phaser.Scene {
   public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
     GameGlobalAPI.getInstance().setGameManager(this);
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-    SourceAcademyGame.getInstance()
-      .getSaveManager()
-      .registerGameInfo(chapterNum, checkpointNum, continueGame);
+    this.getSaveManager().registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentLocationId = gameCheckpoint.startingLoc;
 
     this.stateManager = new GameStateManager(gameCheckpoint);
@@ -89,8 +85,8 @@ class GameManager extends Phaser.Scene {
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
     this.actionManager = new GameActionManager();
-    this.userStateManager = new GameUserStateManager();
     this.boundingBoxManager = new GameBBoxManager();
+
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
@@ -106,14 +102,12 @@ class GameManager extends Phaser.Scene {
   public preload() {
     addLoadingScreen(this);
     this.currentLocationId = this.getSaveManager().getLoadedLocation() || this.currentLocationId;
+
     this.inputManager.initialise(this);
     this.layerManager.initialise(this);
-    this.awardsManager.initialise(this, this.getUserStateManager(), this.phaseManager);
-    this.phaseManager.initialise(
-      createGamePhases(this.escapeManager, this.awardsManager),
-      this.inputManager
-    );
-    this.escapeManager.initialise(this, this.phaseManager);
+    this.phaseManager.initialise(createGamePhases(), this.inputManager);
+    this.awardsManager.initialise(this);
+    this.escapeManager.initialise(this);
 
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
@@ -138,9 +132,7 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    await this.getUserStateManager().loadAssessments();
-    await this.getUserStateManager().loadAchievements();
-
+    // Execute fast forward actions
     await this.getActionManager().fastForwardGameActions(
       this.getStateManager().getTriggeredActions()
     );
@@ -188,7 +180,6 @@ class GameManager extends Phaser.Scene {
     }
 
     await this.getActionManager().processGameActions(gameLocation.actionIds);
-
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
 
@@ -280,8 +271,6 @@ class GameManager extends Phaser.Scene {
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   public getStateManager = () => mandatory(this.stateManager);
-
-  public getUserStateManager = () => mandatory(this.userStateManager);
   public getObjectManager = () => mandatory(this.objectManager);
   public getDialogueManager = () => mandatory(this.dialogueManager);
   public getCharacterManager = () => mandatory(this.characterManager);
