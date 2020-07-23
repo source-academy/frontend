@@ -29,34 +29,13 @@ export type ObjectLayerProps = {
 /**
  * @typedef {ActivatableSprite} - data that represents the object on screen
  * @prop {GlowingImage| Phaser.GameObjects.Rectangle} sprite - The clickable object sprite which can be made to glow and blink
- * @prop {Function} activate - The function to be called when you want to enable listeners for the object
- * @prop {Void Function} deactivate - The function to be called when you want to disable listeners for an object
+ * @prop {Phaser.GameObjects.Image| Phaser.GameObjects.Rectangle} sprite - The area which can be clicked
+ * @prop {ItemId[]} actionIds - The action ids
+ * @prop {ItemId} interactionId - The interaction id for the sprite
  */
 export type ActivatableSprite = {
   sprite: GlowingImage | Phaser.GameObjects.Rectangle;
-  activate: Function;
-  deactivate: Function;
-};
-
-/**
- * Additional callbacks can be supplied to activate an sprite
- *  - onClick: (ItemId) => void, to be executed when object is clicked
- *  - onHover: (ItemId) => void, to be executed when object is hovered over
- *  - onOut: (ItemId) => void, to be executed when object is out of hover
- *
- * The three callbacks are optional; if it is not provided, a null function
- * will be executed instead.
- *
- * The three callbacks will be added on top of the existing action
- * attached to the callbacks.
- *
- * @param callbacks { onClick?: (id?: ItemId) => void,
- *                    onHover?: (id?: ItemId) => void,
- *                    onOut?: (id?: ItemId) => void
- *                  }
- */
-export type ActivateSpriteCallbacks = {
-  onClick: (id: ItemId) => void;
-  onHover: (id: ItemId) => void;
-  onOut: (id: ItemId) => void;
+  clickArea: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
+  actionIds?: ItemId[];
+  interactionId: ItemId;
 };

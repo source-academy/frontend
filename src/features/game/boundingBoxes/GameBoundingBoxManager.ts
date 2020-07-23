@@ -1,10 +1,9 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
-import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
-import { ActivatableSprite, ActivateSpriteCallbacks } from '../objects/GameObjectTypes';
+import { ActivatableSprite } from '../objects/GameObjectTypes';
 import { StateObserver } from '../state/GameStateTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 
@@ -40,23 +39,6 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   /**
-   * Allow objects to be interacted with i.e. enable listeners objects.
-   *
-   * @param {ActivateSpriteCallbacks} callbacks callbacks to objects
-   *                enable them to have extra interactions when clicked
-   */
-  public enableBBoxAction(callbacks: ActivateSpriteCallbacks): void {
-    this.bboxes.forEach(bbox => bbox.activate(callbacks));
-  }
-
-  /**
-   * Remove interactivity of the bboxes, i.e remove listeners from the bboxes.
-   */
-  public disableBBoxAction() {
-    this.bboxes.forEach(bbox => bbox.deactivate());
-  }
-
-  /**
    * Create the bbox from the given bbox property.
    * All bbox created with this function will have
    * `.activate()` and `.deactivate()`; which is internally used
@@ -80,29 +62,11 @@ class GameBoundingBoxManager implements StateObserver {
       bboxSprite.setInteractive();
     }
 
-    function activate({ onClick, onHover, onOut }: ActivateSpriteCallbacks) {
-      bboxSprite.on('pointerup', async () => {
-        onClick(interactionId);
-        await GameGlobalAPI.getInstance().processGameActions(actionIds);
-      });
-      bboxSprite.on('pointerover', () => {
-        onHover(interactionId);
-      });
-      bboxSprite.on('pointerout', () => {
-        onOut(interactionId);
-      });
-    }
-
-    function deactivate() {
-      bboxSprite.off('pointerup');
-      bboxSprite.off('pointerover');
-      bboxSprite.off('pointerout');
-    }
-
     return {
       sprite: bboxSprite,
-      activate: actionIds ? activate : Constants.nullFunction,
-      deactivate
+      clickArea: bboxSprite,
+      actionIds,
+      interactionId
     };
   }
 
@@ -155,6 +119,13 @@ class GameBoundingBoxManager implements StateObserver {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Get all the sprites which can be activated
+   */
+  public getActivatables() {
+    return Array.from(this.bboxes.values());
   }
 }
 

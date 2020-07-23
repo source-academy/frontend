@@ -10,7 +10,7 @@ import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayNotification } from '../../effects/Notification';
 import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
-import { ActivateSpriteCallbacks, ObjectProperty } from '../../objects/GameObjectTypes';
+import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -136,12 +136,11 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
   }
 
-  public enableObjectAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().getObjectManager().enableObjectAction(callbacks);
-  }
-
-  public disableObjectAction() {
-    this.getGameManager().getObjectManager().disableObjectAction();
+  public getAllActivatables() {
+    return [
+      ...this.getGameManager().getObjectManager().getActivatables(),
+      ...this.getGameManager().getBBoxManager().getActivatables()
+    ];
   }
 
   /////////////////////
@@ -150,14 +149,6 @@ class GameGlobalAPI {
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
-  }
-
-  public enableBBoxAction(callbacks: ActivateSpriteCallbacks) {
-    this.getGameManager().getBBoxManager().enableBBoxAction(callbacks);
-  }
-
-  public disableBBoxAction() {
-    this.getGameManager().getBBoxManager().disableBBoxAction();
   }
 
   /////////////////////

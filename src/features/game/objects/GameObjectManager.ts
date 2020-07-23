@@ -1,12 +1,11 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
-import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableSprite, ActivateSpriteCallbacks, ObjectProperty } from './GameObjectTypes';
+import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
 
 /**
  * Manager that renders objects in a location
@@ -47,23 +46,6 @@ class GameObjectManager implements StateObserver {
   }
 
   /**
-   * Allow objects to be interacted with i.e. enable listeners objects.
-   *
-   * @param {ActivatableSpriteCallbacks} callbacks callbacks to objects
-   *                enable them to have extra interactions when clicked
-   */
-  public enableObjectAction(callbacks: ActivateSpriteCallbacks): void {
-    this.objects.forEach(object => object.activate(callbacks));
-  }
-
-  /**
-   * Remove interactivity of the objects, i.e remove listeners from the objects.
-   */
-  public disableObjectAction() {
-    this.objects.forEach(object => object.deactivate());
-  }
-
-  /**
    * Apply glowing effect around the object.
    *
    * @param objectId id of the object
@@ -99,17 +81,6 @@ class GameObjectManager implements StateObserver {
 
   /**
    * Create the object from the given object property.
-   * All objects created with this function will have
-   * `.activate()` and `.deactivate()`; which is internally used
-   * by `.enableObjectActions()` and `.disableObjectActions()`.
-   *
-   * The method `.activate(callbacks)` receive a callbacks argument,
-   * which encapsulate three different callbacks.
-   *
-   * callbacks = { onClick?: (id?: ItemId) => void,
-   *               onHover?: (id?: ItemId) => void,
-   *               onOut?: (id?: ItemId) => void
-   *             }
    *
    * @param objectProperty object property to be used
    */
@@ -118,29 +89,11 @@ class GameObjectManager implements StateObserver {
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
     const object = new GlowingImage(gameManager, x, y, assetKey, width, height);
 
-    function activate({ onClick, onHover, onOut }: ActivateSpriteCallbacks) {
-      object.getClickArea().on('pointerup', async () => {
-        onClick(interactionId);
-        await GameGlobalAPI.getInstance().processGameActions(actionIds);
-      });
-      object.getClickArea().on('pointerover', () => {
-        onHover(interactionId);
-      });
-      object.getClickArea().on('pointerout', () => {
-        onOut(interactionId);
-      });
-    }
-
-    function deactivate() {
-      object.getClickArea().off('pointerup');
-      object.getClickArea().off('pointerover');
-      object.getClickArea().off('pointerout');
-    }
-
     return {
       sprite: object,
-      activate: actionIds ? activate : Constants.nullFunction,
-      deactivate
+      clickArea: object.getClickArea(),
+      actionIds,
+      interactionId
     };
   }
 
@@ -190,6 +143,13 @@ class GameObjectManager implements StateObserver {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Get all the sprites which can be activated
+   */
+  public getActivatables() {
+    return Array.from(this.objects.values());
   }
 }
 
