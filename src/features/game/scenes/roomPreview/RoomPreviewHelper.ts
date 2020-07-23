@@ -57,9 +57,6 @@ function getStudentRoomCode(mission: Assessment | null) {
 
 /**
  * CMR Game Phases for the phase manager.
- *
- * @param escapeMenu escape menu tied to CMR
- * @param awardMenu award menu tied to CMR
  */
 export const createCMRGamePhases = () => {
   return new Map([[GamePhaseType.None, new GameModeSequence()]]);
