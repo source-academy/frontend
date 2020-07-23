@@ -53,15 +53,13 @@ class GameStateManager {
    * Loads some game states from the save manager
    */
   private loadStatesFromSaveManager() {
-    this.triggeredActions = SourceAcademyGame.getInstance().getSaveManager().getTriggeredActions();
+    this.triggeredActions = this.getSaveManager().getTriggeredActions();
 
-    SourceAcademyGame.getInstance()
-      .getSaveManager()
+    this.getSaveManager()
       .getTriggeredInteractions()
       .forEach(interactionId => this.triggerInteraction(interactionId));
 
-    SourceAcademyGame.getInstance()
-      .getSaveManager()
+    this.getSaveManager()
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
   }
@@ -363,6 +361,7 @@ class GameStateManager {
   }
 
   public getGameMap = () => this.gameMap;
+  private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
 }
 
 export default GameStateManager;
