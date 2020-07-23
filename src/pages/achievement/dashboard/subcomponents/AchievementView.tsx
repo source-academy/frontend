@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { abilityBackground } from '../../../../features/achievement/AchievementConstants';
+import { getAbilityBackground } from '../../../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from './utils/AchievementInferencer';
 import { prettifyDate } from './utils/DateHelper';
@@ -26,7 +26,7 @@ function AchievementView(props: AchievementViewProps) {
   const awardedExp = inferencer.getStudentExp(id);
 
   return (
-    <div className="view" style={{ ...handleGlow(id), ...abilityBackground(ability) }}>
+    <div className="view" style={{ ...handleGlow(id), ...getAbilityBackground(ability) }}>
       <div
         className="canvas"
         style={{

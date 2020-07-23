@@ -2,20 +2,13 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useEffect, useState } from 'react';
 
 import Constants from '../../../commons/utils/Constants';
-import { abilityColor } from '../../../features/achievement/AchievementConstants';
+import { FilterColors, getAbilityColor } from '../../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementFilter from './subcomponents/AchievementFilter';
 import AchievementOverview from './subcomponents/AchievementOverview';
 import AchievementTask from './subcomponents/AchievementTask';
 import AchievementView from './subcomponents/AchievementView';
 import AchievementInferencer from './subcomponents/utils/AchievementInferencer';
-
-export const AchievementColors = {
-  blue: '#2dd1f9',
-  red: '#ff0000',
-  white: '#ffffff',
-  black: '#000000'
-};
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
@@ -40,15 +33,15 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [viewId, setViewId] = useState<number>(-1);
 
   const handleFilterColor = (status: FilterStatus) => {
-    return status === filterStatus ? AchievementColors.blue : AchievementColors.white;
+    return status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
   };
 
   const handleGlow = (id: number) => {
     if (id === viewId) {
       const ability = inferencer.getAchievementItem(id).ability;
       return {
-        border: `1px solid ${abilityColor(ability)}`,
-        boxShadow: `0 0 10px ${abilityColor(ability)}`
+        border: `1px solid ${getAbilityColor(ability)}`,
+        boxShadow: `0 0 10px ${getAbilityColor(ability)}`
       };
     }
     return {};

@@ -3,7 +3,17 @@ import { AchievementAbility } from './AchievementTypes';
 
 export const expPerLevel = 1000;
 
-export const abilityColor = (ability: AchievementAbility) => {
+export enum DeadlineColors {
+  RED = '#ff0000',
+  BLACK = '#000000'
+}
+
+export enum FilterColors {
+  BLUE = '#2dd1f9',
+  WHITE = '#ffffff'
+}
+
+export const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
       return '#ffb412';
@@ -25,7 +35,7 @@ export const backgroundUrl = `${achievementAssets}/background`;
 export const canvasUrl = `${achievementAssets}/canvas`;
 export const cardTileUrl = `${achievementAssets}/card-tile`;
 
-export const abilityBackground = (ability: AchievementAbility) => {
+export const getAbilityBackground = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
       return {
