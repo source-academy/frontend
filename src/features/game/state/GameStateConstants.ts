@@ -2,11 +2,6 @@ import FontAssets from '../assets/FontAssets';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { HexColor } from '../utils/StyleUtils';
 
-export const SampleUserState = {
-  collectibles: ['cookies', 'rat'],
-  achievements: ['trophy', 'coolbeans guy']
-};
-
 export const emptyUserState = {
   collectibles: [],
   assessments: []

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 
 // The following section is licensed under the following terms:
 //
@@ -26,7 +26,7 @@ import * as React from 'react';
 
 // The following hook is from
 // https://github.com/jaredLunde/react-hook/blob/master/packages/merged-ref/src/index.tsx
-const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback<T> => (
+export const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback<T> => (
   element: T
 ) =>
   refs.forEach(ref => {
@@ -36,4 +36,44 @@ const useMergedRef = <T extends any>(...refs: React.Ref<T>[]): React.RefCallback
 
 // End
 
-export { useMergedRef };
+/**
+ * This hook sends a request to the backend to fetch the initial state of the field
+ *
+ * @param requestFn The function that creates a request
+ * @param defaultValue T
+ */
+export function useRequest<T>(requestFn: () => Promise<T>, defaultValue: T) {
+  const [value, setValue] = React.useState<T>(defaultValue);
+
+  React.useEffect(() => {
+    (async () => {
+      const fetchedValue = await requestFn();
+      setValue(fetchedValue);
+    })();
+  }, [requestFn]);
+
+  return { value, setValue };
+}
+
+/**
+ * This hook creates an input prop that can
+ * be attached as props for text fields.
+ * When attached as prop, any change in the text field
+ * will cause the value of the hook to change
+ *
+ * @param defaultValue default value of input field
+ */
+export function useInput<T>(defaultValue: T) {
+  const [value, setValue] = React.useState<T>(defaultValue);
+
+  return {
+    value,
+    setValue,
+    inputProps: {
+      value,
+      onChange: (event: any) => {
+        setValue(event.target.value);
+      }
+    }
+  };
+}

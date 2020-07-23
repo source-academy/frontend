@@ -1,124 +1,243 @@
-import { SourceAcademyGame } from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
-
 import { AssetMap, SoundAsset } from '../assets/AssetsTypes';
+import { Constants } from '../commons/CommonConstants';
 import { AssetKey, AssetPath } from '../commons/CommonTypes';
-import { UserSaveState } from '../save/GameSaveTypes';
-import { mandatory, sleep, toS3Path } from '../utils/GameUtils';
+import { SettingsJson } from '../save/GameSaveTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
+import { mandatory, toS3Path } from '../utils/GameUtils';
 import { bgMusicFadeDuration, musicFadeOutTween } from './GameSoundTypes';
 
+/**
+ * This class manages the sounds for the entire game
+ * It proxies the game's sound manager
+ */
 class GameSoundManager {
-  private baseSoundManager: Phaser.Sound.BaseSoundManager | undefined;
-  private scene: Phaser.Scene | undefined;
-  private parentGame: SourceAcademyGame | undefined;
+  private soundAssetMap: Map<AssetKey, SoundAsset>;
+  private bgmVol: number;
+  private sfxVol: number;
 
-  public initialise(scene: Phaser.Scene, parentGame: SourceAcademyGame) {
-    this.scene = scene;
-    this.parentGame = parentGame;
-    this.baseSoundManager = this.parentGame.sound;
-    this.baseSoundManager.pauseOnBlur = true;
+  private currBgMusicKey: AssetKey;
+  private currBgMusic: Phaser.Sound.WebAudioSound | undefined;
+
+  constructor() {
+    (this.getBaseSoundManager() as Phaser.Sound.HTML5AudioSoundManager).unlock();
+    this.soundAssetMap = new Map<AssetKey, SoundAsset>();
+    this.bgmVol = 1;
+    this.sfxVol = 1;
+    this.currBgMusicKey = Constants.nullInteractionId;
   }
 
-  public applyUserSettings(userSaveState: UserSaveState) {
-    this.setGlobalVolume(userSaveState.settings.volume);
+  /**
+   * Apply user settings to the sound manager;
+   * namely the sfxVolume and bgmVolume.
+   *
+   * In the case the volumes are not defined, it will
+   * be defaulted to 1 (max volume).
+   *
+   * @param settings user settings
+   */
+  public applyUserSettings(settings: SettingsJson) {
+    this.bgmVol = settings.bgmVolume !== undefined ? settings.bgmVolume : 1;
+    this.sfxVol = settings.sfxVolume !== undefined ? settings.sfxVolume : 1;
+
+    // Modify currently playing BGM, if any
+    if (this.currBgMusic && this.currBgMusic.isPlaying) {
+      const soundAsset = mandatory(this.getSoundAsset(this.currBgMusicKey));
+      const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
+      this.currBgMusic.setVolume(bgmVol * this.bgmVol);
+    }
   }
 
-  public renderBackgroundMusic(bgmKey: AssetKey) {
-    this.stopCurrBgMusic();
-    this.playBgMusic(bgmKey);
+  /**
+   * Store the sound asset within the sound manager.
+   * Sound asset is stored as it is used when playing the
+   * sound (to apply the sound config).
+   *
+   * @param soundAsset sound asset
+   */
+  private addSoundAsset(soundAsset: SoundAsset) {
+    this.soundAssetMap.set(soundAsset.key, soundAsset);
   }
 
-  public clearSoundAssets() {
-    this.getParentGame().clearSoundAssetMap();
+  /**
+   * Return a sound asset based on its key.
+   * If there is none, return undefined.
+   *
+   * @param key sound asset key
+   */
+  private getSoundAsset(key: AssetKey) {
+    return this.soundAssetMap.get(key);
   }
 
+  /**
+   * Preload sound assets into the sound manager.
+   *
+   * @param soundAssets array of sound assets
+   */
   public loadSounds(soundAssets: SoundAsset[]) {
     soundAssets.forEach(asset => {
-      this.getParentGame().addSoundAsset(asset);
+      this.addSoundAsset(asset);
       this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
+  /**
+   * Preload sound assets into the sound manager.
+   *
+   * @param assetMap AssetMap of sound assets
+   */
   public loadSoundAssetMap(assetMap: AssetMap<SoundAsset>) {
-    Object.entries(assetMap).forEach(asset => {
-      this.getParentGame().addSoundAsset(asset[1]);
-      this.loadSound(asset[1].key, toS3Path(asset[1].path));
+    Object.values(assetMap).forEach(asset => {
+      this.addSoundAsset(asset);
+      this.loadSound(asset.key, toS3Path(asset.path));
     });
   }
 
+  /**
+   * Preload sound asset into the sound manager.
+   *
+   * @param assetKey key to be associated with the sound
+   * @param assetPath path to the sound file
+   */
   private loadSound(assetKey: AssetKey, assetPath: AssetPath) {
-    if (this.scene) {
-      this.scene.load.audio(assetKey, assetPath);
-    }
+    this.getCurrentScene().load.audio(assetKey, assetPath);
   }
 
+  /**
+   * Play a sound, usually an SFX.
+   * The sound will be added, played, and destroyed afterwards; hence
+   * there is no need to keep any reference to it.
+   *
+   * Its volume will be multipled by the current user's SFX volume.
+   *
+   * @param soundKey key associated with the sound.
+   */
   public playSound(soundKey: AssetKey) {
-    if (this.scene) {
-      const soundAsset = this.getParentGame().getSoundAsset(soundKey);
-      if (soundAsset) {
-        this.getBaseSoundManager().play(soundAsset.key, soundAsset.config);
-      }
+    const soundAsset = this.getSoundAsset(soundKey);
+    if (soundAsset) {
+      const vol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
+      this.getBaseSoundManager().play(soundAsset.key, {
+        ...soundAsset.config,
+        volume: vol * this.sfxVol
+      });
     }
   }
 
-  public playBgMusic(soundKey: AssetKey, volume = 1.5) {
-    // If same music is already playing, skip
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    if (currBgMusicKey && currBgMusicKey === soundKey) {
+  /**
+   * Play a background music. Only one background music is able
+   * to be played at any one time; hence calling this method will
+   * also stop the previous background music.
+   *
+   * If the provided soundKey is the same as the the currently
+   * playing background music, it will be skipped (to avoid strange
+   * stopping and playing of the same music).
+   *
+   * To play no music, the parameter can be set to empty string i.e. ''.
+   *
+   * @param soundKey key to the background music to be played.
+   * @param fadeDuration duration to fade out previous background music
+   */
+  public playBgMusic(soundKey: AssetKey, fadeDuration?: number) {
+    // Game is no longer mounted, do not play the music
+    if (!SourceAcademyGame.getInstance().isMounted) {
       return;
     }
 
-    const soundAsset = this.getParentGame().getSoundAsset(soundKey);
-
-    if (soundAsset) {
-      this.getBaseSoundManager().play(soundAsset.key, { ...soundAsset.config, volume });
-      this.getParentGame().setCurrBgMusicKey(soundAsset.key);
+    // If same music is already playing, skip
+    if (this.currBgMusicKey === soundKey) {
+      return;
     }
+
+    // Requested soundKey is empty, stop current BGM
+    if (soundKey === Constants.nullInteractionId && this.currBgMusic) {
+      this.fadeOutAndDestroyMusic(this.currBgMusic, fadeDuration);
+      this.currBgMusic = undefined;
+      this.currBgMusicKey = soundKey;
+      return;
+    }
+
+    // Stop previous BgMusic
+    if (this.currBgMusic) this.fadeOutAndDestroyMusic(this.currBgMusic);
+
+    // Update BGM and key
+    const soundAsset = mandatory(this.getSoundAsset(soundKey));
+    const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
+
+    /**
+     * We do not use `this.getBaseSoundManager().add` as it often
+     * results in crash, due to audio not being present into audio cache.
+     * i.e. calling `.add()` while the sound is not in cache.audio will
+     * result in crash.
+     *
+     * From observation, the audio cache used by `this.getBaseSoundManager()`
+     * and `this.getCurrentScene().sound` can be different.
+     *
+     * From observation, `loadSound()` loads the audio into
+     * `this.getCurrentScene().sound.game.cache.audio`; and not into
+     * `this.getBaseSoundManager().game.cache.audio`.
+     *
+     * Hence, we use `this.getCurrentScene().sound.add` in order to refer
+     * to the correct audio cache.
+     *
+     * NOTE: To check the audio cache, compare between:
+     *  - this.getBaseSoundManager().game.cache.audio
+     *  - this.getCurrentScene().sound.game.cache.audio
+     */
+    this.currBgMusic = this.getCurrentScene().sound.add(soundAsset.key, {
+      ...soundAsset.config,
+      volume: bgmVol * this.bgmVol
+    }) as Phaser.Sound.WebAudioSound;
+    this.currBgMusicKey = soundAsset.key;
+
+    // Finally, play it
+    this.currBgMusic.play();
   }
 
-  public async stopCurrBgMusic(fadeDuration: number = bgMusicFadeDuration) {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    this.getParentGame().setCurrBgMusicKey(undefined);
-    if (this.scene && currBgMusicKey) {
-      // Fade out current music
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      this.scene.tweens.add({
-        targets: currBgMusic,
-        ...musicFadeOutTween,
-        duration: fadeDuration
-      });
+  /**
+   * Fade out a sound and destroy it.
+   *
+   * @param sound sound to be destroyed
+   * @param fadeDuration duration of fade out
+   */
+  private fadeOutAndDestroyMusic(
+    sound: Phaser.Sound.BaseSound,
+    fadeDuration: number = bgMusicFadeDuration
+  ) {
+    this.getCurrentScene().tweens.add({
+      targets: sound,
+      ...musicFadeOutTween,
+      duration: fadeDuration
+    });
 
-      await sleep(fadeDuration);
-      this.getBaseSoundManager().stopByKey(currBgMusicKey);
-    }
+    setTimeout(() => sound.destroy(), fadeDuration * 2);
   }
 
-  public async stopAllSound() {
+  /**
+   * Stop all currently playing sounds.
+   */
+  public stopAllSound() {
     this.getBaseSoundManager().stopAll();
   }
 
+  /**
+   * Pause currently playing BGM music, if it is playing.
+   */
   public pauseCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    if (this.scene && currBgMusicKey) {
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      if (currBgMusic.isPlaying) currBgMusic.pause();
+    if (this.getCurrentScene() && this.currBgMusic && this.currBgMusic.isPlaying) {
+      this.currBgMusic.pause();
     }
   }
 
+  /**
+   * Continue currently playing BGM music, if it is paused.
+   */
   public continueCurrBgMusic() {
-    const currBgMusicKey = this.getParentGame().getCurrBgMusicKey();
-    if (this.scene && currBgMusicKey) {
-      const currBgMusic = this.getBaseSoundManager().get(currBgMusicKey);
-      if (currBgMusic.isPaused) currBgMusic.play();
+    if (this.getCurrentScene() && this.currBgMusic && this.currBgMusic.isPaused) {
+      this.currBgMusic.play();
     }
   }
 
-  public setGlobalVolume(volume: number) {
-    this.getBaseSoundManager().volume = volume;
-  }
-
-  public getBaseSoundManager = () =>
-    mandatory(this.baseSoundManager) as Phaser.Sound.BaseSoundManager;
-  public getParentGame = () => mandatory(this.parentGame) as SourceAcademyGame;
+  public getBaseSoundManager = () => mandatory(SourceAcademyGame.getInstance().sound);
+  public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
 }
 
 export default GameSoundManager;

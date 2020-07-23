@@ -5,7 +5,16 @@ import Parser from './Parser';
 import ParserConverter from './ParserConverter';
 import { GameAttr } from './ParserValidator';
 
+/**
+ * This parser is in charge of parsing conditionals
+ */
 export default class ConditionParser {
+  /**
+   * This function creates an ActionCondition object, given a condition string
+   *
+   * @param conditionDetails A conditional string such as "!if userstate.assessments.301"
+   * @returns {ActionCondition} encapsulating the information on the conditional
+   */
   public static parse(conditionDetails: string): ActionCondition {
     const hasExclamation = conditionDetails[0] === '!';
     if (hasExclamation) {

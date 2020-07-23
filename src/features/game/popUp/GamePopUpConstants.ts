@@ -11,7 +11,8 @@ const popUpConstants = {
     y: popUpYPos,
     width: 280,
     height: 280
-  }
+  },
+  tweenDuration: 300
 };
 
 export default popUpConstants;

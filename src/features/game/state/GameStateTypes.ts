@@ -5,19 +5,45 @@ export enum GameStateStorage {
   ChecklistState = 'ChecklistState'
 }
 
+/**
+ * Type of user state list.
+ */
+export enum UserStateTypes {
+  collectibles = 'collectibles',
+  assessments = 'assessments',
+  achievements = 'achievements'
+}
+
+/**
+ * Encapsulate all user state lists.
+ */
 export type UserState = {
-  collectibles: string[];
-  assessments?: string[];
+  [K in UserStateTypes]?: string[];
 };
 
+/**
+ * Represent the changes done to the state.
+ */
+export enum StateChangeType {
+  Add,
+  Mutate,
+  Delete
+}
+
+/**
+ * Observer pattern, the observer side.
+ */
 export type StateObserver = {
   observerId: string;
-  notify: (locationId: LocationId) => void;
+  notify: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
 };
 
+/**
+ * Observer pattern, the subject side.
+ */
 export type StateSubject = {
   subscribers: Array<StateObserver>;
-  update: (locationId: LocationId) => void;
+  update: (changeType: StateChangeType, locationId: LocationId, id?: string) => void;
   subscribe: (observer: StateObserver) => void;
   unsubscribe: (observer: StateObserver) => void;
 };

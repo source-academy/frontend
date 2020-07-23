@@ -1,7 +1,6 @@
 import FontAssets from '../../assets/FontAssets';
-import ImageAssets from '../../assets/ImageAssets';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
-import { BitmapFontStyle, GameSprite } from '../../commons/CommonTypes';
+import { screenSize } from '../../commons/CommonConstants';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
 import { HexColor } from '../../utils/StyleUtils';
 
 export const modeButtonStyle: BitmapFontStyle = {
@@ -10,13 +9,6 @@ export const modeButtonStyle: BitmapFontStyle = {
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
-
-export const modeBannerRect = {
-  assetKey: ImageAssets.modeMenuBanner.key,
-  assetXPos: screenCenter.x,
-  assetYPos: screenCenter.y,
-  isInteractive: false
-} as GameSprite;
 
 const modeMenuConstants = {
   buttonYPosOffset: screenSize.y * 0.3,

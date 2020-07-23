@@ -1,5 +1,8 @@
 import { GameLocation } from './GameMapTypes';
 
+/**
+ * Intialises an an empty location
+ */
 export function createEmptyLocation(): GameLocation {
   return {
     id: '',

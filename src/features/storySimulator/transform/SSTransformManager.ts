@@ -119,7 +119,7 @@ export default class SSTransformManager {
     this.activeSelection = undefined;
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   private bindDeleteKey() {
     const deleteKeys = [

@@ -1,60 +1,54 @@
 import 'ace-builds/webpack-resolver';
 
-import { Button, Menu, MenuItem, Popover, Position, Tab, Tabs } from '@blueprintjs/core';
-import * as React from 'react';
+import { Button, Tab, Tabs } from '@blueprintjs/core';
+import React from 'react';
+import { toTxtPath } from 'src/features/game/assets/TextAssets';
 import { Constants } from 'src/features/game/commons/CommonConstants';
 
 type Props = {
-  useDefaultChapter: boolean;
   storageName: string;
-  accessToken?: string;
-  assetPaths: string[];
+  s3TxtFiles: string[];
 };
 
-function CheckpointTxtLoader({ storageName, assetPaths, useDefaultChapter }: Props) {
-  const textAssets = assetPaths
-    .filter(assetPath => assetPath.startsWith('stories') && assetPath.endsWith('txt'))
-    .map(
-      assetPath => assetPath.slice(8) // remove /stories
-    );
+/**
+ * This component enables story writers to upload their txt file contents
+ * to the browser, or load a file from S3 and store the txt contents
+ * in the browser. So that GameManager can read from these txt files
+ *
+ * @param storageName the field in browser storage where the loaded/fetched txt files get stored temporarily
+ * @param s3TxtFiles the list of S3 txt files to choose from
+ */
+function CheckpointTxtLoader({ storageName, s3TxtFiles }: Props) {
+  const [chosenFilename, setChosenFilename] = React.useState(s3TxtFiles[0]);
 
-  const [filename, setFilename] = React.useState(
-    useDefaultChapter ? 'defaultCheckpoint.txt' : textAssets[0]
-  );
-
-  function onLoadTxt(e: React.ChangeEvent<HTMLInputElement>) {
+  function onLoadTxt(e: any) {
     if (!e.target.files) return;
     const [file] = e.target.files;
     loadFileLocally(storageName, file);
   }
 
   async function changeChosenFilename(e: any) {
-    if (!e.target.innerHTML) return;
-
-    const filename = e.target.innerHTML;
-    setFilename('Loading');
-    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`);
+    const filename = e.target.value;
+    setChosenFilename(filename);
+    const response = await fetch(`${Constants.assetsFolder}/stories/${filename}`, {
+      headers: createHeadersWithCors()
+    });
     const txt = await response.text();
-    setFilename(filename);
     sessionStorage.setItem(storageName, txt);
   }
 
-  const uploadButton = (
-    <>
-      <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />
-    </>
-  );
+  const uploadButton = <input type="file" onChange={onLoadTxt} style={{ width: '250px' }} />;
 
   const chooseS3Txt = (
     <>
-      <Popover position={Position.BOTTOM}>
-        <Button text={filename} />
-        <Menu>
-          {textAssets.map(file => (
-            <MenuItem onClick={changeChosenFilename} id={file} key={file} text={file} />
-          ))}
-        </Menu>
-      </Popover>
+      <select className="bp3-menu" onChange={changeChosenFilename}>
+        {s3TxtFiles.map(file => (
+          <option value={file} key={file}>
+            {file}
+          </option>
+        ))}
+      </select>
+      <Button icon={'download'} onClick={() => window.open(toTxtPath(chosenFilename))} />
     </>
   );
 
@@ -82,3 +76,9 @@ const loadFileLocally = (storageName: string, txtFile: File) => {
 };
 
 export default CheckpointTxtLoader;
+
+function createHeadersWithCors(): Headers {
+  const headers = new Headers();
+  headers.append('Access-Control-Allow-Origin', '*');
+  return headers;
+}

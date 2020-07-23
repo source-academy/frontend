@@ -7,13 +7,33 @@ import Parser from './Parser';
 import ParserConverter from './ParserConverter';
 import { GameAttr } from './ParserValidator';
 
+/**
+ * The Action Parser parses actions for all entities.
+ * This class takes in action strings to produce GameAction objects,
+ * which store information about action type and
+ * action params (much like React actions)
+ */
 export default class ActionParser {
-  public static parseActions(actionDetails: string[]): ItemId[] {
-    return actionDetails.map(actionDetail => this.parseAction(actionDetail));
+  /**
+   * Parses many action strings, stores resulting Game Action objects
+   * inside the game map, and returns the corresponding actionIds.
+   *
+   * @param fullActionStrings raw action strings, eg ["show_dialogue(done)", "change_location(room) if gamestate.finish"]
+   * @returns {Array<ItemId>} returns actionIds of the parsed actions with actions are stored in the game map.
+   */
+  public static parseActions(fullActionStrings: string[]): ItemId[] {
+    return fullActionStrings.map(fullActionString => this.parseAction(fullActionString));
   }
 
-  public static parseAction(actionDetail: string): ItemId {
-    const [actionString, conditionalsString] = StringUtils.splitByChar(actionDetail, 'if');
+  /**
+   * Parses an action string, stores resulting Game Action object
+   * inside the game map, and returns the corresponding actionId.
+   *
+   * @param rawActionString raw action string eg "show_dialogue(done) if gamestate.finish"
+   * @returns {ItemId} returns actionId of the parsed actions, as action is stored in the game map.
+   */
+  public static parseAction(rawActionString: string): ItemId {
+    const [actionString, conditionalsString] = StringUtils.splitByChar(rawActionString, 'if');
 
     const gameAction = this.parseActionContent(actionString);
     if (conditionalsString) {
@@ -32,6 +52,16 @@ export default class ActionParser {
     return gameAction.interactionId;
   }
 
+  /**
+   * This funciton converts action strings eg "show_dialogue(hello)"
+   * (excluding conditionals) into Game Action objects
+   *
+   * Note that this function also validates the parameters to make
+   * sure that they are used correctly.
+   *
+   * @param actionString the action string to be parsed
+   * @returns {GameAction} resulting action that can be stored in the game map
+   */
   public static parseActionContent(actionString: string): GameAction {
     const [action, actionParamString] = StringUtils.splitByChar(actionString, '(');
     let repeatable = false;
@@ -113,6 +143,7 @@ export default class ActionParser {
           actionParams[0],
           actionType
         );
+        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
         break;
       case GameActionType.MakeObjectGlow:
         actionParamObj.id = Parser.validator.assertLocAttr(
@@ -120,6 +151,13 @@ export default class ActionParser {
           actionParams[0],
           actionType
         );
+        actionParamObj.turnOn = actionParams[1] === 'false' ? false : true;
+        break;
+      case GameActionType.PlayBGM:
+        actionParamObj.id = Parser.validator.assertAttr(GameAttr.bgms, actionParams[0], actionType);
+        break;
+      case GameActionType.PlaySFX:
+        actionParamObj.id = Parser.validator.assertAttr(GameAttr.sfxs, actionParams[0], actionType);
         break;
     }
 

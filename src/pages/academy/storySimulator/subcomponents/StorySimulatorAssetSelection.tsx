@@ -1,8 +1,8 @@
 import { Icon, ITreeNode, Tooltip, Tree } from '@blueprintjs/core';
-import * as _ from 'lodash';
-import * as React from 'react';
-import { deleteS3File } from 'src/features/storySimulator/StorySimulatorService';
+import React from 'react';
+import { deleteS3File, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
 
+import { assetPathsToTree, treeMap } from './StorySimulatorAssetSelectionHelper';
 import StorySimulatorAssetViewer from './StorySimulatorAssetViewer';
 
 type TreeState = {
@@ -11,34 +11,36 @@ type TreeState = {
 
 type Props = {
   assetPaths: string[];
-  accessToken?: string;
-  folders: string[];
 };
 
-function StorySimulatorAssetSelection({ assetPaths, accessToken, folders }: Props) {
+/**
+ * This component takes in all the asset paths and renders them in a folder format
+ * where contents of folders are listed, and each folder can be opened/closed.
+ *
+ * When a file is selected, its filename is stored in session storage, so that
+ * Story Simulator's Object Placement can read the filename and load the image.
+ *
+ * @param assetPaths all the paths of assets in the S3 folder
+ */
+const StorySimulatorAssetSelection = ({ assetPaths }: Props) => {
   const [currentAsset, setCurrentAsset] = React.useState('');
   const [assetTree, setAssetTree] = React.useState<TreeState>({ nodes: [] });
 
   React.useEffect(() => {
-    if (!accessToken) return;
+    setAssetTree({ nodes: assetPathsToTree(assetPaths, toolIcons, s3AssetFolders) });
+  }, [assetPaths]);
 
-    setAssetTree({ nodes: assetPathsToTree(assetPaths, accessToken, folders) });
-  }, [accessToken, assetPaths, folders]);
-
-  const handleNodeClick = React.useCallback(
-    (nodeData: ITreeNode) => {
-      treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
-      nodeData.isSelected = !nodeData.isSelected;
-      nodeData.isExpanded = !nodeData.isExpanded;
-      const selectedPath = nodeData.id.toString();
-      if (!nodeData.childNodes) {
-        setCurrentAsset(selectedPath);
-        sessionStorage.setItem('selectedAsset', selectedPath);
-      }
-      setAssetTree({ ...assetTree });
-    },
-    [assetTree, setCurrentAsset]
-  );
+  const handleNodeClick = (nodeData: ITreeNode) => {
+    treeMap(assetTree.nodes, (node: ITreeNode) => (node.isSelected = false));
+    nodeData.isSelected = !nodeData.isSelected;
+    nodeData.isExpanded = !nodeData.isExpanded;
+    const selectedPath = nodeData.id.toString();
+    if (!nodeData.childNodes) {
+      setCurrentAsset(selectedPath);
+      sessionStorage.setItem('selectedAsset', selectedPath);
+    }
+    setAssetTree({ ...assetTree });
+  };
 
   return (
     <>
@@ -46,53 +48,30 @@ function StorySimulatorAssetSelection({ assetPaths, accessToken, folders }: Prop
       <Tree contents={assetTree.nodes} onNodeClick={handleNodeClick} />
     </>
   );
-}
+};
 
-export default StorySimulatorAssetSelection;
+/**
+ * Tools that are added to asset selection, includes: trash-can delete tool
+ *
+ * @param filePath the path to asset you want to supply tools for
+ * @returns {JSX.Element} A trash can that deletes the file given the asset path
+ */
+const toolIcons = (filePath: string) => (
+  <Tooltip content="Delete">
+    <Icon icon="trash" onClick={deleteFile(filePath)} />
+  </Tooltip>
+);
 
-function treeMap(nodes: ITreeNode[] | undefined, fn: (node: ITreeNode) => void) {
-  nodes &&
-    nodes.forEach(node => {
-      fn(node);
-      treeMap(node.childNodes, fn);
-    });
-}
-
-const deleteFile = (filePath: string, accessToken: string) => async () => {
+/**
+ * This function deletes an S3 file given the short filepath
+ *
+ * @param filePath - the file path e.g. "stories/chapter0.txt"
+ */
+const deleteFile = (filePath: string) => async () => {
   const confirm = window.confirm(
     `Are you sure you want to delete ${filePath}?\nThere is no undoing this action!`
   );
-  alert(confirm ? await deleteS3File(accessToken, filePath) : 'Whew');
+  alert(confirm ? await deleteS3File(filePath) : 'Whew');
 };
 
-function assetPathsToTree(
-  assetPaths: string[],
-  accessToken: string,
-  folders: string[]
-): ITreeNode[] {
-  const assetObj = {};
-  assetPaths.forEach(assetPath => _.set(assetObj, assetPath.split('/'), 'FILE'));
-  folders.forEach(folder => {
-    if (!assetObj[folder] || assetObj[folder] === 'FILE') {
-      assetObj[folder] = [];
-    }
-  });
-
-  function helper(parentFolders: string[], assetObj: object | Array<string>): ITreeNode[] {
-    return Object.keys(assetObj).map(file => {
-      const shortPath = '/' + parentFolders.join('/') + '/' + file;
-      return {
-        id: shortPath,
-        label: file,
-        secondaryLabel: (
-          <Tooltip content="Delete">
-            <Icon icon="trash" onClick={deleteFile(shortPath, accessToken)} />
-          </Tooltip>
-        ),
-        childNodes:
-          assetObj[file] === 'FILE' ? undefined : helper([...parentFolders, file], assetObj[file])
-      };
-    });
-  }
-  return helper([], assetObj);
-}
+export default StorySimulatorAssetSelection;

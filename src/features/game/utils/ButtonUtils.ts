@@ -1,7 +1,7 @@
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
 import { AssetKey, BitmapFontStyle, TextConfig } from '../commons/CommonTypes';
-import GameSoundManager from '../sound/GameSoundManager';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { createBitmapText } from './TextUtils';
 
 type ButtonConfig = {
@@ -13,6 +13,7 @@ type ButtonConfig = {
   onUp?: () => void;
   onHover?: () => void;
   onOut?: () => void;
+  onPointerMove?: (pointer: Phaser.Input.Pointer, localX: number, localY: number) => void;
   onHoverEffect?: boolean;
   onClickSound?: AssetKey;
   onHoverSound?: AssetKey;
@@ -39,6 +40,7 @@ const offHoverAlpha = 0.9;
  * @param onUp callback to execute on onUp event, optional
  * @param onHover callback to execute on onHover event, optional
  * @param onOut callback to execute on onOut event, optional
+ * @param onPointerMove callback to execute on onPointerMove, optional
  * @param onHoverEffect if true, button will include onHover and onOut alpha changes, optional
  * @param onClickSound sound key to play when button is clicked, executed onUp, optional
  * @param onHoverSound sound key to play when button is hovered, optional
@@ -56,24 +58,23 @@ export function createButton(
     onUp = Constants.nullFunction,
     onHover = Constants.nullFunction,
     onOut = Constants.nullFunction,
+    onPointerMove = Constants.nullFunction,
     onHoverEffect = true,
     onClickSound = SoundAssets.buttonClick.key,
     onHoverSound = SoundAssets.buttonHover.key
-  }: ButtonConfig,
-  soundManager?: GameSoundManager
+  }: ButtonConfig
 ): Phaser.GameObjects.Container {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
-  const { x, y, oriX, oriY } = textConfig;
 
   // Set up button functionality
   const button = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey);
   button.setInteractive({ pixelPerfect: true, useHandCursor: true });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
-    if (soundManager) soundManager.playSound(onClickSound);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(onClickSound);
     onUp();
   });
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () => {
-    if (soundManager) soundManager.playSound(onHoverSound);
+    SourceAcademyGame.getInstance().getSoundManager().playSound(onHoverSound);
     if (onHoverEffect) container.setAlpha(onHoverAlpha);
     onHover();
   });
@@ -84,10 +85,15 @@ export function createButton(
   button.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_DOWN, () => {
     onDown();
   });
+  button.addListener(
+    Phaser.Input.Events.GAMEOBJECT_POINTER_MOVE,
+    (pointer: Phaser.Input.Pointer, localX: number, localY: number) => {
+      onPointerMove(pointer, localX, localY);
+    }
+  );
 
   // Set up text
-  const text = createBitmapText(scene, message, x, y, bitMapTextStyle);
-  text.setOrigin(oriX, oriY);
+  const text = createBitmapText(scene, message, textConfig, bitMapTextStyle);
 
   container.add([button, text]);
   if (onHoverEffect) container.setAlpha(offHoverAlpha);

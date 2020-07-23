@@ -1,41 +1,37 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { fetchAssetPaths, s3AssetFolders } from 'src/features/storySimulator/StorySimulatorService';
+import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import {
+  fetchAssetPaths,
+  obtainTextAssets,
+  s3AssetFolders
+} from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { AccountInfo } from '../game/subcomponents/sourceAcademyGame';
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
 import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
-import StorySimulatorChapterSequencer from './subcomponents/StorySimulatorChapterSequencer';
+import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
 import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
-import {
-  createStorySimulatorGame,
-  getStorySimulatorGame
-} from './subcomponents/storySimulatorGame';
+import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-
   const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
+  const [textAssets, setTextAssets] = React.useState<string[]>([]);
+
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {
-    createStorySimulatorGame().setStorySimProps({ setStorySimState });
+    createStorySimulatorGame().setStorySimStateSetter(setStorySimState);
   }, []);
 
   React.useEffect(() => {
-    getStorySimulatorGame().setAccountInfo({
-      accessToken: session.accessToken,
-      refreshToken: session.refreshToken,
-      role: session.role,
-      name: session.name
-    } as AccountInfo);
-  }, [session]);
-
-  React.useEffect(() => {
     (async () => {
-      setAssetPaths(await fetchAssetPaths(session.accessToken, s3AssetFolders));
+      SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
+      const paths = await fetchAssetPaths(s3AssetFolders);
+      setAssetPaths(paths);
+      setTextAssets(obtainTextAssets(paths));
     })();
   }, [session]);
 
@@ -50,34 +46,25 @@ function StorySimulator() {
             </>
           )}
           {storySimState === StorySimState.CheckpointSim && (
-            <StorySimulatorCheckpointSim
-              accessToken={session.accessToken}
-              assetPaths={assetPaths}
-            />
+            <StorySimulatorCheckpointSim textAssets={textAssets} />
           )}
           {storySimState === StorySimState.ObjectPlacement && (
             <>
               <h3>Asset Selection</h3>
-              <StorySimulatorAssetSelection
-                folders={s3AssetFolders}
-                assetPaths={assetPaths}
-                accessToken={session.accessToken}
-              />
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
             </>
           )}
           {storySimState === StorySimState.AssetUploader && (
             <>
               <h3>Asset uploader</h3>
-              <StorySimulatorAssetFileUploader accessToken={session.accessToken} />
+              <StorySimulatorAssetFileUploader />
               <h3>Asset Viewer</h3>
-              <StorySimulatorAssetSelection
-                folders={s3AssetFolders}
-                assetPaths={assetPaths}
-                accessToken={session.accessToken}
-              />
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
             </>
           )}
-          {storySimState === StorySimState.ChapterSequence && <StorySimulatorChapterSequencer />}
+          {storySimState === StorySimState.ChapterSim && (
+            <StorySimulatorChapterSim textAssets={textAssets} />
+          )}
         </div>
       </div>
     </>
