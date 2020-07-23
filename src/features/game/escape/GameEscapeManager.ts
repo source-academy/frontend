@@ -209,12 +209,11 @@ class GameEscapeManager implements IGameUI {
       : 1;
 
     // Save settings
-    await this.getSettingsSaveManager().saveSettings({ bgmVolume: bgmVol, sfxVolume: sfxVol });
+    const newSettings = { bgmVolume: bgmVol, sfxVolume: sfxVol };
+    await this.getSettingsSaveManager().saveSettings(newSettings);
 
     // Apply settings
-    SourceAcademyGame.getInstance()
-      .getSoundManager()
-      .applyUserSettings(this.getSettingsSaveManager().getSettings());
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(newSettings);
   }
 
   /**

@@ -15,8 +15,7 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { fetchChapters } from '../storySimulator/StorySimulatorService';
-import { toTxtPath } from './assets/TextAssets';
+import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
 import EntryScene from './scenes/entry/EntryScene';
@@ -94,9 +93,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   }
 
   public async loadGameChapters() {
-    const chapters = await fetchChapters();
-    chapters.forEach(chapter => (chapter.filenames = chapter.filenames.map(toTxtPath)));
-    this.global.gameChapters = chapters;
+    this.global.gameChapters = await fetchGameChapters();
   }
 
   public async loadRoomCode() {

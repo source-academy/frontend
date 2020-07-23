@@ -97,6 +97,9 @@ export default class GameSaveManager {
    * @param settingsJson the newest settings of the user
    */
   public async saveSettings(settingsJson: SettingsJson) {
+    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return;
+    }
     this.fullSaveState.userSaveState.settings = settingsJson;
     await saveData(this.fullSaveState);
   }
