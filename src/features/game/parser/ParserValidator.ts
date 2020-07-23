@@ -37,10 +37,25 @@ type AssertionDetail = {
 export default class ParserValidator {
   private gameItemAsserts: Map<GameItemType, AssertionDetail[]>;
   private gameEntityAsserts: Map<GameEntityType, AssertionDetail[]>;
+  private allItemIds: Set<string>;
 
   constructor() {
     this.gameItemAsserts = new Map<GameItemType, AssertionDetail[]>();
     this.gameEntityAsserts = new Map<GameEntityType, AssertionDetail[]>();
+    this.allItemIds = new Set();
+  }
+
+  /**
+   * We register an item ids to check for possible duplicates
+   * with other item ids
+   *
+   * @param id new ID for a game item or game entity
+   */
+  public register(id: string) {
+    if (this.allItemIds.has(id)) {
+      throw new Error(`Duplicate item id ${id}`);
+    }
+    this.allItemIds.add(id);
   }
 
   /**

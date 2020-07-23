@@ -37,7 +37,6 @@ room
     boundingBoxes
         + bbox1, 10, 10, 30, 30
 
-
     characters
         + scottie, Scottie, sad, left
 
@@ -45,7 +44,7 @@ hallway
     modes: move, explore
     talkTopics: welcomeToHallway
     objects
-        + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+        + sideDoorInHallway, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
             remove_item(objects, room, computerOnShelf)
 
 

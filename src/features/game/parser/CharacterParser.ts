@@ -60,6 +60,7 @@ export default class CharacterParser {
       characterDetails,
       ','
     );
+    Parser.validator.register(id);
 
     const expressions = new Map<string, AssetKey>();
 

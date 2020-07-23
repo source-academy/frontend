@@ -66,6 +66,8 @@ export default class ObjectParser {
     }
 
     const [objectId, shortPath, x, y, width, height] = StringUtils.splitByChar(objectDetails, ',');
+    Parser.validator.register(objectId);
+
     const objectProperty: ObjectProperty = {
       assetKey: this.objectAssetKey(shortPath),
       x: parseInt(x),

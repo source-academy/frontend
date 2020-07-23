@@ -51,6 +51,7 @@ export default class BoundingBoxParser {
       interactionId: bboxId
     };
 
+    Parser.validator.register(bboxId);
     Parser.checkpoint.map.setItemInMap(GameItemType.boundingBoxes, bboxId, bboxProperty);
     if (addToLoc) {
       Parser.checkpoint.map.addItemToLocation(locationId, GameItemType.boundingBoxes, bboxId);
