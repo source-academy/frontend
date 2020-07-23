@@ -17,12 +17,14 @@ function infiniteLoopErrorType(errorString: string): string {
     )
       return 'input_out_of_domain';
     else if (errorString.includes('Check your recursive function calls.')) return 'no_state_change';
-  } else if (errorString === 'InternalError: too much recursion') return 'stack_overflow';
+  }
   // firefox
-  else if (errorString === 'RangeError: Maximum call stack size exceeded') return 'stack_overflow';
+  else if (errorString === 'InternalError: too much recursion') return 'stack_overflow';
   // chrome
-  else if (errorString === 'Error: Out of stack space') return 'stack_overflow';
+  else if (errorString === 'RangeError: Maximum call stack size exceeded') return 'stack_overflow';
   // edge
+  else if (errorString === 'Error: Out of stack space') return 'stack_overflow';
+  // error from transpiler
   else if (errorString.includes('Potential infinite recursion detected'))
     return 'source_protection_recursion';
   else if (errorString.includes('Potential infinite loop detected'))
