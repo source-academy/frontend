@@ -64,6 +64,8 @@ class GameStateManager {
       .getSaveManager()
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
+
+    this.gameMap.getLocationIds().forEach(locationId => this.addLocationNotif(locationId));
   }
 
   ///////////////////////////////

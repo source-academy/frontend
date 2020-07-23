@@ -142,6 +142,10 @@ class GameMap {
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
 
+  public getLocationIds(): LocationId[] {
+    return Array.from(this.locations.keys());
+  }
+
   public checkLocationExists = this.getLocationAtId;
 }
 

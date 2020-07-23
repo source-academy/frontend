@@ -140,11 +140,11 @@ class GameManager extends Phaser.Scene {
   public async create() {
     await this.getUserStateManager().loadAssessments();
     await this.getUserStateManager().loadAchievements();
-    await this.changeLocationTo(this.currentLocationId, true);
-    // Execute fast forward actions
+
     await this.getActionManager().fastForwardGameActions(
       this.getStateManager().getTriggeredActions()
     );
+    await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
   }
 
