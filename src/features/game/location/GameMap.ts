@@ -113,11 +113,11 @@ class GameMap {
     return this.dialogues;
   }
 
-  public getCharacters(): Map<ItemId, Character> {
+  public getCharacterMap(): Map<ItemId, Character> {
     return this.characters;
   }
 
-  public getActions(): Map<ItemId, GameAction> {
+  public getActionMap(): Map<ItemId, GameAction> {
     return this.actions;
   }
 
@@ -141,6 +141,10 @@ class GameMap {
 
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
+
+  public getLocationIds(): LocationId[] {
+    return Array.from(this.locations.keys());
+  }
 
   public checkLocationExists = this.getLocationAtId;
 }

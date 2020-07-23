@@ -45,16 +45,15 @@ type GameManagerProps = {
  */
 class GameManager extends Phaser.Scene {
   public currentLocationId: LocationId;
-  private currentCheckpoint: GameCheckpoint | undefined;
 
+  public stateManager?: GameStateManager;
   public layerManager: GameLayerManager;
-  public stateManager: GameStateManager;
-  public objectManager: GameObjectManager;
-  public characterManager: GameCharacterManager;
-  public dialogueManager: GameDialogueManager;
-  public actionManager: GameActionManager;
-  public userStateManager: GameUserStateManager;
-  public boundingBoxManager: GameBBoxManager;
+  public objectManager?: GameObjectManager;
+  public characterManager?: GameCharacterManager;
+  public dialogueManager?: GameDialogueManager;
+  public actionManager?: GameActionManager;
+  public userStateManager?: GameUserStateManager;
+  public boundingBoxManager?: GameBBoxManager;
   public popUpManager: GamePopUpManager;
   public saveManager?: GameSaveManager;
   public escapeManager: GameEscapeManager;
@@ -65,17 +64,9 @@ class GameManager extends Phaser.Scene {
 
   constructor() {
     super('GameManager');
-    this.currentCheckpoint = undefined;
     this.currentLocationId = Constants.nullInteractionId;
 
     this.layerManager = new GameLayerManager();
-    this.stateManager = new GameStateManager();
-    this.characterManager = new GameCharacterManager();
-    this.objectManager = new GameObjectManager();
-    this.dialogueManager = new GameDialogueManager();
-    this.actionManager = new GameActionManager();
-    this.userStateManager = new GameUserStateManager();
-    this.boundingBoxManager = new GameBBoxManager();
     this.popUpManager = new GamePopUpManager();
     this.escapeManager = new GameEscapeManager();
     this.phaseManager = new GamePhaseManager();
@@ -85,13 +76,15 @@ class GameManager extends Phaser.Scene {
   }
 
   public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
+    GameGlobalAPI.getInstance().setGameManager(this);
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     SourceAcademyGame.getInstance()
       .getSaveManager()
       .registerGameInfo(chapterNum, checkpointNum, continueGame);
-    this.currentCheckpoint = gameCheckpoint;
+    this.currentLocationId = gameCheckpoint.startingLoc;
+
+    this.stateManager = new GameStateManager(gameCheckpoint);
     this.layerManager = new GameLayerManager();
-    this.stateManager = new GameStateManager();
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
@@ -111,21 +104,11 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public preload() {
-    GameGlobalAPI.getInstance().setGameManager(this);
     addLoadingScreen(this);
-
-    this.currentLocationId =
-      this.getSaveManager().getLoadedLocation() || this.getCurrentCheckpoint().startingLoc;
-    this.stateManager.initialise(this);
-    this.userStateManager.initialise();
-    this.dialogueManager.initialise(this);
-    this.characterManager.initialise(this);
-    this.actionManager.initialise(this);
+    this.currentLocationId = this.getSaveManager().getLoadedLocation() || this.currentLocationId;
     this.inputManager.initialise(this);
-    this.boundingBoxManager.initialise();
-    this.objectManager.initialise();
     this.layerManager.initialise(this);
-    this.awardsManager.initialise(this, this.userStateManager, this.phaseManager);
+    this.awardsManager.initialise(this, this.getUserStateManager(), this.phaseManager);
     this.phaseManager.initialise(
       createGamePhases(this.escapeManager, this.awardsManager),
       this.inputManager
@@ -135,18 +118,17 @@ class GameManager extends Phaser.Scene {
     this.phaseManager.setCallback(
       async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
     );
-    this.preloadLocationsAssets(this.getCurrentCheckpoint());
+    this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
   }
 
   /**
-   * Preload all assets (image and sounds) exclusive to the checkpoint.
-   *
-   * @param checkpoint checkpoint to have its assets loaded
+   * Preload all assets (image and sounds) exclusive to the checkpoint's gamemap.
    */
-  private preloadLocationsAssets(checkpoint: GameCheckpoint) {
-    GameGlobalAPI.getInstance().loadSounds(checkpoint.map.getSoundAssets());
-    checkpoint.map.getMapAssets().forEach((assetPath, assetKey) => {
+  private preloadLocationsAssets() {
+    const gameMap = this.getStateManager().getGameMap();
+    GameGlobalAPI.getInstance().loadSounds(gameMap.getSoundAssets());
+    gameMap.getMapAssets().forEach((assetPath, assetKey) => {
       this.load.image(assetKey, toS3Path(assetPath));
     });
   }
@@ -156,8 +138,12 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    await this.userStateManager.loadAssessments();
-    await this.userStateManager.loadAchievements();
+    await this.getUserStateManager().loadAssessments();
+    await this.getUserStateManager().loadAchievements();
+
+    await this.getActionManager().fastForwardGameActions(
+      this.getStateManager().getTriggeredActions()
+    );
     await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
   }
@@ -182,26 +168,26 @@ class GameManager extends Phaser.Scene {
 
     // Render all assets related to the location
     this.backgroundManager.renderBackgroundLayerContainer(locationId);
-    this.objectManager.renderObjectsLayerContainer(locationId);
-    this.boundingBoxManager.renderBBoxLayerContainer(locationId);
-    this.characterManager.renderCharacterLayerContainer(locationId);
+    this.getObjectManager().renderObjectsLayerContainer(locationId);
+    this.getBBoxManager().renderBBoxLayerContainer(locationId);
+    this.getCharacterManager().renderCharacterLayerContainer(locationId);
     this.layerManager.showLayer(Layer.Character);
 
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 
-    // Execute start actions, notif, then cutscene
-    await this.actionManager.fastForwardGameActions(this.stateManager.getTriggeredActions());
-
-    // Execute start actions, notif, then cutscene
     if (startAction) {
-      await this.actionManager.processGameActions(
-        this.getCurrentCheckpoint().map.getCheckpointCompleteActions()
+      // Execute start actions, notif, then cutscene
+      await this.getActionManager().processGameActions(
+        this.getStateManager().getGameMap().getCheckpointCompleteActions()
       );
     }
-    if (!this.stateManager.hasTriggeredInteraction(locationId)) {
+
+    if (this.getStateManager().hasLocationNotif(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
+      this.getStateManager().removeLocationNotif(locationId);
     }
-    await this.actionManager.processGameActions(gameLocation.actionIds);
+
+    await this.getActionManager().processGameActions(gameLocation.actionIds);
 
     await this.phaseManager.swapPhase(GamePhaseType.Menu);
   }
@@ -224,7 +210,7 @@ class GameManager extends Phaser.Scene {
     });
 
     // Update state after location is fully rendered, location has been visited
-    this.stateManager.triggerInteraction(locationId);
+    this.getStateManager().triggerInteraction(locationId);
   }
 
   /**
@@ -283,8 +269,8 @@ class GameManager extends Phaser.Scene {
 
     // Transition to the next scene if possible
     if (transitionToNextCheckpoint) {
-      await this.actionManager.processGameActions(
-        this.getCurrentCheckpoint().map.getCheckpointCompleteActions()
+      await this.getActionManager().processGameActions(
+        this.getStateManager().getGameMap().getCheckpointCompleteActions()
       );
       this.cleanUp();
       this.scene.start('CheckpointTransition');
@@ -292,8 +278,15 @@ class GameManager extends Phaser.Scene {
     return transitionToNextCheckpoint;
   }
 
-  public getCurrentCheckpoint = () => mandatory(this.currentCheckpoint);
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
+  public getStateManager = () => mandatory(this.stateManager);
+
+  public getUserStateManager = () => mandatory(this.userStateManager);
+  public getObjectManager = () => mandatory(this.objectManager);
+  public getDialogueManager = () => mandatory(this.dialogueManager);
+  public getCharacterManager = () => mandatory(this.characterManager);
+  public getBBoxManager = () => mandatory(this.boundingBoxManager);
+  public getActionManager = () => mandatory(this.actionManager);
 }
 
 export default GameManager;

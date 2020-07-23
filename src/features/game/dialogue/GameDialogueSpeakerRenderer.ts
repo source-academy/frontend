@@ -4,6 +4,7 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
@@ -15,11 +16,6 @@ import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
  */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
-  private username: string;
-
-  constructor(username: string) {
-    this.username = username;
-  }
 
   /**
    * Changes the speaker shown in the speaker box and the speaker rendered on screen
@@ -53,7 +49,7 @@ export default class DialogueSpeakerRenderer {
   private drawSpeakerBox(speakerId: ItemId) {
     const speakerContainer =
       speakerId === 'you'
-        ? this.createSpeakerBox(this.username, GamePosition.Right)
+        ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
         : this.createSpeakerBox(
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
             GamePosition.Left
@@ -100,4 +96,6 @@ export default class DialogueSpeakerRenderer {
     speakerText.text = StringUtils.capitalize(text);
     return container;
   }
+
+  public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }

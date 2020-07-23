@@ -1,60 +1,22 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
 import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ActivatableSprite, ActivateSpriteCallbacks } from '../objects/GameObjectTypes';
-import { StateChangeType, StateObserver } from '../state/GameStateTypes';
-import { mandatory } from '../utils/GameUtils';
+import { StateObserver } from '../state/GameStateTypes';
 import { BBoxProperty } from './GameBoundingBoxTypes';
 
 /**
  * Manager for rendering interactive bounding boxes in the location.
  */
 class GameBoundingBoxManager implements StateObserver {
-  public observerId: string;
   private bboxes: Map<ItemId, ActivatableSprite>;
 
   constructor() {
-    this.observerId = 'GameBoundingBoxManager';
     this.bboxes = new Map<ItemId, ActivatableSprite>();
-  }
-
-  public initialise() {
-    GameGlobalAPI.getInstance().subscribeState(this);
-  }
-
-  /**
-   * Part of observer pattern. Receives notification from GameStateManager.
-   *
-   * On notify, will rerender all the bounding boxes on the location to reflect
-   * the update to the state if applicable.
-   *
-   * @param changeType type of change
-   * @param locationId id of the location being updated
-   * @param id id of item being updated
-   */
-  public notify(changeType: StateChangeType, locationId: LocationId, id?: string) {
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdateAttr(
-      locationId,
-      GameItemType.boundingBoxes
-    );
-    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
-    if (hasUpdate && locationId === currLocationId) {
-      // Inform state manager that update has been consumed
-      GameGlobalAPI.getInstance().consumedLocationUpdate(locationId, GameItemType.boundingBoxes);
-
-      // If the update is on the current location, we rerender to reflect the update
-      if (id) {
-        // If Id is provided, we only need to address the specific bbox
-        this.handleBBoxChange(changeType, id);
-      } else {
-        // Else, rerender the whole layer
-        this.renderBBoxLayerContainer(locationId);
-      }
-    }
+    GameGlobalAPI.getInstance().watchGameItemType(GameItemType.boundingBoxes, this);
   }
 
   /**
@@ -108,10 +70,10 @@ class GameBoundingBoxManager implements StateObserver {
    *               onOut?: (id?: ItemId) => void
    *             }
    *
-   * @param gameManager game manager
    * @param objectProperty object property to be used
    */
-  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableSprite {
+  private createBBox(bboxProperty: BBoxProperty): ActivatableSprite {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const { x, y, width, height, actionIds, interactionId } = bboxProperty;
     const bboxSprite = new Phaser.GameObjects.Rectangle(gameManager, x, y, width, height, 0, 0);
     if (bboxProperty.isInteractive) {
@@ -145,23 +107,6 @@ class GameBoundingBoxManager implements StateObserver {
   }
 
   /**
-   * Handle change of a specific bbox ID.
-   *
-   * @param changeType type of change
-   * @param id id of affected bbox
-   */
-  private handleBBoxChange(changeType: StateChangeType, id: ItemId) {
-    switch (changeType) {
-      case StateChangeType.Add:
-        return this.handleAdd(id);
-      case StateChangeType.Mutate:
-        return this.handleMutate(id);
-      case StateChangeType.Delete:
-        return this.handleDelete(id);
-    }
-  }
-
-  /**
    * Add the bbox, specified by the ID, into the scene
    * and keep track of it within the mapping.
    *
@@ -169,20 +114,17 @@ class GameBoundingBoxManager implements StateObserver {
    * in the mapping.
    *
    * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
    */
-  private handleAdd(id: ItemId) {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
-
-    const bboxProp = mandatory(bboxPropMap.get(id));
-    const bbox = this.createBBox(gameManager, bboxProp);
+  public handleAdd(id: ItemId): boolean {
+    const bboxProp = GameGlobalAPI.getInstance().getBBoxById(id);
+    const bbox = this.createBBox(bboxProp);
     GameGlobalAPI.getInstance().addContainerToLayer(
       Layer.BBox,
       bbox.sprite as Phaser.GameObjects.Rectangle
     );
     this.bboxes.set(id, bbox);
-
-    return bbox;
+    return true;
   }
 
   /**
@@ -192,10 +134,10 @@ class GameBoundingBoxManager implements StateObserver {
    * the updated property.
    *
    * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
    */
-  private handleMutate(id: ItemId) {
-    this.handleDelete(id);
-    this.handleAdd(id);
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
   }
 
   /**
@@ -203,10 +145,16 @@ class GameBoundingBoxManager implements StateObserver {
    * applicable.
    *
    * @param id id of the bbox
+   * @return {boolean} true if successful, false otherwise
    */
-  private handleDelete(id: ItemId) {
+  public handleDelete(id: ItemId): boolean {
     const bbox = this.bboxes.get(id);
-    if (bbox) (bbox.sprite as Phaser.GameObjects.Rectangle).destroy();
+    if (bbox) {
+      this.bboxes.delete(id);
+      (bbox.sprite as Phaser.GameObjects.Rectangle).destroy();
+      return true;
+    }
+    return false;
   }
 }
 
