@@ -23,8 +23,8 @@ class AwardParser {
     const assetLines = StringUtils.splitToLines(assetText);
     const assetParagraphs = StringUtils.splitToParagraph(assetLines);
 
-    assetParagraphs.forEach(([awardType, awardBody]: [string, string[]]) => {
-      AwardParser.parseAwardParagraphs(awardType, awardBody);
+    assetParagraphs.forEach(([, awardBody]: [string, string[]]) => {
+      AwardParser.parseAwardParagraphs(awardBody);
     });
     return this.awardsMapping;
   }
@@ -35,10 +35,10 @@ class AwardParser {
    * @param awardType whether the type is collectible or achievement
    * @param awardBody whether this is a
    */
-  private static parseAwardParagraphs(awardType: string, awardBody: string[]) {
+  private static parseAwardParagraphs(awardBody: string[]) {
     const awardParagraph = StringUtils.splitToParagraph(awardBody);
     awardParagraph.forEach(([id, awardProperties]: [ItemId, string[]]) => {
-      const [assetKey, assetPath, title, description] = StringUtils.splitByChar(
+      const [assetKey, assetPath, title, description] = StringUtils.splitWithLimit(
         awardProperties[0],
         ',',
         3

@@ -126,7 +126,9 @@ class MainMenu extends Phaser.Scene {
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
+
     this.layerManager.clearAllLayers();
+
     Parser.parse(defaultChapterText);
     if (checkpointTxt) {
       Parser.parse(checkpointTxt, true);

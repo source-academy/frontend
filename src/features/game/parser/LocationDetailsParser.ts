@@ -17,7 +17,7 @@ export default class LocationDetailsParser {
    */
   public static parse(locationDetails: string[]) {
     locationDetails.forEach(locationDetail => {
-      const [id, shortPath, name] = StringUtils.splitByChar(locationDetail, ',', 2);
+      const [id, shortPath, name] = StringUtils.splitWithLimit(locationDetail, ',', 2);
       Parser.checkpoint.map.addLocation(id, {
         ...createEmptyLocation(),
         id,

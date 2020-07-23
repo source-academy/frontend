@@ -40,7 +40,7 @@ class Parser {
     Parser.validator = new ParserValidator();
   }
 
-  public static parse(chapterText: string, continueParse = false): GameCheckpoint {
+  public static parse(chapterText: string, continueParse = false) {
     if (!continueParse) {
       Parser.init();
     }
@@ -57,7 +57,6 @@ class Parser {
     });
 
     Parser.validator.verifyAssertions();
-    return this.checkpoint;
   }
 
   private static parseCheckpointConfig(checkpointConfig: string) {

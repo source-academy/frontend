@@ -27,7 +27,7 @@ export default class LocationParser {
     const locationParagraphs = StringUtils.splitToParagraph(locationBody);
 
     locationParagraphs.forEach(([header, body]: [string, string[]]) => {
-      if (body.length === 0) {
+      if (body.length === 0 && header.includes(':')) {
         this.parseLocationConfig(location, header);
       } else {
         this.parseLocationParagraphs(location, header, body);
