@@ -1,141 +1,122 @@
 .AchievementDashboard {
   display: flex;
   flex-direction: column;
-  flex: 1 1 auto;
 
+  height: 100%;
+  width: 100%;
   overflow-x: hidden;
   overflow-y: auto;
 
-  background-size: cover;
-  background-image: url('#{$achievement-assets}/background.png');
-  background-repeat: no-repeat;
-  background-attachment: fixed;
+  background: black url('#{$achievement-assets}/background.png') center/cover no-repeat fixed;
 
   .achievement-overview {
     display: flex;
-
-    height: 7%;
-    width: 45%;
-
     flex-direction: row;
-    justify-content: space-evenly;
     align-items: center;
+
+    height: 5em;
+    width: 100%;
+
+    padding: 0 1em;
 
     color: white;
 
     .level {
       display: flex;
-
       flex-direction: row;
-      justify-content: center;
       align-items: center;
 
       .level-badge {
         display: flex;
-
         flex-direction: column;
-        justify-content: center;
         align-items: center;
 
-        margin: 0.5em 0.5em 0 0;
+        margin: 1em 0.5em 0 0;
 
         .level-icon {
           height: 2.5em;
           width: 2.5em;
 
-          background-image: url('#{$achievement-assets}/level-icon.png');
-          background-size: contain;
+          background: url('#{$achievement-assets}/level-icon.png') center/contain;
         }
 
         p {
-          padding: 0;
-          margin: 0;
           font-size: 0.9em;
           text-decoration: underline white;
+          margin: 0;
         }
       }
 
       .level-progress {
         display: flex;
 
-        flex-direction: row;
-
-        align-items: center;
-
         height: 1.2em;
         width: 20em;
 
         .progress-bar {
-          display: flex;
-
           height: 1.2em;
           width: 20em;
         }
 
         p {
           display: inline-flex;
-
-          z-index: 1;
-
-          height: 1.2em;
-          width: 20em;
-
           justify-content: center;
           align-items: center;
 
-          padding: 0;
-          margin: 0 -20em 0;
-          color: #ffb412;
+          z-index: 1;
+
+          width: 20em;
+
+          margin: 0 0 0 -20em;
+
+          color: #ffef12;
         }
       }
+    }
 
-      .milestone {
+    .milestone {
+      display: flex;
+      flex-direction: column;
+
+      position: absolute;
+      z-index: 2;
+
+      margin: 20em 0 0 0;
+      padding: 0.5em 2em;
+
+      background-color: rgba(0, 0, 0, 0.7);
+      border: 1px solid #90ff12;
+      box-shadow: 0 0 10px #90ff12;
+
+      h2 {
+        margin: 0.5em 0 0 0;
+        text-align: center;
+        text-decoration: underline;
+      }
+
+      .details {
         display: flex;
-
-        flex-direction: column;
-
-        height: 22%;
-        width: 20%;
-
-        margin: 7% 0 0 0;
-        position: absolute;
-        z-index: 2;
-
-        background-color: rgba(0, 0, 0, 0.7);
-        border: 1px solid #90ff12;
-        box-shadow: 0 0 10px #90ff12;
-
-        h2 {
-          text-align: center;
-          text-decoration: underline;
-        }
-
-        .details {
-          display: flex;
-
-          flex-direction: row;
-
-          align-items: center;
-
-          padding: 0 0 1em 3.5em;
-
-          .description {
-            display: flex;
-
-            padding: 1em 0 0 1em;
-          }
-        }
+        flex-direction: row;
+        align-items: center;
       }
+
+      .description {
+        padding: 1em 0 0 0;
+      }
+    }
+
+    h3 {
+      margin: 0 0 0 2em;
     }
   }
 
   .achievement-main {
     display: flex;
-
-    height: 93%;
-
     flex-direction: row;
-    justify-content: flex-start;
+
+    height: 100%;
+    width: 100%;
+
     align-items: center;
 
     & > * {
