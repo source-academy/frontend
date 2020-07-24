@@ -91,6 +91,10 @@ class GameManager extends Phaser.Scene {
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
         await this.checkpointTransition(newPhase)
     );
+    this.phaseManager.setCallback(
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        await this.handleCharacterLayer(prevPhase, newPhase)
+    );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
   }
@@ -246,6 +250,27 @@ class GameManager extends Phaser.Scene {
       this.scene.start('CheckpointTransition');
     }
     return transitionToNextCheckpoint;
+  }
+
+  /**
+   * Handle when character layer should be shown and hidden.
+   * Character layer should only be shown when student is at
+   * Menu Mode.
+   *
+   * This method is passed to the phase manager, to be executed on
+   * every phase transition.
+   *
+   * @param prevPhase previous phase to transition from
+   * @param newPhase new phase to transition to
+   */
+  public async handleCharacterLayer(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
+    if (prevPhase === GamePhaseType.Menu) {
+      GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character);
+    }
+
+    if (newPhase === GamePhaseType.Menu) {
+      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character);
+    }
   }
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
