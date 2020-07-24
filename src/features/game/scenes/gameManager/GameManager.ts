@@ -91,7 +91,7 @@ class GameManager extends Phaser.Scene {
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
         await this.checkpointTransition(newPhase)
     );
-    this.phaseManager.setCallback(
+    this.getPhaseManager().setCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
         await this.handleCharacterLayer(prevPhase, newPhase)
     );
