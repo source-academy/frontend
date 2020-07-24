@@ -9,7 +9,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
-import { limitNumber } from '../../utils/GameUtils';
+import { limitNumber, mandatory } from '../../utils/GameUtils';
 import { resizeUnderflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
@@ -20,8 +20,8 @@ import { createAwardsHoverContainer } from './AwardsHelper';
  * This scenes display all students awards (collectibles and achievements).
  */
 class AwardsHall extends Phaser.Scene {
-  public layerManager: GameLayerManager;
-  public inputManager: GameInputManager;
+  public layerManager?: GameLayerManager;
+  public inputManager?: GameInputManager;
 
   private backgroundTile: Phaser.GameObjects.TileSprite | undefined;
   private awardsContainer: Phaser.GameObjects.Container | undefined;
@@ -35,9 +35,6 @@ class AwardsHall extends Phaser.Scene {
     super('AwardsHall');
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
 
-    this.layerManager = new GameLayerManager();
-    this.inputManager = new GameInputManager();
-
     this.isScrollLeft = false;
     this.isScrollRight = false;
     this.scrollLim = 0;
@@ -45,14 +42,12 @@ class AwardsHall extends Phaser.Scene {
   }
 
   public init() {
-    this.layerManager = new GameLayerManager();
-    this.inputManager = new GameInputManager();
+    this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
   }
 
   public preload() {
     addLoadingScreen(this);
-    this.layerManager.initialise(this);
-    this.inputManager.initialise(this);
   }
 
   public async create() {
@@ -103,7 +98,7 @@ class AwardsHall extends Phaser.Scene {
       AwardsHallConstants.tileDim,
       ImageAssets.awardsBackground.key
     ).setOrigin(0, 0.25);
-    this.layerManager.addToLayer(Layer.Background, this.backgroundTile);
+    this.getLayerManager().addToLayer(Layer.Background, this.backgroundTile);
 
     // Add banners
     const banners = ['Achievements', 'Collectibles'];
@@ -113,7 +108,7 @@ class AwardsHall extends Phaser.Scene {
     });
     banners.forEach((banner, index) => {
       const bannerCont = this.createBanner(banner, bannerPos[index][1]);
-      this.layerManager.addToLayer(Layer.UI, bannerCont);
+      this.getLayerManager().addToLayer(Layer.UI, bannerCont);
     });
 
     const leftArrow = createButton(this, {
@@ -137,9 +132,9 @@ class AwardsHall extends Phaser.Scene {
       this.scene.start('MainMenu');
     });
 
-    this.layerManager.addToLayer(Layer.UI, leftArrow);
-    this.layerManager.addToLayer(Layer.UI, rightArrow);
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, leftArrow);
+    this.getLayerManager().addToLayer(Layer.UI, rightArrow);
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
 
   /**
@@ -190,7 +185,7 @@ class AwardsHall extends Phaser.Scene {
       )
     );
 
-    this.layerManager.addToLayer(Layer.Objects, this.awardsContainer);
+    this.getLayerManager().addToLayer(Layer.Objects, this.awardsContainer);
   }
 
   /**
@@ -234,7 +229,7 @@ class AwardsHall extends Phaser.Scene {
       }
     );
 
-    this.layerManager.addToLayer(Layer.UI, hoverCont);
+    this.getLayerManager().addToLayer(Layer.UI, hoverCont);
     awardCont.add(image);
     return awardCont;
   }
@@ -243,8 +238,8 @@ class AwardsHall extends Phaser.Scene {
    * Clean up of related managers
    */
   private cleanUp() {
-    this.inputManager.clearListeners();
-    this.layerManager.clearAllLayers();
+    this.getInputManager().clearListeners();
+    this.getLayerManager().clearAllLayers();
   }
 
   /**
@@ -275,6 +270,8 @@ class AwardsHall extends Phaser.Scene {
   }
 
   public getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
+  public getInputManager = () => mandatory(this.inputManager);
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default AwardsHall;

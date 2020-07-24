@@ -1,7 +1,6 @@
 import { Constants } from '../commons/CommonConstants';
 import { IGameUI } from '../commons/CommonTypes';
 import GameInputManager from '../input/GameInputManager';
-import { mandatory } from '../utils/GameUtils';
 import { GamePhaseType } from './GamePhaseTypes';
 
 /**
@@ -17,22 +16,18 @@ import { GamePhaseType } from './GamePhaseTypes';
 export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];
-  private inputManager: GameInputManager | undefined;
+  private inputManager: GameInputManager;
   private interruptTransitionCallback: (
     prevPhase: GamePhaseType,
     newPhase: GamePhaseType
   ) => Promise<boolean> | void;
   private transitionCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void;
 
-  constructor() {
+  constructor(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
     this.phaseStack = [GamePhaseType.None];
-    this.phaseMap = new Map<GamePhaseType, IGameUI>();
+    this.phaseMap = phaseMap;
     this.interruptTransitionCallback = Constants.nullFunction;
     this.transitionCallback = Constants.nullFunction;
-  }
-
-  public initialise(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
-    this.phaseMap = phaseMap;
     this.inputManager = inputManager;
   }
 
@@ -118,15 +113,15 @@ export default class GamePhaseManager {
    */
   private async executePhaseTransition(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
     // Disable inputs to avoid user input mutating the stack
-    this.getInputManager().enableKeyboardInput(false);
-    this.getInputManager().enableMouseInput(false);
+    this.inputManager.enableKeyboardInput(false);
+    this.inputManager.enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
 
     // Execute phase transition callback.
     // If executed, we no longer do transition to the new phase.
     if (await this.interruptTransitionCallback(prevPhase, newPhase)) {
-      this.getInputManager().enableMouseInput(true);
-      this.getInputManager().enableKeyboardInput(true);
+      this.inputManager.enableMouseInput(true);
+      this.inputManager.enableKeyboardInput(true);
       return;
     }
 
@@ -134,8 +129,8 @@ export default class GamePhaseManager {
 
     // Transition to new phase
     await this.phaseMap.get(newPhase)!.activateUI();
-    this.getInputManager().enableMouseInput(true);
-    this.getInputManager().enableKeyboardInput(true);
+    this.inputManager.enableMouseInput(true);
+    this.inputManager.enableKeyboardInput(true);
   }
 
   /**
@@ -160,6 +155,4 @@ export default class GamePhaseManager {
     }
     return this.phaseStack[this.phaseStack.length - 1];
   }
-
-  public getInputManager = () => mandatory(this.inputManager);
 }

@@ -12,7 +12,6 @@ import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {

@@ -10,12 +10,6 @@ import { resizeOverflow } from '../utils/SpriteUtils';
  * Loads the background for a location on navigate and change_location action.
  */
 export default class GameBackgroundManager {
-  public observerId: string;
-
-  constructor() {
-    this.observerId = 'GameBackgroundManager';
-  }
-
   /**
    * Render the background with the asset attached to the location ID.
    *

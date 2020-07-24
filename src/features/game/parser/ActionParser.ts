@@ -116,8 +116,8 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
-        actionParamObj.duration = parseInt(actionParams[2]) * 1000;
-        actionParamObj.size = ParserConverter.stringToSize(actionParams[3]);
+        actionParams[2] && (actionParamObj.duration = parseInt(actionParams[2]) * 1000);
+        actionParams[3] && (actionParamObj.size = ParserConverter.stringToSize(actionParams[3]));
         break;
 
       case GameActionType.MakeObjectBlink:

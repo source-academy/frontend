@@ -10,22 +10,13 @@ import { defaultLayerSequence, Layer } from './GameLayerTypes';
  * as specified in Game Layer types
  */
 class GameLayerManager {
-  private mainLayer: Phaser.GameObjects.Container | undefined;
   private layers: Map<Layer, Phaser.GameObjects.Container>;
 
-  constructor() {
-    this.mainLayer = undefined;
-    this.layers = new Map<Layer, Phaser.GameObjects.Container>();
-  }
-
-  public initialise(scene: Phaser.Scene) {
-    this.mainLayer = new Phaser.GameObjects.Container(scene, 0, 0);
-    scene.add.existing(this.mainLayer);
-    for (const layerType of defaultLayerSequence) {
-      const layerContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-      this.layers.set(layerType, layerContainer);
-      this.mainLayer.add(layerContainer);
-    }
+  constructor(scene: Phaser.Scene) {
+    this.layers = new Map(
+      defaultLayerSequence.map(layer => [layer, new Phaser.GameObjects.Container(scene, 0, 0)])
+    );
+    this.layers.forEach(layer => scene.add.existing(layer));
   }
 
   /**
