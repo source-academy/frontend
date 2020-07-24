@@ -3,6 +3,7 @@ import React from 'react';
 type AchievementMilestoneProps = {};
 
 function AchievementMilestone(props: AchievementMilestoneProps) {
+  /*
   return (
     <div className="milestone">
       <h2>ACHIEVEMENT LEVEL</h2>
@@ -22,6 +23,8 @@ function AchievementMilestone(props: AchievementMilestoneProps) {
       </div>
     </div>
   );
+  */
+  return <></>;
 }
 
 export default AchievementMilestone;
