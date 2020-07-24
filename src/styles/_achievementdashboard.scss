@@ -72,36 +72,36 @@
           color: #ffef12;
         }
       }
-    }
 
-    .milestone {
-      display: flex;
-      flex-direction: column;
-
-      position: absolute;
-      z-index: 2;
-
-      margin: 20em 0 0 0;
-      padding: 0.5em 2em;
-
-      background-color: rgba(0, 0, 0, 0.7);
-      border: 1px solid #90ff12;
-      box-shadow: 0 0 10px #90ff12;
-
-      h2 {
-        margin: 0.5em 0 0 0;
-        text-align: center;
-        text-decoration: underline;
-      }
-
-      .details {
+      .milestone {
         display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
+        flex-direction: column;
 
-      .description {
-        padding: 1em 0 0 0;
+        position: absolute;
+        z-index: 2;
+
+        margin: 20em 0 0 1em;
+        padding: 1em 2em;
+
+        background-color: rgba(0, 0, 0, 0.7);
+        border: 1px solid #90ff12;
+        box-shadow: 0 0 10px #90ff12;
+
+        h2 {
+          margin: 0;
+          text-align: center;
+          text-decoration: underline;
+        }
+
+        .details {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
+          .description {
+            padding: 1em 0 0 0;
+          }
+        }
       }
     }
 
