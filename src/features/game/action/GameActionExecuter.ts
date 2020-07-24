@@ -34,6 +34,12 @@ export default class GameActionExecuter {
       case GameActionType.RemoveLocationMode:
         globalAPI.removeLocationMode(actionParams.locationId, actionParams.mode);
         return;
+      case GameActionType.MoveCharacter:
+        globalAPI.moveCharacter(actionParams.id, actionParams.location, actionParams.position);
+        return;
+      case GameActionType.UpdateCharacter:
+        globalAPI.updateCharacter(actionParams.id, actionParams.expression);
+        return;
     }
 
     if (fastForward) return;

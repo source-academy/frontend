@@ -89,6 +89,8 @@ dialogues
         Can I still go to places?
         @scottie, happy
         Yes, you can remain here.
+            move_character(scottie, hallway, right)
+
 
 
     what, What should I do now, Scottie?

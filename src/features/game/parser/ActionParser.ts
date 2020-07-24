@@ -145,6 +145,19 @@ export default class ActionParser {
       case GameActionType.ShowObjectLayer:
         actionParamObj.show = ParserConverter.stringToBoolean(actionParams[0]);
         break;
+
+      case GameActionType.UpdateCharacter:
+        Parser.validator.assertItemType(GameItemType.characters, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
+        actionParamObj.expression = actionParams[1];
+        break;
+
+      case GameActionType.MoveCharacter:
+        Parser.validator.assertItemType(GameItemType.characters, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
+        actionParamObj.location = actionParams[1];
+        actionParamObj.position = ParserConverter.stringToPosition(actionParams[2]);
+        break;
     }
 
     const actionId = Parser.generateActionId();

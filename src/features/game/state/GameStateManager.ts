@@ -1,7 +1,6 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { GameCheckpoint } from '../chapter/GameChapterTypes';
-import { Character } from '../character/GameCharacterTypes';
-import { ItemId } from '../commons/CommonTypes';
+import { GamePosition, ItemId } from '../commons/CommonTypes';
 import GameMap from '../location/GameMap';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
@@ -268,14 +267,30 @@ class GameStateManager {
   }
 
   /**
-   * Replace a character of the given ID with the new character
-   * property. Commonly used to update a specific character property.
+   * Moves a character to another location and another position
    *
-   * @param id id of object to change
-   * @param newCharacter new object property to replace the old one
+   * @param id id of character to change
+   * @param newLocation new location to put this character inside of
+   * @param newPosition new position of the character
    */
-  public setCharacterProperty(id: ItemId, newCharacter: Character) {
-    this.gameMap.setItemInMap(GameItemType.boundingBoxes, id, newCharacter);
+  public moveCharacter(id: ItemId, newLocation: LocationId, newPosition: GamePosition) {
+    // Move location
+    this.removeItem(GameItemType.characters, GameGlobalAPI.getInstance().getCurrLocId(), id);
+    this.addItem(GameItemType.characters, newLocation, id);
+
+    // Move position
+    this.getCharacterAtId(id).defaultPosition = newPosition;
+    this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+  }
+
+  /**
+   * Changes the default expression and position of a character
+   *
+   * @param id id of character to change
+   * @param newExpression new expression of the character
+   */
+  public updateCharacter(id: ItemId, newExpression: string) {
+    this.getCharacterAtId(id).defaultExpression = newExpression;
     this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
   }
 
@@ -362,6 +377,7 @@ class GameStateManager {
 
   public getGameMap = () => this.gameMap;
   private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
+  public getCharacterAtId = (id: ItemId) => mandatory(this.gameMap.getCharacterMap().get(id));
 }
 
 export default GameStateManager;

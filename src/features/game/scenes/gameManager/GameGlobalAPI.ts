@@ -375,6 +375,14 @@ class GameGlobalAPI {
       .createCharacterSprite(characterId, overrideExpression, overridePosition);
   }
 
+  public moveCharacter(id: ItemId, newLocation: LocationId, newPosition: GamePosition) {
+    this.getGameManager().getStateManager().moveCharacter(id, newLocation, newPosition);
+  }
+
+  public updateCharacter(id: ItemId, expression: string) {
+    this.getGameManager().getStateManager().updateCharacter(id, expression);
+  }
+
   /////////////////////
   //  Item retrieval //
   /////////////////////
