@@ -1,7 +1,11 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
 import { ItemId } from '../commons/CommonTypes';
+import { promptWithChoices } from '../effects/Prompt';
+import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
+import StringUtils from '../utils/StringUtils';
+import { UserStateType } from './GameStateTypes';
 
 /**
  * Manages all states related to user, but not related to the
@@ -54,6 +58,27 @@ export default class GameUserStateManager {
   }
 
   /**
+   * This function checks for the existence of a certain
+   * item ID inside one of the user state lists
+   *
+   * @param userStateType which of the user states you want to check
+   * @param id the item ID of the state you want to check
+   * @returns {Promise<boolean>} true if item ID is found in the user state list
+   */
+  public async isInUserState(userStateType: UserStateType, id: ItemId): Promise<boolean> {
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return this[userStateType].has(id);
+    } else {
+      const response = await promptWithChoices(
+        GameGlobalAPI.getInstance().getGameManager(),
+        `${StringUtils.capitalize(userStateType)} ${id}?`,
+        ['Yes', 'No']
+      );
+      return response === 0;
+    }
+  }
+
+  /**
    * Fetches achievements of the student; based on the account
    * information.
    *
@@ -68,8 +93,4 @@ export default class GameUserStateManager {
   public getCollectibles = () => Array.from(this.collectibles);
   public getAchievements = () => Array.from(this.achievements);
   public getAssessments = () => Array.from(this.assessments);
-
-  public hasCollectible = (id: ItemId) => this.collectibles.has(id);
-  public hasAssessment = (id: ItemId) => this.assessments.has(id);
-  public hasAchievement = (id: ItemId) => this.achievements.has(id);
 }

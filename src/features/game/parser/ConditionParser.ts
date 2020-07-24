@@ -23,10 +23,11 @@ export default class ConditionParser {
     const [gameStateStorage, ...condParams] = StringUtils.splitByChar(conditionDetails, '.');
     switch (ParserConverter.stringToGameStateStorage(gameStateStorage)) {
       case GameStateStorage.ChecklistState:
+        Parser.validator.assert(GameEntityType.objectives, condParams[0]);
         return {
           state: GameStateStorage.ChecklistState,
           conditionParams: {
-            id: Parser.validator.assert(GameEntityType.objectives, condParams[0])
+            id: condParams[0]
           },
           boolean: !hasExclamation
         };
@@ -35,7 +36,7 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.UserState,
           conditionParams: {
-            userStateList: condParams[0],
+            userStateType: ParserConverter.stringToUserStateType(condParams[0]),
             id: condParams[1]
           },
           boolean: !hasExclamation

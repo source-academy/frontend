@@ -2,7 +2,8 @@ import { GameActionType } from '../action/GameActionTypes';
 import { GamePosition, GameSize } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameStateStorage } from '../state/GameStateTypes';
+import { GameStateStorage, UserStateType } from '../state/GameStateTypes';
+import { mandatory } from '../utils/GameUtils';
 
 const stringToSizeMap = {
   small: GameSize.Small,
@@ -59,6 +60,12 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState
 };
 
+const stringToUserStateTypeMap = {
+  assessments: UserStateType.assessments,
+  achievements: UserStateType.achievements,
+  collectibles: UserStateType.collectibles
+};
+
 /**
  * This class is in charge of converting strings from
  * the txt into enums that can be stored in the Checkpoint
@@ -78,38 +85,26 @@ export default class ParserConverter {
   }
 
   public static stringToGameMode(str: string) {
-    const result = stringToGameModeMap[str];
-    if (!result) {
-      throw new Error(`Invalid location mode, ${str}`);
-    }
-    return result;
+    return mandatory(stringToGameModeMap[str], `Invalid location mode, ${str}`);
   }
 
   public static stringToActionType(str: string) {
-    const result = stringToActionTypeMap[str];
-    if (!result) {
-      throw new Error(`Invalid action type, ${str}`);
-    }
-    return result;
+    return mandatory(stringToActionTypeMap[str], `Invalid action type, ${str}`);
   }
 
   public static stringToGameStateStorage(str: string) {
-    const result = stringToGameStateStorageMap[str];
-    if (!result) {
-      throw new Error(`Invalid condition type, ${str}`);
-    }
-    return result;
+    return mandatory(stringToGameStateStorageMap[str], `Invalid condition type, ${str}`);
   }
 
   public static stringToGameItemType(str: string) {
-    const result = stringToGameItemMap[str];
-    if (!result) {
-      throw new Error(`Invalid entity type, ${str}`);
-    }
-    return result;
+    return mandatory(stringToGameItemMap[str], `Invalid entity type, ${str}`);
   }
 
   public static stringToBoolean(str: string) {
     return str === 'false' ? false : true;
+  }
+
+  public static stringToUserStateType(str: string) {
+    return mandatory(stringToUserStateTypeMap[str], `Invalid user state type ${str}`);
   }
 }

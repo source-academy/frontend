@@ -1,5 +1,5 @@
 import GameManager from '../scenes/gameManager/GameManager';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
 import { createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';
@@ -60,10 +60,7 @@ export default class GameSaveManager {
    * shouldn't save game state to backend.
    */
   public async saveGame() {
-    if (
-      SourceAcademyGame.getInstance().isGameType(GameType.Game) &&
-      SourceAcademyGame.getInstance().getCurrentSceneRef() instanceof GameManager
-    ) {
+    if (SourceAcademyGame.getInstance().getCurrentSceneRef() instanceof GameManager) {
       this.fullSaveState = gameStateToJson(
         this.fullSaveState,
         this.getChapterNum(),
@@ -81,9 +78,6 @@ export default class GameSaveManager {
    * @param completedChapter the number of the completed chapter
    */
   public async saveChapterComplete(completedChapter: number) {
-    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
-      return;
-    }
     if (completedChapter > this.getLargestCompletedChapterNum()) {
       this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
       await saveData(this.fullSaveState);
@@ -97,9 +91,6 @@ export default class GameSaveManager {
    * @param settingsJson the newest settings of the user
    */
   public async saveSettings(settingsJson: SettingsJson) {
-    if (!SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
-      return;
-    }
     this.fullSaveState.userSaveState.settings = settingsJson;
     await saveData(this.fullSaveState);
   }
@@ -152,5 +143,5 @@ export default class GameSaveManager {
 
   public getChapterNum = () => mandatory(this.chapterNum);
   public getCheckpointNum = () => mandatory(this.checkpointNum);
-  public getFullSaveState = () => mandatory(this.fullSaveState);
+  public getFullSaveState = () => this.fullSaveState;
 }
