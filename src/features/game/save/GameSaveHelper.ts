@@ -19,7 +19,7 @@ export function gameStateToJson(
 ): FullSaveState {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
   const gameStateManager = gameManager.getStateManager();
-  const phaseManager = gameManager.phaseManager;
+  const phaseManager = gameManager.getPhaseManager();
 
   return {
     gameSaveStates: {

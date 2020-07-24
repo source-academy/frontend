@@ -27,12 +27,10 @@ import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreview
  * menu.
  */
 export default class RoomPreview extends Phaser.Scene {
-  public layerManager: GameLayerManager;
-  public inputManager: GameInputManager;
-  public phaseManager: GamePhaseManager;
+  private layerManager?: GameLayerManager;
+  private inputManager?: GameInputManager;
+  private phaseManager?: GamePhaseManager;
 
-  private escapeManager: GameEscapeManager;
-  private awardManager: GameAwardsManager;
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
@@ -46,34 +44,22 @@ export default class RoomPreview extends Phaser.Scene {
     super('RoomPreview');
     this.preloadImageMap = new Map<string, string>();
     this.preloadSoundMap = new Map<string, string>();
-    this.layerManager = new GameLayerManager();
-    this.phaseManager = new GamePhaseManager();
-    this.inputManager = new GameInputManager();
-    this.escapeManager = new GameEscapeManager();
-    this.awardManager = new GameAwardsManager();
     this.studentCode = roomDefaultCode;
   }
 
   public init() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-
     this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
-
-    this.layerManager = new GameLayerManager();
-    this.phaseManager = new GamePhaseManager();
-    this.inputManager = new GameInputManager();
-    this.escapeManager = new GameEscapeManager();
-    this.awardManager = new GameAwardsManager();
+    this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
+    this.phaseManager = new GamePhaseManager(createCMRGamePhases(), this.inputManager);
+    new GameEscapeManager(this);
+    new GameAwardsManager(this);
     this.createContext();
   }
 
   public preload() {
     addLoadingScreen(this);
-    this.layerManager.initialise(this);
-    this.inputManager.initialise(this);
-    this.phaseManager.initialise(createCMRGamePhases(), this.inputManager);
-    this.awardManager.initialise(this);
-    this.escapeManager.initialise(this);
     this.bindKeyboardTriggers();
 
     // Initialise one verified tag to be used throughout the CMR
@@ -116,7 +102,7 @@ export default class RoomPreview extends Phaser.Scene {
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(Constants.nullInteractionId);
 
     // Add verified tag
-    this.layerManager.addToLayer(Layer.UI, this.getVerifCont());
+    this.getLayerManager().addToLayer(Layer.UI, this.getVerifCont());
   }
 
   public update() {
@@ -148,26 +134,26 @@ export default class RoomPreview extends Phaser.Scene {
    */
   private bindKeyboardTriggers() {
     // Bind escape menu
-    this.inputManager.registerKeyboardListener(
+    this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-          await this.phaseManager.popPhase();
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await this.getPhaseManager().popPhase();
         } else {
-          await this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
       }
     );
     // Bind collectible menu
-    this.inputManager.registerKeyboardListener(
+    this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
       async () => {
-        if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
-          await this.phaseManager.popPhase();
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+          await this.getPhaseManager().popPhase();
         } else {
-          await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.AwardMenu);
         }
       }
     );
@@ -177,8 +163,8 @@ export default class RoomPreview extends Phaser.Scene {
    * Clean up on related managers
    */
   public cleanUp() {
-    this.inputManager.clearListeners();
-    this.layerManager.clearAllLayers();
+    this.getInputManager().clearListeners();
+    this.getLayerManager().clearAllLayers();
   }
 
   /**
@@ -245,4 +231,7 @@ export default class RoomPreview extends Phaser.Scene {
   private getVerifMask = () => mandatory(this.verifMask);
 
   private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
+  public getInputManager = () => mandatory(this.inputManager);
+  public getLayerManager = () => mandatory(this.layerManager);
+  public getPhaseManager = () => mandatory(this.phaseManager);
 }

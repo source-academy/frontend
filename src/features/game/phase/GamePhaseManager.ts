@@ -20,15 +20,11 @@ export default class GamePhaseManager {
   private inputManager: GameInputManager | undefined;
   private phaseTransitionCallback: (newPhase: GamePhaseType) => Promise<boolean> | void;
 
-  constructor() {
+  constructor(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
     this.phaseStack = [GamePhaseType.None];
-    this.phaseMap = new Map<GamePhaseType, IGameUI>();
-    this.phaseTransitionCallback = Constants.nullFunction;
-  }
-
-  public initialise(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
     this.phaseMap = phaseMap;
     this.inputManager = inputManager;
+    this.phaseTransitionCallback = Constants.nullFunction;
   }
 
   public addPhaseToMap(gamePhaseType: GamePhaseType, gameUI: IGameUI) {

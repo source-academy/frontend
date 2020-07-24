@@ -112,7 +112,7 @@ export const blackFade = async (
   callback: any
 ) => {
   const fadeBlack = blackScreen(scene);
-  scene.layerManager.addToLayer(Layer.Effects, fadeBlack);
+  scene.getLayerManager().addToLayer(Layer.Effects, fadeBlack);
 
   fadeBlack.setAlpha(0);
   scene.tweens.add(fadeIn([fadeBlack], fadeDuration));

@@ -92,8 +92,8 @@ export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
  * @interface
  */
 export interface IBaseScene extends Phaser.Scene {
-  layerManager: GameLayerManager;
-  inputManager: GameInputManager;
-  phaseManager: GamePhaseManager;
+  getLayerManager: () => GameLayerManager;
+  getInputManager: () => GameInputManager;
+  getPhaseManager: () => GamePhaseManager;
   cleanUp: () => void;
 }

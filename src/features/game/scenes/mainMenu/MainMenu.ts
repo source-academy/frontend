@@ -5,6 +5,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
+import { mandatory } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
@@ -14,20 +15,15 @@ import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
  * User can navigate to other scenes from here.
  */
 class MainMenu extends Phaser.Scene {
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
 
   constructor() {
     super('MainMenu');
-
-    this.layerManager = new GameLayerManager();
-  }
-
-  public preload() {
-    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-    this.layerManager.initialise(this);
   }
 
   public async create() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+    this.layerManager = new GameLayerManager(this);
     this.renderBackground();
     this.renderOptionButtons();
 
@@ -46,7 +42,7 @@ class MainMenu extends Phaser.Scene {
       ImageAssets.mainMenuBackground.key
     ).setDisplaySize(screenSize.x, screenSize.y);
 
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
   }
 
   /**
@@ -74,7 +70,7 @@ class MainMenu extends Phaser.Scene {
       )
     );
 
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
 
   /**
@@ -125,40 +121,41 @@ class MainMenu extends Phaser.Scene {
       {
         text: mainMenuConstants.optionsText.chapterSelect,
         callback: () => {
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('ChapterSelect');
         }
       },
       {
         text: mainMenuConstants.optionsText.awards,
         callback: () => {
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('AwardsHall');
         }
       },
       {
         text: mainMenuConstants.optionsText.studentRoom,
         callback: () => {
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('RoomPreview');
         }
       },
       {
         text: mainMenuConstants.optionsText.settings,
         callback: () => {
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('Settings');
         }
       },
       {
         text: mainMenuConstants.optionsText.bindings,
         callback: () => {
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('Bindings');
         }
       }
     ];
   }
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default MainMenu;
