@@ -8,6 +8,7 @@ import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { ActivatableSprite } from '../../objects/GameObjectTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { sleep } from '../../utils/GameUtils';
 import {
   magnifyingGlass,
@@ -32,8 +33,7 @@ class GameModeExplore implements IGameUI {
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const backButton = new CommonBackButton(gameManager, () => {
-      GameGlobalAPI.getInstance().popPhase();
-      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu);
     });
     exploreMenuContainer.add(backButton);
     return exploreMenuContainer;
@@ -50,7 +50,6 @@ class GameModeExplore implements IGameUI {
 
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
-    GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character, 300);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 

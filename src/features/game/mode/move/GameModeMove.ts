@@ -7,6 +7,7 @@ import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, LocationId } from '../../location/GameMapTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
@@ -101,8 +102,7 @@ class GameModeMove implements IGameUI {
     );
 
     const backButton = new CommonBackButton(gameManager, () => {
-      GameGlobalAPI.getInstance().popPhase();
-      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu);
     });
     moveMenuContainer.add(backButton);
 
@@ -133,7 +133,7 @@ class GameModeMove implements IGameUI {
       return {
         text: location.name,
         callback: async () => {
-          await GameGlobalAPI.getInstance().popPhase();
+          await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Sequence);
           await GameGlobalAPI.getInstance().changeLocationTo(nav);
         },
         onHover: () => previewLoc(location.assetKey),
@@ -183,7 +183,6 @@ class GameModeMove implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
     GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
-    GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character, 300);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
     this.previewMask!.setPosition(this.uiContainer.x, -screenSize.y);

@@ -53,8 +53,8 @@ class GameLayerManager {
    * @param layerType layer to show
    */
   public showLayer(layerType: Layer) {
-    const layerToHide = this.layers.get(layerType);
-    layerToHide && layerToHide.setVisible(true) && layerToHide.setAlpha(1);
+    const layerToShow = this.layers.get(layerType);
+    layerToShow && layerToShow.setVisible(true) && layerToShow.setAlpha(1);
   }
 
   /**
@@ -67,6 +67,7 @@ class GameLayerManager {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const layerToFadeIn = this.layers.get(layerType)!;
 
+    layerToFadeIn.setVisible(true);
     layerToFadeIn.setAlpha(0);
     gameManager.tweens.add(fadeIn([layerToFadeIn], fadeDuration));
     await sleep(fadeDuration);
@@ -82,6 +83,7 @@ class GameLayerManager {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const layerToFadeOut = this.layers.get(layerType)!;
 
+    layerToFadeOut.setVisible(true);
     layerToFadeOut.setAlpha(1);
     gameManager.tweens.add(fadeOut([layerToFadeOut], fadeDuration));
     await sleep(fadeDuration);

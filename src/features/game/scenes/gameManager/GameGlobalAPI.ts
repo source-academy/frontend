@@ -223,7 +223,6 @@ class GameGlobalAPI {
   /////////////////////
 
   public async bringUpUpdateNotif(message: string) {
-    this.getGameManager();
     await displayNotification(message);
   }
 

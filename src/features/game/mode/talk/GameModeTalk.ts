@@ -9,6 +9,7 @@ import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType } from '../../location/GameMapTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
@@ -79,7 +80,7 @@ class GameModeTalk implements IGameUI {
     });
 
     const backButton = new CommonBackButton(gameManager, () =>
-      GameGlobalAPI.getInstance().popPhase()
+      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;

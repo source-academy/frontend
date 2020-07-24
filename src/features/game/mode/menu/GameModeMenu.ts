@@ -129,6 +129,8 @@ class GameModeMenu implements IGameUI {
       targets: this.uiContainer,
       ...modeMenuConstants.entryTweenProps
     });
+    await sleep(500);
+    GameGlobalAPI.getInstance().fadeInLayer(Layer.Character);
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
@@ -140,6 +142,7 @@ class GameModeMenu implements IGameUI {
    */
   public async deactivateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    GameGlobalAPI.getInstance().fadeOutLayer(Layer.Character);
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);

@@ -136,6 +136,7 @@ class GameManager extends Phaser.Scene {
     await this.getActionManager().fastForwardGameActions(
       this.getStateManager().getTriggeredActions()
     );
+    GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
   }
@@ -163,7 +164,6 @@ class GameManager extends Phaser.Scene {
     this.getObjectManager().renderObjectsLayerContainer(locationId);
     this.getBBoxManager().renderBBoxLayerContainer(locationId);
     this.getCharacterManager().renderCharacterLayerContainer(locationId);
-    this.layerManager.showLayer(Layer.Character);
 
     await this.phaseManager.swapPhase(GamePhaseType.Sequence);
 

@@ -35,12 +35,8 @@ export default class DialogueManager {
       this.dialogueRenderer.getDialogueContainer()
     );
 
-    GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Dialogue);
-
     await new Promise(resolve => this.playWholeDialogue(resolve));
-
-    GameGlobalAPI.getInstance().showLayer(Layer.Character);
     this.getDialogueRenderer().destroy();
     this.getSpeakerRenderer().changeSpeakerTo(null);
   }
