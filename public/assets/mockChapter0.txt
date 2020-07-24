@@ -17,7 +17,7 @@ room
     
     objects
         + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
-            add_popup(computerOnShelf, middle, 10)
+            add_popup(computerOnShelf, middle, 10, small)
         + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
             add_item(objects, room, classroomChair)
         + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263

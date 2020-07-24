@@ -19,7 +19,6 @@ class GameSoundManager {
   private currBgMusic: Phaser.Sound.WebAudioSound | undefined;
 
   constructor() {
-    (this.getBaseSoundManager() as Phaser.Sound.HTML5AudioSoundManager).unlock();
     this.soundAssetMap = new Map<AssetKey, SoundAsset>();
     this.bgmVol = 1;
     this.sfxVol = 1;
@@ -162,27 +161,7 @@ class GameSoundManager {
     const soundAsset = mandatory(this.getSoundAsset(soundKey));
     const bgmVol = soundAsset.config.volume !== undefined ? soundAsset.config.volume : 1;
 
-    /**
-     * We do not use `this.getBaseSoundManager().add` as it often
-     * results in crash, due to audio not being present into audio cache.
-     * i.e. calling `.add()` while the sound is not in cache.audio will
-     * result in crash.
-     *
-     * From observation, the audio cache used by `this.getBaseSoundManager()`
-     * and `this.getCurrentScene().sound` can be different.
-     *
-     * From observation, `loadSound()` loads the audio into
-     * `this.getCurrentScene().sound.game.cache.audio`; and not into
-     * `this.getBaseSoundManager().game.cache.audio`.
-     *
-     * Hence, we use `this.getCurrentScene().sound.add` in order to refer
-     * to the correct audio cache.
-     *
-     * NOTE: To check the audio cache, compare between:
-     *  - this.getBaseSoundManager().game.cache.audio
-     *  - this.getCurrentScene().sound.game.cache.audio
-     */
-    this.currBgMusic = this.getCurrentScene().sound.add(soundAsset.key, {
+    this.currBgMusic = this.getBaseSoundManager().add(soundAsset.key, {
       ...soundAsset.config,
       volume: bgmVol * this.bgmVol
     }) as Phaser.Sound.WebAudioSound;
@@ -236,8 +215,34 @@ class GameSoundManager {
     }
   }
 
-  public getBaseSoundManager = () => mandatory(SourceAcademyGame.getInstance().sound);
+  /**
+   * We do not use `this.game.sound` as it often
+   * results in crash, due to audio not being present into audio cache.
+   * i.e. calling `.add()` while the sound is not in cache.audio will
+   * result in crash.
+   *
+   * From observation, the audio cache used by `this.game.sound`
+   * and `this.scene.sound` can be different.
+   *
+   * From observation, `loadSound()` loads the audio into
+   * `this.scene.sound.game.cache.audio`; and not into
+   * `this.game.sound.game.cache.audio`.
+   *
+   * Hence, we use `this.getCurrentScene().sound.add` in order to refer
+   * to the correct audio cache.
+   *
+   * NOTE: To check the audio cache, compare between:
+   *  - this.game.sound.game.cache.audio
+   *  - this.scene.sound.game.cache.audio
+   */
+  public getBaseSoundManager = () =>
+    this.getCurrentScene().sound as Phaser.Sound.WebAudioSoundManager;
   public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
+
+  /**
+   * Unlock sounds i.e. let sound play without awaiting first user interaction.
+   */
+  public unlock = () => this.getBaseSoundManager().unlock();
 }
 
 export default GameSoundManager;

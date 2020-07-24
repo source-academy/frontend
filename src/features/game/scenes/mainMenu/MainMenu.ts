@@ -1,4 +1,5 @@
 import ImageAssets from '../../assets/ImageAssets';
+import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -29,6 +30,9 @@ class MainMenu extends Phaser.Scene {
   public async create() {
     this.renderBackground();
     this.renderOptionButtons();
+
+    SourceAcademyGame.getInstance().getSoundManager().unlock();
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 
   /**
@@ -40,8 +44,7 @@ class MainMenu extends Phaser.Scene {
       screenCenter.x,
       screenCenter.y,
       ImageAssets.mainMenuBackground.key
-    );
-    backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
+    ).setDisplaySize(screenSize.x, screenSize.y);
 
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
   }

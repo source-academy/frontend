@@ -55,7 +55,12 @@ export default class GameActionExecuter {
         await globalAPI.showDialogueInSamePhase(actionParams.id);
         return;
       case GameActionType.AddPopup:
-        await globalAPI.displayPopUp(actionParams.id, actionParams.position, actionParams.duration);
+        await globalAPI.displayPopUp(
+          actionParams.id,
+          actionParams.position,
+          actionParams.duration,
+          actionParams.size
+        );
         return;
       case GameActionType.MakeObjectBlink:
         await globalAPI.makeObjectBlink(actionParams.id, actionParams.turnOn);
