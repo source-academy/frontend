@@ -107,28 +107,28 @@ export default class ActionParser {
 
       case GameActionType.AddLocationMode:
       case GameActionType.RemoveLocationMode:
-        actionParamObj.locationId = actionParams[0];
         Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
+        actionParamObj.locationId = actionParams[0];
         actionParamObj.mode = ParserConverter.stringToGameMode(actionParams[1]);
         break;
 
       case GameActionType.AddPopup:
-        actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[1]);
         actionParams[2] && (actionParamObj.duration = parseInt(actionParams[2]) * 1000);
         actionParams[3] && (actionParamObj.size = ParserConverter.stringToSize(actionParams[3]));
         break;
 
       case GameActionType.MakeObjectBlink:
-        actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
         actionParamObj.turnOn = ParserConverter.stringToBoolean(actionParams[1]);
         break;
 
       case GameActionType.MakeObjectGlow:
-        actionParamObj.id = actionParams[0];
         Parser.validator.assertItemType(GameItemType.objects, actionParams[0], actionType);
+        actionParamObj.id = actionParams[0];
         actionParamObj.turnOn = ParserConverter.stringToBoolean(actionParams[1]);
         break;
 
@@ -154,8 +154,9 @@ export default class ActionParser {
 
       case GameActionType.MoveCharacter:
         Parser.validator.assertItemType(GameItemType.characters, actionParams[0], actionType);
+        Parser.validator.assert(GameEntityType.locations, actionParams[1], actionType);
         actionParamObj.id = actionParams[0];
-        actionParamObj.location = actionParams[1];
+        actionParamObj.locationId = actionParams[1];
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[2]);
         break;
     }
