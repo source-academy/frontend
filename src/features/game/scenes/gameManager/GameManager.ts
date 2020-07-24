@@ -65,11 +65,8 @@ class GameManager extends Phaser.Scene {
     this.getSaveManager().registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentLocationId =
       this.getSaveManager().getLoadedLocation() || gameCheckpoint.startingLoc;
-    this.stateManager = new GameStateManager(gameCheckpoint);
-    this.initialiseManagers();
-  }
 
-  private initialiseManagers() {
+    this.stateManager = new GameStateManager(gameCheckpoint);
     this.layerManager = new GameLayerManager(this);
     this.inputManager = new GameInputManager(this);
     this.phaseManager = new GamePhaseManager(createGamePhases(), this.inputManager);
@@ -90,7 +87,10 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
-    this.getPhaseManager().setCallback(this.checkpointTransition);
+    this.getPhaseManager().setInterruptCallback(
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        await this.checkpointTransition(newPhase)
+    );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
   }
@@ -229,7 +229,7 @@ class GameManager extends Phaser.Scene {
    * during dialogue/cutscene.
    *
    * This method is passed to the phase manager, to be executed on
-   * every phase transition.
+   * every phase transition as the interrupt transition callback.
    *
    * @param newPhase new phase to transition to
    */
