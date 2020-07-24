@@ -2,10 +2,10 @@ import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
-import { AchievementStatus } from '../../../../../features/achievement/AchievementTypes';
-import AchievementDeadline from '../utils/AchievementDeadline';
-import AchievementExp from '../utils/AchievementExp';
-import AchievementInferencer from '../utils/AchievementInferencer';
+import { AchievementStatus } from '../../../../features/achievement/AchievementTypes';
+import AchievementDeadline from './utils/AchievementDeadline';
+import AchievementExp from './utils/AchievementExp';
+import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementCardProps = {
   id: number;

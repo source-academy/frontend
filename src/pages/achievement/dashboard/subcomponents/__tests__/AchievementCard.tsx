@@ -1,9 +1,9 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { mockAchievements } from '../../../../../../commons/mocks/AchievementMocks';
-import AchievementInferencer from '../../utils/AchievementInferencer';
+import { mockAchievements } from '../../../../../commons/mocks/AchievementMocks';
 import AchievementCard from '../AchievementCard';
+import AchievementInferencer from '../utils/AchievementInferencer';
 
 const mockProps = {
   id: 1,

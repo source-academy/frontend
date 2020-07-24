@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { AchievementStatus, FilterStatus } from '../../../../features/achievement/AchievementTypes';
-import AchievementCard from './cards/AchievementCard';
+import AchievementCard from './AchievementCard';
 import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementTaskProps = {
