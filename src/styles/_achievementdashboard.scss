@@ -14,10 +14,8 @@
     flex-direction: row;
     align-items: center;
 
-    height: 5em;
     width: 100%;
-
-    padding: 0 1em;
+    padding: 0.5em 1em;
 
     color: white;
 
@@ -31,7 +29,7 @@
         flex-direction: column;
         align-items: center;
 
-        margin: 1em 0.5em 0 0;
+        margin: 0 0.5em 0 0;
 
         .level-icon {
           height: 2.5em;
@@ -41,9 +39,10 @@
         }
 
         p {
+          margin: 0;
+
           font-size: 0.9em;
           text-decoration: underline white;
-          margin: 0;
         }
       }
 
@@ -66,7 +65,6 @@
           z-index: 1;
 
           width: 20em;
-
           margin: 0 0 0 -20em;
 
           color: #ffef12;
@@ -89,6 +87,7 @@
 
         h2 {
           margin: 0;
+
           text-align: center;
           text-decoration: underline;
         }
@@ -118,10 +117,6 @@
     width: 100%;
 
     align-items: center;
-
-    & > * {
-      overflow-wrap: break-word;
-    }
 
     .filters {
       display: flex;
