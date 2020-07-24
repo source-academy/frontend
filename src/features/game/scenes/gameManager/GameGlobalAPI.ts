@@ -13,7 +13,7 @@ import { ObjectProperty } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { SettingsJson } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { StateObserver } from '../../state/GameStateTypes';
+import { StateObserver, UserStateType } from '../../state/GameStateTypes';
 import { mandatory } from '../../utils/GameUtils';
 import GameManager from './GameManager';
 
@@ -178,16 +178,8 @@ class GameGlobalAPI {
     SourceAcademyGame.getInstance().getUserStateManager().addCollectible(id);
   }
 
-  public hasCollectible(id: string): boolean {
-    return SourceAcademyGame.getInstance().getUserStateManager().hasCollectible(id);
-  }
-
-  public hasAssessment(id: string): boolean {
-    return SourceAcademyGame.getInstance().getUserStateManager().hasAssessment(id);
-  }
-
-  public hasAchievement(id: string): boolean {
-    return SourceAcademyGame.getInstance().getUserStateManager().hasAchievement(id);
+  public async isInUserState(userStateType: UserStateType, id: string): Promise<boolean> {
+    return SourceAcademyGame.getInstance().getUserStateManager().isInUserState(userStateType, id);
   }
 
   /////////////////////

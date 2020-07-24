@@ -8,7 +8,7 @@ export enum GameStateStorage {
 /**
  * Type of user state list.
  */
-export enum UserStateTypes {
+export enum UserStateType {
   collectibles = 'collectibles',
   assessments = 'assessments',
   achievements = 'achievements'

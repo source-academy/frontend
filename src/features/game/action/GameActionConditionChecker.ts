@@ -1,8 +1,5 @@
-import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { GameStateStorage } from '../state/GameStateTypes';
-import StringUtils from '../utils/StringUtils';
 import { ActionCondition } from './GameActionTypes';
 
 /**
@@ -35,24 +32,12 @@ export default class ActionConditionChecker {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:
-        if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
-          const response = await promptWithChoices(
-            GameGlobalAPI.getInstance().getGameManager(),
-            `${StringUtils.capitalize(conditionParams.userStateList)} ${conditionParams.id}?`,
-            ['Yes', 'No']
-          );
-          const isAnswerYes = response === 0;
-          return isAnswerYes === boolean;
-        }
-        switch (conditionParams.userStateList) {
-          case 'collectibles':
-            return GameGlobalAPI.getInstance().hasCollectible(conditionParams.id) === boolean;
-          case 'achievements':
-            return GameGlobalAPI.getInstance().hasAchievement(conditionParams.id) === boolean;
-          case 'assessments':
-            return GameGlobalAPI.getInstance().hasAssessment(conditionParams.id) === boolean;
-        }
-        return true;
+        return (
+          (await GameGlobalAPI.getInstance().isInUserState(
+            conditionParams.userStateType,
+            conditionParams.id
+          )) === boolean
+        );
       case GameStateStorage.ChecklistState:
         return GameGlobalAPI.getInstance().isObjectiveComplete(conditionParams.id) === boolean;
       default:
