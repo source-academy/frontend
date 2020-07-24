@@ -18,12 +18,17 @@ export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];
   private inputManager: GameInputManager | undefined;
-  private phaseTransitionCallback: (newPhase: GamePhaseType) => Promise<boolean> | void;
+  private interruptTransitionCallback: (
+    prevPhase: GamePhaseType,
+    newPhase: GamePhaseType
+  ) => Promise<boolean> | void;
+  private transitionCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void;
 
   constructor() {
     this.phaseStack = [GamePhaseType.None];
     this.phaseMap = new Map<GamePhaseType, IGameUI>();
-    this.phaseTransitionCallback = Constants.nullFunction;
+    this.interruptTransitionCallback = Constants.nullFunction;
+    this.transitionCallback = Constants.nullFunction;
   }
 
   public initialise(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
@@ -36,14 +41,29 @@ export default class GamePhaseManager {
   }
 
   /**
-   * Set the callback of the phase manager. The callback will be executed
+   * Set the interrupt callback of the phase manager. The callback will be executed
    * before every phase transition. The function signature must accept a
    * GamePhaseType and returns a boolean.
    *
+   * If the boolean returned is true, phase manager will not transition to the
+   * new phase i.e. interrupt the phase transition.
+   *
    * @param fn callback
    */
-  public setCallback(fn: (newPhase: GamePhaseType) => Promise<boolean>) {
-    this.phaseTransitionCallback = fn;
+  public setInterruptCallback(
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<boolean>
+  ) {
+    this.interruptTransitionCallback = fn;
+  }
+
+  /**
+   * Set the interrupt callback of the phase manager. The callback will be executed
+   * before every phase transition.
+   *
+   * @param fn callback
+   */
+  public setCallback(fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void) {
+    this.transitionCallback = fn;
   }
 
   /**
@@ -104,11 +124,13 @@ export default class GamePhaseManager {
 
     // Execute phase transition callback.
     // If executed, we no longer do transition to the new phase.
-    if (await this.phaseTransitionCallback(newPhase)) {
+    if (await this.interruptTransitionCallback(prevPhase, newPhase)) {
       this.getInputManager().enableMouseInput(true);
       this.getInputManager().enableKeyboardInput(true);
       return;
     }
+
+    this.transitionCallback(prevPhase, newPhase);
 
     // Transition to new phase
     await this.phaseMap.get(newPhase)!.activateUI();

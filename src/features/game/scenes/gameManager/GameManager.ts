@@ -109,8 +109,9 @@ class GameManager extends Phaser.Scene {
     this.awardsManager.initialise(this);
     this.escapeManager.initialise(this);
 
-    this.phaseManager.setCallback(
-      async (newPhase: GamePhaseType) => await this.checkpointTransition(newPhase)
+    this.phaseManager.setInterruptCallback(
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        await this.checkpointTransition(newPhase)
     );
     this.preloadLocationsAssets();
     this.bindKeyboardTriggers();
@@ -250,7 +251,7 @@ class GameManager extends Phaser.Scene {
    * during dialogue/cutscene.
    *
    * This method is passed to the phase manager, to be executed on
-   * every phase transition.
+   * every phase transition as the interrupt transition callback.
    *
    * @param newPhase new phase to transition to
    */
