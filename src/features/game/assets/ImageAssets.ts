@@ -55,7 +55,7 @@ const ImageAssets: AssetMap<ImageAsset> = {
 
   // Room Preview
   verifiedFrame: { key: 'verified-frame', path: '/ui/verifiedFrame.png' },
-  sourceCrashedPod: { key: 'source-crashed-pod', path: '/location/sourceCrashedPod.png' },
+  sourceCrashedPod: { key: 'source-crashed-pod', path: '/locations/sourceCrashedPod.png' },
 
   // Bindings
   bindingsBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },

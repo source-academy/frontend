@@ -149,7 +149,7 @@ export default class RoomPreview extends Phaser.Scene {
         }
       }
     );
-    // Bind collectible menu
+    // Bind award menu
     this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
