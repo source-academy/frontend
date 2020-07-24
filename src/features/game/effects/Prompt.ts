@@ -21,7 +21,7 @@ export async function promptWithChoices(
   choices: string[]
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-  GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, promptContainer);
+  GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
 
   const textConfig = { x: 0, y: 0, oriX: 0.5, oriY: 0.2 };
   const buttonPositions = calcTableFormatPos({

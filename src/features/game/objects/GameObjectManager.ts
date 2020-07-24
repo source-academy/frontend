@@ -110,7 +110,7 @@ class GameObjectManager implements StateObserver {
   public handleAdd(id: ItemId): boolean {
     const objectProp = GameGlobalAPI.getInstance().getObjectById(id);
     const object = this.createObject(objectProp);
-    GameGlobalAPI.getInstance().addContainerToLayer(
+    GameGlobalAPI.getInstance().addToLayer(
       Layer.Objects,
       (object.sprite as GlowingImage).getContainer()
     );

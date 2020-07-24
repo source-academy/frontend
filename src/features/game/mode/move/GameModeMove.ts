@@ -182,7 +182,7 @@ class GameModeMove implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
     this.previewMask!.setPosition(this.uiContainer.x, -screenSize.y);

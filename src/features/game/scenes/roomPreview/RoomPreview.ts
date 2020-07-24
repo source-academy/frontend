@@ -4,7 +4,7 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
-import { Constants, screenSize } from '../../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { ItemId } from '../../commons/CommonTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -16,6 +16,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { mandatory } from '../../utils/GameUtils';
 import { loadImage, loadSound } from '../../utils/LoaderUtils';
+import { resizeOverflow } from '../../utils/SpriteUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
@@ -53,6 +54,7 @@ export default class RoomPreview extends Phaser.Scene {
     this.layerManager = new GameLayerManager(this);
     this.inputManager = new GameInputManager(this);
     this.phaseManager = new GamePhaseManager(createCMRGamePhases(), this.inputManager);
+
     new GameEscapeManager(this);
     new GameAwardsManager(this);
     this.createContext();
@@ -71,6 +73,8 @@ export default class RoomPreview extends Phaser.Scene {
   public async create() {
     // Run student code once to update the context
     await this.eval(this.studentCode);
+
+    this.renderDefaultBackground();
 
     /**
      * We don't use .eval('preload();') at preload() as
@@ -227,10 +231,35 @@ export default class RoomPreview extends Phaser.Scene {
     return sprite;
   }
 
+  /**
+   * Render starting background for the room.
+   */
+  private renderDefaultBackground() {
+    const backgroundAsset = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      this.getDefaultBackgroundKey()
+    );
+    resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundAsset);
+  }
+
+  /**
+   * Returns the background key to be used, based on the user's assessment
+   * progression.
+   */
+  private getDefaultBackgroundKey() {
+    const completedAssessment = this.getUserStateManager().getAssessments();
+    // Escape type check for now
+    mandatory(completedAssessment);
+    return ImageAssets.sourceCrashedPod.key;
+  }
+
   private getVerifCont = () => mandatory(this.verifCont);
   private getVerifMask = () => mandatory(this.verifMask);
-
   private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
+
   public getInputManager = () => mandatory(this.inputManager);
   public getLayerManager = () => mandatory(this.layerManager);
   public getPhaseManager = () => mandatory(this.phaseManager);

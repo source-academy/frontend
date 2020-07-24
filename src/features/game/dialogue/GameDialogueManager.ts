@@ -30,7 +30,7 @@ export default class DialogueManager {
     this.dialogueGenerator = new DialogueGenerator(dialogue.content);
     this.speakerRenderer = new DialogueSpeakerRenderer();
 
-    GameGlobalAPI.getInstance().addContainerToLayer(
+    GameGlobalAPI.getInstance().addToLayer(
       Layer.Dialogue,
       this.dialogueRenderer.getDialogueContainer()
     );

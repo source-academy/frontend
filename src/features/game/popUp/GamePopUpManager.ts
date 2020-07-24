@@ -68,7 +68,7 @@ class GamePopUpManager {
 
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
+    GameGlobalAPI.getInstance().addToLayer(Layer.PopUp, container);
     GameGlobalAPI.getInstance().playSound(SoundAssets.popUpEnter.key);
 
     container.setActive(true);

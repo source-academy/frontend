@@ -38,7 +38,7 @@ export async function displayNotification(message: string): Promise<void> {
   const dialogueRenderer = new DialogueRenderer({});
   const container = dialogueRenderer.getDialogueContainer();
 
-  GameGlobalAPI.getInstance().addContainerToLayer(Layer.Effects, container);
+  GameGlobalAPI.getInstance().addToLayer(Layer.Effects, container);
   GameGlobalAPI.getInstance().fadeInLayer(Layer.Effects);
 
   const notifText = createBitmapText(gameManager, message, notifTextConfig, notifStyle).setAlpha(0);

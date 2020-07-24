@@ -75,10 +75,7 @@ class GameBoundingBoxManager implements StateObserver {
   public handleAdd(id: ItemId): boolean {
     const bboxProp = GameGlobalAPI.getInstance().getBBoxById(id);
     const bbox = this.createBBox(bboxProp);
-    GameGlobalAPI.getInstance().addContainerToLayer(
-      Layer.BBox,
-      bbox.sprite as Phaser.GameObjects.Rectangle
-    );
+    GameGlobalAPI.getInstance().addToLayer(Layer.BBox, bbox.sprite as Phaser.GameObjects.Rectangle);
     this.bboxes.set(id, bbox);
     return true;
   }

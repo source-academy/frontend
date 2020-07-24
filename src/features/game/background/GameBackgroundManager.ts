@@ -38,7 +38,7 @@ export default class GameBackgroundManager {
     );
     resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
 
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Background, backgroundAsset);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Background, backgroundAsset);
     GameGlobalAPI.getInstance().fadeInLayer(Layer.Background);
   }
 }

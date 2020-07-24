@@ -77,7 +77,7 @@ export default class CharacterManager implements StateObserver {
    */
   public handleAdd(id: ItemId): boolean {
     const characterSprite = this.createCharacterSprite(id);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterSprite);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Character, characterSprite);
     this.characterSpriteMap.set(id, characterSprite);
     return true;
   }

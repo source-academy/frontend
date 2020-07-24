@@ -54,7 +54,7 @@ export default class DialogueSpeakerRenderer {
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
             GamePosition.Left
           );
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.SpeakerBox, speakerContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.SpeakerBox, speakerContainer);
   }
 
   private drawSpeakerSprite({ speakerId, speakerPosition, expression }: SpeakerDetail) {
@@ -66,7 +66,7 @@ export default class DialogueSpeakerRenderer {
       expression,
       speakerPosition
     );
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Speaker, speakerSprite);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
     this.currentSpeakerId = speakerId;
   }
 

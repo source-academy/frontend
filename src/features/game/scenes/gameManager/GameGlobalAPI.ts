@@ -198,7 +198,7 @@ class GameGlobalAPI {
     this.getGameManager().getLayerManager().clearSeveralLayers(layerTypes);
   }
 
-  public addContainerToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
+  public addToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
     this.getGameManager().getLayerManager().addToLayer(layer, gameObj);
   }
 
