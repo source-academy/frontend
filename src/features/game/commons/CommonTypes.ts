@@ -71,7 +71,7 @@ export enum GamePosition {
 export enum GameSize {
   Small = 'Small',
   Medium = 'Medium',
-  Right = 'Right'
+  Large = 'Large'
 }
 
 /**

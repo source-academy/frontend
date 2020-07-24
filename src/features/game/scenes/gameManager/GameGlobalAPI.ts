@@ -267,8 +267,8 @@ class GameGlobalAPI {
   //     Pop Up      //
   /////////////////////
 
-  public displayPopUp(itemId: ItemId, position: GamePosition, size?: GameSize, duration?: number) {
-    this.getGameManager().popUpManager.displayPopUp(itemId, position, size, duration);
+  public displayPopUp(itemId: ItemId, position: GamePosition, duration?: number, size?: GameSize) {
+    this.getGameManager().popUpManager.displayPopUp(itemId, position, duration, size);
   }
 
   public destroyAllPopUps() {

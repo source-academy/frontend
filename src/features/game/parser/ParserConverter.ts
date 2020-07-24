@@ -1,8 +1,14 @@
 import { GameActionType } from '../action/GameActionTypes';
-import { GamePosition } from '../commons/CommonTypes';
+import { GamePosition, GameSize } from '../commons/CommonTypes';
 import { GameItemType } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { GameStateStorage } from '../state/GameStateTypes';
+
+const stringToSizeMap = {
+  small: GameSize.Small,
+  medium: GameSize.Medium,
+  large: GameSize.Large
+};
 
 const stringToPositionMap = {
   left: GamePosition.Left,
@@ -63,6 +69,10 @@ const stringToGameStateStorageMap = {
  * game modes (eg 'explore') are actually valid enums
  */
 export default class ParserConverter {
+  public static stringToSize(str: string) {
+    return stringToSizeMap[str] || GameSize.Medium;
+  }
+
   public static stringToPosition(str: string) {
     return stringToPositionMap[str] || GamePosition.Middle;
   }

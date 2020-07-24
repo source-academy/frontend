@@ -29,12 +29,13 @@ class GamePopUpManager {
    * @param position position of the pop up
    * @param duration duration in which the pop up to be shown. Afterwards, the popup will
    *                 be destroyed.
+   * @param size size of the popup, defaulted to medium.
    */
   public async displayPopUp(
     itemId: ItemId,
     position: GamePosition,
-    size: GameSize = GameSize.Medium,
-    duration = Constants.popupDuration
+    duration = Constants.popupDuration,
+    size: GameSize = GameSize.Medium
   ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
