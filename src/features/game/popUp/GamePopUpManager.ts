@@ -47,7 +47,7 @@ class GamePopUpManager {
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position],
-      popUpConstants.rect.y,
+      popUpConstants.rect.y[size],
       ImageAssets.popUpFrame.key
     ).setScale(popUpConstants.rect.scale[size]);
 
@@ -59,7 +59,7 @@ class GamePopUpManager {
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
-      popUpConstants.rect.y + popUpConstants.imgYOffset,
+      popUpConstants.rect.y[size] + popUpConstants.imgYOffset,
       assetKey
     );
     const newWidth = popUpConstants.rect.width * popUpConstants.rect.scale[size];
