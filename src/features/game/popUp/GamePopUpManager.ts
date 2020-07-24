@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
 import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -33,6 +33,7 @@ class GamePopUpManager {
   public async displayPopUp(
     itemId: ItemId,
     position: GamePosition,
+    size: GameSize = GameSize.Medium,
     duration = Constants.popupDuration
   ) {
     // Destroy previous pop up if any
@@ -47,7 +48,7 @@ class GamePopUpManager {
       popUpConstants.rect.x[position],
       popUpConstants.rect.y,
       ImageAssets.popUpFrame.key
-    );
+    ).setScale(popUpConstants.rect.scale[size]);
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
@@ -60,7 +61,9 @@ class GamePopUpManager {
       popUpConstants.rect.y + popUpConstants.imgYOffset,
       assetKey
     );
-    resizeUnderflow(popUpImage, popUpConstants.rect.width, popUpConstants.rect.height);
+    const newWidth = popUpConstants.rect.width * popUpConstants.rect.scale[size];
+    const newHeight = popUpConstants.rect.height * popUpConstants.rect.scale[size];
+    resizeUnderflow(popUpImage, newWidth, newHeight);
 
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);

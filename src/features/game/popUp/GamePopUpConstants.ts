@@ -9,6 +9,7 @@ const popUpConstants = {
   rect: {
     x: { Left: popUpXOffset, Middle: screenCenter.x, Right: screenSize.x - popUpXOffset },
     y: popUpYPos,
+    scale: { Small: 0.7, Medium: 1, Large: 2 },
     width: 280,
     height: 280
   },

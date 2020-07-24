@@ -44,8 +44,7 @@ class MainMenu extends Phaser.Scene {
       screenCenter.x,
       screenCenter.y,
       ImageAssets.mainMenuBackground.key
-    );
-    backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
+    ).setDisplaySize(screenSize.x, screenSize.y);
 
     this.layerManager.addToLayer(Layer.Background, backgroundImg);
   }

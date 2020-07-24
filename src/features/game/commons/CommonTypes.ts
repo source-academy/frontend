@@ -64,6 +64,17 @@ export enum GamePosition {
 }
 
 /**
+ * Enum for common game size.
+ * @readonly
+ * @enum {string}
+ */
+export enum GameSize {
+  Small = 'Small',
+  Medium = 'Medium',
+  Right = 'Right'
+}
+
+/**
  * Encapsulate text configuration.
  *
  * @prop {number} x x coordinate of the text
