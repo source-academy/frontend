@@ -65,11 +65,14 @@ class GameManager extends Phaser.Scene {
     this.getSaveManager().registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentLocationId =
       this.getSaveManager().getLoadedLocation() || gameCheckpoint.startingLoc;
+    this.stateManager = new GameStateManager(gameCheckpoint);
+    this.initialiseManagers();
+  }
 
+  private initialiseManagers() {
     this.layerManager = new GameLayerManager(this);
     this.inputManager = new GameInputManager(this);
     this.phaseManager = new GamePhaseManager(createGamePhases(), this.inputManager);
-    this.stateManager = new GameStateManager(gameCheckpoint);
     this.characterManager = new GameCharacterManager();
     this.objectManager = new GameObjectManager();
     this.dialogueManager = new GameDialogueManager();
