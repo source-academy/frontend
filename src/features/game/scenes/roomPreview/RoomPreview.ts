@@ -15,7 +15,7 @@ import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { mandatory } from '../../utils/GameUtils';
-import { loadImage, loadSound } from '../../utils/LoaderUtils';
+import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
 import { resizeOverflow } from '../../utils/SpriteUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
@@ -45,6 +45,7 @@ export default class RoomPreview extends Phaser.Scene {
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
+  private preloadSpritesheetMap: Map<string, [string, object]>;
 
   private verifCont: Phaser.GameObjects.Container | undefined;
   private verifMask: Phaser.GameObjects.Graphics | undefined;
@@ -55,6 +56,7 @@ export default class RoomPreview extends Phaser.Scene {
     super('RoomPreview');
     this.preloadImageMap = new Map<string, string>();
     this.preloadSoundMap = new Map<string, string>();
+    this.preloadSpritesheetMap = new Map<string, [string, object]>();
     this.studentCode = roomDefaultCode;
   }
 
@@ -103,6 +105,11 @@ export default class RoomPreview extends Phaser.Scene {
         await loadSound(this, key, path);
       })
     );
+    await Promise.all(
+      Array.from(this.preloadSpritesheetMap).map(async ([key, [path, config]]) => {
+        await loadSpritesheet(this, key, path, config);
+      })
+    );
 
     // Execute create
     await this.eval(`create();`);
@@ -130,6 +137,7 @@ export default class RoomPreview extends Phaser.Scene {
       phaser: Phaser,
       preloadImageMap: this.preloadImageMap,
       preloadSoundMap: this.preloadSoundMap,
+      preloadSpritesheetMap: this.preloadSpritesheetMap,
       remotePath: Constants.assetsFolder,
       screenSize: screenSize,
       createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
