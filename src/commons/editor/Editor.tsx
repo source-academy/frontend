@@ -4,30 +4,28 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
+import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
 import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
-import { IAceEditor } from 'react-ace/lib/types';
 import { HotKeys } from 'react-hotkeys';
 
 import { Documentation } from '../documentation/Documentation';
 import { useMergedRef } from '../utils/Hooks';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
-
-import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
-import GutterContextMenu, { ContextMenuItems, ContextMenuHandler } from './GutterContextMenu';
+import GutterContextMenu, { ContextMenuHandler, ContextMenuItems } from './GutterContextMenu';
 
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
 // Ideally, hooks should be specified by the parent component instead.
+import useComments from './UseComments';
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
-import useComments from './useComments';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type ContextMenuHandlers = { [name in ContextMenuItems]?: ContextMenuHandler };
@@ -103,7 +101,7 @@ const selectMode = (chapter: number, variant: Variant, library: string) => {
   ModeSelector(chapter, variant, library);
 };
 
-const toggleBreakpoint = (editor: IAceEditor, row: number) => {
+const toggleBreakpoint = (editor: Ace.Editor, row: number) => {
   const content = editor.session.getLine(row);
   const breakpoints = editor.session.getBreakpoints();
   if (

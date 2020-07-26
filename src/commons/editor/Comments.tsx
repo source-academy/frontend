@@ -17,7 +17,7 @@ import * as React from 'react';
 import { format } from 'timeago.js';
 
 import Markdown from '../Markdown';
-import { CommentAPI } from './useComments';
+import { CommentAPI } from './UseComments';
 
 export interface IComment {
   id: string;
