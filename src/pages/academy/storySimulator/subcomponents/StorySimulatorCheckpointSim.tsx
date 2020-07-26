@@ -1,18 +1,26 @@
 import { Button } from '@blueprintjs/core';
-import * as React from 'react';
+import React from 'react';
+import { useRequest } from 'src/commons/utils/Hooks';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
+import MainMenu from 'src/features/storySimulator/scenes/mainMenu/MainMenu';
 import mainMenuConstants from 'src/features/storySimulator/scenes/mainMenu/MainMenuConstants';
+import { fetchTextAssets } from 'src/features/storySimulator/StorySimulatorService';
 
 import CheckpointTxtLoader from './StorySimulatorCheckpointTxtLoader';
-import { getStorySimulatorGame } from './storySimulatorGame';
 
-type Props = {
-  accessToken?: string;
-  assetPaths: string[];
-};
+/**
+ * This component helps one simulate a checkpoint by
+ * supplying two txt files - the default txt file
+ * and the checkpoint txt file
+ *
+ * @param textAssets these are the list of text files on S3, if storywriter's simulation
+ *                   involves S3 text files.
+ */
+export default function CheckpointSim() {
+  const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
 
-export default function CheckpointSim({ accessToken, assetPaths }: Props) {
   function simulateCheckpoint() {
-    getStorySimulatorGame().getStorySimProps().mainMenuRef.callGameManager();
+    (SourceAcademyGame.getInstance().getCurrentSceneRef() as MainMenu).simulateCheckpoint();
   }
 
   return (
@@ -20,17 +28,13 @@ export default function CheckpointSim({ accessToken, assetPaths }: Props) {
       <h3>Checkpoint Text Loader</h3>
       <b>Step 1: Choose default checkpoint</b>
       <CheckpointTxtLoader
-        assetPaths={assetPaths}
-        useDefaultChapter={true}
+        s3TxtFiles={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.defaultChapter}
-        accessToken={accessToken}
       />
       <b>Step 2: Choose checkpoint text</b>
       <CheckpointTxtLoader
-        assetPaths={assetPaths}
-        useDefaultChapter={false}
+        s3TxtFiles={textAssets}
         storageName={mainMenuConstants.gameTxtStorageName.checkpointTxt}
-        accessToken={accessToken}
       />
       <br />
       <Button onClick={simulateCheckpoint} icon="play">

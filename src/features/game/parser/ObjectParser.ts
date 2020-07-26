@@ -1,10 +1,23 @@
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import Parser from './Parser';
 
+/**
+ * This class parses object CSV's into Object Properties
+ */
 export default class ObjectParser {
+  /**
+   * This function parses object CSVs in a location,
+   * and creates Object Properties corresponding to the each object CSV,
+   * and stores these Object Properties into the game map.
+   *
+   * The class also parses actions of objects if any.
+   *
+   * @param locationId the location where the object paragraph can be found
+   * @param objectList the list of lines describing objects in the location, including actions
+   */
   public static parse(locationId: LocationId, objectList: string[]) {
     const objectParagraphs = StringUtils.splitToParagraph(objectList);
 
@@ -17,21 +30,44 @@ export default class ObjectParser {
     });
   }
 
+  /**
+   * Generates an asset key based on the object path
+   *
+   * @param shortPath path to the object
+   */
   private static objectAssetKey(shortPath: string) {
     return shortPath;
   }
 
+  /**
+   * Generates an asset path based on the object path
+   *
+   * @param shortPath path to the object
+   */
   private static objectPath(shortPath: string) {
     return shortPath;
   }
 
-  private static parseObjectConfig(locationId: LocationId, objectDetails: string) {
+  /**
+   * This function parses one object CSV into an Object Property,
+   * and places the object inside the game map.
+   *
+   * It also returns the reference to the object property, so that
+   * actionIds can be added to it.
+   *
+   * @param locationId The location id
+   * @param objectDetails One line containing an object CSV
+   * @returns {ObjectProperty} the object property created
+   */
+  private static parseObjectConfig(locationId: LocationId, objectDetails: string): ObjectProperty {
     const addToLoc = objectDetails[0] === '+';
     if (addToLoc) {
       objectDetails = objectDetails.slice(1);
     }
 
     const [objectId, shortPath, x, y, width, height] = StringUtils.splitByChar(objectDetails, ',');
+    Parser.validator.register(objectId);
+
     const objectProperty: ObjectProperty = {
       assetKey: this.objectAssetKey(shortPath),
       x: parseInt(x),
@@ -44,9 +80,9 @@ export default class ObjectParser {
 
     Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), this.objectPath(shortPath));
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.objects, objectId, objectProperty);
+    Parser.checkpoint.map.setItemInMap(GameItemType.objects, objectId, objectProperty);
     if (addToLoc) {
-      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.objects, objectId);
+      Parser.checkpoint.map.addItemToLocation(locationId, GameItemType.objects, objectId);
     }
 
     return objectProperty;

@@ -1,105 +1,121 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
-import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
+import { ActivatableSprite } from '../objects/GameObjectTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableBBox, BBoxProperty } from './GameBoundingBoxTypes';
+import { BBoxProperty } from './GameBoundingBoxTypes';
 
+/**
+ * Manager for rendering interactive bounding boxes in the location.
+ */
 class GameBoundingBoxManager implements StateObserver {
-  public observerId: string;
-  private bboxes: ActivatableBBox[];
+  private bboxes: Map<ItemId, ActivatableSprite>;
 
   constructor() {
-    this.observerId = 'GameBoundingBoxManager';
-    this.bboxes = [];
+    this.bboxes = new Map<ItemId, ActivatableSprite>();
+    GameGlobalAPI.getInstance().watchGameItemType(GameItemType.boundingBoxes, this);
   }
 
-  public initialise() {
-    GameGlobalAPI.getInstance().subscribeState(this);
-  }
-
-  public notify(locationId: LocationId) {
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
-    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
-    if (hasUpdate && locationId === currLocationId) {
-      this.renderBBoxLayerContainer(locationId);
-    }
-  }
-
+  /**
+   * Clear the layers, and render all the bboxes available to the location.
+   * Will immediately be shown on the screen.
+   *
+   * @param locationId location in which to render bboxes at
+   */
   public renderBBoxLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.BBox]);
-    const bboxIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.boundingBoxes,
+    const bboxIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
+      GameItemType.boundingBoxes,
       locationId
     );
-    const bboxContainer = this.createBBoxLayerContainer(bboxIdsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.BBox, bboxContainer);
+
+    // Refresh mapping
+    this.bboxes.clear();
+
+    // Add all the bbox
+    bboxIdsToRender.map(id => this.handleAdd(id));
   }
 
-  public createBBoxLayerContainer(bboxIds: ItemId[]): Phaser.GameObjects.Container {
+  /**
+   * Create the bbox from the given bbox property.
+   * Because we want this sprite to be activatable
+   * by Explore Mode UI, we expose its actionIds
+   * and interactionId
+   *
+   * @param bboxProperty bbox property to be used
+   */
+  private createBBox(bboxProperty: BBoxProperty): ActivatableSprite {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const bboxPropMap = GameGlobalAPI.getInstance().getBBoxPropertyMap();
-    const bboxContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    this.bboxes = bboxIds
-      .map(id => bboxPropMap.get(id))
-      .filter(bboxProp => bboxProp !== undefined)
-      .map(bboxProp => {
-        const bbox = this.createBBox(gameManager, bboxProp!);
-        bboxContainer.add(bbox.sprite);
-        return bbox;
-      });
-
-    return bboxContainer;
-  }
-
-  public enableBBoxAction(callbacks: any): void {
-    this.bboxes.forEach(bbox => bbox.activate(callbacks));
-  }
-
-  public disableBBoxAction() {
-    this.bboxes.forEach(bbox => bbox.deactivate());
-  }
-
-  private createBBox(gameManager: GameManager, bboxProperty: BBoxProperty): ActivatableBBox {
     const { x, y, width, height, actionIds, interactionId } = bboxProperty;
     const bboxSprite = new Phaser.GameObjects.Rectangle(gameManager, x, y, width, height, 0, 0);
     if (bboxProperty.isInteractive) {
       bboxSprite.setInteractive();
     }
 
-    function activate({
-      onClick = (id?: ItemId) => {},
-      onPointerout = (id?: ItemId) => {},
-      onHover = (id?: ItemId) => {}
-    }) {
-      bboxSprite.on('pointerup', async () => {
-        onClick(interactionId);
-        await GameGlobalAPI.getInstance().processGameActions(actionIds);
-      });
-      bboxSprite.on('pointerover', () => {
-        onHover(interactionId);
-      });
-      bboxSprite.on('pointerout', () => {
-        onPointerout(interactionId);
-      });
-    }
-
-    function deactivate() {
-      bboxSprite.off('pointerup');
-      bboxSprite.off('pointerover');
-      bboxSprite.off('pointerout');
-    }
-
     return {
       sprite: bboxSprite,
-      activate: actionIds ? activate : Constants.nullFunction,
-      deactivate
+      clickArea: bboxSprite,
+      actionIds,
+      interactionId
     };
+  }
+
+  /**
+   * Add the bbox, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * Throws error if the bbox property is not available
+   * in the mapping.
+   *
+   * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleAdd(id: ItemId): boolean {
+    const bboxProp = GameGlobalAPI.getInstance().getBBoxById(id);
+    const bbox = this.createBBox(bboxProp);
+    GameGlobalAPI.getInstance().addToLayer(Layer.BBox, bbox.sprite as Phaser.GameObjects.Rectangle);
+    this.bboxes.set(id, bbox);
+    return true;
+  }
+
+  /**
+   * Mutate the bbox of the given id.
+   *
+   * Internally, will delete and re-add the bbox with
+   * the updated property.
+   *
+   * @param id id of bbox
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
+  }
+
+  /**
+   * Delete the bbox of the given id, if
+   * applicable.
+   *
+   * @param id id of the bbox
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleDelete(id: ItemId): boolean {
+    const bbox = this.bboxes.get(id);
+    if (bbox) {
+      this.bboxes.delete(id);
+      (bbox.sprite as Phaser.GameObjects.Rectangle).destroy();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Get all the rectanlge sprites which can be activated
+   * by external Explore Mode UI
+   */
+  public getActivatables() {
+    return Array.from(this.bboxes.values());
   }
 }
 

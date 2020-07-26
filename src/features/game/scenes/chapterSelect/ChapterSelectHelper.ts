@@ -1,8 +1,8 @@
-import { screenCenter } from 'src/features/game/commons/CommonConstants';
-
+import { screenCenter } from '../../../game/commons/CommonConstants';
 import ImageAssets from '../../assets/ImageAssets';
 import { GameChapter } from '../../chapter/GameChapterTypes';
 import CommonTextHover from '../../commons/CommonTextHover';
+import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
@@ -13,9 +13,25 @@ import chapConstants, {
   chapterTitleStyle
 } from './ChapterSelectConstants';
 
+/**
+ * Create a chapter selection and formats it.
+ *
+ * It will use the chapter preview background and set it as the
+ * chapter selection background.
+ *
+ * Additionally, this method attach a 'Play/Continue' button and
+ * 'Reset Progress' button to the chapter selection; with an already
+ * set up button functionality.
+ *
+ * @param scene scene for the chapter selection container to attach to
+ * @param title title of the chapter
+ * @param imageUrl url of the preview image
+ * @param index index of chapter
+ * @param lastCheckpointsIdx last checkpoint to continue users' progression from
+ */
 export function createChapter(
   scene: ChapterSelect,
-  { title }: GameChapter,
+  { title, imageUrl }: GameChapter,
   index: number,
   lastCheckpointsIdx: number
 ) {
@@ -23,12 +39,10 @@ export function createChapter(
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
 
   // Chapter Preview
-  const chapterPreview = new Phaser.GameObjects.Image(
-    scene,
-    0,
-    0,
-    `chapterImage${index}`
-  ).setDisplaySize(chapConstants.imageRect.width, chapConstants.imageRect.height);
+  const chapterPreview = new Phaser.GameObjects.Image(scene, 0, 0, imageUrl).setDisplaySize(
+    chapConstants.imageRect.width,
+    chapConstants.imageRect.height
+  );
 
   // Chapter Frame
   const chapterFrame = new Phaser.GameObjects.Sprite(
@@ -41,61 +55,59 @@ export function createChapter(
   // Chapter Action Popup
   const chapterRepeatHover = new CommonTextHover(
     scene,
-    chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
-    chapConstants.buttonsYOffset + chapConstants.altTextYOffset,
+    0,
+    0,
     'Reset progress',
     chapterActionAltStyle
   );
   const chapterContinueHover = new CommonTextHover(
     scene,
-    -chapConstants.buttonsXOffset + chapConstants.altTextXOffset,
-    chapConstants.buttonsYOffset + chapConstants.altTextYOffset,
+    0,
+    0,
     'Play/Continue',
     chapterActionAltStyle
   );
 
   // Chapter Actions
-  const chapterRepeat = createButton(
-    scene,
-    {
-      assetKey: ImageAssets.chapterRepeatButton.key,
-      onUp: () => callGameManagerOnTxtLoad(scene, scene.chapterDetails, false, index, 0),
-      onHover: () => chapterRepeatHover.setVisible(true),
-      onOut: () => chapterRepeatHover.setVisible(false)
-    },
-    scene.soundManager
-  ).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterRepeat = createButton(scene, {
+    assetKey: ImageAssets.chapterRepeatButton.key,
+    onUp: async () => await callGameManagerOnTxtLoad(false, index, 0),
+    onHover: () => chapterRepeatHover.setVisible(true),
+    onOut: () => chapterRepeatHover.setVisible(false),
+    onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
+      chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
+    }
+  }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
-  const chapterContinue = createButton(
-    scene,
-    {
-      assetKey: ImageAssets.chapterContinueButton.key,
-      onUp: () =>
-        callGameManagerOnTxtLoad(scene, scene.chapterDetails, true, index, lastCheckpointsIdx),
-      onHover: () => chapterContinueHover.setVisible(true),
-      onOut: () => chapterContinueHover.setVisible(false)
-    },
-    scene.soundManager
-  ).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  const chapterContinue = createButton(scene, {
+    assetKey: ImageAssets.chapterContinueButton.key,
+    onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointsIdx),
+    onHover: () => chapterContinueHover.setVisible(true),
+    onOut: () => chapterContinueHover.setVisible(false),
+    onPointerMove: (pointer: Phaser.Input.Pointer) => {
+      chapterContinueHover.x = pointer.worldX - chapterContainer.x;
+      chapterContinueHover.y = pointer.worldY - chapterContainer.y;
+    }
+  }).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(
     scene,
     `Chapter ${index}`,
-    0,
-    chapConstants.indexYOffset,
+    chapConstants.indexTextConfig,
     chapterIndexStyle
-  ).setOrigin(0.5, 0.5);
+  );
 
   const chapterTitleText = createBitmapText(
     scene,
     title,
-    0,
-    chapConstants.titleYOffset,
+    chapConstants.titleTextConfig,
     chapterTitleStyle
-  ).setOrigin(0.5, 0.5);
+  );
 
-  const chapterDone = index <= scene.getLoadedGameState().userState.lastCompletedChapter + 1;
+  const chapterDone =
+    index <= SourceAcademyGame.getInstance().getSaveManager().getLargestCompletedChapterNum() + 1;
 
   const blackTint = new Phaser.GameObjects.Rectangle(
     scene,

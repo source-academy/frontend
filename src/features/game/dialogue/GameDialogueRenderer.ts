@@ -2,15 +2,21 @@ import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { blink, fadeAndDestroy } from '../effects/FadeEffect';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import GameManager from '../scenes/gameManager/GameManager';
 import dialogueConstants from './GameDialogueConstants';
 import { createDialogueBox, createTypewriter } from './GameDialogueHelper';
 
+/**
+ * Class that manages the appearance of the dialogue box, which includes
+ * the box itself, the text animations as well as the blinking diamond click prompt
+ */
 class DialogueRenderer {
   private typewriter: any;
   private dialogueBox: Phaser.GameObjects.Image;
   private blinkingDiamond: any;
 
+  /**
+   * @param typewriterStyle the style of the typewriter you want to use
+   */
   constructor(typewriterStyle: Phaser.Types.GameObjects.Text.TextStyle) {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.dialogueBox = createDialogueBox(gameManager).setInteractive({
@@ -21,6 +27,10 @@ class DialogueRenderer {
     this.blinkingDiamond = this.drawDiamond(gameManager);
   }
 
+  /**
+   * @returns {Phaser.GameObjects.Container} returns the entire dialogueBox container
+   * which can be added to the scene
+   */
   public getDialogueContainer() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const container = new Phaser.GameObjects.Container(gameManager, 0, 0);
@@ -28,21 +38,27 @@ class DialogueRenderer {
     return container;
   }
 
-  private drawDiamond(gameManager: GameManager) {
+  private drawDiamond(scene: Phaser.Scene) {
     const diamondSprite = new Phaser.GameObjects.Image(
-      gameManager,
+      scene,
       screenSize.x - dialogueConstants.promptSize.x - dialogueConstants.promptPadding.x,
       screenSize.y - dialogueConstants.promptSize.y - dialogueConstants.promptPadding.y,
       ImageAssets.diamond.key
     ).setDisplaySize(dialogueConstants.promptSize.x, dialogueConstants.promptSize.y);
 
-    return { container: diamondSprite, clearBlink: blink(gameManager, diamondSprite) };
+    return { container: diamondSprite, clearBlink: blink(scene, diamondSprite) };
   }
 
+  /**
+   * Obtains the green dialogue box
+   */
   public getDialogueBox() {
     return this.dialogueBox;
   }
 
+  /**
+   * Destroyer for the dialogue box elements and interactivity
+   */
   public destroy() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.blinkingDiamond.clearBlink();
@@ -50,6 +66,9 @@ class DialogueRenderer {
     fadeAndDestroy(gameManager, this.getDialogueContainer());
   }
 
+  /**
+   * Change the text written in the box
+   */
   public changeText(message: string) {
     this.typewriter.changeLine(message);
   }

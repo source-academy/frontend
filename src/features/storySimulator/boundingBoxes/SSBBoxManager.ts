@@ -2,12 +2,12 @@ import { ItemId } from 'src/features/game/commons/CommonTypes';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { resize } from 'src/features/game/utils/SpriteUtils';
+import StringUtils from 'src/features/game/utils/StringUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { toIntString } from '../utils/SSUtils';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
 export default class SSBBoxManager implements ICheckpointLoggable {
@@ -28,30 +28,34 @@ export default class SSBBoxManager implements ICheckpointLoggable {
   }
 
   private addBBoxListeners(objectPlacement: ObjectPlacement) {
-    this.getObjectPlacement().inputManager.registerEventListener('pointerdown', () => {
-      if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox)) {
-        this.bboxBeingDrawn = this.createNewBBox();
-      }
-    });
-
-    this.getObjectPlacement().inputManager.registerEventListener('pointerup', () => {
-      if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) && this.bboxBeingDrawn) {
-        if (this.bboxBeingDrawn.displayWidth <= 2 || this.bboxBeingDrawn.displayHeight <= 2) {
-          this.bboxBeingDrawn.destroy();
-          return;
+    this.getObjectPlacement()
+      .getInputManager()
+      .registerEventListener('pointerdown', () => {
+        if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox)) {
+          this.bboxBeingDrawn = this.createNewBBox();
         }
-        this.bboxBeingDrawn.x += this.bboxBeingDrawn.displayWidth / 2;
-        this.bboxBeingDrawn.y += this.bboxBeingDrawn.displayHeight / 2;
-        this.bboxBeingDrawn.setOrigin(0.5);
-        this.registerBBox(this.bboxBeingDrawn);
+      });
 
-        objectPlacement.input.setDraggable(this.bboxBeingDrawn);
-        this.getObjectPlacement().setActiveSelection(this.bboxBeingDrawn);
+    this.getObjectPlacement()
+      .getInputManager()
+      .registerEventListener('pointerup', () => {
+        if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) && this.bboxBeingDrawn) {
+          if (this.bboxBeingDrawn.displayWidth <= 2 || this.bboxBeingDrawn.displayHeight <= 2) {
+            this.bboxBeingDrawn.destroy();
+            return;
+          }
+          this.bboxBeingDrawn.x += this.bboxBeingDrawn.displayWidth / 2;
+          this.bboxBeingDrawn.y += this.bboxBeingDrawn.displayHeight / 2;
+          this.bboxBeingDrawn.setOrigin(0.5);
+          this.registerBBox(this.bboxBeingDrawn);
 
-        this.startingCoordinates = undefined;
-        this.bboxBeingDrawn = undefined;
-      }
-    });
+          objectPlacement.input.setDraggable(this.bboxBeingDrawn);
+          this.getObjectPlacement().setActiveSelection(this.bboxBeingDrawn);
+
+          this.startingCoordinates = undefined;
+          this.bboxBeingDrawn = undefined;
+        }
+      });
   }
 
   private createNewBBox() {
@@ -70,7 +74,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
       .setDataEnabled();
 
     this.startingCoordinates = [x, y];
-    this.getObjectPlacement().layerManager.addToLayer(Layer.BBox, bboxBeingDrawn);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.BBox, bboxBeingDrawn);
     return bboxBeingDrawn;
   }
 
@@ -99,7 +103,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     return this.bboxDetailMap.get(itemId);
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   public resizeWhileBeingDrawn(objectPlacement: ObjectPlacement) {
     if (
@@ -120,10 +124,10 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     this.bboxDetailMap.forEach((bboxDetail: SSBBoxDetail) => {
       const bboxDetailArray = [
         '+' + bboxDetail.id,
-        toIntString(bboxDetail.x),
-        toIntString(bboxDetail.y),
-        toIntString(bboxDetail.width),
-        toIntString(bboxDetail.height)
+        StringUtils.toIntString(bboxDetail.x),
+        StringUtils.toIntString(bboxDetail.y),
+        StringUtils.toIntString(bboxDetail.width),
+        StringUtils.toIntString(bboxDetail.height)
       ];
 
       map.push(bboxDetailArray.join(', '));

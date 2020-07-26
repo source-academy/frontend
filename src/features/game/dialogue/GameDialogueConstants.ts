@@ -24,10 +24,7 @@ const DialogueConstants = {
     x: 100,
     y: 70
   },
-  speakerRect: {
-    x: 320,
-    y: 745
-  }
+  speakerTextConfig: { x: 320, y: 745, oriX: 0.5, oriY: 0.5 }
 };
 
 export const textTypeWriterStyle = {

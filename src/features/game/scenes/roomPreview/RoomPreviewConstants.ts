@@ -1,3 +1,7 @@
+import FontAssets from '../../assets/FontAssets';
+import { BitmapFontStyle } from '../../commons/CommonTypes';
+import { HexColor } from '../../utils/StyleUtils';
+
 export const roomDefaultCode = `
 import { prepend_remote_url, get_screen_width, get_screen_height, load_image, create_image, create_text, create_rect, add, set_display_size, set_alpha, set_origin } from 'game';
 
@@ -27,3 +31,18 @@ function create() {
 
 function update() {}
 `;
+
+export const verifiedStyle: BitmapFontStyle = {
+  key: FontAssets.pixelFont.key,
+  size: 25,
+  fill: HexColor.paleYellow,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+export const roomConstants = {
+  verifiedText: 'VERIFIED',
+  tagWidth: 128,
+  tagHeight: 50,
+  startTextXPos: 200,
+  hoverTagTextConfig: { x: 0, y: 0, oriX: 0.0, oriY: 0.6 }
+};

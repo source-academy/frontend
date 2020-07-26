@@ -1,12 +1,10 @@
 import { AssetPath } from 'src/features/game/commons/CommonTypes';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import StringUtils from 'src/features/game/utils/StringUtils';
-// import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 import { HexColor } from 'src/features/game/utils/StyleUtils';
 import { createBitmapText } from 'src/features/game/utils/TextUtils';
 
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import { toIntString } from '../utils/SSUtils';
 import { loggableStyle } from './SSLogConstants';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
@@ -81,12 +79,9 @@ dialogues
       const loggerText = createBitmapText(
         this.getObjectPlacement(),
         this.formatObjectDetails(loggable),
-        loggable.x + 20,
-        loggable.y + 10,
+        { x: loggable.x + 20, y: loggable.y + 10, oriX: 0.0, oriY: 0.6 },
         loggableStyle
-      )
-        .setLetterSpacing(3)
-        .setOrigin(0.0, 0.6);
+      ).setLetterSpacing(3);
 
       this.detailMapContainer!.add([loggerRectangle, loggerText]);
     });
@@ -97,7 +92,7 @@ dialogues
     return Object.entries(loggable)
       .map(
         ([key, value]) =>
-          `${key}: ${typeof value === 'number' ? toIntString(value) : value.toString()}`
+          `${key}: ${typeof value === 'number' ? StringUtils.toIntString(value) : value.toString()}`
       )
       .join('\n');
   }
@@ -108,5 +103,5 @@ dialogues
     }
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 }

@@ -1,26 +1,42 @@
 import ImageAssets from '../assets/ImageAssets';
+import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, GameSprite, ItemId } from '../commons/CommonTypes';
+import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
+import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import popUpConstants from './GamePopUpConstants';
 
+/**
+ * Manager in charge of keeping track of the the popups in
+ * a game
+ */
 class GamePopUpManager {
   private currPopUp: Map<GamePosition, Phaser.GameObjects.Container>;
-  private popUpFrame: GameSprite;
 
   constructor() {
     this.currPopUp = new Map<GamePosition, Phaser.GameObjects.Container>();
-    this.popUpFrame = {
-      assetKey: ImageAssets.popUpFrame.key,
-      assetXPos: popUpConstants.rect.x[GamePosition.Middle],
-      assetYPos: popUpConstants.rect.y
-    };
   }
 
-  public displayPopUp(itemId: ItemId, position: GamePosition, duration = Constants.popupDuration) {
+  /**
+   * Display a popup image on the screen.
+   * The image is based the given ID, while its position
+   * is based on the given position.
+   *
+   * @param itemId item ID to be shown on the pop up
+   * @param position position of the pop up
+   * @param duration duration in which the pop up to be shown. Afterwards, the popup will
+   *                 be destroyed.
+   * @param size size of the popup, defaulted to medium.
+   */
+  public async displayPopUp(
+    itemId: ItemId,
+    position: GamePosition,
+    duration = Constants.popupDuration,
+    size: GameSize = GameSize.Medium
+  ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
 
@@ -31,59 +47,78 @@ class GamePopUpManager {
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position],
-      this.popUpFrame.assetYPos,
-      this.popUpFrame.assetKey
-    );
+      popUpConstants.rect.y[size],
+      ImageAssets.popUpFrame.key
+    ).setScale(popUpConstants.rect.scale[size]);
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
     if (!assetKey) return;
 
+    // Set up images
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
-      this.popUpFrame.assetYPos + popUpConstants.imgYOffset,
+      popUpConstants.rect.y[size] + popUpConstants.imgYOffset,
       assetKey
     );
-    resizeUnderflow(popUpImage, popUpConstants.rect.width, popUpConstants.rect.height);
+    const newWidth = popUpConstants.rect.width * popUpConstants.rect.scale[size];
+    const newHeight = popUpConstants.rect.height * popUpConstants.rect.scale[size];
+    resizeUnderflow(popUpImage, newWidth, newHeight);
 
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
-
-    // TODO: Animate
+    GameGlobalAPI.getInstance().addToLayer(Layer.PopUp, container);
+    GameGlobalAPI.getInstance().playSound(SoundAssets.popUpEnter.key);
 
     container.setActive(true);
     container.setVisible(true);
+    container.setScale(1.0, 0);
+
+    gameManager.tweens.add(scrollEntry([container], popUpConstants.tweenDuration));
+    await sleep(popUpConstants.tweenDuration);
 
     setTimeout(() => this.destroyPopUp(position), duration);
   }
 
+  /**
+   * Destroy all active pop ups at all positions.
+   */
   public destroyAllPopUps() {
     this.currPopUp.forEach((popUp, position, map) => {
       this.destroyPopUp(position);
     });
   }
 
+  /**
+   * Destroy a pop up at the given position, if any.
+   *
+   * @param position position of thhe pop up to be destroyed
+   */
   public async destroyPopUp(position: GamePosition) {
     const atPosContainer = this.currPopUp.get(position);
     if (!atPosContainer) return;
 
-    // TODO: Animate out
+    GameGlobalAPI.getInstance()
+      .getGameManager()
+      .tweens.add(scrollExit([atPosContainer], popUpConstants.tweenDuration));
+    await sleep(popUpConstants.tweenDuration);
 
-    await sleep(200);
     atPosContainer.setVisible(false);
     atPosContainer.setActive(false);
     atPosContainer.destroy();
 
     this.currPopUp.delete(position);
+    GameGlobalAPI.getInstance().playSound(SoundAssets.popUpExit.key);
   }
 
+  /**
+   * Get the asset key of the item ID.
+   *
+   * @param itemId item ID
+   */
   private getAssetKey(itemId: ItemId) {
-    const objectPropMap = GameGlobalAPI.getInstance()
-      .getGameManager()
-      .getCurrentCheckpoint()
-      .map.getObjects();
+    const objectPropMap = GameGlobalAPI.getInstance().getGameMap().getObjectPropMap();
     const objProp = objectPropMap.get(itemId);
     if (objProp) {
       return objProp.assetKey;

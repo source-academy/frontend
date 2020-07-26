@@ -11,6 +11,11 @@ const barY = screenCenter.y;
 const innerBarX = barX + padding;
 const innerBarY = barY + padding;
 
+/**
+ * A function to display a loading bar while a scene's preload is in progress
+ *
+ * @param scene - the scene in which to add a loading screen when preload is occuring
+ */
 export function addLoadingScreen(scene: Phaser.Scene) {
   let progressBar: Phaser.GameObjects.Graphics;
   let progressBox: Phaser.GameObjects.Graphics;

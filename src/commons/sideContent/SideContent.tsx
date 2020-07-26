@@ -53,9 +53,15 @@ type StateProps = {
 };
 
 const SideContent = (props: SideContentProps) => {
-  const { tabs, handleActiveTabChange, defaultSelectedTabId } = props;
+  const { tabs, defaultSelectedTabId, handleActiveTabChange, onChange } = props;
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
   const workspaces = useSelector((state: OverallState) => state.workspaces);
+
+  React.useEffect(() => {
+    // Set initial sideContentActiveTab for this workspace
+    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Fetch debuggerContext from store
   let debuggerContext: DebuggerContext;
@@ -71,82 +77,80 @@ const SideContent = (props: SideContentProps) => {
   }, [tabs, debuggerContext]);
 
   /**
-   * Remove the 'side-content-tab-alert' class that causes tabs flash.
-   * To be run when tabs are changed.
-   * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
-   */
-  const resetAlert = (prevTabId: TabId) => {
-    const iconId = generateIconId(prevTabId);
-    const icon = document.getElementById(iconId);
-
-    // The new selected tab will still have the "side-content-tab-alert" class, but the CSS hides it
-    if (icon) {
-      icon.classList.remove('side-content-tab-alert');
-    }
-  };
-
-  /**
-   * Generate an icon id given a TabId.
+   * Generates an icon id given a TabId.
    * Used to set and remove the 'side-content-tab-alert' style to the tabs.
    */
-  const generateIconId = (tabId: TabId) => {
-    return `${tabId}-icon`;
-  };
+  const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
-  const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
-    const iconSize = 20;
-    const tabId = tab.id === undefined ? tab.label : tab.id;
-    const tabTitle: JSX.Element = (
-      <Tooltip content={tab.label}>
-        <div className="side-content-tooltip" id={generateIconId(tabId)}>
-          <Icon icon={tab.iconName} iconSize={iconSize} />
-        </div>
-      </Tooltip>
-    );
+  const renderedTabs = React.useMemo(() => {
+    const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
+      const iconSize = 20;
+      const tabId = tab.id === undefined ? tab.label : tab.id;
+      const tabTitle: JSX.Element = (
+        <Tooltip content={tab.label}>
+          <div className="side-content-tooltip" id={generateIconId(tabId)}>
+            <Icon icon={tab.iconName} iconSize={iconSize} />
+          </div>
+        </Tooltip>
+      );
 
-    const tabBody: JSX.Element = workspaceLocation
-      ? {
-          ...tab.body,
-          props: {
-            ...tab.body.props,
-            workspaceLocation
+      const tabBody: JSX.Element = workspaceLocation
+        ? {
+            ...tab.body,
+            props: {
+              ...tab.body.props,
+              workspaceLocation
+            }
           }
+        : tab.body;
+      const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
+
+      return (
+        <Tab
+          key={tabId}
+          id={tabId}
+          title={tabTitle}
+          panel={tabPanel}
+          disabled={tab.disabled}
+          className="side-content-tab"
+        />
+      );
+    };
+
+    return dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
+  }, [dynamicTabs, props.workspaceLocation]);
+
+  const changeTabsCallback = React.useCallback(
+    (
+      newTabId: SideContentType,
+      prevTabId: SideContentType,
+      event: React.MouseEvent<HTMLElement>
+    ): void => {
+      /**
+       * Remove the 'side-content-tab-alert' class that causes tabs flash.
+       * To be run when tabs are changed.
+       * Currently this style is only used for the "Inspector" and "Env Visualizer" tabs.
+       */
+      const resetAlert = (prevTabId: TabId) => {
+        const iconId = generateIconId(prevTabId);
+        const icon = document.getElementById(iconId);
+
+        // The new selected tab will still have the "side-content-tab-alert" class, but the CSS hides it
+        if (icon) {
+          icon.classList.remove('side-content-tab-alert');
         }
-      : tab.body;
-    const tabPanel: JSX.Element = <div className="side-content-text">{tabBody}</div>;
+      };
 
-    return (
-      <Tab
-        key={tabId}
-        id={tabId}
-        title={tabTitle}
-        panel={tabPanel}
-        disabled={tab.disabled}
-        className="side-content-tab"
-      />
-    );
-  };
-
-  const renderedTabs = dynamicTabs.map(tab => renderTab(tab, props.workspaceLocation));
-
-  const changeTabsCallback = (
-    newTabId: SideContentType,
-    prevTabId: SideContentType,
-    event: React.MouseEvent<HTMLElement>
-  ): void => {
-    props.handleActiveTabChange(newTabId);
-    if (props.onChange === undefined) {
-      resetAlert(prevTabId);
-    } else {
-      props.onChange(newTabId, prevTabId, event);
-      resetAlert(prevTabId);
-    }
-  };
-
-  React.useEffect(() => {
-    // Set initial sideContentActiveTab for this workspace
-    handleActiveTabChange(defaultSelectedTabId ? defaultSelectedTabId : tabs[0].id!);
-  }, [defaultSelectedTabId, handleActiveTabChange, tabs]);
+      handleActiveTabChange(newTabId);
+      if (onChange === undefined) {
+        resetAlert(prevTabId);
+      } else {
+        onChange(newTabId, prevTabId, event);
+        resetAlert(prevTabId);
+      }
+    },
+    [handleActiveTabChange, onChange]
+  );
 
   return (
     <div className="side-content">

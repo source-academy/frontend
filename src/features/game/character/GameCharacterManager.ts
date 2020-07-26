@@ -2,59 +2,56 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import { screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
-import { fadeIn, fadeOut } from '../effects/FadeEffect';
 import { Layer } from '../layer/GameLayerTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import GameManager from '../scenes/gameManager/GameManager';
-import { mandatory } from '../utils/GameUtils';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
+import { StateObserver } from '../state/GameStateTypes';
 import { resize } from '../utils/SpriteUtils';
 import CharConstants from './GameCharacterConstants';
-import { Character } from './GameCharacterTypes';
 
-export default class CharacterManager {
-  private characterMap: Map<ItemId, Character>;
+/**
+ * Manager for rendering characters in the location.
+ */
+export default class CharacterManager implements StateObserver {
   private characterSpriteMap: Map<ItemId, Phaser.GameObjects.Image>;
 
   constructor() {
-    this.characterMap = new Map<ItemId, Character>();
     this.characterSpriteMap = new Map<ItemId, Phaser.GameObjects.Image>();
+    GameGlobalAPI.getInstance().watchGameItemType(GameItemType.characters, this);
   }
 
-  public initialise(gameManager: GameManager) {
-    this.characterMap = gameManager.getCurrentCheckpoint().map.getCharacters();
-  }
-
+  /**
+   * Clear the layers, and render all the characters available to the location.
+   * Will immediately be shown on the screen.
+   *
+   * @param locationId location in which to render characters at
+   */
   public renderCharacterLayerContainer(locationId: LocationId): void {
-    const idsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.characters,
+    const idsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
+      GameItemType.characters,
       locationId
     );
-    const characterLayer = this.getCharacterContainer(idsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Character, characterLayer);
+
+    // Refresh mapping
+    this.characterSpriteMap.clear();
+
+    // Add all the characters
+    idsToRender.map(id => this.handleAdd(id));
   }
 
-  public getCharacterContainer(idsToRender: ItemId[]): Phaser.GameObjects.Container {
-    const characterContainer = new Phaser.GameObjects.Container(
-      GameGlobalAPI.getInstance().getGameManager(),
-      0,
-      0
-    );
-
-    idsToRender.forEach(id => {
-      const characterSprite = this.createCharacterSprite(id);
-      characterContainer.add(characterSprite);
-      this.characterSpriteMap.set(id, characterSprite);
-    });
-
-    return characterContainer;
-  }
-
+  /**
+   * Create the character sprite based on its ID,
+   * expression, and put it at the specified location.
+   *
+   * @param characterId id of the character
+   * @param overrideExpression expression of the shown character, optional
+   * @param overridePosition position to put the character at, optional
+   */
   public createCharacterSprite(
     characterId: ItemId,
     overrideExpression?: string,
     overridePosition?: GamePosition
   ) {
-    const character = this.getCharacterById(characterId);
+    const character = GameGlobalAPI.getInstance().getCharacterById(characterId);
     const { defaultPosition, defaultExpression, expressions } = character;
     const characterXPosition = CharConstants.charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
@@ -70,24 +67,49 @@ export default class CharacterManager {
     return characterSprite;
   }
 
-  public showCharacterOnMap(characterId: ItemId) {
-    const characterSprite = this.characterSpriteMap.get(characterId);
-    if (characterSprite) {
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .add.tween(fadeIn([characterSprite]));
-    }
+  /**
+   * Add the character, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * @param id id of character
+   * @return {boolean} true if successful, false otherwise
+
+   */
+  public handleAdd(id: ItemId): boolean {
+    const characterSprite = this.createCharacterSprite(id);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Character, characterSprite);
+    this.characterSpriteMap.set(id, characterSprite);
+    return true;
   }
 
-  public hideCharacterFromMap(characterId: ItemId) {
-    const characterSprite = this.characterSpriteMap.get(characterId);
-    if (characterSprite) {
-      GameGlobalAPI.getInstance()
-        .getGameManager()
-        .add.tween(fadeOut([characterSprite]));
-    }
+  /**
+   * Mutate the character of the given id.
+   *
+   * Internally, will delete and re-add the character with
+   * the updated property.
+   *
+   * @param id id of character
+   * @return {boolean} true if successful, false otherwise
+
+   */
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
   }
 
-  public getCharacterById = (charId: ItemId) =>
-    mandatory(this.characterMap.get(charId)) as Character;
+  /**
+   * Delete the character of the given id, if
+   * applicable.
+   *
+   * @param id id of the character
+   *  @return {boolean} true if successful, false otherwise
+   */
+  public handleDelete(id: ItemId) {
+    const char = this.characterSpriteMap.get(id);
+    if (char) {
+      this.characterSpriteMap.delete(id);
+      char.destroy();
+      return true;
+    }
+    return false;
+  }
 }

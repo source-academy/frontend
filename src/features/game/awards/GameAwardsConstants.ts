@@ -1,9 +1,7 @@
 import FontAssets from '../assets/FontAssets';
-import ImageAssets from '../assets/ImageAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
-import { CollectibleProperty } from './GameCollectiblesTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -19,29 +17,33 @@ export const listBannerTextStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
-export const collectibleTitleStyle: BitmapFontStyle = {
+export const awardTitleStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 50,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const collectibleDescStyle = {
+export const awardKeyStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 25,
+  fill: HexColor.offWhite,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
+
+export const awardDescStyle = {
   fontFamily: 'Verdana',
-  fontSize: '25px',
+  fontSize: '20px',
   fill: Color.lightBlue,
   align: 'center',
   lineSpacing: 10,
   wordWrap: { width: 500 }
 };
 
-export const defaultCollectibleProp: CollectibleProperty = {
-  assetKey: ImageAssets.cookies.key,
-  x: 0,
-  y: 0
-};
+const previewXPos = -screenSize.x * 0.3;
+const previewYPos = -screenSize.y * 0.05;
 
-const CollectibleConstants = {
+const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
   pageYStartPos: -screenSize.y * 0.3,
   pageYSpacing: 150,
@@ -49,11 +51,12 @@ const CollectibleConstants = {
   listYStartPos: -screenSize.y * 0.31,
   listYSpacing: 100,
   listTextXPos: -screenSize.x * 0.09,
-  previewXPos: -screenSize.x * 0.3,
-  previewYPos: -screenSize.y * 0.05,
+  previewXPos: previewXPos,
+  previewYPos: previewYPos,
   previewDim: 430,
-  titleYOffset: -275,
-  descYOffset: 275,
+  previewTitleTextConfig: { x: previewXPos, y: previewYPos - 275, oriX: 0.3, oriY: 0.5 },
+  previewKeyTextConfig: { x: previewXPos, y: previewYPos + 275, oriX: 0.3, oriY: 0.5 },
+  previewDescTextYOffset: 310,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
   arrowXOffset: 80,
@@ -62,4 +65,4 @@ const CollectibleConstants = {
   itemsPerPage: 7
 };
 
-export default CollectibleConstants;
+export default AwardsConstants;

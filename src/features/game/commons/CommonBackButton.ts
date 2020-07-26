@@ -1,6 +1,5 @@
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
-import GameSoundManager from '../sound/GameSoundManager';
 import { createButton } from '../utils/ButtonUtils';
 import { HexColor } from '../utils/StyleUtils';
 import { screenCenter } from './CommonConstants';
@@ -15,30 +14,31 @@ const backButtonStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
+/**
+ * A container that is a back button that is located
+ * at the top, center of the screen.
+ *
+ * The style and colours are fixed.
+ * It is not recommended to change the position of the container.
+ */
 class CommonBackButton extends Phaser.GameObjects.Container {
-  constructor(
-    scene: Phaser.Scene,
-    callback: any,
-    x?: number,
-    y?: number,
-    soundManager?: GameSoundManager
-  ) {
-    super(scene, x, y);
-    this.renderBackButton(callback, soundManager);
+  /**
+   * @param scene scene for the button to be attached to
+   * @param callback callback to be executed on onClick
+   */
+  constructor(scene: Phaser.Scene, callback: any) {
+    super(scene, 0, 0);
+    this.renderBackButton(callback);
   }
 
-  private renderBackButton(callback: any, soundManager?: GameSoundManager) {
-    const backButton = createButton(
-      this.scene,
-      {
-        assetKey: ImageAssets.topButton.key,
-        message: backText,
-        textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
-        bitMapTextStyle: backButtonStyle,
-        onUp: callback
-      },
-      soundManager
-    ).setPosition(screenCenter.x, screenCenter.y);
+  private renderBackButton(callback: any) {
+    const backButton = createButton(this.scene, {
+      assetKey: ImageAssets.topButton.key,
+      message: backText,
+      textConfig: { x: 0, y: backTextYPos, oriX: 0.5, oriY: 0.25 },
+      bitMapTextStyle: backButtonStyle,
+      onUp: callback
+    }).setPosition(screenCenter.x, screenCenter.y);
     this.add(backButton);
   }
 }

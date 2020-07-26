@@ -1,7 +1,6 @@
 import { Constants } from 'src/features/game/commons/CommonConstants';
 import CommonTextHover from 'src/features/game/commons/CommonTextHover';
 import { AssetKey } from 'src/features/game/commons/CommonTypes';
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 
 import SSImageAssets from '../assets/ImageAssets';
@@ -13,13 +12,11 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
   private currCursorMode: CursorMode;
   private cursorModes: Array<Phaser.GameObjects.Container>;
   private currActiveModeIdx: number;
-  private soundManager: GameSoundManager | undefined;
 
   constructor(
     scene: Phaser.Scene,
     x?: number,
     y?: number,
-    soundManager?: GameSoundManager,
     defaultCursorMode: CursorMode = CursorMode.DragResizeObj
   ) {
     super(scene, x, y);
@@ -27,7 +24,6 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     this.isModes = new Array<boolean>();
     this.cursorModes = new Array<Phaser.GameObjects.Container>();
     this.currActiveModeIdx = Constants.nullSequenceNumber;
-    this.soundManager = soundManager;
   }
 
   public getCurrCursorMode() {
@@ -56,13 +52,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     const currIdx = this.cursorModes.length - 1;
 
     // On hover text container
-    const hoverText = new CommonTextHover(
-      scene,
-      SSCursorModeConstants.altTextXPos,
-      SSCursorModeConstants.altTextYPos,
-      text,
-      altTextStyle
-    );
+    const hoverText = new CommonTextHover(scene, 0, 0, text, altTextStyle);
 
     const onUp = () => {
       if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;
@@ -85,17 +75,17 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       onOut();
     };
 
-    const modeButton = createButton(
-      scene,
-      {
-        assetKey: SSImageAssets.iconBg.key,
-        onUp: onUp,
-        onHover: onHoverWrapper,
-        onOut: onOutWrapper,
-        onHoverEffect: false
+    const modeButton = createButton(scene, {
+      assetKey: SSImageAssets.iconBg.key,
+      onUp: onUp,
+      onHover: onHoverWrapper,
+      onOut: onOutWrapper,
+      onPointerMove: (pointer: Phaser.Input.Pointer) => {
+        hoverText.x = pointer.x - cursorModeContainer.x - 100;
+        hoverText.y = pointer.y - cursorModeContainer.y - 100;
       },
-      this.soundManager
-    );
+      onHoverEffect: false
+    });
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(
