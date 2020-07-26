@@ -9,6 +9,7 @@ gameStartActions
 
 room
     modes: explore
+    talkTopics: canNowTalk
     bgm
         heavyHitter, /bgm/HeavyHitter.mp3, 0.5
     sfx
@@ -16,10 +17,10 @@ room
     
     objects
         + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
-            make_object_blink*(carpet)
-        + terminal, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
+            add_popup(computerOnShelf, middle, 10, small)
+        + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
             add_item(objects, room, classroomChair)
-        + computerOnShelf, /objects/cmd-console/emergency.png, 557, 906, 526, 263
+        + console, /objects/cmd-console/emergency.png, 557, 906, 526, 263
             make_object_blink*(carpet, false)
             show_dialogue(addHallway)
         + navigatorgGuy, /objects/cmd-navigator/emergency.png, 504, 568, 117, 277
@@ -36,13 +37,15 @@ room
     boundingBoxes
         + bbox1, 10, 10, 30, 30
 
-
     characters
         + scottie, Scottie, sad, left
 
 hallway
-    modes: talk, move
+    modes: move, explore
     talkTopics: welcomeToHallway
+    objects
+        + sideDoorInHallway, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
+            remove_item(objects, room, computerOnShelf)
 
 
 classroom
@@ -52,14 +55,19 @@ classroom
         + classroomChair, /objects/cmd-chair03/emergency.png, 781, 531, 318, 398
             complete_objective(finish)
             play_sfx(card)
-    
 
 emergency
     modes: move
     nav: classroom
 
 dialogues
-    canNowTalk
+    hello
+        @scottie
+        You can actually change the change the background of the scene.
+            change_background(hallway)
+        Let's now pretend we're in the hallway.
+
+    canNowTalk, you can now talk!
         @scottie
         Thanks for clicking the navigator, you can now talk to me via the talk mode.
             change_background(emergency)
@@ -81,6 +89,8 @@ dialogues
         Can I still go to places?
         @scottie, happy
         Yes, you can remain here.
+            move_character(scottie, hallway, right)
+
 
 
     what, What should I do now, Scottie?

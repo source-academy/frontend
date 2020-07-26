@@ -1,111 +1,43 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
-import ImageAssets from '../assets/ImageAssets';
-import { screenCenter } from '../commons/CommonConstants';
-import { Layer } from '../layer/GameLayerTypes';
+import { ItemId } from '../commons/CommonTypes';
+import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
-import { createButton } from '../utils/ButtonUtils';
-import { mandatory } from '../utils/GameUtils';
-import { userStateStyle } from './GameStateConstants';
-import { UserState, UserStateTypes } from './GameStateTypes';
+import StringUtils from '../utils/StringUtils';
+import { UserStateType } from './GameStateTypes';
 
 /**
  * Manages all states related to user, but not related to the
  * particular story or chapter; e.g. collectibles, achievements, and assessments.
  */
 export default class GameUserStateManager {
-  private userState: UserState;
+  private collectibles: Set<string>;
+  private achievements: Set<string>;
+  private assessments: Set<string>;
 
   constructor() {
-    this.userState = {};
+    this.collectibles = new Set([]);
+    this.achievements = new Set([]);
+    this.assessments = new Set([]);
   }
 
-  public initialise() {
-    this.userState.collectibles = SourceAcademyGame.getInstance()
-      .getSaveManager()
-      .getLoadedUserState().collectibles;
-  }
-
-  /**
-   * Add an id to one of the user state list.
-   *
-   * @param listName name of list to be added
-   * @param id id of item
-   */
-  public addToList(listName: UserStateTypes, id: string): void {
-    if (!this.userState[listName]) this.userState[listName] = [];
-
-    this.userState[listName]!.push(id);
+  public async loadUserState() {
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) return;
+    await this.loadAchievements();
+    await this.loadAssessments();
+    this.collectibles = new Set(
+      SourceAcademyGame.getInstance().getSaveManager().getLoadedUserState().collectibles
+    );
   }
 
   /**
-   * Return a user state list.
+   * Adds the given id to the collectible list
    *
-   * @param listName name of list
+   * @param collectibleId - collectible you want to check if present
    */
-  public getList(listName: UserStateTypes): string[] {
-    if (!this.userState[listName]) this.userState[listName] = [];
-
-    return this.userState[listName]!;
-  }
-
-  /**
-   * Check whether the given ID exist within one of the user state list.
-   *
-   * @param listName list to be queried
-   * @param id id of the item
-   */
-  public async doesIdExistInList(listName: UserStateTypes, id: string): Promise<boolean> {
-    if (
-      listName === UserStateTypes.assessments &&
-      SourceAcademyGame.getInstance().isGameType(GameType.Simulator)
-    ) {
-      return this.askAssessmentComplete(id);
-    }
-    return this.getUserState()[listName as string].includes(id);
-  }
-
-  /**
-   * Display a UI that asks whether an assessment has been completed based
-   * on the assessment ID.
-   *
-   * This is to allow Story Simulator to test/by pass assessment requirement
-   * within a particular checkpoint.
-   *
-   * @param assessmentId assessment ID
-   */
-  public async askAssessmentComplete(assessmentId: string): Promise<boolean> {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const assessmentCheckContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, assessmentCheckContainer);
-
-    const activateAssessmentContainer: Promise<boolean> = new Promise(resolve => {
-      assessmentCheckContainer.add(
-        createButton(gameManager, {
-          assetKey: ImageAssets.longButton.key,
-          message: `Assessment#${assessmentId} completed?`,
-          textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
-          bitMapTextStyle: userStateStyle
-        }).setPosition(screenCenter.x, 100)
-      );
-      assessmentCheckContainer.add(
-        ['Yes', 'No'].map((response, index) =>
-          createButton(gameManager, {
-            assetKey: ImageAssets.shortButton.key,
-            message: response,
-            textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.4 },
-            bitMapTextStyle: userStateStyle,
-            onUp: () => {
-              assessmentCheckContainer.destroy();
-              resolve(response === 'Yes');
-            }
-          }).setPosition(screenCenter.x, index * 200 + 400)
-        )
-      );
-    });
-    const response = await activateAssessmentContainer;
-    return response;
+  public addCollectible(collectibleId: ItemId) {
+    this.collectibles.add(collectibleId);
   }
 
   /**
@@ -115,15 +47,35 @@ export default class GameUserStateManager {
    * Only returns submitted assessments' ids.
    */
   public async loadAssessments() {
-    if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
-      return;
-    }
     const assessments = await getAssessmentOverviews(
       SourceAcademyGame.getInstance().getAccountInfo()
     );
-    this.userState.assessments = assessments
-      ?.filter(assessment => assessment.status === 'submitted')
-      .map(assessment => assessment.id.toString());
+    this.assessments = new Set(
+      (assessments || [])
+        .filter(assessment => assessment.status === 'submitted')
+        .map(assessment => assessment.id.toString())
+    );
+  }
+
+  /**
+   * This function checks for the existence of a certain
+   * item ID inside one of the user state lists
+   *
+   * @param userStateType which of the user states you want to check
+   * @param id the item ID of the state you want to check
+   * @returns {Promise<boolean>} true if item ID is found in the user state list
+   */
+  public async isInUserState(userStateType: UserStateType, id: ItemId): Promise<boolean> {
+    if (SourceAcademyGame.getInstance().isGameType(GameType.Game)) {
+      return this[userStateType].has(id);
+    } else {
+      const response = await promptWithChoices(
+        GameGlobalAPI.getInstance().getGameManager(),
+        `${StringUtils.capitalize(userStateType)} ${id}?`,
+        ['Yes', 'No']
+      );
+      return response === 0;
+    }
   }
 
   /**
@@ -134,9 +86,11 @@ export default class GameUserStateManager {
    */
   public async loadAchievements() {
     // TODO: Fetch from backend
-    this.userState.achievements = ['301', '302'];
-    this.userState.collectibles = ['cookies', 'computer'];
+    this.achievements = new Set(['301', '302']);
+    this.collectibles = new Set(['cookies', 'computer']);
   }
 
-  public getUserState = () => mandatory(this.userState);
+  public getCollectibles = () => Array.from(this.collectibles);
+  public getAchievements = () => Array.from(this.achievements);
+  public getAssessments = () => Array.from(this.assessments);
 }

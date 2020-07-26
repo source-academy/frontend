@@ -1,5 +1,5 @@
 import { Dialogue, DialogueLine, PartName } from '../dialogue/GameDialogueTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -38,11 +38,18 @@ export default class DialogueParser {
    * @param dialogueBody the body of the dialogue containing its contents
    */
   private static parseDialogue(dialogueDetails: string, dialogueBody: string[]) {
-    const [dialogueId, title] = StringUtils.splitByChar(dialogueDetails, ',', 1);
+    const [dialogueId, title] = StringUtils.splitWithLimit(dialogueDetails, ',', 1);
+    Parser.validator.register(dialogueId);
+
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.talkTopics, dialogueId, dialogue);
+    // Add fallback title
+    if (!dialogue.title) {
+      dialogue.title = StringUtils.toCapitalizedWords(dialogueId);
+    }
+
+    Parser.checkpoint.map.setItemInMap(GameItemType.dialogues, dialogueId, dialogue);
   }
 
   /**

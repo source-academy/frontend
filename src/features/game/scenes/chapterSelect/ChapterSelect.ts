@@ -1,9 +1,8 @@
 import { screenCenter, screenSize } from 'src/features/game/commons/CommonConstants';
-import { limitNumber, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
+import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils/GameUtils';
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import { FullSaveState } from '../../save/GameSaveTypes';
@@ -18,7 +17,7 @@ import { createChapter } from './ChapterSelectHelper';
  * Player is able to choose which chapter to play from here.
  */
 class ChapterSelect extends Phaser.Scene {
-  public layerManager: GameLayerManager;
+  public layerManager?: GameLayerManager;
 
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
@@ -32,22 +31,14 @@ class ChapterSelect extends Phaser.Scene {
 
     this.chapterContainer = undefined;
     this.backButtonContainer = undefined;
-    this.layerManager = new GameLayerManager();
     this.autoScrolling = true;
     this.isScrollLeft = false;
     this.isScrollRight = false;
   }
 
-  public init() {
-    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-  }
-
-  public preload() {
-    addLoadingScreen(this);
-    this.layerManager.initialise(this);
-  }
-
   public async create() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+    this.layerManager = new GameLayerManager(this);
     await this.preloadChapterAssets();
     this.renderBackground();
     this.renderChapters();
@@ -75,7 +66,7 @@ class ChapterSelect extends Phaser.Scene {
    * Clean up of related managers.
    */
   public cleanUp() {
-    this.layerManager.clearAllLayers();
+    this.getLayerManager().clearAllLayers();
   }
 
   /**
@@ -108,8 +99,8 @@ class ChapterSelect extends Phaser.Scene {
       screenSize.y,
       0
     ).setAlpha(0.3);
-    this.layerManager.addToLayer(Layer.Background, background);
-    this.layerManager.addToLayer(Layer.Background, blackOverlay);
+    this.getLayerManager().addToLayer(Layer.Background, background);
+    this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
   }
 
   /**
@@ -148,11 +139,11 @@ class ChapterSelect extends Phaser.Scene {
       .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
       .setScale(-1, 1);
 
-    this.layerManager.addToLayer(Layer.UI, this.chapterContainer);
-    this.layerManager.addToLayer(Layer.UI, this.backButtonContainer);
-    this.layerManager.addToLayer(Layer.UI, border);
-    this.layerManager.addToLayer(Layer.UI, leftArrow);
-    this.layerManager.addToLayer(Layer.UI, rightArrow);
+    this.getLayerManager().addToLayer(Layer.UI, this.chapterContainer);
+    this.getLayerManager().addToLayer(Layer.UI, this.backButtonContainer);
+    this.getLayerManager().addToLayer(Layer.UI, border);
+    this.getLayerManager().addToLayer(Layer.UI, leftArrow);
+    this.getLayerManager().addToLayer(Layer.UI, rightArrow);
   }
 
   private createMask() {
@@ -226,6 +217,7 @@ class ChapterSelect extends Phaser.Scene {
     });
     await sleep(scrollDuration);
   }
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default ChapterSelect;

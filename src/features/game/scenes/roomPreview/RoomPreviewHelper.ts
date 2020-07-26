@@ -2,8 +2,6 @@ import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/Assessm
 import { getAssessment } from 'src/commons/sagas/RequestsSaga';
 
 import ImageAssets from '../../assets/ImageAssets';
-import GameAwardsManager from '../../awards/GameAwardsManager';
-import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -59,19 +57,9 @@ function getStudentRoomCode(mission: Assessment | null) {
 
 /**
  * CMR Game Phases for the phase manager.
- *
- * @param escapeMenu escape menu tied to CMR
- * @param awardMenu award menu tied to CMR
  */
-export const createCMRGamePhases = (
-  escapeMenu: GameEscapeManager,
-  awardMenu: GameAwardsManager
-) => {
-  return new Map([
-    [GamePhaseType.None, new GameModeSequence()],
-    [GamePhaseType.EscapeMenu, escapeMenu],
-    [GamePhaseType.AwardMenu, awardMenu]
-  ]);
+export const createCMRGamePhases = () => {
+  return new Map([[GamePhaseType.None, new GameModeSequence()]]);
 };
 
 /**

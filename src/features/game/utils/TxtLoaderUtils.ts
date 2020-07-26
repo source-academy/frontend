@@ -23,6 +23,7 @@ export async function callGameManagerOnTxtLoad(
   if (!filename) {
     return;
   }
+
   await loadText(scene, filename, filename);
   await loadText(scene, TextAssets.defaultCheckpoint.key, TextAssets.defaultCheckpoint.path);
 

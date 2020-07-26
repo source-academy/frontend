@@ -639,7 +639,7 @@ export async function changeChapter(chapterno: number, variant: string, tokens: 
  * If fetch throws an error, or final response has status code < 200 or > 299,
  * this function will cause the user to logout.
  */
-async function request(
+export async function request(
   path: string,
   method: string,
   opts: RequestOptions

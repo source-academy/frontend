@@ -1,8 +1,15 @@
 import { GameActionType } from '../action/GameActionTypes';
-import { GamePosition } from '../commons/CommonTypes';
-import { GameLocationAttr } from '../location/GameMapTypes';
+import { GamePosition, GameSize } from '../commons/CommonTypes';
+import { GameItemType } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
-import { GameStateStorage, UserStateTypes } from '../state/GameStateTypes';
+import { GameStateStorage, UserStateType } from '../state/GameStateTypes';
+import { mandatory } from '../utils/GameUtils';
+
+const stringToSizeMap = {
+  small: GameSize.Small,
+  medium: GameSize.Medium,
+  large: GameSize.Large
+};
 
 const stringToPositionMap = {
   left: GamePosition.Left,
@@ -17,15 +24,15 @@ const stringToGameModeMap = {
   menu: GameMode.Menu
 };
 
-const stringToLocAttrMap = {
-  navigation: GameLocationAttr.navigation,
-  talkTopics: GameLocationAttr.talkTopics,
-  objects: GameLocationAttr.objects,
-  boundingBoxes: GameLocationAttr.boundingBoxes,
-  characters: GameLocationAttr.characters,
-  actions: GameLocationAttr.actions,
-  bgmKey: GameLocationAttr.bgmKey,
-  collectibles: GameLocationAttr.collectibles
+const stringToGameItemMap = {
+  navigation: GameItemType.navigation,
+  talkTopics: GameItemType.talkTopics,
+  objects: GameItemType.objects,
+  boundingBoxes: GameItemType.boundingBoxes,
+  characters: GameItemType.characters,
+  actions: GameItemType.actions,
+  bgmKey: GameItemType.bgmKey,
+  collectibles: GameItemType.collectibles
 };
 
 const stringToActionTypeMap = {
@@ -37,14 +44,15 @@ const stringToActionTypeMap = {
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,
-  show_dialogue: GameActionType.BringUpDialogue,
+  show_dialogue: GameActionType.ShowDialogue,
   add_mode: GameActionType.AddLocationMode,
   remove_mode: GameActionType.RemoveLocationMode,
   add_popup: GameActionType.AddPopup,
   make_object_glow: GameActionType.MakeObjectGlow,
   make_object_blink: GameActionType.MakeObjectBlink,
   play_bgm: GameActionType.PlayBGM,
-  play_sfx: GameActionType.PlaySFX
+  play_sfx: GameActionType.PlaySFX,
+  show_object_layer: GameActionType.ShowObjectLayer
 };
 
 const stringToGameStateStorageMap = {
@@ -52,9 +60,10 @@ const stringToGameStateStorageMap = {
   userstate: GameStateStorage.UserState
 };
 
-const stringToUserStateMap = {
-  achievements: UserStateTypes.achievements,
-  collectibles: UserStateTypes.collectibles
+const stringToUserStateTypeMap = {
+  assessments: UserStateType.assessments,
+  achievements: UserStateType.achievements,
+  collectibles: UserStateType.collectibles
 };
 
 /**
@@ -67,47 +76,35 @@ const stringToUserStateMap = {
  * game modes (eg 'explore') are actually valid enums
  */
 export default class ParserConverter {
+  public static stringToSize(str: string) {
+    return stringToSizeMap[str] || GameSize.Medium;
+  }
+
   public static stringToPosition(str: string) {
     return stringToPositionMap[str] || GamePosition.Middle;
   }
 
   public static stringToGameMode(str: string) {
-    const result = stringToGameModeMap[str];
-    if (!result) {
-      throw new Error(`Invalid location mode, ${str}`);
-    }
-    return result;
+    return mandatory(stringToGameModeMap[str], `Invalid location mode, ${str}`);
   }
 
   public static stringToActionType(str: string) {
-    const result = stringToActionTypeMap[str];
-    if (!result) {
-      throw new Error(`Invalid action type, ${str}`);
-    }
-    return result;
+    return mandatory(stringToActionTypeMap[str], `Invalid action type, ${str}`);
   }
 
   public static stringToGameStateStorage(str: string) {
-    const result = stringToGameStateStorageMap[str];
-    if (!result) {
-      throw new Error(`Invalid condition type, ${str}`);
-    }
-    return result;
+    return mandatory(stringToGameStateStorageMap[str], `Invalid condition type, ${str}`);
   }
 
-  public static stringToLocAttr(str: string) {
-    const result = stringToLocAttrMap[str];
-    if (!result) {
-      throw new Error(`Invalid entity type, ${str}`);
-    }
-    return result;
+  public static stringToGameItemType(str: string) {
+    return mandatory(stringToGameItemMap[str], `Invalid entity type, ${str}`);
   }
 
-  public static stringToUserState(str: string) {
-    const result = stringToUserStateMap[str];
-    if (!result) {
-      throw new Error(`Invalid user state type, ${str}`);
-    }
-    return result;
+  public static stringToBoolean(str: string) {
+    return str === 'false' ? false : true;
+  }
+
+  public static stringToUserStateType(str: string) {
+    return mandatory(stringToUserStateTypeMap[str], `Invalid user state type ${str}`);
   }
 }

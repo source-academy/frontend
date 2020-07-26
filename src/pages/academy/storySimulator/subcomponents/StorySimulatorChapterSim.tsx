@@ -1,13 +1,9 @@
 import React from 'react';
 import { useRequest } from 'src/commons/utils/Hooks';
-import { fetchChapters } from 'src/features/storySimulator/StorySimulatorService';
+import { fetchChapters, fetchTextAssets } from 'src/features/storySimulator/StorySimulatorService';
 import { ChapterDetail } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import StorySimulatorChapterEditor from './StorySimulatorChapterEditor';
-
-type ChapterSequencerProps = {
-  textAssets?: string[];
-};
 
 export const inAYear = (date: Date) => {
   date.setFullYear(date.getFullYear() + 1);
@@ -31,8 +27,10 @@ const defaultChapter = {
  *
  * @param textAssets - the list of all text assets on S3 to choose from
  */
-const ChapterSim = React.memo(({ textAssets }: ChapterSequencerProps) => {
+const ChapterSim = React.memo(() => {
+  const { value: textAssets } = useRequest<string[]>(fetchTextAssets, []);
   const { value: chapters } = useRequest<ChapterDetail[]>(fetchChapters, []);
+
   const [chosenIndex, setChosenIndex] = React.useState(createChapterIndex);
 
   return (

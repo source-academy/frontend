@@ -1,4 +1,4 @@
-import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameSoundType } from '../sound/GameSoundTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
@@ -8,7 +8,7 @@ import MusicParser from './MusicParser';
 import ObjectParser from './ObjectParser';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
-import { GameAttr } from './ParserValidator';
+import { GameEntityType } from './ParserValidator';
 
 /**
  * This class parses data for one specific location.
@@ -27,7 +27,7 @@ export default class LocationParser {
     const locationParagraphs = StringUtils.splitToParagraph(locationBody);
 
     locationParagraphs.forEach(([header, body]: [string, string[]]) => {
-      if (body.length === 0) {
+      if (body.length === 0 && header.includes(':')) {
         this.parseLocationConfig(location, header);
       } else {
         this.parseLocationParagraphs(location, header, body);
@@ -54,13 +54,13 @@ export default class LocationParser {
         break;
       case 'nav':
         configValues.forEach(otherLocationId => {
-          Parser.validator.assertAttr(GameAttr.locations, otherLocationId);
+          Parser.validator.assert(GameEntityType.locations, otherLocationId);
           location.navigation.add(otherLocationId);
         });
         break;
       case 'talkTopics':
         const talkTopics = configValues;
-        Parser.validator.assertLocAttrs(GameLocationAttr.talkTopics, talkTopics);
+        Parser.validator.assertItemTypes(GameItemType.dialogues, talkTopics);
         location.talkTopics = new Set(talkTopics);
         break;
       default:

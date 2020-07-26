@@ -7,6 +7,8 @@ import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
+import { ActivatableSprite } from '../../objects/GameObjectTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { sleep } from '../../utils/GameUtils';
 import {
   magnifyingGlass,
@@ -31,8 +33,7 @@ class GameModeExplore implements IGameUI {
     const exploreMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     const backButton = new CommonBackButton(gameManager, () => {
-      GameGlobalAPI.getInstance().popPhase();
-      GameGlobalAPI.getInstance().fadeInLayer(Layer.Character, 300);
+      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu);
     });
     exploreMenuContainer.add(backButton);
     return exploreMenuContainer;
@@ -48,27 +49,15 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     this.uiContainer = this.createUIContainer();
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
+
+    this.enableInteractions();
 
     gameManager.tweens.add({
       targets: this.uiContainer,
       ...entryTweenProps
-    });
-
-    // Activate objects action and make them interactable
-    GameGlobalAPI.getInstance().enableObjectAction({
-      onClick: this.explorePointerUp,
-      onHover: this.explorePointerOver,
-      onPointerout: this.explorePointerOut
-    });
-
-    // Activate bbox action and make them itneractable
-    GameGlobalAPI.getInstance().enableBBoxAction({
-      onClick: this.explorePointerUp,
-      onHover: this.explorePointerOver,
-      onPointerout: this.explorePointerOut
     });
 
     // Change default icon
@@ -88,10 +77,7 @@ class GameModeExplore implements IGameUI {
     // Reset the cursor
     gameManager.input.setDefaultCursor('');
 
-    // Disable objects and bbox action, should not be interactable
-    // outside Explore mode
-    GameGlobalAPI.getInstance().disableBBoxAction();
-    GameGlobalAPI.getInstance().disableObjectAction();
+    this.disableInteractions();
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
@@ -104,6 +90,42 @@ class GameModeExplore implements IGameUI {
       await sleep(500);
       fadeAndDestroy(gameManager, this.uiContainer);
     }
+  }
+
+  /**
+   * This function enables all the activatable sprites (objects/bboxes)
+   * that are currently being rendered on the map to have mouse events
+   *
+   * It changes the default cursor of the hover/click to a magnifying glass
+   * It also adds enables the activatable's actions to be played when clicked
+   */
+  private enableInteractions() {
+    GameGlobalAPI.getInstance()
+      .getAllActivatables()
+      .forEach((activatable: ActivatableSprite) => {
+        activatable.clickArea.on('pointerout', () => this.explorePointerOut());
+        activatable.clickArea.on('pointerover', () =>
+          this.explorePointerOver(activatable.interactionId)
+        );
+        activatable.clickArea.on('pointerup', async () => {
+          this.explorePointerUp(activatable.interactionId);
+          await GameGlobalAPI.getInstance().processGameActions(activatable.actionIds);
+        });
+      });
+  }
+
+  /**
+   * This function disables all the activatable sprites (objects/bboxes)
+   * that are currently being rendered on the map
+   */
+  private disableInteractions() {
+    GameGlobalAPI.getInstance()
+      .getAllActivatables()
+      .forEach((activatable: ActivatableSprite) => {
+        activatable.clickArea.off('pointerout');
+        activatable.clickArea.off('pointerover');
+        activatable.clickArea.off('pointerup');
+      });
   }
 
   /**

@@ -4,7 +4,7 @@ import { createContext } from 'src/commons/utils/JsSlangHelper';
 import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProp } from '../../awards/GameAwardsHelper';
 import GameAwardsManager from '../../awards/GameAwardsManager';
-import { Constants, screenSize } from '../../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { ItemId } from '../../commons/CommonTypes';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
@@ -14,10 +14,9 @@ import { Layer } from '../../layer/GameLayerTypes';
 import GamePhaseManager from '../../phase/GamePhaseManager';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
-import { UserStateTypes } from '../../state/GameStateTypes';
-import GameUserStateManager from '../../state/GameUserStateManager';
 import { mandatory } from '../../utils/GameUtils';
-import { loadImage, loadSound } from '../../utils/LoaderUtils';
+import { loadImage, loadSound, loadSpritesheet } from '../../utils/LoaderUtils';
+import { resizeOverflow } from '../../utils/SpriteUtils';
 import { roomDefaultCode } from './RoomPreviewConstants';
 import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreviewHelper';
 
@@ -27,18 +26,26 @@ import { createCMRGamePhases, createVerifiedHoverContainer } from './RoomPreview
  * Additionally, the scene shares some common functionality as
  * GameManager, in that it incorporates escape menu and collectible
  * menu.
+ *
+ * Student code is not executed within a layer manager as
+ * there are features that do not work well with container
+ * e.g. mask, animations.
+ *
+ * Hence, student code will be executed and added to the scene
+ * as per normal. Meanwhile, UI parts of this scene will still
+ * make use of the layer manager; separate from student code.
  */
 export default class RoomPreview extends Phaser.Scene {
-  public layerManager: GameLayerManager;
-  public inputManager: GameInputManager;
+  private layerManager?: GameLayerManager;
+  private inputManager?: GameInputManager;
+  private phaseManager?: GamePhaseManager;
+  private escapeManager?: GameEscapeManager;
+  private awardManager?: GameAwardsManager;
 
-  private phaseManager: GamePhaseManager;
-  private userStateManager: GameUserStateManager;
-  private escapeManager: GameEscapeManager;
-  private awardManager: GameAwardsManager;
   private studentCode: string;
   private preloadImageMap: Map<string, string>;
   private preloadSoundMap: Map<string, string>;
+  private preloadSpritesheetMap: Map<string, [string, object]>;
 
   private verifCont: Phaser.GameObjects.Container | undefined;
   private verifMask: Phaser.GameObjects.Graphics | undefined;
@@ -49,41 +56,18 @@ export default class RoomPreview extends Phaser.Scene {
     super('RoomPreview');
     this.preloadImageMap = new Map<string, string>();
     this.preloadSoundMap = new Map<string, string>();
-    this.layerManager = new GameLayerManager();
-    this.phaseManager = new GamePhaseManager();
-    this.inputManager = new GameInputManager();
-    this.escapeManager = new GameEscapeManager();
-    this.userStateManager = new GameUserStateManager();
-    this.awardManager = new GameAwardsManager();
+    this.preloadSpritesheetMap = new Map<string, [string, object]>();
     this.studentCode = roomDefaultCode;
   }
 
   public init() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-
     this.studentCode = SourceAcademyGame.getInstance().getRoomCode();
-
-    this.userStateManager = new GameUserStateManager();
-    this.layerManager = new GameLayerManager();
-    this.phaseManager = new GamePhaseManager();
-    this.inputManager = new GameInputManager();
-    this.escapeManager = new GameEscapeManager();
-    this.awardManager = new GameAwardsManager();
     this.createContext();
   }
 
   public preload() {
     addLoadingScreen(this);
-    this.userStateManager.initialise();
-    this.layerManager.initialise(this);
-    this.inputManager.initialise(this);
-    this.awardManager.initialise(this, this.userStateManager, this.phaseManager);
-    this.phaseManager.initialise(
-      createCMRGamePhases(this.escapeManager, this.awardManager),
-      this.inputManager
-    );
-    this.escapeManager.initialise(this, this.phaseManager);
-    this.bindKeyboardTriggers();
 
     // Initialise one verified tag to be used throughout the CMR
     const [verifCont, verifMask] = createVerifiedHoverContainer(this);
@@ -92,10 +76,10 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public async create() {
-    await this.userStateManager.loadAchievements();
-
     // Run student code once to update the context
     await this.eval(this.studentCode);
+
+    this.renderDefaultBackground();
 
     /**
      * We don't use .eval('preload();') at preload() as
@@ -121,17 +105,30 @@ export default class RoomPreview extends Phaser.Scene {
         await loadSound(this, key, path);
       })
     );
+    await Promise.all(
+      Array.from(this.preloadSpritesheetMap).map(async ([key, [path, config]]) => {
+        await loadSpritesheet(this, key, path, config);
+      })
+    );
 
     // Execute create
     await this.eval(`create();`);
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(Constants.nullInteractionId);
 
+    // Initialise managers after students `create()`
+    // This is primarily to ensure layer manager's layer
+    // are on top of the displayed room objects
+    this.initialiseManagers();
+
+    // Binding keyboard triggers require managers to be initialised
+    this.bindKeyboardTriggers();
+
     // Add verified tag
-    this.layerManager.addToLayer(Layer.UI, this.getVerifCont());
+    this.getLayerManager().addToLayer(Layer.UI, this.getVerifCont());
   }
 
   public update() {
-    this.eval(`update();`);
+    // this.eval(`update();`);
   }
 
   public createContext() {
@@ -140,8 +137,7 @@ export default class RoomPreview extends Phaser.Scene {
       phaser: Phaser,
       preloadImageMap: this.preloadImageMap,
       preloadSoundMap: this.preloadSoundMap,
-      layerManager: this.layerManager,
-      layerTypes: Layer,
+      preloadSpritesheetMap: this.preloadSpritesheetMap,
       remotePath: Constants.assetsFolder,
       screenSize: screenSize,
       createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
@@ -159,26 +155,26 @@ export default class RoomPreview extends Phaser.Scene {
    */
   private bindKeyboardTriggers() {
     // Bind escape menu
-    this.inputManager.registerKeyboardListener(
+    this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.ESC,
       'up',
       async () => {
-        if (this.phaseManager.isCurrentPhase(GamePhaseType.EscapeMenu)) {
-          await this.phaseManager.popPhase();
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.EscapeMenu)) {
+          await this.getPhaseManager().popPhase();
         } else {
-          await this.phaseManager.pushPhase(GamePhaseType.EscapeMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.EscapeMenu);
         }
       }
     );
-    // Bind collectible menu
-    this.inputManager.registerKeyboardListener(
+    // Bind award menu
+    this.getInputManager().registerKeyboardListener(
       Phaser.Input.Keyboard.KeyCodes.TAB,
       'up',
       async () => {
-        if (this.phaseManager.isCurrentPhase(GamePhaseType.AwardMenu)) {
-          await this.phaseManager.popPhase();
+        if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+          await this.getPhaseManager().popPhase();
         } else {
-          await this.phaseManager.pushPhase(GamePhaseType.AwardMenu);
+          await this.getPhaseManager().pushPhase(GamePhaseType.AwardMenu);
         }
       }
     );
@@ -188,8 +184,8 @@ export default class RoomPreview extends Phaser.Scene {
    * Clean up on related managers
    */
   public cleanUp() {
-    this.inputManager.clearListeners();
-    this.layerManager.clearAllLayers();
+    this.getInputManager().clearListeners();
+    this.getLayerManager().clearAllLayers();
   }
 
   /**
@@ -210,8 +206,8 @@ export default class RoomPreview extends Phaser.Scene {
    * @param awardKey key associated with the award
    */
   private createAward(x: number, y: number, awardKey: ItemId) {
-    const achievements = this.userStateManager.getList(UserStateTypes.achievements);
-    const collectibles = this.userStateManager.getList(UserStateTypes.collectibles);
+    const achievements = this.getUserStateManager().getAchievements();
+    const collectibles = this.getUserStateManager().getCollectibles();
     if (achievements.includes(awardKey) || collectibles.includes(awardKey)) {
       const awardProp = getAwardProp(awardKey);
       const award = new Phaser.GameObjects.Sprite(this, x, y, awardProp.assetKey);
@@ -252,6 +248,51 @@ export default class RoomPreview extends Phaser.Scene {
     return sprite;
   }
 
+  /**
+   * Render starting background for the room.
+   */
+  private renderDefaultBackground() {
+    const backgroundAsset = new Phaser.GameObjects.Image(
+      this,
+      screenCenter.x,
+      screenCenter.y,
+      this.getDefaultBackgroundKey()
+    );
+    resizeOverflow(backgroundAsset, screenSize.x, screenSize.y);
+
+    // Don't use layer manager because it does not exist at this point
+    this.add.existing(backgroundAsset);
+  }
+
+  /**
+   * Returns the background key to be used, based on the user's assessment
+   * progression.
+   */
+  private getDefaultBackgroundKey() {
+    const completedAssessment = this.getUserStateManager().getAssessments();
+    // Escape type check for now
+    mandatory(completedAssessment);
+    return ImageAssets.sourceCrashedPod.key;
+  }
+
+  /**
+   * Construct the necessary managers for this scene
+   */
+  private initialiseManagers() {
+    this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
+    this.phaseManager = new GamePhaseManager(createCMRGamePhases(), this.inputManager);
+    this.escapeManager = new GameEscapeManager(this);
+    this.awardManager = new GameAwardsManager(this);
+  }
+
   private getVerifCont = () => mandatory(this.verifCont);
   private getVerifMask = () => mandatory(this.verifMask);
+  private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
+
+  public getInputManager = () => mandatory(this.inputManager);
+  public getLayerManager = () => mandatory(this.layerManager);
+  public getPhaseManager = () => mandatory(this.phaseManager);
+  public getEscapeManager = () => mandatory(this.escapeManager);
+  public getAwardManager = () => mandatory(this.awardManager);
 }

@@ -32,9 +32,10 @@ export type GameLocation = IGameActionable & {
   characters: Set<ItemId>;
 };
 
-export enum GameLocationAttr {
+export enum GameItemType {
   navigation = 'navigation',
   talkTopics = 'talkTopics',
+  dialogues = 'dialogues',
   objects = 'objects',
   boundingBoxes = 'boundingBoxes',
   characters = 'characters',
