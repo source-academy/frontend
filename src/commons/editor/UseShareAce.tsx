@@ -1,9 +1,9 @@
 import * as React from 'react';
-
-import { EditorHook } from './Editor';
 import sharedbAce from 'sharedb-ace';
+
 import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
 import { Links } from '../utils/Constants';
+import { EditorHook } from './Editor';
 
 // EditorHook structure:
 // EditorHooks grant access to 4 things:

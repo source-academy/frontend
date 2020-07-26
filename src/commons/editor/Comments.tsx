@@ -1,22 +1,23 @@
-import * as React from 'react';
-import CSS from 'csstype'; // TODO: Remove
 import {
-  Card,
   Button,
   ButtonGroup,
+  Card,
+  Divider,
   Icon,
-  Popover,
   Menu,
   MenuItem,
+  Popover,
   Position,
-  Divider,
   Spinner
 } from '@blueprintjs/core';
+import CSS from 'csstype'; // TODO: Remove
+import { EventEmitter } from 'events';
+import { omit, some } from 'lodash';
+import * as React from 'react';
 import { format } from 'timeago.js';
+
 import Markdown from '../Markdown';
 import { CommentAPI } from './useComments';
-import { EventEmitter } from 'events';
-import { some, omit } from 'lodash';
 
 export interface IComment {
   id: string;

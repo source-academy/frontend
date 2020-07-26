@@ -1,0 +1,411 @@
+import { GameAction } from '../../action/GameActionTypes';
+import { SoundAsset } from '../../assets/AssetsTypes';
+import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
+import { Character } from '../../character/GameCharacterTypes';
+import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
+import { AssetKey } from '../../commons/CommonTypes';
+import { Dialogue } from '../../dialogue/GameDialogueTypes';
+import { displayNotification } from '../../effects/Notification';
+import { Layer } from '../../layer/GameLayerTypes';
+import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
+import { GameMode } from '../../mode/GameModeTypes';
+import { ObjectProperty } from '../../objects/GameObjectTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
+import { SettingsJson } from '../../save/GameSaveTypes';
+import SourceAcademyGame from '../../SourceAcademyGame';
+import { StateObserver, UserStateType } from '../../state/GameStateTypes';
+import { mandatory } from '../../utils/GameUtils';
+import GameManager from './GameManager';
+
+/**
+ * This class exposes all the public API's of managers
+ * in the Game Manager scene.
+ *
+ * It allows managers to access services globally
+ * through GameGlobalAPI.getInstance().function() without
+ * having to keep a reference to the gameManager.
+ */
+class GameGlobalAPI {
+  private gameManager: GameManager | undefined;
+
+  static instance: GameGlobalAPI;
+
+  private constructor() {
+    this.gameManager = undefined;
+  }
+
+  static getInstance() {
+    if (!GameGlobalAPI.instance) {
+      GameGlobalAPI.instance = new GameGlobalAPI();
+    }
+    return GameGlobalAPI.instance;
+  }
+
+  /////////////////////
+  //   Game Manager  //
+  /////////////////////
+
+  public getGameManager = () => mandatory(this.gameManager);
+
+  public setGameManager(gameManagerRef: GameManager): void {
+    this.gameManager = gameManagerRef;
+  }
+
+  public getCurrLocId(): LocationId {
+    return this.getGameManager().currentLocationId;
+  }
+
+  public getLocationAtId(locationId: LocationId): GameLocation {
+    return this.getGameManager().getStateManager().getGameMap().getLocationAtId(locationId);
+  }
+
+  public async changeLocationTo(locationName: string) {
+    await this.getGameManager().changeLocationTo(locationName);
+  }
+
+  /////////////////////
+  //    Game Mode    //
+  /////////////////////
+
+  public getLocationModes(locationId: LocationId): GameMode[] {
+    return this.getGameManager().getStateManager().getLocationModes(locationId);
+  }
+
+  public addLocationMode(locationId: LocationId, mode: GameMode): void {
+    this.getGameManager().getStateManager().addLocationMode(locationId, mode);
+  }
+
+  public removeLocationMode(locationId: LocationId, mode: GameMode): void {
+    this.getGameManager().getStateManager().removeLocationMode(locationId, mode);
+  }
+
+  /////////////////////
+  //   Interaction   //
+  /////////////////////
+
+  public hasTriggeredInteraction(id: string): boolean | undefined {
+    return this.getGameManager().getStateManager().hasTriggeredInteraction(id);
+  }
+
+  public triggerAction(actionId: ItemId): void {
+    this.getGameManager().getStateManager().triggerAction(actionId);
+  }
+
+  public triggerInteraction(id: string): void {
+    this.getGameManager().getStateManager().triggerInteraction(id);
+  }
+
+  /////////////////////
+  //    Game Items   //
+  /////////////////////
+
+  public watchGameItemType(gameItemType: GameItemType, stateObserver: StateObserver) {
+    this.getGameManager().getStateManager().watchGameItemType(gameItemType, stateObserver);
+  }
+
+  public getGameMap() {
+    return this.getGameManager().getStateManager().getGameMap();
+  }
+
+  public getGameItemsInLocation(gameItemType: GameItemType, locationId: LocationId): ItemId[] {
+    return this.getGameManager().getStateManager().getGameItemsInLocation(gameItemType, locationId);
+  }
+
+  public addItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    this.getGameManager().getStateManager().addItem(gameItemType, locationId, itemId);
+  }
+
+  public removeItem(gameItemType: GameItemType, locationId: LocationId, itemId: ItemId): void {
+    return this.getGameManager().getStateManager().removeItem(gameItemType, locationId, itemId);
+  }
+
+  /////////////////////
+  //  Game Objects   //
+  /////////////////////
+
+  public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().getObjectManager().makeObjectGlow(objectId, turnOn);
+  }
+
+  public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
+    this.getGameManager().getObjectManager().makeObjectBlink(objectId, turnOn);
+  }
+
+  public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
+    this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
+  }
+
+  public getAllActivatables() {
+    return [
+      ...this.getGameManager().getObjectManager().getActivatables(),
+      ...this.getGameManager().getBBoxManager().getActivatables()
+    ];
+  }
+
+  /////////////////////
+  //    Game BBox    //
+  /////////////////////
+
+  public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
+    this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
+  }
+
+  /////////////////////
+  //  Game Objective //
+  /////////////////////
+
+  public isAllComplete(): boolean {
+    return this.getGameManager().getStateManager().isAllComplete();
+  }
+
+  public isObjectiveComplete(key: string): boolean {
+    return this.getGameManager().getStateManager().isObjectiveComplete(key);
+  }
+
+  public areObjectivesComplete(keys: string[]): boolean {
+    return this.getGameManager().getStateManager().areObjectivesComplete(keys);
+  }
+
+  public completeObjective(key: string): void {
+    this.getGameManager().getStateManager().completeObjective(key);
+  }
+
+  /////////////////////
+  //   User State    //
+  /////////////////////
+
+  public addCollectible(id: string): void {
+    SourceAcademyGame.getInstance().getUserStateManager().addCollectible(id);
+  }
+
+  public async isInUserState(userStateType: UserStateType, id: string): Promise<boolean> {
+    return SourceAcademyGame.getInstance().getUserStateManager().isInUserState(userStateType, id);
+  }
+
+  /////////////////////
+  //   Game Layer    //
+  /////////////////////
+
+  public clearSeveralLayers(layerTypes: Layer[]) {
+    this.getGameManager().getLayerManager().clearSeveralLayers(layerTypes);
+  }
+
+  public addToLayer(layer: Layer, gameObj: Phaser.GameObjects.GameObject) {
+    this.getGameManager().getLayerManager().addToLayer(layer, gameObj);
+  }
+
+  public showLayer(layer: Layer) {
+    this.getGameManager().getLayerManager().showLayer(layer);
+  }
+
+  public hideLayer(layer: Layer) {
+    this.getGameManager().getLayerManager().hideLayer(layer);
+  }
+
+  public async fadeInLayer(layer: Layer, fadeDuration?: number) {
+    await this.getGameManager().getLayerManager().fadeInLayer(layer, fadeDuration);
+  }
+
+  public async fadeOutLayer(layer: Layer, fadeDuration?: number) {
+    await this.getGameManager().getLayerManager().fadeOutLayer(layer, fadeDuration);
+  }
+  /////////////////////
+  //  Location Notif //
+  /////////////////////
+
+  public async bringUpUpdateNotif(message: string) {
+    await displayNotification(message);
+  }
+
+  /////////////////////
+  //   Story Action  //
+  /////////////////////
+
+  public async processGameActions(actionIds: ItemId[] | undefined) {
+    await this.getGameManager().getPhaseManager().pushPhase(GamePhaseType.Sequence);
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
+    await this.getGameManager().getPhaseManager().popPhase();
+  }
+
+  public async processGameActionsInSamePhase(actionIds: ItemId[] | undefined) {
+    await this.getGameManager().getActionManager().processGameActions(actionIds);
+  }
+
+  /////////////////////
+  //   Dialogue      //
+  /////////////////////
+
+  public async showDialogue(dialogueId: ItemId) {
+    await this.getGameManager().getPhaseManager().pushPhase(GamePhaseType.Sequence);
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
+    await this.getGameManager().getPhaseManager().popPhase();
+  }
+
+  public async showDialogueInSamePhase(dialogueId: ItemId) {
+    await this.getGameManager().getDialogueManager().showDialogue(dialogueId);
+  }
+
+  /////////////////////
+  //   Collectible   //
+  /////////////////////
+
+  public async obtainCollectible(collectibleId: string) {
+    SourceAcademyGame.getInstance().getUserStateManager().addCollectible(collectibleId);
+  }
+
+  /////////////////////
+  //     Pop Up      //
+  /////////////////////
+
+  public displayPopUp(itemId: ItemId, position: GamePosition, duration?: number, size?: GameSize) {
+    this.getGameManager().getPopupManager().displayPopUp(itemId, position, duration, size);
+  }
+
+  public destroyAllPopUps() {
+    this.getGameManager().getPopupManager().destroyAllPopUps();
+  }
+
+  public async destroyPopUp(position: GamePosition) {
+    this.getGameManager().getPopupManager().destroyPopUp(position);
+  }
+
+  /////////////////////
+  //    Save Game    //
+  /////////////////////
+
+  public async saveGame() {
+    await this.getGameManager().getSaveManager().saveGame();
+  }
+
+  public async saveSettings(settingsJson: SettingsJson) {
+    await this.getGameManager().getSaveManager().saveSettings(settingsJson);
+  }
+
+  public getLoadedUserState() {
+    return this.getGameManager().getSaveManager().getLoadedUserState();
+  }
+
+  /////////////////////
+  //      Sound      //
+  /////////////////////
+
+  public getSoundManager() {
+    return SourceAcademyGame.getInstance().getSoundManager();
+  }
+
+  public playSound(soundKey: AssetKey) {
+    SourceAcademyGame.getInstance().getSoundManager().playSound(soundKey);
+  }
+
+  public playBgMusic(soundKey: AssetKey) {
+    SourceAcademyGame.getInstance().getSoundManager().playBgMusic(soundKey);
+  }
+
+  public async stopAllSound() {
+    SourceAcademyGame.getInstance().getSoundManager().stopAllSound();
+  }
+
+  public pauseCurrBgMusic() {
+    SourceAcademyGame.getInstance().getSoundManager().pauseCurrBgMusic();
+  }
+
+  public continueCurrBgMusic() {
+    SourceAcademyGame.getInstance().getSoundManager().continueCurrBgMusic();
+  }
+
+  public applySoundSettings(userSettings: SettingsJson) {
+    SourceAcademyGame.getInstance().getSoundManager().applyUserSettings(userSettings);
+  }
+
+  public loadSounds(soundAssets: SoundAsset[]) {
+    SourceAcademyGame.getInstance().getSoundManager().loadSounds(soundAssets);
+  }
+
+  /////////////////////
+  //      Input      //
+  /////////////////////
+
+  public enableKeyboardInput(active: boolean) {
+    this.getGameManager().getInputManager().enableKeyboardInput(active);
+  }
+
+  public enableMouseInput(active: boolean) {
+    this.getGameManager().getInputManager().enableMouseInput(active);
+  }
+
+  /////////////////////
+  //      Phases     //
+  /////////////////////
+
+  public async popPhase() {
+    await this.getGameManager().getPhaseManager().popPhase();
+  }
+
+  public async pushPhase(gamePhaseType: GamePhaseType) {
+    await this.getGameManager().getPhaseManager().pushPhase(gamePhaseType);
+  }
+
+  public async swapPhase(gamePhaseType: GamePhaseType) {
+    await this.getGameManager().getPhaseManager().swapPhase(gamePhaseType);
+  }
+
+  public isCurrentPhase(gamePhaseType: GamePhaseType) {
+    return this.getGameManager().getPhaseManager().isCurrentPhase(gamePhaseType);
+  }
+
+  /////////////////////
+  //   Background    //
+  /////////////////////
+
+  public renderBackgroundLayerContainer(locationId: LocationId) {
+    this.getGameManager().getBackgroundManager().renderBackgroundLayerContainer(locationId);
+  }
+
+  /////////////////////
+  //   Characters    //
+  /////////////////////
+
+  public createCharacterSprite(
+    characterId: ItemId,
+    overrideExpression?: string,
+    overridePosition?: GamePosition
+  ) {
+    return this.getGameManager()
+      .getCharacterManager()
+      .createCharacterSprite(characterId, overrideExpression, overridePosition);
+  }
+
+  public moveCharacter(id: ItemId, newLocation: LocationId, newPosition: GamePosition) {
+    this.getGameManager().getStateManager().moveCharacter(id, newLocation, newPosition);
+  }
+
+  public updateCharacter(id: ItemId, expression: string) {
+    this.getGameManager().getStateManager().updateCharacter(id, expression);
+  }
+
+  /////////////////////
+  //  Item retrieval //
+  /////////////////////
+
+  public getDialogueById(dialogueId: ItemId): Dialogue {
+    return mandatory(this.getGameMap().getDialogueMap().get(dialogueId));
+  }
+
+  public getCharacterById(characterId: ItemId): Character {
+    return mandatory(this.getGameMap().getCharacterMap().get(characterId));
+  }
+
+  public getActionById(actionId: ItemId): GameAction {
+    return mandatory(this.getGameMap().getActionMap().get(actionId));
+  }
+
+  public getObjectById(objectId: ItemId): ObjectProperty {
+    return mandatory(this.getGameMap().getObjectPropMap().get(objectId));
+  }
+
+  public getBBoxById(bboxId: ItemId): BBoxProperty {
+    return mandatory(this.getGameMap().getBBoxPropMap().get(bboxId));
+  }
+}
+
+export default GameGlobalAPI;

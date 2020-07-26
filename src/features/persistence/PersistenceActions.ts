@@ -1,10 +1,10 @@
 import { action } from 'typesafe-actions';
 
 import {
+  PERSISTENCE_INITIALISE,
   PERSISTENCE_OPEN_PICKER,
   PERSISTENCE_SAVE_FILE,
   PERSISTENCE_SAVE_FILE_AS,
-  PERSISTENCE_INITIALISE,
   PersistenceFile
 } from './PersistenceTypes';
 

@@ -1,32 +1,32 @@
-/* tslint-disable no-unused-vars */
-import { require as acequire, Ace /*, Range*/ } from 'ace-builds';
+/* eslint-disable simple-import-sort/sort */
+import { Ace, require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
+import 'js-slang/dist/editors/ace/theme/source';
+
+import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
+import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
+import { IAceEditor } from 'react-ace/lib/types';
 import { HotKeys } from 'react-hotkeys';
-
-// import { createContext, getAllOccurrencesInScope } from 'js-slang';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
-import 'js-slang/dist/editors/ace/theme/source';
-import { Variant } from 'js-slang/dist/types';
 
 import { Documentation } from '../documentation/Documentation';
 import { useMergedRef } from '../utils/Hooks';
-import { AceMouseEvent, Position, HighlightedLines } from './EditorTypes';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
+import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
 
 import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
 import GutterContextMenu, { ContextMenuItems, ContextMenuHandler } from './GutterContextMenu';
 
 // =============== Hooks ===============
 // Temporary: Should refactor into EditorBase + different variants.
+// Ideally, hooks should be specified by the parent component instead.
 import useHighlighting from './UseHighlighting';
 import useNavigation from './UseNavigation';
-import useTypeInference from './UseTypeInference';
-import useShareAce from './UseShareAce';
 import useRefactor from './UseRefactor';
-import { IAceEditor } from 'react-ace/lib/types';
+import useShareAce from './UseShareAce';
+import useTypeInference from './UseTypeInference';
 import useComments from './useComments';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
@@ -402,8 +402,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
   );
 });
 
-// in a real usage, hooks would be specified by the parent component
-export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
+const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   <EditorBase
     {...props}
     hooks={[
@@ -418,5 +417,4 @@ export default React.forwardRef<AceEditor, EditorProps>((props, ref) => (
   />
 ));
 
-// real export
-// export default EditorBase;
+export default Editor;

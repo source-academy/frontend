@@ -1,15 +1,13 @@
 import { Card, Classes, Pre } from '@blueprintjs/core';
 import classNames from 'classnames';
-import * as React from 'react';
-import { HotKeys } from 'react-hotkeys';
-
 import { parseError } from 'js-slang';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import * as React from 'react';
+import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
-
 import ReplInput, { ReplInputProps } from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
@@ -72,7 +70,7 @@ export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
         </Card>
       );
     case 'result':
-      // We check if we are using Substituter, so we can process the REPL results properly
+      // We check if we are using Stepper, so we can process the REPL results properly
       if (props.usingSubst && props.output.value instanceof Array) {
         return (
           <Card>

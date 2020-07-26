@@ -1,13 +1,12 @@
-import { require as acequire, Ace } from 'ace-builds';
+import { Ace, require as acequire } from 'ace-builds';
+import { EventEmitter } from 'events';
+import { groupBy, keyBy, map, omit, sortBy, values } from 'lodash';
 import * as React from 'react';
 import ReactDOM from 'react-dom';
-
-import { groupBy, map, omit, sortBy, values, keyBy } from 'lodash';
-
-import { EditorHook } from './Editor';
-import Comments, { IComment } from './Comments';
 import { v1 as uuidv1 } from 'uuid';
-import { EventEmitter } from 'events';
+
+import Comments, { IComment } from './Comments';
+import { EditorHook } from './Editor';
 const LineWidgets = acequire('ace/line_widgets').LineWidgets;
 
 // Inferred from: https://github.com/ajaxorg/ace/blob/master/lib/ace/ext/error_marker.js#L129

@@ -1,6 +1,7 @@
+import { Range } from 'ace-builds';
 import { createContext, getAllOccurrencesInScope } from 'js-slang';
 import * as React from 'react';
-import { Range } from 'ace-builds';
+
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
