@@ -63,7 +63,33 @@ export const loadSound = (scene: Phaser.Scene, assetKey: AssetKey, assetPath: As
       resolve(assetKey);
     } else {
       scene.load.audio(assetKey, assetPath);
-      scene.load.once(`filecomplete-text-${assetKey}`, resolve);
+      scene.load.once(`filecomplete-sound-${assetKey}`, resolve);
+      scene.load.start();
+    }
+  });
+
+/**
+ * Waits for an spritesheet (with assetkey, assetpath, and config) to load in scene
+ *
+ * @param scene scene where to load this asset
+ * @param assetKey the key to be used
+ * @param assetPath the path to the file
+ * @param config spritesheet config
+ * @returns {Promise} promise that resolves when spritesheet is loaded.
+ */
+export const loadSpritesheet = (
+  scene: Phaser.Scene,
+  assetKey: AssetKey,
+  assetPath: AssetPath,
+  config: any
+) =>
+  new Promise<AssetKey>(resolve => {
+    if (scene.textures.get(assetKey).key !== '__MISSING') {
+      resolve(assetKey);
+    } else {
+      scene.load.spritesheet(assetKey, assetPath, config);
+      scene.load.once(`filecomplete-spritesheet-${assetKey}`, resolve);
+      scene.load.once(`loaderror`, resolve);
       scene.load.start();
     }
   });

@@ -3,7 +3,7 @@ import { GameStateStorage } from '../state/GameStateTypes';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
 import ParserConverter from './ParserConverter';
-import { GameAttr } from './ParserValidator';
+import { GameEntityType } from './ParserValidator';
 
 /**
  * This parser is in charge of parsing conditionals
@@ -23,9 +23,12 @@ export default class ConditionParser {
     const [gameStateStorage, ...condParams] = StringUtils.splitByChar(conditionDetails, '.');
     switch (ParserConverter.stringToGameStateStorage(gameStateStorage)) {
       case GameStateStorage.ChecklistState:
+        Parser.validator.assert(GameEntityType.objectives, condParams[0]);
         return {
           state: GameStateStorage.ChecklistState,
-          conditionParams: { id: Parser.validator.assertAttr(GameAttr.objectives, condParams[0]) },
+          conditionParams: {
+            id: condParams[0]
+          },
           boolean: !hasExclamation
         };
 
@@ -33,7 +36,7 @@ export default class ConditionParser {
         return {
           state: GameStateStorage.UserState,
           conditionParams: {
-            listName: condParams[0],
+            userStateType: ParserConverter.stringToUserStateType(condParams[0]),
             id: condParams[1]
           },
           boolean: !hasExclamation

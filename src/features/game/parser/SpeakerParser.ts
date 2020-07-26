@@ -49,7 +49,7 @@ export default class SpeakerParser {
     if (charId === 'you' || charId === 'narrator') {
       return;
     }
-    const character = Parser.checkpoint.map.getCharacters().get(charId);
+    const character = Parser.checkpoint.map.getCharacterMap().get(charId);
 
     if (!character) {
       throw new Error(`Character "${charId}" not in map`);

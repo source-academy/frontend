@@ -52,7 +52,7 @@ export default class SSObjectManager implements ICheckpointLoggable {
       .setInteractive()
       .setDataEnabled();
     this.getObjectPlacement().input.setDraggable(objectSprite);
-    this.getObjectPlacement().layerManager.addToLayer(Layer.Objects, objectSprite);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.Objects, objectSprite);
 
     this.registerObject(objectAssetKey, objectSprite);
   }

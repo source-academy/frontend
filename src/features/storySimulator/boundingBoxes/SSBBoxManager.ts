@@ -28,30 +28,34 @@ export default class SSBBoxManager implements ICheckpointLoggable {
   }
 
   private addBBoxListeners(objectPlacement: ObjectPlacement) {
-    this.getObjectPlacement().inputManager.registerEventListener('pointerdown', () => {
-      if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox)) {
-        this.bboxBeingDrawn = this.createNewBBox();
-      }
-    });
-
-    this.getObjectPlacement().inputManager.registerEventListener('pointerup', () => {
-      if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) && this.bboxBeingDrawn) {
-        if (this.bboxBeingDrawn.displayWidth <= 2 || this.bboxBeingDrawn.displayHeight <= 2) {
-          this.bboxBeingDrawn.destroy();
-          return;
+    this.getObjectPlacement()
+      .getInputManager()
+      .registerEventListener('pointerdown', () => {
+        if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox)) {
+          this.bboxBeingDrawn = this.createNewBBox();
         }
-        this.bboxBeingDrawn.x += this.bboxBeingDrawn.displayWidth / 2;
-        this.bboxBeingDrawn.y += this.bboxBeingDrawn.displayHeight / 2;
-        this.bboxBeingDrawn.setOrigin(0.5);
-        this.registerBBox(this.bboxBeingDrawn);
+      });
 
-        objectPlacement.input.setDraggable(this.bboxBeingDrawn);
-        this.getObjectPlacement().setActiveSelection(this.bboxBeingDrawn);
+    this.getObjectPlacement()
+      .getInputManager()
+      .registerEventListener('pointerup', () => {
+        if (this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) && this.bboxBeingDrawn) {
+          if (this.bboxBeingDrawn.displayWidth <= 2 || this.bboxBeingDrawn.displayHeight <= 2) {
+            this.bboxBeingDrawn.destroy();
+            return;
+          }
+          this.bboxBeingDrawn.x += this.bboxBeingDrawn.displayWidth / 2;
+          this.bboxBeingDrawn.y += this.bboxBeingDrawn.displayHeight / 2;
+          this.bboxBeingDrawn.setOrigin(0.5);
+          this.registerBBox(this.bboxBeingDrawn);
 
-        this.startingCoordinates = undefined;
-        this.bboxBeingDrawn = undefined;
-      }
-    });
+          objectPlacement.input.setDraggable(this.bboxBeingDrawn);
+          this.getObjectPlacement().setActiveSelection(this.bboxBeingDrawn);
+
+          this.startingCoordinates = undefined;
+          this.bboxBeingDrawn = undefined;
+        }
+      });
   }
 
   private createNewBBox() {
@@ -70,7 +74,7 @@ export default class SSBBoxManager implements ICheckpointLoggable {
       .setDataEnabled();
 
     this.startingCoordinates = [x, y];
-    this.getObjectPlacement().layerManager.addToLayer(Layer.BBox, bboxBeingDrawn);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.BBox, bboxBeingDrawn);
     return bboxBeingDrawn;
   }
 

@@ -1,5 +1,5 @@
 import { IGameActionable } from '../action/GameActionTypes';
-import { AssetKey, TrackInteraction } from '../commons/CommonTypes';
+import { AssetKey, ItemId, TrackInteraction } from '../commons/CommonTypes';
 import GlowingImage from '../effects/GlowingObject';
 
 /**
@@ -28,12 +28,14 @@ export type ObjectLayerProps = {
 
 /**
  * @typedef {ActivatableSprite} - data that represents the object on screen
- * @prop {GlowingImage} sprite - The clickable object sprite which can be made to glow and blink
- * @prop {Function} activate - The function to be called when you want to enable listeners for the object
- * @prop {Void Function} deactivate - The function to be called when you want to disable listeners for an object
+ * @prop {GlowingImage| Phaser.GameObjects.Rectangle} sprite - The clickable object sprite which can be made to glow and blink
+ * @prop {Phaser.GameObjects.Image| Phaser.GameObjects.Rectangle} sprite - The area which can be clicked
+ * @prop {ItemId[]} actionIds - The action ids
+ * @prop {ItemId} interactionId - The interaction id for the sprite
  */
 export type ActivatableSprite = {
   sprite: GlowingImage | Phaser.GameObjects.Rectangle;
-  activate: Function;
-  deactivate: Function;
+  clickArea: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle;
+  actionIds?: ItemId[];
+  interactionId: ItemId;
 };

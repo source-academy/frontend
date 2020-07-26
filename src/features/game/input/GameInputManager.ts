@@ -1,5 +1,3 @@
-import { mandatory } from '../utils/GameUtils';
-
 /**
  * Manager that keeps track of all the event listeners.
  * This manager allow clearing of all listeners at once,
@@ -9,20 +7,15 @@ import { mandatory } from '../utils/GameUtils';
  * if needed.
  */
 class GameInputManager {
-  private scene: Phaser.Scene | undefined;
+  private scene: Phaser.Scene;
   private keyboardListeners: Phaser.Input.Keyboard.Key[];
   private eventListeners: Phaser.Input.InputPlugin[];
 
-  constructor() {
+  constructor(scene: Phaser.Scene) {
     this.keyboardListeners = [];
     this.eventListeners = [];
-  }
-
-  public initialise(scene: Phaser.Scene) {
     this.scene = scene;
   }
-
-  public getScene = () => mandatory(this.scene);
 
   /**
    * Enable/disable mouse input based on the parameter.
@@ -30,7 +23,7 @@ class GameInputManager {
    * @param active if true, mouse input is enabled. Else, mouse input is disabled.
    */
   public enableMouseInput(active: boolean) {
-    this.getScene().input.mouse.enabled = active;
+    this.scene.input.mouse.enabled = active;
   }
 
   /**
@@ -39,7 +32,7 @@ class GameInputManager {
    * @param active if true, keyboard input is enabled. Else, keyboard input is disabled.
    */
   public enableKeyboardInput(active: boolean) {
-    this.getScene().input.keyboard.enabled = active;
+    this.scene.input.keyboard.enabled = active;
   }
 
   /**
@@ -55,7 +48,7 @@ class GameInputManager {
     event: string | symbol,
     callback: Function
   ) {
-    const keyObj = this.getScene().input.keyboard.addKey(key);
+    const keyObj = this.scene.input.keyboard.addKey(key);
     const keyboardListener = keyObj.addListener(event, callback);
     this.keyboardListeners.push(keyboardListener);
   }
@@ -68,7 +61,7 @@ class GameInputManager {
    * @param callback callback to execute on event
    */
   public registerEventListener(event: string | symbol, callback: Function) {
-    const eventListener = this.getScene().input.addListener(event, callback);
+    const eventListener = this.scene.input.addListener(event, callback);
     this.eventListeners.concat(eventListener);
   }
 

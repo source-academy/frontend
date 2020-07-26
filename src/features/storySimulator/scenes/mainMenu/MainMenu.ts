@@ -8,7 +8,7 @@ import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import Parser from 'src/features/game/parser/Parser';
 import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
-import { toS3Path } from 'src/features/game/utils/GameUtils';
+import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
 
 import SSImageAssets from '../../assets/ImageAssets';
@@ -22,18 +22,16 @@ import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
  * functionalities from here.
  */
 class MainMenu extends Phaser.Scene {
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
 
   constructor() {
     super('StorySimulatorMenu');
-    this.layerManager = new GameLayerManager();
-  }
-  public init() {
-    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-    this.layerManager.initialise(this);
   }
 
   public preload() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+    this.layerManager = new GameLayerManager(this);
+
     addLoadingScreen(this);
     Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     Object.values(SSImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
@@ -74,7 +72,7 @@ class MainMenu extends Phaser.Scene {
         )
       )
     );
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
 
   private getOptionButtons() {
@@ -83,7 +81,7 @@ class MainMenu extends Phaser.Scene {
         text: 'Object Placement',
         callback: () => {
           SourceAcademyGame.getInstance().setStorySimState(StorySimState.ObjectPlacement);
-          this.layerManager.clearAllLayers();
+          this.getLayerManager().clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
       },
@@ -126,7 +124,9 @@ class MainMenu extends Phaser.Scene {
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
-    this.layerManager.clearAllLayers();
+
+    this.getLayerManager().clearAllLayers();
+
     Parser.parse(defaultChapterText);
     if (checkpointTxt) {
       Parser.parse(checkpointTxt, true);
@@ -154,9 +154,10 @@ class MainMenu extends Phaser.Scene {
       screenCenter.y,
       SSImageAssets.blueUnderlay.key
     ).setAlpha(0.5);
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
-    this.layerManager.addToLayer(Layer.Background, backgroundUnderlay);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);
   }
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default MainMenu;

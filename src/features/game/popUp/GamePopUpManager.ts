@@ -1,7 +1,7 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
 import { Constants } from '../commons/CommonConstants';
-import { GamePosition, ItemId } from '../commons/CommonTypes';
+import { GamePosition, GameSize, ItemId } from '../commons/CommonTypes';
 import { scrollEntry, scrollExit } from '../effects/ScrollEffect';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -29,11 +29,13 @@ class GamePopUpManager {
    * @param position position of the pop up
    * @param duration duration in which the pop up to be shown. Afterwards, the popup will
    *                 be destroyed.
+   * @param size size of the popup, defaulted to medium.
    */
   public async displayPopUp(
     itemId: ItemId,
     position: GamePosition,
-    duration = Constants.popupDuration
+    duration = Constants.popupDuration,
+    size: GameSize = GameSize.Medium
   ) {
     // Destroy previous pop up if any
     this.destroyPopUp(position);
@@ -45,9 +47,9 @@ class GamePopUpManager {
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position],
-      popUpConstants.rect.y,
+      popUpConstants.rect.y[size],
       ImageAssets.popUpFrame.key
-    );
+    ).setScale(popUpConstants.rect.scale[size]);
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
@@ -57,14 +59,16 @@ class GamePopUpManager {
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
       popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
-      popUpConstants.rect.y + popUpConstants.imgYOffset,
+      popUpConstants.rect.y[size] + popUpConstants.imgYOffset,
       assetKey
     );
-    resizeUnderflow(popUpImage, popUpConstants.rect.width, popUpConstants.rect.height);
+    const newWidth = popUpConstants.rect.width * popUpConstants.rect.scale[size];
+    const newHeight = popUpConstants.rect.height * popUpConstants.rect.scale[size];
+    resizeUnderflow(popUpImage, newWidth, newHeight);
 
     container.add([popUpFrameImg, popUpImage]);
     this.currPopUp.set(position, container);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.PopUp, container);
+    GameGlobalAPI.getInstance().addToLayer(Layer.PopUp, container);
     GameGlobalAPI.getInstance().playSound(SoundAssets.popUpEnter.key);
 
     container.setActive(true);
@@ -114,10 +118,7 @@ class GamePopUpManager {
    * @param itemId item ID
    */
   private getAssetKey(itemId: ItemId) {
-    const objectPropMap = GameGlobalAPI.getInstance()
-      .getGameManager()
-      .getCurrentCheckpoint()
-      .map.getObjects();
+    const objectPropMap = GameGlobalAPI.getInstance().getGameMap().getObjectPropMap();
     const objProp = objectPropMap.get(itemId);
     if (objProp) {
       return objProp.assetKey;

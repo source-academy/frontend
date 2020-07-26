@@ -23,16 +23,18 @@ export default class ActionConditionChecker {
 
   /**
    * Checks whether one action conditions is met
+   * Also stubs the user state
+   *
    * @param conditional The action condition
-   * @returns {Promise<boolean>} True if condition is met
+   * @returns {boolean} True if condition is met
    */
-  private static async checkConditionSatisfied(conditional: ActionCondition) {
+  public static async checkConditionSatisfied(conditional: ActionCondition) {
     const { state, conditionParams, boolean } = conditional;
     switch (state) {
       case GameStateStorage.UserState:
         return (
-          (await GameGlobalAPI.getInstance().existsInUserStateList(
-            conditionParams.listName,
+          (await GameGlobalAPI.getInstance().isInUserState(
+            conditionParams.userStateType,
             conditionParams.id
           )) === boolean
         );

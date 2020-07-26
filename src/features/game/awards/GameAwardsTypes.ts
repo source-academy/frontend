@@ -1,5 +1,4 @@
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
-import { UserStateTypes } from '../state/GameStateTypes';
 
 export enum AwardPage {
   Collectibles = 'Collectibles',
@@ -20,5 +19,4 @@ export type AwardProperty = {
   assetPath: AssetPath;
   title: string;
   description: string;
-  awardType: UserStateTypes;
 };
