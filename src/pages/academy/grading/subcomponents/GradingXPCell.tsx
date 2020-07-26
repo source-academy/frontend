@@ -1,5 +1,6 @@
 import { Position, Tooltip } from '@blueprintjs/core';
 import * as React from 'react';
+
 import { GradingCellProps } from '../../../../features/grading/GradingTypes';
 
 /**

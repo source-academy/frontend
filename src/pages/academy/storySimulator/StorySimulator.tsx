@@ -1,40 +1,73 @@
-import { Button } from '@blueprintjs/core';
-import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
+import { useSelector } from 'react-redux';
+import { OverallState } from 'src/commons/application/ApplicationTypes';
+import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
+import {
+  fetchAssetPaths,
+  obtainTextAssets,
+  s3AssetFolders
+} from 'src/features/storySimulator/StorySimulatorService';
+import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import JsonUpload from './subcomponents/JsonUpload';
-import StoryXmlLoader from './subcomponents/StoryXmlLoader';
+import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
+import StorySimulatorAssetSelection from './subcomponents/StorySimulatorAssetSelection';
+import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
+import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
+import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
-  const handleTest = React.useCallback(() => {
-    window.open('/academy/game');
+  const session = useSelector((state: OverallState) => state.session);
+  const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
+  const [textAssets, setTextAssets] = React.useState<string[]>([]);
+
+  const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
+
+  React.useEffect(() => {
+    createStorySimulatorGame().setStorySimStateSetter(setStorySimState);
   }, []);
 
+  React.useEffect(() => {
+    (async () => {
+      SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
+      const paths = await fetchAssetPaths(s3AssetFolders);
+      setAssetPaths(paths);
+      setTextAssets(obtainTextAssets(paths));
+    })();
+  }, [session]);
+
   return (
-    <div className="ContentDisplay row center-xs ">
-      <div className="col-xs-10 contentdisplay-content-parent">
-        <div className="WhiteBackground VerticalStack">
-          <h2>Story Simulator</h2>
-
-          <div className="Horizontal">
-            <div className="Column">
-              <StoryXmlLoader />
-            </div>
-            <div className="Column">
-              <JsonUpload />
-            </div>
-          </div>
-
-          <div>
-            <h3>XML to be loaded</h3>
-            {'mission-1'}
-          </div>
-          <Button icon={IconNames.MOUNTAIN} onClick={handleTest}>
-            <div className="ag-grid-button-text hidden-xs">Play Story</div>
-          </Button>
+    <>
+      <div className="StorySimulatorWrapper">
+        <div id="game-display" />
+        <div className="LeftAlign StorySimulatorPanel">
+          {storySimState === StorySimState.Default && (
+            <>
+              <h3>Welcome to story simulator!</h3>
+            </>
+          )}
+          {storySimState === StorySimState.CheckpointSim && (
+            <StorySimulatorCheckpointSim textAssets={textAssets} />
+          )}
+          {storySimState === StorySimState.ObjectPlacement && (
+            <>
+              <h3>Asset Selection</h3>
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
+            </>
+          )}
+          {storySimState === StorySimState.AssetUploader && (
+            <>
+              <h3>Asset uploader</h3>
+              <StorySimulatorAssetFileUploader />
+              <h3>Asset Viewer</h3>
+              <StorySimulatorAssetSelection assetPaths={assetPaths} />
+            </>
+          )}
+          {storySimState === StorySimState.ChapterSim && (
+            <StorySimulatorChapterSim textAssets={textAssets} />
+          )}
         </div>
       </div>
-    </div>
+    </>
   );
 }
 

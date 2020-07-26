@@ -78,3 +78,10 @@
     margin-top: 10px;
   }
 }
+
+.Centered {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-evenly;
+}

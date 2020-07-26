@@ -1,9 +1,8 @@
 import { Context, IOptions, Result, resume, runInContext } from 'js-slang';
+import createContext from 'js-slang/dist/createContext';
 import { ErrorSeverity, ErrorType, Finished, SourceError, Variant } from 'js-slang/dist/types';
 import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
-
-import createContext from 'js-slang/dist/createContext';
 
 import {
   beginInterruptExecution,

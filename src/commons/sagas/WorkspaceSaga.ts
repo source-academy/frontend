@@ -16,6 +16,7 @@ import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
+import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
 import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
@@ -49,6 +50,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
@@ -478,7 +480,10 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = { runes: {} };
+    action.payload.library.moduleParams = {
+      runes: {},
+      phaser: Phaser
+    };
     yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
     yield undefined;
   });
@@ -670,7 +675,7 @@ export function* evalCode(
     const oldErrors = context.errors;
     context.errors = [];
     const parsed = parse(code, context);
-    const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context))[1];
+    const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
 
     // report infinite loops but only for 'vanilla'/default source
@@ -702,6 +707,11 @@ export function* evalCode(
   // Do not write interpreter output to REPL, if executing chunks (e.g. prepend/postpend blocks)
   if (actionType !== EVAL_SILENT) {
     yield put(actions.evalInterpreterSuccess(result.value, workspaceLocation));
+  }
+
+  // For EVAL_EDITOR and EVAL_REPL, we send notification to workspace that a program has been evaluated
+  if (actionType === EVAL_EDITOR || actionType === EVAL_REPL) {
+    yield put(notifyProgramEvaluated(result, lastDebuggerResult, code, context, workspaceLocation));
   }
 
   /** If successful, then continue to run all testcases IFF evalCode was triggered from

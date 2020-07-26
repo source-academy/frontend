@@ -32,7 +32,7 @@ import { ManageQuestionTab } from '../editingWorkspaceSideContent/EditingWorkspa
 import { MCQQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentMcqQuestionTemplateTab';
 import { ProgrammingQuestionTemplateTab } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentProgrammingQuestionTemplateTab';
 import { TextAreaContent } from '../editingWorkspaceSideContent/EditingWorkspaceSideContentTextAreaContent';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
@@ -90,7 +90,7 @@ export type StateProps = {
   editorValue: string | null;
   editorWidth: string;
   breakpoints: string[];
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   hasUnsavedChanges: boolean;
   isRunning: boolean;
   isDebugging: boolean;
@@ -459,13 +459,15 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorQuestionOverview
+          id: SideContentType.editorQuestionOverview,
+          toSpawn: () => true
         },
         {
           label: `Question Template`,
           iconName: IconNames.DOCUMENT,
           body: questionTemplateTab,
-          id: SideContentType.editorQuestionTemplate
+          id: SideContentType.editorQuestionTemplate,
+          toSpawn: () => true
         },
         {
           label: `Manage Local Deployment`,
@@ -480,7 +482,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalDeployment
+          id: SideContentType.editorLocalDeployment,
+          toSpawn: () => true
         },
         {
           label: `Manage Local Grader Deployment`,
@@ -496,7 +499,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorLocalGraderDeployment
+          id: SideContentType.editorLocalGraderDeployment,
+          toSpawn: () => true
         },
         {
           label: `Grading`,
@@ -508,7 +512,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorGrading
+          id: SideContentType.editorGrading,
+          toSpawn: () => true
         }
       ];
       if (qnType === 'programming') {
@@ -523,7 +528,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorAutograder
+          id: SideContentType.editorAutograder,
+          toSpawn: () => true
         });
       }
       const functionsAttached = assessment!.globalDeployment!.external.symbols;
@@ -532,7 +538,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
           label: `Tone Matrix`,
           iconName: IconNames.GRID_VIEW,
           body: <SideContentToneMatrix />,
-          id: SideContentType.toneMatrix
+          id: SideContentType.toneMatrix,
+          toSpawn: () => true
         });
       }
     } else {
@@ -547,7 +554,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateEditAssessmentState}
             />
           ),
-          id: SideContentType.editorBriefing
+          id: SideContentType.editorBriefing,
+          toSpawn: () => true
         },
         {
           label: `Manage Question`,
@@ -560,7 +568,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               updateAssessment={this.updateAndSaveAssessment}
             />
           ),
-          id: SideContentType.editorManageQuestion
+          id: SideContentType.editorManageQuestion,
+          toSpawn: () => true
         },
         {
           label: `Manage Global Deployment`,
@@ -575,7 +584,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={false}
             />
           ),
-          id: SideContentType.editorGlobalDeployment
+          id: SideContentType.editorGlobalDeployment,
+          toSpawn: () => true
         },
         {
           label: `Manage Global Grader Deployment`,
@@ -590,7 +600,8 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
               isOptionalDeployment={true}
             />
           ),
-          id: SideContentType.editorGlobalGraderDeployment
+          id: SideContentType.editorGlobalGraderDeployment,
+          toSpawn: () => true
         }
       ];
     }

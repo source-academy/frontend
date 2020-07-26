@@ -1,11 +1,11 @@
+import 'ace-builds/src-noconflict/ext-searchbox';
+import 'ace-builds/src-noconflict/mode-javascript';
+import 'js-slang/dist/editors/ace/theme/source';
+
 import { isEqual } from 'lodash';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
-
-import 'ace-builds/src-noconflict/ext-searchbox';
-import 'ace-builds/src-noconflict/mode-javascript';
-import 'js-slang/dist/editors/ace/theme/source';
 
 import {
   CodeDelta,
@@ -13,7 +13,7 @@ import {
   KeyboardCommand,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
-import { Position } from '../editor/EditorTypes';
+import { HighlightedLines, Position } from '../editor/EditorTypes';
 
 /**
  * @property editorValue - The string content of the react-ace editor
@@ -43,7 +43,7 @@ type StateProps = {
   editorReadonly?: boolean;
   editorSessionId: string;
   editorValue: string;
-  highlightedLines: number[][];
+  highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   inputToApply?: Input | null;
   isPlaying?: boolean;

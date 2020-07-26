@@ -4,14 +4,7 @@
     "outDir": "build/dist",
     "module": "esnext",
     "target": "es2016",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext",
-      "es6",
-      "es2015",
-      "es2017"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext", "es6", "es2015", "es2017"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
@@ -32,10 +25,6 @@
     "isolatedModules": true,
     "noEmit": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/setupTests.ts"
-  ]
+  "include": ["src"],
+  "exclude": ["src/setupTests.ts"]
 }
