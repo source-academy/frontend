@@ -1,5 +1,4 @@
 import * as Sentry from '@sentry/browser';
-
 import { Context, NativeStorage, SourceError } from 'js-slang/dist/types';
 
 /**
