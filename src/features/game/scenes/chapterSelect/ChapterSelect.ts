@@ -5,7 +5,6 @@ import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
-import { FullSaveState } from '../../save/GameSaveTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { loadImage } from '../../utils/LoaderUtils';
@@ -21,7 +20,6 @@ class ChapterSelect extends Phaser.Scene {
 
   private chapterContainer: Phaser.GameObjects.Container | undefined;
   private backButtonContainer: Phaser.GameObjects.Container | undefined;
-  private loadedGameState: FullSaveState | undefined;
   private autoScrolling: boolean;
   private isScrollLeft: boolean;
   private isScrollRight: boolean;
@@ -171,12 +169,7 @@ class ChapterSelect extends Phaser.Scene {
     const chapterContainer = new Phaser.GameObjects.Container(this, 0, 0);
     chapterContainer.add(
       this.getGameChapters().map((chapterDetail, chapterIndex) => {
-        // Use latest checkpoint if it exist
-        let lastCheckpoint = 0;
-        if (this.loadedGameState && this.loadedGameState.gameSaveStates[chapterIndex]) {
-          lastCheckpoint = this.loadedGameState.gameSaveStates[chapterIndex].lastCheckpointPlayed;
-        }
-        return createChapter(this, chapterDetail, chapterIndex, lastCheckpoint);
+        return createChapter(this, chapterDetail, chapterIndex);
       })
     );
     return chapterContainer;

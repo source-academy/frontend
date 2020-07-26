@@ -12,13 +12,8 @@ export default class GameActionExecuter {
    * Executes the game action based on given type and parameters
    * @param actionType the type of action that will be executed
    * @param actionParams an object containing all the parameters
-   * @param fastForward whether or not some actions will play
    */
-  public static async executeGameAction(
-    actionType: GameActionType,
-    actionParams: any,
-    fastForward?: boolean
-  ) {
+  public static async executeGameAction(actionType: GameActionType, actionParams: any) {
     const globalAPI = GameGlobalAPI.getInstance();
 
     switch (actionType) {
@@ -40,11 +35,6 @@ export default class GameActionExecuter {
       case GameActionType.UpdateCharacter:
         globalAPI.updateCharacter(actionParams.id, actionParams.expression);
         return;
-    }
-
-    if (fastForward) return;
-
-    switch (actionType) {
       case GameActionType.LocationChange:
         await globalAPI.changeLocationTo(actionParams.id);
         return;
@@ -85,6 +75,36 @@ export default class GameActionExecuter {
         return;
       default:
         return;
+    }
+  }
+
+  /**
+   * Determines if action is state change action type
+   * State-change actions are replayed at the start of every game
+   *
+   * @param actionType - the type of action
+   */
+  public static isStateChangeAction(actionType: GameActionType) {
+    switch (actionType) {
+      case GameActionType.AddItem:
+      case GameActionType.RemoveItem:
+      case GameActionType.AddLocationMode:
+      case GameActionType.RemoveLocationMode:
+      case GameActionType.MoveCharacter:
+      case GameActionType.UpdateCharacter:
+        return true;
+      case GameActionType.LocationChange:
+      case GameActionType.ChangeBackground:
+      case GameActionType.ObtainCollectible:
+      case GameActionType.CompleteObjective:
+      case GameActionType.ShowDialogue:
+      case GameActionType.AddPopup:
+      case GameActionType.MakeObjectBlink:
+      case GameActionType.MakeObjectGlow:
+      case GameActionType.PlayBGM:
+      case GameActionType.PlaySFX:
+      case GameActionType.ShowObjectLayer:
+        return false;
     }
   }
 }

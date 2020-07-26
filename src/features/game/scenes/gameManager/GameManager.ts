@@ -115,10 +115,6 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    // Execute fast forward actions
-    await this.getActionManager().fastForwardGameActions(
-      this.getStateManager().getTriggeredActions()
-    );
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
@@ -148,20 +144,26 @@ class GameManager extends Phaser.Scene {
     this.getBBoxManager().renderBBoxLayerContainer(locationId);
     this.getCharacterManager().renderCharacterLayerContainer(locationId);
 
-    // Execute start actions, notif, then cutscene
     await this.getPhaseManager().swapPhase(GamePhaseType.Sequence);
 
     if (startAction) {
+      // Execute fast forward actions
+      await this.getActionManager().fastForwardGameActions(
+        this.getStateManager().getTriggeredActions()
+      );
+      // Game start actions
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getGameStartActions()
       );
     }
 
+    // Location notification
     if (this.getStateManager().hasLocationNotif(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
       this.getStateManager().removeLocationNotif(locationId);
     }
 
+    // Location cutscene
     await this.getActionManager().processGameActions(gameLocation.actionIds);
     await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
   }

@@ -21,7 +21,7 @@ export type FullSaveState = {
  */
 export type GameSaveState = {
   lastCheckpointPlayed: number;
-  currentLocation: string;
+  currentLocation: string | undefined;
   currentPhase: string;
 
   completedObjectives: string[];

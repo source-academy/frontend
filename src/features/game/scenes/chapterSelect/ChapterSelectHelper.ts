@@ -32,8 +32,7 @@ import chapConstants, {
 export function createChapter(
   scene: ChapterSelect,
   { title, imageUrl }: GameChapter,
-  index: number,
-  lastCheckpointsIdx: number
+  index: number
 ) {
   const [x, y] = getCoorByChapter(index);
   const chapterContainer = new Phaser.GameObjects.Container(scene, x, y);
@@ -80,9 +79,13 @@ export function createChapter(
     }
   }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
 
+  const lastCheckpointPlayed = SourceAcademyGame.getInstance()
+    .getSaveManager()
+    .getChapterSaveState(index).lastCheckpointPlayed;
+
   const chapterContinue = createButton(scene, {
     assetKey: ImageAssets.chapterContinueButton.key,
-    onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointsIdx),
+    onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointPlayed),
     onHover: () => chapterContinueHover.setVisible(true),
     onOut: () => chapterContinueHover.setVisible(false),
     onPointerMove: (pointer: Phaser.Input.Pointer) => {

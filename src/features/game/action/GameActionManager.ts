@@ -11,7 +11,6 @@ import { ActionCondition } from './GameActionTypes';
 export default class GameActionManager {
   /**
    * Process an array of actions, denoted by their IDs,
-   * but only replays those actions that have no visible effects
    *
    * @param actionIds ids of the actions
    */
@@ -19,7 +18,7 @@ export default class GameActionManager {
     if (!actionIds) return;
     for (const actionId of actionIds) {
       const { actionType, actionParams } = GameGlobalAPI.getInstance().getActionById(actionId);
-      await GameActionExecuter.executeGameAction(actionType, actionParams, true);
+      await GameActionExecuter.executeGameAction(actionType, actionParams);
     }
   }
 
@@ -54,8 +53,10 @@ export default class GameActionManager {
 
     if (await this.checkCanPlayAction(isRepeatable, interactionId, actionConditions)) {
       await GameActionExecuter.executeGameAction(actionType, actionParams);
+      if (GameActionExecuter.isStateChangeAction(actionType)) {
+        GameGlobalAPI.getInstance().triggerAction(actionId);
+      }
       GameGlobalAPI.getInstance().triggerInteraction(actionId);
-      GameGlobalAPI.getInstance().triggerAction(actionId);
     }
   }
 

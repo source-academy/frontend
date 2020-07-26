@@ -1,6 +1,7 @@
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { FullSaveState } from './GameSaveTypes';
+import { FullSaveState, GameSaveState } from './GameSaveTypes';
 
 /**
  * Function that saves game data as a 'snapshot' in FullSaveState
@@ -43,7 +44,7 @@ export function gameStateToJson(
 }
 
 /**
- * Function to create an empty save state
+ * Function to create an empty full save state
  * Used for resetting game data of students
  *
  * @returns {FullSaveState} - an empty save state for starting players
@@ -57,6 +58,23 @@ export const createEmptySaveState = (): FullSaveState => {
       recentlyPlayedCheckpoint: [-1, -1],
       largestCompletedChapter: -1
     }
+  };
+};
+
+/**
+ * Function to create an empty game save state
+ * Used for resetting game data of students
+ *
+ * @returns {GameSaveState} - an empty save state for starting the game
+ */
+export const createEmptyGameSaveState = (): GameSaveState => {
+  return {
+    lastCheckpointPlayed: 0,
+    currentLocation: undefined,
+    currentPhase: GamePhaseType.Menu,
+    completedObjectives: [],
+    triggeredInteractions: [],
+    triggeredActions: []
   };
 };
 

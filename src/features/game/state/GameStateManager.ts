@@ -173,23 +173,27 @@ class GameStateManager {
   }
 
   /**
-   * Add a mode to a location.
+   * Add a mode to a location. If this is not the current location,
+   * then add a notification.
    *
    * @param locationId location ID
    * @param mode game mode to add
    */
   public addLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.add(mode);
+    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
   }
 
   /**
-   * Remove a mode from a location.
+   * Remove a mode from a location. If this is not the current location,
+   * then add a notification.
    *
    * @param locationId location ID
    * @param mode game mode to remove
    */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.delete(mode);
+    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
   }
 
   ///////////////////////////////
