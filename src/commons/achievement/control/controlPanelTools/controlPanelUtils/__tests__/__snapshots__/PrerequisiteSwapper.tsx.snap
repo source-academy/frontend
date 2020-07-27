@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`PrerequisiteSwapper component renders correctly 1`] = `
+"<PrerequisiteSwapper prerequisiteIdDs={{...}} inferencer={{...}} setDialogOpen={[Function: setDialogOpen]} isDialogOpen={false} swapPrerequisitePositionAction={[Function: swapPrerequisitePositionAction]} firstID={2} setFirstID={[Function: setFirstID]} secondID={1} setSecondID={[Function: setSecondID]}>
+  <Blueprint3.Dialog onClose={[Function: setDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true}>
+    <Blueprint3.Overlay onClose={[Function: setDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+  </Blueprint3.Dialog>
+</PrerequisiteSwapper>"
+`;

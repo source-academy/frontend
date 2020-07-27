@@ -1,6 +1,7 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
+import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import {
   editAchievement,
@@ -9,7 +10,6 @@ import {
   removeGoal,
   saveAchievements
 } from '../../../features/achievement/AchievementActions';
-import AchievementInferencer from '../dashboard/subcomponents/utils/AchievementInferencer';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({

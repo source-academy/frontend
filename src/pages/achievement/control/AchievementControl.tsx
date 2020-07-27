@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
+import AchievementControlPanel from '../../../commons/achievement/control/AchievementControlPanel';
+import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
+import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
-import AchievementInferencer from '../dashboard/subcomponents/utils/AchievementInferencer';
-import AchievementControlPanel from './subcomponents/AchievementControlPanel';
-import AchievementEditor from './subcomponents/AchievementEditor';
 
 export type DispatchProps = {
   handleFetchAchievements: () => void;

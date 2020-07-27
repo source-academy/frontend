@@ -3,7 +3,7 @@ import { Redirect, Route, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
 import AchievementControl from './control/AchievementControlContainer';
-import Dashboard from './dashboard/DashboardContainer';
+import AchievementDashboard from './subcomponents/AchievementDashboardContainer';
 
 export type DispatchProps = {};
 
@@ -23,7 +23,7 @@ function Achievement(props: AchievementProps) {
 
   return (
     <Switch>
-      <Route exact={true} path="/achievement" component={Dashboard}></Route>
+      <Route exact={true} path="/achievement" component={AchievementDashboard}></Route>
       <Route path="/achievement/control" component={toAchievementControl}></Route>
       <Route component={redirectTo404} />
     </Switch>
