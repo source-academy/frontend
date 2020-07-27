@@ -179,9 +179,50 @@ class AssessmentWorkspace extends React.Component<
 
   // TODO: Implemenet THis for Keystroke Logging!
   public uploadLogs = () => {
-    if (this.state.logs && this.state.logs.length > 0) {
-      console.log(this.state.logs);
+    if (this.state.payload && this.state.payload.length > 0) {
+      console.log(this.state.payload);
+      this.setState({ logs: [], payload: [] });
+    }
+  };
+
+  public convertLogsToPayload = () => {
+    const logsCopy = this.state.logs;
+
+    if (logsCopy.length === 0) {
+      return;
+    }
+
+    console.log(logsCopy);
+    const firstLog = logsCopy[0];
+
+    if (firstLog.type === 'cursorPositionChange') {
       this.setState({ logs: [] });
+      return;
+    }
+
+    if (firstLog.type === 'codeDelta') {
+      const actionToBeUploaded = {
+        LogType: firstLog.data.action,
+        ActionCount: 0,
+        Content: '',
+        Time: 0
+      };
+
+      for (let i = 0; i < logsCopy.length; i += 2) {
+        const nextLogData = logsCopy[i];
+
+        if (nextLogData.type === 'codeDelta') {
+          const lines = nextLogData.data.lines.reduce((x, y) => x + '\n' + y);
+          actionToBeUploaded.Content += lines;
+          actionToBeUploaded.ActionCount++;
+          actionToBeUploaded.Time = nextLogData.time;
+        }
+      }
+
+      const payloadCopy = this.state.payload;
+
+      payloadCopy.push(actionToBeUploaded);
+      this.setState({ logs: [], payload: payloadCopy });
     }
   };
 
@@ -247,45 +288,6 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
-    const convertLogsToPayload = () => {
-      const logsCopy = this.state.logs;
-
-      if (logsCopy.length === 0) {
-        return;
-      }
-
-      console.log(logsCopy);
-      const firstLog = logsCopy[0];
-
-      if (firstLog.type === 'cursorPositionChange') {
-        this.setState({ logs: [] });
-        return;
-      }
-
-      if (firstLog.type === 'codeDelta') {
-        const actionToBeUploaded = {
-          LogType: firstLog.data.action,
-          ActionCount: 0,
-          Content: '',
-          Time: 0
-        };
-
-        for (let i = 0; i < logsCopy.length; i += 2) {
-          const nextLogData = logsCopy[i];
-
-          if (nextLogData.type === 'codeDelta') {
-            const lines = nextLogData.data.lines.reduce((x, y) => x + '\n' + y);
-            actionToBeUploaded.Content += lines;
-            actionToBeUploaded.ActionCount++;
-            actionToBeUploaded.Time = nextLogData.time;
-          }
-        }
-
-        console.log(actionToBeUploaded);
-        this.setState({ logs: [] });
-      }
-    };
-
     // TODO: Add Handler to Save key stroke
     const onChangeMethod = (newCode: string, delta: CodeDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
@@ -307,7 +309,7 @@ class AssessmentWorkspace extends React.Component<
         this.setState({ logs: logsCopy, lastPosition: delta.end });
 
         if (delta.start.row !== delta.end.row) {
-          convertLogsToPayload();
+          this.convertLogsToPayload();
         }
       }
     };
@@ -326,7 +328,7 @@ class AssessmentWorkspace extends React.Component<
           logsCopy.length === 0 ||
           logsCopy[logsCopy.length - 1].type === 'cursorPositionChange'
         ) {
-          convertLogsToPayload();
+          this.convertLogsToPayload();
           return;
         }
 
