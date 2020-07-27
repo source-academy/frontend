@@ -1,8 +1,17 @@
-import { Button, Classes, Dialog, IButtonProps, IDialogProps, Intent } from '@blueprintjs/core';
+import {
+  Button,
+  Classes,
+  Dialog,
+  IButtonProps,
+  IconName,
+  IDialogProps,
+  Intent
+} from '@blueprintjs/core';
 import classNames from 'classnames';
 import * as React from 'react';
 
 export interface ConfirmDialogProps<T> {
+  icon?: IconName;
   title?: string;
   contents?: React.ReactNode;
   choices: Array<{ key: T; label: string; intent?: Intent; props?: IButtonProps }>;
@@ -10,7 +19,7 @@ export interface ConfirmDialogProps<T> {
   escapeResponse?: T;
   onResponse: (response: T) => void;
   isOpen?: boolean;
-  props?: IDialogProps;
+  props?: Omit<IDialogProps, 'isOpen'>;
 }
 
 export function ConfirmDialog<T>(
@@ -41,6 +50,7 @@ export function ConfirmDialog<T>(
       canEscapeKeyClose={!!escapeHandler}
       onClose={escapeHandler}
       isOpen={props.isOpen}
+      icon={props.icon}
       {...props.props}
     >
       <div className={Classes.DIALOG_BODY}>{props.contents}</div>
