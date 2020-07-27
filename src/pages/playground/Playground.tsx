@@ -45,6 +45,7 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFetchSublanguage: () => void;
   handleFinishInvite: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
@@ -106,6 +107,16 @@ export type StateProps = {
 const keyMap = { goGreen: 'h u l k' };
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const { handleFetchSublanguage } = props;
+
+  React.useEffect(() => {
+    // Only fetch default Playground sublanguage when not loaded via a share link
+    if (props.location.hash === '') {
+      handleFetchSublanguage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
