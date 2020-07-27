@@ -17,32 +17,31 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
-  const [viewData, setViewData] = useState<AchievementViewItem>(view);
-
-  const { canvasUrl, description, completionText } = viewData;
-
   const setDescription = (newDescription: string) => {
-    setViewData({
-      ...viewData,
-      description: newDescription
-    });
-    changeView(viewData);
+    const newView = {
+      description: newDescription,
+      canvasUrl: view.canvasUrl,
+      completionText: view.completionText
+    };
+    changeView(newView);
   };
 
   const setCompletionText = (newCompletionText: string) => {
-    setViewData({
-      ...viewData,
+    const newView = {
+      description: view.description,
+      canvasUrl: view.canvasUrl,
       completionText: newCompletionText
-    });
-    changeView(viewData);
+    };
+    changeView(newView);
   };
 
   const setCanvasUrl = (newCanvasUrl: string) => {
-    setViewData({
-      ...viewData,
-      canvasUrl: newCanvasUrl
-    });
-    changeView(viewData);
+    const newView = {
+      description: view.description,
+      canvasUrl: newCanvasUrl,
+      completionText: view.completionText
+    };
+    changeView(newView);
   };
 
   return (
@@ -60,9 +59,16 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
           <Card className="background-card">
             <h1>{title} </h1>
 
-            <EditableViewImage canvasUrl={canvasUrl} title={title} setCanvasUrl={setCanvasUrl} />
-            <EditableViewDescription description={description} setDescription={setDescription} />
-            <EditableViewText goalText={completionText} setGoalText={setCompletionText} />
+            <EditableViewImage
+              canvasUrl={view.canvasUrl}
+              title={title}
+              setCanvasUrl={setCanvasUrl}
+            />
+            <EditableViewDescription
+              description={view.description}
+              setDescription={setDescription}
+            />
+            <EditableViewText goalText={view.completionText} setGoalText={setCompletionText} />
           </Card>
         </div>
       </Dialog>

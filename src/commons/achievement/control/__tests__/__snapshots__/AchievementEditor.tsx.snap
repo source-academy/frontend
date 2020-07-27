@@ -9,7 +9,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Rune Master\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Rune Master\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -222,7 +222,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Beyond the Second Dimension\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Beyond the Second Dimension\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -435,7 +435,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Colorful Carpet\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Colorful Carpet\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -648,7 +648,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Unpublished\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Unpublished\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -861,7 +861,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Curve Wizard\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Curve Wizard\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -1074,7 +1074,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Curve Introduction\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Curve Introduction\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -1287,7 +1287,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Curve Manipulation\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Curve Manipulation\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -1500,7 +1500,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"The Source-rer\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"The Source-rer\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -1713,7 +1713,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Power of Friendship\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Power of Friendship\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -1926,7 +1926,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Piazza Guru\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Piazza Guru\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -2139,7 +2139,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"That\\\\'s the Spirit\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"That\\\\'s the Spirit\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -2352,7 +2352,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Kool Kidz\\" view={{...}} changeView={[Function: handleChangeVoew]}>
+                <EditableAchievementView title=\\"Kool Kidz\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>

@@ -154,7 +154,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handleChangeVoew = (view: AchievementViewItem) => {
+  const handleChangeView = (view: AchievementViewItem) => {
     setEditableAchievement({
       ...editableAchievement,
       view: view
@@ -170,7 +170,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       }}
     >
       <div className="top-bar">
-        <EditableAchievementView title={title} view={view} changeView={handleChangeVoew} />
+        <EditableAchievementView title={title} view={view} changeView={handleChangeView} />
 
         <AchievementUploader
           hasChanges={hasChanges}
