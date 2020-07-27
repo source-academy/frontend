@@ -25,15 +25,16 @@ export function obtainTextAssets(assetPaths: string[]) {
     );
 }
 
+export const fetchTextAssets = async () => obtainTextAssets(await fetchFolder('stories'));
+
 /**
  * Request to fetches assets from all S3 folders
  *
- * @param folders - S3 folders to fetch from
  * @returns {Promise<string[]>} - full concatenated list of files in the given S3 folders
  */
-export async function fetchAssetPaths(folders: string[]) {
+export async function fetchAssetPaths(): Promise<string[]> {
   const files = await Promise.all(
-    folders.map(async folderName => {
+    s3AssetFolders.map(async folderName => {
       const files = await fetchFolder(folderName);
       return files.length ? files : [`${folderName}`];
     })

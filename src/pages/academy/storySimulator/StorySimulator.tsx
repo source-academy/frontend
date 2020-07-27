@@ -2,11 +2,6 @@ import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
 import SourceAcademyGame, { AccountInfo } from 'src/features/game/SourceAcademyGame';
-import {
-  fetchAssetPaths,
-  obtainTextAssets,
-  s3AssetFolders
-} from 'src/features/storySimulator/StorySimulatorService';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
 import StorySimulatorAssetFileUploader from './subcomponents/StorySimulatorAssetFileUploader';
@@ -17,9 +12,6 @@ import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
-  const [assetPaths, setAssetPaths] = React.useState<string[]>([]);
-  const [textAssets, setTextAssets] = React.useState<string[]>([]);
-
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);
 
   React.useEffect(() => {
@@ -27,12 +19,7 @@ function StorySimulator() {
   }, []);
 
   React.useEffect(() => {
-    (async () => {
-      SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
-      const paths = await fetchAssetPaths(s3AssetFolders);
-      setAssetPaths(paths);
-      setTextAssets(obtainTextAssets(paths));
-    })();
+    SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
   }, [session]);
 
   return (
@@ -45,13 +32,11 @@ function StorySimulator() {
               <h3>Welcome to story simulator!</h3>
             </>
           )}
-          {storySimState === StorySimState.CheckpointSim && (
-            <StorySimulatorCheckpointSim textAssets={textAssets} />
-          )}
+          {storySimState === StorySimState.CheckpointSim && <StorySimulatorCheckpointSim />}
           {storySimState === StorySimState.ObjectPlacement && (
             <>
               <h3>Asset Selection</h3>
-              <StorySimulatorAssetSelection assetPaths={assetPaths} />
+              <StorySimulatorAssetSelection />
             </>
           )}
           {storySimState === StorySimState.AssetUploader && (
@@ -59,12 +44,10 @@ function StorySimulator() {
               <h3>Asset uploader</h3>
               <StorySimulatorAssetFileUploader />
               <h3>Asset Viewer</h3>
-              <StorySimulatorAssetSelection assetPaths={assetPaths} />
+              <StorySimulatorAssetSelection />
             </>
           )}
-          {storySimState === StorySimState.ChapterSim && (
-            <StorySimulatorChapterSim textAssets={textAssets} />
-          )}
+          {storySimState === StorySimState.ChapterSim && <StorySimulatorChapterSim />}
         </div>
       </div>
     </>

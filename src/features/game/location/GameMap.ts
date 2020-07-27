@@ -4,7 +4,7 @@ import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../character/GameCharacterTypes';
 import { AssetKey, AssetPath, ItemId } from '../commons/CommonTypes';
 import { Dialogue } from '../dialogue/GameDialogueTypes';
-import { GameLocation, GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, GameLocation, LocationId } from '../location/GameMapTypes';
 import { GameMode } from '../mode/GameModeTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import { mandatory } from '../utils/GameUtils';
@@ -30,7 +30,7 @@ class GameMap {
   private mapAssets: Map<AssetKey, AssetPath>;
 
   private locations: Map<LocationId, GameLocation>;
-  private talkTopics: Map<ItemId, Dialogue>;
+  private dialogues: Map<ItemId, Dialogue>;
   private objects: Map<ItemId, ObjectProperty>;
   private boundingBoxes: Map<ItemId, BBoxProperty>;
   private characters: Map<ItemId, Character>;
@@ -43,11 +43,12 @@ class GameMap {
     this.mapAssets = new Map<AssetKey, AssetPath>();
 
     this.locations = new Map<LocationId, GameLocation>();
-    this.talkTopics = new Map<ItemId, Dialogue>();
+    this.dialogues = new Map<ItemId, Dialogue>();
     this.objects = new Map<ItemId, ObjectProperty>();
     this.boundingBoxes = new Map<ItemId, BBoxProperty>();
     this.characters = new Map<ItemId, Character>();
     this.actions = new Map<ItemId, GameAction>();
+
     this.gameStartActions = [];
     this.checkpointCompleteActions = [];
   }
@@ -88,11 +89,11 @@ class GameMap {
     this.checkpointCompleteActions = actionIds;
   }
 
-  public getStartActions() {
+  public getGameStartActions() {
     return this.gameStartActions;
   }
 
-  public getEndActions() {
+  public getCheckpointCompleteActions() {
     return this.checkpointCompleteActions;
   }
 
@@ -100,23 +101,23 @@ class GameMap {
     return this.locations;
   }
 
-  public getObjects(): Map<ItemId, ObjectProperty> {
+  public getObjectPropMap(): Map<ItemId, ObjectProperty> {
     return this.objects;
   }
 
-  public getBBoxes(): Map<ItemId, BBoxProperty> {
+  public getBBoxPropMap(): Map<ItemId, BBoxProperty> {
     return this.boundingBoxes;
   }
 
-  public getDialogues(): Map<ItemId, Dialogue> {
-    return this.talkTopics;
+  public getDialogueMap(): Map<ItemId, Dialogue> {
+    return this.dialogues;
   }
 
-  public getCharacters(): Map<ItemId, Character> {
+  public getCharacterMap(): Map<ItemId, Character> {
     return this.characters;
   }
 
-  public getActions(): Map<ItemId, GameAction> {
+  public getActionMap(): Map<ItemId, GameAction> {
     return this.actions;
   }
 
@@ -124,22 +125,24 @@ class GameMap {
     return this.soundAssets;
   }
 
-  public addItemToMap<T>(listName: GameLocationAttr, itemId: string, item: T) {
-    this[listName].set(itemId, item);
+  public setItemInMap(gameItemType: GameItemType, itemId: string, item: any) {
+    this[gameItemType].set(itemId, item);
   }
 
-  public setItemAt<T>(locId: LocationId, listName: GameLocationAttr, itemId: string) {
-    const location = this.getLocationAtId(locId);
-    location[listName].add(itemId);
+  public addItemToLocation(locId: LocationId, gameItemType: GameItemType, itemId: string) {
+    this.getLocationAtId(locId)[gameItemType].add(itemId);
   }
 
   public setBGMusicAt(locId: LocationId, soundKey: AssetKey) {
-    const location = this.getLocationAtId(locId);
-    location.bgmKey = soundKey;
+    this.getLocationAtId(locId).bgmKey = soundKey;
   }
 
   public getLocationAtId = (locId: LocationId) =>
     mandatory(this.locations.get(locId), `Location ${locId} was not found!`);
+
+  public getLocationIds(): LocationId[] {
+    return Array.from(this.locations.keys());
+  }
 }
 
 export default GameMap;

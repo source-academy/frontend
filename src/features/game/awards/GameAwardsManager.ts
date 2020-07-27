@@ -4,15 +4,11 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
-import GameLayerManager from '../layer/GameLayerManager';
 import { Layer } from '../layer/GameLayerTypes';
-import GamePhaseManager from '../phase/GamePhaseManager';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
-import { UserStateTypes } from '../state/GameStateTypes';
-import GameUserStateManager from '../state/GameUserStateManager';
 import { createButton } from '../utils/ButtonUtils';
-import { limitNumber, mandatory, sleep } from '../utils/GameUtils';
+import { limitNumber, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
@@ -33,10 +29,8 @@ import { AwardPage, AwardProperty } from './GameAwardsTypes';
  * available for browsing.
  */
 class GameAwardsManager implements IGameUI {
-  private scene: Phaser.Scene | undefined;
-  private layerManager: GameLayerManager | undefined;
-  private userStateManager: GameUserStateManager | undefined;
-  private phaseManager: GamePhaseManager | undefined;
+  private scene: IBaseScene;
+
   private uiContainer: Phaser.GameObjects.Container | undefined;
   private previewContainer: Phaser.GameObjects.Container | undefined;
   private itemsContainer: Phaser.GameObjects.Container | undefined;
@@ -44,20 +38,11 @@ class GameAwardsManager implements IGameUI {
   private currActivePage: AwardPage;
   private activePageNumber: Map<AwardPage, number>;
 
-  constructor() {
+  constructor(scene: IBaseScene) {
+    this.scene = scene;
     this.activePageNumber = new Map<AwardPage, number>();
     this.currActivePage = AwardPage.Collectibles;
-  }
-
-  public initialise(
-    scene: IBaseScene,
-    userStateManager: GameUserStateManager,
-    phaseManager: GamePhaseManager
-  ) {
-    this.scene = scene;
-    this.layerManager = scene.layerManager;
-    this.userStateManager = userStateManager;
-    this.phaseManager = phaseManager;
+    this.scene.getPhaseManager().addPhaseToMap(GamePhaseType.AwardMenu, this);
 
     // Set all initial pages number to zero
     Object.keys(AwardPage).forEach((page, index) => {
@@ -89,14 +74,12 @@ class GameAwardsManager implements IGameUI {
       const bannerPos = this.getPageOptPositions();
       const chosenIdx = Object.keys(AwardPage).findIndex(pg => pg === (page as string));
       const bannerChosen = new Phaser.GameObjects.Sprite(
-        this.getScene(),
+        this.scene,
         bannerPos[chosenIdx][0],
         bannerPos[chosenIdx][1] + awardsConstants.pageYStartPos,
         ImageAssets.awardsPageChosen.key
       );
-      this.pageChosenContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0, [
-        bannerChosen
-      ]);
+      this.pageChosenContainer = new Phaser.GameObjects.Container(this.scene, 0, 0, [bannerChosen]);
       this.uiContainer.add(this.pageChosenContainer);
 
       // Set default preview
@@ -108,10 +91,10 @@ class GameAwardsManager implements IGameUI {
    * Create the container that encapsulate the 'Award Menu' UI.
    */
   private createUIContainer() {
-    const awardContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+    const awardContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
 
     const blackUnderlay = new Phaser.GameObjects.Rectangle(
-      this.getScene(),
+      this.scene,
       0,
       0,
       screenSize.x,
@@ -121,7 +104,7 @@ class GameAwardsManager implements IGameUI {
       .setAlpha(0.7)
       .setInteractive();
 
-    const awardBg = new Phaser.GameObjects.Image(this.getScene(), 0, 0, ImageAssets.awardsMenu.key);
+    const awardBg = new Phaser.GameObjects.Image(this.scene, 0, 0, ImageAssets.awardsMenu.key);
     awardContainer.add([blackUnderlay, awardBg]);
 
     // Add options
@@ -145,14 +128,14 @@ class GameAwardsManager implements IGameUI {
 
     // Add back button
     const backButton = this.createPageOpt('Back', 0, awardsConstants.backButtonYPos, async () => {
-      if (this.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
-        await this.getPhaseManager().popPhase();
+      if (this.scene.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
+        await this.scene.getPhaseManager().popPhase();
       }
     });
     awardContainer.add(backButton);
 
     // Add page arrows
-    const arrowLeft = createButton(this.getScene(), {
+    const arrowLeft = createButton(this.scene, {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(false)
     })
@@ -163,7 +146,7 @@ class GameAwardsManager implements IGameUI {
         awardsConstants.arrowDownYPos
       );
 
-    const arrowRight = createButton(this.getScene(), {
+    const arrowRight = createButton(this.scene, {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(true)
     })
@@ -177,7 +160,7 @@ class GameAwardsManager implements IGameUI {
 
     // Add preview frame
     const frame = new Phaser.GameObjects.Sprite(
-      this.getScene(),
+      this.scene,
       awardsConstants.previewXPos,
       awardsConstants.previewYPos,
       ImageAssets.popUpFrame.key
@@ -209,11 +192,11 @@ class GameAwardsManager implements IGameUI {
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
-      this.previewContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+      this.previewContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
 
       if (award) {
         // Preview image
-        const previewSprite = new Phaser.GameObjects.Sprite(this.getScene(), 0, 0, award.assetKey);
+        const previewSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
         resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
         previewSprite
           .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
@@ -221,7 +204,7 @@ class GameAwardsManager implements IGameUI {
 
         // Preview title
         const previewTitle = createBitmapText(
-          this.getScene(),
+          this.scene,
           award.title,
           awardsConstants.previewTitleTextConfig,
           awardTitleStyle
@@ -229,7 +212,7 @@ class GameAwardsManager implements IGameUI {
 
         // Preview asset key
         const previewKey = createBitmapText(
-          this.getScene(),
+          this.scene,
           award.assetKey,
           awardsConstants.previewKeyTextConfig,
           awardKeyStyle
@@ -237,7 +220,7 @@ class GameAwardsManager implements IGameUI {
 
         // Preview description
         const previewDesc = new Phaser.GameObjects.Text(
-          this.getScene(),
+          this.scene,
           awardsConstants.previewXPos,
           awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
           award.description,
@@ -290,7 +273,7 @@ class GameAwardsManager implements IGameUI {
    * @param callback callback to be executed on click
    */
   private createPageOpt(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.getScene(), {
+    return createButton(this.scene, {
       assetKey: ImageAssets.awardsPage.key,
       message: text,
       textConfig: { x: awardsConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
@@ -304,7 +287,7 @@ class GameAwardsManager implements IGameUI {
    * to be selected on the screen.
    */
   private createItemsContainer() {
-    const itemsContainer = new Phaser.GameObjects.Container(this.getScene(), 0, 0);
+    const itemsContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
 
     // Use the previously active page number of the page
     const items = this.getItems(this.activePageNumber.get(this.currActivePage)!);
@@ -339,7 +322,7 @@ class GameAwardsManager implements IGameUI {
    * @param callback callback to be executed on click
    */
   private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.getScene(), {
+    return createButton(this.scene, {
       assetKey: ImageAssets.awardsBanner.key,
       message: obj,
       textConfig: { x: awardsConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
@@ -362,10 +345,10 @@ class GameAwardsManager implements IGameUI {
     let keys: string[];
     switch (this.currActivePage) {
       case AwardPage.Achievements:
-        keys = this.getUserStateManager().getList(UserStateTypes.achievements);
+        keys = this.getUserStateManager().getAchievements();
         break;
       case AwardPage.Collectibles:
-        keys = this.getUserStateManager().getList(UserStateTypes.collectibles);
+        keys = this.getUserStateManager().getCollectibles();
         break;
       default:
         keys = [];
@@ -384,7 +367,7 @@ class GameAwardsManager implements IGameUI {
    */
   public async activateUI(): Promise<void> {
     this.uiContainer = this.createUIContainer();
-    this.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
+    this.scene.getLayerManager().addToLayer(Layer.UI, this.uiContainer);
     this.getSoundManager().playSound(SoundAssets.menuEnter.key);
 
     // Set initial page
@@ -392,7 +375,7 @@ class GameAwardsManager implements IGameUI {
 
     this.uiContainer.setPosition(screenCenter.x, -screenSize.y);
 
-    this.getScene().tweens.add({
+    this.scene.tweens.add({
       targets: this.uiContainer,
       ...entryTweenProps,
       y: screenCenter.y
@@ -410,21 +393,18 @@ class GameAwardsManager implements IGameUI {
       this.uiContainer.setPosition(this.uiContainer.x, this.uiContainer.y);
       this.getSoundManager().playSound(SoundAssets.menuExit.key);
 
-      this.getScene().tweens.add({
+      this.scene.tweens.add({
         targets: this.uiContainer,
         ...exitTweenProps
       });
 
       await sleep(exitTweenProps.duration);
-      fadeAndDestroy(this.getScene(), this.uiContainer, { fadeDuration: 50 });
+      fadeAndDestroy(this.scene, this.uiContainer, { fadeDuration: 50 });
     }
   }
 
-  private getScene = () => mandatory(this.scene);
-  private getLayerManager = () => mandatory(this.layerManager);
-  private getPhaseManager = () => mandatory(this.phaseManager);
   private getSoundManager = () => SourceAcademyGame.getInstance().getSoundManager();
-  private getUserStateManager = () => mandatory(this.userStateManager);
+  private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 }
 
 export default GameAwardsManager;

@@ -6,6 +6,7 @@ import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
+import { mandatory } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import settingsConstants, {
@@ -21,18 +22,15 @@ import settingsConstants, {
 class Settings extends Phaser.Scene {
   private bgmVolumeRadioButtons: CommonRadioButton | undefined;
   private sfxVolumeRadioButtons: CommonRadioButton | undefined;
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
 
   constructor() {
     super('Settings');
-    this.layerManager = new GameLayerManager();
-  }
-  public preload() {
-    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
-    this.layerManager.initialise(this);
   }
 
   public async create() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+    this.layerManager = new GameLayerManager(this);
     this.renderBackground();
     this.renderOptions();
   }
@@ -54,8 +52,8 @@ class Settings extends Phaser.Scene {
       screenCenter.y,
       ImageAssets.settingBanner.key
     );
-    this.layerManager.addToLayer(Layer.Background, background);
-    this.layerManager.addToLayer(Layer.Background, settingBgImg);
+    this.getLayerManager().addToLayer(Layer.Background, background);
+    this.getLayerManager().addToLayer(Layer.Background, settingBgImg);
   }
 
   /**
@@ -100,15 +98,15 @@ class Settings extends Phaser.Scene {
 
     // Create back button to main menu
     const backButton = new CommonBackButton(this, () => {
-      this.layerManager.clearAllLayers();
+      this.getLayerManager().clearAllLayers();
       this.scene.start('MainMenu');
     });
 
-    this.layerManager.addToLayer(Layer.UI, optCont);
-    this.layerManager.addToLayer(Layer.UI, this.sfxVolumeRadioButtons);
-    this.layerManager.addToLayer(Layer.UI, this.bgmVolumeRadioButtons);
-    this.layerManager.addToLayer(Layer.UI, applySettingsButton);
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, optCont);
+    this.getLayerManager().addToLayer(Layer.UI, this.sfxVolumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, this.bgmVolumeRadioButtons);
+    this.getLayerManager().addToLayer(Layer.UI, applySettingsButton);
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
 
   /**
@@ -188,6 +186,7 @@ class Settings extends Phaser.Scene {
   }
 
   public getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default Settings;

@@ -1,5 +1,5 @@
 import { BBoxProperty } from '../boundingBoxes/GameBoundingBoxTypes';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import Parser from './Parser';
@@ -51,9 +51,10 @@ export default class BoundingBoxParser {
       interactionId: bboxId
     };
 
-    Parser.checkpoint.map.addItemToMap(GameLocationAttr.boundingBoxes, bboxId, bboxProperty);
+    Parser.validator.register(bboxId);
+    Parser.checkpoint.map.setItemInMap(GameItemType.boundingBoxes, bboxId, bboxProperty);
     if (addToLoc) {
-      Parser.checkpoint.map.setItemAt(locationId, GameLocationAttr.boundingBoxes, bboxId);
+      Parser.checkpoint.map.addItemToLocation(locationId, GameItemType.boundingBoxes, bboxId);
     }
 
     return bboxProperty;

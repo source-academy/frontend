@@ -1,5 +1,6 @@
 import GameInputManager from '../input/GameInputManager';
 import GameLayerManager from '../layer/GameLayerManager';
+import GamePhaseManager from '../phase/GamePhaseManager';
 
 /**
  * Encapsulate style of bitmap text.
@@ -63,6 +64,17 @@ export enum GamePosition {
 }
 
 /**
+ * Enum for common game size.
+ * @readonly
+ * @enum {string}
+ */
+export enum GameSize {
+  Small = 'Small',
+  Medium = 'Medium',
+  Large = 'Large'
+}
+
+/**
  * Encapsulate text configuration.
  *
  * @prop {number} x x coordinate of the text
@@ -80,7 +92,8 @@ export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
  * @interface
  */
 export interface IBaseScene extends Phaser.Scene {
-  layerManager: GameLayerManager;
-  inputManager: GameInputManager;
+  getLayerManager: () => GameLayerManager;
+  getInputManager: () => GameInputManager;
+  getPhaseManager: () => GamePhaseManager;
   cleanUp: () => void;
 }

@@ -4,6 +4,7 @@ import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
+import { mandatory } from '../../utils/GameUtils';
 import { calcListFormatPos } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { bindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
@@ -13,18 +14,16 @@ import { bindingConstants, keyDescStyle, keyStyle } from './BindingsConstants';
  * Static scene.
  */
 class Bindings extends Phaser.Scene {
-  public layerManager: GameLayerManager;
-  public inputManager: GameInputManager;
+  public layerManager?: GameLayerManager;
+  public inputManager?: GameInputManager;
 
   constructor() {
     super('Bindings');
-    this.layerManager = new GameLayerManager();
-    this.inputManager = new GameInputManager();
   }
 
-  public preload() {
-    this.layerManager.initialise(this);
-    this.inputManager.initialise(this);
+  public init() {
+    this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
   }
 
   public create() {
@@ -50,8 +49,8 @@ class Bindings extends Phaser.Scene {
       screenSize.y,
       0
     ).setAlpha(0.3);
-    this.layerManager.addToLayer(Layer.Background, background);
-    this.layerManager.addToLayer(Layer.Background, blackOverlay);
+    this.getLayerManager().addToLayer(Layer.Background, background);
+    this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
   }
 
   /**
@@ -78,12 +77,12 @@ class Bindings extends Phaser.Scene {
       )
     );
     const backButton = new CommonBackButton(this, () => {
-      this.layerManager.clearAllLayers();
+      this.getLayerManager().clearAllLayers();
       this.scene.start('MainMenu');
     });
 
-    this.layerManager.addToLayer(Layer.UI, bindingsContainer);
-    this.layerManager.addToLayer(Layer.UI, backButton);
+    this.getLayerManager().addToLayer(Layer.UI, bindingsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, backButton);
   }
 
   /**
@@ -135,6 +134,8 @@ class Bindings extends Phaser.Scene {
     bindingContainer.add([keyIcon, keyText, keyDesc]);
     return bindingContainer;
   }
+  public getInputManager = () => mandatory(this.inputManager);
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default Bindings;

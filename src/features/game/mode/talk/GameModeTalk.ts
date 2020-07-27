@@ -8,7 +8,8 @@ import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
 import { Layer } from '../../layer/GameLayerTypes';
-import { GameLocationAttr } from '../../location/GameMapTypes';
+import { GameItemType } from '../../location/GameMapTypes';
+import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
@@ -26,8 +27,8 @@ class GameModeTalk implements IGameUI {
    * Fetches the talk topics of the current location id.
    */
   private getLatestTalkTopics() {
-    return GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.talkTopics,
+    return GameGlobalAPI.getInstance().getGameItemsInLocation(
+      GameItemType.talkTopics,
       GameGlobalAPI.getInstance().getCurrLocId()
     );
   }
@@ -79,7 +80,7 @@ class GameModeTalk implements IGameUI {
     });
 
     const backButton = new CommonBackButton(gameManager, () =>
-      GameGlobalAPI.getInstance().popPhase()
+      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;
@@ -94,7 +95,7 @@ class GameModeTalk implements IGameUI {
    */
   private getTalkTopicButtons(dialogueIds: ItemId[]) {
     return dialogueIds.map(dialogueId => {
-      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogue(dialogueId));
+      const dialogue = mandatory(GameGlobalAPI.getInstance().getDialogueById(dialogueId));
       return {
         text: dialogue.title,
         callback: async () => {
@@ -135,7 +136,7 @@ class GameModeTalk implements IGameUI {
   public async activateUI(): Promise<void> {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     this.uiContainer = this.createUIContainer();
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.UI, this.uiContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
 

@@ -4,24 +4,18 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 import { GamePosition, ItemId } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from '../SourceAcademyGame';
 import StringUtils from '../utils/StringUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import DialogueConstants, { speakerTextStyle } from './GameDialogueConstants';
 
 /**
  * Class that manages speakerbox portion of the dialgoue box
- * Rendering it in the right place and placing the right name
+ * And renders the characters in Speaker Layer
  *
- * This class also signals the character manager to render speaker sprites in front
- * And hide them from the map if they are the ones speaking
  */
 export default class DialogueSpeakerRenderer {
   private currentSpeakerId?: string;
-  private username: string;
-
-  constructor(username: string) {
-    this.username = username;
-  }
 
   /**
    * Changes the speaker shown in the speaker box and the speaker rendered on screen
@@ -42,7 +36,6 @@ export default class DialogueSpeakerRenderer {
   private hidePreviousSpeaker(previousSpeakerId?: ItemId) {
     if (previousSpeakerId) {
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
-      GameGlobalAPI.getInstance().showCharacterOnMap(previousSpeakerId);
     }
   }
 
@@ -56,25 +49,24 @@ export default class DialogueSpeakerRenderer {
   private drawSpeakerBox(speakerId: ItemId) {
     const speakerContainer =
       speakerId === 'you'
-        ? this.createSpeakerBox(this.username, GamePosition.Right)
+        ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
         : this.createSpeakerBox(
             GameGlobalAPI.getInstance().getCharacterById(speakerId).name,
             GamePosition.Left
           );
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.SpeakerBox, speakerContainer);
+    GameGlobalAPI.getInstance().addToLayer(Layer.SpeakerBox, speakerContainer);
   }
 
   private drawSpeakerSprite({ speakerId, speakerPosition, expression }: SpeakerDetail) {
     if (speakerId === 'you' || speakerId === 'narrator') {
       return;
     }
-    GameGlobalAPI.getInstance().hideCharacterFromMap(speakerId);
     const speakerSprite = GameGlobalAPI.getInstance().createCharacterSprite(
       speakerId,
       expression,
       speakerPosition
     );
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Speaker, speakerSprite);
+    GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
     this.currentSpeakerId = speakerId;
   }
 
@@ -104,4 +96,6 @@ export default class DialogueSpeakerRenderer {
     speakerText.text = StringUtils.capitalize(text);
     return container;
   }
+
+  public getUsername = () => SourceAcademyGame.getInstance().getAccountInfo().name;
 }

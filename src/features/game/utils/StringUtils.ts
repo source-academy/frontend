@@ -18,21 +18,21 @@ export default class StringUtils {
    *                                      been split into head and body
    */
   public static splitToParagraph(lines: string[]) {
-    const paragraphHeaderAndBodyLines: [string, string[]][] = [];
+    const headerAndBodyLines: [string, string[]][] = [];
     lines.forEach((line: string) => {
       if (line.startsWith('\t') || line.startsWith('    ')) {
         const content = line.startsWith('\t') ? line.slice(1) : line.slice(4);
-        if (paragraphHeaderAndBodyLines.length === 0) {
+        if (headerAndBodyLines.length === 0) {
           console.error('Unexpected tabs');
           return;
         }
-        const bodyLines = paragraphHeaderAndBodyLines[paragraphHeaderAndBodyLines.length - 1][1];
+        const bodyLines = headerAndBodyLines[headerAndBodyLines.length - 1][1];
         bodyLines.push(content);
         return;
       }
-      paragraphHeaderAndBodyLines.push([line.trim(), []]);
+      headerAndBodyLines.push([line.trim(), []]);
     });
-    return paragraphHeaderAndBodyLines;
+    return headerAndBodyLines;
   }
 
   /**
@@ -79,7 +79,7 @@ export default class StringUtils {
    * @param limit the number of separators to split the string, undefined if use all separators
    * @param {Array<string>}
    */
-  public static splitByChar(line: string, sep: string, limit?: number): string[] {
+  public static splitWithLimit(line: string, sep: string, limit: number): string[] {
     let lines = [];
     if (limit) {
       let currWord = '';
@@ -97,6 +97,17 @@ export default class StringUtils {
       lines = line.split(sep);
     }
     return lines.map((phrase: string) => phrase.trim());
+  }
+
+  /**
+   * Split using separator. After splitting, trim each entry to get rid of whitespaces.
+   *
+   * @param line line to be split
+   * @param sep separator to be used
+   * @param {Array<string>}
+   */
+  public static splitByChar(line: string, sep: string): string[] {
+    return line.split(sep).map((phrase: string) => phrase.trim());
   }
 
   /**
