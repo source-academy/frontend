@@ -196,7 +196,20 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
     props.externalLibraryName || 'NONE'
   ];
 
-  React.useEffect(() => {
+  // we would normally use use(Layout)Effect here, however useEffect actually
+  // runs after DOM changes are committed, which means that Ace might try to
+  // load the mode before we cause it to be defined i.e. breaking syntax
+  // highlighting
+  //
+  // so we use useMemo here so that
+  // (1) selectMode is called before the mode is set on the Editor
+  // (2) we still save on calls to ace.define (versus just calling it directly)
+  //
+  // note that since repeated calls to ace.define are actually okay (just a
+  // waste of compute cycles) it is okay to use useMemo (which doesn't guarantee
+  // that it will _only_ call when the dependencies change) or not even wrap
+  // this in a hook
+  React.useMemo(() => {
     selectMode(sourceChapter, sourceVariant, externalLibraryName);
   }, [sourceChapter, sourceVariant, externalLibraryName]);
 
