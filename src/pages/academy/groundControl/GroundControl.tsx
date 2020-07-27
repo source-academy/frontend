@@ -48,6 +48,11 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     };
     this.columnDefs = [
       {
+        field: 'number',
+        headerName: 'ID',
+        width: 50
+      },
+      {
         headerName: 'Title',
         field: 'title'
       },
@@ -151,8 +156,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
             onGridSizeChanged={this.resizeGrid}
             rowData={data}
             rowHeight={30}
-            pagination={true}
-            paginationPageSize={25}
             suppressMovableColumns={true}
             suppressPaginationPanel={true}
           />
