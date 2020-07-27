@@ -119,7 +119,7 @@ class AssessmentWorkspace extends React.Component<
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
     logs: Input[];
-    lastPosition: Position;
+    previousAction: string;
     payload: any[];
   }
 > {
@@ -129,7 +129,7 @@ class AssessmentWorkspace extends React.Component<
       showOverlay: false,
       showResetTemplateOverlay: false,
       logs: [],
-      lastPosition: { row: 0, column: 0 },
+      previousAction: 'cursorPositionChange',
       payload: []
     };
 
@@ -179,7 +179,9 @@ class AssessmentWorkspace extends React.Component<
 
   // TODO: Implemenet THis for Keystroke Logging!
   public uploadLogs = () => {
+    this.convertLogsToPayload();
     if (this.state.payload && this.state.payload.length > 0) {
+      // TODO: Upload Payload to Data Handler (Backend)
       console.log(this.state.payload);
       this.setState({ logs: [], payload: [] });
     }
@@ -192,7 +194,6 @@ class AssessmentWorkspace extends React.Component<
       return;
     }
 
-    console.log(logsCopy);
     const firstLog = logsCopy[0];
 
     if (firstLog.type === 'cursorPositionChange') {
@@ -220,8 +221,10 @@ class AssessmentWorkspace extends React.Component<
       }
 
       const payloadCopy = this.state.payload;
-
       payloadCopy.push(actionToBeUploaded);
+
+      console.log('PAYLOAD: \n');
+      console.log(payloadCopy);
       this.setState({ logs: [], payload: payloadCopy });
     }
   };
@@ -303,14 +306,13 @@ class AssessmentWorkspace extends React.Component<
           data: delta
         };
 
-        const logsCopy = this.state.logs;
-
-        logsCopy.push(input);
-        this.setState({ logs: logsCopy, lastPosition: delta.end });
-
-        if (delta.start.row !== delta.end.row) {
+        if (delta.action !== this.state.previousAction || delta.start.row !== delta.end.row) {
           this.convertLogsToPayload();
         }
+
+        const logsCopy = this.state.logs;
+        logsCopy.push(input);
+        this.setState({ logs: logsCopy, previousAction: delta.action });
       }
     };
 
@@ -329,11 +331,12 @@ class AssessmentWorkspace extends React.Component<
           logsCopy[logsCopy.length - 1].type === 'cursorPositionChange'
         ) {
           this.convertLogsToPayload();
+          this.setState({ previousAction: 'cursorPositionChange' });
           return;
         }
 
         logsCopy.push(input);
-        this.setState({ logs: logsCopy, lastPosition: selection.getCursor() });
+        this.setState({ logs: logsCopy });
       }
     };
 
