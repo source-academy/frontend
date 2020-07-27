@@ -1,35 +1,6 @@
 import * as Sentry from '@sentry/browser';
+import { infiniteLoopErrorType } from 'js-slang/dist/infiniteLoops/errorMessages';
 import { Context, NativeStorage, SourceError } from 'js-slang/dist/types';
-
-/**
- * Parses the error and determines whether it is an infinite loop and
- * if so, what kind of infinite loop.
- *
- * @returns {string} string containing the infinite loop classification.
- * @returns {string} empty string, if the error is not an infinite loop.
- */
-function infiniteLoopErrorType(errorString: string): string {
-  if (errorString.includes('Infinite recursion (or runtime error) detected')) {
-    if (errorString.includes('forget your base case')) return 'no_base_case';
-    else if (
-      errorString.includes('Did you call a value that is outside the range of your function?')
-    )
-      return 'input_out_of_domain';
-    else if (errorString.includes('Check your recursive function calls.')) return 'no_state_change';
-  }
-  // firefox
-  else if (errorString === 'InternalError: too much recursion') return 'stack_overflow';
-  // chrome
-  else if (errorString === 'RangeError: Maximum call stack size exceeded') return 'stack_overflow';
-  // edge
-  else if (errorString === 'Error: Out of stack space') return 'stack_overflow';
-  // error from transpiler
-  else if (errorString.includes('Potential infinite recursion detected'))
-    return 'source_protection_recursion';
-  else if (errorString.includes('Potential infinite loop detected'))
-    return 'source_protection_loop';
-  return '';
-}
 
 function getInfiniteLoopErrors(errors: SourceError[]) {
   for (const error of errors) {
