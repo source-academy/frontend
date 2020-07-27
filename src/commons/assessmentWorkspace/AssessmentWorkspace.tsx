@@ -115,14 +115,15 @@ export type StateProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetTemplateOverlay: boolean; logs: Input[] }
+  { showOverlay: boolean; showResetTemplateOverlay: boolean; logs: Input[]; lastPosition: Position }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
       showResetTemplateOverlay: false,
-      logs: []
+      logs: [],
+      lastPosition: { row: 0, column: 0 }
     };
 
     this.props.handleEditorValueChange('');
@@ -257,7 +258,7 @@ class AssessmentWorkspace extends React.Component<
         const logsCopy = this.state.logs;
 
         logsCopy.push(input);
-        this.setState({ logs: logsCopy });
+        this.setState({ logs: logsCopy, lastPosition: delta.end });
       }
     };
 
@@ -272,7 +273,7 @@ class AssessmentWorkspace extends React.Component<
         const logsCopy = this.state.logs;
 
         logsCopy.push(input);
-        this.setState({ logs: logsCopy });
+        this.setState({ logs: logsCopy, lastPosition: selection.getCursor() });
       }
     };
 
