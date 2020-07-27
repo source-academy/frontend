@@ -6,42 +6,46 @@ import { addLoadingScreen } from 'src/features/game/effects/LoadingScreen';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import Parser from 'src/features/game/parser/Parser';
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
-import { toS3Path } from 'src/features/game/utils/GameUtils';
+import { mandatory, toS3Path } from 'src/features/game/utils/GameUtils';
 import { calcTableFormatPos } from 'src/features/game/utils/StyleUtils';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import { StorySimState } from '../../StorySimulatorTypes';
 import mainMenuConstants, { mainMenuOptStyle } from './MainMenuConstants';
 
+/**
+ * Entry point for story simulator.
+ *
+ * User can access different story simulator
+ * functionalities from here.
+ */
 class MainMenu extends Phaser.Scene {
-  private soundManager: GameSoundManager;
-  private layerManager: GameLayerManager;
+  private layerManager?: GameLayerManager;
 
   constructor() {
     super('StorySimulatorMenu');
-    this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
-  }
-  public init() {
-    getStorySimulatorGame().setStorySimProps({ mainMenuRef: this });
-    this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getStorySimulatorGame());
   }
 
-  public async preload() {
+  public preload() {
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+    this.layerManager = new GameLayerManager(this);
+
     addLoadingScreen(this);
     Object.values(ImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     Object.values(SSImageAssets).forEach(asset => this.load.image(asset.key, toS3Path(asset.path)));
     Object.values(FontAssets).forEach(asset =>
       this.load.bitmapFont(asset.key, asset.pngPath, asset.fntPath)
     );
-    this.soundManager.loadSoundAssetMap(SoundAssets);
+    SourceAcademyGame.getInstance().getSoundManager().loadSoundAssetMap(SoundAssets);
   }
 
   public async create() {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'student') {
+      console.log('Students cannot use story sim');
+      return;
+    }
     this.renderBackground();
     this.renderOptionButtons();
   }
@@ -68,7 +72,7 @@ class MainMenu extends Phaser.Scene {
         )
       )
     );
-    this.layerManager.addToLayer(Layer.UI, optionsContainer);
+    this.getLayerManager().addToLayer(Layer.UI, optionsContainer);
   }
 
   private getOptionButtons() {
@@ -76,47 +80,43 @@ class MainMenu extends Phaser.Scene {
       {
         text: 'Object Placement',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.ObjectPlacement);
-          this.layerManager.clearAllLayers();
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ObjectPlacement);
+          this.getLayerManager().clearAllLayers();
           this.scene.start('ObjectPlacement');
         }
       },
       {
-        text: 'Simulate Checkpoint',
+        text: 'Checkpoint Simulator',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.CheckpointSim);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.CheckpointSim);
         }
       },
       {
         text: 'Asset Uploader',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.AssetUploader);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.AssetUploader);
         }
       },
       {
-        text: 'Chapter Sequencer',
+        text: 'Chapter Simulator',
         callback: () => {
-          getStorySimulatorGame().setStorySimState(StorySimState.ChapterSequence);
+          SourceAcademyGame.getInstance().setStorySimState(StorySimState.ChapterSim);
         }
       }
     ];
   }
 
   private createOptButton(text: string, xPos: number, yPos: number, callback: any) {
-    return createButton(
-      this,
-      {
-        assetKey: SSImageAssets.invertedButton.key,
-        message: text,
-        textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
-        bitMapTextStyle: mainMenuOptStyle,
-        onUp: callback
-      },
-      this.soundManager
-    ).setPosition(xPos, yPos);
+    return createButton(this, {
+      assetKey: SSImageAssets.invertedButton.key,
+      message: text,
+      textConfig: { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
+      bitMapTextStyle: mainMenuOptStyle,
+      onUp: callback
+    }).setPosition(xPos, yPos);
   }
 
-  public callGameManager() {
+  public simulateCheckpoint() {
     const defaultChapterText =
       sessionStorage.getItem(mainMenuConstants.gameTxtStorageName.defaultChapter) || '';
     const checkpointTxt =
@@ -124,7 +124,9 @@ class MainMenu extends Phaser.Scene {
     if (defaultChapterText === '' && checkpointTxt === '') {
       return;
     }
-    this.layerManager.clearAllLayers();
+
+    this.getLayerManager().clearAllLayers();
+
     Parser.parse(defaultChapterText);
     if (checkpointTxt) {
       Parser.parse(checkpointTxt, true);
@@ -132,10 +134,7 @@ class MainMenu extends Phaser.Scene {
     const gameCheckpoint = Parser.checkpoint;
 
     this.scene.start('GameManager', {
-      isStorySimulator: true,
-      fullSaveState: undefined,
       gameCheckpoint,
-      continueGame: false,
       chapterNum: -1,
       checkpointNum: -1
     });
@@ -155,9 +154,10 @@ class MainMenu extends Phaser.Scene {
       screenCenter.y,
       SSImageAssets.blueUnderlay.key
     ).setAlpha(0.5);
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
-    this.layerManager.addToLayer(Layer.Background, backgroundUnderlay);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundUnderlay);
   }
+  public getLayerManager = () => mandatory(this.layerManager);
 }
 
 export default MainMenu;

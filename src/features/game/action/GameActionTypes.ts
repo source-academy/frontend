@@ -9,13 +9,16 @@ export enum GameActionType {
   LocationChange = 'LocationChange',
   AddItem = 'AddItem',
   RemoveItem = 'RemoveItem',
-  BringUpDialogue = 'BringUpDialogue',
+  ShowDialogue = 'ShowDialogue',
   ChangeBackground = 'ChangeBackground',
   RemoveLocationMode = 'RemoveLocationMode',
   AddLocationMode = 'AddLocationMode',
   AddPopup = 'AddPopup',
   MakeObjectBlink = 'MakeObjectBlink',
-  MakeObjectGlow = 'MakeObjectGlow'
+  MakeObjectGlow = 'MakeObjectGlow',
+  PlayBGM = 'PlayBGM',
+  PlaySFX = 'PlaySFX',
+  ShowObjectLayer = 'ShowObjectLayer'
 }
 
 export interface IGameActionable {

@@ -44,17 +44,17 @@ export default class SSBackgroundManager {
       return;
     }
 
-    this.getObjectPlacement().layerManager.clearLayerContents(Layer.Background);
+    this.getObjectPlacement().getLayerManager().clearLayerContents(Layer.Background);
     const backgroundSprite = new Phaser.GameObjects.Image(
       this.getObjectPlacement(),
       screenCenter.x,
       screenCenter.y,
       backgroundAssetKey
     ).setInteractive();
-    this.getObjectPlacement().layerManager.addToLayer(Layer.Background, backgroundSprite);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.Background, backgroundSprite);
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   public getBackgroundAssetPath() {
     return this.backgroundAssetPath;

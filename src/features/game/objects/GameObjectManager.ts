@@ -1,124 +1,159 @@
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
 import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
-import GameManager from 'src/features/game/scenes/gameManager/GameManager';
 
-import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
-import { blink } from '../effects/FadeEffect';
 import GlowingImage from '../effects/GlowingObject';
-import { GameLocationAttr, LocationId } from '../location/GameMapTypes';
-import { GameMode } from '../mode/GameModeTypes';
+import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { StateObserver } from '../state/GameStateTypes';
-import { ActivatableObject, ObjectProperty } from './GameObjectTypes';
+import { ActivatableSprite, ObjectProperty } from './GameObjectTypes';
 
+/**
+ * Manager that renders objects in a location
+ * and also attaches actions as onClick callbacks to objects
+ *
+ * It provides the activate/and deactivate interfaces
+ * for Explore mode to call, as well as
+ * provides API for make_object_glow and make_object_blink actions
+ *
+ * It is a subject/listener of GameStateManager.
+ */
 class GameObjectManager implements StateObserver {
-  public observerId: string;
-  private objects: Map<ItemId, ActivatableObject>;
+  private objects: Map<ItemId, ActivatableSprite>;
 
   constructor() {
-    this.observerId = 'GameObjectManager';
-    this.objects = new Map<ItemId, ActivatableObject>();
+    this.objects = new Map<ItemId, ActivatableSprite>();
+    GameGlobalAPI.getInstance().watchGameItemType(GameItemType.objects, this);
   }
 
-  public initialise() {
-    GameGlobalAPI.getInstance().subscribeState(this);
-  }
-
-  public notify(locationId: LocationId) {
-    const hasUpdate = GameGlobalAPI.getInstance().hasLocationUpdate(locationId, GameMode.Explore);
-    const currLocationId = GameGlobalAPI.getInstance().getCurrLocId();
-    if (hasUpdate && locationId === currLocationId) {
-      this.renderObjectsLayerContainer(locationId);
-    }
-  }
-
-  private createObjectsLayerContainer(objectIds: ItemId[]): Phaser.GameObjects.Container {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    const objectPropMap = GameGlobalAPI.getInstance().getObjPropertyMap();
-    const objectContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
-
-    objectIds
-      .map(id => objectPropMap.get(id))
-      .filter(objectProp => objectProp !== undefined)
-      .forEach(objectProp => {
-        const object = this.createObject(gameManager, objectProp!);
-        objectContainer.add((object.sprite as GlowingImage).getContainer());
-        this.objects.set(objectProp!.interactionId, object);
-        return object;
-      });
-
-    return objectContainer;
-  }
-
+  /**
+   * Clear the layers, and render all the objects available to the location.
+   * Will immediately be shown on the screen.
+   *
+   * @param locationId location in which to render objects at
+   */
   public renderObjectsLayerContainer(locationId: LocationId): void {
     GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Objects]);
-    const objIdsToRender = GameGlobalAPI.getInstance().getLocationAttr(
-      GameLocationAttr.objects,
+    const objIdsToRender = GameGlobalAPI.getInstance().getGameItemsInLocation(
+      GameItemType.objects,
       locationId
     );
-    const objectContainer = this.createObjectsLayerContainer(objIdsToRender);
-    GameGlobalAPI.getInstance().addContainerToLayer(Layer.Objects, objectContainer);
+
+    // Refresh mapping
+    this.objects.clear();
+
+    // Add all the objects
+    objIdsToRender.map(id => this.handleAdd(id));
   }
 
-  public enableObjectAction(callbacks: any): void {
-    this.objects.forEach(object => object.activate(callbacks));
-  }
-
-  public disableObjectAction() {
-    this.objects.forEach(object => object.deactivate());
-  }
-
-  public makeObjectGlow(objectId: ItemId) {
+  /**
+   * Apply glowing effect around the object.
+   *
+   * @param objectId id of the object
+   */
+  public makeObjectGlow(objectId: ItemId, turnOn: boolean) {
     const object = this.objects.get(objectId);
     if (!object) {
       return;
     }
-    (object.sprite as GlowingImage).startGlow();
+    if (turnOn) {
+      (object.sprite as GlowingImage).startGlow();
+    } else {
+      (object.sprite as GlowingImage).clearGlow();
+    }
   }
 
-  public makeObjectBlink(objectId: ItemId) {
+  /**
+   * Apply blinking effect on the object.
+   *
+   * @param objectId id of the object
+   */
+  public makeObjectBlink(objectId: ItemId, turnOn: boolean) {
     const object = this.objects.get(objectId);
     if (!object) {
       return;
     }
-    blink(GameGlobalAPI.getInstance().getGameManager(), object.sprite.getContainer());
+    if (turnOn) {
+      (object.sprite as GlowingImage).startBlink();
+    } else {
+      (object.sprite as GlowingImage).clearBlink();
+    }
   }
 
-  private createObject(
-    gameManager: GameManager,
-    objectProperty: ObjectProperty
-  ): ActivatableObject {
+  /**
+   * Create the object from the given object property.
+   * Because we want this sprite to be activatable
+   * by Explore Mode UI, we expose its actionIds
+   * and interactionId
+   *
+   * @param objectProperty object property to be used
+   */
+  private createObject(objectProperty: ObjectProperty): ActivatableSprite {
+    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const { assetKey, x, y, width, height, actionIds, interactionId } = objectProperty;
     const object = new GlowingImage(gameManager, x, y, assetKey, width, height);
 
-    function activate({
-      onClick = (id?: ItemId) => {},
-      onPointerout = (id?: ItemId) => {},
-      onHover = (id?: ItemId) => {}
-    }) {
-      object.getClickArea().on('pointerup', async () => {
-        onClick(interactionId);
-        await GameGlobalAPI.getInstance().processGameActions(actionIds);
-      });
-      object.getClickArea().on('pointerover', () => {
-        onHover(interactionId);
-      });
-      object.getClickArea().on('pointerout', () => {
-        onPointerout(interactionId);
-      });
-    }
-
-    function deactivate() {
-      object.getClickArea().off('pointerup');
-      object.getClickArea().off('pointerover');
-      object.getClickArea().off('pointerout');
-    }
-
     return {
       sprite: object,
-      activate: actionIds ? activate : Constants.nullFunction,
-      deactivate
+      clickArea: object.getClickArea(),
+      actionIds,
+      interactionId
     };
+  }
+
+  /**
+   * Add the object, specified by the ID, into the scene
+   * and keep track of it within the mapping.
+   *
+   * @param id id of object
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleAdd(id: ItemId): boolean {
+    const objectProp = GameGlobalAPI.getInstance().getObjectById(id);
+    const object = this.createObject(objectProp);
+    GameGlobalAPI.getInstance().addToLayer(
+      Layer.Objects,
+      (object.sprite as GlowingImage).getContainer()
+    );
+    this.objects.set(id, object);
+    return true;
+  }
+
+  /**
+   * Mutate the object of the given id.
+   *
+   * Internally, will delete and re-add the object with
+   * the updated property.
+   *
+   * @param id id of object
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleMutate(id: ItemId): boolean {
+    return this.handleDelete(id) && this.handleAdd(id);
+  }
+
+  /**
+   * Delete the object of the given id, if
+   * applicable.
+   *
+   * @param id id of the object
+   * @return {boolean} true if successful, false otherwise
+   */
+  public handleDelete(id: ItemId): boolean {
+    const object = this.objects.get(id);
+    if (object) {
+      this.objects.delete(id);
+      (object.sprite as GlowingImage).getContainer().destroy();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Get all the rectanlge sprites which can be activated
+   * by external Explore Mode UI
+   */
+  public getActivatables() {
+    return Array.from(this.objects.values());
   }
 }
 

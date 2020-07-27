@@ -1,19 +1,30 @@
+import _ from 'lodash';
 import Constants from 'src/commons/utils/Constants';
-import {
-  AccountInfo,
-  getSourceAcademyGame
-} from 'src/pages/academy/game/subcomponents/sourceAcademyGame';
 
-import { createEmptySaveState } from './GameSaveConstants';
+import SourceAcademyGame from '../SourceAcademyGame';
+import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
 
-export async function saveData(accountInfo: AccountInfo, gameState: FullSaveState) {
+/**
+ * This function saves data to the backend.
+ * Currently saves the entire game data in the "collectibles" field
+ * just because that is the format accepted by the backend
+ *
+ * TODO: Change backend endpoint to accept fullSaveState
+ *
+ * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
+ */
+export async function saveData(fullSaveState: FullSaveState) {
+  if (SourceAcademyGame.getInstance().getAccountInfo().role !== 'student') {
+    return;
+  }
+
   const options = {
     method: 'PUT',
-    headers: createHeaders(accountInfo.accessToken),
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken),
     body: JSON.stringify({
       gameStates: {
-        collectibles: gameState,
+        collectibles: fullSaveState,
         completed_quests: []
       }
     })
@@ -26,23 +37,34 @@ export async function saveData(accountInfo: AccountInfo, gameState: FullSaveStat
   return;
 }
 
-export async function loadData(accountInfo: AccountInfo): Promise<FullSaveState> {
+/**
+ * This function fetches data from the backend.
+ * Currently saves the loaded game data from the "collectibles" field
+ * just because that is the format stored by the backend
+ *
+ * TODO: Change backend endpoint to store fullSaveState
+ */
+export async function loadData(): Promise<FullSaveState> {
   const options = {
     method: 'GET',
-    headers: createHeaders(accountInfo.accessToken)
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
   };
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/`, options);
   const message = await resp.text();
   const json = JSON.parse(message);
 
-  return json.gameStates.collectibles;
+  const loadedData = json.gameStates.collectibles;
+  return _.isEmpty(loadedData) ? createEmptySaveState() : loadedData;
 }
 
-export async function clearData(accountInfo: AccountInfo) {
+/**
+ * This function clears the entire game object from the database
+ */
+export async function clearData() {
   const options = {
     method: 'PUT',
-    headers: createHeaders(accountInfo.accessToken)
+    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
   };
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/clear`, options);
@@ -53,14 +75,11 @@ export async function clearData(accountInfo: AccountInfo) {
   }
 }
 
-export async function resetData() {
-  const resp = await saveData(getSourceAcademyGame().getAccountInfo(), createEmptySaveState());
-  if (resp && resp.ok) {
-    alert('Game data reset!');
-    return;
-  }
-}
-
+/**
+ * Format a header object.
+ *
+ * @param accessToken access token to be used
+ */
 function createHeaders(accessToken: string): Headers {
   const headers = new Headers();
   headers.append('Accept', 'application/json');

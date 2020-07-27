@@ -4,9 +4,8 @@ import { AssetKey, AssetPath } from 'src/features/game/commons/CommonTypes';
 import GameInputManager from 'src/features/game/input/GameInputManager';
 import GameLayerManager from 'src/features/game/layer/GameLayerManager';
 import { Layer } from 'src/features/game/layer/GameLayerTypes';
-import GameSoundManager from 'src/features/game/sound/GameSoundManager';
+import SourceAcademyGame from 'src/features/game/SourceAcademyGame';
 import { mandatory } from 'src/features/game/utils/GameUtils';
-import { getStorySimulatorGame } from 'src/pages/academy/storySimulator/subcomponents/storySimulatorGame';
 
 import SSImageAssets from '../../assets/ImageAssets';
 import SSBackgroundManager from '../../background/SSBackgroundManager';
@@ -19,10 +18,13 @@ import { StorySimState } from '../../StorySimulatorTypes';
 import SSTransformManager from '../../transform/SSTransformManager';
 import objPlacementConstants from './ObjectPlacementConstants';
 
+/**
+ * Allow users to position objects, set backgrounds, and get
+ * the coordinates of the objects.
+ */
 export default class ObjectPlacement extends Phaser.Scene {
-  public layerManager: GameLayerManager;
-  public soundManager: GameSoundManager;
-  public inputManager: GameInputManager;
+  public layerManager?: GameLayerManager;
+  public inputManager?: GameInputManager;
   private transformManager: SSTransformManager;
   private cursorModes: SSCursorMode | undefined;
   private bboxManager: SSBBoxManager;
@@ -38,9 +40,6 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   constructor() {
     super('ObjectPlacement');
-    this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
-    this.inputManager = new GameInputManager();
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
     this.backgroundManager = new SSBackgroundManager();
@@ -53,9 +52,8 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public init() {
-    this.layerManager = new GameLayerManager();
-    this.soundManager = new GameSoundManager();
-    this.inputManager = new GameInputManager();
+    this.layerManager = new GameLayerManager(this);
+    this.inputManager = new GameInputManager(this);
     this.objectManager = new SSObjectManager();
     this.bboxManager = new SSBBoxManager();
     this.backgroundManager = new SSBackgroundManager();
@@ -68,9 +66,8 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   public create() {
-    this.layerManager.initialise(this);
-    this.soundManager.initialise(this, getStorySimulatorGame());
-    this.inputManager.initialise(this);
+    SourceAcademyGame.getInstance().setCurrentSceneRef(this);
+
     this.renderBackground();
     this.createUIButtons();
     this.backgroundManager.initialise(this);
@@ -96,30 +93,23 @@ export default class ObjectPlacement extends Phaser.Scene {
 
   private createUIButtons() {
     const uiContainer = new Phaser.GameObjects.Container(this, 0, 0);
-    const backButton = new CommonBackButton(
-      this,
-      () => {
-        this.cleanUp();
-        getStorySimulatorGame().setStorySimState(StorySimState.Default);
-        this.scene.start('StorySimulatorMenu');
-      },
-      0,
-      0,
-      this.soundManager
-    );
+    const backButton = new CommonBackButton(this, () => {
+      this.cleanUp();
+      SourceAcademyGame.getInstance().setStorySimState(StorySimState.Default);
+      this.scene.start('StorySimulatorMenu');
+    });
 
     this.cursorModes = new SSCursorMode(
       this,
       objPlacementConstants.cursorModeXPos,
-      objPlacementConstants.cursorModeYPos,
-      this.soundManager
+      objPlacementConstants.cursorModeYPos
     );
     this.populateCursorModes();
 
     uiContainer.add(this.cursorModes);
     uiContainer.add(backButton);
 
-    this.layerManager.addToLayer(Layer.UI, uiContainer);
+    this.getLayerManager().addToLayer(Layer.UI, uiContainer);
   }
 
   public renderBackground() {
@@ -131,7 +121,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     );
     backgroundImg.setDisplaySize(screenSize.x, screenSize.y);
 
-    this.layerManager.addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
   }
 
   private populateCursorModes() {
@@ -189,7 +179,10 @@ export default class ObjectPlacement extends Phaser.Scene {
 
       // Erase Layers
       this.cursorModes.addCursorMode(this, SSImageAssets.eraseIcon.key, false, 'Erase all', () => {
-        this.layerManager.clearSeveralLayers([Layer.Background, Layer.BBox, Layer.Objects]);
+        const confirm = window.confirm('Are you sure you want to delete?');
+
+        if (!confirm) return;
+        this.getLayerManager().clearSeveralLayers([Layer.Background, Layer.BBox, Layer.Objects]);
         this.objectManager.deleteAll();
         this.bboxManager.deleteAll();
         this.transformManager.deselect();
@@ -200,7 +193,7 @@ export default class ObjectPlacement extends Phaser.Scene {
     }
   }
 
-  public getCursorManager = () => mandatory(this.cursorModes) as SSCursorMode;
+  public getCursorManager = () => mandatory(this.cursorModes);
 
   public getCoordinates(): number[] {
     return [this.input.x, this.input.y];
@@ -211,8 +204,8 @@ export default class ObjectPlacement extends Phaser.Scene {
   }
 
   private cleanUp() {
-    this.inputManager.clearListeners();
-    this.layerManager.clearAllLayers();
+    this.getInputManager().clearListeners();
+    this.getLayerManager().clearAllLayers();
   }
 
   public addAsset(assetKey: AssetKey, assetPath: AssetPath) {
@@ -254,4 +247,7 @@ export default class ObjectPlacement extends Phaser.Scene {
   public deleteBBox(bboxSprite: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image) {
     this.bboxManager.delete(bboxSprite);
   }
+
+  public getInputManager = () => mandatory(this.inputManager);
+  public getLayerManager = () => mandatory(this.layerManager);
 }

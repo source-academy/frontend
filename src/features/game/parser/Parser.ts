@@ -6,8 +6,18 @@ import ActionParser from './ActionParser';
 import DialoguesParser from './DialogueParser';
 import LocationsParser from './LocationDetailsParser';
 import LocationParser from './LocationParser';
-import ParserValidator, { GameAttr } from './ParserValidator';
+import ParserValidator, { GameEntityType } from './ParserValidator';
 
+/**
+ * This class converts a checkpoint txt file into a Checkpoint
+ * object.
+ *
+ * A Checkpoint object encapsulates data about the map including all
+ * the locations inside it, as well as the objectives in that checkpoint,
+ * basically everything the game engine needs to know to render
+ * the entire checkpoint for players to play.
+ *
+ */
 class Parser {
   public static checkpoint: GameCheckpoint;
   private static actionIdNum: number;
@@ -22,7 +32,6 @@ class Parser {
     Parser.actionIdNum = 0;
 
     Parser.checkpoint = {
-      configuration: '',
       map: new GameMap(),
       startingLoc: '',
       objectives: new GameObjective()
@@ -31,7 +40,7 @@ class Parser {
     Parser.validator = new ParserValidator();
   }
 
-  public static parse(chapterText: string, continueParse = false): GameCheckpoint {
+  public static parse(chapterText: string, continueParse = false) {
     if (!continueParse) {
       Parser.init();
     }
@@ -48,14 +57,13 @@ class Parser {
     });
 
     Parser.validator.verifyAssertions();
-    return this.checkpoint;
   }
 
   private static parseCheckpointConfig(checkpointConfig: string) {
     const [key, value] = StringUtils.splitByChar(checkpointConfig, ':');
     switch (key) {
       case 'startingLoc':
-        Parser.validator.assertAttr(GameAttr.locations, value);
+        Parser.validator.assert(GameEntityType.locations, value);
         Parser.checkpoint.startingLoc = value;
         break;
       default:
@@ -71,11 +79,11 @@ class Parser {
       case 'locations':
         LocationsParser.parse(body);
         break;
-      case 'startActions':
-        Parser.checkpoint.map.setStartActions(ActionParser.parseActions(body));
+      case 'gameStartActions':
+        Parser.checkpoint.map.setGameStartActions(ActionParser.parseActions(body));
         break;
-      case 'endActions':
-        Parser.checkpoint.map.setEndActions(ActionParser.parseActions(body));
+      case 'checkpointCompleteActions':
+        Parser.checkpoint.map.setCheckpointCompleteActions(ActionParser.parseActions(body));
         break;
       case 'dialogues':
         DialoguesParser.parse(body);

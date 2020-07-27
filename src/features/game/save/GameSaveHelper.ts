@@ -1,112 +1,74 @@
-import * as _ from 'lodash';
-
-import { GameLocation, LocationId } from '../location/GameMapTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import { FullSaveState, GameSaveState, SettingsJson, UserSaveState } from './GameSaveTypes';
+import SourceAcademyGame from '../SourceAcademyGame';
+import { FullSaveState } from './GameSaveTypes';
 
+/**
+ * Function that saves game data as a 'snapshot' in FullSaveState
+ * json format by collecting game data from game manager,
+ * game state manager, user state manager, and phase manager
+ *
+ * @param prevGameState - the snapshot of the game the during the last save point
+ * @param chapterNum - the chapterNumber of the game
+ * @param checkpointNUm - the checkpoint of the game
+ * @returns {FullSaveState} - the new 'snapshot' of the game
+ */
 export function gameStateToJson(
   prevGameState: FullSaveState,
   chapterNum: number,
   checkpointNum: number
 ): FullSaveState {
   const gameManager = GameGlobalAPI.getInstance().getGameManager();
-  const gameStateManager = gameManager.stateManager;
-  const userStateManager = gameManager.userStateManager;
-  const phaseManager = gameManager.phaseManager;
+  const gameStateManager = gameManager.getStateManager();
+  const phaseManager = gameManager.getPhaseManager();
 
-  const gameStoryState: GameSaveState = {
-    currentLocation: gameManager.currentLocationId,
-    currentPhase: phaseManager.getCurrentPhase(),
-    chapterObjective: mapToJsObject(gameStateManager.getCheckpointObjectives().getObjectives()),
-    locationStates: locationStatesToJson(gameStateManager.getLocationStates()),
-    objectPropertyMap: mapToJsObject(gameStateManager.getObjPropertyMap()),
-    bboxPropertyMap: mapToJsObject(gameStateManager.getBBoxPropertyMap()),
-    triggeredInteractions: mapToJsObject(gameStateManager.getTriggeredInteractions()),
-    lastCheckpointPlayed: checkpointNum
-  };
-
-  const userState: UserSaveState = {
-    settings: { ...prevGameState.userState.settings },
-    lastPlayedCheckpoint: [chapterNum, checkpointNum],
-    collectibles: userStateManager.getList('collectibles'),
-    achievements: userStateManager.getList('achievements'),
-    lastCompletedChapter:
-      prevGameState.userState.lastCompletedChapter === undefined
-        ? -1
-        : prevGameState.userState.lastCompletedChapter
-  };
-
-  const newGameStoryStates = { ...prevGameState.gameSaveStates, [chapterNum]: gameStoryState };
-
-  const newGameState = {
-    gameSaveStates: newGameStoryStates,
-    userState
-  };
-
-  return newGameState;
-}
-
-export function userSettingsToJson(
-  prevGameState: FullSaveState,
-  settingsJson: SettingsJson
-): FullSaveState {
-  const newGameState = {
-    gameSaveStates: prevGameState.gameSaveStates,
-    userState: { ...prevGameState.userState, settings: settingsJson }
-  };
-
-  return newGameState;
-}
-
-function mapToJsObject<K, V>(map: Map<K, V>): any {
-  const jsObject = {};
-  map.forEach((value: V, key: K) => {
-    jsObject[(key as any) as string] = value;
-  });
-  return jsObject;
-}
-
-function locationStatesToJson(map: Map<LocationId, GameLocation>): any {
-  const jsObject = {};
-  map.forEach((location: GameLocation, locationId: LocationId) => {
-    const locationWithArrays = _.mapValues(location, locationProperty => {
-      if (locationProperty instanceof Set) {
-        return Array.from(locationProperty);
+  return {
+    gameSaveStates: {
+      ...prevGameState.gameSaveStates,
+      [chapterNum]: {
+        lastCheckpointPlayed: checkpointNum,
+        currentLocation: gameManager.currentLocationId,
+        currentPhase: phaseManager.getCurrentPhase(),
+        completedObjectives: gameStateManager.getCompletedObjectives(),
+        triggeredInteractions: gameStateManager.getTriggeredInteractions(),
+        triggeredActions: gameStateManager.getTriggeredActions()
       }
-      return locationProperty;
-    });
-    jsObject[locationId] = locationWithArrays;
-  });
-  return jsObject;
+    },
+    userSaveState: {
+      settings: prevGameState.userSaveState.settings,
+      recentlyPlayedCheckpoint: [chapterNum, checkpointNum],
+      collectibles: SourceAcademyGame.getInstance().getUserStateManager().getCollectibles(),
+      largestCompletedChapter: prevGameState.userSaveState.largestCompletedChapter
+    }
+  };
 }
 
-export function jsonToLocationStates(obj: any): Map<LocationId, GameLocation> {
-  const map = new Map<LocationId, any>();
+/**
+ * Function to create an empty save state
+ * Used for resetting game data of students
+ *
+ * @returns {FullSaveState} - an empty save state for starting players
+ */
+export const createEmptySaveState = (): FullSaveState => {
+  return {
+    gameSaveStates: {},
+    userSaveState: {
+      collectibles: [],
+      settings: { bgmVolume: 1, sfxVolume: 1 },
+      recentlyPlayedCheckpoint: [-1, -1],
+      largestCompletedChapter: -1
+    }
+  };
+};
 
-  if (Object.keys(obj).length) {
-    Object.keys(obj).forEach((locationId: LocationId) => {
-      const locationWithSets = _.mapValues(obj[locationId], locationProperty => {
-        if (locationProperty instanceof Array) {
-          return new Set(locationProperty);
-        }
-        return locationProperty;
-      });
-
-      map.set(locationId, locationWithSets);
-    });
-  }
-
-  return map;
-}
-
-export function jsObjectToMap(obj: any): Map<string, any> {
-  const map = new Map<string, any>();
-
-  if (Object.keys(obj).length) {
-    Object.keys(obj).forEach((key: string) => {
-      map.set(key, obj[key]);
-    });
-  }
-
-  return map;
+/**
+ * Converts a map, where some items have been triggered
+ * into an array containing all the items that have been triggered.
+ *
+ * @param completionMap map containing string elements to boolean indicating
+ *                      which elements have been completed/triggerd
+ */
+export function convertMapToArray(completionMap: Map<string, boolean>) {
+  return Array.from(completionMap)
+    .filter(([_objective, boolean]: [string, boolean]) => boolean)
+    .map(([objective]: [string, boolean]) => objective);
 }

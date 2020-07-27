@@ -27,37 +27,39 @@ export default class SSTransformManager {
       1,
       0
     ).setAlpha(0.3);
-    this.getObjectPlacement().layerManager.addToLayer(Layer.Selector, this.activeSelectRect);
+    this.getObjectPlacement().getLayerManager().addToLayer(Layer.Selector, this.activeSelectRect);
   }
 
   private trackDraggables(objectPlacement: ObjectPlacement) {
-    objectPlacement.inputManager.registerEventListener(
-      'drag',
-      (
-        pointer: MouseEvent,
-        gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
-        dragX: number,
-        dragY: number
-      ) => {
-        if (!objectPlacement.isCursorMode(CursorMode.DrawBBox)) {
-          objectPlacement.getCursorManager().setCursorMode(CursorMode.DragResizeObj);
-          gameObject.x = dragX;
-          gameObject.y = dragY;
-        }
+    objectPlacement
+      .getInputManager()
+      .registerEventListener(
+        'drag',
+        (
+          pointer: MouseEvent,
+          gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
+          dragX: number,
+          dragY: number
+        ) => {
+          if (!objectPlacement.isCursorMode(CursorMode.DrawBBox)) {
+            objectPlacement.getCursorManager().setCursorMode(CursorMode.DragResizeObj);
+            gameObject.x = dragX;
+            gameObject.y = dragY;
+          }
 
-        if (gameObject.data.get('type') === 'object') {
-          objectPlacement.setObjAttribute(gameObject, 'x', dragX);
-          objectPlacement.setObjAttribute(gameObject, 'y', dragY);
-          this.setActiveSelection(gameObject);
-        }
+          if (gameObject.data.get('type') === 'object') {
+            objectPlacement.setObjAttribute(gameObject, 'x', dragX);
+            objectPlacement.setObjAttribute(gameObject, 'y', dragY);
+            this.setActiveSelection(gameObject);
+          }
 
-        if (gameObject.data.get('type') === 'bbox') {
-          objectPlacement.setBBoxAttribute(gameObject, 'x', dragX);
-          objectPlacement.setBBoxAttribute(gameObject, 'y', dragY);
-          this.setActiveSelection(gameObject);
+          if (gameObject.data.get('type') === 'bbox') {
+            objectPlacement.setBBoxAttribute(gameObject, 'x', dragX);
+            objectPlacement.setBBoxAttribute(gameObject, 'y', dragY);
+            this.setActiveSelection(gameObject);
+          }
         }
-      }
-    );
+      );
   }
 
   public resizeActive(enlarge: boolean) {
@@ -119,7 +121,7 @@ export default class SSTransformManager {
     this.activeSelection = undefined;
   }
 
-  private getObjectPlacement = () => mandatory(this.objectPlacement) as ObjectPlacement;
+  private getObjectPlacement = () => mandatory(this.objectPlacement);
 
   private bindDeleteKey() {
     const deleteKeys = [
@@ -127,10 +129,12 @@ export default class SSTransformManager {
       Phaser.Input.Keyboard.KeyCodes.DELETE
     ];
     deleteKeys.forEach(key =>
-      this.getObjectPlacement().inputManager.registerKeyboardListener(key, 'up', () => {
-        this.deleteActiveSelection();
-        this.deselect();
-      })
+      this.getObjectPlacement()
+        .getInputManager()
+        .registerKeyboardListener(key, 'up', () => {
+          this.deleteActiveSelection();
+          this.deselect();
+        })
     );
   }
 

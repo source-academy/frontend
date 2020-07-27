@@ -5,7 +5,7 @@ export enum Layer {
   Speaker,
   PopUp,
   Dialogue,
-  DialogueLabel,
+  SpeakerBox,
   UI,
   Objects,
   BBox,
@@ -25,7 +25,7 @@ export const defaultLayerSequence = [
   Layer.Speaker,
   Layer.PopUp,
   Layer.Dialogue,
-  Layer.DialogueLabel,
+  Layer.SpeakerBox,
   Layer.UI,
   Layer.Effects,
   Layer.Escape
