@@ -82,7 +82,7 @@ class AchievementInferencer {
     // first, generate a new unique id by finding the max id
     let newId = 0;
     if (this.achievements.length > 0) {
-      newId = [...this.nodeList.keys()].reduce((maxId, curId) => Math.max(maxId, curId), 0) + 1;
+      newId = Math.max(...this.nodeList.keys(), 0) + 1;
     }
 
     // then assign the new unique id by overwriting the achievement item supplied by param

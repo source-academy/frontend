@@ -1,35 +1,22 @@
 export const prettifyDate = (deadline: Date) => {
+  const months = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December'
+  ];
   const day = deadline.getDate();
   const year = deadline.getFullYear();
 
-  switch (deadline.getMonth()) {
-    case 0:
-      return day + ' January ' + year;
-    case 1:
-      return day + ' February ' + year;
-    case 2:
-      return day + ' March ' + year;
-    case 3:
-      return day + ' April ' + year;
-    case 4:
-      return day + ' May ' + year;
-    case 5:
-      return day + ' June ' + year;
-    case 6:
-      return day + ' July ' + year;
-    case 7:
-      return day + ' August ' + year;
-    case 8:
-      return day + ' September ' + year;
-    case 9:
-      return day + ' October ' + year;
-    case 10:
-      return day + ' November ' + year;
-    case 11:
-      return day + ' December ' + year;
-    default:
-      return deadline.toLocaleDateString();
-  }
+  return `${day} ${months[deadline.getMonth()]} ${year}`;
 };
 
 // Converts Date to deadline countdown

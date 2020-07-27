@@ -39,21 +39,16 @@ function AchievementControl(props: DispatchProps & StateProps) {
     }
   }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
 
-  const setUpload = (bool: boolean) => setPanelPendingUpload(bool);
   const addUnsavedChanges = (changes: number) =>
     setEditorUnsavedChanges(editorUnsavedChanges + changes);
 
-  const addUnsavedChange = () => setEditorUnsavedChanges(1);
+  const addUnsavedChange = () => addUnsavedChanges(1);
   const removeUnsavedChange = () => addUnsavedChanges(-1);
 
   const updateAchievements = () => {
     for (const achievement of inferencer.getAchievements()) {
-      editAchievement(achievement);
+      handleEditAchievement(achievement);
     }
-  };
-
-  const editAchievement = (achievement: AchievementItem) => {
-    handleEditAchievement(achievement);
   };
 
   const [render, setRender] = useState<boolean>();
@@ -68,14 +63,14 @@ function AchievementControl(props: DispatchProps & StateProps) {
           forceRender={forceRender}
           isDisabled={editorUnsavedChanges !== 0}
           pendingUpload={panelPendingUpload}
-          setPendingUpload={setUpload}
+          setPendingUpload={setPanelPendingUpload}
           saveAchievementsToFrontEnd={handleSaveAchievements}
         />
 
         <AchievementEditor
           inferencer={inferencer}
           updateAchievements={updateAchievements}
-          editAchievement={editAchievement}
+          editAchievement={handleEditAchievement}
           forceRender={forceRender}
           addUnsavedChange={addUnsavedChange}
           removeUnsavedChange={removeUnsavedChange}
