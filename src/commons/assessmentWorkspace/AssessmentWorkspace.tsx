@@ -115,7 +115,13 @@ export type StateProps = {
 
 class AssessmentWorkspace extends React.Component<
   AssessmentWorkspaceProps,
-  { showOverlay: boolean; showResetTemplateOverlay: boolean; logs: Input[]; lastPosition: Position }
+  {
+    showOverlay: boolean;
+    showResetTemplateOverlay: boolean;
+    logs: Input[];
+    lastPosition: Position;
+    payload: any[];
+  }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
@@ -123,7 +129,8 @@ class AssessmentWorkspace extends React.Component<
       showOverlay: false,
       showResetTemplateOverlay: false,
       logs: [],
-      lastPosition: { row: 0, column: 0 }
+      lastPosition: { row: 0, column: 0 },
+      payload: []
     };
 
     this.props.handleEditorValueChange('');
@@ -240,6 +247,45 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
+    const convertLogsToPayload = () => {
+      const logsCopy = this.state.logs;
+
+      if (logsCopy.length === 0) {
+        return;
+      }
+
+      console.log(logsCopy);
+      const firstLog = logsCopy[0];
+
+      if (firstLog.type === 'cursorPositionChange') {
+        this.setState({ logs: [] });
+        return;
+      }
+
+      if (firstLog.type === 'codeDelta') {
+        const actionToBeUploaded = {
+          LogType: firstLog.data.action,
+          ActionCount: 0,
+          Content: '',
+          Time: 0
+        };
+
+        for (let i = 0; i < logsCopy.length; i += 2) {
+          const nextLogData = logsCopy[i];
+
+          if (nextLogData.type === 'codeDelta') {
+            const lines = nextLogData.data.lines.reduce((x, y) => x + '\n' + y);
+            actionToBeUploaded.Content += lines;
+            actionToBeUploaded.ActionCount++;
+            actionToBeUploaded.Time = nextLogData.time;
+          }
+        }
+
+        console.log(actionToBeUploaded);
+        this.setState({ logs: [] });
+      }
+    };
+
     // TODO: Add Handler to Save key stroke
     const onChangeMethod = (newCode: string, delta: CodeDelta) => {
       if (this.props.handleUpdateHasUnsavedChanges) {
@@ -259,6 +305,10 @@ class AssessmentWorkspace extends React.Component<
 
         logsCopy.push(input);
         this.setState({ logs: logsCopy, lastPosition: delta.end });
+
+        if (delta.start.row !== delta.end.row) {
+          convertLogsToPayload();
+        }
       }
     };
 
@@ -271,6 +321,14 @@ class AssessmentWorkspace extends React.Component<
         };
 
         const logsCopy = this.state.logs;
+
+        if (
+          logsCopy.length === 0 ||
+          logsCopy[logsCopy.length - 1].type === 'cursorPositionChange'
+        ) {
+          convertLogsToPayload();
+          return;
+        }
 
         logsCopy.push(input);
         this.setState({ logs: logsCopy, lastPosition: selection.getCursor() });
