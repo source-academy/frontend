@@ -13,22 +13,36 @@ export enum FilterColors {
   WHITE = '#ffffff'
 }
 
-export const getAbilityColor = (ability: AchievementAbility) => {
+const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
-      return '#ffb412';
+      return '#ffb412'; // gold
     case AchievementAbility.EFFORT:
-      return '#b5ff61';
+      return '#b5ff61'; // green
     case AchievementAbility.EXPLORATION:
-      return '#9ecaed';
+      return '#9ecaed'; // blue
     case AchievementAbility.COMMUNITY:
-      return '#ff6780';
+      return '#ff6780'; // pink
     case AchievementAbility.FLEX:
-      return '#ffffff';
+      return '#ffffff'; // white
     default:
-      return '#ffffff';
+      return '';
   }
 };
+
+export const getAbilityGlow = (ability: AchievementAbility) =>
+  ability === AchievementAbility.FLEX
+    ? {
+        border: `1px solid ${getAbilityColor(ability)}`,
+        boxShadow: `
+          0 0 5px #fff,     /* outer white */
+          -1px 0 10px #f0f, /* outer left magenta */
+          1px 0 15px #0ff   /* outer right cyan */`
+      }
+    : {
+        border: `1px solid ${getAbilityColor(ability)}`,
+        boxShadow: `0 0 10px ${getAbilityColor(ability)}`
+      };
 
 export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
 export const backgroundUrl = `${achievementAssets}/background`;

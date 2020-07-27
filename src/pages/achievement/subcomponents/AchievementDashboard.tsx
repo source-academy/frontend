@@ -7,8 +7,8 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
-import { FilterColors, getAbilityColor } from '../../../features/achievement/AchievementConstants';
-import { FilterStatus } from '../../../features/achievement/AchievementTypes';
+import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
+import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
@@ -32,19 +32,16 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [viewId, setViewId] = useState<number>(-1);
 
-  const handleFilterColor = (status: FilterStatus) => {
-    return status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
-  };
+  // Filter icon turns blue when selected, otherwise white
+  const handleFilterColor = (status: FilterStatus) =>
+    status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
+  // Make Flex achievements parmanently glowing and the selected achievement glow
   const handleGlow = (id: number) => {
-    if (id === viewId) {
-      const ability = inferencer.getAchievementItem(id).ability;
-      return {
-        border: `1px solid ${getAbilityColor(ability)}`,
-        boxShadow: `0 0 10px ${getAbilityColor(ability)}`
-      };
-    }
-    return {};
+    const ability = inferencer.getAchievementItem(id).ability;
+    return ability === AchievementAbility.FLEX || id === viewId
+      ? getAbilityGlow(ability)
+      : undefined;
   };
 
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
