@@ -157,12 +157,6 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
         ability: achievement.ability as AchievementAbility,
         deadline: new Date(achievement.deadline),
         release: new Date(achievement.release),
-        view: {
-          canvasUrl: achievement.canvasUrl || '',
-          description: achievement.description || '',
-          goalText: achievement.goalText || '',
-          completionText: achievement.completionText || ''
-        },
         goals: achievement.goals || [],
         prerequisiteIds: achievement.prerequisiteIds || []
       } as AchievementItem)

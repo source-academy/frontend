@@ -46,7 +46,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, deadline, cardTileUrl, release, goals } = editableAchievement;
+  const { id, title, ability, deadline, cardTileUrl, release, goals, view } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -154,7 +154,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handlechangeView = (view: AchievementViewItem) => {
+  const handleChangeVoew = (view: AchievementViewItem) => {
     setEditableAchievement({
       ...editableAchievement,
       view: view
@@ -170,11 +170,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       }}
     >
       <div className="top-bar">
-        <EditableAchievementView
-          title={title}
-          view={achievement.view}
-          changeView={handlechangeView}
-        />
+        <EditableAchievementView title={title} view={view} changeView={handleChangeVoew} />
 
         <AchievementUploader
           hasChanges={hasChanges}

@@ -21,26 +21,26 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const { canvasUrl, description, completionText } = viewData;
 
-  const setDescription = (description: string) => {
+  const setDescription = (newDescription: string) => {
     setViewData({
       ...viewData,
-      description: description
+      description: newDescription
     });
     changeView(viewData);
   };
 
-  const setCompletionText = (completionText: string) => {
+  const setCompletionText = (newCompletionText: string) => {
     setViewData({
       ...viewData,
-      completionText: completionText
+      completionText: newCompletionText
     });
     changeView(viewData);
   };
 
-  const setcanvasUrl = (canvasUrl: string) => {
+  const setCanvasUrl = (newCanvasUrl: string) => {
     setViewData({
       ...viewData,
-      canvasUrl: canvasUrl
+      canvasUrl: newCanvasUrl
     });
     changeView(viewData);
   };
@@ -60,8 +60,7 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
           <Card className="background-card">
             <h1>{title} </h1>
 
-            <EditableViewImage canvasUrl={canvasUrl} title={title} setcanvasUrl={setcanvasUrl} />
-
+            <EditableViewImage canvasUrl={canvasUrl} title={title} setCanvasUrl={setCanvasUrl} />
             <EditableViewDescription description={description} setDescription={setDescription} />
             <EditableViewText goalText={completionText} setGoalText={setCompletionText} />
           </Card>
