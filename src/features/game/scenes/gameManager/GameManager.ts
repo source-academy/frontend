@@ -149,7 +149,7 @@ class GameManager extends Phaser.Scene {
     if (startAction) {
       // Execute fast forward actions
       await this.getActionManager().fastForwardGameActions(
-        this.getStateManager().getTriggeredActions()
+        this.getStateManager().getTriggeredStateChangeActions()
       );
       // Game start actions
       await this.getActionManager().processGameActions(

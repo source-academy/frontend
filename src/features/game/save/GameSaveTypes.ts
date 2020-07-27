@@ -26,7 +26,7 @@ export type GameSaveState = {
 
   completedObjectives: string[];
   triggeredInteractions: string[];
-  triggeredActions: string[];
+  triggeredStateChangeActions: string[];
 };
 
 /**

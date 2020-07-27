@@ -81,6 +81,7 @@ export default class GameActionExecuter {
   /**
    * Determines if action is state change action type
    * State-change actions are replayed at the start of every game
+   * They are actions that modify that game map's original state
    *
    * @param actionType - the type of action
    */

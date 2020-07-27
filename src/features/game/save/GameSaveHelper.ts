@@ -31,7 +31,7 @@ export function gameStateToJson(
         currentPhase: phaseManager.getCurrentPhase(),
         completedObjectives: gameStateManager.getCompletedObjectives(),
         triggeredInteractions: gameStateManager.getTriggeredInteractions(),
-        triggeredActions: gameStateManager.getTriggeredActions()
+        triggeredStateChangeActions: gameStateManager.getTriggeredStateChangeActions()
       }
     },
     userSaveState: {
@@ -74,7 +74,7 @@ export const createEmptyGameSaveState = (): GameSaveState => {
     currentPhase: GamePhaseType.Menu,
     completedObjectives: [],
     triggeredInteractions: [],
-    triggeredActions: []
+    triggeredStateChangeActions: []
   };
 };
 

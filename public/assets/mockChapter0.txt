@@ -36,6 +36,7 @@ room
 
     boundingBoxes
         + bbox1, 10, 10, 30, 30
+            show_dialogue(what)
 
     characters
         + scottie, Scottie, sad, left
@@ -99,6 +100,9 @@ dialogues
 
         @scottie
         I'm glad you asked!
+
+        @narrator
+        Well
     
     done
         Well, what do you know, you finished the game.

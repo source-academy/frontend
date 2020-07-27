@@ -54,7 +54,7 @@ export default class GameActionManager {
     if (await this.checkCanPlayAction(isRepeatable, interactionId, actionConditions)) {
       await GameActionExecuter.executeGameAction(actionType, actionParams);
       if (GameActionExecuter.isStateChangeAction(actionType)) {
-        GameGlobalAPI.getInstance().triggerAction(actionId);
+        GameGlobalAPI.getInstance().triggerStateChangeAction(actionId);
       }
       GameGlobalAPI.getInstance().triggerInteraction(actionId);
     }

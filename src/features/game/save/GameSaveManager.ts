@@ -142,7 +142,7 @@ export default class GameSaveManager {
     return this.fullSaveState.gameSaveStates[index] || createEmptyGameSaveState();
   }
 
-  public getTriggeredActions = () => this.getGameSaveState().triggeredActions;
+  public getTriggeredStateChangeActions = () => this.getGameSaveState().triggeredStateChangeActions;
   public getTriggeredInteractions = () => this.getGameSaveState().triggeredInteractions;
   public getCompletedObjectives = () => this.getGameSaveState().completedObjectives;
   public getLoadedPhase = () => this.getGameSaveState().currentPhase;
