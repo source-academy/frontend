@@ -261,6 +261,21 @@ class AssessmentWorkspace extends React.Component<
       }
     };
 
+    const onCursorChangeMethod = (selection: any) => {
+      if (this.props.assessment!.category !== 'Practical') {
+        const input: Input = {
+          time: Date.now(),
+          type: 'cursorPositionChange',
+          data: selection.getCursor()
+        };
+
+        const logsCopy = this.state.logs;
+
+        logsCopy.push(input);
+        this.setState({ logs: logsCopy });
+      }
+    };
+
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
@@ -282,7 +297,8 @@ class AssessmentWorkspace extends React.Component<
             handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: this.props.handlePromptAutocomplete,
             isEditorAutorun: false,
-            onChangeMethod: onChangeMethod
+            onChangeMethod: onChangeMethod,
+            onCursorChangeMethod: onCursorChangeMethod
           }
         : undefined;
     const workspaceProps: WorkspaceProps = {
