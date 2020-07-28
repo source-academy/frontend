@@ -30,6 +30,7 @@ import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingType
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
+import { reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -877,6 +878,28 @@ describe('evalCode', () => {
         })
         .put(evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
+    });
+
+    test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
+      context = createContext(3);
+      const code1 = 'const test=[(x)=>x,2,3,[(x)=>x],5];function f(x){return f(x);}';
+      const code2 = 'f(1);';
+      state = generateDefaultState(workspaceLocation, {});
+
+      return runInContext(code1, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: 1000,
+        useSubst: false
+      }).then(_ => {
+        expectSaga(evalCode, code2, context, execTime, workspaceLocation, actionType)
+          .withState(state)
+          .call(
+            reportInfiniteLoopError,
+            'source_protection_recursion',
+            'const test=[x => x,2,3,[x => x],5];\nfunction f(x) {\n  return f(x);\n}\n{f(1);}'
+          )
+          .silentRun();
+      });
     });
   });
 
