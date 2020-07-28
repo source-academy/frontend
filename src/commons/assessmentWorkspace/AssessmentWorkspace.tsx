@@ -223,8 +223,6 @@ class AssessmentWorkspace extends React.Component<
       const payloadCopy = this.state.payload;
       payloadCopy.push(actionToBeUploaded);
 
-      console.log('PAYLOAD: \n');
-      console.log(payloadCopy);
       this.setState({ logs: [], payload: payloadCopy });
     }
   };
@@ -299,45 +297,38 @@ class AssessmentWorkspace extends React.Component<
 
       this.props.handleEditorValueChange(newCode);
 
-      if (this.props.assessment!.category !== 'Practical') {
-        const input: Input = {
-          time: Date.now(),
-          type: 'codeDelta',
-          data: delta
-        };
+      const input: Input = {
+        time: Date.now(),
+        type: 'codeDelta',
+        data: delta
+      };
 
-        if (delta.action !== this.state.previousAction || delta.start.row !== delta.end.row) {
-          this.convertLogsToPayload();
-        }
-
-        const logsCopy = this.state.logs;
-        logsCopy.push(input);
-        this.setState({ logs: logsCopy, previousAction: delta.action });
+      if (delta.action !== this.state.previousAction || delta.start.row !== delta.end.row) {
+        this.convertLogsToPayload();
       }
+
+      const logsCopy = this.state.logs;
+      logsCopy.push(input);
+      this.setState({ logs: logsCopy, previousAction: delta.action });
     };
 
     const onCursorChangeMethod = (selection: any) => {
-      if (this.props.assessment!.category !== 'Practical') {
-        const input: Input = {
-          time: Date.now(),
-          type: 'cursorPositionChange',
-          data: selection.getCursor()
-        };
+      const input: Input = {
+        time: Date.now(),
+        type: 'cursorPositionChange',
+        data: selection.getCursor()
+      };
 
-        const logsCopy = this.state.logs;
+      const logsCopy = this.state.logs;
 
-        if (
-          logsCopy.length === 0 ||
-          logsCopy[logsCopy.length - 1].type === 'cursorPositionChange'
-        ) {
-          this.convertLogsToPayload();
-          this.setState({ previousAction: 'cursorPositionChange' });
-          return;
-        }
-
-        logsCopy.push(input);
-        this.setState({ logs: logsCopy });
+      if (logsCopy.length === 0 || logsCopy[logsCopy.length - 1].type === 'cursorPositionChange') {
+        this.convertLogsToPayload();
+        this.setState({ previousAction: 'cursorPositionChange' });
+        return;
       }
+
+      logsCopy.push(input);
+      this.setState({ logs: logsCopy });
     };
 
     /* If questionId is out of bounds, set it to the max. */
@@ -543,15 +534,12 @@ class AssessmentWorkspace extends React.Component<
 
     const onClickPrevious = () => {
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-      this.uploadLogs();
     };
     const onClickNext = () => {
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-      this.uploadLogs();
     };
     const onClickReturn = () => {
       history.push(listingPath);
-      this.uploadLogs();
     };
 
     // Returns a nullary function that defers the navigation of the browser window, until the
@@ -648,18 +636,16 @@ class AssessmentWorkspace extends React.Component<
     // TODO: Add Handler to Save Run
     const handleEval = () => {
       this.props.handleEditorEval();
-      if (this.props.assessment!.category !== 'Practical') {
-        const input: Input = {
-          time: Date.now(),
-          type: 'keyboardCommand',
-          data: KeyboardCommand.run
-        };
+      const input: Input = {
+        time: Date.now(),
+        type: 'keyboardCommand',
+        data: KeyboardCommand.run
+      };
 
-        const logsCopy = this.state.logs;
+      const logsCopy = this.state.logs;
 
-        logsCopy.push(input);
-        this.setState({ logs: logsCopy });
-      }
+      logsCopy.push(input);
+      this.setState({ logs: logsCopy });
     };
 
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
