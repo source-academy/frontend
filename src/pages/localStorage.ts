@@ -39,7 +39,8 @@ export const saveState = (state: OverallState) => {
         accessToken: state.session.accessToken,
         refreshToken: state.session.refreshToken,
         role: state.session.role,
-        name: state.session.name
+        name: state.session.name,
+        userId: state.session.userId
       },
       playgroundEditorValue: state.workspaces.playground.editorValue,
       playgroundIsEditorAutorun: state.workspaces.playground.isEditorAutorun,

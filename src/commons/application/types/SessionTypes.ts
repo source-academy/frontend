@@ -44,6 +44,7 @@ export type SessionState = {
   readonly story: Story;
   readonly gameState: GameState;
   readonly name?: string;
+  readonly userId?: number;
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;

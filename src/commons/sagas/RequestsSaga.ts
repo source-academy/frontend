@@ -293,6 +293,7 @@ export async function getGradingOverviews(
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student.groupName,
+        groupLeaderId: overview.student.groupLeaderId,
         // Grade
         initialGrade: overview.grade,
         gradeAdjustment: overview.adjustment,
