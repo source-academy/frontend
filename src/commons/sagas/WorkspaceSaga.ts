@@ -679,7 +679,7 @@ export function* evalCode(
     context.errors = oldErrors;
 
     // report infinite loops but only for 'vanilla'/default source
-    if (!(isLazy || isNonDet || isWasm)) {
+    if (context.variant === 'default') {
       const infiniteLoopData = getInfiniteLoopData(context, code);
       if (infiniteLoopData) {
         const [error, code] = infiniteLoopData;
