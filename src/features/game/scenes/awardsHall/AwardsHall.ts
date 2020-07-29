@@ -255,7 +255,7 @@ class AwardsHall extends Phaser.Scene {
       AwardsHallConstants.awardDim,
       AwardsHallConstants.awardDim,
       0
-    ).setAlpha(award.completed === false ? 0.8 : 0);
+    ).setAlpha(award.completed ? 0 : 0.8);
     awardCont.add(blackTint);
 
     // Set up the pop up

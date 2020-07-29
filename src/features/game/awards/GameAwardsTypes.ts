@@ -11,5 +11,5 @@ export type AwardProperty = {
   assetPath: AssetPath;
   title: string;
   description: string;
-  completed?: boolean; // optional because collectible doesnt use this
+  completed: boolean;
 };

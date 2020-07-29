@@ -45,7 +45,7 @@ export const defaultAwardProp: AwardProperty = {
   id: 'default-award',
   assetKey: Constants.nullInteractionId,
   assetPath: Constants.nullInteractionId,
-  title: '',
+  title: Constants.nullInteractionId,
   description: 'There is no asset associated with this award.',
   completed: false
 };

@@ -31,8 +31,6 @@ export default class GameUserStateManager {
     this.collectibles = new Set(
       SourceAcademyGame.getInstance().getSaveManager().getLoadedUserState().collectibles
     );
-
-    this.achievements = new Set(['301', '302', '303']);
   }
 
   /**

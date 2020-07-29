@@ -36,8 +36,19 @@ export const getAwardProp = (awardKey: ItemId): AwardProperty => {
   return awardProp ? awardProp : { ...defaultAwardProp, title: awardKey };
 };
 
-export function createAssetKeyPreviewCont(scene: Phaser.Scene, assetKey: string) {
-  const assetKeyCont = new Phaser.GameObjects.Container(scene, 0, 0);
+/**
+ * Create a UI bar, labeled as 'asset key' on the side. To be used
+ * within Awards Menu UI container. On hover on the label,
+ * will pop up a hover text explanation on the use of the asset key.
+ *
+ * @param scene scene to attach to
+ */
+export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
+  const assetKeyCont = new Phaser.GameObjects.Container(
+    scene,
+    AwardsConstants.previewXOffset,
+    AwardsConstants.previewYOffset
+  );
   const rectDim = AwardsConstants.previewKeyRect;
 
   // Create asset key bar and text
@@ -65,12 +76,6 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene, assetKey: string)
     AwardsConstants.previewKeyTagTextConfig,
     awardKeyStyle
   );
-  const assetKeyText = createBitmapText(
-    scene,
-    assetKey,
-    AwardsConstants.previewKeyTextConfig,
-    awardKeyStyle
-  );
 
   // Create explanation pop-up
   const hoverCont = new CommonTextHover(
@@ -89,6 +94,6 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene, assetKey: string)
     hoverCont.setVisible(false)
   );
 
-  assetKeyCont.add([assetKeyBg, assetKeyTagBg, assetKeyTag, assetKeyText, hoverCont]);
+  assetKeyCont.add([assetKeyBg, assetKeyTagBg, assetKeyTag, hoverCont]);
   return assetKeyCont;
 }

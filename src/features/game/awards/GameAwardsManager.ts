@@ -167,6 +167,9 @@ class GameAwardsManager implements IGameUI {
     ).setScale(1.2);
     awardContainer.add(frame);
 
+    // Add asset key container
+    awardContainer.add(createAssetKeyPreviewCont(this.scene));
+
     return awardContainer;
   }
 
@@ -192,63 +195,67 @@ class GameAwardsManager implements IGameUI {
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
+      if (!award) return;
+
       this.previewContainer = new Phaser.GameObjects.Container(
         this.scene,
         awardsConstants.previewXOffset,
         awardsConstants.previewYOffset
       );
 
-      if (award) {
-        // Preview image
-        let previewAsset;
-        if (award.assetKey === Constants.nullInteractionId) {
-          // No asset is associated with the award
-          previewAsset = createBitmapText(
-            this.scene,
-            'No preview available',
-            awardsConstants.noPreviewTextConfig,
-            awardKeyStyle
-          );
-        } else {
-          previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
-          resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
-          previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
-        }
-
-        // Preview title
-        const previewTitle = createBitmapText(
+      // Preview image
+      let previewAsset;
+      if (award.assetKey === Constants.nullInteractionId) {
+        // No asset is associated with the award
+        previewAsset = createBitmapText(
           this.scene,
-          award.title,
-          awardsConstants.previewTitleTextConfig,
-          awardTitleStyle
+          'No preview available',
+          awardsConstants.noPreviewTextConfig,
+          awardKeyStyle
         );
-
-        // Preview description
-        const previewDesc = new Phaser.GameObjects.Text(
-          this.scene,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
-          award.description,
-          awardDescStyle
-        ).setOrigin(0.5, 0.0);
-
-        // Preview asset key, use only empty string if award is not completed
-        const assetKey = award.completed === false ? '' : award.assetKey;
-        const previewKey = createAssetKeyPreviewCont(this.scene, assetKey);
-
-        // Black tint to overlay the asset if award is not completed
-        const blackTint = new Phaser.GameObjects.Rectangle(
-          this.scene,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos,
-          awardsConstants.previewDim,
-          awardsConstants.previewDim,
-          0
-        ).setAlpha(award.completed === false ? 0.8 : 0);
-
-        this.previewContainer.add([previewAsset, blackTint, previewTitle, previewDesc, previewKey]);
+      } else {
+        previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
+        resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
+        previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
       }
 
+      // Preview title
+      const previewTitle = createBitmapText(
+        this.scene,
+        award.title,
+        awardsConstants.previewTitleTextConfig,
+        awardTitleStyle
+      );
+
+      // Preview description
+      const previewDesc = new Phaser.GameObjects.Text(
+        this.scene,
+        awardsConstants.previewXPos,
+        awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
+        award.description,
+        awardDescStyle
+      ).setOrigin(0.5, 0.0);
+
+      // Preview asset key, use only empty string if award is not completed
+      const assetKey = award.completed === false ? '' : award.assetKey;
+      const previewKey = createBitmapText(
+        this.scene,
+        assetKey,
+        awardsConstants.previewKeyTextConfig,
+        awardKeyStyle
+      );
+
+      // Black tint to overlay the asset if award is not completed
+      const blackTint = new Phaser.GameObjects.Rectangle(
+        this.scene,
+        awardsConstants.previewXPos,
+        awardsConstants.previewYPos,
+        awardsConstants.previewDim,
+        awardsConstants.previewDim,
+        0
+      ).setAlpha(award.completed ? 0 : 0.8);
+
+      this.previewContainer.add([previewAsset, blackTint, previewTitle, previewDesc, previewKey]);
       this.uiContainer.add(this.previewContainer);
     }
   }
