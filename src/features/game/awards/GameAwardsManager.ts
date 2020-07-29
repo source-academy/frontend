@@ -192,7 +192,11 @@ class GameAwardsManager implements IGameUI {
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
-      this.previewContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+      this.previewContainer = new Phaser.GameObjects.Container(
+        this.scene,
+        awardsConstants.previewXOffset,
+        awardsConstants.previewYOffset
+      );
 
       if (award) {
         // Preview title
@@ -213,7 +217,7 @@ class GameAwardsManager implements IGameUI {
           awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
           award.description,
           awardDescStyle
-        ).setOrigin(0.428, 0.0);
+        ).setOrigin(0.5, 0.0);
 
         // Preview image
         let previewAsset;
@@ -228,12 +232,10 @@ class GameAwardsManager implements IGameUI {
         } else {
           previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
           resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
-          previewAsset
-            .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
-            .setOrigin(0.428, 0.468);
+          previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
         }
 
-        this.previewContainer.add([previewAsset, previewTitle, previewKey, previewDesc]);
+        this.previewContainer.add([previewAsset, previewTitle, previewDesc, previewKey]);
       }
 
       this.uiContainer.add(this.previewContainer);

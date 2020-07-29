@@ -49,6 +49,9 @@ export const defaultAwardProp: AwardProperty = {
   description: 'There is no asset associated with this award.'
 };
 
+export const awardExplanation =
+  "Asset key can be used to include the asset into your room by using 'create_award' function.";
+
 const previewXPos = -screenSize.x * 0.3;
 const previewYPos = -screenSize.y * 0.05;
 const previewKeyYPos = previewYPos + 275;
@@ -64,8 +67,10 @@ const AwardsConstants = {
   listTextXPos: -screenSize.x * 0.09,
   previewXPos: previewXPos,
   previewYPos: previewYPos,
+  previewXOffset: 30,
+  previewYOffset: 15,
   previewDim: previewDim,
-  noPreviewTextConfig: { x: previewXPos, y: -40, oriX: 0.35, oriY: 0.5 },
+  noPreviewTextConfig: { x: previewXPos, y: -40, oriX: 0.5, oriY: 0.5 },
   previewTitleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 },
   previewKeyRect: {
     x: previewXPos,
@@ -73,8 +78,10 @@ const AwardsConstants = {
     width: previewDim,
     height: 35
   },
-  previewKeyTagTextConfig: { x: previewXPos - 170, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
-  previewKeyTextConfig: { x: previewXPos - 65, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewKeyExplXPos: previewXPos - 150,
+  previewKeyExplYPos: previewYPos + 200,
+  previewKeyTagTextConfig: { x: previewXPos - 205, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewKeyTextConfig: { x: previewXPos - 90, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
   previewDescTextYOffset: 320,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
