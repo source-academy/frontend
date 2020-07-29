@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditableAchievementTitle component renders correctly 1`] = `
+"<EditableAchievementTitle title=\\"\\" changeTitle={[Function: changeTitle]}>
+  <div>
+    <h1>
+      <Blueprint3.EditableText placeholder=\\"Enter your title here\\" value=\\"\\" onChange={[Function: changeTitle]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
+        <div className=\\"bp3-editable-text bp3-editable-text-placeholder\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+          <span className=\\"bp3-editable-text-content\\" style={{...}}>
+            Enter your title here
+          </span>
+        </div>
+      </Blueprint3.EditableText>
+    </h1>
+  </div>
+</EditableAchievementTitle>"
+`;

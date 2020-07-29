@@ -1,0 +1,40 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditableAchievementAbility component renders correctly 1`] = `
+"<EditableAchievementAbility ability=\\"Community\\" changeAbility={[Function: changeAbility]}>
+  <div className=\\"ability\\">
+    <Blueprint3.Select className=\\"bp3-minimal\\" items={{...}} onItemSelect={[Function: changeAbility]} itemRenderer={[Function: abilityRenderer]} filterable={false}>
+      <Blueprint3.QueryList className=\\"bp3-minimal\\" items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function: abilityRenderer]} renderer={[Function (anonymous)]} disabled={false} resetOnQuery={true}>
+        <Blueprint3.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={false} position=\\"bottom-left\\" className=\\"bp3-minimal\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp3-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+          <Manager>
+            <span className=\\"bp3-popover-wrapper bp3-minimal\\">
+              <Reference innerRef={[Function: target]}>
+                <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                  <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                    <span onClick={[Function (anonymous)]} className=\\"bp3-popover-target\\">
+                      <div onKeyDown={[Function (anonymous)]} onKeyUp={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                        <div>
+                          <Blueprint3.Button className=\\"bp3-minimal\\" text=\\"Community\\">
+                            <button type=\\"button\\" className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                              <Blueprint3.Icon icon={[undefined]} />
+                              <span className=\\"bp3-button-text\\">
+                                Community
+                              </span>
+                              <Blueprint3.Icon icon={[undefined]} />
+                            </button>
+                          </Blueprint3.Button>
+                        </div>
+                      </div>
+                    </span>
+                  </Blueprint3.ResizeSensor>
+                </InnerReference>
+              </Reference>
+              <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[Function (anonymous)]} onOpened={[Function (anonymous)]} onOpening={[Function (anonymous)]} transitionDuration={300} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
+            </span>
+          </Manager>
+        </Blueprint3.Popover>
+      </Blueprint3.QueryList>
+    </Blueprint3.Select>
+  </div>
+</EditableAchievementAbility>"
+`;

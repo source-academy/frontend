@@ -91,7 +91,7 @@ class Academy extends React.Component<AcademyProps> {
 
   /**
    * 1. If user is in /academy.*, redirect to game
-   * 2. If not, redirect to the last /acdaemy.* route the user was in
+   * 2. If not, redirect to the last /academy.* route the user was in
    * See ../../commons/utils/HistoryHelper.ts for more details
    */
   private dynamicRedirect = (props: StateProps) => {

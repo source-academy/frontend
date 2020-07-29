@@ -10,6 +10,7 @@ const mockShortDefaultState: SavedState = {
     role: defaultState.session.role,
     name: defaultState.session.name
   },
+  achievements: defaultState.achievement.achievements,
   playgroundEditorValue: defaultState.workspaces.playground.editorValue,
   playgroundIsEditorAutorun: defaultState.workspaces.playground.isEditorAutorun,
   playgroundSourceChapter: defaultState.workspaces.playground.context.chapter,

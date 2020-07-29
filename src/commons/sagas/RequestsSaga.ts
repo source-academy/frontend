@@ -13,6 +13,11 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
+import {
+  AchievementAbility,
+  AchievementGoal,
+  AchievementItem
+} from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
@@ -123,6 +128,96 @@ export async function putUserGameState(
       gameStates: JSON.stringify(gameStates)
     }
   });
+  return resp;
+}
+
+/**
+ * GET /achievements
+ *
+ * Will be updated after a separate db for student progress is ready
+ */
+export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
+  const resp = await request('achievements/', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievements = await resp.json();
+
+  return achievements.map(
+    (achievement: any) =>
+      ({
+        ...achievement,
+        id: achievement.id,
+        ability: achievement.ability as AchievementAbility,
+        deadline: new Date(achievement.deadline),
+        release: new Date(achievement.release),
+        goals: achievement.goals || [],
+        prerequisiteIds: achievement.prerequisiteIds || []
+      } as AchievementItem)
+  );
+}
+
+/**
+ * POST /achievements/:achievement_id
+ */
+export async function editAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/${achievement.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/:achievement_id
+ */
+export async function removeAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/goals
+ */
+export async function removeGoal(
+  goal: AchievementGoal,
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/${achievement.id}/goals/${goal.goalId}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { goal: goal, achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
   return resp;
 }
 
