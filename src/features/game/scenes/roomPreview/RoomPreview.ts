@@ -128,7 +128,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public update() {
-    // this.eval(`update();`);
+    this.eval(`update();`);
   }
 
   public createContext() {
