@@ -88,6 +88,10 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.awardsMapping = awardsMapping;
   }
 
+  public addAwardMapping(awardId: ItemId, awardProp: AwardProperty) {
+    this.global.awardsMapping.set(awardId, awardProp);
+  }
+
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
   }

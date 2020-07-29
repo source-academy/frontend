@@ -1,5 +1,8 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
+import { store } from 'src/pages/createStore';
 
+import { getAwardProp } from '../awards/GameAwardsHelper';
+import { AwardProperty } from '../awards/GameAwardsTypes';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -85,8 +88,34 @@ export default class GameUserStateManager {
    * Only returns the awards ID that the student possess.
    */
   public async loadAchievements() {
-    // TODO: Fetch from backend
-    this.achievements = new Set(['301', '302', '303']);
+    const achievements = store.getState().achievement.achievements;
+
+    achievements.forEach(achievement => {
+      const achievementId = achievement.id.toString();
+      const isCompleted = achievement.goals.reduce(
+        (soFar, goal) => goal.goalProgress === goal.goalTarget && soFar,
+        true
+      );
+      const awardProp = getAwardProp(achievementId);
+
+      let newAwardProp: AwardProperty;
+      if (!awardProp) {
+        // If there is no mapping, we create one from available information
+        newAwardProp = {
+          id: achievementId,
+          assetKey: '',
+          assetPath: '',
+          title: achievement.title,
+          description: achievement.view.description,
+          completed: isCompleted
+        };
+      } else {
+        // If there is mapping, we update the complete attribute
+        newAwardProp = { ...awardProp, completed: isCompleted };
+      }
+      SourceAcademyGame.getInstance().addAwardMapping(achievementId, newAwardProp);
+      this.achievements.add(achievementId);
+    });
   }
 
   public getCollectibles = () => Array.from(this.collectibles);

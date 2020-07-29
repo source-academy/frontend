@@ -19,4 +19,5 @@ export type AwardProperty = {
   assetPath: AssetPath;
   title: string;
   description: string;
+  completed?: boolean;
 };
