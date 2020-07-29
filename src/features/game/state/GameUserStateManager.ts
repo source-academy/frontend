@@ -82,10 +82,7 @@ export default class GameUserStateManager {
   }
 
   /**
-   * Fetches achievements of the student; based on the account
-   * information.
-   *
-   * Only returns the awards ID that the student possess.
+   * Fetches achievements of the student;
    */
   public async loadAchievements() {
     const achievements = store.getState().achievement.achievements;

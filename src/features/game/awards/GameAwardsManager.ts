@@ -235,7 +235,16 @@ class GameAwardsManager implements IGameUI {
           previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
         }
 
-        this.previewContainer.add([previewAsset, previewTitle, previewDesc, previewKey]);
+        const blackTint = new Phaser.GameObjects.Rectangle(
+          this.scene,
+          awardsConstants.previewXPos,
+          awardsConstants.previewYPos,
+          awardsConstants.previewDim,
+          awardsConstants.previewDim,
+          0
+        ).setAlpha(award.completed === false ? 0.8 : 0);
+
+        this.previewContainer.add([previewAsset, blackTint, previewTitle, previewDesc, previewKey]);
       }
 
       this.uiContainer.add(this.previewContainer);
@@ -307,14 +316,19 @@ class GameAwardsManager implements IGameUI {
 
     // Populate container with all the item buttons
     itemsContainer.add(
-      items.map((awardProp, index) =>
-        this.createItemButton(
+      items.map((awardProp, index) => {
+        const button = this.createItemButton(
           awardProp.title,
           itemPositions[index][0],
           itemPositions[index][1] + awardsConstants.listYStartPos,
           () => this.setPreview(awardProp)
-        )
-      )
+        );
+
+        // For non completed awards, make it less visible
+        if (awardProp.completed === false) button.setAlpha(0.5);
+
+        return button;
+      })
     );
     return itemsContainer;
   }

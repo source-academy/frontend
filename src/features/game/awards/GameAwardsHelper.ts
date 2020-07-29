@@ -33,7 +33,6 @@ export const getAwardProps = (awardKeys: ItemId[]): AwardProperty[] => {
  */
 export const getAwardProp = (awardKey: ItemId): AwardProperty => {
   const awardProp = SourceAcademyGame.getInstance().getAwardsMapping().get(awardKey);
-  // TODO: Overwrite some property with existing information where we can
   return awardProp ? awardProp : { ...defaultAwardProp, title: awardKey };
 };
 

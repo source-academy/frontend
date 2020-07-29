@@ -5,19 +5,11 @@ export enum AwardPage {
   Achievements = 'Achievements'
 }
 
-export type CollectibleProperty = {
-  assetKey: string;
-  x: number;
-  y: number;
-  width?: number;
-  height?: number;
-};
-
 export type AwardProperty = {
   id: ItemId;
   assetKey: AssetKey;
   assetPath: AssetPath;
   title: string;
   description: string;
-  completed?: boolean;
+  completed?: boolean; // optional because collectible doesnt use this
 };
