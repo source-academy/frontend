@@ -27,9 +27,9 @@ export const awardTitleStyle: BitmapFontStyle = {
 
 export const awardKeyStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
-  size: 25,
+  size: 18,
   fill: HexColor.offWhite,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 export const awardDescStyle = {
@@ -51,6 +51,8 @@ export const defaultAwardProp: AwardProperty = {
 
 const previewXPos = -screenSize.x * 0.3;
 const previewYPos = -screenSize.y * 0.05;
+const previewKeyYPos = previewYPos + 275;
+const previewDim = 430;
 
 const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
@@ -62,11 +64,18 @@ const AwardsConstants = {
   listTextXPos: -screenSize.x * 0.09,
   previewXPos: previewXPos,
   previewYPos: previewYPos,
-  previewDim: 430,
+  previewDim: previewDim,
   noPreviewTextConfig: { x: previewXPos, y: -40, oriX: 0.35, oriY: 0.5 },
-  previewTitleTextConfig: { x: previewXPos, y: previewYPos - 275, oriX: 0.15, oriY: 0.5 },
-  previewKeyTextConfig: { x: previewXPos, y: previewYPos + 275, oriX: 0.4, oriY: 0.5 },
-  previewDescTextYOffset: 310,
+  previewTitleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 },
+  previewKeyRect: {
+    x: previewXPos,
+    y: previewKeyYPos,
+    width: previewDim,
+    height: 35
+  },
+  previewKeyTagTextConfig: { x: previewXPos - 170, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewKeyTextConfig: { x: previewXPos - 65, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewDescTextYOffset: 320,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
   arrowXOffset: 80,

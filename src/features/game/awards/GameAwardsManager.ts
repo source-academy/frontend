@@ -19,7 +19,7 @@ import awardsConstants, {
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
-import { getAwardProps } from './GameAwardsHelper';
+import { createAssetKeyPreviewCont, getAwardProps } from './GameAwardsHelper';
 import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
@@ -204,12 +204,7 @@ class GameAwardsManager implements IGameUI {
         );
 
         // Preview asset key
-        const previewKey = createBitmapText(
-          this.scene,
-          award.assetKey,
-          awardsConstants.previewKeyTextConfig,
-          awardKeyStyle
-        );
+        const previewKey = createAssetKeyPreviewCont(this.scene, award.assetKey);
 
         // Preview description
         const previewDesc = new Phaser.GameObjects.Text(
@@ -218,7 +213,7 @@ class GameAwardsManager implements IGameUI {
           awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
           award.description,
           awardDescStyle
-        ).setOrigin(0.4, 0.0);
+        ).setOrigin(0.428, 0.0);
 
         // Preview image
         let previewAsset;
