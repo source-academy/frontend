@@ -86,8 +86,7 @@ export default class GameUserStateManager {
    */
   public async loadAchievements() {
     // TODO: Fetch from backend
-    this.achievements = new Set(['301', '302']);
-    this.collectibles = new Set(['cookies', 'computer']);
+    this.achievements = new Set(['301', '302', '303']);
   }
 
   public getCollectibles = () => Array.from(this.collectibles);

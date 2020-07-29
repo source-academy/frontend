@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
@@ -195,13 +195,6 @@ class GameAwardsManager implements IGameUI {
       this.previewContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
 
       if (award) {
-        // Preview image
-        const previewSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
-        resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
-        previewSprite
-          .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
-          .setOrigin(0.428, 0.468);
-
         // Preview title
         const previewTitle = createBitmapText(
           this.scene,
@@ -227,7 +220,24 @@ class GameAwardsManager implements IGameUI {
           awardDescStyle
         ).setOrigin(0.4, 0.0);
 
-        this.previewContainer.add([previewSprite, previewTitle, previewKey, previewDesc]);
+        // Preview image
+        let previewAsset;
+        if (award.assetKey === Constants.nullInteractionId) {
+          previewAsset = createBitmapText(
+            this.scene,
+            'No preview available',
+            awardsConstants.noPreviewTextConfig,
+            awardKeyStyle
+          );
+        } else {
+          previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
+          resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
+          previewAsset
+            .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
+            .setOrigin(0.428, 0.468);
+        }
+
+        this.previewContainer.add([previewAsset, previewTitle, previewKey, previewDesc]);
       }
 
       this.uiContainer.add(this.previewContainer);
