@@ -30,6 +30,7 @@ export type GradingOverview = {
   submissionId: number;
   submissionStatus: string;
   groupName: string;
+  groupLeaderId?: number;
   gradingStatus: GradingStatus;
   questionCount: number;
   gradedCount: number;

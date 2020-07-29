@@ -2,7 +2,7 @@ import ImageAssets from '../../assets/ImageAssets';
 import { getAwardProps } from '../../awards/GameAwardsHelper';
 import { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
@@ -11,10 +11,14 @@ import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { limitNumber, mandatory } from '../../utils/GameUtils';
 import { resizeUnderflow } from '../../utils/SpriteUtils';
-import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import { calcTableFormatPos, Direction, HexColor } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
-import { awardBannerTextStyle, AwardsHallConstants } from './AwardsHallConstants';
-import { createAwardsHoverContainer } from './AwardsHelper';
+import {
+  awardBannerTextStyle,
+  awardNoAssetTitleStyle,
+  AwardsHallConstants
+} from './AwardsHallConstants';
+import { createAwardsHoverContainer } from './AwardsHallHelper';
 
 /**
  * This scenes display all students awards (collectibles and achievements).
@@ -150,6 +154,8 @@ class AwardsHall extends Phaser.Scene {
     const achievementsPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: achievements.length,
+      numItemLimit: AwardsHallConstants.maxAwardsPerCol,
+      redistributeLast: false,
       maxXSpace: this.awardXSpace,
       maxYSpace: AwardsHallConstants.awardYSpace
     });
@@ -170,6 +176,8 @@ class AwardsHall extends Phaser.Scene {
     const collectiblesPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: collectibles.length,
+      numItemLimit: AwardsHallConstants.maxAwardsPerCol,
+      redistributeLast: false,
       maxXSpace: this.awardXSpace,
       maxYSpace: AwardsHallConstants.awardYSpace
     });
@@ -208,13 +216,39 @@ class AwardsHall extends Phaser.Scene {
    */
   private createAward(award: AwardProperty, xPos: number, yPos: number) {
     const awardCont = new Phaser.GameObjects.Container(this, xPos, yPos);
-    const image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey).setOrigin(0.5);
-    const hoverCont = createAwardsHoverContainer(this, award);
 
-    resizeUnderflow(image, AwardsHallConstants.awardDim, AwardsHallConstants.awardDim);
+    let image;
+    if (award.assetKey === Constants.nullInteractionId) {
+      // No asset is associated with the award
+      image = new Phaser.GameObjects.Rectangle(
+        this,
+        0,
+        0,
+        AwardsHallConstants.awardDim,
+        AwardsHallConstants.awardDim,
+        HexColor.darkBlue,
+        0.8
+      );
+      image.setInteractive();
+
+      const text = new Phaser.GameObjects.Text(
+        this,
+        0,
+        0,
+        award.title,
+        awardNoAssetTitleStyle
+      ).setOrigin(0.5, 0.5);
+      awardCont.add([image, text]);
+    } else {
+      image = new Phaser.GameObjects.Sprite(this, 0, 0, award.assetKey).setOrigin(0.5);
+      resizeUnderflow(image, AwardsHallConstants.awardDim, AwardsHallConstants.awardDim);
+      image.setInteractive({ pixelPerfect: true, useHandCursor: true });
+
+      awardCont.add(image);
+    }
 
     // Set up the pop up
-    image.setInteractive({ pixelPerfect: true, useHandCursor: true });
+    const hoverCont = createAwardsHoverContainer(this, award);
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
       hoverCont.setVisible(true)
     );
@@ -230,7 +264,6 @@ class AwardsHall extends Phaser.Scene {
     );
 
     this.getLayerManager().addToLayer(Layer.UI, hoverCont);
-    awardCont.add(image);
     return awardCont;
   }
 

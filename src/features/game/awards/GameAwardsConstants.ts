@@ -1,7 +1,8 @@
 import FontAssets from '../assets/FontAssets';
-import { screenSize } from '../commons/CommonConstants';
+import { Constants, screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Color, HexColor } from '../utils/StyleUtils';
+import { AwardProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
@@ -26,9 +27,9 @@ export const awardTitleStyle: BitmapFontStyle = {
 
 export const awardKeyStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
-  size: 25,
+  size: 18,
   fill: HexColor.offWhite,
-  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 export const awardDescStyle = {
@@ -40,8 +41,21 @@ export const awardDescStyle = {
   wordWrap: { width: 500 }
 };
 
+export const defaultAwardProp: AwardProperty = {
+  id: 'default-award',
+  assetKey: Constants.nullInteractionId,
+  assetPath: Constants.nullInteractionId,
+  title: '',
+  description: 'There is no asset associated with this award.'
+};
+
+export const awardExplanation =
+  "Asset key can be used to include the asset into your room by using 'create_award' function.";
+
 const previewXPos = -screenSize.x * 0.3;
 const previewYPos = -screenSize.y * 0.05;
+const previewKeyYPos = previewYPos + 275;
+const previewDim = 430;
 
 const AwardsConstants = {
   backButtonYPos: screenSize.y * 0.3,
@@ -53,10 +67,22 @@ const AwardsConstants = {
   listTextXPos: -screenSize.x * 0.09,
   previewXPos: previewXPos,
   previewYPos: previewYPos,
-  previewDim: 430,
-  previewTitleTextConfig: { x: previewXPos, y: previewYPos - 275, oriX: 0.3, oriY: 0.5 },
-  previewKeyTextConfig: { x: previewXPos, y: previewYPos + 275, oriX: 0.3, oriY: 0.5 },
-  previewDescTextYOffset: 310,
+  previewXOffset: 30,
+  previewYOffset: 15,
+  previewDim: previewDim,
+  noPreviewTextConfig: { x: previewXPos, y: -40, oriX: 0.5, oriY: 0.5 },
+  previewTitleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 },
+  previewKeyRect: {
+    x: previewXPos,
+    y: previewKeyYPos,
+    width: previewDim,
+    height: 35
+  },
+  previewKeyExplXPos: previewXPos - 150,
+  previewKeyExplYPos: previewYPos + 200,
+  previewKeyTagTextConfig: { x: previewXPos - 205, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewKeyTextConfig: { x: previewXPos - 90, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+  previewDescTextYOffset: 320,
   arrowDownYPos: screenSize.y * 0.34,
   arrowXMidPos: screenSize.x * 0.08,
   arrowXOffset: 80,

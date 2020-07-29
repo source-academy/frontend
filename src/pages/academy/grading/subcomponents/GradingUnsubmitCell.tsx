@@ -14,7 +14,7 @@ type DispatchProps = {
 
 type StateProps = {
   data: GradingOverview;
-  group: string | null;
+  userId?: number;
   role?: Role;
 };
 
@@ -32,9 +32,11 @@ class GradingUnsubmitCell extends React.Component<UnsubmitCellProps, State> {
   }
 
   public render() {
-    if (this.props.data.submissionStatus !== 'submitted') {
-      return null;
-    } else if (this.props.group !== this.props.data.groupName && this.props.role! !== Role.Admin) {
+    if (
+      this.props.data.submissionStatus !== 'submitted' ||
+      !this.props.userId ||
+      (this.props.userId !== this.props.data.groupLeaderId && this.props.role !== Role.Admin)
+    ) {
       return null;
     }
 

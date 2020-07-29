@@ -1,0 +1,108 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementControlPanelTools component renders correctly 1`] = `
+"<AchievementControlPanelTools editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+  <PrerequisiteAdder editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+    <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: toggleDialogOpen]} text=\\"Add A Prerequisite\\">
+      <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Add A Prerequisite
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <AchievementSelection selections={{...}} inferencer={{...}} selectedId={3} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Add Prerequisite\\" dialogHeader=\\"Add A Prerequisite\\" emptySelectionsMessage=\\"You have no more prerequisites to add\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: addPrerequisiteAction]}>
+      <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Add A Prerequisite\\" canOutsideClickClose={true}>
+        <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Add A Prerequisite\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+      </Blueprint3.Dialog>
+    </AchievementSelection>
+  </PrerequisiteAdder>
+  <PrerequisiteDeleter editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+    <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: toggleDialogOpen]} text=\\"Delete A Prerequisite\\">
+      <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Delete A Prerequisite
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <AchievementSelection selections={{...}} inferencer={{...}} selectedId={2} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Delete Prerequisite\\" dialogHeader=\\"Delete A Prerequisite\\" emptySelectionsMessage=\\"You have no more prerequisites to delete\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: deleteAction]}>
+      <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Delete A Prerequisite\\" canOutsideClickClose={true}>
+        <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Delete A Prerequisite\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+      </Blueprint3.Dialog>
+    </AchievementSelection>
+  </PrerequisiteDeleter>
+  <TaskDeleter editableAchievement={{...}} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+    <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: setNonTaskAction]} text=\\"Delete This Task\\">
+      <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: setNonTaskAction]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Delete This Task
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+  </TaskDeleter>
+  <TaskPositionInserter editableAchievement={{...}} setEditableAchievement={[Function: setEditableAchievement]} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+    <div className=\\"move-editor-buttons\\">
+      <Blueprint3.Select items={{...}} onItemSelect={[Function: changePosition]} itemRenderer={[Function: selectionsRenderer]} filterable={false}>
+        <Blueprint3.QueryList items={{...}} onItemSelect={[Function (anonymous)]} itemRenderer={[Function: selectionsRenderer]} renderer={[Function (anonymous)]} disabled={false} resetOnQuery={true}>
+          <Blueprint3.Popover autoFocus={false} enforceFocus={false} isOpen={false} disabled={false} position=\\"bottom-left\\" className=\\"\\" onInteraction={[Function (anonymous)]} popoverClassName=\\"bp3-select-popover\\" onOpening={[Function (anonymous)]} onOpened={[Function (anonymous)]} onClosing={[Function (anonymous)]} boundary=\\"scrollParent\\" captureDismiss={false} defaultIsOpen={false} fill={false} hasBackdrop={false} hoverCloseDelay={300} hoverOpenDelay={150} inheritDarkTheme={true} interactionKind=\\"click\\" minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" transitionDuration={300} usePortal={true} wrapperTagName=\\"span\\">
+            <Manager>
+              <span className=\\"bp3-popover-wrapper\\">
+                <Reference innerRef={[Function: target]}>
+                  <InnerReference setReferenceNode={[Function (anonymous)]} innerRef={[Function: target]}>
+                    <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
+                      <span onClick={[Function (anonymous)]} className=\\"bp3-popover-target\\">
+                        <div onKeyDown={[Function (anonymous)]} onKeyUp={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
+                          <Blueprint3.Button className=\\"move-button\\" text={1}>
+                            <button type=\\"button\\" className=\\"bp3-button move-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                              <Blueprint3.Icon icon={[undefined]} />
+                              <span className=\\"bp3-button-text\\">
+                                1
+                              </span>
+                              <Blueprint3.Icon icon={[undefined]} />
+                            </button>
+                          </Blueprint3.Button>
+                        </div>
+                      </span>
+                    </Blueprint3.ResizeSensor>
+                  </InnerReference>
+                </Reference>
+                <Blueprint3.Overlay autoFocus={false} backdropClassName=\\"bp3-popover-backdrop\\" backdropProps={{...}} canEscapeKeyClose={true} canOutsideClickClose={true} className={[undefined]} enforceFocus={false} hasBackdrop={false} isOpen={false} onClose={[Function (anonymous)]} onClosed={[undefined]} onClosing={[Function (anonymous)]} onOpened={[Function (anonymous)]} onOpening={[Function (anonymous)]} transitionDuration={300} transitionName=\\"bp3-popover\\" usePortal={true} portalContainer={[undefined]} lazy={true} />
+              </span>
+            </Manager>
+          </Blueprint3.Popover>
+        </Blueprint3.QueryList>
+      </Blueprint3.Select>
+      <Blueprint3.Button onClick={[Function: action]} text=\\"Change Position\\" disabled={false}>
+        <button type=\\"button\\" onClick={[Function: action]} disabled={[undefined]} className=\\"bp3-button\\" onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+          <Blueprint3.Icon icon={[undefined]} />
+          <span className=\\"bp3-button-text\\">
+            Change Position
+          </span>
+          <Blueprint3.Icon icon={[undefined]} />
+        </button>
+      </Blueprint3.Button>
+    </div>
+  </TaskPositionInserter>
+  <PrerequisitePositionEditor editableAchievement={{...}} inferencer={{...}} saveChanges={[Function: saveChanges]}>
+    <Blueprint3.Button className=\\"editor-button\\" onClick={[Function: toggleDialogOpen]} text=\\"Change Prerequisite Pos\\">
+      <button type=\\"button\\" className=\\"bp3-button editor-button\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Change Prerequisite Pos
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <PrerequisiteSwapper prerequisiteIdDs={{...}} inferencer={{...}} setDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} swapPrerequisitePositionAction={[Function: swapAction]} firstID={2} setFirstID={[Function: bound dispatchAction]} secondID={2} setSecondID={[Function: bound dispatchAction]}>
+      <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true}>
+        <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Swap\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+      </Blueprint3.Dialog>
+    </PrerequisiteSwapper>
+  </PrerequisitePositionEditor>
+</AchievementControlPanelTools>"
+`;

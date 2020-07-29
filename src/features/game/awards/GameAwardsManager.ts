@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
@@ -19,7 +19,7 @@ import awardsConstants, {
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
-import { getAwardProps } from './GameAwardsHelper';
+import { createAssetKeyPreviewCont, getAwardProps } from './GameAwardsHelper';
 import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
@@ -192,16 +192,13 @@ class GameAwardsManager implements IGameUI {
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
-      this.previewContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+      this.previewContainer = new Phaser.GameObjects.Container(
+        this.scene,
+        awardsConstants.previewXOffset,
+        awardsConstants.previewYOffset
+      );
 
       if (award) {
-        // Preview image
-        const previewSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
-        resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
-        previewSprite
-          .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
-          .setOrigin(0.428, 0.468);
-
         // Preview title
         const previewTitle = createBitmapText(
           this.scene,
@@ -211,12 +208,7 @@ class GameAwardsManager implements IGameUI {
         );
 
         // Preview asset key
-        const previewKey = createBitmapText(
-          this.scene,
-          award.assetKey,
-          awardsConstants.previewKeyTextConfig,
-          awardKeyStyle
-        );
+        const previewKey = createAssetKeyPreviewCont(this.scene, award.assetKey);
 
         // Preview description
         const previewDesc = new Phaser.GameObjects.Text(
@@ -225,9 +217,25 @@ class GameAwardsManager implements IGameUI {
           awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
           award.description,
           awardDescStyle
-        ).setOrigin(0.4, 0.0);
+        ).setOrigin(0.5, 0.0);
 
-        this.previewContainer.add([previewSprite, previewTitle, previewKey, previewDesc]);
+        // Preview image
+        let previewAsset;
+        if (award.assetKey === Constants.nullInteractionId) {
+          // No asset is associated with the award
+          previewAsset = createBitmapText(
+            this.scene,
+            'No preview available',
+            awardsConstants.noPreviewTextConfig,
+            awardKeyStyle
+          );
+        } else {
+          previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
+          resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
+          previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
+        }
+
+        this.previewContainer.add([previewAsset, previewTitle, previewDesc, previewKey]);
       }
 
       this.uiContainer.add(this.previewContainer);

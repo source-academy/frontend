@@ -1,6 +1,7 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
+import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
@@ -20,6 +21,7 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
+  readonly achievement: AchievementState;
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -162,6 +164,10 @@ export const defaultDashboard: DashboardState = {
   gradingSummary: []
 };
 
+export const defaultAchievement: AchievementState = {
+  achievements: []
+};
+
 export const defaultPlayground: PlaygroundState = {
   usingSubst: false
 };
@@ -291,6 +297,7 @@ export const defaultSession: SessionState = {
 
 export const defaultState: OverallState = {
   academy: defaultAcademy,
+  achievement: defaultAchievement,
   application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,
