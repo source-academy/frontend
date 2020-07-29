@@ -69,6 +69,7 @@ export const setTokens = ({
   });
 
 export const setUser = (user: {
+  userId: number;
   name: string;
   role: Role;
   group: string | null;

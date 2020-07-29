@@ -38,6 +38,7 @@ import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
+import { getInfiniteLoopData, reportInfiniteLoopError } from '../utils/InfiniteLoopReporter';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -676,6 +677,16 @@ export function* evalCode(
     const parsed = parse(code, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
+
+    // report infinite loops but only for 'vanilla'/default source
+    if (context.variant === 'default') {
+      const infiniteLoopData = getInfiniteLoopData(context, code);
+      if (infiniteLoopData) {
+        const [error, code] = infiniteLoopData;
+        yield call(reportInfiniteLoopError, error, code);
+      }
+    }
+
     if (typeErrors && typeErrors.length > 0) {
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)

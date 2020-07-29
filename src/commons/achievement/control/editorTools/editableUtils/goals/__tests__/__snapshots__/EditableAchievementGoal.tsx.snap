@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementExp component renders correctly 1`] = `
+"<EditableAchievementGoal goal={{...}} editGoal={[Function: editGoal]} removeGoal={[Function: removeGoal]}>
+  <div className=\\"goal\\">
+    <div className=\\"goal-medal\\">
+      <Blueprint3.Icon color=\\"#F0E68C\\" className=\\"goal-award\\" iconSize={44} icon=\\"badge\\">
+        <span icon=\\"badge\\" className=\\"bp3-icon bp3-icon-badge goal-award\\" title={[undefined]}>
+          <svg fill=\\"#F0E68C\\" data-icon=\\"badge\\" width={44} height={44} viewBox=\\"0 0 20 20\\">
+            <desc>
+              badge
+            </desc>
+            <path d=\\"M16.94 5.73c-.19-1.41.62-2.52 1.38-3.59L17.03.65C14.89 1.76 11.88 1.48 10 0 8.12 1.48 5.11 1.76 2.97.65L1.68 2.14c.76 1.07 1.57 2.18 1.38 3.59C2.68 8.59 0 10.94 1.4 14.08c.56 1.43 1.81 2.37 3.4 2.75 1.95.46 4.4.91 5.2 3.17.8-2.26 3.25-2.71 5.2-3.17 1.6-.38 2.84-1.32 3.4-2.75 1.4-3.14-1.28-5.49-1.66-8.35z\\" fillRule=\\"evenodd\\" />
+          </svg>
+        </span>
+      </Blueprint3.Icon>
+      <div>
+        213
+         /
+        <Blueprint3.EditableText placeholder=\\"Enter your goal target here\\" value=\\"250\\" onChange={[Function: changeTarget]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
+          <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+            <span className=\\"bp3-editable-text-content\\" style={{...}}>
+              250
+            </span>
+          </div>
+        </Blueprint3.EditableText>
+        XP
+      </div>
+    </div>
+    <div className=\\"goal-text\\">
+      <Blueprint3.EditableText placeholder=\\"Enter your goal text here\\" value=\\"Complete Beyond the Second Dimension achievement\\" onChange={[Function: changeGoalText]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
+        <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+          <span className=\\"bp3-editable-text-content\\" style={{...}}>
+            Complete Beyond the Second Dimension achievement
+          </span>
+        </div>
+      </Blueprint3.EditableText>
+    </div>
+    <Blueprint3.Button text=\\"Remove Goal\\" onClick={[Function: onClick]}>
+      <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Remove Goal
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+  </div>
+</EditableAchievementGoal>"
+`;

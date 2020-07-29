@@ -2,6 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
@@ -16,7 +17,6 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -77,6 +77,7 @@ class Application extends React.Component<ApplicationProps, {}> {
               <Route path="/login" render={toLogin(this.props)} />
               <Route path="/contributors" component={Contributors} />
               <Route path="/sourcecast" component={SourcecastContainer} />
+              <Route path="/achievement" component={toAchievement(this.props)} />
               <Route exact={true} path="/" render={this.redirectToAcademy} />
               <Route component={NotFound} />
             </Switch>
@@ -99,6 +100,16 @@ const toAcademy = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
+
+/**
+ * A user routes to /achievement,
+ *  1. If the user is logged in, render the Achievement component
+ *  2. If the user is not logged in, redirect to /login
+ */
+const toAchievement = (props: ApplicationProps) =>
+  props.accessToken === undefined || props.role === undefined
+    ? () => <Redirect to="/login" />
+    : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);

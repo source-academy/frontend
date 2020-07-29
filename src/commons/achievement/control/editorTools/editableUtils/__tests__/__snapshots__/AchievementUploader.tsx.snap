@@ -1,0 +1,3 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AchievementUploader component renders correctly 1`] = `"<AchievementUploader hasChanges={false} saveChanges={[Function: saveChanges]} discardChanges={[Function: discardChanges]} pendingUpload={false} uploadChanges={[Function: uploadChanges]} />"`;

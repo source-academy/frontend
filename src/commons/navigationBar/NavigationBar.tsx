@@ -61,6 +61,16 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           {Constants.playgroundOnly ? 'Source Academy Playground' : 'Playground'}
         </div>
       </NavLink>
+      {props.role && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/achievement"
+        >
+          <Icon icon={IconNames.MOUNTAIN} />
+          <div className="navbar-button-text hidden-xs hidden-sm">Achievement</div>
+        </NavLink>
+      )}
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>

@@ -49,7 +49,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  group: string | null;
+  userId?: number;
   gradingOverviews?: GradingOverview[];
   notifications: Notification[];
   role?: Role;
@@ -165,7 +165,7 @@ class Grading extends React.Component<GradingProps, State> {
         field: '',
         cellRendererFramework: GradingUnsubmitCell,
         cellRendererParams: {
-          group: this.props.group,
+          userId: this.props.userId,
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
           role: this.props.role
         },
