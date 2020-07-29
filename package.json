@@ -67,7 +67,7 @@
     "redux-saga": "^1.1.3",
     "sharedb-ace": "^1.0.9",
     "showdown": "^1.9.1",
-    "sourceror": "^0.6.3",
+    "sourceror": "file:../sourceror/sourceror-driver",
     "typesafe-actions": "^5.1.0",
     "xml2js": "^0.4.23",
     "yareco": "^0.1.5"

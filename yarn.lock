@@ -13675,15 +13675,13 @@ source-map@^0.7.3:
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.7.3.tgz#5302f8169031735226544092e64981f751750383"
   integrity sha512-CkCj6giN3S+n9qrYiBTX5gystlENnRW5jZeNLHpe6aue+SrHcG5VYwujhW9s4dY31mEGsxBDrHR6oI69fTXsaQ==
 
-sourceror@^0.6.3:
+"sourceror@file:../sourceror/sourceror-driver":
   version "0.6.3"
-  resolved "https://registry.yarnpkg.com/sourceror/-/sourceror-0.6.3.tgz#633dba344c75c64a67fda90d75f5def3c9e6d452"
-  integrity sha512-mZ9hJxcrKKNfOs8Gyi7MMDHzkzj8jBzl1yfnZANSxmS++kccHMwDWPAudFSv2tIohdpzM3uL3VE6q+A3IDLkzA==
   dependencies:
     "@btzy/libsourceror" "^0.0.1"
     "@types/estree" "^0.0.45"
     "@types/node" "^14.0.14"
-    js-slang "^0.4.52"
+    js-slang "^0.4.53"
     node-getopt "^0.3.2"
 
 spawn-error-forwarder@~1.0.0:
