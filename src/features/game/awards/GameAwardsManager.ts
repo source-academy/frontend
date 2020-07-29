@@ -235,6 +235,7 @@ class GameAwardsManager implements IGameUI {
           previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
         }
 
+        // Black tint to overlay the asset if award is not completed
         const blackTint = new Phaser.GameObjects.Rectangle(
           this.scene,
           awardsConstants.previewXPos,

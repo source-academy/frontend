@@ -247,6 +247,17 @@ class AwardsHall extends Phaser.Scene {
       awardCont.add(image);
     }
 
+    // Add black tint if award is not completed
+    const blackTint = new Phaser.GameObjects.Rectangle(
+      this,
+      0,
+      0,
+      AwardsHallConstants.awardDim,
+      AwardsHallConstants.awardDim,
+      0
+    ).setAlpha(award.completed === false ? 0.8 : 0);
+    awardCont.add(blackTint);
+
     // Set up the pop up
     const hoverCont = createAwardsHoverContainer(this, award);
     image.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
