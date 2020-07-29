@@ -9,6 +9,8 @@ import SourceAcademyGame, {
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
+  const achievements = useSelector((state: OverallState) => state.achievement.achievements);
+
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
@@ -22,12 +24,14 @@ function Game() {
 
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
+    SourceAcademyGame.getInstance().setAchievements(achievements);
+
     if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
       SourceAcademyGame.getInstance().toggleUsingMock();
     }
-  }, [session]);
+  }, [achievements, session]);
 
   return (
     <>

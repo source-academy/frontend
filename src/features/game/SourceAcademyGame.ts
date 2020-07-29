@@ -15,6 +15,7 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
+import { AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
@@ -36,6 +37,7 @@ export enum GameType {
 
 type GlobalGameProps = {
   accountInfo: AccountInfo | undefined;
+  achievements: AchievementItem[] | undefined;
   setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
   currentSceneRef?: Phaser.Scene;
@@ -61,6 +63,7 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global = {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       accountInfo: undefined,
+      achievements: undefined,
       setStorySimState: Constants.nullFunction,
       currentSceneRef: undefined,
       soundManager: new GameSoundManager(),
@@ -82,6 +85,10 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public setAccountInfo(acc: AccountInfo | undefined) {
     this.global.accountInfo = acc;
+  }
+
+  public setAchievements(achievements: AchievementItem[]) {
+    this.global.achievements = achievements;
   }
 
   public setAwardsMapping(awardsMapping: Map<ItemId, AwardProperty>) {
@@ -122,6 +129,7 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public getAwardsMapping = () => mandatory(this.global.awardsMapping);
   public getAccountInfo = () => mandatory(this.global.accountInfo);
+  public getAchievements = () => mandatory(this.global.achievements);
   public getSoundManager = () => mandatory(this.global.soundManager);
   public getUserStateManager = () => mandatory(this.global.userStateManager);
   public getSaveManager = () => mandatory(this.global.saveManager);

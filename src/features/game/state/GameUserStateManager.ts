@@ -1,5 +1,4 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
-import { store } from 'src/pages/createStore';
 
 import { getAwardProp } from '../awards/GameAwardsHelper';
 import { AwardProperty } from '../awards/GameAwardsTypes';
@@ -85,7 +84,7 @@ export default class GameUserStateManager {
    * Fetches achievements of the student;
    */
   public async loadAchievements() {
-    const achievements = store.getState().achievement.achievements;
+    const achievements = SourceAcademyGame.getInstance().getAchievements();
 
     achievements.forEach(achievement => {
       const achievementId = achievement.id.toString();
