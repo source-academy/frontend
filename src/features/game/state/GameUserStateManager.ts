@@ -2,6 +2,7 @@ import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
 import { getAwardProp } from '../awards/GameAwardsHelper';
 import { AwardProperty } from '../awards/GameAwardsTypes';
+import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -99,8 +100,8 @@ export default class GameUserStateManager {
         // If there is no mapping, we create one from available information
         newAwardProp = {
           id: achievementId,
-          assetKey: '',
-          assetPath: '',
+          assetKey: Constants.nullInteractionId,
+          assetPath: Constants.nullInteractionId,
           title: achievement.title,
           description: achievement.view.description,
           completed: isCompleted
