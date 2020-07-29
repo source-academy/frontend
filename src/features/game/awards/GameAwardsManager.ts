@@ -223,6 +223,7 @@ class GameAwardsManager implements IGameUI {
         // Preview image
         let previewAsset;
         if (award.assetKey === Constants.nullInteractionId) {
+          // No asset is associated with the award
           previewAsset = createBitmapText(
             this.scene,
             'No preview available',

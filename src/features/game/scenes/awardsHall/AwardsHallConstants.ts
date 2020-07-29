@@ -7,7 +7,7 @@ export const AwardsHallConstants = {
   defaultScrollSpeed: 20,
   itemPerCol: 4,
   tileDim: 2048,
-  maxAwardsPerCol: 4,
+  maxAwardsPerCol: 2,
   awardsXSpacing: 300,
   arrowXOffset: 875,
   awardYStartPos: 300,
@@ -23,6 +23,14 @@ export const awardBannerTextStyle: BitmapFontStyle = {
   size: 35,
   fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
+};
+
+export const awardNoAssetTitleStyle = {
+  fontFamily: 'Verdana',
+  fontSize: '30px',
+  fill: Color.lightBlue,
+  align: 'center',
+  wordWrap: { width: AwardsHallConstants.awardDim - 20 }
 };
 
 export const awardHoverTitleStyle = {
