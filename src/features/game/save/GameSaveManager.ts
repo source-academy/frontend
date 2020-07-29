@@ -136,7 +136,7 @@ export default class GameSaveManager {
     return this.getGameSaveState().currentLocation;
   }
   /**
-   * Returns the save state for a particular chapter, could return undefined
+   * Returns the save state for a particular chapter, if no data, then create an empty save state
    */
   public getChapterSaveState(index: number) {
     return this.fullSaveState.gameSaveStates[index] || createEmptyGameSaveState();

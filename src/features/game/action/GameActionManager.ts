@@ -10,7 +10,8 @@ import { ActionCondition } from './GameActionTypes';
  */
 export default class GameActionManager {
   /**
-   * Process an array of actions, denoted by their IDs,
+   * Executes an array of state-change actions
+   * to bring game state same as last player's progress
    *
    * @param actionIds ids of the actions
    */
