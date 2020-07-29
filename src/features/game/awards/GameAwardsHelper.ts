@@ -48,7 +48,7 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene, assetKey: string)
   const assetKeyTagBg = new Phaser.GameObjects.Rectangle(
     scene,
     AwardsConstants.previewKeyRect.x -
-    AwardsConstants.previewKeyRect.width * assetKeyBg.originX * 0.75,
+      AwardsConstants.previewKeyRect.width * assetKeyBg.originX * 0.75,
     AwardsConstants.previewKeyRect.y,
     AwardsConstants.previewKeyRect.width / 4,
     AwardsConstants.previewKeyRect.height,

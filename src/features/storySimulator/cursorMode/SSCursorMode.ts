@@ -4,7 +4,7 @@ import { AssetKey } from 'src/features/game/commons/CommonTypes';
 import { createButton } from 'src/features/game/utils/ButtonUtils';
 
 import SSImageAssets from '../assets/ImageAssets';
-import SSCursorModeConstants, { altTextStyle } from './SSCursorModeConstants';
+import SSCursorModeConstants from './SSCursorModeConstants';
 import { CursorMode } from './SSCursorModeTypes';
 
 export default class SSCursorMode extends Phaser.GameObjects.Container {
@@ -52,7 +52,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
     const currIdx = this.cursorModes.length - 1;
 
     // On hover text container
-    const hoverText = new CommonTextHover(scene, 0, 0, text, altTextStyle);
+    const hoverText = new CommonTextHover(scene, 0, 0, text);
 
     const onUp = () => {
       if (this.isModes[currIdx]) this.currActiveModeIdx = currIdx;

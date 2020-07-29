@@ -17,13 +17,6 @@ export const chapterTitleStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const chapterActionAltStyle: BitmapFontStyle = {
-  key: FontAssets.zektonFont.key,
-  size: 20,
-  fill: HexColor.lightBlue,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
-};
-
 const marginX = 0;
 const marginY = 100;
 const imageRectWidth = 500;

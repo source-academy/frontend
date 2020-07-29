@@ -18,7 +18,7 @@ import {
   awardNoAssetTitleStyle,
   AwardsHallConstants
 } from './AwardsHallConstants';
-import { createAwardsHoverContainer } from './AwardsHelper';
+import { createAwardsHoverContainer } from './AwardsHallHelper';
 
 /**
  * This scenes display all students awards (collectibles and achievements).

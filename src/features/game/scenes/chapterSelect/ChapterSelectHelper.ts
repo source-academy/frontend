@@ -7,11 +7,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
 import ChapterSelect from './ChapterSelect';
-import chapConstants, {
-  chapterActionAltStyle,
-  chapterIndexStyle,
-  chapterTitleStyle
-} from './ChapterSelectConstants';
+import chapConstants, { chapterIndexStyle, chapterTitleStyle } from './ChapterSelectConstants';
 
 /**
  * Create a chapter selection and formats it.
@@ -52,20 +48,8 @@ export function createChapter(
   );
 
   // Chapter Action Popup
-  const chapterRepeatHover = new CommonTextHover(
-    scene,
-    0,
-    0,
-    'Reset progress',
-    chapterActionAltStyle
-  );
-  const chapterContinueHover = new CommonTextHover(
-    scene,
-    0,
-    0,
-    'Play/Continue',
-    chapterActionAltStyle
-  );
+  const chapterRepeatHover = new CommonTextHover(scene, 0, 0, 'Reset progress');
+  const chapterContinueHover = new CommonTextHover(scene, 0, 0, 'Play/Continue');
 
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
