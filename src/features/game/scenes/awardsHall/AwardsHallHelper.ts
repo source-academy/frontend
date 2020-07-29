@@ -60,14 +60,11 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     ImageAssets.scrollFrame.key
   );
 
-  hoverContainer.add([
-    hoverTextBg,
-    awardTitle,
-    awardAssetKey,
-    awardDesc,
-    scrollFrameTop,
-    scrollFrameBot
-  ]);
+  hoverContainer.add([hoverTextBg, awardTitle, awardDesc, scrollFrameTop, scrollFrameBot]);
+
+  // Only show asset key if award is completed
+  award.completed !== false && hoverContainer.add(awardAssetKey);
+
   hoverContainer.setVisible(false);
   return hoverContainer;
 };

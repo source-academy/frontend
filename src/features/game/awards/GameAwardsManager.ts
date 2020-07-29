@@ -199,26 +199,6 @@ class GameAwardsManager implements IGameUI {
       );
 
       if (award) {
-        // Preview title
-        const previewTitle = createBitmapText(
-          this.scene,
-          award.title,
-          awardsConstants.previewTitleTextConfig,
-          awardTitleStyle
-        );
-
-        // Preview asset key
-        const previewKey = createAssetKeyPreviewCont(this.scene, award.assetKey);
-
-        // Preview description
-        const previewDesc = new Phaser.GameObjects.Text(
-          this.scene,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
-          award.description,
-          awardDescStyle
-        ).setOrigin(0.5, 0.0);
-
         // Preview image
         let previewAsset;
         if (award.assetKey === Constants.nullInteractionId) {
@@ -234,6 +214,27 @@ class GameAwardsManager implements IGameUI {
           resizeUnderflow(previewAsset, awardsConstants.previewDim, awardsConstants.previewDim);
           previewAsset.setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos);
         }
+
+        // Preview title
+        const previewTitle = createBitmapText(
+          this.scene,
+          award.title,
+          awardsConstants.previewTitleTextConfig,
+          awardTitleStyle
+        );
+
+        // Preview description
+        const previewDesc = new Phaser.GameObjects.Text(
+          this.scene,
+          awardsConstants.previewXPos,
+          awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
+          award.description,
+          awardDescStyle
+        ).setOrigin(0.5, 0.0);
+
+        // Preview asset key, use only empty string if award is not completed
+        const assetKey = award.completed === false ? '' : award.assetKey;
+        const previewKey = createAssetKeyPreviewCont(this.scene, assetKey);
 
         // Black tint to overlay the asset if award is not completed
         const blackTint = new Phaser.GameObjects.Rectangle(
@@ -317,19 +318,15 @@ class GameAwardsManager implements IGameUI {
 
     // Populate container with all the item buttons
     itemsContainer.add(
-      items.map((awardProp, index) => {
-        const button = this.createItemButton(
+      items.map((awardProp, index) =>
+        this.createItemButton(
           awardProp.title,
           itemPositions[index][0],
           itemPositions[index][1] + awardsConstants.listYStartPos,
-          () => this.setPreview(awardProp)
-        );
-
-        // For non completed awards, make it less visible
-        if (awardProp.completed === false) button.setAlpha(0.5);
-
-        return button;
-      })
+          () => this.setPreview(awardProp),
+          awardProp.completed !== false
+        )
+      )
     );
     return itemsContainer;
   }
@@ -344,14 +341,25 @@ class GameAwardsManager implements IGameUI {
    * @param yPos y position of the button
    * @param callback callback to be executed on click
    */
-  private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.scene, {
+  private createItemButton(
+    obj: string,
+    xPos: number,
+    yPos: number,
+    callback: any,
+    completed: boolean
+  ) {
+    const button = createButton(this.scene, {
       assetKey: ImageAssets.awardsBanner.key,
       message: obj,
       textConfig: { x: awardsConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
       bitMapTextStyle: listBannerTextStyle,
-      onUp: callback
+      onUp: callback,
+      onHoverEffect: completed
     }).setPosition(xPos, yPos);
+
+    // For non completed award, they do not hover effect and is less visible
+    if (!completed) button.setAlpha(0.5);
+    return button;
   }
 
   /**
