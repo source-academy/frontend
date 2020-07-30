@@ -34,6 +34,7 @@ import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
   Input,
+  PlaybackData,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
@@ -118,6 +119,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
   const [logs, setLogs] = React.useState<Input[]>([]);
+  const [startingEditorValue, setStartingEditorValue] = React.useState<string>('');
 
   const handlers = React.useMemo(
     () => ({
@@ -175,10 +177,43 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
+  const getReadyLogs = () => {
+    const playbackData: PlaybackData = {
+      init: {
+        chapter: props.sourceChapter,
+        externalLibrary: props.externalLibraryName as ExternalLibraryName,
+        editorValue: startingEditorValue
+      },
+      inputs: logs
+    };
+    console.log(playbackData);
+
+    setLogs([]);
+  };
+
+  const pushLog = React.useCallback(
+    (newInput: Input) => {
+      const logsCopy = logs;
+
+      if (logsCopy.length === 0) {
+        setStartingEditorValue(props.editorValue);
+      }
+
+      logsCopy.push(newInput);
+
+      if (logsCopy.length > 10000) {
+        uploadLogs();
+      } else {
+        setLogs(logsCopy);
+      }
+    },
+    [logs, setLogs]
+  );
+
   // TODO: Implemenet THis for Keystroke Logging!
   const uploadLogs = React.useCallback(() => {
-    console.log(logs);
-  }, [logs]);
+    getReadyLogs();
+  }, [getReadyLogs]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();
@@ -223,9 +258,25 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleReplOutputClear();
         handleUsingSubst(false);
       }
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'chapterSelect',
+        data: chapter
+      };
+
+      pushLog(input);
+
       handleChapterSelect(chapter, variant);
     },
-    [handleReplOutputClear, handleUsingSubst, hasBreakpoints, handleChapterSelect, selectedTab]
+    [
+      hasBreakpoints,
+      selectedTab,
+      pushLog,
+      handleChapterSelect,
+      handleUsingSubst,
+      handleReplOutputClear
+    ]
   );
 
   const chapterSelect = React.useMemo(
@@ -307,17 +358,30 @@ const Playground: React.FC<PlaygroundProps> = props => {
   );
 
   const { handleExternalSelect, externalLibraryName } = props;
+
+  const handleExternalSelectAndRecord = (name: ExternalLibraryName) => {
+    handleExternalSelect(name);
+
+    const input: Input = {
+      time: Date.now(),
+      type: 'externalLibrarySelect',
+      data: name
+    };
+
+    pushLog(input);
+  };
+
   const externalLibrarySelect = React.useMemo(
     () => (
       <ControlBarExternalLibrarySelect
         externalLibraryName={externalLibraryName}
         handleExternalSelect={({ name }: { name: ExternalLibraryName }, e: any) =>
-          handleExternalSelect(name)
+          handleExternalSelectAndRecord(name)
         }
         key="external_library"
       />
     ),
-    [externalLibraryName, handleExternalSelect]
+    [externalLibraryName, handleExternalSelectAndRecord]
   );
 
   const sessionButtons = React.useMemo(
@@ -435,10 +499,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       data: delta
     };
 
-    const logsCopy = logs;
-
-    logsCopy.push(input);
-    setLogs(logsCopy);
+    pushLog(input);
   };
 
   const onCursorChangeMethod = (selection: any) => {
@@ -448,10 +509,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       data: selection.getCursor()
     };
 
-    const logsCopy = logs;
-
-    logsCopy.push(input);
-    setLogs(logsCopy);
+    pushLog(input);
   };
 
   const onSelectionChangeMethod = (selection: any) => {
@@ -464,10 +522,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         data: { range, isBackwards }
       };
 
-      const logsCopy = logs;
-
-      logsCopy.push(input);
-      setLogs(logsCopy);
+      pushLog(input);
     }
   };
 

@@ -12,7 +12,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { debounce, isEqual } from 'lodash';
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import {
   CodeDelta,
@@ -183,9 +183,9 @@ class AssessmentWorkspace extends React.Component<
   }
 
   // TODO: Implemenet THis for Keystroke Logging!
-  public uploadLogs = () => debounce(this.setLogs, 1000 * 60 * 60);
+  public uploadLogs = () => this.getReadyLogs();
 
-  public setLogs = () => {
+  public getReadyLogs = () => {
     const playbackData: PlaybackData = {
       init: {
         chapter: this.props.assessment!.questions[this.props.questionId].library.chapter,
