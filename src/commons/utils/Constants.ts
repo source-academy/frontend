@@ -45,6 +45,7 @@ export enum Links {
   luminus = 'https://luminus.nus.edu.sg/modules/41d42e9a-5880-43b5-8ee6-75f5a41355e3/announcements/active',
   piazza = 'https://piazza.com/class/kas136yscf8605',
   shareDBServer = 'api2.sourceacademy.nus.edu.sg/',
+  sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
   sourceDocs = 'https://source-academy.github.io/source/',
   sourceDocsChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
   sourceDocsChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',

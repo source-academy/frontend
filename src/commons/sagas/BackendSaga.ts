@@ -133,6 +133,7 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
+
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     const resp = yield call(postAnswer, questionId, answer, tokens);

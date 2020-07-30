@@ -38,6 +38,7 @@ export function* mockBackendSaga(): SagaIterator {
       refreshToken: 'refreshToken'
     };
     const user = {
+      userId: 123,
       name: 'DevStaff',
       role: 'staff' as Role,
       group: '1F',
