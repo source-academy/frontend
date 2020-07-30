@@ -119,11 +119,13 @@ export default class GamePhaseManager {
 
     // Execute phase transition callback.
     // If executed, we no longer do transition to the new phase.
+    this.inputManager.enableMouseInput(true);
+    this.inputManager.enableKeyboardInput(true);
     if (await this.interruptTransitionCallback(prevPhase, newPhase)) {
-      this.inputManager.enableMouseInput(true);
-      this.inputManager.enableKeyboardInput(true);
       return;
     }
+    this.inputManager.enableMouseInput(false);
+    this.inputManager.enableKeyboardInput(false);
 
     this.transitionCallback(prevPhase, newPhase);
 
