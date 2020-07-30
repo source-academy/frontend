@@ -132,6 +132,27 @@ export async function putUserGameState(
 }
 
 /**
+ * POST request
+ *
+ * TODO: Fix URL of backend when ready.
+ */
+export async function postKeystrokeLogs(
+  tokens: Tokens,
+  playbackData: PlaybackData
+): Promise<Response | null> {
+  const resp = await request(`keystroke/`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { playbackData: playbackData },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
  * GET /achievements
  *
  * Will be updated after a separate db for student progress is ready

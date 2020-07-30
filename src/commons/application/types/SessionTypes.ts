@@ -28,6 +28,8 @@ export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
+export const UPDATE_KEYSTROKE_LOGS = 'UPDATE_KEYSTROKE_LOGS';
+
 export type SessionState = {
   readonly accessToken?: string;
   readonly assessmentOverviews?: AssessmentOverview[];

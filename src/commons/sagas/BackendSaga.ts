@@ -38,7 +38,8 @@ import {
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
-  UNSUBMIT_SUBMISSION
+  UNSUBMIT_SUBMISSION,
+  UPDATE_KEYSTROKE_LOGS
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
@@ -63,6 +64,7 @@ import {
   postAssessment,
   postAuth,
   postGrading,
+  postKeystrokeLogs,
   postSourcecast,
   postUnsubmit,
   publishAssessment,
@@ -579,6 +581,26 @@ function* BackendSaga(): SagaIterator {
       yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
     } else if (respMsg === 'Force Update OK') {
       yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+    } else {
+      yield call(showWarningMessage, respMsg, 10000);
+      return;
+    }
+    yield put(actions.fetchAssessmentOverviews());
+  });
+
+  yield takeEvery(UPDATE_KEYSTROKE_LOGS, function* (
+    action: ReturnType<typeof actions.updateKeystrokeLogs>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const playbackData = action.payload;
+    const respMsg = yield postKeystrokeLogs(tokens, playbackData);
+    if (!respMsg) {
+      yield handleResponseError(respMsg);
+    } else if (respMsg === 'OK') {
+      yield call(showSuccessMessage, 'Keystrokes Uploaded successfully!', 2000);
     } else {
       yield call(showWarningMessage, respMsg, 10000);
       return;

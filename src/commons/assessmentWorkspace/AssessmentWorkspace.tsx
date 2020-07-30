@@ -12,12 +12,13 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
-import { isEqual } from 'lodash';
+import { debounce, isEqual } from 'lodash';
 import * as React from 'react';
 import {
   CodeDelta,
   Input,
   KeyboardCommand,
+  PlaybackData,
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
@@ -125,7 +126,7 @@ class AssessmentWorkspace extends React.Component<
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
     logs: Input[];
-    previousAction: string;
+    startingEditorValue: string | null;
   }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
@@ -134,7 +135,7 @@ class AssessmentWorkspace extends React.Component<
       showOverlay: false,
       showResetTemplateOverlay: false,
       logs: [],
-      previousAction: 'cursorPositionChange'
+      startingEditorValue: ''
     };
 
     this.props.handleEditorValueChange('');
@@ -182,8 +183,38 @@ class AssessmentWorkspace extends React.Component<
   }
 
   // TODO: Implemenet THis for Keystroke Logging!
-  public uploadLogs = () => {
-    console.log(this.state.logs);
+  public uploadLogs = () => debounce(this.setLogs, 1000 * 60 * 60);
+
+  public setLogs = () => {
+    const playbackData: PlaybackData = {
+      init: {
+        chapter: this.props.assessment!.questions[this.props.questionId].library.chapter,
+        externalLibrary: this.props.assessment!.questions[this.props.questionId].library.external
+          .name,
+        editorValue: this.state.startingEditorValue ? this.state.startingEditorValue : ''
+      },
+      inputs: this.state.logs
+    };
+    console.log(this.props.questionId);
+    console.log(playbackData);
+
+    this.setState({ logs: [], startingEditorValue: this.props.editorValue });
+  };
+
+  public pushLog = (newInput: Input) => {
+    const logsCopy = this.state.logs;
+
+    if (logsCopy.length === 0) {
+      this.setState({ startingEditorValue: this.props.editorValue });
+    }
+
+    logsCopy.push(newInput);
+
+    if (logsCopy.length > 10000) {
+      this.uploadLogs();
+    } else {
+      this.setState({ logs: logsCopy });
+    }
   };
 
   public render() {
@@ -262,11 +293,7 @@ class AssessmentWorkspace extends React.Component<
         data: delta
       };
 
-      console.log(input);
-
-      const logsCopy = this.state.logs;
-      logsCopy.push(input);
-      this.setState({ logs: logsCopy, previousAction: delta.action });
+      this.pushLog(input);
     };
 
     const onCursorChangeMethod = (selection: any) => {
@@ -276,12 +303,7 @@ class AssessmentWorkspace extends React.Component<
         data: selection.getCursor()
       };
 
-      console.log(input);
-
-      const logsCopy = this.state.logs;
-
-      logsCopy.push(input);
-      this.setState({ logs: logsCopy });
+      this.pushLog(input);
     };
 
     const onSelectionChangeMethod = (selection: any) => {
@@ -294,12 +316,7 @@ class AssessmentWorkspace extends React.Component<
           data: { range, isBackwards }
         };
 
-        console.log(input);
-
-        const logsCopy = this.state.logs;
-
-        logsCopy.push(input);
-        this.setState({ logs: logsCopy });
+        this.pushLog(input);
       }
     };
 
@@ -615,10 +632,7 @@ class AssessmentWorkspace extends React.Component<
         data: KeyboardCommand.run
       };
 
-      const logsCopy = this.state.logs;
-
-      logsCopy.push(input);
-      this.setState({ logs: logsCopy });
+      this.pushLog(input);
     };
 
     const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;

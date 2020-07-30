@@ -117,7 +117,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
-  const [logs, setLogs] = React.useState<any[]>([]);
+  const [logs, setLogs] = React.useState<Input[]>([]);
 
   const handlers = React.useMemo(
     () => ({
@@ -435,8 +435,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       data: delta
     };
 
-    console.log(input);
-
     const logsCopy = logs;
 
     logsCopy.push(input);
@@ -449,8 +447,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       type: 'cursorPositionChange',
       data: selection.getCursor()
     };
-
-    console.log(input);
 
     const logsCopy = logs;
 
@@ -467,8 +463,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
         type: 'selectionRangeData',
         data: { range, isBackwards }
       };
-
-      console.log(input);
 
       const logsCopy = logs;
 

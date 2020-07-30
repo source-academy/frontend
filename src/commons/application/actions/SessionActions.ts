@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
   Notification,
@@ -31,6 +32,7 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
+  UPDATE_KEYSTROKE_LOGS,
   UPDATE_NOTIFICATIONS
 } from '../types/SessionTypes';
 
@@ -156,3 +158,6 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
+
+export const updateKeystrokeLogs = (playbackData: PlaybackData) =>
+  action(UPDATE_KEYSTROKE_LOGS, playbackData);
