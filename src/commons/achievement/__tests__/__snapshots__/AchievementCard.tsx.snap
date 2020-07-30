@@ -30,7 +30,7 @@ exports[`AchievementCard component renders correctly 1`] = `
             </Blueprint3.Icon>
             <span style={{...}}>
               <p>
-                4 Weeks
+                3 Weeks
               </p>
             </span>
           </div>
