@@ -46,10 +46,10 @@ export const getAwardProp = (awardKey: ItemId): AwardProperty => {
 export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
   const assetKeyCont = new Phaser.GameObjects.Container(
     scene,
-    AwardsConstants.previewXOffset,
-    AwardsConstants.previewYOffset
+    AwardsConstants.preview.rect.xOffset,
+    AwardsConstants.preview.rect.yOffset
   );
-  const rectDim = AwardsConstants.previewKeyRect;
+  const rectDim = AwardsConstants.preview.key;
 
   // Create asset key bar and text
   const assetKeyBg = new Phaser.GameObjects.Rectangle(
@@ -73,15 +73,15 @@ export function createAssetKeyPreviewCont(scene: Phaser.Scene) {
   const assetKeyTag = createBitmapText(
     scene,
     'asset key',
-    AwardsConstants.previewKeyTagTextConfig,
+    AwardsConstants.preview.keyTagTextConfig,
     awardKeyStyle
   );
 
   // Create explanation pop-up
   const hoverCont = new CommonTextHover(
     scene,
-    AwardsConstants.previewKeyExplXPos,
-    AwardsConstants.previewKeyExplYPos,
+    AwardsConstants.preview.explanation.x,
+    AwardsConstants.preview.explanation.y,
     awardExplanation
   );
 

@@ -59,37 +59,23 @@ const previewKeyYPos = previewYPos + 275;
 const previewDim = 430;
 
 const AwardsConstants = {
-  backButtonYPos: screenSize.y * 0.3,
-  pageYStartPos: -screenSize.y * 0.3,
-  pageYSpacing: 150,
-  pageTextXPos: screenSize.x * 0.3,
-  listYStartPos: -screenSize.y * 0.31,
-  listYSpacing: 100,
-  listTextXPos: -screenSize.x * 0.09,
-  previewXPos: previewXPos,
-  previewYPos: previewYPos,
-  previewXOffset: 30,
-  previewYOffset: 15,
-  previewDim: previewDim,
+  arrow: { x: screenSize.x * 0.08, y: screenSize.y * 0.34, xOffset: 80, xScale: 0.4, yScale: 0.3 },
+  backButton: { y: screenSize.y * 0.3 },
+  itemsPerPage: 7,
+  list: { yStart: -screenSize.y * 0.31, ySpace: 100 },
+  listTextConfig: { x: -screenSize.x * 0.09, y: 0, oriX: 0.0, oriY: 0.55 },
   noPreviewTextConfig: { x: previewXPos, y: -40, oriX: 0.5, oriY: 0.5 },
-  previewTitleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 },
-  previewKeyRect: {
-    x: previewXPos,
-    y: previewKeyYPos,
-    width: previewDim,
-    height: 35
-  },
-  previewKeyExplXPos: previewXPos - 150,
-  previewKeyExplYPos: previewYPos + 200,
-  previewKeyTagTextConfig: { x: previewXPos - 205, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
-  previewKeyTextConfig: { x: previewXPos - 90, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
-  previewDescTextYOffset: 320,
-  arrowDownYPos: screenSize.y * 0.34,
-  arrowXMidPos: screenSize.x * 0.08,
-  arrowXOffset: 80,
-  arrowXScale: 0.4,
-  arrowYScale: 0.3,
-  itemsPerPage: 7
+  page: { yStart: -screenSize.y * 0.3, ySpace: 150 },
+  pageTextConfig: { x: screenSize.x * 0.3, y: 0, oriX: 0.1, oriY: 0.5 },
+  preview: {
+    descText: { yOffset: 320 },
+    rect: { dim: previewDim, x: previewXPos, y: previewYPos, xOffset: 30, yOffset: 15 },
+    key: { x: previewXPos, y: previewKeyYPos, width: previewDim, height: 35 },
+    keyTagTextConfig: { x: previewXPos - 205, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+    keyTextConfig: { x: previewXPos - 90, y: previewKeyYPos, oriX: 0.0, oriY: 0.5 },
+    explanation: { x: previewXPos - 150, y: previewYPos + 200 },
+    titleTextConfig: { x: previewXPos + 20, y: previewYPos - 275, oriX: 0.5, oriY: 0.5 }
+  }
 };
 
 export default AwardsConstants;
