@@ -4,7 +4,7 @@
 
   height: 100%;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: auto;
   overflow-y: auto;
 
   background: black url('#{$achievement-assets}/background.png') center/cover no-repeat fixed;
@@ -15,7 +15,7 @@
     align-items: center;
 
     width: 100%;
-    padding: 0.5em 1em;
+    padding: 0.5em 0;
 
     color: white;
 
@@ -24,12 +24,12 @@
       flex-direction: row;
       align-items: center;
 
+      margin: 0 1em;
+
       .level-badge {
         display: flex;
         flex-direction: column;
         align-items: center;
-
-        margin: 0 0.5em 0 0;
 
         .level-icon {
           height: 2.5em;
@@ -47,27 +47,34 @@
       }
 
       .level-progress {
-        display: flex;
+        display: none;
+      }
 
-        height: 1.2em;
-        width: 20em;
+      @media only screen and (min-width: 1025px) {
+        .level-progress {
+          display: flex;
 
-        .progress-bar {
           height: 1.2em;
           width: 20em;
-        }
+          margin: 0 0 0 0.5em;
 
-        p {
-          display: inline-flex;
-          justify-content: center;
-          align-items: center;
+          .progress-bar {
+            height: 1.2em;
+            width: 20em;
+          }
 
-          z-index: 1;
+          p {
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
 
-          width: 20em;
-          margin: 0 0 0 -20em;
+            z-index: 1;
 
-          color: #ffef12;
+            width: 20em;
+            margin: 0 0 0 -20em;
+
+            color: #ffef12;
+          }
         }
       }
 
@@ -105,7 +112,7 @@
     }
 
     h3 {
-      margin: 0 0 0 2em;
+      margin: 0 0.5em;
     }
   }
 
