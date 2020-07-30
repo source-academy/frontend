@@ -26,8 +26,8 @@ export function createTypewriter(
   style: Phaser.Types.GameObjects.Text.TextStyle
 ) {
   const typewriter = Typewriter(scene, {
-    x: dialogueConstants.rect.x + dialogueConstants.textPadding.x,
-    y: dialogueConstants.rect.y + dialogueConstants.textPadding.y,
+    x: dialogueConstants.rect.x + dialogueConstants.text.xPad,
+    y: dialogueConstants.rect.y + dialogueConstants.text.yPad,
     textStyle: style
   });
   return typewriter;

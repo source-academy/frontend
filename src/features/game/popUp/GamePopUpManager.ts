@@ -34,7 +34,7 @@ class GamePopUpManager {
   public async displayPopUp(
     itemId: ItemId,
     position: GamePosition,
-    duration = Constants.popupDuration,
+    duration = Constants.popUpDuration,
     size: GameSize = GameSize.Medium
   ) {
     // Destroy previous pop up if any
