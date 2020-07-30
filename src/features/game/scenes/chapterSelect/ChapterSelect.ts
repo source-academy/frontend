@@ -3,6 +3,7 @@ import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -34,6 +35,10 @@ class ChapterSelect extends Phaser.Scene {
     this.isScrollRight = false;
   }
 
+  public preload() {
+    addLoadingScreen(this);
+  }
+
   public async create() {
     SourceAcademyGame.getInstance().setCurrentSceneRef(this);
     this.layerManager = new GameLayerManager(this);
@@ -49,9 +54,9 @@ class ChapterSelect extends Phaser.Scene {
     // Scroll the chapter select if button is currently clicked/held down
     let newXPos = this.chapterContainer.x;
     if (this.isScrollRight) {
-      newXPos -= chapConstants.defaultScrollSpeed;
+      newXPos -= chapConstants.scrollSpeed;
     } else if (this.isScrollLeft) {
-      newXPos += chapConstants.defaultScrollSpeed;
+      newXPos += chapConstants.scrollSpeed;
     }
     this.chapterContainer.x = limitNumber(
       newXPos,
@@ -126,7 +131,7 @@ class ChapterSelect extends Phaser.Scene {
       onDown: () => (this.isScrollLeft = true),
       onUp: () => (this.isScrollLeft = false),
       onOut: () => (this.isScrollLeft = false)
-    }).setPosition(screenCenter.x - chapConstants.arrowXOffset, screenCenter.y);
+    }).setPosition(screenCenter.x - chapConstants.arrow.xOffset, screenCenter.y);
 
     const rightArrow = createButton(this, {
       assetKey: ImageAssets.chapterSelectArrow.key,
@@ -134,7 +139,7 @@ class ChapterSelect extends Phaser.Scene {
       onUp: () => (this.isScrollRight = false),
       onOut: () => (this.isScrollRight = false)
     })
-      .setPosition(screenCenter.x + chapConstants.arrowXOffset, screenCenter.y)
+      .setPosition(screenCenter.x + chapConstants.arrow.xOffset, screenCenter.y)
       .setScale(-1, 1);
 
     this.getLayerManager().addToLayer(Layer.UI, this.chapterContainer);

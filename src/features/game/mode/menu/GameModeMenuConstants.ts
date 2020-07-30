@@ -10,8 +10,8 @@ export const modeButtonStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-const modeMenuConstants = {
-  buttonYPosOffset: screenSize.y * 0.3,
+const MenuModeConstants = {
+  button: { yOffset: screenSize.y * 0.3 },
   entryTweenProps: {
     y: 0,
     duration: 500,
@@ -24,4 +24,4 @@ const modeMenuConstants = {
   }
 };
 
-export default modeMenuConstants;
+export default MenuModeConstants;

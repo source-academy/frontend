@@ -19,7 +19,7 @@ import { AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
-import EntryScene from './scenes/entry/EntryScene';
+import Entry from './scenes/entry/Entry';
 import { getRoomPreviewCode } from './scenes/roomPreview/RoomPreviewHelper';
 import GameUserStateManager from './state/GameUserStateManager';
 
@@ -155,7 +155,7 @@ const config = {
     parent: 'game-display'
   },
   scene: [
-    EntryScene,
+    Entry,
     MainMenu,
     Settings,
     ChapterSelect,

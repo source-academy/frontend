@@ -3,7 +3,7 @@ import SourceAcademyGame, { GameType } from '../../SourceAcademyGame';
 import { sleep } from '../../utils/GameUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import { callGameManagerForSim, callGameManagerOnTxtLoad } from '../../utils/TxtLoaderUtils';
-import checkpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
+import CheckpointConstants, { transitionTextStyle } from './CheckpointTransitionConstants';
 
 /**
  * This scene is triggered in between checkpoints/chapters.
@@ -30,7 +30,7 @@ class CheckpointTransition extends Phaser.Scene {
 
   public async create() {
     if (SourceAcademyGame.getInstance().isGameType(GameType.Simulator)) {
-      await this.showTransitionText(checkpointConstants.checkpointText);
+      await this.showTransitionText(CheckpointConstants.text.checkpoint);
       await callGameManagerForSim();
       return;
     }
@@ -50,13 +50,13 @@ class CheckpointTransition extends Phaser.Scene {
         return;
       } else {
         // Transition to the next chapter, first checkpoint
-        await this.showTransitionText(checkpointConstants.chapterText);
+        await this.showTransitionText(CheckpointConstants.text.chapter);
         await callGameManagerOnTxtLoad(true, currChapter + 1, 0);
         return;
       }
     } else {
       // Transition to the next checkpoint
-      await this.showTransitionText(checkpointConstants.checkpointText);
+      await this.showTransitionText(CheckpointConstants.text.checkpoint);
       await callGameManagerOnTxtLoad(false, currChapter, currCheckpoint + 1);
       return;
     }
@@ -71,7 +71,7 @@ class CheckpointTransition extends Phaser.Scene {
     const transitionText = createBitmapText(
       this,
       text,
-      checkpointConstants.transitionTextConfig,
+      CheckpointConstants.transitionTextConfig,
       transitionTextStyle
     ).setAlpha(0);
 
@@ -80,18 +80,18 @@ class CheckpointTransition extends Phaser.Scene {
     // Fade in
     this.tweens.add({
       targets: transitionText,
-      ...checkpointConstants.entryTween
+      ...CheckpointConstants.entryTween
     });
 
-    await sleep(checkpointConstants.tweenDuration * 2);
+    await sleep(CheckpointConstants.tweenDuration * 2);
 
     // Fade out
     this.tweens.add({
       targets: transitionText,
-      ...checkpointConstants.exitTween
+      ...CheckpointConstants.exitTween
     });
 
-    await sleep(checkpointConstants.tweenDuration);
+    await sleep(CheckpointConstants.tweenDuration);
   }
 
   /**

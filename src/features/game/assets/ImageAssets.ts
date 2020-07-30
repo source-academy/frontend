@@ -20,6 +20,7 @@ const ImageAssets: AssetMap<ImageAsset> = {
   arrow: { key: 'arrow', path: '/ui/arrow.png' },
   cookies: { key: 'cookies', path: '/images/cookies.png' },
   scrollFrame: { key: 'scroll-frame', path: '/ui/scrollFrame.png' },
+  messageBar: { key: 'message-bar', path: '/ui/messageBg.png' },
 
   // Escape Menu
   escapeMenuBackground: { key: 'escape-bg', path: '/ui/escapeMenu.png' },

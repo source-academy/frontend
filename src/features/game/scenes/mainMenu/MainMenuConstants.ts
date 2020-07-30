@@ -13,29 +13,27 @@ export const mainMenuStyle: BitmapFontStyle = {
 const bannerShow = 200;
 const bannerHide = 300;
 
-const mainMenuConstants = {
-  optionsText: {
+const MainMenuConstants = {
+  text: {
     chapterSelect: 'Play Chapter',
     studentRoom: 'Go to My Room',
     awards: 'Awards Hall',
     settings: 'Settings',
     bindings: 'Key Bindings'
   },
-  buttonYSpace: screenSize.y * 0.5,
-  optXOffset: 80,
-  textXOffset: 600,
-  bannerHide: bannerHide,
-  bannerShow: bannerShow,
-  onFocusOptTween: {
+  button: { ySpace: screenSize.y * 0.5 },
+  buttonTextConfig: { x: 600, y: 0, oriX: 1.0, oriY: 0.1 },
+  banner: { xHide: bannerHide },
+  onFocusTween: {
     x: screenCenter.x + bannerShow,
     duration: 200,
     ease: 'Power2'
   },
-  outFocusOptTween: {
+  outFocusTween: {
     x: screenCenter.x + bannerHide,
     duration: 200,
     ease: 'Power2'
   }
 };
 
-export default mainMenuConstants;
+export default MainMenuConstants;

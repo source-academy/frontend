@@ -1,13 +1,5 @@
 import { GameSoundType } from '../sound/GameSoundTypes';
 
-export type ImageAssetMap = {
-  [name: string]: ImageAsset;
-};
-
-export type TextAssetMap = {
-  [name: string]: TextAsset;
-};
-
 export type AssetMap<T> = {
   [name: string]: T;
 };

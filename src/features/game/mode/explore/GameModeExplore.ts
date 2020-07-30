@@ -10,11 +10,7 @@ import { Layer } from '../../layer/GameLayerTypes';
 import { ActivatableSprite } from '../../objects/GameObjectTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { sleep } from '../../utils/GameUtils';
-import {
-  magnifyingGlass,
-  magnifyingGlassChecked,
-  magnifyingGlassHighlight
-} from './GameModeExploreConstants';
+import ExploreModeConstants from './GameModeExploreConstants';
 
 /**
  * The class in charge of showing "Explore" mode UI
@@ -61,7 +57,7 @@ class GameModeExplore implements IGameUI {
     });
 
     // Change default icon
-    gameManager.input.setDefaultCursor(magnifyingGlass);
+    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
@@ -140,9 +136,9 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
     if (hasTriggered) {
-      gameManager.input.setDefaultCursor(magnifyingGlassChecked);
+      gameManager.input.setDefaultCursor(ExploreModeConstants.checked);
     } else {
-      gameManager.input.setDefaultCursor(magnifyingGlassHighlight);
+      gameManager.input.setDefaultCursor(ExploreModeConstants.hover);
     }
   }
 
@@ -152,7 +148,7 @@ class GameModeExplore implements IGameUI {
    */
   private explorePointerOut() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    gameManager.input.setDefaultCursor(magnifyingGlass);
+    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
   }
 
   /**
@@ -167,7 +163,7 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
     gameManager.input.setDefaultCursor('');
     GameGlobalAPI.getInstance().triggerInteraction(id);
-    gameManager.input.setDefaultCursor(magnifyingGlass);
+    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
   }
 }
 

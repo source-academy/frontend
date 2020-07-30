@@ -12,9 +12,8 @@ export const transitionTextStyle: BitmapFontStyle = {
 
 const tweenDuration = 1500;
 
-const checkpointConstants = {
-  chapterText: 'Chapter completed.',
-  checkpointText: 'Checkpoint reached.',
+const CheckpointConstants = {
+  text: { chapter: 'Chapter completed.', checkpoint: 'Checkpoint reached.' },
   transitionTextConfig: { x: screenCenter.x, y: screenCenter.y, oriX: 0.5, oriY: 0.5 },
   tweenDuration: tweenDuration,
   entryTween: {
@@ -29,4 +28,4 @@ const checkpointConstants = {
   }
 };
 
-export default checkpointConstants;
+export default CheckpointConstants;

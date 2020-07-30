@@ -13,7 +13,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
+import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
 
 /**
  * The class renders the "Talk" UI which displays
@@ -47,7 +47,7 @@ class GameModeTalk implements IGameUI {
     const buttons = this.getTalkTopicButtons(talkTopics);
     const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
-      maxYSpace: talkButtonYSpace
+      maxYSpace: TalkModeConstants.button.ySpace
     });
 
     talkMenuContainer.add(

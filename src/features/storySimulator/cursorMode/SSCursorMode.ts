@@ -62,7 +62,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
 
     const onHoverWrapper = () => {
       if (text !== '') hoverText.setVisible(true);
-      cursorModeContainer.setAlpha(SSCursorModeConstants.onHoverAlpha);
+      cursorModeContainer.setAlpha(SSCursorModeConstants.alpha.hover);
       onHover();
     };
 
@@ -70,7 +70,7 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       hoverText.setVisible(false);
       const activeMode = currIdx === this.currActiveModeIdx && this.isModes[currIdx];
       cursorModeContainer.setAlpha(
-        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
+        activeMode ? SSCursorModeConstants.alpha.active : SSCursorModeConstants.alpha.inactive
       );
       onOut();
     };
@@ -89,8 +89,8 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
 
     // Icon
     const modeIcon = new Phaser.GameObjects.Sprite(scene, 0, 0, assetKey).setDisplaySize(
-      SSCursorModeConstants.iconSize,
-      SSCursorModeConstants.iconSize
+      SSCursorModeConstants.icon.size,
+      SSCursorModeConstants.icon.size
     );
 
     modeButton.add(modeIcon);
@@ -105,10 +105,10 @@ export default class SSCursorMode extends Phaser.GameObjects.Container {
       mode.setPosition(0, spacing);
       const activeMode = index === this.currActiveModeIdx && this.isModes[index];
       mode.setAlpha(
-        activeMode ? SSCursorModeConstants.activeAlpha : SSCursorModeConstants.inactiveAlpha
+        activeMode ? SSCursorModeConstants.alpha.active : SSCursorModeConstants.alpha.inactive
       );
       this.add(mode);
-      spacing += SSCursorModeConstants.iconBgSize + SSCursorModeConstants.iconSpacing;
+      spacing += SSCursorModeConstants.icon.bgSize + SSCursorModeConstants.icon.yInterval;
     });
   }
 }

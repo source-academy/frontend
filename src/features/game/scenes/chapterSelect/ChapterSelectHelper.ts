@@ -42,8 +42,8 @@ export function createChapter(
   // Chapter Frame
   const chapterFrame = new Phaser.GameObjects.Sprite(
     scene,
-    chapConstants.frameXOffset,
-    chapConstants.frameYOffset,
+    chapConstants.frame.xOffset,
+    chapConstants.frame.yOffset,
     ImageAssets.chapterSelectFrame.key
   );
 
@@ -61,7 +61,7 @@ export function createChapter(
       chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
       chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
     }
-  }).setPosition(chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  }).setPosition(chapConstants.button.xOffset, chapConstants.button.yOffset);
 
   const lastCheckpointPlayed = SourceAcademyGame.getInstance()
     .getSaveManager()
@@ -76,7 +76,7 @@ export function createChapter(
       chapterContinueHover.x = pointer.worldX - chapterContainer.x;
       chapterContinueHover.y = pointer.worldY - chapterContainer.y;
     }
-  }).setPosition(-chapConstants.buttonsXOffset, chapConstants.buttonsYOffset);
+  }).setPosition(-chapConstants.button.xOffset, chapConstants.button.yOffset);
 
   // Chapter Text
   const chapterIndexText = createBitmapText(

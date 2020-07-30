@@ -39,10 +39,8 @@ export const verifiedStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-export const roomConstants = {
+export const RoomConstants = {
   verifiedText: 'VERIFIED',
-  tagWidth: 128,
-  tagHeight: 50,
-  startTextXPos: 200,
+  tag: { width: 128, height: 50, textXStart: 200 },
   hoverTagTextConfig: { x: 0, y: 0, oriX: 0.0, oriY: 0.6 }
 };
