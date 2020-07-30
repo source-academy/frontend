@@ -1,13 +1,15 @@
-import { Button, Classes, Dialog, Intent, MenuItem } from '@blueprintjs/core';
+import { Button, Classes, Dialog, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import {
+  defaultLanguages,
   SourceLanguage,
   sourceLanguages,
-  styliseSublanguage
+  styliseSublanguage,
+  variantLanguages
 } from '../../../commons/application/ApplicationTypes';
 import controlButton from '../../../commons/ControlButton';
 
@@ -19,7 +21,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  // handleChapterSelect?: (i: SourceLanguage, e: React.ChangeEvent<HTMLSelectElement>) => void;
   sourceChapter: number;
   sourceVariant: Variant;
 };
@@ -51,29 +52,53 @@ const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = prop
     handleUpdateSublanguage(chosenSublang);
   }, [chosenSublang, setDialogState, handleUpdateSublanguage]);
 
-  const chapterRenderer: ItemRenderer<SourceLanguage> = (lang, { handleClick }) => (
-    <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
+  const chapterRenderer: ItemRenderer<SourceLanguage> = React.useCallback(
+    (lang, { handleClick }) => (
+      <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
+    ),
+    []
   );
 
-  const ChapterSelect = Select.ofType<SourceLanguage>();
+  const chapterListRenderer: ItemListRenderer<SourceLanguage> = React.useCallback(
+    ({ itemsParentRef, renderItem }) => {
+      const defaultChoices = defaultLanguages.map(renderItem);
+      const variantChoices = variantLanguages.map(renderItem);
 
-  const chapSelect = (
-    currentChap: number,
-    currentVariant: Variant,
-    handleSelect = (item: SourceLanguage) => {}
-  ) => (
-    <ChapterSelect
-      items={sourceLanguages}
-      onItemSelect={handleSelect}
-      itemRenderer={chapterRenderer}
-      filterable={false}
-    >
-      <Button
-        className={Classes.MINIMAL}
-        text={styliseSublanguage(currentChap, currentVariant)}
-        rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-      />
-    </ChapterSelect>
+      return (
+        <Menu ulRef={itemsParentRef}>
+          {defaultChoices}
+          <MenuItem key="variant-menu" text="Variants" icon="cog">
+            {variantChoices}
+          </MenuItem>
+        </Menu>
+      );
+    },
+    []
+  );
+
+  const ChapterSelectComponent = Select.ofType<SourceLanguage>();
+
+  const chapSelect = React.useCallback(
+    (
+      currentChap: number,
+      currentVariant: Variant,
+      handleSelect = (item: SourceLanguage, event?: React.SyntheticEvent<HTMLElement>) => {}
+    ) => (
+      <ChapterSelectComponent
+        items={sourceLanguages}
+        onItemSelect={handleSelect}
+        itemRenderer={chapterRenderer}
+        itemListRenderer={chapterListRenderer}
+        filterable={false}
+      >
+        <Button
+          className={Classes.MINIMAL}
+          text={styliseSublanguage(currentChap, currentVariant)}
+          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+        />
+      </ChapterSelectComponent>
+    ),
+    [chapterListRenderer, chapterRenderer]
   );
 
   return (

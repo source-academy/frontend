@@ -144,6 +144,9 @@ export const sourceLanguages = sublanguages.map(sublang => {
   };
 });
 
+export const defaultLanguages = sourceLanguages.filter(sublang => sublang.variant === 'default');
+export const variantLanguages = sourceLanguages.filter(sublang => sublang.variant !== 'default');
+
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
     case 'development':
