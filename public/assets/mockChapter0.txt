@@ -7,6 +7,9 @@ gameStartActions
     show_dialogue(welcome) if userstate.assessments.301
     show_dialogue(unwelcome) if !userstate.assessments.301
 
+checkpointCompleteActions
+    show_dialogue(done)
+
 room
     modes: explore
     talkTopics: canNowTalk
@@ -81,8 +84,7 @@ dialogues
         Welcome to Source Academy!
 
         I'm glad you took the time to come in
-        
-
+            update_character(scottie, happy)
 
     unwelcome
         @scottie, sad
@@ -107,6 +109,7 @@ dialogues
     
     done
         Well, what do you know, you finished the game.
+        Are you done with the game?
     
     welcomeToHallway
         Welcome to the Hallway, we've got fun and games.
