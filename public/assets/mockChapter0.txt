@@ -37,6 +37,7 @@ room
             play_sfx(card)
         + sideDoor, /objects/dc-lf_door03/normal.png, 255, 533, 36, 172
             add_popup(sideDoor)
+            complete_objective(finish)
 
     boundingBoxes
         + bbox1, 10, 10, 30, 30
