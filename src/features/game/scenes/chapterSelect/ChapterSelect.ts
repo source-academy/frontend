@@ -3,6 +3,7 @@ import { limitNumber, mandatory, sleep, toS3Path } from 'src/features/game/utils
 
 import ImageAssets from '../../assets/ImageAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
+import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -32,6 +33,10 @@ class ChapterSelect extends Phaser.Scene {
     this.autoScrolling = true;
     this.isScrollLeft = false;
     this.isScrollRight = false;
+  }
+
+  public preload() {
+    addLoadingScreen(this);
   }
 
   public async create() {

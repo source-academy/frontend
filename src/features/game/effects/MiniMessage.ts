@@ -16,7 +16,7 @@ const messageTextConfig = { x: 20, y: 100, oriX: 0.0, oriY: 0.5 };
 const messageStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 20,
-  fill: HexColor.darkBlue,
+  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
@@ -31,7 +31,7 @@ const messageStyle: BitmapFontStyle = {
 export async function displayMiniMessage(scene: IBaseScene, text: string) {
   const container = new Phaser.GameObjects.Container(scene, 0, 0);
   const messageBg = new Phaser.GameObjects.Sprite(scene, 0, 100, ImageAssets.messageBar.key);
-  messageBg.setScale(1, 0.8);
+  messageBg.setScale(1.5, 0.8);
   const messageText = createBitmapText(scene, text, messageTextConfig, messageStyle);
 
   container.add([messageBg, messageText]);
