@@ -70,6 +70,7 @@ type StateProps = {
   hooks?: EditorHook[];
   onChangeMethod?: any; // TODO: Add to help with keystroke logging
   onCursorChangeMethod?: any; // TODO: Add to help with keystroke logging
+  onSelectionChangeMethod?: any; 
 };
 
 const getMarkers = (
@@ -327,6 +328,7 @@ const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
           {...aceEditorProps}
           onChange={props.onChangeMethod}
           onCursorChange={props.onCursorChangeMethod}
+          onSelectionChange={props.onSelectionChangeMethod}
           ref={useMergedRef(reactAceRef, forwardedRef)}
         />
       </div>

@@ -12,8 +12,14 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import { stringify } from 'js-slang/dist/utils/stringify';
+import { isEqual } from 'lodash';
 import * as React from 'react';
-import { CodeDelta, Input, KeyboardCommand } from 'src/features/sourceRecorder/SourceRecorderTypes';
+import {
+  CodeDelta,
+  Input,
+  KeyboardCommand,
+  SelectionRange
+} from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -120,7 +126,6 @@ class AssessmentWorkspace extends React.Component<
     showResetTemplateOverlay: boolean;
     logs: Input[];
     previousAction: string;
-    payload: any[];
   }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
@@ -129,8 +134,7 @@ class AssessmentWorkspace extends React.Component<
       showOverlay: false,
       showResetTemplateOverlay: false,
       logs: [],
-      previousAction: 'cursorPositionChange',
-      payload: []
+      previousAction: 'cursorPositionChange'
     };
 
     this.props.handleEditorValueChange('');
@@ -179,52 +183,7 @@ class AssessmentWorkspace extends React.Component<
 
   // TODO: Implemenet THis for Keystroke Logging!
   public uploadLogs = () => {
-    this.convertLogsToPayload();
-    if (this.state.payload && this.state.payload.length > 0) {
-      // TODO: Upload Payload to Data Handler (Backend)
-      console.log(this.state.payload);
-      this.setState({ logs: [], payload: [] });
-    }
-  };
-
-  public convertLogsToPayload = () => {
-    const logsCopy = this.state.logs;
-
-    if (logsCopy.length === 0) {
-      return;
-    }
-
-    const firstLog = logsCopy[0];
-
-    if (firstLog.type === 'cursorPositionChange') {
-      this.setState({ logs: [] });
-      return;
-    }
-
-    if (firstLog.type === 'codeDelta') {
-      const actionToBeUploaded = {
-        LogType: firstLog.data.action,
-        ActionCount: 0,
-        Content: '',
-        Time: 0
-      };
-
-      for (let i = 0; i < logsCopy.length; i += 2) {
-        const nextLogData = logsCopy[i];
-
-        if (nextLogData.type === 'codeDelta') {
-          const lines = nextLogData.data.lines.reduce((x, y) => x + '\n' + y);
-          actionToBeUploaded.Content += lines;
-          actionToBeUploaded.ActionCount++;
-          actionToBeUploaded.Time = nextLogData.time;
-        }
-      }
-
-      const payloadCopy = this.state.payload;
-      payloadCopy.push(actionToBeUploaded);
-
-      this.setState({ logs: [], payload: payloadCopy });
-    }
+    console.log(this.state.logs);
   };
 
   public render() {
@@ -303,9 +262,7 @@ class AssessmentWorkspace extends React.Component<
         data: delta
       };
 
-      if (delta.action !== this.state.previousAction || delta.start.row !== delta.end.row) {
-        this.convertLogsToPayload();
-      }
+      console.log(input);
 
       const logsCopy = this.state.logs;
       logsCopy.push(input);
@@ -319,16 +276,31 @@ class AssessmentWorkspace extends React.Component<
         data: selection.getCursor()
       };
 
-      const logsCopy = this.state.logs;
+      console.log(input);
 
-      if (logsCopy.length === 0 || logsCopy[logsCopy.length - 1].type === 'cursorPositionChange') {
-        this.convertLogsToPayload();
-        this.setState({ previousAction: 'cursorPositionChange' });
-        return;
-      }
+      const logsCopy = this.state.logs;
 
       logsCopy.push(input);
       this.setState({ logs: logsCopy });
+    };
+
+    const onSelectionChangeMethod = (selection: any) => {
+      const range: SelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
+      if (!isEqual(range.start, range.end)) {
+        const input: Input = {
+          time: Date.now(),
+          type: 'selectionRangeData',
+          data: { range, isBackwards }
+        };
+
+        console.log(input);
+
+        const logsCopy = this.state.logs;
+
+        logsCopy.push(input);
+        this.setState({ logs: logsCopy });
+      }
     };
 
     /* If questionId is out of bounds, set it to the max. */
@@ -353,7 +325,8 @@ class AssessmentWorkspace extends React.Component<
             handlePromptAutocomplete: this.props.handlePromptAutocomplete,
             isEditorAutorun: false,
             onChangeMethod: onChangeMethod,
-            onCursorChangeMethod: onCursorChangeMethod
+            onCursorChangeMethod: onCursorChangeMethod,
+            onSelectionChangeMethod: onSelectionChangeMethod
           }
         : undefined;
     const workspaceProps: WorkspaceProps = {
