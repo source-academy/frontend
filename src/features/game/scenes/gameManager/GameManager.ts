@@ -87,6 +87,10 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
+    this.getPhaseManager().setInterruptCheckCallback(
+      (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        this.transitionChecker(prevPhase, newPhase)
+    );
     this.getPhaseManager().setInterruptCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
         await this.checkpointTransition(newPhase)
@@ -234,24 +238,29 @@ class GameManager extends Phaser.Scene {
    * in order to ensure that we don't transition to the next checkpoint
    * during dialogue/cutscene.
    *
-   * This method is passed to the phase manager, to be executed on
-   * every phase transition as the interrupt transition callback.
+   * This method is passed to the phase manager, as the interrupt checker.
+   *
+   * @param prevPhase previous phase to transition from
+   * @param newPhase new phase to transition to
+   */
+  public transitionChecker(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
+    return newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();
+  }
+
+  /**
+   * Transition to the next checkpoint.
+   *
+   * This method is passed to the phase manager
+   * as the interrupt transition callback.
    *
    * @param newPhase new phase to transition to
    */
   public async checkpointTransition(newPhase: GamePhaseType) {
-    const transitionToNextCheckpoint =
-      newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();
-
-    // Transition to the next scene if possible
-    if (transitionToNextCheckpoint) {
-      await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getCheckpointCompleteActions()
-      );
-      this.cleanUp();
-      this.scene.start('CheckpointTransition');
-    }
-    return transitionToNextCheckpoint;
+    await this.getActionManager().processGameActions(
+      this.getStateManager().getGameMap().getCheckpointCompleteActions()
+    );
+    this.cleanUp();
+    this.scene.start('CheckpointTransition');
   }
 
   /**
