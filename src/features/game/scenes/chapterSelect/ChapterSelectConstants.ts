@@ -22,14 +22,12 @@ const marginY = 100;
 const imageRectWidth = 500;
 
 const chapConstants = {
-  defaultScrollSpeed: 20,
-  buttonsYOffset: 200,
-  buttonsXOffset: 100,
-  frameXOffset: 15,
-  frameYOffset: -10,
+  arrow: { xOffset: 875 },
+  button: { xOffset: 100, yOffset: 200 },
+  frame: { xOffset: 15, yOffset: -10 },
+  scrollSpeed: 20,
   indexTextConfig: { x: 0, y: -160, oriX: 0.5, oriY: 0.5 },
   titleTextConfig: { x: 0, y: -100, oriX: 0.5, oriY: 0.5 },
-  arrowXOffset: 875,
   maskRect: {
     x: -screenCenter.x + marginX,
     y: -screenCenter.y + marginY,

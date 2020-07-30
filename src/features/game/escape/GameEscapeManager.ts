@@ -5,7 +5,7 @@ import CommonRadioButton from '../commons/CommonRadioButton';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
-import settingsConstants from '../scenes/settings/SettingsConstants';
+import SettingsConstants from '../scenes/settings/SettingsConstants';
 import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
@@ -74,10 +74,10 @@ class GameEscapeManager implements IGameUI {
 
     // Get user settings, to use as default choice in the radio buttons
     const { bgmVolume, sfxVolume } = this.getSettingsSaveManager().getSettings();
-    const sfxVolIdx = settingsConstants.volContainerOpts.findIndex(
+    const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === sfxVolume
     );
-    const bgmVolIdx = settingsConstants.volContainerOpts.findIndex(
+    const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === bgmVolume
     );
 
@@ -127,7 +127,7 @@ class GameEscapeManager implements IGameUI {
     return new CommonRadioButton(
       this.scene,
       {
-        choices: settingsConstants.volContainerOpts,
+        choices: SettingsConstants.volContainerOpts,
         defaultChoiceIdx: defaultChoiceIdx,
         maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {

@@ -7,7 +7,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import { sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
-import popUpConstants from './GamePopUpConstants';
+import PopUpConstants from './GamePopUpConstants';
 
 /**
  * Manager in charge of keeping track of the the popups in
@@ -46,10 +46,10 @@ class GamePopUpManager {
     // Frame
     const popUpFrameImg = new Phaser.GameObjects.Image(
       gameManager,
-      popUpConstants.rect.x[position],
-      popUpConstants.rect.y[size],
+      PopUpConstants.rect.x[position],
+      PopUpConstants.rect.y[size],
       ImageAssets.popUpFrame.key
-    ).setScale(popUpConstants.rect.scale[size]);
+    ).setScale(PopUpConstants.rect.scale[size]);
 
     // Get assetKey
     const assetKey = this.getAssetKey(itemId);
@@ -58,12 +58,12 @@ class GamePopUpManager {
     // Set up images
     const popUpImage = new Phaser.GameObjects.Image(
       gameManager,
-      popUpConstants.rect.x[position] + popUpConstants.imgXOffset,
-      popUpConstants.rect.y[size] + popUpConstants.imgYOffset,
+      PopUpConstants.rect.x[position] + PopUpConstants.image.xOffset,
+      PopUpConstants.rect.y[size] + PopUpConstants.image.yOffset,
       assetKey
     );
-    const newWidth = popUpConstants.rect.width * popUpConstants.rect.scale[size];
-    const newHeight = popUpConstants.rect.height * popUpConstants.rect.scale[size];
+    const newWidth = PopUpConstants.rect.width * PopUpConstants.rect.scale[size];
+    const newHeight = PopUpConstants.rect.height * PopUpConstants.rect.scale[size];
     resizeUnderflow(popUpImage, newWidth, newHeight);
 
     container.add([popUpFrameImg, popUpImage]);
@@ -75,8 +75,8 @@ class GamePopUpManager {
     container.setVisible(true);
     container.setScale(1.0, 0);
 
-    gameManager.tweens.add(scrollEntry([container], popUpConstants.tweenDuration));
-    await sleep(popUpConstants.tweenDuration);
+    gameManager.tweens.add(scrollEntry([container], PopUpConstants.tweenDuration));
+    await sleep(PopUpConstants.tweenDuration);
 
     setTimeout(() => this.destroyPopUp(position), duration);
   }
@@ -101,8 +101,8 @@ class GamePopUpManager {
 
     GameGlobalAPI.getInstance()
       .getGameManager()
-      .tweens.add(scrollExit([atPosContainer], popUpConstants.tweenDuration));
-    await sleep(popUpConstants.tweenDuration);
+      .tweens.add(scrollExit([atPosContainer], PopUpConstants.tweenDuration));
+    await sleep(PopUpConstants.tweenDuration);
 
     atPosContainer.setVisible(false);
     atPosContainer.setActive(false);
