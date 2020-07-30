@@ -16,7 +16,7 @@ import SSLogManager from '../../logger/SSLogManager';
 import SSObjectManager from '../../objects/SSObjectManager';
 import { StorySimState } from '../../StorySimulatorTypes';
 import SSTransformManager from '../../transform/SSTransformManager';
-import objPlacementConstants from './ObjectPlacementConstants';
+import ObjPlacementConstants from './ObjectPlacementConstants';
 
 /**
  * Allow users to position objects, set backgrounds, and get
@@ -101,8 +101,8 @@ export default class ObjectPlacement extends Phaser.Scene {
 
     this.cursorModes = new SSCursorMode(
       this,
-      objPlacementConstants.cursorModeXPos,
-      objPlacementConstants.cursorModeYPos
+      ObjPlacementConstants.cursor.x,
+      ObjPlacementConstants.cursor.y
     );
     this.populateCursorModes();
 
