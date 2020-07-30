@@ -74,7 +74,6 @@ export default class ActionParser {
     switch (gameActionType) {
       case GameActionType.ObtainCollectible:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assertItemType(GameItemType.collectibles, actionParams[0], actionType);
         break;
 
       case GameActionType.CompleteObjective:
