@@ -70,7 +70,7 @@ type StateProps = {
   hooks?: EditorHook[];
   onChangeMethod?: any; // TODO: Add to help with keystroke logging
   onCursorChangeMethod?: any; // TODO: Add to help with keystroke logging
-  onSelectionChangeMethod?: any; 
+  onSelectionChangeMethod?: any;
 };
 
 const getMarkers = (

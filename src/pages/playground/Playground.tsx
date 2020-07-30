@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
+import { isEqual } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
@@ -30,6 +31,11 @@ import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoD
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
+import {
+  CodeDelta,
+  Input,
+  SelectionRange
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -111,6 +117,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
+  const [logs, setLogs] = React.useState<any[]>([]);
+
   const handlers = React.useMemo(
     () => ({
       goGreen: () => setIsGreen(!isGreen)
@@ -167,13 +175,23 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
+  // TODO: Implemenet THis for Keystroke Logging!
+  const uploadLogs = React.useCallback(() => {
+    console.log(logs);
+  }, [logs]);
+
+  const handleEvalCallback = React.useCallback(() => {
+    props.handleEditorEval();
+    uploadLogs();
+  }, [props, uploadLogs]);
+
   const autorunButtons = React.useMemo(
     () => (
       <ControlBarAutorunButtons
         handleDebuggerPause={props.handleDebuggerPause}
         handleDebuggerReset={props.handleDebuggerReset}
         handleDebuggerResume={props.handleDebuggerResume}
-        handleEditorEval={props.handleEditorEval}
+        handleEditorEval={handleEvalCallback}
         handleInterruptEval={props.handleInterruptEval}
         handleToggleEditorAutorun={props.handleToggleEditorAutorun}
         isDebugging={props.isDebugging}
@@ -186,7 +204,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleDebuggerPause,
       props.handleDebuggerReset,
       props.handleDebuggerResume,
-      props.handleEditorEval,
+      handleEvalCallback,
       props.handleInterruptEval,
       props.handleToggleEditorAutorun,
       props.isDebugging,
@@ -408,6 +426,57 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant
   ]);
 
+  const onChangeMethod = (newCode: string, delta: CodeDelta) => {
+    handleEditorValueChange(newCode);
+
+    const input: Input = {
+      time: Date.now(),
+      type: 'codeDelta',
+      data: delta
+    };
+
+    console.log(input);
+
+    const logsCopy = logs;
+
+    logsCopy.push(input);
+    setLogs(logsCopy);
+  };
+
+  const onCursorChangeMethod = (selection: any) => {
+    const input: Input = {
+      time: Date.now(),
+      type: 'cursorPositionChange',
+      data: selection.getCursor()
+    };
+
+    console.log(input);
+
+    const logsCopy = logs;
+
+    logsCopy.push(input);
+    setLogs(logsCopy);
+  };
+
+  const onSelectionChangeMethod = (selection: any) => {
+    const range: SelectionRange = selection.getRange();
+    const isBackwards: boolean = selection.isBackwards();
+    if (!isEqual(range.start, range.end)) {
+      const input: Input = {
+        time: Date.now(),
+        type: 'selectionRangeData',
+        data: { range, isBackwards }
+      };
+
+      console.log(input);
+
+      const logsCopy = logs;
+
+      logsCopy.push(input);
+      setLogs(logsCopy);
+    }
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -422,6 +491,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       replButtons: [props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
     },
     editorProps: {
+      onChangeMethod: onChangeMethod,
+      onCursorChangeMethod: onCursorChangeMethod,
+      onSelectionChangeMethod: onSelectionChangeMethod,
       sourceChapter: props.sourceChapter,
       externalLibraryName: props.externalLibraryName,
       sourceVariant: props.sourceVariant,
