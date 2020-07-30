@@ -189,6 +189,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     console.log(playbackData);
 
     setLogs([]);
+    setStartingEditorValue(props.editorValue);
   };
 
   const pushLog = React.useCallback(
