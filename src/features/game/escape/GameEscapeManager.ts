@@ -10,7 +10,7 @@ import SourceAcademyGame, { GameType } from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
 import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import escapeConstants, {
+import EscapeConstants, {
   escapeOptButtonStyle,
   optTextStyle,
   volumeRadioOptTextStyle
@@ -56,7 +56,7 @@ class GameEscapeManager implements IGameUI {
     const settingsPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: settings.length,
-      maxYSpace: escapeConstants.settingsYSpace
+      maxYSpace: EscapeConstants.settings.ySpace
     });
     escapeMenuContainer.add(
       settings.map((setting, index) =>
@@ -64,8 +64,8 @@ class GameEscapeManager implements IGameUI {
           this.scene,
           setting,
           {
-            ...escapeConstants.settingsTextConfig,
-            y: settingsPos[index][1] + escapeConstants.settingsTextConfig.y
+            ...EscapeConstants.settingsTextConfig,
+            y: settingsPos[index][1] + EscapeConstants.settingsTextConfig.y
           },
           optTextStyle
         )
@@ -98,7 +98,7 @@ class GameEscapeManager implements IGameUI {
         this.createEscapeOptButton(
           button.text,
           buttonPositions[index][0],
-          buttonPositions[index][1] + escapeConstants.buttonYPos,
+          buttonPositions[index][1] + EscapeConstants.button.y,
           button.callback
         )
       )
@@ -129,17 +129,17 @@ class GameEscapeManager implements IGameUI {
       {
         choices: settingsConstants.volContainerOpts,
         defaultChoiceIdx: defaultChoiceIdx,
-        maxXSpace: escapeConstants.radioButtonsXSpace,
+        maxXSpace: EscapeConstants.radioButtons.xSpace,
         radioChoiceConfig: {
           circleDim: 15,
           checkedDim: 10,
           outlineThickness: 3
         },
-        choiceTextConfig: escapeConstants.radioChoiceTextConfig,
+        choiceTextConfig: EscapeConstants.radioChoiceTextConfig,
         bitmapTextStyle: volumeRadioOptTextStyle
       },
-      escapeConstants.volOptXPos,
-      -screenCenter.y + yPos + escapeConstants.settingsYOffset
+      EscapeConstants.volOpt.x,
+      -screenCenter.y + yPos + EscapeConstants.settings.yOffset
     );
   }
 
@@ -189,7 +189,7 @@ class GameEscapeManager implements IGameUI {
     return createButton(this.scene, {
       assetKey: ImageAssets.mediumButton.key,
       message: text,
-      textConfig: escapeConstants.escapeOptTextConfig,
+      textConfig: EscapeConstants.escapeOptTextConfig,
       bitMapTextStyle: escapeOptButtonStyle,
       onUp: callback
     }).setPosition(xPos, yPos);

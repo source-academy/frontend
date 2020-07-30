@@ -11,7 +11,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import { GameMode, gameModeToPhase } from '../GameModeTypes';
-import modeMenuConstants, { modeButtonStyle } from './GameModeMenuConstants';
+import MenuModeConstants, { modeButtonStyle } from './GameModeMenuConstants';
 
 /**
  * The class in charge of showing the "Menu" mode UI
@@ -68,7 +68,7 @@ class GameModeMenu implements IGameUI {
         this.createModeButton(
           button.text,
           buttonPositions[index][0],
-          buttonPositions[index][1] + modeMenuConstants.buttonYPosOffset,
+          buttonPositions[index][1] + MenuModeConstants.button.yOffset,
           button.callback
         )
       )
@@ -127,7 +127,7 @@ class GameModeMenu implements IGameUI {
 
     gameManager.tweens.add({
       targets: this.uiContainer,
-      ...modeMenuConstants.entryTweenProps
+      ...MenuModeConstants.entryTweenProps
     });
     await sleep(500);
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
@@ -147,7 +147,7 @@ class GameModeMenu implements IGameUI {
 
       gameManager.tweens.add({
         targets: this.uiContainer,
-        ...modeMenuConstants.exitTweenProps
+        ...MenuModeConstants.exitTweenProps
       });
 
       await sleep(500);
