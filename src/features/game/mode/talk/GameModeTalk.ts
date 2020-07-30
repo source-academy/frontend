@@ -12,7 +12,7 @@ import { GameItemType } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos } from '../../utils/StyleUtils';
+import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
 
 /**
@@ -46,6 +46,7 @@ class GameModeTalk implements IGameUI {
     const talkTopics = this.getLatestTalkTopics();
     const buttons = this.getTalkTopicButtons(talkTopics);
     const buttonPositions = calcTableFormatPos({
+      direction: Direction.Column,
       numOfItems: buttons.length,
       maxYSpace: TalkModeConstants.button.ySpace
     });
