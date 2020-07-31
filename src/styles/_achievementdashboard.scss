@@ -1,6 +1,7 @@
 .AchievementDashboard {
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
 
   height: 100%;
   width: 100%;
@@ -42,7 +43,7 @@
           margin: 0;
 
           font-size: 0.9em;
-          text-decoration: underline white;
+          text-decoration: underline;
         }
       }
 
@@ -117,20 +118,15 @@
   }
 
   .achievement-main {
+    border: solid green;
     display: flex;
     flex-direction: row;
-
-    height: 100%;
-    width: 100%;
-
+    justify-content: center;
     align-items: center;
 
     .filters {
+      border: solid yellow;
       display: flex;
-
-      height: 70%;
-      width: 15%;
-
       flex-direction: column;
       justify-content: space-evenly;
       align-items: center;
@@ -148,6 +144,7 @@
     }
 
     .list-container {
+      border: solid yellow;
       display: flex;
 
       height: 90%;
@@ -308,6 +305,7 @@
     }
 
     .view-container {
+      border: solid yellow;
       display: flex;
 
       height: 90%;
@@ -321,8 +319,6 @@
         height: 50em;
         width: 40em;
         flex-direction: column;
-
-        color: white;
 
         .canvas {
           display: flex;
