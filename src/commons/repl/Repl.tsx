@@ -47,7 +47,9 @@ class Repl extends React.PureComponent<ReplProps, {}> {
             className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
             handlers={handlers}
           >
-            {this.props.sourceVariant !== 'concurrent' ? <ReplInput {...inputProps} /> : null}
+            {this.props.sourceVariant !== 'concurrent' && this.props.sourceVariant !== 'wasm' ? (
+              <ReplInput {...inputProps} />
+            ) : null}
           </HotKeys>
         </div>
       </div>
