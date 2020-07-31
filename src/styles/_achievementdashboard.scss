@@ -1,48 +1,41 @@
 .AchievementDashboard {
+  background: black url(#{$achievement-assets}/background.png) center/cover no-repeat fixed;
   display: flex;
   flex-direction: column;
   flex: 1 1 auto;
-
   height: 100%;
-  width: 100%;
   overflow-x: auto;
   overflow-y: auto;
-
-  background: black url('#{$achievement-assets}/background.png') center/cover no-repeat fixed;
+  width: 100%;
 
   .achievement-overview {
+    align-items: center;
+    color: white;
     display: flex;
     flex-direction: row;
-    align-items: center;
-
-    width: 100%;
     padding: 0.5em 0;
-
-    color: white;
+    width: 100%;
 
     .level {
+      align-items: center;
       display: flex;
       flex-direction: row;
-      align-items: center;
-
       margin: 0 1em;
 
       .level-badge {
+        align-items: center;
         display: flex;
         flex-direction: column;
-        align-items: center;
 
         .level-icon {
+          background: url(#{$achievement-assets}/level-icon.png) center/contain;
           height: 2.5em;
           width: 2.5em;
-
-          background: url('#{$achievement-assets}/level-icon.png') center/contain;
         }
 
         p {
-          margin: 0;
-
           font-size: 0.9em;
+          margin: 0;
           text-decoration: underline;
         }
       }
@@ -54,10 +47,9 @@
       @media only screen and (min-width: 1025px) {
         .level-progress {
           display: flex;
-
           height: 1.2em;
-          width: 20em;
           margin: 0 0 0 0.5em;
+          width: 20em;
 
           .progress-bar {
             height: 1.2em;
@@ -65,45 +57,38 @@
           }
 
           p {
+            align-items: center;
+            color: #ffef12;
             display: inline-flex;
             justify-content: center;
-            align-items: center;
-
-            z-index: 1;
-
-            width: 20em;
             margin: 0 0 0 -20em;
-
-            color: #ffef12;
+            width: 20em;
+            z-index: 1;
           }
         }
       }
 
       .milestone {
-        display: flex;
-        flex-direction: column;
-
-        position: absolute;
-        z-index: 2;
-
-        margin: 20em 0 0 1em;
-        padding: 1em 2em;
-
         background-color: rgba(0, 0, 0, 0.7);
         border: 1px solid #90ff12;
         box-shadow: 0 0 10px #90ff12;
+        display: flex;
+        flex-direction: column;
+        margin: 20em 0 0 1em;
+        padding: 1em 2em;
+        position: absolute;
+        z-index: 2;
 
         h2 {
           margin: 0;
-
           text-align: center;
           text-decoration: underline;
         }
 
         .details {
+          align-items: center;
           display: flex;
           flex-direction: row;
-          align-items: center;
 
           .description {
             padding: 1em 0 0 0;
@@ -118,50 +103,46 @@
   }
 
   .achievement-main {
+    align-items: center;
     display: flex;
     flex-direction: row;
-    justify-content: space-evenly;
-    align-items: center;
-
     height: 100%;
+    justify-content: space-evenly;
 
     .filters {
+      align-items: center;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-
       height: 40%;
+      justify-content: space-between;
       min-height: 23em;
       padding: 0 1em;
 
       .filter-button {
-        display: flex;
-        flex-direction: column;
         align-items: center;
         cursor: pointer;
-
+        display: flex;
+        flex-direction: column;
         margin: 2em 0;
 
         p {
-          margin: 0.5em 0 0 0;
           font-size: 0.8em;
+          margin: 0.5em 0 0 0;
           white-space: nowrap;
         }
       }
     }
 
     .list-container {
+      align-items: center;
       display: flex;
       flex-direction: column;
-      align-items: center;
-      list-style-type: none;
-
       height: 0;
+      list-style-type: none;
+      margin: 0;
       min-height: 90%;
       overflow-x: hidden;
       overflow-y: auto;
-      margin: 0;
       padding: 1em;
 
       li:not(:first-child) {
@@ -169,37 +150,32 @@
       }
 
       .achievement-card {
+        // Card aspect ratio 6:1
+        cursor: pointer;
         display: flex;
         flex-direction: row;
-
-        // Card aspect ratio 6:1
         height: 5em;
+        transition: box-shadow 0.2s ease-out;
         width: 30em;
 
-        cursor: pointer;
-        transition: box-shadow 0.2s ease-out;
-
         .dropdown-button {
-          display: flex;
           align-items: center;
-
+          display: flex;
           height: 5em;
-          width: 5em;
           padding: 0 0 0 0.5em;
+          width: 5em;
         }
 
         .content {
           display: flex;
           flex-direction: column;
-
           height: 5em;
           width: 25em;
 
           .heading {
+            align-items: center;
             display: flex;
             flex-direction: row;
-            align-items: center;
-
             height: 3em;
 
             h3 {
@@ -216,26 +192,24 @@
           .details {
             display: flex;
             flex-direction: row;
-
-            margin: 0 0 0.3em 0;
-
             font-size: 0.8em;
+            margin: 0 0 0.3em 0;
 
             p {
               margin: 0;
             }
 
             .ability {
+              align-items: center;
               display: flex;
               flex: 1 1 50%;
-              align-items: center;
             }
 
             .deadline,
             .exp {
+              align-items: center;
               display: flex;
               flex: 1 1 25%;
-              align-items: center;
 
               p {
                 margin-left: 0.3em;
@@ -251,14 +225,13 @@
       }
 
       .achievement-card:hover {
-        transition: box-shadow 0.2s ease-in;
         box-shadow: 0 0 10px black;
+        transition: box-shadow 0.2s ease-in;
       }
 
       .prerequisite-container {
         display: flex;
         flex-direction: column;
-
         margin-left: 1em;
         margin-right: -1em;
 
@@ -267,17 +240,13 @@
           flex-direction: row;
 
           .dropdown-lines {
+            border-bottom: 1px solid white;
+            border-left: 1px solid white;
             display: flex;
             flex-direction: column;
-
             height: 6em;
+            margin: -3em -2em 2em 0;
             width: 2em;
-
-            margin-top: -3em;
-            margin-right: -2em;
-            margin-bottom: 2em;
-            border-left: 1px solid white;
-            border-bottom: 1px solid white;
           }
 
           .achievement-card {
@@ -288,7 +257,6 @@
         .prerequisite:first-child {
           .dropdown-lines {
             height: 3em;
-
             margin-top: 0;
           }
         }
@@ -297,46 +265,36 @@
 
     // Consider removing view-container
     .view-container {
+      align-items: center;
       display: flex;
-
       height: 100%;
+      justify-content: center;
       width: 50%;
 
-      justify-content: center;
-      align-items: center;
-
       .view {
+        color: white;
         display: flex;
         flex-direction: column;
-
         height: 90%;
         max-height: 60em;
         width: 40em;
 
-        color: white;
-
         .canvas {
-          display: flex;
-
-          flex-direction: column;
           align-items: center;
-
+          display: flex;
+          flex-direction: column;
           height: 20em;
-          width: 40em;
-
           margin: 0 0 0.5em 0;
+          width: 40em;
 
           h1 {
             margin: 0.5em 0 0.2em 0;
           }
 
           .deadline {
-            display: flex;
-
-            flex-direction: row;
-
             align-items: baseline;
-
+            display: flex;
+            flex-direction: row;
             font-size: 1.1em;
 
             .week {
@@ -346,40 +304,33 @@
           }
 
           .description {
-            display: flex;
-
-            height: 100%;
-            width: 75%;
-
-            justify-content: center;
             align-items: flex-end;
-
-            text-align: center;
             color: yellow;
+            display: flex;
             font-size: 0.85em;
+            height: 100%;
+            justify-content: center;
+            text-align: center;
+            width: 75%;
           }
         }
 
         .goal {
           display: flex;
           flex-direction: row;
-
           padding: 0.5em 0;
 
           .goal-medal {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 18%;
-
-            justify-content: center;
             align-items: center;
+            display: flex;
+            flex-basis: 18%;
+            flex-direction: column;
+            justify-content: center;
 
             .medal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
               height: 2em;
               width: 2em;
-
-              background-image: url('#{$achievement-assets}/xp-icon.png');
-              background-size: contain;
             }
 
             .medal-text {
@@ -388,17 +339,17 @@
           }
 
           .goal-text {
-            display: flex;
             align-items: center;
+            display: flex;
           }
         }
 
         hr {
-          height: 1px;
-          width: 90%;
           background-color: lightgrey;
           border: none;
+          height: 1px;
           margin: 0.5em auto 0.5em;
+          width: 90%;
         }
       }
 
@@ -416,16 +367,16 @@
     }
 
     ::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
       -webkit-border-radius: 10px;
+      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
       border-radius: 10px;
+      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
     }
 
     ::-webkit-scrollbar-thumb {
       -webkit-border-radius: 10px;
-      border-radius: 10px;
       background: rgba(255, 255, 255, 1);
+      border-radius: 10px;
     }
   }
 }

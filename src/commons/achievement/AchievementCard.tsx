@@ -45,9 +45,7 @@ function AchievementCard(props: AchievementCardProps) {
       style={{
         ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
-        background: `url(${cardTileUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        background: `url(${cardTileUrl}) center/cover`,
       }}
       onClick={() => displayView(id)}
       onClickCapture={toggleDropdown}
