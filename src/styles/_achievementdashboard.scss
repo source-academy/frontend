@@ -134,8 +134,7 @@
       align-items: center;
 
       height: 40%;
-      min-height: 24em;
-      min-width: 8em;
+      min-height: 23em;
       padding: 0 1em;
 
       .filter-button {
@@ -149,6 +148,7 @@
         p {
           margin: 0.5em 0 0 0;
           font-size: 0.8em;
+          white-space: nowrap;
         }
       }
     }
@@ -164,6 +164,7 @@
       min-height: 90%;
       overflow-x: auto;
       overflow-y: auto;
+      margin: 0;
       padding: 1em;
 
       .achievement-card {
