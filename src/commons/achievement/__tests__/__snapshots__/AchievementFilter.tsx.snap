@@ -2,10 +2,10 @@
 
 exports[`AchievementFilter component renders correctly 1`] = `
 "<AchievementFilter filterStatus=\\"ACTIVE\\" setFilterStatus={[Function: setFilterStatus]} icon=\\"locate\\" count={0} handleFilterColor={[Function: handleFilterColor]}>
-  <div className=\\"filter-button\\" onClick={[Function: changeFilterStatus]}>
-    <Blueprint3.Icon iconSize={40} icon=\\"locate\\" color={[undefined]}>
+  <div className=\\"filter-button\\" onClick={[Function: changeFilterStatus]} style={{...}}>
+    <Blueprint3.Icon iconSize={30} icon=\\"locate\\">
       <span icon=\\"locate\\" className=\\"bp3-icon bp3-icon-locate\\" title={[undefined]}>
-        <svg fill={[undefined]} data-icon=\\"locate\\" width={40} height={40} viewBox=\\"0 0 20 20\\">
+        <svg fill={[undefined]} data-icon=\\"locate\\" width={30} height={30} viewBox=\\"0 0 20 20\\">
           <desc>
             locate
           </desc>
@@ -13,13 +13,12 @@ exports[`AchievementFilter component renders correctly 1`] = `
         </svg>
       </span>
     </Blueprint3.Icon>
-    <br />
-    <span style={{...}}>
+    <p>
       ACTIVE
        [
       0
       ]
-    </span>
+    </p>
   </div>
 </AchievementFilter>"
 `;

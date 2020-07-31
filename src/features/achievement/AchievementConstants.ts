@@ -53,27 +53,25 @@ export const getAbilityBackground = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
       return {
-        background: `url(${backgroundUrl}/core-background.png) no-repeat center`
+        background: `url(${backgroundUrl}/core-background.png) no-repeat center/cover`
       };
     case AchievementAbility.EFFORT:
       return {
-        background: `url(${backgroundUrl}/effort-background.png) no-repeat center`
+        background: `url(${backgroundUrl}/effort-background.png) no-repeat center/cover`
       };
     case AchievementAbility.EXPLORATION:
       return {
-        background: `url(${backgroundUrl}/exploration-background.png) no-repeat center`
+        background: `url(${backgroundUrl}/exploration-background.png) no-repeat center/cover`
       };
     case AchievementAbility.COMMUNITY:
       return {
-        background: `url(${backgroundUrl}/community-background.png) no-repeat center`
+        background: `url(${backgroundUrl}/community-background.png) no-repeat center/cover`
       };
     case AchievementAbility.FLEX:
       return {
         background: `black`
       };
     default:
-      return {
-        background: 'black'
-      };
+      return {};
   }
 };
