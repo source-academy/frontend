@@ -128,23 +128,27 @@
       border: solid yellow;
       display: flex;
       flex-direction: column;
-      justify-content: space-evenly;
+      justify-content: center;
       align-items: center;
+
+      padding: 0 1em;
 
       .filter-button {
         display: flex;
-
         flex-direction: column;
         align-items: center;
-
-        line-height: 0.8em;
-
         cursor: pointer;
+
+        margin: 2em 0;
+
+        p {
+          margin: 0.5em 0 0 0;
+          font-size: 0.8em;
+        }
       }
     }
 
     .list-container {
-      border: solid yellow;
       display: flex;
 
       height: 90%;
@@ -305,7 +309,6 @@
     }
 
     .view-container {
-      border: solid yellow;
       display: flex;
 
       height: 90%;

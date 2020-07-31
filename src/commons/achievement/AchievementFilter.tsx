@@ -24,12 +24,11 @@ function AchievementFilter(props: AchievementFilterProps) {
   const filterColor = handleFilterColor(filterStatus);
 
   return (
-    <div className="filter-button" onClick={changeFilterStatus}>
-      <Icon iconSize={40} icon={icon} color={filterColor} />
-      <br />
-      <span style={{ color: filterColor }}>
+    <div className="filter-button" onClick={changeFilterStatus} style={{ color: filterColor }}>
+      <Icon iconSize={30} icon={icon} />
+      <p>
         {filterStatus} [{count}]
-      </span>
+      </p>
     </div>
   );
 }
