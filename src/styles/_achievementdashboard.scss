@@ -232,24 +232,20 @@
       .prerequisite-container {
         display: flex;
         flex-direction: column;
-        margin-left: 1em;
-        margin-right: -1em;
 
         .prerequisite {
           display: flex;
           flex-direction: row;
+          max-width: 30em;
 
           .dropdown-lines {
-            border-bottom: 1px solid white;
-            border-left: 1px solid white;
-            display: flex;
-            flex-direction: column;
-            height: 6em;
-            margin: -3em -2em 2em 0;
-            width: 2em;
+            height: 5.5em;
+            margin: -2.5em -1.5em 0 1em;
+            min-width: 1em;
           }
 
           .achievement-card {
+            margin: 0.5em 0 0 0;
             transform: scale(0.9);
           }
         }
@@ -257,7 +253,7 @@
         .prerequisite:first-child {
           .dropdown-lines {
             height: 3em;
-            margin-top: 0;
+            margin: 0 -1.5em 0 1em;
           }
         }
       }

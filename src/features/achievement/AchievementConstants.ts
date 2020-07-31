@@ -13,7 +13,7 @@ export enum FilterColors {
   WHITE = '#ffffff'
 }
 
-const getAbilityColor = (ability: AchievementAbility) => {
+export const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
       return '#ffb412'; // gold
