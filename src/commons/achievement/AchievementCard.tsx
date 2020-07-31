@@ -61,9 +61,11 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          {status === AchievementStatus.COMPLETED && (
-            <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} style={{ paddingLeft: '1em' }} />
-          )}
+          <span className="status">
+            {status === AchievementStatus.COMPLETED && (
+              <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} />
+            )}
+          </span>
         </div>
 
         <div className="details">

@@ -30,9 +30,7 @@ function AchievementView(props: AchievementViewProps) {
       <div
         className="canvas"
         style={{
-          backgroundImage: `url(${canvasUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          background: `url(${canvasUrl}) center/cover`
         }}
       >
         <h1>{title.toUpperCase()}</h1>

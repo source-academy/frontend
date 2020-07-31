@@ -164,55 +164,52 @@
       margin: 0;
       padding: 1em;
 
+      li:not(:first-child) {
+        margin: 1em 0 0 0;
+      }
+
       .achievement-card {
         display: flex;
-
         flex-direction: row;
 
         // Card aspect ratio 6:1
         height: 5em;
         width: 30em;
-        padding: 0;
 
-        justify-content: center;
-        align-items: center;
         cursor: pointer;
         transition: box-shadow 0.2s ease-out;
-        box-shadow: 0;
 
         .dropdown-button {
           display: flex;
+          align-items: center;
 
           height: 5em;
-          width: 6em;
+          width: 5em;
           padding: 0 0 0 0.5em;
-
-          justify-content: flex-start;
-          align-items: center;
         }
 
         .content {
           display: flex;
-
           flex-direction: column;
 
           height: 5em;
-          width: 24em;
+          width: 25em;
 
           .heading {
             display: flex;
             flex-direction: row;
-
-            height: 2.8em;
-
-            justify-content: flex-start;
             align-items: center;
 
-            padding: 0.2em 0 0 0;
+            height: 3em;
 
-            .week {
-              padding: 0 0 0 1em;
-              transform: scale(0.8);
+            h3 {
+              margin: 0;
+              max-width: 22em;
+            }
+
+            .status {
+              display: flex;
+              margin: 0 0.5em 0 0.5em;
             }
           }
 
@@ -220,44 +217,35 @@
             display: flex;
             flex-direction: row;
 
-            height: 1.9em;
+            margin: 0 0 0.3em 0;
 
-            font-size: 0.85em;
+            font-size: 0.8em;
+
+            p {
+              margin: 0;
+            }
 
             .ability {
               display: flex;
-              flex: 0 1 55%;
+              flex: 1 1 50%;
+              align-items: center;
             }
 
-            .deadline {
-              display: flex;
-              flex-direction: row;
-              flex: 0 1 25%;
-              align-items: stretch;
-
-              p {
-                padding-left: 0.3em;
-              }
-            }
-
+            .deadline,
             .exp {
               display: flex;
-              flex-direction: row;
-              flex: 0 1 20%;
-              align-items: stretch;
+              flex: 1 1 25%;
+              align-items: center;
 
               p {
-                padding-left: 0.3em;
+                margin-left: 0.3em;
               }
             }
           }
 
           .progress {
-            display: flex;
             height: 0.2em;
-            width: 23em;
-
-            align-items: flex-end;
+            width: 24em;
           }
         }
       }
@@ -271,8 +259,8 @@
         display: flex;
         flex-direction: column;
 
-        padding-left: 0.8em;
-        padding-right: -0.8em;
+        margin-left: 1em;
+        margin-right: -1em;
 
         .prerequisite {
           display: flex;

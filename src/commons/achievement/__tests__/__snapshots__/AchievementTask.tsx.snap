@@ -11,6 +11,7 @@ exports[`AchievementView component renders correctly 1`] = `
             <h3>
               BEYOND THE SECOND DIMENSION
             </h3>
+            <span className=\\"status\\" />
           </div>
           <div className=\\"details\\">
             <div className=\\"ability\\">
