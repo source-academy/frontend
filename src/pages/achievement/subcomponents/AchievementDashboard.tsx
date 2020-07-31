@@ -58,13 +58,11 @@ function Dashboard(props: DispatchProps & StateProps) {
 
   return (
     <div className="AchievementDashboard">
-      <div className="achievement-overview">
-        <AchievementOverview
-          name={name || 'User'}
-          studio={group || 'Staff'}
-          inferencer={inferencer}
-        />
-      </div>
+      <AchievementOverview
+        name={name || 'User'}
+        studio={group || 'Staff'}
+        inferencer={inferencer}
+      />
       <div className="achievement-main">
         <div className="filters">
           <AchievementFilter
@@ -94,9 +92,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
         </ul>
 
-        <div className="view-container">
-          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
-        </div>
+        <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
       </div>
     </div>
   );

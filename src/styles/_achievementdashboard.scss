@@ -13,8 +13,7 @@
     color: white;
     display: flex;
     flex-direction: row;
-    padding: 0.5em 0;
-    width: 100%;
+    margin: 0.5em;
 
     .level {
       align-items: center;
@@ -107,7 +106,7 @@
     display: flex;
     flex-direction: row;
     height: 100%;
-    justify-content: space-evenly;
+    justify-content: space-evenly; // fix this
 
     .filters {
       align-items: center;
@@ -115,8 +114,8 @@
       flex-direction: column;
       height: 40%;
       justify-content: space-between;
+      margin: 0 2em;
       min-height: 23em;
-      padding: 0 1em;
 
       .filter-button {
         align-items: center;
@@ -139,11 +138,12 @@
       flex-direction: column;
       height: 0;
       list-style-type: none;
-      margin: 0;
+      margin: 1em;
       min-height: 90%;
+      min-width: 34em;
       overflow-x: hidden;
       overflow-y: auto;
-      padding: 1em;
+      padding: 0;
 
       li:not(:first-child) {
         margin: 1em 0 0 0;
@@ -259,101 +259,101 @@
       }
     }
 
-    // Consider removing view-container
-    .view-container {
-      align-items: center;
+    .view {
+      color: white;
       display: flex;
-      height: 100%;
-      justify-content: center;
-      width: 50%;
+      flex-direction: column;
+      height: 90%;
+      margin: 1em;
+      min-height: 50em;
+      min-width: 40em;
 
-      .view {
-        color: white;
+      .canvas {
+        align-items: center;
         display: flex;
         flex-direction: column;
-        height: 90%;
-        max-height: 60em;
+        height: 20em;
+        margin: 0 0 0.5em 0;
         width: 40em;
 
-        .canvas {
-          align-items: center;
-          display: flex;
-          flex-direction: column;
-          height: 20em;
-          margin: 0 0 0.5em 0;
-          width: 40em;
-
-          h1 {
-            margin: 0.5em 0 0.2em 0;
-          }
-
-          .deadline {
-            align-items: baseline;
-            display: flex;
-            flex-direction: row;
-            font-size: 1.1em;
-
-            .week {
-              padding: 0 0 0 0.1em;
-              transform: scale(0.9);
-            }
-          }
-
-          .description {
-            align-items: flex-end;
-            color: yellow;
-            display: flex;
-            font-size: 0.85em;
-            height: 100%;
-            justify-content: center;
-            text-align: center;
-            width: 75%;
-          }
+        h1 {
+          margin: 0.5em 0 0.2em 0;
         }
 
-        .goal {
+        .deadline {
+          align-items: baseline;
           display: flex;
           flex-direction: row;
-          padding: 0.5em 0;
+          font-size: 1.1em;
 
-          .goal-medal {
-            align-items: center;
-            display: flex;
-            flex-basis: 18%;
-            flex-direction: column;
-            justify-content: center;
-
-            .medal-icon {
-              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
-              height: 2em;
-              width: 2em;
-            }
-
-            .medal-text {
-              font-size: 0.7em;
-            }
-          }
-
-          .goal-text {
-            align-items: center;
-            display: flex;
+          .week {
+            padding: 0 0 0 0.1em;
+            transform: scale(0.9);
           }
         }
 
-        hr {
-          background-color: lightgrey;
-          border: none;
-          height: 1px;
-          margin: 0.5em auto 0.5em;
-          width: 90%;
+        .description {
+          align-items: flex-end;
+          color: yellow;
+          display: flex;
+          font-size: 0.85em;
+          height: 100%;
+          justify-content: center;
+          text-align: center;
+          width: 75%;
         }
       }
 
-      .completion {
-        text-align: center;
-        h1 {
-          color: #ffc000;
+      .goal {
+        display: flex;
+        flex-direction: row;
+        padding: 0.5em 0;
+
+        .goal-medal {
+          align-items: center;
+          display: flex;
+          flex-basis: 18%;
+          flex-direction: column;
+          justify-content: center;
+
+          .medal-icon {
+            background: url(#{$achievement-assets}/xp-icon.png) center/contain;
+            height: 2em;
+            width: 2em;
+          }
+
+          .medal-text {
+            font-size: 0.7em;
+          }
         }
+
+        .goal-text {
+          align-items: center;
+          display: flex;
+        }
+      }
+
+      hr {
+        background-color: lightgrey;
+        border: none;
+        height: 1px;
+        margin: 0.5em auto 0.5em;
+        width: 90%;
+      }
+    }
+
+    .completion {
+      text-align: center;
+      h1 {
+        color: #ffc000;
+      }
+    }
+
+    @media only screen and (min-height: 1081px) {
+      .list-container,
+      .view {
+        max-height: 62em;
+        min-height: 62em;
       }
     }
 
