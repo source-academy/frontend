@@ -1,4 +1,14 @@
 .GroundControl {
+  .ground-control-controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .#{$ns}-card {
+    margin-top: 4px;
+  }
+
   .toggle-button-wrapper {
     margin-left: auto;
     margin-right: auto;

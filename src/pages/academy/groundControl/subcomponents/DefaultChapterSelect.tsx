@@ -10,10 +10,10 @@ import {
   sourceLanguages,
   styliseSublanguage,
   variantLanguages
-} from '../../../commons/application/ApplicationTypes';
-import controlButton from '../../../commons/ControlButton';
+} from '../../../../commons/application/ApplicationTypes';
+import controlButton from '../../../../commons/ControlButton';
 
-export type DefaultChapterProps = DispatchProps & StateProps;
+export type DefaultChapterSelectProps = DispatchProps & StateProps;
 
 export type DispatchProps = {
   handleFetchSublanguage: () => void;
@@ -25,7 +25,7 @@ export type StateProps = {
   sourceVariant: Variant;
 };
 
-const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = props => {
+const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> = props => {
   const { handleFetchSublanguage, handleUpdateSublanguage } = props;
 
   React.useEffect(() => {
@@ -76,15 +76,15 @@ const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = prop
     []
   );
 
-  const ChapterSelectComponent = Select.ofType<SourceLanguage>();
+  const DefaultChapterSelectComponent = Select.ofType<SourceLanguage>();
 
-  const chapSelect = React.useCallback(
+  const defaultChapSelect = React.useCallback(
     (
       currentChap: number,
       currentVariant: Variant,
       handleSelect = (item: SourceLanguage, event?: React.SyntheticEvent<HTMLElement>) => {}
     ) => (
-      <ChapterSelectComponent
+      <DefaultChapterSelectComponent
         items={sourceLanguages}
         onItemSelect={handleSelect}
         itemRenderer={chapterRenderer}
@@ -92,18 +92,17 @@ const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = prop
         filterable={false}
       >
         <Button
-          className={Classes.MINIMAL}
-          text={styliseSublanguage(currentChap, currentVariant)}
+          text={`Default sublanguage: ${styliseSublanguage(currentChap, currentVariant)}`}
           rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
         />
-      </ChapterSelectComponent>
+      </DefaultChapterSelectComponent>
     ),
     [chapterListRenderer, chapterRenderer]
   );
 
   return (
-    <div>
-      {chapSelect(props.sourceChapter, props.sourceVariant, handleOpenDialog)}
+    <>
+      {defaultChapSelect(props.sourceChapter, props.sourceVariant, handleOpenDialog)}
       <Dialog
         canEscapeKeyClose={true}
         canOutsideClickClose={true}
@@ -128,8 +127,8 @@ const AcademyDefaultChapter: React.FunctionComponent<DefaultChapterProps> = prop
           </div>
         </div>
       </Dialog>
-    </div>
+    </>
   );
 };
 
-export default AcademyDefaultChapter;
+export default DefaultChapterSelect;

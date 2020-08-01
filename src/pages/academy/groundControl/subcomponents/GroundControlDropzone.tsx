@@ -123,14 +123,14 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
 
   return (
     <>
-      <Card className="contentdisplay-content" elevation={Elevation.THREE}>
+      <Card elevation={Elevation.TWO} interactive={true}>
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
           <p>Drag 'n' drop some files here, or click to select files</p>
         </div>
       </Card>
       {file && (
-        <Card>
+        <Card elevation={Elevation.TWO} interactive={true}>
           <div>{title}</div>
           <br />
           {!props.displayConfirmation &&

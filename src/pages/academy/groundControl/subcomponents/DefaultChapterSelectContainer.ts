@@ -1,9 +1,12 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
-import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { changeSublanguage, fetchSublanguage } from '../../../commons/workspace/WorkspaceActions';
-import AcademyDefaultChapter, { DispatchProps, StateProps } from './AcademyDefaultChapter';
+import { OverallState } from '../../../../commons/application/ApplicationTypes';
+import {
+  changeSublanguage,
+  fetchSublanguage
+} from '../../../../commons/workspace/WorkspaceActions';
+import DefaultChapterSelect, { DispatchProps, StateProps } from './DefaultChapterSelect';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   sourceChapter: state.workspaces.playground.context.chapter,
@@ -19,9 +22,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     dispatch
   );
 
-const AcademyDefaultChapterContainer = connect(
+const DefaultChapterSelectContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(AcademyDefaultChapter);
+)(DefaultChapterSelect);
 
-export default AcademyDefaultChapterContainer;
+export default DefaultChapterSelectContainer;

@@ -1,6 +1,8 @@
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+import { Collapse, Divider } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
 import { sortBy } from 'lodash';
@@ -8,8 +10,10 @@ import * as React from 'react';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
+import controlButton from '../../../commons/ControlButton';
 import { getPrettyDate } from '../../../commons/utils/DateHelper';
 import { IGroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes';
+import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -30,8 +34,9 @@ export type StateProps = {
 };
 
 type State = {
-  forceUpdate: boolean;
   displayConfirmation: boolean;
+  forceUpdate: boolean;
+  showDropzone: boolean;
 };
 
 class GroundControl extends React.Component<GroundControlProps, State> {
@@ -43,9 +48,11 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     super(props);
 
     this.state = {
+      displayConfirmation: false,
       forceUpdate: false,
-      displayConfirmation: false
+      showDropzone: false
     };
+
     this.columnDefs = [
       {
         headerName: 'Title',
@@ -140,6 +147,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
   public render() {
     const data = this.sortByCategoryAndDate();
+
     const Grid = () => (
       <div className="GradingContainer">
         <div className="Grading ag-grid-parent ag-theme-balham">
@@ -162,13 +170,25 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     const display = (
       <div className="GroundControl">
-        <Dropzone
-          handleUploadAssessment={this.handleUploadAssessment}
-          toggleForceUpdate={this.toggleForceUpdate}
-          toggleDisplayConfirmation={this.toggleDisplayConfirmation}
-          forceUpdate={this.state.forceUpdate}
-          displayConfirmation={this.state.displayConfirmation}
-        />
+        <div className="ground-control-controls">
+          <DefaultChapterSelect />
+          {controlButton('Upload assessment', IconNames.CLOUD_UPLOAD, this.toggleDropzone, {
+            iconOnRight: true,
+            minimal: false
+          })}
+        </div>
+        <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
+          <Dropzone
+            handleUploadAssessment={this.handleUploadAssessment}
+            toggleDisplayConfirmation={this.toggleDisplayConfirmation}
+            toggleForceUpdate={this.toggleForceUpdate}
+            displayConfirmation={this.state.displayConfirmation}
+            forceUpdate={this.state.forceUpdate}
+          />
+        </Collapse>
+
+        <Divider />
+
         <Grid />
       </div>
     );
@@ -219,12 +239,16 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     this.setState({ forceUpdate: false });
   };
 
-  private toggleForceUpdate = () => {
-    this.setState({ forceUpdate: !this.state.forceUpdate });
-  };
-
   private toggleDisplayConfirmation = () => {
     this.setState({ displayConfirmation: !this.state.displayConfirmation });
+  };
+
+  private toggleDropzone = () => {
+    this.setState({ showDropzone: !this.state.showDropzone });
+  };
+
+  private toggleForceUpdate = () => {
+    this.setState({ forceUpdate: !this.state.forceUpdate });
   };
 }
 

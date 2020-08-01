@@ -9,7 +9,6 @@ import { AssessmentCategories } from '../../../commons/assessment/AssessmentType
 import NotificationBadgeContainer from '../../../commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../../commons/notificationBadge/NotificationBadgeHelper';
 import { assessmentCategoryLink } from '../../../commons/utils/ParamParseHelper';
-import AcademyDefaultChapter from './AcademyDefaultChapterContainer';
 
 type OwnProps = {
   role: Role;
@@ -81,8 +80,6 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
-        <AcademyDefaultChapter />
-
         <NavLink
           to={'/academy/groundcontrol'}
           activeClassName={Classes.ACTIVE}
