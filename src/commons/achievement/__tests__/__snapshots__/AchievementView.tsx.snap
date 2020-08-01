@@ -48,7 +48,6 @@ exports[`AchievementView component renders correctly 1`] = `
         </div>
       </div>
     </AchievementViewGoal>
-    <hr />
   </div>
 </AchievementView>"
 `;
