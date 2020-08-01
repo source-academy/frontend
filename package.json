@@ -40,7 +40,7 @@
     "array-move": "^2.2.2",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
-    "eslint": "6",
+    "eslint": "7",
     "eslint-plugin-simple-import-sort": "^5.0.3",
     "flexboxgrid": "^6.3.1",
     "flexboxgrid-helpers": "^1.1.3",
