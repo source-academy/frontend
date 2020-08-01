@@ -1135,10 +1135,10 @@
     react-lifecycles-compat "^3.0.4"
     tslib "~1.10.0"
 
-"@blueprintjs/icons@^3.19.0":
-  version "3.19.0"
-  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.19.0.tgz#83ad9fe213705f6656dbec6e9d6bec75d3564455"
-  integrity sha512-pFgEdSDj8q8ESofuXXSfonsiiqQNJ0u54vr8zxQyKggSwgMyASM/h9MdFVED7jXaj5nsda4or+hWM1ilUeES4Q==
+"@blueprintjs/icons@^3.19.0", "@blueprintjs/icons@^3.20.0":
+  version "3.20.0"
+  resolved "https://registry.yarnpkg.com/@blueprintjs/icons/-/icons-3.20.0.tgz#8eae6fa490735ed2e20a670851cb6ff9d0d3973f"
+  integrity sha512-bEn7S/aYF8K1p9QJb4KcQ8R9vJLDJ+VtB81w0JlMWIrWTJyM/U3953mp22mK/jr7zJ1pyVIzw6ZRSrG8ht4rgw==
   dependencies:
     classnames "^2.2"
     tslib "~1.10.0"
