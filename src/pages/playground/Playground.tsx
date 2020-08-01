@@ -538,7 +538,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         persistenceButtons,
         executionTime
       ],
-      replButtons: [props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
+      replButtons: [
+        props.sourceVariant !== 'concurrent' && props.sourceVariant !== 'wasm' ? evalButton : null,
+        clearButton
+      ]
     },
     editorProps: {
       onChangeMethod: onChangeMethod,
