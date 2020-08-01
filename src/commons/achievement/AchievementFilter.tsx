@@ -24,7 +24,7 @@ function AchievementFilter(props: AchievementFilterProps) {
   const filterColor = handleFilterColor(filterStatus);
 
   return (
-    <div className="filter-button" onClick={changeFilterStatus} style={{ color: filterColor }}>
+    <div className="filter" onClick={changeFilterStatus} style={{ color: filterColor }}>
       <Icon iconSize={30} icon={icon} />
       <p>
         {filterStatus} [{count}]

@@ -10,7 +10,6 @@
 
   .achievement-overview {
     align-items: center;
-    border: solid green;
     color: white;
     display: flex;
     flex-direction: row;
@@ -20,7 +19,6 @@
       align-items: center;
       display: flex;
       flex-direction: row;
-      margin: 0 1em;
 
       .level-badge {
         align-items: center;
@@ -97,6 +95,7 @@
       }
     }
 
+    .level,
     h3 {
       margin: 0 0.5em;
     }
@@ -104,49 +103,52 @@
 
   .achievement-main {
     align-items: center;
-    border: solid yellow;
     display: flex;
     flex-direction: row;
     height: 100%;
-    justify-content: space-evenly; // fix this
+    padding: 2em 1em;
 
-    .filters {
-      align-items: center;
-      border: dashed coral;
+    .filter-container {
       display: flex;
       flex-direction: column;
-      height: 40%;
-      justify-content: space-between;
-      margin: 0 1em;
+      height: 60%;
+      margin: 0 auto;
+      min-width: auto;
 
-      .filter-button {
+      .filter {
         align-items: center;
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        margin: 1em 0;
+        margin: auto 0;
+        padding: 1em;
 
         p {
           font-size: 0.8em;
-          margin: 0.5em 0 0 0;
+          margin: 0;
+          padding: 1em 0 0 0;
           white-space: nowrap;
+        }
+      }
+
+      @media only screen and (max-height: 600px) {
+        height: 80%;
+
+        p {
+          display: none;
         }
       }
     }
 
     .list-container {
-      align-items: center;
-      border: dashed coral;
       display: flex;
       flex-direction: column;
-      height: 0;
+      height: 90%;
       list-style-type: none;
-      margin: 1em;
-      min-height: 90%;
-      min-width: 34em;
-      overflow-x: hidden;
+      margin: 0 auto;
+      min-width: 34em; // should use auto
       overflow-y: auto;
-      padding: 0;
+      padding: 0 2em;
 
       li:not(:first-child) {
         margin: 1em 0 0 0;
@@ -180,23 +182,12 @@
             display: flex;
             flex-direction: row;
             height: 3em;
-
-            h3 {
-              margin: 0;
-              max-width: 22em;
-            }
-
-            .status {
-              display: flex;
-              margin: 0 0.5em 0 0.5em;
-            }
           }
 
           .details {
             display: flex;
             flex-direction: row;
             font-size: 0.8em;
-            margin: 0 0 0.3em 0;
 
             p {
               margin: 0;
@@ -215,13 +206,14 @@
               flex: 1 1 25%;
 
               p {
-                margin-left: 0.3em;
+                padding: 0 0 0 0.3em;
               }
             }
           }
 
           .progress {
             height: 0.2em;
+            margin: 0.2em 0 0 0;
             width: 24em;
           }
         }
@@ -263,13 +255,11 @@
     }
 
     .view {
-      border: dashed coral;
       color: white;
       display: flex;
       flex-direction: column;
       height: 90%;
-      margin: 1em;
-      min-width: 40em;
+      margin: 0 auto;
 
       .canvas {
         align-items: center;

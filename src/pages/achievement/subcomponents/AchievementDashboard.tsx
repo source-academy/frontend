@@ -64,7 +64,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         inferencer={inferencer}
       />
       <div className="achievement-main">
-        <div className="filters">
+        <div className="filter-container">
           <AchievementFilter
             filterStatus={FilterStatus.ALL}
             setFilterStatus={setFilterStatus}
