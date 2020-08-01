@@ -340,12 +340,12 @@
         margin: 0.5em auto 0.5em;
         width: 90%;
       }
-    }
 
-    .completion {
-      text-align: center;
-      h1 {
-        color: #ffc000;
+      .completion {
+        text-align: center;
+        h1 {
+          color: #ffc000;
+        }
       }
     }
 
@@ -353,7 +353,6 @@
       .list-container,
       .view {
         max-height: 62em;
-        min-height: 62em;
       }
     }
 
