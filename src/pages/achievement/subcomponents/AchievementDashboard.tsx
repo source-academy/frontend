@@ -63,6 +63,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         studio={group || 'Staff'}
         inferencer={inferencer}
       />
+
       <div className="achievement-main">
         <div className="filter-container">
           <AchievementFilter

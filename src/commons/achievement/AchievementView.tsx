@@ -44,9 +44,11 @@ function AchievementView(props: AchievementViewProps) {
         </div>
       </div>
       <AchievementViewGoal goals={goals} />
-      <hr />
       {status === AchievementStatus.COMPLETED ? (
-        <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+        <>
+          <hr />
+          <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+        </>
       ) : null}
     </div>
   );
