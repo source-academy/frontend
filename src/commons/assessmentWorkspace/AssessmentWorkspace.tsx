@@ -18,7 +18,6 @@ import {
   CodeDelta,
   Input,
   KeyboardCommand,
-  PlaybackData,
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
@@ -182,10 +181,8 @@ class AssessmentWorkspace extends React.Component<
     this.checkWorkspaceReset(this.props);
   }
 
-  // TODO: Implemenet THis for Keystroke Logging!
-  public uploadLogs = () => this.getReadyLogs();
-
   public getReadyLogs = () => {
+    /*
     const playbackData: PlaybackData = {
       init: {
         chapter: this.props.assessment!.questions[this.props.questionId].library.chapter,
@@ -195,9 +192,12 @@ class AssessmentWorkspace extends React.Component<
       },
       inputs: this.state.logs
     };
+    */
 
     this.setState({ logs: [], startingEditorValue: this.props.editorValue });
   };
+
+  public uploadLogs = () => this.getReadyLogs();
 
   public pushLog = (newInput: Input) => {
     const logsCopy = this.state.logs;
@@ -421,7 +421,6 @@ class AssessmentWorkspace extends React.Component<
       }
     }
 
-    this.uploadLogs();
     this.props.handleEditorUpdateBreakpoints([]);
     this.props.handleUpdateCurrentAssessmentId(assessmentId, questionId);
     this.props.handleResetWorkspace({

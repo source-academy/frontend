@@ -177,7 +177,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  const getReadyLogs = () => {
+  const getReadyLogs = React.useCallback(() => {
+    /*
     const playbackData: PlaybackData = {
       init: {
         chapter: props.sourceChapter,
@@ -187,10 +188,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       inputs: logs
     };
     console.log(playbackData);
+    */
 
     setLogs([]);
     setStartingEditorValue(props.editorValue);
-  };
+  }, [props, setLogs, setStartingEditorValue]);
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
@@ -360,17 +362,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const { handleExternalSelect, externalLibraryName } = props;
 
-  const handleExternalSelectAndRecord = (name: ExternalLibraryName) => {
-    handleExternalSelect(name);
+  const handleExternalSelectAndRecord = React.useCallback(
+    (name: ExternalLibraryName) => {
+      handleExternalSelect(name);
 
-    const input: Input = {
-      time: Date.now(),
-      type: 'externalLibrarySelect',
-      data: name
-    };
+      const input: Input = {
+        time: Date.now(),
+        type: 'externalLibrarySelect',
+        data: name
+      };
 
-    pushLog(input);
-  };
+      pushLog(input);
+    },
+    [handleExternalSelect, pushLog]
+  );
 
   const externalLibrarySelect = React.useMemo(
     () => (
