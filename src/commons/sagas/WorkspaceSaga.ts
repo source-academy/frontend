@@ -636,7 +636,9 @@ export function* evalCode(
   }
   async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
     return Sourceror.compile(wasmCode, wasmContext)
-      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then((wasmModule: WebAssembly.Module) =>
+        Sourceror.run(wasmModule, Sourceror.makePlatformImports(), wasmContext)
+      )
       .then(
         (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
         _ => ({ status: 'error' })
