@@ -10,6 +10,7 @@
 
   .achievement-overview {
     align-items: center;
+    border: solid green;
     color: white;
     display: flex;
     flex-direction: row;
@@ -103,6 +104,7 @@
 
   .achievement-main {
     align-items: center;
+    border: solid yellow;
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -110,19 +112,19 @@
 
     .filters {
       align-items: center;
+      border: dashed coral;
       display: flex;
       flex-direction: column;
       height: 40%;
       justify-content: space-between;
-      margin: 0 2em;
-      min-height: 23em;
+      margin: 0 1em;
 
       .filter-button {
         align-items: center;
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        margin: 2em 0;
+        margin: 1em 0;
 
         p {
           font-size: 0.8em;
@@ -134,6 +136,7 @@
 
     .list-container {
       align-items: center;
+      border: dashed coral;
       display: flex;
       flex-direction: column;
       height: 0;
@@ -260,12 +263,12 @@
     }
 
     .view {
+      border: dashed coral;
       color: white;
       display: flex;
       flex-direction: column;
       height: 90%;
       margin: 1em;
-      min-height: 50em;
       min-width: 40em;
 
       .canvas {
