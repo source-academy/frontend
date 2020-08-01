@@ -34,7 +34,6 @@ import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
   Input,
-  PlaybackData,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
@@ -189,10 +188,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
     };
     console.log(playbackData);
     */
+    console.log(startingEditorValue);
 
     setLogs([]);
     setStartingEditorValue(props.editorValue);
   }, [props, setLogs, setStartingEditorValue]);
+
+  // TODO: Implemenet THis for Keystroke Logging!
+  const uploadLogs = React.useCallback(() => {
+    getReadyLogs();
+  }, [getReadyLogs]);
+
+  const handleEvalCallback = React.useCallback(() => {
+    props.handleEditorEval();
+    uploadLogs();
+  }, [props, uploadLogs]);
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
@@ -210,18 +220,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         setLogs(logsCopy);
       }
     },
-    [logs, setLogs]
+    [logs, props, uploadLogs, setLogs, setStartingEditorValue]
   );
-
-  // TODO: Implemenet THis for Keystroke Logging!
-  const uploadLogs = React.useCallback(() => {
-    getReadyLogs();
-  }, [getReadyLogs]);
-
-  const handleEvalCallback = React.useCallback(() => {
-    props.handleEditorEval();
-    uploadLogs();
-  }, [props, uploadLogs]);
 
   const autorunButtons = React.useMemo(
     () => (
