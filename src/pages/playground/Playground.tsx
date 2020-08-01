@@ -192,7 +192,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
     setLogs([]);
     setStartingEditorValue(props.editorValue);
-  }, [props, setLogs, setStartingEditorValue]);
+  }, [props, setLogs, startingEditorValue, setStartingEditorValue]);
 
   // TODO: Implemenet THis for Keystroke Logging!
   const uploadLogs = React.useCallback(() => {
