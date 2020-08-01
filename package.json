@@ -37,7 +37,7 @@
     "acorn": "^7.3.1",
     "ag-grid-community": "^23.2.1",
     "ag-grid-react": "^23.2.1",
-    "array-move": "^2.2.2",
+    "array-move": "^3.0.0",
     "classnames": "^2.2.6",
     "connected-react-router": "^6.8.0",
     "eslint": "6",
