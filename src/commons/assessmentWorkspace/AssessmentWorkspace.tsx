@@ -195,8 +195,6 @@ class AssessmentWorkspace extends React.Component<
       },
       inputs: this.state.logs
     };
-    console.log(this.props.questionId);
-    console.log(playbackData);
 
     this.setState({ logs: [], startingEditorValue: this.props.editorValue });
   };
