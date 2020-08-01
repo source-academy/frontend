@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AchievementFilter component renders correctly 1`] = `
-"<AchievementFilter filterStatus=\\"ACTIVE\\" setFilterStatus={[Function: setFilterStatus]} icon=\\"locate\\" count={0} handleFilterColor={[Function: handleFilterColor]}>
+"<AchievementFilter filterStatus=\\"ACTIVE\\" setFilterStatus={[Function: setFilterStatus]} icon=\\"locate\\" count={0} getFilterColor={[Function: getFilterColor]}>
   <div className=\\"filter\\" onClick={[Function: changeFilterStatus]} style={{...}}>
     <Blueprint3.Icon iconSize={30} icon=\\"locate\\">
       <span icon=\\"locate\\" className=\\"bp3-icon bp3-icon-locate\\" title={[undefined]}>

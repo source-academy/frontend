@@ -4,8 +4,7 @@
   flex-direction: column;
   flex: 1 1 auto;
   height: 100%;
-  overflow-x: auto;
-  overflow-y: auto;
+  overflow: auto;
   width: 100%;
 
   .achievement-overview {
@@ -109,6 +108,7 @@
     padding: 2em 1em;
 
     .filter-container {
+      border: solid green;
       display: flex;
       flex-direction: column;
       height: 60%;
@@ -141,6 +141,7 @@
     }
 
     .list-container {
+      border: solid green;
       display: flex;
       flex-direction: column;
       height: 90%;
@@ -254,97 +255,108 @@
       }
     }
 
-    .view {
-      color: white;
+    .view-container {
+      border: solid green;
       display: flex;
       flex-direction: column;
       height: 90%;
       margin: 0 auto;
+      min-width: 40em; // should use auto
+      overflow-y: auto;
+      padding: 0 2em;
 
-      .canvas {
-        align-items: center;
+      .view {
+        color: white;
         display: flex;
         flex-direction: column;
-        height: 20em;
-        margin: 0 0 0.5em 0;
-        width: 40em;
+        height: 100%;
+        margin: 0 auto;
 
-        h1 {
-          margin: 0.5em 0 0.2em 0;
+        .canvas {
+          align-items: center;
+          display: flex;
+          flex-direction: column;
+          height: 15em;
+          margin: 0 0 0.5em 0;
+          width: 36em;
+
+          h1 {
+            margin: 0.5em 0 0.2em 0;
+          }
+
+          .deadline {
+            align-items: baseline;
+            display: flex;
+            flex-direction: row;
+            font-size: 1.1em;
+
+            .week {
+              padding: 0 0 0 0.1em;
+              transform: scale(0.9);
+            }
+          }
+
+          .description {
+            align-items: flex-end;
+            color: yellow;
+            display: flex;
+            font-size: 0.85em;
+            height: 100%;
+            justify-content: center;
+            text-align: center;
+            width: 75%;
+          }
         }
 
-        .deadline {
-          align-items: baseline;
+        .goal {
           display: flex;
           flex-direction: row;
-          font-size: 1.1em;
+          padding: 0.5em 0;
 
-          .week {
-            padding: 0 0 0 0.1em;
-            transform: scale(0.9);
+          .goal-medal {
+            align-items: center;
+            display: flex;
+            flex-basis: 18%;
+            flex-direction: column;
+            justify-content: center;
+
+            .medal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
+              height: 2em;
+              width: 2em;
+            }
+
+            .medal-text {
+              font-size: 0.7em;
+            }
+          }
+
+          .goal-text {
+            align-items: center;
+            display: flex;
           }
         }
 
-        .description {
-          align-items: flex-end;
-          color: yellow;
-          display: flex;
-          font-size: 0.85em;
-          height: 100%;
-          justify-content: center;
+        hr {
+          background-color: lightgrey;
+          border: none;
+          height: 1px;
+          margin: 0.5em auto 0.5em;
+          width: 90%;
+        }
+
+        .completion {
           text-align: center;
-          width: 75%;
-        }
-      }
-
-      .goal {
-        display: flex;
-        flex-direction: row;
-        padding: 0.5em 0;
-
-        .goal-medal {
-          align-items: center;
-          display: flex;
-          flex-basis: 18%;
-          flex-direction: column;
-          justify-content: center;
-
-          .medal-icon {
-            background: url(#{$achievement-assets}/xp-icon.png) center/contain;
-            height: 2em;
-            width: 2em;
+          h1 {
+            color: #ffc000;
           }
-
-          .medal-text {
-            font-size: 0.7em;
-          }
-        }
-
-        .goal-text {
-          align-items: center;
-          display: flex;
-        }
-      }
-
-      hr {
-        background-color: lightgrey;
-        border: none;
-        height: 1px;
-        margin: 0.5em auto 0.5em;
-        width: 90%;
-      }
-
-      .completion {
-        text-align: center;
-        h1 {
-          color: #ffc000;
         }
       }
     }
 
     @media only screen and (min-height: 1081px) {
       .list-container,
-      .view {
+      .view-container {
         max-height: 62em;
       }
     }

@@ -33,7 +33,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [viewId, setViewId] = useState<number>(-1);
 
   // Filter icon turns blue when selected, otherwise white
-  const handleFilterColor = (status: FilterStatus) =>
+  const getFilterColor = (status: FilterStatus) =>
     status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
   // Make Flex achievements parmanently glowing and the selected achievement glow
@@ -70,21 +70,21 @@ function Dashboard(props: DispatchProps & StateProps) {
             setFilterStatus={setFilterStatus}
             icon={IconNames.GLOBE}
             count={inferencer.getFilterCount(FilterStatus.ALL)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.ACTIVE}
             setFilterStatus={setFilterStatus}
             icon={IconNames.LOCATE}
             count={inferencer.getFilterCount(FilterStatus.ACTIVE)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.COMPLETED}
             setFilterStatus={setFilterStatus}
             icon={IconNames.ENDORSED}
             count={inferencer.getFilterCount(FilterStatus.COMPLETED)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
         </div>
 
@@ -92,7 +92,9 @@ function Dashboard(props: DispatchProps & StateProps) {
           {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
         </ul>
 
-        <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
+        <div className="view-container">
+          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
+        </div>
       </div>
     </div>
   );
