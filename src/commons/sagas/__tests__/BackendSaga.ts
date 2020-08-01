@@ -262,16 +262,45 @@ describe('Test SUBMIT_ANSWER Action', () => {
   });
 
   test('when role is not student', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Answer rejected - only students can submit answers.')
-      .not.call.fn(postAnswer)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(UPDATE_HAS_UNSAVED_CHANGES)
-      .hasFinalState({ session: { role: Role.Staff } })
+    const mockAnsweredAssessmentQuestion: Question =
+      mockAssessmentQuestion.type === 'mcq'
+        ? { ...mockAssessmentQuestion, answer: 42 }
+        : { ...mockAssessmentQuestion, answer: '42' };
+    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+      (question: Question): Question => {
+        if (question.id === mockAnsweredAssessmentQuestion.id) {
+          return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
+        }
+        return question;
+      }
+    );
+    const mockNewAssessment = {
+      ...mockAssessment,
+      questions: mockNewQuestions
+    };
+    expectSaga(BackendSaga)
+      .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
+      .provide([
+        [
+          call(
+            postAnswer,
+            mockAnsweredAssessmentQuestion.id,
+            mockAnsweredAssessmentQuestion.answer || '',
+            mockTokens
+          ),
+          okResp
+        ]
+      ])
+      .not.call.fn(showWarningMessage)
+      .call(showSuccessMessage, 'Saved!', 1000)
+      .put(updateAssessment(mockNewAssessment))
+      .put(updateHasUnsavedChanges('assessment' as WorkspaceLocation, false))
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
+    // To make sure no changes in state
+    return expect(
+      mockStates.session.assessments.get(mockNewAssessment.id)!.questions[0].answer
+    ).toEqual(null);
   });
 
   test('when response is null', () => {
@@ -380,14 +409,25 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
   });
 
   test('when role is not a student', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff } })
-      .call(showWarningMessage, 'Submission rejected - only students can submit assessments.')
-      .not.call.fn(postAssessment)
-      .not.put.actionType(UPDATE_ASSESSMENT_OVERVIEWS)
-      .hasFinalState({ session: { role: Role.Staff } })
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: 0 })
+    const mockAssessmentId = mockAssessment.id;
+    const mockNewOverviews = mockAssessmentOverviews.map(overview => {
+      if (overview.id === mockAssessmentId) {
+        return { ...overview, status: AssessmentStatuses.submitted };
+      }
+      return overview;
+    });
+    expectSaga(BackendSaga)
+      .withState({ ...mockStates, session: { ...mockStates.session, role: Role.Staff } })
+      .provide([[call(postAssessment, mockAssessmentId, mockTokens), okResp]])
+      .not.call(showWarningMessage)
+      .call(showSuccessMessage, 'Submitted!', 2000)
+      .put(updateAssessmentOverviews(mockNewOverviews))
+      .dispatch({ type: SUBMIT_ASSESSMENT, payload: mockAssessmentId })
       .silentRun();
+    expect(mockStates.session.assessmentOverviews[0].id).toEqual(mockAssessmentId);
+    return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
+      AssessmentStatuses.submitted
+    );
   });
 });
 

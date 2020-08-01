@@ -128,11 +128,6 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role !== Role.Student) {
-      return yield call(showWarningMessage, 'Answer rejected - only students can submit answers.');
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -176,14 +171,6 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
-    const role: Role = yield select((state: OverallState) => state.session.role);
-    if (role !== Role.Student) {
-      return yield call(
-        showWarningMessage,
-        'Submission rejected - only students can submit assessments.'
-      );
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken

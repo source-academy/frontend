@@ -11,7 +11,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   assessmentId: 0,
   autogradingResults: [],
   notAttempted: true,
-  closeDate: '2048-06-18T05:24:26.026Z',
+  canSave: true,
   editorPrepend: '',
   editorValue: null,
   editorPostpend: '',
@@ -67,7 +67,7 @@ const mockProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
 
 const mockClosedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
   ...mockProgrammingAssessmentWorkspaceProps,
-  closeDate: '2008-06-18T05:24:26.026Z'
+  canSave: false
 };
 
 const mockGradedProgrammingAssessmentWorkspaceProps: AssessmentWorkspaceProps = {
