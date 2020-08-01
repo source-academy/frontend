@@ -110,14 +110,14 @@ test('AssessmentWorkspace page with MCQ question renders correctly', () => {
 
 /*  ===== Tester comments =====
     Issue:
-      https://stackoverflow.com/questions/42813342/react-createelement-type-is-invalid-expected-a-string 
+      https://stackoverflow.com/questions/42813342/react-createelement-type-is-invalid-expected-a-string
     Description:
       Mounting the AssessmentWorkspace deeply (rendering all recursive subcomponents) in Enzyme with mount
       results in the test failing with the error
           Warning: React.createElement: type is invalid -- expected a string (for built-in components) or
           a class/function (for composite components) but got: undefined. You likely forgot to export your
           component from the file it's defined in, or you might have mixed up default and named imports.
-     
+
           Check the render method of `Workspace`.
 
           The above error occurred in the <div> component:
@@ -127,13 +127,13 @@ test('AssessmentWorkspace page with MCQ question renders correctly', () => {
             in div (created by AssessmentWorkspace)
             in AssessmentWorkspace (created by WrapperComponent)
             in WrapperComponent
-      
+
       whereas mounting it one-level deep in Enzyme using shallow throws no errors
     Fix:
       Stack trace suggests one of the React subcomponents of AssessmentWorkspace works in production
       but is not set up correctly - requires re-examination of every single React component and
       sub-component used in AssessmentWorkspace
-      
+
       Current workaround is to mount AssessmentWorkspace shallowly since the behaviour is correct
       during user testing
 */
