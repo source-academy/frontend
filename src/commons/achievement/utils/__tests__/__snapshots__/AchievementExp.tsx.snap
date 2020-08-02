@@ -1,13 +1,13 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AchievementExp component renders correctly 1`] = `
-"<AchievementExp exp={0}>
+"<AchievementExp exp={0} isBonus={false}>
   <div className=\\"exp\\" />
 </AchievementExp>"
 `;
 
 exports[`AchievementExp component renders correctly 2`] = `
-"<AchievementExp exp={[undefined]}>
+"<AchievementExp exp={[undefined]} isBonus={false}>
   <div className=\\"exp\\" />
 </AchievementExp>"
 `;
