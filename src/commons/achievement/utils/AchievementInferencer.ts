@@ -168,6 +168,21 @@ class AchievementInferencer {
     this.normalizePositions();
   }
 
+  // Calculates set bonus
+  public getBonusExp(id: number) {
+    assert(this.nodeList.has(id));
+    if (this.nodeList.get(id)!.children.size === 0) return 0;
+
+    const displayExp = this.nodeList.get(id)!.displayExp;
+
+    let totalChildExp = 0;
+    for (const childId of this.nodeList.get(id)!.children) {
+      totalChildExp = totalChildExp + this.nodeList.get(childId)!.displayExp;
+    }
+
+    return displayExp - totalChildExp;
+  }
+
   public getDisplayExp(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.displayExp;

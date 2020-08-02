@@ -4,14 +4,17 @@ import React from 'react';
 
 type AchievementExpProps = {
   exp?: number;
+  isBonus: boolean;
 };
 
 function AchievementExp(props: AchievementExpProps) {
-  const { exp } = props;
+  const { exp, isBonus } = props;
+
+  if (exp === undefined || exp === 0) return <div className="exp"></div>;
 
   // Converts number to EXP string
-  const stringifyExp = (exp: number | undefined) => {
-    return exp === undefined ? 'No XP' : exp + ' XP';
+  const stringifyExp = (exp: number) => {
+    return (isBonus ? '+' : '') + exp + ' XP';
   };
 
   return (

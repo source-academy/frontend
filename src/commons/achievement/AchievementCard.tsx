@@ -31,13 +31,14 @@ function AchievementCard(props: AchievementCardProps) {
   const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
-  const displayExp = inferencer.getDisplayExp(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
   // Only task card with prerequisites has dropdown button
   const hasDropdown =
     isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
+
+  const displayExp = hasDropdown ? inferencer.getBonusExp(id) : inferencer.getDisplayExp(id);
 
   return (
     <div
@@ -71,7 +72,7 @@ function AchievementCard(props: AchievementCardProps) {
             <p>{ability}</p>
           </div>
           <AchievementDeadline deadline={displayDeadline} ability={ability} />
-          <AchievementExp exp={displayExp} />
+          <AchievementExp exp={displayExp} isBonus={hasDropdown} />
         </div>
 
         <ProgressBar
