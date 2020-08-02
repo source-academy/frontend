@@ -224,7 +224,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
       mockAssessmentQuestion.type === 'mcq'
         ? { ...mockAssessmentQuestion, answer: 42 }
         : { ...mockAssessmentQuestion, answer: '42' };
-    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+    const mockNewQuestions: Question[] = mockAssessment.questions.map(
       (question: Question): Question => {
         if (question.id === mockAnsweredAssessmentQuestion.id) {
           return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
@@ -266,7 +266,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
       mockAssessmentQuestion.type === 'mcq'
         ? { ...mockAssessmentQuestion, answer: 42 }
         : { ...mockAssessmentQuestion, answer: '42' };
-    const mockNewQuestions: Question[] = mockAssessment.questions.slice().map(
+    const mockNewQuestions: Question[] = mockAssessment.questions.map(
       (question: Question): Question => {
         if (question.id === mockAnsweredAssessmentQuestion.id) {
           return { ...question, answer: mockAnsweredAssessmentQuestion.answer } as Question;
