@@ -78,15 +78,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       const editorCode = state.workspaces[workspaceLocation].editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
-    const [prepend, tempvalue] = code;
-    const exploded = tempvalue.split('\n');
-    for (const i in breakpoints) {
-      if (typeof i === 'string') {
-        const index: number = +i;
-        exploded[index] = 'debugger;' + exploded[index];
-      }
-    }
-    const value = exploded.join('\n');
+
     const chapter: number = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
     );
@@ -117,6 +109,25 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.beginClearContext(library, workspaceLocation));
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+
+    const [prepend, tempvalue] = code;
+    const exploded = tempvalue.split('\n');
+    for (const b in breakpoints) {
+      if (typeof b === 'string') {
+        const index: number = +b;
+        const temp = exploded[index];
+        exploded[index] = 'debugger;' + temp;
+
+        context.errors = [];
+        parse(exploded.join('\n'), context);
+        if(context.errors.length > 0) {
+          yield call(showWarningMessage, 'Line ' + (+b + 1) + ': Misplaced breakpoint', 2000);
+        }
+
+        exploded[index] = temp;
+      }
+    }
+    const value = exploded.join('\n');
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
