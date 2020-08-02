@@ -128,14 +128,12 @@
       /* To be exact, 
       max-height: $view-height + $border-glow-radius * 2 */
       max-height: $view-height + $default-spacing * 2;
-      overflow-y: auto;
     }
 
     .filter-container {
       @extend %container;
       height: 60%;
       min-width: auto;
-      overflow: visible;
 
       .filter {
         align-items: center;
@@ -166,6 +164,7 @@
       height: 90%;
       list-style-type: none;
       min-width: $card-width + $default-spacing;
+      overflow-y: auto;
       padding: 0;
       scrollbar-color: white #444;
       scrollbar-width: thin;
@@ -290,6 +289,7 @@
       /* To be exact, 
       min-width: $view-width + $border-glow-radius * 2 */
       min-width: $view-width + $default-spacing * 2;
+      overflow-y: auto;
       scrollbar-width: none;
 
       .view {
@@ -308,72 +308,58 @@
           width: $canvas-width;
 
           h1 {
-            margin: 0.5em 0 0.2em 0;
-          }
-
-          .deadline {
-            align-items: baseline;
-            display: flex;
-            flex-direction: row;
-            font-size: 1.1em;
-
-            .week {
-              padding: 0 0 0 0.1em;
-              transform: scale(0.9);
-            }
+            margin-bottom: 0.3em;
           }
 
           .description {
-            align-items: flex-end;
             color: yellow;
-            display: flex;
             font-size: 0.85em;
-            height: 100%;
-            justify-content: center;
+            margin: auto 0 1em;
             text-align: center;
             width: 75%;
           }
         }
 
         .goal {
+          align-items: center;
           display: flex;
           flex-direction: row;
           padding: 0.5em 0;
 
-          .goal-medal {
+          .goal-badge {
             align-items: center;
             display: flex;
-            flex-basis: 18%;
+            flex: 0 1 20%;
             flex-direction: column;
-            justify-content: center;
 
-            .medal-icon {
+            .goal-icon {
               background: url(#{$achievement-assets}/xp-icon.png) center/contain;
               height: 2em;
               width: 2em;
             }
 
-            .medal-text {
+            p {
               font-size: 0.7em;
+              padding: 0.2em 0 0 0;
             }
           }
 
-          .goal-text {
-            align-items: center;
-            display: flex;
+          p {
+            margin: 0;
           }
         }
 
         hr {
-          background-color: lightgrey;
+          background: lightgrey;
           border: none;
           height: 1px;
-          margin: 0.5em auto 0.5em;
+          margin: 0.5em auto;
           width: 90%;
         }
 
         .completion {
           text-align: center;
+
           h1 {
             color: #ffc000;
           }

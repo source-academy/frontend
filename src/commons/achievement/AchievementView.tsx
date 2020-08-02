@@ -34,14 +34,10 @@ function AchievementView(props: AchievementViewProps) {
         }}
       >
         <h1>{title.toUpperCase()}</h1>
-        {deadline && (
-          <div className="deadline">
-            <p>{`Deadline: ${prettifyDate(deadline)}`}</p>
-          </div>
-        )}
-        <div className="description">
+        {deadline && <p>{`Deadline: ${prettifyDate(deadline)}`}</p>}
+        <span className="description">
           <p>{description}</p>
-        </div>
+        </span>
       </div>
       <AchievementViewGoal goals={goals} />
       {status === AchievementStatus.COMPLETED ? (
