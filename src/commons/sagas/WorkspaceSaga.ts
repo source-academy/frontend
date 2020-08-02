@@ -18,7 +18,7 @@ import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
@@ -66,6 +66,7 @@ import {
   UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
