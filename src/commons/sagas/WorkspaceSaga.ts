@@ -120,7 +120,7 @@ export default function* WorkspaceSaga(): SagaIterator {
 
         context.errors = [];
         parse(exploded.join('\n'), context);
-        if(context.errors.length > 0) {
+        if (context.errors.length > 0) {
           yield call(showWarningMessage, 'Line ' + (+b + 1) + ': Misplaced breakpoint', 2000);
         }
 
