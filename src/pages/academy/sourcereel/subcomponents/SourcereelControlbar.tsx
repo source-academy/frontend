@@ -14,6 +14,7 @@ type SourcereelControlbarProps = DispatchProps & StateProps;
 
 type DispatchProps = {
   handleRecordInit: () => void;
+  handleRecordPause: () => void;
   handleResetInputs: (inputs: Input[]) => void;
   handleSaveSourcecastData: (
     title: string,
@@ -74,6 +75,11 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   }
 
   public render() {
+    const RecorderRecordPauseButton = controlButton(
+      'Record Pause',
+      IconNames.ASTERISK,
+      this.props.handleRecordPause
+    );
     const RecorderPauseButton = controlButton('Pause', IconNames.PAUSE, this.handleRecorderPausing);
     const RecorderResumeButton = controlButton(
       'Resume',
@@ -140,6 +146,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
           {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderResumeFromCurrentButton}
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
+          {this.props.recordingStatus === RecordingStatus.recording && RecorderRecordPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
           {/* {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton} */}
           {this.props.recordingStatus === RecordingStatus.finished && RecorderSaveButton}

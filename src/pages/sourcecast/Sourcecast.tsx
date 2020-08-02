@@ -120,6 +120,9 @@ class Sourcecast extends React.Component<SourcecastProps> {
       case 'externalLibrarySelect':
         this.props.handleExternalSelect(inputToApply.data);
         break;
+      case 'forcePause':
+        this.props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
+        break;
     }
   }
 
