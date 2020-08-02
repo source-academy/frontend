@@ -1,6 +1,5 @@
-var viewport_size = 600
-
 function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
+  const viewport_size = 600
   const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   var curvePosArray = []
   var transMat = mat4.create()
