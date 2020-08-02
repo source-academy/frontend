@@ -38,7 +38,7 @@ function AchievementCard(props: AchievementCardProps) {
   const hasDropdown =
     isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
 
-  const displayExp = hasDropdown ? inferencer.getBonusExp(id) : inferencer.getDisplayExp(id);
+  const displayExp = hasDropdown ? inferencer.getBonusExp(id) : inferencer.getMaxExp(id);
 
   return (
     <div
