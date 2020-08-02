@@ -8,7 +8,7 @@ exports[`AchievementView component renders correctly 1`] = `
         BEYOND THE SECOND DIMENSION
       </h1>
       <p>
-        Deadline: 21 August 2020
+        Deadline: 21 August 2020 00:00
       </p>
       <span className=\\"description\\">
         <p>
