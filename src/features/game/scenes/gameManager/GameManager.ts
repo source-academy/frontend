@@ -42,6 +42,7 @@ type GameManagerProps = {
  */
 class GameManager extends Phaser.Scene {
   public currentLocationId: LocationId;
+  public hasTransitioned: boolean;
   private stateManager?: GameStateManager;
   private layerManager?: GameLayerManager;
   private objectManager?: GameObjectManager;
@@ -53,10 +54,13 @@ class GameManager extends Phaser.Scene {
   private phaseManager?: GamePhaseManager;
   private backgroundManager?: GameBackgroundManager;
   private inputManager?: GameInputManager;
+  private escapeManager?: GameEscapeManager;
+  private awardManager?: GameAwardsManager;
 
   constructor() {
     super('GameManager');
     this.currentLocationId = Constants.nullInteractionId;
+    this.hasTransitioned = false;
   }
 
   public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
@@ -65,6 +69,7 @@ class GameManager extends Phaser.Scene {
     this.getSaveManager().registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentLocationId =
       this.getSaveManager().getLoadedLocation() || gameCheckpoint.startingLoc;
+    this.hasTransitioned = false;
 
     this.stateManager = new GameStateManager(gameCheckpoint);
     this.layerManager = new GameLayerManager(this);
@@ -77,8 +82,8 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.backgroundManager = new GameBackgroundManager();
     this.popUpManager = new GamePopUpManager();
-    new GameEscapeManager(this);
-    new GameAwardsManager(this);
+    this.escapeManager = new GameEscapeManager(this);
+    this.awardManager = new GameAwardsManager(this);
   }
 
   //////////////////////
@@ -244,7 +249,11 @@ class GameManager extends Phaser.Scene {
    * @param newPhase new phase to transition to
    */
   public transitionChecker(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
-    return newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();
+    return (
+      !this.hasTransitioned &&
+      newPhase === GamePhaseType.Menu &&
+      GameGlobalAPI.getInstance().isAllComplete()
+    );
   }
 
   /**
@@ -256,6 +265,7 @@ class GameManager extends Phaser.Scene {
    * @param newPhase new phase to transition to
    */
   public async checkpointTransition(newPhase: GamePhaseType) {
+    this.hasTransitioned = true;
     await this.getActionManager().processGameActions(
       this.getStateManager().getGameMap().getCheckpointCompleteActions()
     );
@@ -296,6 +306,8 @@ class GameManager extends Phaser.Scene {
   public getPhaseManager = () => mandatory(this.phaseManager);
   public getBackgroundManager = () => mandatory(this.backgroundManager);
   public getPopupManager = () => mandatory(this.popUpManager);
+  public getEscapeManager = () => mandatory(this.escapeManager);
+  public getAwardManager = () => mandatory(this.awardManager);
 }
 
 export default GameManager;
