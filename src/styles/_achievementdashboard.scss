@@ -287,7 +287,6 @@
       @extend %container;
       align-items: center;
       height: 90%;
-      justify-content: center;
       /* To be exact, 
       min-width: $view-width + $border-glow-radius * 2 */
       min-width: $view-width + $default-spacing * 2;
