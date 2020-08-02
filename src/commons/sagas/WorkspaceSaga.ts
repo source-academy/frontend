@@ -50,6 +50,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -636,12 +637,21 @@ export function* evalCode(
   }
   async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
     return Sourceror.compile(wasmCode, wasmContext)
-      .then((wasmModule: WebAssembly.Module) =>
-        Sourceror.run(wasmModule, Sourceror.makePlatformImports(), wasmContext)
-      )
+      .then((wasmModule: WebAssembly.Module) => {
+        const transcoder = new Sourceror.Transcoder();
+        return Sourceror.run(
+          wasmModule,
+          Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
+          transcoder,
+          wasmContext
+        );
+      })
       .then(
-        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
-        _ => ({ status: 'error' })
+        (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
+        (e: any): Result => {
+          console.log(e);
+          return { status: 'error' };
+        }
       );
   }
 

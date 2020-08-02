@@ -13681,6 +13681,7 @@ source-map@^0.7.3:
     "@btzy/libsourceror" "^0.0.1"
     "@types/estree" "^0.0.45"
     "@types/node" "^14.0.14"
+    acorn "^7.3.1"
     js-slang "^0.4.53"
     node-getopt "^0.3.2"
 
