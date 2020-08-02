@@ -194,6 +194,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     setStartingEditorValue(props.editorValue);
   }, [props, logs, setLogs, startingEditorValue, setStartingEditorValue]);
 
+  const uploadPerHour = () => {
+    const interval = setInterval(() => {
+      uploadLogs();
+    }, 1000 * 60 * 60);
+    return () => clearInterval(interval);
+  };
+
+  React.useEffect(() => uploadPerHour(), [uploadPerHour]);
+
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();
     uploadLogs();

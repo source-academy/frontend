@@ -173,6 +173,7 @@ class AssessmentWorkspace extends React.Component<
     }
 
     this.props.handleEditorValueChange(answer);
+    this.uploadPerHour();
   }
 
   /**
@@ -182,6 +183,13 @@ class AssessmentWorkspace extends React.Component<
   public componentDidUpdate() {
     this.checkWorkspaceReset(this.props);
   }
+
+  public uploadPerHour = () => {
+    const interval = setInterval(() => {
+      this.uploadLogs();
+    }, 1000 * 60 * 60);
+    return () => clearInterval(interval);
+  };
 
   public uploadLogs = () => {
     const playbackData: PlaybackData = {
