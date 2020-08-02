@@ -31,7 +31,6 @@ function AchievementCard(props: AchievementCardProps) {
   const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
   const status = inferencer.getStatus(id);
-  const displayExp = inferencer.getDisplayExp(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
@@ -39,15 +38,15 @@ function AchievementCard(props: AchievementCardProps) {
   const hasDropdown =
     isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
 
+  const displayExp = hasDropdown ? inferencer.getBonusExp(id) : inferencer.getMaxExp(id);
+
   return (
     <div
       className="achievement-card"
       style={{
         ...handleGlow(id),
         opacity: shouldPartiallyRender ? '20%' : '100%',
-        background: `url(${cardTileUrl})`,
-        backgroundSize: 'cover',
-        backgroundPosition: 'center'
+        background: `url(${cardTileUrl}) center/cover`
       }}
       onClick={() => displayView(id)}
       onClickCapture={toggleDropdown}
@@ -61,9 +60,11 @@ function AchievementCard(props: AchievementCardProps) {
       <div className="content">
         <div className="heading">
           <h3>{title.toUpperCase()}</h3>
-          {status === AchievementStatus.COMPLETED && (
-            <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} style={{ paddingLeft: '1em' }} />
-          )}
+          <span className="status">
+            {status === AchievementStatus.COMPLETED && (
+              <Icon icon={IconNames.CONFIRM} intent={Intent.SUCCESS} style={{ padding: '1em' }} />
+            )}
+          </span>
         </div>
 
         <div className="details">
@@ -71,7 +72,7 @@ function AchievementCard(props: AchievementCardProps) {
             <p>{ability}</p>
           </div>
           <AchievementDeadline deadline={displayDeadline} ability={ability} />
-          <AchievementExp exp={displayExp} />
+          <AchievementExp exp={displayExp} isBonus={hasDropdown} />
         </div>
 
         <ProgressBar

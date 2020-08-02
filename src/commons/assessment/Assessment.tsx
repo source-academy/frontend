@@ -95,7 +95,9 @@ class Assessment extends React.Component<AssessmentProps, State> {
         assessmentId,
         questionId,
         notAttempted: overview.status === AssessmentStatuses.not_attempted,
-        closeDate: overview.closeAt
+        canSave:
+          !this.props.isStudent ||
+          (overview.status !== AssessmentStatuses.submitted && !beforeNow(overview.closeAt))
       };
       return <AssessmentWorkspaceContainer {...assessmentWorkspaceProps} />;
     }

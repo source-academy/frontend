@@ -12,7 +12,7 @@ import {
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
- * @param {number} displayExp total achievable EXP of the achievement
+ * @param {number} maxExp total achievable EXP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
@@ -22,7 +22,7 @@ import {
 class InferencerNode {
   public achievement: AchievementItem;
   public dataIdx: number;
-  public displayExp: number;
+  public maxExp: number;
   public progressFrac: number;
   public status: AchievementStatus;
   public displayDeadline?: Date;
@@ -34,7 +34,7 @@ class InferencerNode {
 
     this.achievement = achievement;
     this.dataIdx = dataIdx;
-    this.displayExp = this.generateDisplayExp(goals);
+    this.maxExp = this.generateMaxExp(goals);
     this.progressFrac = this.generateProgressFrac(goals);
     this.status = AchievementStatus.ACTIVE; // to be updated after the nodeList is constructed
     this.displayDeadline = deadline;
@@ -42,14 +42,14 @@ class InferencerNode {
     this.descendant = new Set(prerequisiteIds);
   }
 
-  private generateDisplayExp(goals: AchievementGoal[]) {
+  private generateMaxExp(goals: AchievementGoal[]) {
     return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
   }
 
   private generateProgressFrac(goals: AchievementGoal[]) {
     const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
-    return Math.min(progress / this.displayExp, 1);
+    return Math.min(progress / this.maxExp, 1);
   }
 }
 
@@ -168,9 +168,24 @@ class AchievementInferencer {
     this.normalizePositions();
   }
 
-  public getDisplayExp(id: number) {
+  // Calculates set bonus
+  public getBonusExp(id: number) {
     assert(this.nodeList.has(id));
-    return this.nodeList.get(id)!.displayExp;
+    if (this.nodeList.get(id)!.children.size === 0) return 0;
+
+    const maxExp = this.nodeList.get(id)!.maxExp;
+
+    let maxChildExp = 0;
+    for (const childId of this.nodeList.get(id)!.children) {
+      maxChildExp = maxChildExp + this.nodeList.get(childId)!.maxExp;
+    }
+
+    return maxExp - maxChildExp;
+  }
+
+  public getMaxExp(id: number) {
+    assert(this.nodeList.has(id));
+    return this.nodeList.get(id)!.maxExp;
   }
 
   public getStudentExp(id: number) {
@@ -184,7 +199,7 @@ class AchievementInferencer {
   public getTotalExp() {
     const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
 
-    return publishedTask.reduce((totalExp, node) => totalExp + node.displayExp, 0);
+    return publishedTask.reduce((totalExp, node) => totalExp + node.maxExp, 0);
   }
 
   // total EXP earned by the student

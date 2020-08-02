@@ -14,9 +14,13 @@ export const prettifyDate = (deadline: Date) => {
     'December'
   ];
   const day = deadline.getDate();
+  const month = months[deadline.getMonth()];
   const year = deadline.getFullYear();
+  const hour = deadline.getHours();
+  const minute = deadline.getMinutes();
+  const time = (hour < 10 ? '0' : '') + hour + ':' + (minute < 10 ? '0' : '') + minute;
 
-  return `${day} ${months[deadline.getMonth()]} ${year}`;
+  return `${day} ${month} ${year} ${time}`;
 };
 
 // Converts Date to deadline countdown

@@ -16,7 +16,7 @@ type AchievementViewProps = {
 function AchievementView(props: AchievementViewProps) {
   const { id, inferencer, handleGlow } = props;
 
-  if (id < 0) return null;
+  if (id < 0) return <div className="view"></div>;
 
   const achievement = inferencer.getAchievementItem(id);
   const { title, ability, deadline, goals, view } = achievement;
@@ -30,25 +30,21 @@ function AchievementView(props: AchievementViewProps) {
       <div
         className="canvas"
         style={{
-          backgroundImage: `url(${canvasUrl})`,
-          backgroundSize: 'cover',
-          backgroundPosition: 'center'
+          background: `url(${canvasUrl}) center/cover`
         }}
       >
         <h1>{title.toUpperCase()}</h1>
-        {deadline && (
-          <div className="deadline">
-            <p>{`Deadline: ${prettifyDate(deadline)}`}</p>
-          </div>
-        )}
-        <div className="description">
+        {deadline && <p>{`Deadline: ${prettifyDate(deadline)}`}</p>}
+        <span className="description">
           <p>{description}</p>
-        </div>
+        </span>
       </div>
       <AchievementViewGoal goals={goals} />
-      <hr />
       {status === AchievementStatus.COMPLETED ? (
-        <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+        <>
+          <hr />
+          <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+        </>
       ) : null}
     </div>
   );
