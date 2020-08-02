@@ -18,6 +18,7 @@ import {
   CodeDelta,
   Input,
   KeyboardCommand,
+  PlaybackData,
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
@@ -87,6 +88,7 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
+  handleKeystrokeUpload: (playbackData: PlaybackData) => void;
 };
 
 export type OwnProps = {
@@ -181,8 +183,7 @@ class AssessmentWorkspace extends React.Component<
     this.checkWorkspaceReset(this.props);
   }
 
-  public getReadyLogs = () => {
-    /*
+  public uploadLogs = () => {
     const playbackData: PlaybackData = {
       init: {
         chapter: this.props.assessment!.questions[this.props.questionId].library.chapter,
@@ -192,12 +193,11 @@ class AssessmentWorkspace extends React.Component<
       },
       inputs: this.state.logs
     };
-    */
+    console.log(playbackData);
+    // this.props.handleKeystrokeUpload(playbackData);
 
     this.setState({ logs: [], startingEditorValue: this.props.editorValue });
   };
-
-  public uploadLogs = () => this.getReadyLogs();
 
   public pushLog = (newInput: Input) => {
     const logsCopy = this.state.logs;

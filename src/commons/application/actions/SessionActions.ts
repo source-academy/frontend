@@ -19,6 +19,8 @@ import {
   FETCH_NOTIFICATIONS,
   LOGIN,
   LOGOUT_GOOGLE,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -119,6 +121,12 @@ export const submitGradingAndContinue = (
     xpAdjustment,
     comments
   });
+
+export const reautogradeSubmission = (submissionId: number) =>
+  action(REAUTOGRADE_SUBMISSION, submissionId);
+
+export const reautogradeAnswer = (submissionId: number, questionId: number) =>
+  action(REAUTOGRADE_ANSWER, { submissionId, questionId });
 
 export const updateHistoryHelpers = (loc: string) => action(UPDATE_HISTORY_HELPERS, loc);
 

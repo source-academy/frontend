@@ -7,7 +7,11 @@ import {
   debuggerReset,
   debuggerResume
 } from '../application/actions/InterpreterActions';
-import { fetchAssessment, submitAnswer } from '../application/actions/SessionActions';
+import {
+  fetchAssessment,
+  submitAnswer,
+  updateKeystrokeLogs
+} from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { Library } from '../assessment/AssessmentTypes';
 import { Position } from '../editor/EditorTypes';
@@ -101,7 +105,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerResume: () => debuggerResume(workspaceLocation),
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
-        promptAutocomplete(workspaceLocation, row, col, callback)
+        promptAutocomplete(workspaceLocation, row, col, callback),
+      handleKeystrokeUpload: updateKeystrokeLogs
     },
     dispatch
   );

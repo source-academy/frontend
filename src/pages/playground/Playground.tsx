@@ -34,6 +34,7 @@ import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
   Input,
+  PlaybackData,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
@@ -78,6 +79,7 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
+  handleKeystrokeUpload: (playbackData: PlaybackData) => void;
 };
 
 export type StateProps = {
@@ -176,8 +178,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  const getReadyLogs = React.useCallback(() => {
-    /*
+  const uploadLogs = React.useCallback(() => {
     const playbackData: PlaybackData = {
       init: {
         chapter: props.sourceChapter,
@@ -187,17 +188,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       inputs: logs
     };
     console.log(playbackData);
-    */
-    console.log(startingEditorValue);
+    // props.handleKeystrokeUpload(playbackData);
 
     setLogs([]);
     setStartingEditorValue(props.editorValue);
-  }, [props, setLogs, startingEditorValue, setStartingEditorValue]);
-
-  // TODO: Implemenet THis for Keystroke Logging!
-  const uploadLogs = React.useCallback(() => {
-    getReadyLogs();
-  }, [getReadyLogs]);
+  }, [props, logs, setLogs, startingEditorValue, setStartingEditorValue]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();

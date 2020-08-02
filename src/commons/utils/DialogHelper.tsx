@@ -1,4 +1,4 @@
-import { Intent } from '@blueprintjs/core';
+import { IconName, Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 
@@ -76,9 +76,11 @@ export function showConfirmDialog<T>(
 }
 
 export function showSimpleConfirmDialog(props: {
+  icon?: IconName;
   title?: string;
   contents?: React.ReactNode;
   positiveLabel?: string;
+  positiveIntent?: Intent;
   negativeLabel?: string;
   props?: Partial<ConfirmDialogProps<boolean>>;
 }): Promise<boolean> {
@@ -90,11 +92,12 @@ export function showSimpleConfirmDialog(props: {
       {
         key: true,
         label: props.positiveLabel || 'Yes',
-        intent: Intent.SUCCESS,
+        intent: props.positiveIntent || Intent.SUCCESS,
         props: { type: 'submit' }
       }
     ],
     escapeResponse: false,
+    icon: props.icon,
     ...props.props
   });
 }

@@ -9,6 +9,7 @@ import { createStore } from '../createStore';
 import { SavedState } from '../localStorage';
 
 const mockChangedStoredState: SavedState = {
+  achievements: [],
   session: {
     accessToken: 'yep',
     refreshToken: 'refresherOrb',

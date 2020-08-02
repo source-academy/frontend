@@ -7,7 +7,7 @@ const mockProps = {
   canvasUrl:
     'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png',
   title: 'Sample Title',
-  setcanvasUrl: () => {}
+  setCanvasUrl: () => {}
 };
 
 test('EditableViewImage component renders correctly', () => {

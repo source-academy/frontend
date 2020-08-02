@@ -4,6 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   acknowledgeNotifications,
   fetchGradingOverviews,
+  reautogradeSubmission,
   unsubmitSubmission
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
@@ -21,7 +22,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,
       handleFetchGradingOverviews: fetchGradingOverviews,
-      handleUnsubmitSubmission: unsubmitSubmission
+      handleUnsubmitSubmission: unsubmitSubmission,
+      handleReautogradeSubmission: reautogradeSubmission
     },
     dispatch
   );

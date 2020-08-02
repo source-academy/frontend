@@ -11,6 +11,8 @@ import {
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
   LOGIN,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -34,6 +36,8 @@ import {
   fetchGradingOverviews,
   fetchNotifications,
   login,
+  reautogradeAnswer,
+  reautogradeSubmission,
   setTokens,
   setUser,
   submitAnswer,
@@ -142,6 +146,7 @@ test('setTokens generates correct action object', () => {
 
 test('setUser generates correct action object', () => {
   const user = {
+    userId: 123,
     name: 'test student',
     role: 'student' as Role,
     group: '42D',
@@ -253,6 +258,25 @@ test('submitGradingAndContinue generates correct action object', () => {
       xpAdjustment,
       comments
     }
+  });
+});
+
+test('reautogradeSubmission generates correct action object', () => {
+  const submissionId = 123;
+  const action = reautogradeSubmission(submissionId);
+  expect(action).toEqual({
+    type: REAUTOGRADE_SUBMISSION,
+    payload: submissionId
+  });
+});
+
+test('reautogradeAnswer generates correct action object', () => {
+  const submissionId = 123;
+  const questionId = 456;
+  const action = reautogradeAnswer(submissionId, questionId);
+  expect(action).toEqual({
+    type: REAUTOGRADE_ANSWER,
+    payload: { submissionId, questionId }
   });
 });
 

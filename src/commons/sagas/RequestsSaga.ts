@@ -134,13 +134,13 @@ export async function putUserGameState(
 /**
  * POST request
  *
- * TODO: Fix URL of backend when ready.
+ * TODO: Fix URL of backend when ready!
  */
 export async function postKeystrokeLogs(
   tokens: Tokens,
   playbackData: PlaybackData
 ): Promise<Response | null> {
-  const resp = await request(`keystroke/`, 'POST', {
+  const resp = await request(`/`, 'POST', {
     accessToken: tokens.accessToken,
     body: { playbackData: playbackData },
     noHeaderAccept: true,
@@ -522,6 +522,38 @@ export const postGrading = async (
     shouldRefresh: true
   });
   return resp;
+};
+
+/**
+ * POST /grading/{submissionId}/autograde
+ */
+export const postReautogradeSubmission = async (submissionId: number, tokens: Tokens) => {
+  const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return !!resp?.ok;
+};
+
+/**
+ * POST /grading/{submissionId}/{questionId}/autograde
+ */
+export const postReautogradeAnswer = async (
+  submissionId: number,
+  questionId: number,
+  tokens: Tokens
+) => {
+  const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return !!resp?.ok;
 };
 
 /**
