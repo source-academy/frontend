@@ -104,9 +104,16 @@
   }
 
   .achievement-main {
+    $border-glow-radius: 10px;
+    // Canvas aspect ratio 2:1
+    $canvas-height: 18em;
+    $canvas-width: 36em;
+    // Card aspect ratio 2:1
     $card-height: 5em;
     $card-width: 30em;
     $default-spacing: 1em;
+    $view-height: 50em;
+    $view-width: $canvas-width;
 
     align-items: center;
     display: flex;
@@ -118,6 +125,9 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+      /* To be exact, 
+      max-height: $view-height + $border-glow-radius * 2 */
+      max-height: $view-height + $default-spacing * 2;
       overflow-y: auto;
     }
 
@@ -133,7 +143,6 @@
         display: flex;
         flex-direction: column;
         margin: auto $default-spacing;
-        padding-left: $default-spacing;
 
         p {
           font-size: 0.8em;
@@ -156,17 +165,17 @@
       @extend %container;
       height: 90%;
       list-style-type: none;
-      min-width: $default-spacing + $card-width + $default-spacing;
+      min-width: $card-width + $default-spacing;
       padding: 0;
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
       li {
-        margin: 0 auto;
+        margin: 0 $default-spacing 0 0;
       }
 
       li:not(:first-child) {
-        margin-top: $default-spacing;
+        margin: $default-spacing $default-spacing 0 0;
       }
 
       .achievement-card {
@@ -241,7 +250,8 @@
       .prerequisite-container {
         $shrink-factor: 0.9;
         $line-width: 1em;
-        $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2; // eliminate empty space between line and card
+        // remaining-width is the empty space between line and card
+        $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
         $top-spacing: 0.2em;
 
         display: flex;
@@ -275,26 +285,28 @@
 
     .view-container {
       @extend %container;
-      max-height: 90%;
-      min-width: 40em;
+      align-items: center;
+      height: 90%;
+      justify-content: center;
+      /* To be exact, 
+      min-width: $view-width + $border-glow-radius * 2 */
+      min-width: $view-width + $default-spacing * 2;
       scrollbar-width: none;
 
       .view {
         color: white;
         display: flex;
         flex-direction: column;
-        height: 95%;
-        width: 36em;
-        margin: 10px auto;
-        padding: 0 0 4em 0;
+        margin: $border-glow-radius;
+        min-height: $view-height;
+        width: $view-width;
 
-        // Canvas aspect ratio 2:1
         .canvas {
           align-items: center;
           display: flex;
           flex-direction: column;
-          height: 18em;
-          width: 100%;
+          height: $canvas-height;
+          width: $canvas-width;
 
           h1 {
             margin: 0.5em 0 0.2em 0;
@@ -367,13 +379,6 @@
             color: #ffc000;
           }
         }
-      }
-    }
-
-    @media only screen and (min-height: 1081px) {
-      .list-container,
-      .view-container {
-        max-height: 62em;
       }
     }
 
