@@ -12,7 +12,7 @@
     color: white;
     display: flex;
     flex-direction: row;
-    margin: 0.5em;
+    padding: 0.5em;
 
     .level {
       align-items: center;
@@ -38,33 +38,32 @@
       }
 
       .level-progress {
-        display: none;
-      }
+        display: flex;
+        height: 1.2em;
+        margin: 0 0 0 0.5em;
+        width: 20em;
 
-      @media only screen and (min-width: 1025px) {
-        .level-progress {
-          display: flex;
+        .progress-bar {
           height: 1.2em;
-          margin: 0 0 0 0.5em;
           width: 20em;
+        }
 
-          .progress-bar {
-            height: 1.2em;
-            width: 20em;
-          }
+        p {
+          align-items: center;
+          color: #ffef12;
+          display: inline-flex;
+          justify-content: center;
+          margin: 0 0 0 -20em;
+          width: 20em;
+          z-index: 1;
+        }
 
-          p {
-            align-items: center;
-            color: #ffef12;
-            display: inline-flex;
-            justify-content: center;
-            margin: 0 0 0 -20em;
-            width: 20em;
-            z-index: 1;
-          }
+        @media only screen and (max-width: 1024px) {
+          display: none;
         }
       }
 
+      /* Temporarily removed
       .milestone {
         background-color: rgba(0, 0, 0, 0.7);
         border: 1px solid #90ff12;
@@ -91,7 +90,7 @@
             padding: 1em 0 0 0;
           }
         }
-      }
+      } */
     }
 
     .level,
