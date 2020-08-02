@@ -12,11 +12,11 @@ import {
 type ControlBarExternalLibrarySelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleExternalSelect?: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void;
+  handleExternalSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void;
 };
 
 type StateProps = {
-  externalLibraryName?: string;
+  externalLibraryName: string;
   key: string;
 };
 
@@ -34,24 +34,19 @@ export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrary
     { handleClick, modifiers, query }
   ) => <MenuItem active={false} key={external.key} onClick={handleClick} text={external.name} />;
 
-  const externalSelect = (
-    currentExternal: string,
-    handleSelect: (i: External, e?: React.SyntheticEvent<HTMLElement>) => void
-  ) => (
+  return (
     <ExternalSelectComponent
       className={Classes.MINIMAL}
       items={iExternals}
-      onItemSelect={handleSelect}
+      onItemSelect={props.handleExternalSelect}
       itemRenderer={externalRenderer}
       filterable={false}
     >
       <Button
         className={Classes.MINIMAL}
-        text={currentExternal}
+        text={props.externalLibraryName}
         rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
       />
     </ExternalSelectComponent>
   );
-
-  return externalSelect(props.externalLibraryName!, props.handleExternalSelect!);
 }
