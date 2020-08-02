@@ -32,10 +32,9 @@ import {
   GradingOverview,
   GradingOverviewWithNotifications
 } from '../../../features/grading/GradingTypes';
-import GradingEditGradingCell from './subcomponents/GradingEditGradingCell';
+import GradingActionsCell from './subcomponents/GradingActionsCell';
 import GradingGradeCell from './subcomponents/GradingGradeCell';
 import GradingStatusCell from './subcomponents/GradingStatusCell';
-import GradingUnsubmitCell from './subcomponents/GradingUnsubmitCell';
 import { OwnProps as GradingWorkspaceOwnProps } from './subcomponents/GradingWorkspace';
 import GradingWorkspaceContainer from './subcomponents/GradingWorkspaceContainer';
 import GradingXPCell from './subcomponents/GradingXPCell';
@@ -46,6 +45,7 @@ export type DispatchProps = {
   handleAcknowledgeNotifications: (withFilter?: NotificationFilterFunction) => void;
   handleFetchGradingOverviews: (filterToGroup?: boolean) => void;
   handleUnsubmitSubmission: (submissionId: number) => void;
+  handleReautogradeSubmission: (submissionId: number) => void;
 };
 
 export type StateProps = {
@@ -144,29 +144,15 @@ class Grading extends React.Component<GradingProps, State> {
         }
       },
       {
-        headerName: 'Edit',
-        cellRendererFramework: GradingEditGradingCell,
-        cellRendererParams: {
-          handleAcknowledgeNotifications: this.props.handleAcknowledgeNotifications
-        },
-        width: 65,
-        filter: false,
-        resizable: false,
-        sortable: false,
-        suppressSizeToFit: true,
-        cellStyle: {
-          padding: 0
-        }
-      },
-      {
-        headerName: 'Unsubmit',
-        colId: 'Unsubmit',
-        width: 100,
+        headerName: 'Actions',
+        colId: 'Actions',
+        width: 120,
         field: '',
-        cellRendererFramework: GradingUnsubmitCell,
+        cellRendererFramework: GradingActionsCell,
         cellRendererParams: {
           userId: this.props.userId,
           handleUnsubmitSubmission: this.props.handleUnsubmitSubmission,
+          handleReautogradeSubmission: this.props.handleReautogradeSubmission,
           role: this.props.role
         },
         filter: false,

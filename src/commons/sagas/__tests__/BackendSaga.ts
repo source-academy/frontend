@@ -20,6 +20,8 @@ import {
   FETCH_ASSESSMENT,
   FETCH_AUTH,
   FETCH_NOTIFICATIONS,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SET_TOKENS,
   SET_USER,
   SUBMIT_ANSWER,
@@ -61,7 +63,9 @@ import {
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
-  postAuth
+  postAuth,
+  postReautogradeAnswer,
+  postReautogradeSubmission
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -106,6 +110,7 @@ describe('Test FETCH_AUTH Action', () => {
   const redirectUrl = computeRedirectUri(providerId);
 
   const user = {
+    userId: 123,
     name: 'user',
     role: 'student' as Role,
     group: '42D',
@@ -466,6 +471,59 @@ describe('Test FETCH_GROUP_GRADING_SUMMARY Action', () => {
       .not.put.actionType(UPDATE_GROUP_GRADING_SUMMARY)
       .hasFinalState({ session: { ...mockTokens, role: Role.Staff } })
       .dispatch({ type: FETCH_GROUP_GRADING_SUMMARY })
+      .silentRun();
+  });
+});
+
+describe('Test REAUTOGRADE_SUBMISSION Action', () => {
+  const submissionId = 123;
+  test('when successful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), true]])
+      .call(postReautogradeSubmission, submissionId, mockTokens)
+      .call.fn(showSuccessMessage)
+      .not.call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_SUBMISSION, payload: submissionId })
+      .silentRun();
+  });
+
+  test('when unsuccessful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), false]])
+      .call(postReautogradeSubmission, submissionId, mockTokens)
+      .not.call.fn(showSuccessMessage)
+      .call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_SUBMISSION, payload: submissionId })
+      .silentRun();
+  });
+});
+
+describe('Test REAUTOGRADE_ANSWER Action', () => {
+  const submissionId = 123;
+  const questionId = 456;
+
+  test('when successful', () => {
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), true]])
+      .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
+      .call.fn(showSuccessMessage)
+      .not.call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_ANSWER, payload: { submissionId, questionId } })
+      .silentRun();
+  });
+
+  test('when unsuccessful', () => {
+    const submissionId = 123;
+    return expectSaga(BackendSaga)
+      .withState({ session: { ...mockTokens, role: Role.Staff } })
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), false]])
+      .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
+      .not.call.fn(showSuccessMessage)
+      .call.fn(showWarningMessage)
+      .dispatch({ type: REAUTOGRADE_ANSWER, payload: { submissionId, questionId } })
       .silentRun();
   });
 });

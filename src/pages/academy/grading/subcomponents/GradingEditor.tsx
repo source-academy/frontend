@@ -1,4 +1,5 @@
 import {
+  Button,
   Divider,
   H3,
   Icon,
@@ -12,6 +13,7 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
 import controlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
@@ -35,6 +37,7 @@ type GradingSaveFunction = (
 export type DispatchProps = {
   handleGradingSave: GradingSaveFunction;
   handleGradingSaveAndContinue: GradingSaveFunction;
+  handleReautogradeAnswer: (submissionId: number, questionId: number) => void;
 };
 
 type OwnProps = {
@@ -160,7 +163,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
           <div className="grading-editor-grades">
             <div className="autograder-grade">
               <div>Autograder grade:</div>
-              <div>{`${this.props.initialGrade} / ${this.props.maxGrade}`}</div>
+              <div>
+                {`${this.props.initialGrade} / ${this.props.maxGrade}`}{' '}
+                <Button
+                  icon="refresh"
+                  small
+                  minimal
+                  onClick={this.onClickReautogradeAnswer}
+                ></Button>
+              </div>
             </div>
             <div className="grade-adjustment">
               <div>Grade adjustment:</div>
@@ -340,6 +351,22 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
       );
     };
     this.setState({ ...this.state, currentlySaving: true }, callback);
+  };
+
+  private onClickReautogradeAnswer = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: (
+        <>
+          <p>Reautograde this answer?</p>
+          <p>Note: manual adjustments will be reset to 0.</p>
+        </>
+      ),
+      positiveLabel: 'Reautograde',
+      positiveIntent: 'danger'
+    });
+    if (confirm) {
+      this.props.handleReautogradeAnswer(this.props.submissionId, this.props.questionId);
+    }
   };
 
   /**

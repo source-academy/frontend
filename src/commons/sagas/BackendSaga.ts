@@ -35,6 +35,8 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
@@ -63,6 +65,8 @@ import {
   postAssessment,
   postAuth,
   postGrading,
+  postReautogradeAnswer,
+  postReautogradeSubmission,
   postSourcecast,
   postUnsubmit,
   publishAssessment,
@@ -348,6 +352,38 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_GRADING, sendGrade);
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
+
+  yield takeEvery(REAUTOGRADE_SUBMISSION, function* (
+    action: ReturnType<typeof actions.reautogradeSubmission>
+  ) {
+    const submissionId = action.payload;
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const result: boolean = yield call(postReautogradeSubmission, submissionId, tokens);
+    if (result) {
+      yield call(showSuccessMessage, 'Autograde job queued successfully.');
+    } else {
+      yield call(showWarningMessage, 'Failed to queue autograde job.');
+    }
+  });
+
+  yield takeEvery(REAUTOGRADE_ANSWER, function* (
+    action: ReturnType<typeof actions.reautogradeAnswer>
+  ) {
+    const { submissionId, questionId } = action.payload;
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const result: boolean = yield call(postReautogradeAnswer, submissionId, questionId, tokens);
+    if (result) {
+      yield call(showSuccessMessage, 'Autograde job queued successfully.');
+    } else {
+      yield call(showWarningMessage, 'Failed to queue autograde job.');
+    }
+  });
 
   yield takeEvery(FETCH_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.fetchNotifications>

@@ -504,6 +504,38 @@ export const postGrading = async (
 };
 
 /**
+ * POST /grading/{submissionId}/autograde
+ */
+export const postReautogradeSubmission = async (submissionId: number, tokens: Tokens) => {
+  const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return !!resp?.ok;
+};
+
+/**
+ * POST /grading/{submissionId}/{questionId}/autograde
+ */
+export const postReautogradeAnswer = async (
+  submissionId: number,
+  questionId: number,
+  tokens: Tokens
+) => {
+  const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return !!resp?.ok;
+};
+
+/**
  * POST /grading/{submissionId}/unsubmit
  */
 export async function postUnsubmit(submissionId: number, tokens: Tokens) {
