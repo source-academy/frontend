@@ -1,6 +1,5 @@
 import { Card, Elevation, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { FlexDirectionProperty } from 'csstype';
 import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -25,7 +24,7 @@ const dropZoneStyle = {
     flex: 1,
     display: 'flex',
     height: '30vh',
-    flexDirection: 'column' as FlexDirectionProperty,
+    flexDirection: 'column' as const,
     alignItems: 'center',
     justifyContent: 'center',
     padding: '20px',

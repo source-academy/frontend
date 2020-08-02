@@ -16,11 +16,6 @@ const FontAssets: AssetMap<FontAsset> = {
     pngPath: '../assets/alien_league.png',
     fntPath: '../assets/alien_league.fnt'
   },
-  educatedDeersFont: {
-    key: 'educatedDeers',
-    pngPath: '../assets/educated_deers.png',
-    fntPath: '../assets/educated_deers.fnt'
-  },
   pixelFont: {
     key: 'pixel',
     pngPath: '../assets/pixel.png',

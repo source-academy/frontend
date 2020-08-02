@@ -1,6 +1,6 @@
-import { ImageAssetMap } from 'src/features/game/assets/AssetsTypes';
+import { AssetMap, ImageAsset } from 'src/features/game/assets/AssetsTypes';
 
-const SSImageAssets: ImageAssetMap = {
+const SSImageAssets: AssetMap<ImageAsset> = {
   storySimBg: { key: 'student-room', path: '/locations/deathCube_ext/shields-down.png' },
   mainMenuOptBanner: { key: 'menu-option', path: '/ui/menuOption.png' },
   shortButton: { key: 'short-button', path: '/ui/shortButton.png' },

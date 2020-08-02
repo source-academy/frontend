@@ -9,7 +9,7 @@ import { createButton } from '../../utils/ButtonUtils';
 import { mandatory } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
-import settingsConstants, {
+import SettingsConstants, {
   applySettingsTextStyle,
   optionHeaderTextStyle,
   optionTextStyle
@@ -67,7 +67,7 @@ class Settings extends Phaser.Scene {
     const optHeaderPos = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: optHeader.length,
-      maxYSpace: settingsConstants.optYSpace
+      maxYSpace: SettingsConstants.opt.ySpace
     });
     optCont.add(
       optHeader.map((header, index) => this.createOptionHeader(header, optHeaderPos[index][1]))
@@ -75,10 +75,10 @@ class Settings extends Phaser.Scene {
 
     // Get user default choice
     const { bgmVolume, sfxVolume } = this.getSaveManager().getSettings();
-    const sfxVolIdx = settingsConstants.volContainerOpts.findIndex(
+    const sfxVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === sfxVolume
     );
-    const bgmVolIdx = settingsConstants.volContainerOpts.findIndex(
+    const bgmVolIdx = SettingsConstants.volContainerOpts.findIndex(
       value => parseFloat(value) === bgmVolume
     );
 
@@ -134,7 +134,7 @@ class Settings extends Phaser.Scene {
     const headerText = createBitmapText(
       this,
       header,
-      settingsConstants.optHeaderTextConfig,
+      SettingsConstants.optHeaderTextConfig,
       optionHeaderTextStyle
     );
     optHeaderCont.add([headerDiv, headerText]);
@@ -151,13 +151,13 @@ class Settings extends Phaser.Scene {
     return new CommonRadioButton(
       this,
       {
-        choices: settingsConstants.volContainerOpts,
+        choices: SettingsConstants.volContainerOpts,
         defaultChoiceIdx: defaultChoiceIdx,
-        maxXSpace: settingsConstants.optXSpace,
-        choiceTextConfig: { x: 0, y: -50, oriX: 0.5, oriY: 0.25 },
+        maxXSpace: SettingsConstants.opt.xSpace,
+        choiceTextConfig: SettingsConstants.radioButtonsTextConfig,
         bitmapTextStyle: optionTextStyle
       },
-      settingsConstants.optXPos,
+      SettingsConstants.opt.x,
       -screenCenter.y + yPos
     );
   }

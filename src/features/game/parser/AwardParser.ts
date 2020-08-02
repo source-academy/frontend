@@ -48,7 +48,8 @@ class AwardParser {
         assetKey,
         assetPath: toS3Path(assetPath),
         title,
-        description
+        description,
+        completed: true
       });
     });
   }

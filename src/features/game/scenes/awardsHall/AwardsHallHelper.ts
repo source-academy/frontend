@@ -40,7 +40,7 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
     scene,
     0,
     0,
-    AwardsHallConstants.hoverWidth,
+    AwardsHallConstants.awardInfo.width,
     awardDesc.getBounds().bottom + 20,
     HexColor.darkBlue
   )
@@ -49,25 +49,22 @@ export const createAwardsHoverContainer = (scene: Phaser.Scene, award: AwardProp
 
   const scrollFrameTop = new Phaser.GameObjects.Sprite(
     scene,
-    AwardsHallConstants.hoverWidth / 2,
+    AwardsHallConstants.awardInfo.width / 2,
     0,
     ImageAssets.scrollFrame.key
   );
   const scrollFrameBot = new Phaser.GameObjects.Sprite(
     scene,
-    AwardsHallConstants.hoverWidth / 2,
+    AwardsHallConstants.awardInfo.width / 2,
     hoverTextBg.getBounds().bottom,
     ImageAssets.scrollFrame.key
   );
 
-  hoverContainer.add([
-    hoverTextBg,
-    awardTitle,
-    awardAssetKey,
-    awardDesc,
-    scrollFrameTop,
-    scrollFrameBot
-  ]);
+  hoverContainer.add([hoverTextBg, awardTitle, awardDesc, scrollFrameTop, scrollFrameBot]);
+
+  // Only show asset key if award is completed
+  award.completed && hoverContainer.add(awardAssetKey);
+
   hoverContainer.setVisible(false);
   return hoverContainer;
 };

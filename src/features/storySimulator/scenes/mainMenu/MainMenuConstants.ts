@@ -12,8 +12,7 @@ export const mainMenuOptStyle: BitmapFontStyle = {
 
 const SSMainMenuConstants = {
   maxOptButtonsRow: 2,
-  optButtonsXSpace: screenSize.x * 0.9,
-  optButtonsYSpace: screenSize.y * 0.5,
+  optButton: { xSpace: screenSize.x * 0.9, ySpace: screenSize.y * 0.5 },
   gameTxtStorageName: {
     defaultChapter: 'defaultChapter',
     checkpointTxt: 'checkpointTxt'

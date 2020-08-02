@@ -1,6 +1,6 @@
 import ImageAssets from '../assets/ImageAssets';
 import SoundAssets from '../assets/SoundAssets';
-import { screenCenter, screenSize } from '../commons/CommonConstants';
+import { Constants, screenCenter, screenSize } from '../commons/CommonConstants';
 import { IBaseScene, IGameUI } from '../commons/CommonTypes';
 import { fadeAndDestroy } from '../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../effects/FlyEffect';
@@ -12,14 +12,14 @@ import { limitNumber, sleep } from '../utils/GameUtils';
 import { resizeUnderflow } from '../utils/SpriteUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
-import awardsConstants, {
+import AwardsConstants, {
   awardDescStyle,
   awardKeyStyle,
   awardTitleStyle,
   listBannerTextStyle,
   pageBannerTextStyle
 } from './GameAwardsConstants';
-import { getAwardProps } from './GameAwardsHelper';
+import { createAssetKeyPreviewCont, getAwardProps } from './GameAwardsHelper';
 import { AwardPage, AwardProperty } from './GameAwardsTypes';
 
 /**
@@ -76,7 +76,7 @@ class GameAwardsManager implements IGameUI {
       const bannerChosen = new Phaser.GameObjects.Sprite(
         this.scene,
         bannerPos[chosenIdx][0],
-        bannerPos[chosenIdx][1] + awardsConstants.pageYStartPos,
+        bannerPos[chosenIdx][1] + AwardsConstants.page.yStart,
         ImageAssets.awardsPageChosen.key
       );
       this.pageChosenContainer = new Phaser.GameObjects.Container(this.scene, 0, 0, [bannerChosen]);
@@ -120,14 +120,14 @@ class GameAwardsManager implements IGameUI {
         this.createPageOpt(
           button.text,
           pageOptButtonPositions[index][0],
-          pageOptButtonPositions[index][1] + awardsConstants.pageYStartPos,
+          pageOptButtonPositions[index][1] + AwardsConstants.page.yStart,
           button.callback
         )
       )
     );
 
     // Add back button
-    const backButton = this.createPageOpt('Back', 0, awardsConstants.backButtonYPos, async () => {
+    const backButton = this.createPageOpt('Back', 0, AwardsConstants.backButton.y, async () => {
       if (this.scene.getPhaseManager().isCurrentPhase(GamePhaseType.AwardMenu)) {
         await this.scene.getPhaseManager().popPhase();
       }
@@ -139,33 +139,36 @@ class GameAwardsManager implements IGameUI {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(false)
     })
-      .setScale(awardsConstants.arrowXScale, awardsConstants.arrowYScale)
+      .setScale(AwardsConstants.arrow.yScale, AwardsConstants.arrow.yScale)
       .setRotation((-90 * Math.PI) / 180)
       .setPosition(
-        awardsConstants.arrowXMidPos - awardsConstants.arrowXOffset,
-        awardsConstants.arrowDownYPos
+        AwardsConstants.arrow.x - AwardsConstants.arrow.xOffset,
+        AwardsConstants.arrow.y
       );
 
     const arrowRight = createButton(this.scene, {
       assetKey: ImageAssets.arrow.key,
       onUp: () => this.nextPage(true)
     })
-      .setScale(awardsConstants.arrowXScale, awardsConstants.arrowYScale)
+      .setScale(AwardsConstants.arrow.xScale, AwardsConstants.arrow.yScale)
       .setRotation((90 * Math.PI) / 180)
       .setPosition(
-        awardsConstants.arrowXMidPos + awardsConstants.arrowXOffset,
-        awardsConstants.arrowDownYPos
+        AwardsConstants.arrow.x + AwardsConstants.arrow.xOffset,
+        AwardsConstants.arrow.y
       );
     awardContainer.add([arrowLeft, arrowRight]);
 
     // Add preview frame
     const frame = new Phaser.GameObjects.Sprite(
       this.scene,
-      awardsConstants.previewXPos,
-      awardsConstants.previewYPos,
+      AwardsConstants.preview.rect.x,
+      AwardsConstants.preview.rect.y,
       ImageAssets.popUpFrame.key
     ).setScale(1.2);
     awardContainer.add(frame);
+
+    // Add asset key container
+    awardContainer.add(createAssetKeyPreviewCont(this.scene));
 
     return awardContainer;
   }
@@ -177,7 +180,7 @@ class GameAwardsManager implements IGameUI {
     return calcListFormatPos({
       numOfItems: Object.keys(AwardPage).length,
       xSpacing: 0,
-      ySpacing: awardsConstants.pageYSpacing
+      ySpacing: AwardsConstants.page.ySpace
     });
   }
 
@@ -192,44 +195,68 @@ class GameAwardsManager implements IGameUI {
   private setPreview(award?: AwardProperty) {
     if (this.uiContainer) {
       if (this.previewContainer) this.previewContainer.destroy();
-      this.previewContainer = new Phaser.GameObjects.Container(this.scene, 0, 0);
+      if (!award) return;
 
-      if (award) {
-        // Preview image
-        const previewSprite = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
-        resizeUnderflow(previewSprite, awardsConstants.previewDim, awardsConstants.previewDim);
-        previewSprite
-          .setPosition(awardsConstants.previewXPos, awardsConstants.previewYPos)
-          .setOrigin(0.428, 0.468);
+      this.previewContainer = new Phaser.GameObjects.Container(
+        this.scene,
+        AwardsConstants.preview.rect.xOffset,
+        AwardsConstants.preview.rect.yOffset
+      );
 
-        // Preview title
-        const previewTitle = createBitmapText(
+      // Preview image
+      let previewAsset;
+      if (award.assetKey === Constants.nullInteractionId) {
+        // No asset is associated with the award
+        previewAsset = createBitmapText(
           this.scene,
-          award.title,
-          awardsConstants.previewTitleTextConfig,
-          awardTitleStyle
-        );
-
-        // Preview asset key
-        const previewKey = createBitmapText(
-          this.scene,
-          award.assetKey,
-          awardsConstants.previewKeyTextConfig,
+          'No preview available',
+          AwardsConstants.noPreviewTextConfig,
           awardKeyStyle
         );
-
-        // Preview description
-        const previewDesc = new Phaser.GameObjects.Text(
-          this.scene,
-          awardsConstants.previewXPos,
-          awardsConstants.previewYPos + awardsConstants.previewDescTextYOffset,
-          award.description,
-          awardDescStyle
-        ).setOrigin(0.4, 0.0);
-
-        this.previewContainer.add([previewSprite, previewTitle, previewKey, previewDesc]);
+      } else {
+        const previewRect = AwardsConstants.preview.rect;
+        previewAsset = new Phaser.GameObjects.Sprite(this.scene, 0, 0, award.assetKey);
+        resizeUnderflow(previewAsset, previewRect.dim, previewRect.dim);
+        previewAsset.setPosition(previewRect.x, previewRect.y);
       }
 
+      // Preview title
+      const previewTitle = createBitmapText(
+        this.scene,
+        award.title,
+        AwardsConstants.preview.titleTextConfig,
+        awardTitleStyle
+      );
+
+      // Preview description
+      const previewDesc = new Phaser.GameObjects.Text(
+        this.scene,
+        AwardsConstants.preview.rect.x,
+        AwardsConstants.preview.rect.y + AwardsConstants.preview.descText.yOffset,
+        award.description,
+        awardDescStyle
+      ).setOrigin(0.5, 0.0);
+
+      // Preview asset key, use only empty string if award is not completed
+      const assetKey = award.completed === false ? '' : award.assetKey;
+      const previewKey = createBitmapText(
+        this.scene,
+        assetKey,
+        AwardsConstants.preview.keyTextConfig,
+        awardKeyStyle
+      );
+
+      // Black tint to overlay the asset if award is not completed
+      const blackTint = new Phaser.GameObjects.Rectangle(
+        this.scene,
+        AwardsConstants.preview.rect.x,
+        AwardsConstants.preview.rect.y,
+        AwardsConstants.preview.rect.dim,
+        AwardsConstants.preview.rect.dim,
+        0
+      ).setAlpha(award.completed ? 0 : 0.8);
+
+      this.previewContainer.add([previewAsset, blackTint, previewTitle, previewDesc, previewKey]);
       this.uiContainer.add(this.previewContainer);
     }
   }
@@ -276,7 +303,7 @@ class GameAwardsManager implements IGameUI {
     return createButton(this.scene, {
       assetKey: ImageAssets.awardsPage.key,
       message: text,
-      textConfig: { x: awardsConstants.pageTextXPos, y: 0, oriX: 0.1, oriY: 0.5 },
+      textConfig: AwardsConstants.pageTextConfig,
       bitMapTextStyle: pageBannerTextStyle,
       onUp: callback
     }).setPosition(xPos, yPos);
@@ -294,7 +321,7 @@ class GameAwardsManager implements IGameUI {
     const itemPositions = calcListFormatPos({
       numOfItems: items.length,
       xSpacing: 0,
-      ySpacing: awardsConstants.listYSpacing
+      ySpacing: AwardsConstants.list.ySpace
     });
 
     // Populate container with all the item buttons
@@ -303,8 +330,9 @@ class GameAwardsManager implements IGameUI {
         this.createItemButton(
           awardProp.title,
           itemPositions[index][0],
-          itemPositions[index][1] + awardsConstants.listYStartPos,
-          () => this.setPreview(awardProp)
+          itemPositions[index][1] + AwardsConstants.list.yStart,
+          () => this.setPreview(awardProp),
+          awardProp.completed !== false
         )
       )
     );
@@ -321,14 +349,25 @@ class GameAwardsManager implements IGameUI {
    * @param yPos y position of the button
    * @param callback callback to be executed on click
    */
-  private createItemButton(obj: string, xPos: number, yPos: number, callback: any) {
-    return createButton(this.scene, {
+  private createItemButton(
+    obj: string,
+    xPos: number,
+    yPos: number,
+    callback: any,
+    completed: boolean
+  ) {
+    const button = createButton(this.scene, {
       assetKey: ImageAssets.awardsBanner.key,
       message: obj,
-      textConfig: { x: awardsConstants.listTextXPos, y: 0, oriX: 0.0, oriY: 0.55 },
+      textConfig: AwardsConstants.listTextConfig,
       bitMapTextStyle: listBannerTextStyle,
-      onUp: callback
+      onUp: callback,
+      onHoverEffect: completed
     }).setPosition(xPos, yPos);
+
+    // For non completed award, they do not hover effect and is less visible
+    if (!completed) button.setAlpha(0.5);
+    return button;
   }
 
   /**
@@ -355,8 +394,8 @@ class GameAwardsManager implements IGameUI {
     }
 
     const itemList = getAwardProps(keys);
-    const itemStartIdx = pageNum * awardsConstants.itemsPerPage;
-    return itemList.slice(itemStartIdx, itemStartIdx + awardsConstants.itemsPerPage);
+    const itemStartIdx = pageNum * AwardsConstants.itemsPerPage;
+    return itemList.slice(itemStartIdx, itemStartIdx + AwardsConstants.itemsPerPage);
   }
 
   /**

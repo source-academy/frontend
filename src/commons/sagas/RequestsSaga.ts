@@ -503,6 +503,54 @@ export const postGrading = async (
   return resp;
 };
 
+function handleReautogradeResponse(
+  resp: Response | null
+): true | 'not_found' | 'not_submitted' | false {
+  if (!resp || resp.ok) {
+    return !!resp?.ok;
+  }
+
+  switch (resp.status) {
+    case 400:
+      return 'not_submitted';
+    case 404:
+      return 'not_found';
+  }
+  return false;
+}
+
+/**
+ * POST /grading/{submissionId}/autograde
+ */
+export const postReautogradeSubmission = async (submissionId: number, tokens: Tokens) => {
+  const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return handleReautogradeResponse(resp);
+};
+
+/**
+ * POST /grading/{submissionId}/{questionId}/autograde
+ */
+export const postReautogradeAnswer = async (
+  submissionId: number,
+  questionId: number,
+  tokens: Tokens
+) => {
+  const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return handleReautogradeResponse(resp);
+};
+
 /**
  * POST /grading/{submissionId}/unsubmit
  */

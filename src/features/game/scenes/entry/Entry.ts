@@ -13,9 +13,9 @@ import { loadImage } from '../../utils/LoaderUtils';
  *
  * This is where all the fetching happens
  */
-class EntryScene extends Phaser.Scene {
+class Entry extends Phaser.Scene {
   constructor() {
-    super('EntryScene');
+    super('Entry');
   }
 
   public preload() {
@@ -77,4 +77,4 @@ class EntryScene extends Phaser.Scene {
   }
 }
 
-export default EntryScene;
+export default Entry;

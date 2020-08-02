@@ -2,7 +2,7 @@ import ImageAssets from '../assets/ImageAssets';
 import { screenCenter } from '../commons/CommonConstants';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import mainMenuConstants from '../scenes/mainMenu/MainMenuConstants';
+import MainMenuConstants from '../scenes/mainMenu/MainMenuConstants';
 import { userStateStyle } from '../state/GameStateConstants';
 import { createButton } from '../utils/ButtonUtils';
 import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
@@ -27,7 +27,7 @@ export async function promptWithChoices(
   const buttonPositions = calcTableFormatPos({
     direction: Direction.Column,
     numOfItems: choices.length + 1,
-    maxYSpace: mainMenuConstants.buttonYSpace
+    maxYSpace: MainMenuConstants.button.ySpace
   });
 
   const activatePromptContainer: Promise<number> = new Promise(resolve => {
