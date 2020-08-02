@@ -123,8 +123,6 @@ export default function* WorkspaceSaga(): SagaIterator {
         if (context.errors.length > 0) {
           yield call(showWarningMessage, 'Line ' + (+b + 1) + ': Misplaced breakpoint', 2000);
         }
-
-        exploded[index] = temp;
       }
     }
     const value = exploded.join('\n');
