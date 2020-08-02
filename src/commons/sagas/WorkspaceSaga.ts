@@ -115,13 +115,12 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const b in breakpoints) {
       if (typeof b === 'string') {
         const index: number = +b;
-        const temp = exploded[index];
-        exploded[index] = 'debugger;' + temp;
+        exploded[index] = 'debugger;' + exploded[index];
 
         context.errors = [];
         parse(exploded.join('\n'), context);
         if (context.errors.length > 0) {
-          yield call(showWarningMessage, 'Line ' + (+b + 1) + ': Misplaced breakpoint', 2000);
+          yield call(showWarningMessage, 'Line ' + (index + 1) + ': Misplaced breakpoint', 2000);
         }
       }
     }
