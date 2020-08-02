@@ -1,4 +1,4 @@
-import { Card, H1, Popover } from '@blueprintjs/core';
+import { Card, Classes, Dialog, H1, InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import Recorder from 'yareco';
@@ -45,6 +45,7 @@ type StateProps = {
 };
 
 type State = {
+  dialogOpen: boolean;
   duration: number;
   fileDataBlob?: Blob;
   updater?: NodeJS.Timeout;
@@ -58,6 +59,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   constructor(props: SourcereelControlbarProps) {
     super(props);
     this.state = {
+      dialogOpen: false,
       duration: 0,
       updater: undefined,
       saveTitle: 'Title',
@@ -102,32 +104,44 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
       IconNames.REFRESH,
       this.handleRecorderResetting
     );
-    const RecorderSaveButton = (
-      <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
-        {controlButton('Save', IconNames.FLOPPY_DISK)}
-        <ul className="Sourcereel-save-form">
-          <li className="form-row">
-            <label htmlFor="title">Title: </label>
-            <input
-              id="title"
-              value={this.state.saveTitle}
-              onChange={this.handleSaveTitleInputChange}
-            />
-          </li>
-          <li className="form-row">
-            <label htmlFor="description">Description: </label>
-            <input
-              id="description"
-              value={this.state.saveDescription}
-              onChange={this.handleSaveDescriptionInputChange}
-            />
-          </li>
-          <li>{controlButton('Submit', IconNames.TICK, this.handleRecorderSaving)}</li>
-        </ul>
-      </Popover>
+    const RecorderSaveButton = controlButton(
+      'Upload',
+      IconNames.FLOPPY_DISK,
+      this.handleOpenDialog
     );
     return (
       <div>
+        <Dialog
+          icon="info-sign"
+          isOpen={this.state.dialogOpen}
+          onClose={this.handleCloseDialog}
+          title="Upload Sourcecast"
+          canOutsideClickClose={true}
+        >
+          <div className={Classes.DIALOG_BODY}>
+            <InputGroup
+              id="title"
+              leftIcon={IconNames.HEADER}
+              onChange={this.handleSaveTitleInputChange}
+              placeholder="Title..."
+              value={this.state.saveTitle}
+            />
+            <br />
+            <InputGroup
+              id="description"
+              leftIcon={IconNames.LIST_DETAIL_VIEW}
+              onChange={this.handleSaveDescriptionInputChange}
+              placeholder="Description..."
+              value={this.state.saveDescription}
+            />
+          </div>
+          <div className={Classes.DIALOG_FOOTER}>
+            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+              {controlButton('Confirm Upload', IconNames.TICK, this.handleRecorderSaving)}
+              {controlButton('Cancel', IconNames.CROSS, this.handleCloseDialog)}
+            </div>
+          </div>
+        </Dialog>
         <br />
         <div className="Timer">
           <Card elevation={2} style={{ background: '#24323F' }}>
@@ -148,7 +162,6 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
           {this.props.recordingStatus === RecordingStatus.recording && RecorderPauseButton}
           {this.props.recordingStatus === RecordingStatus.recording && RecorderRecordPauseButton}
           {this.props.recordingStatus === RecordingStatus.paused && RecorderStopButton}
-          {/* {this.props.recordingStatus === RecordingStatus.finished && RecorderDownloadButton} */}
           {this.props.recordingStatus === RecordingStatus.finished && RecorderSaveButton}
           {this.props.recordingStatus !== RecordingStatus.notStarted && RecorderResetButton}
         </div>
@@ -156,6 +169,10 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
       </div>
     );
   }
+
+  private handleCloseDialog = () => this.setState({ dialogOpen: false });
+
+  private handleOpenDialog = () => this.setState({ dialogOpen: true });
 
   private updateTimerDuration = () => {
     this.setState({ duration: this.props.getTimerDuration() });
