@@ -290,7 +290,8 @@
       min-width: $view-width + $border-glow-radius * 2 */
       min-width: $view-width + $default-spacing * 2;
       overflow-y: auto;
-      scrollbar-width: none;
+      scrollbar-color: white #444;
+      scrollbar-width: thin;
 
       .view {
         color: white;
