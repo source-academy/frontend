@@ -132,9 +132,8 @@
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        margin: auto 0;
-        padding: $default-spacing;
-        padding-right: 0;
+        margin: auto $default-spacing;
+        padding-left: $default-spacing;
 
         p {
           font-size: 0.8em;
