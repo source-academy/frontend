@@ -19,12 +19,14 @@ type DispatchProps = {
   handleSaveSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audio: Blob,
     playbackData: PlaybackData
   ) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -51,6 +53,7 @@ type State = {
   updater?: NodeJS.Timeout;
   saveTitle: string;
   saveDescription: string;
+  saveUID: string;
 };
 
 class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps, State> {
@@ -62,8 +65,9 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
       dialogOpen: false,
       duration: 0,
       updater: undefined,
-      saveTitle: 'Title',
-      saveDescription: 'Description'
+      saveTitle: '',
+      saveDescription: '',
+      saveUID: ''
     };
   }
 
@@ -123,7 +127,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
               id="title"
               leftIcon={IconNames.HEADER}
               onChange={this.handleSaveTitleInputChange}
-              placeholder="Title..."
+              placeholder="Title"
               value={this.state.saveTitle}
             />
             <br />
@@ -131,8 +135,16 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
               id="description"
               leftIcon={IconNames.LIST_DETAIL_VIEW}
               onChange={this.handleSaveDescriptionInputChange}
-              placeholder="Description..."
+              placeholder="Description"
               value={this.state.saveDescription}
+            />
+            <br />
+            <InputGroup
+              id="uid"
+              leftIcon={IconNames.KEY}
+              onChange={this.handleSaveUIDInputChange}
+              placeholder="UID (optional, only alphanumeric, dash and underscore allowed)"
+              value={this.state.saveUID}
             />
           </div>
           <div className={Classes.DIALOG_FOOTER}>
@@ -195,7 +207,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     handleTimerPause();
     this.recorder.pause();
     const audioUrl = window.URL.createObjectURL(this.recorder.exportWAV());
-    handleSetSourcecastData('', '', audioUrl, this.props.playbackData);
+    handleSetSourcecastData('', '', '', audioUrl, this.props.playbackData);
   };
 
   private handleRecorderStarting = () => {
@@ -277,6 +289,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
     this.props.handleSaveSourcecastData(
       this.state.saveTitle,
       this.state.saveDescription,
+      this.state.saveUID,
       this.state.fileDataBlob,
       this.props.playbackData
     );
@@ -296,6 +309,10 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
 
   private handleSaveDescriptionInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     this.setState({ saveDescription: event.target.value });
+  };
+
+  private handleSaveUIDInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.setState({ saveUID: event.target.value });
   };
 }
 

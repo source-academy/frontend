@@ -19,6 +19,7 @@ test('updateSourcecastIndex generates correct action object', () => {
   const sourcecastData: SourcecastData = {
     title: 'Test Title',
     description: 'Test Description',
+    uid: 'uid',
     inserted_at: '2019-07-17T15:54:57',
     updated_at: '2019-07-17T15:54:57',
     playbackData: '{}',

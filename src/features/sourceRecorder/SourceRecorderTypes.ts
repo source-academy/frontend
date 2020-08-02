@@ -61,6 +61,7 @@ export type PlaybackData = {
 export type SourcecastData = {
   title: string;
   description: string;
+  uid: string;
   inserted_at: string;
   updated_at: string;
   playbackData: string;

@@ -10,6 +10,7 @@ type DispatchProps = {
   handleSetSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -32,9 +33,13 @@ class SourceRecorderSelectCell extends React.Component<SourceRecorderSelectCellP
 
   private handleSelect = () => {
     const { data } = this.props;
-    const url = data.url;
-    const playbackData = JSON.parse(data.playbackData);
-    this.props.handleSetSourcecastData(data.title, data.description, url, playbackData);
+    this.props.handleSetSourcecastData(
+      data.title,
+      data.description,
+      data.uid,
+      data.url,
+      JSON.parse(data.playbackData)
+    );
   };
 }
 
