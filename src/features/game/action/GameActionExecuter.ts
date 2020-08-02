@@ -1,4 +1,5 @@
 import { Layer } from '../layer/GameLayerTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { GameActionType } from './GameActionTypes';
@@ -48,7 +49,11 @@ export default class GameActionExecuter {
         globalAPI.completeObjective(actionParams.id);
         return;
       case GameActionType.ShowDialogue:
-        await globalAPI.showDialogueInSamePhase(actionParams.id);
+        if (globalAPI.isCurrentPhase(GamePhaseType.Sequence)) {
+          await globalAPI.showDialogueInSamePhase(actionParams.id);
+        } else {
+          await globalAPI.showDialogue(actionParams.id);
+        }
         return;
       case GameActionType.AddPopup:
         await globalAPI.displayPopUp(

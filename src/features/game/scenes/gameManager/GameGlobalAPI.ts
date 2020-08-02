@@ -328,6 +328,10 @@ class GameGlobalAPI {
   //      Input      //
   /////////////////////
 
+  public setDefaultCursor(cursor: string) {
+    this.getGameManager().getInputManager().setDefaultCursor(cursor);
+  }
+
   public enableKeyboardInput(active: boolean) {
     this.getGameManager().getInputManager().enableKeyboardInput(active);
   }

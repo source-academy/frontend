@@ -2,7 +2,7 @@ import GameGlobalAPI from 'src/features/game/scenes/gameManager/GameGlobalAPI';
 
 import SoundAssets from '../../assets/SoundAssets';
 import CommonBackButton from '../../commons/CommonBackButton';
-import { screenSize } from '../../commons/CommonConstants';
+import { Constants, screenSize } from '../../commons/CommonConstants';
 import { IGameUI, ItemId } from '../../commons/CommonTypes';
 import { fadeAndDestroy } from '../../effects/FadeEffect';
 import { entryTweenProps, exitTweenProps } from '../../effects/FlyEffect';
@@ -57,7 +57,7 @@ class GameModeExplore implements IGameUI {
     });
 
     // Change default icon
-    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
+    GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.normal);
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
   }
 
@@ -71,7 +71,7 @@ class GameModeExplore implements IGameUI {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
 
     // Reset the cursor
-    gameManager.input.setDefaultCursor('');
+    GameGlobalAPI.getInstance().setDefaultCursor(Constants.defaultCursor);
 
     this.disableInteractions();
 
@@ -133,12 +133,11 @@ class GameModeExplore implements IGameUI {
    *           triggered before
    */
   private explorePointerOver(id: ItemId) {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
     const hasTriggered = GameGlobalAPI.getInstance().hasTriggeredInteraction(id);
     if (hasTriggered) {
-      gameManager.input.setDefaultCursor(ExploreModeConstants.checked);
+      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.checked);
     } else {
-      gameManager.input.setDefaultCursor(ExploreModeConstants.hover);
+      GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.hover);
     }
   }
 
@@ -147,8 +146,7 @@ class GameModeExplore implements IGameUI {
    * It sets the cursor back to 'Explore' mode cursor.
    */
   private explorePointerOut() {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
+    GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.normal);
   }
 
   /**
@@ -160,10 +158,9 @@ class GameModeExplore implements IGameUI {
    * @param id id of the object, to be used to inform GameStateManager
    */
   private explorePointerUp(id: string) {
-    const gameManager = GameGlobalAPI.getInstance().getGameManager();
-    gameManager.input.setDefaultCursor('');
+    GameGlobalAPI.getInstance().setDefaultCursor(Constants.defaultCursor);
     GameGlobalAPI.getInstance().triggerInteraction(id);
-    gameManager.input.setDefaultCursor(ExploreModeConstants.normal);
+    GameGlobalAPI.getInstance().setDefaultCursor(ExploreModeConstants.normal);
   }
 }
 

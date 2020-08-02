@@ -14,7 +14,8 @@ export const Constants = {
     size: 30,
     fill: HexColor.lightBlue,
     align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
-  }
+  },
+  defaultCursor: ''
 };
 
 export const screenSize = {

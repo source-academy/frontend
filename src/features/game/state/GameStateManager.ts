@@ -384,10 +384,7 @@ class GameStateManager {
 
   public getGameMap = () => this.gameMap;
   private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
-  public getCharacterAtId = (id: ItemId) => {
-    console.log(this.gameMap.getCharacterMap());
-    return mandatory(this.gameMap.getCharacterMap().get(id));
-  };
+  public getCharacterAtId = (id: ItemId) => mandatory(this.gameMap.getCharacterMap().get(id));
 }
 
 export default GameStateManager;

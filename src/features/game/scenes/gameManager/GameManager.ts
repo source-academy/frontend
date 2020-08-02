@@ -6,7 +6,7 @@ import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
-import { blackFade } from '../../effects/FadeEffect';
+import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
@@ -19,7 +19,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
-import { mandatory, toS3Path } from '../../utils/GameUtils';
+import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
 
@@ -97,8 +97,7 @@ class GameManager extends Phaser.Scene {
         this.transitionChecker(prevPhase, newPhase)
     );
     this.getPhaseManager().setInterruptCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        await this.checkpointTransition(newPhase)
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
     );
     this.getPhaseManager().setCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
@@ -239,7 +238,7 @@ class GameManager extends Phaser.Scene {
    * Game is only able to transition to the next checkpoint
    * if all of the objectives of the current checkpoint has been cleared.
    *
-   * Additionally, game will only transition if the newPhase is a Menu phase;
+   * Additionally, game will only transition if the newPhase is not Sequence phase;
    * in order to ensure that we don't transition to the next checkpoint
    * during dialogue/cutscene.
    *
@@ -251,24 +250,32 @@ class GameManager extends Phaser.Scene {
   public transitionChecker(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
     return (
       !this.hasTransitioned &&
-      newPhase === GamePhaseType.Menu &&
+      newPhase !== GamePhaseType.Sequence &&
       GameGlobalAPI.getInstance().isAllComplete()
     );
   }
 
   /**
-   * Transition to the next checkpoint.
+   * Transition to the next checkpoint and resets the input setting.
    *
    * This method is passed to the phase manager
    * as the interrupt transition callback.
-   *
-   * @param newPhase new phase to transition to
    */
-  public async checkpointTransition(newPhase: GamePhaseType) {
+  public async checkpointTransition() {
     this.hasTransitioned = true;
+
     await this.getActionManager().processGameActions(
       this.getStateManager().getGameMap().getCheckpointCompleteActions()
     );
+
+    // Reset input and cursor, in case it is changed after story complete actions
+    this.getInputManager().setDefaultCursor(Constants.defaultCursor);
+    this.getInputManager().enableMouseInput(true);
+    this.getInputManager().enableKeyboardInput(true);
+
+    this.tweens.add(fadeIn([blackScreen(this).setAlpha(0)], Constants.fadeDuration));
+    await sleep(Constants.fadeDuration);
+
     this.cleanUp();
     this.scene.start('CheckpointTransition');
   }
