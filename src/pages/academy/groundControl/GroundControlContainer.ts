@@ -12,7 +12,7 @@ import {
 import GroundControl, { DispatchProps, StateProps } from './GroundControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  assessmentOverviews: state.session.assessmentOverviews ? state.session.assessmentOverviews : []
+  assessmentOverviews: state.session.assessmentOverviews
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

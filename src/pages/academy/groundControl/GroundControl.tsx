@@ -30,7 +30,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  assessmentOverviews: AssessmentOverview[];
+  assessmentOverviews?: AssessmentOverview[];
 };
 
 type State = {
@@ -136,15 +136,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     };
   }
 
-  public componentDidUpdate(prevProps: GroundControlProps) {
-    if (
-      this.gridApi &&
-      this.props.assessmentOverviews.length !== prevProps.assessmentOverviews.length
-    ) {
-      this.gridApi.setRowData(this.sortByCategoryAndDate());
-    }
-  }
-
   public render() {
     const data = this.sortByCategoryAndDate();
 
@@ -197,11 +188,18 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       <div>
         <ContentDisplay
           display={display}
-          loadContentDispatch={this.props.handleAssessmentOverviewFetch}
+          loadContentDispatch={this.conditionallyFetchAssessmentOverviews}
         />
       </div>
     );
   }
+
+  private conditionallyFetchAssessmentOverviews = () => {
+    if (!this.props.assessmentOverviews) {
+      // If assessment overviews are not loaded, fetch them
+      this.props.handleAssessmentOverviewFetch();
+    }
+  };
 
   private sortByCategoryAndDate = () => {
     if (!this.props.assessmentOverviews) {

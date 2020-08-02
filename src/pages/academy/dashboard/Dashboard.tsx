@@ -81,7 +81,6 @@ class Dashboard extends React.Component<DashboardProps> {
             columnDefs={this.columnDefs}
             defaultColDef={this.defaultColumnDefs}
             onGridReady={this.onGridReady}
-            onFirstDataRendered={this.resizeGrid}
             onGridSizeChanged={this.resizeGrid}
             rowData={this.props.gradingSummary}
             rowHeight={30}
