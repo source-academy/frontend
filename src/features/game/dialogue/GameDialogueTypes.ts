@@ -25,4 +25,3 @@ export type Dialogue = {
 };
 
 export type DialogueObject = Map<PartName, DialogueLine[]>;
-export type DialogueString = string;

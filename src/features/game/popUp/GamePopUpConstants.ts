@@ -2,9 +2,8 @@ import { screenCenter, screenSize } from '../commons/CommonConstants';
 
 const popUpXOffset = 400;
 
-const popUpConstants = {
-  imgXOffset: 20,
-  imgYOffset: 20,
+const PopUpConstants = {
+  image: { xOffset: 20, yOffset: 20 },
   rect: {
     x: { Left: popUpXOffset, Middle: screenCenter.x, Right: screenSize.x - popUpXOffset },
     y: { Small: 325, Medium: 350, Large: 420 },
@@ -15,4 +14,4 @@ const popUpConstants = {
   tweenDuration: 300
 };
 
-export default popUpConstants;
+export default PopUpConstants;

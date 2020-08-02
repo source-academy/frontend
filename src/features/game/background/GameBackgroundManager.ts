@@ -7,7 +7,7 @@ import { resizeOverflow } from '../utils/SpriteUtils';
 
 /**
  * Manager for game's background.
- * Loads the background for a location on navigate and change_location action.
+ * Loads the background for a location on navigate and change_background action.
  */
 export default class GameBackgroundManager {
   /**

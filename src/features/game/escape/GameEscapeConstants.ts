@@ -24,19 +24,14 @@ export const optTextStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
-const escapeConstants = {
-  buttonYPos: screenSize.y * 0.15,
+const EscapeConstants = {
+  button: { y: screenSize.y * 0.15 },
   escapeOptTextConfig: { x: 0, y: 0, oriX: 0.37, oriY: 0.75 },
-
+  settings: { yOffset: -screenCenter.y * 0.1, ySpace: screenSize.y * 0.3 },
   settingsTextConfig: { x: screenSize.x * 0.38, y: -screenCenter.y * 0.1, oriX: 0.0, oriY: 0.5 },
-  settingsYOffset: -screenCenter.y * 0.1,
-  settingsYSpace: screenSize.y * 0.3,
-
+  radioButtons: { xSpace: screenSize.x * 0.2 },
   radioChoiceTextConfig: { x: 0, y: -45, oriX: 0.5, oriY: 0.25 },
-  radioButtonsXSpace: screenSize.x * 0.2,
-
-  volOptXPos: screenSize.x * 0.05,
-  volOptYPos: -screenSize.y * 0.1
+  volOpt: { x: screenSize.x * 0.05 }
 };
 
-export default escapeConstants;
+export default EscapeConstants;

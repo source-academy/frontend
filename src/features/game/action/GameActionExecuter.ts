@@ -1,4 +1,5 @@
 import { Layer } from '../layer/GameLayerTypes';
+import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { GameActionType } from './GameActionTypes';
@@ -12,13 +13,8 @@ export default class GameActionExecuter {
    * Executes the game action based on given type and parameters
    * @param actionType the type of action that will be executed
    * @param actionParams an object containing all the parameters
-   * @param fastForward whether or not some actions will play
    */
-  public static async executeGameAction(
-    actionType: GameActionType,
-    actionParams: any,
-    fastForward?: boolean
-  ) {
+  public static async executeGameAction(actionType: GameActionType, actionParams: any) {
     const globalAPI = GameGlobalAPI.getInstance();
 
     switch (actionType) {
@@ -40,11 +36,6 @@ export default class GameActionExecuter {
       case GameActionType.UpdateCharacter:
         globalAPI.updateCharacter(actionParams.id, actionParams.expression);
         return;
-    }
-
-    if (fastForward) return;
-
-    switch (actionType) {
       case GameActionType.LocationChange:
         await globalAPI.changeLocationTo(actionParams.id);
         return;
@@ -58,7 +49,11 @@ export default class GameActionExecuter {
         globalAPI.completeObjective(actionParams.id);
         return;
       case GameActionType.ShowDialogue:
-        await globalAPI.showDialogueInSamePhase(actionParams.id);
+        if (globalAPI.isCurrentPhase(GamePhaseType.Sequence)) {
+          await globalAPI.showDialogueInSamePhase(actionParams.id);
+        } else {
+          await globalAPI.showDialogue(actionParams.id);
+        }
         return;
       case GameActionType.AddPopup:
         await globalAPI.displayPopUp(
@@ -85,6 +80,37 @@ export default class GameActionExecuter {
         return;
       default:
         return;
+    }
+  }
+
+  /**
+   * Determines if action is state change action type
+   * State-change actions are replayed at the start of every game
+   * They are actions that modify that game map's original state
+   *
+   * @param actionType - the type of action
+   */
+  public static isStateChangeAction(actionType: GameActionType) {
+    switch (actionType) {
+      case GameActionType.AddItem:
+      case GameActionType.RemoveItem:
+      case GameActionType.AddLocationMode:
+      case GameActionType.RemoveLocationMode:
+      case GameActionType.MoveCharacter:
+      case GameActionType.UpdateCharacter:
+        return true;
+      case GameActionType.LocationChange:
+      case GameActionType.ChangeBackground:
+      case GameActionType.ObtainCollectible:
+      case GameActionType.CompleteObjective:
+      case GameActionType.ShowDialogue:
+      case GameActionType.AddPopup:
+      case GameActionType.MakeObjectBlink:
+      case GameActionType.MakeObjectGlow:
+      case GameActionType.PlayBGM:
+      case GameActionType.PlaySFX:
+      case GameActionType.ShowObjectLayer:
+        return false;
     }
   }
 }
