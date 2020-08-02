@@ -18,6 +18,7 @@ export type InputTypeShape = {
   cursorPositionChange: Position;
   codeDelta: CodeDelta;
   externalLibrarySelect: ExternalLibraryName;
+  forcePause: null;
   keyboardCommand: KeyboardCommand;
   selectionRangeData: SelectionData;
 };
@@ -27,6 +28,7 @@ export enum KeyboardCommand {
 }
 
 export enum PlaybackStatus {
+  forcedPaused = 'forcedPaused',
   playing = 'playing',
   paused = 'paused'
 }
