@@ -166,7 +166,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     <Card
       className="editable-achievement"
       style={{
-        background: `url(${cardTileUrl})`
+        background: `url(${cardTileUrl}) center/cover`
       }}
     >
       <div className="top-bar">

@@ -1,299 +1,281 @@
 .AchievementDashboard {
+  background: black url(#{$achievement-assets}/background.png) center/cover no-repeat fixed;
   display: flex;
   flex-direction: column;
-
   height: 100%;
+  overflow: auto;
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
-
-  background: black url('#{$achievement-assets}/background.png') center/cover no-repeat fixed;
 
   .achievement-overview {
+    $default-spacing: 0.5em;
+
+    align-items: center;
+    color: white;
     display: flex;
     flex-direction: row;
-    align-items: center;
-
-    width: 100%;
-    padding: 0.5em 1em;
-
-    color: white;
+    padding: $default-spacing;
 
     .level {
+      $progress-bar-height: 1.2em;
+      $progress-bar-width: 20em;
+
+      align-items: center;
       display: flex;
       flex-direction: row;
-      align-items: center;
 
       .level-badge {
+        align-items: center;
         display: flex;
         flex-direction: column;
-        align-items: center;
-
-        margin: 0 0.5em 0 0;
 
         .level-icon {
+          background: url(#{$achievement-assets}/level-icon.png) center/contain;
           height: 2.5em;
           width: 2.5em;
-
-          background: url('#{$achievement-assets}/level-icon.png') center/contain;
         }
 
         p {
-          margin: 0;
-
           font-size: 0.9em;
-          text-decoration: underline white;
+          margin: 0;
+          text-decoration: underline;
         }
       }
 
       .level-progress {
         display: flex;
-
-        height: 1.2em;
-        width: 20em;
+        height: $progress-bar-height;
+        margin: 0 0 0 $default-spacing;
+        width: $progress-bar-width;
 
         .progress-bar {
-          height: 1.2em;
-          width: 20em;
+          height: $progress-bar-height;
+          width: $progress-bar-width;
         }
 
         p {
+          align-items: center;
+          color: #ffef12;
           display: inline-flex;
           justify-content: center;
-          align-items: center;
-
+          margin: 0 0 0 -#{$progress-bar-width};
+          width: $progress-bar-width;
           z-index: 1;
+        }
 
-          width: 20em;
-          margin: 0 0 0 -20em;
-
-          color: #ffef12;
+        @media only screen and (max-width: 1024px) {
+          display: none;
         }
       }
 
+      /* Temporarily removed
       .milestone {
-        display: flex;
-        flex-direction: column;
-
-        position: absolute;
-        z-index: 2;
-
-        margin: 20em 0 0 1em;
-        padding: 1em 2em;
-
         background-color: rgba(0, 0, 0, 0.7);
         border: 1px solid #90ff12;
         box-shadow: 0 0 10px #90ff12;
+        display: flex;
+        flex-direction: column;
+        margin: 20em 0 0 1em;
+        padding: 1em 2em;
+        position: absolute;
+        z-index: 2;
 
         h2 {
           margin: 0;
-
           text-align: center;
           text-decoration: underline;
         }
 
         .details {
+          align-items: center;
           display: flex;
           flex-direction: row;
-          align-items: center;
 
           .description {
             padding: 1em 0 0 0;
           }
         }
-      }
+      } */
     }
 
+    .level,
     h3 {
-      margin: 0 0 0 2em;
+      margin: 0 $default-spacing;
     }
   }
 
   .achievement-main {
-    display: flex;
-    flex-direction: row;
-
-    height: 100%;
-    width: 100%;
+    $border-glow-radius: 10px;
+    // Canvas aspect ratio 2:1
+    $canvas-height: 18em;
+    $canvas-width: 36em;
+    // Card aspect ratio 2:1
+    $card-height: 5em;
+    $card-width: 30em;
+    $default-spacing: 1em;
+    $view-height: 50em;
+    $view-width: $canvas-width;
 
     align-items: center;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    overflow-y: hidden;
 
-    .filters {
+    %container {
       display: flex;
-
-      height: 70%;
-      width: 15%;
-
       flex-direction: column;
-      justify-content: space-evenly;
-      align-items: center;
+      margin: 0 auto;
+      /* To be exact, 
+      max-height: $view-height + $border-glow-radius * 2 */
+      max-height: $view-height + $default-spacing * 2;
+    }
 
-      .filter-button {
-        display: flex;
+    .filter-container {
+      @extend %container;
+      height: 60%;
+      min-width: auto;
 
-        flex-direction: column;
+      .filter {
         align-items: center;
-
-        line-height: 0.8em;
-
         cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        margin: auto $default-spacing;
+
+        p {
+          font-size: 0.8em;
+          margin: 0;
+          padding: 1em 0 0 0;
+          white-space: nowrap;
+        }
+      }
+
+      @media only screen and (max-height: 600px) {
+        height: 80%;
+
+        p {
+          display: none;
+        }
       }
     }
 
     .list-container {
-      display: flex;
-
+      @extend %container;
       height: 90%;
-      width: 35%;
-
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: center;
-
-      overflow-x: hidden;
-      overflow-y: scroll;
-
       list-style-type: none;
+      min-width: $card-width + $default-spacing;
+      overflow-y: auto;
+      padding: 0;
+      scrollbar-color: white #444;
+      scrollbar-width: thin;
+
+      li {
+        margin: 0 $default-spacing 0 0;
+      }
+
+      li:not(:first-child) {
+        margin: $default-spacing $default-spacing 0 0;
+      }
 
       .achievement-card {
-        display: flex;
-
-        flex-direction: row;
-
-        // Card aspect ratio 6:1
-        height: 5em;
-        width: 30em;
-        padding: 0;
-
-        justify-content: center;
-        align-items: center;
         cursor: pointer;
+        display: flex;
+        flex-direction: row;
+        height: $card-height;
         transition: box-shadow 0.2s ease-out;
-        box-shadow: 0;
+        width: $card-width;
 
         .dropdown-button {
-          display: flex;
-
-          height: 5em;
-          width: 6em;
-          padding: 0 0 0 0.5em;
-
-          justify-content: flex-start;
           align-items: center;
+          display: flex;
+          height: $card-height;
+          padding: 0 0 0 0.5em;
+          width: $card-height;
         }
 
         .content {
           display: flex;
-
           flex-direction: column;
-
-          height: 5em;
-          width: 24em;
+          height: $card-height;
+          width: $card-width - $card-height;
 
           .heading {
+            align-items: center;
             display: flex;
             flex-direction: row;
-
-            height: 2.8em;
-
-            justify-content: flex-start;
-            align-items: center;
-
-            padding: 0.2em 0 0 0;
-
-            font-size: 0.7vw;
-
-            .week {
-              padding: 0 0 0 1em;
-              transform: scale(0.8);
-            }
+            height: $card-height * 3 / 5;
           }
 
           .details {
             display: flex;
             flex-direction: row;
+            font-size: 0.8em;
 
-            height: 1.9em;
-
-            font-size: 0.85em;
+            p {
+              margin: 0;
+            }
 
             .ability {
+              align-items: center;
               display: flex;
-              flex: 0 1 55%;
+              flex: 1 1 50%;
             }
 
-            .deadline {
-              display: flex;
-              flex-direction: row;
-              flex: 0 1 25%;
-              align-items: stretch;
-
-              p {
-                padding-left: 0.3em;
-              }
-            }
-
+            .deadline,
             .exp {
+              align-items: center;
               display: flex;
-              flex-direction: row;
-              flex: 0 1 20%;
-              align-items: stretch;
+              flex: 1 1 25%;
 
               p {
-                padding-left: 0.3em;
+                padding: 0 0 0 0.3em;
               }
             }
           }
 
           .progress {
-            display: flex;
             height: 0.2em;
-            width: 23em;
-
-            align-items: flex-end;
+            margin: 0.2em 0 0 0;
+            width: 95%;
           }
         }
       }
 
       .achievement-card:hover {
-        transition: box-shadow 0.2s ease-in;
         box-shadow: 0 0 10px black;
+        transition: box-shadow 0.2s ease-in;
       }
 
       .prerequisite-container {
+        $shrink-factor: 0.9;
+        $line-width: 1em;
+        // remaining-width is the empty space between line and card
+        $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
+        $top-spacing: 0.2em;
+
         display: flex;
         flex-direction: column;
-
-        padding-left: 0.8em;
-        padding-right: -0.8em;
 
         .prerequisite {
           display: flex;
           flex-direction: row;
+          max-width: $card-width;
 
           .dropdown-lines {
-            display: flex;
-            flex-direction: column;
-
-            height: 6em;
-            width: 2em;
-
-            margin-top: -3em;
-            margin-right: -2em;
-            margin-bottom: 2em;
-            border-left: 1px solid white;
-            border-bottom: 1px solid white;
+            height: $top-spacing + $card-height;
+            margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
+            min-width: $line-width;
           }
 
           .achievement-card {
-            transform: scale(0.9);
+            margin: $top-spacing 0 0 0;
+            transform: scale($shrink-factor);
           }
         }
 
         .prerequisite:first-child {
           .dropdown-lines {
-            height: 3em;
-
+            height: $top-spacing + $card-height / 2;
             margin-top: 0;
           }
         }
@@ -301,133 +283,104 @@
     }
 
     .view-container {
-      display: flex;
-
+      @extend %container;
+      align-items: center;
       height: 90%;
-      width: 50%;
-
-      justify-content: center;
+      /* To be exact, 
+      min-width: $view-width + $border-glow-radius * 2 */
+      min-width: $view-width + $default-spacing * 2;
+      overflow-y: auto;
+      scrollbar-color: white #444;
+      scrollbar-width: thin;
 
       .view {
-        display: flex;
-
-        height: 50em;
-        width: 40em;
-        flex-direction: column;
-
         color: white;
+        display: flex;
+        flex-direction: column;
+        margin: $border-glow-radius;
+        min-height: $view-height;
+        width: $view-width;
 
         .canvas {
-          display: flex;
-
-          flex-direction: column;
           align-items: center;
-
-          height: 20em;
-          width: 40em;
-
-          margin: 0 0 0.5em 0;
+          display: flex;
+          flex-direction: column;
+          height: $canvas-height;
+          width: $canvas-width;
 
           h1 {
-            margin: 0.5em 0 0.2em 0;
-          }
-
-          .deadline {
-            display: flex;
-
-            flex-direction: row;
-
-            align-items: baseline;
-
-            font-size: 1.1em;
-
-            .week {
-              padding: 0 0 0 0.1em;
-              transform: scale(0.9);
-            }
+            margin-bottom: 0.3em;
           }
 
           .description {
-            display: flex;
-
-            height: 100%;
-            width: 75%;
-
-            justify-content: center;
-            align-items: flex-end;
-
-            text-align: center;
             color: yellow;
             font-size: 0.85em;
+            margin: auto 0 1em;
+            text-align: center;
+            width: 75%;
           }
         }
 
         .goal {
+          align-items: center;
           display: flex;
           flex-direction: row;
-
           padding: 0.5em 0;
 
-          .goal-medal {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 18%;
-
-            justify-content: center;
+          .goal-badge {
             align-items: center;
+            display: flex;
+            flex: 0 1 20%;
+            flex-direction: column;
 
-            .medal-icon {
+            .goal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
               height: 2em;
               width: 2em;
-
-              background-image: url('#{$achievement-assets}/xp-icon.png');
-              background-size: contain;
             }
 
-            .medal-text {
+            p {
               font-size: 0.7em;
+              padding: 0.2em 0 0 0;
             }
           }
 
-          .goal-text {
-            display: flex;
-            align-items: center;
+          p {
+            margin: 0;
           }
         }
 
         hr {
-          height: 1px;
-          width: 90%;
-          background-color: lightgrey;
+          background: lightgrey;
           border: none;
-          margin: 0.5em auto 0.5em;
+          height: 1px;
+          margin: 0.5em auto;
+          width: 90%;
         }
-      }
 
-      .completion {
-        text-align: center;
-        h1 {
-          color: #ffc000;
+        .completion {
+          text-align: center;
+
+          h1 {
+            color: #ffc000;
+          }
         }
       }
     }
 
     // Scroll Bar
     ::-webkit-scrollbar {
-      width: 5px;
+      width: 3px;
     }
 
     ::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
+      border-radius: 1.5px;
+      box-shadow: inset 0 0 3px black;
     }
 
     ::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 1);
+      background: white;
+      border-radius: 1.5px;
     }
   }
 }

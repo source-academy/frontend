@@ -33,7 +33,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [viewId, setViewId] = useState<number>(-1);
 
   // Filter icon turns blue when selected, otherwise white
-  const handleFilterColor = (status: FilterStatus) =>
+  const getFilterColor = (status: FilterStatus) =>
     status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
   // Make Flex achievements parmanently glowing and the selected achievement glow
@@ -58,35 +58,34 @@ function Dashboard(props: DispatchProps & StateProps) {
 
   return (
     <div className="AchievementDashboard">
-      <div className="achievement-overview">
-        <AchievementOverview
-          name={name || 'User'}
-          studio={group || 'Staff'}
-          inferencer={inferencer}
-        />
-      </div>
+      <AchievementOverview
+        name={name || 'User'}
+        studio={group || 'Staff'}
+        inferencer={inferencer}
+      />
+
       <div className="achievement-main">
-        <div className="filters">
+        <div className="filter-container">
           <AchievementFilter
             filterStatus={FilterStatus.ALL}
             setFilterStatus={setFilterStatus}
             icon={IconNames.GLOBE}
             count={inferencer.getFilterCount(FilterStatus.ALL)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.ACTIVE}
             setFilterStatus={setFilterStatus}
             icon={IconNames.LOCATE}
             count={inferencer.getFilterCount(FilterStatus.ACTIVE)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
           <AchievementFilter
             filterStatus={FilterStatus.COMPLETED}
             setFilterStatus={setFilterStatus}
             icon={IconNames.ENDORSED}
             count={inferencer.getFilterCount(FilterStatus.COMPLETED)}
-            handleFilterColor={handleFilterColor}
+            getFilterColor={getFilterColor}
           />
         </div>
 
