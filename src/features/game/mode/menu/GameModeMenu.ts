@@ -87,7 +87,7 @@ class GameModeMenu implements IGameUI {
     return modes.sort().map(mode => {
       return {
         text: mode,
-        callback: () => GameGlobalAPI.getInstance().swapPhase(gameModeToPhase[mode])
+        callback: async () => await GameGlobalAPI.getInstance().swapPhase(gameModeToPhase[mode])
       };
     });
   }

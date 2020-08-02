@@ -80,8 +80,9 @@ class GameModeTalk implements IGameUI {
       }
     });
 
-    const backButton = new CommonBackButton(gameManager, () =>
-      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+    const backButton = new CommonBackButton(
+      gameManager,
+      async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;
