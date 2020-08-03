@@ -292,7 +292,8 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  notifications: []
+  notifications: [],
+  users: []
 };
 
 export const defaultState: OverallState = {

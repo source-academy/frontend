@@ -13,6 +13,7 @@ import { AchievementAbility, FilterStatus } from '../../../features/achievement/
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
+  handleUsersFetch: () => void;
 };
 
 export type StateProps = {
@@ -20,16 +21,18 @@ export type StateProps = {
   name?: string;
   role?: Role;
   group: string | null;
+  users: any[];
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, role, group, handleAchievementsFetch } = props;
+  const { inferencer, name, role, group, users, handleAchievementsFetch, handleUsersFetch } = props;
 
   useEffect(() => {
     if (Constants.useBackend) {
       handleAchievementsFetch();
+      handleUsersFetch();
     }
-  }, [handleAchievementsFetch]);
+  }, [handleAchievementsFetch, handleUsersFetch]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [viewId, setViewId] = useState<number>(-1);
@@ -64,6 +67,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         name={name || 'User'}
         role={role}
         studio={group || 'Staff'}
+        users={users}
         inferencer={inferencer}
       />
 

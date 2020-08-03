@@ -30,6 +30,9 @@ export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
+export const FETCH_USER_LIST = 'FETCH_USER_LIST';
+export const UPDATE_USER_LIST = 'UPDATE_USER_LIST';
+
 export type SessionState = {
   readonly accessToken?: string;
   readonly assessmentOverviews?: AssessmentOverview[];
@@ -50,4 +53,6 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
+
+  readonly users: any[];
 };

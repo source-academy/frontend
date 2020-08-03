@@ -14,7 +14,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  UPDATE_USER_LIST
 } from '../types/SessionTypes';
 
 export const SessionsReducer: Reducer<SessionState> = (
@@ -88,6 +89,12 @@ export const SessionsReducer: Reducer<SessionState> = (
         ...state,
         gameState: action.payload
       };
+    case UPDATE_USER_LIST:
+      return {
+        ...state,
+        users: action.payload
+      };
+
     default:
       return state;
   }

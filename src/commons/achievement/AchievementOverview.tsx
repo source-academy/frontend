@@ -9,6 +9,7 @@ type AchievementOverviewProps = {
   role?: Role;
   studio: string;
   inferencer: AchievementInferencer;
+  users: any[];
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {

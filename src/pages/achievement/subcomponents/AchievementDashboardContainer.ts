@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import { getUsers } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
@@ -14,13 +15,15 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     : new AchievementInferencer(mockAchievements),
   name: state.session.name,
   role: state.session.role,
-  group: state.session.group
+  group: state.session.group,
+  users: state.session.users
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleAchievementsFetch: getAchievements
+      handleAchievementsFetch: getAchievements,
+      handleUsersFetch: getUsers
     },
     dispatch
   );

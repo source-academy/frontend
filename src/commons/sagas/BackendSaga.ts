@@ -35,6 +35,7 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_LIST,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
@@ -60,6 +61,7 @@ import {
   getNotifications,
   getSourcecastIndex,
   getUser,
+  getUsers,
   handleResponseError,
   postAcknowledgeNotifications,
   postAnswer,
@@ -227,6 +229,17 @@ function* BackendSaga(): SagaIterator {
     const grading = yield call(getGrading, id, tokens);
     if (grading) {
       yield put(actions.updateGrading(id, grading));
+    }
+  });
+
+  yield takeEvery(FETCH_USER_LIST, function* (action: ReturnType<typeof actions.getUsers>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const users = yield call(getUsers, tokens);
+    if (users) {
+      yield put(actions.updateUserList(users));
     }
   });
 

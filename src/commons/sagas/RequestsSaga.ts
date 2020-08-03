@@ -132,6 +132,24 @@ export async function putUserGameState(
 }
 
 /**
+ * GET /uers
+ */
+export async function getUsers(tokens: Tokens): Promise<any[] | null> {
+  const resp = await request('users/', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const users = await resp.json();
+  return users;
+}
+
+/**
  * GET /achievements
  *
  * Will be updated after a separate db for student progress is ready

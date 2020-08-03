@@ -16,6 +16,7 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  FETCH_USER_LIST,
   LOGIN,
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
@@ -33,7 +34,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  UPDATE_USER_LIST
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -164,3 +166,7 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
+
+export const getUsers = () => action(FETCH_USER_LIST);
+
+export const updateUserList = (users: any[]) => action(UPDATE_USER_LIST, users);
