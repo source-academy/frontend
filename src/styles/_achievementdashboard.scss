@@ -170,11 +170,11 @@
       scrollbar-width: thin;
 
       li {
-        margin: 0 $default-spacing;
+        margin: $default-spacing;
       }
 
       li:not(:first-child) {
-        margin: $default-spacing $default-spacing 0;
+        margin: 0 $default-spacing $default-spacing;
       }
 
       .achievement-card {
