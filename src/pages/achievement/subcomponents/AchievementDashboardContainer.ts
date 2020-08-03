@@ -7,6 +7,7 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
 import { getAchievements } from '../../../features/achievement/AchievementActions';
+import { UserSimpleState } from '../../../features/achievement/AchievementTypes';
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -16,7 +17,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   name: state.session.name,
   role: state.session.role,
   group: state.session.group,
-  users: state.session.users
+  users: state.session.users as UserSimpleState[]
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

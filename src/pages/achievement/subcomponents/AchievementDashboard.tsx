@@ -9,7 +9,11 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { Role } from '../../../commons/application/ApplicationTypes';
 import Constants from '../../../commons/utils/Constants';
 import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
+import {
+  AchievementAbility,
+  FilterStatus,
+  UserSimpleState
+} from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
@@ -21,7 +25,7 @@ export type StateProps = {
   name?: string;
   role?: Role;
   group: string | null;
-  users: any[];
+  users: UserSimpleState[];
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
@@ -29,13 +33,19 @@ function Dashboard(props: DispatchProps & StateProps) {
 
   useEffect(() => {
     if (Constants.useBackend) {
+      if (role !== Role.Student) {
+        handleUsersFetch();
+      }
+
       handleAchievementsFetch();
-      handleUsersFetch();
     }
-  }, [handleAchievementsFetch, handleUsersFetch]);
+  }, [handleAchievementsFetch, handleUsersFetch, role]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [viewId, setViewId] = useState<number>(-1);
+
+  const [filteredUserName, setFilteredUserName] = useState<string>('');
+  const [filteredUserGroup, setFileredUserGroup] = useState<string>('');
 
   // Filter icon turns blue when selected, otherwise white
   const getFilterColor = (status: FilterStatus) =>
@@ -69,6 +79,10 @@ function Dashboard(props: DispatchProps & StateProps) {
         studio={group || 'Staff'}
         users={users}
         inferencer={inferencer}
+        filteredUserName={filteredUserName}
+        setFilteredUserName={setFilteredUserName}
+        filteredUserGroup={filteredUserGroup}
+        setFileredUserGroup={setFileredUserGroup}
       />
 
       <div className="achievement-main">

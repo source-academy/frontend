@@ -1,6 +1,9 @@
 import React from 'react';
 
+import { UserSimpleState } from '../../features/achievement/AchievementTypes';
 import { Role } from '../application/ApplicationTypes';
+import AchievementGroupFilter from './AchievementGroupFilter';
+import AchievementNameFilter from './AchievementNameFilter';
 import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementLevel from './utils/AchievementLevel';
 
@@ -9,19 +12,47 @@ type AchievementOverviewProps = {
   role?: Role;
   studio: string;
   inferencer: AchievementInferencer;
-  users: any[];
+  users: UserSimpleState[];
+
+  filteredUserName: string;
+  setFilteredUserName: any;
+  filteredUserGroup: string;
+  setFileredUserGroup: any;
 };
 
 function AchievementOverview(props: AchievementOverviewProps) {
-  const { name, studio, inferencer } = props;
+  const {
+    name,
+    studio,
+    inferencer,
+    users,
+    filteredUserName,
+    setFilteredUserName,
+    filteredUserGroup,
+    setFileredUserGroup
+  } = props;
 
   const studentExp = inferencer.getStudentTotalExp();
 
   return (
     <div className="achievement-overview">
       <AchievementLevel studentExp={studentExp} />
-      <h3>{name}</h3>
-      <h3>{studio}</h3>
+      <AchievementNameFilter
+        filteredUserName={filteredUserName}
+        setFilteredUserName={setFilteredUserName}
+        filteredUserGroup={filteredUserGroup}
+        shouldFilter={true}
+        name={name}
+        studio={studio}
+        users={users}
+      />
+      <AchievementGroupFilter
+        setFileredUserGroup={setFileredUserGroup}
+        filteredUserGroup={filteredUserGroup}
+        shouldFilter={true}
+        studio={studio}
+        users={users}
+      />
     </div>
   );
 }

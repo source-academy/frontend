@@ -94,6 +94,13 @@ export type AchievementState = {
   achievements: AchievementItem[];
 };
 
+export type UserSimpleState = {
+  group: string;
+  name: string;
+  role: string;
+  userId: number;
+};
+
 export const defaultAchievement: AchievementState = {
   achievements: []
 };
