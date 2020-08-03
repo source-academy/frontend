@@ -4,6 +4,7 @@ import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
+import { PLAYGROUND_QUESTION_ID } from '../../features/keystrokes/KeystrokesHelper';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
@@ -294,7 +295,8 @@ export const defaultSession: SessionState = {
   xp: 0,
   notifications: [],
 
-  keystrokeLogs: []
+  keystrokeLogs: [],
+  loggedQuestionId: PLAYGROUND_QUESTION_ID
 };
 
 export const defaultState: OverallState = {

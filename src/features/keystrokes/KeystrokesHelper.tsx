@@ -16,3 +16,5 @@ const getLocalStorageSpace = () => {
 export const hasExceededLocalStorageSpace = () => {
   return getLocalStorageSpace() > FIVE_MB_IN_KB;
 };
+
+export const PLAYGROUND_QUESTION_ID: number = -1;
