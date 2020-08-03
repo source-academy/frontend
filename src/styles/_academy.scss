@@ -238,6 +238,11 @@
 }
 
 .Grid {
+  .ag-center-cols-viewport {
+    /* Fixes spurious horizontal scrollbar in grid viewport at certain widths */
+    overflow-x: inherit;
+  }
+
   :focus {
     /* Disable rendering blue border when a sub-component in grid is in focus */
     outline: none;
