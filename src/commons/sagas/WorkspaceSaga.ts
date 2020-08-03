@@ -401,11 +401,13 @@ export default function* WorkspaceSaga(): SagaIterator {
       },
       globals
     };
-    if (newExternalLibraryName !== oldExternalLibraryName) {
+    if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+      if (!action.payload.initialise) {
+        yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+      }
     }
   });
 

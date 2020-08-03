@@ -18,6 +18,15 @@ class GameInputManager {
   }
 
   /**
+   * Set default cursor icon.
+   *
+   * @param cursor css cursor value
+   */
+  public setDefaultCursor(cursor: string) {
+    this.scene.input.setDefaultCursor(cursor);
+  }
+
+  /**
    * Enable/disable mouse input based on the parameter.
    *
    * @param active if true, mouse input is enabled. Else, mouse input is disabled.

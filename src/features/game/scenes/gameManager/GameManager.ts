@@ -6,7 +6,7 @@ import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
-import { blackFade } from '../../effects/FadeEffect';
+import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameEscapeManager from '../../escape/GameEscapeManager';
 import GameInputManager from '../../input/GameInputManager';
@@ -19,7 +19,7 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GamePopUpManager from '../../popUp/GamePopUpManager';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import GameStateManager from '../../state/GameStateManager';
-import { mandatory, toS3Path } from '../../utils/GameUtils';
+import { mandatory, sleep, toS3Path } from '../../utils/GameUtils';
 import GameGlobalAPI from './GameGlobalAPI';
 import { createGamePhases } from './GameManagerHelper';
 
@@ -42,6 +42,7 @@ type GameManagerProps = {
  */
 class GameManager extends Phaser.Scene {
   public currentLocationId: LocationId;
+  public hasTransitioned: boolean;
   private stateManager?: GameStateManager;
   private layerManager?: GameLayerManager;
   private objectManager?: GameObjectManager;
@@ -53,10 +54,13 @@ class GameManager extends Phaser.Scene {
   private phaseManager?: GamePhaseManager;
   private backgroundManager?: GameBackgroundManager;
   private inputManager?: GameInputManager;
+  private escapeManager?: GameEscapeManager;
+  private awardManager?: GameAwardsManager;
 
   constructor() {
     super('GameManager');
     this.currentLocationId = Constants.nullInteractionId;
+    this.hasTransitioned = false;
   }
 
   public init({ gameCheckpoint, continueGame, chapterNum, checkpointNum }: GameManagerProps) {
@@ -65,6 +69,7 @@ class GameManager extends Phaser.Scene {
     this.getSaveManager().registerGameInfo(chapterNum, checkpointNum, continueGame);
     this.currentLocationId =
       this.getSaveManager().getLoadedLocation() || gameCheckpoint.startingLoc;
+    this.hasTransitioned = false;
 
     this.stateManager = new GameStateManager(gameCheckpoint);
     this.layerManager = new GameLayerManager(this);
@@ -77,8 +82,8 @@ class GameManager extends Phaser.Scene {
     this.boundingBoxManager = new GameBBoxManager();
     this.backgroundManager = new GameBackgroundManager();
     this.popUpManager = new GamePopUpManager();
-    new GameEscapeManager(this);
-    new GameAwardsManager(this);
+    this.escapeManager = new GameEscapeManager(this);
+    this.awardManager = new GameAwardsManager(this);
   }
 
   //////////////////////
@@ -87,9 +92,12 @@ class GameManager extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
+    this.getPhaseManager().setInterruptCheckCallback(
+      (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
+        this.transitionChecker(prevPhase, newPhase)
+    );
     this.getPhaseManager().setInterruptCallback(
-      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
-        await this.checkpointTransition(newPhase)
+      async (prevPhase: GamePhaseType, newPhase: GamePhaseType) => await this.checkpointTransition()
     );
     this.getPhaseManager().setCallback(
       async (prevPhase: GamePhaseType, newPhase: GamePhaseType) =>
@@ -115,10 +123,6 @@ class GameManager extends Phaser.Scene {
   //////////////////////
 
   public async create() {
-    // Execute fast forward actions
-    await this.getActionManager().fastForwardGameActions(
-      this.getStateManager().getTriggeredActions()
-    );
     GameGlobalAPI.getInstance().hideLayer(Layer.Character);
     await this.changeLocationTo(this.currentLocationId, true);
     await GameGlobalAPI.getInstance().saveGame();
@@ -148,22 +152,31 @@ class GameManager extends Phaser.Scene {
     this.getBBoxManager().renderBBoxLayerContainer(locationId);
     this.getCharacterManager().renderCharacterLayerContainer(locationId);
 
-    // Execute start actions, notif, then cutscene
     await this.getPhaseManager().swapPhase(GamePhaseType.Sequence);
 
     if (startAction) {
+      // Execute fast forward actions
+      await this.getActionManager().fastForwardGameActions(
+        this.getStateManager().getTriggeredStateChangeActions()
+      );
+      // Game start actions
       await this.getActionManager().processGameActions(
         this.getStateManager().getGameMap().getGameStartActions()
       );
     }
 
+    // Location notification
     if (this.getStateManager().hasLocationNotif(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
       this.getStateManager().removeLocationNotif(locationId);
     }
 
+    // Location cutscene
     await this.getActionManager().processGameActions(gameLocation.actionIds);
-    await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
+
+    if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
+      await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
+    }
   }
 
   /**
@@ -228,28 +241,46 @@ class GameManager extends Phaser.Scene {
    * Game is only able to transition to the next checkpoint
    * if all of the objectives of the current checkpoint has been cleared.
    *
-   * Additionally, game will only transition if the newPhase is a Menu phase;
+   * Additionally, game will only transition if the newPhase is not Sequence phase;
    * in order to ensure that we don't transition to the next checkpoint
    * during dialogue/cutscene.
    *
-   * This method is passed to the phase manager, to be executed on
-   * every phase transition as the interrupt transition callback.
+   * This method is passed to the phase manager, as the interrupt checker.
    *
+   * @param prevPhase previous phase to transition from
    * @param newPhase new phase to transition to
    */
-  public async checkpointTransition(newPhase: GamePhaseType) {
-    const transitionToNextCheckpoint =
-      newPhase === GamePhaseType.Menu && GameGlobalAPI.getInstance().isAllComplete();
+  public transitionChecker(prevPhase: GamePhaseType, newPhase: GamePhaseType) {
+    return (
+      !this.hasTransitioned &&
+      newPhase !== GamePhaseType.Sequence &&
+      GameGlobalAPI.getInstance().isAllComplete()
+    );
+  }
 
-    // Transition to the next scene if possible
-    if (transitionToNextCheckpoint) {
-      await this.getActionManager().processGameActions(
-        this.getStateManager().getGameMap().getCheckpointCompleteActions()
-      );
-      this.cleanUp();
-      this.scene.start('CheckpointTransition');
-    }
-    return transitionToNextCheckpoint;
+  /**
+   * Transition to the next checkpoint and resets the input setting.
+   *
+   * This method is passed to the phase manager
+   * as the interrupt transition callback.
+   */
+  public async checkpointTransition() {
+    this.hasTransitioned = true;
+
+    await this.getActionManager().processGameActions(
+      this.getStateManager().getGameMap().getCheckpointCompleteActions()
+    );
+
+    // Reset input and cursor, in case it is changed after story complete actions
+    this.getInputManager().setDefaultCursor(Constants.defaultCursor);
+    this.getInputManager().enableMouseInput(true);
+    this.getInputManager().enableKeyboardInput(true);
+
+    this.tweens.add(fadeIn([blackScreen(this).setAlpha(0)], Constants.fadeDuration));
+    await sleep(Constants.fadeDuration);
+
+    this.cleanUp();
+    this.scene.start('CheckpointTransition');
   }
 
   /**
@@ -285,6 +316,8 @@ class GameManager extends Phaser.Scene {
   public getPhaseManager = () => mandatory(this.phaseManager);
   public getBackgroundManager = () => mandatory(this.backgroundManager);
   public getPopupManager = () => mandatory(this.popUpManager);
+  public getEscapeManager = () => mandatory(this.escapeManager);
+  public getAwardManager = () => mandatory(this.awardManager);
 }
 
 export default GameManager;

@@ -29,10 +29,14 @@ class GradingActionsCell extends React.Component<GradingActionsCellProps> {
   }
 
   public render() {
-    const cannotUnsubmit =
-      this.props.data.submissionStatus !== 'submitted' ||
-      !this.props.userId ||
-      (this.props.userId !== this.props.data.groupLeaderId && this.props.role !== Role.Admin);
+    const isOwnSubmission = this.props.userId && this.props.userId === this.props.data.studentId;
+    const canReautograde = isOwnSubmission || this.props.data.submissionStatus === 'submitted';
+    const canUnsubmit =
+      this.props.data.submissionStatus === 'submitted' &&
+      this.props.userId &&
+      (this.props.userId === this.props.data.groupLeaderId ||
+        isOwnSubmission ||
+        this.props.role === Role.Admin);
 
     return (
       <>
@@ -46,13 +50,14 @@ class GradingActionsCell extends React.Component<GradingActionsCellProps> {
           icon="refresh"
           minimal
           onClick={this.handleConfirmReautograde}
+          disabled={!canReautograde}
           title="Reautograde"
         />
         <Button
           icon="arrow-left"
           minimal
           onClick={this.handleConfirmUnsubmit}
-          disabled={cannotUnsubmit}
+          disabled={!canUnsubmit}
           title="Unsubmit"
         />
       </>

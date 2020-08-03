@@ -8,7 +8,7 @@ import SourceAcademyGame from '../../SourceAcademyGame';
 import { HexColor } from '../../utils/StyleUtils';
 import { createBitmapText } from '../../utils/TextUtils';
 import RoomPreview from './RoomPreview';
-import { roomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewConstants';
+import { RoomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewConstants';
 
 /**
  * Async function that obtains students code for Create-My-Room mission
@@ -74,8 +74,8 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     scene,
     0,
     0,
-    roomConstants.tagWidth,
-    roomConstants.tagHeight,
+    RoomConstants.tag.width,
+    RoomConstants.tag.height,
     HexColor.darkBlue
   )
     .setOrigin(0.0, 0.5)
@@ -98,20 +98,20 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
 
   const hoverText = createBitmapText(
     scene,
-    roomConstants.verifiedText,
-    roomConstants.hoverTagTextConfig,
+    RoomConstants.verifiedText,
+    RoomConstants.hoverTagTextConfig,
     verifiedStyle
   )
-    .setPosition(roomConstants.startTextXPos, 0)
+    .setPosition(RoomConstants.tag.textXStart, 0)
     .setMask(hoverMask.createGeometryMask());
 
   scene.tweens.add({
     targets: hoverText,
-    x: -roomConstants.startTextXPos,
+    x: -RoomConstants.tag.textXStart,
     duration: 5000,
     ease: 'Power0',
     loop: -1,
-    onLoop: () => (hoverText.x = roomConstants.startTextXPos + 50)
+    onLoop: () => (hoverText.x = RoomConstants.tag.textXStart + 50)
   });
 
   hoverContainer.add([hoverTextBg, hoverText, hoverTextFrame]);

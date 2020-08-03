@@ -1,5 +1,8 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
+import { getAwardProp } from '../awards/GameAwardsHelper';
+import { AwardProperty } from '../awards/GameAwardsTypes';
+import { Constants } from '../commons/CommonConstants';
 import { ItemId } from '../commons/CommonTypes';
 import { promptWithChoices } from '../effects/Prompt';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
@@ -79,15 +82,37 @@ export default class GameUserStateManager {
   }
 
   /**
-   * Fetches achievements of the student; based on the account
-   * information.
-   *
-   * Only returns the awards ID that the student possess.
+   * Fetches achievements of the student;
    */
   public async loadAchievements() {
-    // TODO: Fetch from backend
-    this.achievements = new Set(['301', '302']);
-    this.collectibles = new Set(['cookies', 'computer']);
+    const achievements = SourceAcademyGame.getInstance().getAchievements();
+
+    achievements.forEach(achievement => {
+      const achievementId = achievement.id.toString();
+      const isCompleted = achievement.goals.reduce(
+        (soFar, goal) => goal.goalProgress === goal.goalTarget && soFar,
+        true
+      );
+      const awardProp = getAwardProp(achievementId);
+
+      let newAwardProp: AwardProperty;
+      if (!awardProp) {
+        // If there is no mapping, we create one from available information
+        newAwardProp = {
+          id: achievementId,
+          assetKey: Constants.nullInteractionId,
+          assetPath: Constants.nullInteractionId,
+          title: achievement.title,
+          description: achievement.view.description,
+          completed: isCompleted
+        };
+      } else {
+        // If there is mapping, we update the complete attribute
+        newAwardProp = { ...awardProp, completed: isCompleted };
+      }
+      SourceAcademyGame.getInstance().addAwardMapping(achievementId, newAwardProp);
+      this.achievements.add(achievementId);
+    });
   }
 
   public getCollectibles = () => Array.from(this.collectibles);

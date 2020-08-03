@@ -13,13 +13,13 @@ function AchievementViewGoal(props: AchievementViewGoalProps) {
     const { goalId, goalText, goalProgress, goalTarget } = goal;
     return (
       <div className="goal" key={goalId}>
-        <div className="goal-medal">
-          <span className="medal-icon" />
-          <div className="medal-text">
+        <div className="goal-badge">
+          <span className="goal-icon" />
+          <p>
             {goalProgress} / {goalTarget} XP
-          </div>
+          </p>
         </div>
-        <div className="goal-text">{goalText}</div>
+        <p>{goalText}</p>
       </div>
     );
   };

@@ -1,4 +1,5 @@
 import { screenCenter } from '../commons/CommonConstants';
+import { blackScreen } from './FadeEffect';
 
 const barWidth = 320;
 const barHeight = 50;
@@ -19,8 +20,10 @@ const innerBarY = barY + padding;
 export function addLoadingScreen(scene: Phaser.Scene) {
   let progressBar: Phaser.GameObjects.Graphics;
   let progressBox: Phaser.GameObjects.Graphics;
+  let loadingScreenBg: Phaser.GameObjects.GameObject;
 
   scene.load.on('start', () => {
+    loadingScreenBg = scene.add.existing(blackScreen(scene));
     progressBar = scene.add.graphics();
     progressBox = scene.add.graphics();
     progressBox.fillStyle(0x222222, 0.8);
@@ -36,5 +39,6 @@ export function addLoadingScreen(scene: Phaser.Scene) {
   scene.load.on('complete', function () {
     progressBar.destroy();
     progressBox.destroy();
+    loadingScreenBg.destroy();
   });
 }

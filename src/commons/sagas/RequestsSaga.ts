@@ -503,6 +503,22 @@ export const postGrading = async (
   return resp;
 };
 
+function handleReautogradeResponse(
+  resp: Response | null
+): true | 'not_found' | 'not_submitted' | false {
+  if (!resp || resp.ok) {
+    return !!resp?.ok;
+  }
+
+  switch (resp.status) {
+    case 400:
+      return 'not_submitted';
+    case 404:
+      return 'not_found';
+  }
+  return false;
+}
+
 /**
  * POST /grading/{submissionId}/autograde
  */
@@ -514,7 +530,7 @@ export const postReautogradeSubmission = async (submissionId: number, tokens: To
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return !!resp?.ok;
+  return handleReautogradeResponse(resp);
 };
 
 /**
@@ -532,7 +548,7 @@ export const postReautogradeAnswer = async (
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return !!resp?.ok;
+  return handleReautogradeResponse(resp);
 };
 
 /**

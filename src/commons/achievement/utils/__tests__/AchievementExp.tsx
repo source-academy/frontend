@@ -4,11 +4,13 @@ import React from 'react';
 import AchievementExp from '../AchievementExp';
 
 const expProps = {
-  exp: 0
+  exp: 0,
+  isBonus: false
 };
 
 const undefinedExpProps = {
-  exp: undefined
+  exp: undefined,
+  isBonus: false
 };
 
 test('AchievementExp component renders correctly', () => {

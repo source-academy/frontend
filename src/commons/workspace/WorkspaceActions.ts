@@ -83,11 +83,13 @@ export const chapterSelect = (
 
 export const externalLibrarySelect = (
   externalLibraryName: ExternalLibraryName,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  initialise?: boolean
 ) =>
   action(PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
-    workspaceLocation
+    workspaceLocation,
+    initialise: initialise || false
   });
 
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>

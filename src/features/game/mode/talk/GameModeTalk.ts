@@ -12,8 +12,8 @@ import { GameItemType } from '../../location/GameMapTypes';
 import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory, sleep } from '../../utils/GameUtils';
-import { calcTableFormatPos } from '../../utils/StyleUtils';
-import { talkButtonStyle, talkButtonYSpace } from './GameModeTalkConstants';
+import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
+import TalkModeConstants, { talkButtonStyle } from './GameModeTalkConstants';
 
 /**
  * The class renders the "Talk" UI which displays
@@ -46,8 +46,9 @@ class GameModeTalk implements IGameUI {
     const talkTopics = this.getLatestTalkTopics();
     const buttons = this.getTalkTopicButtons(talkTopics);
     const buttonPositions = calcTableFormatPos({
+      direction: Direction.Column,
       numOfItems: buttons.length,
-      maxYSpace: talkButtonYSpace
+      maxYSpace: TalkModeConstants.button.ySpace
     });
 
     talkMenuContainer.add(
@@ -79,8 +80,9 @@ class GameModeTalk implements IGameUI {
       }
     });
 
-    const backButton = new CommonBackButton(gameManager, () =>
-      GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
+    const backButton = new CommonBackButton(
+      gameManager,
+      async () => await GameGlobalAPI.getInstance().swapPhase(GamePhaseType.Menu)
     );
     talkMenuContainer.add(backButton);
     return talkMenuContainer;

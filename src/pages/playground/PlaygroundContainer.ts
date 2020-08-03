@@ -114,8 +114,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
       handleInvalidEditorSessionId: () => invalidEditorSessionId(),
-      handleExternalSelect: (externalLibraryName: ExternalLibraryName) =>
-        externalLibrarySelect(externalLibraryName, workspaceLocation),
+      handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
+        externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
       handleInitInvite: (editorValue: string) => initInvite(editorValue, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),

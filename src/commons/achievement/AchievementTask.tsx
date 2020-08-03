@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { getAbilityColor } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
 import AchievementCard from './AchievementCard';
 import AchievementInferencer from './utils/AchievementInferencer';
@@ -19,6 +20,8 @@ function AchievementTask(props: AchievementTaskProps) {
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
+
+  const taskColor = getAbilityColor(inferencer.getAchievementItem(id).ability);
 
   /**
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
@@ -75,7 +78,13 @@ function AchievementTask(props: AchievementTaskProps) {
             <div className="prerequisite-container">
               {inferencer.listImmediateChildren(id).map(prerequisite => (
                 <div className="prerequisite" key={prerequisite}>
-                  <div className="dropdown-lines"></div>
+                  <div
+                    className="dropdown-lines"
+                    style={{
+                      borderBottom: `1px solid ${taskColor}`,
+                      borderLeft: `1px solid ${taskColor}`
+                    }}
+                  ></div>
                   <AchievementCard
                     id={prerequisite}
                     inferencer={inferencer}

@@ -44,7 +44,6 @@ import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import Constants from '../utils/Constants';
-import { beforeNow } from '../utils/DateHelper';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
 import { assessmentCategoryLink } from '../utils/ParamParseHelper';
@@ -87,7 +86,7 @@ export type OwnProps = {
   assessmentId: number;
   questionId: number;
   notAttempted: boolean;
-  closeDate: string;
+  canSave: boolean;
 };
 
 export type StateProps = {
@@ -525,7 +524,7 @@ class AssessmentWorkspace extends React.Component<
     );
 
     const saveButton =
-      !beforeNow(this.props.closeDate) &&
+      this.props.canSave &&
       this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
         <ControlButtonSaveButton
           hasUnsavedChanges={this.props.hasUnsavedChanges}

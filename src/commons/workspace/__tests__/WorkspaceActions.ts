@@ -165,7 +165,8 @@ test('externalLibrarySelect generates correct action object', () => {
     type: PLAYGROUND_EXTERNAL_SELECT,
     payload: {
       externalLibraryName,
-      workspaceLocation: assessmentWorkspace
+      workspaceLocation: assessmentWorkspace,
+      initialise: false
     }
   });
 });

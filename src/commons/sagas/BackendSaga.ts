@@ -46,6 +46,7 @@ import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { AsyncReturnType } from '../utils/TypeHelper';
 import {
   changeChapter,
   changeDateAssessment,
@@ -128,11 +129,6 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role !== Role.Student) {
-      return yield call(showWarningMessage, 'Answer rejected - only students can submit answers.');
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -176,14 +172,6 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
-    const role: Role = yield select((state: OverallState) => state.session.role);
-    if (role !== Role.Student) {
-      return yield call(
-        showWarningMessage,
-        'Submission rejected - only students can submit assessments.'
-      );
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -361,12 +349,8 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const result: boolean = yield call(postReautogradeSubmission, submissionId, tokens);
-    if (result) {
-      yield call(showSuccessMessage, 'Autograde job queued successfully.');
-    } else {
-      yield call(showWarningMessage, 'Failed to queue autograde job.');
-    }
+    const result = yield call(postReautogradeSubmission, submissionId, tokens);
+    yield call(handleReautogradeResponse, result);
   });
 
   yield takeEvery(REAUTOGRADE_ANSWER, function* (
@@ -377,12 +361,8 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const result: boolean = yield call(postReautogradeAnswer, submissionId, questionId, tokens);
-    if (result) {
-      yield call(showSuccessMessage, 'Autograde job queued successfully.');
-    } else {
-      yield call(showWarningMessage, 'Failed to queue autograde job.');
-    }
+    const result = yield call(postReautogradeAnswer, submissionId, questionId, tokens);
+    yield call(handleReautogradeResponse, result);
   });
 
   yield takeEvery(FETCH_NOTIFICATIONS, function* (
@@ -644,6 +624,21 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.setGameState(gameState));
   });
   */
+}
+
+function* handleReautogradeResponse(result: AsyncReturnType<typeof postReautogradeSubmission>) {
+  switch (result) {
+    case true:
+      yield call(showSuccessMessage, 'Autograde job queued successfully.');
+      break;
+    case 'not_found':
+    case false:
+      yield call(showWarningMessage, 'Failed to queue autograde job.');
+      break;
+    case 'not_submitted':
+      yield call(showWarningMessage, 'Cannot reautograde non-submitted submission.');
+      break;
+  }
 }
 
 export default BackendSaga;

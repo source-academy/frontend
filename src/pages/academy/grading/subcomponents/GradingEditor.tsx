@@ -13,11 +13,11 @@ import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 import ReactMde, { ReactMdeProps } from 'react-mde';
 import { Prompt } from 'react-router';
-import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
 import controlButton from '../../../../commons/ControlButton';
 import Markdown from '../../../../commons/Markdown';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
+import { showSimpleConfirmDialog } from '../../../../commons/utils/DialogHelper';
 import {
   showSuccessMessage,
   showWarningMessage
