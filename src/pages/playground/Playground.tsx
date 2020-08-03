@@ -135,12 +135,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleExternalSelect(props.externalLibraryName, true);
     // run once only
     // eslint-disable-next-line react-hooks/exhaustive-deps
-
-    if (props.loggedQuestionId !== PLAYGROUND_QUESTION_ID) {
-      uploadLogs();
-    }
-
-    props.handleKeystrokeAssessmentChange(PLAYGROUND_QUESTION_ID);
   }, []);
 
   const handlers = React.useMemo(
@@ -222,7 +216,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     return () => clearInterval(interval);
   }, [uploadLogs]);
 
-  React.useEffect(() => uploadPerHour(), [uploadPerHour]);
+  // Second useEffect called here just in case.
+  React.useEffect(() => {
+    uploadPerHour();
+    if (props.loggedQuestionId !== PLAYGROUND_QUESTION_ID) {
+      uploadLogs();
+    }
+
+    props.handleKeystrokeAssessmentChange(PLAYGROUND_QUESTION_ID);
+  }, [props, uploadLogs, uploadPerHour]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();
