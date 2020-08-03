@@ -78,55 +78,48 @@ const DefaultChapterSelect: React.FunctionComponent<DefaultChapterSelectProps> =
 
   const DefaultChapterSelectComponent = Select.ofType<SourceLanguage>();
 
-  const defaultChapSelect = React.useCallback(
-    (
-      currentChap: number,
-      currentVariant: Variant,
-      handleSelect = (item: SourceLanguage, event?: React.SyntheticEvent<HTMLElement>) => {}
-    ) => (
-      <DefaultChapterSelectComponent
-        items={sourceLanguages}
-        onItemSelect={handleSelect}
-        itemRenderer={chapterRenderer}
-        itemListRenderer={chapterListRenderer}
-        filterable={false}
-      >
-        <Button
-          text={`Default sublanguage: ${styliseSublanguage(currentChap, currentVariant)}`}
-          rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
-        />
-      </DefaultChapterSelectComponent>
-    ),
-    [chapterListRenderer, chapterRenderer]
+  const dialog = (
+    <Dialog
+      canEscapeKeyClose={true}
+      canOutsideClickClose={true}
+      className="change-default-lang-dialog"
+      icon={IconNames.ERROR}
+      isCloseButtonShown={true}
+      isOpen={isDialogOpen}
+      onClose={handleCloseDialog}
+      title="Updating default Source sublanguage"
+    >
+      <div className={Classes.DIALOG_BODY}>
+        Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
+        {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
+      </div>
+      <div className={Classes.DIALOG_FOOTER}>
+        <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+          {controlButton('Cancel', null, handleCloseDialog, { minimal: false })}
+          {controlButton('Confirm', null, handleConfirmDialog, {
+            minimal: false,
+            intent: Intent.DANGER
+          })}
+        </div>
+      </div>
+    </Dialog>
   );
 
   return (
     <>
-      {defaultChapSelect(props.sourceChapter, props.sourceVariant, handleOpenDialog)}
-      <Dialog
-        canEscapeKeyClose={true}
-        canOutsideClickClose={true}
-        className="change-default-lang-dialog"
-        icon={IconNames.ERROR}
-        isCloseButtonShown={true}
-        isOpen={isDialogOpen}
-        onClose={handleCloseDialog}
-        title="Updating default Source sublanguage"
+      <DefaultChapterSelectComponent
+        items={sourceLanguages}
+        onItemSelect={handleOpenDialog}
+        itemRenderer={chapterRenderer}
+        itemListRenderer={chapterListRenderer}
+        filterable={false}
       >
-        <div className={Classes.DIALOG_BODY}>
-          Are you sure you want to update the <b>default Playground Source sublanguage</b> from{' '}
-          {styliseSublanguage(sourceChapter, sourceVariant)} to <b>{chosenSublang.displayName}</b>?
-        </div>
-        <div className={Classes.DIALOG_FOOTER}>
-          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-            {controlButton('Cancel', null, handleCloseDialog, { minimal: false })}
-            {controlButton('Confirm', null, handleConfirmDialog, {
-              minimal: false,
-              intent: Intent.DANGER
-            })}
-          </div>
-        </div>
-      </Dialog>
+        <Button rightIcon={IconNames.DOUBLE_CARET_VERTICAL}>
+          <span className="hidden-xs hidden-sm">Default sublanguage: </span>
+          <span>{styliseSublanguage(sourceChapter, sourceVariant)}</span>
+        </Button>
+      </DefaultChapterSelectComponent>
+      {dialog}
     </>
   );
 };

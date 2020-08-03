@@ -1,17 +1,16 @@
 .GroundControl {
-  .ground-control-controls {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-
   .#{$ns}-collapse .#{$ns}-card {
     margin-top: 4px;
   }
 
   .toggle-button-wrapper {
+    padding-top: 2px;
     margin-left: auto;
     margin-right: auto;
-    width: 20px;
+    width: 28px;
+
+    .#{$ns}-control {
+      margin-bottom: 0;
+    }
   }
 }

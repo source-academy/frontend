@@ -1,7 +1,7 @@
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
-import { Collapse, Divider } from '@blueprintjs/core';
+import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
@@ -10,7 +10,6 @@ import * as React from 'react';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import controlButton from '../../../commons/ControlButton';
 import { getPrettyDate } from '../../../commons/utils/DateHelper';
 import { IGroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
@@ -140,12 +139,19 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     const data = this.sortByCategoryAndDate();
 
     const controls = (
-      <div className="ground-control-controls">
+      <div className="GridControls ground-control-controls">
+        <Button
+          active={this.state.showDropzone}
+          icon={IconNames.CLOUD_UPLOAD}
+          intent={this.state.showDropzone ? Intent.PRIMARY : Intent.NONE}
+          onClick={this.toggleDropzone}
+        >
+          <span className="hidden-xs">Upload assessment</span>
+        </Button>
         <DefaultChapterSelect />
-        {controlButton('Upload assessment', IconNames.CLOUD_UPLOAD, this.toggleDropzone, {
-          iconOnRight: true,
-          minimal: false
-        })}
+        <Button icon={IconNames.REFRESH} onClick={this.props.handleAssessmentOverviewFetch}>
+          <span className="hidden-xs">Refresh assessments</span>
+        </Button>
       </div>
     );
 

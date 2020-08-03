@@ -247,7 +247,7 @@ class Grading extends React.Component<GradingProps, State> {
           />
         </FormGroup>
 
-        <div className="ag-grid-controls">
+        <div className="GridControls ag-grid-controls">
           <div className="left-controls">
             <Button
               active={this.state.groupFilterEnabled}
@@ -255,7 +255,7 @@ class Grading extends React.Component<GradingProps, State> {
               intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
               onClick={this.handleGroupsFilter}
             >
-              <div className="ag-grid-button-text hidden-xs">Show all groups</div>
+              <span className="hidden-xs">Show all groups</span>
             </Button>
           </div>
           <div className="centre-controls">
@@ -290,7 +290,7 @@ class Grading extends React.Component<GradingProps, State> {
           </div>
           <div className="right-controls">
             <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
-              <div className="ag-grid-button-text hidden-xs">Export to CSV</div>
+              <span className="hidden-xs">Export to CSV</span>
             </Button>
           </div>
         </div>
