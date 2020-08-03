@@ -62,7 +62,7 @@ export type DispatchProps = {
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName, force?: boolean) => void;
   handleInitInvite: (value: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -111,7 +111,7 @@ export type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   websocketStatus: number;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -128,6 +128,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
   const [startingEditorValue, setStartingEditorValue] = React.useState<string>(props.editorValue);
+  React.useEffect(() => {
+    props.handleExternalSelect(props.externalLibraryName, true);
+    // run once only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlers = React.useMemo(
     () => ({

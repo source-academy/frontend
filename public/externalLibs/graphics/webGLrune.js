@@ -1,4 +1,4 @@
-var viewport_size = 512 // This is the height of the viewport
+var rune_viewport_size = 512 // This is the height of the viewport
 // while a curve is approximated by a polygon,
 // the side of the polygon will be no longer than maxArcLength pixels
 var maxArcLength = 20
@@ -168,7 +168,7 @@ function makeCircle() {
   var centerVerInd = 0
   var firstVer = vertices.length / 4
   var firstInd = indices.length
-  var numPoints = Math.ceil(Math.PI * viewport_size / maxArcLength)
+  var numPoints = Math.ceil(Math.PI * rune_viewport_size / maxArcLength)
   // generate points and store it in the vertex buffer
   for (var i = 0; i < numPoints; i++) {
     var angle = Math.PI * 2 * i / numPoints
@@ -190,7 +190,7 @@ function makeHeart() {
   var root2 = Math.sqrt(2)
   var r = 4 / (2 + 3 * root2)
   var scaleX = 1 / (r * (1 + root2 / 2))
-  var numPoints = Math.ceil(Math.PI / 2 * viewport_size * r / maxArcLength)
+  var numPoints = Math.ceil(Math.PI / 2 * rune_viewport_size * r / maxArcLength)
   // right semi-circle
   var rightCenterX = r / root2
   var rightCenterY = 1 - r
@@ -418,7 +418,7 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
  * the REPL displays it graphically, instead of textually.
  */
 function show(rune) {
-  const frame = open_pixmap('frame', viewport_size, viewport_size, true);
+  const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
   clear_viewport()
   var flattened_rune_list = generateFlattenedRuneList(rune)
   drawWithWebGL(flattened_rune_list, drawRune);
@@ -436,7 +436,7 @@ function show(rune) {
  * to view the Anaglyph.
  */
 function anaglyph(rune) {
-  const frame = open_pixmap('frame', viewport_size, viewport_size, true);
+  const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
   clear_viewport()
   clearAnaglyphFramebuffer()
   var flattened_rune_list = generateFlattenedRuneList(rune)
@@ -462,7 +462,7 @@ function hollusion(rune, num) {
   var flattened_rune_list = generateFlattenedRuneList(rune)
   var frame_list = []
   for (var j = 0; j < num; j++) {
-    var frame = open_pixmap('frame' + j, viewport_size, viewport_size, false)
+    var frame = open_pixmap('frame' + j, rune_viewport_size, rune_viewport_size, false)
     for (var i = 0; i < flattened_rune_list.length; i++) {
       var rune = flattened_rune_list[i].rune
       var instanceArray = flattened_rune_list[i].instanceArray
@@ -483,7 +483,7 @@ function hollusion(rune, num) {
   for (var i = frame_list.length - 2; i > 0; i--) {
     frame_list.push(frame_list[i])
   }
-  const outframe = open_pixmap('frame', viewport_size, viewport_size, true);
+  const outframe = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
   function animate() {
     var frame = frame_list.shift()
     copy_viewport(frame, outframe);
@@ -942,7 +942,7 @@ function overlay(rune1, rune2) {
 function stereogram(rune) {
   clear_viewport()
   var flattened_rune_list = generateFlattenedRuneList(rune)
-  var depth_map = open_pixmap('depth_map', viewport_size, viewport_size, true)
+  var depth_map = open_pixmap('depth_map', rune_viewport_size, rune_viewport_size, true)
   // draw the depth map
   for (var i = 0; i < flattened_rune_list.length; i++) {
     var rune = flattened_rune_list[i].rune
