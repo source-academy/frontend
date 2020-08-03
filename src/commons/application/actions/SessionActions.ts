@@ -170,8 +170,8 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
 
-export const uploadKeystrokeLogs = (playbackData: PlaybackData) =>
-  action(UPLOAD_KEYSTROKE_LOGS, playbackData);
+export const uploadKeystrokeLogs = (questionId: number, playbackData: PlaybackData) =>
+  action(UPLOAD_KEYSTROKE_LOGS, { questionId, playbackData });
 
 export const resetKeystrokeLogs = () => action(RESET_KEYSTROKE_LOGS);
 

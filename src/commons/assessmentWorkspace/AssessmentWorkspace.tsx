@@ -91,7 +91,7 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleKeystrokeUpload: (playbackData: PlaybackData) => void;
+  handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => void;
   handleKeystrokeAdd: (log: Input) => void;
   handleKeystrokesReset: () => void;
   handleKeystrokeAssessmentChange: (id: number) => void;
@@ -216,9 +216,9 @@ class AssessmentWorkspace extends React.Component<
       },
       inputs: this.props.keystrokeLogs
     };
-    console.log(playbackData);
+    console.log(this.props.loggedQuestionId, playbackData);
     this.props.handleKeystrokesReset();
-    // this.props.handleKeystrokeUpload(playbackData);
+    // this.props.handleKeystrokeUpload(this.props.questionId, playbackData);
 
     this.setState({ startingEditorValue: this.props.editorValue });
   };

@@ -84,7 +84,7 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleKeystrokeUpload: (playbackData: PlaybackData) => void;
+  handleKeystrokeUpload: (questionID: number, playbackData: PlaybackData) => void;
   handleKeystrokeAdd: (log: Input) => void;
   handleKeystrokesReset: () => void;
   handleKeystrokeAssessmentChange: (id: number) => void;
@@ -208,9 +208,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       },
       inputs: props.keystrokeLogs
     };
-    console.log(playbackData);
+    console.log(props.loggedQuestionId, playbackData);
     props.handleKeystrokesReset();
-    // props.handleKeystrokeUpload(playbackData);
+    // props.handleKeystrokeUpload(props.loggedQuestionId, playbackData);
 
     setStartingEditorValue(props.editorValue);
   }, [props, startingEditorValue, setStartingEditorValue]);

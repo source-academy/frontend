@@ -138,11 +138,12 @@ export async function putUserGameState(
  */
 export async function postKeystrokeLogs(
   tokens: Tokens,
+  questionId: number,
   playbackData: PlaybackData
 ): Promise<Response | null> {
   const resp = await request(`/`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { playbackData: playbackData },
+    body: { questionId: questionId, playbackData: playbackData },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
