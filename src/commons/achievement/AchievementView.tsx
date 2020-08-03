@@ -16,7 +16,7 @@ type AchievementViewProps = {
 function AchievementView(props: AchievementViewProps) {
   const { id, inferencer, handleGlow } = props;
 
-  if (id < 0) return <div className="view"></div>;
+  if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
   const { title, ability, deadline, goals, view } = achievement;
