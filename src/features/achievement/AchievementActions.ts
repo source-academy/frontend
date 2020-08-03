@@ -10,7 +10,8 @@ import {
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
-  SAVE_GOALS
+  SAVE_GOALS,
+  UPDATE_GOAL_PROGRESS
 } from './AchievementTypes';
 
 /*
@@ -37,4 +38,7 @@ export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals)
 export const getGoals = () => action(GET_GOALS);
 
 // TODO: Change type to GoalDefinition
-export const editGoal = (definition: any) => action(SAVE_GOALS, definition);
+export const editGoal = (definition: any) => action(EDIT_GOAL, definition);
+
+// TODO: Change type to GoalProgress
+export const updateGoalProgress = (progress: any) => action(UPDATE_GOAL_PROGRESS, progress);

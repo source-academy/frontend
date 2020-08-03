@@ -196,13 +196,12 @@ export async function fetchUserGoals(
 /**
  * POST /achievements/goals/:goal_id/:student_id
  */
-export async function editGoalProgress(
-  goal: AchievementGoal,
+export async function updateGoalProgress(
   user: any, // TODO: Change to user
   progress: any, // TODO: Change to GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/${goal.id}/${user.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${progress.id}/${user.id}`, 'POST', {
     accessToken: tokens.accessToken,
     body: { progress: progress },
     noHeaderAccept: true,

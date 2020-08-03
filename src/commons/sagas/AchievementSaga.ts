@@ -7,7 +7,8 @@ import {
   GET_ACHIEVEMENTS,
   GET_GOALS,
   REMOVE_ACHIEVEMENT,
-  REMOVE_GOAL
+  REMOVE_GOAL,
+  UPDATE_GOAL_PROGRESS
 } from '../../features/achievement/AchievementTypes';
 import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -17,7 +18,8 @@ import {
   getAchievements,
   removeAchievement,
   removeGoal,
-  updateGoalDefinition
+  updateGoalDefinition,
+  updateGoalProgress
 } from './RequestsSaga';
 
 export default function* AchievementSaga(): SagaIterator {
@@ -110,6 +112,30 @@ export default function* AchievementSaga(): SagaIterator {
       {
         /* TODO: Implement Goal Defintiion Here */
       },
+      tokens
+    );
+
+    if (!resp) {
+      return;
+    }
+  });
+
+  yield takeEvery(UPDATE_GOAL_PROGRESS, function* (
+    action: ReturnType<typeof actions.updateGoalProgress>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const progress = action.payload;
+
+    const resp = yield call(
+      updateGoalProgress,
+      {
+        /* TODO: Implement User here  */
+      },
+      progress,
       tokens
     );
 

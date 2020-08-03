@@ -9,6 +9,8 @@ export const SAVE_GOALS = 'SAVE_GOALS';
 export const GET_GOALS = 'GET_GOALS';
 export const EDIT_GOAL = 'EDIT_GOAL';
 
+export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
+
 export enum AchievementAbility {
   CORE = 'Core',
   EFFORT = 'Effort',
