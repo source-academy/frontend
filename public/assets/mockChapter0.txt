@@ -31,7 +31,7 @@ room
             show_dialogue(canNowTalk)
             add_mode(room, talk)
         + todaysTopic, /objects/cr-todaysTopic/emergency.png, 188, 286, 289, 128
-            change_location(crashsite)
+            preview_location(hallway)
         + bigMug, /objects/yourMug/emergency.png, 1355, 526, 136, 169
             make_object_glow*(bigMug)
         + bottomDoor, /objects/dc-bttm_door02/normal.png, 653, 735, 345, 68
