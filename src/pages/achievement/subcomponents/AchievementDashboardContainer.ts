@@ -13,6 +13,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
     ? new AchievementInferencer(state.achievement.achievements)
     : new AchievementInferencer(mockAchievements),
   name: state.session.name,
+  role: state.session.role,
   group: state.session.group
 });
 

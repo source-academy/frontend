@@ -6,6 +6,7 @@ import AchievementOverview from '../../../commons/achievement/AchievementOvervie
 import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import { Role } from '../../../commons/application/ApplicationTypes';
 import Constants from '../../../commons/utils/Constants';
 import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
 import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
@@ -17,11 +18,12 @@ export type DispatchProps = {
 export type StateProps = {
   inferencer: AchievementInferencer;
   name?: string;
+  role?: Role;
   group: string | null;
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleAchievementsFetch } = props;
+  const { inferencer, name, role, group, handleAchievementsFetch } = props;
 
   useEffect(() => {
     if (Constants.useBackend) {
@@ -60,6 +62,7 @@ function Dashboard(props: DispatchProps & StateProps) {
     <div className="AchievementDashboard">
       <AchievementOverview
         name={name || 'User'}
+        role={role}
         studio={group || 'Staff'}
         inferencer={inferencer}
       />

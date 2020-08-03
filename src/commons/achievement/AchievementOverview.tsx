@@ -1,10 +1,12 @@
 import React from 'react';
 
+import { Role } from '../application/ApplicationTypes';
 import AchievementInferencer from './utils/AchievementInferencer';
 import AchievementLevel from './utils/AchievementLevel';
 
 type AchievementOverviewProps = {
   name: string;
+  role?: Role;
   studio: string;
   inferencer: AchievementInferencer;
 };
