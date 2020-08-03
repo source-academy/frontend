@@ -66,7 +66,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
     storedQuestionId: state.workspaces.assessment.currentQuestion,
 
-    logs: state.session.logs
+    keystrokeLogs: state.session.keystrokeLogs
   };
 };
 

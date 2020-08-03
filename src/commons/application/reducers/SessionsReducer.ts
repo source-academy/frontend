@@ -91,16 +91,16 @@ export const SessionsReducer: Reducer<SessionState> = (
         gameState: action.payload
       };
     case ADD_KEYSTROKE_LOG:
-      const logsCopy = state.logs;
+      const logsCopy = state.keystrokeLogs;
       logsCopy.push(action.payload);
       return {
         ...state,
-        logs: logsCopy
+        keystrokeLogs: logsCopy
       };
     case RESET_KEYSTROKE_LOGS:
       return {
         ...state,
-        logs: []
+        keystrokeLogs: []
       };
     default:
       return state;

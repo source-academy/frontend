@@ -90,7 +90,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
 
-  logs: state.session.logs
+  keystrokeLogs: state.session.keystrokeLogs
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';

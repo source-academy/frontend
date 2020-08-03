@@ -116,7 +116,7 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
 
-  logs: Input[];
+  keystrokeLogs: Input[];
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -197,7 +197,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         externalLibrary: props.externalLibraryName as ExternalLibraryName,
         editorValue: startingEditorValue
       },
-      inputs: props.logs
+      inputs: props.keystrokeLogs
     };
     console.log(playbackData);
     props.handleKeystrokesReset();

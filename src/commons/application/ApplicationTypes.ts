@@ -294,7 +294,7 @@ export const defaultSession: SessionState = {
   xp: 0,
   notifications: [],
 
-  logs: []
+  keystrokeLogs: []
 };
 
 export const defaultState: OverallState = {

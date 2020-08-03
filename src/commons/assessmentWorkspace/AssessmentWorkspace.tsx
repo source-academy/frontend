@@ -124,7 +124,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  logs: Input[];
+  keystrokeLogs: Input[];
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -203,7 +203,7 @@ class AssessmentWorkspace extends React.Component<
           .name,
         editorValue: this.state.startingEditorValue ? this.state.startingEditorValue : ''
       },
-      inputs: this.props.logs
+      inputs: this.props.keystrokeLogs
     };
     console.log(playbackData);
     this.props.handleKeystrokesReset();

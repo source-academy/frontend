@@ -56,5 +56,5 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
 
-  readonly logs: Input[];
+  readonly keystrokeLogs: Input[];
 };
