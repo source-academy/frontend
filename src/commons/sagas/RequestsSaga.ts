@@ -164,6 +164,77 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
+ * GET achievements/goals
+ */
+export async function fetchUserGoals(
+  tokens: Tokens,
+  user: any // TODO: Change to user
+): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/${user.id}`, 'GET', {
+    // TODO: Put in student id if necessary
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal
+        // TODO: type: goal.type as GoalType,
+        // TODO: meta: goal.meta as GoalMeta;
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * POST /achievements/goals/:goal_id/:student_id
+ */
+export async function editGoalProgress(
+  goal: AchievementGoal,
+  user: any, // TODO: Change to user
+  progress: any, // TODO: Change to GoalProgress,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${goal.id}/${user.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { progress: progress },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * POST /achievements/goals/:goal_id/
+ */
+export async function updateGoalDefinition(
+  goal: AchievementGoal,
+  definition: any, // TODO: Change to GoalDefinition,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${goal.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { definition: definition },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
  * POST /achievements/:achievement_id
  */
 export async function editAchievement(
@@ -209,7 +280,7 @@ export async function removeGoal(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/${achievement.id}/goals/${goal.goalId}`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}/goals/${goal.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { goal: goal, achievement: achievement },
     noHeaderAccept: true,
