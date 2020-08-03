@@ -4,10 +4,13 @@ import {
   AchievementGoal,
   AchievementItem,
   EDIT_ACHIEVEMENT,
+  EDIT_GOAL,
   GET_ACHIEVEMENTS,
+  GET_GOALS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
-  SAVE_ACHIEVEMENTS
+  SAVE_ACHIEVEMENTS,
+  SAVE_GOALS
 } from './AchievementTypes';
 
 /*
@@ -28,3 +31,10 @@ export const editAchievement = (achievement: AchievementItem) =>
 /* Will be deprecated after a separate db for student progress is ready */
 export const removeGoal = (goal: AchievementGoal, achievement: AchievementItem) =>
   action(REMOVE_GOAL, { goal, achievement });
+
+export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
+
+export const getGoals = () => action(GET_GOALS);
+
+// TODO: Change type to GoalDefinition
+export const editGoal = (definition: any) => action(SAVE_GOALS, definition);
