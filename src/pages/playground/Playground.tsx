@@ -32,7 +32,8 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   hasExceededLocalStorageSpace,
-  ONE_HOUR_IN_MILLISECONDS
+  ONE_HOUR_IN_MILLISECONDS,
+  PLAYGROUND_QUESTION_ID
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -86,6 +87,7 @@ export type DispatchProps = {
   handleKeystrokeUpload: (playbackData: PlaybackData) => void;
   handleKeystrokeAdd: (log: Input) => void;
   handleKeystrokesReset: () => void;
+  handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
 export type StateProps = {
@@ -117,6 +119,7 @@ export type StateProps = {
   persistenceFile: PersistenceFile | undefined;
 
   keystrokeLogs: Input[];
+  loggedQuestionId: number;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -132,6 +135,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleExternalSelect(props.externalLibraryName, true);
     // run once only
     // eslint-disable-next-line react-hooks/exhaustive-deps
+
+    if (props.loggedQuestionId !== PLAYGROUND_QUESTION_ID) {
+      uploadLogs();
+    }
+
+    props.handleKeystrokeAssessmentChange(PLAYGROUND_QUESTION_ID);
   }, []);
 
   const handlers = React.useMemo(

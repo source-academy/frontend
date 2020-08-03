@@ -94,6 +94,7 @@ export type DispatchProps = {
   handleKeystrokeUpload: (playbackData: PlaybackData) => void;
   handleKeystrokeAdd: (log: Input) => void;
   handleKeystrokesReset: () => void;
+  handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
 export type OwnProps = {
@@ -125,6 +126,7 @@ export type StateProps = {
   storedAssessmentId?: number;
   storedQuestionId?: number;
   keystrokeLogs: Input[];
+  loggedQuestionId: number;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -177,6 +179,15 @@ class AssessmentWorkspace extends React.Component<
     }
 
     this.props.handleEditorValueChange(answer);
+
+    if (this.props.loggedQuestionId !== this.props.questionId && this.props.questionId !== 0) {
+      this.uploadLogs();
+    }
+
+    if (this.props.questionId !== 0) {
+      this.props.handleKeystrokeAssessmentChange(this.props.questionId);
+    }
+
     this.uploadPerHour();
   }
 

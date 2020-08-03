@@ -33,6 +33,7 @@ const baseProps = {
   persistenceUser: undefined,
   persistenceFile: undefined,
   keystrokeLogs: [],
+  loggedQuestionId: -1,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -73,7 +74,8 @@ const baseProps = {
   handlePersistenceLogOut: () => {},
   handleKeystrokeUpload: (playbackData: PlaybackData) => {},
   handleKeystrokeAdd: (log: Input) => {},
-  handleKeystrokesReset: () => {}
+  handleKeystrokesReset: () => {},
+  handleKeystrokeAssessmentChange: (id: number) => {}
 };
 
 const testValueProps: PlaygroundProps = {
