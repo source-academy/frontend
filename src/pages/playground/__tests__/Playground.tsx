@@ -6,7 +6,7 @@ import { ExternalLibraryName } from '../../../commons/application/types/External
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
+import { Input, PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -32,6 +32,7 @@ const baseProps = {
   usingSubst: false,
   persistenceUser: undefined,
   persistenceFile: undefined,
+  logs: [],
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
@@ -70,7 +71,9 @@ const baseProps = {
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
   handlePersistenceLogOut: () => {},
-  handleKeystrokeUpload: (playbackData: PlaybackData) => {}
+  handleKeystrokeUpload: (playbackData: PlaybackData) => {},
+  handleKeystrokeAdd: (log: Input) => {},
+  handleKeystrokesReset: () => {}
 };
 
 const testValueProps: PlaygroundProps = {
