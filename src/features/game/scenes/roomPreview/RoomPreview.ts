@@ -122,10 +122,6 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Add verified tag
     this.getLayerManager().addToLayer(Layer.UI, this.getVerifCont());
-
-    const cookie = new Phaser.GameObjects.Sprite(this, 1920 / 2, 1080 / 2, 'cookies');
-    this.attachVerificationTag(cookie);
-    this.getLayerManager().addToLayer(Layer.Objects, cookie);
   }
 
   public update() {

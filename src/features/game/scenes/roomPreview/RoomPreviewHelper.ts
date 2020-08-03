@@ -63,10 +63,10 @@ export const createCMRGamePhases = () => {
 };
 
 /**
- * Create a verification container and its mask.
+ * Create a verification container.
  *
  * @param scene room preview scene
- * @returns {[Phaser.GameObjects.Container, Phaser.GameObjects.Graphics]} verification container, and its mask
+ * @returns {Phaser.GameObjects.Container} verification container
  */
 export const createVerifiedHoverContainer = (scene: RoomPreview) => {
   const hoverContainer = new Phaser.GameObjects.Container(scene, 0, 0);
@@ -96,9 +96,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     hoverTextBg.width,
     hoverTextBg.height * 0.05,
     HexColor.offWhite
-  )
-    .setOrigin(0.0, 0.0)
-    .setBlendMode(Phaser.BlendModes.ADD);
+  ).setOrigin(0.0, 0.0);
 
   const hoverText = createBitmapText(
     scene,
