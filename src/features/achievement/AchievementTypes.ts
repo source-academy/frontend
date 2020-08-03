@@ -13,6 +13,7 @@ export enum AchievementAbility {
   FLEX = 'Flex'
 }
 
+// TODO: use Object.values instead
 export const achievementAbilities = [
   AchievementAbility.CORE,
   AchievementAbility.EFFORT,
@@ -37,16 +38,16 @@ export enum FilterStatus {
  * Information of an achievement item
  *
  * @param {number} id unique id, primary key of the achievement item
- * @param {string} title title of the achievement item
- * @param {AchievementAbility} ability ability of the achievement item
- * @param {String} cardTileUrl background image of the achievement's card
- * @param {Date} deadline Optional, the deadline of the achievement item
- * @param {Date} release Optional, the release date of the achievement item
- * @param {boolean} isTask the achievement item is rendered as an achievement task if true
- * @param {number[]} prerequisiteIds an array of the prerequisites id
- * @param {AchievementGoal[]} goals an array of achievement goals
- * @param {AchievementViewItem} view view item of the achievement
- * @param {number} position ordering position of the achievement, value is 0 for non-tasks
+ * @param {string} title title of the achievement
+ * @param {AchievementAbility} ability ability of the achievement, string enum
+ * @param {string} cardTileUrl background image of the achievement card
+ * @param {Date} deadline Optional, the deadline of the achievement
+ * @param {Date} release Optional, the release date of the achievement
+ * @param {boolean} isTask if true, the achievement is rendered as an achievement task
+ * @param {number} position ordering of the achievement task, 0 for non-task
+ * @param {number[]} prerequisiteIds an array of prerequisite ids
+ * @param {number[]} goalIds an array of goal ids
+ * @param {AchievementViewItem} view the achievement view item
  */
 export type AchievementItem = {
   id: number;
@@ -56,25 +57,65 @@ export type AchievementItem = {
   deadline?: Date;
   release?: Date;
   isTask: boolean;
-  prerequisiteIds: number[];
-  goals: AchievementGoal[];
-  view: AchievementViewItem;
   position: number;
+  prerequisiteIds: number[];
+  goalIds: number[];
+  view: AchievementViewItem;
+};
+
+export type AchievementGoal = GoalDefinition & GoalProgress;
+
+/**
+ * Information of an achievement goal definition
+ * NOTE: Achievement EXP named to deconflict with Assessment XP
+ *
+ * @param {number} id unique id of the goal
+ * @param {string} text goal description
+ * @param {number} maxExp maximum attainable exp of the goal
+ * @param {GoalType} type type of goal, string enum
+ * @param {GoalMeta} meta contains meta data relevant to the goal type
+ */
+export type GoalDefinition = {
+  id: number;
+  text: string;
+  maxExp: number;
+  type: GoalType;
+  meta: GoalMeta;
 };
 
 /**
- * Information of an achievement goal
+ * Information of an achievement goal progress
+ * NOTE: Achievement EXP named to deconflict with Assessment XP
  *
- * @param {number} goalId id of the goal
- * @param {string} goalText describes the goal requirement
- * @param {number} goalProgress student's current xp of this goal
- * @param {number} goalTarget maximum xp of this goal
+ * @param {number} id unique id of the goal
+ * @param {number} exp student's current exp of the goal
+ * @param {boolean} completed student's completion status of the goal
  */
-export type AchievementGoal = {
-  goalId: number;
-  goalText: string;
-  goalProgress: number;
-  goalTarget: number;
+export type GoalProgress = {
+  id: number;
+  exp: number;
+  completed: boolean;
+};
+
+export enum GoalType {
+  ASSESSMENT = 'Assessment',
+  BINARY = 'Binary',
+  MANUAL = 'Manual'
+}
+
+export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
+
+export type AssessmentMeta = {
+  assessmentId: number;
+  requiredCompletionExp: number;
+};
+
+export type BinaryMeta = {
+  condition: string;
+};
+
+export type ManualMeta = {
+  // currently nothing
 };
 
 /**
