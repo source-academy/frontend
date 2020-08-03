@@ -133,8 +133,5 @@ export type AchievementViewItem = {
 
 export type AchievementState = {
   achievements: AchievementItem[];
-};
-
-export const defaultAchievement: AchievementState = {
-  achievements: []
+  goals: AchievementGoal[];
 };
