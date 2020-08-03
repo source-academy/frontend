@@ -144,7 +144,7 @@ export default class SourceAcademyGame extends Phaser.Game {
 
 const config = {
   debug: true,
-  type: Phaser.WEBGL,
+  type: Phaser.CANVAS,
   width: screenSize.x,
   height: screenSize.y,
   physics: {
