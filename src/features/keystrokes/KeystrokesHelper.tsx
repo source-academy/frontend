@@ -14,6 +14,5 @@ const getLocalStorageSpace = () => {
 };
 
 export const hasExceededLocalStorageSpace = () => {
-  console.log(getLocalStorageSpace());
   return getLocalStorageSpace() > FIVE_MB_IN_KB;
 };
