@@ -69,7 +69,7 @@ export const getAbilityBackground = (ability: AchievementAbility) => {
       };
     case AchievementAbility.FLEX:
       return {
-        background: `black`
+        background: `url(${backgroundUrl}/flex-background.png) no-repeat center/cover`
       };
     default:
       return {};
