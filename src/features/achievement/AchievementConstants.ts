@@ -35,9 +35,9 @@ export const getAbilityGlow = (ability: AchievementAbility) =>
     ? {
         border: `1px solid ${getAbilityColor(ability)}`,
         boxShadow: `
-          0 0 5px #fff,     /* outer white */
-          -1px 0 10px #f0f, /* outer left magenta */
-          1px 0 15px #0ff   /* outer right cyan */`
+          0 0 10px #ff0,   /* yellow */
+          -1px 0 9px #f0f, /* magenta */
+          1px 0 9px #0ff   /* cyan */`
       }
     : {
         border: `1px solid ${getAbilityColor(ability)}`,
@@ -69,7 +69,7 @@ export const getAbilityBackground = (ability: AchievementAbility) => {
       };
     case AchievementAbility.FLEX:
       return {
-        background: `black`
+        background: `url(${backgroundUrl}/flex-background.png) no-repeat center/cover`
       };
     default:
       return {};
