@@ -30,6 +30,7 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { ONE_HOUR_IN_MILLISECONDS } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -80,6 +81,8 @@ export type DispatchProps = {
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
   handleKeystrokeUpload: (playbackData: PlaybackData) => void;
+  handleKeystrokeAdd: (log: Input) => void;
+  handleKeystrokesReset: () => void;
 };
 
 export type StateProps = {
@@ -109,6 +112,8 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
+
+  logs: Input[];
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -119,8 +124,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
-  const [logs, setLogs] = React.useState<Input[]>([]);
-  const [startingEditorValue, setStartingEditorValue] = React.useState<string>('');
+  const [startingEditorValue, setStartingEditorValue] = React.useState<string>(props.editorValue);
 
   const handlers = React.useMemo(
     () => ({
@@ -185,19 +189,19 @@ const Playground: React.FC<PlaygroundProps> = props => {
         externalLibrary: props.externalLibraryName as ExternalLibraryName,
         editorValue: startingEditorValue
       },
-      inputs: logs
+      inputs: props.logs
     };
     console.log(playbackData);
+    props.handleKeystrokesReset();
     // props.handleKeystrokeUpload(playbackData);
 
-    setLogs([]);
     setStartingEditorValue(props.editorValue);
-  }, [props, logs, setLogs, startingEditorValue, setStartingEditorValue]);
+  }, [props, startingEditorValue, setStartingEditorValue]);
 
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
       uploadLogs();
-    }, 1000 * 60 * 60);
+    }, ONE_HOUR_IN_MILLISECONDS);
     return () => clearInterval(interval);
   }, [uploadLogs]);
 
@@ -210,21 +214,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
-      const logsCopy = logs;
+      props.handleKeystrokeAdd(newInput);
 
-      if (logsCopy.length === 0) {
-        setStartingEditorValue(props.editorValue);
-      }
-
-      logsCopy.push(newInput);
-
-      if (logsCopy.length > 10000) {
+      if (props.logs.length > 10000) {
         uploadLogs();
-      } else {
-        setLogs(logsCopy);
       }
     },
-    [logs, props, uploadLogs, setLogs, setStartingEditorValue]
+    [props, uploadLogs]
   );
 
   const autorunButtons = React.useMemo(

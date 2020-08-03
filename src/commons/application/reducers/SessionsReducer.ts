@@ -5,6 +5,8 @@ import { defaultSession } from '../ApplicationTypes';
 import { SET_GAME_STATE } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
+  ADD_KEYSTROKE_LOG,
+  RESET_KEYSTROKE_LOGS,
   SessionState,
   SET_GOOGLE_USER,
   SET_TOKENS,
@@ -87,6 +89,18 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         gameState: action.payload
+      };
+    case ADD_KEYSTROKE_LOG:
+      const logsCopy = state.logs;
+      logsCopy.push(action.payload);
+      return {
+        ...state,
+        logs: logsCopy
+      };
+    case RESET_KEYSTROKE_LOGS:
+      return {
+        ...state,
+        logs: []
       };
     default:
       return state;

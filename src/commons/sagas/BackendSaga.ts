@@ -41,7 +41,7 @@ import {
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
-  UPDATE_KEYSTROKE_LOGS
+  UPLOAD_KEYSTROKE_LOGS
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
@@ -604,8 +604,8 @@ function* BackendSaga(): SagaIterator {
     yield put(actions.fetchAssessmentOverviews());
   });
 
-  yield takeEvery(UPDATE_KEYSTROKE_LOGS, function* (
-    action: ReturnType<typeof actions.updateKeystrokeLogs>
+  yield takeEvery(UPLOAD_KEYSTROKE_LOGS, function* (
+    action: ReturnType<typeof actions.uploadKeystrokeLogs>
   ) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,

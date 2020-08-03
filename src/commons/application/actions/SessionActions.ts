@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
+import { Input, PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
   Notification,
@@ -11,6 +11,7 @@ import { GameState, Role, Story } from '../ApplicationTypes';
 import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
+  ADD_KEYSTROKE_LOG,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -21,6 +22,7 @@ import {
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
+  RESET_KEYSTROKE_LOGS,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -34,8 +36,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_KEYSTROKE_LOGS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  UPLOAD_KEYSTROKE_LOGS
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -167,5 +169,9 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
 
-export const updateKeystrokeLogs = (playbackData: PlaybackData) =>
-  action(UPDATE_KEYSTROKE_LOGS, playbackData);
+export const uploadKeystrokeLogs = (playbackData: PlaybackData) =>
+  action(UPLOAD_KEYSTROKE_LOGS, playbackData);
+
+export const resetKeystrokeLogs = () => action(RESET_KEYSTROKE_LOGS);
+
+export const addKeystrokeLog = (log: Input) => action(ADD_KEYSTROKE_LOG, log);

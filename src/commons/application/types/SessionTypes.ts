@@ -1,4 +1,5 @@
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { Input } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
@@ -30,7 +31,9 @@ export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
-export const UPDATE_KEYSTROKE_LOGS = 'UPDATE_KEYSTROKE_LOGS';
+export const ADD_KEYSTROKE_LOG = 'ADD_KEYSTROKE_LOG';
+export const RESET_KEYSTROKE_LOGS = 'RESET_KEYSTROKE_LOGS';
+export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
 
 export type SessionState = {
   readonly accessToken?: string;
@@ -52,4 +55,6 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
+
+  readonly logs: Input[];
 };

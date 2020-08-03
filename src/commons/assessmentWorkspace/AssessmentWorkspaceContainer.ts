@@ -8,9 +8,11 @@ import {
   debuggerResume
 } from '../application/actions/InterpreterActions';
 import {
+  addKeystrokeLog,
   fetchAssessment,
+  resetKeystrokeLogs,
   submitAnswer,
-  updateKeystrokeLogs
+  uploadKeystrokeLogs
 } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -62,7 +64,9 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion
+    storedQuestionId: state.workspaces.assessment.currentQuestion,
+
+    logs: state.session.logs
   };
 };
 
@@ -106,7 +110,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
-      handleKeystrokeUpload: updateKeystrokeLogs
+      handleKeystrokeUpload: uploadKeystrokeLogs,
+      handleKeystrokesReset: resetKeystrokeLogs,
+      handleKeystrokeAdd: addKeystrokeLog
     },
     dispatch
   );

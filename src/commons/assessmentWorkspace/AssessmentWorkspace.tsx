@@ -22,6 +22,7 @@ import {
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
+import { ONE_HOUR_IN_MILLISECONDS } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -88,6 +89,8 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleKeystrokeUpload: (playbackData: PlaybackData) => void;
+  handleKeystrokeAdd: (log: Input) => void;
+  handleKeystrokesReset: () => void;
 };
 
 export type OwnProps = {
@@ -118,6 +121,7 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
+  logs: Input[];
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -125,7 +129,6 @@ class AssessmentWorkspace extends React.Component<
   {
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
-    logs: Input[];
     startingEditorValue: string | null;
   }
 > {
@@ -134,7 +137,6 @@ class AssessmentWorkspace extends React.Component<
     this.state = {
       showOverlay: false,
       showResetTemplateOverlay: false,
-      logs: [],
       startingEditorValue: ''
     };
 
@@ -186,7 +188,7 @@ class AssessmentWorkspace extends React.Component<
   public uploadPerHour = () => {
     const interval = setInterval(() => {
       this.uploadLogs();
-    }, 1000 * 60 * 60);
+    }, ONE_HOUR_IN_MILLISECONDS);
     return () => clearInterval(interval);
   };
 
@@ -198,27 +200,20 @@ class AssessmentWorkspace extends React.Component<
           .name,
         editorValue: this.state.startingEditorValue ? this.state.startingEditorValue : ''
       },
-      inputs: this.state.logs
+      inputs: this.props.logs
     };
     console.log(playbackData);
+    this.props.handleKeystrokesReset();
     // this.props.handleKeystrokeUpload(playbackData);
 
-    this.setState({ logs: [], startingEditorValue: this.props.editorValue });
+    this.setState({ startingEditorValue: this.props.editorValue });
   };
 
   public pushLog = (newInput: Input) => {
-    const logsCopy = this.state.logs;
+    this.props.handleKeystrokeAdd(newInput);
 
-    if (logsCopy.length === 0) {
-      this.setState({ startingEditorValue: this.props.editorValue });
-    }
-
-    logsCopy.push(newInput);
-
-    if (logsCopy.length > 10000) {
+    if (this.props.logs.length > 10000) {
       this.uploadLogs();
-    } else {
-      this.setState({ logs: logsCopy });
     }
   };
 
