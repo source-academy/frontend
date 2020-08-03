@@ -70,6 +70,7 @@ export const createCMRGamePhases = () => {
  */
 export const createVerifiedHoverContainer = (scene: RoomPreview) => {
   const hoverContainer = new Phaser.GameObjects.Container(scene, 0, 0);
+
   const hoverTextBg = new Phaser.GameObjects.Rectangle(
     scene,
     0,
@@ -80,6 +81,7 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
   )
     .setOrigin(0.0, 0.5)
     .setAlpha(0.8);
+
   const hoverTextFrame = new Phaser.GameObjects.Sprite(
     scene,
     0,
@@ -87,34 +89,35 @@ export const createVerifiedHoverContainer = (scene: RoomPreview) => {
     ImageAssets.verifiedFrame.key
   ).setOrigin(0.0, 0.5);
 
-  const hoverMask = new Phaser.GameObjects.Graphics(scene)
-    .fillRect(
-      hoverTextBg.x - hoverTextBg.height * hoverTextBg.originX * 0.5,
-      hoverTextBg.y - hoverTextBg.width * hoverTextBg.originY * 0.5,
-      hoverTextBg.width,
-      hoverTextBg.height
-    )
-    .setAlpha(0);
+  const hoverLine = new Phaser.GameObjects.Rectangle(
+    scene,
+    0,
+    -hoverTextBg.height * 0.5,
+    hoverTextBg.width,
+    hoverTextBg.height * 0.05,
+    HexColor.offWhite
+  )
+    .setOrigin(0.0, 0.0)
+    .setBlendMode(Phaser.BlendModes.ADD);
 
   const hoverText = createBitmapText(
     scene,
     RoomConstants.verifiedText,
     RoomConstants.hoverTagTextConfig,
     verifiedStyle
-  )
-    .setPosition(RoomConstants.tag.textXStart, 0)
-    .setMask(hoverMask.createGeometryMask());
+  ).setBlendMode(Phaser.BlendModes.DIFFERENCE);
 
   scene.tweens.add({
-    targets: hoverText,
-    x: -RoomConstants.tag.textXStart,
-    duration: 5000,
+    targets: hoverLine,
+    alpha: 0.2,
+    y: hoverTextBg.height * 0.35,
+    duration: 2000,
     ease: 'Power0',
-    loop: -1,
-    onLoop: () => (hoverText.x = RoomConstants.tag.textXStart + 50)
+    yoyo: true,
+    loop: -1
   });
 
-  hoverContainer.add([hoverTextBg, hoverText, hoverTextFrame]);
+  hoverContainer.add([hoverTextBg, hoverText, hoverLine, hoverTextFrame]);
   hoverContainer.setVisible(false);
-  return [hoverContainer, hoverMask];
+  return hoverContainer;
 };
