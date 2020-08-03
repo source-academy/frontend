@@ -237,32 +237,7 @@
   margin: 12px 0 12px 0;
 }
 
-.Grading {
-  /* To show the table borders that get cut out by a Card */
-  padding: 1px;
-
-  /** 
-   *  To prevent misalignment of column header and content 
-   *  for large displays. This effectively flushes the content left.
-   *  See https://github.com/source-academy/cadet-frontend/pull/148
-   */
-  .ag-body-container {
-    display: block;
-    /* Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix) */
-    margin-bottom: 0;
-  }
-
-  .#{$ns}-icon {
-    /* Vertically centre appearance of blueprintjs icons in ag-grid */
-    margin-top: 6px;
-  }
-
-  .ag-paging-panel {
-    border-top: none;
-    font-weight: bold;
-    padding: 10px;
-  }
-
+.Grid {
   :focus {
     /* Disable rendering blue border when a sub-component in grid is in focus */
     outline: none;
@@ -316,12 +291,6 @@
   padding-left: 0.375em !important;
   padding-right: 0.375em !important;
   text-align: center;
-}
-
-.ag-cell-focus,
-.ag-cell-no-focus {
-  /* Suppress blue border around focused cells from ag-grid stylesheet */
-  border: none !important;
 }
 
 #filterBar {

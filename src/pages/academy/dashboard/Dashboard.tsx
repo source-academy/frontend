@@ -73,9 +73,9 @@ class Dashboard extends React.Component<DashboardProps> {
   };
 
   public render() {
-    const grid = (
-      <div className="GradingContainer">
-        <div className="Grading ag-grid-parent ag-theme-balham">
+    const content = (
+      <div className="Dashboard">
+        <div className="Grid ag-grid-parent ag-theme-balham">
           <AgGridReact
             domLayout={'autoHeight'}
             columnDefs={this.columnDefs}
@@ -84,6 +84,7 @@ class Dashboard extends React.Component<DashboardProps> {
             onGridSizeChanged={this.resizeGrid}
             rowData={this.props.gradingSummary}
             rowHeight={30}
+            suppressCellSelection={true}
             suppressMovableColumns={true}
           />
         </div>
@@ -92,7 +93,7 @@ class Dashboard extends React.Component<DashboardProps> {
 
     return (
       <div>
-        <ContentDisplay display={grid} loadContentDispatch={this.handleFetchGradingSummary} />
+        <ContentDisplay display={content} loadContentDispatch={this.handleFetchGradingSummary} />
       </div>
     );
   }

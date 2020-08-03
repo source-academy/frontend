@@ -139,55 +139,60 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   public render() {
     const data = this.sortByCategoryAndDate();
 
-    const Grid = () => (
-      <div className="GradingContainer">
-        <div className="Grading ag-grid-parent ag-theme-balham">
-          <AgGridReact
-            domLayout={'autoHeight'}
-            columnDefs={this.columnDefs}
-            defaultColDef={this.defaultColumnDefs}
-            onGridReady={this.onGridReady}
-            onGridSizeChanged={this.resizeGrid}
-            rowData={data}
-            rowHeight={30}
-            pagination={true}
-            paginationPageSize={25}
-            suppressMovableColumns={true}
-            suppressPaginationPanel={true}
-          />
-        </div>
+    const controls = (
+      <div className="ground-control-controls">
+        <DefaultChapterSelect />
+        {controlButton('Upload assessment', IconNames.CLOUD_UPLOAD, this.toggleDropzone, {
+          iconOnRight: true,
+          minimal: false
+        })}
       </div>
     );
 
-    const display = (
+    const dropzone = (
+      <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
+        <Dropzone
+          handleUploadAssessment={this.handleUploadAssessment}
+          toggleDisplayConfirmation={this.toggleDisplayConfirmation}
+          toggleForceUpdate={this.toggleForceUpdate}
+          displayConfirmation={this.state.displayConfirmation}
+          forceUpdate={this.state.forceUpdate}
+        />
+      </Collapse>
+    );
+
+    const grid = (
+      <div className="Grid ag-grid-parent ag-theme-balham">
+        <AgGridReact
+          domLayout={'autoHeight'}
+          columnDefs={this.columnDefs}
+          defaultColDef={this.defaultColumnDefs}
+          onGridReady={this.onGridReady}
+          onGridSizeChanged={this.resizeGrid}
+          rowData={data}
+          rowHeight={30}
+          pagination={true}
+          paginationPageSize={25}
+          suppressCellSelection={true}
+          suppressMovableColumns={true}
+          suppressPaginationPanel={true}
+        />
+      </div>
+    );
+
+    const content = (
       <div className="GroundControl">
-        <div className="ground-control-controls">
-          <DefaultChapterSelect />
-          {controlButton('Upload assessment', IconNames.CLOUD_UPLOAD, this.toggleDropzone, {
-            iconOnRight: true,
-            minimal: false
-          })}
-        </div>
-        <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
-          <Dropzone
-            handleUploadAssessment={this.handleUploadAssessment}
-            toggleDisplayConfirmation={this.toggleDisplayConfirmation}
-            toggleForceUpdate={this.toggleForceUpdate}
-            displayConfirmation={this.state.displayConfirmation}
-            forceUpdate={this.state.forceUpdate}
-          />
-        </Collapse>
-
+        {controls}
+        {dropzone}
         <Divider />
-
-        <Grid />
+        {grid}
       </div>
     );
 
     return (
       <div>
         <ContentDisplay
-          display={display}
+          display={content}
           loadContentDispatch={this.conditionallyFetchAssessmentOverviews}
         />
       </div>
