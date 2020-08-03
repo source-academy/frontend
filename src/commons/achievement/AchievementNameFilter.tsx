@@ -25,9 +25,16 @@ function AchievementNameFilter(props: AchievementNameFilterProps) {
     filteredUserGroup
   } = props;
 
-  const usernames = users.filter(user => user.group === filteredUserGroup).map(user => user.name);
+  const usernames =
+    filteredUserGroup === ''
+      ? users.map(user => user.name)
+      : users.filter(user => user.group === filteredUserGroup).map(user => user.name);
 
   const filterByName: ItemPredicate<string> = (query, name) => {
+    if (query === '' && filteredUserGroup === '') {
+      return false;
+    }
+
     return name.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 
