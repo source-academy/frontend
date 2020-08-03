@@ -22,7 +22,10 @@ import {
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
-import { ONE_HOUR_IN_MILLISECONDS } from '../../features/keystrokes/KeystrokesHelper';
+import {
+  hasExceededLocalStorageSpace,
+  ONE_HOUR_IN_MILLISECONDS
+} from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -212,7 +215,7 @@ class AssessmentWorkspace extends React.Component<
   public pushLog = (newInput: Input) => {
     this.props.handleKeystrokeAdd(newInput);
 
-    if (this.props.logs.length > 10000) {
+    if (hasExceededLocalStorageSpace()) {
       this.uploadLogs();
     }
   };

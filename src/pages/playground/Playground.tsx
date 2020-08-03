@@ -30,7 +30,10 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import { ONE_HOUR_IN_MILLISECONDS } from '../../features/keystrokes/KeystrokesHelper';
+import {
+  hasExceededLocalStorageSpace,
+  ONE_HOUR_IN_MILLISECONDS
+} from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -216,7 +219,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     (newInput: Input) => {
       props.handleKeystrokeAdd(newInput);
 
-      if (props.logs.length > 10000) {
+      if (hasExceededLocalStorageSpace()) {
         uploadLogs();
       }
     },
