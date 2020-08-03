@@ -257,7 +257,15 @@ class GameStateManager {
    */
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.gameMap.setItemInMap(GameItemType.objects, id, newObjProp);
-    this.getSubscriberForItemType(GameItemType.objects).handleMutate(id);
+
+    // Update every location that has the object
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.objects.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.objects).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   /**
@@ -269,7 +277,15 @@ class GameStateManager {
    */
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.gameMap.setItemInMap(GameItemType.boundingBoxes, id, newBBoxProp);
-    this.getSubscriberForItemType(GameItemType.boundingBoxes).handleMutate(id);
+
+    // Update every location that has the bbox
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.boundingBoxes.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.boundingBoxes).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   /**
@@ -286,18 +302,30 @@ class GameStateManager {
 
     // Move position
     this.getCharacterAtId(id).defaultPosition = newPosition;
-    this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+
+    // Update the new location if needed
+    this.isCurrentLocation(newLocation)
+      ? this.getSubscriberForItemType(GameItemType.characters).handleMutate(id)
+      : this.addLocationNotif(newLocation);
   }
 
   /**
-   * Changes the default expression and position of a character
+   * Changes the default expression of a character
    *
    * @param id id of character to change
    * @param newExpression new expression of the character
    */
   public updateCharacter(id: ItemId, newExpression: string) {
     this.getCharacterAtId(id).defaultExpression = newExpression;
-    this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+
+    // Update every location that has the character
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.characters.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.characters).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   ///////////////////////////////
