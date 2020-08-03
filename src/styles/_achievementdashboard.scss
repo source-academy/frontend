@@ -111,7 +111,9 @@
     // Card aspect ratio 2:1
     $card-height: 5em;
     $card-width: 30em;
+    // Default spacing should be at least 10px to prevent border glow bleeding
     $default-spacing: 1em;
+    // View aspect ratio 18:25
     $view-height: 50em;
     $view-width: $canvas-width;
 
@@ -125,8 +127,6 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
-      /* To be exact, 
-      max-height: $view-height + $border-glow-radius * 2 */
       max-height: $view-height + $default-spacing * 2;
     }
 
@@ -163,18 +163,18 @@
       @extend %container;
       height: 90%;
       list-style-type: none;
-      min-width: $card-width + $default-spacing;
+      min-width: $card-width + $default-spacing * 2;
       overflow-y: auto;
       padding: 0;
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
       li {
-        margin: 0 $default-spacing 0 0;
+        margin: 0 $default-spacing;
       }
 
       li:not(:first-child) {
-        margin: $default-spacing $default-spacing 0 0;
+        margin: $default-spacing $default-spacing 0;
       }
 
       .achievement-card {
@@ -284,10 +284,7 @@
 
     .view-container {
       @extend %container;
-      align-items: center;
       height: 90%;
-      /* To be exact, 
-      min-width: $view-width + $border-glow-radius * 2 */
       min-width: $view-width + $default-spacing * 2;
       overflow-y: auto;
       scrollbar-color: white #444;
@@ -297,7 +294,7 @@
         color: white;
         display: flex;
         flex-direction: column;
-        margin: $border-glow-radius;
+        margin: $default-spacing;
         min-height: $view-height;
         width: $view-width;
 
