@@ -1,7 +1,7 @@
-export const ONE_HOUR_IN_MILLISECONDS = 3600000;
-const ONE_BYTE_IN_BITS = 8;
-const ONE_KB_IN_BYTES = 1024;
-const FIVE_MB_IN_KB = 5 * 1024;
+export const oneHourInMilliSeconds = 3600000;
+const oneByteInBits = 8;
+const oneKbInBytes = 1024;
+const fiveMbInKb = 5 * 1024;
 
 const getLocalStorageSpace = () => {
   let allStrings = '';
@@ -10,11 +10,11 @@ const getLocalStorageSpace = () => {
       allStrings += window.localStorage[key];
     }
   }
-  return allStrings ? 3 + (allStrings.length * 16) / (ONE_BYTE_IN_BITS * ONE_KB_IN_BYTES) : 0;
+  return allStrings ? 3 + (allStrings.length * 16) / (oneByteInBits * oneKbInBytes) : 0;
 };
 
 export const hasExceededLocalStorageSpace = () => {
-  return getLocalStorageSpace() > FIVE_MB_IN_KB;
+  return getLocalStorageSpace() > fiveMbInKb;
 };
 
-export const PLAYGROUND_QUESTION_ID: number = -1;
+export const playgroundQuestionId: number = -1;

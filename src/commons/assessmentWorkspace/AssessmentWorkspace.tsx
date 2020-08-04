@@ -24,7 +24,7 @@ import {
 
 import {
   hasExceededLocalStorageSpace,
-  ONE_HOUR_IN_MILLISECONDS
+  oneHourInMilliSeconds
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -202,7 +202,7 @@ class AssessmentWorkspace extends React.Component<
   public uploadPerHour = () => {
     const interval = setInterval(() => {
       this.uploadLogs();
-    }, ONE_HOUR_IN_MILLISECONDS);
+    }, oneHourInMilliSeconds);
     return () => clearInterval(interval);
   };
 

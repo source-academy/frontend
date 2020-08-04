@@ -32,8 +32,8 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   hasExceededLocalStorageSpace,
-  ONE_HOUR_IN_MILLISECONDS,
-  PLAYGROUND_QUESTION_ID
+  oneHourInMilliSeconds,
+  playgroundQuestionId
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -212,18 +212,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
       uploadLogs();
-    }, ONE_HOUR_IN_MILLISECONDS);
+    }, oneHourInMilliSeconds);
     return () => clearInterval(interval);
   }, [uploadLogs]);
 
   // Second useEffect called here just in case.
   React.useEffect(() => {
     uploadPerHour();
-    if (props.loggedQuestionId !== PLAYGROUND_QUESTION_ID) {
+    if (props.loggedQuestionId !== playgroundQuestionId) {
       uploadLogs();
     }
 
-    props.handleKeystrokeAssessmentChange(PLAYGROUND_QUESTION_ID);
+    props.handleKeystrokeAssessmentChange(playgroundQuestionId);
   }, [props, uploadLogs, uploadPerHour]);
 
   const handleEvalCallback = React.useCallback(() => {

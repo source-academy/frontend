@@ -623,7 +623,6 @@ function* BackendSaga(): SagaIterator {
       yield call(showWarningMessage, respMsg, 10000);
       return;
     }
-    yield put(actions.fetchAssessmentOverviews());
   });
 
   /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
