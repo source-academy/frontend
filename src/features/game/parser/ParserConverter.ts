@@ -40,7 +40,6 @@ const stringToActionTypeMap = {
   update_character: GameActionType.UpdateCharacter,
   obtain_collectible: GameActionType.ObtainCollectible,
   complete_objective: GameActionType.CompleteObjective,
-  change_location: GameActionType.LocationChange,
   add_item: GameActionType.AddItem,
   remove_item: GameActionType.RemoveItem,
   change_background: GameActionType.ChangeBackground,
@@ -52,6 +51,7 @@ const stringToActionTypeMap = {
   make_object_blink: GameActionType.MakeObjectBlink,
   play_bgm: GameActionType.PlayBGM,
   play_sfx: GameActionType.PlaySFX,
+  preview_location: GameActionType.PreviewLocation,
   show_object_layer: GameActionType.ShowObjectLayer
 };
 

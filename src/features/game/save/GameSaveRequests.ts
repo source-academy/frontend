@@ -6,11 +6,7 @@ import { createEmptySaveState } from './GameSaveHelper';
 import { FullSaveState } from './GameSaveTypes';
 
 /**
- * This function saves data to the backend.
- * Currently saves the entire game data in the "collectibles" field
- * just because that is the format accepted by the backend
- *
- * TODO: Change backend endpoint to accept fullSaveState
+ * This function saves data to the backend under user's game state.
  *
  * @param fullSaveState - the entire game data that needs to be saved, including game state and userstate
  */
@@ -23,10 +19,7 @@ export async function saveData(fullSaveState: FullSaveState) {
     method: 'PUT',
     headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken),
     body: JSON.stringify({
-      gameStates: {
-        collectibles: fullSaveState,
-        completed_quests: []
-      }
+      gameStates: fullSaveState
     })
   };
 
@@ -39,10 +32,6 @@ export async function saveData(fullSaveState: FullSaveState) {
 
 /**
  * This function fetches data from the backend.
- * Currently saves the loaded game data from the "collectibles" field
- * just because that is the format stored by the backend
- *
- * TODO: Change backend endpoint to store fullSaveState
  */
 export async function loadData(): Promise<FullSaveState> {
   const options = {
@@ -52,27 +41,9 @@ export async function loadData(): Promise<FullSaveState> {
 
   const resp = await fetch(`${Constants.backendUrl}/v1/user/`, options);
   const message = await resp.text();
-  const json = JSON.parse(message);
+  const json = JSON.parse(message).gameStates;
 
-  const loadedData = json.gameStates.collectibles;
-  return _.isEmpty(loadedData) ? createEmptySaveState() : loadedData;
-}
-
-/**
- * This function clears the entire game object from the database
- */
-export async function clearData() {
-  const options = {
-    method: 'PUT',
-    headers: createHeaders(SourceAcademyGame.getInstance().getAccountInfo().accessToken)
-  };
-
-  const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/clear`, options);
-
-  if (resp && resp.ok) {
-    alert('Game cleared!');
-    return;
-  }
+  return _.isEmpty(json) ? createEmptySaveState() : json;
 }
 
 /**
