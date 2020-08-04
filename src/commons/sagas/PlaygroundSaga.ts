@@ -2,7 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, takeEvery } from 'redux-saga/effects';
+import { call, delay, put, race, select } from 'redux-saga/effects';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -14,6 +14,7 @@ import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../features/playground/Playg
 import { defaultEditorValue, OverallState } from '../application/ApplicationTypes';
 import Constants from '../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* PlaygroundSaga(): SagaIterator {
   yield takeEvery(GENERATE_LZ_STRING, updateQueryString);

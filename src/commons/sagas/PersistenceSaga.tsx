@@ -1,8 +1,7 @@
 import { Intent } from '@blueprintjs/core';
 import * as React from 'react';
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
-import { playgroundUpdatePersistenceFile } from 'src/features/playground/PlaygroundActions';
+import { call, put, select } from 'redux-saga/effects';
 
 import {
   PERSISTENCE_INITIALISE,
@@ -25,6 +24,7 @@ import {
   showWarningMessage
 } from '../utils/NotificationsHelper';
 import { AsyncReturnType } from '../utils/TypeHelper';
+import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const DISCOVERY_DOCS = ['https://www.googleapis.com/discovery/v1/apis/drive/v3/rest'];
 const SCOPES = 'profile https://www.googleapis.com/auth/drive.file';
@@ -38,7 +38,7 @@ const MIME_SOURCE = 'text/plain';
 
 export function* persistenceSaga(): SagaIterator {
   yield takeLatest(LOGOUT_GOOGLE, function* () {
-    yield put(playgroundUpdatePersistenceFile(undefined));
+    yield put(actions.playgroundUpdatePersistenceFile(undefined));
     yield call(ensureInitialised);
     yield call([gapi.auth2.getAuthInstance(), 'signOut']);
   });
