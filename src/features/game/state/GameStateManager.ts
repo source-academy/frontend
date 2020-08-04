@@ -296,17 +296,15 @@ class GameStateManager {
    * @param newPosition new position of the character
    */
   public moveCharacter(id: ItemId, newLocation: LocationId, newPosition: GamePosition) {
-    // Move location
-    this.removeItem(GameItemType.characters, GameGlobalAPI.getInstance().getCurrLocId(), id);
-    this.addItem(GameItemType.characters, newLocation, id);
-
     // Move position
     this.getCharacterAtId(id).defaultPosition = newPosition;
 
-    // Update the new location if needed
-    this.isCurrentLocation(newLocation)
-      ? this.getSubscriberForItemType(GameItemType.characters).handleMutate(id)
-      : this.addLocationNotif(newLocation);
+    // Find location with character
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.characters.has(id)) return;
+      this.removeItem(GameItemType.characters, locId, id);
+    });
+    this.addItem(GameItemType.characters, newLocation, id);
   }
 
   /**

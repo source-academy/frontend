@@ -32,6 +32,7 @@ room
             add_mode(room, talk)
         + todaysTopic, /objects/cr-todaysTopic/emergency.png, 188, 286, 289, 128
             preview_location(hallway)
+            move_character(scottie, room, center)
         + bigMug, /objects/yourMug/emergency.png, 1355, 526, 136, 169
             make_object_glow*(bigMug)
         + bottomDoor, /objects/dc-bttm_door02/normal.png, 653, 735, 345, 68
@@ -44,8 +45,7 @@ room
         + bbox1, 10, 10, 30, 30
             show_dialogue(what)
 
-    characters
-        + scottie, Scottie, sad, left
+    
 
 hallway
     modes: move, explore
@@ -55,6 +55,8 @@ hallway
             play_bgm(heavyHitter)
             remove_item(objects, room, computerOnShelf)
             remove_mode(classroom, talk)
+    characters
+        + scottie, Scottie, sad, left
 
 
 classroom
