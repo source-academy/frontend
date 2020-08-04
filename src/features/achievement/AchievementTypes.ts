@@ -27,7 +27,7 @@ export enum FilterStatus {
 /**
  * Information of an achievement item
  *
- * @param {number} id unique id, primary key of the achievement item
+ * @param {number} id unique id of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
  * @param {Date} deadline Optional, the deadline of the achievement
@@ -36,7 +36,7 @@ export enum FilterStatus {
  * @param {number} position ordering of the achievement task, 0 for non-task
  * @param {number[]} prerequisiteIds an array of prerequisite ids
  * @param {number[]} goalIds an array of goal ids
- * @param {string} cardTileUrl background image of the achievement card
+ * @param {string} cardTileUrl background image URL of the achievement card
  * @param {AchievementView} view the achievement view
  */
 export type AchievementItem = {
@@ -111,7 +111,7 @@ export type ManualMeta = {
 /**
  * Information of an achievement view
  *
- * @param {string} canvasUrl URL of the canvas image
+ * @param {string} canvasUrl canvas image URL
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
