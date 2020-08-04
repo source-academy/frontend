@@ -17,6 +17,5 @@ export const createBitmapText = (
   style: BitmapFontStyle
 ) => {
   return new Phaser.GameObjects.BitmapText(scene, x, y, style.key, text, style.size, style.align)
-    .setTintFill(style.fill)
     .setOrigin(oriX, oriY);
 };

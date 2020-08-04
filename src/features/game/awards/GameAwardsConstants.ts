@@ -1,34 +1,30 @@
 import FontAssets from '../assets/FontAssets';
 import { Constants, screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { Color, HexColor } from '../utils/StyleUtils';
+import { Color } from '../utils/StyleUtils';
 import { AwardProperty } from './GameAwardsTypes';
 
 export const pageBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 35,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 export const listBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  fill: HexColor.darkBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 export const awardTitleStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 50,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const awardKeyStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 18,
-  fill: HexColor.offWhite,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 

@@ -1,7 +1,6 @@
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
 import { createButton } from '../utils/ButtonUtils';
-import { HexColor } from '../utils/StyleUtils';
 import { screenCenter } from './CommonConstants';
 import { BitmapFontStyle } from './CommonTypes';
 
@@ -10,7 +9,6 @@ const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  fill: HexColor.darkBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 

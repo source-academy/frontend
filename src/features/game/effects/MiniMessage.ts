@@ -6,7 +6,6 @@ import { BitmapFontStyle, IBaseScene } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
-import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { fadeAndDestroy } from './FadeEffect';
 import { sideEntryTweenProps, sideExitTweenProps } from './FlyEffect';
@@ -16,7 +15,6 @@ const messageTextConfig = { x: 20, y: 100, oriX: 0.0, oriY: 0.5 };
 const messageStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 20,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 

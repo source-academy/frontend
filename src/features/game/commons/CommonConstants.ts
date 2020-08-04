@@ -1,5 +1,4 @@
 import FontAssets from '../assets/FontAssets';
-import { HexColor } from '../utils/StyleUtils';
 
 export const Constants = {
   assetsFolder: 'https://s3-ap-southeast-1.amazonaws.com/source-academy-assets',
@@ -12,7 +11,6 @@ export const Constants = {
   defaultFontStyle: {
     key: FontAssets.zektonFont.key,
     size: 30,
-    fill: HexColor.lightBlue,
     align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
   },
   defaultCursor: ''
