@@ -2,10 +2,10 @@ import { canvasUrl, cardTileUrl } from '../../../../features/achievement/Achieve
 import {
   AchievementAbility,
   AchievementItem,
-  AchievementViewItem
+  AchievementView
 } from '../../../../features/achievement/AchievementTypes';
 
-export const viewTemplate: AchievementViewItem = {
+export const viewTemplate: AchievementView = {
   canvasUrl: `${canvasUrl}/annotated-canvas.png`,
   description: 'View Description here',
   completionText: 'Completion Text here'

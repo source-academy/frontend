@@ -5,7 +5,7 @@ import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
-  AchievementViewItem
+  AchievementView
 } from '../../../../features/achievement/AchievementTypes';
 import AchievementInferencer from '../../utils/AchievementInferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
@@ -154,7 +154,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
-  const handleChangeView = (view: AchievementViewItem) => {
+  const handleChangeView = (view: AchievementView) => {
     setEditableAchievement({
       ...editableAchievement,
       view: view

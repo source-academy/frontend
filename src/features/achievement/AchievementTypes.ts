@@ -2,7 +2,6 @@ export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
 export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
-
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 
 export const SAVE_GOALS = 'SAVE_GOALS';
@@ -19,15 +18,6 @@ export enum AchievementAbility {
   FLEX = 'Flex'
 }
 
-// TODO: use Object.values instead
-export const achievementAbilities = [
-  AchievementAbility.CORE,
-  AchievementAbility.EFFORT,
-  AchievementAbility.EXPLORATION,
-  AchievementAbility.COMMUNITY,
-  AchievementAbility.FLEX
-];
-
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
   COMPLETED = 'COMPLETED', // completed, regardless of deadline
@@ -43,30 +33,30 @@ export enum FilterStatus {
 /**
  * Information of an achievement item
  *
- * @param {number} id unique id, primary key of the achievement item
+ * @param {number} id unique id of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
- * @param {string} cardTileUrl background image of the achievement card
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
  * @param {number} position ordering of the achievement task, 0 for non-task
  * @param {number[]} prerequisiteIds an array of prerequisite ids
  * @param {number[]} goalIds an array of goal ids
- * @param {AchievementViewItem} view the achievement view item
+ * @param {string} cardTileUrl background image URL of the achievement card
+ * @param {AchievementView} view the achievement view
  */
 export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
-  cardTileUrl: string;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
   position: number;
   prerequisiteIds: number[];
   goalIds: number[];
-  view: AchievementViewItem;
+  cardTileUrl: string;
+  view: AchievementView;
 };
 
 export type AchievementGoal = GoalDefinition & GoalProgress;
@@ -125,13 +115,13 @@ export type ManualMeta = {
 };
 
 /**
- * Information of an achievement in a view
+ * Information of an achievement view
  *
- * @param {string} canvasUrl URL of the view image
+ * @param {string} canvasUrl canvas image URL
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
-export type AchievementViewItem = {
+export type AchievementView = {
   canvasUrl: string;
   description: string;
   completionText: string;
