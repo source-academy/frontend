@@ -17,6 +17,9 @@ const config = {
   scale: {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
+  },
+  fps: {
+    target: 24
   }
 };
 
