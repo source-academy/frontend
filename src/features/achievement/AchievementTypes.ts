@@ -2,7 +2,6 @@ export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
 export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
-
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 
 export enum AchievementAbility {
@@ -12,15 +11,6 @@ export enum AchievementAbility {
   COMMUNITY = 'Community',
   FLEX = 'Flex'
 }
-
-// TODO: use Object.values instead
-export const achievementAbilities = [
-  AchievementAbility.CORE,
-  AchievementAbility.EFFORT,
-  AchievementAbility.EXPLORATION,
-  AchievementAbility.COMMUNITY,
-  AchievementAbility.FLEX
-];
 
 export enum AchievementStatus {
   ACTIVE = 'ACTIVE', // deadline not over and not completed
