@@ -16,6 +16,13 @@ export const createBitmapText = (
   { x, y, oriX, oriY }: TextConfig,
   style: BitmapFontStyle
 ) => {
-  return new Phaser.GameObjects.BitmapText(scene, x, y, style.key, text, style.size, style.align)
-    .setOrigin(oriX, oriY);
+  return new Phaser.GameObjects.BitmapText(
+    scene,
+    x,
+    y,
+    style.key,
+    text,
+    style.size,
+    style.align
+  ).setOrigin(oriX, oriY);
 };
