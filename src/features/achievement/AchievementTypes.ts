@@ -30,26 +30,26 @@ export enum FilterStatus {
  * @param {number} id unique id, primary key of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
- * @param {string} cardTileUrl background image of the achievement card
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
  * @param {number} position ordering of the achievement task, 0 for non-task
  * @param {number[]} prerequisiteIds an array of prerequisite ids
  * @param {number[]} goalIds an array of goal ids
+ * @param {string} cardTileUrl background image of the achievement card
  * @param {AchievementViewItem} view the achievement view item
  */
 export type AchievementItem = {
   id: number;
   title: string;
   ability: AchievementAbility;
-  cardTileUrl: string;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
   position: number;
   prerequisiteIds: number[];
   goalIds: number[];
+  cardTileUrl: string;
   view: AchievementViewItem;
 };
 
