@@ -5,6 +5,7 @@ import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
 import controlButton from '../../../../commons/ControlButton';
+import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
 interface IDispatchProps {
   handleUploadAssessment: (file: File) => void;
@@ -69,9 +70,15 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
     isDragReject,
     isFocused
   } = useDropzone({
-    onDrop: acceptedFiles => {
+    multiple: false,
+    onDropAccepted: acceptedFiles => {
       setFile(acceptedFiles[0]);
       setTitle(acceptedFiles[0].name);
+    },
+    onDropRejected: rejectedFiles => {
+      if (rejectedFiles.length > 1) {
+        showWarningMessage('Uploading multiple files at once is not currently supported!', 2000);
+      }
     }
   });
   const style = React.useMemo(
@@ -126,7 +133,7 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
       <Card elevation={Elevation.TWO} interactive={true}>
         <div {...getRootProps({ style })}>
           <input {...getInputProps()} />
-          <p>Drag 'n' drop some files here, or click to select files</p>
+          <p>Drag 'n' drop a file here, or click to select a file</p>
         </div>
       </Card>
       {file && (
