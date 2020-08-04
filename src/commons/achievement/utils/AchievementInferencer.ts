@@ -11,33 +11,30 @@ import {
  * An InferencerNode item encapsulates all important information of an achievement item
  *
  * @param {AchievementItem} achievement the achievement item
- * @param {number} dataIdx the key to retrive the achivement item in achievements[], i.e. achievements[dataIdx] = achievement
+ * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
  * @param {number} maxExp total achievable EXP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
- * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
  * @param {Set<number>} children a set of immediate prerequisites id
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
 class InferencerNode {
   public achievement: AchievementItem;
-  public dataIdx: number;
+  public displayDeadline?: Date;
   public maxExp: number;
   public progressFrac: number;
   public status: AchievementStatus;
-  public displayDeadline?: Date;
   public children: Set<number>;
   public descendant: Set<number>;
 
-  constructor(achievement: AchievementItem, dataIdx: number) {
+  constructor(achievement: AchievementItem) {
     const { deadline, prerequisiteIds, goals } = achievement;
 
     this.achievement = achievement;
-    this.dataIdx = dataIdx;
+    this.displayDeadline = deadline;
     this.maxExp = this.generateMaxExp(goals);
     this.progressFrac = this.generateProgressFrac(goals);
-    this.status = AchievementStatus.ACTIVE; // to be updated after the nodeList is constructed
-    this.displayDeadline = deadline;
+    this.status = AchievementStatus.ACTIVE; // will be updated after the nodeList is constructed
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
   }
@@ -54,15 +51,14 @@ class InferencerNode {
 }
 
 /**
- * Main Class which handles the assignment of ids to each and every Achievement in the system.
+ * Note: The inferencer assigns new IDs to AchievementItem and AchievementGoal
  */
 class AchievementInferencer {
-  private achievements: AchievementItem[] = []; // note: the achievement_id might not be the same as its array index
-  private nodeList: Map<number, InferencerNode> = new Map(); // key = achievement_id, value = achievement node
+  private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
 
   constructor(achievements: AchievementItem[]) {
-    this.achievements = achievements;
-    this.processData();
+    this.nodeList = this.constructNodeList(achievements);
+    this.processNodes();
   }
 
   public doesAchievementExist(id: number) {
@@ -70,7 +66,7 @@ class AchievementInferencer {
   }
 
   public getAchievements() {
-    return this.achievements;
+    return [...this.nodeList.values()].map(node => node.achievement);
   }
 
   public getAchievementItem(id: number) {
@@ -81,74 +77,74 @@ class AchievementInferencer {
   public insertAchievement(achievement: AchievementItem) {
     // first, generate a new unique id by finding the max id
     let newId = 0;
-    if (this.achievements.length > 0) {
+    if (this.nodeList.size > 0) {
       newId = Math.max(...this.nodeList.keys(), 0) + 1;
     }
 
     // then assign the new unique id by overwriting the achievement item supplied by param
-    // and append it to achievements[]
+    // and insert it into nodeList
     achievement.id = newId;
-    this.achievements.push(achievement);
+    this.nodeList.set(newId, new InferencerNode(achievement));
 
-    // finally, reconstruct the nodeList
-    this.processData();
+    // finally, process the nodeList
+    this.processNodes();
 
     return newId;
   }
 
   public modifyAchievement(achievement: AchievementItem) {
-    // directly modify the achievement element in achievements
+    // directly replace the InferencerNode in nodeList
     assert(this.nodeList.has(achievement.id));
-    const idx = this.nodeList.get(achievement.id)!.dataIdx;
-    this.achievements[idx] = achievement;
+    this.nodeList.set(achievement.id, new InferencerNode(achievement));
 
-    // then, reconstruct the nodeList
-    this.processData();
+    // then, process the nodeList
+    this.processNodes();
   }
 
-  public removeAchievement(id: number) {
-    const hasChild = (achievement: AchievementItem) => achievement.prerequisiteIds.includes(id);
+  public removeAchievement(targetId: number) {
+    const hasTarget = (node: InferencerNode) => node.children.has(targetId);
 
-    const removeChild = (achievement: AchievementItem) =>
-      achievement.prerequisiteIds.filter(child => child !== id);
+    const sanitizeNode = (node: InferencerNode) => {
+      const newPrerequisiteIds = node.achievement.prerequisiteIds.filter(id => id !== targetId);
+      node.achievement.prerequisiteIds = newPrerequisiteIds;
 
-    // create a copy of achievements that:
-    // 1. does not contain the removed achievement
-    // 2. does not contain reference of the removed achievement in other achievement's prerequisite
-    const newAchievements: AchievementItem[] = [];
-    this.achievements.forEach(achievement => {
-      if (hasChild(achievement)) {
-        // reference of the removed item is filtered out
-        achievement.prerequisiteIds = removeChild(achievement);
-      }
-      if (achievement.id !== id) {
-        // removed achievement is not included in the new achievements
-        newAchievements.push(achievement);
+      return new InferencerNode(node.achievement);
+    };
+
+    // first, remove achievement from node list
+    this.nodeList.delete(targetId);
+    // then, remove reference of the target in other achievement's prerequisite
+    this.nodeList.forEach((node, id) => {
+      if (hasTarget(node)) {
+        this.nodeList.set(id, sanitizeNode(node));
       }
     });
-    this.achievements = newAchievements;
 
-    // finally, reconstruct the nodeList
-    this.processData();
+    // finally, process the nodeList
+    this.processNodes();
   }
 
   public listIds() {
-    return this.achievements.map(achievement => achievement.id);
+    return [...this.nodeList.keys()];
   }
 
   public listTaskIds() {
-    return this.achievements.filter(achievement => achievement.isTask).map(task => task.id);
+    return this.getAchievements()
+      .filter(achievement => achievement.isTask)
+      .map(task => task.id);
   }
 
   public listTaskIdsbyPosition() {
-    return this.achievements
+    return this.getAchievements()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .map(task => task.id);
   }
 
   public listNonTaskIds() {
-    return this.achievements.filter(achievement => !achievement.isTask).map(nonTask => nonTask.id);
+    return this.getAchievements()
+      .filter(achievement => !achievement.isTask)
+      .map(nonTask => nonTask.id);
   }
 
   public setTask(achievement: AchievementItem) {
@@ -292,8 +288,7 @@ class AchievementInferencer {
     }
   }
 
-  private processData() {
-    this.constructNodeList();
+  private processNodes() {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
@@ -301,12 +296,12 @@ class AchievementInferencer {
     });
   }
 
-  private constructNodeList() {
-    this.nodeList = new Map();
-    for (let idx = 0; idx < this.achievements.length; idx++) {
-      const achievement = this.achievements[idx];
-      this.nodeList.set(achievement.id, new InferencerNode(achievement, idx));
-    }
+  private constructNodeList(achievements: AchievementItem[]) {
+    const nodeList = new Map();
+    achievements.forEach(achievement =>
+      nodeList.set(achievement.id, new InferencerNode(achievement))
+    );
+    return nodeList;
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
@@ -381,17 +376,17 @@ class AchievementInferencer {
 
   // normalize positions
   private normalizePositions() {
-    this.achievements.sort((a, b) => a.position - b.position);
+    const posToId = new Map<number, number>();
+    this.getAchievements().forEach(achievement =>
+      posToId.set(achievement.position, achievement.id)
+    );
 
-    // position 0 is reserved for non-task achievements
-    const nonTaskPosition = 0;
+    const sortedPosToId = [...posToId.entries()].sort();
+
     let newPosition = 1;
-
-    for (let idx = 0; idx < this.achievements.length; idx++) {
-      if (this.achievements[idx].isTask) {
-        this.achievements[idx].position = newPosition++;
-      } else {
-        this.achievements[idx].position = nonTaskPosition;
+    for (const [pos, id] of sortedPosToId) {
+      if (pos !== 0) {
+        this.nodeList.get(id)!.achievement.position = newPosition++;
       }
     }
   }
