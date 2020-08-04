@@ -34,7 +34,7 @@ export const awardKeyStyle: BitmapFontStyle = {
 
 export const awardDescStyle = {
   fontFamily: 'Verdana',
-  fontSize: '20px',
+  fontSize: '18px',
   fill: Color.lightBlue,
   align: 'center',
   lineSpacing: 10,

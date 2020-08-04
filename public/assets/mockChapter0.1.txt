@@ -14,7 +14,6 @@ room
     objects
         + door, /objects/yourCarpet/normal.png, 300, 300
             show_dialogue(whoddaThought) if checklist.visit
-            change_location(classroom) if checklist.visit 
         + chair, /objects/yourChair/normal.png, 90, 90
         + carpet, /objects/yourCarpet/normal.png, 90, 90
 
