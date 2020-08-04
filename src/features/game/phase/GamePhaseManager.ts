@@ -27,7 +27,7 @@ export default class GamePhaseManager {
   constructor(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
     this.phaseStack = [GamePhaseType.None];
     this.phaseMap = phaseMap;
-    this.interruptCheckCallback = () => true;
+    this.interruptCheckCallback = () => false;
     this.interruptTransitionCallback = async () => Constants.nullFunction();
     this.transitionCallback = Constants.nullFunction;
     this.inputManager = inputManager;

@@ -1,12 +1,10 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { HexColor } from '../../utils/StyleUtils';
 
 export const transitionTextStyle: BitmapFontStyle = {
   key: FontAssets.alienCowsFont.key,
   size: 80,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 

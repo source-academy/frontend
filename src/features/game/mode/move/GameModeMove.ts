@@ -11,7 +11,6 @@ import { GamePhaseType } from '../../phase/GamePhaseTypes';
 import GameGlobalAPI from '../../scenes/gameManager/GameGlobalAPI';
 import { createButton } from '../../utils/ButtonUtils';
 import { sleep } from '../../utils/GameUtils';
-import { resizeOverflow } from '../../utils/SpriteUtils';
 import { calcTableFormatPos } from '../../utils/StyleUtils';
 import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
 
@@ -22,7 +21,6 @@ import MoveModeConstants, { moveButtonStyle } from './GameModeMoveConstants';
  */
 class GameModeMove implements IGameUI {
   private uiContainer: Phaser.GameObjects.Container | undefined;
-  private previewMask: Phaser.GameObjects.Graphics | undefined;
 
   /**
    * Set the location preview sprite to the given asset key.
@@ -33,12 +31,8 @@ class GameModeMove implements IGameUI {
   private setPreview(sprite: Phaser.GameObjects.Sprite, assetKey: string) {
     sprite
       .setTexture(assetKey)
+      .setDisplaySize(MoveModeConstants.preview.rect.width, MoveModeConstants.preview.rect.height)
       .setPosition(MoveModeConstants.preview.rect.x, MoveModeConstants.preview.rect.y);
-    resizeOverflow(
-      sprite,
-      MoveModeConstants.preview.rect.width,
-      MoveModeConstants.preview.rect.height
-    );
   }
 
   /**
@@ -61,15 +55,6 @@ class GameModeMove implements IGameUI {
     const moveMenuContainer = new Phaser.GameObjects.Container(gameManager, 0, 0);
 
     // Preview
-    const previewRect = MoveModeConstants.preview.rect;
-    const previewMask = new Phaser.GameObjects.Graphics(gameManager)
-      .fillRect(
-        previewRect.x - previewRect.width / 2,
-        previewRect.y - previewRect.height / 2,
-        previewRect.width,
-        previewRect.height
-      )
-      .setAlpha(0);
     const previewFrame = new Phaser.GameObjects.Sprite(
       gameManager,
       MoveModeConstants.preview.frame.x,
@@ -81,7 +66,7 @@ class GameModeMove implements IGameUI {
       screenCenter.x,
       screenCenter.y,
       ImageAssets.locationPreviewFill.key
-    ).setMask(previewMask.createGeometryMask());
+    );
     moveMenuContainer.add([previewFrame, previewFill]);
 
     // Add all navigation buttons
@@ -114,9 +99,6 @@ class GameModeMove implements IGameUI {
 
     // Initial setting
     this.setPreview(previewFill, ImageAssets.defaultLocationImg.key);
-
-    // Keep reference to mask for tweening
-    this.previewMask = previewMask;
 
     return moveMenuContainer;
   }
@@ -191,10 +173,9 @@ class GameModeMove implements IGameUI {
     GameGlobalAPI.getInstance().addToLayer(Layer.UI, this.uiContainer);
 
     this.uiContainer.setPosition(this.uiContainer.x, -screenSize.y);
-    this.previewMask!.setPosition(this.uiContainer.x, -screenSize.y);
 
     gameManager.tweens.add({
-      targets: [this.uiContainer, this.previewMask],
+      targets: this.uiContainer,
       ...entryTweenProps
     });
     GameGlobalAPI.getInstance().playSound(SoundAssets.modeEnter.key);
@@ -211,16 +192,14 @@ class GameModeMove implements IGameUI {
 
     if (this.uiContainer) {
       this.uiContainer.setPosition(this.uiContainer.x, 0);
-      this.previewMask!.setPosition(this.uiContainer.x, 0);
 
       gameManager.tweens.add({
-        targets: [this.uiContainer, this.previewMask],
+        targets: this.uiContainer,
         ...exitTweenProps
       });
 
       await sleep(500);
       fadeAndDestroy(gameManager, this.uiContainer);
-      this.previewMask!.destroy();
     }
   }
 }

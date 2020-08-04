@@ -1,7 +1,7 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { Color, HexColor } from '../../utils/StyleUtils';
+import { Color } from '../../utils/StyleUtils';
 
 export const AwardsHallConstants = {
   scrollSpeed: 20,
@@ -17,7 +17,6 @@ export const AwardsHallConstants = {
 export const awardBannerTextStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 35,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 

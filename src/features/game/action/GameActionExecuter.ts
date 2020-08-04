@@ -36,11 +36,13 @@ export default class GameActionExecuter {
       case GameActionType.UpdateCharacter:
         globalAPI.updateCharacter(actionParams.id, actionParams.expression);
         return;
-      case GameActionType.LocationChange:
-        await globalAPI.changeLocationTo(actionParams.id);
-        return;
       case GameActionType.ChangeBackground:
         globalAPI.renderBackgroundLayerContainer(actionParams.id);
+        return;
+      case GameActionType.PreviewLocation:
+        globalAPI.renderBackgroundLayerContainer(actionParams.id);
+        globalAPI.renderObjectLayerContainer(actionParams.id);
+        globalAPI.renderBBoxLayerContainer(actionParams.id);
         return;
       case GameActionType.ObtainCollectible:
         globalAPI.obtainCollectible(actionParams.id);
@@ -99,7 +101,7 @@ export default class GameActionExecuter {
       case GameActionType.MoveCharacter:
       case GameActionType.UpdateCharacter:
         return true;
-      case GameActionType.LocationChange:
+      case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
       case GameActionType.ObtainCollectible:
       case GameActionType.CompleteObjective:

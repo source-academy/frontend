@@ -6,7 +6,7 @@ export enum GameActionType {
   UpdateCharacter = 'UpdateCharacter',
   ObtainCollectible = 'ObtainCollectible',
   CompleteObjective = 'CompleteObjective',
-  LocationChange = 'LocationChange',
+  PreviewLocation = 'PreviewLocation',
   AddItem = 'AddItem',
   RemoveItem = 'RemoveItem',
   ShowDialogue = 'ShowDialogue',
