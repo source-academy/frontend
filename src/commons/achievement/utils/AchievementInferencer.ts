@@ -49,7 +49,7 @@ class InferencerNode {
   private generateProgressFrac(goals: AchievementGoal[]) {
     const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
 
-    return Math.min(progress / this.maxExp, 1);
+    return this.maxExp === 0 ? 0 : Math.min(progress / this.maxExp, 1);
   }
 }
 
