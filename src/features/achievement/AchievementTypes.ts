@@ -5,6 +5,7 @@ export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
 export const REMOVE_GOAL = 'REMOVE_GOAL';
 
 export const SAVE_GOALS = 'SAVE_GOALS';
+export const GET_OWN_GOALS = 'GET_OWN_GOALS';
 export const GET_GOALS = 'GET_GOALS';
 export const EDIT_GOAL = 'EDIT_GOAL';
 

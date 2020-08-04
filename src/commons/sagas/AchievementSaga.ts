@@ -5,6 +5,7 @@ import {
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
   GET_ACHIEVEMENTS,
+  GET_OWN_GOALS,
   GET_GOALS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
@@ -14,6 +15,7 @@ import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import {
   editAchievement,
+  fetchOwnGoals,
   fetchUserGoals,
   getAchievements,
   removeAchievement,
@@ -80,6 +82,19 @@ export default function* AchievementSaga(): SagaIterator {
 
     if (!resp) {
       return;
+    }
+  });
+
+  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getGoals>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const goals = yield call(fetchOwnGoals, tokens);
+
+    if (goals) {
+      yield put(actions.saveGoals(goals));
     }
   });
 

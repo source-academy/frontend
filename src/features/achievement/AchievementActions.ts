@@ -6,6 +6,7 @@ import {
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
   GET_ACHIEVEMENTS,
+  GET_OWN_GOALS,
   GET_GOALS,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
@@ -36,6 +37,8 @@ export const removeGoal = (goal: AchievementGoal, achievement: AchievementItem) 
 export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 
 export const getGoals = () => action(GET_GOALS);
+
+export const getOwnGoals = () => action(GET_OWN_GOALS);
 
 // TODO: Change type to GoalDefinition
 export const editGoal = (definition: any) => action(EDIT_GOAL, definition);

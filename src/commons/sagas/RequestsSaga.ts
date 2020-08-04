@@ -166,6 +166,33 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 /**
  * GET achievements/goals
  */
+export async function fetchOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/`, 'GET', {
+    // TODO: Put in student id if necessary
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal
+        // TODO: type: goal.type as GoalType,
+        // TODO: meta: goal.meta as GoalMeta;
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * GET achievements/goals/user_id
+ */
 export async function fetchUserGoals(
   tokens: Tokens,
   user: any // TODO: Change to user
