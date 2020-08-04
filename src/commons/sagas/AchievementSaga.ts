@@ -104,9 +104,9 @@ export default function* AchievementSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const goals = yield call(fetchUserGoals, tokens, {
-      /* TODO: Implement User Details Here */
-    });
+    const studentId = action.payload;
+
+    const goals = yield call(fetchUserGoals, tokens, studentId);
 
     if (goals) {
       yield put(actions.saveGoals(goals));

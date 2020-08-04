@@ -197,17 +197,16 @@ export async function fetchOwnGoals(tokens: Tokens): Promise<AchievementGoal[] |
  */
 export async function fetchUserGoals(
   tokens: Tokens,
-  user: any // TODO: Change to user
+  studentId: number, 
 ): Promise<AchievementGoal[] | null> {
-  const resp = await request(`achievements/goals/${user.id}`, 'GET', {
-    // TODO: Put in student id if necessary
+  const resp = await request(`achievements/goals/${studentId}`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
   });
 
   if (!resp || !resp.ok) {
-    return null; // invalid accessToken _and_ refreshToken
+    return null; /
   }
 
   const achievementGoals = await resp.json();
@@ -299,10 +298,9 @@ export async function removeAchievement(
   return resp;
 }
 
-/**
- * TODO: REMOVE
- *
+/** 
  * DELETE /achievements/goals
+ * 
  */
 export async function removeGoal(
   definition: GoalDefinition,

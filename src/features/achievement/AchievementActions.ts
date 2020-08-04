@@ -32,7 +32,7 @@ export const removeAchievement = (achievement: AchievementItem) =>
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);
 
-export const getGoals = () => action(GET_GOALS);
+export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 
