@@ -30,6 +30,7 @@ test('saveSourcecastData generates correct action object', () => {
   window.URL.createObjectURL = noOp;
   const title = 'Test Title';
   const description = 'Test Description';
+  const uid = 'unique_id';
   const audio = new Blob();
   const playbackData: PlaybackData = {
     init: {
@@ -39,12 +40,20 @@ test('saveSourcecastData generates correct action object', () => {
     },
     inputs: []
   };
-  const action = saveSourcecastData(title, description, audio, playbackData, sourcereelWorkspace);
+  const action = saveSourcecastData(
+    title,
+    description,
+    uid,
+    audio,
+    playbackData,
+    sourcereelWorkspace
+  );
   expect(action).toEqual({
     type: SAVE_SOURCECAST_DATA,
     payload: {
       title,
       description,
+      uid,
       audio,
       audioUrl: fakeUrl,
       playbackData,
@@ -135,6 +144,7 @@ test('setSourcecastData generates correct action object', () => {
   const action = setSourcecastData(
     'Test Title',
     'Test Description',
+    'unique_id',
     'fakeAudioUrl.com/audio.mp3',
     playbackData,
     sourcecastWorkspace
@@ -144,6 +154,7 @@ test('setSourcecastData generates correct action object', () => {
     payload: {
       title: 'Test Title',
       description: 'Test Description',
+      uid: 'unique_id',
       audioUrl: 'fakeAudioUrl.com/audio.mp3',
       playbackData,
       workspaceLocation: sourcecastWorkspace
