@@ -395,8 +395,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(envVisualizerTab);
     }
 
-    if (props.sourceChapter <= 2 && props.sourceVariant !== 'wasm') {
-      // Enable Subst Visualizer for Source 1 & 2
+    if (props.sourceChapter <= 2 && props.sourceVariant === 'default') {
+      // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
