@@ -37,7 +37,7 @@ export enum FilterStatus {
  * @param {number[]} prerequisiteIds an array of prerequisite ids
  * @param {number[]} goalIds an array of goal ids
  * @param {string} cardTileUrl background image of the achievement card
- * @param {AchievementViewItem} view the achievement view item
+ * @param {AchievementView} view the achievement view
  */
 export type AchievementItem = {
   id: number;
@@ -50,7 +50,7 @@ export type AchievementItem = {
   prerequisiteIds: number[];
   goalIds: number[];
   cardTileUrl: string;
-  view: AchievementViewItem;
+  view: AchievementView;
 };
 
 export type AchievementGoal = GoalDefinition & GoalProgress;
@@ -109,13 +109,13 @@ export type ManualMeta = {
 };
 
 /**
- * Information of an achievement in a view
+ * Information of an achievement view
  *
- * @param {string} canvasUrl URL of the view image
+ * @param {string} canvasUrl URL of the canvas image
  * @param {string} description fixed text that displays under title
  * @param {string} completionText text that displays after student completes the achievement
  */
-export type AchievementViewItem = {
+export type AchievementView = {
   canvasUrl: string;
   description: string;
   completionText: string;
