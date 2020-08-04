@@ -580,6 +580,9 @@ export function* evalCode(
   const substIsActive: boolean = yield select(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );
+  const stepLimit: number = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
+  );
   const substActiveAndCorrectChapter =
     context.chapter <= 2 && workspaceLocation === 'playground' && substIsActive;
   if (substActiveAndCorrectChapter) {
@@ -598,12 +601,14 @@ export function* evalCode(
         : call(runInContext, code, context, {
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           });
     } else if (variant === 'lazy') {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
+        stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
@@ -633,6 +638,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           }),
 

@@ -16,6 +16,7 @@ export const CHANGE_EDITOR_WIDTH = 'CHANGE_EDITOR_WIDTH';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
 export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
+export const CHANGE_STEP_LIMIT = 'CHANGE_STEP_LIMIT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
@@ -102,6 +103,7 @@ export type WorkspaceState = {
   readonly sharedbAceIsInviting: boolean;
   readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
+  readonly stepLimit: number;
   readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
