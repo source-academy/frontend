@@ -6,6 +6,15 @@ import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import TransformConstants from './SSTransformManagerConstants';
 
+/**
+ * This manager manages transformation (changing of dimensions and coordinates)
+ * of on-screen assets, ie bounding boxes and objects
+ *
+ * For dragging: It firstly renders the chagnes in real time using Phaser's drag listener
+ * When mouse is detached, it updates the details for bbox/objects by contacting their managers
+ *
+ * For resizing: The `[` and `]` keys are used to resize an object
+ */
 export default class SSTransformManager {
   private activeSelection: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle | undefined;
   private activeSelectRect: Phaser.GameObjects.Rectangle | undefined;
