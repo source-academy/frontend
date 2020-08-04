@@ -238,11 +238,6 @@ class GameSoundManager {
   public getBaseSoundManager = () =>
     this.getCurrentScene().sound as Phaser.Sound.WebAudioSoundManager;
   public getCurrentScene = () => mandatory(SourceAcademyGame.getInstance().getCurrentSceneRef());
-
-  /**
-   * Unlock sounds i.e. let sound play without awaiting first user interaction.
-   */
-  public unlock = () => this.getBaseSoundManager().unlock();
 }
 
 export default GameSoundManager;

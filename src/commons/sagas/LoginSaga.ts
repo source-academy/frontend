@@ -1,10 +1,11 @@
 import { SagaIterator } from 'redux-saga';
-import { call, takeEvery } from 'redux-saga/effects';
+import { call } from 'redux-saga/effects';
 
 import { LOGIN } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeEndpointUrl } from '../utils/AuthHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* LoginSaga(): SagaIterator {
   yield takeEvery(LOGIN, updateLoginHref);

@@ -27,7 +27,6 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
-    SourceAcademyGame.getInstance().getSoundManager().unlock();
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 

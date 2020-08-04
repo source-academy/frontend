@@ -8,14 +8,12 @@ import dialogueConstants from '../dialogue/GameDialogueConstants';
 import DialogueRenderer from '../dialogue/GameDialogueRenderer';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
-import { HexColor } from '../utils/StyleUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { fadeAndDestroy, fadeIn } from './FadeEffect';
 
 const notifStyle: BitmapFontStyle = {
   key: FontAssets.alienLeagueFont.key,
   size: 100,
-  fill: HexColor.paleYellow,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 

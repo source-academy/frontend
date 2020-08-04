@@ -137,6 +137,10 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
   }
 
+  public renderObjectLayerContainer(locationId: LocationId) {
+    this.getGameManager().getObjectManager().renderObjectsLayerContainer(locationId);
+  }
+
   public getAllActivatables() {
     return [
       ...this.getGameManager().getObjectManager().getActivatables(),
@@ -150,6 +154,10 @@ class GameGlobalAPI {
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
+  }
+
+  public renderBBoxLayerContainer(locationId: LocationId) {
+    this.getGameManager().getBBoxManager().renderBBoxLayerContainer(locationId);
   }
 
   /////////////////////

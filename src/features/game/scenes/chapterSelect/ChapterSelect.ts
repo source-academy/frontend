@@ -111,13 +111,11 @@ class ChapterSelect extends Phaser.Scene {
    * (the gray frame, the left and right arrow, and back button.)
    */
   private renderChapters() {
-    const mask = this.createMask();
     this.backButtonContainer = new CommonBackButton(this, () => {
       this.cleanUp();
       this.scene.start('MainMenu');
     });
     this.chapterContainer = this.createChapterContainer();
-    this.chapterContainer.mask = new Phaser.Display.Masks.GeometryMask(this, mask);
 
     const border = new Phaser.GameObjects.Image(
       this,
@@ -147,20 +145,6 @@ class ChapterSelect extends Phaser.Scene {
     this.getLayerManager().addToLayer(Layer.UI, border);
     this.getLayerManager().addToLayer(Layer.UI, leftArrow);
     this.getLayerManager().addToLayer(Layer.UI, rightArrow);
-  }
-
-  private createMask() {
-    const graphics = this.add.graphics();
-    const mask = graphics
-      .fillRect(
-        chapConstants.maskRect.x,
-        chapConstants.maskRect.y,
-        chapConstants.maskRect.width,
-        chapConstants.maskRect.height
-      )
-      .setPosition(screenCenter.x, screenCenter.y);
-    mask.alpha = 0;
-    return mask;
   }
 
   /**

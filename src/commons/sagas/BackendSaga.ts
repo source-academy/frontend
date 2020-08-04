@@ -1,7 +1,7 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
@@ -75,6 +75,7 @@ import {
   publishAssessment,
   uploadAssessment
 } from './RequestsSaga';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
