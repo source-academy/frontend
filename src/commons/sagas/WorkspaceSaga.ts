@@ -130,7 +130,7 @@ export default function* WorkspaceSaga(): SagaIterator {
         value = exploded.join('\n');
         parse(value, context);
         if (context.errors.length) {
-          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + ".";
+          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
           yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
         }
       }
