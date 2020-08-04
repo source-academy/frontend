@@ -8,7 +8,7 @@ import ObjectPlacement from 'src/features/storySimulator/scenes/ObjectPlacement/
 
 const config = {
   debug: true,
-  type: Phaser.WEBGL,
+  type: Phaser.CANVAS,
   width: screenSize.x,
   height: screenSize.y,
   physics: {

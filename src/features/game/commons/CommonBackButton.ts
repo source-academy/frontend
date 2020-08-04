@@ -7,7 +7,7 @@ import { BitmapFontStyle } from './CommonTypes';
 const backText = 'Back';
 const backTextYPos = -screenCenter.y * 0.975;
 const backButtonStyle: BitmapFontStyle = {
-  key: FontAssets.zektonFont.key,
+  key: FontAssets.zektonDarkFont.key,
   size: 25,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };

@@ -3,7 +3,7 @@ import { screenSize } from 'src/features/game/commons/CommonConstants';
 import { BitmapFontStyle } from 'src/features/game/commons/CommonTypes';
 
 export const mainMenuOptStyle: BitmapFontStyle = {
-  key: FontAssets.zektonFont.key,
+  key: FontAssets.zektonDarkFont.key,
   size: 35,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
