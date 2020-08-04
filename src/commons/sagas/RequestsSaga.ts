@@ -299,16 +299,18 @@ export async function removeAchievement(
 }
 
 /**
+ * TODO: REMOVE
+ *
  * DELETE /achievements/goals
  */
 export async function removeGoal(
   goal: AchievementGoal,
-  achievement: AchievementItem,
+  definition: any, // TODO: Change to GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/${achievement.id}/goals/${goal.id}`, 'DELETE', {
+  const resp = await request(`achievements/goals/${goal.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
-    body: { goal: goal, achievement: achievement },
+    body: { definition: definition },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

@@ -30,9 +30,9 @@ export const removeAchievement = (achievement: AchievementItem) =>
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);
 
-/* Will be deprecated after a separate db for student progress is ready */
-export const removeGoal = (goal: AchievementGoal, achievement: AchievementItem) =>
-  action(REMOVE_GOAL, { goal, achievement });
+/* TODO: Add Definition type */
+export const removeGoal = (goal: AchievementGoal, definition: any) =>
+  action(REMOVE_GOAL, { goal, definition });
 
 export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 

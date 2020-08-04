@@ -76,9 +76,16 @@ export default function* AchievementSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const { goal, achievement } = action.payload;
+    const { goal /* TODO: Add Definition to Payload */ } = action.payload;
 
-    const resp = yield call(removeGoal, goal, achievement, tokens);
+    const resp = yield call(
+      removeGoal,
+      goal,
+      {
+        /* TODO: Add Definition From Payload */
+      },
+      tokens
+    );
 
     if (!resp) {
       return;
