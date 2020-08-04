@@ -112,20 +112,29 @@ export default function* WorkspaceSaga(): SagaIterator {
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
     const [prepend, tempvalue] = code;
-    const exploded = tempvalue.split('\n');
-    for (const b in breakpoints) {
-      if (typeof b === 'string') {
-        const index: number = +b;
-        exploded[index] = 'debugger;' + exploded[index];
+    let value = tempvalue;
+    // Check for initial syntax errors. If there are errors, we continue with
+    // eval and let it print the error messages.
+    parse(tempvalue, context);
+    if (!context.errors.length) {
+      // Otherwise we step through the breakpoints one by one and check them.
+      const exploded = tempvalue.split('\n');
+      for (const b in breakpoints) {
+        if (typeof b !== 'string') {
+          continue;
+        }
 
+        const index: number = +b;
         context.errors = [];
-        parse(exploded.join('\n'), context);
-        if (context.errors.length > 0) {
-          yield call(showWarningMessage, 'Line ' + (index + 1) + ': Misplaced breakpoint', 2000);
+        exploded[index] = 'debugger;' + exploded[index];
+        value = exploded.join('\n');
+        parse(value, context);
+        if (context.errors.length) {
+          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + ".";
+          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
         }
       }
     }
-    const value = exploded.join('\n');
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
