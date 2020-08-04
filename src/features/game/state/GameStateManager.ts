@@ -299,11 +299,13 @@ class GameStateManager {
     // Move position
     this.getCharacterAtId(id).defaultPosition = newPosition;
 
-    // Find location with character
+    // Find location with character and remove him
     this.gameMap.getLocations().forEach((location, locId) => {
       if (!location.characters.has(id)) return;
       this.removeItem(GameItemType.characters, locId, id);
     });
+
+    // Add updated character to new location
     this.addItem(GameItemType.characters, newLocation, id);
   }
 
