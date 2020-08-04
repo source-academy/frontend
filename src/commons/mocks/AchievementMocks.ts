@@ -1,4 +1,9 @@
-import { AchievementAbility, AchievementItem } from '../../features/achievement/AchievementTypes';
+import {
+  AchievementAbility,
+  AchievementGoal,
+  AchievementItem,
+  GoalType
+} from '../../features/achievement/AchievementTypes';
 
 export const mockAchievements: AchievementItem[] = [
   {
@@ -7,8 +12,8 @@ export const mockAchievements: AchievementItem[] = [
     ability: AchievementAbility.CORE,
     isTask: true,
     position: 1,
-    prerequisiteIds: [],
-    goalIds: [],
+    prerequisiteIds: [2, 1],
+    goalIds: [0],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/rune-master-tile.png',
     view: {
@@ -27,7 +32,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: false,
     position: 0,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [1],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/btsd-tile.png',
     view: {
@@ -45,8 +50,8 @@ export const mockAchievements: AchievementItem[] = [
     deadline: new Date(2020, 7, 8, 9, 0, 0),
     isTask: false,
     position: 0,
-    prerequisiteIds: [],
-    goalIds: [],
+    prerequisiteIds: [2],
+    goalIds: [2],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
     view: {
@@ -79,8 +84,8 @@ export const mockAchievements: AchievementItem[] = [
     deadline: new Date(2020, 8, 15, 0, 0, 0),
     isTask: true,
     position: 4,
-    prerequisiteIds: [],
-    goalIds: [],
+    prerequisiteIds: [5, 6],
+    goalIds: [3],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-wizard-tile.png',
     view: {
@@ -99,7 +104,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: false,
     position: 0,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [4],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-introduction-tile.png',
     view: {
@@ -118,7 +123,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: false,
     position: 0,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [5],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/curve-manipulation-tile.png',
     view: {
@@ -137,7 +142,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: true,
     position: 3,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [6, 7],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/the-source-rer-tile.png',
     view: {
@@ -154,7 +159,7 @@ export const mockAchievements: AchievementItem[] = [
     ability: AchievementAbility.COMMUNITY,
     isTask: true,
     position: 2,
-    prerequisiteIds: [],
+    prerequisiteIds: [9],
     goalIds: [],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/power-of-friendship-tile.png',
@@ -173,7 +178,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: false,
     position: 0,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [8],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/piazza-guru-tile.png',
     view: {
@@ -191,7 +196,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: true,
     position: 5,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [9],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/thats-the-spirit-tile.png',
     view: {
@@ -218,5 +223,146 @@ export const mockAchievements: AchievementItem[] = [
       description: 'Diz for teh K00L K1dz',
       completionText: 'U SO G00D'
     }
+  }
+];
+
+export const mockGoals: AchievementGoal[] = [
+  {
+    id: 0,
+    text: 'Bonus for completing Colorful Carpet & Beyond the Second Dimension Achievements',
+    maxExp: 100,
+    type: GoalType.BINARY,
+    meta: {
+      condition: `AND(
+        {
+          event: 'achievement',
+          restriction: 2,
+        },
+        {
+          event: 'achievement',
+          restriction: 1,
+        },
+      )`
+    },
+    exp: 0,
+    completed: false
+  },
+  {
+    id: 1,
+    text: 'XP earned from Beyond the Second Dimension Mission',
+    maxExp: 250,
+    type: GoalType.ASSESSMENT,
+    meta: { assessmentId: 5, requiredCompletionExp: 200 },
+    exp: 213,
+    completed: true
+  },
+  {
+    id: 2,
+    text: 'XP earned from Colorful Carpet Mission',
+    maxExp: 250,
+    type: GoalType.ASSESSMENT,
+    meta: { assessmentId: 3, requiredCompletionExp: 200 },
+    exp: 0,
+    completed: false
+  },
+  {
+    id: 3,
+    text: 'Bonus for completing Curve Introduction & Curve Manipulation Achievements',
+    maxExp: 100,
+    type: GoalType.BINARY,
+    meta: {
+      condition: `AND(
+      {
+        event: 'achievement',
+        restriction: 4,
+      },
+      {
+        event: 'achievement',
+        restriction: 5,
+      },
+    )`
+    },
+    exp: 0,
+    completed: false
+  },
+  {
+    id: 4,
+    text: 'XP earned from Curve Introduction Mission',
+    maxExp: 250,
+    type: GoalType.ASSESSMENT,
+    meta: { assessmentId: 7, requiredCompletionExp: 150 },
+    exp: 178,
+    completed: true
+  },
+  {
+    id: 5,
+    text: 'XP earned from Curve Manipulation Mission',
+    maxExp: 250,
+    type: GoalType.ASSESSMENT,
+    meta: { assessmentId: 8, requiredCompletionExp: 200 },
+    exp: 191,
+    completed: false
+  },
+  {
+    id: 6,
+    text: 'Submit Source 3 Path',
+    maxExp: 100,
+    type: GoalType.BINARY,
+    meta: {
+      condition: `
+      {
+        event: 'assessment-submission',
+        restriction: paths.SOURCE_THREE,
+      },
+    `
+    },
+    exp: 100,
+    completed: true
+  },
+  {
+    id: 7,
+    text: 'XP earned from Source 3 Path',
+    maxExp: 300,
+    type: GoalType.ASSESSMENT,
+    meta: {
+      assessmentId: 12,
+      requiredCompletionExp: 300
+    },
+    exp: 300,
+    completed: true
+  },
+  {
+    id: 8,
+    text: 'Each Top Voted answer in Piazza gives 10 XP',
+    maxExp: 100,
+    type: GoalType.MANUAL,
+    meta: {},
+    exp: 40,
+    completed: false
+  },
+  {
+    id: 9,
+    text: 'Submit 1 PR to Source Academy Github',
+    maxExp: 100,
+    type: GoalType.MANUAL,
+    meta: {},
+    exp: 100,
+    completed: true
+  },
+  {
+    id: 10,
+    text: 'Be the Koolest Kidz in SOC by redeeming this 100 XP achievement yourself',
+    maxExp: 100,
+    type: GoalType.BINARY,
+    meta: {
+      condition: `
+      {
+        event: 'achievement',
+        restriction: 'false',
+      },
+    `
+    },
+    exp: 0,
+    completed: false
   }
 ];
