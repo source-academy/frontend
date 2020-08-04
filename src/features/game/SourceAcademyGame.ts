@@ -154,6 +154,9 @@ const config = {
     mode: Phaser.Scale.FIT,
     parent: 'game-display'
   },
+  fps: {
+    target: 24
+  },
   scene: [
     Entry,
     MainMenu,
