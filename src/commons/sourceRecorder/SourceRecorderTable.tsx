@@ -52,7 +52,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          width: 400,
+          width: 300,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -91,8 +91,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           cellRendererFramework: SourceRecorderShareCell,
           width: 100,
           suppressMovable: true,
-          suppressMenu: true,
-          hide: !!this.props.handleSetSourcecastData
+          suppressMenu: true
         },
         {
           headerName: 'Delete',

@@ -83,7 +83,7 @@ class SourcereelControlbar extends React.PureComponent<SourcereelControlbarProps
   public render() {
     const RecorderRecordPauseButton = controlButton(
       'Record Pause',
-      IconNames.ASTERISK,
+      IconNames.SNOWFLAKE,
       this.props.handleRecordPause
     );
     const RecorderPauseButton = controlButton('Pause', IconNames.PAUSE, this.handleRecorderPausing);
