@@ -76,16 +76,9 @@ export default function* AchievementSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const { goal /* TODO: Add Definition to Payload */ } = action.payload;
+    const definition = action.payload;
 
-    const resp = yield call(
-      removeGoal,
-      goal,
-      {
-        /* TODO: Add Definition From Payload */
-      },
-      tokens
-    );
+    const resp = yield call(removeGoal, definition, tokens);
 
     if (!resp) {
       return;
@@ -126,16 +119,9 @@ export default function* AchievementSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const goal = action.payload;
+    const definition = action.payload;
 
-    const resp = yield call(
-      updateGoalDefinition,
-      goal,
-      {
-        /* TODO: Implement Goal Defintiion Here */
-      },
-      tokens
-    );
+    const resp = yield call(updateGoalDefinition, definition, tokens);
 
     if (!resp) {
       return;
@@ -150,16 +136,9 @@ export default function* AchievementSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
 
-    const progress = action.payload;
+    const { studentId, progress } = action.payload;
 
-    const resp = yield call(
-      updateGoalProgress,
-      {
-        /* TODO: Implement User here  */
-      },
-      progress,
-      tokens
-    );
+    const resp = yield call(updateGoalProgress, studentId, progress, tokens);
 
     if (!resp) {
       return;

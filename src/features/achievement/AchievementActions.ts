@@ -8,6 +8,8 @@ import {
   GET_ACHIEVEMENTS,
   GET_OWN_GOALS,
   GET_GOALS,
+  GoalDefinition,
+  GoalProgress,
   REMOVE_ACHIEVEMENT,
   REMOVE_GOAL,
   SAVE_ACHIEVEMENTS,
@@ -30,18 +32,15 @@ export const removeAchievement = (achievement: AchievementItem) =>
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);
 
-/* TODO: Add Definition type */
-export const removeGoal = (goal: AchievementGoal, definition: any) =>
-  action(REMOVE_GOAL, { goal, definition });
-
-export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
-
 export const getGoals = () => action(GET_GOALS);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 
-// TODO: Change type to GoalDefinition
-export const editGoal = (definition: any) => action(EDIT_GOAL, definition);
+export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 
-// TODO: Change type to GoalProgress
-export const updateGoalProgress = (progress: any) => action(UPDATE_GOAL_PROGRESS, progress);
+export const removeGoal = (definition: GoalDefinition) => action(REMOVE_GOAL, definition);
+
+export const editGoal = (definition: GoalDefinition) => action(EDIT_GOAL, definition);
+
+export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>
+  action(UPDATE_GOAL_PROGRESS, { studentId, progress });

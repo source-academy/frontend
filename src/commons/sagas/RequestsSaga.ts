@@ -16,7 +16,9 @@ import {
 import {
   AchievementAbility,
   AchievementGoal,
-  AchievementItem
+  AchievementItem,
+  GoalDefinition,
+  GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -224,11 +226,11 @@ export async function fetchUserGoals(
  * POST /achievements/goals/:goal_id/:student_id
  */
 export async function updateGoalProgress(
-  user: any, // TODO: Change to user
-  progress: any, // TODO: Change to GoalProgress,
+  studentId: number,
+  progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/${progress.id}/${user.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
     accessToken: tokens.accessToken,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -244,11 +246,10 @@ export async function updateGoalProgress(
  * POST /achievements/goals/:goal_id/
  */
 export async function updateGoalDefinition(
-  goal: AchievementGoal,
-  definition: any, // TODO: Change to GoalDefinition,
+  definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/${goal.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
     accessToken: tokens.accessToken,
     body: { definition: definition },
     noHeaderAccept: true,
@@ -304,11 +305,10 @@ export async function removeAchievement(
  * DELETE /achievements/goals
  */
 export async function removeGoal(
-  goal: AchievementGoal,
-  definition: any, // TODO: Change to GoalDefinition,
+  definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/${goal.id}`, 'DELETE', {
+  const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { definition: definition },
     noHeaderAccept: true,
