@@ -8,7 +8,7 @@ import AchievementInferencer from '../AchievementInferencer';
 
 const sampleAchievement: AchievementItem = {
   id: 12,
-  title: 'Sample Title',
+  title: 'New Achievement',
   ability: AchievementAbility.CORE,
   isTask: false,
   prerequisiteIds: [],
@@ -25,18 +25,21 @@ const sampleAchievement: AchievementItem = {
 };
 
 describe('Achievements change when', () => {
-  test('an achievement is set to be a task', () => {
-    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
-    inferencer.setTask(inferencer.getAchievementItem(0));
-
-    expect(inferencer.getAchievementItem(0).isTask).toEqual(true);
-  });
-
   test('an achievement is unset to be a task', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     inferencer.setNonTask(inferencer.getAchievementItem(0));
 
     expect(inferencer.getAchievementItem(0).isTask).toEqual(false);
+    expect(inferencer.getAchievementItem(0).position).toEqual(0);
+    expect(inferencer.getAchievementItem(0).prerequisiteIds).toEqual([]);
+  });
+
+  test('an achievement is set to be a task', () => {
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+    inferencer.setTask(inferencer.getAchievementItem(0));
+
+    expect(inferencer.getAchievementItem(0).isTask).toEqual(true);
+    expect(inferencer.getAchievementItem(0).position).toEqual(inferencer.listTaskIds().length + 1);
   });
 
   test('an achievement is inserted and deleted', () => {
@@ -45,8 +48,20 @@ describe('Achievements change when', () => {
     inferencer.insertAchievement(sampleAchievement);
     expect(inferencer.getAchievements().length).toEqual(13);
 
-    inferencer.removeAchievement(0);
+    expect(inferencer.doesAchievementExist(sampleAchievement.id)).toEqual(true);
+    expect(inferencer.getAchievementItem(sampleAchievement.id)).toEqual(sampleAchievement);
+
+    inferencer.removeAchievement(sampleAchievement.id);
     expect(inferencer.getAchievements().length).toEqual(12);
+  });
+
+  test('an achievement swaps position', () => {
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+    const firstTask = inferencer.getAchievementItem(4);
+
+    inferencer.changeAchievementPosition(firstTask, 2);
+
+    expect(inferencer.getAchievementItem(firstTask.id).position).toEqual(2);
   });
 });
 
