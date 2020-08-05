@@ -18,7 +18,9 @@ import {
   AchievementGoal,
   AchievementItem,
   GoalDefinition,
-  GoalProgress
+  GoalMeta,
+  GoalProgress,
+  GoalType
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -170,7 +172,6 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
  */
 export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
   const resp = await request(`achievements/goals/`, 'GET', {
-    // TODO: Put in student id if necessary
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
@@ -185,9 +186,9 @@ export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | n
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal
-        // TODO: type: goal.type as GoalType,
-        // TODO: meta: goal.meta as GoalMeta;
+        ...goal,
+        type: goal.type as GoalType,
+        meta: goal.meta as GoalMeta
       } as AchievementGoal)
   );
 }
@@ -214,9 +215,9 @@ export async function getGoals(
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal
-        // TODO: type: goal.type as GoalType,
-        // TODO: meta: goal.meta as GoalMeta;
+        ...goal,
+        type: goal.type as GoalType,
+        meta: goal.meta as GoalMeta
       } as AchievementGoal)
   );
 }
