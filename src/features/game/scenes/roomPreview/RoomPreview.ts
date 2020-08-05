@@ -125,7 +125,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public update() {
-    // this.eval(`update();`);
+    this.eval(`update();`);
   }
 
   public createContext() {
@@ -145,6 +145,16 @@ export default class RoomPreview extends Phaser.Scene {
   private async eval(code: string) {
     // runInContext also automatically updates the context
     await runInContext(code, this.context!);
+
+    /**
+     * runInContext appends new frame everytime it is run,
+     * which leads to out of memory error when we run
+     * runInContext as often as FPS of the game for `update()`.
+     *
+     * Hence, we replace the scope instead of appending
+     * new one each time.
+     */
+    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
   }
 
   /**
