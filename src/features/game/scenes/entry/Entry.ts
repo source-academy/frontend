@@ -25,17 +25,16 @@ class Entry extends Phaser.Scene {
   }
 
   public async create() {
-    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
-      console.log('Staff do not have accounts');
-      return;
-    }
-
     await SourceAcademyGame.getInstance().loadGameChapters();
     await SourceAcademyGame.getInstance().loadRoomCode();
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
     await SourceAcademyGame.getInstance().getUserStateManager().loadUserState();
     await this.preloadAwards();
 
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
+      console.log('Staff do not have accounts');
+      return;
+    }
     this.applyLoadedSettings();
 
     this.scene.start('MainMenu');

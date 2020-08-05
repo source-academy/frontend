@@ -241,6 +241,11 @@ class GameManager extends Phaser.Scene {
    * Game is only able to transition to the next checkpoint
    * if all of the objectives of the current checkpoint has been cleared.
    *
+   * We also do not want to go Transition scene if players have just
+   * completed the chapter so that they can don't get kicked out of the
+   * chapter if they've already finished it before.
+   * This is unless they press replay, which sets their chapNewlyCompleted back to false.
+   *
    * Additionally, game will only transition if the newPhase is not Sequence phase;
    * in order to ensure that we don't transition to the next checkpoint
    * during dialogue/cutscene.
@@ -254,7 +259,8 @@ class GameManager extends Phaser.Scene {
     return (
       !this.hasTransitioned &&
       newPhase !== GamePhaseType.Sequence &&
-      GameGlobalAPI.getInstance().isAllComplete()
+      GameGlobalAPI.getInstance().isAllComplete() &&
+      !this.getStateManager().getChapterNewlyCompleted()
     );
   }
 
