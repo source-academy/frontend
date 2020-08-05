@@ -378,17 +378,19 @@ class GameGlobalAPI {
   }
 
   /////////////////////
-  //       URL       //
+  //    Assessment   //
   /////////////////////
 
-  public async promptNavigateToURL(pageTitle: string, url: string) {
+  public async promptNavigateToAssessment(assessmentTitle: string, assessmentId: number) {
+    // We do not fetch the assessment title by ourselves as it
+    // involves back-end request which may be slow
     const response = await promptWithChoices(
       GameGlobalAPI.getInstance().getGameManager(),
-      `You will be navigated to ${pageTitle}. Do you want to proceed?`,
+      `You will be navigated to ${assessmentTitle}. Do you want to proceed?`,
       ['Yes', 'No']
     );
     if (response === 0) {
-      window.open(url, '_blank_');
+      window.open(`/academy/missions/${assessmentId}/0`, 'blank');
       window.focus();
     }
   }
