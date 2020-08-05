@@ -1,4 +1,4 @@
-import { mockGoals } from 'src/commons/mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
@@ -87,7 +87,8 @@ export default class GameUserStateManager {
    * Fetches achievements of the student;
    */
   public async loadAchievements() {
-    const achievements = SourceAcademyGame.getInstance().getAchievements();
+    // TODO: replace below with const achievements = SourceAcademyGame.getInstance().getAchievements();
+    const achievements = mockAchievements;
     // TODO: replace below with const goals = SourceAcademyGame.getInstance().getGoals();
     const goals = new Map<number, AchievementGoal>();
     // TODO: replace mockGoals with the goals from redux store
