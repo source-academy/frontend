@@ -168,7 +168,7 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 /**
  * GET achievements/goals
  */
-export async function fetchOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
+export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
   const resp = await request(`achievements/goals/`, 'GET', {
     // TODO: Put in student id if necessary
     accessToken: tokens.accessToken,
@@ -195,7 +195,7 @@ export async function fetchOwnGoals(tokens: Tokens): Promise<AchievementGoal[] |
 /**
  * GET achievements/goals/user_id
  */
-export async function fetchUserGoals(
+export async function getGoals(
   tokens: Tokens,
   studentId: number
 ): Promise<AchievementGoal[] | null> {
@@ -244,7 +244,7 @@ export async function updateGoalProgress(
 /**
  * POST /achievements/goals/:goal_id/
  */
-export async function updateGoalDefinition(
+export async function editGoal(
   definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> {
