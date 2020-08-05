@@ -28,25 +28,15 @@ class InferencerNode {
   public descendant: Set<number>;
 
   constructor(achievement: AchievementItem) {
-    const { deadline, prerequisiteIds, goals } = achievement;
+    const { deadline, prerequisiteIds } = achievement;
 
     this.achievement = achievement;
     this.displayDeadline = deadline;
-    this.maxExp = this.generateMaxExp(goals);
-    this.progressFrac = this.generateProgressFrac(goals);
-    this.status = AchievementStatus.ACTIVE; // will be updated after the nodeList is constructed
+    this.maxExp = 0;
+    this.progressFrac = 0;
+    this.status = AchievementStatus.ACTIVE;
     this.children = new Set(prerequisiteIds);
     this.descendant = new Set(prerequisiteIds);
-  }
-
-  private generateMaxExp(goals: AchievementGoal[]) {
-    return goals.reduce((exp, goal) => exp + goal.goalTarget, 0);
-  }
-
-  private generateProgressFrac(goals: AchievementGoal[]) {
-    const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
-
-    return this.maxExp === 0 ? 0 : Math.min(progress / this.maxExp, 1);
   }
 }
 
@@ -55,14 +45,16 @@ class InferencerNode {
  */
 class AchievementInferencer {
   private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
+  private goalList: Map<number, AchievementGoal> = new Map(); // key = goalId, value = AchievementGoal
 
-  constructor(achievements: AchievementItem[]) {
+  constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
+    this.goalList = this.constructGoalList(goals);
     this.processNodes();
   }
 
   public doesAchievementExist(id: number) {
-    return this.nodeList.get(id) !== undefined;
+    return this.nodeList.has(id);
   }
 
   public getAchievements() {
@@ -138,7 +130,7 @@ class AchievementInferencer {
     return this.getAchievements()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
-      .map(task => task.id);
+      .map(sortedTask => sortedTask.id);
   }
 
   public listNonTaskIds() {
@@ -149,10 +141,9 @@ class AchievementInferencer {
 
   public setTask(achievement: AchievementItem) {
     achievement.isTask = true;
-    achievement.position = this.listTaskIds().length;
+    achievement.position = this.listTaskIds().length + 1;
 
     this.modifyAchievement(achievement);
-    this.normalizePositions();
   }
 
   public setNonTask(achievement: AchievementItem) {
@@ -161,22 +152,6 @@ class AchievementInferencer {
     achievement.position = 0; // position 0 is reserved for non-task achievements
 
     this.modifyAchievement(achievement);
-    this.normalizePositions();
-  }
-
-  // Calculates set bonus
-  public getBonusExp(id: number) {
-    assert(this.nodeList.has(id));
-    if (this.nodeList.get(id)!.children.size === 0) return 0;
-
-    const maxExp = this.nodeList.get(id)!.maxExp;
-
-    let maxChildExp = 0;
-    for (const childId of this.nodeList.get(id)!.children) {
-      maxChildExp = maxChildExp + this.nodeList.get(childId)!.maxExp;
-    }
-
-    return maxExp - maxChildExp;
   }
 
   public getMaxExp(id: number) {
@@ -184,29 +159,19 @@ class AchievementInferencer {
     return this.nodeList.get(id)!.maxExp;
   }
 
-  public getStudentExp(id: number) {
-    assert(this.nodeList.has(id));
-    const goals = this.nodeList.get(id)!.achievement.goals;
-
-    return goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
+  public getGoalExp(goalId: number) {
+    assert(this.goalList.has(goalId));
+    return this.goalList.get(goalId)!.exp;
   }
 
-  // total achievable EXP of all published achievements
-  public getTotalExp() {
-    const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
-
-    return publishedTask.reduce((totalExp, node) => totalExp + node.maxExp, 0);
+  public getGoalMaxExp(goalId: number) {
+    assert(this.goalList.has(goalId));
+    return this.goalList.get(goalId)!.maxExp;
   }
 
   // total EXP earned by the student
-  public getStudentTotalExp() {
-    const publishedTask = this.listPublishedNodes().filter(node => node.achievement.isTask);
-
-    return publishedTask.reduce((totalProgress, node) => {
-      const goals = node.achievement.goals;
-      const progress = goals.reduce((progress, goal) => progress + goal.goalProgress, 0);
-      return totalProgress + progress;
-    }, 0);
+  public getTotalExp() {
+    return [...this.goalList.values()].reduce((totalExp, goal) => totalExp + goal.exp, 0);
   }
 
   public getProgressFrac(id: number) {
@@ -279,8 +244,8 @@ class AchievementInferencer {
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position);
 
-    const movedAchievement = achievements.splice(achievement.position - 1, 1)[0];
-    achievements.splice(newPosition - 1, 0, movedAchievement);
+    const targetAchievement = achievements.splice(achievement.position - 1, 1)[0];
+    achievements.splice(newPosition - 1, 0, targetAchievement);
 
     for (let i = Math.min(newPosition - 1, achievement.position); i < achievements.length; i++) {
       const editedAchievement = achievements[i];
@@ -292,8 +257,11 @@ class AchievementInferencer {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
+      this.generateMaxExp(node);
+      this.generateProgressFrac(node);
       this.generateStatus(node);
     });
+    this.normalizePositions();
   }
 
   private constructNodeList(achievements: AchievementItem[]) {
@@ -302,6 +270,12 @@ class AchievementInferencer {
       nodeList.set(achievement.id, new InferencerNode(achievement))
     );
     return nodeList;
+  }
+
+  private constructGoalList(goals: AchievementGoal[]) {
+    const goalList = new Map();
+    goals.forEach(goal => goalList.set(goal.id, goal));
+    return goalList;
   }
 
   // Recursively append grandchildren's id to children, O(N) operation
@@ -320,6 +294,8 @@ class AchievementInferencer {
   }
 
   // Set the node's display deadline by comparing with all descendants' deadlines
+  // Display deadline is the closest unexpired deadline of all descendants
+  // (Deadline <= CurrentTime) is considered as deadline expired
   private generateDisplayDeadline(node: InferencerNode) {
     const now = new Date();
 
@@ -334,8 +310,8 @@ class AchievementInferencer {
       } else if (displayDeadline === undefined) {
         return currentDeadline;
       } else {
-        // currentDeadline unexpired, displayDeadline may be expired or unexpired
-        // display the closest unexpired deadline
+        // currentDeadline unexpired, displayDeadline may or may not expired
+        // hence display the closest unexpired deadline
         return displayDeadline <= now || currentDeadline < displayDeadline
           ? currentDeadline
           : displayDeadline;
@@ -354,23 +330,49 @@ class AchievementInferencer {
     node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
   }
 
+  private generateMaxExp(node: InferencerNode) {
+    const { goalIds } = node.achievement;
+    node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
+  }
+
+  private generateProgressFrac(node: InferencerNode) {
+    const { goalIds } = node.achievement;
+    const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+
+    node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
+  }
+
+  // Mark as AchievementStatus.COMPLETED if all goals completed
+  // Else mark as AchievementStatus.EXPIRED if all descendant deadlines expired
+  // Else mark as AchievementStatus.ACTIVE if none of the above
   private generateStatus(node: InferencerNode) {
+    const { goalIds } = node.achievement;
+    const achievementCompleted = goalIds
+      .map(goalId => {
+        assert(this.goalList.has(goalId));
+        return this.goalList.get(goalId)!.completed;
+      })
+      .reduce((result, goalCompleted) => result && goalCompleted, true);
+
+    // Temporary array of all descendants' deadlines
+    const descendantDeadlines = [];
+    for (const childId of node.descendant) {
+      assert(this.nodeList.has(childId));
+      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
+      descendantDeadlines.push(childDeadline);
+    }
     const now = new Date();
-    const deadline = node.displayDeadline;
-    if (deadline !== undefined && deadline.getTime() <= now.getTime()) {
-      // deadline elapsed
-      if (node.progressFrac === 0) {
-        return (node.status = AchievementStatus.EXPIRED); // not attempted
-      } else {
-        return (node.status = AchievementStatus.COMPLETED); // attempted
-      }
+    const deadlinesExpired = descendantDeadlines.reduce(
+      (result, deadline) => deadline === undefined || (result && deadline <= now),
+      true
+    );
+
+    if (achievementCompleted) {
+      node.status = AchievementStatus.COMPLETED;
+    } else if (deadlinesExpired) {
+      node.status = AchievementStatus.EXPIRED;
     } else {
-      // deadline not elapsed
-      if (node.progressFrac === 1) {
-        return (node.status = AchievementStatus.COMPLETED); // fully completed
-      } else {
-        return (node.status = AchievementStatus.ACTIVE); // not fully completed
-      }
+      node.status = AchievementStatus.ACTIVE;
     }
   }
 
