@@ -6,6 +6,7 @@ import {
   AchievementStatus,
   FilterStatus
 } from '../../../features/achievement/AchievementTypes';
+import { isExpired } from './DateHelper';
 
 /**
  * An InferencerNode item encapsulates all important information of an achievement item
@@ -50,7 +51,6 @@ class AchievementInferencer {
   constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
     this.goalList = this.constructGoalList(goals);
-    console.log(this.goalList);
     this.processNodes();
   }
 
@@ -331,16 +331,13 @@ class AchievementInferencer {
 
   // Set the node's display deadline by comparing with all descendants' deadlines
   // Display deadline is the closest unexpired deadline of all descendants
-  // (Deadline <= CurrentTime) is considered as deadline expired
   private generateDisplayDeadline(node: InferencerNode) {
-    const now = new Date();
-
     // Comparator of two deadlines
     const compareDeadlines = (
       displayDeadline: Date | undefined,
       currentDeadline: Date | undefined
     ) => {
-      if (currentDeadline === undefined || currentDeadline <= now) {
+      if (currentDeadline === undefined || isExpired(currentDeadline)) {
         // currentDeadline undefined or expired, nothing change
         return displayDeadline;
       } else if (displayDeadline === undefined) {
@@ -348,7 +345,7 @@ class AchievementInferencer {
       } else {
         // currentDeadline unexpired, displayDeadline may or may not expired
         // hence display the closest unexpired deadline
-        return displayDeadline <= now || currentDeadline < displayDeadline
+        return isExpired(displayDeadline) || currentDeadline < displayDeadline
           ? currentDeadline
           : displayDeadline;
       }
@@ -381,15 +378,17 @@ class AchievementInferencer {
     node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
   }
 
-  // Mark as AchievementStatus.COMPLETED if all goals completed
-  // Else mark as AchievementStatus.EXPIRED if all descendant deadlines expired
-  // Else mark as AchievementStatus.ACTIVE if none of the above
+  // AchievementStatus.COMPLETED if contains goals and all goals completed
+  // AchievementStatus.ACTIVE if has at least 1 active descendant
+  // AchievementStatus.EXPIRED if none of the above
   private generateStatus(node: InferencerNode) {
-    const { goalIds } = node.achievement;
+    const { deadline, goalIds } = node.achievement;
     goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
-    const achievementCompleted = goalIds
-      .map(goalId => this.goalList.get(goalId)!.completed)
-      .reduce((result, goalCompleted) => result && goalCompleted, true);
+    const achievementCompleted =
+      goalIds.length !== 0 &&
+      goalIds
+        .map(goalId => this.goalList.get(goalId)!.completed)
+        .reduce((result, goalCompleted) => result && goalCompleted, true);
 
     // Temporary array of all descendants' deadlines
     const descendantDeadlines = [];
@@ -398,17 +397,17 @@ class AchievementInferencer {
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
-    const now = new Date();
-    const deadlinesExpired = descendantDeadlines.reduce((result, deadline) => {
-      return deadline === undefined ? false : result && deadline <= now;
-    }, true);
+    const hasUnexpiredDeadline = descendantDeadlines.reduce(
+      (result, deadline) => result || !isExpired(deadline),
+      !isExpired(deadline)
+    );
 
     if (achievementCompleted) {
       node.status = AchievementStatus.COMPLETED;
-    } else if (deadlinesExpired) {
-      node.status = AchievementStatus.EXPIRED;
-    } else {
+    } else if (hasUnexpiredDeadline) {
       node.status = AchievementStatus.ACTIVE;
+    } else {
+      node.status = AchievementStatus.EXPIRED;
     }
   }
 
