@@ -8,8 +8,8 @@ const TextAssets = {
 };
 
 export const MockTextAssets = {
-  defaultCheckpoint: { key: 'default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
-  awardsMapping: { key: 'awards-mapping', path: '../assets/mockAwardsMapping.txt' }
+  defaultCheckpoint: { key: 'mock-default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
+  awardsMapping: { key: 'mock-awards-mapping', path: '../assets/mockAwardsMapping.txt' }
 };
 
 export default TextAssets;

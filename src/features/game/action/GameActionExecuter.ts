@@ -80,6 +80,9 @@ export default class GameActionExecuter {
       case GameActionType.ShowObjectLayer:
         actionParams.show ? globalAPI.showLayer(Layer.Objects) : globalAPI.hideLayer(Layer.Objects);
         return;
+      case GameActionType.NavigateToAssessment:
+        await globalAPI.promptNavigateToAssessment(actionParams.title, actionParams.assessmentId);
+        return;
       default:
         return;
     }
@@ -101,6 +104,7 @@ export default class GameActionExecuter {
       case GameActionType.MoveCharacter:
       case GameActionType.UpdateCharacter:
         return true;
+      case GameActionType.NavigateToAssessment:
       case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
       case GameActionType.ObtainCollectible:

@@ -158,6 +158,11 @@ export default class ActionParser {
         actionParamObj.locationId = actionParams[1];
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[2]);
         break;
+
+      case GameActionType.NavigateToAssessment:
+        actionParamObj.title = actionParams[0];
+        actionParamObj.assessmentId = actionParams[1];
+        break;
     }
 
     const actionId = Parser.generateActionId();
