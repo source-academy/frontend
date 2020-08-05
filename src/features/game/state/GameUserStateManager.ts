@@ -89,11 +89,8 @@ export default class GameUserStateManager {
   public async loadAchievements() {
     const achievements = SourceAcademyGame.getInstance().getAchievements();
     // TODO: replace below with const goals = SourceAcademyGame.getInstance().getGoals();
-    // This is just an example of how to retrieve goals from the new goal structure
     const goals = new Map<number, AchievementGoal>();
-    // Converting the original goal array to a map is necessary because
-    // the goal index in the goals array might not be the same as its goal id
-    // Also, replace mockGoals with the goals from redux store
+    // TODO: replace mockGoals with the goals from redux store
     mockGoals.forEach(goal => goals.set(goal.id, goal));
 
     achievements.forEach(achievement => {
