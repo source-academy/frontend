@@ -55,9 +55,11 @@ class InferencerNode {
  */
 class AchievementInferencer {
   private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
+  private goalList: Map<number, AchievementGoal> = new Map(); // key = goalId, value = AchievementGoal
 
-  constructor(achievements: AchievementItem[]) {
+  constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
+    this.goalList = this.constructGoalList(goals);
     this.processNodes();
   }
 
@@ -304,6 +306,12 @@ class AchievementInferencer {
     return nodeList;
   }
 
+  private constructGoalList(goals: AchievementGoal[]) {
+    const goalList = new Map();
+    goals.forEach(goal => goalList.set(goal.id, goal));
+    return goalList;
+  }
+
   // Recursively append grandchildren's id to children, O(N) operation
   private generateDescendant(node: InferencerNode) {
     for (const childId of node.descendant) {
@@ -320,6 +328,8 @@ class AchievementInferencer {
   }
 
   // Set the node's display deadline by comparing with all descendants' deadlines
+  // Display deadline is the closest unexpired deadline of all descendants
+  // (Deadline <= CurrentTime) is considered as deadline expired
   private generateDisplayDeadline(node: InferencerNode) {
     const now = new Date();
 
@@ -334,8 +344,8 @@ class AchievementInferencer {
       } else if (displayDeadline === undefined) {
         return currentDeadline;
       } else {
-        // currentDeadline unexpired, displayDeadline may be expired or unexpired
-        // display the closest unexpired deadline
+        // currentDeadline unexpired, displayDeadline may or may not expired
+        // hence display the closest unexpired deadline
         return displayDeadline <= now || currentDeadline < displayDeadline
           ? currentDeadline
           : displayDeadline;
