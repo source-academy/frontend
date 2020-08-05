@@ -50,7 +50,7 @@ export const mockAchievements: AchievementItem[] = [
     deadline: new Date(2020, 7, 8, 9, 0, 0),
     isTask: false,
     position: 0,
-    prerequisiteIds: [2],
+    prerequisiteIds: [],
     goalIds: [2],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/colorful-carpet-tile.png',
