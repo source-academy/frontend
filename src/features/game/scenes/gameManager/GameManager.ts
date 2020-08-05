@@ -177,6 +177,8 @@ class GameManager extends Phaser.Scene {
     if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
       await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
     }
+
+    GameGlobalAPI.getInstance().promptNavigateToAssessment(405);
   }
 
   /**

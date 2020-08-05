@@ -1,17 +1,22 @@
 import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
-import { screenSize } from '../commons/CommonConstants';
+import SoundAssets from '../assets/SoundAssets';
+import { Constants, screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
+import SourceAcademyGame from '../SourceAcademyGame';
 import { createButton } from '../utils/ButtonUtils';
+import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+import { fadeAndDestroy } from './FadeEffect';
+import { rightSideEntryTweenProps, rightSideExitTweenProps } from './FlyEffect';
 
 const PromptConstants = {
   textPad: 20,
   textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
   y: 100,
-  width: 500,
+  width: 450,
   yInterval: 100
 };
 
@@ -44,7 +49,6 @@ export async function promptWithChoices(
   choices: string[]
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
-  GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
 
   const header = new Phaser.GameObjects.Text(
     scene,
@@ -80,6 +84,8 @@ export async function promptWithChoices(
     ySpacing: PromptConstants.yInterval
   });
 
+  GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
+
   const activatePromptContainer: Promise<number> = new Promise(resolve => {
     promptContainer.add(
       choices.map((response, index) =>
@@ -99,6 +105,29 @@ export async function promptWithChoices(
       )
     );
   });
+
+  // Animate in
+  promptContainer.setPosition(screenSize.x, 0);
+  SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifEnter.key);
+  scene.add.tween({
+    targets: promptContainer,
+    alpha: 1,
+    ...rightSideEntryTweenProps
+  });
+  await sleep(rightSideEntryTweenProps.duration);
+
   const response = await activatePromptContainer;
+
+  // Animate out
+  SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
+  scene.add.tween({
+    targets: promptContainer,
+    alpha: 1,
+    ...rightSideExitTweenProps
+  });
+
+  await sleep(rightSideExitTweenProps.duration);
+  fadeAndDestroy(scene, promptContainer, { fadeDuration: Constants.fadeDuration });
+
   return response;
 }

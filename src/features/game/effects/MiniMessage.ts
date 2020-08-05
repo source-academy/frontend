@@ -8,7 +8,7 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { createBitmapText } from '../utils/TextUtils';
 import { fadeAndDestroy } from './FadeEffect';
-import { sideEntryTweenProps, sideExitTweenProps } from './FlyEffect';
+import { leftSideEntryTweenProps, leftSideExitTweenProps } from './FlyEffect';
 
 const messageDuration = 3000;
 const messageTextConfig = { x: 20, y: 100, oriX: 0.0, oriY: 0.5 };
@@ -41,18 +41,18 @@ export async function displayMiniMessage(scene: IBaseScene, text: string) {
   scene.add.tween({
     targets: container,
     alpha: 1,
-    ...sideEntryTweenProps
+    ...leftSideEntryTweenProps
   });
 
-  await sleep(sideEntryTweenProps.duration + messageDuration);
+  await sleep(leftSideEntryTweenProps.duration + messageDuration);
 
   SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
   scene.add.tween({
     targets: container,
     alpha: 1,
-    ...sideExitTweenProps
+    ...leftSideExitTweenProps
   });
 
-  await sleep(sideExitTweenProps.duration);
+  await sleep(leftSideExitTweenProps.duration);
   fadeAndDestroy(scene, container, { fadeDuration: Constants.fadeDuration });
 }
