@@ -18,6 +18,7 @@ import {
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_STEP_LIMIT,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -69,6 +70,9 @@ export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLoc
 
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
+
+export const changeStepLimit = (stepLimit: number, workspaceLocation: WorkspaceLocation) =>
+  action(CHANGE_STEP_LIMIT, { stepLimit, workspaceLocation });
 
 export const chapterSelect = (
   chapter: number,
