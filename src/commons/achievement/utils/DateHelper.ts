@@ -1,4 +1,13 @@
-export const prettifyDate = (deadline: Date) => {
+const now = new Date();
+
+export const isExpired = (deadline?: Date) => deadline !== undefined && deadline <= now;
+
+export const timeFromExpired = (deadline?: Date) =>
+  deadline === undefined ? 0 : deadline.getTime() - now.getTime();
+
+export const prettifyDate = (deadline?: Date) => {
+  if (deadline === undefined) return '';
+
   const months = [
     'January',
     'February',
@@ -24,9 +33,8 @@ export const prettifyDate = (deadline: Date) => {
 };
 
 // Converts Date to deadline countdown
-export const prettifyDeadline = (deadline: Date | undefined) => {
+export const prettifyDeadline = (deadline?: Date) => {
   /* ---------- Date constants ---------- */
-  const now = new Date();
   const daysPerWeek = 7;
   const hoursPerDay = 24;
   const millisecondsPerHour = 3600000;

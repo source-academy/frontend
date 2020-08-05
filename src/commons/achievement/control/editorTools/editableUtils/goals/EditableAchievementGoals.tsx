@@ -1,17 +1,21 @@
-import { Button, Dialog } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import React from 'react';
 
+function EditableAchievementGoals() {
+  return <></>;
+}
+
+/*
 import { AchievementGoal } from '../../../../../../features/achievement/AchievementTypes';
 import EditableAchievementGoal from './EditableAchievementGoal';
 
 type EditableAchievementGoalsProps = {
-  goals: AchievementGoal[];
+  goalIds: AchievementGoal[];
   editGoals: any;
   removeGoalFromBackend: any;
 };
 
 function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
-  const { goals, editGoals, removeGoalFromBackend } = props;
+  const { goalIds, editGoals, removeGoalFromBackend } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
 
@@ -21,7 +25,8 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
    * For example, a goal with goalId 0 will be the first goal
    * in this array of new goals.
    */
-  const [newGoals, setNewGoals] = useState<AchievementGoal[]>(goals);
+/*
+  const [newGoals, setNewGoals] = useState<AchievementGoal[]>(goalIds);
 
   const createNewGoal = () => {
     const newID = newGoals.length;
@@ -90,5 +95,5 @@ function EditableAchievementGoals(props: EditableAchievementGoalsProps) {
     </div>
   );
 }
-
+*/
 export default EditableAchievementGoals;
