@@ -1,56 +1,101 @@
+import FontAssets from '../assets/FontAssets';
 import ImageAssets from '../assets/ImageAssets';
-import { screenCenter } from '../commons/CommonConstants';
+import { screenSize } from '../commons/CommonConstants';
+import { BitmapFontStyle } from '../commons/CommonTypes';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
-import MainMenuConstants from '../scenes/mainMenu/MainMenuConstants';
-import { userStateStyle } from '../state/GameStateConstants';
 import { createButton } from '../utils/ButtonUtils';
-import { calcTableFormatPos, Direction } from '../utils/StyleUtils';
+import { calcListFormatPos, Color, HexColor } from '../utils/StyleUtils';
+
+const PromptConstants = {
+  textPad: 20,
+  textConfig: { x: 15, y: -15, oriX: 0.5, oriY: 0.5 },
+  y: 100,
+  width: 500,
+  yInterval: 100
+};
+
+const textStyle = {
+  fontFamily: 'Verdana',
+  fontSize: '20px',
+  fill: Color.offWhite,
+  align: 'right',
+  lineSpacing: 10,
+  wordWrap: { width: PromptConstants.width - PromptConstants.textPad * 2 }
+};
+
+const promptOptStyle: BitmapFontStyle = {
+  key: FontAssets.zektonFont.key,
+  size: 25,
+  align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
+};
 
 /**
  * Display a UI that asks users to choose which option they like
  *
  * @param scene - which scene to add this prompt in
- * @param question - question you want to ask
+ * @param text - question you want to ask
  * @param choices - an array of choices to show
  * @returns {Promise<number>} which choice index the user has chosen
  */
 export async function promptWithChoices(
   scene: Phaser.Scene,
-  question: string,
+  text: string,
   choices: string[]
 ): Promise<number> {
   const promptContainer = new Phaser.GameObjects.Container(scene, 0, 0);
   GameGlobalAPI.getInstance().addToLayer(Layer.UI, promptContainer);
 
-  const textConfig = { x: 0, y: 0, oriX: 0.5, oriY: 0.2 };
-  const buttonPositions = calcTableFormatPos({
-    direction: Direction.Column,
-    numOfItems: choices.length + 1,
-    maxYSpace: MainMenuConstants.button.ySpace
+  const header = new Phaser.GameObjects.Text(
+    scene,
+    screenSize.x - PromptConstants.textPad,
+    PromptConstants.y,
+    text,
+    textStyle
+  ).setOrigin(1.0, 0.0);
+  const promptHeaderBg = new Phaser.GameObjects.Rectangle(
+    scene,
+    screenSize.x,
+    PromptConstants.y - PromptConstants.textPad,
+    PromptConstants.width,
+    header.getBounds().bottom * 0.5 + PromptConstants.textPad,
+    HexColor.darkBlue,
+    0.8
+  ).setOrigin(1.0, 0.0);
+  const promptBg = new Phaser.GameObjects.Rectangle(
+    scene,
+    screenSize.x,
+    PromptConstants.y - PromptConstants.textPad,
+    PromptConstants.width,
+    promptHeaderBg.getBounds().bottom * 0.5 + (choices.length + 0.5) * PromptConstants.yInterval,
+    HexColor.lightBlue,
+    0.2
+  ).setOrigin(1.0, 0.0);
+
+  promptContainer.add([promptBg, promptHeaderBg, header]);
+
+  const buttonPositions = calcListFormatPos({
+    numOfItems: choices.length,
+    xSpacing: 0,
+    ySpacing: PromptConstants.yInterval
   });
 
   const activatePromptContainer: Promise<number> = new Promise(resolve => {
     promptContainer.add(
-      createButton(scene, {
-        assetKey: ImageAssets.longButton.key,
-        message: question,
-        textConfig,
-        bitMapTextStyle: userStateStyle
-      }).setPosition(screenCenter.x, buttonPositions[0][1] - screenCenter.y * 0.25)
-    );
-    promptContainer.add(
       choices.map((response, index) =>
         createButton(scene, {
-          assetKey: ImageAssets.longButton.key,
+          assetKey: ImageAssets.mediumButton.key,
           message: response,
-          textConfig,
-          bitMapTextStyle: userStateStyle,
+          textConfig: PromptConstants.textConfig,
+          bitMapTextStyle: promptOptStyle,
           onUp: () => {
             promptContainer.destroy();
             resolve(index);
           }
-        }).setPosition(screenCenter.x, buttonPositions[index + 1][1] - screenCenter.y * 0.25)
+        }).setPosition(
+          screenSize.x - PromptConstants.width / 2,
+          buttonPositions[index][1] + promptHeaderBg.getBounds().bottom + 75
+        )
       )
     );
   });

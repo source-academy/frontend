@@ -160,8 +160,7 @@ export default class ActionParser {
         break;
 
       case GameActionType.NavigateToAssessment:
-        actionParamObj.title = actionParams[0];
-        actionParamObj.assessmentId = actionParams[1];
+        actionParamObj.assessmentId = actionParams[0];
         break;
     }
 
