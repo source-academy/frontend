@@ -15,12 +15,12 @@ import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import {
   editAchievement,
-  fetchOwnGoals,
-  fetchUserGoals,
+  getOwnGoals,
+  getGoals,
   getAchievements,
   removeAchievement,
   removeGoal,
-  updateGoalDefinition,
+  editGoal,
   updateGoalProgress
 } from './RequestsSaga';
 
@@ -85,13 +85,13 @@ export default function* AchievementSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getGoals>) {
+  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getOwnGoals>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const goals = yield call(fetchOwnGoals, tokens);
+    const goals = yield call(getOwnGoals, tokens);
 
     if (goals) {
       yield put(actions.saveGoals(goals));
@@ -106,7 +106,7 @@ export default function* AchievementSaga(): SagaIterator {
 
     const studentId = action.payload;
 
-    const goals = yield call(fetchUserGoals, tokens, studentId);
+    const goals = yield call(getGoals, tokens, studentId);
 
     if (goals) {
       yield put(actions.saveGoals(goals));
@@ -121,7 +121,7 @@ export default function* AchievementSaga(): SagaIterator {
 
     const definition = action.payload;
 
-    const resp = yield call(updateGoalDefinition, definition, tokens);
+    const resp = yield call(editGoal, definition, tokens);
 
     if (!resp) {
       return;
