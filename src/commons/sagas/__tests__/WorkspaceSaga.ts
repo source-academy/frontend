@@ -145,7 +145,12 @@ describe('EVAL_EDITOR', () => {
           args: [
             editorValue,
             context,
-            { scheduler: 'preemptive', originalMaxExecTime: execTime, stepLimit: 1000, useSubst: false }
+            {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              stepLimit: 1000,
+              useSubst: false
+            }
           ]
         })
         // running the student's program should return -1, which is written to REPL
