@@ -73,19 +73,25 @@ export function createChapter(
   ).setVisible(chapterDone);
 
   // Chapter Action Popup
-  const chapterRepeatHover = new CommonTextHover(scene, 0, 0, 'Reset progress');
-  const chapterContinueHover = new CommonTextHover(scene, 0, 0, 'Play/Continue');
+  const chapterRepeatHover = new CommonTextHover(
+    scene,
+    chapConstants.button.xOffset + 10,
+    chapConstants.button.yOffset - 50,
+    'Reset progress'
+  );
+  const chapterContinueHover = new CommonTextHover(
+    scene,
+    -chapConstants.button.xOffset + 10,
+    chapConstants.button.yOffset - 50,
+    'Play/Continue'
+  );
 
   // Chapter Actions
   const chapterRepeat = createButton(scene, {
     assetKey: ImageAssets.chapterRepeatButton.key,
     onUp: async () => await callGameManagerOnTxtLoad(false, index, 0),
     onHover: () => chapterRepeatHover.setVisible(true),
-    onOut: () => chapterRepeatHover.setVisible(false),
-    onPointerMove: (pointer: Phaser.Input.Pointer) => {
-      chapterRepeatHover.x = pointer.worldX - chapterContainer.x;
-      chapterRepeatHover.y = pointer.worldY - chapterContainer.y;
-    }
+    onOut: () => chapterRepeatHover.setVisible(false)
   }).setPosition(chapConstants.button.xOffset, chapConstants.button.yOffset);
 
   const lastCheckpointPlayed = SourceAcademyGame.getInstance()
@@ -96,11 +102,7 @@ export function createChapter(
     assetKey: ImageAssets.chapterContinueButton.key,
     onUp: async () => await callGameManagerOnTxtLoad(true, index, lastCheckpointPlayed),
     onHover: () => chapterContinueHover.setVisible(true),
-    onOut: () => chapterContinueHover.setVisible(false),
-    onPointerMove: (pointer: Phaser.Input.Pointer) => {
-      chapterContinueHover.x = pointer.worldX - chapterContainer.x;
-      chapterContinueHover.y = pointer.worldY - chapterContainer.y;
-    }
+    onOut: () => chapterContinueHover.setVisible(false)
   }).setPosition(-chapConstants.button.xOffset, chapConstants.button.yOffset);
 
   // Chapter Text
