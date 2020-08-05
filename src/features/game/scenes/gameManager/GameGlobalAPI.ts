@@ -349,6 +349,12 @@ class GameGlobalAPI {
     this.getGameManager().getInputManager().enableMouseInput(active);
   }
 
+  public enableSprite(gameObject: Phaser.GameObjects.GameObject, active: boolean) {
+    active
+      ? this.getGameManager().input.enable(gameObject)
+      : this.getGameManager().input.disable(gameObject);
+  }
+
   /////////////////////
   //      Phases     //
   /////////////////////
