@@ -8,6 +8,7 @@ import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
+import { promptWithChoices } from '../../effects/Prompt';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { GameMode } from '../../mode/GameModeTypes';
@@ -374,6 +375,22 @@ class GameGlobalAPI {
 
   public renderBackgroundLayerContainer(locationId: LocationId) {
     this.getGameManager().getBackgroundManager().renderBackgroundLayerContainer(locationId);
+  }
+
+  /////////////////////
+  //       URL       //
+  /////////////////////
+
+  public async promptNavigateToURL(pageTitle: string, url: string) {
+    const response = await promptWithChoices(
+      GameGlobalAPI.getInstance().getGameManager(),
+      `You will be navigated to ${pageTitle}. Do you want to proceed?`,
+      ['Yes', 'No']
+    );
+    if (response === 0) {
+      window.open(url, '_blank_');
+      window.focus();
+    }
   }
 
   /////////////////////

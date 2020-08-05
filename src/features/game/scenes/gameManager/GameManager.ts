@@ -165,14 +165,14 @@ class GameManager extends Phaser.Scene {
       );
     }
 
+    // Location cutscene
+    await this.getActionManager().processGameActions(gameLocation.actionIds);
+
     // Location notification
     if (this.getStateManager().hasLocationNotif(locationId)) {
       await GameGlobalAPI.getInstance().bringUpUpdateNotif(gameLocation.name);
       this.getStateManager().removeLocationNotif(locationId);
     }
-
-    // Location cutscene
-    await this.getActionManager().processGameActions(gameLocation.actionIds);
 
     if (this.getPhaseManager().isCurrentPhase(GamePhaseType.Sequence)) {
       await this.getPhaseManager().swapPhase(GamePhaseType.Menu);
