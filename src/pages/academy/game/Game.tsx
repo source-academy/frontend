@@ -42,6 +42,7 @@ function Game() {
           <button
             onClick={async () => {
               await saveData({} as FullSaveState);
+              alert('Game cleared! Please refresh');
             }}
           >
             Clear data
