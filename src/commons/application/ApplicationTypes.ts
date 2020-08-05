@@ -252,7 +252,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
-    title: null
+    title: null,
+    uid: null
   },
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),
