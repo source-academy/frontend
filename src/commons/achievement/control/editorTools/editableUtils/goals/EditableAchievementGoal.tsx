@@ -1,3 +1,10 @@
+import React from 'react';
+
+function EditableAchievementGoal() {
+  return <></>;
+}
+
+/*
 import { Button, EditableText, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
@@ -54,5 +61,5 @@ function EditableAchievementGoal(props: EditableAchievementGoalProps) {
     </div>
   );
 }
-
+*/
 export default EditableAchievementGoal;

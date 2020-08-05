@@ -50,6 +50,7 @@ class AchievementInferencer {
   constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
     this.goalList = this.constructGoalList(goals);
+    console.log(this.goalList);
     this.processNodes();
   }
 
@@ -86,7 +87,6 @@ class AchievementInferencer {
 
   public modifyAchievement(achievement: AchievementItem) {
     // directly replace the InferencerNode in nodeList
-    assert(this.nodeList.has(achievement.id));
     this.nodeList.set(achievement.id, new InferencerNode(achievement));
 
     // then, process the nodeList
@@ -154,22 +154,58 @@ class AchievementInferencer {
     this.modifyAchievement(achievement);
   }
 
+  public getGoals(id: number) {
+    assert(this.nodeList.has(id));
+    const { goalIds } = this.nodeList.get(id)!.achievement;
+    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
+    return goalIds.map(goalId => this.goalList.get(goalId)!);
+  }
+
+  /**
+   * Returns EXP earned from the achievement
+   *
+   * @param id Achievement Id
+   */
+  public getExp(id: number) {
+    assert(this.nodeList.has(id));
+    const { goalIds } = this.nodeList.get(id)!.achievement;
+    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
+    return goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+  }
+
+  /**
+   * Returns the maximum attainable EXP from the achievement
+   *
+   * @param id Achievement Id
+   */
   public getMaxExp(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.maxExp;
   }
 
+  /**
+   * Returns EXP earned from the goal
+   *
+   * @param goalId Goal Id
+   */
   public getGoalExp(goalId: number) {
     assert(this.goalList.has(goalId));
     return this.goalList.get(goalId)!.exp;
   }
 
+  /**
+   * Returns the maximum attainable EXP from the goal
+   *
+   * @param goalId Goal Id
+   */
   public getGoalMaxExp(goalId: number) {
     assert(this.goalList.has(goalId));
     return this.goalList.get(goalId)!.maxExp;
   }
 
-  // total EXP earned by the student
+  /**
+   * Returns total EXP earned from all goals
+   */
   public getTotalExp() {
     return [...this.goalList.values()].reduce((totalExp, goal) => totalExp + goal.exp, 0);
   }
@@ -265,7 +301,7 @@ class AchievementInferencer {
   }
 
   private constructNodeList(achievements: AchievementItem[]) {
-    const nodeList = new Map();
+    const nodeList = new Map<number, InferencerNode>();
     achievements.forEach(achievement =>
       nodeList.set(achievement.id, new InferencerNode(achievement))
     );
@@ -273,7 +309,7 @@ class AchievementInferencer {
   }
 
   private constructGoalList(goals: AchievementGoal[]) {
-    const goalList = new Map();
+    const goalList = new Map<number, AchievementGoal>();
     goals.forEach(goal => goalList.set(goal.id, goal));
     return goalList;
   }
@@ -332,11 +368,14 @@ class AchievementInferencer {
 
   private generateMaxExp(node: InferencerNode) {
     const { goalIds } = node.achievement;
+    goalIds.forEach(goalId => console.log(this.goalList.has(goalId)));
+    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
   }
 
   private generateProgressFrac(node: InferencerNode) {
     const { goalIds } = node.achievement;
+    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
 
     node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
@@ -347,11 +386,9 @@ class AchievementInferencer {
   // Else mark as AchievementStatus.ACTIVE if none of the above
   private generateStatus(node: InferencerNode) {
     const { goalIds } = node.achievement;
+    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     const achievementCompleted = goalIds
-      .map(goalId => {
-        assert(this.goalList.has(goalId));
-        return this.goalList.get(goalId)!.completed;
-      })
+      .map(goalId => this.goalList.get(goalId)!.completed)
       .reduce((result, goalCompleted) => result && goalCompleted, true);
 
     // Temporary array of all descendants' deadlines
@@ -362,10 +399,9 @@ class AchievementInferencer {
       descendantDeadlines.push(childDeadline);
     }
     const now = new Date();
-    const deadlinesExpired = descendantDeadlines.reduce(
-      (result, deadline) => deadline === undefined || (result && deadline <= now),
-      true
-    );
+    const deadlinesExpired = descendantDeadlines.reduce((result, deadline) => {
+      return deadline === undefined ? false : result && deadline <= now;
+    }, true);
 
     if (achievementCompleted) {
       node.status = AchievementStatus.COMPLETED;
@@ -388,6 +424,7 @@ class AchievementInferencer {
     let newPosition = 1;
     for (const [pos, id] of sortedPosToId) {
       if (pos !== 0) {
+        assert(this.nodeList.has(id));
         this.nodeList.get(id)!.achievement.position = newPosition++;
       }
     }

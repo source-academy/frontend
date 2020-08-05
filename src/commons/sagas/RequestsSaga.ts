@@ -209,7 +209,7 @@ export async function removeGoal(
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/${achievement.id}/goals/${goal.goalId}`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.id}/goals/${goal.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
     body: { goal: goal, achievement: achievement },
     noHeaderAccept: true,

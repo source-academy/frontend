@@ -10,16 +10,16 @@ function AchievementViewGoal(props: AchievementViewGoalProps) {
   const { goals } = props;
 
   const mapGoalToJSX = (goal: AchievementGoal) => {
-    const { goalId, goalText, goalProgress, goalTarget } = goal;
+    const { id, text, maxExp, exp } = goal;
     return (
-      <div className="goal" key={goalId}>
+      <div className="goal" key={id}>
         <div className="goal-badge">
           <span className="goal-icon" />
           <p>
-            {goalProgress} / {goalTarget} XP
+            {exp} / {maxExp} XP
           </p>
         </div>
-        <p>{goalText}</p>
+        <p>{text}</p>
       </div>
     );
   };
