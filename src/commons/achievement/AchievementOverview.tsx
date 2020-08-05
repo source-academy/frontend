@@ -12,7 +12,7 @@ type AchievementOverviewProps = {
 function AchievementOverview(props: AchievementOverviewProps) {
   const { name, studio, inferencer } = props;
 
-  const studentExp = inferencer.getStudentTotalExp();
+  const studentExp = inferencer.getTotalExp();
 
   return (
     <div className="achievement-overview">

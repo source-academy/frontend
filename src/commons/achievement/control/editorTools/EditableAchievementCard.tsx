@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 
 import {
   AchievementAbility,
-  AchievementGoal,
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';
@@ -14,7 +13,6 @@ import EditableAchievementAbility from './editableUtils/EditableAchievementAbili
 import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
 import EditableAchievementDate from './editableUtils/EditableAchievementDate';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
-import EditableAchievementGoals from './editableUtils/goals/EditableAchievementGoals';
 import EditableAchievementView from './editableView/EditableAchievementView';
 
 type EditableAchievementCardProps = {
@@ -41,12 +39,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setAdderId,
     addUnsavedChange,
     removeUnsavedChange,
-    removeGoal,
     removeAchievement
   } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, deadline, cardTileUrl, release, goals, view } = editableAchievement;
+  const { id, title, ability, deadline, cardTileUrl, release, view } = editableAchievement;
 
   const [hasChanges, setHasChanges] = useState<boolean>(false);
   const [pendingUpload, setPendingUpload] = useState<boolean>(false);
@@ -108,10 +105,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setUnsaved();
   };
 
+  /*
   const handleEditGoals = (goals: AchievementGoal[], shouldUpdate: boolean) => {
     setEditableAchievement({
       ...editableAchievement,
-      goals: goals
+      goalIds: goalIds
     });
 
     inferencer.modifyAchievement(editableAchievement);
@@ -121,7 +119,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleRemoveGoal = (goal: AchievementGoal) => {
     removeGoal(goal, editableAchievement);
   };
-
+  */
   const handleChangeBackground = (cardTileUrl: string) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -186,12 +184,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           cardTileUrl={cardTileUrl}
           setcardTileUrl={handleChangeBackground}
         />
-
+        {/* TODO: Implement goal editor        
         <EditableAchievementGoals
-          goals={goals}
+          goalIds={goalIds}
           editGoals={handleEditGoals}
           removeGoalFromBackend={handleRemoveGoal}
-        />
+        /> */}
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 

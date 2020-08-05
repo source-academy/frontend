@@ -19,11 +19,12 @@ function AchievementView(props: AchievementViewProps) {
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, deadline, goals, view } = achievement;
+  const { title, ability, deadline, view } = achievement;
   const { canvasUrl, description, completionText } = view;
 
+  const awardedExp = inferencer.getExp(id);
+  const goals = inferencer.getGoals(id);
   const status = inferencer.getStatus(id);
-  const awardedExp = inferencer.getStudentExp(id);
 
   return (
     <div className="view" style={{ ...handleGlow(id), ...getAbilityBackground(ability) }}>
