@@ -11,10 +11,11 @@ type AchievementDeadlineProps = {
   ability: AchievementAbility;
 };
 
+const twoDays = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
+
 function AchievementDeadline(props: AchievementDeadlineProps) {
   const { deadline, ability } = props;
 
-  const twoDays = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
   // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
     ability === AchievementAbility.CORE &&
