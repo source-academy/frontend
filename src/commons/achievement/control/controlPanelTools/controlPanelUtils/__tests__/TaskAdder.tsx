@@ -1,7 +1,7 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { mockAchievements } from '../../../../../mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from '../../../../../mocks/AchievementMocks';
 import AchievementInferencer from '../../../../utils/AchievementInferencer';
 import TaskAdder from '../TaskAdder';
 
