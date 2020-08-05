@@ -15,12 +15,12 @@ import { OverallState } from '../application/ApplicationTypes';
 import { actions } from '../utils/ActionsHelper';
 import {
   editAchievement,
-  getOwnGoals,
-  getGoals,
+  editGoal,
   getAchievements,
+  getGoals,
+  getOwnGoals,
   removeAchievement,
   removeGoal,
-  editGoal,
   updateGoalProgress
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';

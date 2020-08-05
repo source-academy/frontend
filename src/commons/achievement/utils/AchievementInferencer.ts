@@ -383,7 +383,6 @@ class AchievementInferencer {
 
   private generateMaxExp(node: InferencerNode) {
     const { goalIds } = node.achievement;
-    goalIds.forEach(goalId => console.log(this.goalList.has(goalId)));
     node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
   }
 

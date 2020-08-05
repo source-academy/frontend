@@ -1,14 +1,12 @@
-export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
-export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
+export const EDIT_GOAL = 'EDIT_GOAL';
+export const GET_ACHIEVEMENTS = 'GET_ACHIEVEMENTS';
+export const GET_GOALS = 'GET_GOALS';
+export const GET_OWN_GOALS = 'GET_OWN_GOALS';
 export const REMOVE_ACHIEVEMENT = 'REMOVE_ACHIEVEMENT';
 export const REMOVE_GOAL = 'REMOVE_GOAL';
-
+export const SAVE_ACHIEVEMENTS = 'SAVE_ACHIEVEMENTS';
 export const SAVE_GOALS = 'SAVE_GOALS';
-export const GET_OWN_GOALS = 'GET_OWN_GOALS';
-export const GET_GOALS = 'GET_GOALS';
-export const EDIT_GOAL = 'EDIT_GOAL';
-
 export const UPDATE_GOAL_PROGRESS = 'UPDATE_GOAL_PROGRESS';
 
 export enum AchievementAbility {
