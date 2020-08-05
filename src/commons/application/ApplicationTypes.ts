@@ -210,6 +210,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sharedbAceInitValue: '',
   sharedbAceIsInviting: false,
   sideContentActiveTab: SideContentType.questionOverview,
+  stepLimit: 1000,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
@@ -252,7 +253,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
-    title: null
+    title: null,
+    uid: null
   },
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),

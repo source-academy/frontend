@@ -28,6 +28,7 @@ import {
   changeEditorWidth,
   changeExecTime,
   changeSideContentHeight,
+  changeStepLimit,
   chapterSelect,
   clearReplOutput,
   evalEditor,
@@ -63,6 +64,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   editorWidth: state.workspaces.playground.editorWidth,
   editorValue: state.workspaces.playground.editorValue!,
   execTime: state.workspaces.playground.execTime,
+  stepLimit: state.workspaces.playground.stepLimit,
   isEditorAutorun: state.workspaces.playground.isEditorAutorun,
   breakpoints: state.workspaces.playground.breakpoints,
   highlightedLines: state.workspaces.playground.highlightedLines,
@@ -97,6 +99,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
       handleChangeExecTime: (execTime: number) =>
         changeExecTime(execTime.toString(), workspaceLocation),
+      handleChangeStepLimit: (stepLimit: number) => changeStepLimit(stepLimit, workspaceLocation),
       handleChapterSelect: (chapter: number, variant: Variant) =>
         chapterSelect(chapter, variant, workspaceLocation),
       handleDeclarationNavigate: (cursorPosition: Position) =>

@@ -79,15 +79,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       const editorCode = state.workspaces[workspaceLocation].editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
-    const [prepend, tempvalue] = code;
-    const exploded = tempvalue.split('\n');
-    for (const i in breakpoints) {
-      if (typeof i === 'string') {
-        const index: number = +i;
-        exploded[index] = 'debugger;' + exploded[index];
-      }
-    }
-    const value = exploded.join('\n');
+
     const chapter: number = yield select(
       (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
     );
@@ -118,6 +110,31 @@ export default function* WorkspaceSaga(): SagaIterator {
     yield put(actions.beginClearContext(library, workspaceLocation));
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+
+    const [prepend, tempvalue] = code;
+    let value = tempvalue;
+    // Check for initial syntax errors. If there are errors, we continue with
+    // eval and let it print the error messages.
+    parse(tempvalue, context);
+    if (!context.errors.length) {
+      // Otherwise we step through the breakpoints one by one and check them.
+      const exploded = tempvalue.split('\n');
+      for (const b in breakpoints) {
+        if (typeof b !== 'string') {
+          continue;
+        }
+
+        const index: number = +b;
+        context.errors = [];
+        exploded[index] = 'debugger;' + exploded[index];
+        value = exploded.join('\n');
+        parse(value, context);
+        if (context.errors.length) {
+          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
+          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
+        }
+      }
+    }
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -580,6 +597,9 @@ export function* evalCode(
   const substIsActive: boolean = yield select(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );
+  const stepLimit: number = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
+  );
   const substActiveAndCorrectChapter =
     context.chapter <= 2 && workspaceLocation === 'playground' && substIsActive;
   if (substActiveAndCorrectChapter) {
@@ -598,12 +618,14 @@ export function* evalCode(
         : call(runInContext, code, context, {
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           });
     } else if (variant === 'lazy') {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
+        stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
@@ -633,6 +655,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           }),
 

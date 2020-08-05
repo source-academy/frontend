@@ -648,6 +648,7 @@ export async function getSourcecastIndex(tokens: Tokens): Promise<SourcecastData
 export const postSourcecast = async (
   title: string,
   description: string,
+  uid: string,
   audio: Blob,
   playbackData: PlaybackData,
   tokens: Tokens
@@ -656,6 +657,7 @@ export const postSourcecast = async (
   const filename = Date.now().toString() + '.wav';
   formData.append('sourcecast[title]', title);
   formData.append('sourcecast[description]', description);
+  formData.append('sourcecast[uid]', uid);
   formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
   const resp = await request(`sourcecast`, 'POST', {

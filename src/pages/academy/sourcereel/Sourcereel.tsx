@@ -65,12 +65,14 @@ export type DispatchProps = {
   handleSaveSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audio: Blob,
     playbackData: PlaybackData
   ) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -122,6 +124,10 @@ export type StateProps = {
 };
 
 class Sourcereel extends React.Component<SourcereelProps> {
+  public componentDidMount() {
+    this.props.handleFetchSourcecastIndex();
+  }
+
   public componentDidUpdate(prevProps: SourcereelProps) {
     const { inputToApply } = this.props;
 
@@ -322,7 +328,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
               <div>
                 <SourcecastTable
                   handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
-                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
               </div>
