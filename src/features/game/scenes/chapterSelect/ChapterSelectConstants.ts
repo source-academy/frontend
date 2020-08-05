@@ -35,7 +35,12 @@ const chapConstants = {
     width: imageRectWidth,
     height: 700
   },
-  imageDist: imageRectWidth + 150
+  imageDist: imageRectWidth + 150,
+  chapComplete: {
+    y: 20,
+    height: 60,
+    text: 'Chapter Completed'
+  }
 };
 
 export default chapConstants;
