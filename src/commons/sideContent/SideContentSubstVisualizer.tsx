@@ -24,7 +24,8 @@ const SubstDefaultText = () => {
         <br />
         <br />
         On even-numbered steps, the part of the program that will be evaluated next is highlighted
-        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green.
+        in yellow. On odd-numbered steps, the result of the evaluation is highlighted in green. You
+        can change the maximum steps limit (500-5000, default 1000) in the control bar.
         <br />
         <br />
         <Divider />
