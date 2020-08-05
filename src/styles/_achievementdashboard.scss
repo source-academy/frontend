@@ -327,8 +327,9 @@
           .goal-badge {
             align-items: center;
             display: flex;
-            flex: 0 1 20%;
             flex-direction: column;
+            min-width: 6em;
+            padding: 0 0.5em;
 
             .goal-icon {
               background: url(#{$achievement-assets}/xp-icon.png) center/contain;
@@ -337,6 +338,7 @@
             }
 
             p {
+              text-align: center;
               font-size: 0.7em;
               padding: 0.2em 0 0 0;
             }
