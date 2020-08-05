@@ -7,7 +7,7 @@ exports[`AchievementExp component renders correctly 1`] = `
 `;
 
 exports[`AchievementExp component renders correctly 2`] = `
-"<AchievementExp exp={[undefined]} isBonus={false}>
+"<AchievementExp exp={100} isBonus={true}>
   <div className=\\"exp\\">
     <Blueprint3.Icon icon=\\"bank-account\\">
       <span icon=\\"bank-account\\" className=\\"bp3-icon bp3-icon-bank-account\\" title={[undefined]}>
@@ -20,7 +20,7 @@ exports[`AchievementExp component renders correctly 2`] = `
       </span>
     </Blueprint3.Icon>
     <p>
-      undefined XP
+      +100 XP
     </p>
   </div>
 </AchievementExp>"
