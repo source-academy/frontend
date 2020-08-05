@@ -13,7 +13,6 @@ import GamePhaseManager from '../phase/GamePhaseManager';
 export type BitmapFontStyle = {
   key: string;
   size: number;
-  fill: number;
   align: number;
 };
 

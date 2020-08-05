@@ -1,5 +1,5 @@
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import {
   EDIT_ACHIEVEMENT,
@@ -23,6 +23,7 @@ import {
   editGoal,
   updateGoalProgress
 } from './RequestsSaga';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* AchievementSaga(): SagaIterator {
   yield takeEvery(GET_ACHIEVEMENTS, function* () {

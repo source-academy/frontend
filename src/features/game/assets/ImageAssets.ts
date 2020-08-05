@@ -27,7 +27,7 @@ const ImageAssets: AssetMap<ImageAsset> = {
 
   // Awards Menu
   awardsMenu: { key: 'award-bg', path: '/ui/collectiblesBg.png' },
-  awardsBanner: { key: 'award-banner', path: '/ui/collectiblesBanner.png' },
+  awardsBanner: { key: 'award-banner', path: '/ui/awardsBanner.png' },
   awardsPageChosen: {
     key: 'award-pg-chosen',
     path: '/ui/collectiblesPageOptChosen.png'

@@ -6,6 +6,11 @@ const FontAssets: AssetMap<FontAsset> = {
     pngPath: '../assets/zekton.png',
     fntPath: '../assets/zekton.fnt'
   },
+  zektonDarkFont: {
+    key: 'zektonDark',
+    pngPath: '../assets/zekton_dark.png',
+    fntPath: '../assets/zekton.fnt'
+  },
   alienCowsFont: {
     key: 'alienAndCows',
     pngPath: '../assets/alien_and_cows.png',

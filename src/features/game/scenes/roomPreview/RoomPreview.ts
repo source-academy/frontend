@@ -48,7 +48,6 @@ export default class RoomPreview extends Phaser.Scene {
   private preloadSpritesheetMap: Map<string, [string, object]>;
 
   private verifCont: Phaser.GameObjects.Container | undefined;
-  private verifMask: Phaser.GameObjects.Graphics | undefined;
 
   private context?: Context;
 
@@ -70,9 +69,7 @@ export default class RoomPreview extends Phaser.Scene {
     addLoadingScreen(this);
 
     // Initialise one verified tag to be used throughout the CMR
-    const [verifCont, verifMask] = createVerifiedHoverContainer(this);
-    this.verifCont = verifCont as Phaser.GameObjects.Container;
-    this.verifMask = verifMask as Phaser.GameObjects.Graphics;
+    this.verifCont = createVerifiedHoverContainer(this);
   }
 
   public async create() {
@@ -227,7 +224,6 @@ export default class RoomPreview extends Phaser.Scene {
    */
   private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {
     const verifCont = this.getVerifCont();
-    const verifMask = this.getVerifMask();
 
     sprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
@@ -241,8 +237,6 @@ export default class RoomPreview extends Phaser.Scene {
       (pointer: Phaser.Input.Pointer) => {
         verifCont.x = pointer.x + 10;
         verifCont.y = pointer.y - 10;
-        verifMask.x = pointer.x + 10;
-        verifMask.y = pointer.y - 10;
       }
     );
     return sprite;
@@ -287,7 +281,6 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   private getVerifCont = () => mandatory(this.verifCont);
-  private getVerifMask = () => mandatory(this.verifMask);
   private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 
   public getInputManager = () => mandatory(this.inputManager);

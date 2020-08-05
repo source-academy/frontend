@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { clearData } from 'src/features/game/save/GameSaveRequests';
+import { saveData } from 'src/features/game/save/GameSaveRequests';
+import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
   AccountInfo,
   createSourceAcademyGame
@@ -15,10 +16,11 @@ function Game() {
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-    createSourceAcademyGame();
+    const game = createSourceAcademyGame();
     return () => {
-      SourceAcademyGame.getInstance().isMounted = false;
-      SourceAcademyGame.getInstance().stopAllSounds();
+      game.isMounted = false;
+      game.stopAllSounds();
+      game.destroy(true);
     };
   }, []);
 
@@ -40,7 +42,7 @@ function Game() {
         <div className="Horizontal">
           <button
             onClick={async () => {
-              await clearData();
+              await saveData({} as FullSaveState);
             }}
           >
             Clear data

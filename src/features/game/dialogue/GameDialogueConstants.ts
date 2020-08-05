@@ -1,7 +1,7 @@
 import FontAssets from '../assets/FontAssets';
 import { screenSize } from '../commons/CommonConstants';
 import { BitmapFontStyle } from '../commons/CommonTypes';
-import { Color, HexColor } from '../utils/StyleUtils';
+import { Color } from '../utils/StyleUtils';
 
 const dialogueRectMargin = 10;
 
@@ -31,7 +31,6 @@ export const textTypeWriterStyle = {
 export const speakerTextStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 36,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
