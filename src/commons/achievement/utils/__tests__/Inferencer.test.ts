@@ -3,16 +3,16 @@ import {
   AchievementItem,
   FilterStatus
 } from '../../../../features/achievement/AchievementTypes';
-import { mockAchievements } from '../../../mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from '../../../mocks/AchievementMocks';
 import AchievementInferencer from '../AchievementInferencer';
 
 const sampleAchievement: AchievementItem = {
-  id: 11,
-  title: 'Sample Title',
+  id: 12,
+  title: 'New Achievement',
   ability: AchievementAbility.CORE,
   isTask: false,
   prerequisiteIds: [],
-  goals: [],
+  goalIds: [],
   position: 0,
   cardTileUrl:
     'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
@@ -25,34 +25,49 @@ const sampleAchievement: AchievementItem = {
 };
 
 describe('Achievements change when', () => {
-  test('an achievement is set to be a task', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
-    inferencer.setTask(inferencer.getAchievementItem(0));
-
-    expect(inferencer.getAchievementItem(0).isTask).toEqual(true);
-  });
-
   test('an achievement is unset to be a task', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     inferencer.setNonTask(inferencer.getAchievementItem(0));
 
     expect(inferencer.getAchievementItem(0).isTask).toEqual(false);
+    expect(inferencer.getAchievementItem(0).position).toEqual(0);
+    expect(inferencer.getAchievementItem(0).prerequisiteIds).toEqual([]);
+  });
+
+  test('an achievement is set to be a task', () => {
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+    inferencer.setTask(inferencer.getAchievementItem(0));
+
+    expect(inferencer.getAchievementItem(0).isTask).toEqual(true);
+    expect(inferencer.getAchievementItem(0).position).toEqual(inferencer.listTaskIds().length + 1);
   });
 
   test('an achievement is inserted and deleted', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
     inferencer.insertAchievement(sampleAchievement);
     expect(inferencer.getAchievements().length).toEqual(13);
 
-    inferencer.removeAchievement(0);
+    expect(inferencer.doesAchievementExist(sampleAchievement.id)).toEqual(true);
+    expect(inferencer.getAchievementItem(sampleAchievement.id)).toEqual(sampleAchievement);
+
+    inferencer.removeAchievement(sampleAchievement.id);
     expect(inferencer.getAchievements().length).toEqual(12);
+  });
+
+  test('an achievement swaps position', () => {
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+    const firstTask = inferencer.getAchievementItem(4);
+
+    inferencer.changeAchievementPosition(firstTask, 2);
+
+    expect(inferencer.getAchievementItem(firstTask.id).position).toEqual(2);
   });
 });
 
 describe('Children are listed', () => {
   test('to test if they are immediate', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     const firstAchievementId = inferencer.getAchievementItem(0).id;
     const secondAchievementId = inferencer.getAchievementItem(1).id;
 
@@ -60,7 +75,7 @@ describe('Children are listed', () => {
   });
 
   test('if listImmediateChildren is called', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     const firstAchievementId = inferencer.getAchievementItem(0).id;
 
     expect(inferencer.listImmediateChildren(firstAchievementId)).toEqual([]);
@@ -69,10 +84,10 @@ describe('Children are listed', () => {
 
 describe('Filter Count activated when', () => {
   test('getFilterCount is called', () => {
-    const inferencer = new AchievementInferencer(mockAchievements);
-    expect(inferencer.getFilterCount(FilterStatus.COMPLETED)).toEqual(1);
+    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+    expect(inferencer.getFilterCount(FilterStatus.COMPLETED)).toEqual(5);
 
-    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(7);
+    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(1);
 
     expect(inferencer.getFilterCount(FilterStatus.ALL)).toEqual(8);
   });

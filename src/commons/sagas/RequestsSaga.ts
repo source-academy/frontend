@@ -16,7 +16,9 @@ import {
 import {
   AchievementAbility,
   AchievementGoal,
-  AchievementItem
+  AchievementItem,
+  GoalDefinition,
+  GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -164,6 +166,101 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
+ * GET achievements/goals
+ */
+export async function fetchOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/`, 'GET', {
+    // TODO: Put in student id if necessary
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal
+        // TODO: type: goal.type as GoalType,
+        // TODO: meta: goal.meta as GoalMeta;
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * GET achievements/goals/user_id
+ */
+export async function fetchUserGoals(
+  tokens: Tokens,
+  studentId: number
+): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/${studentId}`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal
+        // TODO: type: goal.type as GoalType,
+        // TODO: meta: goal.meta as GoalMeta;
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * POST /achievements/goals/:goal_id/:student_id
+ */
+export async function updateGoalProgress(
+  studentId: number,
+  progress: GoalProgress,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { progress: progress },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * POST /achievements/goals/:goal_id/
+ */
+export async function updateGoalDefinition(
+  definition: GoalDefinition,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { definition: definition },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
  * POST /achievements/:achievement_id
  */
 export async function editAchievement(
@@ -203,15 +300,15 @@ export async function removeAchievement(
 
 /**
  * DELETE /achievements/goals
+ *
  */
 export async function removeGoal(
-  goal: AchievementGoal,
-  achievement: AchievementItem,
+  definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/${achievement.id}/goals/${goal.id}`, 'DELETE', {
+  const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
     accessToken: tokens.accessToken,
-    body: { goal: goal, achievement: achievement },
+    body: { definition: definition },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
