@@ -387,12 +387,10 @@ class GameGlobalAPI {
   //    Assessment   //
   /////////////////////
 
-  public async promptNavigateToAssessment(assessmentTitle: string, assessmentId: number) {
-    // We do not fetch the assessment title by ourselves as it
-    // involves back-end request which may be slow
+  public async promptNavigateToAssessment(assessmentId: number) {
     const response = await promptWithChoices(
       GameGlobalAPI.getInstance().getGameManager(),
-      `You will be navigated to ${assessmentTitle}. Do you want to proceed?`,
+      `Are you ready for the challenge?`,
       ['Yes', 'No']
     );
     if (response === 0) {

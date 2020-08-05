@@ -81,7 +81,7 @@ export default class GameActionExecuter {
         actionParams.show ? globalAPI.showLayer(Layer.Objects) : globalAPI.hideLayer(Layer.Objects);
         return;
       case GameActionType.NavigateToAssessment:
-        await globalAPI.promptNavigateToAssessment(actionParams.title, actionParams.assessmentId);
+        await globalAPI.promptNavigateToAssessment(actionParams.assessmentId);
         return;
       default:
         return;

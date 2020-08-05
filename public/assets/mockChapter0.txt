@@ -96,7 +96,7 @@ dialogues
         @scottie, sad
         You haven't finished assessment
         Finish assessment 301 first and come back?
-            navigate_to_assessment(Runes Mission, 405)
+            navigate_to_assessment(405)
         Anyways, welcome.
         @you
         Can I still go to places?
