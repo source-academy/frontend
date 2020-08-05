@@ -7,7 +7,7 @@ import TaskDeleter from '../TaskDeleter';
 
 const mockProps = {
   editableAchievement: mockAchievements[0],
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   saveChanges: () => {}
 };
 

@@ -1,13 +1,13 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { mockAchievements } from '../../mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from '../../mocks/AchievementMocks';
 import AchievementView from '../AchievementView';
 import AchievementInferencer from '../utils/AchievementInferencer';
 
 const mockProps = {
   id: 1,
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   handleGlow: () => {}
 };
 

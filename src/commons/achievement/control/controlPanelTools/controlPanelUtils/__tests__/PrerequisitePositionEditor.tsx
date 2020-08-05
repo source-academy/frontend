@@ -7,7 +7,7 @@ import PrerequisitePositionEditor from '../PrerequisitePositionEditor';
 
 const mockProps = {
   editableAchievement: mockAchievements[0],
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   saveChanges: () => {}
 };
 

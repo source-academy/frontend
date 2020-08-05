@@ -6,7 +6,7 @@ import AchievementInferencer from '../../../../utils/AchievementInferencer';
 import TaskAdder from '../TaskAdder';
 
 const mockProps = {
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   saveChanges: () => {}
 };
 

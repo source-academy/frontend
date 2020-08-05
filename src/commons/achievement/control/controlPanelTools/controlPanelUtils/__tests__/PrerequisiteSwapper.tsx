@@ -7,7 +7,7 @@ import PrerequisiteSwapper from '../PrerequisiteSwapper';
 
 const mockProps = {
   prerequisiteIdDs: mockAchievements[0].prerequisiteIds,
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
 
   setDialogOpen: () => {},
   isDialogOpen: false,

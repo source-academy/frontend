@@ -8,7 +8,7 @@ import TaskPositionInserter from '../TaskPositionInserter';
 const mockProps = {
   editableAchievement: mockAchievements[0],
   setEditableAchievement: () => {},
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   saveChanges: () => {}
 };
 

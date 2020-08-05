@@ -6,7 +6,7 @@ import AchievementInferencer from '../../../../utils/AchievementInferencer';
 import AchievementAdder from '../AchievementAdder';
 
 const mockProps = {
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   adderId: 0,
   setAdderId: () => {}
 };

@@ -7,7 +7,7 @@ import EditableAchievementCard from '../EditableAchievementCard';
 
 const mockProps = {
   achievement: mockAchievements[0],
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   updateAchievements: () => {},
   editAchievement: () => {},
   forceRender: () => {},
