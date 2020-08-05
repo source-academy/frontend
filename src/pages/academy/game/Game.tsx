@@ -16,10 +16,11 @@ function Game() {
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-    createSourceAcademyGame();
+    const game = createSourceAcademyGame();
     return () => {
-      SourceAcademyGame.getInstance().isMounted = false;
-      SourceAcademyGame.getInstance().stopAllSounds();
+      game.isMounted = false;
+      game.stopAllSounds();
+      game.destroy(true);
     };
   }, []);
 
