@@ -210,6 +210,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sharedbAceInitValue: '',
   sharedbAceIsInviting: false,
   sideContentActiveTab: SideContentType.questionOverview,
+  stepLimit: 1000,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
