@@ -154,11 +154,32 @@ class AchievementInferencer {
     this.modifyAchievement(achievement);
   }
 
+  /**
+   * Returns an array of AchievementGoal which belongs to the achievement
+   *
+   * @param id Achievement Id
+   */
   public getGoals(id: number) {
     assert(this.nodeList.has(id));
     const { goalIds } = this.nodeList.get(id)!.achievement;
-    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     return goalIds.map(goalId => this.goalList.get(goalId)!);
+  }
+
+  /**
+   * Returns an array of AchievementGoal which belongs to the prerequisites of the achievement
+   *
+   * @param id Achievement Id
+   */
+  public getPrerequisiteGoals(id: number) {
+    assert(this.nodeList.has(id));
+
+    const childGoalIds: number[] = [];
+    for (const childId of this.nodeList.get(id)!.children) {
+      const { goalIds } = this.nodeList.get(childId)!.achievement;
+      goalIds.forEach(goalId => childGoalIds.push(goalId));
+    }
+
+    return childGoalIds.map(goalId => this.goalList.get(goalId)!);
   }
 
   /**
@@ -169,7 +190,6 @@ class AchievementInferencer {
   public getExp(id: number) {
     assert(this.nodeList.has(id));
     const { goalIds } = this.nodeList.get(id)!.achievement;
-    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     return goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
   }
 
@@ -320,7 +340,6 @@ class AchievementInferencer {
       if (childId === node.achievement.id) {
         console.error('Circular dependency detected');
       }
-      assert(this.nodeList.has(childId));
       for (const grandchildId of this.nodeList.get(childId)!.descendant) {
         // Newly added grandchild is appended to the back of the set.
         node.descendant.add(grandchildId);
@@ -354,7 +373,6 @@ class AchievementInferencer {
     // Temporary array of all descendants' deadlines
     const descendantDeadlines = [];
     for (const childId of node.descendant) {
-      assert(this.nodeList.has(childId));
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
@@ -366,13 +384,11 @@ class AchievementInferencer {
   private generateMaxExp(node: InferencerNode) {
     const { goalIds } = node.achievement;
     goalIds.forEach(goalId => console.log(this.goalList.has(goalId)));
-    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
   }
 
   private generateProgressFrac(node: InferencerNode) {
     const { goalIds } = node.achievement;
-    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
 
     node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
@@ -383,7 +399,6 @@ class AchievementInferencer {
   // AchievementStatus.EXPIRED if none of the above
   private generateStatus(node: InferencerNode) {
     const { deadline, goalIds } = node.achievement;
-    goalIds.forEach(goalId => assert(this.goalList.has(goalId)));
     const achievementCompleted =
       goalIds.length !== 0 &&
       goalIds
@@ -393,7 +408,6 @@ class AchievementInferencer {
     // Temporary array of all descendants' deadlines
     const descendantDeadlines = [];
     for (const childId of node.descendant) {
-      assert(this.nodeList.has(childId));
       const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
       descendantDeadlines.push(childDeadline);
     }
@@ -423,7 +437,6 @@ class AchievementInferencer {
     let newPosition = 1;
     for (const [pos, id] of sortedPosToId) {
       if (pos !== 0) {
-        assert(this.nodeList.has(id));
         this.nodeList.get(id)!.achievement.position = newPosition++;
       }
     }
@@ -432,11 +445,9 @@ class AchievementInferencer {
   private listPublishedNodes() {
     // returns an array of Node that are published to the achievement page
     return this.listTaskIds().reduce((arr, id) => {
-      assert(this.nodeList.has(id));
       const node = this.nodeList.get(id)!;
       arr.push(node); // including task achievement
       for (const child of node.children) {
-        assert(this.nodeList.has(child));
         arr.push(this.nodeList.get(child)!); // including immediate prerequisites
       }
       return arr;
