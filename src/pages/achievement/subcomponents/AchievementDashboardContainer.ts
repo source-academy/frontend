@@ -6,7 +6,10 @@ import { getUsers } from '../../../commons/application/actions/SessionActions';
 import { OverallState, UserSimpleState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
-import { getAchievements } from '../../../features/achievement/AchievementActions';
+import {
+  getAchievements,
+  updateGoalProgress
+} from '../../../features/achievement/AchievementActions';
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
@@ -23,7 +26,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleAchievementsFetch: getAchievements,
-      handleUsersFetch: getUsers
+      handleUsersFetch: getUsers,
+      updateGoalProgress: updateGoalProgress
     },
     dispatch
   );

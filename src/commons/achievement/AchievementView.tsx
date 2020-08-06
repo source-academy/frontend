@@ -2,25 +2,30 @@ import React from 'react';
 
 import { getAbilityBackground } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
+import { Role, UserSimpleState } from '../application/ApplicationTypes';
 import AchievementInferencer from './utils/AchievementInferencer';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
+  users: UserSimpleState[];
   id: number;
+  role?: Role;
   inferencer: AchievementInferencer;
   handleGlow: any;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { id, inferencer, handleGlow } = props;
+  const { id, role, users, inferencer, handleGlow } = props;
 
   if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
   const { title, ability, deadline, view } = achievement;
   const { canvasUrl, description, completionText } = view;
+
+  const userToEdit = users.length === 0 ? null : users[0];
 
   const awardedExp = inferencer.getExp(id);
   const goals = inferencer.getGoals(id);
@@ -41,11 +46,11 @@ function AchievementView(props: AchievementViewProps) {
           <p>{description}</p>
         </span>
       </div>
-      <AchievementViewGoal goals={goals} />
+      <AchievementViewGoal role={role} userToEdit={userToEdit} goals={goals} />
       {prereqGoals.length > 0 ? (
         <>
           <hr />
-          <AchievementViewGoal goals={prereqGoals} />
+          <AchievementViewGoal role={role} userToEdit={userToEdit} goals={prereqGoals} />
         </>
       ) : null}
       {status === AchievementStatus.COMPLETED ? (

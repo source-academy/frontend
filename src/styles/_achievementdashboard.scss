@@ -327,6 +327,7 @@
           .goal-badge {
             align-items: center;
             display: flex;
+            flex-basis: 20%;
             flex-direction: column;
             min-width: 6em;
             padding: 0 0.5em;
@@ -345,7 +346,12 @@
           }
 
           p {
+            flex-basis: 65%;
             margin: 0;
+          }
+
+          .goal-editor {
+            flex-basis: 15%;
           }
         }
 

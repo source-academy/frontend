@@ -1,16 +1,20 @@
 import React from 'react';
 
-import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
+import { AchievementGoal, GoalType } from '../../../features/achievement/AchievementTypes';
+import { Role, UserSimpleState } from '../../application/ApplicationTypes';
+import AchievementViewGoalEditor from './AchievementViewGoalEditor';
 
 type AchievementViewGoalProps = {
+  userToEdit: UserSimpleState | null;
+  role?: Role;
   goals: AchievementGoal[];
 };
 
 function AchievementViewGoal(props: AchievementViewGoalProps) {
-  const { goals } = props;
+  const { userToEdit, role, goals } = props;
 
   const mapGoalToJSX = (goal: AchievementGoal) => {
-    const { id, text, maxExp, exp } = goal;
+    const { id, text, maxExp, exp, type } = goal;
     return (
       <div className="goal" key={id}>
         <div className="goal-badge">
@@ -20,6 +24,9 @@ function AchievementViewGoal(props: AchievementViewGoalProps) {
           </p>
         </div>
         <p>{text}</p>
+        {role !== Role.Student && type === GoalType.MANUAL && (
+          <AchievementViewGoalEditor userToEdit={userToEdit} id={id} exp={exp} maxExp={exp} />
+        )}
       </div>
     );
   };

@@ -23,6 +23,7 @@ type AchievementOverviewProps = {
 function AchievementOverview(props: AchievementOverviewProps) {
   const {
     name,
+    role,
     studio,
     inferencer,
     users,
@@ -41,7 +42,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
         filteredUserName={filteredUserName}
         setFilteredUserName={setFilteredUserName}
         filteredUserGroup={filteredUserGroup}
-        shouldFilter={true}
+        shouldFilter={role !== Role.Student}
         name={name}
         studio={studio}
         users={users}
@@ -49,7 +50,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
       <AchievementGroupFilter
         setFileredUserGroup={setFileredUserGroup}
         filteredUserGroup={filteredUserGroup}
-        shouldFilter={true}
+        shouldFilter={role !== Role.Student}
         studio={studio}
         users={users}
       />

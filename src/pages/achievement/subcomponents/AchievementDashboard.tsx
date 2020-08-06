@@ -9,11 +9,16 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { Role, UserSimpleState } from '../../../commons/application/ApplicationTypes';
 import Constants from '../../../commons/utils/Constants';
 import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
+import {
+  AchievementAbility,
+  FilterStatus,
+  GoalProgress
+} from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   handleAchievementsFetch: () => void;
   handleUsersFetch: () => void;
+  updateGoalProgress: (studentId: number, progress: GoalProgress) => void;
 };
 
 export type StateProps = {
@@ -40,8 +45,12 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [viewId, setViewId] = useState<number>(-1);
 
-  const [filteredUserName, setFilteredUserName] = useState<string>('');
-  const [filteredUserGroup, setFileredUserGroup] = useState<string>('');
+  const [filteredUserName, setFilteredUserName] = useState<string>(
+    role === Role.Student ? name! : ''
+  );
+  const [filteredUserGroup, setFileredUserGroup] = useState<string>(
+    role === Role.Student ? group! : ''
+  );
 
   // Filter icon turns blue when selected, otherwise white
   const getFilterColor = (status: FilterStatus) =>
@@ -111,7 +120,13 @@ function Dashboard(props: DispatchProps & StateProps) {
         </ul>
 
         <div className="view-container">
-          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
+          <AchievementView
+            users={users.filter(user => user.name === filteredUserName)}
+            id={viewId}
+            role={role}
+            inferencer={inferencer}
+            handleGlow={handleGlow}
+          />
         </div>
       </div>
     </div>
