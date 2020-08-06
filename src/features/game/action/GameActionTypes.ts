@@ -19,7 +19,8 @@ export enum GameActionType {
   PlayBGM = 'PlayBGM',
   PlaySFX = 'PlaySFX',
   ShowObjectLayer = 'ShowObjectLayer',
-  NavigateToAssessment = 'NavigateToAssessment'
+  NavigateToAssessment = 'NavigateToAssessment',
+  Delay = 'Delay'
 }
 
 /**

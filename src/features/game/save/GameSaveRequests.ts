@@ -23,7 +23,7 @@ export async function saveData(fullSaveState: FullSaveState) {
     })
   };
 
-  const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states/save`, options);
+  const resp = await fetch(`${Constants.backendUrl}/v1/user/game_states`, options);
 
   if (resp && resp.ok) {
     return resp;

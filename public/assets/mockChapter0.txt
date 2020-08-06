@@ -20,6 +20,7 @@ room
     
     objects
         + carpet, /objects/yourCarpet/normal.png, 781, 531, 318, 398
+            delay(2)
             obtain_collectible(cookies)
             add_popup(computerOnShelf, middle, 10, small)
         + computerOnShelf, /objects/cmd-commentsTerminal/emergency.png, 122, 588, 124, 227
