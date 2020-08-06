@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import ControlPanel from '../../../commons/achievement/control/ControlPanel';
+import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 
@@ -76,6 +77,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
         removeAchievement={handleRemoveAchievement}
         removeGoal={handleRemoveGoal}
       />
+
+      <GoalEditor />
     </div>
   );
 }

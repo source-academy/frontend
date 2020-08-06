@@ -60,11 +60,13 @@ function AchievementEditor(props: AchievementEditorProps) {
     ));
 
   return (
-    <div className="editor-cards">
-      <div className="main">
-        <ul className="display-list">{mapAchievementIdsToEditableCard(inferencer.listIds())}</ul>
+    <div className="achievement-editor">
+      <div className="achievement-command">
         <AchievementAdder inferencer={inferencer} adderId={adderId} setAdderId={setAdderId} />
       </div>
+      <ul className="achievement-container">
+        {mapAchievementIdsToEditableCard(inferencer.listIds())}
+      </ul>
     </div>
   );
 }

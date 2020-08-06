@@ -50,18 +50,17 @@ function ControlPanel(props: ControlPanelProps) {
     ));
 
   return (
-    <div
-      className="sample-cards"
-      style={isDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}
-    >
-      <ul className="display-list">
-        {mapAchievementIdsToEditableTask(inferencer.listTaskIdsbyPosition())}
-      </ul>
-
-      <div>
+    <div className="control-panel">
+      <div className="control-command">
         <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
         <TaskAdder inferencer={inferencer} saveChanges={handleSaveChanges} />
       </div>
+      <ul
+        className="control-container"
+        style={isDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}
+      >
+        {mapAchievementIdsToEditableTask(inferencer.listTaskIdsbyPosition())}
+      </ul>
     </div>
   );
 }
