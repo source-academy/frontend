@@ -19,9 +19,7 @@ const PublishCell: React.FunctionComponent<PublishCellProps> = props => {
   const { data } = props;
 
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-  const [isPublished] = React.useState<boolean>(
-    data.isPublished === undefined ? false : data.isPublished
-  );
+  const [isPublished] = React.useState<boolean>(!!data.isPublished);
 
   const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
   const handleCloseDialog = React.useCallback(() => setDialogState(false), []);

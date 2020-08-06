@@ -6,6 +6,7 @@ import * as React from 'react';
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import controlButton from '../../../../commons/ControlButton';
 import { getPrettyDate } from '../../../../commons/utils/DateHelper';
+import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
 export type EditCellProps = DispatchProps & StateProps;
 
@@ -23,10 +24,14 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const maxDate = new Date(2030, 11, 31);
 
   const { data, forOpenDate } = props;
-  const currentDateString = forOpenDate ? data.openAt : data.closeAt;
+  const currentDateString = React.useMemo(() => (forOpenDate ? data.openAt : data.closeAt), [
+    data.closeAt,
+    data.openAt,
+    forOpenDate
+  ]);
 
   const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
-  const [newDate, setNewDate] = React.useState<Date>(new Date(currentDateString));
+  const [newDate, setNewDate] = React.useState<Date | null>(new Date(currentDateString));
 
   const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
   const handleCloseDialog = React.useCallback(() => setDialogState(false), []);
@@ -34,25 +39,45 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
   const { handleAssessmentChangeDate } = props;
 
   const handleUpdateDate = React.useCallback(() => {
-    const { id, openAt, closeAt } = data;
-    handleAssessmentChangeDate(
-      id,
-      forOpenDate ? newDate.toISOString() : openAt,
-      forOpenDate ? closeAt : newDate.toISOString()
-    );
-    handleCloseDialog();
-  }, [data, forOpenDate, newDate, handleAssessmentChangeDate, handleCloseDialog]);
+    if (!newDate) {
+      // Reset date to current date if no date is selected (null date) in the date input
+      showWarningMessage('No date and time selected!', 2000);
+      setNewDate(new Date(currentDateString));
+    } else {
+      const { id, openAt, closeAt } = data;
+      handleAssessmentChangeDate(
+        id,
+        forOpenDate ? newDate.toISOString() : openAt,
+        forOpenDate ? closeAt : newDate.toISOString()
+      );
+      handleCloseDialog();
+    }
+  }, [
+    data,
+    forOpenDate,
+    newDate,
+    currentDateString,
+    handleAssessmentChangeDate,
+    handleCloseDialog
+  ]);
 
   const handleParseDate = (str: string) => new Date(str);
   const handleFormatDate = (date: Date) => date.toLocaleString();
 
   const handleDateChange = React.useCallback((selectedDate: Date) => setNewDate(selectedDate), []);
+  const handleDateError = React.useCallback(() => {
+    // Reset date to current date if user enters an invalid date string
+    showWarningMessage('Failed to parse date string! Defaulting to current date.', 2000);
+    setNewDate(new Date(currentDateString));
+  }, [currentDateString]);
 
   const dateInput = (
     <DateInput
       formatDate={handleFormatDate}
       onChange={handleDateChange}
+      onError={handleDateError}
       parseDate={handleParseDate}
+      placeholder={'MM/DD/YYYY, HH:mm:ss (AM/PM) or select a date'}
       value={newDate}
       timePrecision={'second'}
       fill={true}
