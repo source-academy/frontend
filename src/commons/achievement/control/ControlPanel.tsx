@@ -5,7 +5,7 @@ import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
 import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 
-type AchievementControlPanelProps = {
+type ControlPanelProps = {
   inferencer: AchievementInferencer;
   updateAchievements: any;
   forceRender: any;
@@ -16,7 +16,7 @@ type AchievementControlPanelProps = {
   saveAchievementsToFrontEnd: any;
 };
 
-function AchievementControlPanel(props: AchievementControlPanelProps) {
+function ControlPanel(props: ControlPanelProps) {
   const {
     inferencer,
     updateAchievements,
@@ -65,4 +65,4 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     </div>
   );
 }
-export default AchievementControlPanel;
+export default ControlPanel;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
-import AchievementControlPanel from '../../../commons/achievement/control/AchievementControlPanel';
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
+import ControlPanel from '../../../commons/achievement/control/ControlPanel';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 
@@ -55,30 +55,28 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const forceRender = () => setRender(!render);
 
   return (
-    <>
-      <div className="AchievementControl">
-        <AchievementControlPanel
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-          forceRender={forceRender}
-          isDisabled={editorUnsavedChanges !== 0}
-          pendingUpload={panelPendingUpload}
-          setPendingUpload={setPanelPendingUpload}
-          saveAchievementsToFrontEnd={handleSaveAchievements}
-        />
+    <div className="AchievementControl">
+      <ControlPanel
+        inferencer={inferencer}
+        updateAchievements={updateAchievements}
+        forceRender={forceRender}
+        isDisabled={editorUnsavedChanges !== 0}
+        pendingUpload={panelPendingUpload}
+        setPendingUpload={setPanelPendingUpload}
+        saveAchievementsToFrontEnd={handleSaveAchievements}
+      />
 
-        <AchievementEditor
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-          editAchievement={handleEditAchievement}
-          forceRender={forceRender}
-          addUnsavedChange={addUnsavedChange}
-          removeUnsavedChange={removeUnsavedChange}
-          removeAchievement={handleRemoveAchievement}
-          removeGoal={handleRemoveGoal}
-        />
-      </div>
-    </>
+      <AchievementEditor
+        inferencer={inferencer}
+        updateAchievements={updateAchievements}
+        editAchievement={handleEditAchievement}
+        forceRender={forceRender}
+        addUnsavedChange={addUnsavedChange}
+        removeUnsavedChange={removeUnsavedChange}
+        removeAchievement={handleRemoveAchievement}
+        removeGoal={handleRemoveGoal}
+      />
+    </div>
   );
 }
 

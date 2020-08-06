@@ -105,7 +105,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           />
         </div>
 
-        <ul className="list-container">
+        <ul className="task-container">
           {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
         </ul>
 

@@ -3,7 +3,7 @@ import React from 'react';
 type AchievementMilestoneProps = {};
 
 function AchievementMilestone(props: AchievementMilestoneProps) {
-  /*
+  /* TODO: Implement Milestone
   return (
     <div className="milestone">
       <h2>ACHIEVEMENT LEVEL</h2>

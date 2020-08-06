@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { getAbilityColor } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
-import AchievementCard from './AchievementCard';
+import AchievementCard from './utils/AchievementCard';
 import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementTaskProps = {
