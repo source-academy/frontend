@@ -7,13 +7,13 @@
   width: 100%;
 
   .achievement-overview {
-    $default-spacing: 0.5em;
+    $default-margin: 0.5em;
 
     align-items: center;
     color: white;
     display: flex;
     flex-direction: row;
-    padding: $default-spacing;
+    padding: $default-margin;
 
     .level {
       $progress-bar-height: 1.2em;
@@ -44,7 +44,7 @@
       .level-progress {
         display: flex;
         height: $progress-bar-height;
-        margin: 0 0 0 $default-spacing;
+        margin: 0 0 0 $default-margin;
         width: $progress-bar-width;
 
         .progress-bar {
@@ -99,7 +99,7 @@
 
     .level,
     h3 {
-      margin: 0 $default-spacing;
+      margin: 0 $default-margin;
     }
   }
 
@@ -112,7 +112,7 @@
     $card-height: 5em;
     $card-width: 30em;
     // Default spacing should be at least 10px to prevent border glow bleeding
-    $default-spacing: 1em;
+    $default-margin: 1em;
     // View aspect ratio 18:25
     $view-height: 50em;
     $view-width: $canvas-width;
@@ -127,7 +127,7 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
-      max-height: $view-height + $default-spacing * 2;
+      max-height: $view-height + $default-margin * 2;
     }
 
     .filter-container {
@@ -140,7 +140,7 @@
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        margin: auto $default-spacing;
+        margin: auto $default-margin;
 
         p {
           font-size: 0.8em;
@@ -163,18 +163,18 @@
       @extend %container;
       height: 90%;
       list-style-type: none;
-      min-width: $card-width + $default-spacing * 2;
+      min-width: $card-width + $default-margin * 2;
       overflow-y: auto;
       padding: 0;
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
       li {
-        margin: $default-spacing;
+        margin: $default-margin;
       }
 
       li:not(:first-child) {
-        margin: 0 $default-spacing $default-spacing;
+        margin: 0 $default-margin $default-margin;
       }
 
       .achievement-card {
@@ -283,9 +283,12 @@
     }
 
     .view-container {
+      $canvas-padding: 0.3em;
+      $content-padding: 0.5em;
+
       @extend %container;
       height: 90%;
-      min-width: $view-width + $default-spacing * 2;
+      min-width: $view-width + $default-margin * 2;
       overflow-y: auto;
       scrollbar-color: white #444;
       scrollbar-width: thin;
@@ -294,27 +297,32 @@
         color: white;
         display: flex;
         flex-direction: column;
-        margin: $default-spacing;
+        margin: $default-margin;
         min-height: $view-height;
         width: $view-width;
 
         .canvas {
-          align-items: center;
           display: flex;
           flex-direction: column;
           height: $canvas-height;
           width: $canvas-width;
 
           h1 {
-            margin-bottom: 0.3em;
+            margin: 0.5em auto 0;
+            padding: $canvas-padding;
+          }
+
+          p {
+            margin: 0 auto;
+            padding: $canvas-padding;
           }
 
           .description {
             color: yellow;
             font-size: 0.85em;
-            margin: auto 0 1em;
+            margin: auto auto 1em;
             text-align: center;
-            width: 75%;
+            width: 80%;
           }
         }
 
@@ -322,14 +330,14 @@
           align-items: center;
           display: flex;
           flex-direction: row;
-          padding: 0.5em 0;
+          padding: $content-padding;
 
           .goal-badge {
             align-items: center;
             display: flex;
             flex-direction: column;
             min-width: 6em;
-            padding: 0 0.5em;
+            padding: 0 $content-padding;
 
             .goal-icon {
               background: url(#{$achievement-assets}/xp-icon.png) center/contain;
@@ -346,6 +354,7 @@
 
           p {
             margin: 0;
+            padding: 0;
           }
         }
 
@@ -353,15 +362,22 @@
           background: lightgrey;
           border: none;
           height: 1px;
-          margin: 0.5em auto;
+          margin: $content-padding auto;
           width: 90%;
         }
 
         .completion {
+          padding: $content-padding;
           text-align: center;
 
           h1 {
             color: #fc0;
+            margin: 0 auto $content-padding;
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
           }
         }
       }
