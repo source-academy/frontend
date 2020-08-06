@@ -1,4 +1,3 @@
-import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
@@ -88,17 +87,17 @@ export default class GameUserStateManager {
    * Fetches achievements of the student;
    */
   public async loadAchievements() {
-    // TODO: replace below with const achievements = SourceAcademyGame.getInstance().getAchievements();
-    const achievements = mockAchievements;
-    // TODO: replace below with const goals = SourceAcademyGame.getInstance().getGoals();
-    const goals = new Map<number, AchievementGoal>();
-    // TODO: replace mockGoals with the goals from redux store
-    mockGoals.forEach(goal => goals.set(goal.id, goal));
+    const achievements = SourceAcademyGame.getInstance().getAchievements();
+    const goals = SourceAcademyGame.getInstance().getGoals();
+
+    // Convert goals to map
+    const goalMapping = new Map<number, AchievementGoal>();
+    goals.forEach(goal => goalMapping.set(goal.id, goal));
 
     achievements.forEach(achievement => {
       const achievementId = achievement.id.toString();
       const isCompleted = achievement.goalIds.reduce(
-        (result, goalId) => result && goals.get(goalId)!.completed,
+        (result, goalId) => result && goalMapping.get(goalId)!.completed,
         true
       );
       const awardProp = getAwardProp(achievementId);

@@ -15,7 +15,7 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { AchievementItem } from '../achievement/AchievementTypes';
+import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
@@ -42,6 +42,7 @@ type GlobalGameProps = {
   currentSceneRef?: Phaser.Scene;
   gameChapters: GameChapter[];
   gameType: GameType;
+  goals: AchievementGoal[] | undefined;
   isUsingMock: boolean;
   roomCode: string;
   roomPreviewMapping: Map<ItemId, AssetPath>;
@@ -68,6 +69,7 @@ export default class SourceAcademyGame extends Phaser.Game {
       currentSceneRef: undefined,
       gameChapters: [],
       gameType: gameType,
+      goals: undefined,
       isUsingMock: false,
       roomCode: '',
       roomPreviewMapping: new Map<ItemId, AssetPath>(),
@@ -99,6 +101,10 @@ export default class SourceAcademyGame extends Phaser.Game {
 
   public addAwardMapping(awardId: ItemId, awardProp: AwardProperty) {
     this.global.awardsMapping.set(awardId, awardProp);
+  }
+
+  public setGoals(goals: AchievementGoal[]) {
+    this.global.goals = goals;
   }
 
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
@@ -137,6 +143,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getAchievements = () => mandatory(this.global.achievements);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getGoals = () => mandatory(this.global.goals);
   public getRoomPreviewMapping = () => mandatory(this.global.roomPreviewMapping);
   public getUserStateManager = () => mandatory(this.global.userStateManager);
   public getSaveManager = () => mandatory(this.global.saveManager);
