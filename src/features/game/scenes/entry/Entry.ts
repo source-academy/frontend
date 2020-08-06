@@ -4,6 +4,7 @@ import SoundAssets from '../../assets/SoundAssets';
 import TextAssets from '../../assets/TextAssets';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import AwardParser from '../../parser/AwardParser';
+import RoomPreviewParser from '../../parser/RoomPreviewParser';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { toS3Path } from '../../utils/GameUtils';
 import { loadImage } from '../../utils/LoaderUtils';
@@ -25,16 +26,18 @@ class Entry extends Phaser.Scene {
   }
 
   public async create() {
+    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
+      console.log('Staff do not have accounts');
+      return;
+    }
+
     await SourceAcademyGame.getInstance().loadGameChapters();
     await SourceAcademyGame.getInstance().loadRoomCode();
     await SourceAcademyGame.getInstance().getSaveManager().loadLastSaveState();
     await SourceAcademyGame.getInstance().getUserStateManager().loadUserState();
     await this.preloadAwards();
+    await this.preloadRoomPreviewBackgrounds();
 
-    if (SourceAcademyGame.getInstance().getAccountInfo().role === 'staff') {
-      console.log('Staff do not have accounts');
-      return;
-    }
     this.applyLoadedSettings();
 
     this.scene.start('MainMenu');
@@ -59,6 +62,21 @@ class Entry extends Phaser.Scene {
     await Promise.all(
       Array.from(awardsMapping.values()).map(
         async awardInfo => await loadImage(this, awardInfo.assetKey, awardInfo.assetPath)
+      )
+    );
+  }
+
+  /**
+   * Fetch the roomPreviewMapping text, set it as global variable,
+   * and load all the necessary assets.
+   */
+  private async preloadRoomPreviewBackgrounds() {
+    const roomPreviewMappingTxt = this.cache.text.get(TextAssets.roomPreviewMapping.key);
+    const roomPreviewMapping = RoomPreviewParser.parse(roomPreviewMappingTxt);
+    SourceAcademyGame.getInstance().setRoomPreviewMapping(roomPreviewMapping);
+    await Promise.all(
+      Array.from(roomPreviewMapping.entries()).map(
+        async ([key, value]) => await loadImage(this, key, value)
       )
     );
   }
