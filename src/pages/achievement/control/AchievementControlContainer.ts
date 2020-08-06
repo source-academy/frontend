@@ -6,10 +6,13 @@ import { OverallState } from '../../../commons/application/ApplicationTypes';
 import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import {
   editAchievement,
+  editGoal,
   getAchievements,
+  getOwnGoals,
   removeAchievement,
   removeGoal,
-  saveAchievements
+  saveAchievements,
+  saveGoals
 } from '../../../features/achievement/AchievementActions';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
@@ -20,11 +23,14 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleFetchAchievements: getAchievements,
-      handleSaveAchievements: saveAchievements,
       handleEditAchievement: editAchievement,
+      handleEditGoal: editGoal,
+      handleGetAchievements: getAchievements,
+      handleGetOwnGoals: getOwnGoals,
+      handleRemoveAchievement: removeAchievement,
       handleRemoveGoal: removeGoal,
-      handleRemoveAchievement: removeAchievement
+      handleSaveAchievements: saveAchievements,
+      handleSaveGoals: saveGoals
     },
     dispatch
   );

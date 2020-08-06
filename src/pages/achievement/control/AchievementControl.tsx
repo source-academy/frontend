@@ -6,11 +6,11 @@ import AchievementInferencer from '../../../commons/achievement/utils/Achievemen
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleFetchAchievements: () => void;
-  handleSaveAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
-  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
+  handleGetAchievements: () => void;
   handleRemoveAchievement: (achievement: AchievementItem) => void;
+  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
+  handleSaveAchievements: (achievements: AchievementItem[]) => void;
 };
 
 export type StateProps = {
@@ -20,11 +20,11 @@ export type StateProps = {
 function AchievementControl(props: DispatchProps & StateProps) {
   const {
     inferencer,
-    handleFetchAchievements,
-    handleSaveAchievements,
     handleEditAchievement,
+    handleGetAchievements,
+    handleRemoveAchievement,
     handleRemoveGoal,
-    handleRemoveAchievement
+    handleSaveAchievements
   } = props;
 
   const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
@@ -34,10 +34,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
     if (editorUnsavedChanges !== 0 || panelPendingUpload) {
       window.onbeforeunload = () => true;
     } else {
-      handleFetchAchievements();
+      handleGetAchievements();
       window.onbeforeunload = null;
     }
-  }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
+  }, [handleGetAchievements, editorUnsavedChanges, panelPendingUpload]);
 
   const addUnsavedChanges = (changes: number) =>
     setEditorUnsavedChanges(editorUnsavedChanges + changes);
