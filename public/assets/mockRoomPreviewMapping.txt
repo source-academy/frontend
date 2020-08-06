@@ -1,6 +1,3 @@
-default
-    /locations/sourceCrashedPod.png
-
 405
     /locations/yourRoom-dim/normal.png
 
