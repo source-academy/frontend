@@ -49,7 +49,7 @@ function AchievementTask(props: AchievementTaskProps) {
    * the whole AchievementTask will be rendered together.
    */
   const shouldRenderPrerequisites = (id: number) => {
-    const children = inferencer.listImmediateChildren(id);
+    const children = [...inferencer.getImmediateChildren(id)];
     return children.reduce((canRender, prerequisite) => {
       return canRender || shouldRender(prerequisite);
     }, false);
@@ -60,6 +60,8 @@ function AchievementTask(props: AchievementTaskProps) {
    * the whole achievement task will be rendered
    */
   const shouldRenderTask = (id: number) => shouldRender(id) || shouldRenderPrerequisites(id);
+
+  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
 
   return (
     <>
@@ -76,8 +78,8 @@ function AchievementTask(props: AchievementTaskProps) {
           />
           {isDropdownOpen && (
             <div className="prerequisite-container">
-              {inferencer.listImmediateChildren(id).map(prerequisite => (
-                <div className="prerequisite" key={prerequisite}>
+              {prerequisiteIds.map(prerequisiteId => (
+                <div className="prerequisite" key={prerequisiteId}>
                   <div
                     className="dropdown-lines"
                     style={{
@@ -86,9 +88,9 @@ function AchievementTask(props: AchievementTaskProps) {
                     }}
                   ></div>
                   <AchievementCard
-                    id={prerequisite}
+                    id={prerequisiteId}
                     inferencer={inferencer}
-                    shouldPartiallyRender={!shouldRender(prerequisite)}
+                    shouldPartiallyRender={!shouldRender(prerequisiteId)}
                     displayView={displayView}
                     handleGlow={handleGlow}
                   />

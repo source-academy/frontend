@@ -168,32 +168,6 @@ export async function getAchievements(tokens: Tokens): Promise<AchievementItem[]
 }
 
 /**
- * GET achievements/goals
- */
-export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
-  const resp = await request(`achievements/goals/`, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
-    shouldRefresh: true
-  });
-
-  if (!resp || !resp.ok) {
-    return null; // invalid accessToken _and_ refreshToken
-  }
-
-  const achievementGoals = await resp.json();
-
-  return achievementGoals.map(
-    (goal: any) =>
-      ({
-        ...goal,
-        type: goal.type as GoalType,
-        meta: goal.meta as GoalMeta
-      } as AchievementGoal)
-  );
-}
-
-/**
  * GET achievements/goals/user_id
  */
 export async function getGoals(
@@ -223,16 +197,41 @@ export async function getGoals(
 }
 
 /**
- * POST /achievements/goals/:goal_id/:student_id
+ * GET achievements/goals
  */
-export async function updateGoalProgress(
-  studentId: number,
-  progress: GoalProgress,
+export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal,
+        type: goal.type as GoalType,
+        meta: goal.meta as GoalMeta
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * POST /achievements/:achievement_id
+ */
+export async function editAchievement(
+  achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
+  const resp = await request(`achievements/${achievement.id}`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { progress: progress },
+    body: { achievement: achievement },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -262,15 +261,16 @@ export async function editGoal(
 }
 
 /**
- * POST /achievements/:achievement_id
+ * POST /achievements/goals/:goal_id/:student_id
  */
-export async function editAchievement(
-  achievement: AchievementItem,
+export async function updateGoalProgress(
+  studentId: number,
+  progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`achievements/${achievement.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
     accessToken: tokens.accessToken,
-    body: { achievement: achievement },
+    body: { progress: progress },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

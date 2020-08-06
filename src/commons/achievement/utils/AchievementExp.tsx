@@ -12,7 +12,11 @@ function AchievementExp(props: AchievementExpProps) {
 
   if (exp === 0) return <div className="exp"></div>;
 
-  // Converts number to EXP string
+  /**
+   * Converts number to EXP string
+   *
+   * @param exp exp
+   */
   const stringifyExp = (exp: number) => {
     return (isBonus ? '+' : '') + exp + ' XP';
   };

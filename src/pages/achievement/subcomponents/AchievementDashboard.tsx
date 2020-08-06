@@ -11,7 +11,9 @@ import { FilterColors, getAbilityGlow } from '../../../features/achievement/Achi
 import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleAchievementsFetch: () => void;
+  handleGetAchievements: () => void;
+  // TODO: handleGetGoals: () => void;
+  // TODO: handleGetOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -21,22 +23,31 @@ export type StateProps = {
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleAchievementsFetch } = props;
+  const { inferencer, name, group, handleGetAchievements } = props;
 
   useEffect(() => {
     if (Constants.useBackend) {
-      handleAchievementsFetch();
+      handleGetAchievements();
+      // TODO: handleGetGoals();
     }
-  }, [handleAchievementsFetch]);
+  }, [handleGetAchievements]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
   const [viewId, setViewId] = useState<number>(-1);
 
-  // Filter icon turns blue when selected, otherwise white
+  /**
+   * Returns blue hex code if the filter is selected, otherwise return white
+   *
+   * @param status current FilterStatus
+   */
   const getFilterColor = (status: FilterStatus) =>
     status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
-  // Make Flex achievements parmanently glowing and the selected achievement glow
+  /**
+   * Make selected achievement glows and Flex achievements parmanently glowing
+   *
+   * @param id achievementId
+   */
   const handleGlow = (id: number) => {
     const ability = inferencer.getAchievementItem(id).ability;
     return ability === AchievementAbility.FLEX || id === viewId
@@ -44,6 +55,11 @@ function Dashboard(props: DispatchProps & StateProps) {
       : undefined;
   };
 
+  /**
+   * Maps an array of achievementId to <AchievementTask /> component
+   *
+   * @param taskIds an array of achievementId
+   */
   const mapAchievementIdsToTasks = (taskIds: number[]) =>
     taskIds.map(id => (
       <AchievementTask

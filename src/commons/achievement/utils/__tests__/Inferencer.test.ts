@@ -90,6 +90,6 @@ describe('Children are listed', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     const firstAchievementId = inferencer.getAchievementItem(0).id;
 
-    expect(inferencer.listImmediateChildren(firstAchievementId)).toEqual([]);
+    expect([...inferencer.getImmediateChildren(firstAchievementId)]).toEqual([]);
   });
 });
