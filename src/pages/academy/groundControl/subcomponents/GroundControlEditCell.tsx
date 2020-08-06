@@ -89,7 +89,7 @@ const EditCell: React.FunctionComponent<EditCellProps> = props => {
 
   return (
     <>
-      {getPrettyDate(currentDateString)}
+      <span className="date-cell-text">{getPrettyDate(currentDateString)}</span>
       {controlButton('', IconNames.EDIT, handleOpenDialog)}
       <Dialog
         icon={IconNames.INFO_SIGN}

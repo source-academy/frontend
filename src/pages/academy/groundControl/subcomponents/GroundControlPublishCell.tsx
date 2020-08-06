@@ -34,7 +34,7 @@ const PublishCell: React.FunctionComponent<PublishCellProps> = props => {
 
   return (
     <>
-      <Switch className="publish-switch" checked={isPublished} onChange={handleOpenDialog} />
+      <Switch className="publish-cell" checked={isPublished} onChange={handleOpenDialog} />
       <Dialog
         icon={IconNames.WARNING_SIGN}
         isOpen={isDialogOpen}

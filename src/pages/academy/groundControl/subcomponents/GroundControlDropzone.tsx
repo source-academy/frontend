@@ -1,6 +1,6 @@
-import { Card, Elevation, Switch } from '@blueprintjs/core';
+import { Card, Elevation, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { FlexDirectionProperty } from 'csstype';
+import classNames from 'classnames';
 import * as React from 'react';
 import { useDropzone } from 'react-dropzone';
 
@@ -20,42 +20,10 @@ interface IStateProps {
 
 interface IDropzoneProps extends IDispatchProps, IStateProps {}
 
-// Dropzone styling
-const dropZoneStyle = {
-  baseStyle: {
-    flex: 1,
-    display: 'flex',
-    height: '30vh',
-    flexDirection: 'column' as FlexDirectionProperty,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    borderWidth: 2,
-    borderRadius: 2,
-    borderColor: '#eeeeee',
-    borderStyle: 'dashed',
-    backgroundColor: '#fafafa',
-    color: '#bdbdbd',
-    outline: 'none',
-    transition: 'border .24s ease-in-out'
-  },
-
-  activeStyle: {
-    borderColor: '#2196f3'
-  },
-
-  acceptStyle: {
-    borderColor: '#00e676'
-  },
-
-  rejectStyle: {
-    borderColor: '#ff1744'
-  }
-};
-
-const MaterialDropzone: React.FC<IDropzoneProps> = props => {
+const MaterialDropzone: React.FunctionComponent<IDropzoneProps> = props => {
   const [file, setFile] = React.useState<File>();
   const [title, setTitle] = React.useState<string>();
+
   const handleConfirmUpload = () => {
     props.handleUploadAssessment(file!);
     setFile(undefined);
@@ -81,16 +49,15 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
       }
     }
   });
-  const style = React.useMemo(
-    () => ({
-      ...dropZoneStyle.baseStyle,
-      ...(isDragActive ? dropZoneStyle.activeStyle : {}),
-      ...(isDragAccept ? dropZoneStyle.acceptStyle : {}),
-      ...(isDragReject ? dropZoneStyle.rejectStyle : {}),
-      ...(isFocused ? dropZoneStyle.activeStyle : {})
-    }),
-    [isDragActive, isDragAccept, isDragReject, isFocused]
-  );
+
+  const classList = React.useMemo(() => {
+    return classNames(
+      'dropzone-base',
+      isFocused || isDragActive ? 'dropzone-active' : undefined,
+      isDragAccept ? 'dropzone-accept' : undefined,
+      isDragReject ? 'dropzone-reject' : undefined
+    );
+  }, [isDragActive, isDragAccept, isDragReject, isFocused]);
 
   const handleToggleOnChange = () => {
     if (!props.forceUpdate) {
@@ -118,37 +85,50 @@ const MaterialDropzone: React.FC<IDropzoneProps> = props => {
     props.toggleForceUpdate();
   };
 
-  const confirmationMessage = () => {
-    return (
-      <div>
-        <p>Are you sure that you want to force update the assessment?</p>
-        {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate)}
-        {controlButton('No', IconNames.CROSS, handleCancelForceUpdate)}
-      </div>
-    );
-  };
+  const confirmationMessage = () => (
+    <div className="dropzone-controls">
+      {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate, {
+        minimal: false,
+        intent: Intent.DANGER
+      })}
+      {controlButton('No', IconNames.CROSS, handleCancelForceUpdate, {
+        minimal: false
+      })}
+    </div>
+  );
 
   return (
     <>
       <Card elevation={Elevation.TWO} interactive={true}>
-        <div {...getRootProps({ style })}>
+        <div {...getRootProps({ className: classList })}>
           <input {...getInputProps()} />
           <p>Drag 'n' drop a file here, or click to select a file</p>
         </div>
       </Card>
       {file && (
-        <Card elevation={Elevation.TWO} interactive={true}>
-          <div>{title}</div>
-          <br />
-          {!props.displayConfirmation &&
-            controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload)}
-          {!props.displayConfirmation &&
-            controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload)}
-          <br />
-          <br />
-          {!props.displayConfirmation && <p>Force update opened assessment</p>}
+        <Card className="dropzone-prompt" elevation={Elevation.TWO} interactive={true}>
+          <h3>{title}</h3>
+          {!props.displayConfirmation && (
+            <>
+              <div className="dropzone-controls">
+                {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload, {
+                  minimal: false,
+                  intent: Intent.DANGER
+                })}
+                {controlButton('Cancel Upload', IconNames.DELETE, handleCancelUpload, {
+                  minimal: false
+                })}
+              </div>
+              <div className="dropzone-controls">
+                <p>Force update opened assessment</p>
+                {toggleButton()}
+              </div>
+            </>
+          )}
+          {props.displayConfirmation && (
+            <p>Are you sure that you want to force update the assessment?</p>
+          )}
           {props.displayConfirmation && confirmationMessage()}
-          {!props.displayConfirmation && toggleButton()}
         </Card>
       )}
     </>
