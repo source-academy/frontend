@@ -20,6 +20,10 @@ const AssetViewer = memo(({ assetPath }: AssetProps) => {
         crossOrigin={'anonymous'}
         src={Constants.assetsFolder + displayAssetPath}
         width="150px"
+        onError={e => {
+          (e.target as any).onerror = null;
+          (e.target as any).src = Constants.assetsFolder + Constants.defaultAssetPath;
+        }}
       ></img>
     </>
   );

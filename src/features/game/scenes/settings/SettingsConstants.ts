@@ -24,7 +24,7 @@ const SettingsConstants = {
   optHeaderTextConfig: { x: screenSize.x * 0.25, y: 0, oriX: 0.5, oriY: 0.75 },
   opt: { x: 140, xSpace: screenSize.x * 0.4, ySpace: screenSize.y * 0.7 },
   radioButtonsTextConfig: { x: 0, y: -50, oriX: 0.5, oriY: 0.25 },
-  volContainerOpts: ['0', '0.5', '1.0', '1.5', '2.0']
+  volContainerOpts: ['0', '0.25', '0.5', '1.0', '1.5', '2.0']
 };
 
 export default SettingsConstants;

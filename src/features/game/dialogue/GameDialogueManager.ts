@@ -45,18 +45,21 @@ export default class DialogueManager {
     await this.showNextLine(resolve);
     this.getDialogueRenderer()
       .getDialogueBox()
-      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => {
-        GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
-        await this.showNextLine(resolve);
-      });
+      .on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, async () => await this.showNextLine(resolve));
   }
 
   private async showNextLine(resolve: () => void) {
+    GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
     const { line, speakerDetail, actionIds } = this.getDialogueGenerator().generateNextLine();
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
+
+    // Disable interactions while processing actions
+    GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
+    GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);
+
     if (!line) resolve();
   }
 

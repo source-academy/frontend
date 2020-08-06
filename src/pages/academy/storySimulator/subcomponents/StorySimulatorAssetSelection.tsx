@@ -15,13 +15,10 @@ type TreeState = {
 };
 
 /**
- * This component takes in all the asset paths and renders them in a folder format
- * where contents of folders are listed, and each folder can be opened/closed.
+ * This component provides a preview of all the S3 asset files.
  *
- * When a file is selected, its filename is stored in session storage, so that
- * Story Simulator's Object Placement can read the filename and load the image.
- *
- * @param assetPaths all the paths of assets in the S3 folder
+ * When a image is selected, the filename of the image is stored in session storage,
+ * so Story Simulator's Object Placement can read the filename and load the image.
  */
 const StorySimulatorAssetSelection = () => {
   const { value: assetPaths } = useRequest<string[]>(fetchAssetPaths, []);

@@ -10,6 +10,14 @@ import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSBBoxDetail } from './SSBBoxManagerTypes';
 
+/**
+ * This manager manages the bounding boxes for Story Simulator's Object Placement scene
+ *
+ * It handles:
+ * (1) Storing of information on bounding boxes
+ * (2) Creation of bboxes using mouse drag
+ * (3) Rendering of bboxes as translucent white boxes
+ */
 export default class SSBBoxManager implements ICheckpointLoggable {
   public checkpointTitle = 'boundingBoxes';
 
@@ -27,6 +35,15 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     this.addBBoxListeners(objectPlacement);
   }
 
+  /**
+   * Adds pointer up and down listener on the object placement scene
+   * in order to draw bboxes when the mode is bbox draw-mode
+   *
+   * Pointer down causes bbox to be drawn
+   * Pointer up stops a bbox from being drawn
+   *
+   * @param objectPlacement the object placement scene
+   */
   private addBBoxListeners(objectPlacement: ObjectPlacement) {
     this.getObjectPlacement()
       .getInputManager()
@@ -58,6 +75,10 @@ export default class SSBBoxManager implements ICheckpointLoggable {
       });
   }
 
+  /**
+   * Draws a new bbox whose center is the center
+   * created by the dragged bbox
+   */
   private createNewBBox() {
     const [x, y] = this.getObjectPlacement().getCoordinates();
     const bboxBeingDrawn = new Phaser.GameObjects.Rectangle(
@@ -78,6 +99,10 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     return bboxBeingDrawn;
   }
 
+  /**
+   * Memorises the dimensions and coordinates of the drawn
+   * bbox and stores this information
+   */
   private registerBBox(bboxSprite: Phaser.GameObjects.Rectangle) {
     const itemId = 'bbox' + this.getObjectPlacement().generateItemIdNumber();
 
@@ -95,6 +120,10 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     bboxSprite.data.set('type', 'bbox');
   }
 
+  /**
+   * Returns an array of bounding box details for logging information
+   * into info-boxes by LOg Manager
+   */
   public getLoggables() {
     return [...this.bboxDetailMap.values()];
   }
@@ -105,6 +134,12 @@ export default class SSBBoxManager implements ICheckpointLoggable {
 
   private getObjectPlacement = () => mandatory(this.objectPlacement);
 
+  /**
+   * This function resizes the bbox that is currently being drawn,
+   * so that users can see the effects of drawing a rectangle in real-time.
+   *
+   * @param objectPlacement the bbox being drawn
+   */
   public resizeWhileBeingDrawn(objectPlacement: ObjectPlacement) {
     if (
       !this.getObjectPlacement().isCursorMode(CursorMode.DrawBBox) ||
@@ -119,6 +154,12 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     resize(this.bboxBeingDrawn, currentX - startX, currentY - startY);
   }
 
+  /**
+   * This function is called when printing the checkpoint text file
+   *
+   * Provides the array of strings that are associated with the `boundingBoxes` entity
+   * that are printed within the location paragraph.
+   */
   public checkpointTxtLog() {
     const map: string[] = [];
     this.bboxDetailMap.forEach((bboxDetail: SSBBoxDetail) => {
@@ -136,6 +177,14 @@ export default class SSBBoxManager implements ICheckpointLoggable {
     return map;
   }
 
+  /**
+   * This function receives any transformation updates on bboxes
+   * from Transformation manager and stores information internally in its `bboxDetailMap`
+   *
+   * @param gameObject bounding box being updated
+   * @param attribute attributes being updated for that bbox
+   * @param value value to set this attribute to
+   */
   public setAttribute(
     gameObject: Phaser.GameObjects.Rectangle | Phaser.GameObjects.Image,
     attribute: string,

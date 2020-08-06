@@ -52,7 +52,9 @@ const stringToActionTypeMap = {
   play_bgm: GameActionType.PlayBGM,
   play_sfx: GameActionType.PlaySFX,
   preview_location: GameActionType.PreviewLocation,
-  show_object_layer: GameActionType.ShowObjectLayer
+  show_object_layer: GameActionType.ShowObjectLayer,
+  navigate_to_assessment: GameActionType.NavigateToAssessment,
+  delay: GameActionType.Delay
 };
 
 const stringToGameStateStorageMap = {

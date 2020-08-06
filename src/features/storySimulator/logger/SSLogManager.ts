@@ -9,6 +9,12 @@ import { loggableStyle } from './SSLogConstants';
 import { getIdFromShortPath, padWithTab } from './SSLogManagerHelper';
 import { ICheckpointLoggable, IScreenLoggable } from './SSLogManagerTypes';
 
+/**
+ * This manager manages 2 types of logging
+ *
+ * (1) On-screen logging of coordinates and asset paths
+ * (2) Printing of asset texts onto console
+ */
 export default class SSLogManager {
   private detailMapContainer: Phaser.GameObjects.Container | undefined;
   private objectPlacement: ObjectPlacement | undefined;
@@ -17,6 +23,12 @@ export default class SSLogManager {
     this.objectPlacement = objectPlacement;
   }
 
+  /**
+   * Prints the checkpoint text file generated onto the console
+   *
+   * @param locationAssetPath The location to use as the base for this text file
+   * @param checkpointLoggers The managers that manage entities that can be logged into the checkpoint
+   */
   public printCheckpoint(
     locationAssetPath: AssetPath = '/locations/yourRoom-dim/normal.png',
     checkpointLoggers: ICheckpointLoggable[]
@@ -61,6 +73,13 @@ dialogues
     console.log(checkpoint);
   }
 
+  /**
+   * Renders information box for every entity present
+   * on-screen when mouse is hovered over the "Show Details" button.
+   *
+   * @param loggables A list of IScreenLoggable that have x and y coordinates (to determine where their info-box is rendered)
+   *                  Each IScreenLoggable object also contains other details such as asset keys, that will be rendered inside the info-box
+   */
   public showDetailMap(loggables: IScreenLoggable[]) {
     this.detailMapContainer = new Phaser.GameObjects.Container(this.getObjectPlacement(), 0, 0);
 
@@ -88,6 +107,11 @@ dialogues
     this.getObjectPlacement().add.existing(this.detailMapContainer);
   }
 
+  /**
+   * Helper function for formatting the IScreenLoggable into format readable to users
+   *
+   * @param loggable
+   */
   private formatObjectDetails(loggable: IScreenLoggable) {
     return Object.entries(loggable)
       .map(
@@ -97,6 +121,10 @@ dialogues
       .join('\n');
   }
 
+  /**
+   * Hide the information boxes shown on screen
+   * when user is no longer hovering over the "Show Details" button
+   */
   public hideDetailMap() {
     if (this.detailMapContainer) {
       this.detailMapContainer.destroy();
