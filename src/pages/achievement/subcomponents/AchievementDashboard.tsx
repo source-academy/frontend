@@ -6,10 +6,9 @@ import AchievementOverview from '../../../commons/achievement/AchievementOvervie
 import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { Role } from '../../../commons/application/ApplicationTypes';
+import { Role, UserSimpleState } from '../../../commons/application/ApplicationTypes';
 import Constants from '../../../commons/utils/Constants';
 import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
-import { UserSimpleState } from '../../../commons/application/ApplicationTypes';
 import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
