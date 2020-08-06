@@ -30,7 +30,16 @@ export type StateProps = {
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, role, group, users, handleAchievementsFetch, handleUsersFetch } = props;
+  const {
+    inferencer,
+    name,
+    role,
+    group,
+    users,
+    handleAchievementsFetch,
+    handleUsersFetch,
+    updateGoalProgress
+  } = props;
 
   useEffect(() => {
     if (Constants.useBackend) {
@@ -126,6 +135,7 @@ function Dashboard(props: DispatchProps & StateProps) {
             role={role}
             inferencer={inferencer}
             handleGlow={handleGlow}
+            updateGoalProgress={updateGoalProgress}
           />
         </div>
       </div>

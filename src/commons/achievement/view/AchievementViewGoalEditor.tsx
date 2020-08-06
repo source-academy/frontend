@@ -1,18 +1,20 @@
 import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
+import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 import { UserSimpleState } from '../../application/ApplicationTypes';
 import { showWarningMessage } from '../../utils/NotificationsHelper';
 
 type AchievementViewGoalEditorProps = {
-  id: number;
-  exp: number;
-  maxExp: number;
+  goal: AchievementGoal;
   userToEdit: UserSimpleState | null;
+
+  updateGoalProgress: any;
 };
 
 function AchievementViewGoalEditor(props: AchievementViewGoalEditorProps) {
-  const { userToEdit, exp, maxExp } = props;
+  const { userToEdit, goal /* updateGoalProgress */ } = props;
+  const { exp, maxExp } = goal;
 
   const [currentExp, setCurrentExp] = useState<number>(exp);
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -39,6 +41,15 @@ function AchievementViewGoalEditor(props: AchievementViewGoalEditorProps) {
     }
   };
 
+  const saveGoalProgress = () => {
+    /*  TODO: Implement this when backend is ready!
+
+    const goalCopy = { ...goal };
+    goalCopy.exp = currentExp;
+    updateGoalProgress(userToEdit?.userId, goalCopy);
+    */
+  };
+
   return (
     <div className="goal-editor">
       <Button text={`Edit`} onClick={openDialog} />
@@ -47,7 +58,7 @@ function AchievementViewGoalEditor(props: AchievementViewGoalEditorProps) {
           <p> Max EXP: {maxExp}</p>
           <br />
           <EditableText value={`${currentExp}`} onChange={(exp: string) => verifyandEdit(exp)} />
-          <Button text={`Save`} onClick={() => {}} />
+          <Button text={`Save`} onClick={saveGoalProgress} />
         </Dialog>
       </div>
     </div>

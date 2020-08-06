@@ -8,10 +8,12 @@ type AchievementViewGoalProps = {
   userToEdit: UserSimpleState | null;
   role?: Role;
   goals: AchievementGoal[];
+
+  updateGoalProgress: any;
 };
 
 function AchievementViewGoal(props: AchievementViewGoalProps) {
-  const { userToEdit, role, goals } = props;
+  const { userToEdit, role, goals, updateGoalProgress } = props;
 
   const mapGoalToJSX = (goal: AchievementGoal) => {
     const { id, text, maxExp, exp, type } = goal;
@@ -25,7 +27,11 @@ function AchievementViewGoal(props: AchievementViewGoalProps) {
         </div>
         <p>{text}</p>
         {role !== Role.Student && type === GoalType.MANUAL && (
-          <AchievementViewGoalEditor userToEdit={userToEdit} id={id} exp={exp} maxExp={exp} />
+          <AchievementViewGoalEditor
+            updateGoalProgress={updateGoalProgress}
+            userToEdit={userToEdit}
+            goal={goal}
+          />
         )}
       </div>
     );

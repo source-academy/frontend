@@ -14,10 +14,12 @@ type AchievementViewProps = {
   role?: Role;
   inferencer: AchievementInferencer;
   handleGlow: any;
+
+  updateGoalProgress: any;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { id, role, users, inferencer, handleGlow } = props;
+  const { id, role, users, inferencer, handleGlow, updateGoalProgress } = props;
 
   if (id < 0) return null;
 
@@ -46,11 +48,21 @@ function AchievementView(props: AchievementViewProps) {
           <p>{description}</p>
         </span>
       </div>
-      <AchievementViewGoal role={role} userToEdit={userToEdit} goals={goals} />
+      <AchievementViewGoal
+        updateGoalProgress={updateGoalProgress}
+        role={role}
+        userToEdit={userToEdit}
+        goals={goals}
+      />
       {prereqGoals.length > 0 ? (
         <>
           <hr />
-          <AchievementViewGoal role={role} userToEdit={userToEdit} goals={prereqGoals} />
+          <AchievementViewGoal
+            updateGoalProgress={updateGoalProgress}
+            role={role}
+            userToEdit={userToEdit}
+            goals={prereqGoals}
+          />
         </>
       ) : null}
       {status === AchievementStatus.COMPLETED ? (
