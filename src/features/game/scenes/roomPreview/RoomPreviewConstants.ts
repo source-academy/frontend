@@ -38,6 +38,7 @@ export const verifiedStyle: BitmapFontStyle = {
 };
 
 export const RoomConstants = {
+  assessmentNumber: 'MYROOM',
   verifiedText: 'VERIFIED',
   tag: { width: 128, height: 50 },
   hoverTagTextConfig: { x: 64, y: 0, oriX: 0.5, oriY: 0.55 }
