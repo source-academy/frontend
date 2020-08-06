@@ -20,6 +20,11 @@ function AchievementGroupFilter(props: AchievementGroupFilterProps) {
   const distinctUserGroups = [...new Set(userGroups)];
 
   const FilterByGroup: ItemPredicate<string> = (query, group) => {
+    if (!group) {
+      // This means is either staff or admin user
+      return false;
+    }
+
     return group.toLowerCase().indexOf(query.toLowerCase()) >= 0;
   };
 

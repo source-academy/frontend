@@ -139,7 +139,7 @@ export async function putUserGameState(
  * GET /uers
  */
 export async function getUsers(tokens: Tokens): Promise<any[] | null> {
-  const resp = await request('users/', 'GET', {
+  const resp = await request('admin/users/', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
     shouldRefresh: true
