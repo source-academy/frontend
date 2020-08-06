@@ -350,6 +350,9 @@ function generateFlattenedRuneList(rune) {
     }
   }
   function helper(rune, color) {
+    if (!isRune(rune)) {
+        throw 'expects rune, received ' + rune
+    }
     if (rune.isPrimary) {
       if (rune.count === 0) {
         // this is blank, do nothing
