@@ -2,6 +2,7 @@ import { Layer } from '../layer/GameLayerTypes';
 import { GamePhaseType } from '../phase/GamePhaseTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
+import { sleep } from '../utils/GameUtils';
 import { GameActionType } from './GameActionTypes';
 
 /**
@@ -83,6 +84,9 @@ export default class GameActionExecuter {
       case GameActionType.NavigateToAssessment:
         await globalAPI.promptNavigateToAssessment(actionParams.assessmentId);
         return;
+      case GameActionType.Delay:
+        await sleep(actionParams.duration);
+        return;
       default:
         return;
     }
@@ -116,6 +120,7 @@ export default class GameActionExecuter {
       case GameActionType.PlayBGM:
       case GameActionType.PlaySFX:
       case GameActionType.ShowObjectLayer:
+      case GameActionType.Delay:
         return false;
     }
   }

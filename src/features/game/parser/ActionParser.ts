@@ -162,6 +162,11 @@ export default class ActionParser {
       case GameActionType.NavigateToAssessment:
         actionParamObj.assessmentId = actionParams[0];
         break;
+
+      case GameActionType.Delay:
+        actionParamObj.duration = parseInt(actionParams[0]) * 1000;
+        break;
+
     }
 
     const actionId = Parser.generateActionId();
