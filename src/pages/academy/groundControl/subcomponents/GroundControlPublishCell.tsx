@@ -1,70 +1,75 @@
-import { Classes, Dialog, Switch } from '@blueprintjs/core';
+import { Classes, Dialog, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import controlButton from '../../../../commons/ControlButton';
 
-interface IPublishCellProps {
-  data: AssessmentOverview;
+export type PublishCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handlePublishAssessment: (togglePublishTo: boolean, id: number) => void;
-}
+};
 
-interface IPublishCellState {
-  dialogOpen: boolean;
-  isPublished: boolean;
-}
+type StateProps = {
+  data: AssessmentOverview;
+};
 
-class PublishCell extends React.Component<IPublishCellProps, IPublishCellState> {
-  public constructor(props: IPublishCellProps) {
-    super(props);
-    this.state = {
-      dialogOpen: false,
-      isPublished: this.props.data.isPublished === undefined ? false : this.props.data.isPublished
-    };
-  }
+const PublishCell: React.FunctionComponent<PublishCellProps> = props => {
+  const { data } = props;
 
-  public render() {
-    const text = this.props.data.isPublished ? 'Unpublish' : 'Publish';
-    const lowerCaseText = text.toLowerCase();
-    const toggleButton = () => {
-      return (
-        <div className="toggle-button-wrapper">
-          <Switch checked={this.state.isPublished} onChange={this.handleOpenDialog} />
+  const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
+  const [isPublished] = React.useState<boolean>(
+    data.isPublished === undefined ? false : data.isPublished
+  );
+
+  const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
+  const handleCloseDialog = React.useCallback(() => setDialogState(false), []);
+
+  const { handlePublishAssessment } = props;
+
+  const handleTogglePublished = React.useCallback(() => {
+    const { id } = data;
+    handlePublishAssessment(!isPublished, id);
+    handleCloseDialog();
+  }, [data, isPublished, handleCloseDialog, handlePublishAssessment]);
+
+  return (
+    <>
+      <Switch className="publish-switch" checked={isPublished} onChange={handleOpenDialog} />
+      <Dialog
+        icon={IconNames.WARNING_SIGN}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+        title={`${isPublished ? 'Unpublish' : 'Publish'} assessment`}
+        canOutsideClickClose={true}
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <p>
+            Are you sure you want to <b>{isPublished ? 'unpublish' : 'publish'}</b> the assessment{' '}
+            <i>{data.title}</i>?
+          </p>
+          {isPublished ? (
+            <p>
+              <b>
+                This will hide the assessment for students and prevent them from uploading new
+                answers. Admins and staff are not affected.
+              </b>
+            </p>
+          ) : null}
         </div>
-      );
-    };
-    return (
-      <div>
-        {toggleButton()}
-        <Dialog
-          icon="info-sign"
-          isOpen={this.state.dialogOpen}
-          onClose={this.handleCloseDialog}
-          title={text + ' Assessment'}
-          canOutsideClickClose={true}
-        >
-          <div className={Classes.DIALOG_BODY}>
-            {<p>Are you sure that you want to {lowerCaseText} this Assessment?</p>}
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            {controlButton('Cancel', IconNames.CROSS, handleCloseDialog, { minimal: false })}
+            {controlButton('Confirm', IconNames.CONFIRM, handleTogglePublished, {
+              minimal: false,
+              intent: Intent.DANGER
+            })}
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              {controlButton('Confirm ' + text, IconNames.CONFIRM, this.handleDelete)}
-              {controlButton('Cancel', IconNames.CROSS, this.handleCloseDialog)}
-            </div>
-          </div>
-        </Dialog>
-      </div>
-    );
-  }
-
-  private handleCloseDialog = () => this.setState({ dialogOpen: false });
-  private handleOpenDialog = () => this.setState({ dialogOpen: true });
-  private handleDelete = () => {
-    const { data } = this.props;
-    this.props.handlePublishAssessment(!data.isPublished, data.id);
-    this.handleCloseDialog();
-  };
-}
+        </div>
+      </Dialog>
+    </>
+  );
+};
 
 export default PublishCell;

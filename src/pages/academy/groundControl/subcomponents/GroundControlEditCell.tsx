@@ -1,103 +1,94 @@
-import { Classes, Dialog } from '@blueprintjs/core';
+import { Classes, Dialog, Intent } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { AssessmentOverview } from '../../../../commons/assessment/AssessmentTypes';
 import controlButton from '../../../../commons/ControlButton';
-import { IGroundControlAssessmentOverview } from '../../../../features/groundControl/GroundControlTypes';
+import { getPrettyDate } from '../../../../commons/utils/DateHelper';
 
-interface IEditCellProps {
-  data: IGroundControlAssessmentOverview;
+export type EditCellProps = DispatchProps & StateProps;
+
+type DispatchProps = {
   handleAssessmentChangeDate: (id: number, openAt: string, closeAt: string) => void;
+};
+
+type StateProps = {
+  data: AssessmentOverview;
   forOpenDate: boolean;
-}
+};
 
-interface IEditCellState extends IEditCellDateState {
-  dialogOpen: boolean;
-}
+const EditCell: React.FunctionComponent<EditCellProps> = props => {
+  const minDate = new Date(2010, 0, 0);
+  const maxDate = new Date(2030, 11, 31);
 
-interface IEditCellDateState {
-  openAt: Date;
-  closeAt: Date;
-}
+  const { data, forOpenDate } = props;
+  const currentDateString = forOpenDate ? data.openAt : data.closeAt;
 
-class EditCell extends React.Component<IEditCellProps, IEditCellState> {
-  private maxDate = new Date(new Date(Date.now()).setFullYear(2100));
+  const [isDialogOpen, setDialogState] = React.useState<boolean>(false);
+  const [newDate, setNewDate] = React.useState<Date>(new Date(currentDateString));
 
-  public constructor(props: IEditCellProps) {
-    super(props);
-    this.state = {
-      dialogOpen: false,
-      openAt: new Date(Date.parse(this.props.data.openAt)),
-      closeAt: new Date(Date.parse(this.props.data.closeAt))
-    };
-  }
+  const handleOpenDialog = React.useCallback(() => setDialogState(true), []);
+  const handleCloseDialog = React.useCallback(() => setDialogState(false), []);
 
-  public render() {
-    const fieldName = this.props.forOpenDate ? 'Opening' : 'Closing';
-    return (
-      <div>
-        {this.props.forOpenDate ? this.props.data.prettyOpenAt : this.props.data.prettyCloseAt}
-        {controlButton('', IconNames.EDIT, this.handleOpenDialog)}
-        <Dialog
-          icon="info-sign"
-          isOpen={this.state.dialogOpen}
-          onClose={this.handleCloseDialog}
-          title="Update Assessment"
-          canOutsideClickClose={true}
-        >
-          <div className={Classes.DIALOG_BODY}>
-            {fieldName} Date: {this.dateInput()}
+  const { handleAssessmentChangeDate } = props;
+
+  const handleUpdateDate = React.useCallback(() => {
+    const { id, openAt, closeAt } = data;
+    handleAssessmentChangeDate(
+      id,
+      forOpenDate ? newDate.toISOString() : openAt,
+      forOpenDate ? closeAt : newDate.toISOString()
+    );
+    handleCloseDialog();
+  }, [data, forOpenDate, newDate, handleAssessmentChangeDate, handleCloseDialog]);
+
+  const handleParseDate = (str: string) => new Date(str);
+  const handleFormatDate = (date: Date) => date.toLocaleString();
+
+  const handleDateChange = React.useCallback((selectedDate: Date) => setNewDate(selectedDate), []);
+
+  const dateInput = (
+    <DateInput
+      formatDate={handleFormatDate}
+      onChange={handleDateChange}
+      parseDate={handleParseDate}
+      value={newDate}
+      timePrecision={'second'}
+      fill={true}
+      minDate={minDate}
+      maxDate={maxDate}
+      closeOnSelection={false}
+    />
+  );
+
+  return (
+    <>
+      {getPrettyDate(currentDateString)}
+      {controlButton('', IconNames.EDIT, handleOpenDialog)}
+      <Dialog
+        icon={IconNames.INFO_SIGN}
+        isOpen={isDialogOpen}
+        onClose={handleCloseDialog}
+        title="Updating assessment settings"
+        canOutsideClickClose={true}
+      >
+        <div className={Classes.DIALOG_BODY}>
+          <p>{forOpenDate ? 'Opening' : 'Closing'} date and time:</p>
+          {dateInput}
+        </div>
+        <div className={Classes.DIALOG_FOOTER}>
+          <div className={Classes.DIALOG_FOOTER_ACTIONS}>
+            {controlButton('Cancel', IconNames.CROSS, handleCloseDialog, { minimal: false })}
+            {controlButton('Confirm', IconNames.TICK, handleUpdateDate, {
+              minimal: false,
+              intent: Intent.DANGER
+            })}
           </div>
-          <div className={Classes.DIALOG_FOOTER}>
-            <div className={Classes.DIALOG_FOOTER_ACTIONS}>
-              {controlButton('Confirm Update', IconNames.TICK, this.handleUpdate)}
-              {controlButton('Cancel', IconNames.CROSS, this.handleCloseDialog)}
-            </div>
-          </div>
-        </Dialog>
-      </div>
-    );
-  }
-
-  private dateInput = () => {
-    return (
-      <DateInput
-        formatDate={this.formatDate}
-        onChange={this.handleDateChange}
-        parseDate={this.parseDate}
-        value={this.props.forOpenDate ? this.state.openAt : this.state.closeAt}
-        timePrecision={'minute'}
-        fill={true}
-        maxDate={this.maxDate}
-        closeOnSelection={false}
-      />
-    );
-  };
-
-  private parseDate = (str: string) => new Date(str);
-
-  private formatDate = (date: Date) => date.toLocaleString();
-
-  private handleDateChange = (selectedDate: Date) => {
-    if (this.props.forOpenDate) {
-      this.setState({ openAt: selectedDate });
-    } else {
-      this.setState({ closeAt: selectedDate });
-    }
-  };
-
-  private handleCloseDialog = () => this.setState({ dialogOpen: false });
-  private handleOpenDialog = () => this.setState({ dialogOpen: true });
-  private handleUpdate = () => {
-    const { data } = this.props;
-    this.props.handleAssessmentChangeDate(
-      data.id,
-      this.state.openAt.toISOString(),
-      this.state.closeAt.toISOString()
-    );
-    this.handleCloseDialog();
-  };
-}
+        </div>
+      </Dialog>
+    </>
+  );
+};
 
 export default EditCell;

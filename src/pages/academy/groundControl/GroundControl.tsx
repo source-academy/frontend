@@ -5,13 +5,10 @@ import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import { getPrettyDate } from '../../../commons/utils/DateHelper';
-import { IGroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes';
 import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
@@ -64,35 +61,23 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       },
       {
         headerName: 'Open Date',
-        field: '',
+        field: 'openAt',
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: true
         },
-        width: 150,
-        sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
-        cellStyle: {
-          padding: 0
-        }
+        width: 150
       },
       {
         headerName: 'Close Date',
-        field: '',
+        field: 'closeAt',
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: false
         },
-        width: 150,
-        sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
-        cellStyle: {
-          padding: 0
-        }
+        width: 150
       },
       {
         headerName: 'Publish',
@@ -102,13 +87,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
         width: 100,
+        filter: false,
+        resizable: false,
         sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
         cellStyle: {
           padding: 0
-        },
-        hide: !this.props.handlePublishAssessment
+        }
       },
       {
         headerName: 'Delete',
@@ -118,13 +102,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
         width: 100,
+        filter: false,
+        resizable: false,
         sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
         cellStyle: {
           padding: 0
-        },
-        hide: !this.props.handleDeleteAssessment
+        }
       }
     ];
 
@@ -136,8 +119,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
   }
 
   public render() {
-    const data = this.sortByCategoryAndDate();
-
     const controls = (
       <div className="GridControls ground-control-controls">
         <Button
@@ -175,7 +156,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           defaultColDef={this.defaultColumnDefs}
           onGridReady={this.onGridReady}
           onGridSizeChanged={this.resizeGrid}
-          rowData={data}
+          rowData={this.props.assessmentOverviews}
           rowHeight={30}
           pagination={true}
           paginationPageSize={25}
@@ -210,26 +191,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       // If assessment overviews are not loaded, fetch them
       this.props.handleAssessmentOverviewFetch();
     }
-  };
-
-  private sortByCategoryAndDate = () => {
-    if (!this.props.assessmentOverviews) {
-      return [];
-    }
-
-    const overview: IGroundControlAssessmentOverview[] = this.props.assessmentOverviews
-      .slice()
-      .map(assessmentOverview => {
-        const clone: IGroundControlAssessmentOverview = JSON.parse(
-          JSON.stringify(assessmentOverview)
-        );
-        clone.prettyCloseAt = getPrettyDate(clone.closeAt);
-        clone.prettyOpenAt = getPrettyDate(clone.openAt);
-        clone.formattedOpenAt = new Date(Date.parse(clone.openAt));
-        clone.formattedCloseAt = new Date(Date.parse(clone.closeAt));
-        return clone;
-      });
-    return sortBy(overview, ['category', 'formattedOpenAt', 'formattedCloseAt']);
   };
 
   private onGridReady = (params: GridReadyEvent) => {

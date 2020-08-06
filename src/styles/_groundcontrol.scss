@@ -3,14 +3,12 @@
     margin-top: 4px;
   }
 
-  .toggle-button-wrapper {
+  .publish-switch.publish-switch {
     padding-top: 2px;
+    padding-left: 48px;
+    margin-bottom: 0;
     margin-left: auto;
     margin-right: auto;
     width: 28px;
-
-    .#{$ns}-control {
-      margin-bottom: 0;
-    }
   }
 }
