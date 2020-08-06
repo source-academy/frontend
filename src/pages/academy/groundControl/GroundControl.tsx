@@ -30,8 +30,6 @@ export type StateProps = {
 };
 
 type State = {
-  displayConfirmation: boolean;
-  forceUpdate: boolean;
   showDropzone: boolean;
 };
 
@@ -44,8 +42,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     super(props);
 
     this.state = {
-      displayConfirmation: false,
-      forceUpdate: false,
       showDropzone: false
     };
 
@@ -138,13 +134,7 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     const dropzone = (
       <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
-        <Dropzone
-          handleUploadAssessment={this.handleUploadAssessment}
-          toggleDisplayConfirmation={this.toggleDisplayConfirmation}
-          toggleForceUpdate={this.toggleForceUpdate}
-          displayConfirmation={this.state.displayConfirmation}
-          forceUpdate={this.state.forceUpdate}
-        />
+        <Dropzone handleUploadAssessment={this.props.handleUploadAssessment} />
       </Collapse>
     );
 
@@ -204,21 +194,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     }
   };
 
-  private handleUploadAssessment = (file: File) => {
-    this.props.handleUploadAssessment(file, this.state.forceUpdate);
-    this.setState({ forceUpdate: false });
-  };
-
-  private toggleDisplayConfirmation = () => {
-    this.setState({ displayConfirmation: !this.state.displayConfirmation });
-  };
-
   private toggleDropzone = () => {
     this.setState({ showDropzone: !this.state.showDropzone });
-  };
-
-  private toggleForceUpdate = () => {
-    this.setState({ forceUpdate: !this.state.forceUpdate });
   };
 }
 

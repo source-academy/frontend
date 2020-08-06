@@ -2,52 +2,57 @@ import { Card, Elevation, Intent, Switch } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
-import { useDropzone } from 'react-dropzone';
+import { FileRejection, useDropzone } from 'react-dropzone';
 
 import controlButton from '../../../../commons/ControlButton';
 import { showWarningMessage } from '../../../../commons/utils/NotificationsHelper';
 
-interface IDispatchProps {
-  handleUploadAssessment: (file: File) => void;
-  toggleForceUpdate: () => void;
-  toggleDisplayConfirmation: () => void;
-}
+export type DropzoneProps = DispatchProps;
 
-interface IStateProps {
-  forceUpdate: boolean;
-  displayConfirmation: boolean;
-}
+type DispatchProps = {
+  handleUploadAssessment: (file: File, forceUpdate: boolean) => void;
+};
 
-interface IDropzoneProps extends IDispatchProps, IStateProps {}
+const MaterialDropzone: React.FunctionComponent<DropzoneProps> = props => {
+  const [file, setFile] = React.useState<File | undefined>(undefined);
+  const [isWarningShown, setPromptShown] = React.useState<boolean>(false);
+  const [forceUpdate, setForceUpdate] = React.useState<boolean>(false);
 
-const MaterialDropzone: React.FunctionComponent<IDropzoneProps> = props => {
-  const [file, setFile] = React.useState<File>();
-  const [title, setTitle] = React.useState<string>();
+  const { handleUploadAssessment } = props;
 
-  const handleConfirmUpload = () => {
-    props.handleUploadAssessment(file!);
+  const handleConfirmUpload = React.useCallback(() => {
+    if (file) {
+      handleUploadAssessment(file, forceUpdate);
+      setForceUpdate(false);
+    }
     setFile(undefined);
-  };
-  const handleCancelUpload = () => setFile(undefined);
+  }, [file, forceUpdate, handleUploadAssessment]);
+  const handleCancelUpload = React.useCallback(() => setFile(undefined), [setFile]);
+
+  const handleDropAccepted = React.useCallback(
+    (acceptedFiles: File[]) => {
+      setFile(acceptedFiles[0]);
+      setForceUpdate(false);
+    },
+    [setFile]
+  );
+  const handleDropRejected = React.useCallback((rejectedFiles: FileRejection[]) => {
+    if (rejectedFiles.length > 1) {
+      showWarningMessage('Uploading multiple files at once is not currently supported!', 2000);
+    }
+  }, []);
 
   const {
     getRootProps,
     getInputProps,
+    isFocused,
     isDragActive,
     isDragAccept,
-    isDragReject,
-    isFocused
+    isDragReject
   } = useDropzone({
     multiple: false,
-    onDropAccepted: acceptedFiles => {
-      setFile(acceptedFiles[0]);
-      setTitle(acceptedFiles[0].name);
-    },
-    onDropRejected: rejectedFiles => {
-      if (rejectedFiles.length > 1) {
-        showWarningMessage('Uploading multiple files at once is not currently supported!', 2000);
-      }
-    }
+    onDropAccepted: handleDropAccepted,
+    onDropRejected: handleDropRejected
   });
 
   const classList = React.useMemo(() => {
@@ -57,44 +62,46 @@ const MaterialDropzone: React.FunctionComponent<IDropzoneProps> = props => {
       isDragAccept ? 'dropzone-accept' : undefined,
       isDragReject ? 'dropzone-reject' : undefined
     );
-  }, [isDragActive, isDragAccept, isDragReject, isFocused]);
+  }, [isFocused, isDragActive, isDragAccept, isDragReject]);
 
-  const handleToggleOnChange = () => {
-    if (!props.forceUpdate) {
-      props.toggleDisplayConfirmation();
-      props.toggleForceUpdate();
+  const handleSwitchOnChange = React.useCallback(() => {
+    if (!forceUpdate) {
+      setPromptShown(true);
     } else {
-      props.toggleForceUpdate();
+      setForceUpdate(false);
     }
-  };
+  }, [forceUpdate, setPromptShown, setForceUpdate]);
 
-  const toggleButton = () => {
-    return (
+  const toggleButton = React.useMemo(
+    () => (
       <div className="toggle-button-wrapper">
-        <Switch checked={props.forceUpdate} onChange={handleToggleOnChange} />
+        <Switch checked={forceUpdate} onChange={handleSwitchOnChange} />
       </div>
-    );
-  };
+    ),
+    [forceUpdate, handleSwitchOnChange]
+  );
 
-  const handleConfirmForceUpdate = () => {
-    props.toggleDisplayConfirmation();
-  };
+  const handleConfirmForceUpdate = React.useCallback(() => {
+    setForceUpdate(true);
+    setPromptShown(false);
+  }, [setForceUpdate]);
+  const handleCancelForceUpdate = React.useCallback(() => {
+    setPromptShown(false);
+  }, [setPromptShown]);
 
-  const handleCancelForceUpdate = () => {
-    props.toggleDisplayConfirmation();
-    props.toggleForceUpdate();
-  };
-
-  const confirmationMessage = () => (
-    <div className="dropzone-controls">
-      {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate, {
-        minimal: false,
-        intent: Intent.DANGER
-      })}
-      {controlButton('No', IconNames.CROSS, handleCancelForceUpdate, {
-        minimal: false
-      })}
-    </div>
+  const confirmationPrompt = React.useMemo(
+    () => (
+      <div className="dropzone-controls">
+        {controlButton('Yes', IconNames.CONFIRM, handleConfirmForceUpdate, {
+          minimal: false,
+          intent: Intent.DANGER
+        })}
+        {controlButton('No', IconNames.CROSS, handleCancelForceUpdate, {
+          minimal: false
+        })}
+      </div>
+    ),
+    [handleCancelForceUpdate, handleConfirmForceUpdate]
   );
 
   return (
@@ -107,8 +114,8 @@ const MaterialDropzone: React.FunctionComponent<IDropzoneProps> = props => {
       </Card>
       {file && (
         <Card className="dropzone-prompt" elevation={Elevation.TWO} interactive={true}>
-          <h3>{title}</h3>
-          {!props.displayConfirmation && (
+          <h3>{file?.name}</h3>
+          {!isWarningShown && (
             <>
               <div className="dropzone-controls">
                 {controlButton('Confirm Upload', IconNames.UPLOAD, handleConfirmUpload, {
@@ -121,14 +128,12 @@ const MaterialDropzone: React.FunctionComponent<IDropzoneProps> = props => {
               </div>
               <div className="dropzone-controls">
                 <p>Force update opened assessment</p>
-                {toggleButton()}
+                {toggleButton}
               </div>
             </>
           )}
-          {props.displayConfirmation && (
-            <p>Are you sure that you want to force update the assessment?</p>
-          )}
-          {props.displayConfirmation && confirmationMessage()}
+          {isWarningShown && <p>Are you sure that you want to force update the assessment?</p>}
+          {isWarningShown && confirmationPrompt}
         </Card>
       )}
     </>
