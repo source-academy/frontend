@@ -2,9 +2,13 @@ import { mount } from 'enzyme';
 import React from 'react';
 
 import AchievementViewGoal from '../AchievementViewGoal';
+import { Role } from 'src/commons/application/ApplicationTypes';
 
 const mockProps = {
-  goals: []
+  userToEdit: null, 
+  role: Role.Student, 
+  goals: [], 
+  updateGoalProgress: () => {}, 
 };
 
 test('AchievementViewCompletion component renders correctly', () => {
