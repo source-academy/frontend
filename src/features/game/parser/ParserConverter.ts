@@ -54,7 +54,7 @@ const stringToActionTypeMap = {
   preview_location: GameActionType.PreviewLocation,
   show_object_layer: GameActionType.ShowObjectLayer,
   navigate_to_assessment: GameActionType.NavigateToAssessment,
-  delay: GameActionType.Delay,
+  delay: GameActionType.Delay
 };
 
 const stringToGameStateStorageMap = {
