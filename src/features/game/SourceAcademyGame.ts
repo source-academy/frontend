@@ -137,6 +137,7 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getAchievements = () => mandatory(this.global.achievements);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getRoomPreviewMapping = () => mandatory(this.global.roomPreviewMapping);
   public getUserStateManager = () => mandatory(this.global.userStateManager);
   public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);

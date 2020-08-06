@@ -47,9 +47,9 @@ export default class GameUserStateManager {
 
   /**
    * Fetches assessment overview of the student; based on
-   * the account information.
+   * the account information. Only include submitted assessments' ids.
    *
-   * Only returns submitted assessments' ids.
+   * IMPT: The assessments are ordered from earliest close date.
    */
   public async loadAssessments() {
     const assessments = await getAssessmentOverviews(
@@ -58,6 +58,7 @@ export default class GameUserStateManager {
     this.assessments = new Set(
       (assessments || [])
         .filter(assessment => assessment.status === 'submitted')
+        .sort((a, b) => (a.closeAt <= b.closeAt ? -1 : 1))
         .map(assessment => assessment.id.toString())
     );
   }
