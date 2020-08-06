@@ -410,6 +410,10 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
   }
 }
 
+function isRune(x) {
+    return typeof x === "object" && x.isPrimary;
+}
+
 /**
  * turns a given Rune into a two-dimensional Picture
  * @param {Rune} rune - given Rune
@@ -417,13 +421,18 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
  * If the result of evaluating a program is a Picture,
  * the REPL displays it graphically, instead of textually.
  */
+
 function show(rune) {
-  const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
-  clear_viewport()
-  var flattened_rune_list = generateFlattenedRuneList(rune)
-  drawWithWebGL(flattened_rune_list, drawRune);
-  copy_viewport(gl.canvas, frame);
-  return new ShapeDrawn(frame);
+    if (isRune(rune)) {
+	const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
+	clear_viewport()
+	var flattened_rune_list = generateFlattenedRuneList(rune)
+	drawWithWebGL(flattened_rune_list, drawRune);
+	copy_viewport(gl.canvas, frame);
+	return new ShapeDrawn(frame);
+    } else {
+	throw 'show expects a rune as argument, received ' + rune
+    }
 }
 
 /**
