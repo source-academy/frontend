@@ -4,27 +4,27 @@ import { AchievementAbility } from './AchievementTypes';
 export const expPerLevel = 1000;
 
 export enum DeadlineColors {
-  RED = '#ff0000',
-  BLACK = '#000000'
+  RED = '#f00',
+  BLACK = '#000'
 }
 
 export enum FilterColors {
-  BLUE = '#2dd1f9',
-  WHITE = '#ffffff'
+  BLUE = '#4df',
+  WHITE = '#fff'
 }
 
 export const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
-      return '#ffb412'; // gold
+      return '#fb0'; // gold
     case AchievementAbility.EFFORT:
-      return '#b5ff61'; // green
+      return '#bf6'; // green
     case AchievementAbility.EXPLORATION:
-      return '#9ecaed'; // blue
+      return '#9ce'; // blue
     case AchievementAbility.COMMUNITY:
-      return '#ff6780'; // pink
+      return '#f68'; // pink
     case AchievementAbility.FLEX:
-      return '#ffffff'; // white
+      return '#fff'; // white
     default:
       return '';
   }

@@ -48,24 +48,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Rune Master\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -261,24 +243,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Beyond the Second Dimension\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -365,7 +329,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -474,24 +438,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Colorful Carpet\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -578,7 +524,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -648,7 +594,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
           <Blueprint3.Card className=\\"editable-achievement\\" style={{...}} elevation={0} interactive={false}>
             <div className=\\"bp3-card bp3-elevation-0 editable-achievement\\" style={{...}}>
               <div className=\\"top-bar\\">
-                <EditableAchievementView title=\\"Unpublished\\" view={{...}} changeView={[Function: handleChangeView]}>
+                <EditableAchievementView title=\\"\\" view={{...}} changeView={[Function: handleChangeView]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
@@ -669,7 +615,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground cardTileUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setcardTileUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -687,32 +633,14 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
-                  <EditableAchievementTitle title=\\"Unpublished\\" changeTitle={[Function: handleChangeTitle]}>
+                  <EditableAchievementTitle title=\\"\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
                       <h1>
-                        <Blueprint3.EditableText placeholder=\\"Enter your title here\\" value=\\"Unpublished\\" onChange={[Function: handleChangeTitle]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
-                          <div className=\\"bp3-editable-text\\" onFocus={[Function (anonymous)]} tabIndex={0}>
+                        <Blueprint3.EditableText placeholder=\\"Enter your title here\\" value=\\"\\" onChange={[Function: handleChangeTitle]} alwaysRenderInput={false} confirmOnEnterKey={false} defaultValue=\\"\\" disabled={false} maxLines={Infinity} minLines={1} minWidth={80} multiline={false} type=\\"text\\">
+                          <div className=\\"bp3-editable-text bp3-editable-text-placeholder\\" onFocus={[Function (anonymous)]} tabIndex={0}>
                             <span className=\\"bp3-editable-text-content\\" style={{...}}>
-                              Unpublished
+                              Enter your title here
                             </span>
                           </div>
                         </Blueprint3.EditableText>
@@ -900,24 +828,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Curve Wizard\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -1004,7 +914,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -1113,24 +1023,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Curve Introduction\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -1217,7 +1109,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -1326,24 +1218,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Curve Manipulation\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -1430,7 +1304,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -1539,24 +1413,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"The Source-rer\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -1643,7 +1499,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                         </Blueprint3.Dialog>
                       </div>
                     </EditableAchievementDate>
-                    <EditableAchievementDate type=\\"Release\\" deadline={{...}} changeDeadline={[Function: handleChangeRelease]}>
+                    <EditableAchievementDate type=\\"Release\\" deadline={[undefined]} changeDeadline={[Function: handleChangeRelease]}>
                       <div className=\\"deadline\\">
                         <div className=\\"deadline-details\\">
                           <div>
@@ -1752,24 +1608,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Power of Friendship\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -1965,24 +1803,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Piazza Guru\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -2178,24 +1998,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"That\\\\'s the Spirit\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>
@@ -2373,7 +2175,7 @@ exports[`AchievementEditor component renders correctly 1`] = `
                 <AchievementUploader hasChanges={false} saveChanges={[Function: handleSaveChanges]} discardChanges={[Function: handleDiscardChanges]} pendingUpload={false} uploadChanges={[Function: handleUploadChanges]} />
               </div>
               <div className=\\"main\\">
-                <EditableAchievementBackground cardTileUrl=\\"https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg\\" setcardTileUrl={[Function: handleChangeBackground]}>
+                <EditableAchievementBackground cardTileUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png\\" setcardTileUrl={[Function: handleChangeBackground]}>
                   <div>
                     <div>
                       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
@@ -2391,24 +2193,6 @@ exports[`AchievementEditor component renders correctly 1`] = `
                     </Blueprint3.Dialog>
                   </div>
                 </EditableAchievementBackground>
-                <EditableAchievementGoals goals={{...}} editGoals={[Function: handleEditGoals]} removeGoalFromBackend={[Function: handleRemoveGoal]}>
-                  <div>
-                    <div>
-                      <Blueprint3.Button text=\\"Edit Goals\\" onClick={[Function: onClick]}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-                          <Blueprint3.Icon icon={[undefined]} />
-                          <span className=\\"bp3-button-text\\">
-                            Edit Goals
-                          </span>
-                          <Blueprint3.Icon icon={[undefined]} />
-                        </button>
-                      </Blueprint3.Button>
-                    </div>
-                    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true}>
-                      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit Goals\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
-                    </Blueprint3.Dialog>
-                  </div>
-                </EditableAchievementGoals>
                 <div className=\\"display\\">
                   <EditableAchievementTitle title=\\"Kool Kidz\\" changeTitle={[Function: handleChangeTitle]}>
                     <div>

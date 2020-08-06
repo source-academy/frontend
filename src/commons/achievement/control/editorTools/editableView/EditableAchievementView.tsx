@@ -1,14 +1,14 @@
 import { Button, Card, Dialog } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
-import { AchievementViewItem } from '../../../../../features/achievement/AchievementTypes';
+import { AchievementView } from '../../../../../features/achievement/AchievementTypes';
 import EditableViewDescription from './EditableViewDescription';
 import EditableViewImage from './EditableViewImage';
 import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
   title: string;
-  view: AchievementViewItem;
+  view: AchievementView;
   changeView: any;
 };
 
