@@ -1,5 +1,7 @@
+import { defaultAchievement } from 'src/commons/application/ApplicationTypes';
+
 import { AchievementReducer } from '../AchievementReducer';
-import { AchievementState, defaultAchievement, SAVE_ACHIEVEMENTS } from '../AchievementTypes';
+import { AchievementState, SAVE_ACHIEVEMENTS } from '../AchievementTypes';
 
 test('SAVE_ACHIEVEMENTS works correctly on default achievements', () => {
   const action = {

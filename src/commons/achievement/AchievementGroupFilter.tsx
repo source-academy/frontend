@@ -2,7 +2,7 @@ import { MenuItem, Popover, PopoverInteractionKind, Position } from '@blueprintj
 import { ItemPredicate, ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 
-import { UserSimpleState } from '../../features/achievement/AchievementTypes';
+import { UserSimpleState } from '../../commons/application/ApplicationTypes';
 
 type AchievementGroupFilterProps = {
   shouldFilter: boolean;

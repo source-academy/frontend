@@ -1,13 +1,13 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { mockAchievements } from '../../../../../mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from '../../../../../mocks/AchievementMocks';
 import AchievementInferencer from '../../../../utils/AchievementInferencer';
 import PrerequisiteSwapper from '../PrerequisiteSwapper';
 
 const mockProps = {
   prerequisiteIdDs: mockAchievements[0].prerequisiteIds,
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
 
   setDialogOpen: () => {},
   isDialogOpen: false,

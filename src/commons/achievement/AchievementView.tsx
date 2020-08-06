@@ -16,14 +16,16 @@ type AchievementViewProps = {
 function AchievementView(props: AchievementViewProps) {
   const { id, inferencer, handleGlow } = props;
 
-  if (id < 0) return <div className="view"></div>;
+  if (id < 0) return null;
 
   const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, deadline, goals, view } = achievement;
+  const { title, ability, deadline, view } = achievement;
   const { canvasUrl, description, completionText } = view;
 
+  const awardedExp = inferencer.getExp(id);
+  const goals = inferencer.getGoals(id);
+  const prereqGoals = inferencer.getPrerequisiteGoals(id);
   const status = inferencer.getStatus(id);
-  const awardedExp = inferencer.getStudentExp(id);
 
   return (
     <div className="view" style={{ ...handleGlow(id), ...getAbilityBackground(ability) }}>
@@ -40,6 +42,12 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
       <AchievementViewGoal goals={goals} />
+      {prereqGoals.length > 0 ? (
+        <>
+          <hr />
+          <AchievementViewGoal goals={prereqGoals} />
+        </>
+      ) : null}
       {status === AchievementStatus.COMPLETED ? (
         <>
           <hr />

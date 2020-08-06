@@ -1,14 +1,14 @@
 import { mount } from 'enzyme';
 import React from 'react';
 
-import { mockAchievements } from '../../../../../mocks/AchievementMocks';
+import { mockAchievements, mockGoals } from '../../../../../mocks/AchievementMocks';
 import AchievementInferencer from '../../../../utils/AchievementInferencer';
 import PrerequisiteDeleter from '../PrerequisiteDeleter';
 
 const mockProps = {
   editableAchievement: mockAchievements[0],
   setEditableAchievement: () => {},
-  inferencer: new AchievementInferencer(mockAchievements),
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals),
   saveChanges: () => {}
 };
 

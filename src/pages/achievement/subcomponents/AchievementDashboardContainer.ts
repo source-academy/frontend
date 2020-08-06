@@ -3,17 +3,16 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { getUsers } from '../../../commons/application/actions/SessionActions';
-import { OverallState } from '../../../commons/application/ApplicationTypes';
-import { mockAchievements } from '../../../commons/mocks/AchievementMocks';
+import { OverallState, UserSimpleState } from '../../../commons/application/ApplicationTypes';
+import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import Constants from '../../../commons/utils/Constants';
 import { getAchievements } from '../../../features/achievement/AchievementActions';
-import { UserSimpleState } from '../../../features/achievement/AchievementTypes';
 import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   inferencer: Constants.useBackend
-    ? new AchievementInferencer(state.achievement.achievements)
-    : new AchievementInferencer(mockAchievements),
+    ? new AchievementInferencer(mockAchievements, mockGoals) // TODO: state.achievement.goals
+    : new AchievementInferencer(mockAchievements, mockGoals),
   name: state.session.name,
   role: state.session.role,
   group: state.session.group,

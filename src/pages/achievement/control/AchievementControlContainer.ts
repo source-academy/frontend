@@ -3,6 +3,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
+import { mockAchievements, mockGoals } from '../../../commons/mocks/AchievementMocks';
 import {
   editAchievement,
   getAchievements,
@@ -13,7 +14,7 @@ import {
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new AchievementInferencer(state.achievement.achievements)
+  inferencer: new AchievementInferencer(mockAchievements, mockGoals) // TODO: use redux store
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>

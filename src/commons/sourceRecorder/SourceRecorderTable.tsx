@@ -10,15 +10,16 @@ import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/Sour
 import { getStandardDate } from '../utils/DateHelper';
 import SourcastDeleteCell from './SourceRecorderDeleteCell';
 import SourceRecorderSelectCell from './SourceRecorderSelectCell';
+import SourceRecorderShareCell from './SourceRecorderShareCell';
 
 type SourceRecorderTableProps = OwnProps;
 
 type OwnProps = {
   handleDeleteSourcecastEntry?: (id: number) => void;
-  handleFetchSourcecastIndex: () => void;
   handleSetSourcecastData?: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -51,7 +52,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           cellRendererParams: {
             handleSetSourcecastData: this.props.handleSetSourcecastData
           },
-          width: 400,
+          width: 300,
           suppressMovable: true,
           suppressMenu: true,
           cellStyle: {
@@ -62,7 +63,7 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
         {
           headerName: 'Title',
           field: 'title',
-          width: 200,
+          width: 100,
           suppressMovable: true,
           suppressMenu: true,
           hide: !!this.props.handleSetSourcecastData
@@ -81,6 +82,14 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
           headerName: 'Date',
           valueGetter: params => getStandardDate(params.data.inserted_at),
           maxWidth: 200,
+          suppressMovable: true,
+          suppressMenu: true
+        },
+        {
+          headerName: 'Share',
+          field: 'uid',
+          cellRendererFramework: SourceRecorderShareCell,
+          width: 100,
           suppressMovable: true,
           suppressMenu: true
         },
@@ -117,10 +126,6 @@ class SourcecastTable extends React.Component<SourceRecorderTableProps, State> {
       resizable: true,
       sortable: true
     };
-  }
-
-  public componentDidMount() {
-    this.props.handleFetchSourcecastIndex();
   }
 
   public render() {

@@ -1,7 +1,7 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
 import { OverallState, Role } from '../../commons/application/ApplicationTypes';
 import {
@@ -75,6 +75,7 @@ import {
   publishAssessment,
   uploadAssessment
 } from './RequestsSaga';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
@@ -478,12 +479,12 @@ function* BackendSaga(): SagaIterator {
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can save sourcecast.');
     }
-    const { title, description, audio, playbackData } = action.payload;
+    const { title, description, uid, audio, playbackData } = action.payload;
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postSourcecast(title, description, audio, playbackData, tokens);
+    const resp = yield postSourcecast(title, description, uid, audio, playbackData, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp, new Map());

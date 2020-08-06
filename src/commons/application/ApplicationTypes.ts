@@ -90,6 +90,13 @@ export type ErrorOutput = {
 
 export type InterpreterOutput = RunningOutput | CodeOutput | ResultOutput | ErrorOutput;
 
+export type UserSimpleState = {
+  group: string;
+  name: string;
+  role: string;
+  userId: number;
+};
+
 export enum ApplicationEnvironment {
   Development = 'development',
   Production = 'production',
@@ -165,7 +172,8 @@ export const defaultDashboard: DashboardState = {
 };
 
 export const defaultAchievement: AchievementState = {
-  achievements: []
+  achievements: [],
+  goals: []
 };
 
 export const defaultPlayground: PlaygroundState = {
@@ -210,6 +218,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sharedbAceInitValue: '',
   sharedbAceIsInviting: false,
   sideContentActiveTab: SideContentType.questionOverview,
+  stepLimit: 1000,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
@@ -252,7 +261,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
-    title: null
+    title: null,
+    uid: null
   },
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),

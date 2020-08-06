@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { UserSimpleState } from '../../features/achievement/AchievementTypes';
+import { UserSimpleState } from '../../commons/application/ApplicationTypes';
 import { Role } from '../application/ApplicationTypes';
 import AchievementGroupFilter from './AchievementGroupFilter';
 import AchievementNameFilter from './AchievementNameFilter';
@@ -32,7 +32,7 @@ function AchievementOverview(props: AchievementOverviewProps) {
     setFileredUserGroup
   } = props;
 
-  const studentExp = inferencer.getStudentTotalExp();
+  const studentExp = inferencer.getTotalExp();
 
   return (
     <div className="achievement-overview">

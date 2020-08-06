@@ -32,13 +32,12 @@ function AchievementCard(props: AchievementCardProps) {
 
   const status = inferencer.getStatus(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
+  const displayExp = inferencer.getMaxExp(id);
   const progressFrac = inferencer.getProgressFrac(id);
 
   // Only task card with prerequisites has dropdown button
   const hasDropdown =
     isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
-
-  const displayExp = hasDropdown ? inferencer.getBonusExp(id) : inferencer.getMaxExp(id);
 
   return (
     <div
