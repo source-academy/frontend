@@ -9,7 +9,7 @@ import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  users: UserSimpleState[];
+  users?: UserSimpleState[];
   id: number;
   role?: Role;
   inferencer: AchievementInferencer;
@@ -27,7 +27,7 @@ function AchievementView(props: AchievementViewProps) {
   const { title, ability, deadline, view } = achievement;
   const { canvasUrl, description, completionText } = view;
 
-  const userToEdit = users.length === 0 ? null : users[0];
+  const userToEdit = !users || users.length === 0 ? null : users[0];
 
   const awardedExp = inferencer.getExp(id);
   const goals = inferencer.getGoals(id);

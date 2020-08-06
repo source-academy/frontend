@@ -1,7 +1,7 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`AchievementView component renders correctly 1`] = `
-"<AchievementView id={1} inferencer={{...}} handleGlow={[Function: handleGlow]}>
+"<AchievementView id={1} role=\\"student\\" inferencer={{...}} handleGlow={[Function: handleGlow]} updateGoalProgress={[Function: updateGoalProgress]}>
   <div className=\\"view\\" style={{...}}>
     <div className=\\"canvas\\" style={{...}}>
       <h1>
@@ -16,7 +16,7 @@ exports[`AchievementView component renders correctly 1`] = `
         </p>
       </span>
     </div>
-    <AchievementViewGoal goals={{...}}>
+    <AchievementViewGoal updateGoalProgress={[Function: updateGoalProgress]} role=\\"student\\" userToEdit={{...}} goals={{...}}>
       <div className=\\"goal\\">
         <div className=\\"goal-badge\\">
           <span className=\\"goal-icon\\" />
