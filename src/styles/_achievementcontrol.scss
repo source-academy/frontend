@@ -10,7 +10,6 @@
 
   // Interfaces e.g. Control Panel, Achievement Editor and Goal Editor
   %platform {
-    border: solid yellow;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -59,6 +58,8 @@
 
     .task-container {
       @extend %container;
+      height: 82%; // To mimic actual height in dashboard
+      margin-top: $default-spacing;
 
       // Card aspect ratio 2:1
       $card-height: 5em;
