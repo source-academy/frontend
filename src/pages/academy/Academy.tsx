@@ -74,10 +74,18 @@ class Academy extends React.Component<AcademyProps> {
             render={this.assessmentRenderFactory(AssessmentCategories.Practical)}
           />
           <Route path="/academy/dashboard" component={DashboardContainer} />
-          {(this.props.role!=="student") && <Route path="/academy/groundcontrol" component={GroundControl} />}
-          {(this.props.role!=="student") && <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />}
-          {(this.props.role!=="student") && <Route path="/academy/sourcereel" component={Sourcereel} />}
-          {(this.props.role!=="student") && <Route path={'/academy/storysimulator'} component={StorySimulator} />}
+          {this.props.role !== 'student' && (
+            <Route path="/academy/groundcontrol" component={GroundControl} />
+          )}
+          {this.props.role !== 'student' && (
+            <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
+          )}
+          {this.props.role !== 'student' && (
+            <Route path="/academy/sourcereel" component={Sourcereel} />
+          )}
+          {this.props.role !== 'student' && (
+            <Route path={'/academy/storysimulator'} component={StorySimulator} />
+          )}
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
 
           <Route component={this.redirectTo404} />
