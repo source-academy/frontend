@@ -1,7 +1,6 @@
 import {
   AchievementAbility,
-  AchievementItem,
-  FilterStatus
+  AchievementItem
 } from '../../../../features/achievement/AchievementTypes';
 import { mockAchievements, mockGoals } from '../../../mocks/AchievementMocks';
 import AchievementInferencer from '../AchievementInferencer';

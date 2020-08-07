@@ -3,7 +3,7 @@
 exports[`AchievementEditor component renders correctly 1`] = `
 "<AchievementEditor inferencer={{...}} updateAchievements={[Function: updateAchievements]} editAchievement={[Function: editAchievement]} forceRender={[Function: forceRender]} addUnsavedChange={[Function: addUnsavedChange]} removeUnsavedChange={[Function: removeUnsavedChange]} removeGoal={[Function: removeGoal]} removeAchievement={[Function: removeAchievement]}>
   <div className=\\"achievement-editor\\">
-    <div className=\\"command-buttons\\">
+    <div className=\\"achievement-command\\">
       <AchievementAdder inferencer={{...}} adderId={-1} setAdderId={[Function: bound dispatchAction]}>
         <Blueprint3.Button className=\\"main-adder\\" onClick={[Function: handleAddAchievement]} text=\\"Add A New Item\\" disabled={false}>
           <button type=\\"button\\" className=\\"bp3-button main-adder\\" onClick={[Function: handleAddAchievement]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>

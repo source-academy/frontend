@@ -20,7 +20,7 @@
   }
 
   // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
-  .command-buttons {
+  %command {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -31,9 +31,8 @@
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
-    height: 90%;
     list-style-type: none;
-    margin: auto;
+    margin: 0;
     overflow-y: auto;
     padding: 0;
     scrollbar-color: white #444;
@@ -49,21 +48,129 @@
   }
 
   .achievement-preview {
+    $canvas-spacing: 0.3em;
+    $content-spacing: 0.5em;
+    // Canvas aspect ratio 2:1
+    $canvas-height: 18em;
+    $canvas-width: 36em;
+    // Card aspect ratio 2:1
+    $card-height: 5em;
+    $card-width: 30em;
+    // View aspect ratio 18:25
+    $view-height: 50em;
+    $view-width: $canvas-width;
+
     @extend %platform;
 
-    .title {
-      color: white;
-      text-align: center;
+    .command-button {
+      display: flex;
+      flex-direction: row;
+      height: 1em;
+      margin: $default-spacing auto;
     }
 
-    .task-container {
+    .preview-container {
       @extend %container;
-      height: 82%; // To mimic actual height in dashboard
-      margin-top: $default-spacing;
+      align-items: center;
+      height: 90%;
+      width: $view-width + $default-spacing * 2;
 
-      // Card aspect ratio 2:1
-      $card-height: 5em;
-      $card-width: 30em;
+      .no-view {
+        align-items: center;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+      }
+
+      .view {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin: $default-spacing;
+        min-height: $view-height;
+        width: $view-width;
+
+        .canvas {
+          display: flex;
+          flex-direction: column;
+          height: $canvas-height;
+          width: $canvas-width;
+
+          h1 {
+            margin: 0.5em auto 0;
+            padding: $canvas-spacing;
+          }
+
+          p {
+            margin: 0 auto;
+            padding: $canvas-spacing;
+          }
+
+          .description {
+            color: yellow;
+            font-size: 0.85em;
+            margin: auto auto 1em;
+            text-align: center;
+            width: 80%;
+          }
+        }
+
+        .goal {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          padding: $content-spacing;
+
+          .goal-badge {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            min-width: 6em;
+            padding: 0 $content-spacing;
+
+            .goal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
+              height: 2em;
+              width: 2em;
+            }
+
+            p {
+              text-align: center;
+              font-size: 0.7em;
+              padding: 0.2em 0 0 0;
+            }
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+
+        hr {
+          background: lightgrey;
+          border: none;
+          height: 1px;
+          margin: $content-spacing auto;
+          width: 90%;
+        }
+
+        .completion {
+          padding: $content-spacing;
+          text-align: center;
+
+          h1 {
+            color: #fc0;
+            margin: 0 auto $content-spacing;
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
 
       .task {
         .achievement-card {
@@ -175,6 +282,10 @@
 
   .achievement-editor {
     @extend %platform;
+
+    .achievement-command {
+      @extend %command;
+    }
 
     .achievement-container {
       @extend %container;
