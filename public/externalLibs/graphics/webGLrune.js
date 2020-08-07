@@ -353,7 +353,7 @@ function generateFlattenedRuneList(rune) {
   }
   function helper(rune, color) {
     if (!isRune(rune)) {
-        throw 'primitive rune function expects rune, received ' + rune
+        throw 'primitive rune function expects rune, received ' + stringify(rune)
     }
     if (rune.isPrimary) {
       if (rune.count === 0) {
@@ -436,7 +436,7 @@ function show(rune) {
 	copy_viewport(gl.canvas, frame);
 	return new ShapeDrawn(frame);
     } else {
-	throw 'show expects a rune as argument, received ' + rune
+	throw 'show expects a rune as argument, received ' + stringify(rune)
     }
 }
 
