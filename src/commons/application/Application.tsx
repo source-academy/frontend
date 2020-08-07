@@ -72,7 +72,7 @@ class Application extends React.Component<ApplicationProps, {}> {
           ) : (
             <Switch>
               <Route path="/academy" component={toAcademy(this.props)} />
-              <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
+              {(this.props.role!=="student") && <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />}
               <Route path="/playground" component={Playground} />
               <Route path="/login" render={toLogin(this.props)} />
               <Route path="/contributors" component={Contributors} />
