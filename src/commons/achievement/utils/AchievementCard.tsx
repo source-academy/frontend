@@ -1,6 +1,5 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import { noop } from 'lodash';
 import React from 'react';
 
 import { AchievementStatus } from '../../../features/achievement/AchievementTypes';
@@ -12,7 +11,7 @@ type AchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
-  displayView?: any;
+  setFocusId: any;
   handleGlow: any;
   isDropdownOpen?: boolean;
   toggleDropdown?: any;
@@ -23,7 +22,7 @@ function AchievementCard(props: AchievementCardProps) {
     id,
     inferencer,
     shouldPartiallyRender,
-    displayView = noop, // Disable display view function for Achievement Control
+    setFocusId,
     handleGlow,
     isDropdownOpen,
     toggleDropdown
@@ -48,7 +47,7 @@ function AchievementCard(props: AchievementCardProps) {
         opacity: shouldPartiallyRender ? '20%' : '100%',
         background: `url(${cardTileUrl}) center/cover`
       }}
-      onClick={() => displayView(id)}
+      onClick={() => setFocusId(id)}
       onClickCapture={toggleDropdown}
     >
       <div className="dropdown-button">

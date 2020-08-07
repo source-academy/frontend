@@ -8,11 +8,13 @@ import AchievementControlPanelTools from './AchievementControlPanelTools';
 type EditableAchievementTaskProps = {
   achievement: AchievementItem;
   inferencer: AchievementInferencer;
+  setFocusId: any;
+  handleGlow: any;
   saveChanges: any;
 };
 
 function EditableAchievementTask(props: EditableAchievementTaskProps) {
-  const { inferencer, achievement, saveChanges } = props;
+  const { inferencer, achievement, setFocusId, handleGlow, saveChanges } = props;
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
@@ -23,7 +25,8 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
         id={id}
         inferencer={inferencer}
         filterStatus={FilterStatus.ALL}
-        handleGlow={(id: number) => {}}
+        setFocusId={setFocusId}
+        handleGlow={handleGlow}
       />
       <AchievementControlPanelTools
         editableAchievement={editableAchievement}

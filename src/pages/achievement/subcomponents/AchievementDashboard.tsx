@@ -33,7 +33,9 @@ function Dashboard(props: DispatchProps & StateProps) {
   }, [handleGetAchievements]);
 
   const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
-  const [viewId, setViewId] = useState<number>(-1);
+
+  // If an achievement is focused, the cards glow and dashboard displays the AchievementView
+  const [focusId, setFocusId] = useState<number>(-1);
 
   /**
    * Returns blue hex code if the filter is selected, otherwise return white
@@ -44,13 +46,13 @@ function Dashboard(props: DispatchProps & StateProps) {
     status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
   /**
-   * Make selected achievement glows and Flex achievements parmanently glowing
+   * Make focused achievement glow and Flex achievements permanently glowing
    *
    * @param id achievementId
    */
   const handleGlow = (id: number) => {
     const ability = inferencer.getAchievementItem(id).ability;
-    return ability === AchievementAbility.FLEX || id === viewId
+    return ability === AchievementAbility.FLEX || id === focusId
       ? getAbilityGlow(ability)
       : undefined;
   };
@@ -67,7 +69,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         id={id}
         inferencer={inferencer}
         filterStatus={filterStatus}
-        displayView={setViewId}
+        setFocusId={setFocusId}
         handleGlow={handleGlow}
       />
     ));
@@ -110,7 +112,7 @@ function Dashboard(props: DispatchProps & StateProps) {
         </ul>
 
         <div className="view-container">
-          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
+          <AchievementView id={focusId} inferencer={inferencer} handleGlow={handleGlow} />
         </div>
       </div>
     </div>

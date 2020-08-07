@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { getAbilityGlow } from 'src/features/achievement/AchievementConstants';
+import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
 import AchievementInferencer from '../utils/AchievementInferencer';
 import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
@@ -27,6 +29,21 @@ function ControlPanel(props: ControlPanelProps) {
     saveAchievementsToFrontEnd
   } = props;
 
+  // If an achievement is focused, the cards glow and dashboard displays the AchievementView
+  const [focusId, setFocusId] = useState<number>(-1);
+
+  /**
+   * Make focused achievement glow and Flex achievements permanently glowing
+   *
+   * @param id achievementId
+   */
+  const handleGlow = (id: number) => {
+    const ability = inferencer.getAchievementItem(id).ability;
+    return ability === AchievementAbility.FLEX || id === focusId
+      ? getAbilityGlow(ability)
+      : undefined;
+  };
+
   const handleSaveChanges = () => {
     setPendingUpload(true);
     saveAchievementsToFrontEnd(inferencer.getAchievements());
@@ -50,6 +67,8 @@ function ControlPanel(props: ControlPanelProps) {
         key={id}
         achievement={inferencer.getAchievementItem(id)}
         inferencer={inferencer}
+        setFocusId={setFocusId}
+        handleGlow={handleGlow}
         saveChanges={handleSaveChanges}
       />
     ));
