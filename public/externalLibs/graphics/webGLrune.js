@@ -9,6 +9,7 @@ function PrimaryRune(first, count) {
   this.first = first // the first index in the index buffer
   // that belongs to this rune
   this.count = count // number of indices to draw the rune
+  this.toReplString = () => '<RUNE>'
 }
 
 function Rune() {
@@ -16,6 +17,7 @@ function Rune() {
   this.transMatrix = mat4.create()
   this.runes = []
   this.color = undefined
+  this.toReplString = () => '<RUNE>'
 }
 
 // set the transformation matrix related to the rune
