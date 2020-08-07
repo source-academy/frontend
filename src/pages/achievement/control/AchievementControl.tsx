@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import AchievementPreview from 'src/commons/achievement/control/AchievementPreview';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
-import ControlPanel from '../../../commons/achievement/control/ControlPanel';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
@@ -24,12 +24,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleEditAchievement,
     handleGetAchievements,
     handleRemoveAchievement,
-    handleRemoveGoal,
-    handleSaveAchievements
+    handleRemoveGoal
   } = props;
 
   const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
-  const [panelPendingUpload, setPanelPendingUpload] = useState<boolean>(false);
+  const [panelPendingUpload] = useState<boolean>(false);
 
   useEffect(() => {
     if (editorUnsavedChanges !== 0 || panelPendingUpload) {
@@ -57,15 +56,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
   return (
     <div className="AchievementControl">
-      <ControlPanel
-        inferencer={inferencer}
-        updateAchievements={updateAchievements}
-        forceRender={forceRender}
-        isDisabled={editorUnsavedChanges !== 0}
-        pendingUpload={panelPendingUpload}
-        setPendingUpload={setPanelPendingUpload}
-        saveAchievementsToFrontEnd={handleSaveAchievements}
-      />
+      <AchievementPreview inferencer={inferencer} />
 
       <AchievementEditor
         inferencer={inferencer}

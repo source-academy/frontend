@@ -49,151 +49,122 @@
     }
   }
 
-  .control-panel {
+  .achievement-preview {
     @extend %platform;
 
-    .control-container {
+    .title {
+      color: white;
+      text-align: center;
+    }
+
+    .task-container {
       @extend %container;
 
-      .editable-task {
-        display: flex;
-        flex-direction: row;
+      // Card aspect ratio 2:1
+      $card-height: 5em;
+      $card-width: 30em;
 
-        // Constants for task
-        // Card aspect ratio 2:1
-        $card-height: 5em;
-        $card-width: 30em;
+      .task {
+        .achievement-card {
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          height: $card-height;
+          transition: box-shadow 0.2s ease-out;
+          width: $card-width;
 
-        .task {
-          .achievement-card {
-            cursor: pointer;
+          .dropdown-button {
+            align-items: center;
             display: flex;
-            flex-direction: row;
             height: $card-height;
-            transition: box-shadow 0.2s ease-out;
-            width: $card-width;
-
-            .dropdown-button {
-              align-items: center;
-              display: flex;
-              height: $card-height;
-              padding: 0 0 0 0.5em;
-              width: $card-height;
-            }
-
-            .content {
-              display: flex;
-              flex-direction: column;
-              height: $card-height;
-              width: $card-width - $card-height;
-
-              .heading {
-                align-items: center;
-                display: flex;
-                flex-direction: row;
-                height: $card-height * 3 / 5;
-              }
-
-              .details {
-                display: flex;
-                flex-direction: row;
-                font-size: 0.8em;
-
-                p {
-                  margin: 0;
-                }
-
-                .ability {
-                  align-items: center;
-                  display: flex;
-                  flex: 1 1 50%;
-                }
-
-                .deadline,
-                .exp {
-                  align-items: center;
-                  display: flex;
-                  flex: 1 1 25%;
-
-                  p {
-                    padding: 0 0 0 0.3em;
-                  }
-                }
-              }
-
-              .progress {
-                height: 0.2em;
-                margin: 0.2em 0 0 0;
-                width: 95%;
-              }
-            }
+            padding: 0 0 0 0.5em;
+            width: $card-height;
           }
 
-          .achievement-card:hover {
-            box-shadow: 0 0 10px black;
-            transition: box-shadow 0.2s ease-in;
-          }
-
-          .prerequisite-container {
-            $shrink-factor: 0.9;
-            $line-width: 1em;
-            // remaining-width is the empty space between line and card
-            $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
-            $top-spacing: 0.2em;
-
+          .content {
             display: flex;
             flex-direction: column;
+            height: $card-height;
+            width: $card-width - $card-height;
 
-            .prerequisite {
+            .heading {
+              align-items: center;
               display: flex;
               flex-direction: row;
-              max-width: $card-width;
+              height: $card-height * 3 / 5;
+            }
 
-              .dropdown-lines {
-                height: $top-spacing + $card-height;
-                margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
-                min-width: $line-width;
+            .details {
+              display: flex;
+              flex-direction: row;
+              font-size: 0.8em;
+
+              p {
+                margin: 0;
               }
 
-              .achievement-card {
-                margin: $top-spacing 0 0 0;
-                transform: scale($shrink-factor);
+              .ability {
+                align-items: center;
+                display: flex;
+                flex: 1 1 50%;
+              }
+
+              .deadline,
+              .exp {
+                align-items: center;
+                display: flex;
+                flex: 1 1 25%;
+
+                p {
+                  padding: 0 0 0 0.3em;
+                }
               }
             }
 
-            .prerequisite:first-child {
-              .dropdown-lines {
-                height: $top-spacing + $card-height / 2;
-                margin-top: 0;
-              }
+            .progress {
+              height: 0.2em;
+              margin: 0.2em 0 0 0;
+              width: 95%;
             }
           }
         }
 
-        .task-options {
+        .achievement-card:hover {
+          box-shadow: 0 0 10px black;
+          transition: box-shadow 0.2s ease-in;
+        }
+
+        .prerequisite-container {
+          $shrink-factor: 0.9;
+          $line-width: 1em;
+          // remaining-width is the empty space between line and card
+          $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
+          $top-spacing: 0.2em;
+
           display: flex;
           flex-direction: column;
 
-          .editor-buttons {
+          .prerequisite {
             display: flex;
+            flex-direction: row;
+            max-width: $card-width;
 
-            .task-selector {
-              margin-top: 10px;
-              text-align: center;
-              align-items: center;
-              justify-content: center;
+            .dropdown-lines {
+              height: $top-spacing + $card-height;
+              margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
+              min-width: $line-width;
+            }
 
-              display: flex;
-              flex-direction: column;
+            .achievement-card {
+              margin: $top-spacing 0 0 0;
+              transform: scale($shrink-factor);
+            }
+          }
 
-              .editor-button {
-                width: 100%;
-              }
-
-              .move-editor-buttons {
-                display: flex;
-                flex-direction: row;
-              }
+          .prerequisite:first-child {
+            .dropdown-lines {
+              height: $top-spacing + $card-height / 2;
+              margin-top: 0;
             }
           }
         }
