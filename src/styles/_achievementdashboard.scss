@@ -129,12 +129,12 @@
       flex-direction: column;
       margin: 0 auto;
       max-height: $view-height + $default-margin * 2;
+      min-width: max-content;
     }
 
     .filter-container {
       @extend %container;
       height: 60%;
-      min-width: auto;
 
       .filter {
         align-items: center;
@@ -164,7 +164,6 @@
       @extend %container;
       height: 90%;
       list-style-type: none;
-      min-width: $card-width + $default-margin * 2;
       overflow-y: auto;
       padding: 0;
       scrollbar-color: white #444;
@@ -289,7 +288,6 @@
 
       @extend %container;
       height: 90%;
-      min-width: $view-width + $default-margin * 2;
       overflow-y: auto;
       scrollbar-color: white #444;
       scrollbar-width: thin;

@@ -61,7 +61,7 @@ function AchievementEditor(props: AchievementEditorProps) {
 
   return (
     <div className="achievement-editor">
-      <div className="achievement-command">
+      <div className="command-buttons">
         <AchievementAdder inferencer={inferencer} adderId={adderId} setAdderId={setAdderId} />
       </div>
       <ul className="achievement-container">

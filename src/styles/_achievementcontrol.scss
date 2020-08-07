@@ -11,20 +11,20 @@
   // Interfaces e.g. Control Panel, Achievement Editor and Goal Editor
   %platform {
     border: solid yellow;
-    align-items: center;
     display: flex;
     flex-direction: column;
     height: 100%;
-    justify-content: center;
     margin: 0 auto;
+    min-width: max-content;
     overflow: hidden;
     padding: $default-spacing;
   }
 
   // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
-  %command {
+  .command-buttons {
     display: flex;
     flex-direction: row;
+    justify-content: center;
   }
 
   // Unordered list container, has a vertical scrollbar
@@ -34,8 +34,9 @@
     flex-direction: column;
     height: 90%;
     list-style-type: none;
-    margin: 0 auto;
+    margin: auto;
     overflow-y: auto;
+    padding: $default-spacing;
     scrollbar-color: white #444;
     scrollbar-width: thin;
   }
@@ -43,15 +44,8 @@
   .control-panel {
     @extend %platform;
 
-    .control-command {
-      @extend %command;
-    }
-
     .control-container {
       @extend %container;
-      padding: $default-spacing;
-      min-width: 40em;
-      // min-width: $card-width + $action-width + $default-margin * 2;
 
       .main-adder {
         width: 100%;
@@ -242,14 +236,8 @@
   .achievement-editor {
     @extend %platform;
 
-    .achievement-command {
-      @extend %command;
-    }
-
     .achievement-container {
       @extend %container;
-      min-width: 40em;
-      // min-width: $card-width + $action-width + $default-margin * 2;
 
       .editable-achievement {
         width: 90%;
@@ -368,14 +356,8 @@
   .goal-editor {
     @extend %platform;
 
-    .goal-command {
-      @extend %command;
-    }
-
     .goal-container {
       @extend %container;
-      min-width: 20em;
-      // min-width: $card-width + $action-width + $default-margin * 2;
     }
   }
 

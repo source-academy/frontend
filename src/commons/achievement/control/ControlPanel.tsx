@@ -51,9 +51,9 @@ function ControlPanel(props: ControlPanelProps) {
 
   return (
     <div className="control-panel">
-      <div className="control-command">
-        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
+      <div className="command-buttons">
         <TaskAdder inferencer={inferencer} saveChanges={handleSaveChanges} />
+        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
       </div>
       <ul
         className="control-container"
