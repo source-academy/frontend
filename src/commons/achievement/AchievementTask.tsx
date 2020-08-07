@@ -9,23 +9,21 @@ type AchievementTaskProps = {
   id: number;
   inferencer: AchievementInferencer;
   filterStatus: FilterStatus;
-  setFocusId: any;
-  handleGlow: any;
+  focusState: [number, any];
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { id, inferencer, filterStatus, setFocusId, handleGlow } = props;
+  const { id, inferencer, filterStatus, focusState } = props;
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+  const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
 
+  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
   const taskColor = getAbilityColor(inferencer.getAchievementItem(id).ability);
 
   /**
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
-   * based on the achivement page filterStatus.
+   * based on the achievement dashboard filterStatus.
    */
   const shouldRender = (id: number): boolean => {
     const status = inferencer.getStatus(id);
@@ -42,8 +40,8 @@ function AchievementTask(props: AchievementTaskProps) {
   };
 
   /**
-   * Checks whether the achievement item has any prerequisite item that
-   * should be rendered based on the achievement page filterStatus.
+   * Checks whether the AchievementItem has any prerequisite that
+   * should be rendered based on the achievement dashboard filterStatus.
    *
    * If there is at least 1 prerequisite that needs to be rendered,
    * the whole AchievementTask will be rendered together.
@@ -61,18 +59,15 @@ function AchievementTask(props: AchievementTaskProps) {
    */
   const shouldRenderTask = (id: number) => shouldRender(id) || shouldRenderPrerequisites(id);
 
-  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
-
   return (
     <>
       {shouldRenderTask(id) && (
-        <li className="task" key={id}>
+        <li className="task">
           <AchievementCard
             id={id}
             inferencer={inferencer}
-            shouldPartiallyRender={!shouldRender(id)}
-            setFocusId={setFocusId}
-            handleGlow={handleGlow}
+            shouldRender={shouldRender(id)}
+            focusState={focusState}
             isDropdownOpen={isDropdownOpen}
             toggleDropdown={toggleDropdown}
           />
@@ -90,9 +85,8 @@ function AchievementTask(props: AchievementTaskProps) {
                   <AchievementCard
                     id={prerequisiteId}
                     inferencer={inferencer}
-                    shouldPartiallyRender={!shouldRender(prerequisiteId)}
-                    setFocusId={setFocusId}
-                    handleGlow={handleGlow}
+                    shouldRender={shouldRender(prerequisiteId)}
+                    focusState={focusState}
                   />
                 </div>
               ))}

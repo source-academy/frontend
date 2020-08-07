@@ -1,5 +1,5 @@
 import { Links } from '../../commons/utils/Constants';
-import { AchievementAbility } from './AchievementTypes';
+import { AchievementAbility, FilterStatus } from './AchievementTypes';
 
 export const expPerLevel = 1000;
 
@@ -12,6 +12,9 @@ export enum FilterColors {
   BLUE = '#4df',
   WHITE = '#fff'
 }
+
+export const getFilterColor = (globalStatus: FilterStatus, ownStatus: FilterStatus) =>
+  globalStatus === ownStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
 export const getAbilityColor = (ability: AchievementAbility) => {
   switch (ability) {
@@ -44,6 +47,9 @@ export const getAbilityGlow = (ability: AchievementAbility) =>
         boxShadow: `0 0 10px ${getAbilityColor(ability)}`
       };
 
+export const handleGlow = (id: number, focusId: number, ability: AchievementAbility) =>
+  ability === AchievementAbility.FLEX || id === focusId ? getAbilityGlow(ability) : undefined;
+
 export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
 export const backgroundUrl = `${achievementAssets}/background`;
 export const canvasUrl = `${achievementAssets}/canvas`;
@@ -72,6 +78,8 @@ export const getAbilityBackground = (ability: AchievementAbility) => {
         background: `url(${backgroundUrl}/flex-background.png) no-repeat center/cover`
       };
     default:
-      return {};
+      return {
+        background: ``
+      };
   }
 };

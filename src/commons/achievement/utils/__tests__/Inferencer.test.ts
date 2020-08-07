@@ -24,18 +24,6 @@ const sampleAchievement: AchievementItem = {
   }
 };
 
-describe('Filter Count activated when', () => {
-  test('getFilterCount is called', () => {
-    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
-
-    expect(inferencer.getFilterCount(FilterStatus.ALL)).toEqual(11);
-
-    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(7);
-
-    expect(inferencer.getFilterCount(FilterStatus.COMPLETED)).toEqual(4);
-  });
-});
-
 describe('Achievements change when', () => {
   test('an achievement is unset to be a task', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);

@@ -3,8 +3,7 @@ import assert from 'assert';
 import {
   AchievementGoal,
   AchievementItem,
-  AchievementStatus,
-  FilterStatus
+  AchievementStatus
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired } from './DateHelper';
 
@@ -367,26 +366,6 @@ class AchievementInferencer {
   }
 
   /**
-   * Returns the number of achievement which is appearing on the dashboard
-   *
-   * @param filterStatus Filter Status
-   */
-  public getFilterCount(filterStatus: FilterStatus) {
-    const published = this.listPublishedNodes();
-
-    switch (filterStatus) {
-      case FilterStatus.ALL:
-        return published.length;
-      case FilterStatus.ACTIVE:
-        return published.filter(node => node.status === AchievementStatus.ACTIVE).length;
-      case FilterStatus.COMPLETED:
-        return published.filter(node => node.status === AchievementStatus.COMPLETED).length;
-      default:
-        return 0;
-    }
-  }
-
-  /**
    * Changes the position of the achievement
    *
    * Note: positions of achievements are 1-indexed
@@ -573,21 +552,6 @@ class AchievementInferencer {
         this.nodeList.get(id)!.achievement.position = newPosition++;
       }
     }
-  }
-
-  /**
-   * Returns an array of achievementId which is appearing on the dashboard
-   */
-  private listPublishedNodes() {
-    // returns an array of Node that are published to the achievement page
-    return this.listTaskIds().reduce((arr, id) => {
-      const node = this.nodeList.get(id)!;
-      arr.push(node); // including task achievement
-      for (const child of node.children) {
-        arr.push(this.nodeList.get(child)!); // including immediate prerequisites
-      }
-      return arr;
-    }, [] as InferencerNode[]);
   }
 }
 

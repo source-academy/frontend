@@ -1,6 +1,7 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
+import { handleGlow } from 'src/features/achievement/AchievementConstants';
 
 import { AchievementStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementDeadline from './AchievementDeadline';
@@ -10,23 +11,16 @@ import AchievementInferencer from './AchievementInferencer';
 type AchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
-  shouldPartiallyRender: boolean;
-  setFocusId: any;
-  handleGlow: any;
+  shouldRender: boolean;
+  focusState: [number, any];
   isDropdownOpen?: boolean;
   toggleDropdown?: any;
 };
 
 function AchievementCard(props: AchievementCardProps) {
-  const {
-    id,
-    inferencer,
-    shouldPartiallyRender,
-    setFocusId,
-    handleGlow,
-    isDropdownOpen,
-    toggleDropdown
-  } = props;
+  const { id, inferencer, shouldRender, focusState, isDropdownOpen, toggleDropdown } = props;
+
+  const [focusId, setFocusId] = focusState;
 
   const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
 
@@ -43,17 +37,17 @@ function AchievementCard(props: AchievementCardProps) {
     <div
       className="achievement-card"
       style={{
-        ...handleGlow(id),
-        opacity: shouldPartiallyRender ? '20%' : '100%',
+        ...handleGlow(id, focusId, ability),
+        opacity: shouldRender ? '100%' : '20%',
         background: `url(${cardTileUrl}) center/cover`
       }}
       onClick={() => setFocusId(id)}
       onClickCapture={toggleDropdown}
     >
       <div className="dropdown-button">
-        {hasDropdown ? (
+        {hasDropdown && (
           <Icon icon={isDropdownOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT} />
-        ) : null}
+        )}
       </div>
 
       <div className="content">
