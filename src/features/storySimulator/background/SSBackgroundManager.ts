@@ -6,6 +6,10 @@ import { mandatory } from 'src/features/game/utils/GameUtils';
 import { loadImage } from '../../game/utils/LoaderUtils';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 
+/**
+ * This manager manages the background for Story Simulator's Object Placement scene
+ * It handles (1) storing of information on the chosen background (2) Rendering background
+ */
 export default class SSBackgroundManager {
   private backgroundAssetPath: string | undefined;
   private objectPlacement: ObjectPlacement | undefined;
@@ -21,6 +25,12 @@ export default class SSBackgroundManager {
     this.objectPlacement = objectPlacement;
   }
 
+  /**
+   * Loads the background if the chosen file comes from the
+   * locations folder
+   *
+   * And records the short path of the background image
+   */
   public async loadBackground() {
     const shortPath = sessionStorage.getItem('selectedAsset');
     if (!shortPath || !shortPath.startsWith('/locations/')) {

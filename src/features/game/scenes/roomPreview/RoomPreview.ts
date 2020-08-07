@@ -125,7 +125,16 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public update() {
-    // this.eval(`update();`);
+    /**
+     * runInContext appends new frame everytime it is run,
+     * which leads to out of memory error when we run
+     * runInContext as often as FPS of the game for `update()`.
+     *
+     * Hence, we replace the scope instead of appending
+     * new one each time.
+     */
+    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
+    this.eval(`update();`);
   }
 
   public createContext() {
@@ -263,10 +272,21 @@ export default class RoomPreview extends Phaser.Scene {
    * progression.
    */
   private getDefaultBackgroundKey() {
-    const completedAssessment = this.getUserStateManager().getAssessments();
-    // Escape type check for now
-    mandatory(completedAssessment);
-    return ImageAssets.sourceCrashedPod.key;
+    const completedAssessmentIds = this.getUserStateManager().getAssessments().reverse();
+
+    // Once reversed, the first element is the submitted assessment with the most recent close date
+    const backgroundMapping = SourceAcademyGame.getInstance().getRoomPreviewMapping();
+
+    let backgroundKey;
+    for (let i = 0; i < completedAssessmentIds.length; i++) {
+      backgroundKey = backgroundMapping.get(completedAssessmentIds[i]);
+      if (backgroundKey) break;
+    }
+
+    // If there is no valid mapping, we use default background image
+    if (!backgroundKey) backgroundKey = ImageAssets.sourceCrashedPod.key;
+
+    return backgroundKey;
   }
 
   /**
