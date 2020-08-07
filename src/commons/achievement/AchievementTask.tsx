@@ -9,7 +9,7 @@ type AchievementTaskProps = {
   id: number;
   inferencer: AchievementInferencer;
   filterStatus: FilterStatus;
-  displayView: any;
+  displayView?: any;
   handleGlow: any;
 };
 
@@ -66,7 +66,7 @@ function AchievementTask(props: AchievementTaskProps) {
   return (
     <>
       {shouldRenderTask(id) && (
-        <li key={id}>
+        <li className="task" key={id}>
           <AchievementCard
             id={id}
             inferencer={inferencer}

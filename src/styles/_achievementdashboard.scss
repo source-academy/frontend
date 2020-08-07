@@ -7,13 +7,13 @@
   width: 100%;
 
   .achievement-overview {
-    $default-margin: 0.5em;
+    $default-spacing: 0.5em;
 
     align-items: center;
     color: white;
     display: flex;
     flex-direction: row;
-    padding: $default-margin;
+    padding: $default-spacing;
 
     .level {
       $progress-bar-height: 1.2em;
@@ -44,7 +44,7 @@
       .level-progress {
         display: flex;
         height: $progress-bar-height;
-        margin: 0 0 0 $default-margin;
+        margin: 0 0 0 $default-spacing;
         width: $progress-bar-width;
 
         .progress-bar {
@@ -99,7 +99,7 @@
 
     .level,
     h3 {
-      margin: 0 $default-margin;
+      margin: 0 $default-spacing;
     }
   }
 
@@ -112,7 +112,7 @@
     $card-height: 5em;
     $card-width: 30em;
     // Default spacing should be at least 10px to prevent border glow bleeding
-    $default-margin: 1em;
+    $default-spacing: 1em;
     // View aspect ratio 18:25
     $view-height: 50em;
     $view-width: $canvas-width;
@@ -128,7 +128,7 @@
       display: flex;
       flex-direction: column;
       margin: 0 auto;
-      max-height: $view-height + $default-margin * 2;
+      max-height: $view-height + $default-spacing * 2;
       min-width: max-content;
     }
 
@@ -141,7 +141,7 @@
         cursor: pointer;
         display: flex;
         flex-direction: column;
-        margin: auto $default-margin;
+        margin: auto $default-spacing;
 
         p {
           font-size: 0.8em;
@@ -170,124 +170,127 @@
       scrollbar-width: thin;
 
       li {
-        margin: $default-margin;
+        margin: $default-spacing;
       }
 
       li:not(:first-child) {
-        margin: 0 $default-margin $default-margin;
+        margin: 0 $default-spacing $default-spacing;
       }
 
-      .achievement-card {
-        cursor: pointer;
-        display: flex;
-        flex-direction: row;
-        height: $card-height;
-        transition: box-shadow 0.2s ease-out;
-        width: $card-width;
-
-        .dropdown-button {
-          align-items: center;
-          display: flex;
-          height: $card-height;
-          padding: 0 0 0 0.5em;
-          width: $card-height;
-        }
-
-        .content {
-          display: flex;
-          flex-direction: column;
-          height: $card-height;
-          width: $card-width - $card-height;
-
-          .heading {
-            align-items: center;
-            display: flex;
-            flex-direction: row;
-            height: $card-height * 3 / 5;
-          }
-
-          .details {
-            display: flex;
-            flex-direction: row;
-            font-size: 0.8em;
-
-            p {
-              margin: 0;
-            }
-
-            .ability {
-              align-items: center;
-              display: flex;
-              flex: 1 1 50%;
-            }
-
-            .deadline,
-            .exp {
-              align-items: center;
-              display: flex;
-              flex: 1 1 25%;
-
-              p {
-                padding: 0 0 0 0.3em;
-              }
-            }
-          }
-
-          .progress {
-            height: 0.2em;
-            margin: 0.2em 0 0 0;
-            width: 95%;
-          }
-        }
-      }
-
-      .achievement-card:hover {
-        box-shadow: 0 0 10px black;
-        transition: box-shadow 0.2s ease-in;
-      }
-
-      .prerequisite-container {
-        $shrink-factor: 0.9;
-        $line-width: 1em;
-        // remaining-width is the empty space between line and card
-        $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
-        $top-spacing: 0.2em;
-
-        display: flex;
-        flex-direction: column;
-
-        .prerequisite {
+      .task {
+        .achievement-card {
+          cursor: pointer;
           display: flex;
           flex-direction: row;
-          max-width: $card-width;
+          height: $card-height;
+          transition: box-shadow 0.2s ease-out;
+          width: $card-width;
 
-          .dropdown-lines {
-            height: $top-spacing + $card-height;
-            margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
-            min-width: $line-width;
+          .dropdown-button {
+            align-items: center;
+            display: flex;
+            height: $card-height;
+            padding: 0 0 0 0.5em;
+            width: $card-height;
           }
 
-          .achievement-card {
-            margin: $top-spacing 0 0 0;
-            transform: scale($shrink-factor);
+          .content {
+            display: flex;
+            flex-direction: column;
+            height: $card-height;
+            width: $card-width - $card-height;
+
+            .heading {
+              align-items: center;
+              display: flex;
+              flex-direction: row;
+              height: $card-height * 3 / 5;
+            }
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              font-size: 0.8em;
+
+              p {
+                margin: 0;
+              }
+
+              .ability {
+                align-items: center;
+                display: flex;
+                flex: 1 1 50%;
+              }
+
+              .deadline,
+              .exp {
+                align-items: center;
+                display: flex;
+                flex: 1 1 25%;
+
+                p {
+                  padding: 0 0 0 0.3em;
+                }
+              }
+            }
+
+            .progress {
+              height: 0.2em;
+              margin: 0.2em 0 0 0;
+              width: 95%;
+            }
           }
         }
 
-        .prerequisite:first-child {
-          .dropdown-lines {
-            height: $top-spacing + $card-height / 2;
-            margin-top: 0;
+        .achievement-card:hover {
+          box-shadow: 0 0 10px black;
+          transition: box-shadow 0.2s ease-in;
+        }
+
+        .prerequisite-container {
+          $shrink-factor: 0.9;
+          $line-width: 1em;
+          // remaining-width is the empty space between line and card
+          $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
+          $top-spacing: 0.2em;
+
+          display: flex;
+          flex-direction: column;
+
+          .prerequisite {
+            display: flex;
+            flex-direction: row;
+            max-width: $card-width;
+
+            .dropdown-lines {
+              height: $top-spacing + $card-height;
+              margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
+              min-width: $line-width;
+            }
+
+            .achievement-card {
+              margin: $top-spacing 0 0 0;
+              transform: scale($shrink-factor);
+            }
+          }
+
+          .prerequisite:first-child {
+            .dropdown-lines {
+              height: $top-spacing + $card-height / 2;
+              margin-top: 0;
+            }
           }
         }
       }
     }
 
     .view-container {
-      $canvas-padding: 0.3em;
-      $content-padding: 0.5em;
+      $canvas-spacing: 0.3em;
+      $content-spacing: 0.5em;
 
       @extend %container;
       height: 90%;
+      min-width: $view-width + $default-spacing * 2;
       overflow-y: auto;
       scrollbar-color: white #444;
       scrollbar-width: thin;
@@ -296,7 +299,7 @@
         color: white;
         display: flex;
         flex-direction: column;
-        margin: $default-margin;
+        margin: $default-spacing;
         min-height: $view-height;
         width: $view-width;
 
@@ -308,12 +311,12 @@
 
           h1 {
             margin: 0.5em auto 0;
-            padding: $canvas-padding;
+            padding: $canvas-spacing;
           }
 
           p {
             margin: 0 auto;
-            padding: $canvas-padding;
+            padding: $canvas-spacing;
           }
 
           .description {
@@ -329,14 +332,14 @@
           align-items: center;
           display: flex;
           flex-direction: row;
-          padding: $content-padding;
+          padding: $content-spacing;
 
           .goal-badge {
             align-items: center;
             display: flex;
             flex-direction: column;
             min-width: 6em;
-            padding: 0 $content-padding;
+            padding: 0 $content-spacing;
 
             .goal-icon {
               background: url(#{$achievement-assets}/xp-icon.png) center/contain;
@@ -361,17 +364,17 @@
           background: lightgrey;
           border: none;
           height: 1px;
-          margin: $content-padding auto;
+          margin: $content-spacing auto;
           width: 90%;
         }
 
         .completion {
-          padding: $content-padding;
+          padding: $content-spacing;
           text-align: center;
 
           h1 {
             color: #fc0;
-            margin: 0 auto $content-padding;
+            margin: 0 auto $content-spacing;
           }
 
           p {

@@ -39,8 +39,13 @@ function ControlPanel(props: ControlPanelProps) {
     forceRender();
   };
 
-  const mapAchievementIdsToEditableTask = (achievementIds: number[]) =>
-    achievementIds.map(id => (
+  /**
+   * Maps an array of achievementId to <EditableAchievementTask /> component
+   *
+   * @param taskIds an array of achievementId
+   */
+  const mapAchievementIdsToEditableTask = (taskIds: number[]) =>
+    taskIds.map(id => (
       <EditableAchievementTask
         key={id}
         achievement={inferencer.getAchievementItem(id)}
@@ -64,4 +69,5 @@ function ControlPanel(props: ControlPanelProps) {
     </div>
   );
 }
+
 export default ControlPanel;

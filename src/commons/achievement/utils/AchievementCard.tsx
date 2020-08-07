@@ -1,5 +1,6 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { noop } from 'lodash';
 import React from 'react';
 
 import { AchievementStatus } from '../../../features/achievement/AchievementTypes';
@@ -11,7 +12,7 @@ type AchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   shouldPartiallyRender: boolean;
-  displayView: any;
+  displayView?: any;
   handleGlow: any;
   isDropdownOpen?: boolean;
   toggleDropdown?: any;
@@ -22,7 +23,7 @@ function AchievementCard(props: AchievementCardProps) {
     id,
     inferencer,
     shouldPartiallyRender,
-    displayView,
+    displayView = noop, // Disable display view function for Achievement Control
     handleGlow,
     isDropdownOpen,
     toggleDropdown

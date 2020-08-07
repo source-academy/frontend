@@ -17,29 +17,20 @@ function EditableAchievementTask(props: EditableAchievementTaskProps) {
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
   const { id } = editableAchievement;
 
-  const noOp = () => {};
-
-  const task = (
-    <AchievementTask
-      id={id}
-      inferencer={inferencer}
-      filterStatus={FilterStatus.ALL}
-      displayView={noOp}
-      handleGlow={(id: number) => {}}
-    />
-  );
-
   return (
-    <div className="edit-container">
-      <div className="main-cards">{task}</div>
-      <div className="editor-buttons">
-        <AchievementControlPanelTools
-          editableAchievement={editableAchievement}
-          setEditableAchievement={setEditableAchievement}
-          inferencer={inferencer}
-          saveChanges={saveChanges}
-        />
-      </div>
+    <div className="editable-task">
+      <AchievementTask
+        id={id}
+        inferencer={inferencer}
+        filterStatus={FilterStatus.ALL}
+        handleGlow={(id: number) => {}}
+      />
+      <AchievementControlPanelTools
+        editableAchievement={editableAchievement}
+        setEditableAchievement={setEditableAchievement}
+        inferencer={inferencer}
+        saveChanges={saveChanges}
+      />
     </div>
   );
 }
