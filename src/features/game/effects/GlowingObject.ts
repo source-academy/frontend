@@ -1,5 +1,4 @@
 import { resize } from '../utils/SpriteUtils';
-import { HexColor } from '../utils/StyleUtils';
 import { blink } from './FadeEffect';
 
 /**
@@ -39,7 +38,7 @@ export default class GlowingImage {
     const image = new Phaser.GameObjects.Image(scene, 0, 0, assetKey);
     this.imageGlow = new Phaser.GameObjects.Image(scene, 0, 0, assetKey)
       .setAlpha(0)
-      .setTint(HexColor.yellow);
+      .setBlendMode(Phaser.BlendModes.ADD);
     this.clickArea = new Phaser.GameObjects.Image(scene, 0, 0, assetKey)
       .setAlpha(0.01)
       .setInteractive({ pixelPerfect: true });

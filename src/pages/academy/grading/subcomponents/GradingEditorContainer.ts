@@ -2,6 +2,7 @@ import { connect, MapDispatchToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
 
 import {
+  reautogradeAnswer,
   submitGrading,
   submitGradingAndContinue
 } from '../../../../commons/application/actions/SessionActions';
@@ -11,7 +12,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
   bindActionCreators(
     {
       handleGradingSave: submitGrading,
-      handleGradingSaveAndContinue: submitGradingAndContinue
+      handleGradingSaveAndContinue: submitGradingAndContinue,
+      handleReautogradeAnswer: reautogradeAnswer
     },
     dispatch
   );

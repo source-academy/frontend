@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`TaskAdder component renders correctly 1`] = `
+"<TaskAdder inferencer={{...}} saveChanges={[Function: saveChanges]}>
+  <Blueprint3.Button className=\\"main-adder\\" onClick={[Function: toggleDialogOpen]} text=\\"Add A Task\\">
+    <button type=\\"button\\" className=\\"bp3-button main-adder\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <Blueprint3.Icon icon={[undefined]} />
+      <span className=\\"bp3-button-text\\">
+        Add A Task
+      </span>
+      <Blueprint3.Icon icon={[undefined]} />
+    </button>
+  </Blueprint3.Button>
+  <AchievementSelection selections={{...}} inferencer={{...}} selectedId={1} setSelectedId={[Function: bound dispatchAction]} buttonText=\\"Add Task\\" dialogHeader=\\"Add A Task\\" emptySelectionsMessage=\\"You have no more tasks to add\\" toggleDialogOpen={[Function: toggleDialogOpen]} isDialogOpen={false} action={[Function: addAction]}>
+    <Blueprint3.Dialog onClose={[Function: toggleDialogOpen]} className=\\"task-selector\\" isOpen={false} title=\\"Add A Task\\" canOutsideClickClose={true}>
+      <Blueprint3.Overlay onClose={[Function: toggleDialogOpen]} className=\\"bp3-overlay-scroll-container\\" isOpen={false} title=\\"Add A Task\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+    </Blueprint3.Dialog>
+  </AchievementSelection>
+</TaskAdder>"
+`;

@@ -29,14 +29,9 @@ export default class DialogueSpeakerRenderer {
   public changeSpeakerTo(newSpeakerDetail?: SpeakerDetail | null) {
     if (newSpeakerDetail === undefined) return;
 
-    this.hidePreviousSpeaker(this.currentSpeakerId);
-    this.showNewSpeaker(newSpeakerDetail);
-  }
-
-  private hidePreviousSpeaker(previousSpeakerId?: ItemId) {
-    if (previousSpeakerId) {
+    this.currentSpeakerId &&
       GameGlobalAPI.getInstance().clearSeveralLayers([Layer.Speaker, Layer.SpeakerBox]);
-    }
+    this.showNewSpeaker(newSpeakerDetail);
   }
 
   private showNewSpeaker(newSpeakerDetail: SpeakerDetail | null) {
@@ -47,6 +42,7 @@ export default class DialogueSpeakerRenderer {
   }
 
   private drawSpeakerBox(speakerId: ItemId) {
+    if (speakerId === 'narrator') return;
     const speakerContainer =
       speakerId === 'you'
         ? this.createSpeakerBox(this.getUsername(), GamePosition.Right)
@@ -58,6 +54,7 @@ export default class DialogueSpeakerRenderer {
   }
 
   private drawSpeakerSprite({ speakerId, speakerPosition, expression }: SpeakerDetail) {
+    this.currentSpeakerId = speakerId;
     if (speakerId === 'you' || speakerId === 'narrator') {
       return;
     }
@@ -67,7 +64,6 @@ export default class DialogueSpeakerRenderer {
       speakerPosition
     );
     GameGlobalAPI.getInstance().addToLayer(Layer.Speaker, speakerSprite);
-    this.currentSpeakerId = speakerId;
   }
 
   private createSpeakerBox(text: string, position: GamePosition) {

@@ -13,14 +13,13 @@ import GamePhaseManager from '../phase/GamePhaseManager';
 export type BitmapFontStyle = {
   key: string;
   size: number;
-  fill: number;
   align: number;
 };
 
 /**
  * @typedef {string} ItemId - id associated with an item.
  * Item can be any of the following:
- * (Dialogue | ObjectProperty | BboxProperty | Character | Action | CollectibleProperty)
+ * (Dialogue | ObjectProperty | BboxProperty | Character | Action | AwardProperty)
  */
 export type ItemId = string;
 

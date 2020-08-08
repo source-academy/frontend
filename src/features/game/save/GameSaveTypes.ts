@@ -21,12 +21,13 @@ export type FullSaveState = {
  */
 export type GameSaveState = {
   lastCheckpointPlayed: number;
-  currentLocation: string;
+  currentLocation: string | undefined;
   currentPhase: string;
+  chapterNewlyCompleted: boolean;
 
   completedObjectives: string[];
   triggeredInteractions: string[];
-  triggeredActions: string[];
+  triggeredStateChangeActions: string[];
 };
 
 /**

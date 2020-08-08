@@ -18,6 +18,7 @@ import {
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_STEP_LIMIT,
   CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
@@ -71,6 +72,9 @@ export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLoc
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
+export const changeStepLimit = (stepLimit: number, workspaceLocation: WorkspaceLocation) =>
+  action(CHANGE_STEP_LIMIT, { stepLimit, workspaceLocation });
+
 export const chapterSelect = (
   chapter: number,
   variant: Variant,
@@ -84,11 +88,13 @@ export const chapterSelect = (
 
 export const externalLibrarySelect = (
   externalLibraryName: ExternalLibraryName,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  initialise?: boolean
 ) =>
   action(PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
-    workspaceLocation
+    workspaceLocation,
+    initialise: initialise || false
   });
 
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>

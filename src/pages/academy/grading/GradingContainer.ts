@@ -4,6 +4,7 @@ import { bindActionCreators, Dispatch } from 'redux';
 import {
   acknowledgeNotifications,
   fetchGradingOverviews,
+  reautogradeSubmission,
   unsubmitSubmission
 } from '../../../commons/application/actions/SessionActions';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
@@ -11,7 +12,7 @@ import Grading, { DispatchProps, StateProps } from './Grading';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   gradingOverviews: state.session.gradingOverviews,
-  group: state.session.group,
+  userId: state.session.userId,
   notifications: state.session.notifications,
   role: state.session.role
 });
@@ -21,7 +22,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleAcknowledgeNotifications: acknowledgeNotifications,
       handleFetchGradingOverviews: fetchGradingOverviews,
-      handleUnsubmitSubmission: unsubmitSubmission
+      handleUnsubmitSubmission: unsubmitSubmission,
+      handleReautogradeSubmission: reautogradeSubmission
     },
     dispatch
   );

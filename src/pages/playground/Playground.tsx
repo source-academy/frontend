@@ -18,6 +18,7 @@ import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/Contro
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
+import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -38,6 +39,7 @@ export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
+  handleChangeStepLimit: (stepLimit: number) => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
@@ -52,7 +54,7 @@ export type DispatchProps = {
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
   handleInvalidEditorSessionId: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName, force?: boolean) => void;
   handleInitInvite: (value: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
@@ -97,8 +99,9 @@ export type StateProps = {
   sharedbAceIsInviting: boolean;
   sourceChapter: number;
   sourceVariant: Variant;
+  stepLimit: number;
   websocketStatus: number;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -121,6 +124,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
+
+  React.useEffect(() => {
+    props.handleExternalSelect(props.externalLibraryName, true);
+    // run once only
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handlers = React.useMemo(
     () => ({
@@ -299,6 +308,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [execTime, handleChangeExecTime]
   );
 
+  const { handleChangeStepLimit, stepLimit } = props;
+  const stepperStepLimit = React.useMemo(
+    () => (
+      <ControlBarStepLimit
+        stepLimit={stepLimit}
+        handleChangeStepLimit={(stepLimit: number) => handleChangeStepLimit(stepLimit)}
+        key="step_limit"
+      />
+    ),
+    [stepLimit, handleChangeStepLimit]
+  );
+
   const { handleExternalSelect, externalLibraryName } = props;
   const externalLibrarySelect = React.useMemo(
     () => (
@@ -400,8 +421,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(envVisualizerTab);
     }
 
-    if (props.sourceChapter <= 2 && props.sourceVariant !== 'wasm') {
-      // Enable Subst Visualizer for Source 1 & 2
+    if (props.sourceChapter <= 2 && props.sourceVariant === 'default') {
+      // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
@@ -428,9 +449,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
-        executionTime
+        props.usingSubst ? stepperStepLimit : executionTime
       ],
-      replButtons: [props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
+      replButtons: [
+        props.sourceVariant !== 'concurrent' && props.sourceVariant !== 'wasm' ? evalButton : null,
+        clearButton
+      ]
     },
     editorProps: {
       sourceChapter: props.sourceChapter,

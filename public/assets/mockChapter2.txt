@@ -6,6 +6,7 @@ objectives
 emergency
     actions
         show_dialogue(chapter2)
+        complete_objective(finish)
 
 dialogues
     chapter2

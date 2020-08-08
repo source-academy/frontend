@@ -30,6 +30,7 @@ import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingType
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
+import { reportInfiniteLoopError } from '../../utils/InfiniteLoopReporter';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
 import {
   beginClearContext,
@@ -129,6 +130,7 @@ describe('EVAL_EDITOR', () => {
             {
               scheduler: 'preemptive',
               originalMaxExecTime: execTime,
+              stepLimit: 1000,
               useSubst: false
             }
           ]
@@ -143,7 +145,12 @@ describe('EVAL_EDITOR', () => {
           args: [
             editorValue,
             context,
-            { scheduler: 'preemptive', originalMaxExecTime: execTime, useSubst: false }
+            {
+              scheduler: 'preemptive',
+              originalMaxExecTime: execTime,
+              stepLimit: 1000,
+              useSubst: false
+            }
           ]
         })
         // running the student's program should return -1, which is written to REPL
@@ -216,6 +223,7 @@ describe('EVAL_REPL', () => {
         .call(runInContext, replValue, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: 1000,
+          stepLimit: 1000,
           useSubst: false
         })
         .dispatch({
@@ -687,7 +695,12 @@ describe('evalCode', () => {
     actionType = EVAL_EDITOR;
     context = createContext(); // mockRuntimeContext();
     value = 'test value';
-    options = { scheduler: 'preemptive', originalMaxExecTime: 1000, useSubst: false };
+    options = {
+      scheduler: 'preemptive',
+      originalMaxExecTime: 1000,
+      stepLimit: 1000,
+      useSubst: false
+    };
     lastDebuggerResult = { status: 'error' };
     state = generateDefaultState(workspaceLocation);
   });
@@ -700,6 +713,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
@@ -719,6 +733,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
@@ -741,6 +756,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
@@ -781,6 +797,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
@@ -808,6 +825,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
@@ -838,6 +856,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(endDebuggerPause(workspaceLocation))
@@ -851,6 +870,7 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put.like({ action: { type: EVAL_INTERPRETER_ERROR } })
@@ -873,10 +893,33 @@ describe('evalCode', () => {
         .call(runInContext, code, context, {
           scheduler: 'preemptive',
           originalMaxExecTime: execTime,
+          stepLimit: 1000,
           useSubst: false
         })
         .put(evalInterpreterError(context.errors, workspaceLocation))
         .silentRun();
+    });
+
+    test('calls reportInfiniteLoop on error and sends correct data to sentry', () => {
+      context = createContext(3);
+      const code1 = 'const test=[(x)=>x,2,3,[(x)=>x],5];function f(x){return f(x);}';
+      const code2 = 'f(1);';
+      state = generateDefaultState(workspaceLocation, {});
+
+      return runInContext(code1, context, {
+        scheduler: 'preemptive',
+        originalMaxExecTime: 1000,
+        useSubst: false
+      }).then(_ => {
+        expectSaga(evalCode, code2, context, execTime, workspaceLocation, actionType)
+          .withState(state)
+          .call(
+            reportInfiniteLoopError,
+            'source_protection_recursion',
+            'const test=[x => x,2,3,[x => x],5];\nfunction f(x) {\n  return f(x);\n}\n{f(1);}'
+          )
+          .silentRun();
+      });
     });
   });
 

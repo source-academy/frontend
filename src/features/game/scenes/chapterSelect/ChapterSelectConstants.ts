@@ -1,27 +1,17 @@
 import FontAssets from '../../assets/FontAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { BitmapFontStyle } from '../../commons/CommonTypes';
-import { HexColor } from '../../utils/StyleUtils';
 
 export const chapterIndexStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 25,
-  fill: HexColor.offWhite,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
 export const chapterTitleStyle: BitmapFontStyle = {
   key: FontAssets.zektonFont.key,
   size: 35,
-  fill: HexColor.lightBlue,
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
-};
-
-export const chapterActionAltStyle: BitmapFontStyle = {
-  key: FontAssets.zektonFont.key,
-  size: 20,
-  fill: HexColor.lightBlue,
-  align: Phaser.GameObjects.BitmapText.ALIGN_LEFT
 };
 
 const marginX = 0;
@@ -29,14 +19,12 @@ const marginY = 100;
 const imageRectWidth = 500;
 
 const chapConstants = {
-  defaultScrollSpeed: 20,
-  buttonsYOffset: 200,
-  buttonsXOffset: 100,
-  frameXOffset: 15,
-  frameYOffset: -10,
+  arrow: { xOffset: 875 },
+  button: { xOffset: 100, yOffset: 200 },
+  frame: { xOffset: 15, yOffset: -10 },
+  scrollSpeed: 20,
   indexTextConfig: { x: 0, y: -160, oriX: 0.5, oriY: 0.5 },
   titleTextConfig: { x: 0, y: -100, oriX: 0.5, oriY: 0.5 },
-  arrowXOffset: 875,
   maskRect: {
     x: -screenCenter.x + marginX,
     y: -screenCenter.y + marginY,
@@ -47,7 +35,12 @@ const chapConstants = {
     width: imageRectWidth,
     height: 700
   },
-  imageDist: imageRectWidth + 150
+  imageDist: imageRectWidth + 150,
+  chapComplete: {
+    y: 20,
+    height: 60,
+    text: 'Chapter Completed'
+  }
 };
 
 export default chapConstants;

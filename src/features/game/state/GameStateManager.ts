@@ -29,21 +29,23 @@ class GameStateManager {
   // Game State
   private gameMap: GameMap;
   private checkpointObjective: GameObjective;
+  private chapterNewlyCompleted: boolean;
 
   // Triggered Interactions
   private updatedLocations: Set<LocationId>;
   private triggeredInteractions: Map<ItemId, boolean>;
-  private triggeredActions: ItemId[];
+  private triggeredStateChangeActions: ItemId[];
 
   constructor(gameCheckpoint: GameCheckpoint) {
     this.subscribers = new Map<GameItemType, StateObserver>();
 
     this.gameMap = gameCheckpoint.map;
     this.checkpointObjective = gameCheckpoint.objectives;
+    this.chapterNewlyCompleted = false;
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
-    this.triggeredActions = [];
+    this.triggeredStateChangeActions = [];
 
     this.loadStatesFromSaveManager();
   }
@@ -52,7 +54,7 @@ class GameStateManager {
    * Loads some game states from the save manager
    */
   private loadStatesFromSaveManager() {
-    this.triggeredActions = this.getSaveManager().getTriggeredActions();
+    this.triggeredStateChangeActions = this.getSaveManager().getTriggeredStateChangeActions();
 
     this.getSaveManager()
       .getTriggeredInteractions()
@@ -61,6 +63,8 @@ class GameStateManager {
     this.getSaveManager()
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
+
+    this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
   ///////////////////////////////
@@ -100,12 +104,14 @@ class GameStateManager {
   }
 
   /**
-   * Record that an action has been triggered.
+   * Record a state-change action that has been triggered.
+   * State-change actions refer to actions that modify the map's
+   * original state
    *
    * @param actionId actionId of interaction
    */
-  public triggerAction(actionId: ItemId): void {
-    this.triggeredActions.push(actionId);
+  public triggerStateChangeAction(actionId: ItemId): void {
+    this.triggeredStateChangeActions.push(actionId);
   }
 
   /**
@@ -173,23 +179,27 @@ class GameStateManager {
   }
 
   /**
-   * Add a mode to a location.
+   * Add a mode to a location. If this is not the current location,
+   * then add a notification.
    *
    * @param locationId location ID
    * @param mode game mode to add
    */
   public addLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.add(mode);
+    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
   }
 
   /**
-   * Remove a mode from a location.
+   * Remove a mode from a location. If this is not the current location,
+   * then add a notification.
    *
    * @param locationId location ID
    * @param mode game mode to remove
    */
   public removeLocationMode(locationId: LocationId, mode: GameMode) {
     this.gameMap.getLocationAtId(locationId).modes.delete(mode);
+    !this.isCurrentLocation(locationId) && this.addLocationNotif(locationId);
   }
 
   ///////////////////////////////
@@ -251,7 +261,15 @@ class GameStateManager {
    */
   public setObjProperty(id: ItemId, newObjProp: ObjectProperty) {
     this.gameMap.setItemInMap(GameItemType.objects, id, newObjProp);
-    this.getSubscriberForItemType(GameItemType.objects).handleMutate(id);
+
+    // Update every location that has the object
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.objects.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.objects).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   /**
@@ -263,7 +281,15 @@ class GameStateManager {
    */
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.gameMap.setItemInMap(GameItemType.boundingBoxes, id, newBBoxProp);
-    this.getSubscriberForItemType(GameItemType.boundingBoxes).handleMutate(id);
+
+    // Update every location that has the bbox
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.boundingBoxes.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.boundingBoxes).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   /**
@@ -274,24 +300,36 @@ class GameStateManager {
    * @param newPosition new position of the character
    */
   public moveCharacter(id: ItemId, newLocation: LocationId, newPosition: GamePosition) {
-    // Move location
-    this.removeItem(GameItemType.characters, GameGlobalAPI.getInstance().getCurrLocId(), id);
-    this.addItem(GameItemType.characters, newLocation, id);
-
     // Move position
     this.getCharacterAtId(id).defaultPosition = newPosition;
-    this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+
+    // Find location with character and remove him
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.characters.has(id)) return;
+      this.removeItem(GameItemType.characters, locId, id);
+    });
+
+    // Add updated character to new location
+    this.addItem(GameItemType.characters, newLocation, id);
   }
 
   /**
-   * Changes the default expression and position of a character
+   * Changes the default expression of a character
    *
    * @param id id of character to change
    * @param newExpression new expression of the character
    */
   public updateCharacter(id: ItemId, newExpression: string) {
     this.getCharacterAtId(id).defaultExpression = newExpression;
-    this.getSubscriberForItemType(GameItemType.characters).handleMutate(id);
+
+    // Update every location that has the character
+    this.gameMap.getLocations().forEach((location, locId) => {
+      if (!location.characters.has(id)) return;
+
+      this.isCurrentLocation(locId)
+        ? this.getSubscriberForItemType(GameItemType.characters).handleMutate(id)
+        : this.addLocationNotif(locId);
+    });
   }
 
   ///////////////////////////////
@@ -367,17 +405,20 @@ class GameStateManager {
   }
 
   /**
-   * Return an array interactions of actions that have been triggered
+   * Return an array interactions of state-change actions that have been triggered
+   * State-change actions refer to actions that modify the game map's original state
    *
    * @returns {string[]}
    */
-  public getTriggeredActions(): string[] {
-    return this.triggeredActions;
+  public getTriggeredStateChangeActions(): string[] {
+    return this.triggeredStateChangeActions;
   }
 
   public getGameMap = () => this.gameMap;
-  private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   public getCharacterAtId = (id: ItemId) => mandatory(this.gameMap.getCharacterMap().get(id));
+
+  private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
+  public getChapterNewlyCompleted = () => this.chapterNewlyCompleted;
 }
 
 export default GameStateManager;

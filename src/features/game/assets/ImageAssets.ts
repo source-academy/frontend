@@ -20,13 +20,14 @@ const ImageAssets: AssetMap<ImageAsset> = {
   arrow: { key: 'arrow', path: '/ui/arrow.png' },
   cookies: { key: 'cookies', path: '/images/cookies.png' },
   scrollFrame: { key: 'scroll-frame', path: '/ui/scrollFrame.png' },
+  messageBar: { key: 'message-bar', path: '/ui/messageBg.png' },
 
   // Escape Menu
   escapeMenuBackground: { key: 'escape-bg', path: '/ui/escapeMenu.png' },
 
   // Awards Menu
   awardsMenu: { key: 'award-bg', path: '/ui/collectiblesBg.png' },
-  awardsBanner: { key: 'award-banner', path: '/ui/collectiblesBanner.png' },
+  awardsBanner: { key: 'award-banner', path: '/ui/awardsBanner.png' },
   awardsPageChosen: {
     key: 'award-pg-chosen',
     path: '/ui/collectiblesPageOptChosen.png'

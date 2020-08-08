@@ -1,12 +1,6 @@
-/*eslint no-eval: "error"*/
-/*eslint-env browser*/
 import { call } from 'redux-saga/effects';
 
-import {
-  GameState,
-  SourceLanguage,
-  styliseSublanguage
-} from '../../commons/application/ApplicationTypes';
+import { SourceLanguage, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -17,6 +11,15 @@ import {
   QuestionType,
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
+import {
+  AchievementAbility,
+  AchievementGoal,
+  AchievementItem,
+  GoalDefinition,
+  GoalMeta,
+  GoalProgress,
+  GoalType
+} from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
@@ -114,19 +117,186 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
 }
 
 /**
- * PUT /user/game_states/
+ * GET /achievements
+ *
+ * Will be updated after a separate db for student progress is ready
  */
-export async function putUserGameState(
-  gameStates: GameState,
-  tokens: Tokens
-): Promise<Response | null> {
-  const resp = await request('user/game_states/save', 'PUT', {
+export async function getAchievements(tokens: Tokens): Promise<AchievementItem[] | null> {
+  const resp = await request('achievements/', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    body: {
-      gameStates: JSON.stringify(gameStates)
-    }
+    shouldRefresh: true
   });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievements = await resp.json();
+
+  return achievements.map(
+    (achievement: any) =>
+      ({
+        ...achievement,
+        id: achievement.id,
+        ability: achievement.ability as AchievementAbility,
+        deadline: new Date(achievement.deadline),
+        release: new Date(achievement.release),
+        goals: achievement.goals || [],
+        prerequisiteIds: achievement.prerequisiteIds || []
+      } as AchievementItem)
+  );
+}
+
+/**
+ * GET achievements/goals/user_id
+ */
+export async function getGoals(
+  tokens: Tokens,
+  studentId: number
+): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/${studentId}`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null;
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal,
+        type: goal.type as GoalType,
+        meta: goal.meta as GoalMeta
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * GET achievements/goals
+ */
+export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | null> {
+  const resp = await request(`achievements/goals/`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp || !resp.ok) {
+    return null; // invalid accessToken _and_ refreshToken
+  }
+
+  const achievementGoals = await resp.json();
+
+  return achievementGoals.map(
+    (goal: any) =>
+      ({
+        ...goal,
+        type: goal.type as GoalType,
+        meta: goal.meta as GoalMeta
+      } as AchievementGoal)
+  );
+}
+
+/**
+ * POST /achievements/:achievement_id
+ */
+export async function editAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/${achievement.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * POST /achievements/goals/:goal_id/
+ */
+export async function editGoal(
+  definition: GoalDefinition,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { definition: definition },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * POST /achievements/goals/:goal_id/:student_id
+ */
+export async function updateGoalProgress(
+  studentId: number,
+  progress: GoalProgress,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { progress: progress },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/:achievement_id
+ */
+export async function removeAchievement(
+  achievement: AchievementItem,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { achievement: achievement },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * DELETE /achievements/goals
+ *
+ */
+export async function removeGoal(
+  definition: GoalDefinition,
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    body: { definition: definition },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
   return resp;
 }
 
@@ -297,6 +467,7 @@ export async function getGradingOverviews(
         submissionId: overview.id,
         submissionStatus: overview.status,
         groupName: overview.student.groupName,
+        groupLeaderId: overview.student.groupLeaderId,
         // Grade
         initialGrade: overview.grade,
         gradeAdjustment: overview.adjustment,
@@ -411,6 +582,54 @@ export const postGrading = async (
   return resp;
 };
 
+function handleReautogradeResponse(
+  resp: Response | null
+): true | 'not_found' | 'not_submitted' | false {
+  if (!resp || resp.ok) {
+    return !!resp?.ok;
+  }
+
+  switch (resp.status) {
+    case 400:
+      return 'not_submitted';
+    case 404:
+      return 'not_found';
+  }
+  return false;
+}
+
+/**
+ * POST /grading/{submissionId}/autograde
+ */
+export const postReautogradeSubmission = async (submissionId: number, tokens: Tokens) => {
+  const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return handleReautogradeResponse(resp);
+};
+
+/**
+ * POST /grading/{submissionId}/{questionId}/autograde
+ */
+export const postReautogradeAnswer = async (
+  submissionId: number,
+  questionId: number,
+  tokens: Tokens
+) => {
+  const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    noHeaderAccept: true,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+  return handleReautogradeResponse(resp);
+};
+
 /**
  * POST /grading/{submissionId}/unsubmit
  */
@@ -508,6 +727,7 @@ export async function getSourcecastIndex(tokens: Tokens): Promise<SourcecastData
 export const postSourcecast = async (
   title: string,
   description: string,
+  uid: string,
   audio: Blob,
   playbackData: PlaybackData,
   tokens: Tokens
@@ -516,6 +736,7 @@ export const postSourcecast = async (
   const filename = Date.now().toString() + '.wav';
   formData.append('sourcecast[title]', title);
   formData.append('sourcecast[description]', description);
+  formData.append('sourcecast[uid]', uid);
   formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
   const resp = await request(`sourcecast`, 'POST', {

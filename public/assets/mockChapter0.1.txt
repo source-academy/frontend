@@ -9,12 +9,11 @@ room
     nav: hallway
     talkTopics: cutscene
     actions
-        show_dialogue(carpet) if checklist.visit
+        show_dialogue(carpetFound) if checklist.visit
 
     objects
         + door, /objects/yourCarpet/normal.png, 300, 300
             show_dialogue(whoddaThought) if checklist.visit
-            change_location(classroom) if checklist.visit 
         + chair, /objects/yourChair/normal.png, 90, 90
         + carpet, /objects/yourCarpet/normal.png, 90, 90
 
@@ -42,6 +41,8 @@ classroom
 emergency
     modes: move
     nav: classroom
+    actions
+        complete_objective(visit)
 
 dialogues
     cutscene, Cut Scene
@@ -61,7 +62,7 @@ dialogues
     found
         Wow, I see you've used the power of source and found me
 
-    carpet
+    carpetFound
         You found the other carpet! Go out and come back to see it :)
 
     whatHappened, What happened?

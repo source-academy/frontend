@@ -1,11 +1,14 @@
 import { GameAction } from '../../action/GameActionTypes';
 import { SoundAsset } from '../../assets/AssetsTypes';
+import { getAwardProp } from '../../awards/GameAwardsHelper';
 import { BBoxProperty } from '../../boundingBoxes/GameBoundingBoxTypes';
 import { Character } from '../../character/GameCharacterTypes';
 import { GamePosition, GameSize, ItemId } from '../../commons/CommonTypes';
 import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
+import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
+import { promptWithChoices } from '../../effects/Prompt';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { GameMode } from '../../mode/GameModeTypes';
@@ -87,8 +90,8 @@ class GameGlobalAPI {
     return this.getGameManager().getStateManager().hasTriggeredInteraction(id);
   }
 
-  public triggerAction(actionId: ItemId): void {
-    this.getGameManager().getStateManager().triggerAction(actionId);
+  public triggerStateChangeAction(actionId: ItemId): void {
+    this.getGameManager().getStateManager().triggerStateChangeAction(actionId);
   }
 
   public triggerInteraction(id: string): void {
@@ -135,6 +138,10 @@ class GameGlobalAPI {
     this.getGameManager().getStateManager().setObjProperty(id, newObjProp);
   }
 
+  public renderObjectLayerContainer(locationId: LocationId) {
+    this.getGameManager().getObjectManager().renderObjectsLayerContainer(locationId);
+  }
+
   public getAllActivatables() {
     return [
       ...this.getGameManager().getObjectManager().getActivatables(),
@@ -148,6 +155,10 @@ class GameGlobalAPI {
 
   public setBBoxProperty(id: ItemId, newBBoxProp: BBoxProperty) {
     this.getGameManager().getStateManager().setBBoxProperty(id, newBBoxProp);
+  }
+
+  public renderBBoxLayerContainer(locationId: LocationId) {
+    this.getGameManager().getBBoxManager().renderBBoxLayerContainer(locationId);
   }
 
   /////////////////////
@@ -214,7 +225,7 @@ class GameGlobalAPI {
   /////////////////////
 
   public async bringUpUpdateNotif(message: string) {
-    await displayNotification(message);
+    await displayNotification(this.getGameManager(), message);
   }
 
   /////////////////////
@@ -250,6 +261,7 @@ class GameGlobalAPI {
   /////////////////////
 
   public async obtainCollectible(collectibleId: string) {
+    displayMiniMessage(this.getGameManager(), `Obtained ${getAwardProp(collectibleId).title}`);
     SourceAcademyGame.getInstance().getUserStateManager().addCollectible(collectibleId);
   }
 
@@ -325,12 +337,22 @@ class GameGlobalAPI {
   //      Input      //
   /////////////////////
 
+  public setDefaultCursor(cursor: string) {
+    this.getGameManager().getInputManager().setDefaultCursor(cursor);
+  }
+
   public enableKeyboardInput(active: boolean) {
     this.getGameManager().getInputManager().enableKeyboardInput(active);
   }
 
   public enableMouseInput(active: boolean) {
     this.getGameManager().getInputManager().enableMouseInput(active);
+  }
+
+  public enableSprite(gameObject: Phaser.GameObjects.GameObject, active: boolean) {
+    active
+      ? this.getGameManager().input.enable(gameObject)
+      : this.getGameManager().input.disable(gameObject);
   }
 
   /////////////////////
@@ -359,6 +381,22 @@ class GameGlobalAPI {
 
   public renderBackgroundLayerContainer(locationId: LocationId) {
     this.getGameManager().getBackgroundManager().renderBackgroundLayerContainer(locationId);
+  }
+
+  /////////////////////
+  //    Assessment   //
+  /////////////////////
+
+  public async promptNavigateToAssessment(assessmentId: number) {
+    const response = await promptWithChoices(
+      GameGlobalAPI.getInstance().getGameManager(),
+      `Are you ready for the challenge?`,
+      ['Yes', 'No']
+    );
+    if (response === 0) {
+      window.open(`/academy/missions/${assessmentId}/0`, 'blank');
+      window.focus();
+    }
   }
 
   /////////////////////

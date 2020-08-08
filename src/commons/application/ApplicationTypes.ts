@@ -1,6 +1,7 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
+import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
@@ -20,6 +21,7 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
+  readonly achievement: AchievementState;
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -171,6 +173,11 @@ export const defaultDashboard: DashboardState = {
   gradingSummary: []
 };
 
+export const defaultAchievement: AchievementState = {
+  achievements: [],
+  goals: []
+};
+
 export const defaultPlayground: PlaygroundState = {
   usingSubst: false
 };
@@ -213,6 +220,7 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
   sharedbAceInitValue: '',
   sharedbAceIsInviting: false,
   sideContentActiveTab: SideContentType.questionOverview,
+  stepLimit: 1000,
   websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
@@ -255,7 +263,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
-    title: null
+    title: null,
+    uid: null
   },
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),
@@ -300,6 +309,7 @@ export const defaultSession: SessionState = {
 
 export const defaultState: OverallState = {
   academy: defaultAcademy,
+  achievement: defaultAchievement,
   application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,

@@ -47,6 +47,11 @@ class GroundControl extends React.Component<GroundControlProps, State> {
 
     this.columnDefs = [
       {
+        field: 'number',
+        headerName: 'ID',
+        width: 50
+      },
+      {
         headerName: 'Title',
         field: 'title'
       },

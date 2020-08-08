@@ -122,9 +122,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSaveSourcecastData: (
         title: string,
         description: string,
+        uid: string,
         audio: Blob,
         playbackData: PlaybackData
-      ) => saveSourcecastData(title, description, audio, playbackData, 'sourcecast'),
+      ) => saveSourcecastData(title, description, uid, audio, playbackData, 'sourcecast'),
       handleSetCurrentPlayerTime: (playerTime: number) =>
         setCurrentPlayerTime(playerTime, 'sourcecast'),
       handleSetCodeDeltasToApply: (deltas: CodeDelta[]) =>
@@ -133,9 +134,10 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleSetSourcecastData: (
         title: string,
         description: string,
+        uid: string,
         audioUrl: string,
         playbackData: PlaybackData
-      ) => setSourcecastData(title, description, audioUrl, playbackData, 'sourcecast'),
+      ) => setSourcecastData(title, description, uid, audioUrl, playbackData, 'sourcecast'),
       handleSetSourcecastDuration: (duration: number) =>
         setSourcecastDuration(duration, 'sourcecast'),
       handleSetSourcecastStatus: (playbackStatus: PlaybackStatus) =>
