@@ -11,8 +11,8 @@ import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
   handleGetAchievements: () => void;
+  handleGetOwnGoals: () => void;
   // TODO: handleGetGoals: () => void;
-  // TODO: handleGetOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -44,21 +44,21 @@ export const generateAchievementTasks = (
 };
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleGetAchievements } = props;
-
-  const filterState = useState<FilterStatus>(FilterStatus.ALL);
-  const [filterStatus] = filterState;
+  const { inferencer, name, group, handleGetAchievements, handleGetOwnGoals } = props;
 
   /**
    * The dashboard fetches the latest achievements and goals from backend
-   * when the page is mounted or the filter status is changed
+   * when the page is rendered
    */
   useEffect(() => {
     if (Constants.useBackend) {
       handleGetAchievements();
-      // TODO: handleGetGoals();
+      handleGetOwnGoals();
     }
-  }, [filterStatus, handleGetAchievements]);
+  }, [handleGetAchievements, handleGetOwnGoals]);
+
+  const filterState = useState<FilterStatus>(FilterStatus.ALL);
+  const [filterStatus] = filterState;
 
   // If an achievement is focused, the cards glow and dashboard displays the AchievementView
   const focusState = useState<number>(-1);
