@@ -16,85 +16,67 @@ import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
 import EditableAchievementView from './editableView/EditableAchievementView';
 
 type EditableAchievementCardProps = {
-  achievement: AchievementItem;
+  id: number;
   inferencer: AchievementInferencer;
-  updateAchievements: any;
-  editAchievement: any;
-  forceRender: any;
-  adderId: number;
-  setAdderId: any;
-  addUnsavedChange: any;
-  removeUnsavedChange: any;
-  removeGoal: any;
-  removeAchievement: any;
+  controlState: [number, any];
+  publishState: [boolean, any];
+  forceRender: () => void;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const {
-    achievement,
-    inferencer,
-    updateAchievements,
-    editAchievement,
-    adderId,
-    setAdderId,
-    addUnsavedChange,
-    removeUnsavedChange,
-    removeAchievement
-  } = props;
+  const { id, inferencer, controlState, publishState, forceRender } = props;
 
+  const [controlId, setControlId] = controlState;
+  const [, setCanPublish] = publishState;
+
+  const achievement = inferencer.getAchievementItem(id);
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const { id, title, ability, deadline, cardTileUrl, release, view } = editableAchievement;
+  const {
+    title,
+    ability,
+    deadline,
+    release,
+    /* TODO:
+    isTask,
+    position,
+    prerequisiteIds,
+    goalIds, */
+    cardTileUrl,
+    view
+  } = editableAchievement;
 
-  const [hasChanges, setHasChanges] = useState<boolean>(false);
-  const [pendingUpload, setPendingUpload] = useState<boolean>(false);
-
-  const setUnsaved = () => {
-    if (!hasChanges) {
-      setHasChanges(true);
-      addUnsavedChange();
-    }
-  };
-
-  const setUpload = () => {
-    setPendingUpload(false);
-    removeUnsavedChange();
-  };
+  const [isDirty, setIsDirty] = useState<boolean>(false);
 
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
-    setHasChanges(false);
-    setPendingUpload(true);
-
-    // It means that there is currently an item being added.
-    // Once this item is added, we can reset it to -1, which means
-    // that there is no achievement being added.
-    // indicating to the system that there is no achievement
-    // being added.
-    if (id === adderId) {
-      setAdderId(-1);
-    }
-  };
-
-  const handleUploadChanges = () => {
-    editAchievement(editableAchievement);
-    setUpload();
-  };
-
-  const handleDeleteAchievement = () => {
-    inferencer.removeAchievement(id);
-
-    removeAchievement(editableAchievement);
-    updateAchievements();
-
-    if (id === adderId) {
-      setAdderId(-1);
+    setIsDirty(false);
+    setCanPublish(true);
+    forceRender();
+    /**
+     * It means that there is currently an item being added.
+     * Once this item is added, we can reset it to -1, which means
+     * that there is no achievement being added.
+     * indicating to the system that there is no achievement
+     * being added.
+     */
+    if (id === controlId) {
+      setControlId(-1);
     }
   };
 
   const handleDiscardChanges = () => {
     setEditableAchievement(achievement);
-    setHasChanges(false);
-    setUpload();
+    setIsDirty(false);
+  };
+
+  const handleDeleteAchievement = () => {
+    inferencer.removeAchievement(id);
+    setCanPublish(true);
+    forceRender();
+
+    if (id === controlId) {
+      setControlId(-1);
+    }
   };
 
   const handleChangeTitle = (title: string) => {
@@ -102,30 +84,15 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       title: title
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
-  /*
-  const handleEditGoals = (goals: AchievementGoal[], shouldUpdate: boolean) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      goalIds: goalIds
-    });
-
-    inferencer.modifyAchievement(editableAchievement);
-    editAchievement(editableAchievement);
-  };
-
-  const handleRemoveGoal = (goal: AchievementGoal) => {
-    removeGoal(goal, editableAchievement);
-  };
-  */
   const handleChangeBackground = (cardTileUrl: string) => {
     setEditableAchievement({
       ...editableAchievement,
       cardTileUrl: cardTileUrl
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
   const handleChangeRelease = (release: Date) => {
@@ -133,7 +100,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       release: release
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
   const handleChangeDeadline = (deadline: Date) => {
@@ -141,15 +108,15 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       deadline: deadline
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
-  const handleChangeAbility = (ability: AchievementAbility, e: any) => {
+  const handleChangeAbility = (ability: AchievementAbility) => {
     setEditableAchievement({
       ...editableAchievement,
       ability: ability
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
   const handleChangeView = (view: AchievementView) => {
@@ -157,7 +124,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       ...editableAchievement,
       view: view
     });
-    setUnsaved();
+    setIsDirty(true);
   };
 
   return (
@@ -171,11 +138,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
         <EditableAchievementView title={title} view={view} changeView={handleChangeView} />
 
         <AchievementUploader
-          hasChanges={hasChanges}
+          hasChanges={isDirty}
           saveChanges={handleSaveChanges}
           discardChanges={handleDiscardChanges}
-          pendingUpload={pendingUpload}
-          uploadChanges={handleUploadChanges}
         />
       </div>
 
@@ -184,12 +149,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           cardTileUrl={cardTileUrl}
           setcardTileUrl={handleChangeBackground}
         />
-        {/* TODO: Implement goal editor        
-        <EditableAchievementGoals
-          goalIds={goalIds}
-          editGoals={handleEditGoals}
-          removeGoalFromBackend={handleRemoveGoal}
-        /> */}
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
 

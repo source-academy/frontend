@@ -5,16 +5,14 @@ type AchievementUploaderProps = {
   hasChanges: boolean;
   saveChanges: any;
   discardChanges: any;
-  pendingUpload: boolean;
-  uploadChanges: any;
 };
 
 function AchievementUploader(props: AchievementUploaderProps) {
-  const { hasChanges, saveChanges, discardChanges, pendingUpload, uploadChanges } = props;
+  const { hasChanges, saveChanges, discardChanges } = props;
 
   return (
     <>
-      {hasChanges ? (
+      {hasChanges && (
         <>
           <Button
             icon={'floppy-disk'}
@@ -31,9 +29,7 @@ function AchievementUploader(props: AchievementUploaderProps) {
             onClick={discardChanges}
           />
         </>
-      ) : pendingUpload ? (
-        <Button icon={'export'} text={'Submit'} intent={'primary'} onClick={uploadChanges} />
-      ) : null}
+      )}
     </>
   );
 }

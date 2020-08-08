@@ -1,10 +1,10 @@
-import { noop } from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
+import Constants from '../../../commons/utils/Constants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
@@ -19,36 +19,48 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  const { inferencer, handleGetAchievements, handleGetOwnGoals } = props;
+  const {
+    inferencer,
+    handleBulkUpdateAchievements,
+    handleGetAchievements,
+    handleGetOwnGoals
+  } = props;
 
-  const [editorUnsavedChanges] = useState<number>(0);
-  const [panelPendingUpload] = useState<boolean>(false);
-
+  /**
+   * The control fetches the latest achievements and goals from backend
+   * when the page is rendered
+   */
   useEffect(() => {
-    if (editorUnsavedChanges !== 0 || panelPendingUpload) {
-      window.onbeforeunload = () => true;
-    } else {
+    if (Constants.useBackend) {
       handleGetAchievements();
-      window.onbeforeunload = null;
+      handleGetOwnGoals();
     }
-  }, [editorUnsavedChanges, panelPendingUpload, handleGetAchievements, handleGetOwnGoals]);
+    console.log('fetch achievements');
+    console.log('fetch goals');
+  }, [handleGetAchievements, handleGetOwnGoals]);
+
+  // TODO: <Prompt />
+
+  /**
+   * Publish state monitors changes that are awaiting publish
+   */
+  const publishState = useState<boolean>(false);
 
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
 
   return (
     <div className="AchievementControl">
-      <AchievementPreview inferencer={inferencer} />
+      <AchievementPreview
+        inferencer={inferencer}
+        publishState={publishState}
+        publishAchievements={handleBulkUpdateAchievements}
+      />
 
       <AchievementEditor
         inferencer={inferencer}
-        updateAchievements={noop}
-        editAchievement={noop}
+        publishState={publishState}
         forceRender={forceRender}
-        addUnsavedChange={noop}
-        removeUnsavedChange={noop}
-        removeAchievement={noop}
-        removeGoal={noop}
       />
 
       <GoalEditor />

@@ -62,13 +62,17 @@
 
     @extend %platform;
 
-    .command-button {
+    .command {
       display: flex;
       flex-direction: row;
-      height: 1em;
-      margin: $default-spacing auto;
-    }
+      justify-content: center;
 
+      .command-button {
+        display: flex;
+        height: 1em;
+        margin: $default-spacing;
+      }
+    }
     .preview-container {
       @extend %container;
       align-items: center;

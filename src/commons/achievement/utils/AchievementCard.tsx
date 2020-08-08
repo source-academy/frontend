@@ -14,7 +14,7 @@ type AchievementCardProps = {
   shouldRender: boolean;
   focusState: [number, any];
   isDropdownOpen?: boolean;
-  toggleDropdown?: any;
+  toggleDropdown?: () => void;
 };
 
 function AchievementCard(props: AchievementCardProps) {
