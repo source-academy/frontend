@@ -67,14 +67,12 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
  * @param {number} id unique id of the goal
  * @param {string} text goal description
  * @param {number} maxExp maximum attainable exp of the goal
- * @param {GoalType} type type of goal, string enum
  * @param {GoalMeta} meta contains meta data relevant to the goal type
  */
 export type GoalDefinition = {
   id: number;
   text: string;
   maxExp: number;
-  type: GoalType;
   meta: GoalMeta;
 };
 
@@ -101,16 +99,18 @@ export enum GoalType {
 export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
 
 export type AssessmentMeta = {
-  assessmentId: number;
+  type: GoalType;
+  assessmentId: string; // e.g. 'M1A', 'P2'
   requiredCompletionExp: number;
 };
 
 export type BinaryMeta = {
+  type: GoalType;
   condition: string;
 };
 
 export type ManualMeta = {
-  // currently nothing
+  type: GoalType;
 };
 
 /**

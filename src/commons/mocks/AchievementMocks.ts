@@ -231,8 +231,8 @@ export const mockGoals: AchievementGoal[] = [
     id: 0,
     text: 'Bonus for completing Colorful Carpet & Beyond the Second Dimension Achievements',
     maxExp: 100,
-    type: GoalType.BINARY,
     meta: {
+      type: GoalType.BINARY,
       condition: `AND(
         {
           event: 'achievement',
@@ -251,8 +251,11 @@ export const mockGoals: AchievementGoal[] = [
     id: 1,
     text: 'XP earned from Beyond the Second Dimension Mission',
     maxExp: 250,
-    type: GoalType.ASSESSMENT,
-    meta: { assessmentId: 5, requiredCompletionExp: 200 },
+    meta: {
+      type: GoalType.ASSESSMENT,
+      assessmentId: '5',
+      requiredCompletionExp: 200
+    },
     exp: 213,
     completed: true
   },
@@ -260,8 +263,11 @@ export const mockGoals: AchievementGoal[] = [
     id: 2,
     text: 'XP earned from Colorful Carpet Mission',
     maxExp: 250,
-    type: GoalType.ASSESSMENT,
-    meta: { assessmentId: 3, requiredCompletionExp: 200 },
+    meta: {
+      type: GoalType.ASSESSMENT,
+      assessmentId: '3',
+      requiredCompletionExp: 200
+    },
     exp: 0,
     completed: false
   },
@@ -269,8 +275,8 @@ export const mockGoals: AchievementGoal[] = [
     id: 3,
     text: 'Bonus for completing Curve Introduction & Curve Manipulation Achievements',
     maxExp: 100,
-    type: GoalType.BINARY,
     meta: {
+      type: GoalType.BINARY,
       condition: `AND(
       {
         event: 'achievement',
@@ -289,8 +295,11 @@ export const mockGoals: AchievementGoal[] = [
     id: 4,
     text: 'XP earned from Curve Introduction Mission',
     maxExp: 250,
-    type: GoalType.ASSESSMENT,
-    meta: { assessmentId: 7, requiredCompletionExp: 150 },
+    meta: {
+      type: GoalType.ASSESSMENT,
+      assessmentId: '7',
+      requiredCompletionExp: 150
+    },
     exp: 178,
     completed: true
   },
@@ -298,8 +307,11 @@ export const mockGoals: AchievementGoal[] = [
     id: 5,
     text: 'XP earned from Curve Manipulation Mission',
     maxExp: 250,
-    type: GoalType.ASSESSMENT,
-    meta: { assessmentId: 8, requiredCompletionExp: 200 },
+    meta: {
+      type: GoalType.ASSESSMENT,
+      assessmentId: '8',
+      requiredCompletionExp: 200
+    },
     exp: 191,
     completed: false
   },
@@ -307,8 +319,8 @@ export const mockGoals: AchievementGoal[] = [
     id: 6,
     text: 'Submit Source 3 Path',
     maxExp: 100,
-    type: GoalType.BINARY,
     meta: {
+      type: GoalType.BINARY,
       condition: `
       {
         event: 'assessment-submission',
@@ -323,9 +335,9 @@ export const mockGoals: AchievementGoal[] = [
     id: 7,
     text: 'XP earned from Source 3 Path',
     maxExp: 300,
-    type: GoalType.ASSESSMENT,
     meta: {
-      assessmentId: 12,
+      type: GoalType.ASSESSMENT,
+      assessmentId: '12',
       requiredCompletionExp: 300
     },
     exp: 300,
@@ -335,8 +347,9 @@ export const mockGoals: AchievementGoal[] = [
     id: 8,
     text: 'Each Top Voted answer in Piazza gives 10 XP',
     maxExp: 100,
-    type: GoalType.MANUAL,
-    meta: {},
+    meta: {
+      type: GoalType.MANUAL
+    },
     exp: 40,
     completed: false
   },
@@ -344,8 +357,9 @@ export const mockGoals: AchievementGoal[] = [
     id: 9,
     text: 'Submit 1 PR to Source Academy Github',
     maxExp: 100,
-    type: GoalType.MANUAL,
-    meta: {},
+    meta: {
+      type: GoalType.MANUAL
+    },
     exp: 100,
     completed: true
   },
@@ -353,8 +367,8 @@ export const mockGoals: AchievementGoal[] = [
     id: 10,
     text: 'Be the Koolest Kidz in SOC by redeeming this 100 XP achievement yourself',
     maxExp: 100,
-    type: GoalType.BINARY,
     meta: {
+      type: GoalType.BINARY,
       condition: `
       {
         event: 'achievement',
