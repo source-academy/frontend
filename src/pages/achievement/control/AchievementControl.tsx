@@ -1,17 +1,17 @@
+import { noop } from 'lodash';
 import React, { useEffect, useState } from 'react';
-import AchievementPreview from 'src/commons/achievement/control/AchievementPreview';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
+import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
-import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
+import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleEditAchievement: (achievement: AchievementItem) => void;
+  handleBulkUpdateAchievements: (achievements: AchievementItem[]) => void;
+  handleBulkUpdateGoals: (goals: GoalDefinition[]) => void;
   handleGetAchievements: () => void;
-  handleRemoveAchievement: (achievement: AchievementItem) => void;
-  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
-  handleSaveAchievements: (achievements: AchievementItem[]) => void;
+  handleGetOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -19,15 +19,9 @@ export type StateProps = {
 };
 
 function AchievementControl(props: DispatchProps & StateProps) {
-  const {
-    inferencer,
-    handleEditAchievement,
-    handleGetAchievements,
-    handleRemoveAchievement,
-    handleRemoveGoal
-  } = props;
+  const { inferencer, handleGetAchievements, handleGetOwnGoals } = props;
 
-  const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
+  const [editorUnsavedChanges] = useState<number>(0);
   const [panelPendingUpload] = useState<boolean>(false);
 
   useEffect(() => {
@@ -37,19 +31,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
       handleGetAchievements();
       window.onbeforeunload = null;
     }
-  }, [handleGetAchievements, editorUnsavedChanges, panelPendingUpload]);
-
-  const addUnsavedChanges = (changes: number) =>
-    setEditorUnsavedChanges(editorUnsavedChanges + changes);
-
-  const addUnsavedChange = () => addUnsavedChanges(1);
-  const removeUnsavedChange = () => addUnsavedChanges(-1);
-
-  const updateAchievements = () => {
-    for (const achievement of inferencer.getAchievements()) {
-      handleEditAchievement(achievement);
-    }
-  };
+  }, [editorUnsavedChanges, panelPendingUpload, handleGetAchievements, handleGetOwnGoals]);
 
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
@@ -60,13 +42,13 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
       <AchievementEditor
         inferencer={inferencer}
-        updateAchievements={updateAchievements}
-        editAchievement={handleEditAchievement}
+        updateAchievements={noop}
+        editAchievement={noop}
         forceRender={forceRender}
-        addUnsavedChange={addUnsavedChange}
-        removeUnsavedChange={removeUnsavedChange}
-        removeAchievement={handleRemoveAchievement}
-        removeGoal={handleRemoveGoal}
+        addUnsavedChange={noop}
+        removeUnsavedChange={noop}
+        removeAchievement={noop}
+        removeGoal={noop}
       />
 
       <GoalEditor />

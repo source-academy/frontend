@@ -3,6 +3,8 @@ import { action } from 'typesafe-actions';
 import {
   AchievementGoal,
   AchievementItem,
+  BULK_UPDATE_ACHIEVEMENTS,
+  BULK_UPDATE_GOALS,
   EDIT_ACHIEVEMENT,
   EDIT_GOAL,
   GET_ACHIEVEMENTS,
@@ -16,6 +18,11 @@ import {
   SAVE_GOALS,
   UPDATE_GOAL_PROGRESS
 } from './AchievementTypes';
+
+export const bulkUpdateAchievements = (achievements: AchievementItem[]) =>
+  action(BULK_UPDATE_ACHIEVEMENTS, achievements);
+
+export const bulkUpdateGoals = (goals: GoalDefinition[]) => action(BULK_UPDATE_GOALS, goals);
 
 export const editAchievement = (achievement: AchievementItem) =>
   action(EDIT_ACHIEVEMENT, achievement);

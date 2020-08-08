@@ -203,6 +203,44 @@ export async function getOwnGoals(tokens: Tokens): Promise<AchievementGoal[] | n
 }
 
 /**
+ * PUT /admin/achievements
+ */
+export async function bulkUpdateAchievements(
+  achievements: AchievementItem[],
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`admin/achievements`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { achievements: achievements },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
+ * PUT /admin/goals
+ */
+export async function bulkUpdateGoals(
+  goals: GoalDefinition[],
+  tokens: Tokens
+): Promise<Response | null> {
+  const resp = await request(`admin/goals`, 'POST', {
+    accessToken: tokens.accessToken,
+    body: { goals: goals },
+    noHeaderAccept: true,
+    refreshToken: tokens.refreshToken,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
+
+  return resp;
+}
+
+/**
  * POST /achievements/:achievement_id
  */
 export async function editAchievement(
