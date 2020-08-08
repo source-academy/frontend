@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
+import AchievementPreview from 'src/commons/achievement/control/AchievementPreview';
 
-import AchievementControlPanel from '../../../commons/achievement/control/AchievementControlPanel';
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
+import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { AchievementGoal, AchievementItem } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleFetchAchievements: () => void;
-  handleSaveAchievements: (achievements: AchievementItem[]) => void;
   handleEditAchievement: (achievement: AchievementItem) => void;
-  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
+  handleGetAchievements: () => void;
   handleRemoveAchievement: (achievement: AchievementItem) => void;
+  handleRemoveGoal: (goal: AchievementGoal, achievement: AchievementItem) => void;
+  handleSaveAchievements: (achievements: AchievementItem[]) => void;
 };
 
 export type StateProps = {
@@ -20,24 +21,23 @@ export type StateProps = {
 function AchievementControl(props: DispatchProps & StateProps) {
   const {
     inferencer,
-    handleFetchAchievements,
-    handleSaveAchievements,
     handleEditAchievement,
-    handleRemoveGoal,
-    handleRemoveAchievement
+    handleGetAchievements,
+    handleRemoveAchievement,
+    handleRemoveGoal
   } = props;
 
   const [editorUnsavedChanges, setEditorUnsavedChanges] = useState<number>(0);
-  const [panelPendingUpload, setPanelPendingUpload] = useState<boolean>(false);
+  const [panelPendingUpload] = useState<boolean>(false);
 
   useEffect(() => {
     if (editorUnsavedChanges !== 0 || panelPendingUpload) {
       window.onbeforeunload = () => true;
     } else {
-      handleFetchAchievements();
+      handleGetAchievements();
       window.onbeforeunload = null;
     }
-  }, [handleFetchAchievements, editorUnsavedChanges, panelPendingUpload]);
+  }, [handleGetAchievements, editorUnsavedChanges, panelPendingUpload]);
 
   const addUnsavedChanges = (changes: number) =>
     setEditorUnsavedChanges(editorUnsavedChanges + changes);
@@ -55,30 +55,22 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const forceRender = () => setRender(!render);
 
   return (
-    <>
-      <div className="AchievementControl">
-        <AchievementControlPanel
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-          forceRender={forceRender}
-          isDisabled={editorUnsavedChanges !== 0}
-          pendingUpload={panelPendingUpload}
-          setPendingUpload={setPanelPendingUpload}
-          saveAchievementsToFrontEnd={handleSaveAchievements}
-        />
+    <div className="AchievementControl">
+      <AchievementPreview inferencer={inferencer} />
 
-        <AchievementEditor
-          inferencer={inferencer}
-          updateAchievements={updateAchievements}
-          editAchievement={handleEditAchievement}
-          forceRender={forceRender}
-          addUnsavedChange={addUnsavedChange}
-          removeUnsavedChange={removeUnsavedChange}
-          removeAchievement={handleRemoveAchievement}
-          removeGoal={handleRemoveGoal}
-        />
-      </div>
-    </>
+      <AchievementEditor
+        inferencer={inferencer}
+        updateAchievements={updateAchievements}
+        editAchievement={handleEditAchievement}
+        forceRender={forceRender}
+        addUnsavedChange={addUnsavedChange}
+        removeUnsavedChange={removeUnsavedChange}
+        removeAchievement={handleRemoveAchievement}
+        removeGoal={handleRemoveGoal}
+      />
+
+      <GoalEditor />
+    </div>
   );
 }
 

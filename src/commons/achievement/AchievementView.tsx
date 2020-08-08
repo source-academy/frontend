@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { getAbilityBackground } from '../../features/achievement/AchievementConstants';
+import {
+  getAbilityBackground,
+  getAbilityGlow
+} from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
 import AchievementInferencer from './utils/AchievementInferencer';
 import { prettifyDate } from './utils/DateHelper';
@@ -8,27 +11,26 @@ import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  id: number;
   inferencer: AchievementInferencer;
-  handleGlow: any;
+  focusId: number;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { id, inferencer, handleGlow } = props;
+  const { inferencer, focusId } = props;
 
-  if (id < 0) return null;
+  if (focusId < 0) return null;
 
-  const achievement = inferencer.getAchievementItem(id);
-  const { title, ability, deadline, view } = achievement;
-  const { canvasUrl, description, completionText } = view;
+  const achievement = inferencer.getAchievementItem(focusId);
+  const { ability, deadline, title, view } = achievement;
+  const { canvasUrl, completionText, description } = view;
 
-  const awardedExp = inferencer.getExp(id);
-  const goals = inferencer.getGoals(id);
-  const prereqGoals = inferencer.getPrerequisiteGoals(id);
-  const status = inferencer.getStatus(id);
+  const awardedExp = inferencer.getExp(focusId);
+  const goals = inferencer.getGoals(focusId);
+  const prereqGoals = inferencer.getPrerequisiteGoals(focusId);
+  const status = inferencer.getStatus(focusId);
 
   return (
-    <div className="view" style={{ ...handleGlow(id), ...getAbilityBackground(ability) }}>
+    <div className="view" style={{ ...getAbilityGlow(ability), ...getAbilityBackground(ability) }}>
       <div
         className="canvas"
         style={{
@@ -42,18 +44,18 @@ function AchievementView(props: AchievementViewProps) {
         </span>
       </div>
       <AchievementViewGoal goals={goals} />
-      {prereqGoals.length > 0 ? (
+      {prereqGoals.length > 0 && (
         <>
           <hr />
           <AchievementViewGoal goals={prereqGoals} />
         </>
-      ) : null}
-      {status === AchievementStatus.COMPLETED ? (
+      )}
+      {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
           <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
         </>
-      ) : null}
+      )}
     </div>
   );
 }

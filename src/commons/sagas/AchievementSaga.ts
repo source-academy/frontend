@@ -26,6 +26,36 @@ import {
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 export default function* AchievementSaga(): SagaIterator {
+  yield takeEvery(EDIT_ACHIEVEMENT, function* (action: ReturnType<typeof actions.editAchievement>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const achievement = action.payload;
+
+    const resp = yield call(editAchievement, achievement, tokens);
+
+    if (!resp) {
+      return;
+    }
+  });
+
+  yield takeEvery(EDIT_GOAL, function* (action: ReturnType<typeof actions.editGoal>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const definition = action.payload;
+
+    const resp = yield call(editGoal, definition, tokens);
+
+    if (!resp) {
+      return;
+    }
+  });
+
   yield takeEvery(GET_ACHIEVEMENTS, function* () {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
@@ -39,18 +69,31 @@ export default function* AchievementSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(EDIT_ACHIEVEMENT, function* (action: ReturnType<typeof actions.editAchievement>) {
+  yield takeEvery(GET_GOALS, function* (action: ReturnType<typeof actions.getGoals>) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const achievement = action.payload;
+    const studentId = action.payload;
 
-    const resp = yield call(editAchievement, achievement, tokens);
+    const goals = yield call(getGoals, tokens, studentId);
 
-    if (!resp) {
-      return;
+    if (goals) {
+      yield put(actions.saveGoals(goals));
+    }
+  });
+
+  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getOwnGoals>) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const goals = yield call(getOwnGoals, tokens);
+
+    if (goals) {
+      yield put(actions.saveGoals(goals));
     }
   });
 
@@ -80,49 +123,6 @@ export default function* AchievementSaga(): SagaIterator {
     const definition = action.payload;
 
     const resp = yield call(removeGoal, definition, tokens);
-
-    if (!resp) {
-      return;
-    }
-  });
-
-  yield takeEvery(GET_OWN_GOALS, function* (action: ReturnType<typeof actions.getOwnGoals>) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const goals = yield call(getOwnGoals, tokens);
-
-    if (goals) {
-      yield put(actions.saveGoals(goals));
-    }
-  });
-
-  yield takeEvery(GET_GOALS, function* (action: ReturnType<typeof actions.getGoals>) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const studentId = action.payload;
-
-    const goals = yield call(getGoals, tokens, studentId);
-
-    if (goals) {
-      yield put(actions.saveGoals(goals));
-    }
-  });
-
-  yield takeEvery(EDIT_GOAL, function* (action: ReturnType<typeof actions.editGoal>) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const definition = action.payload;
-
-    const resp = yield call(editGoal, definition, tokens);
 
     if (!resp) {
       return;

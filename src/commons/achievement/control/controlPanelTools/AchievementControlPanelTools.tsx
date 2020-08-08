@@ -19,7 +19,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
   const { editableAchievement, setEditableAchievement, inferencer, saveChanges } = props;
 
   return (
-    <>
+    <div className="task-options">
       <PrerequisiteAdder
         editableAchievement={editableAchievement}
         setEditableAchievement={setEditableAchievement}
@@ -52,7 +52,7 @@ function AchievementControlPanelTools(props: AchievementControlPanelToolsProps) 
         inferencer={inferencer}
         saveChanges={saveChanges}
       />
-    </>
+    </div>
   );
 }
 

@@ -3,8 +3,7 @@ import assert from 'assert';
 import {
   AchievementGoal,
   AchievementItem,
-  AchievementStatus,
-  FilterStatus
+  AchievementStatus
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired } from './DateHelper';
 
@@ -42,7 +41,9 @@ class InferencerNode {
 }
 
 /**
- * Note: The inferencer assigns new IDs to AchievementItem and AchievementGoal
+ * The AchievementInferencer consumes achievements and goals, then infers useful React props
+ *
+ * Note: The inferencer is responsible for assigning new IDs to AchievementItem and AchievementGoal
  */
 class AchievementInferencer {
   private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
@@ -54,19 +55,38 @@ class AchievementInferencer {
     this.processNodes();
   }
 
+  /**
+   * Returns true if the achievement exists
+   *
+   * @param id Achievement Id
+   */
   public doesAchievementExist(id: number) {
     return this.nodeList.has(id);
   }
 
+  /**
+   * Returns an array of AchievementItem
+   */
   public getAchievements() {
     return [...this.nodeList.values()].map(node => node.achievement);
   }
 
+  /**
+   * Returns the AchievementItem
+   *
+   * @param id Achievement Id
+   */
   public getAchievementItem(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.achievement;
   }
 
+  /**
+   * Inserts a new AchievementItem into the Inferencer,
+   * then returns the newly assigned achievementId
+   *
+   * @param achievement the AchievementItem
+   */
   public insertAchievement(achievement: AchievementItem) {
     // first, generate a new unique id by finding the max id
     let newId = 0;
@@ -85,6 +105,11 @@ class AchievementInferencer {
     return newId;
   }
 
+  /**
+   * Updates the AchievementItem in the Inferencer
+   *
+   * @param achievement the AchievementItem
+   */
   public modifyAchievement(achievement: AchievementItem) {
     // directly replace the InferencerNode in nodeList
     this.nodeList.set(achievement.id, new InferencerNode(achievement));
@@ -93,6 +118,11 @@ class AchievementInferencer {
     this.processNodes();
   }
 
+  /**
+   * Removes the AchievementItem from the Inferencer
+   *
+   * @param targetId Achievement Id
+   */
   public removeAchievement(targetId: number) {
     const hasTarget = (node: InferencerNode) => node.children.has(targetId);
 
@@ -116,16 +146,25 @@ class AchievementInferencer {
     this.processNodes();
   }
 
+  /**
+   * Returns an array of achievementId
+   */
   public listIds() {
     return [...this.nodeList.keys()];
   }
 
+  /**
+   * Returns an array of achievementId that isTask
+   */
   public listTaskIds() {
     return this.getAchievements()
       .filter(achievement => achievement.isTask)
       .map(task => task.id);
   }
 
+  /**
+   * Returns a sorted array of achievementId that isTask
+   */
   public listTaskIdsbyPosition() {
     return this.getAchievements()
       .filter(achievement => achievement.isTask)
@@ -133,12 +172,20 @@ class AchievementInferencer {
       .map(sortedTask => sortedTask.id);
   }
 
+  /**
+   * Returns an array of achievementId that not isTask
+   */
   public listNonTaskIds() {
     return this.getAchievements()
       .filter(achievement => !achievement.isTask)
       .map(nonTask => nonTask.id);
   }
 
+  /**
+   * Set the achievement item as isTask
+   *
+   * @param achievement the AchievementItem
+   */
   public setTask(achievement: AchievementItem) {
     achievement.isTask = true;
     achievement.position = this.listTaskIds().length + 1;
@@ -146,6 +193,11 @@ class AchievementInferencer {
     this.modifyAchievement(achievement);
   }
 
+  /**
+   * Set the achievement item as not isTask
+   *
+   * @param achievement the AchievementItem
+   */
   public setNonTask(achievement: AchievementItem) {
     achievement.prerequisiteIds = [];
     achievement.isTask = false;
@@ -230,71 +282,97 @@ class AchievementInferencer {
     return [...this.goalList.values()].reduce((totalExp, goal) => totalExp + goal.exp, 0);
   }
 
+  /**
+   * Returns the achievement progress percentage in fraction
+   *
+   * @param id Achievement Id
+   */
   public getProgressFrac(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.progressFrac;
   }
 
+  /**
+   * Returns the achievement status
+   *
+   * @param id Achievement Id
+   */
   public getStatus(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.status;
   }
 
+  /**
+   * Returns the achievement display deadline
+   *
+   * @param id Achievement Id
+   */
   public getDisplayDeadline(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.displayDeadline;
   }
 
+  /**
+   * Returns true if the child is a prerequisite of parent achievement
+   *
+   * @param id Parent Achievement Id
+   * @param childId Child Achievement Id
+   */
   public isImmediateChild(id: number, childId: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.children.has(childId);
   }
 
+  /**
+   * Returns a set of prerequisite id
+   *
+   * @param id Achievement Id
+   */
   public getImmediateChildren(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.children;
   }
 
-  public listImmediateChildren(id: number) {
-    return [...this.getImmediateChildren(id)];
-  }
-
+  /**
+   * Returns true if an achievement is a descendant of ancestor achievement
+   *
+   * @param id Ancestor Achievement Id
+   * @param childId Descendant Achievement Id
+   */
   public isDescendant(id: number, childId: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.descendant.has(childId);
   }
 
+  /**
+   * Returns a set of descendant id
+   *
+   * @param id Achievement Id
+   */
   public getDescendants(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.descendant;
   }
 
-  public listDescendants(id: number) {
-    return [...this.getDescendants(id)];
-  }
-
+  /**
+   * Returns a list of achievementId that may be a prerequisite of the achievement
+   *
+   * @param id Achievement Id
+   */
   public listAvailablePrerequisites(id: number) {
     return this.listIds().filter(
       target => target !== id && !this.isDescendant(id, target) && !this.isDescendant(target, id)
     );
   }
 
-  public getFilterCount(filterStatus: FilterStatus) {
-    const published = this.listPublishedNodes();
-
-    switch (filterStatus) {
-      case FilterStatus.ALL:
-        return published.length;
-      case FilterStatus.ACTIVE:
-        return published.filter(node => node.status === AchievementStatus.ACTIVE).length;
-      case FilterStatus.COMPLETED:
-        return published.filter(node => node.status === AchievementStatus.COMPLETED).length;
-      default:
-        return 0;
-    }
-  }
-
-  // NOTE: positions of achievements are 1-indexed.
+  /**
+   * Changes the position of the achievement
+   *
+   * Note: positions of achievements are 1-indexed
+   *
+   * @param achievement the AchievementItem
+   * @param newPosition the new position
+   */
   public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
     const achievements = this.getAchievements()
       .filter(achievement => achievement.isTask)
@@ -309,6 +387,9 @@ class AchievementInferencer {
     }
   }
 
+  /**
+   * Recalculates the InferencerNode data of each achievements, O(N) operation
+   */
   private processNodes() {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
@@ -320,6 +401,11 @@ class AchievementInferencer {
     this.normalizePositions();
   }
 
+  /**
+   * Returns a new nodeList constructed based on achievements
+   *
+   * @param achievements an array of AchievementItem
+   */
   private constructNodeList(achievements: AchievementItem[]) {
     const nodeList = new Map<number, InferencerNode>();
     achievements.forEach(achievement =>
@@ -328,13 +414,22 @@ class AchievementInferencer {
     return nodeList;
   }
 
+  /**
+   * Returns a new goalList constructed based on goals
+   *
+   * @param goals an array of AchievementGoal
+   */
   private constructGoalList(goals: AchievementGoal[]) {
     const goalList = new Map<number, AchievementGoal>();
     goals.forEach(goal => goalList.set(goal.id, goal));
     return goalList;
   }
 
-  // Recursively append grandchildren's id to children, O(N) operation
+  /**
+   * Recursively append grandchildren's id to children, O(N) operation
+   *
+   * @param node the InferencerNode
+   */
   private generateDescendant(node: InferencerNode) {
     for (const childId of node.descendant) {
       if (childId === node.achievement.id) {
@@ -348,8 +443,13 @@ class AchievementInferencer {
     }
   }
 
-  // Set the node's display deadline by comparing with all descendants' deadlines
-  // Display deadline is the closest unexpired deadline of all descendants
+  /**
+   * Set the node's display deadline by comparing with all descendants' deadlines
+   *
+   * Note: display deadline is the closest unexpired deadline of all descendants
+   *
+   * @param node the InferencerNode
+   */
   private generateDisplayDeadline(node: InferencerNode) {
     // Comparator of two deadlines
     const compareDeadlines = (
@@ -381,6 +481,11 @@ class AchievementInferencer {
     node.displayDeadline = descendantDeadlines.reduce(compareDeadlines, node.displayDeadline);
   }
 
+  /**
+   * Calculates the achievement maximum attainable EXP
+   *
+   * @param node the InferencerNode
+   */
   private generateMaxExp(node: InferencerNode) {
     const { goalIds } = node.achievement;
     node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
@@ -393,9 +498,15 @@ class AchievementInferencer {
     node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
   }
 
-  // AchievementStatus.COMPLETED if contains goals and all goals completed
-  // AchievementStatus.ACTIVE if has at least 1 active descendant
-  // AchievementStatus.EXPIRED if none of the above
+  /**
+   * Generates the achievement status
+   *
+   * AchievementStatus.COMPLETED if contains goals and all goals completed
+   * AchievementStatus.ACTIVE if has at least 1 active descendant
+   * AchievementStatus.EXPIRED if none of the above
+   *
+   * @param node the InferencerNode
+   */
   private generateStatus(node: InferencerNode) {
     const { deadline, goalIds } = node.achievement;
     const achievementCompleted =
@@ -424,7 +535,9 @@ class AchievementInferencer {
     }
   }
 
-  // normalize positions
+  /**
+   * Reassign the achievement position number without changing their orders
+   */
   private normalizePositions() {
     const posToId = new Map<number, number>();
     this.getAchievements().forEach(achievement =>
@@ -439,18 +552,6 @@ class AchievementInferencer {
         this.nodeList.get(id)!.achievement.position = newPosition++;
       }
     }
-  }
-
-  private listPublishedNodes() {
-    // returns an array of Node that are published to the achievement page
-    return this.listTaskIds().reduce((arr, id) => {
-      const node = this.nodeList.get(id)!;
-      arr.push(node); // including task achievement
-      for (const child of node.children) {
-        arr.push(this.nodeList.get(child)!); // including immediate prerequisites
-      }
-      return arr;
-    }, [] as InferencerNode[]);
   }
 }
 

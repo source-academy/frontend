@@ -7,11 +7,12 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
-import { FilterColors, getAbilityGlow } from '../../../features/achievement/AchievementConstants';
-import { AchievementAbility, FilterStatus } from '../../../features/achievement/AchievementTypes';
+import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleAchievementsFetch: () => void;
+  handleGetAchievements: () => void;
+  // TODO: handleGetGoals: () => void;
+  // TODO: handleGetOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -20,41 +21,44 @@ export type StateProps = {
   group: string | null;
 };
 
+/**
+ * Generates <AchievementTask /> components
+ *
+ * @param taskIds an array of achievementId
+ */
+export const generateAchievementTasks = (
+  inferencer: AchievementInferencer,
+  filterStatus: FilterStatus,
+  focusState: [number, any]
+) => {
+  const taskIds = inferencer.listTaskIdsbyPosition();
+  return taskIds.map(taskId => (
+    <AchievementTask
+      key={taskId}
+      id={taskId}
+      inferencer={inferencer}
+      filterStatus={filterStatus}
+      focusState={focusState}
+    />
+  ));
+};
+
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleAchievementsFetch } = props;
+  const { inferencer, name, group, handleGetAchievements } = props;
 
   useEffect(() => {
     if (Constants.useBackend) {
-      handleAchievementsFetch();
+      handleGetAchievements();
+      // TODO: handleGetGoals();
     }
-  }, [handleAchievementsFetch]);
+  }, [handleGetAchievements]);
 
-  const [filterStatus, setFilterStatus] = useState<FilterStatus>(FilterStatus.ALL);
-  const [viewId, setViewId] = useState<number>(-1);
+  const filterState = useState<FilterStatus>(FilterStatus.ALL);
+  const [filterStatus] = filterState;
 
-  // Filter icon turns blue when selected, otherwise white
-  const getFilterColor = (status: FilterStatus) =>
-    status === filterStatus ? FilterColors.BLUE : FilterColors.WHITE;
-
-  // Make Flex achievements parmanently glowing and the selected achievement glow
-  const handleGlow = (id: number) => {
-    const ability = inferencer.getAchievementItem(id).ability;
-    return ability === AchievementAbility.FLEX || id === viewId
-      ? getAbilityGlow(ability)
-      : undefined;
-  };
-
-  const mapAchievementIdsToTasks = (taskIds: number[]) =>
-    taskIds.map(id => (
-      <AchievementTask
-        key={id}
-        id={id}
-        inferencer={inferencer}
-        filterStatus={filterStatus}
-        displayView={setViewId}
-        handleGlow={handleGlow}
-      />
-    ));
+  // If an achievement is focused, the cards glow and dashboard displays the AchievementView
+  const focusState = useState<number>(-1);
+  const [focusId] = focusState;
 
   return (
     <div className="AchievementDashboard">
@@ -67,34 +71,28 @@ function Dashboard(props: DispatchProps & StateProps) {
       <div className="achievement-main">
         <div className="filter-container">
           <AchievementFilter
-            filterStatus={FilterStatus.ALL}
-            setFilterStatus={setFilterStatus}
+            ownStatus={FilterStatus.ALL}
             icon={IconNames.GLOBE}
-            count={inferencer.getFilterCount(FilterStatus.ALL)}
-            getFilterColor={getFilterColor}
+            filterState={filterState}
           />
           <AchievementFilter
-            filterStatus={FilterStatus.ACTIVE}
-            setFilterStatus={setFilterStatus}
+            ownStatus={FilterStatus.ACTIVE}
             icon={IconNames.LOCATE}
-            count={inferencer.getFilterCount(FilterStatus.ACTIVE)}
-            getFilterColor={getFilterColor}
+            filterState={filterState}
           />
           <AchievementFilter
-            filterStatus={FilterStatus.COMPLETED}
-            setFilterStatus={setFilterStatus}
+            ownStatus={FilterStatus.COMPLETED}
             icon={IconNames.ENDORSED}
-            count={inferencer.getFilterCount(FilterStatus.COMPLETED)}
-            getFilterColor={getFilterColor}
+            filterState={filterState}
           />
         </div>
 
-        <ul className="list-container">
-          {mapAchievementIdsToTasks(inferencer.listTaskIdsbyPosition())}
+        <ul className="task-container">
+          {generateAchievementTasks(inferencer, filterStatus, focusState)}
         </ul>
 
         <div className="view-container">
-          <AchievementView id={viewId} inferencer={inferencer} handleGlow={handleGlow} />
+          <AchievementView inferencer={inferencer} focusId={focusId} />
         </div>
       </div>
     </div>
