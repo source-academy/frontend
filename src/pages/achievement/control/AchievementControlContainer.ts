@@ -1,5 +1,6 @@
 import { connect, MapDispatchToProps, MapStateToProps } from 'react-redux';
 import { bindActionCreators, Dispatch } from 'redux';
+import Constants from 'src/commons/utils/Constants';
 
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import { OverallState } from '../../../commons/application/ApplicationTypes';
@@ -17,7 +18,9 @@ import {
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
-  inferencer: new AchievementInferencer(mockAchievements, mockGoals) // TODO: use redux store
+  inferencer: Constants.useBackend
+    ? new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
+    : new AchievementInferencer(mockAchievements, mockGoals)
 });
 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
