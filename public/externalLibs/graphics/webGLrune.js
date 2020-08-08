@@ -416,7 +416,7 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
 }
 
 function isRune(x) {
-    return typeof x === "object" && x.isPrimary !== undefined;
+    return x !== null && x !== undefined && x.isPrimary !== undefined
 }
 
 /**
