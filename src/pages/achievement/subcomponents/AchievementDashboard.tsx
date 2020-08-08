@@ -46,15 +46,19 @@ export const generateAchievementTasks = (
 function Dashboard(props: DispatchProps & StateProps) {
   const { inferencer, name, group, handleGetAchievements } = props;
 
+  const filterState = useState<FilterStatus>(FilterStatus.ALL);
+  const [filterStatus] = filterState;
+
+  /**
+   * The dashboard fetches the latest achievements and goals from backend
+   * when the page is mounted or the filter status is changed
+   */
   useEffect(() => {
     if (Constants.useBackend) {
       handleGetAchievements();
       // TODO: handleGetGoals();
     }
-  }, [handleGetAchievements]);
-
-  const filterState = useState<FilterStatus>(FilterStatus.ALL);
-  const [filterStatus] = filterState;
+  }, [filterStatus, handleGetAchievements]);
 
   // If an achievement is focused, the cards glow and dashboard displays the AchievementView
   const focusState = useState<number>(-1);
