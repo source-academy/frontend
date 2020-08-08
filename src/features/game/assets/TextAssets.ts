@@ -4,12 +4,17 @@ export const toTxtPath = (path: string) => `${Constants.assetsFolder}/stories/${
 
 const TextAssets = {
   defaultCheckpoint: { key: 'default-chap', path: toTxtPath('defaultCheckpoint.txt') },
-  awardsMapping: { key: 'awards-mapping', path: toTxtPath('awardsMapping.txt') }
+  awardsMapping: { key: 'awards-mapping', path: toTxtPath('awardsMapping.txt') },
+  roomPreviewMapping: { key: 'room-prev-mapping', path: toTxtPath('roomPreviewMapping.txt') }
 };
 
 export const MockTextAssets = {
-  defaultCheckpoint: { key: 'default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
-  awardsMapping: { key: 'awards-mapping', path: '../assets/mockAwardsMapping.txt' }
+  defaultCheckpoint: { key: 'mock-default-chap', path: '../assets/mockDefaultCheckpoint.txt' },
+  awardsMapping: { key: 'mock-awards-mapping', path: '../assets/mockAwardsMapping.txt' },
+  roomPreviewMapping: {
+    key: 'mock-room-prev-mapping',
+    path: '../assets/mockRoomPreviewMapping.txt'
+  }
 };
 
 export default TextAssets;

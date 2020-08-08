@@ -78,10 +78,11 @@ export default class GameSaveManager {
    * @param completedChapter the number of the completed chapter
    */
   public async saveChapterComplete(completedChapter: number) {
+    this.fullSaveState.gameSaveStates[completedChapter].chapterNewlyCompleted = true;
     if (completedChapter > this.getLargestCompletedChapterNum()) {
       this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
-      await saveData(this.fullSaveState);
     }
+    await saveData(this.fullSaveState);
   }
 
   /**
@@ -146,6 +147,7 @@ export default class GameSaveManager {
   public getTriggeredInteractions = () => this.getGameSaveState().triggeredInteractions;
   public getCompletedObjectives = () => this.getGameSaveState().completedObjectives;
   public getLoadedPhase = () => this.getGameSaveState().currentPhase;
+  public getChapterNewlyCompleted = () => this.getGameSaveState().chapterNewlyCompleted;
 
   public getChapterNum = () => mandatory(this.chapterNum);
   public getCheckpointNum = () => mandatory(this.checkpointNum);

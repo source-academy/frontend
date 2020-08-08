@@ -29,6 +29,7 @@ class GameStateManager {
   // Game State
   private gameMap: GameMap;
   private checkpointObjective: GameObjective;
+  private chapterNewlyCompleted: boolean;
 
   // Triggered Interactions
   private updatedLocations: Set<LocationId>;
@@ -40,6 +41,7 @@ class GameStateManager {
 
     this.gameMap = gameCheckpoint.map;
     this.checkpointObjective = gameCheckpoint.objectives;
+    this.chapterNewlyCompleted = false;
 
     this.updatedLocations = new Set(this.gameMap.getLocationIds());
     this.triggeredInteractions = new Map<ItemId, boolean>();
@@ -61,6 +63,8 @@ class GameStateManager {
     this.getSaveManager()
       .getCompletedObjectives()
       .forEach(objective => this.checkpointObjective.setObjective(objective, true));
+
+    this.chapterNewlyCompleted = this.getSaveManager().getChapterNewlyCompleted();
   }
 
   ///////////////////////////////
@@ -411,8 +415,10 @@ class GameStateManager {
   }
 
   public getGameMap = () => this.gameMap;
-  private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
   public getCharacterAtId = (id: ItemId) => mandatory(this.gameMap.getCharacterMap().get(id));
+
+  private getSaveManager = () => SourceAcademyGame.getInstance().getSaveManager();
+  public getChapterNewlyCompleted = () => this.chapterNewlyCompleted;
 }
 
 export default GameStateManager;

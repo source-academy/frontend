@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
+import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -10,7 +11,12 @@ import SourceAcademyGame, {
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
-  const achievements = useSelector((state: OverallState) => state.achievement.achievements);
+
+  // TODO: Replace with actual achievements and goals
+  // const achievements = useSelector((state: OverallState) => state.achievement.achievements);
+  // const goals = useSelector((state: OverallState) => state.achievement.goals);
+  const achievements = mockAchievements;
+  const goals = mockGoals;
 
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
@@ -27,13 +33,14 @@ function Game() {
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
     SourceAcademyGame.getInstance().setAchievements(achievements);
+    SourceAcademyGame.getInstance().setGoals(goals);
 
     if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
       SourceAcademyGame.getInstance().toggleUsingMock();
     }
-  }, [achievements, session]);
+  }, [achievements, goals, session]);
 
   return (
     <>
@@ -43,6 +50,7 @@ function Game() {
           <button
             onClick={async () => {
               await saveData({} as FullSaveState);
+              alert('Game cleared! Please refresh');
             }}
           >
             Clear data

@@ -8,6 +8,7 @@ import { AssetKey } from '../../commons/CommonTypes';
 import { Dialogue } from '../../dialogue/GameDialogueTypes';
 import { displayMiniMessage } from '../../effects/MiniMessage';
 import { displayNotification } from '../../effects/Notification';
+import { promptWithChoices } from '../../effects/Prompt';
 import { Layer } from '../../layer/GameLayerTypes';
 import { GameItemType, GameLocation, LocationId } from '../../location/GameMapTypes';
 import { GameMode } from '../../mode/GameModeTypes';
@@ -348,6 +349,12 @@ class GameGlobalAPI {
     this.getGameManager().getInputManager().enableMouseInput(active);
   }
 
+  public enableSprite(gameObject: Phaser.GameObjects.GameObject, active: boolean) {
+    active
+      ? this.getGameManager().input.enable(gameObject)
+      : this.getGameManager().input.disable(gameObject);
+  }
+
   /////////////////////
   //      Phases     //
   /////////////////////
@@ -374,6 +381,22 @@ class GameGlobalAPI {
 
   public renderBackgroundLayerContainer(locationId: LocationId) {
     this.getGameManager().getBackgroundManager().renderBackgroundLayerContainer(locationId);
+  }
+
+  /////////////////////
+  //    Assessment   //
+  /////////////////////
+
+  public async promptNavigateToAssessment(assessmentId: number) {
+    const response = await promptWithChoices(
+      GameGlobalAPI.getInstance().getGameManager(),
+      `Are you ready for the challenge?`,
+      ['Yes', 'No']
+    );
+    if (response === 0) {
+      window.open(`/academy/missions/${assessmentId}/0`, 'blank');
+      window.focus();
+    }
   }
 
   /////////////////////

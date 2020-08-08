@@ -1,4 +1,4 @@
-import TextAssets, { toTxtPath } from '../assets/TextAssets';
+import TextAssets, { MockTextAssets, toTxtPath } from '../assets/TextAssets';
 import Parser from '../parser/Parser';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { loadText } from '../utils/LoaderUtils';
@@ -17,6 +17,7 @@ export async function callGameManagerOnTxtLoad(
   chapterNum: number,
   checkpointNum: number
 ) {
+  const textAssets = SourceAcademyGame.getInstance().getIsUsingMock() ? MockTextAssets : TextAssets;
   const scene = SourceAcademyGame.getInstance().getCurrentSceneRef();
   const gameChapters = SourceAcademyGame.getInstance().getGameChapters();
   const filename = gameChapters[chapterNum].filenames[checkpointNum];
@@ -25,10 +26,10 @@ export async function callGameManagerOnTxtLoad(
   }
 
   await loadText(scene, filename, filename);
-  await loadText(scene, TextAssets.defaultCheckpoint.key, TextAssets.defaultCheckpoint.path);
+  await loadText(scene, textAssets.defaultCheckpoint.key, textAssets.defaultCheckpoint.path);
 
   const text = scene.cache.text.get(filename);
-  const defaultCheckpointText = scene.cache.text.get(TextAssets.defaultCheckpoint.key);
+  const defaultCheckpointText = scene.cache.text.get(textAssets.defaultCheckpoint.key);
 
   Parser.parse(defaultCheckpointText);
   Parser.parse(text, true);

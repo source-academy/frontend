@@ -1,4 +1,3 @@
-import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
@@ -47,9 +46,9 @@ export default class GameUserStateManager {
 
   /**
    * Fetches assessment overview of the student; based on
-   * the account information.
+   * the account information. Only include submitted assessments' ids.
    *
-   * Only returns submitted assessments' ids.
+   * IMPT: The assessments are ordered from earliest close date.
    */
   public async loadAssessments() {
     const assessments = await getAssessmentOverviews(
@@ -58,6 +57,7 @@ export default class GameUserStateManager {
     this.assessments = new Set(
       (assessments || [])
         .filter(assessment => assessment.status === 'submitted')
+        .sort((a, b) => (a.closeAt <= b.closeAt ? -1 : 1))
         .map(assessment => assessment.id.toString())
     );
   }
@@ -87,17 +87,17 @@ export default class GameUserStateManager {
    * Fetches achievements of the student;
    */
   public async loadAchievements() {
-    // TODO: replace below with const achievements = SourceAcademyGame.getInstance().getAchievements();
-    const achievements = mockAchievements;
-    // TODO: replace below with const goals = SourceAcademyGame.getInstance().getGoals();
-    const goals = new Map<number, AchievementGoal>();
-    // TODO: replace mockGoals with the goals from redux store
-    mockGoals.forEach(goal => goals.set(goal.id, goal));
+    const achievements = SourceAcademyGame.getInstance().getAchievements();
+    const goals = SourceAcademyGame.getInstance().getGoals();
+
+    // Convert goals to map
+    const goalMapping = new Map<number, AchievementGoal>();
+    goals.forEach(goal => goalMapping.set(goal.id, goal));
 
     achievements.forEach(achievement => {
       const achievementId = achievement.id.toString();
       const isCompleted = achievement.goalIds.reduce(
-        (result, goalId) => result && goals.get(goalId)!.completed,
+        (result, goalId) => result && goalMapping.get(goalId)!.completed,
         true
       );
       const awardProp = getAwardProp(achievementId);

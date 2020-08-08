@@ -44,13 +44,13 @@ class CheckpointTransition extends Phaser.Scene {
     if (this.isLastCheckpoint(chapterDetails, currChapter, currCheckpoint)) {
       // If it is the last checkpoint, we mark that chapter is completed
       await SourceAcademyGame.getInstance().getSaveManager().saveChapterComplete(currChapter);
+      await this.showTransitionText(CheckpointConstants.text.chapter);
       if (this.isLastChapter(chapterDetails, currChapter)) {
-        // No more chapter, transition to main menu instead
-        this.scene.start('MainMenu');
+        // No more chapter, transition to chapter select instead
+        this.scene.start('ChapterSelect');
         return;
       } else {
         // Transition to the next chapter, first checkpoint
-        await this.showTransitionText(CheckpointConstants.text.chapter);
         await callGameManagerOnTxtLoad(true, currChapter + 1, 0);
         return;
       }

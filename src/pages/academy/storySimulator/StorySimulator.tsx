@@ -10,6 +10,18 @@ import StorySimulatorChapterSim from './subcomponents/StorySimulatorChapterSim';
 import StorySimulatorCheckpointSim from './subcomponents/StorySimulatorCheckpointSim';
 import { createStorySimulatorGame } from './subcomponents/storySimulatorGame';
 
+/**
+ * Story simulator main page
+ *
+ * Displays the following elements:
+ * (1) Story Simulator phaser canvas
+ * (2) Story Simulator control panel
+ *
+ * Story Simulator control panel's content can be altered using
+ * `setStorySimState` function. This function is passed into story
+ * simulator phaser game, so that the StorySimulatorMainMenu buttons
+ * are able to control what is shown on the Story Simulator panel.
+ */
 function StorySimulator() {
   const session = useSelector((state: OverallState) => state.session);
   const [storySimState, setStorySimState] = React.useState<string>(StorySimState.Default);

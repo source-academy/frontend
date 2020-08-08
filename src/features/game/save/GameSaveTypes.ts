@@ -23,6 +23,7 @@ export type GameSaveState = {
   lastCheckpointPlayed: number;
   currentLocation: string | undefined;
   currentPhase: string;
+  chapterNewlyCompleted: boolean;
 
   completedObjectives: string[];
   triggeredInteractions: string[];
