@@ -1,4 +1,4 @@
-import { Button, Icon } from '@blueprintjs/core';
+import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import {
@@ -26,16 +26,18 @@ function AchievementPreview(props: AchievementPreviewProps) {
 
   const [canPublish, setCanPublish] = publishState;
   const handlePublish = () => {
+    // Update goals first because goals must exist before their ID can be specified in achievements
     publishGoals(goals);
     publishAchievements(achievements);
     setCanPublish(false);
   };
 
+  // The Preview displays the AchievementView on View mode
   const [viewMode, setViewMode] = useState<boolean>(false);
   const toggleMode = () => setViewMode(!viewMode);
 
   // If an achievement is focused, the cards glow
-  const focusState = useState<number>(-1);
+  const focusState = useState<number>(NaN);
   const [focusId] = focusState;
 
   return (
@@ -60,14 +62,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
       </div>
       {viewMode ? (
         <div className="preview-container">
-          {focusId < 0 ? (
-            <div className="no-view">
-              <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
-              <h2>Select an achievement</h2>
-            </div>
-          ) : (
-            <AchievementView inferencer={inferencer} focusId={focusId} />
-          )}
+          <AchievementView inferencer={inferencer} focusId={focusId} />
         </div>
       ) : (
         <ul className="preview-container">

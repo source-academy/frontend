@@ -52,15 +52,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(false);
     setCanPublish(true);
     forceRender();
-    /**
-     * It means that there is currently an item being added.
-     * Once this item is added, we can reset it to -1, which means
-     * that there is no achievement being added.
-     * indicating to the system that there is no achievement
-     * being added.
-     */
+
+    // Release the controlId
     if (id === controlId) {
-      setControlId(-1);
+      setControlId(NaN);
     }
   };
 
@@ -74,8 +69,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setCanPublish(true);
     forceRender();
 
+    // Release the controlId
     if (id === controlId) {
-      setControlId(-1);
+      setControlId(NaN);
     }
   };
 

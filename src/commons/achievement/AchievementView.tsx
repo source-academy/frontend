@@ -1,3 +1,5 @@
+import { Icon } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
 import {
@@ -18,7 +20,14 @@ type AchievementViewProps = {
 function AchievementView(props: AchievementViewProps) {
   const { inferencer, focusId } = props;
 
-  if (focusId < 0) return null;
+  if (isNaN(focusId)) {
+    return (
+      <div className="no-view">
+        <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
+        <h2>Select an achievement</h2>
+      </div>
+    );
+  }
 
   const achievement = inferencer.getAchievementItem(focusId);
   const { ability, deadline, title, view } = achievement;

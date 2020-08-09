@@ -16,10 +16,12 @@ function AchievementAdder(props: AchievementAdderProps) {
 
   const handleAddAchievement = () => {
     const createdId = inferencer.insertAchievement(achievementTemplate);
+    // Mark this new achievementId as controlId, it will only get released
+    // when this achievement is saved into the inferencer
     setControlId(createdId);
   };
 
-  const disableAdder = controlId !== -1;
+  const disableAdder = !isNaN(controlId);
 
   return (
     <Button

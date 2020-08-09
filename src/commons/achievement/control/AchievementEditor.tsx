@@ -17,15 +17,15 @@ function AchievementEditor(props: AchievementEditorProps) {
    * NOTE: This helps us to ensure that only ONE achievement is added
    * every time.
    *
-   * Refering to AchievementAdder, if the adderId is -1, this
+   * Refering to AchievementAdder, if the controlId is NaN, this
    * means that currently no achievement is being added and the admin is able to
    * add a new achievement.
    *
-   * Alternatievly, if the adderId is not -1, this means that currently an achievement
-   * is being added to the systen and the admin is not allowed to add two achievements
+   * Alternatievly, if the controlId is not NaN, this means that currently an achievement
+   * is being added to the system and the admin is not allowed to add two achievements
    * at one go.
    */
-  const controlState = useState<number>(-1);
+  const controlState = useState<number>(NaN);
 
   const generateEditableCards = (inferencer: AchievementInferencer) => {
     const achievementIds = inferencer.listIds().reverse();

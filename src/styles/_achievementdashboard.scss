@@ -294,6 +294,18 @@
       scrollbar-color: white #444;
       scrollbar-width: thin;
 
+      .no-view {
+        align-items: center;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        height: $view-height;
+        justify-content: center;
+        margin: auto;
+        width: $view-width;
+      }
+
       .view {
         color: white;
         display: flex;
