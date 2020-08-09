@@ -241,8 +241,7 @@ export const mockGoals: AchievementGoal[] = [
         {
           event: 'achievement',
           restriction: 1,
-        },
-      )`
+        })`
     },
     exp: 0,
     completed: false
@@ -278,15 +277,14 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.BINARY,
       condition: `AND(
-      {
-        event: 'achievement',
-        restriction: 4,
-      },
-      {
-        event: 'achievement',
-        restriction: 5,
-      },
-    )`
+        {
+          event: 'achievement',
+          restriction: 4
+        },
+        {
+          event: 'achievement',
+          restriction: 5
+        })`
     },
     exp: 0,
     completed: false
@@ -321,12 +319,10 @@ export const mockGoals: AchievementGoal[] = [
     maxExp: 100,
     meta: {
       type: GoalType.BINARY,
-      condition: `
-      {
+      condition: `{
         event: 'assessment-submission',
-        restriction: paths.SOURCE_THREE,
-      },
-    `
+        restriction: paths.SOURCE_THREE
+      }`
     },
     exp: 100,
     completed: true
@@ -369,12 +365,10 @@ export const mockGoals: AchievementGoal[] = [
     maxExp: 100,
     meta: {
       type: GoalType.BINARY,
-      condition: `
-      {
+      condition: `{
         event: 'achievement',
         restriction: 'false',
-      },
-    `
+      }`
     },
     exp: 0,
     completed: false

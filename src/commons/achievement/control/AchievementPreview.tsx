@@ -26,17 +26,20 @@ function AchievementPreview(props: AchievementPreviewProps) {
 
   const [canPublish, setCanPublish] = publishState;
   const handlePublish = () => {
-    // Update goals first because goals must exist before their ID can be specified in achievements
+    // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
     publishGoals(goals);
     publishAchievements(achievements);
     setCanPublish(false);
   };
 
-  // The Preview displays the AchievementView on View mode
+  // Show AchievementView when viewMode is true, otherwise show AchievementTask
   const [viewMode, setViewMode] = useState<boolean>(false);
   const toggleMode = () => setViewMode(!viewMode);
 
-  // If an achievement is focused, the cards glow
+  /**
+   * Marks the achievement id that is currently on focus (selected)
+   * If an achievement is focused, the cards glow and dashboard displays the AchievementView
+   */
   const focusState = useState<number>(NaN);
   const [focusId] = focusState;
 

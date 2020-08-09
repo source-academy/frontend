@@ -24,7 +24,9 @@ export type StateProps = {
 /**
  * Generates <AchievementTask /> components
  *
- * @param taskIds an array of achievementId
+ * @param inferencer the AchievementInferencer
+ * @param filterStatus the dashboard filter status
+ * @param focusState the focused achievement state
  */
 export const generateAchievementTasks = (
   inferencer: AchievementInferencer,
@@ -60,7 +62,10 @@ function Dashboard(props: DispatchProps & StateProps) {
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
 
-  // If an achievement is focused, the cards glow and dashboard displays the AchievementView
+  /**
+   * Marks the achievement id that is currently on focus (selected)
+   * If an achievement is focused, the cards glow and dashboard displays the AchievementView
+   */
   const focusState = useState<number>(NaN);
   const [focusId] = focusState;
 

@@ -83,18 +83,10 @@ class AchievementInferencer {
    * Returns an array of GoalDefinition
    */
   public getAllGoalDefinition() {
-    /**
-     * NOTE: This is a very artificial way of instantiating a GoalDefinition
-     * from AchievementGoal due to the limitation of type alias. Ideally,
-     * GoalDefinition, GoalProgress should be declared as classes.
-     *
-     * Read: https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c
-     *
-     * TODO: Revisit AchievementGoal, GoalDefinition, GoalProgress declarations
-     */
     return this.getAllGoal().map(goal => {
       const { id, text, maxExp, meta } = goal;
-      return { id, text, maxExp, meta } as GoalDefinition;
+      const definition: GoalDefinition = { id, text, maxExp, meta };
+      return definition;
     });
   }
 

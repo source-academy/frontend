@@ -47,6 +47,7 @@ export const getAbilityGlow = (ability: AchievementAbility) =>
         boxShadow: `0 0 10px ${getAbilityColor(ability)}`
       };
 
+// Make selected achievements + view and Flex achievements glow
 export const handleGlow = (id: number, focusId: number, ability: AchievementAbility) =>
   ability === AchievementAbility.FLEX || id === focusId ? getAbilityGlow(ability) : undefined;
 
