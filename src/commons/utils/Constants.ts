@@ -61,7 +61,7 @@ export enum Links {
   source_1_Wasm = 'https://source-academy.github.io/source/source_1_wasm/',
   source_2 = 'https://source-academy.github.io/source/source_2/',
   source_2_Lazy = 'https://source-academy.github.io/source/source_2_lazy/',
-  source_3 = 'https://source-academy.github.io/source/source_1/',
+  source_3 = 'https://source-academy.github.io/source/source_3/',
   source_3_Concurrent = 'https://source-academy.github.io/source/source_3_concurrent/',
   source_3_Nondet = 'https://source-academy.github.io/source/source_3_non-det/',
   source_4 = 'https://source-academy.github.io/source/source_4/',
