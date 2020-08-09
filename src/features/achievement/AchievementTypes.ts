@@ -101,18 +101,18 @@ export enum GoalType {
 export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
 
 export type AssessmentMeta = {
-  type: GoalType;
+  type: GoalType.ASSESSMENT;
   assessmentId: string; // e.g. 'M1A', 'P2'
   requiredCompletionExp: number;
 };
 
 export type BinaryMeta = {
-  type: GoalType;
+  type: GoalType.BINARY;
   condition: string;
 };
 
 export type ManualMeta = {
-  type: GoalType;
+  type: GoalType.MANUAL;
 };
 
 /**
