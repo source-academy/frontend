@@ -63,6 +63,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Open Date',
         field: 'openAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
@@ -73,6 +79,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       {
         headerName: 'Close Date',
         field: 'closeAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
@@ -188,9 +200,24 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     }
   };
 
+  /*
+   *  Reference: https://www.ag-grid.com/javascript-grid-filter-date/#date-filter-comparator
+   */
+  private dateFilterComparator = (filterDate: Date, cellValue: string) => {
+    const cellDate = new Date(cellValue);
+
+    return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
+  };
+
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+
+    // Sort assessments by opening date, breaking ties by later of closing dates
+    this.gridApi.setSortModel([
+      { colId: 'openAt', sort: 'desc' },
+      { colId: 'closeAt', sort: 'desc' }
+    ]);
   };
 
   private resizeGrid = () => {
