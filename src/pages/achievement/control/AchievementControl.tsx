@@ -28,8 +28,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
   } = props;
 
   /**
-   * The control fetches the latest achievements and goals from backend
-   * when the page is rendered
+   * The latest achievements and goals from backend are fetched when the page is rendered
    */
   useEffect(() => {
     if (Constants.useBackend) {
@@ -41,13 +40,15 @@ function AchievementControl(props: DispatchProps & StateProps) {
   // TODO: <Prompt />
 
   /**
-   * Publish state monitors changes that are awaiting publish
+   * Monitors changes that are awaiting publish
    */
   const publishState = useState<boolean>(false);
+  const [, setAwaitPublish] = publishState;
+  const requestPublish = () => setAwaitPublish(true);
 
   /**
-   * forceRender allows child components to trigger a page render,
-   * so that the AchievementPreview displays the latest local changes
+   * Allows child components to trigger a page render so that the AchievementPreview
+   * displays the latest local changes
    */
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
@@ -64,7 +65,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
       <AchievementEditor
         inferencer={inferencer}
         forceRender={forceRender}
-        publishState={publishState}
+        requestPublish={requestPublish}
       />
 
       <GoalEditor />

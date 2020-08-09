@@ -7,23 +7,22 @@ import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 type AchievementEditorProps = {
   inferencer: AchievementInferencer;
   forceRender: () => void;
-  publishState: [boolean, any];
+  requestPublish: () => void;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { inferencer, forceRender, publishState } = props;
+  const { inferencer, forceRender, requestPublish } = props;
 
   /**
-   * NOTE: This helps us to ensure that only ONE achievement is added
-   * every time.
+   * controlState helps us to ensure that only ONE achievement is added at any point of time.
    *
-   * Refering to AchievementAdder, if the controlId is NaN, this
-   * means that currently no achievement is being added and the admin is able to
-   * add a new achievement.
+   * Refering to AchievementAdder, if the controlId is NaN, this means that currently no
+   * achievement is being added and the admin is able to add a new achievement.
    *
-   * Alternatievly, if the controlId is not NaN, this means that currently an achievement
+   * Conversely, if the controlId is not NaN, this means that currently an achievement
    * is being added to the system and the admin is not allowed to add two achievements
-   * at one go.
+   * at one go. The controlId holds the newly created achievement id until the new achievement
+   * is added into the AchievementInferencer.
    */
   const controlState = useState<number>(NaN);
 
@@ -36,7 +35,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         inferencer={inferencer}
         controlState={controlState}
         forceRender={forceRender}
-        publishState={publishState}
+        requestPublish={requestPublish}
       />
     ));
   };

@@ -24,12 +24,12 @@ function AchievementPreview(props: AchievementPreviewProps) {
   const achievements = inferencer.getAllAchievement();
   const goals = inferencer.getAllGoalDefinition();
 
-  const [canPublish, setCanPublish] = publishState;
+  const [awaitPublish, setAwaitPublish] = publishState;
   const handlePublish = () => {
     // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
     publishGoals(goals);
     publishAchievements(achievements);
-    setCanPublish(false);
+    setAwaitPublish(false);
   };
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
@@ -53,7 +53,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
           text={viewMode ? 'Task' : 'View'}
           onClick={toggleMode}
         />
-        {canPublish && (
+        {awaitPublish && (
           <Button
             className="command-button"
             icon={IconNames.CLOUD_UPLOAD}

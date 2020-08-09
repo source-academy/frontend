@@ -20,14 +20,13 @@ type EditableAchievementCardProps = {
   inferencer: AchievementInferencer;
   controlState: [number, any];
   forceRender: () => void;
-  publishState: [boolean, any];
+  requestPublish: () => void;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, inferencer, controlState, forceRender, publishState } = props;
+  const { id, inferencer, controlState, forceRender, requestPublish } = props;
 
   const [controlId, setControlId] = controlState;
-  const [, setCanPublish] = publishState;
 
   const achievement = inferencer.getAchievementItem(id);
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
@@ -50,7 +49,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
     setIsDirty(false);
-    setCanPublish(true);
+    requestPublish();
     forceRender();
 
     // Release the controlId
@@ -66,7 +65,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
-    setCanPublish(true);
+    requestPublish();
     forceRender();
 
     // Release the controlId
