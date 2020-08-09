@@ -165,8 +165,6 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           onGridSizeChanged={this.resizeGrid}
           rowData={this.props.assessmentOverviews}
           rowHeight={30}
-          pagination={true}
-          paginationPageSize={25}
           suppressCellSelection={true}
           suppressMovableColumns={true}
           suppressPaginationPanel={true}
