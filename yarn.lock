@@ -2006,7 +2006,7 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
-"@types/jest@^26.0.8":
+"@types/jest@^26.0.9":
   version "26.0.9"
   resolved "https://registry.yarnpkg.com/@types/jest/-/jest-26.0.9.tgz#0543b57da5f0cd949c5f423a00c56c492289c989"
   integrity sha512-k4qFfJ5AUKrWok5KYXp2EPm89b0P/KZpl7Vg4XuOTVVQEhLDBDBU3iBFrjjdgd8fLw96aAtmnwhXHl63bWeBQQ==
@@ -2024,7 +2024,7 @@
   resolved "https://registry.yarnpkg.com/@types/jwt-decode/-/jwt-decode-2.2.1.tgz#afdf5c527fcfccbd4009b5fd02d1e18241f2d2f2"
   integrity sha512-aWw2YTtAdT7CskFyxEX2K21/zSDStuf/ikI3yBqmwpwJF0pS+/IX5DWv+1UFffZIbruP6cnT9/LAJV1gFwAT1A==
 
-"@types/lodash@^4.14.158":
+"@types/lodash@^4.14.159":
   version "4.14.159"
   resolved "https://registry.yarnpkg.com/@types/lodash/-/lodash-4.14.159.tgz#61089719dc6fdd9c5cb46efc827f2571d1517065"
   integrity sha512-gF7A72f7WQN33DpqOWw9geApQPh4M3PxluMtaHxWHXEGSN12/WbcEk/eNSqWNQcQhF66VSZ06vCF94CrHwXJDg==
@@ -2127,7 +2127,7 @@
     "@types/history" "*"
     "@types/react" "*"
 
-"@types/react-test-renderer@^16.9.2":
+"@types/react-test-renderer@^16.9.3":
   version "16.9.3"
   resolved "https://registry.yarnpkg.com/@types/react-test-renderer/-/react-test-renderer-16.9.3.tgz#96bab1860904366f4e848b739ba0e2f67bcae87e"
   integrity sha512-wJ7IlN5NI82XMLOyHSa+cNN4Z0I+8/YaLl04uDgcZ+W+ExWCmCiVTLT/7fRNqzy4OhStZcUwIqLNF7q+AdW43Q==
@@ -2141,7 +2141,7 @@
   dependencies:
     "@types/react" "*"
 
-"@types/react@*", "@types/react@^16.9.44":
+"@types/react@*", "@types/react@^16.9.45":
   version "16.9.45"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-16.9.45.tgz#b43ccf3d8a3d2020e6a48c8c8492e5a4bc10f097"
   integrity sha512-vv950slTF5UZ5eDOf13b8qC1SD4rTvkqg3HfaUKzr17U97oeJZAa+dUaIHn0QoOJflNTIt6Pem9MmapULs9dkA==
@@ -2467,7 +2467,7 @@ acorn@^6.0.1, acorn@^6.0.4, acorn@^6.2.1:
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-6.4.1.tgz#531e58ba3f51b9dacb9a6646ca4debf5b14ca474"
   integrity sha512-ZVA9k326Nwrj3Cj9jlh3wGFutC2ZornPNARZwsNYqQYgN0EsV2d53w5RN/co65Ohn4sUAUtb1rSUAOD6XN9idA==
 
-acorn@^7.0.0, acorn@^7.1.1, acorn@^7.3.1:
+acorn@^7.0.0, acorn@^7.1.1, acorn@^7.3.1, acorn@^7.4.0:
   version "7.4.0"
   resolved "https://registry.yarnpkg.com/acorn/-/acorn-7.4.0.tgz#e1ad486e6c54501634c6c397c5c121daa383607c"
   integrity sha512-+G7P8jJmCHr+S+cLfQxygbWhXy+8YTVGzAkpEbcLo2mLoL7tij/VG41QSHACSf5QgYRhMZYHuNc6drJaO0Da+w==
@@ -2781,7 +2781,7 @@ array-map@0.0.0:
   resolved "https://registry.yarnpkg.com/array-map/-/array-map-0.0.0.tgz#88a2bab73d1cf7bcd5c1b118a003f66f665fa662"
   integrity sha1-iKK6tz0c97zVwbEYoAP2b2ZfpmI=
 
-array-move@^3.0.0:
+array-move@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/array-move/-/array-move-3.0.1.tgz#179645cc0987b65953a4fc06b6df9045e4ba9618"
   integrity sha512-H3Of6NIn2nNU1gsVDqDnYKY/LCdWvCMMOWifNGhKcVQgiZ6nOek39aESOvro6zmueP07exSl93YLvkN4fZOkSg==
@@ -5393,7 +5393,7 @@ env-paths@^2.2.0:
   resolved "https://registry.yarnpkg.com/env-paths/-/env-paths-2.2.0.tgz#cdca557dc009152917d6166e2febe1f039685e43"
   integrity sha512-6u0VYSCo/OW6IoD5WCLLy9JUGARbamfSavcNXry/eu8aHVFei6CD3Sw+VGX5alea1i9pgPHW0mbu6Xj0uBh7gA==
 
-enzyme-adapter-react-16@^1.15.2:
+enzyme-adapter-react-16@^1.15.3:
   version "1.15.3"
   resolved "https://registry.yarnpkg.com/enzyme-adapter-react-16/-/enzyme-adapter-react-16-1.15.3.tgz#90154055be3318d70a51df61ac89cfa22e3d5f60"
   integrity sha512-98rqNI4n9HZslWIPuuwy4hK1bxRuMy+XX0CU1dS8iUqcgisTxeBaap6oPp2r4MWC8OphCbbqAT8EU/xHz3zIaQ==
@@ -6779,7 +6779,7 @@ gpu-mock.js@^1.1.1:
   dependencies:
     gpu.js "^2.9.3"
 
-gpu.js@^2.9.3, gpu.js@^2.9.4:
+gpu.js@^2.9.3, gpu.js@^2.9.5:
   version "2.9.5"
   resolved "https://registry.yarnpkg.com/gpu.js/-/gpu.js-2.9.5.tgz#a7fe82df65f2e925971e57f849dfc01aa1d71dff"
   integrity sha512-I8wWINzCKD2z+AQitSWFj+N2mkQCBJ/VbQJg7PFuLkjlHy82Z+wAPN4yMXz11WdDCg6P1D90QKkmkLiWLzCoLQ==
@@ -8439,18 +8439,18 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.6.4.tgz#f4e686c5de1ea1f867dbcad3d46d969428df98c4"
   integrity sha512-pZe//GGmwJndub7ZghVHz7vjb2LgC1m8B07Au3eYqeqv9emhESByMXxaEgkUkEqJe87oBbSniGYoQNIBklc7IQ==
 
-js-slang@^0.4.60:
-  version "0.4.60"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.60.tgz#89b353a6db4f07d0cf414cf13e0df5e41839d261"
-  integrity sha512-q0xt5S6Vppe0AbfoFHi7Q0FH525cBNV+/Zvm5VHkM3CDN1H7dEcH+Iy80OUAI4THOECPE0AuAuikxIWxBzlKjg==
+js-slang@^0.4.60, js-slang@^0.4.61:
+  version "0.4.61"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.61.tgz#860d4452d6dcb5d56131670ded6ec1d3d81bf2ec"
+  integrity sha512-2HbyDx0DhtRyWN9orahyTHKa5kmrpDxjLOcxsX2w1GBN62xkmVtJxaucMhKT8kpidWzjufHeh8vgaOshYaQcEQ==
   dependencies:
     "@types/estree" "0.0.45"
-    acorn "^7.3.1"
+    acorn "^7.4.0"
     acorn-loose "^7.1.0"
     acorn-walk "^7.2.0"
     astring "^1.4.3"
-    gpu.js "^2.9.4"
-    lodash "^4.17.15"
+    gpu.js "^2.9.5"
+    lodash "^4.17.19"
     node-getopt "^0.3.2"
     source-map "^0.7.3"
     xmlhttprequest-ts "^1.0.1"
