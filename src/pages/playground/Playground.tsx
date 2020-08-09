@@ -110,41 +110,35 @@ export type StateProps = {
 const keyMap = { goGreen: 'h u l k' };
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const { handleExternalSelect, handleFetchSublanguage } = props;
-
-  React.useEffect(() => {
-    // Fixes some errors with runes and curves (see PR #1420)
-    handleExternalSelect(props.externalLibraryName, true);
-
-    // Only fetch default Playground sublanguage when not loaded via a share link
-    if (props.location.hash === '') {
-      handleFetchSublanguage();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const propsRef = React.useRef(props);
+  propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
+  React.useEffect(() => {
+    // Fixes some errors with runes and curves (see PR #1420)
+    propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
+
+    // Only fetch default Playground sublanguage when not loaded via a share link
+    if (propsRef.current.location.hash === '') {
+      propsRef.current.handleFetchSublanguage();
+    }
+  }, []);
+
   const handlers = React.useMemo(
     () => ({
       goGreen: () => setIsGreen(!isGreen)
     }),
-    [isGreen, setIsGreen]
+    [isGreen]
   );
 
-  const { handleEditorValueChange } = props;
-  const onEditorValueChange = React.useCallback(
-    val => {
-      setLastEdit(new Date());
-      handleEditorValueChange(val);
-    },
-    [handleEditorValueChange]
-  );
+  const onEditorValueChange = React.useCallback(val => {
+    setLastEdit(new Date());
+    propsRef.current.handleEditorValueChange(val);
+  }, []);
 
-  const { handleUsingSubst, handleReplOutputClear, sourceChapter } = props;
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -154,6 +148,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       if (newTabId === prevTabId) {
         return;
       }
+
+      const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
 
       if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
         handleUsingSubst(true);
@@ -166,7 +162,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       setSelectedTab(newTabId);
     },
-    [handleReplOutputClear, handleUsingSubst, hasBreakpoints, sourceChapter]
+    [hasBreakpoints]
   );
 
   const processStepperOutput = (output: InterpreterOutput[]) => {
@@ -212,9 +208,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const { handleChapterSelect } = props;
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: number; variant: Variant }, e: any) => {
+      const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
       }
@@ -224,7 +220,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
       handleChapterSelect(chapter, variant);
     },
-    [handleReplOutputClear, handleUsingSubst, hasBreakpoints, handleChapterSelect, selectedTab]
+    [hasBreakpoints, selectedTab]
   );
 
   const chapterSelect = React.useMemo(
@@ -293,31 +289,29 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { handleChangeExecTime, execTime } = props;
   const executionTime = React.useMemo(
     () => (
       <ControlBarExecutionTime
-        execTime={execTime}
-        handleChangeExecTime={(execTime: number) => handleChangeExecTime(execTime)}
+        execTime={props.execTime}
+        handleChangeExecTime={props.handleChangeExecTime}
         key="execution_time"
       />
     ),
-    [execTime, handleChangeExecTime]
+    [props.execTime, props.handleChangeExecTime]
   );
 
-  const { handleChangeStepLimit, stepLimit } = props;
   const stepperStepLimit = React.useMemo(
     () => (
       <ControlBarStepLimit
-        stepLimit={stepLimit}
-        handleChangeStepLimit={(stepLimit: number) => handleChangeStepLimit(stepLimit)}
+        stepLimit={props.stepLimit}
+        handleChangeStepLimit={props.handleChangeStepLimit}
         key="step_limit"
       />
     ),
-    [stepLimit, handleChangeStepLimit]
+    [props.handleChangeStepLimit, props.stepLimit]
   );
 
-  const { externalLibraryName } = props;
+  const { handleExternalSelect, externalLibraryName } = props;
   const externalLibrarySelect = React.useMemo(
     () => (
       <ControlBarExternalLibrarySelect
@@ -437,6 +431,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant
   ]);
 
+  const handleEditorUpdateBreakpoints = React.useCallback(
+    (breakpoints: string[]) => {
+      // get rid of holes in array
+      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+      if (numberOfBreakpoints > 0) {
+        setHasBreakpoints(true);
+        if (propsRef.current.sourceChapter <= 2) {
+          /**
+           * There are breakpoints set on Source Chapter 2, so we set the
+           * Redux state for the editor to evaluate to the substituter
+           */
+
+          propsRef.current.handleUsingSubst(true);
+        }
+      }
+      if (numberOfBreakpoints === 0) {
+        setHasBreakpoints(false);
+
+        if (selectedTab !== SideContentType.substVisualizer) {
+          propsRef.current.handleReplOutputClear();
+          propsRef.current.handleUsingSubst(false);
+        }
+      }
+      propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
+    },
+    [selectedTab]
+  );
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -471,30 +493,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       breakpoints: props.breakpoints,
       highlightedLines: props.highlightedLines,
       newCursorPosition: props.newCursorPosition,
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
-        // get rid of holes in array
-        const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-        if (numberOfBreakpoints > 0) {
-          setHasBreakpoints(true);
-          if (props.sourceChapter <= 2) {
-            /**
-             * There are breakpoints set on Source Chapter 2, so we set the
-             * Redux state for the editor to evaluate to the substituter
-             */
-
-            props.handleUsingSubst(true);
-          }
-        }
-        if (numberOfBreakpoints === 0) {
-          setHasBreakpoints(false);
-
-          if (selectedTab !== SideContentType.substVisualizer) {
-            props.handleReplOutputClear();
-            props.handleUsingSubst(false);
-          }
-        }
-        props.handleEditorUpdateBreakpoints(breakpoints);
-      },
+      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
       handleSetWebsocketStatus: props.handleSetWebsocketStatus
     },
     editorHeight: props.editorHeight,

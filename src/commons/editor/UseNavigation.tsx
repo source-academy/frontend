@@ -13,13 +13,6 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  // editorValue is the prop that is going to change all the time
-  // use a ref so that the callbacks below can be memoised
-  const editorValueRef = React.useRef<string>(inProps.editorValue);
-  React.useEffect(() => {
-    editorValueRef.current = inProps.editorValue;
-  }, [inProps.editorValue]);
-
   const { sourceChapter, handleDeclarationNavigate } = inProps;
   const sourceVariant = inProps.sourceVariant === 'default' ? '' : `_${inProps.sourceVariant}`;
   const external = inProps.externalLibraryName === undefined ? 'NONE' : inProps.externalLibraryName;
@@ -41,7 +34,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     }
 
     if (
-      hasDeclaration(editorValueRef.current, createContext(sourceChapter), {
+      hasDeclaration(editor.getValue(), createContext(sourceChapter), {
         line: newPos.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
         column: newPos.column
       })

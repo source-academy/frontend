@@ -175,164 +175,164 @@ const handlers = {
   goGreen: () => {}
 };
 
-const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
-  props,
-  forwardedRef
-) {
-  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+const EditorBase = React.memo(
+  React.forwardRef<AceEditor, EditorProps>(function EditorBase(props, forwardedRef) {
+    const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
 
-  // Refs for things that technically shouldn't change... but just in case.
-  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
-  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+    // Refs for things that technically shouldn't change... but just in case.
+    const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
+    const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
 
-  React.useEffect(() => {
-    handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
-    handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
-  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
+    React.useEffect(() => {
+      handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
+      handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
+    }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-  const [sourceChapter, sourceVariant, externalLibraryName] = [
-    props.sourceChapter || 1,
-    props.sourceVariant || 'default',
-    props.externalLibraryName || 'NONE'
-  ];
+    const [sourceChapter, sourceVariant, externalLibraryName] = [
+      props.sourceChapter || 1,
+      props.sourceVariant || 'default',
+      props.externalLibraryName || 'NONE'
+    ];
 
-  // we would normally use use(Layout)Effect here, however useEffect actually
-  // runs after DOM changes are committed, which means that Ace might try to
-  // load the mode before we cause it to be defined i.e. breaking syntax
-  // highlighting
-  //
-  // so we use useMemo here so that
-  // (1) selectMode is called before the mode is set on the Editor
-  // (2) we still save on calls to ace.define (versus just calling it directly)
-  //
-  // note that since repeated calls to ace.define are actually okay (just a
-  // waste of compute cycles) it is okay to use useMemo (which doesn't guarantee
-  // that it will _only_ call when the dependencies change) or not even wrap
-  // this in a hook
-  React.useMemo(() => {
-    selectMode(sourceChapter, sourceVariant, externalLibraryName);
-  }, [sourceChapter, sourceVariant, externalLibraryName]);
+    // we would normally use use(Layout)Effect here, however useEffect actually
+    // runs after DOM changes are committed, which means that Ace might try to
+    // load the mode before we cause it to be defined i.e. breaking syntax
+    // highlighting
+    //
+    // so we use useMemo here so that
+    // (1) selectMode is called before the mode is set on the Editor
+    // (2) we still save on calls to ace.define (versus just calling it directly)
+    //
+    // note that since repeated calls to ace.define are actually okay (just a
+    // waste of compute cycles) it is okay to use useMemo (which doesn't guarantee
+    // that it will _only_ call when the dependencies change) or not even wrap
+    // this in a hook
+    React.useMemo(() => {
+      selectMode(sourceChapter, sourceVariant, externalLibraryName);
+    }, [sourceChapter, sourceVariant, externalLibraryName]);
 
-  React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
-      return;
-    }
-    const editor = reactAceRef.current.editor;
-    const session = editor.getSession();
-    // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
-    // The () => ref.current() are designed to use the latest instance only.
-
-    // NOTE: the two `any`s below are because the Ace editor typedefs are
-    // hopelessly incomplete
-    editor.on(
-      'gutterclick' as any,
-      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
-    );
-
-    // Change all info annotations to error annotations
-    session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
-
-    // Start autocompletion
-    acequire('ace/ext/language_tools').setCompleters([
-      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
-    ]);
-    // This should run exactly once.
-  }, [reactAceRef, handleEditorUpdateBreakpointsRef, handlePromptAutocompleteRef]);
-
-  React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
-      return;
-    }
-    const newCursorPosition = props.newCursorPosition;
-    if (newCursorPosition) {
-      moveCursor(reactAceRef.current.editor, newCursorPosition);
-    }
-  }, [reactAceRef, props.newCursorPosition]);
-
-  const {
-    handleUpdateHasUnsavedChanges,
-    handleEditorValueChange,
-    isEditorAutorun,
-    handleEditorEval
-  } = props;
-  const onChange = React.useCallback(
-    (newCode: string, delta: Ace.Delta) => {
+    React.useLayoutEffect(() => {
       if (!reactAceRef.current) {
         return;
       }
-      if (handleUpdateHasUnsavedChanges) {
-        handleUpdateHasUnsavedChanges(true);
+      const editor = reactAceRef.current.editor;
+      const session = editor.getSession();
+      // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
+      // The () => ref.current() are designed to use the latest instance only.
+
+      // NOTE: the two `any`s below are because the Ace editor typedefs are
+      // hopelessly incomplete
+      editor.on(
+        'gutterclick' as any,
+        makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
+      );
+
+      // Change all info annotations to error annotations
+      session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
+
+      // Start autocompletion
+      acequire('ace/ext/language_tools').setCompleters([
+        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+      ]);
+      // This should run exactly once.
+    }, []);
+
+    React.useLayoutEffect(() => {
+      if (!reactAceRef.current) {
+        return;
       }
-      handleEditorValueChange(newCode);
-      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
-      if (isEditorAutorun && annotations.length === 0) {
-        handleEditorEval();
+      const newCursorPosition = props.newCursorPosition;
+      if (newCursorPosition) {
+        moveCursor(reactAceRef.current.editor, newCursorPosition);
       }
-    },
-    [
-      reactAceRef,
+    }, [props.newCursorPosition]);
+
+    const {
       handleUpdateHasUnsavedChanges,
       handleEditorValueChange,
-      handleEditorEval,
-      isEditorAutorun
-    ]
-  );
+      isEditorAutorun,
+      handleEditorEval
+    } = props;
+    const keyHandlers: EditorKeyBindingHandlers = {
+      evaluate: handleEditorEval
+    };
 
-  const keyHandlers: EditorKeyBindingHandlers = {
-    evaluate: handleEditorEval
-  };
+    const aceEditorProps: IAceEditorProps = {
+      className: 'react-ace',
+      editorProps: {
+        $blockScrolling: Infinity
+      },
+      markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+      fontSize: 17,
+      height: '100%',
+      highlightActiveLine: false,
+      mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+      theme: 'source',
+      value: props.editorValue,
+      width: '100%',
+      setOptions: {
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        fontFamily: "'Inconsolata', monospace"
+      }
+    };
 
-  const aceEditorProps: IAceEditorProps = {
-    className: 'react-ace',
-    editorProps: {
-      $blockScrolling: Infinity
-    },
-    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
-    fontSize: 17,
-    height: '100%',
-    highlightActiveLine: false,
-    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
-    theme: 'source',
-    value: props.editorValue,
-    width: '100%',
-    setOptions: {
-      enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true,
-      fontFamily: "'Inconsolata', monospace"
-    },
-    onChange
-  };
-
-  // Hooks must not change after an editor is instantiated, so to prevent that
-  // we store the original value and always use that only
-  const [hooks] = React.useState(props.hooks);
-  if (hooks) {
-    // Note: the following is extremely non-standard use of hooks
-    // DO NOT refactor this into any form where the hook is called from a lambda
-    for (const hook of hooks) {
-      hook(props, aceEditorProps, keyHandlers, reactAceRef);
+    // Hooks must not change after an editor is instantiated, so to prevent that
+    // we store the original value and always use that only
+    const [hooks] = React.useState(props.hooks);
+    if (hooks) {
+      // Note: the following is extremely non-standard use of hooks
+      // DO NOT refactor this into any form where the hook is called from a lambda
+      for (const hook of hooks) {
+        hook(props, aceEditorProps, keyHandlers, reactAceRef);
+      }
     }
-  }
 
-  aceEditorProps.commands = Object.entries(keyHandlers)
-    .filter(([_, exec]) => exec)
-    .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+    const hooksOnChange = aceEditorProps.onChange;
 
-  return (
-    <HotKeys className="Editor" handlers={handlers}>
-      <div className="row editor-react-ace">
-        <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
-      </div>
-    </HotKeys>
-  );
-});
+    aceEditorProps.onChange = React.useCallback(
+      (newCode: string, delta: Ace.Delta) => {
+        if (!reactAceRef.current) {
+          return;
+        }
+        handleEditorValueChange(newCode);
+        if (handleUpdateHasUnsavedChanges) {
+          handleUpdateHasUnsavedChanges(true);
+        }
+        const annotations = reactAceRef.current.editor.getSession().getAnnotations();
+        if (isEditorAutorun && annotations.length === 0) {
+          handleEditorEval();
+        }
+        hooksOnChange && hooksOnChange(newCode, delta);
+      },
+      [
+        handleEditorValueChange,
+        handleUpdateHasUnsavedChanges,
+        isEditorAutorun,
+        hooksOnChange,
+        handleEditorEval
+      ]
+    );
+
+    aceEditorProps.commands = Object.entries(keyHandlers)
+      .filter(([_, exec]) => exec)
+      .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+
+    return (
+      <HotKeys className="Editor" handlers={handlers}>
+        <div className="row editor-react-ace">
+          <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
+        </div>
+      </HotKeys>
+    );
+  })
+);
+
+// don't create a new list every render.
+const hooks = [useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor];
 
 const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => (
-  <EditorBase
-    {...props}
-    hooks={[useHighlighting, useNavigation, useTypeInference, useShareAce, useRefactor]}
-    ref={ref}
-  />
+  <EditorBase {...props} hooks={hooks} ref={ref} />
 ));
 
 export default Editor;
