@@ -18,29 +18,31 @@ import EditableAchievementView from './editableView/EditableAchievementView';
 type EditableAchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
-  controlState: [number, any];
   forceRender: () => void;
+  releaseId: (id: number) => void;
   requestPublish: () => void;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, inferencer, controlState, forceRender, requestPublish } = props;
-
-  const [controlId, setControlId] = controlState;
+  const { id, inferencer, forceRender, releaseId, requestPublish } = props;
 
   const achievement = inferencer.getAchievementItem(id);
+
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
+  const resetEditableAchievement = () => setEditableAchievement(achievement);
+
   const {
-    title,
     ability,
+    cardTileUrl,
     deadline,
-    release,
-    /* TODO:
+    /*
+    goalIds,
     isTask,
     position,
     prerequisiteIds,
-    goalIds, */
-    cardTileUrl,
+    */
+    release,
+    title,
     view
   } = editableAchievement;
 
@@ -49,29 +51,22 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
     setIsDirty(false);
+    releaseId(id);
     requestPublish();
     forceRender();
-
-    // Release the controlId
-    if (id === controlId) {
-      setControlId(NaN);
-    }
   };
 
   const handleDiscardChanges = () => {
-    setEditableAchievement(achievement);
+    resetEditableAchievement();
     setIsDirty(false);
   };
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
+    setIsDirty(false);
+    releaseId(id);
     requestPublish();
     forceRender();
-
-    // Release the controlId
-    if (id === controlId) {
-      setControlId(NaN);
-    }
   };
 
   const handleChangeTitle = (title: string) => {

@@ -6,29 +6,26 @@ import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {
   inferencer: AchievementInferencer;
-  controlState: [number, any];
+  admitId: (id: number) => void;
+  isHoldingId: boolean;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
-  const { inferencer, controlState } = props;
+  const { inferencer, admitId, isHoldingId } = props;
 
-  const [controlId, setControlId] = controlState;
-
-  const handleAddAchievement = () => {
-    const createdId = inferencer.insertAchievement(achievementTemplate);
-    // Mark this new achievementId as controlId, it will only get released
-    // when this achievement is saved into the inferencer
-    setControlId(createdId);
-  };
-
-  const disableAdder = !isNaN(controlId);
+  /**
+   * Create a template achievement and hold the new achievementId as controlId.
+   * The controlId will only get released when the temporary achievement is updated
+   * and saved into the AchievementInferencer
+   */
+  const handleAddAchievement = () => admitId(inferencer.insertAchievement(achievementTemplate));
 
   return (
     <Button
       className="main-adder"
       onClick={handleAddAchievement}
       text={'Add A New Item'}
-      disabled={disableAdder}
+      disabled={isHoldingId}
     />
   );
 }
