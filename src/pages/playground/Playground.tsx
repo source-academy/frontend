@@ -48,20 +48,17 @@ export type DispatchProps = {
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
   handleFetchSublanguage: () => void;
-  handleFinishInvite: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
-  handleInvalidEditorSessionId: () => void;
   handleExternalSelect: (externalLibraryName: ExternalLibraryName, force?: boolean) => void;
-  handleInitInvite: (value: string) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
+  handleSetSharedbConnected: (connected: boolean) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
   handleDebuggerPause: () => void;
@@ -95,12 +92,10 @@ export type StateProps = {
   shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
-  sharedbAceInitValue: string;
-  sharedbAceIsInviting: boolean;
   sourceChapter: number;
   sourceVariant: Variant;
   stepLimit: number;
-  websocketStatus: number;
+  sharedbConnected: boolean;
   externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   persistenceUser: string | undefined;
@@ -325,26 +320,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [externalLibraryName, handleExternalSelect]
   );
 
-  const sessionButtons = React.useMemo(
-    () => (
-      <ControlBarSessionButtons
-        editorSessionId={props.editorSessionId}
-        editorValue={props.editorValue}
-        handleInitInvite={props.handleInitInvite}
-        handleInvalidEditorSessionId={props.handleInvalidEditorSessionId}
-        handleSetEditorSessionId={props.handleSetEditorSessionId}
-        websocketStatus={props.websocketStatus}
-        key="session"
-      />
-    ),
-    [
-      props.editorSessionId,
-      props.editorValue,
-      props.handleInitInvite,
-      props.handleInvalidEditorSessionId,
-      props.handleSetEditorSessionId,
-      props.websocketStatus
-    ]
+  // No point memoing this, it uses props.editorValue
+  const sessionButtons = (
+    <ControlBarSessionButtons
+      editorSessionId={props.editorSessionId}
+      editorValue={props.editorValue}
+      handleSetEditorSessionId={props.handleSetEditorSessionId}
+      sharedbConnected={props.sharedbConnected}
+      key="session"
+    />
   );
 
   const shareButton = React.useMemo(
@@ -486,15 +470,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleEditorValueChange: onEditorValueChange,
       handleSendReplInputToOutput: props.handleSendReplInputToOutput,
       handlePromptAutocomplete: props.handlePromptAutocomplete,
-      handleFinishInvite: props.handleFinishInvite,
-      sharedbAceInitValue: props.sharedbAceInitValue,
-      sharedbAceIsInviting: props.sharedbAceIsInviting,
       isEditorAutorun: props.isEditorAutorun,
       breakpoints: props.breakpoints,
       highlightedLines: props.highlightedLines,
       newCursorPosition: props.newCursorPosition,
       handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-      handleSetWebsocketStatus: props.handleSetWebsocketStatus
+      handleSetSharedbConnected: props.handleSetSharedbConnected
     },
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,

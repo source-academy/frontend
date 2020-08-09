@@ -5,25 +5,28 @@ import * as CopyToClipboard from 'react-copy-to-clipboard';
 
 import { checkSessionIdExists, createNewSession } from '../collabEditing/CollabEditingHelper';
 import controlButton from '../ControlButton';
+import { showWarningMessage } from '../utils/NotificationsHelper';
 
 type ControlBarSessionButtonsProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleInitInvite?: (value: string) => void;
-  handleInvalidEditorSessionId?: () => void;
   handleSetEditorSessionId?: (editorSessionId: string) => void;
 };
 
 type StateProps = {
   editorSessionId?: string;
   editorValue?: string | null;
-  websocketStatus?: number;
+  sharedbConnected?: boolean;
   key: string;
 };
 
 type State = {
   joinElemValue: string;
 };
+
+function handleError(error: any) {
+  showWarningMessage(`Could not connect: ${(error && error.message) || error || 'Unknown error'}`);
+}
 
 export class ControlBarSessionButtons extends React.PureComponent<
   ControlBarSessionButtonsProps,
@@ -42,13 +45,11 @@ export class ControlBarSessionButtons extends React.PureComponent<
 
   public render() {
     const handleStartInvite = () => {
+      // FIXME this handler should be a Saga action or at least in a controller
       if (this.props.editorSessionId === '') {
-        const onSessionCreated = (sessionId: string) => {
+        createNewSession(this.props.editorValue || '').then(sessionId => {
           this.props.handleSetEditorSessionId!(sessionId);
-          const code = this.props.editorValue || '// Collaborative Editing Mode!';
-          this.props.handleInitInvite!(code);
-        };
-        createNewSession(onSessionCreated);
+        }, handleError);
       }
     };
 
@@ -65,28 +66,28 @@ export class ControlBarSessionButtons extends React.PureComponent<
     );
 
     const handleStartJoining = (event: React.FormEvent<HTMLFormElement>) => {
-      const onSessionIdExists = () =>
-        this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
-
-      const onSessionIdNotExist = () => {
-        this.props.handleInvalidEditorSessionId!();
-        this.props.handleSetEditorSessionId!('');
-      };
-
-      const onServerUnreachable = () => this.props.handleSetEditorSessionId!('');
-
-      checkSessionIdExists(
-        this.state.joinElemValue,
-        onSessionIdExists,
-        onSessionIdNotExist,
-        onServerUnreachable
-      );
       event.preventDefault();
+      // FIXME this handler should be a Saga action or at least in a controller
+      checkSessionIdExists(this.state.joinElemValue).then(
+        exists => {
+          if (exists) {
+            this.props.handleSetEditorSessionId!(this.state!.joinElemValue);
+          } else {
+            this.props.handleSetEditorSessionId!('');
+            showWarningMessage('Could not find a session with that ID.');
+          }
+        },
+        error => {
+          this.props.handleSetEditorSessionId!('');
+          handleError(error);
+        }
+      );
     };
 
     const joinButton = (
       <Popover popoverClassName="Popover-share" inheritDarkTheme={false}>
         {controlButton('Join', IconNames.LOG_IN)}
+        {/* FIXME this form should use Blueprint */}
         <>
           <form onSubmit={handleStartJoining}>
             <input type="text" value={this.state.joinElemValue} onChange={this.handleChange} />
@@ -99,6 +100,7 @@ export class ControlBarSessionButtons extends React.PureComponent<
     );
 
     const leaveButton = controlButton('Leave', IconNames.FEED, () => {
+      // FIXME this handler should be a Saga action or at least in a controller
       this.props.handleSetEditorSessionId!('');
       this.setState({ joinElemValue: '' });
     });
@@ -116,9 +118,9 @@ export class ControlBarSessionButtons extends React.PureComponent<
           iconColor:
             this.props.editorSessionId === ''
               ? undefined
-              : this.props.websocketStatus === 0
-              ? Colors.RED3
-              : Colors.GREEN3
+              : this.props.sharedbConnected
+              ? Colors.GREEN3
+              : Colors.RED3
         })}
       </Popover>
     );

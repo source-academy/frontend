@@ -48,10 +48,9 @@ type DispatchProps = {
   handleReplValueChange?: (newCode: string) => void;
   handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
-  handleSetWebsocketStatus?: (websocketStatus: number) => void;
+  handleSetSharedbConnected?: (connected: boolean) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 };
 
@@ -62,8 +61,6 @@ type StateProps = {
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
-  sharedbAceInitValue?: string;
-  sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
   externalLibraryName?: string;
   sourceVariant?: Variant;
