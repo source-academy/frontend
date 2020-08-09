@@ -79,10 +79,10 @@ class Grading extends React.Component<GradingProps, State> {
         field: 'notifications',
         cellRendererFramework: this.NotificationBadgeCell,
         width: 30,
-        suppressMovable: true,
-        suppressMenu: true,
-        suppressSizeToFit: true,
-        resizable: false
+        filter: false,
+        resizable: false,
+        sortable: false,
+        suppressSizeToFit: true
       },
       { headerName: 'Assessment Name', field: 'assessmentName' },
       { headerName: 'Category', field: 'assessmentCategory', maxWidth: 100 },
@@ -215,100 +215,107 @@ class Grading extends React.Component<GradingProps, State> {
         icon={<Spinner size={Spinner.SIZE_LARGE} />}
       />
     );
+
     const data = this.sortSubmissionsByNotifications();
 
-    const grid = (
-      <div className="GradingContainer">
-        <div>
-          <FormGroup label="Filter:" labelFor="text-input" inline={true}>
-            <InputGroup
-              id="filterBar"
-              large={false}
-              leftIcon="filter"
-              placeholder="Enter any text (e.g. mission)"
-              value={this.state.filterValue}
-              onChange={this.handleFilterChange}
-              onKeyPress={this.handleFilterKeypress}
-              onBlur={this.handleApplyFilter}
-            />
-          </FormGroup>
+    const controls = (
+      <div className="grading-controls">
+        <FormGroup label="Filter:" labelFor="text-input" inline={true}>
+          <InputGroup
+            id="filterBar"
+            large={false}
+            leftIcon="filter"
+            placeholder="Enter any text (e.g. mission)"
+            value={this.state.filterValue}
+            onChange={this.handleFilterChange}
+            onKeyPress={this.handleFilterKeypress}
+            onBlur={this.handleApplyFilter}
+          />
+        </FormGroup>
 
-          <div className="ag-grid-controls">
-            <div className="left-controls">
-              <Button
-                active={this.state.groupFilterEnabled}
-                icon={IconNames.GIT_REPO}
-                intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
-                onClick={this.handleGroupsFilter}
-              >
-                <div className="ag-grid-button-text hidden-xs">Show all groups</div>
-              </Button>
-            </div>
-            <div className="centre-controls">
-              <Button
-                icon={IconNames.CHEVRON_BACKWARD}
-                onClick={this.changePaginationView('first')}
-                minimal={true}
-                disabled={this.state.isBackDisabled}
-              />
-              <Button
-                icon={IconNames.CHEVRON_LEFT}
-                onClick={this.changePaginationView('prev')}
-                minimal={true}
-                disabled={this.state.isBackDisabled}
-              />
-              <Button className="pagination-details hidden-xs" disabled={true} minimal={true}>
-                <div>{`Page ${this.state.currPage} of ${this.state.maxPages}`}</div>
-                <div>{this.state.rowCountString}</div>
-              </Button>
-              <Button
-                icon={IconNames.CHEVRON_RIGHT}
-                onClick={this.changePaginationView('next')}
-                minimal={true}
-                disabled={this.state.isForwardDisabled}
-              />
-              <Button
-                icon={IconNames.CHEVRON_FORWARD}
-                onClick={this.changePaginationView('last')}
-                minimal={true}
-                disabled={this.state.isForwardDisabled}
-              />
-            </div>
-            <div className="right-controls">
-              <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
-                <div className="ag-grid-button-text hidden-xs">Export to CSV</div>
-              </Button>
-            </div>
+        <div className="GridControls ag-grid-controls">
+          <div className="left-controls">
+            <Button
+              active={this.state.groupFilterEnabled}
+              icon={IconNames.GIT_REPO}
+              intent={this.state.groupFilterEnabled ? Intent.PRIMARY : Intent.NONE}
+              onClick={this.handleGroupsFilter}
+            >
+              <span className="hidden-xs">Show all groups</span>
+            </Button>
           </div>
-        </div>
-
-        <Divider />
-
-        <div className="Grading">
-          <div className="ag-grid-parent ag-theme-balham">
-            <AgGridReact
-              domLayout={'autoHeight'}
-              columnDefs={this.columnDefs}
-              defaultColDef={this.defaultColumnDefs}
-              onGridReady={this.onGridReady}
-              onGridSizeChanged={this.resizeGrid}
-              onPaginationChanged={this.updatePaginationState}
-              rowData={data}
-              rowHeight={30}
-              pagination={true}
-              paginationPageSize={25}
-              suppressMovableColumns={true}
-              suppressPaginationPanel={true}
+          <div className="centre-controls">
+            <Button
+              icon={IconNames.CHEVRON_BACKWARD}
+              onClick={this.changePaginationView('first')}
+              minimal={true}
+              disabled={this.state.isBackDisabled}
             />
+            <Button
+              icon={IconNames.CHEVRON_LEFT}
+              onClick={this.changePaginationView('prev')}
+              minimal={true}
+              disabled={this.state.isBackDisabled}
+            />
+            <Button className="pagination-details hidden-xs" disabled={true} minimal={true}>
+              <div>{`Page ${this.state.currPage} of ${this.state.maxPages}`}</div>
+              <div>{this.state.rowCountString}</div>
+            </Button>
+            <Button
+              icon={IconNames.CHEVRON_RIGHT}
+              onClick={this.changePaginationView('next')}
+              minimal={true}
+              disabled={this.state.isForwardDisabled}
+            />
+            <Button
+              icon={IconNames.CHEVRON_FORWARD}
+              onClick={this.changePaginationView('last')}
+              minimal={true}
+              disabled={this.state.isForwardDisabled}
+            />
+          </div>
+          <div className="right-controls">
+            <Button icon={IconNames.EXPORT} onClick={this.exportCSV}>
+              <span className="hidden-xs">Export to CSV</span>
+            </Button>
           </div>
         </div>
       </div>
     );
+
+    const grid = (
+      <div className="Grid ag-grid-parent ag-theme-balham">
+        <AgGridReact
+          domLayout={'autoHeight'}
+          columnDefs={this.columnDefs}
+          defaultColDef={this.defaultColumnDefs}
+          onGridReady={this.onGridReady}
+          onGridSizeChanged={this.resizeGrid}
+          onPaginationChanged={this.updatePaginationState}
+          rowData={data}
+          rowHeight={30}
+          pagination={true}
+          paginationPageSize={25}
+          suppressCellSelection={true}
+          suppressMovableColumns={true}
+          suppressPaginationPanel={true}
+        />
+      </div>
+    );
+
+    const content = (
+      <div className="Grading">
+        {controls}
+        <Divider />
+        {grid}
+      </div>
+    );
+
     return (
       <div>
         <ContentDisplay
           loadContentDispatch={this.props.handleFetchGradingOverviews}
-          display={this.props.gradingOverviews === undefined ? loadingDisplay : grid}
+          display={this.props.gradingOverviews === undefined ? loadingDisplay : content}
           fullWidth={false}
         />
       </div>

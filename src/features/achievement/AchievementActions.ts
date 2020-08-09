@@ -34,12 +34,16 @@ export const removeAchievement = (achievement: AchievementItem) =>
 export const removeGoal = (definition: GoalDefinition) => action(REMOVE_GOAL, definition);
 
 /*
-  Note: This Updates the store for our Achievements in the frontend. 
+  Note: This updates the frontend Achievement Redux store.
   Please refer to AchievementReducer to find out more. 
 */
 export const saveAchievements = (achievements: AchievementItem[]) =>
   action(SAVE_ACHIEVEMENTS, achievements);
 
+/*
+  Note: This updates the frontend Achievement Redux store.
+  Please refer to AchievementReducer to find out more. 
+*/
 export const saveGoals = (goals: AchievementGoal[]) => action(SAVE_GOALS, goals);
 
 export const updateGoalProgress = (studentId: number, progress: GoalProgress) =>

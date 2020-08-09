@@ -1,7 +1,6 @@
 import {
   AchievementAbility,
-  AchievementItem,
-  FilterStatus
+  AchievementItem
 } from '../../../../features/achievement/AchievementTypes';
 import { mockAchievements, mockGoals } from '../../../mocks/AchievementMocks';
 import AchievementInferencer from '../AchievementInferencer';
@@ -23,18 +22,6 @@ const sampleAchievement: AchievementItem = {
     completionText: ''
   }
 };
-
-describe('Filter Count activated when', () => {
-  test('getFilterCount is called', () => {
-    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
-
-    expect(inferencer.getFilterCount(FilterStatus.ALL)).toEqual(11);
-
-    expect(inferencer.getFilterCount(FilterStatus.ACTIVE)).toEqual(7);
-
-    expect(inferencer.getFilterCount(FilterStatus.COMPLETED)).toEqual(4);
-  });
-});
 
 describe('Achievements change when', () => {
   test('an achievement is unset to be a task', () => {
@@ -90,6 +77,6 @@ describe('Children are listed', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
     const firstAchievementId = inferencer.getAchievementItem(0).id;
 
-    expect(inferencer.listImmediateChildren(firstAchievementId)).toEqual([]);
+    expect([...inferencer.getImmediateChildren(firstAchievementId)]).toEqual([]);
   });
 });
