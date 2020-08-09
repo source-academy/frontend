@@ -7,6 +7,10 @@ import SSImageAssets from '../assets/ImageAssets';
 import SSCursorModeConstants from './SSCursorModeConstants';
 import { CursorMode } from './SSCursorModeTypes';
 
+/**
+ * This manager manages rendering of the cursor mode icons
+ * and manages which SS cursor mode is activated
+ */
 export default class SSCursorMode extends Phaser.GameObjects.Container {
   private isModes: Array<boolean>;
   private currCursorMode: CursorMode;

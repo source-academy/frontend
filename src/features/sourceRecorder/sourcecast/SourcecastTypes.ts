@@ -22,5 +22,6 @@ type SourcecastWorkspaceAttr = {
   readonly playbackStatus: PlaybackStatus;
   readonly sourcecastIndex: SourcecastData[] | null;
   readonly title: string | null;
+  readonly uid: string | null;
 };
 export type SourcecastWorkspaceState = SourcecastWorkspaceAttr & WorkspaceState;

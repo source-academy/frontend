@@ -93,10 +93,7 @@ export async function shortenURLRequest(
   queryString: string,
   keyword: string
 ): Promise<Response | null> {
-  let url = `${window.location.protocol}//${window.location.hostname}/playground#${queryString}`;
-  if (window.location.port !== '') {
-    url = `${window.location.protocol}//${window.location.hostname}:${window.location.port}/playground#${queryString}`;
-  }
+  const url = `${window.location.protocol}//${window.location.host}/playground#${queryString}`;
 
   const params = {
     signature: Constants.urlShortenerSignature,

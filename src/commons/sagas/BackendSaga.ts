@@ -468,12 +468,12 @@ function* BackendSaga(): SagaIterator {
     if (role === Role.Student) {
       return yield call(showWarningMessage, 'Only staff can save sourcecast.');
     }
-    const { title, description, audio, playbackData } = action.payload;
+    const { title, description, uid, audio, playbackData } = action.payload;
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postSourcecast(title, description, audio, playbackData, tokens);
+    const resp = yield postSourcecast(title, description, uid, audio, playbackData, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp, new Map());

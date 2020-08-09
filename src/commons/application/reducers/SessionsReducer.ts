@@ -2,7 +2,6 @@ import { Reducer } from 'redux';
 
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
-import { SET_GAME_STATE } from '../types/ActionTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
   ADD_KEYSTROKE_LOG,
@@ -85,11 +84,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notifications: action.payload
-      };
-    case SET_GAME_STATE:
-      return {
-        ...state,
-        gameState: action.payload
       };
     case ADD_KEYSTROKE_LOG:
       const logsCopy = state.keystrokeLogs;

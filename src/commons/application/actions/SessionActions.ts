@@ -8,7 +8,6 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
-import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   ADD_KEYSTROKE_LOG,
@@ -60,8 +59,6 @@ export const fetchGradingOverviews = (filterToGroup = true) =>
 export const login = (providerId: string) => action(LOGIN, providerId);
 
 export const logoutGoogle = () => action(LOGOUT_GOOGLE);
-
-export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
 
 export const setTokens = ({
   accessToken,

@@ -1,5 +1,5 @@
 import { Assessment, IProgrammingQuestion } from 'src/commons/assessment/AssessmentTypes';
-import { getAssessment } from 'src/commons/sagas/RequestsSaga';
+import { getAssessment, getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
 
 import ImageAssets from '../../assets/ImageAssets';
 import GameModeSequence from '../../mode/sequence/GameModeSequence';
@@ -17,9 +17,9 @@ import { RoomConstants, roomDefaultCode, verifiedStyle } from './RoomPreviewCons
  * @returns {Promise<string>} - promise of students code
  */
 export async function getRoomPreviewCode(): Promise<string> {
-  const roomMissionId = getRoomMissionId();
+  const roomAssessmentId = await getRoomAssessmentId();
   const mission = await getAssessment(
-    roomMissionId,
+    roomAssessmentId,
     SourceAcademyGame.getInstance().getAccountInfo()
   );
   const studentCode = getStudentRoomCode(mission);
@@ -27,13 +27,18 @@ export async function getRoomPreviewCode(): Promise<string> {
 }
 
 /**
- * Function that generates the correct mission id of students
+ * Function that generates the correct assessment id of students
  *
  * @param {AccountInfo} accInfo - students' account information
  */
-function getRoomMissionId() {
-  // TODO: Change to non-hardcode
-  return 405;
+async function getRoomAssessmentId() {
+  const assessments = await getAssessmentOverviews(
+    SourceAcademyGame.getInstance().getAccountInfo()
+  );
+  const roomAssessment = (assessments || []).find(
+    assessment => assessment.number === RoomConstants.assessmentNumber
+  );
+  return roomAssessment ? roomAssessment.id : 0;
 }
 
 /**

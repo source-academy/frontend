@@ -20,6 +20,7 @@ export const SourcecastReducer = (
         ...state,
         title: action.payload.title,
         description: action.payload.description,
+        uid: action.payload.uid,
         audioUrl: action.payload.audioUrl,
         playbackData: action.payload.playbackData
       };
@@ -43,6 +44,7 @@ export const SourcecastReducer = (
         ...state,
         title: action.payload.title,
         description: action.payload.description,
+        uid: action.payload.uid,
         audioUrl: action.payload.audioUrl,
         playbackData: action.payload.playbackData
       };

@@ -3,9 +3,8 @@ import React from 'react';
 import AchievementInferencer from '../utils/AchievementInferencer';
 import TaskAdder from './controlPanelTools/controlPanelUtils/TaskAdder';
 import TaskUploader from './controlPanelTools/controlPanelUtils/TaskUploader';
-import EditableAchievementTask from './controlPanelTools/EditableAchievementTask';
 
-type AchievementControlPanelProps = {
+type ControlPanelProps = {
   inferencer: AchievementInferencer;
   updateAchievements: any;
   forceRender: any;
@@ -16,12 +15,11 @@ type AchievementControlPanelProps = {
   saveAchievementsToFrontEnd: any;
 };
 
-function AchievementControlPanel(props: AchievementControlPanelProps) {
+function ControlPanel(props: ControlPanelProps) {
   const {
     inferencer,
     updateAchievements,
     forceRender,
-    isDisabled,
     pendingUpload,
     setPendingUpload,
     saveAchievementsToFrontEnd
@@ -39,30 +37,14 @@ function AchievementControlPanel(props: AchievementControlPanelProps) {
     forceRender();
   };
 
-  const mapAchievementIdsToEditableTask = (achievementIds: number[]) =>
-    achievementIds.map(id => (
-      <EditableAchievementTask
-        key={id}
-        achievement={inferencer.getAchievementItem(id)}
-        inferencer={inferencer}
-        saveChanges={handleSaveChanges}
-      />
-    ));
-
   return (
-    <div
-      className="sample-cards"
-      style={isDisabled ? { pointerEvents: 'none', opacity: '0.4' } : {}}
-    >
-      <ul className="display-list">
-        {mapAchievementIdsToEditableTask(inferencer.listTaskIdsbyPosition())}
-      </ul>
-
-      <div>
-        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
+    <div className="control-panel">
+      <div className="command-buttons">
         <TaskAdder inferencer={inferencer} saveChanges={handleSaveChanges} />
+        <TaskUploader pendingUpload={pendingUpload} uploadChanges={handleUploadChanges} />
       </div>
     </div>
   );
 }
-export default AchievementControlPanel;
+
+export default ControlPanel;

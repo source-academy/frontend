@@ -10,6 +10,14 @@ import { ICheckpointLoggable } from '../logger/SSLogManagerTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
 import { SSObjectDetail } from './SSObjectManagerTypes';
 
+/**
+ * This manager manages the object (image assets) for Story Simulator's Object Placement scene
+ *
+ * It handles:
+ * (1) Storing of information on image assets used
+ * (2) Creation of image assets by taking the image name from browser storage
+ * (3) Rendering of image assets onto screen
+ */
 export default class SSObjectManager implements ICheckpointLoggable {
   public checkpointTitle = 'objects';
 
@@ -25,6 +33,10 @@ export default class SSObjectManager implements ICheckpointLoggable {
     this.objectDetailMap = new Map<ItemId, SSObjectDetail>();
   }
 
+  /**
+   * Takes the image path from the session storage
+   * and renders the image on screen
+   */
   public async loadObject() {
     const shortPath = sessionStorage.getItem('selectedAsset');
     if (!shortPath) return;
@@ -39,6 +51,11 @@ export default class SSObjectManager implements ICheckpointLoggable {
     this.renderObject(assetKeyOnLoad);
   }
 
+  /**
+   * Helper to renders the object in the middle of the screen
+   *
+   * @param objectAssetKey asset key of the image used for the object
+   */
   private renderObject(objectAssetKey: string) {
     if (objectAssetKey[0] !== '#') {
       return;
@@ -57,6 +74,12 @@ export default class SSObjectManager implements ICheckpointLoggable {
     this.registerObject(objectAssetKey, objectSprite);
   }
 
+  /**
+   * Helper to record down information on the object that has been placed onto the scene
+   *
+   * @param objectAssetKey
+   * @param objectSprite
+   */
   private registerObject(objectAssetKey: AssetKey, objectSprite: Phaser.GameObjects.Image) {
     const itemId = this.generateItemId(
       objectAssetKey,
@@ -81,15 +104,31 @@ export default class SSObjectManager implements ICheckpointLoggable {
     this.getObjectPlacement().setActiveSelection(objectSprite);
   }
 
+  /**
+   * Helper to generate a default id for this object
+   *
+   * @param assetKey
+   * @param objectIdNumber
+   */
   private generateItemId(assetKey: string, objectIdNumber: number) {
     const itemName = getIdFromShortPath(assetKey);
     return `${itemName}${objectIdNumber}`;
   }
 
+  /**
+   * Returns the list of objects details for logging information
+   * into info-boxes by LogManager
+   */
   public getLoggables() {
     return [...this.objectDetailMap.values()];
   }
 
+  /**
+   * This function is called when printing the checkpoint text file
+   *
+   * Provides the array of strings that are associated with the `objects` entity
+   * that are printed within the location paragraph.
+   */
   public checkpointTxtLog() {
     return Array.from(this.objectDetailMap.values()).map((objectDetail: SSObjectDetail) => {
       const objectDetailArray = [
@@ -108,6 +147,14 @@ export default class SSObjectManager implements ICheckpointLoggable {
 
   private getObjectPlacement = () => mandatory(this.objectPlacement);
 
+  /**
+   * This function receives any transformation updates on objects
+   * from Transformation manager and stores information internally in its `objectDetailMap`
+   *
+   * @param gameObject bounding box being updated
+   * @param attribute attributes being updated for that bbox
+   * @param value value to set this attribute to
+   */
   public setAttribute(
     gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle,
     attribute: string,

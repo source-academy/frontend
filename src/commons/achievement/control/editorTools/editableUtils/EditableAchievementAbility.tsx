@@ -2,10 +2,7 @@ import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 
-import {
-  achievementAbilities,
-  AchievementAbility
-} from '../../../../../features/achievement/AchievementTypes';
+import { AchievementAbility } from '../../../../../features/achievement/AchievementTypes';
 
 type EditableAchievementAbilityProps = {
   ability: AchievementAbility;
@@ -33,7 +30,7 @@ function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
     <div className="ability">
       <AbilitySelectComponent
         className={Classes.MINIMAL}
-        items={achievementAbilities}
+        items={Object.values(AchievementAbility)}
         onItemSelect={changeAbility}
         itemRenderer={abilityRenderer}
         filterable={false}

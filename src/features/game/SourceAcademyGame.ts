@@ -1,7 +1,7 @@
 import * as Phaser from 'phaser';
 import { AwardProperty } from 'src/features/game/awards/GameAwardsTypes';
 import { Constants, screenSize } from 'src/features/game/commons/CommonConstants';
-import { ItemId } from 'src/features/game/commons/CommonTypes';
+import { AssetPath, ItemId } from 'src/features/game/commons/CommonTypes';
 import GameSaveManager from 'src/features/game/save/GameSaveManager';
 import AwardsHall from 'src/features/game/scenes/awardsHall/AwardsHall';
 import Bindings from 'src/features/game/scenes/bindings/Bindings';
@@ -15,7 +15,7 @@ import GameSoundManager from 'src/features/game/sound/GameSoundManager';
 import { mandatory } from 'src/features/game/utils/GameUtils';
 import { StorySimState } from 'src/features/storySimulator/StorySimulatorTypes';
 
-import { AchievementItem } from '../achievement/AchievementTypes';
+import { AchievementGoal, AchievementItem } from '../achievement/AchievementTypes';
 import { fetchGameChapters } from './chapter/GameChapterHelpers';
 import GameChapterMocks from './chapter/GameChapterMocks';
 import { GameChapter } from './chapter/GameChapterTypes';
@@ -38,17 +38,19 @@ export enum GameType {
 type GlobalGameProps = {
   accountInfo: AccountInfo | undefined;
   achievements: AchievementItem[] | undefined;
-  setStorySimState: (value: React.SetStateAction<string>) => void;
   awardsMapping: Map<ItemId, AwardProperty>;
   currentSceneRef?: Phaser.Scene;
-  soundManager: GameSoundManager;
-  saveManager: GameSaveManager;
-  userStateManager: GameUserStateManager;
-  gameType: GameType;
   gameChapters: GameChapter[];
-  ssChapterSimFilenames: string[];
+  gameType: GameType;
+  goals: AchievementGoal[] | undefined;
   isUsingMock: boolean;
   roomCode: string;
+  roomPreviewMapping: Map<ItemId, AssetPath>;
+  saveManager: GameSaveManager;
+  setStorySimState: (value: React.SetStateAction<string>) => void;
+  soundManager: GameSoundManager;
+  ssChapterSimFilenames: string[];
+  userStateManager: GameUserStateManager;
 };
 
 export default class SourceAcademyGame extends Phaser.Game {
@@ -64,16 +66,18 @@ export default class SourceAcademyGame extends Phaser.Game {
       awardsMapping: new Map<ItemId, AwardProperty>(),
       accountInfo: undefined,
       achievements: undefined,
-      setStorySimState: Constants.nullFunction,
       currentSceneRef: undefined,
-      soundManager: new GameSoundManager(),
-      saveManager: new GameSaveManager(),
-      userStateManager: new GameUserStateManager(),
-      gameType,
       gameChapters: [],
-      ssChapterSimFilenames: [],
+      gameType: gameType,
+      goals: undefined,
       isUsingMock: false,
-      roomCode: ''
+      roomCode: '',
+      roomPreviewMapping: new Map<ItemId, AssetPath>(),
+      saveManager: new GameSaveManager(),
+      setStorySimState: Constants.nullFunction,
+      soundManager: new GameSoundManager(),
+      ssChapterSimFilenames: [],
+      userStateManager: new GameUserStateManager()
     };
   }
 
@@ -99,8 +103,16 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.awardsMapping.set(awardId, awardProp);
   }
 
+  public setGoals(goals: AchievementGoal[]) {
+    this.global.goals = goals;
+  }
+
   public setStorySimStateSetter(setStorySimState: (value: React.SetStateAction<string>) => void) {
     this.setStorySimState = setStorySimState;
+  }
+
+  public setRoomPreviewMapping(mapping: Map<ItemId, AssetPath>) {
+    this.global.roomPreviewMapping = mapping;
   }
 
   public async loadGameChapters() {
@@ -131,6 +143,8 @@ export default class SourceAcademyGame extends Phaser.Game {
   public getAccountInfo = () => mandatory(this.global.accountInfo);
   public getAchievements = () => mandatory(this.global.achievements);
   public getSoundManager = () => mandatory(this.global.soundManager);
+  public getGoals = () => mandatory(this.global.goals);
+  public getRoomPreviewMapping = () => mandatory(this.global.roomPreviewMapping);
   public getUserStateManager = () => mandatory(this.global.userStateManager);
   public getSaveManager = () => mandatory(this.global.saveManager);
   public getCurrentSceneRef = () => mandatory(this.global.currentSceneRef);

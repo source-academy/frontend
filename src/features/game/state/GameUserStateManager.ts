@@ -1,4 +1,5 @@
 import { getAssessmentOverviews } from 'src/commons/sagas/RequestsSaga';
+import { AchievementGoal } from 'src/features/achievement/AchievementTypes';
 
 import { getAwardProp } from '../awards/GameAwardsHelper';
 import { AwardProperty } from '../awards/GameAwardsTypes';
@@ -45,9 +46,9 @@ export default class GameUserStateManager {
 
   /**
    * Fetches assessment overview of the student; based on
-   * the account information.
+   * the account information. Only include submitted assessments' ids.
    *
-   * Only returns submitted assessments' ids.
+   * IMPT: The assessments are ordered from earliest close date.
    */
   public async loadAssessments() {
     const assessments = await getAssessmentOverviews(
@@ -56,6 +57,7 @@ export default class GameUserStateManager {
     this.assessments = new Set(
       (assessments || [])
         .filter(assessment => assessment.status === 'submitted')
+        .sort((a, b) => (a.closeAt <= b.closeAt ? -1 : 1))
         .map(assessment => assessment.id.toString())
     );
   }
@@ -86,11 +88,16 @@ export default class GameUserStateManager {
    */
   public async loadAchievements() {
     const achievements = SourceAcademyGame.getInstance().getAchievements();
+    const goals = SourceAcademyGame.getInstance().getGoals();
+
+    // Convert goals to map
+    const goalMapping = new Map<number, AchievementGoal>();
+    goals.forEach(goal => goalMapping.set(goal.id, goal));
 
     achievements.forEach(achievement => {
       const achievementId = achievement.id.toString();
-      const isCompleted = achievement.goals.reduce(
-        (soFar, goal) => goal.goalProgress === goal.goalTarget && soFar,
+      const isCompleted = achievement.goalIds.reduce(
+        (result, goalId) => result && goalMapping.get(goalId)!.completed,
         true
       );
       const awardProp = getAwardProp(achievementId);

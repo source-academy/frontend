@@ -1,15 +1,416 @@
 .AchievementControl {
+  $default-spacing: 1em;
+
+  background: black url(#{$achievement-assets}/background.png) center/cover no-repeat fixed;
   display: flex;
   flex-direction: row;
-  flex: 1 1 100%;
-  background-size: cover;
-  background-image: linear-gradient(
-      to right,
-      rgba(0, 0, 0, 0.3),
-      rgba(0, 0, 0, 0.6),
-      rgba(0, 0, 0, 0.3)
-    ),
-    url(#{$achievement-assets}/background.png);
+  height: 100%;
+  overflow: auto;
+  width: 100%;
+
+  // Interfaces e.g. Control Panel, Achievement Editor and Goal Editor
+  %platform {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    margin: 0 auto;
+    min-width: max-content;
+    overflow: hidden;
+    padding: $default-spacing;
+  }
+
+  // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
+  %command {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  // Unordered list container, has a vertical scrollbar
+  %container {
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    list-style-type: none;
+    margin: 0;
+    overflow-y: auto;
+    padding: 0;
+    scrollbar-color: white #444;
+    scrollbar-width: thin;
+
+    li {
+      margin: $default-spacing;
+    }
+
+    li:not(:first-child) {
+      margin: 0 $default-spacing $default-spacing;
+    }
+  }
+
+  .achievement-preview {
+    $canvas-spacing: 0.3em;
+    $content-spacing: 0.5em;
+    // Canvas aspect ratio 2:1
+    $canvas-height: 18em;
+    $canvas-width: 36em;
+    // Card aspect ratio 2:1
+    $card-height: 5em;
+    $card-width: 30em;
+    // View aspect ratio 18:25
+    $view-height: 50em;
+    $view-width: $canvas-width;
+
+    @extend %platform;
+
+    .command-button {
+      display: flex;
+      flex-direction: row;
+      height: 1em;
+      margin: $default-spacing auto;
+    }
+
+    .preview-container {
+      @extend %container;
+      align-items: center;
+      height: 90%;
+      width: $view-width + $default-spacing * 2;
+
+      .no-view {
+        align-items: center;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+      }
+
+      .view {
+        color: white;
+        display: flex;
+        flex-direction: column;
+        margin: $default-spacing;
+        min-height: $view-height;
+        width: $view-width;
+
+        .canvas {
+          display: flex;
+          flex-direction: column;
+          height: $canvas-height;
+          width: $canvas-width;
+
+          h1 {
+            margin: 0.5em auto 0;
+            padding: $canvas-spacing;
+          }
+
+          p {
+            margin: 0 auto;
+            padding: $canvas-spacing;
+          }
+
+          .description {
+            color: yellow;
+            font-size: 0.85em;
+            margin: auto auto 1em;
+            text-align: center;
+            width: 80%;
+          }
+        }
+
+        .goal {
+          align-items: center;
+          display: flex;
+          flex-direction: row;
+          padding: $content-spacing;
+
+          .goal-badge {
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            min-width: 6em;
+            padding: 0 $content-spacing;
+
+            .goal-icon {
+              background: url(#{$achievement-assets}/xp-icon.png) center/contain;
+              height: 2em;
+              width: 2em;
+            }
+
+            p {
+              text-align: center;
+              font-size: 0.7em;
+              padding: 0.2em 0 0 0;
+            }
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+
+        hr {
+          background: lightgrey;
+          border: none;
+          height: 1px;
+          margin: $content-spacing auto;
+          width: 90%;
+        }
+
+        .completion {
+          padding: $content-spacing;
+          text-align: center;
+
+          h1 {
+            color: #fc0;
+            margin: 0 auto $content-spacing;
+          }
+
+          p {
+            margin: 0;
+            padding: 0;
+          }
+        }
+      }
+
+      .task {
+        .achievement-card {
+          cursor: pointer;
+          display: flex;
+          flex-direction: row;
+          height: $card-height;
+          transition: box-shadow 0.2s ease-out;
+          width: $card-width;
+
+          .dropdown-button {
+            align-items: center;
+            display: flex;
+            height: $card-height;
+            padding: 0 0 0 0.5em;
+            width: $card-height;
+          }
+
+          .content {
+            display: flex;
+            flex-direction: column;
+            height: $card-height;
+            width: $card-width - $card-height;
+
+            .heading {
+              align-items: center;
+              display: flex;
+              flex-direction: row;
+              height: $card-height * 3 / 5;
+            }
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              font-size: 0.8em;
+
+              p {
+                margin: 0;
+              }
+
+              .ability {
+                align-items: center;
+                display: flex;
+                flex: 1 1 50%;
+              }
+
+              .deadline,
+              .exp {
+                align-items: center;
+                display: flex;
+                flex: 1 1 25%;
+
+                p {
+                  padding: 0 0 0 0.3em;
+                }
+              }
+            }
+
+            .progress {
+              height: 0.2em;
+              margin: 0.2em 0 0 0;
+              width: 95%;
+            }
+          }
+        }
+
+        .achievement-card:hover {
+          box-shadow: 0 0 10px black;
+          transition: box-shadow 0.2s ease-in;
+        }
+
+        .prerequisite-container {
+          $shrink-factor: 0.9;
+          $line-width: 1em;
+          // remaining-width is the empty space between line and card
+          $remaining-width: ((1 - $shrink-factor) * $card-width - 2 * $line-width) / 2;
+          $top-spacing: 0.2em;
+
+          display: flex;
+          flex-direction: column;
+
+          .prerequisite {
+            display: flex;
+            flex-direction: row;
+            max-width: $card-width;
+
+            .dropdown-lines {
+              height: $top-spacing + $card-height;
+              margin: -#{$card-height / 2} -#{$line-width + $remaining-width} 0 $line-width;
+              min-width: $line-width;
+            }
+
+            .achievement-card {
+              margin: $top-spacing 0 0 0;
+              transform: scale($shrink-factor);
+            }
+          }
+
+          .prerequisite:first-child {
+            .dropdown-lines {
+              height: $top-spacing + $card-height / 2;
+              margin-top: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .achievement-editor {
+    @extend %platform;
+
+    .achievement-command {
+      @extend %command;
+    }
+
+    .achievement-container {
+      @extend %container;
+
+      .editable-achievement {
+        width: 90%;
+        background-color: #d9d9d9;
+
+        height: 20%;
+        margin-bottom: 10px;
+
+        display: flex;
+        flex-direction: column;
+
+        .top-bar {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        }
+
+        .bp3-dialog-container {
+          align-items: center;
+          justify-content: center;
+
+          .goal {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-evenly;
+
+            .goal-medal {
+              display: flex;
+              flex-direction: column;
+              flex-basis: 25%;
+
+              text-align: center;
+              align-items: center;
+              justify-content: center;
+            }
+
+            .goal-text {
+              display: flex;
+              text-align: center;
+              align-items: center;
+              justify-content: center;
+            }
+          }
+
+          .view-editor {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            text-align: center;
+
+            .background-card {
+              max-width: 100%;
+              background-color: #333e50;
+            }
+
+            .view-img {
+              max-width: 100%;
+            }
+          }
+        }
+
+        .main {
+          display: flex;
+          flex-direction: row;
+          flex-basis: 80%;
+
+          .dropdown {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 10%;
+          }
+
+          .icon {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-basis: 10%;
+          }
+
+          .display {
+            display: flex;
+            justify-content: center;
+            margin-left: 10%;
+            width: 100%;
+            flex-direction: column;
+
+            .details {
+              display: flex;
+              flex-direction: row;
+              justify-content: space-evenly;
+
+              .ability {
+                flex-basis: 40%;
+              }
+
+              .deadline {
+                display: flex;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
+
+              .exp {
+                display: flex;
+                margin-left: 5%;
+                flex-direction: row;
+                flex-basis: 30%;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .goal-editor {
+    @extend %platform;
+
+    .goal-container {
+      @extend %container;
+    }
+  }
 
   .bp3-dialog-container {
     align-items: flex-start;
@@ -20,365 +421,18 @@
     pointer-events: none;
   }
 
-  .sample-cards {
-    width: 50%;
-    display: table;
-
-    .main-adder {
-      width: 100%;
-      text-align: center;
-    }
-
-    ::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    ::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 1);
-    }
-
-    .display-list {
-      overflow: hidden;
-      overflow-y: scroll;
-      height: 800px;
-      max-height: 800px;
-      list-style: none;
-      padding-bottom: 10px;
-    }
-
-    .edit-container {
-      display: flex;
-      flex-direction: row;
-
-      .main-cards {
-        flex-basis: 90%;
-        height: 100%;
-
-        .achievement-card {
-          display: flex;
-
-          flex-direction: row;
-
-          // Card aspect ratio 6:1
-          height: 5em;
-          width: 30em;
-          padding: 0;
-          margin-bottom: 0.8em;
-
-          justify-content: center;
-          align-items: center;
-          cursor: pointer;
-          transition: box-shadow 0.2s ease-out;
-          box-shadow: 0;
-
-          .dropdown-button {
-            display: flex;
-
-            height: 5em;
-            width: 6em;
-            padding: 0 0 0 0.5em;
-
-            justify-content: flex-start;
-            align-items: center;
-          }
-
-          .content {
-            display: flex;
-
-            flex-direction: column;
-
-            height: 5em;
-            width: 24em;
-
-            .heading {
-              display: flex;
-              flex-direction: row;
-
-              height: 2.8em;
-
-              justify-content: flex-start;
-              align-items: center;
-
-              padding: 0.2em 0 0 0;
-
-              font-size: 0.7vw;
-
-              .week {
-                padding: 0 0 0 1em;
-                transform: scale(0.8);
-              }
-            }
-
-            .details {
-              display: flex;
-              flex-direction: row;
-
-              height: 1.9em;
-
-              font-size: 0.85em;
-
-              .ability {
-                display: flex;
-                flex: 0 1 55%;
-              }
-
-              .deadline {
-                display: flex;
-                flex-direction: row;
-                flex: 0 1 25%;
-                align-items: stretch;
-
-                p {
-                  padding-left: 0.3em;
-                }
-              }
-
-              .exp {
-                display: flex;
-                flex-direction: row;
-                flex: 0 1 20%;
-                align-items: stretch;
-
-                p {
-                  padding-left: 0.3em;
-                }
-              }
-            }
-
-            .progress {
-              display: flex;
-              height: 0.2em;
-              width: 23em;
-
-              align-items: flex-end;
-            }
-          }
-        }
-
-        .achievement-card:hover {
-          transition: box-shadow 0.2s ease-in;
-          box-shadow: 0 0 10px black;
-        }
-
-        .dropdown-container {
-          display: flex;
-          flex-direction: row;
-
-          .lines {
-            display: flex;
-            width: 10%;
-            flex-direction: column;
-
-            margin: -0.8em -0.8em 0 0.8em;
-
-            .l-shape {
-              height: 50%;
-              width: 60%;
-              border-bottom: 1px solid white;
-              border-left: 1px solid white;
-            }
-
-            .extend-bottom {
-              height: 50%;
-              border-left: 1px solid white;
-            }
-          }
-
-          .dropdown-button {
-            display: flex;
-
-            height: 5em;
-            width: 4em;
-
-            justify-content: flex-start;
-            align-items: center;
-          }
-        }
-      }
-
-      .editor-buttons {
-        flex-basis: 25%;
-        height: 10em;
-        margin-bottom: 0.5em;
-
-        display: flex;
-        flex-direction: column;
-
-        .task-selector {
-          margin-top: 10px;
-          text-align: center;
-          align-items: center;
-          justify-content: center;
-
-          display: flex;
-          flex-direction: column;
-
-          .editor-button {
-            width: 100%;
-          }
-
-          .move-editor-buttons {
-            display: flex;
-            flex-direction: row;
-          }
-        }
-      }
-    }
+  // Scroll Bar
+  ::-webkit-scrollbar {
+    width: 3px;
   }
 
-  .editor-cards {
-    width: 50%;
-    display: table;
+  ::-webkit-scrollbar-track {
+    border-radius: 1.5px;
+    box-shadow: inset 0 0 3px black;
+  }
 
-    .main-adder {
-      width: 100%;
-      text-align: center;
-    }
-
-    ::-webkit-scrollbar {
-      width: 12px;
-    }
-
-    ::-webkit-scrollbar-track {
-      -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      box-shadow: inset 0 0 6px rgba(0, 0, 0, 1);
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      -webkit-border-radius: 10px;
-      border-radius: 10px;
-      background: rgba(255, 255, 255, 1);
-    }
-
-    .display-list {
-      overflow: hidden;
-      overflow-y: scroll;
-      height: 800px;
-      max-height: 800px;
-      list-style: none;
-    }
-
-    .editable-achievement {
-      width: 90%;
-      background-color: #d9d9d9;
-
-      height: 20%;
-      margin-bottom: 10px;
-
-      display: flex;
-      flex-direction: column;
-
-      .top-bar {
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-      }
-
-      .bp3-dialog-container {
-        align-items: center;
-        justify-content: center;
-
-        .goal {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-evenly;
-
-          .goal-medal {
-            display: flex;
-            flex-direction: column;
-            flex-basis: 25%;
-
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-          }
-
-          .goal-text {
-            display: flex;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-          }
-        }
-
-        .view-editor {
-          width: 100%;
-          display: flex;
-          justify-content: center;
-          text-align: center;
-
-          .background-card {
-            max-width: 100%;
-            background-color: #333e50;
-          }
-
-          .view-img {
-            max-width: 100%;
-          }
-        }
-      }
-
-      .main {
-        display: flex;
-        flex-direction: row;
-        flex-basis: 80%;
-
-        .dropdown {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .icon {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-basis: 10%;
-        }
-
-        .display {
-          display: flex;
-          justify-content: center;
-          margin-left: 10%;
-          width: 100%;
-          flex-direction: column;
-
-          .details {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
-
-            .ability {
-              flex-basis: 40%;
-            }
-
-            .deadline {
-              display: flex;
-              flex-direction: row;
-              flex-basis: 30%;
-            }
-
-            .exp {
-              display: flex;
-              margin-left: 5%;
-              flex-direction: row;
-              flex-basis: 30%;
-            }
-          }
-        }
-      }
-    }
+  ::-webkit-scrollbar-thumb {
+    background: white;
+    border-radius: 1.5px;
   }
 }

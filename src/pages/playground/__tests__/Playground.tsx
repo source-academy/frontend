@@ -12,6 +12,7 @@ import Playground, { PlaygroundProps } from '../Playground';
 const baseProps = {
   editorValue: '',
   execTime: 1000,
+  stepLimit: 1000,
   breakpoints: [],
   highlightedLines: [],
   isRunning: false,
@@ -38,6 +39,7 @@ const baseProps = {
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
   handleChangeExecTime: (execTime: number) => {},
+  handleChangeStepLimit: (stepLimit: number) => {},
   handleChapterSelect: (chapter: number) => {},
   handleDeclarationNavigate: (cursorPosition: Position) => {},
   handleEditorEval: () => {},

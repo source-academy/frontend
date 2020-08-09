@@ -3,24 +3,25 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
 type AchievementExpProps = {
-  exp?: number;
+  exp: number;
   isBonus: boolean;
+};
+
+const stringifyExp = (exp: number, isBonus: boolean) => {
+  return (isBonus ? '+' : '') + exp + ' XP';
 };
 
 function AchievementExp(props: AchievementExpProps) {
   const { exp, isBonus } = props;
 
-  if (exp === undefined || exp === 0) return <div className="exp"></div>;
-
-  // Converts number to EXP string
-  const stringifyExp = (exp: number) => {
-    return (isBonus ? '+' : '') + exp + ' XP';
-  };
-
   return (
     <div className="exp">
-      <Icon icon={IconNames.BANK_ACCOUNT} />
-      <p>{stringifyExp(exp)}</p>
+      {exp !== 0 && (
+        <>
+          <Icon icon={IconNames.BANK_ACCOUNT} />
+          <p>{stringifyExp(exp, isBonus)}</p>
+        </>
+      )}
     </div>
   );
 }
