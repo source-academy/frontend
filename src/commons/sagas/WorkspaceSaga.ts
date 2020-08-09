@@ -14,6 +14,7 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
@@ -492,6 +493,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       case ExternalLibraryName.RUNES:
         (window as any).loadLib('RUNES');
         (window as any).getReadyWebGLForCanvas('3d');
+        (window as any).getReadyStringifyForRunes(stringify);
         break;
       case ExternalLibraryName.CURVES:
         (window as any).loadLib('CURVES');
