@@ -45,6 +45,7 @@ const baseProps = {
   handleEditorWidthChange: (widthChange: number) => {},
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => {},
   handleExternalSelect: (externalLibraryName: ExternalLibraryName) => {},
+  handleFetchSublanguage: () => {},
   handleFinishInvite: () => {},
   handleGenerateLz: () => {},
   handleShortenURL: () => {},
