@@ -1,15 +1,15 @@
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-balham.css';
 
+import { Button, Collapse, Divider, Intent } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import { ColDef, GridApi, GridReadyEvent } from 'ag-grid-community';
 import { AgGridReact } from 'ag-grid-react';
-import { sortBy } from 'lodash';
 import * as React from 'react';
 
 import { AssessmentOverview } from '../../../commons/assessment/AssessmentTypes';
 import ContentDisplay from '../../../commons/ContentDisplay';
-import { getPrettyDate } from '../../../commons/utils/DateHelper';
-import { IGroundControlAssessmentOverview } from '../../../features/groundControl/GroundControlTypes';
+import DefaultChapterSelect from './subcomponents/DefaultChapterSelectContainer';
 import DeleteCell from './subcomponents/GroundControlDeleteCell';
 import Dropzone from './subcomponents/GroundControlDropzone';
 import EditCell from './subcomponents/GroundControlEditCell';
@@ -26,12 +26,11 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  assessmentOverviews: AssessmentOverview[];
+  assessmentOverviews?: AssessmentOverview[];
 };
 
 type State = {
-  forceUpdate: boolean;
-  displayConfirmation: boolean;
+  showDropzone: boolean;
 };
 
 class GroundControl extends React.Component<GroundControlProps, State> {
@@ -43,9 +42,9 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     super(props);
 
     this.state = {
-      forceUpdate: false,
-      displayConfirmation: false
+      showDropzone: false
     };
+
     this.columnDefs = [
       {
         field: 'number',
@@ -63,35 +62,35 @@ class GroundControl extends React.Component<GroundControlProps, State> {
       },
       {
         headerName: 'Open Date',
-        field: '',
+        field: 'openAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: true
         },
-        width: 150,
-        sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
-        cellStyle: {
-          padding: 0
-        }
+        width: 150
       },
       {
         headerName: 'Close Date',
-        field: '',
+        field: 'closeAt',
+        filter: 'agDateColumnFilter',
+        filterParams: {
+          comparator: this.dateFilterComparator,
+          inRangeInclusive: true
+        },
+        sortingOrder: ['desc', 'asc', null],
         cellRendererFramework: EditCell,
         cellRendererParams: {
           handleAssessmentChangeDate: this.props.handleAssessmentChangeDate,
           forOpenDate: false
         },
-        width: 150,
-        sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
-        cellStyle: {
-          padding: 0
-        }
+        width: 150
       },
       {
         headerName: 'Publish',
@@ -101,13 +100,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handlePublishAssessment: this.props.handlePublishAssessment
         },
         width: 100,
+        filter: false,
+        resizable: false,
         sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
         cellStyle: {
           padding: 0
-        },
-        hide: !this.props.handlePublishAssessment
+        }
       },
       {
         headerName: 'Delete',
@@ -117,13 +115,12 @@ class GroundControl extends React.Component<GroundControlProps, State> {
           handleDeleteAssessment: this.props.handleDeleteAssessment
         },
         width: 100,
+        filter: false,
+        resizable: false,
         sortable: false,
-        suppressMovable: true,
-        suppressMenu: true,
         cellStyle: {
           padding: 0
-        },
-        hide: !this.props.handleDeleteAssessment
+        }
       }
     ];
 
@@ -134,81 +131,91 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     };
   }
 
-  public componentDidUpdate(prevProps: GroundControlProps) {
-    if (
-      this.gridApi &&
-      this.props.assessmentOverviews.length !== prevProps.assessmentOverviews.length
-    ) {
-      this.gridApi.setRowData(this.sortByCategoryAndDate());
-    }
-  }
-
   public render() {
-    const data = this.sortByCategoryAndDate();
-    const Grid = () => (
-      <div className="GradingContainer">
-        <div className="Grading ag-grid-parent ag-theme-balham">
-          <AgGridReact
-            domLayout={'autoHeight'}
-            columnDefs={this.columnDefs}
-            defaultColDef={this.defaultColumnDefs}
-            onGridReady={this.onGridReady}
-            onGridSizeChanged={this.resizeGrid}
-            rowData={data}
-            rowHeight={30}
-            suppressMovableColumns={true}
-            suppressPaginationPanel={true}
-          />
-        </div>
+    const controls = (
+      <div className="GridControls ground-control-controls">
+        <Button
+          active={this.state.showDropzone}
+          icon={IconNames.CLOUD_UPLOAD}
+          intent={this.state.showDropzone ? Intent.PRIMARY : Intent.NONE}
+          onClick={this.toggleDropzone}
+        >
+          <span className="hidden-xs">Upload assessment</span>
+        </Button>
+        <DefaultChapterSelect />
+        <Button icon={IconNames.REFRESH} onClick={this.props.handleAssessmentOverviewFetch}>
+          <span className="hidden-xs">Refresh assessments</span>
+        </Button>
       </div>
     );
 
-    const display = (
-      <div className="GroundControl">
-        <Dropzone
-          handleUploadAssessment={this.handleUploadAssessment}
-          toggleForceUpdate={this.toggleForceUpdate}
-          toggleDisplayConfirmation={this.toggleDisplayConfirmation}
-          forceUpdate={this.state.forceUpdate}
-          displayConfirmation={this.state.displayConfirmation}
+    const dropzone = (
+      <Collapse isOpen={this.state.showDropzone} keepChildrenMounted={true}>
+        <Dropzone handleUploadAssessment={this.props.handleUploadAssessment} />
+      </Collapse>
+    );
+
+    const grid = (
+      <div className="Grid ag-grid-parent ag-theme-balham">
+        <AgGridReact
+          domLayout={'autoHeight'}
+          columnDefs={this.columnDefs}
+          defaultColDef={this.defaultColumnDefs}
+          onGridReady={this.onGridReady}
+          onGridSizeChanged={this.resizeGrid}
+          rowData={this.props.assessmentOverviews}
+          rowHeight={30}
+          suppressCellSelection={true}
+          suppressMovableColumns={true}
+          suppressPaginationPanel={true}
         />
-        <Grid />
+      </div>
+    );
+
+    const content = (
+      <div className="GroundControl">
+        {controls}
+        {dropzone}
+        <Divider />
+        {grid}
       </div>
     );
 
     return (
       <div>
         <ContentDisplay
-          display={display}
-          loadContentDispatch={this.props.handleAssessmentOverviewFetch}
+          display={content}
+          loadContentDispatch={this.conditionallyFetchAssessmentOverviews}
         />
       </div>
     );
   }
 
-  private sortByCategoryAndDate = () => {
+  private conditionallyFetchAssessmentOverviews = () => {
     if (!this.props.assessmentOverviews) {
-      return [];
+      // If assessment overviews are not loaded, fetch them
+      this.props.handleAssessmentOverviewFetch();
     }
+  };
 
-    const overview: IGroundControlAssessmentOverview[] = this.props.assessmentOverviews
-      .slice()
-      .map(assessmentOverview => {
-        const clone: IGroundControlAssessmentOverview = JSON.parse(
-          JSON.stringify(assessmentOverview)
-        );
-        clone.prettyCloseAt = getPrettyDate(clone.closeAt);
-        clone.prettyOpenAt = getPrettyDate(clone.openAt);
-        clone.formattedOpenAt = new Date(Date.parse(clone.openAt));
-        clone.formattedCloseAt = new Date(Date.parse(clone.closeAt));
-        return clone;
-      });
-    return sortBy(overview, ['category', 'formattedOpenAt', 'formattedCloseAt']);
+  /*
+   *  Reference: https://www.ag-grid.com/javascript-grid-filter-date/#date-filter-comparator
+   */
+  private dateFilterComparator = (filterDate: Date, cellValue: string) => {
+    const cellDate = new Date(cellValue);
+
+    return cellDate < filterDate ? -1 : cellDate > filterDate ? 1 : 0;
   };
 
   private onGridReady = (params: GridReadyEvent) => {
     this.gridApi = params.api;
     this.gridApi.sizeColumnsToFit();
+
+    // Sort assessments by opening date, breaking ties by later of closing dates
+    this.gridApi.setSortModel([
+      { colId: 'openAt', sort: 'desc' },
+      { colId: 'closeAt', sort: 'desc' }
+    ]);
   };
 
   private resizeGrid = () => {
@@ -217,17 +224,8 @@ class GroundControl extends React.Component<GroundControlProps, State> {
     }
   };
 
-  private handleUploadAssessment = (file: File) => {
-    this.props.handleUploadAssessment(file, this.state.forceUpdate);
-    this.setState({ forceUpdate: false });
-  };
-
-  private toggleForceUpdate = () => {
-    this.setState({ forceUpdate: !this.state.forceUpdate });
-  };
-
-  private toggleDisplayConfirmation = () => {
-    this.setState({ displayConfirmation: !this.state.displayConfirmation });
+  private toggleDropzone = () => {
+    this.setState({ showDropzone: !this.state.showDropzone });
   };
 }
 

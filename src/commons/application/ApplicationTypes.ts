@@ -103,15 +103,30 @@ export enum Role {
 }
 
 /**
- * Defines what chapters are available for usage.
+ * Defines the Source sublanguages available for use.
  * For external libraries, see ExternalLibrariesTypes.ts
  */
 export type SourceLanguage = {
   chapter: number;
   variant: Variant;
+  displayName: string;
 };
 
-export const sourceLanguages: SourceLanguage[] = [
+const variantDisplay: Map<Variant, string> = new Map([
+  ['wasm', 'WebAssembly'],
+  ['non-det', 'Non-Det'],
+  ['concurrent', 'Concurrent'],
+  ['lazy', 'Lazy'],
+  ['gpu', 'GPU']
+]);
+
+export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
+  return `Source \xa7${chapter}${
+    variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
+  }`;
+};
+
+const sublanguages: { chapter: number; variant: Variant }[] = [
   { chapter: 1, variant: 'default' },
   { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
@@ -124,21 +139,15 @@ export const sourceLanguages: SourceLanguage[] = [
   { chapter: 4, variant: 'gpu' }
 ];
 
-const variantDisplay: Map<Variant, string> = new Map([
-  ['wasm', 'WebAssembly'],
-  ['non-det', 'Non-Det'],
-  ['concurrent', 'Concurrent'],
-  ['lazy', 'Lazy'],
-  ['gpu', 'GPU']
-]);
+export const sourceLanguages = sublanguages.map(sublang => {
+  return {
+    ...sublang,
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+  };
+});
 
-export const styliseChapter = (chap: number, variant: Variant = 'default') => {
-  let res = `Source \xa7${chap}`;
-  if (variantDisplay.has(variant)) {
-    res += ' ' + variantDisplay.get(variant);
-  }
-  return res;
-};
+export const defaultLanguages = sourceLanguages.filter(sublang => sublang.variant === 'default');
+export const variantLanguages = sourceLanguages.filter(sublang => sublang.variant !== 'default');
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {

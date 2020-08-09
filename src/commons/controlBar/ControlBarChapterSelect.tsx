@@ -4,13 +4,18 @@ import { ItemListRenderer, ItemRenderer, Select } from '@blueprintjs/select';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 
-import { SourceLanguage, sourceLanguages, styliseChapter } from '../application/ApplicationTypes';
-import { Chapter } from '../application/types/ChapterTypes';
+import {
+  defaultLanguages,
+  SourceLanguage,
+  sourceLanguages,
+  styliseSublanguage,
+  variantLanguages
+} from '../application/ApplicationTypes';
 
 type ControlBarChapterSelectProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleChapterSelect?: (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => void;
+  handleChapterSelect?: (i: SourceLanguage, e?: React.SyntheticEvent<HTMLElement>) => void;
 };
 
 type StateProps = {
@@ -21,71 +26,49 @@ type StateProps = {
 };
 
 export function ControlBarChapterSelect(props: ControlBarChapterSelectProps) {
-  const chapters = sourceLanguages.map((lang: SourceLanguage) => {
-    return {
-      chapter: lang.chapter,
-      variant: lang.variant,
-      displayName: styliseChapter(lang.chapter, lang.variant)
-    };
-  });
+  const chapterRenderer: ItemRenderer<SourceLanguage> = (lang, { handleClick }) => (
+    <MenuItem key={lang.displayName} onClick={handleClick} text={lang.displayName} />
+  );
 
-  const chapterListRenderer: ItemListRenderer<Chapter> = ({
-    items,
+  const chapterListRenderer: ItemListRenderer<SourceLanguage> = ({
     itemsParentRef,
-    query,
     renderItem
   }) => {
-    const defaultLangs = items.filter(item => item.variant === 'default').map(renderItem);
-    const variantLangs = items.filter(item => item.variant !== 'default').map(renderItem);
+    const defaultChoices = defaultLanguages.map(renderItem);
+    const variantChoices = variantLanguages.map(renderItem);
+
     return (
       <Menu ulRef={itemsParentRef}>
-        {defaultLangs}
-        <MenuItem active={false} key="variant-menu" text="Variant" icon="cog">
-          {variantLangs}
+        {defaultChoices}
+        <MenuItem key="variant-menu" text="Variants" icon="cog">
+          {variantChoices}
         </MenuItem>
       </Menu>
     );
   };
 
-  const chapterRenderer: ItemRenderer<Chapter> = (lang, { handleClick }) => (
-    <MenuItem
-      active={false}
-      key={lang.chapter + lang.variant}
-      onClick={handleClick}
-      text={lang.displayName}
-    />
-  );
-  const ChapterSelectComponent = Select.ofType<Chapter>();
-
-  const chapterSelector = (currentChap: number, currentVariant: Variant, disabled: boolean) => {
-    return (
-      <div>
-        <Button
-          className={Classes.MINIMAL}
-          text={styliseChapter(currentChap, currentVariant)}
-          rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
-          disabled={disabled || false}
-        />
-      </div>
-    );
-  };
+  const ChapterSelectComponent = Select.ofType<SourceLanguage>();
 
   const chapSelect = (
     currentChap: number,
     currentVariant: Variant,
-    handleSelect = (i: Chapter, e?: React.SyntheticEvent<HTMLElement>) => {},
+    handleSelect = (item: SourceLanguage, event?: React.SyntheticEvent<HTMLElement>) => {},
     disabled: boolean
   ) => (
     <ChapterSelectComponent
-      className={Classes.MINIMAL}
-      items={chapters}
+      items={sourceLanguages}
       onItemSelect={handleSelect}
       itemRenderer={chapterRenderer}
       itemListRenderer={chapterListRenderer}
       filterable={false}
       disabled={disabled || false}
     >
-      {chapterSelector(currentChap, currentVariant, disabled)}
+      <Button
+        className={Classes.MINIMAL}
+        text={styliseSublanguage(currentChap, currentVariant)}
+        rightIcon={disabled ? null : IconNames.DOUBLE_CARET_VERTICAL}
+        disabled={disabled || false}
+      />
     </ChapterSelectComponent>
   );
 

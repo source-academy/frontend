@@ -22,7 +22,7 @@ import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { OverallState, styliseChapter } from '../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -373,7 +373,11 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
+      yield call(
+        showSuccessMessage,
+        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+        1000
+      );
     }
   });
 
