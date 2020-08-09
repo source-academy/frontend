@@ -1,7 +1,11 @@
 import { Button, Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
-import { AchievementItem, FilterStatus } from 'src/features/achievement/AchievementTypes';
+import {
+  AchievementItem,
+  FilterStatus,
+  GoalDefinition
+} from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
 
 import AchievementView from '../AchievementView';
@@ -9,20 +13,20 @@ import AchievementInferencer from '../utils/AchievementInferencer';
 
 type AchievementPreviewProps = {
   inferencer: AchievementInferencer;
-  publishState: [boolean, any];
   publishAchievements: (achievements: AchievementItem[]) => void;
-  // TODO: publishGoals: (goals: GoalDefinition[]) => void;
+  publishGoals: (goals: GoalDefinition[]) => void;
+  publishState: [boolean, any];
 };
 
 function AchievementPreview(props: AchievementPreviewProps) {
-  const { inferencer, publishState, publishAchievements } = props;
+  const { inferencer, publishAchievements, publishGoals, publishState } = props;
 
-  const achievements = inferencer.getAchievements();
-  // TODO: const goals = inferencer.getGoalDefinitions();
+  const achievements = inferencer.getAllAchievement();
+  const goals = inferencer.getAllGoalDefinition();
 
   const [canPublish, setCanPublish] = publishState;
   const handlePublish = () => {
-    // TODO: publishGoals(goals);
+    publishGoals(goals);
     publishAchievements(achievements);
     setCanPublish(false);
   };

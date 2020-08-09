@@ -20,10 +20,11 @@ export type StateProps = {
 
 function AchievementControl(props: DispatchProps & StateProps) {
   const {
-    inferencer,
     handleBulkUpdateAchievements,
+    handleBulkUpdateGoals,
     handleGetAchievements,
-    handleGetOwnGoals
+    handleGetOwnGoals,
+    inferencer
   } = props;
 
   /**
@@ -35,8 +36,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
       handleGetAchievements();
       handleGetOwnGoals();
     }
-    console.log('fetch achievements');
-    console.log('fetch goals');
   }, [handleGetAchievements, handleGetOwnGoals]);
 
   // TODO: <Prompt />
@@ -46,6 +45,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
    */
   const publishState = useState<boolean>(false);
 
+  /**
+   * forceRender allows child components to trigger a page render,
+   * so that the AchievementPreview displays the latest local changes
+   */
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
 
@@ -53,14 +56,15 @@ function AchievementControl(props: DispatchProps & StateProps) {
     <div className="AchievementControl">
       <AchievementPreview
         inferencer={inferencer}
-        publishState={publishState}
         publishAchievements={handleBulkUpdateAchievements}
+        publishGoals={handleBulkUpdateGoals}
+        publishState={publishState}
       />
 
       <AchievementEditor
         inferencer={inferencer}
-        publishState={publishState}
         forceRender={forceRender}
+        publishState={publishState}
       />
 
       <GoalEditor />

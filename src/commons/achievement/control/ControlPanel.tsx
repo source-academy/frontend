@@ -27,7 +27,7 @@ function ControlPanel(props: ControlPanelProps) {
 
   const handleSaveChanges = () => {
     setPendingUpload(true);
-    saveAchievementsToFrontEnd(inferencer.getAchievements());
+    saveAchievementsToFrontEnd(inferencer.getAllAchievement());
     forceRender();
   };
 

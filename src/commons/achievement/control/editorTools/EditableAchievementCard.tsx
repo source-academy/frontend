@@ -19,12 +19,12 @@ type EditableAchievementCardProps = {
   id: number;
   inferencer: AchievementInferencer;
   controlState: [number, any];
-  publishState: [boolean, any];
   forceRender: () => void;
+  publishState: [boolean, any];
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, inferencer, controlState, publishState, forceRender } = props;
+  const { id, inferencer, controlState, forceRender, publishState } = props;
 
   const [controlId, setControlId] = controlState;
   const [, setCanPublish] = publishState;

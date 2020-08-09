@@ -6,12 +6,12 @@ import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
   inferencer: AchievementInferencer;
-  publishState: [boolean, any];
   forceRender: () => void;
+  publishState: [boolean, any];
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { inferencer, publishState, forceRender } = props;
+  const { inferencer, forceRender, publishState } = props;
 
   /**
    * NOTE: This helps us to ensure that only ONE achievement is added
@@ -35,8 +35,8 @@ function AchievementEditor(props: AchievementEditorProps) {
         id={id}
         inferencer={inferencer}
         controlState={controlState}
-        publishState={publishState}
         forceRender={forceRender}
+        publishState={publishState}
       />
     ));
   };

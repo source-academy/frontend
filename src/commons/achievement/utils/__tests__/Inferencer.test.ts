@@ -45,13 +45,13 @@ describe('Achievements change when', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
     inferencer.insertAchievement(sampleAchievement);
-    expect(inferencer.getAchievements().length).toEqual(13);
+    expect(inferencer.getAllAchievement().length).toEqual(13);
 
     expect(inferencer.doesAchievementExist(sampleAchievement.id)).toEqual(true);
     expect(inferencer.getAchievementItem(sampleAchievement.id)).toEqual(sampleAchievement);
 
     inferencer.removeAchievement(sampleAchievement.id);
-    expect(inferencer.getAchievements().length).toEqual(12);
+    expect(inferencer.getAllAchievement().length).toEqual(12);
   });
 
   test('an achievement swaps position', () => {

@@ -3,7 +3,8 @@ import assert from 'assert';
 import {
   AchievementGoal,
   AchievementItem,
-  AchievementStatus
+  AchievementStatus,
+  GoalDefinition
 } from '../../../features/achievement/AchievementTypes';
 import { isExpired } from './DateHelper';
 
@@ -67,8 +68,34 @@ class AchievementInferencer {
   /**
    * Returns an array of AchievementItem
    */
-  public getAchievements() {
+  public getAllAchievement() {
     return [...this.nodeList.values()].map(node => node.achievement);
+  }
+
+  /**
+   * Returns an array of AchievementGoal
+   */
+  public getAllGoal() {
+    return [...this.goalList.values()];
+  }
+
+  /**
+   * Returns an array of GoalDefinition
+   */
+  public getAllGoalDefinition() {
+    /**
+     * NOTE: This is a very artificial way of instantiating a GoalDefinition
+     * from AchievementGoal due to the limitation of type alias. Ideally,
+     * GoalDefinition, GoalProgress should be declared as classes.
+     *
+     * Read: https://medium.com/@martin_hotell/interface-vs-type-alias-in-typescript-2-7-2a8f1777af4c
+     *
+     * TODO: Revisit AchievementGoal, GoalDefinition, GoalProgress declarations
+     */
+    return this.getAllGoal().map(goal => {
+      const { id, text, maxExp, meta } = goal;
+      return { id, text, maxExp, meta } as GoalDefinition;
+    });
   }
 
   /**
@@ -157,7 +184,7 @@ class AchievementInferencer {
    * Returns an array of achievementId that isTask
    */
   public listTaskIds() {
-    return this.getAchievements()
+    return this.getAllAchievement()
       .filter(achievement => achievement.isTask)
       .map(task => task.id);
   }
@@ -166,7 +193,7 @@ class AchievementInferencer {
    * Returns a sorted array of achievementId that isTask
    */
   public listTaskIdsbyPosition() {
-    return this.getAchievements()
+    return this.getAllAchievement()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .map(sortedTask => sortedTask.id);
@@ -176,7 +203,7 @@ class AchievementInferencer {
    * Returns an array of achievementId that not isTask
    */
   public listNonTaskIds() {
-    return this.getAchievements()
+    return this.getAllAchievement()
       .filter(achievement => !achievement.isTask)
       .map(nonTask => nonTask.id);
   }
@@ -279,7 +306,7 @@ class AchievementInferencer {
    * Returns total EXP earned from all goals
    */
   public getTotalExp() {
-    return [...this.goalList.values()].reduce((totalExp, goal) => totalExp + goal.exp, 0);
+    return this.getAllGoal().reduce((totalExp, goal) => totalExp + goal.exp, 0);
   }
 
   /**
@@ -374,7 +401,7 @@ class AchievementInferencer {
    * @param newPosition the new position
    */
   public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
-    const achievements = this.getAchievements()
+    const achievements = this.getAllAchievement()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position);
 
@@ -540,7 +567,7 @@ class AchievementInferencer {
    */
   private normalizePositions() {
     const posToId = new Map<number, number>();
-    this.getAchievements().forEach(achievement =>
+    this.getAllAchievement().forEach(achievement =>
       posToId.set(achievement.position, achievement.id)
     );
 
