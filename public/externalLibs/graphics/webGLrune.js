@@ -416,7 +416,7 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
 }
 
 function isRune(x) {
-    return x !== null && x !== undefined && x.isPrimary !== undefined
+  return x !== null && x !== undefined && x.isPrimary !== undefined
 }
 
 /**
@@ -428,16 +428,16 @@ function isRune(x) {
  */
 
 function show(rune) {
-    if (isRune(rune)) {
-	const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
-	clear_viewport()
-	var flattened_rune_list = generateFlattenedRuneList(rune)
-	drawWithWebGL(flattened_rune_list, drawRune);
-	copy_viewport(gl.canvas, frame);
-	return new ShapeDrawn(frame);
-    } else {
-	throw 'show expects a rune as argument, received ' + stringify(rune)
-    }
+  if (isRune(rune)) {
+    const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
+    clear_viewport()
+    var flattened_rune_list = generateFlattenedRuneList(rune)
+    drawWithWebGL(flattened_rune_list, drawRune);
+    copy_viewport(gl.canvas, frame);
+    return new ShapeDrawn(frame);
+  } else {
+    throw 'show expects a rune as argument, received ' + stringify(rune)
+  }
 }
 
 /**
