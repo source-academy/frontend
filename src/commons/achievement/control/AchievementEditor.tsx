@@ -14,20 +14,20 @@ function AchievementEditor(props: AchievementEditorProps) {
   const { inferencer, forceRender, requestPublish } = props;
 
   /**
-   * controlId helps us to ensure that only ONE achievement is added at any point of time.
+   * newId helps us to ensure that only ONE achievement is added at any point of time.
    *
-   * By default,  the controlId is NaN, which means currently no new achievement
+   * By default,  the newId is NaN, which means currently no new achievement
    * is being added and the admin is able to add a new achievement.
    *
-   * Conversely, if the controlId is not NaN, this means currently an achievement
+   * Conversely, if the newId is not NaN, this means currently an achievement
    * is being added to the system and the admin is not allowed to add two achievements
-   * at one go. The controlId holds the newly created achievement id until the new achievement
+   * at one go. The newId holds the newly created achievement id until the new achievement
    * is added into the AchievementInferencer.
    */
-  const [controlId, setControlId] = useState<number>(NaN);
-  const admitId = (id: number) => setControlId(id);
-  const releaseId = (id: number) => (id === controlId ? setControlId(NaN) : undefined);
-  const isHoldingId = !isNaN(controlId);
+  const [newId, setNewId] = useState<number>(NaN);
+  const admitId = (id: number) => setNewId(id);
+  const releaseId = (id: number) => (id === newId ? setNewId(NaN) : undefined);
+  const isHoldingId = !isNaN(newId);
 
   const generateEditableCards = (inferencer: AchievementInferencer) => {
     const achievementIds = inferencer.listIds().reverse();

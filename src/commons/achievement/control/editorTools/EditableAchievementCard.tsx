@@ -1,4 +1,5 @@
 import { Card } from '@blueprintjs/core';
+import { cloneDeep } from 'lodash';
 import React, { useState } from 'react';
 
 import {
@@ -26,11 +27,12 @@ type EditableAchievementCardProps = {
 function EditableAchievementCard(props: EditableAchievementCardProps) {
   const { id, inferencer, forceRender, releaseId, requestPublish } = props;
 
-  const achievement = inferencer.getAchievementItem(id);
+  const achievementReference = inferencer.getAchievementItem(id);
 
-  const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(achievement);
-  const resetEditableAchievement = () => setEditableAchievement(achievement);
-
+  const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(
+    () => cloneDeep(achievementReference) // Expensive, only clone once on initialization
+  );
+  const resetEditableAchievement = () => setEditableAchievement(cloneDeep(achievementReference));
   const {
     ability,
     cardTileUrl,
@@ -48,6 +50,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
+  // TODO: Replace the following 3 useState with useReducer for state management & cleanup
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
     setIsDirty(false);
@@ -69,6 +72,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     forceRender();
   };
 
+  // TODO: Replace all of the following useState with useReducer for editable content
   const handleChangeTitle = (title: string) => {
     setEditableAchievement({
       ...editableAchievement,

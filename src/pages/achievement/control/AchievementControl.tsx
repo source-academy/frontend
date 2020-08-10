@@ -15,6 +15,7 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  // TODO: useContext for inferencer
   inferencer: AchievementInferencer;
 };
 
