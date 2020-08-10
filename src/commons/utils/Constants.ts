@@ -6,6 +6,7 @@ const isTest = process.env.NODE_ENV === 'test';
 
 const sourceAcademyVersion = process.env.REACT_APP_VERSION;
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
+const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
 const defaultSourceChapter = 4;
 const defaultSourceVariant = 'default';
@@ -71,6 +72,7 @@ export enum Links {
 const Constants = {
   sourceAcademyVersion,
   backendUrl,
+  cadetLoggerUrl,
   useBackend,
   defaultSourceChapter,
   defaultSourceVariant,

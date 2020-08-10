@@ -126,7 +126,7 @@ export async function postKeystrokeLogs(
   questionId: number,
   playbackData: PlaybackData
 ): Promise<Response | null> {
-  const resp = await request(`/`, 'POST', {
+  const resp = await sendToLogger(`/`, 'POST', {
     accessToken: tokens.accessToken,
     body: { questionId: questionId, playbackData: playbackData },
     noHeaderAccept: true,
@@ -914,6 +914,62 @@ export async function request(
   }
   try {
     const resp = await fetch(`${Constants.backendUrl}/v1/${path}`, fetchOpts);
+    // response.ok is (200 <= response.status <= 299)
+    // response.status of > 299 does not raise error; so deal with in in the try clause
+    if (opts.shouldRefresh && resp && resp.status === 401) {
+      const newTokens = await postRefresh(opts.refreshToken!);
+      store.dispatch(actions.setTokens(newTokens!));
+      const newOpts = {
+        ...opts,
+        accessToken: newTokens!.accessToken,
+        shouldRefresh: false
+      };
+      return request(path, method, newOpts);
+    }
+    if (resp && !resp.ok && opts.shouldAutoLogout === false) {
+      // this clause is mostly for SUBMIT_ANSWER; show an error message instead
+      // and ask student to manually logout, so that they have a chance to save
+      // their answers
+      return resp;
+    }
+    if (!resp || !resp.ok) {
+      throw new Error('API call failed or got non-OK response');
+    }
+    return resp;
+  } catch (e) {
+    store.dispatch(actions.logOut());
+    showWarningMessage(opts.errorMessage ? opts.errorMessage : 'Please login again.');
+    return null;
+  }
+}
+
+/**
+ * Note: This is for Uploading of KeystrokeLogs
+ */
+export async function sendToLogger(
+  path: string,
+  method: string,
+  opts: RequestOptions
+): Promise<Response | null> {
+  const headers = new Headers();
+  if (!opts.noHeaderAccept) {
+    headers.append('Accept', 'application/json');
+  }
+  if (opts.accessToken) {
+    headers.append('Authorization', `Bearer ${opts.accessToken}`);
+  }
+  const fetchOpts: any = { method, headers };
+  if (opts.body) {
+    if (opts.noContentType) {
+      // Content Type is not needed for sending multipart data
+      fetchOpts.body = opts.body;
+    } else {
+      headers.append('Content-Type', 'application/json');
+      fetchOpts.body = JSON.stringify(opts.body);
+    }
+  }
+  try {
+    const resp = await fetch(`${Constants.cadetLoggerUrl}/logs/${path}`, fetchOpts);
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
     if (opts.shouldRefresh && resp && resp.status === 401) {
