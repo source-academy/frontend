@@ -5,23 +5,23 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {
-  admitId: (id: number) => void;
-  isHoldingId: boolean;
+  allowNewId: boolean;
+  setNewId: (id: number) => void;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
-  const { admitId, isHoldingId } = props;
+  const { allowNewId, setNewId } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  const handleAddAchievement = () => admitId(inferencer.insertAchievement(achievementTemplate));
+  const handleAddAchievement = () => setNewId(inferencer.insertAchievement(achievementTemplate));
 
   return (
     <Button
       className="main-adder"
       onClick={handleAddAchievement}
       text={'Add A New Item'}
-      disabled={isHoldingId}
+      disabled={!allowNewId}
     />
   );
 }

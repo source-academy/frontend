@@ -23,13 +23,17 @@ function AchievementEditor(props: AchievementEditorProps) {
    * Conversely, if the newId is not NaN, this means currently an achievement
    * is being added to the system and the admin is not allowed to add two achievements
    * at one go. The newId holds the newly created achievement id until the new achievement
-   * is added into the AchievementInferencer.
+   * is added into the inferencer.
    */
   const [newId, setNewId] = useState<number>(NaN);
-  const admitId = (id: number) => setNewId(id);
+  const allowNewId = isNaN(newId);
   const releaseId = (id: number) => (id === newId ? setNewId(NaN) : undefined);
-  const isHoldingId = !isNaN(newId);
 
+  /**
+   * Generates <EditableAchievementCard /> components
+   *
+   * @param achievementIds an array of achievementId
+   */
   const generateEditableCards = (achievementIds: number[]) =>
     achievementIds.map(id => (
       <EditableAchievementCard
@@ -44,7 +48,7 @@ function AchievementEditor(props: AchievementEditorProps) {
   return (
     <div className="achievement-editor">
       <div className="achievement-command">
-        <AchievementAdder admitId={admitId} isHoldingId={isHoldingId} />
+        <AchievementAdder allowNewId={allowNewId} setNewId={setNewId} />
       </div>
       <ul className="achievement-container">
         {generateEditableCards(inferencer.listIds().reverse())}

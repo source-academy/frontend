@@ -48,6 +48,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     view
   } = editableAchievement;
 
+  // A save/discard button appears on top of the card when it's dirty
   const [isDirty, setIsDirty] = useState<boolean>(false);
 
   // TODO: Replace the following 3 useState with useReducer for state management & cleanup
@@ -73,26 +74,18 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   // TODO: Replace all of the following useState with useReducer for editable content
-  const handleChangeTitle = (title: string) => {
+  const handleChangeAbility = (ability: AchievementAbility) => {
     setEditableAchievement({
       ...editableAchievement,
-      title: title
+      ability: ability
     });
     setIsDirty(true);
   };
 
-  const handleChangeBackground = (cardTileUrl: string) => {
+  const handleChangeCardBackground = (cardTileUrl: string) => {
     setEditableAchievement({
       ...editableAchievement,
       cardTileUrl: cardTileUrl
-    });
-    setIsDirty(true);
-  };
-
-  const handleChangeRelease = (release: Date) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      release: release
     });
     setIsDirty(true);
   };
@@ -105,10 +98,18 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(true);
   };
 
-  const handleChangeAbility = (ability: AchievementAbility) => {
+  const handleChangeRelease = (release: Date) => {
     setEditableAchievement({
       ...editableAchievement,
-      ability: ability
+      release: release
+    });
+    setIsDirty(true);
+  };
+
+  const handleChangeTitle = (title: string) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      title: title
     });
     setIsDirty(true);
   };
@@ -141,7 +142,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       <div className="main">
         <EditableAchievementBackground
           cardTileUrl={cardTileUrl}
-          setcardTileUrl={handleChangeBackground}
+          setcardTileUrl={handleChangeCardBackground}
         />
         <div className="display">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
