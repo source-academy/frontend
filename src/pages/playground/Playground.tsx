@@ -213,9 +213,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       },
       inputs: props.keystrokeLogs
     };
-    console.log(props.loggedQuestionId, playbackData);
     props.handleKeystrokesReset();
-    // props.handleKeystrokeUpload(props.loggedQuestionId, playbackData);
+    props.handleKeystrokeUpload(props.loggedQuestionId, playbackData);
 
     setStartingEditorValue(props.editorValue);
   }, [props, startingEditorValue, setStartingEditorValue]);
