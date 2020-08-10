@@ -80,7 +80,6 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <withRouter(Connect(DefaultChapter)) />
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
@@ -155,7 +154,6 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
   </Blueprint3.NavbarGroup>
   <Blueprint3.NavbarGroup align=\\"right\\">
-    <withRouter(Connect(DefaultChapter)) />
     <NavLink to=\\"/academy/groundcontrol\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"satellite\\" />
       <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">

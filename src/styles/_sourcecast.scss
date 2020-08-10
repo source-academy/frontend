@@ -43,28 +43,6 @@
     float: none;
   }
 
-  /** 
-   *  To prevent misalignment of column header and content 
-   *  for large displays. This effectively flushes the content left.
-   *  See https://github.com/source-academy/cadet-frontend/pull/148
-   */
-  .ag-body-container {
-    display: block;
-    /* Override ag-grid style to suppress unnecessary vertical scrollbar (bugfix) */
-    margin-bottom: 0;
-  }
-
-  .#{$ns}-icon {
-    /* Vertically centre appearance of blueprintjs icons in ag-grid */
-    margin-top: 6px;
-  }
-
-  .ag-paging-panel {
-    border-top: none;
-    font-weight: bold;
-    padding: 10px;
-  }
-
   :focus {
     /* Disable rendering blue border when a sub-component in grid is in focus */
     outline: none;

@@ -1,5 +1,6 @@
 import { call } from 'redux-saga/effects';
 
+import { SourceLanguage, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
   Assessment,
@@ -842,10 +843,10 @@ export async function getGradingSummary(tokens: Tokens): Promise<GradingSummary 
 }
 
 /**
- * GET /chapter
+ * GET /settings/sublanguage
  */
-export async function fetchChapter(): Promise<Response | null> {
-  const resp = await request('chapter', 'GET', {
+export async function getSublanguage(): Promise<SourceLanguage | null> {
+  const resp = await request('settings/sublanguage', 'GET', {
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -855,16 +856,20 @@ export async function fetchChapter(): Promise<Response | null> {
     return null;
   }
 
-  return await resp.json();
+  const sublang = (await resp.json()).sublanguage;
+  return {
+    ...sublang,
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+  };
 }
 
 /**
- * POST /chapter/update/1
+ * PUT /settings/sublanguage
  */
-export async function changeChapter(chapterno: number, variant: string, tokens: Tokens) {
-  const resp = await request(`chapter/update/1`, 'POST', {
+export async function postSublanguage(chapter: number, variant: string, tokens: Tokens) {
+  const resp = await request(`settings/sublanguage`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { chapterno, variant },
+    body: { chapter, variant },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

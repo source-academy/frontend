@@ -14,7 +14,7 @@ import {
   updateAssessmentOverviews,
   updateNotifications
 } from '../../application/actions/SessionActions';
-import { GameState, Role, Story } from '../../application/ApplicationTypes';
+import { GameState, Role, SourceLanguage, Story } from '../../application/ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -45,27 +45,29 @@ import { mockNotifications } from '../../mocks/UserMocks';
 import { computeRedirectUri } from '../../utils/AuthHelper';
 import Constants from '../../utils/Constants';
 import { showSuccessMessage, showWarningMessage } from '../../utils/NotificationsHelper';
-import { updateChapter, updateHasUnsavedChanges } from '../../workspace/WorkspaceActions';
+import { updateHasUnsavedChanges, updateSublanguage } from '../../workspace/WorkspaceActions';
 import {
-  CHANGE_CHAPTER,
-  FETCH_CHAPTER,
+  CHANGE_SUBLANGUAGE,
+  FETCH_SUBLANGUAGE,
   UPDATE_HAS_UNSAVED_CHANGES,
+  UPDATE_SUBLANGUAGE,
   WorkspaceLocation
 } from '../../workspace/WorkspaceTypes';
 import BackendSaga from '../BackendSaga';
 import {
-  changeChapter,
   getAssessment,
   getAssessmentOverviews,
   getGradingSummary,
   getNotifications,
+  getSublanguage,
   getUser,
   postAcknowledgeNotifications,
   postAnswer,
   postAssessment,
   postAuth,
   postReautogradeAnswer,
-  postReautogradeSubmission
+  postReautogradeSubmission,
+  postSublanguage
 } from '../RequestsSaga';
 
 // ----------------------------------------
@@ -98,7 +100,7 @@ const okResp = { ok: true };
 const errorResp = { ok: false };
 // ----------------------------------------
 
-describe('Test FETCH_AUTH Action', () => {
+describe('Test FETCH_AUTH action', () => {
   const code = 'luminusCode';
   const providerId = 'provider';
   const clientId = 'clientId';
@@ -169,7 +171,7 @@ describe('Test FETCH_AUTH Action', () => {
   });
 });
 
-describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
+describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
   test('when assesments is obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -193,7 +195,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS Action', () => {
   });
 });
 
-describe('Test FETCH_ASSESSMENT Action', () => {
+describe('Test FETCH_ASSESSMENT action', () => {
   test('when assesment is obtained', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
@@ -218,7 +220,7 @@ describe('Test FETCH_ASSESSMENT Action', () => {
   });
 });
 
-describe('Test SUBMIT_ANSWER Action', () => {
+describe('Test SUBMIT_ANSWER action', () => {
   test('when response is ok', () => {
     const mockAnsweredAssessmentQuestion: Question =
       mockAssessmentQuestion.type === 'mcq'
@@ -358,7 +360,7 @@ describe('Test SUBMIT_ANSWER Action', () => {
   });
 });
 
-describe('Test SUBMIT_ASSESSMENT Action', () => {
+describe('Test SUBMIT_ASSESSMENT action', () => {
   test('when response is ok', () => {
     const mockAssessmentId = mockAssessment.id;
     const mockNewOverviews = mockAssessmentOverviews.map(overview => {
@@ -431,7 +433,7 @@ describe('Test SUBMIT_ASSESSMENT Action', () => {
   });
 });
 
-describe('Test FETCH_NOTIFICATIONS Action', () => {
+describe('Test FETCH_NOTIFICATIONS action', () => {
   test('when notifications obtained', () => {
     return expectSaga(BackendSaga)
       .withState(mockStates)
@@ -442,7 +444,7 @@ describe('Test FETCH_NOTIFICATIONS Action', () => {
   });
 });
 
-describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
+describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
   test('when response is ok', () => {
     const ids = [1, 2, 3];
     const mockNewNotifications = mockNotifications.filter(n => !ids.includes(n.id));
@@ -474,25 +476,51 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS Action', () => {
   });
 });
 
-describe('Test FETCH_CHAPTER Action', () => {
-  test('when chapter is obtained', () => {
-    return expectSaga(BackendSaga).dispatch({ type: FETCH_CHAPTER }).silentRun();
-  });
-});
+describe('Test FETCH_SUBLANGUAGE action', () => {
+  test('when sublanguage is obtained', () => {
+    const mockSublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
 
-describe('Test CHANGE_CHAPTER Action', () => {
-  test('when chapter is changed', () => {
     return expectSaga(BackendSaga)
-      .withState({ session: { role: Role.Staff, ...mockTokens } })
-      .call(changeChapter, 1, 'default', mockTokens)
-      .put(updateChapter(1, 'default'))
-      .provide([[call(changeChapter, 1, 'default', mockTokens), { ok: true }]])
-      .dispatch({ type: CHANGE_CHAPTER, payload: { chapter: 1, variant: 'default' } })
+      .provide([[call(getSublanguage), mockSublang]])
+      .call(getSublanguage)
+      .put(updateSublanguage(mockSublang))
+      .dispatch({ type: FETCH_SUBLANGUAGE })
+      .silentRun();
+  });
+
+  test('when response is null', () => {
+    return expectSaga(BackendSaga)
+      .provide([[call(getSublanguage), null]])
+      .call(showWarningMessage, 'Failed to load default Source sublanguage for Playground!')
+      .not.put.actionType(UPDATE_SUBLANGUAGE)
+      .dispatch({ type: FETCH_SUBLANGUAGE })
       .silentRun();
   });
 });
 
-describe('Test FETCH_GROUP_GRADING_SUMMARY Action', () => {
+describe('Test CHANGE_SUBLANGUAGE action', () => {
+  test('when chapter is changed', () => {
+    const sublang: SourceLanguage = {
+      chapter: 4,
+      variant: 'gpu',
+      displayName: 'Source \xa74 GPU'
+    };
+
+    return expectSaga(BackendSaga)
+      .withState({ session: { role: Role.Staff, ...mockTokens } })
+      .call(postSublanguage, sublang.chapter, sublang.variant, mockTokens)
+      .put(updateSublanguage(sublang))
+      .provide([[call(postSublanguage, 4, 'gpu', mockTokens), { ok: true }]])
+      .dispatch({ type: CHANGE_SUBLANGUAGE, payload: { sublang } })
+      .silentRun();
+  });
+});
+
+describe('Test FETCH_GROUP_GRADING_SUMMARY action', () => {
   test('when grading summary is obtained', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })

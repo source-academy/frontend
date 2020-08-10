@@ -598,6 +598,7 @@ describe('ENSURE_LIBRARIES_LOADED', () => {
 describe('BEGIN_CLEAR_CONTEXT', () => {
   let loadLib: any;
   let getReadyWebGLForCanvas: any;
+  let getReadyStringifyForRunes: any;
   let chapter: number;
   let globals: Array<[string, any]>;
   let workspaceLocation: WorkspaceLocation;
@@ -605,9 +606,11 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   beforeEach(() => {
     loadLib = jest.fn();
     getReadyWebGLForCanvas = jest.fn();
+    getReadyStringifyForRunes = jest.fn();
 
     (window as any).loadLib = loadLib;
     (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
+    (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
 
     workspaceLocation = 'grading';
     chapter = 4;
