@@ -92,7 +92,11 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleKeystrokeUpload: (questionID: number, playbackData: PlaybackData) => void;
+  handleKeystrokeUpload: (
+    assessmentId: number,
+    questionId: number,
+    playbackData: PlaybackData
+  ) => void;
 };
 
 export type StateProps = {
@@ -203,7 +207,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const uploadLogs = React.useCallback(() => {
-    props.handleKeystrokeUpload(playgroundQuestionId, getAssessmentLogs());
+    props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, getAssessmentLogs());
     resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
   }, [props]);
 

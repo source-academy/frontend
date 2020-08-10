@@ -47,7 +47,11 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleDebuggerResume: () => {},
   handleDebuggerReset: () => {},
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
-  handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => {},
+  handleKeystrokeUpload: (
+    assessmentId: number,
+    questionId: number,
+    playbackData: PlaybackData
+  ) => {},
   isRunning: false,
   isDebugging: false,
   enableDebugging: false,

@@ -637,8 +637,9 @@ function* BackendSaga(): SagaIterator {
       refreshToken: state.session.refreshToken
     }));
     const playbackData = action.payload.playbackData;
+    const assessmentId = action.payload.assessmentId;
     const questionId = action.payload.questionId;
-    const respMsg = yield postKeystrokeLogs(tokens, questionId, playbackData);
+    const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
     if (!respMsg) {
       yield handleResponseError(respMsg);
     } else if (respMsg === 'OK') {

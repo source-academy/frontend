@@ -96,7 +96,11 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => void;
+  handleKeystrokeUpload: (
+    assessmentId: number,
+    questionId: number,
+    playbackData: PlaybackData
+  ) => void;
 };
 
 export type OwnProps = {
@@ -207,7 +211,11 @@ class AssessmentWorkspace extends React.Component<
   };
 
   public uploadLogs = () => {
-    this.props.handleKeystrokeUpload(this.props.questionId, getAssessmentLogs());
+    this.props.handleKeystrokeUpload(
+      this.props.assessmentId,
+      this.props.questionId,
+      getAssessmentLogs()
+    );
     resetAssessmentInit(
       this.props.assessment!.questions[this.props.questionId].library.chapter,
       this.props.assessment!.questions[this.props.questionId].library.external.name,

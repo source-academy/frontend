@@ -123,12 +123,13 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
  */
 export async function postKeystrokeLogs(
   tokens: Tokens,
+  assessmentId: number,
   questionId: number,
   playbackData: PlaybackData
 ): Promise<Response | null> {
-  const resp = await sendToLogger(`/`, 'POST', {
+  const resp = await sendToLogger(``, 'POST', {
     accessToken: tokens.accessToken,
-    body: { questionId: questionId, playbackData: playbackData },
+    body: { assessmentId: assessmentId, questionId: questionId, playbackData: playbackData },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,

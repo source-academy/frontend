@@ -73,7 +73,11 @@ const baseProps = {
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
   handlePersistenceLogOut: () => {},
-  handleKeystrokeUpload: (questionID: number, playbackData: PlaybackData) => {}
+  handleKeystrokeUpload: (
+    assessmentId: number,
+    questionId: number,
+    playbackData: PlaybackData
+  ) => {}
 };
 
 const testValueProps: PlaygroundProps = {
