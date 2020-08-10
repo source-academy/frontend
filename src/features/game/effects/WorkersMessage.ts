@@ -19,7 +19,7 @@ const workerTLines = [
   '',
   'Behind this closed space, as my very blood fuels',
   'these engines - waiting for you to find me.',
-  '- T. C. Sia'
+  '- T. S. Chong'
 ];
 
 const WorkerConstants = {
