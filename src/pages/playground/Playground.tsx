@@ -224,7 +224,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
 
     resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
-  }, [props]);
+  }, [props, getAssessmentLogs, getLoggedAssessmentIds, getPlaygroundLogs]);
 
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
