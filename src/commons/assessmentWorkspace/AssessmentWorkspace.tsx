@@ -23,8 +23,11 @@ import {
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
 import {
+  getAssessmentLogs,
   hasExceededLocalStorageSpace,
-  oneHourInMilliSeconds
+  oneHourInMilliSeconds,
+  resetAssessmentInit,
+  saveAssessmentLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -92,8 +95,6 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => void;
-  handleKeystrokeAdd: (log: Input) => void;
-  handleKeystrokesReset: () => void;
   handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
@@ -125,7 +126,6 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  keystrokeLogs: Input[];
   loggedQuestionId: number;
 };
 
@@ -134,15 +134,13 @@ class AssessmentWorkspace extends React.Component<
   {
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
-    startingEditorValue: string | null;
   }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetTemplateOverlay: false,
-      startingEditorValue: ''
+      showResetTemplateOverlay: false
     };
 
     this.props.handleEditorValueChange('');
@@ -207,23 +205,16 @@ class AssessmentWorkspace extends React.Component<
   };
 
   public uploadLogs = () => {
-    const playbackData: PlaybackData = {
-      init: {
-        chapter: this.props.assessment!.questions[this.props.questionId].library.chapter,
-        externalLibrary: this.props.assessment!.questions[this.props.questionId].library.external
-          .name,
-        editorValue: this.state.startingEditorValue ? this.state.startingEditorValue : ''
-      },
-      inputs: this.props.keystrokeLogs
-    };
-    this.props.handleKeystrokeUpload(this.props.questionId, playbackData);
-    this.props.handleKeystrokesReset();
-
-    this.setState({ startingEditorValue: this.props.editorValue });
+    this.props.handleKeystrokeUpload(this.props.questionId, getAssessmentLogs());
+    resetAssessmentInit(
+      this.props.assessment!.questions[this.props.questionId].library.chapter,
+      this.props.assessment!.questions[this.props.questionId].library.external.name,
+      this.props.editorValue ? this.props.editorValue : ''
+    );
   };
 
   public pushLog = (newInput: Input) => {
-    this.props.handleKeystrokeAdd(newInput);
+    saveAssessmentLog(newInput);
 
     if (hasExceededLocalStorageSpace()) {
       this.uploadLogs();

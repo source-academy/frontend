@@ -10,9 +10,7 @@ import {
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
 import {
-  addKeystrokeLog,
   logoutGoogle,
-  resetKeystrokeLogs,
   updateKeystrokeAssessmentId,
   uploadKeystrokeLogs
 } from '../../commons/application/actions/SessionActions';
@@ -93,7 +91,6 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   persistenceUser: state.session.googleUser,
   persistenceFile: state.playground.persistenceFile,
 
-  keystrokeLogs: state.session.keystrokeLogs,
   loggedQuestionId: state.session.loggedQuestionId
 });
 
@@ -154,8 +151,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
       handleKeystrokeUpload: uploadKeystrokeLogs,
-      handleKeystrokeAdd: addKeystrokeLog,
-      handleKeystrokesReset: resetKeystrokeLogs,
       handleKeystrokeAssessmentChange: updateKeystrokeAssessmentId
     },
     dispatch

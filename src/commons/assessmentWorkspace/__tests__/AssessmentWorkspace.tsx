@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { Input, PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Library } from '../../assessment/AssessmentTypes';
 import { Position } from '../../editor/EditorTypes';
 import { mockAssessments } from '../../mocks/AssessmentMocks';
@@ -21,7 +21,6 @@ const defaultProps: AssessmentWorkspaceProps = {
   breakpoints: [],
   highlightedLines: [],
   hasUnsavedChanges: false,
-  keystrokeLogs: [],
   loggedQuestionId: 0,
   handleActiveTabChange: (activeTab: SideContentType) => {},
   handleAssessmentFetch: (assessmentId: number) => {},
@@ -50,8 +49,6 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleDebuggerReset: () => {},
   handlePromptAutocomplete: (row: number, col: number, callback: any) => {},
   handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => {},
-  handleKeystrokeAdd: (log: Input) => {},
-  handleKeystrokesReset: () => {},
   handleKeystrokeAssessmentChange: (id: number) => {},
   isRunning: false,
   isDebugging: false,

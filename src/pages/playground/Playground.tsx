@@ -32,9 +32,12 @@ import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoD
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
+  getAssessmentLogs,
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
-  playgroundQuestionId
+  playgroundQuestionId,
+  resetPlaygroundInit,
+  savePlaygroundLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -88,8 +91,6 @@ export type DispatchProps = {
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
   handleKeystrokeUpload: (questionID: number, playbackData: PlaybackData) => void;
-  handleKeystrokeAdd: (log: Input) => void;
-  handleKeystrokesReset: () => void;
   handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
@@ -122,7 +123,6 @@ export type StateProps = {
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
 
-  keystrokeLogs: Input[];
   loggedQuestionId: number;
 };
 
@@ -131,7 +131,6 @@ const keyMap = { goGreen: 'h u l k' };
 const Playground: React.FC<PlaygroundProps> = props => {
   const { handleExternalSelect, handleFetchSublanguage } = props;
 
-  const [startingEditorValue, setStartingEditorValue] = React.useState<string>(props.editorValue);
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
     handleExternalSelect(props.externalLibraryName, true);
@@ -205,19 +204,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const uploadLogs = React.useCallback(() => {
-    const playbackData: PlaybackData = {
-      init: {
-        chapter: props.sourceChapter,
-        externalLibrary: props.externalLibraryName as ExternalLibraryName,
-        editorValue: startingEditorValue
-      },
-      inputs: props.keystrokeLogs
-    };
-    props.handleKeystrokeUpload(props.loggedQuestionId, playbackData);
-    props.handleKeystrokesReset();
-
-    setStartingEditorValue(props.editorValue);
-  }, [props, startingEditorValue, setStartingEditorValue]);
+    props.handleKeystrokeUpload(props.loggedQuestionId, getAssessmentLogs());
+    resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
+  }, [props]);
 
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
@@ -243,13 +232,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
-      props.handleKeystrokeAdd(newInput);
+      savePlaygroundLog(newInput);
 
       if (hasExceededLocalStorageSpace()) {
         uploadLogs();
       }
     },
-    [props, uploadLogs]
+    [uploadLogs]
   );
 
   const autorunButtons = React.useMemo(
