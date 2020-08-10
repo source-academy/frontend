@@ -211,9 +211,10 @@ class AssessmentWorkspace extends React.Component<
   };
 
   public uploadLogs = () => {
+    const assessmentIDs = getLoggedAssessmentIds();
     this.props.handleKeystrokeUpload(
-      this.props.assessmentId,
-      this.props.questionId,
+      assessmentIDs.assessmentId,
+      assessmentIDs.questionId,
       getAssessmentLogs()
     );
     resetAssessmentInit(
