@@ -2,6 +2,8 @@ import { AssetMap, ImageAsset } from './AssetsTypes';
 
 const ImageAssets: AssetMap<ImageAsset> = {
   // Commons Asset
+  spaceshipBg: { key: 'spaceship-bg', path: '/locations/spaceshipBackground.png' },
+  saBanner: { key: 'sa-banner', path: '/ui/sourceAcadBannerOneLine.png' },
   shortButton: { key: 'short-button', path: '/ui/shortButton.png' },
   mediumButton: { key: 'med-button', path: '/ui/mediumButton.png' },
   longButton: { key: 'long-button', path: '/ui/longButton.png' },
@@ -38,7 +40,6 @@ const ImageAssets: AssetMap<ImageAsset> = {
   awardsBackground: { key: 'award-hall-bg', path: '/ui/awardsHall.png' },
 
   // Chapter Select
-  chapterSelectBackground: { key: 'chapter-select-bg', path: '/locations/yourRoom-dim/normal.png' },
   chapterRepeatButton: { key: 'chapter-repeat', path: '/ui/chapterRepeat.png' },
   chapterContinueButton: { key: 'chapter-continue', path: '/ui/chapterContinue.png' },
   chapterSelectFrame: { key: 'chapter-select-frame', path: '/ui/chapterSelectionFrame.png' },
@@ -46,11 +47,9 @@ const ImageAssets: AssetMap<ImageAsset> = {
   chapterSelectArrow: { key: 'chapter-select-arrow', path: '/ui/chapSelectArrow.png' },
 
   // Main Menu
-  mainMenuBackground: { key: 'main-menu-bg', path: '/locations/yourRoom-dim/normal.png' },
   mainMenuOptBanner: { key: 'menu-option', path: '/ui/menuOption.png' },
 
   // Settings
-  settingBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
   settingBanner: { key: 'settings-bg', path: '/ui/settingsBg.png' },
   settingOption: { key: 'settings-opt', path: '/ui/settingsOption.png' },
 
@@ -59,7 +58,6 @@ const ImageAssets: AssetMap<ImageAsset> = {
   sourceCrashedPod: { key: 'source-crashed-pod', path: '/locations/sourceCrashedPod.png' },
 
   // Bindings
-  bindingsBackground: { key: 'setting-bg', path: '/locations/yourRoom-dim/normal.png' },
   squareKeyboardIcon: { key: 'keyboard-key-square', path: '/ui/keyboardKeyIcon.png' },
   medKeyboardIcon: { key: 'keyboard-key-medium', path: '/ui/TabIcon.png' }
 };

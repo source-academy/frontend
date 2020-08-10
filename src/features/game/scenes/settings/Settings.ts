@@ -43,7 +43,7 @@ class Settings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.settingBackground.key
+      ImageAssets.spaceshipBg.key
     );
 
     const settingBgImg = new Phaser.GameObjects.Image(
