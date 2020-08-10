@@ -92,7 +92,7 @@ class ChapterSelect extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.chapterSelectBackground.key
+      ImageAssets.spaceshipBg.key
     );
     const blackOverlay = new Phaser.GameObjects.Rectangle(
       this,

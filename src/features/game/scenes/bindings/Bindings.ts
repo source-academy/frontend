@@ -39,7 +39,7 @@ class Bindings extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.settingBackground.key
+      ImageAssets.spaceshipBg.key
     );
     const blackOverlay = new Phaser.GameObjects.Rectangle(
       this,

@@ -46,8 +46,6 @@ room
         + bbox1, 10, 10, 30, 30
             show_dialogue(what)
 
-    
-
 hallway
     modes: move, explore
     talkTopics: welcomeToHallway
@@ -57,7 +55,7 @@ hallway
             remove_item(objects, room, computerOnShelf)
             remove_mode(classroom, talk)
     characters
-        + scottie, Scottie, sad, left
+        + scottie, Scottie, sad, left, 1.4
 
 
 classroom
@@ -89,7 +87,6 @@ dialogues
     welcome
         @scottie, happy
         Welcome to Source Academy!
-
         I'm glad you took the time to come in
             update_character(scottie, happy)
 
@@ -105,15 +102,11 @@ dialogues
         Yes, you can remain here.
             move_character(scottie, hallway, right)
 
-
-
     what, What should I do now, Scottie?
         @you
         What should I do now?
-
         @scottie
         I'm glad you asked!
-
         @narrator
         Well
     

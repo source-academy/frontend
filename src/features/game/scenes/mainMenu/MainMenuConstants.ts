@@ -31,7 +31,8 @@ const MainMenuConstants = {
     x: screenCenter.x + bannerHide,
     duration: 200,
     ease: 'Power2'
-  }
+  },
+  saBanner: { x: screenSize.x * 0.3, y: screenSize.y * 0.9 }
 };
 
 export default MainMenuConstants;
