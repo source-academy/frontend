@@ -10,7 +10,6 @@ import {
 import {
   fetchAssessment,
   submitAnswer,
-  updateKeystrokeAssessmentId,
   uploadKeystrokeLogs
 } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
@@ -63,9 +62,7 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion,
-
-    loggedQuestionId: state.session.loggedQuestionId
+    storedQuestionId: state.workspaces.assessment.currentQuestion
   };
 };
 
@@ -109,8 +106,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
-      handleKeystrokeUpload: uploadKeystrokeLogs,
-      handleKeystrokeAssessmentChange: updateKeystrokeAssessmentId
+      handleKeystrokeUpload: uploadKeystrokeLogs
     },
     dispatch
   );

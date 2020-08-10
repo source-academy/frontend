@@ -33,10 +33,12 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   getAssessmentLogs,
+  getLoggedAssessmentIds,
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   playgroundQuestionId,
   resetPlaygroundInit,
+  saveLoggedAssessmentIds,
   savePlaygroundLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -91,7 +93,6 @@ export type DispatchProps = {
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
   handleKeystrokeUpload: (questionID: number, playbackData: PlaybackData) => void;
-  handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
 export type StateProps = {
@@ -122,8 +123,6 @@ export type StateProps = {
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
-
-  loggedQuestionId: number;
 };
 
 const keyMap = { goGreen: 'h u l k' };
@@ -204,7 +203,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const uploadLogs = React.useCallback(() => {
-    props.handleKeystrokeUpload(props.loggedQuestionId, getAssessmentLogs());
+    props.handleKeystrokeUpload(playgroundQuestionId, getAssessmentLogs());
     resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
   }, [props]);
 
@@ -218,12 +217,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Second useEffect called here just in case.
   React.useEffect(() => {
     uploadPerHour();
-    if (props.loggedQuestionId !== playgroundQuestionId) {
+    const currentAssessmentIds = getLoggedAssessmentIds();
+    if (
+      currentAssessmentIds.assessmentId !== playgroundQuestionId &&
+      currentAssessmentIds.questionID !== playgroundQuestionId
+    ) {
       uploadLogs();
     }
 
-    props.handleKeystrokeAssessmentChange(playgroundQuestionId);
-  }, [props, uploadLogs, uploadPerHour]);
+    saveLoggedAssessmentIds(playgroundQuestionId, playgroundQuestionId);
+  }, [uploadPerHour, uploadLogs]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();

@@ -11,7 +11,6 @@ import {
 } from '../../commons/application/actions/InterpreterActions';
 import {
   logoutGoogle,
-  updateKeystrokeAssessmentId,
   uploadKeystrokeLogs
 } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
@@ -89,9 +88,7 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
-  persistenceFile: state.playground.persistenceFile,
-
-  loggedQuestionId: state.session.loggedQuestionId
+  persistenceFile: state.playground.persistenceFile
 });
 
 const workspaceLocation: WorkspaceLocation = 'playground';
@@ -150,8 +147,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleKeystrokeUpload: uploadKeystrokeLogs,
-      handleKeystrokeAssessmentChange: updateKeystrokeAssessmentId
+      handleKeystrokeUpload: uploadKeystrokeLogs
     },
     dispatch
   );

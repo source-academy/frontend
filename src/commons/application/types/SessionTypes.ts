@@ -31,7 +31,6 @@ export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
-export const UPDATE_KEYSTROKE_ASSESSMENT = 'UPDATE_KEYSTROKE_ASSESSMENT';
 
 export type SessionState = {
   readonly accessToken?: string;
@@ -53,6 +52,4 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
-
-  readonly loggedQuestionId: number; // -1 is for Playground.
 };

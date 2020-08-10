@@ -102,7 +102,30 @@ export const getAssessmentLogs = () => {
   return assessmentPlayback;
 };
 
-export const defaultPlaybackData: PlaybackData = {
+export const saveLoggedAssessmentIds = (assessmentId: number, questionId: number) => {
+  const questionParamsString: string | null = localStorage.getItem('LoggedAssessmentIds');
+  const questionParams = JSON.parse(
+    questionParamsString ? questionParamsString : JSON.stringify(defaultAssessmentIds)
+  );
+  questionParams.assessmentId = assessmentId;
+  questionParams.questionId = questionId;
+  localStorage.setItem('LoggedAssessmentIds', JSON.stringify(questionParams));
+};
+
+export const getLoggedAssessmentIds = () => {
+  const questionParamsString: string | null = localStorage.getItem('LoggedAssessmentIds');
+  const questionParams = JSON.parse(
+    questionParamsString ? questionParamsString : JSON.stringify(defaultAssessmentIds)
+  );
+  return questionParams;
+};
+
+const defaultAssessmentIds = {
+  assessmentId: playgroundQuestionId,
+  questionId: playgroundQuestionId
+};
+
+const defaultPlaybackData: PlaybackData = {
   init: {
     chapter: 1,
     externalLibrary: ExternalLibraryName.NONE,

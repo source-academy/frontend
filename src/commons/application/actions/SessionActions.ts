@@ -33,7 +33,6 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_KEYSTROKE_ASSESSMENT,
   UPDATE_NOTIFICATIONS,
   UPLOAD_KEYSTROKE_LOGS
 } from '../types/SessionTypes';
@@ -167,5 +166,3 @@ export const updateNotifications = (notifications: Notification[]) =>
 
 export const uploadKeystrokeLogs = (questionId: number, playbackData: PlaybackData) =>
   action(UPLOAD_KEYSTROKE_LOGS, { questionId, playbackData });
-
-export const updateKeystrokeAssessmentId = (id: number) => action(UPDATE_KEYSTROKE_ASSESSMENT, id);

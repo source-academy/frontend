@@ -4,7 +4,6 @@ import { AcademyState } from '../../features/academy/AcademyTypes';
 import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
-import { playgroundQuestionId } from '../../features/keystrokes/KeystrokesHelper';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
 import { PlaybackStatus, RecordingStatus } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment } from '../assessment/AssessmentTypes';
@@ -305,9 +304,7 @@ export const defaultSession: SessionState = {
     collectibles: {}
   },
   xp: 0,
-  notifications: [],
-
-  loggedQuestionId: playgroundQuestionId
+  notifications: []
 };
 
 export const defaultState: OverallState = {

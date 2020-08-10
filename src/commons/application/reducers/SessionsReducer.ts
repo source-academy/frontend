@@ -13,7 +13,6 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_KEYSTROKE_ASSESSMENT,
   UPDATE_NOTIFICATIONS
 } from '../types/SessionTypes';
 
@@ -82,11 +81,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notifications: action.payload
-      };
-    case UPDATE_KEYSTROKE_ASSESSMENT:
-      return {
-        ...state,
-        loggedQuestionId: action.payload
       };
     default:
       return state;

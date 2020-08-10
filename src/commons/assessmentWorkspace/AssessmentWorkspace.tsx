@@ -24,10 +24,12 @@ import {
 
 import {
   getAssessmentLogs,
+  getLoggedAssessmentIds,
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   resetAssessmentInit,
-  saveAssessmentLog
+  saveAssessmentLog,
+  saveLoggedAssessmentIds
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -95,7 +97,6 @@ export type DispatchProps = {
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleKeystrokeUpload: (questionId: number, playbackData: PlaybackData) => void;
-  handleKeystrokeAssessmentChange: (id: number) => void;
 };
 
 export type OwnProps = {
@@ -126,7 +127,6 @@ export type StateProps = {
   sideContentHeight?: number;
   storedAssessmentId?: number;
   storedQuestionId?: number;
-  loggedQuestionId: number;
 };
 
 class AssessmentWorkspace extends React.Component<
@@ -178,13 +178,15 @@ class AssessmentWorkspace extends React.Component<
 
     this.props.handleEditorValueChange(answer);
 
-    if (this.props.loggedQuestionId !== this.props.questionId && this.props.questionId !== 0) {
+    const currentAssessmentIds = getLoggedAssessmentIds();
+    if (
+      currentAssessmentIds.assessmentId !== this.props.assessmentId &&
+      currentAssessmentIds.questionID !== this.props.questionId
+    ) {
       this.uploadLogs();
     }
 
-    if (this.props.questionId !== 0) {
-      this.props.handleKeystrokeAssessmentChange(this.props.questionId);
-    }
+    saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
 
     this.uploadPerHour();
   }
