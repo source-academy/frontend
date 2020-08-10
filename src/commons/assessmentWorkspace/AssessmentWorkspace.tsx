@@ -25,13 +25,13 @@ import {
 import {
   getAssessmentLogs,
   getLoggedAssessmentIds,
+  getPlaygroundLogs,
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
+  playgroundQuestionId,
   resetAssessmentInit,
   saveAssessmentLog,
-  saveLoggedAssessmentIds,
-  getPlaygroundLogs,
-  playgroundQuestionId
+  saveLoggedAssessmentIds
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {

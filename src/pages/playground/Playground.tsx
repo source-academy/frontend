@@ -34,13 +34,12 @@ import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   getAssessmentLogs,
   getLoggedAssessmentIds,
+  getPlaygroundLogs,
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   playgroundQuestionId,
   resetPlaygroundInit,
-  saveLoggedAssessmentIds,
-  savePlaygroundLog,
-  getPlaygroundLogs
+  savePlaygroundLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -225,7 +224,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
 
     resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
-  }, [props, getAssessmentLogs, getLoggedAssessmentIds, getPlaygroundLogs]);
+  }, [props]);
 
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
