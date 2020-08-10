@@ -131,8 +131,12 @@ export default class SourceAcademyGame extends Phaser.Game {
     this.global.currentSceneRef = scene;
   }
 
-  public toggleUsingMock() {
-    this.global.isUsingMock = !this.global.isUsingMock;
+  public toggleUsingMock(value?: boolean) {
+    if (value === undefined) {
+      this.global.isUsingMock = !this.global.isUsingMock;
+    } else {
+      this.global.isUsingMock = value;
+    }
   }
 
   public setChapterSimStack(checkpointFilenames: string[]) {
