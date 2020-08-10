@@ -156,3 +156,52 @@ export function blink(
   }
   return clearBlink;
 }
+
+/**
+ * Makes a game object object blink through fade ins and fade outs
+ *
+ * @param scene - the scene where you want to add this object to
+ * @param gameObject - the gameObject which you want to add blinking effect on
+ * @returns {() => void} - clearBlink is a function. When called, it stops the blinking.
+ */
+export function twitch(
+  scene: Phaser.Scene,
+  gameObject: Phaser.GameObjects.Image | Phaser.GameObjects.Container
+) {
+  let i = 0;
+  const blink = setInterval(() => {
+    if (i % 6 !== 0) {
+      scene.tweens.add({
+        x: screenCenter.x + Math.random() * 10,
+        y: screenCenter.y,
+        targets: gameObject,
+        duration: 50
+      });
+    }
+
+    if ((i + 1) % 3 !== 0) {
+      scene.tweens.add({
+        x: screenCenter.x,
+        y: screenCenter.y + Math.random() * 10,
+        targets: gameObject,
+        duration: 50
+      });
+    }
+
+    if (i % 2 !== 0) {
+      scene.tweens.add({
+        targets: gameObject,
+        alpha: 0,
+        duration: 50,
+        onComplete: () => gameObject.setAlpha(1)
+      });
+    }
+
+    i++;
+  }, 200);
+  function clearBlink() {
+    i = 0;
+    clearInterval(blink);
+  }
+  return clearBlink;
+}

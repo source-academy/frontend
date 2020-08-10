@@ -3,6 +3,7 @@ import { getAwardProps } from '../../awards/GameAwardsHelper';
 import { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
+import { blackScreen, twitch } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
@@ -52,6 +53,9 @@ class AwardsHall extends Phaser.Scene {
 
   public preload() {
     addLoadingScreen(this);
+    this.load.image('glitch1', '../assets/glitch1.png');
+    this.load.image('glitch2', '../assets/glitch2.png');
+    this.load.image('glitch3', '../assets/glitch3.png');
   }
 
   public async create() {
@@ -68,6 +72,21 @@ class AwardsHall extends Phaser.Scene {
     this.scrollLim = this.awardXSpace < screenSize.x ? 0 : this.awardXSpace - screenSize.x;
     this.renderBackground();
     this.renderAwards();
+
+    this.add.existing(blackScreen(this));
+    this.add
+      .image(screenCenter.x, screenCenter.y, 'glitch1')
+      .setDisplaySize(screenSize.x * 0.8, screenSize.y * 0.8);
+    const glitch2 = this.add
+      .image(screenCenter.x, screenCenter.y, 'glitch2')
+      .setDisplaySize(screenSize.x * 0.8, screenSize.y * 0.8);
+    const glitch3 = this.add
+      .image(screenCenter.x, screenCenter.y, 'glitch3')
+      .setDisplaySize(screenSize.x * 0.8, screenSize.y * 0.8);
+
+    // twitch(this, glitch1);
+    twitch(this, glitch2);
+    twitch(this, glitch3);
   }
 
   public update() {
