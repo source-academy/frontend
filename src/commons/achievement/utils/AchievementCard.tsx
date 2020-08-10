@@ -1,33 +1,33 @@
 import { Icon, Intent, ProgressBar } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
-import { handleGlow } from 'src/features/achievement/AchievementConstants';
+import React, { useContext } from 'react';
+import { AchievementContext, handleGlow } from 'src/features/achievement/AchievementConstants';
 
 import { AchievementStatus } from '../../../features/achievement/AchievementTypes';
 import AchievementDeadline from './AchievementDeadline';
 import AchievementExp from './AchievementExp';
-import AchievementInferencer from './AchievementInferencer';
 
 type AchievementCardProps = {
   id: number;
-  inferencer: AchievementInferencer;
-  shouldRender: boolean;
   focusState: [number, any];
   isDropdownOpen?: boolean;
+  shouldRender: boolean;
   toggleDropdown?: () => void;
 };
 
 function AchievementCard(props: AchievementCardProps) {
-  const { id, inferencer, shouldRender, focusState, isDropdownOpen, toggleDropdown } = props;
+  const { id, focusState, isDropdownOpen, shouldRender, toggleDropdown } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   const [focusId, setFocusId] = focusState;
 
-  const { title, ability, cardTileUrl } = inferencer.getAchievementItem(id);
+  const { ability, cardTileUrl, title } = inferencer.getAchievementItem(id);
 
-  const status = inferencer.getStatus(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const displayExp = inferencer.getMaxExp(id);
   const progressFrac = inferencer.getProgressFrac(id);
+  const status = inferencer.getStatus(id);
 
   // Only task card with prerequisites has dropdown button
   const hasDropdown =

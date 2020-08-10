@@ -1,24 +1,25 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
+import React, { useContext } from 'react';
 
 import {
+  AchievementContext,
   getAbilityBackground,
   getAbilityGlow
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
-import AchievementInferencer from './utils/AchievementInferencer';
 import { prettifyDate } from './utils/DateHelper';
 import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  inferencer: AchievementInferencer;
   focusId: number;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { inferencer, focusId } = props;
+  const { focusId } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   if (isNaN(focusId)) {
     return (

@@ -7,6 +7,7 @@ import AchievementTask from '../../../commons/achievement/AchievementTask';
 import AchievementView from '../../../commons/achievement/AchievementView';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
@@ -16,7 +17,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  // TODO: useContext for inferencer
   inferencer: AchievementInferencer;
   name?: string;
   group: string | null;
@@ -25,26 +25,18 @@ export type StateProps = {
 /**
  * Generates <AchievementTask /> components
  *
- * @param inferencer the AchievementInferencer
+ * @param taskIds an array of achievementId
  * @param filterStatus the dashboard filter status
  * @param focusState the focused achievement state
  */
 export const generateAchievementTasks = (
-  inferencer: AchievementInferencer,
+  taskIds: number[],
   filterStatus: FilterStatus,
   focusState: [number, any]
-) => {
-  const taskIds = inferencer.listTaskIdsbyPosition();
-  return taskIds.map(taskId => (
-    <AchievementTask
-      key={taskId}
-      id={taskId}
-      inferencer={inferencer}
-      filterStatus={filterStatus}
-      focusState={focusState}
-    />
+) =>
+  taskIds.map(taskId => (
+    <AchievementTask key={taskId} id={taskId} filterStatus={filterStatus} focusState={focusState} />
   ));
-};
 
 function Dashboard(props: DispatchProps & StateProps) {
   const { inferencer, name, group, handleGetAchievements, handleGetOwnGoals } = props;
@@ -71,41 +63,39 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [focusId] = focusState;
 
   return (
-    <div className="AchievementDashboard">
-      <AchievementOverview
-        name={name || 'User'}
-        studio={group || 'Staff'}
-        inferencer={inferencer}
-      />
+    <AchievementContext.Provider value={inferencer}>
+      <div className="AchievementDashboard">
+        <AchievementOverview name={name || 'User'} studio={group || 'Staff'} />
 
-      <div className="achievement-main">
-        <div className="filter-container">
-          <AchievementFilter
-            ownStatus={FilterStatus.ALL}
-            icon={IconNames.GLOBE}
-            filterState={filterState}
-          />
-          <AchievementFilter
-            ownStatus={FilterStatus.ACTIVE}
-            icon={IconNames.LOCATE}
-            filterState={filterState}
-          />
-          <AchievementFilter
-            ownStatus={FilterStatus.COMPLETED}
-            icon={IconNames.ENDORSED}
-            filterState={filterState}
-          />
-        </div>
+        <div className="achievement-main">
+          <div className="filter-container">
+            <AchievementFilter
+              ownStatus={FilterStatus.ALL}
+              icon={IconNames.GLOBE}
+              filterState={filterState}
+            />
+            <AchievementFilter
+              ownStatus={FilterStatus.ACTIVE}
+              icon={IconNames.LOCATE}
+              filterState={filterState}
+            />
+            <AchievementFilter
+              ownStatus={FilterStatus.COMPLETED}
+              icon={IconNames.ENDORSED}
+              filterState={filterState}
+            />
+          </div>
 
-        <ul className="task-container">
-          {generateAchievementTasks(inferencer, filterStatus, focusState)}
-        </ul>
+          <ul className="task-container">
+            {generateAchievementTasks(inferencer.listTaskIdsbyPosition(), filterStatus, focusState)}
+          </ul>
 
-        <div className="view-container">
-          <AchievementView inferencer={inferencer} focusId={focusId} />
+          <div className="view-container">
+            <AchievementView focusId={focusId} />
+          </div>
         </div>
       </div>
-    </div>
+    </AchievementContext.Provider>
   );
 }
 

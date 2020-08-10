@@ -1,13 +1,13 @@
 import { Card } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
+import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
   AchievementAbility,
   AchievementItem,
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';
-import AchievementInferencer from '../../utils/AchievementInferencer';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
 import AchievementUploader from './editableUtils/AchievementUploader';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
@@ -18,15 +18,15 @@ import EditableAchievementView from './editableView/EditableAchievementView';
 
 type EditableAchievementCardProps = {
   id: number;
-  inferencer: AchievementInferencer;
   forceRender: () => void;
   releaseId: (id: number) => void;
   requestPublish: () => void;
 };
 
 function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, inferencer, forceRender, releaseId, requestPublish } = props;
+  const { id, forceRender, releaseId, requestPublish } = props;
 
+  const inferencer = useContext(AchievementContext);
   const achievementReference = inferencer.getAchievementItem(id);
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(

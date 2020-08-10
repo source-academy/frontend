@@ -5,6 +5,7 @@ import AchievementPreview from '../../../commons/achievement/control/Achievement
 import GoalEditor from '../../../commons/achievement/control/GoalEditor';
 import AchievementInferencer from '../../../commons/achievement/utils/AchievementInferencer';
 import Constants from '../../../commons/utils/Constants';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
@@ -15,7 +16,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  // TODO: useContext for inferencer
   inferencer: AchievementInferencer;
 };
 
@@ -48,29 +48,34 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const requestPublish = () => setAwaitPublish(true);
 
   /**
-   * Allows child components to trigger a page render so that the AchievementPreview
+   * Allows editor components to trigger a page re-render so that the AchievementPreview
    * displays the latest local changes
+   *
+   * NOTE: AchievementContext should be able to observe the changes in the inferencer
+   * and automatically trigger a re-render in all child components. However, in
+   * <EditableAchievementCard /> modifying an achievement is done by calling
+   * inferencer.modifyAchievement() instead of using useState hooks recommended by React.
+   * Hence the AchievementContext is unaware of the changes and a forceRender() is needed.
+   *
+   * TODO: Refactor the <EditableAchievementCard /> workflow and deprecate forceRender()
    */
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
 
   return (
-    <div className="AchievementControl">
-      <AchievementPreview
-        inferencer={inferencer}
-        publishAchievements={handleBulkUpdateAchievements}
-        publishGoals={handleBulkUpdateGoals}
-        publishState={publishState}
-      />
+    <AchievementContext.Provider value={inferencer}>
+      <div className="AchievementControl">
+        <AchievementPreview
+          publishAchievements={handleBulkUpdateAchievements}
+          publishGoals={handleBulkUpdateGoals}
+          publishState={publishState}
+        />
 
-      <AchievementEditor
-        inferencer={inferencer}
-        forceRender={forceRender}
-        requestPublish={requestPublish}
-      />
+        <AchievementEditor forceRender={forceRender} requestPublish={requestPublish} />
 
-      <GoalEditor />
-    </div>
+        <GoalEditor />
+      </div>
+    </AchievementContext.Provider>
   );
 }
 

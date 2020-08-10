@@ -1,17 +1,18 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import AchievementInferencer from '../utils/AchievementInferencer';
 import EditableAchievementCard from './editorTools/EditableAchievementCard';
 import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
 
 type AchievementEditorProps = {
-  inferencer: AchievementInferencer;
   forceRender: () => void;
   requestPublish: () => void;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { inferencer, forceRender, requestPublish } = props;
+  const { forceRender, requestPublish } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   /**
    * newId helps us to ensure that only ONE achievement is added at any point of time.
@@ -29,26 +30,25 @@ function AchievementEditor(props: AchievementEditorProps) {
   const releaseId = (id: number) => (id === newId ? setNewId(NaN) : undefined);
   const isHoldingId = !isNaN(newId);
 
-  const generateEditableCards = (inferencer: AchievementInferencer) => {
-    const achievementIds = inferencer.listIds().reverse();
-    return achievementIds.map(id => (
+  const generateEditableCards = (achievementIds: number[]) =>
+    achievementIds.map(id => (
       <EditableAchievementCard
         key={id}
         id={id}
-        inferencer={inferencer}
         forceRender={forceRender}
         releaseId={releaseId}
         requestPublish={requestPublish}
       />
     ));
-  };
 
   return (
     <div className="achievement-editor">
       <div className="achievement-command">
-        <AchievementAdder inferencer={inferencer} admitId={admitId} isHoldingId={isHoldingId} />
+        <AchievementAdder admitId={admitId} isHoldingId={isHoldingId} />
       </div>
-      <ul className="achievement-container">{generateEditableCards(inferencer)}</ul>
+      <ul className="achievement-container">
+        {generateEditableCards(inferencer.listIds().reverse())}
+      </ul>
     </div>
   );
 }

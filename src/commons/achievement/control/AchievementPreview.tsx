@@ -1,6 +1,7 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import {
   AchievementItem,
   FilterStatus,
@@ -9,18 +10,17 @@ import {
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
 
 import AchievementView from '../AchievementView';
-import AchievementInferencer from '../utils/AchievementInferencer';
 
 type AchievementPreviewProps = {
-  inferencer: AchievementInferencer;
   publishAchievements: (achievements: AchievementItem[]) => void;
   publishGoals: (goals: GoalDefinition[]) => void;
   publishState: [boolean, any];
 };
 
 function AchievementPreview(props: AchievementPreviewProps) {
-  const { inferencer, publishAchievements, publishGoals, publishState } = props;
+  const { publishAchievements, publishGoals, publishState } = props;
 
+  const inferencer = useContext(AchievementContext);
   const achievements = inferencer.getAllAchievement();
   const goals = inferencer.getAllGoalDefinition();
 
@@ -65,11 +65,15 @@ function AchievementPreview(props: AchievementPreviewProps) {
       </div>
       {viewMode ? (
         <div className="preview-container">
-          <AchievementView inferencer={inferencer} focusId={focusId} />
+          <AchievementView focusId={focusId} />
         </div>
       ) : (
         <ul className="preview-container">
-          {generateAchievementTasks(inferencer, FilterStatus.ALL, focusState)}
+          {generateAchievementTasks(
+            inferencer.listTaskIdsbyPosition(),
+            FilterStatus.ALL,
+            focusState
+          )}
         </ul>
       )}
     </div>

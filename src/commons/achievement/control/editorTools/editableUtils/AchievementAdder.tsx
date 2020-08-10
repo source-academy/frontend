@@ -1,17 +1,18 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
+import React, { useContext } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import AchievementInferencer from '../../../utils/AchievementInferencer';
 import { achievementTemplate } from '../AchievementTemplate';
 
 type AchievementAdderProps = {
-  inferencer: AchievementInferencer;
   admitId: (id: number) => void;
   isHoldingId: boolean;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
-  const { inferencer, admitId, isHoldingId } = props;
+  const { admitId, isHoldingId } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   const handleAddAchievement = () => admitId(inferencer.insertAchievement(achievementTemplate));
 

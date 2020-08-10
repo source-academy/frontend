@@ -1,19 +1,22 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 
-import { getAbilityColor } from '../../features/achievement/AchievementConstants';
+import {
+  AchievementContext,
+  getAbilityColor
+} from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
 import AchievementCard from './utils/AchievementCard';
-import AchievementInferencer from './utils/AchievementInferencer';
 
 type AchievementTaskProps = {
   id: number;
-  inferencer: AchievementInferencer;
   filterStatus: FilterStatus;
   focusState: [number, any];
 };
 
 function AchievementTask(props: AchievementTaskProps) {
-  const { id, inferencer, filterStatus, focusState } = props;
+  const { id, filterStatus, focusState } = props;
+
+  const inferencer = useContext(AchievementContext);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
@@ -65,7 +68,6 @@ function AchievementTask(props: AchievementTaskProps) {
         <li className="task">
           <AchievementCard
             id={id}
-            inferencer={inferencer}
             shouldRender={shouldRender(id)}
             focusState={focusState}
             isDropdownOpen={isDropdownOpen}
@@ -84,7 +86,6 @@ function AchievementTask(props: AchievementTaskProps) {
                   ></div>
                   <AchievementCard
                     id={prerequisiteId}
-                    inferencer={inferencer}
                     shouldRender={shouldRender(prerequisiteId)}
                     focusState={focusState}
                   />

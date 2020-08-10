@@ -1,7 +1,16 @@
+import React from 'react';
+
+import AchievementInferencer from '../../commons/achievement/utils/AchievementInferencer';
+import { defaultAchievement } from '../../commons/application/ApplicationTypes';
 import { Links } from '../../commons/utils/Constants';
 import { AchievementAbility, FilterStatus } from './AchievementTypes';
 
 export const expPerLevel = 1000;
+
+const { achievements: defaultAchievements, goals: defaultGoals } = defaultAchievement;
+export const AchievementContext = React.createContext(
+  new AchievementInferencer(defaultAchievements, defaultGoals)
+);
 
 export enum DeadlineColors {
   RED = '#f00',
