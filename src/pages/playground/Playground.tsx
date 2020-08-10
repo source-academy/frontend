@@ -39,7 +39,8 @@ import {
   playgroundQuestionId,
   resetPlaygroundInit,
   saveLoggedAssessmentIds,
-  savePlaygroundLog
+  savePlaygroundLog,
+  getPlaygroundLogs
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -207,9 +208,24 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const uploadLogs = React.useCallback(() => {
-    props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, getAssessmentLogs());
+    const assessmentIDs = getLoggedAssessmentIds();
+    const assessmentLogs = getAssessmentLogs();
+    const playgroundLogs = getPlaygroundLogs();
+
+    if (assessmentLogs.inputs.length !== 0) {
+      props.handleKeystrokeUpload(
+        assessmentIDs.assessmentId,
+        assessmentIDs.questionId,
+        assessmentLogs
+      );
+    }
+
+    if (playgroundLogs.inputs.length !== 0) {
+      props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
+    }
+
     resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
-  }, [props]);
+  }, [props, getAssessmentLogs, getLoggedAssessmentIds, getPlaygroundLogs]);
 
   const uploadPerHour = React.useCallback(() => {
     const interval = setInterval(() => {
@@ -228,8 +244,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ) {
       uploadLogs();
     }
-
-    saveLoggedAssessmentIds(playgroundQuestionId, playgroundQuestionId);
   }, [uploadPerHour, uploadLogs]);
 
   const handleEvalCallback = React.useCallback(() => {

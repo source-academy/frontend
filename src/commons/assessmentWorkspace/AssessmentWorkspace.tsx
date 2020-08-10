@@ -29,7 +29,9 @@ import {
   oneHourInMilliSeconds,
   resetAssessmentInit,
   saveAssessmentLog,
-  saveLoggedAssessmentIds
+  saveLoggedAssessmentIds,
+  getPlaygroundLogs,
+  playgroundQuestionId
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -212,11 +214,22 @@ class AssessmentWorkspace extends React.Component<
 
   public uploadLogs = () => {
     const assessmentIDs = getLoggedAssessmentIds();
-    this.props.handleKeystrokeUpload(
-      assessmentIDs.assessmentId,
-      assessmentIDs.questionId,
-      getAssessmentLogs()
-    );
+    const assessmentLogs = getAssessmentLogs();
+    const playgroundLogs = getPlaygroundLogs();
+
+    if (assessmentLogs.inputs.length !== 0) {
+      this.props.handleKeystrokeUpload(
+        assessmentIDs.assessmentId,
+        assessmentIDs.questionId,
+        assessmentLogs
+      );
+    }
+
+    if (playgroundLogs.inputs.length !== 0) {
+      this.props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
+    }
+
+    saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
     resetAssessmentInit(
       this.props.assessment!.questions[this.props.questionId].library.chapter,
       this.props.assessment!.questions[this.props.questionId].library.external.name,
