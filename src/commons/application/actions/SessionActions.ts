@@ -164,5 +164,8 @@ export const acknowledgeNotifications = (withFilter?: NotificationFilterFunction
 export const updateNotifications = (notifications: Notification[]) =>
   action(UPDATE_NOTIFICATIONS, notifications);
 
-export const uploadKeystrokeLogs = (questionId: number, playbackData: PlaybackData) =>
-  action(UPLOAD_KEYSTROKE_LOGS, { questionId, playbackData });
+export const uploadKeystrokeLogs = (
+  assessmentId: number,
+  questionId: number,
+  playbackData: PlaybackData
+) => action(UPLOAD_KEYSTROKE_LOGS, { assessmentId, questionId, playbackData });
