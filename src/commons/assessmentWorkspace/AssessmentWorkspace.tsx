@@ -216,8 +216,8 @@ class AssessmentWorkspace extends React.Component<
       },
       inputs: this.props.keystrokeLogs
     };
-    this.props.handleKeystrokesReset();
     this.props.handleKeystrokeUpload(this.props.questionId, playbackData);
+    this.props.handleKeystrokesReset();
 
     this.setState({ startingEditorValue: this.props.editorValue });
   };
