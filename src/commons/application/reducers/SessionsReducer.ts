@@ -4,8 +4,6 @@ import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
 import {
-  ADD_KEYSTROKE_LOG,
-  RESET_KEYSTROKE_LOGS,
   SessionState,
   SET_GOOGLE_USER,
   SET_TOKENS,
@@ -84,18 +82,6 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notifications: action.payload
-      };
-    case ADD_KEYSTROKE_LOG:
-      const logsCopy = state.keystrokeLogs;
-      logsCopy.push(action.payload);
-      return {
-        ...state,
-        keystrokeLogs: logsCopy
-      };
-    case RESET_KEYSTROKE_LOGS:
-      return {
-        ...state,
-        keystrokeLogs: []
       };
     case UPDATE_KEYSTROKE_ASSESSMENT:
       return {

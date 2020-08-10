@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { Input, PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
+import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
   Notification,
@@ -10,7 +10,6 @@ import {
 import { GameState, Role, Story } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
-  ADD_KEYSTROKE_LOG,
   FETCH_ASSESSMENT,
   FETCH_ASSESSMENT_OVERVIEWS,
   FETCH_AUTH,
@@ -21,7 +20,6 @@ import {
   LOGOUT_GOOGLE,
   REAUTOGRADE_ANSWER,
   REAUTOGRADE_SUBMISSION,
-  RESET_KEYSTROKE_LOGS,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -169,9 +167,5 @@ export const updateNotifications = (notifications: Notification[]) =>
 
 export const uploadKeystrokeLogs = (questionId: number, playbackData: PlaybackData) =>
   action(UPLOAD_KEYSTROKE_LOGS, { questionId, playbackData });
-
-export const resetKeystrokeLogs = () => action(RESET_KEYSTROKE_LOGS);
-
-export const addKeystrokeLog = (log: Input) => action(ADD_KEYSTROKE_LOG, log);
 
 export const updateKeystrokeAssessmentId = (id: number) => action(UPDATE_KEYSTROKE_ASSESSMENT, id);

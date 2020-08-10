@@ -307,7 +307,6 @@ export const defaultSession: SessionState = {
   xp: 0,
   notifications: [],
 
-  keystrokeLogs: [],
   loggedQuestionId: playgroundQuestionId
 };
 
