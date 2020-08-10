@@ -1,34 +1,28 @@
 import { Icon, IconName } from '@blueprintjs/core';
 import React from 'react';
 
+import { getFilterColor } from '../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../features/achievement/AchievementTypes';
 
 type AchievementFilterProps = {
-  filterStatus: FilterStatus;
-  setFilterStatus: any;
+  ownStatus: FilterStatus;
   icon: IconName;
-  count: number;
-  getFilterColor: any;
+  filterState: [FilterStatus, any];
 };
 
 function AchievementFilter(props: AchievementFilterProps) {
-  const { filterStatus, setFilterStatus, icon, count, getFilterColor } = props;
+  const { ownStatus, icon, filterState } = props;
 
-  /**
-   * Changes the filter status for the achievement page.
-   */
-  const changeFilterStatus = () => {
-    setFilterStatus(filterStatus);
-  };
-
-  const filterColor = getFilterColor(filterStatus);
+  const [globalStatus, setGlobalStatus] = filterState;
 
   return (
-    <div className="filter" onClick={changeFilterStatus} style={{ color: filterColor }}>
+    <div
+      className="filter"
+      onClick={() => setGlobalStatus(ownStatus)}
+      style={{ color: getFilterColor(globalStatus, ownStatus) }}
+    >
       <Icon iconSize={30} icon={icon} />
-      <p>
-        {filterStatus} [{count}]
-      </p>
+      <p>{ownStatus}</p>
     </div>
   );
 }

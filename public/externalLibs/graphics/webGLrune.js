@@ -9,6 +9,7 @@ function PrimaryRune(first, count) {
   this.first = first // the first index in the index buffer
   // that belongs to this rune
   this.count = count // number of indices to draw the rune
+  this.toReplString = () => '<RUNE>'
 }
 
 function Rune() {
@@ -16,6 +17,7 @@ function Rune() {
   this.transMatrix = mat4.create()
   this.runes = []
   this.color = undefined
+  this.toReplString = () => '<RUNE>'
 }
 
 // set the transformation matrix related to the rune
@@ -350,6 +352,7 @@ function generateFlattenedRuneList(rune) {
     }
   }
   function helper(rune, color) {
+    throwIfNotRune('primitive rune function', rune)
     if (rune.isPrimary) {
       if (rune.count === 0) {
         // this is blank, do nothing
@@ -410,6 +413,18 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
   }
 }
 
+function isRune(x) {
+  return x instanceof Rune || x instanceof PrimaryRune
+}
+
+function throwIfNotRune(name, x) {
+  for (var rune of Array.prototype.slice.call(arguments, 1)) {
+    if (!isRune(rune)) {
+      throw name + ' expects a rune as argument, received ' + stringify(rune)
+    }
+  }
+}
+
 /**
  * turns a given Rune into a two-dimensional Picture
  * @param {Rune} rune - given Rune
@@ -417,7 +432,9 @@ function drawWithWebGL(flattened_rune_list, drawFunction) {
  * If the result of evaluating a program is a Picture,
  * the REPL displays it graphically, instead of textually.
  */
+
 function show(rune) {
+  throwIfNotRune('show', rune)
   const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
   clear_viewport()
   var flattened_rune_list = generateFlattenedRuneList(rune)
@@ -436,6 +453,7 @@ function show(rune) {
  * to view the Anaglyph.
  */
 function anaglyph(rune) {
+  throwIfNotRune('anaglyph', rune)
   const frame = open_pixmap('frame', rune_viewport_size, rune_viewport_size, true);
   clear_viewport()
   clearAnaglyphFramebuffer()
@@ -507,6 +525,7 @@ function clearHollusion() {
  * @return {Rune} resulting scaled Rune
  */
 function scale_independent(ratio_x, ratio_y, rune) {
+  throwIfNotRune('scale_independent', rune)
   var scaleVec = vec3.fromValues(ratio_x, ratio_y, 1)
   var scaleMat = mat4.create()
   mat4.scale(scaleMat, scaleMat, scaleVec)
@@ -524,6 +543,7 @@ function scale_independent(ratio_x, ratio_y, rune) {
  * @return {Rune} resulting scaled Rune
  */
 function scale(ratio, rune) {
+  throwIfNotRune('scale', rune)
   return scale_independent(ratio, ratio, rune)
 }
 
@@ -537,6 +557,7 @@ function scale(ratio, rune) {
  * @return {Rune} resulting translated Rune
  */
 function translate(x, y, rune) {
+  throwIfNotRune('translate', rune)
   var translateVec = vec3.fromValues(x, -y, 0)
   var translateMat = mat4.create()
   mat4.translate(translateMat, translateMat, translateVec)
@@ -556,6 +577,7 @@ function translate(x, y, rune) {
  * @return {Rune} rotated Rune
  */
 function rotate(rad, rune) {
+  throwIfNotRune('rotate', rune)
   var rotateMat = mat4.create()
   mat4.rotateZ(rotateMat, rotateMat, rad)
   var wrapper = new Rune()
@@ -576,6 +598,7 @@ function rotate(rad, rune) {
  * @return {Rune} resulting Rune
  */
 function stack_frac(frac, rune1, rune2) {
+  throwIfNotRune('stack_frac', rune1, rune2)
   var upper = translate(0, -(1 - frac), scale_independent(1, frac, rune1))
   var lower = translate(0, frac, scale_independent(1, 1 - frac, rune2))
   var combined = new Rune()
@@ -593,6 +616,7 @@ function stack_frac(frac, rune1, rune2) {
  * @return {Rune} resulting Rune
  */
 function stack(rune1, rune2) {
+  throwIfNotRune('stack', rune1, rune2)
   return stack_frac(1 / 2, rune1, rune2)
 }
 
@@ -604,6 +628,7 @@ function stack(rune1, rune2) {
  * @return {Rune} resulting Rune
  */
 function stackn(n, rune) {
+  throwIfNotRune('stackn', rune)
   if (n === 1) {
     return rune
   } else {
@@ -619,6 +644,7 @@ function stackn(n, rune) {
  * @return {Rune} resulting Rune
  */
 function quarter_turn_right(rune) {
+  throwIfNotRune('quarter_turn_right', rune)
   return rotate(-Math.PI / 2, rune)
 }
 
@@ -630,6 +656,7 @@ function quarter_turn_right(rune) {
  * @return {Rune} resulting Rune
  */
 function quarter_turn_left(rune) {
+  throwIfNotRune('quarter_turn_left', rune)
   return rotate(Math.PI / 2, rune)
 }
 
@@ -640,6 +667,7 @@ function quarter_turn_left(rune) {
  * @return {Rune} resulting Rune
  */
 function turn_upside_down(rune) {
+  throwIfNotRune('turn_upside_down', rune)
   return rotate(Math.PI, rune)
 }
 
@@ -655,6 +683,7 @@ function turn_upside_down(rune) {
  * @return {Rune} resulting Rune
  */
 function beside_frac(frac, rune1, rune2) {
+  throwIfNotRune('beside_frac', rune1, rune2)
   var left = translate(-(1 - frac), 0, scale_independent(frac, 1, rune1))
   var right = translate(frac, 0, scale_independent(1 - frac, 1, rune2))
   var combined = new Rune()
@@ -672,6 +701,7 @@ function beside_frac(frac, rune1, rune2) {
  * @return {Rune} resulting Rune
  */
 function beside(rune1, rune2) {
+  throwIfNotRune('beside', rune1, rune2)
   return beside_frac(1 / 2, rune1, rune2)
 }
 
@@ -683,6 +713,7 @@ function beside(rune1, rune2) {
  * @return {Rune} resulting Rune
  */
 function flip_vert(rune) {
+  throwIfNotRune('flip_vert', rune)
   return scale_independent(1, -1, rune)
 }
 
@@ -694,6 +725,7 @@ function flip_vert(rune) {
  * @return {Rune} resulting Rune
  */
 function flip_horiz(rune) {
+  throwIfNotRune('flip_horiz', rune)
   return scale_independent(-1, 1, rune)
 }
 
@@ -705,6 +737,7 @@ function flip_horiz(rune) {
  * @return {Rune} resulting Rune
  */
 function make_cross(rune) {
+  throwIfNotRune('make_cross', rune)
   return stack(
     beside(quarter_turn_right(rune), rotate(Math.PI, rune)),
     beside(rune, rotate(Math.PI / 2, rune))
@@ -750,6 +783,7 @@ function hexToColor(hex) {
  * @returns {Rune} the colored Rune
  */
 function color(rune, r, g, b) {
+  throwIfNotRune('color', rune)
   var wrapper = new Rune()
   wrapper.addS(rune)
   var color = [r, g, b, 1]
@@ -758,6 +792,7 @@ function color(rune, r, g, b) {
 }
 
 function addColorFromHex(rune, hex) {
+  throwIfNotRune('addColorFromHex', rune)
   var wrapper = new Rune()
   wrapper.addS(rune)
   wrapper.setColor(hexToColor(hex))
@@ -772,6 +807,7 @@ function addColorFromHex(rune, hex) {
  * @returns {Rune} the colored Rune
  */
 function random_color(rune) {
+  throwIfNotRune('random_color', rune)
   var wrapper = new Rune()
   wrapper.addS(rune)
   var randomColor = hexToColor(colorPalette[Math.floor(Math.random() * colorPalette.length)])
@@ -799,6 +835,7 @@ var colorPalette = [
  * @returns {Rune} the colored Rune
  */
 function red(rune) {
+  throwIfNotRune('red', rune)
   return addColorFromHex(rune, '#F44336')
 }
 
@@ -808,6 +845,7 @@ function red(rune) {
  * @returns {Rune} the colored Rune
  */
 function pink(rune) {
+  throwIfNotRune('pink', rune)
   return addColorFromHex(rune, '#E91E63')
 }
 
@@ -817,6 +855,7 @@ function pink(rune) {
  * @returns {Rune} the colored Rune
  */
 function purple(rune) {
+  throwIfNotRune('purple', rune)
   return addColorFromHex(rune, '#AA00FF')
 }
 
@@ -826,6 +865,7 @@ function purple(rune) {
  * @returns {Rune} the colored Rune
  */
 function indigo(rune) {
+  throwIfNotRune('indigo', rune)
   return addColorFromHex(rune, '#3F51B5')
 }
 
@@ -835,6 +875,7 @@ function indigo(rune) {
  * @returns {Rune} the colored Rune
  */
 function blue(rune) {
+  throwIfNotRune('blue', rune)
   return addColorFromHex(rune, '#2196F3')
 }
 
@@ -844,6 +885,7 @@ function blue(rune) {
  * @returns {Rune} the colored Rune
  */
 function green(rune) {
+  throwIfNotRune('green', rune)
   return addColorFromHex(rune, '#4CAF50')
 }
 
@@ -853,6 +895,7 @@ function green(rune) {
  * @returns {Rune} the colored Rune
  */
 function yellow(rune) {
+  throwIfNotRune('yellow', rune)
   return addColorFromHex(rune, '#FFEB3B')
 }
 
@@ -862,6 +905,7 @@ function yellow(rune) {
  * @returns {Rune} the colored Rune
  */
 function orange(rune) {
+  throwIfNotRune('orange', rune)
   return addColorFromHex(rune, '#FF9800')
 }
 
@@ -871,6 +915,7 @@ function orange(rune) {
  * @returns {Rune} the colored Rune
  */
 function brown(rune) {
+  throwIfNotRune('brown', rune)
   return addColorFromHex(rune, '#795548')
 }
 
@@ -880,6 +925,7 @@ function brown(rune) {
  * @returns {Rune} the colored Rune
  */
 function black(rune) {
+  throwIfNotRune('black', rune)
   return addColorFromHex(rune, '#000000')
 }
 
@@ -889,6 +935,7 @@ function black(rune) {
  * @returns {Rune} the colored Rune
  */
 function white(rune) {
+  throwIfNotRune('white', rune)
   return addColorFromHex(rune, '#FFFFFF')
 }
 
@@ -904,6 +951,7 @@ function white(rune) {
  * @return {Rune} resulting Rune
  */
 function overlay_frac(frac, rune1, rune2) {
+  throwIfNotRune('overlay_frac', rune1, rune2)
   var front = new Rune()
   front.addS(rune1)
   var frontMat = front.getM()
@@ -935,6 +983,7 @@ function overlay_frac(frac, rune1, rune2) {
  * @return {Rune} resulting Rune
  */
 function overlay(rune1, rune2) {
+  throwIfNotRune('overlay', rune1, rune2)
   return overlay_frac(0.5, rune1, rune2)
 }
 

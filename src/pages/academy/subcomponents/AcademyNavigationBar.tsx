@@ -9,13 +9,12 @@ import { AssessmentCategories } from '../../../commons/assessment/AssessmentType
 import NotificationBadgeContainer from '../../../commons/notificationBadge/NotificationBadgeContainer';
 import { filterNotificationsByType } from '../../../commons/notificationBadge/NotificationBadgeHelper';
 import { assessmentCategoryLink } from '../../../commons/utils/ParamParseHelper';
-import DefaultChapterContainer from './AcademyDefaultChapterContainer';
 
 type OwnProps = {
   role: Role;
 };
 
-const AcademyNavigationBar: React.SFC<OwnProps> = props => (
+const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
   <Navbar className="NavigationBar secondary-navbar">
     <NavbarGroup align={Alignment.LEFT}>
       <NavLink
@@ -81,8 +80,6 @@ const AcademyNavigationBar: React.SFC<OwnProps> = props => (
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
       <NavbarGroup align={Alignment.RIGHT}>
-        <DefaultChapterContainer />
-
         <NavLink
           to={'/academy/groundcontrol'}
           activeClassName={Classes.ACTIVE}

@@ -14,6 +14,7 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
@@ -22,7 +23,7 @@ import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { OverallState, styliseChapter } from '../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -50,6 +51,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -373,7 +375,11 @@ export default function* WorkspaceSaga(): SagaIterator {
       yield put(actions.beginClearContext(library, workspaceLocation));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
+      yield call(
+        showSuccessMessage,
+        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+        1000
+      );
     }
   });
 
@@ -487,6 +493,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       case ExternalLibraryName.RUNES:
         (window as any).loadLib('RUNES');
         (window as any).getReadyWebGLForCanvas('3d');
+        (window as any).getReadyStringifyForRunes(stringify);
         break;
       case ExternalLibraryName.CURVES:
         (window as any).loadLib('CURVES');
@@ -636,10 +643,21 @@ export function* evalCode(
   }
   async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
     return Sourceror.compile(wasmCode, wasmContext)
-      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then((wasmModule: WebAssembly.Module) => {
+        const transcoder = new Sourceror.Transcoder();
+        return Sourceror.run(
+          wasmModule,
+          Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
+          transcoder,
+          wasmContext
+        );
+      })
       .then(
-        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
-        _ => ({ status: 'error' })
+        (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
+        (e: any): Result => {
+          console.log(e);
+          return { status: 'error' };
+        }
       );
   }
 

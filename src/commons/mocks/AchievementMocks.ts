@@ -214,7 +214,7 @@ export const mockAchievements: AchievementItem[] = [
     isTask: true,
     position: 6,
     prerequisiteIds: [],
-    goalIds: [],
+    goalIds: [10],
     cardTileUrl:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-tile/annotated-tile.png',
     view: {

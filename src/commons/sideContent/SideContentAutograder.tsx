@@ -105,16 +105,21 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
-        minimal: true,
-        className: 'collapse-button'
+        className: 'collapse-button',
+        iconOnRight: true,
+        minimal: true
       });
 
     return (
       <div className="Autograder">
         {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}
-        <Collapse isOpen={this.state.showTestcases}>{testcases}</Collapse>
+        <Collapse isOpen={this.state.showTestcases} keepChildrenMounted={true}>
+          {testcases}
+        </Collapse>
         {collapseButton('Autograder Results', this.state.showResults, this.toggleResults)}
-        <Collapse isOpen={this.state.showResults}>{results}</Collapse>
+        <Collapse isOpen={this.state.showResults} keepChildrenMounted={true}>
+          {results}
+        </Collapse>
       </div>
     );
   }

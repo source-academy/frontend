@@ -47,6 +47,7 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
+  handleFetchSublanguage: () => void;
   handleFinishInvite: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
@@ -109,16 +110,23 @@ export type StateProps = {
 const keyMap = { goGreen: 'h u l k' };
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const { handleExternalSelect, handleFetchSublanguage } = props;
+
+  React.useEffect(() => {
+    // Fixes some errors with runes and curves (see PR #1420)
+    handleExternalSelect(props.externalLibraryName, true);
+
+    // Only fetch default Playground sublanguage when not loaded via a share link
+    if (props.location.hash === '') {
+      handleFetchSublanguage();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
-
-  React.useEffect(() => {
-    props.handleExternalSelect(props.externalLibraryName, true);
-    // run once only
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handlers = React.useMemo(
     () => ({
@@ -309,7 +317,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [stepLimit, handleChangeStepLimit]
   );
 
-  const { handleExternalSelect, externalLibraryName } = props;
+  const { externalLibraryName } = props;
   const externalLibrarySelect = React.useMemo(
     () => (
       <ControlBarExternalLibrarySelect
