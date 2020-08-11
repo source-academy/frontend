@@ -11,18 +11,11 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useTypeInference: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  // editorValue is the prop that is going to change all the time
-  // use a ref so that the callbacks below can be memoised
-  const editorValueRef = React.useRef<string>(inProps.editorValue);
-  React.useEffect(() => {
-    editorValueRef.current = inProps.editorValue;
-  }, [inProps.editorValue]);
-
   const { sourceChapter, handleSendReplInputToOutput } = inProps;
 
   const handleTypeInferenceDisplay = React.useCallback(() => {
-    const code = editorValueRef.current;
     const editor = reactAceRef.current!.editor;
+    const code = editor.getValue();
     const pos = editor.getCursorPosition();
     const token = editor.session.getTokenAt(pos.row, pos.column);
 
@@ -59,7 +52,7 @@ const useTypeInference: EditorHook = (inProps, outProps, keyBindings, reactAceRe
       }
       handleSendReplInputToOutput(output);
     }
-  }, [editorValueRef, reactAceRef, handleSendReplInputToOutput, sourceChapter]);
+  }, [reactAceRef, handleSendReplInputToOutput, sourceChapter]);
 
   keyBindings.typeInferenceDisplay = handleTypeInferenceDisplay;
 };

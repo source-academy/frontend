@@ -99,12 +99,10 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
-  readonly sharedbAceInitValue: string;
-  readonly sharedbAceIsInviting: boolean;
+  readonly sharedbConnected: boolean;
   readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
   readonly stepLimit: number;
-  readonly websocketStatus: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
 };
