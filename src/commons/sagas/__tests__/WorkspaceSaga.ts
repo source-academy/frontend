@@ -26,7 +26,6 @@ import {
   EVAL_TESTCASE_SUCCESS
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseType, TestcaseTypes } from '../../assessment/AssessmentTypes';
-import { INVALID_EDITOR_SESSION_ID } from '../../collabEditing/CollabEditingTypes';
 import { mockRuntimeContext } from '../../mocks/ContextMocks';
 import { mockTestcases } from '../../mocks/GradingMocks';
 import { SideContentType } from '../../sideContent/SideContentTypes';
@@ -190,17 +189,6 @@ describe('TOGGLE_EDITOR_AUTORUN', () => {
       .dispatch({
         type: TOGGLE_EDITOR_AUTORUN,
         payload: { workspaceLocation }
-      })
-      .silentRun();
-  });
-});
-
-describe('INVALID_EDITOR_SESSION_ID', () => {
-  test('calls showWarningMessage correctly', () => {
-    return expectSaga(workspaceSaga)
-      .call(showWarningMessage, 'Invalid ID Input', 1000)
-      .dispatch({
-        type: INVALID_EDITOR_SESSION_ID
       })
       .silentRun();
   });
@@ -598,6 +586,7 @@ describe('ENSURE_LIBRARIES_LOADED', () => {
 describe('BEGIN_CLEAR_CONTEXT', () => {
   let loadLib: any;
   let getReadyWebGLForCanvas: any;
+  let getReadyStringifyForRunes: any;
   let chapter: number;
   let globals: Array<[string, any]>;
   let workspaceLocation: WorkspaceLocation;
@@ -605,9 +594,11 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
   beforeEach(() => {
     loadLib = jest.fn();
     getReadyWebGLForCanvas = jest.fn();
+    getReadyStringifyForRunes = jest.fn();
 
     (window as any).loadLib = loadLib;
     (window as any).getReadyWebGLForCanvas = getReadyWebGLForCanvas;
+    (window as any).getReadyStringifyForRunes = getReadyStringifyForRunes;
 
     workspaceLocation = 'grading';
     chapter = 4;
@@ -632,7 +623,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     };
 
     return expectSaga(workspaceSaga)
-      .put(endClearContext(library, workspaceLocation))
+      .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
         payload: { library, workspaceLocation }
@@ -661,7 +652,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     };
 
     return expectSaga(workspaceSaga)
-      .put(endClearContext(library, workspaceLocation))
+      .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
         payload: { library, workspaceLocation }

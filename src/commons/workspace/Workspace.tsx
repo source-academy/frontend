@@ -176,7 +176,7 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (props.customEditor) {
       return props.customEditor;
     } else if (props.editorProps) {
-      return <Editor {...props.editorProps} key={props.editorProps.editorSessionId} />;
+      return <Editor {...props.editorProps} />;
     } else {
       return <McqChooser {...props.mcqProps!} />;
     }

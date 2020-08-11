@@ -38,7 +38,7 @@ function Game() {
     if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
-      SourceAcademyGame.getInstance().toggleUsingMock();
+      SourceAcademyGame.getInstance().toggleUsingMock(true);
     }
   }, [achievements, goals, session]);
 

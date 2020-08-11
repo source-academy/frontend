@@ -182,6 +182,7 @@ var halfEyeDistance = 0.03 // rune 3d only
 
 //----------------------Global variables----------------------
 // common
+var stringify // stringify function we should use (eg for error messages)
 var gl // the WebGL context
 var curShaderProgram // the shader program currently in use
 var normalShaderProgram // the default shader program
@@ -260,6 +261,10 @@ function createCanvas() {
   canvas.hidden = true;
   document.body.appendChild(canvas);
   return canvas;
+}
+
+function getReadyStringifyForRunes(stringify_) {
+  stringify = stringify_
 }
 
 /*

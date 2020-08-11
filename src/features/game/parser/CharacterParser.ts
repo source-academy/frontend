@@ -56,7 +56,7 @@ export default class CharacterParser {
       characterDetails = characterDetails.slice(1);
     }
 
-    const [id, name, defaultExpression, defaultPosition] = StringUtils.splitByChar(
+    const [id, name, defaultExpression, defaultPosition, scale] = StringUtils.splitByChar(
       characterDetails,
       ','
     );
@@ -69,7 +69,8 @@ export default class CharacterParser {
       name,
       expressions,
       defaultExpression,
-      defaultPosition: ParserConverter.stringToPosition(defaultPosition)
+      defaultPosition: ParserConverter.stringToPosition(defaultPosition),
+      scale: scale ? parseFloat(scale) : 1
     };
 
     // Add asset key to expression map

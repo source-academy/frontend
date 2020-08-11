@@ -4,6 +4,7 @@ import { AwardProperty } from '../../awards/GameAwardsTypes';
 import CommonBackButton from '../../commons/CommonBackButton';
 import { Constants, screenCenter, screenSize } from '../../commons/CommonConstants';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
+import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameInputManager from '../../input/GameInputManager';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
@@ -68,6 +69,8 @@ class AwardsHall extends Phaser.Scene {
     this.scrollLim = this.awardXSpace < screenSize.x ? 0 : this.awardXSpace - screenSize.x;
     this.renderBackground();
     this.renderAwards();
+
+    putWorkerMessage(this, 'A', screenSize.x * 0.95, screenSize.y * 0.99);
   }
 
   public update() {

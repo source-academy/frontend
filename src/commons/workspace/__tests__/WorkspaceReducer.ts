@@ -21,10 +21,8 @@ import {
 } from '../../application/types/InterpreterTypes';
 import { Library, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
 import {
-  FINISH_INVITE,
-  INIT_INVITE,
   SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
+  SET_SHAREDB_CONNECTED
 } from '../../collabEditing/CollabEditingTypes';
 import { SideContentType } from '../../sideContent/SideContentTypes';
 import Constants from '../../utils/Constants';
@@ -922,28 +920,6 @@ describe('EVAL_TESTCASE_SUCCESS', () => {
   });
 });
 
-describe('INIT_INVITE', () => {
-  test('sets sharedbAceInitValue and sharedbAceIsInviting correctly', () => {
-    const sharedbAceInitValue = 'test sharedbAce init value';
-    const actions = generateActions(INIT_INVITE, {
-      editorValue: sharedbAceInitValue
-    });
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sharedbAceInitValue,
-          sharedbAceIsInviting: true
-        }
-      });
-    });
-  });
-});
-
 describe('HANDLE_CONSOLE_LOG', () => {
   test('works correctly with RunningOutput', () => {
     const logString = 'test-log-string';
@@ -1038,24 +1014,6 @@ describe('HIGHLIGHT_LINE', () => {
   });
 });
 
-describe('FINISH_INVITE', () => {
-  test('sets sharedbAceIsInviting to false', () => {
-    const actions = generateActions(FINISH_INVITE);
-
-    actions.forEach(action => {
-      const result = WorkspaceReducer(defaultWorkspaceManager, action);
-      const location = action.payload.workspaceLocation;
-      expect(result).toEqual({
-        ...defaultWorkspaceManager,
-        [location]: {
-          ...defaultWorkspaceManager[location],
-          sharedbAceIsInviting: false
-        }
-      });
-    });
-  });
-});
-
 describe('LOG_OUT', () => {
   test('preserves playground workspace after logout', () => {
     const newPlayground: PlaygroundWorkspaceState = {
@@ -1068,7 +1026,7 @@ describe('LOG_OUT', () => {
       ],
       externalLibrary: 'NONE' as ExternalLibraryName,
       replValue: 'test repl value here',
-      websocketStatus: 0,
+      sharedbConnected: false,
       usingSubst: false
     };
 
@@ -1259,10 +1217,10 @@ describe('SET_EDITOR_SESSION_ID', () => {
   });
 });
 
-describe('SET_WEBSOCKET_STATUS', () => {
-  test('sets websocketStatus correctly', () => {
-    const websocketStatus = 1;
-    const actions = generateActions(SET_WEBSOCKET_STATUS, { websocketStatus });
+describe('SET_SHAREDB_CONNECTED', () => {
+  test('sets sharedbConnected correctly', () => {
+    const connected = true;
+    const actions = generateActions(SET_SHAREDB_CONNECTED, { connected });
 
     actions.forEach(action => {
       const result = WorkspaceReducer(defaultWorkspaceManager, action);
@@ -1271,7 +1229,7 @@ describe('SET_WEBSOCKET_STATUS', () => {
         ...defaultWorkspaceManager,
         [location]: {
           ...defaultWorkspaceManager[location],
-          websocketStatus: 1
+          sharedbConnected: connected
         }
       });
     });

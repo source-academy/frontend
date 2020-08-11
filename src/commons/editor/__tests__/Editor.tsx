@@ -11,14 +11,11 @@ test('Editor renders correctly', () => {
     editorValue: '',
     highlightedLines: [],
     isEditorAutorun: false,
-    sharedbAceInitValue: '',
-    sharedbAceIsInviting: false,
     handleDeclarationNavigate: (cursorPosition: Position) => {},
     handleEditorEval: () => {},
     handleEditorValueChange: newCode => {},
     handleEditorUpdateBreakpoints: breakpoints => {},
-    handleFinishInvite: () => {},
-    handleSetWebsocketStatus: websocketStatus => {},
+    handleSetSharedbConnected: () => {},
     handleUpdateHasUnsavedChanges: hasUnsavedChanges => {},
     handlePromptAutocomplete: (row: number, col: number, callback: any) => {}
   };

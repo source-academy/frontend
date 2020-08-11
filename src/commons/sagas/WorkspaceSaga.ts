@@ -14,6 +14,7 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
@@ -34,7 +35,6 @@ import {
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -220,12 +220,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  });
-
-  yield takeEvery(INVALID_EDITOR_SESSION_ID, function* (
-    action: ReturnType<typeof actions.invalidEditorSessionId>
-  ) {
-    yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
   yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
@@ -492,6 +486,7 @@ export default function* WorkspaceSaga(): SagaIterator {
       case ExternalLibraryName.RUNES:
         (window as any).loadLib('RUNES');
         (window as any).getReadyWebGLForCanvas('3d');
+        (window as any).getReadyStringifyForRunes(stringify);
         break;
       case ExternalLibraryName.CURVES:
         (window as any).loadLib('CURVES');
@@ -505,11 +500,18 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = {
-      runes: {},
-      phaser: Phaser
-    };
-    yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
+    yield put(
+      actions.endClearContext(
+        {
+          ...action.payload.library,
+          moduleParams: {
+            runes: {},
+            phaser: Phaser
+          }
+        },
+        action.payload.workspaceLocation
+      )
+    );
     yield undefined;
   });
 

@@ -100,6 +100,9 @@ class GameModeExplore implements IGameUI {
     GameGlobalAPI.getInstance()
       .getAllActivatables()
       .forEach((activatable: ActivatableSprite) => {
+        if (!activatable.actionIds || !activatable.actionIds.length) {
+          return;
+        }
         activatable.clickArea.on('pointerout', () => this.explorePointerOut());
         activatable.clickArea.on('pointerover', () =>
           this.explorePointerOver(activatable.interactionId)

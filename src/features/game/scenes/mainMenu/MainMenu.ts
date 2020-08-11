@@ -1,6 +1,8 @@
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { blackScreen } from '../../effects/FadeEffect';
+import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -27,6 +29,8 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
+    putWorkerMessage(this, 'T', screenCenter.x * 1.12, screenCenter.y * 1.1);
+
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 
@@ -38,10 +42,18 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.mainMenuBackground.key
+      ImageAssets.spaceshipBg.key
     ).setDisplaySize(screenSize.x, screenSize.y);
-
+    const blackOverlay = blackScreen(this).setAlpha(0.15);
+    const saBanner = new Phaser.GameObjects.Image(
+      this,
+      MainMenuConstants.saBanner.x,
+      MainMenuConstants.saBanner.y,
+      ImageAssets.saBanner.key
+    ).setAlpha(0.7);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
+    this.getLayerManager().addToLayer(Layer.Background, saBanner);
   }
 
   /**
