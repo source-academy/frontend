@@ -8,6 +8,7 @@ import { addGlitchText } from './Glitch';
 
 const workerALines = [
   'Clang. Thud. One hit to the wall, one hit to my flesh.',
+  '',
   'They told me I was to be the pillar of this',
   'spaceship - who knew they meant it literally?',
   '- A. Halim'
@@ -17,8 +18,8 @@ const workerTLines = [
   'I blink synchronously with the screen;',
   'I breathe as the machine steams on and off.',
   '',
-  'Behind this closed space, as my very blood fuels',
-  'these engines - waiting for you to find me.',
+  'Behind this closed space, my very blood fuels',
+  'these engines - hoping for you to find me.',
   '- T. C. Sia'
 ];
 
@@ -27,21 +28,25 @@ const WorkerConstants = {
   messageDuration: 5000
 };
 
-export function showWorkerAMessage(scene: ILayeredScene) {
-  showLines(scene, workerALines);
-}
+export function putWorkerMessage(
+  scene: ILayeredScene,
+  workerId: string,
+  x: number,
+  y: number,
+  width: number = 50,
+  height: number = 50
+) {
+  const rect = new Phaser.GameObjects.Rectangle(scene, x, y, width, height, 0, 0);
+  const lines = workerId === 'A' ? workerALines : workerTLines;
 
-export function showWorkerTMessage(scene: ILayeredScene) {
-  showLines(scene, workerTLines);
+  rect.setInteractive({ useHandCursor: true });
+  rect.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => showLines(scene, lines));
+
+  scene.getLayerManager().addToLayer(Layer.UI, rect);
 }
 
 async function showLines(scene: ILayeredScene, lines: string[]) {
-  const container = new Phaser.GameObjects.Container(scene, 0, 0);
-  const blackOverlay = blackScreen(scene);
-
-  container.add(blackOverlay);
-  scene.getLayerManager().addToLayer(Layer.Effects, container);
-  scene.add.tween(fadeIn([container], Constants.fadeDuration * 2));
+  const blackOverlay = blackScreen(scene).setInteractive().setAlpha(0);
 
   const linesPos = calcListFormatPos({
     numOfItems: lines.length,
@@ -49,10 +54,13 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
     ySpacing: WorkerConstants.yInterval
   });
 
-  await sleep(Constants.fadeDuration * 2);
-
   const textConfig = { x: screenCenter.x, y: 0, oriX: 0.5, oriY: 0.5 };
   const yStartPos = screenCenter.y - lines.length * WorkerConstants.yInterval * 0.5;
+
+  scene.getLayerManager().addToLayer(Layer.Effects, blackOverlay);
+  scene.add.tween(fadeIn([blackOverlay], Constants.fadeDuration));
+
+  await sleep(Constants.fadeDuration);
 
   lines.forEach((line, index) => {
     const textFrames = addGlitchText(scene, line, {
@@ -64,5 +72,5 @@ async function showLines(scene: ILayeredScene, lines: string[]) {
 
   await sleep(WorkerConstants.messageDuration);
 
-  fadeAndDestroy(scene, container);
+  fadeAndDestroy(scene, blackOverlay);
 }

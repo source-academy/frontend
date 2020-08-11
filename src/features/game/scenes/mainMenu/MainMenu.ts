@@ -2,6 +2,7 @@ import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
 import { blackScreen } from '../../effects/FadeEffect';
+import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
@@ -27,6 +28,8 @@ class MainMenu extends Phaser.Scene {
     this.layerManager = new GameLayerManager(this);
     this.renderBackground();
     this.renderOptionButtons();
+
+    putWorkerMessage(this, 'T', screenCenter.x * 1.12, screenCenter.y * 1.1);
 
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
