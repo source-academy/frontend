@@ -3,12 +3,11 @@ import React, { useState } from 'react';
 
 type EditableViewImageProps = {
   canvasUrl: string;
-  title: string;
   setCanvasUrl: any;
 };
 
 function EditableViewImage(props: EditableViewImageProps) {
-  const { canvasUrl, title, setCanvasUrl } = props;
+  const { canvasUrl, setCanvasUrl } = props;
 
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
@@ -21,12 +20,12 @@ function EditableViewImage(props: EditableViewImageProps) {
       {isEditing ? (
         <EditableText
           placeholder={`Enter your image URL here`}
-          value={canvasUrl}
-          onChange={setCanvasUrl}
           multiline={true}
+          onChange={setCanvasUrl}
+          value={canvasUrl}
         />
       ) : (
-        <img className="view-img" src={canvasUrl} alt={title} />
+        <img className="view-img" src={canvasUrl} alt={'view image'} />
       )}
     </div>
   );

@@ -1,76 +1,59 @@
-import { Button, Card, Dialog } from '@blueprintjs/core';
+import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 import { AchievementView } from '../../../../../features/achievement/AchievementTypes';
-import EditableViewDescription from './EditableViewDescription';
-import EditableViewImage from './EditableViewImage';
-import EditableViewText from './EditableViewText';
 
 type EditableAchievementViewProps = {
-  title: string;
   view: AchievementView;
   changeView: any;
 };
 
 function EditableAchievementView(props: EditableAchievementViewProps) {
-  const { title, view, changeView } = props;
+  const { view, changeView } = props;
 
-  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleOpen = () => setOpen(!isOpen);
 
-  const setDescription = (newDescription: string) => {
-    const newView = {
-      description: newDescription,
-      canvasUrl: view.canvasUrl,
-      completionText: view.completionText
-    };
-    changeView(newView);
+  const { canvasUrl, description, completionText } = view;
+
+  const changeCanvasUrl = (canvasUrl: string) => {
+    changeView({ ...view, canvasUrl: canvasUrl });
   };
 
-  const setCompletionText = (newCompletionText: string) => {
-    const newView = {
-      description: view.description,
-      canvasUrl: view.canvasUrl,
-      completionText: newCompletionText
-    };
-    changeView(newView);
+  const changeDescription = (description: string) => {
+    changeView({ ...view, description: description });
   };
 
-  const setCanvasUrl = (newCanvasUrl: string) => {
-    const newView = {
-      description: view.description,
-      canvasUrl: newCanvasUrl,
-      completionText: view.completionText
-    };
-    changeView(newView);
+  const changeCompletionText = (completionText: string) => {
+    changeView({ ...view, completionText: completionText });
   };
 
   return (
-    <div>
-      <div>
-        <Button text={'Edit View'} onClick={() => setDialogOpen(!isDialogOpen)} />
-      </div>
-      <Dialog
-        onClose={() => setDialogOpen(!isDialogOpen)}
-        isOpen={isDialogOpen}
-        title={'Edit View'}
-        usePortal={false}
-      >
-        <div className="view-editor">
-          <Card className="background-card">
-            <h1>{title} </h1>
+    <div className="editableView">
+      <Button text={'Edit View'} onClick={toggleOpen} />
 
-            <EditableViewImage
-              canvasUrl={view.canvasUrl}
-              title={title}
-              setCanvasUrl={setCanvasUrl}
-            />
-            <EditableViewDescription
-              description={view.description}
-              setDescription={setDescription}
-            />
-            <EditableViewText goalText={view.completionText} setGoalText={setCompletionText} />
-          </Card>
-        </div>
+      <Dialog title={'Edit View'} isOpen={isOpen} onClose={toggleOpen}>
+        <h3>Canvas Image URL</h3>
+        <EditableText
+          placeholder={'Enter image URL here'}
+          multiline={true}
+          onChange={changeCanvasUrl}
+          value={canvasUrl}
+        />
+        <h3>Description</h3>
+        <EditableText
+          placeholder={'Enter description here'}
+          multiline={true}
+          onChange={changeDescription}
+          value={description}
+        />
+        <h3>Completion Text</h3>
+        <EditableText
+          placeholder={'Enter completion text here'}
+          multiline={true}
+          onChange={changeCompletionText}
+          value={completionText}
+        />
       </Dialog>
     </div>
   );

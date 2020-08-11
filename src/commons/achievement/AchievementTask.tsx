@@ -68,9 +68,9 @@ function AchievementTask(props: AchievementTaskProps) {
         <li className="task">
           <AchievementCard
             id={id}
-            shouldRender={shouldRender(id)}
             focusState={focusState}
             isDropdownOpen={isDropdownOpen}
+            shouldRender={shouldRender(id)}
             toggleDropdown={toggleDropdown}
           />
           {isDropdownOpen && (
@@ -86,8 +86,8 @@ function AchievementTask(props: AchievementTaskProps) {
                   ></div>
                   <AchievementCard
                     id={prerequisiteId}
-                    shouldRender={shouldRender(prerequisiteId)}
                     focusState={focusState}
+                    shouldRender={shouldRender(prerequisiteId)}
                   />
                 </div>
               ))}

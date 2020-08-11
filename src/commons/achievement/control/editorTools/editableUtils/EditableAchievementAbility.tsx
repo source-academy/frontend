@@ -1,4 +1,4 @@
-import { Button, Classes, MenuItem } from '@blueprintjs/core';
+import { Button, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 
@@ -12,31 +12,22 @@ type EditableAchievementAbilityProps = {
 function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
   const { ability, changeAbility } = props;
 
+  const AbilitySelect = Select.ofType<AchievementAbility>();
+
   const abilityRenderer: ItemRenderer<AchievementAbility> = (ability, { handleClick }) => (
-    <MenuItem active={false} key={ability} onClick={handleClick} text={ability} />
+    <MenuItem key={ability} onClick={handleClick} text={ability} />
   );
-
-  const AbilitySelectComponent = Select.ofType<AchievementAbility>();
-
-  const abilitySelector = (currentAbility: AchievementAbility) => {
-    return (
-      <div>
-        <Button className={Classes.MINIMAL} text={currentAbility} />
-      </div>
-    );
-  };
 
   return (
     <div className="ability">
-      <AbilitySelectComponent
-        className={Classes.MINIMAL}
+      <AbilitySelect
         items={Object.values(AchievementAbility)}
         onItemSelect={changeAbility}
         itemRenderer={abilityRenderer}
         filterable={false}
       >
-        {abilitySelector(ability)}
-      </AbilitySelectComponent>
+        <Button text={ability} />
+      </AbilitySelect>
     </div>
   );
 }

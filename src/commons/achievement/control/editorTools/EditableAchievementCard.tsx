@@ -1,4 +1,3 @@
-import { Card } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 
@@ -9,11 +8,11 @@ import {
   AchievementView
 } from '../../../../features/achievement/AchievementTypes';
 import AchievementDeleter from './editableUtils/AchievementDeleter';
-import AchievementUploader from './editableUtils/AchievementUploader';
+import AchievementSaver from './editableUtils/AchievementSaver';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
-import EditableAchievementBackground from './editableUtils/EditableAchievementBackground';
 import EditableAchievementDate from './editableUtils/EditableAchievementDate';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
+import EditableTools from './editableUtils/EditableTools';
 import EditableAchievementView from './editableView/EditableAchievementView';
 
 type EditableAchievementCardProps = {
@@ -37,12 +36,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     ability,
     cardTileUrl,
     deadline,
-    /*
     goalIds,
-    isTask,
     position,
     prerequisiteIds,
-    */
     release,
     title,
     view
@@ -114,6 +110,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(true);
   };
 
+  const handleChangePosition = (position: number) => {
+    inferencer.changePosition(editableAchievement, position);
+    setIsDirty(true);
+  };
+
   const handleChangeView = (view: AchievementView) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -123,51 +124,55 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   return (
-    <Card
-      className="editable-achievement"
+    <div
+      className="editable-card"
       style={{
         background: `url(${cardTileUrl}) center/cover`
       }}
     >
-      <div className="top-bar">
-        <EditableAchievementView title={title} view={view} changeView={handleChangeView} />
-
-        <AchievementUploader
-          hasChanges={isDirty}
-          saveChanges={handleSaveChanges}
-          discardChanges={handleDiscardChanges}
+      <div className="action-button">
+        <EditableAchievementView view={view} changeView={handleChangeView} />
+        <EditableTools
+          changeCardBackground={handleChangeCardBackground}
+          changePosition={handleChangePosition}
+          goalIds={goalIds}
+          position={position}
+          prerequisiteIds={prerequisiteIds}
         />
       </div>
 
-      <div className="main">
-        <EditableAchievementBackground
-          cardTileUrl={cardTileUrl}
-          setcardTileUrl={handleChangeCardBackground}
-        />
-        <div className="display">
+      <div className="content">
+        <div className="heading">
           <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
+          <div className="status">
+            {isDirty ? (
+              <AchievementSaver
+                discardChanges={handleDiscardChanges}
+                saveChanges={handleSaveChanges}
+              />
+            ) : (
+              <AchievementDeleter deleteAchievement={handleDeleteAchievement} />
+            )}
+          </div>
 
           <div className="details">
             <EditableAchievementAbility ability={ability} changeAbility={handleChangeAbility} />
 
             <EditableAchievementDate
               type="Deadline"
-              deadline={deadline}
-              changeDeadline={handleChangeDeadline}
+              date={deadline}
+              changeDate={handleChangeDeadline}
             />
 
             <EditableAchievementDate
               type="Release"
-              deadline={release}
-              changeDeadline={handleChangeRelease}
+              date={release}
+              changeDate={handleChangeRelease}
             />
           </div>
         </div>
-        <div className="details">
-          <AchievementDeleter deleteAchievement={handleDeleteAchievement} />
-        </div>
       </div>
-    </Card>
+    </div>
   );
 }
 

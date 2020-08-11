@@ -23,7 +23,7 @@ function TaskDeleter(props: TaskDeleterProps) {
   // This will set this achivement to be removed
   // from the list of tasks.
   const setNonTaskAction = () => {
-    inferencer.setNonTask(editableAchievement);
+    inferencer.changePosition(editableAchievement, 0);
 
     saveChanges();
   };

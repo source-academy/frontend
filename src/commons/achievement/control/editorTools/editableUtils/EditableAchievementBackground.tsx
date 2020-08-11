@@ -2,31 +2,27 @@ import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 
 type EditableAchievementBackgroundProps = {
-  cardTileUrl: string;
-  setcardTileUrl: any;
+  cardBackground: string;
+  changeCardBackground: any;
+  title: string;
 };
 
 function EditableAchievementBackground(props: EditableAchievementBackgroundProps) {
-  const { cardTileUrl, setcardTileUrl } = props;
+  const { cardBackground, changeCardBackground, title } = props;
 
   const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const toggleDialog = () => setDialogOpen(!isDialogOpen);
 
   return (
-    <div>
-      <div>
-        <Button text={'Edit Background'} onClick={() => setDialogOpen(!isDialogOpen)} />
-      </div>
-      <Dialog
-        onClose={() => setDialogOpen(!isDialogOpen)}
-        isOpen={isDialogOpen}
-        title={'Edit Background'}
-        usePortal={false}
-      >
+    <div className="editable-background">
+      <Button text={'Edit Background'} onClick={toggleDialog} />
+
+      <Dialog title={`${title} Card Background`} isOpen={isDialogOpen} onClose={toggleDialog}>
         <EditableText
-          placeholder={`Enter your image URL here`}
-          value={cardTileUrl}
-          onChange={setcardTileUrl}
+          placeholder={'Enter image URL here'}
           multiline={true}
+          onChange={changeCardBackground}
+          value={cardBackground}
         />
       </Dialog>
     </div>

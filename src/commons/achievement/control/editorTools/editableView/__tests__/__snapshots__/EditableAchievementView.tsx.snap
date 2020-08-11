@@ -2,20 +2,18 @@
 
 exports[`EditableAchievementView component renders correctly 1`] = `
 "<EditableAchievementView title=\\"Sample Title\\" view={{...}} changeView={[Function: changeView]}>
-  <div>
-    <div>
-      <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
-        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-          <Blueprint3.Icon icon={[undefined]} />
-          <span className=\\"bp3-button-text\\">
-            Edit View
-          </span>
-          <Blueprint3.Icon icon={[undefined]} />
-        </button>
-      </Blueprint3.Button>
-    </div>
-    <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true}>
-      <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} title=\\"Edit View\\" usePortal={false} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" />
+  <div className=\\"editableView\\">
+    <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: toggleOpen]}>
+      <button type=\\"button\\" onClick={[Function: toggleOpen]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon={[undefined]} />
+        <span className=\\"bp3-button-text\\">
+          Edit View
+        </span>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Dialog title=\\"Edit View\\" isOpen={false} onClose={[Function: toggleOpen]} canOutsideClickClose={true}>
+      <Blueprint3.Overlay title=\\"Edit View\\" isOpen={false} onClose={[Function: toggleOpen]} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
     </Blueprint3.Dialog>
   </div>
 </EditableAchievementView>"

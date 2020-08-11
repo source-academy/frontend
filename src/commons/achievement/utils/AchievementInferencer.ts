@@ -201,31 +201,6 @@ class AchievementInferencer {
   }
 
   /**
-   * Set the achievement item as isTask
-   *
-   * @param achievement the AchievementItem
-   */
-  public setTask(achievement: AchievementItem) {
-    achievement.isTask = true;
-    achievement.position = this.listTaskIds().length + 1;
-
-    this.modifyAchievement(achievement);
-  }
-
-  /**
-   * Set the achievement item as not isTask
-   *
-   * @param achievement the AchievementItem
-   */
-  public setNonTask(achievement: AchievementItem) {
-    achievement.prerequisiteIds = [];
-    achievement.isTask = false;
-    achievement.position = 0; // position 0 is reserved for non-task achievements
-
-    this.modifyAchievement(achievement);
-  }
-
-  /**
    * Returns an array of AchievementGoal which belongs to the achievement
    *
    * @param id Achievement Id
@@ -392,7 +367,9 @@ class AchievementInferencer {
    * @param achievement the AchievementItem
    * @param newPosition the new position
    */
-  public changeAchievementPosition(achievement: AchievementItem, newPosition: number) {
+  public changePosition(achievement: AchievementItem, newPosition: number) {
+    achievement.isTask = newPosition !== 0;
+
     const achievements = this.getAllAchievement()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position);
@@ -404,6 +381,8 @@ class AchievementInferencer {
       const editedAchievement = achievements[i];
       editedAchievement.position = i + 1;
     }
+
+    this.normalizePositions();
   }
 
   /**

@@ -2,26 +2,28 @@
 
 exports[`AchievementDeleter component renders correctly 1`] = `
 "<AchievementDeleter deleteAchievement={[Function: deleteAchievement]}>
-  <Blueprint3.Button icon=\\"trash\\" text=\\"Delete Achievement\\" intent=\\"danger\\" onClick={[Function: onClick]}>
-    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
-      <Blueprint3.Icon icon=\\"trash\\">
-        <span icon=\\"trash\\" className=\\"bp3-icon bp3-icon-trash\\" title={[undefined]}>
-          <svg fill={[undefined]} data-icon=\\"trash\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
-            <desc>
-              trash
-            </desc>
-            <path d=\\"M14.49 3.99h-13c-.28 0-.5.22-.5.5s.22.5.5.5h.5v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1v-10h.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5zm-8.5 9c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm3 0c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm3 0c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm2-12h-4c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1h-4c-.55 0-1 .45-1 1v1h14v-1c0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
-          </svg>
+  <div className=\\"deleter\\">
+    <Blueprint3.Button text=\\"Delete Achievement\\" icon=\\"trash\\" intent=\\"danger\\" onClick={[Function: toggleOpen]}>
+      <button type=\\"button\\" onClick={[Function: toggleOpen]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <Blueprint3.Icon icon=\\"trash\\">
+          <span icon=\\"trash\\" className=\\"bp3-icon bp3-icon-trash\\" title={[undefined]}>
+            <svg fill={[undefined]} data-icon=\\"trash\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
+              <desc>
+                trash
+              </desc>
+              <path d=\\"M14.49 3.99h-13c-.28 0-.5.22-.5.5s.22.5.5.5h.5v10c0 .55.45 1 1 1h10c.55 0 1-.45 1-1v-10h.5c.28 0 .5-.22.5-.5s-.22-.5-.5-.5zm-8.5 9c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm3 0c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm3 0c0 .55-.45 1-1 1s-1-.45-1-1v-6c0-.55.45-1 1-1s1 .45 1 1v6zm2-12h-4c0-.55-.45-1-1-1h-2c-.55 0-1 .45-1 1h-4c-.55 0-1 .45-1 1v1h14v-1c0-.55-.45-1-1-1z\\" fillRule=\\"evenodd\\" />
+            </svg>
+          </span>
+        </Blueprint3.Icon>
+        <span className=\\"bp3-button-text\\">
+          Delete Achievement
         </span>
-      </Blueprint3.Icon>
-      <span className=\\"bp3-button-text\\">
-        Delete Achievement
-      </span>
-      <Blueprint3.Icon icon={[undefined]} />
-    </button>
-  </Blueprint3.Button>
-  <Blueprint3.Dialog onClose={[Function: onClose]} isOpen={false} className=\\"task-selector\\" title=\\"Confirm Delete\\" canOutsideClickClose={true}>
-    <Blueprint3.Overlay onClose={[Function: onClose]} isOpen={false} className=\\"bp3-overlay-scroll-container\\" title=\\"Confirm Delete\\" canOutsideClickClose={true} hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
-  </Blueprint3.Dialog>
+        <Blueprint3.Icon icon={[undefined]} />
+      </button>
+    </Blueprint3.Button>
+    <Blueprint3.Dialog title=\\"Confirm Delete\\" isOpen={false} onClose={[Function: toggleOpen]} canOutsideClickClose={true}>
+      <Blueprint3.Overlay title=\\"Confirm Delete\\" isOpen={false} onClose={[Function: toggleOpen]} canOutsideClickClose={true} className=\\"bp3-overlay-scroll-container\\" hasBackdrop={true} autoFocus={true} backdropProps={{...}} canEscapeKeyClose={true} enforceFocus={true} lazy={true} transitionDuration={300} transitionName=\\"bp3-overlay\\" usePortal={true} />
+    </Blueprint3.Dialog>
+  </div>
 </AchievementDeleter>"
 `;

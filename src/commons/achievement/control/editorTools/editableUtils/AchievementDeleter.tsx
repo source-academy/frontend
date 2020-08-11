@@ -1,4 +1,5 @@
 import { Button, Dialog } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 
 type AchievementDeleterProps = {
@@ -8,22 +9,18 @@ type AchievementDeleterProps = {
 function AchievementDeleter(props: AchievementDeleterProps) {
   const { deleteAchievement } = props;
 
-  const [isDialogOpen, setDialogOpen] = useState<boolean>(false);
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleOpen = () => setOpen(!isOpen);
 
   return (
-    <>
+    <div className="deleter">
       <Button
-        icon={'trash'}
         text={'Delete Achievement'}
+        icon={IconNames.TRASH}
         intent={'danger'}
-        onClick={() => setDialogOpen(!isDialogOpen)}
+        onClick={toggleOpen}
       />
-      <Dialog
-        onClose={() => setDialogOpen(!isDialogOpen)}
-        isOpen={isDialogOpen}
-        className={'task-selector'}
-        title={'Confirm Delete'}
-      >
+      <Dialog title={'Confirm Delete'} isOpen={isOpen} onClose={toggleOpen}>
         <p> Are you sure you want to delete this achievement?</p>
 
         <Button
@@ -33,7 +30,7 @@ function AchievementDeleter(props: AchievementDeleterProps) {
           onClick={deleteAchievement}
         />
       </Dialog>
-    </>
+    </div>
   );
 }
 

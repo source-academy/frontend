@@ -33,7 +33,6 @@ function AchievementView(props: AchievementViewProps) {
   const achievement = inferencer.getAchievementItem(focusId);
   const { ability, deadline, title, view } = achievement;
   const { canvasUrl, completionText, description } = view;
-
   const awardedExp = inferencer.getExp(focusId);
   const goals = inferencer.getGoals(focusId);
   const prereqGoals = inferencer.getPrerequisiteGoals(focusId);

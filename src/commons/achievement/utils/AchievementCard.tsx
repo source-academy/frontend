@@ -23,7 +23,6 @@ function AchievementCard(props: AchievementCardProps) {
   const [focusId, setFocusId] = focusState;
 
   const { ability, cardTileUrl, title } = inferencer.getAchievementItem(id);
-
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const displayExp = inferencer.getMaxExp(id);
   const progressFrac = inferencer.getProgressFrac(id);

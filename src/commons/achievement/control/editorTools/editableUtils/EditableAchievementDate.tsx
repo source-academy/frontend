@@ -1,40 +1,42 @@
-import { Button, Dialog, Popover, PopoverInteractionKind, Position } from '@blueprintjs/core';
+import { Button, Dialog } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import React, { useState } from 'react';
+import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 
 type EditableAchievementDateProps = {
   type: string;
-  deadline?: Date;
-  changeDeadline: any;
+  date?: Date;
+  changeDate: any;
 };
 
 function EditableAchievementDate(props: EditableAchievementDateProps) {
-  const { type, deadline, changeDeadline } = props;
-  const [isOpen, setOpen] = useState<boolean>(false);
+  const { type, date, changeDate } = props;
 
-  const generateDeadlineString = () => {
-    return deadline === undefined
-      ? ''
-      : `${deadline?.toLocaleDateString()} ${deadline?.toLocaleTimeString()}`;
-  };
+  const [isOpen, setOpen] = useState<boolean>(false);
+  const toggleOpen = () => setOpen(!isOpen);
+
+  const buttonText = date === undefined ? `Set ${type}` : `${type}: ${prettifyDate(date)}`;
 
   return (
     <div className="deadline">
-      <div className="deadline-details">
-        <div>
-          <Popover interactionKind={PopoverInteractionKind.HOVER} position={Position.TOP}>
-            <Button onClick={() => setOpen(!isOpen)}>{`Change ${type}`}</Button>
-            {generateDeadlineString()}
-          </Popover>
-        </div>
-      </div>
-      <Dialog onClose={() => setOpen(!isOpen)} isOpen={isOpen} title={`Edit Achievement ${type}`}>
+      <Button onClick={toggleOpen}>{buttonText}</Button>
+      <Dialog
+        title={`Edit ${type}`}
+        isCloseButtonShown={false}
+        isOpen={isOpen}
+        onClose={toggleOpen}
+        style={{
+          background: '#fff',
+          maxWidth: 'max-content',
+          padding: '1em'
+        }}
+      >
         <DatePicker
           timePickerProps={{ showArrowButtons: true }}
-          value={deadline}
-          onChange={changeDeadline}
+          value={date}
+          onChange={changeDate}
         />
-        <Button text={`Remove ${type}`} onClick={() => changeDeadline(undefined)} />
+        <Button text={`Remove ${type}`} onClick={() => changeDate(undefined)} />
       </Dialog>
     </div>
   );
