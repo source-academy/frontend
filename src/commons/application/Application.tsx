@@ -43,8 +43,6 @@ export type StateProps = {
   currentExternalLibrary: ExternalLibraryName;
 };
 
-const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
-
 class Application extends React.Component<ApplicationProps, {}> {
   public componentDidMount() {
     parsePlayground(this.props);
@@ -55,7 +53,11 @@ class Application extends React.Component<ApplicationProps, {}> {
       ? null
       : [
           <Route path="/academy" component={toAcademy(this.props)} key={0} />,
-          <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} key={1} />,
+          <Route
+            path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+            render={toIncubator}
+            key={1}
+          />,
           <Route path="/achievement" component={toAchievement(this.props)} key={2} />,
           <Route path="/login" render={toLogin(this.props)} key={3} />
         ];

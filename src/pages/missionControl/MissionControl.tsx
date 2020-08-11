@@ -15,17 +15,10 @@ import Constants from '../../commons/utils/Constants';
 import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
 import { retrieveLocalAssessmentOverview } from '../../commons/XMLParser/XMLParserHelper';
 
-export type MissionControlProps = DispatchProps &
-  StateProps &
-  RouteComponentProps<AssessmentWorkspaceParams>;
+export type MissionControlProps = DispatchProps & RouteComponentProps<AssessmentWorkspaceParams>;
 
 export type DispatchProps = {
   handleAssessmentOverviewFetch: () => void;
-  handleSubmitAssessment: (id: number) => void;
-};
-
-export type StateProps = {
-  isStudent: boolean;
 };
 
 type State = {
@@ -48,38 +41,33 @@ class MissionControl extends React.Component<MissionControlProps, State> {
       stringParamToInt(this.props.match.params.questionId) || Constants.defaultQuestionId;
 
     // If mission for testing is to render, create workspace
-    if (assessmentId === -1) {
-      if (this.state.editingOverview) {
-        const overview = this.state.editingOverview;
-        const assessmentProps: EditingWorkspaceOwnProps = {
-          assessmentId,
-          questionId,
-          assessmentOverview: overview,
-          updateAssessmentOverview: this.updateEditingOverview,
-          notAttempted: overview.status === AssessmentStatuses.not_attempted,
-          closeDate: overview.closeAt
-        };
-        return (
-          <div className="Academy">
-            <EditingWorkspaceContainer {...assessmentProps} />
-          </div>
-        );
-      }
+    if (assessmentId === -1 && this.state.editingOverview) {
+      const overview = this.state.editingOverview;
+      const assessmentProps: EditingWorkspaceOwnProps = {
+        assessmentId,
+        questionId,
+        assessmentOverview: overview,
+        updateAssessmentOverview: this.updateEditingOverview,
+        notAttempted: overview.status === AssessmentStatuses.not_attempted,
+        closeDate: overview.closeAt
+      };
+      return (
+        <div className="Academy">
+          <EditingWorkspaceContainer {...assessmentProps} />
+        </div>
+      );
     }
-
-    /** Mission editing card */
-    const missionEditingCard = this.state.editingOverview ? (
-      <EditingOverviewCard
-        overview={this.state.editingOverview}
-        updateEditingOverview={this.updateEditingOverview}
-        listingPath="/mission-control"
-      />
-    ) : null;
 
     const display = (
       <>
         <MissionCreator updateEditingOverview={this.updateEditingOverview} />
-        {missionEditingCard}
+        {this.state.editingOverview && (
+          <EditingOverviewCard
+            overview={this.state.editingOverview}
+            updateEditingOverview={this.updateEditingOverview}
+            listingPath="/mission-control"
+          />
+        )}
       </>
     );
 
