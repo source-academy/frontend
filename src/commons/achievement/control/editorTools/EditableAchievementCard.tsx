@@ -12,8 +12,8 @@ import AchievementSaver from './editableUtils/AchievementSaver';
 import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
 import EditableAchievementDate from './editableUtils/EditableAchievementDate';
 import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
+import EditableAchievementView from './editableUtils/EditableAchievementView';
 import EditableTools from './editableUtils/EditableTools';
-import EditableAchievementView from './editableView/EditableAchievementView';
 
 type EditableAchievementCardProps = {
   id: number;
