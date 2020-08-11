@@ -500,11 +500,18 @@ export default function* WorkspaceSaga(): SagaIterator {
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = {
-      runes: {},
-      phaser: Phaser
-    };
-    yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
+    yield put(
+      actions.endClearContext(
+        {
+          ...action.payload.library,
+          moduleParams: {
+            runes: {},
+            phaser: Phaser
+          }
+        },
+        action.payload.workspaceLocation
+      )
+    );
     yield undefined;
   });
 

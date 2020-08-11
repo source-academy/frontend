@@ -623,7 +623,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     };
 
     return expectSaga(workspaceSaga)
-      .put(endClearContext(library, workspaceLocation))
+      .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
         payload: { library, workspaceLocation }
@@ -652,7 +652,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
     };
 
     return expectSaga(workspaceSaga)
-      .put(endClearContext(library, workspaceLocation))
+      .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
         payload: { library, workspaceLocation }
