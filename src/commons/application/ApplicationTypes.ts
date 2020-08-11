@@ -217,11 +217,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
-  sharedbAceInitValue: '',
-  sharedbAceIsInviting: false,
+  sharedbConnected: false,
   sideContentActiveTab: SideContentType.questionOverview,
   stepLimit: 1000,
-  websocketStatus: 0,
   globals: [],
   isEditorAutorun: false,
   isRunning: false,

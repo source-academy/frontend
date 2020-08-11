@@ -35,7 +35,6 @@ import {
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
@@ -221,12 +220,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  });
-
-  yield takeEvery(INVALID_EDITOR_SESSION_ID, function* (
-    action: ReturnType<typeof actions.invalidEditorSessionId>
-  ) {
-    yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
   yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {

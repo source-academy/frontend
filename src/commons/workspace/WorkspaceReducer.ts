@@ -25,12 +25,7 @@ import {
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
-import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
-} from '../collabEditing/CollabEditingTypes';
+import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -529,23 +524,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case INIT_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceInitValue: action.payload.editorValue,
-          sharedbAceIsInviting: true
-        }
-      };
-    case FINISH_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceIsInviting: false
-        }
-      };
     /**
      * Updates workspace without changing anything
      * which has not been specified
@@ -575,12 +553,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorReadonly: action.payload.editorReadonly
         }
       };
-    case SET_WEBSOCKET_STATUS:
+    case SET_SHAREDB_CONNECTED:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          websocketStatus: action.payload.websocketStatus
+          sharedbConnected: action.payload.connected
         }
       };
     case TOGGLE_EDITOR_AUTORUN:

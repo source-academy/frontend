@@ -1,40 +1,36 @@
-import { Links } from '../utils/Constants';
-import { XMLHttpReadyState, XMLHttpStatus } from './CollabEditingTypes';
+import Constants from '../utils/Constants';
 
-export function checkSessionIdExists(
-  editorSessionId: string,
-  handleConnectionOK: () => void,
-  handleSessionIdNotFound: () => void,
-  handleCannotReachServer: () => void
-) {
-  const xmlhttp = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState !== XMLHttpReadyState.DONE) {
-      return;
-    }
-    if (xmlhttp.status !== XMLHttpStatus.OK) {
-      handleCannotReachServer();
-      return;
-    }
-    const sessionIdExists: boolean = JSON.parse(xmlhttp.responseText).state;
-    if (!sessionIdExists) {
-      handleSessionIdNotFound();
-      return;
-    }
-    handleConnectionOK();
-  };
-  xmlhttp.open('GET', 'https://' + Links.shareDBServer + 'gists/' + editorSessionId, true);
-  xmlhttp.send();
+const protocolMap = {
+  'http:': 'ws:',
+  'https:': 'wss:'
+};
+
+export function getSessionUrl(sessionId: string, ws?: boolean): string {
+  const url = new URL(sessionId, Constants.sharedbBackendUrl);
+  if (ws) {
+    url.protocol = protocolMap[url.protocol];
+  }
+  return url.toString();
 }
 
-export function createNewSession(onSessionCreated: (sessionId: string) => void) {
-  const xmlhttp: XMLHttpRequest = new XMLHttpRequest();
-  xmlhttp.onreadystatechange = () => {
-    if (xmlhttp.readyState === XMLHttpReadyState.DONE && xmlhttp.status === XMLHttpStatus.OK) {
-      const id: string = JSON.parse(xmlhttp.responseText).id;
-      onSessionCreated(id);
-    }
-  };
-  xmlhttp.open('GET', 'https://' + Links.shareDBServer + 'gists/latest/', true);
-  xmlhttp.send();
+export async function checkSessionIdExists(sessionId: string): Promise<boolean> {
+  const resp = await fetch(getSessionUrl(sessionId));
+
+  return resp && resp.ok;
+}
+
+export async function createNewSession(initial: string): Promise<string> {
+  const resp = await fetch(Constants.sharedbBackendUrl, {
+    method: 'POST',
+    body: initial,
+    headers: { 'Content-Type': 'text/plain' }
+  });
+
+  if (!resp || !resp.ok) {
+    throw new Error(
+      resp ? `Could not create new session: ${await resp.text()}` : 'Unknown error creating session'
+    );
+  }
+
+  return resp.text();
 }

@@ -5,16 +5,10 @@ import * as React from 'react';
 import { EditorHook } from './Editor';
 
 const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
+  const propsRef = React.useRef(inProps);
+  propsRef.current = inProps;
   const markerIdsRef = React.useRef<Array<number>>([]);
 
-  // editorValue is the prop that is going to change all the time
-  // use a ref so that the callbacks below can be memoised
-  const editorValueRef = React.useRef<string>(inProps.editorValue);
-  React.useEffect(() => {
-    editorValueRef.current = inProps.editorValue;
-  }, [inProps.editorValue]);
-
-  const { sourceChapter } = inProps;
   const handleVariableHighlighting = React.useCallback(() => {
     // using Ace Editor's way of highlighting as seen here: https://github.com/ajaxorg/ace/blob/master/lib/ace/editor.js#L497
     // We use async blocks so we don't block the browser during editing
@@ -25,8 +19,8 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       }
       const editor = reactAceRef.current.editor;
       const session: Ace.EditSession = editor.session;
-      const code = editorValueRef.current;
-      const chapterNumber = sourceChapter;
+      const code = session.getValue();
+      const chapterNumber = propsRef.current.sourceChapter;
       const position = editor.getCursorPosition();
       if (!session || !(session as any).bgTokenizer) {
         return;
@@ -47,15 +41,16 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         return session.addMarker(range, markerType, 'text');
       });
     }, 10);
-  }, [reactAceRef, sourceChapter]);
+  }, [reactAceRef]);
 
   const handleHighlightScope = React.useCallback(() => {
     if (!reactAceRef.current) {
       return;
     }
-    const code = editorValueRef.current;
-    const chapter = sourceChapter;
-    const position = reactAceRef.current.editor.getCursorPosition();
+    const editor = reactAceRef.current.editor;
+    const code = editor.getValue();
+    const chapter = propsRef.current.sourceChapter;
+    const position = editor.getCursorPosition();
 
     const ranges = getScope(code, createContext(chapter), {
       line: position.row + 1,
@@ -66,7 +61,7 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
       ranges.forEach(range => {
         // Highlight the scope ranges
         markerIdsRef.current.push(
-          reactAceRef.current!.editor.session.addMarker(
+          editor.session.addMarker(
             new AceRange(
               range.start.line - 1,
               range.start.column,
@@ -79,17 +74,23 @@ const useHighlighting: EditorHook = (inProps, outProps, keyBindings, reactAceRef
         );
       });
     }
-  }, [reactAceRef, sourceChapter]);
+  }, [reactAceRef]);
 
   const { onChange: prevOnChange, onCursorChange: prevOnCursorChange } = outProps;
-  outProps.onChange = (...args) => {
-    handleVariableHighlighting();
-    prevOnChange && prevOnChange(...args);
-  };
-  outProps.onCursorChange = (...args) => {
-    handleVariableHighlighting();
-    prevOnCursorChange && prevOnCursorChange(...args);
-  };
+  outProps.onChange = React.useCallback(
+    (v, e) => {
+      handleVariableHighlighting();
+      prevOnChange && prevOnChange(v, e);
+    },
+    [handleVariableHighlighting, prevOnChange]
+  );
+  outProps.onCursorChange = React.useCallback(
+    (v, e) => {
+      handleVariableHighlighting();
+      prevOnCursorChange && prevOnCursorChange(v, e);
+    },
+    [handleVariableHighlighting, prevOnCursorChange]
+  );
   keyBindings.highlightScope = handleHighlightScope;
 };
 

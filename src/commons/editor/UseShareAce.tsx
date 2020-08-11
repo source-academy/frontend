@@ -1,8 +1,8 @@
+import * as Sentry from '@sentry/browser';
+import sharedbAce from '@sourceacademy/sharedb-ace';
 import * as React from 'react';
-import sharedbAce from 'sharedb-ace';
 
-import { checkSessionIdExists } from '../collabEditing/CollabEditingHelper';
-import { Links } from '../utils/Constants';
+import { checkSessionIdExists, getSessionUrl } from '../collabEditing/CollabEditingHelper';
 import { EditorHook } from './Editor';
 
 // EditorHook structure:
@@ -13,43 +13,31 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  // editorValue is the prop that is going to change all the time
-  // use a ref so that the callbacks below can be memoised
-  const editorValueRef = React.useRef<string>(inProps.editorValue);
+  // use a ref to refer to any other props so that we run the effect below
+  // *only* when the editorSessionId changes
+  const propsRef = React.useRef(inProps);
+  propsRef.current = inProps;
+
+  const { editorSessionId } = inProps;
+
   React.useEffect(() => {
-    editorValueRef.current = inProps.editorValue;
-  }, [inProps.editorValue]);
+    if (!editorSessionId) {
+      return;
+    }
 
-  const {
-    editorSessionId,
-    sharedbAceIsInviting,
-    handleEditorValueChange,
-    handleFinishInvite,
-    sharedbAceInitValue,
-    handleSetWebsocketStatus
-  } = inProps;
-
-  const handleStartCollabEditing = React.useCallback(() => {
     const editor = reactAceRef.current!.editor;
     const ShareAce = new sharedbAce(editorSessionId, {
-      WsUrl: 'wss://' + Links.shareDBServer + 'ws/',
+      WsUrl: getSessionUrl(editorSessionId, true),
       pluginWsUrl: null,
-      namespace: 'codepad'
+      namespace: 'sa'
     });
     ShareAce.on('ready', () => {
-      ShareAce.add(
-        editor,
-        ['code'],
-        [
-          // TODO: Removal
-          // SharedbAceRWControl,
-          // SharedbAceMultipleCursors
-        ]
-      );
-      if (sharedbAceIsInviting) {
-        handleEditorValueChange(sharedbAceInitValue!);
-        handleFinishInvite!();
-      }
+      ShareAce.add(editor, [], []);
+      propsRef.current.handleSetSharedbConnected!(true);
+    });
+    ShareAce.on('error', (path: string, error: any) => {
+      console.error('ShareAce error', error);
+      Sentry.captureException(error);
     });
 
     // WebSocket connection status detection logic
@@ -57,49 +45,38 @@ const useShareAce: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     // Since interval is used as a closure.
     // eslint-disable-next-line prefer-const
     let interval: any;
-    const sessionIdNotFound = () => {
-      clearInterval(interval);
-      WS.close();
-    };
-    const cannotReachServer = () => {
-      WS.reconnect();
-    };
-    const checkStatus = () => {
+    const checkStatus = async () => {
       if (ShareAce === null) {
         return;
       }
-      checkSessionIdExists(editorSessionId, () => {}, sessionIdNotFound, cannotReachServer);
+      try {
+        const exists = await checkSessionIdExists(editorSessionId);
+        if (!exists) {
+          clearInterval(interval);
+          WS.close();
+        }
+      } catch {
+        WS.reconnect();
+      }
     };
     // Checks connection status every 5sec
     interval = setInterval(checkStatus, 5000);
 
-    WS.addEventListener('open', (event: Event) => {
-      handleSetWebsocketStatus!(1);
+    WS.addEventListener('open', () => {
+      propsRef.current.handleSetSharedbConnected!(true);
     });
-    WS.addEventListener('close', (event: Event) => {
-      handleSetWebsocketStatus!(0);
+    WS.addEventListener('close', () => {
+      propsRef.current.handleSetSharedbConnected!(false);
     });
-    return ShareAce;
-  }, [
-    reactAceRef,
-    editorSessionId,
-    handleEditorValueChange,
-    handleSetWebsocketStatus,
-    handleFinishInvite,
-    sharedbAceInitValue,
-    sharedbAceIsInviting
-  ]);
 
-  React.useEffect(() => {
-    const shareAce = editorSessionId !== '' ? handleStartCollabEditing() : null;
     return () => {
-      // Terminates the session if it exists.
-      // Assumes editorSessionId is immutable.
-      if (shareAce) {
-        shareAce.WS.close();
+      clearInterval(interval);
+      for (const connection of Object.values<any>(ShareAce.connections)) {
+        connection.unlisten();
       }
+      ShareAce.WS.close();
     };
-  }, [handleStartCollabEditing, reactAceRef, editorSessionId]);
+  }, [editorSessionId, reactAceRef]);
 };
 
 export default useShareAce;
