@@ -1,6 +1,5 @@
 import FontAssets from '../assets/FontAssets';
 import { BitmapFontStyle, ILayeredScene, TextConfig } from '../commons/CommonTypes';
-import { Layer } from '../layer/GameLayerTypes';
 import { createBitmapText } from '../utils/TextUtils';
 
 const defaultGlitchStyle: BitmapFontStyle = {
@@ -9,6 +8,24 @@ const defaultGlitchStyle: BitmapFontStyle = {
   align: Phaser.GameObjects.BitmapText.ALIGN_CENTER
 };
 
+/**
+ * Create a bitmap text that glitches.
+ *
+ * Internally, we make use of multiple bitmap texts and apply
+ * random small displacement to the individual bitmap texts.
+ *
+ * Returns an array of the individual bitmap texts.
+ *
+ * @param scene scene to attach it to
+ * @param text text to show on the screen
+ * @param baseTextConfig text config to be applied as the base to the text.
+ *                       All random displacement is relative to this config
+ * @param style style of the bitmap text
+ * @param numOfFrames number of bitmap text to be created. The larger it is,
+ *                    the more glitchy it becomes; but the more expensive is the effect
+ * @param maxXDisplacement maximum horizontal displacement to be applied to the text
+ * @param maxYDisplacement maximum vertical displacement to be applied to the text
+ */
 export function addGlitchText(
   scene: ILayeredScene,
   text: string,
@@ -32,7 +49,6 @@ export function addGlitchText(
   }
 
   textFrames.forEach(bitmapText => {
-    scene.getLayerManager().addToLayer(Layer.Effects, bitmapText);
     scene.tweens.add({
       targets: bitmapText,
       x: bitmapText.x + maxXDisplacement * Math.random(),
