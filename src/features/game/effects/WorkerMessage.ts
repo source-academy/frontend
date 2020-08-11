@@ -6,7 +6,7 @@ import SourceAcademyGame from '../SourceAcademyGame';
 import { sleep } from '../utils/GameUtils';
 import { calcListFormatPos } from '../utils/StyleUtils';
 import { blackScreen, fadeAndDestroy, fadeIn } from './FadeEffect';
-import { addGlitchText as createGlitchBitmapText } from './Glitch';
+import { createGlitchBitmapText } from './Glitch';
 
 const workerALines = [
   'Clang. Thud. One hit to the wall, one hit to my flesh.',

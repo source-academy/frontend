@@ -26,7 +26,7 @@ const defaultGlitchStyle: BitmapFontStyle = {
  * @param maxXDisplacement maximum horizontal displacement to be applied to the text
  * @param maxYDisplacement maximum vertical displacement to be applied to the text
  */
-export function addGlitchText(
+export function createGlitchBitmapText(
   scene: ILayeredScene,
   text: string,
   baseTextConfig: TextConfig = { x: 0, y: 0, oriX: 0.5, oriY: 0.5 },
