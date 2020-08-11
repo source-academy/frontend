@@ -69,6 +69,12 @@ const SoundAssets: AssetMap<SoundAsset> = {
     config: { volume: 0.25 },
     soundType: GameSoundType.SFX
   },
+  radioStatic: {
+    key: 'radio-static',
+    path: '/sfx/radioStatic.mp3',
+    config: { volume: 0.1 },
+    soundType: GameSoundType.SFX
+  },
 
   // BGM
   galacticHarmony: {
