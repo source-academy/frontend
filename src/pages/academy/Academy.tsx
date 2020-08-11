@@ -38,6 +38,15 @@ class Academy extends React.Component<AcademyProps> {
   }
 
   public render() {
+    const staffRoutes =
+      this.props.role !== 'student'
+        ? [
+            <Route path="/academy/groundcontrol" component={GroundControl} key={0} />,
+            <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} key={1} />,
+            <Route path="/academy/sourcereel" component={Sourcereel} key={2} />,
+            <Route path={'/academy/storysimulator'} component={StorySimulator} key={3} />
+          ]
+        : null;
     return (
       <div className="Academy">
         <AcademyNavigationBar role={this.props.role} />
@@ -74,20 +83,8 @@ class Academy extends React.Component<AcademyProps> {
             render={this.assessmentRenderFactory(AssessmentCategories.Practical)}
           />
           <Route path="/academy/dashboard" component={DashboardContainer} />
-          {this.props.role !== 'student' && (
-            <Route path="/academy/groundcontrol" component={GroundControl} />
-          )}
-          {this.props.role !== 'student' && (
-            <Route path={`/academy/grading/${gradingRegExp}`} component={Grading} />
-          )}
-          {this.props.role !== 'student' && (
-            <Route path="/academy/sourcereel" component={Sourcereel} />
-          )}
-          {this.props.role !== 'student' && (
-            <Route path={'/academy/storysimulator'} component={StorySimulator} />
-          )}
           <Route exact={true} path="/academy" component={this.dynamicRedirect(this.props)} />
-
+          {staffRoutes}
           <Route component={this.redirectTo404} />
         </Switch>
       </div>

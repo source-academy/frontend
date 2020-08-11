@@ -51,6 +51,15 @@ class Application extends React.Component<ApplicationProps, {}> {
   }
 
   public render() {
+    const fullPaths = Constants.playgroundOnly
+      ? null
+      : [
+          <Route path="/academy" component={toAcademy(this.props)} key={0} />,
+          <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} key={1} />,
+          <Route path="/achievement" component={toAchievement(this.props)} key={2} />,
+          <Route path="/login" render={toLogin(this.props)} key={3} />
+        ];
+
     return (
       <div className="Application">
         <NavigationBar
@@ -60,30 +69,18 @@ class Application extends React.Component<ApplicationProps, {}> {
           title={this.props.title}
         />
         <div className="Application__main">
-          {/* Unfortunately Switches cannot contain fragments :( */}
-          {Constants.playgroundOnly ? (
-            <Switch>
-              <Route path="/playground" component={Playground} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route exact={true} path="/" render={this.redirectToPlayground} />
-              <Route component={NotFound} />
-            </Switch>
-          ) : (
-            <Switch>
-              <Route path="/academy" component={toAcademy(this.props)} />
-              {this.props.role !== 'student' && (
-                <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
-              )}
-              <Route path="/playground" component={Playground} />
-              <Route path="/login" render={toLogin(this.props)} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route path="/achievement" component={toAchievement(this.props)} />
-              <Route exact={true} path="/" render={this.redirectToAcademy} />
-              <Route component={NotFound} />
-            </Switch>
-          )}
+          <Switch>
+            <Route path="/playground" component={Playground} />
+            <Route path="/contributors" component={Contributors} />
+            <Route path="/sourcecast" component={SourcecastContainer} />
+            {fullPaths}
+            <Route
+              exact={true}
+              path="/"
+              render={Constants.playgroundOnly ? this.redirectToPlayground : this.redirectToAcademy}
+            />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </div>
     );
