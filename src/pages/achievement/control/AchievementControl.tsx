@@ -38,13 +38,22 @@ function AchievementControl(props: DispatchProps & StateProps) {
     }
   }, [handleGetAchievements, handleGetOwnGoals]);
 
+  const achievements = inferencer.getAllAchievement();
+  const goals = inferencer.getAllGoalDefinition();
+
   // TODO: <Prompt />
 
   /**
    * Monitors changes that are awaiting publish
    */
   const publishState = useState<boolean>(false);
-  const [, setAwaitPublish] = publishState;
+  const [awaitPublish, setAwaitPublish] = publishState;
+  const handlePublish = () => {
+    // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
+    handleBulkUpdateGoals(goals);
+    handleBulkUpdateAchievements(achievements);
+    setAwaitPublish(false);
+  };
   const requestPublish = () => setAwaitPublish(true);
 
   /**
@@ -65,11 +74,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
   return (
     <AchievementContext.Provider value={inferencer}>
       <div className="AchievementControl">
-        <AchievementPreview
-          publishAchievements={handleBulkUpdateAchievements}
-          publishGoals={handleBulkUpdateGoals}
-          publishState={publishState}
-        />
+        <AchievementPreview awaitPublish={awaitPublish} handlePublish={handlePublish} />
 
         <AchievementEditor forceRender={forceRender} requestPublish={requestPublish} />
 

@@ -2,35 +2,20 @@ import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import {
-  AchievementItem,
-  FilterStatus,
-  GoalDefinition
-} from 'src/features/achievement/AchievementTypes';
+import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
 
 import AchievementView from '../AchievementView';
 
 type AchievementPreviewProps = {
-  publishAchievements: (achievements: AchievementItem[]) => void;
-  publishGoals: (goals: GoalDefinition[]) => void;
-  publishState: [boolean, any];
+  awaitPublish: boolean;
+  handlePublish: () => void;
 };
 
 function AchievementPreview(props: AchievementPreviewProps) {
-  const { publishAchievements, publishGoals, publishState } = props;
+  const { awaitPublish, handlePublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const achievements = inferencer.getAllAchievement();
-  const goals = inferencer.getAllGoalDefinition();
-
-  const [awaitPublish, setAwaitPublish] = publishState;
-  const handlePublish = () => {
-    // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
-    publishGoals(goals);
-    publishAchievements(achievements);
-    setAwaitPublish(false);
-  };
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
   const [viewMode, setViewMode] = useState<boolean>(false);
