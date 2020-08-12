@@ -38,8 +38,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
     }
   }, [handleGetAchievements, handleGetOwnGoals]);
 
-  const achievements = inferencer.getAllAchievement();
-  const goals = inferencer.getAllGoalDefinition();
+  const achievements = inferencer.getAllAchievements();
+  const goals = inferencer.getAllGoalDefinitions();
 
   // TODO: <Prompt />
 
@@ -78,7 +78,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
         <AchievementEditor forceRender={forceRender} requestPublish={requestPublish} />
 
-        <GoalEditor />
+        <GoalEditor forceRender={forceRender} requestPublish={requestPublish} />
       </div>
     </AchievementContext.Provider>
   );

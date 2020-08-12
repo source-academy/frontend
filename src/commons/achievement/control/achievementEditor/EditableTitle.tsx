@@ -11,7 +11,7 @@ function EditableTitle(props: EditableTitleProps) {
 
   return (
     <h3>
-      <EditableText placeholder={`Enter your title here`} value={title} onChange={changeTitle} />
+      <EditableText placeholder="Enter your title here" value={title} onChange={changeTitle} />
     </h3>
   );
 }

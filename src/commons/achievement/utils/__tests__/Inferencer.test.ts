@@ -28,12 +28,12 @@ describe('Achievements change when', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
     inferencer.insertAchievement(sampleAchievement);
-    expect(inferencer.getAllAchievement().length).toEqual(13);
+    expect(inferencer.getAllAchievements().length).toEqual(13);
 
     expect(inferencer.doesAchievementExist(sampleAchievement.id)).toEqual(true);
     expect(inferencer.getAchievementItem(sampleAchievement.id)).toEqual(sampleAchievement);
 
     inferencer.removeAchievement(sampleAchievement.id);
-    expect(inferencer.getAllAchievement().length).toEqual(12);
+    expect(inferencer.getAllAchievements().length).toEqual(12);
   });
 });

@@ -15,7 +15,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
   const inferencer = useContext(AchievementContext);
   const titleToId: Map<string, number> = new Map();
   inferencer
-    .getAllAchievement()
+    .getAllAchievements()
     .forEach(achievement => titleToId.set(achievement.title, achievement.id));
   const getId = (title: string) => titleToId.get(title)!;
   const getTitle = (id: number) => inferencer.getAchievementItem(id).title;

@@ -2,12 +2,12 @@ import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
-type AchievementSaverProps = {
+type ItemSaverProps = {
   discardChanges: any;
   saveChanges: any;
 };
 
-function AchievementSaver(props: AchievementSaverProps) {
+function ItemSaver(props: ItemSaverProps) {
   const { discardChanges, saveChanges } = props;
 
   return (
@@ -18,4 +18,4 @@ function AchievementSaver(props: AchievementSaverProps) {
   );
 }
 
-export default AchievementSaver;
+export default ItemSaver;

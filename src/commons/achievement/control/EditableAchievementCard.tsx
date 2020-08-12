@@ -7,13 +7,13 @@ import {
   AchievementItem,
   AchievementView
 } from '../../../features/achievement/AchievementTypes';
-import AchievementDeleter from './achievementEditor/AchievementDeleter';
-import AchievementSaver from './achievementEditor/AchievementSaver';
 import EditableAbility from './achievementEditor/EditableAbility';
 import EditableDate from './achievementEditor/EditableDate';
 import EditableOptions from './achievementEditor/EditableOptions';
 import EditableTitle from './achievementEditor/EditableTitle';
 import EditableView from './achievementEditor/EditableView';
+import ItemDeleter from './ItemDeleter';
+import ItemSaver from './ItemSaver';
 
 type EditableAchievementCardProps = {
   id: number;
@@ -171,12 +171,9 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           <EditableTitle title={title} changeTitle={handleChangeTitle} />
           <div className="status">
             {isDirty ? (
-              <AchievementSaver
-                discardChanges={handleDiscardChanges}
-                saveChanges={handleSaveChanges}
-              />
+              <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
             ) : (
-              <AchievementDeleter deleteAchievement={handleDeleteAchievement} />
+              <ItemDeleter deleteItem={handleDeleteAchievement} />
             )}
           </div>
 

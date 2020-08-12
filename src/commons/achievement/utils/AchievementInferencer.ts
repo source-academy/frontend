@@ -9,7 +9,7 @@ import {
 import { isExpired } from './DateHelper';
 
 /**
- * An InferencerNode item encapsulates all important information of an achievement item
+ * An AchievementNode item encapsulates all important information of an achievement item
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
@@ -19,7 +19,7 @@ import { isExpired } from './DateHelper';
  * @param {Set<number>} children a set of immediate prerequisites id
  * @param {Set<number>} descendant a set of all descendant prerequisites id (including immediate prerequisites)
  */
-class InferencerNode {
+class AchievementNode {
   public achievement: AchievementItem;
   public displayDeadline?: Date;
   public maxExp: number;
@@ -47,7 +47,7 @@ class InferencerNode {
  * Note: The inferencer is responsible for assigning new IDs to AchievementItem and AchievementGoal
  */
 class AchievementInferencer {
-  private nodeList: Map<number, InferencerNode> = new Map(); // key = achievementId, value = InferencerNode
+  private nodeList: Map<number, AchievementNode> = new Map(); // key = achievementId, value = AchievementNode
   private goalList: Map<number, AchievementGoal> = new Map(); // key = goalId, value = AchievementGoal
 
   constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
@@ -68,26 +68,22 @@ class AchievementInferencer {
   /**
    * Returns an array of AchievementItem
    */
-  public getAllAchievement() {
+  public getAllAchievements() {
     return [...this.nodeList.values()].map(node => node.achievement);
   }
 
   /**
    * Returns an array of AchievementGoal
    */
-  public getAllGoal() {
+  public getAllGoals() {
     return [...this.goalList.values()];
   }
 
   /**
    * Returns an array of GoalDefinition
    */
-  public getAllGoalDefinition() {
-    return this.getAllGoal().map(goal => {
-      const { id, text, maxExp, meta } = goal;
-      const definition: GoalDefinition = { id, text, maxExp, meta };
-      return definition;
-    });
+  public getAllGoalDefinitions() {
+    return this.getAllGoals().map(goal => this.constructGoalDefinition(goal));
   }
 
   /**
@@ -98,6 +94,16 @@ class AchievementInferencer {
   public getAchievementItem(id: number) {
     assert(this.nodeList.has(id));
     return this.nodeList.get(id)!.achievement;
+  }
+
+  /**
+   * Returns the AchievementGoal
+   *
+   * @param id Goal Id
+   */
+  public getGoalDefinition(id: number) {
+    assert(this.goalList.has(id));
+    return this.constructGoalDefinition(this.goalList.get(id)!);
   }
 
   /**
@@ -116,11 +122,32 @@ class AchievementInferencer {
     // then assign the new unique id by overwriting the achievement item supplied by param
     // and insert it into nodeList
     achievement.id = newId;
-    this.nodeList.set(newId, new InferencerNode(achievement));
+    this.nodeList.set(newId, new AchievementNode(achievement));
 
     // finally, process the nodeList
     this.processNodes();
     this.normalizePositions(achievement.id);
+
+    return newId;
+  }
+
+  /**
+   * Inserts a new GoalDefinition into the Inferencer,
+   * then returns the newly assigned goalId
+   *
+   * @param goal the GoalDefinition
+   */
+  public insertGoalDefinition(goal: GoalDefinition) {
+    // first, generate a new unique id by finding the max id
+    let newId = 0;
+    if (this.goalList.size > 0) {
+      newId = Math.max(...this.goalList.keys(), 0) + 1;
+    }
+
+    // then assign the new unique id by overwriting the goal item supplied by param
+    // and insert it into goalList
+    goal.id = newId;
+    this.goalList.set(newId, this.constructDefaultGoal(goal));
 
     return newId;
   }
@@ -131,12 +158,25 @@ class AchievementInferencer {
    * @param achievement the AchievementItem
    */
   public modifyAchievement(achievement: AchievementItem) {
-    // directly replace the InferencerNode in nodeList
-    this.nodeList.set(achievement.id, new InferencerNode(achievement));
+    // directly replace the AchievementNode in nodeList
+    this.nodeList.set(achievement.id, new AchievementNode(achievement));
 
     // then, process the nodeList
     this.processNodes();
     this.normalizePositions(achievement.id);
+  }
+
+  /**
+   * Updates the GoalDefinition in the Inferencer
+   *
+   * @param goal the GoalDefinition
+   */
+  public modifyGoalDefinition(goal: GoalDefinition) {
+    // directly replace the GoalDefinition in goalList
+    this.goalList.set(goal.id, this.constructDefaultGoal(goal));
+
+    // then, process the nodeList
+    this.processNodes();
   }
 
   /**
@@ -145,13 +185,13 @@ class AchievementInferencer {
    * @param targetId Achievement Id
    */
   public removeAchievement(targetId: number) {
-    const hasTarget = (node: InferencerNode) => node.children.has(targetId);
+    const hasTarget = (node: AchievementNode) => node.children.has(targetId);
 
-    const sanitizeNode = (node: InferencerNode) => {
+    const sanitizeNode = (node: AchievementNode) => {
       const newPrerequisiteIds = node.achievement.prerequisiteIds.filter(id => id !== targetId);
       node.achievement.prerequisiteIds = newPrerequisiteIds;
 
-      return new InferencerNode(node.achievement);
+      return new AchievementNode(node.achievement);
     };
 
     // first, remove achievement from node list
@@ -169,6 +209,31 @@ class AchievementInferencer {
   }
 
   /**
+   * Removes the GoalDefinition from the Inferencer
+   *
+   * @param targetId Goal Id
+   */
+  public removeGoalDefinition(targetId: number) {
+    const findTargetIndex = (node: AchievementNode) =>
+      node.achievement.goalIds.findIndex(id => id === targetId);
+
+    const sanitizeNode = (node: AchievementNode) => {
+      const targetIndex = findTargetIndex(node);
+      if (targetIndex !== -1) {
+        node.achievement.goalIds.splice(targetIndex, 1);
+      }
+    };
+
+    // first, remove goal from goal list
+    this.goalList.delete(targetId);
+    // then, remove reference of the goal in all achievement's goals
+    this.nodeList.forEach(node => sanitizeNode(node));
+
+    // finally, process the nodeList
+    this.processNodes();
+  }
+
+  /**
    * Returns an array of achievementId
    */
   public listIds() {
@@ -179,7 +244,7 @@ class AchievementInferencer {
    * Returns an array of achievementId that isTask
    */
   public listTaskIds() {
-    return this.getAllAchievement()
+    return this.getAllAchievements()
       .filter(achievement => achievement.isTask)
       .map(task => task.id);
   }
@@ -188,7 +253,7 @@ class AchievementInferencer {
    * Returns a sorted array of achievementId that isTask
    */
   public listTaskIdsbyPosition() {
-    return this.getAllAchievement()
+    return this.getAllAchievements()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .map(sortedTask => sortedTask.id);
@@ -198,7 +263,7 @@ class AchievementInferencer {
    * Returns an array of achievementId that not isTask
    */
   public listNonTaskIds() {
-    return this.getAllAchievement()
+    return this.getAllAchievements()
       .filter(achievement => !achievement.isTask)
       .map(nonTask => nonTask.id);
   }
@@ -276,7 +341,7 @@ class AchievementInferencer {
    * Returns total EXP earned from all goals
    */
   public getTotalExp() {
-    return this.getAllGoal().reduce((totalExp, goal) => totalExp + goal.exp, 0);
+    return this.getAllGoals().reduce((totalExp, goal) => totalExp + goal.exp, 0);
   }
 
   /**
@@ -355,7 +420,7 @@ class AchievementInferencer {
    * Returns a list of goalId
    */
   public listAllGoalIds() {
-    return this.getAllGoal().map(goal => goal.id);
+    return this.getAllGoals().map(goal => goal.id);
   }
 
   /**
@@ -370,7 +435,7 @@ class AchievementInferencer {
   }
 
   /**
-   * Recalculates the InferencerNode data of each achievements, O(N) operation
+   * Recalculates the AchievementNode data of each achievements, O(N) operation
    */
   private processNodes() {
     this.nodeList.forEach(node => {
@@ -388,9 +453,9 @@ class AchievementInferencer {
    * @param achievements an array of AchievementItem
    */
   private constructNodeList(achievements: AchievementItem[]) {
-    const nodeList = new Map<number, InferencerNode>();
+    const nodeList = new Map<number, AchievementNode>();
     achievements.forEach(achievement =>
-      nodeList.set(achievement.id, new InferencerNode(achievement))
+      nodeList.set(achievement.id, new AchievementNode(achievement))
     );
     return nodeList;
   }
@@ -407,11 +472,32 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns a goal definition based on the AchievementGoal
+   *
+   * @param goal the AchievementGoal
+   */
+  private constructGoalDefinition(goal: AchievementGoal) {
+    const { id, text, maxExp, meta } = goal;
+    const definition: GoalDefinition = { id, text, maxExp, meta };
+    return definition;
+  }
+
+  /**
+   * Returns a default AchievementGoal based on the GoalDefinition
+   *
+   * @param goal the GoalDefinition
+   */
+  private constructDefaultGoal(goal: GoalDefinition) {
+    const defaultGoal: AchievementGoal = { ...goal, exp: 0, completed: false };
+    return defaultGoal;
+  }
+
+  /**
    * Recursively append grandchildren's id to children, O(N) operation
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateDescendant(node: InferencerNode) {
+  private generateDescendant(node: AchievementNode) {
     for (const childId of node.descendant) {
       if (childId === node.achievement.id) {
         console.error('Circular dependency detected');
@@ -429,9 +515,9 @@ class AchievementInferencer {
    *
    * Note: display deadline is the closest unexpired deadline of all descendants
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateDisplayDeadline(node: InferencerNode) {
+  private generateDisplayDeadline(node: AchievementNode) {
     // Comparator of two deadlines
     const compareDeadlines = (
       displayDeadline: Date | undefined,
@@ -465,14 +551,14 @@ class AchievementInferencer {
   /**
    * Calculates the achievement maximum attainable EXP
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateMaxExp(node: InferencerNode) {
+  private generateMaxExp(node: AchievementNode) {
     const { goalIds } = node.achievement;
     node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
   }
 
-  private generateProgressFrac(node: InferencerNode) {
+  private generateProgressFrac(node: AchievementNode) {
     const { goalIds } = node.achievement;
     const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
 
@@ -486,9 +572,9 @@ class AchievementInferencer {
    * AchievementStatus.ACTIVE if has at least 1 active descendant
    * AchievementStatus.EXPIRED if none of the above
    *
-   * @param node the InferencerNode
+   * @param node the AchievementNode
    */
-  private generateStatus(node: InferencerNode) {
+  private generateStatus(node: AchievementNode) {
     const { deadline, goalIds } = node.achievement;
     const achievementCompleted =
       goalIds.length !== 0 &&
@@ -524,7 +610,7 @@ class AchievementInferencer {
    * @param priorityId achievementId
    */
   private normalizePositions(priorityId?: number) {
-    const sortedTasks = this.getAllAchievement()
+    const sortedTasks = this.getAllAchievements()
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) =>
         taskA.position === taskB.position

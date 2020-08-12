@@ -2,28 +2,28 @@ import { Button } from '@blueprintjs/core';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import { achievementTemplate } from './AchievementTemplate';
+import { goalTemplate } from './GoalTemplate';
 
-type AchievementAdderProps = {
+type GoalAdderProps = {
   allowNewId: boolean;
   setNewId: (id: number) => void;
 };
 
-function AchievementAdder(props: AchievementAdderProps) {
+function GoalAdder(props: GoalAdderProps) {
   const { allowNewId, setNewId } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  const handleAddAchievement = () => setNewId(inferencer.insertAchievement(achievementTemplate));
+  const handleAddGoal = () => setNewId(inferencer.insertGoalDefinition(goalTemplate));
 
   return (
     <Button
       className="main-adder"
-      onClick={handleAddAchievement}
-      text="Add A New Item"
+      onClick={handleAddGoal}
+      text="Add A New Goal"
       disabled={!allowNewId}
     />
   );
 }
 
-export default AchievementAdder;
+export default GoalAdder;
