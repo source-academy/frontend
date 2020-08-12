@@ -1,19 +1,19 @@
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 
-import { AchievementContext } from '../../../features/achievement/AchievementConstants';
+import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
   AchievementAbility,
   AchievementItem,
   AchievementView
-} from '../../../features/achievement/AchievementTypes';
-import EditableAbility from './achievementEditor/EditableAbility';
-import EditableDate from './achievementEditor/EditableDate';
-import EditableOptions from './achievementEditor/EditableOptions';
-import EditableTitle from './achievementEditor/EditableTitle';
-import EditableView from './achievementEditor/EditableView';
-import ItemDeleter from './ItemDeleter';
-import ItemSaver from './ItemSaver';
+} from '../../../../features/achievement/AchievementTypes';
+import ItemDeleter from '../common/ItemDeleter';
+import ItemSaver from '../common/ItemSaver';
+import EditableAbility from './EditableAbility';
+import EditableDate from './EditableDate';
+import EditableOptions from './EditableOptions';
+import EditableTitle from './EditableTitle';
+import EditableView from './EditableView';
 
 type EditableAchievementCardProps = {
   id: number;

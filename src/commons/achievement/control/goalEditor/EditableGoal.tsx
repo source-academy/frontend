@@ -4,8 +4,8 @@ import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { GoalDefinition } from 'src/features/achievement/AchievementTypes';
 
-import ItemDeleter from '../ItemDeleter';
-import ItemSaver from '../ItemSaver';
+import ItemDeleter from '../common/ItemDeleter';
+import ItemSaver from '../common/ItemSaver';
 
 type EditableGoalProps = {
   id: number;
