@@ -352,11 +352,18 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns a list of goalId
+   */
+  public listAllGoalIds() {
+    return this.getAllGoal().map(goal => goal.id);
+  }
+
+  /**
    * Returns a list of achievementId that may be a prerequisite of the achievement
    *
    * @param id Achievement Id
    */
-  public listAvailablePrerequisites(id: number) {
+  public listAvailablePrerequisiteIds(id: number) {
     return this.listIds().filter(
       target => target !== id && !this.isDescendant(id, target) && !this.isDescendant(target, id)
     );

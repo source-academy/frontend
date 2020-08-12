@@ -2,6 +2,7 @@ import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
+import EditableGoalIds from './editableOptions/EditableGoalIds';
 import EditablePosition from './editableOptions/EditablePosition';
 import EditablePrerequisiteIds from './editableOptions/EditablePrerequisiteIds';
 
@@ -9,6 +10,7 @@ type EditableOptionsProps = {
   id: number;
   cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
+  changeGoalIds: (goalIds: number[]) => void;
   changePosition: (position: number) => void;
   changePrerequisiteIds: (prerequisiteIds: number[]) => void;
   goalIds: number[];
@@ -21,6 +23,7 @@ function EditableOptions(props: EditableOptionsProps) {
     id,
     cardBackground,
     changeCardBackground,
+    changeGoalIds,
     changePosition,
     changePrerequisiteIds,
     goalIds,
@@ -51,12 +54,16 @@ function EditableOptions(props: EditableOptionsProps) {
         </h3>
         <h3>Prerequisite Ids</h3>
         <EditablePrerequisiteIds
-          availableIds={inferencer.listAvailablePrerequisites(id)}
+          availableIds={inferencer.listAvailablePrerequisiteIds(id)}
           changePrerequisiteIds={changePrerequisiteIds}
           prerequisiteIds={prerequisiteIds}
         />
         <h3>Goal Ids</h3>
-        <p>{goalIds}</p>
+        <EditableGoalIds
+          allGoalIds={inferencer.listAllGoalIds()}
+          changeGoalIds={changeGoalIds}
+          goalIds={goalIds}
+        />
       </Dialog>
     </div>
   );

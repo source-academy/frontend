@@ -94,18 +94,10 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(true);
   };
 
-  const handleChangeRelease = (release: Date) => {
+  const handleChangeGoalIds = (goalIds: number[]) => {
     setEditableAchievement({
       ...editableAchievement,
-      release: release
-    });
-    setIsDirty(true);
-  };
-
-  const handleChangeTitle = (title: string) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      title: title
+      goalIds: goalIds
     });
     setIsDirty(true);
   };
@@ -124,6 +116,22 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setEditableAchievement({
       ...editableAchievement,
       prerequisiteIds: prerequisiteIds
+    });
+    setIsDirty(true);
+  };
+
+  const handleChangeRelease = (release: Date) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      release: release
+    });
+    setIsDirty(true);
+  };
+
+  const handleChangeTitle = (title: string) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      title: title
     });
     setIsDirty(true);
   };
@@ -149,6 +157,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           id={id}
           cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}
+          changeGoalIds={handleChangeGoalIds}
           changePosition={handleChangePosition}
           changePrerequisiteIds={handleChangePrerequisiteIds}
           goalIds={goalIds}

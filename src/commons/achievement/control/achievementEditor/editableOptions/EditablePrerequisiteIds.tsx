@@ -46,7 +46,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
       items={[...availablePrereqs]}
       noResults={<MenuItem disabled={true} text="No available achievement" />}
       onItemSelect={handleSelectPrereq}
-      selectedItems={prerequisiteIds}
+      selectedItems={[...selectedPrereqs]}
       tagInputProps={{ onRemove: title => handleRemovePrereq(getId(title)) }}
       tagRenderer={getTitle}
     />
