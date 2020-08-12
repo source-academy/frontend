@@ -1,12 +1,16 @@
-import { Button, Dialog, EditableText, MenuItem } from '@blueprintjs/core';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
+import EditablePosition from './editableOptions/EditablePosition';
+import EditablePrerequisiteIds from './editableOptions/EditablePrerequisiteIds';
+
 type EditableOptionsProps = {
+  id: number;
   cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
   changePosition: (position: number) => void;
+  changePrerequisiteIds: (prerequisiteIds: number[]) => void;
   goalIds: number[];
   position: number;
   prerequisiteIds: number[];
@@ -14,9 +18,11 @@ type EditableOptionsProps = {
 
 function EditableOptions(props: EditableOptionsProps) {
   const {
+    id,
     cardBackground,
     changeCardBackground,
     changePosition,
+    changePrerequisiteIds,
     goalIds,
     position,
     prerequisiteIds
@@ -26,15 +32,6 @@ function EditableOptions(props: EditableOptionsProps) {
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
-
-  const PositionSelect = Select.ofType<number>();
-  const positionRenderer: ItemRenderer<number> = (position, { handleClick }) => (
-    <MenuItem key={position} onClick={handleClick} text={position} />
-  );
-  const positionOptions: number[] = [];
-  for (let i = 0; i <= inferencer.listTaskIds().length + 1; i++) {
-    positionOptions.push(i);
-  }
 
   return (
     <div className="editable-tool">
@@ -49,19 +46,16 @@ function EditableOptions(props: EditableOptionsProps) {
           value={cardBackground}
         />
         <h3>
-          Position
-          <PositionSelect
-            items={positionOptions}
-            onItemSelect={changePosition}
-            itemRenderer={positionRenderer}
-            filterable={false}
-          >
-            <Button text={position} />
-          </PositionSelect>
+          Insert before position:
+          <EditablePosition changePosition={changePosition} position={position} />
         </h3>
-        <h3>prerequisiteIds</h3>
-        <p>{prerequisiteIds}</p>
-        <h3>goalIds</h3>
+        <h3>Prerequisite Ids</h3>
+        <EditablePrerequisiteIds
+          availableIds={inferencer.listAvailablePrerequisites(id)}
+          changePrerequisiteIds={changePrerequisiteIds}
+          prerequisiteIds={prerequisiteIds}
+        />
+        <h3>Goal Ids</h3>
         <p>{goalIds}</p>
       </Dialog>
     </div>

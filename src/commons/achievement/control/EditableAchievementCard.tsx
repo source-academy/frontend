@@ -120,6 +120,14 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(true);
   };
 
+  const handleChangePrerequisiteIds = (prerequisiteIds: number[]) => {
+    setEditableAchievement({
+      ...editableAchievement,
+      prerequisiteIds: prerequisiteIds
+    });
+    setIsDirty(true);
+  };
+
   const handleChangeView = (view: AchievementView) => {
     setEditableAchievement({
       ...editableAchievement,
@@ -138,9 +146,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       <div className="action-button">
         <EditableAchievementView view={view} changeView={handleChangeView} />
         <EditableOptions
+          id={id}
           cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}
           changePosition={handleChangePosition}
+          changePrerequisiteIds={handleChangePrerequisiteIds}
           goalIds={goalIds}
           position={position}
           prerequisiteIds={prerequisiteIds}
