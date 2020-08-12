@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import AchievementLevel from './utils/AchievementLevel';
+import AchievementLevel from './overview/AchievementLevel';
 
 type AchievementOverviewProps = {
   name: string;

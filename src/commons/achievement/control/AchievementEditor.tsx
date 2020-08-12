@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import EditableAchievementCard from './editorTools/EditableAchievementCard';
-import AchievementAdder from './editorTools/editableUtils/AchievementAdder';
+import AchievementAdder from './achievementEditor/AchievementAdder';
+import EditableAchievementCard from './EditableAchievementCard';
 
 type AchievementEditorProps = {
   forceRender: () => void;

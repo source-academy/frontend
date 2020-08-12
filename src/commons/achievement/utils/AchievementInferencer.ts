@@ -510,7 +510,11 @@ class AchievementInferencer {
   }
 
   /**
-   * Reassign the achievement position number without changing their orders
+   * Reassign the achievement position number without changing their orders.
+   * If priorityId is supplied, the achievement will be given order priority
+   * when two achievements have the same position number.
+   *
+   * @param priorityId achievementId
    */
   private normalizePositions(priorityId?: number) {
     const sortedTasks = this.getAllAchievement()

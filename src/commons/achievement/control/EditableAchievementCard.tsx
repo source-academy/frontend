@@ -1,19 +1,19 @@
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 
-import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
+import { AchievementContext } from '../../../features/achievement/AchievementConstants';
 import {
   AchievementAbility,
   AchievementItem,
   AchievementView
-} from '../../../../features/achievement/AchievementTypes';
-import AchievementDeleter from './editableUtils/AchievementDeleter';
-import AchievementSaver from './editableUtils/AchievementSaver';
-import EditableAchievementAbility from './editableUtils/EditableAchievementAbility';
-import EditableAchievementDate from './editableUtils/EditableAchievementDate';
-import EditableAchievementTitle from './editableUtils/EditableAchievementTitle';
-import EditableAchievementView from './editableUtils/EditableAchievementView';
-import EditableTools from './editableUtils/EditableTools';
+} from '../../../features/achievement/AchievementTypes';
+import AchievementDeleter from './achievementEditor/AchievementDeleter';
+import AchievementSaver from './achievementEditor/AchievementSaver';
+import EditableAchievementAbility from './achievementEditor/EditableAchievementAbility';
+import EditableAchievementDate from './achievementEditor/EditableAchievementDate';
+import EditableAchievementTitle from './achievementEditor/EditableAchievementTitle';
+import EditableAchievementView from './achievementEditor/EditableAchievementView';
+import EditableOptions from './achievementEditor/EditableOptions';
 
 type EditableAchievementCardProps = {
   id: number;
@@ -137,7 +137,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     >
       <div className="action-button">
         <EditableAchievementView view={view} changeView={handleChangeView} />
-        <EditableTools
+        <EditableOptions
           cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}
           changePosition={handleChangePosition}
@@ -165,13 +165,13 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
             <EditableAchievementAbility ability={ability} changeAbility={handleChangeAbility} />
 
             <EditableAchievementDate
-              type="Deadline"
+              type="Release"
               date={deadline}
               changeDate={handleChangeDeadline}
             />
 
             <EditableAchievementDate
-              type="Release"
+              type="Deadline"
               date={release}
               changeDate={handleChangeRelease}
             />

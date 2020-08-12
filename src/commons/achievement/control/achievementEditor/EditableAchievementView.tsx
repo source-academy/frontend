@@ -1,7 +1,6 @@
 import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
-
-import { AchievementView } from '../../../../../features/achievement/AchievementTypes';
+import { AchievementView } from 'src/features/achievement/AchievementTypes';
 
 type EditableAchievementViewProps = {
   view: AchievementView;
@@ -16,24 +15,20 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
 
   const { canvasUrl, description, completionText } = view;
 
-  const changeCanvasUrl = (canvasUrl: string) => {
-    changeView({ ...view, canvasUrl: canvasUrl });
-  };
+  const changeCanvasUrl = (canvasUrl: string) => changeView({ ...view, canvasUrl: canvasUrl });
 
-  const changeDescription = (description: string) => {
+  const changeDescription = (description: string) =>
     changeView({ ...view, description: description });
-  };
 
-  const changeCompletionText = (completionText: string) => {
+  const changeCompletionText = (completionText: string) =>
     changeView({ ...view, completionText: completionText });
-  };
 
   return (
     <div className="editable-view">
       <Button text="Edit View" onClick={toggleOpen} />
 
       <Dialog title="Edit View" isOpen={isOpen} onClose={toggleOpen}>
-        <h3>Canvas Image URL</h3>
+        <h3>View Image</h3>
         <EditableText
           placeholder="Enter image URL here"
           multiline={true}

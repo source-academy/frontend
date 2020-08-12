@@ -2,7 +2,7 @@ import { Button } from '@blueprintjs/core';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import { achievementTemplate } from '../AchievementTemplate';
+import { achievementTemplate } from './AchievementTemplate';
 
 type AchievementAdderProps = {
   allowNewId: boolean;

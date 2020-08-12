@@ -5,7 +5,7 @@ import {
   getAbilityColor
 } from '../../features/achievement/AchievementConstants';
 import { AchievementStatus, FilterStatus } from '../../features/achievement/AchievementTypes';
-import AchievementCard from './utils/AchievementCard';
+import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {
   id: number;

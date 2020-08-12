@@ -3,7 +3,7 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-type EditableToolsProps = {
+type EditableOptionsProps = {
   cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
   changePosition: (position: number) => void;
@@ -12,7 +12,7 @@ type EditableToolsProps = {
   prerequisiteIds: number[];
 };
 
-function EditableTools(props: EditableToolsProps) {
+function EditableOptions(props: EditableOptionsProps) {
   const {
     cardBackground,
     changeCardBackground,
@@ -48,15 +48,17 @@ function EditableTools(props: EditableToolsProps) {
           onChange={changeCardBackground}
           value={cardBackground}
         />
-        <h3>Position</h3>
-        <PositionSelect
-          items={positionOptions}
-          onItemSelect={changePosition}
-          itemRenderer={positionRenderer}
-          filterable={false}
-        >
-          <Button text={position} />
-        </PositionSelect>
+        <h3>
+          Position
+          <PositionSelect
+            items={positionOptions}
+            onItemSelect={changePosition}
+            itemRenderer={positionRenderer}
+            filterable={false}
+          >
+            <Button text={position} />
+          </PositionSelect>
+        </h3>
         <h3>prerequisiteIds</h3>
         <p>{prerequisiteIds}</p>
         <h3>goalIds</h3>
@@ -66,4 +68,4 @@ function EditableTools(props: EditableToolsProps) {
   );
 }
 
-export default EditableTools;
+export default EditableOptions;

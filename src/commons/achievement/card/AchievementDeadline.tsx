@@ -4,7 +4,7 @@ import React from 'react';
 
 import { DeadlineColors } from '../../../features/achievement/AchievementConstants';
 import { AchievementAbility } from '../../../features/achievement/AchievementTypes';
-import { isExpired, prettifyDeadline, timeFromExpired } from './DateHelper';
+import { isExpired, prettifyDeadline, timeFromExpired } from '../utils/DateHelper';
 
 type AchievementDeadlineProps = {
   deadline?: Date;
