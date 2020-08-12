@@ -111,7 +111,12 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   };
 
   const handleChangePosition = (position: number) => {
-    inferencer.changePosition(editableAchievement, position);
+    const isTask = position !== 0;
+    setEditableAchievement({
+      ...editableAchievement,
+      isTask: isTask,
+      position: position
+    });
     setIsDirty(true);
   };
 
@@ -133,6 +138,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       <div className="action-button">
         <EditableAchievementView view={view} changeView={handleChangeView} />
         <EditableTools
+          cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}
           changePosition={handleChangePosition}
           goalIds={goalIds}

@@ -29,27 +29,27 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
   };
 
   return (
-    <div className="editableView">
-      <Button text={'Edit View'} onClick={toggleOpen} />
+    <div className="editable-view">
+      <Button text="Edit View" onClick={toggleOpen} />
 
-      <Dialog title={'Edit View'} isOpen={isOpen} onClose={toggleOpen}>
+      <Dialog title="Edit View" isOpen={isOpen} onClose={toggleOpen}>
         <h3>Canvas Image URL</h3>
         <EditableText
-          placeholder={'Enter image URL here'}
+          placeholder="Enter image URL here"
           multiline={true}
           onChange={changeCanvasUrl}
           value={canvasUrl}
         />
         <h3>Description</h3>
         <EditableText
-          placeholder={'Enter description here'}
+          placeholder="Enter description here"
           multiline={true}
           onChange={changeDescription}
           value={description}
         />
         <h3>Completion Text</h3>
         <EditableText
-          placeholder={'Enter completion text here'}
+          placeholder="Enter completion text here"
           multiline={true}
           onChange={changeCompletionText}
           value={completionText}

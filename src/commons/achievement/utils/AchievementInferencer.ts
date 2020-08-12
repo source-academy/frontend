@@ -120,6 +120,7 @@ class AchievementInferencer {
 
     // finally, process the nodeList
     this.processNodes();
+    this.normalizePositions(achievement.id);
 
     return newId;
   }
@@ -135,6 +136,7 @@ class AchievementInferencer {
 
     // then, process the nodeList
     this.processNodes();
+    this.normalizePositions(achievement.id);
   }
 
   /**
@@ -163,6 +165,7 @@ class AchievementInferencer {
 
     // finally, process the nodeList
     this.processNodes();
+    this.normalizePositions();
   }
 
   /**
@@ -360,32 +363,6 @@ class AchievementInferencer {
   }
 
   /**
-   * Changes the position of the achievement
-   *
-   * Note: positions of achievements are 1-indexed
-   *
-   * @param achievement the AchievementItem
-   * @param newPosition the new position
-   */
-  public changePosition(achievement: AchievementItem, newPosition: number) {
-    achievement.isTask = newPosition !== 0;
-
-    const achievements = this.getAllAchievement()
-      .filter(achievement => achievement.isTask)
-      .sort((taskA, taskB) => taskA.position - taskB.position);
-
-    const targetAchievement = achievements.splice(achievement.position - 1, 1)[0];
-    achievements.splice(newPosition - 1, 0, targetAchievement);
-
-    for (let i = Math.min(newPosition - 1, achievement.position); i < achievements.length; i++) {
-      const editedAchievement = achievements[i];
-      editedAchievement.position = i + 1;
-    }
-
-    this.normalizePositions();
-  }
-
-  /**
    * Recalculates the InferencerNode data of each achievements, O(N) operation
    */
   private processNodes() {
@@ -396,7 +373,6 @@ class AchievementInferencer {
       this.generateProgressFrac(node);
       this.generateStatus(node);
     });
-    this.normalizePositions();
   }
 
   /**
@@ -536,20 +512,19 @@ class AchievementInferencer {
   /**
    * Reassign the achievement position number without changing their orders
    */
-  private normalizePositions() {
-    const posToId = new Map<number, number>();
-    this.getAllAchievement().forEach(achievement =>
-      posToId.set(achievement.position, achievement.id)
-    );
-
-    const sortedPosToId = [...posToId.entries()].sort();
+  private normalizePositions(priorityId?: number) {
+    const sortedTasks = this.getAllAchievement()
+      .filter(achievement => achievement.isTask)
+      .sort((taskA, taskB) =>
+        taskA.position === taskB.position
+          ? taskA.id === priorityId
+            ? -1
+            : 1
+          : taskA.position - taskB.position
+      );
 
     let newPosition = 1;
-    for (const [pos, id] of sortedPosToId) {
-      if (pos !== 0) {
-        this.nodeList.get(id)!.achievement.position = newPosition++;
-      }
-    }
+    sortedTasks.forEach(task => (task.position = newPosition++));
   }
 }
 

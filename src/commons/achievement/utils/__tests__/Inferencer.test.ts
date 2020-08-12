@@ -36,13 +36,4 @@ describe('Achievements change when', () => {
     inferencer.removeAchievement(sampleAchievement.id);
     expect(inferencer.getAllAchievement().length).toEqual(12);
   });
-
-  test('an achievement swaps position', () => {
-    const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
-    const firstTask = inferencer.getAchievementItem(4);
-
-    inferencer.changePosition(firstTask, 2);
-
-    expect(inferencer.getAchievementItem(firstTask.id).position).toEqual(2);
-  });
 });
