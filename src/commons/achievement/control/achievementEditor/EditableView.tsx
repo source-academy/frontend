@@ -2,12 +2,12 @@ import { Button, Dialog, EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
 import { AchievementView } from 'src/features/achievement/AchievementTypes';
 
-type EditableAchievementViewProps = {
+type EditableViewProps = {
   view: AchievementView;
   changeView: any;
 };
 
-function EditableAchievementView(props: EditableAchievementViewProps) {
+function EditableView(props: EditableViewProps) {
   const { view, changeView } = props;
 
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -54,4 +54,4 @@ function EditableAchievementView(props: EditableAchievementViewProps) {
   );
 }
 
-export default EditableAchievementView;
+export default EditableView;

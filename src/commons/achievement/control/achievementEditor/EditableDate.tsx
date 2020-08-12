@@ -3,13 +3,13 @@ import { DatePicker } from '@blueprintjs/datetime';
 import React, { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 
-type EditableAchievementDateProps = {
+type EditableDateProps = {
   type: string;
   date?: Date;
   changeDate: any;
 };
 
-function EditableAchievementDate(props: EditableAchievementDateProps) {
+function EditableDate(props: EditableDateProps) {
   const { type, date, changeDate } = props;
 
   const [isOpen, setOpen] = useState<boolean>(false);
@@ -42,4 +42,4 @@ function EditableAchievementDate(props: EditableAchievementDateProps) {
   );
 }
 
-export default EditableAchievementDate;
+export default EditableDate;

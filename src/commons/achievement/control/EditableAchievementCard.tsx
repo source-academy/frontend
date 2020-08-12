@@ -9,11 +9,11 @@ import {
 } from '../../../features/achievement/AchievementTypes';
 import AchievementDeleter from './achievementEditor/AchievementDeleter';
 import AchievementSaver from './achievementEditor/AchievementSaver';
-import EditableAchievementAbility from './achievementEditor/EditableAchievementAbility';
-import EditableAchievementDate from './achievementEditor/EditableAchievementDate';
-import EditableAchievementTitle from './achievementEditor/EditableAchievementTitle';
-import EditableAchievementView from './achievementEditor/EditableAchievementView';
+import EditableAbility from './achievementEditor/EditableAbility';
+import EditableDate from './achievementEditor/EditableDate';
 import EditableOptions from './achievementEditor/EditableOptions';
+import EditableTitle from './achievementEditor/EditableTitle';
+import EditableView from './achievementEditor/EditableView';
 
 type EditableAchievementCardProps = {
   id: number;
@@ -144,7 +144,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
       }}
     >
       <div className="action-button">
-        <EditableAchievementView view={view} changeView={handleChangeView} />
+        <EditableView view={view} changeView={handleChangeView} />
         <EditableOptions
           id={id}
           cardBackground={cardTileUrl}
@@ -159,7 +159,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
 
       <div className="content">
         <div className="heading">
-          <EditableAchievementTitle title={title} changeTitle={handleChangeTitle} />
+          <EditableTitle title={title} changeTitle={handleChangeTitle} />
           <div className="status">
             {isDirty ? (
               <AchievementSaver
@@ -172,19 +172,11 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
           </div>
 
           <div className="details">
-            <EditableAchievementAbility ability={ability} changeAbility={handleChangeAbility} />
+            <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
 
-            <EditableAchievementDate
-              type="Release"
-              date={deadline}
-              changeDate={handleChangeDeadline}
-            />
+            <EditableDate type="Release" date={deadline} changeDate={handleChangeDeadline} />
 
-            <EditableAchievementDate
-              type="Deadline"
-              date={release}
-              changeDate={handleChangeRelease}
-            />
+            <EditableDate type="Deadline" date={release} changeDate={handleChangeRelease} />
           </div>
         </div>
       </div>

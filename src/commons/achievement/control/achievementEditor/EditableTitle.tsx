@@ -1,12 +1,12 @@
 import { EditableText } from '@blueprintjs/core';
 import React from 'react';
 
-type EditableAchievementTitleProps = {
+type EditableTitleProps = {
   title: string;
   changeTitle: any;
 };
 
-function EditableAchievementTitle(props: EditableAchievementTitleProps) {
+function EditableTitle(props: EditableTitleProps) {
   const { title, changeTitle } = props;
 
   return (
@@ -16,4 +16,4 @@ function EditableAchievementTitle(props: EditableAchievementTitleProps) {
   );
 }
 
-export default EditableAchievementTitle;
+export default EditableTitle;

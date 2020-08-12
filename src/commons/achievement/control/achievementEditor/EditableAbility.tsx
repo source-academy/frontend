@@ -3,12 +3,12 @@ import { ItemRenderer, Select } from '@blueprintjs/select';
 import React from 'react';
 import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
-type EditableAchievementAbilityProps = {
+type EditableAbilityProps = {
   ability: AchievementAbility;
   changeAbility: any;
 };
 
-function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
+function EditableAbility(props: EditableAbilityProps) {
   const { ability, changeAbility } = props;
 
   const AbilitySelect = Select.ofType<AchievementAbility>();
@@ -31,4 +31,4 @@ function EditableAchievementAbility(props: EditableAchievementAbilityProps) {
   );
 }
 
-export default EditableAchievementAbility;
+export default EditableAbility;

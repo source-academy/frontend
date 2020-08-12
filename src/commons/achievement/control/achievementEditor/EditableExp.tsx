@@ -2,12 +2,12 @@ import { InputGroup } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
-type EditableAchievementExpProps = {
+type EditableExpProps = {
   exp: number;
   changeExp: any;
 };
 
-function EditableAchievementExp(props: EditableAchievementExpProps) {
+function EditableExp(props: EditableExpProps) {
   const { exp, changeExp } = props;
 
   return (
@@ -23,4 +23,4 @@ function EditableAchievementExp(props: EditableAchievementExpProps) {
   );
 }
 
-export default EditableAchievementExp;
+export default EditableExp;
