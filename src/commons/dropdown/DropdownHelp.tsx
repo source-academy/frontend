@@ -30,8 +30,8 @@ const DropdownHelp: React.SFC<DialogProps> = props => (
         <li>
           For critical technical issues that seriously affect your learning experience, email the
           Technical Services of the NUS School of Computing at{' '}
-          <a href={Links.techSVC}>{React.useMemo(() => new URL(Links.techSVC).pathname, [])}</a> or
-          call {Links.techSVCNumber}.
+          <a href={Links.techSVC}>{new URL(Links.techSVC).pathname}</a> or call{' '}
+          {Links.techSVCNumber}.
         </li>
         <li>
           For non-critical technical issues, such as enhancement suggestions, please use the issue
