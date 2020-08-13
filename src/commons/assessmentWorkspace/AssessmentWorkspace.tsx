@@ -250,7 +250,10 @@ class AssessmentWorkspace extends React.Component<
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
+              isEditorAutorun: false,
+              sourceChapter: question?.library?.chapter || 4,
+              sourceVariant: 'default',
+              externalLibraryName: question?.library?.external?.name || 'NONE'
             }
           : undefined,
       editorHeight: this.props.editorHeight,
