@@ -19,7 +19,6 @@ import {
   changeEditorHeight,
   changeEditorWidth,
   changeSideContentHeight,
-  chapterSelect,
   clearReplOutput,
   evalEditor,
   evalRepl,
@@ -72,9 +71,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleAssessmentFetch: fetchAssessment,
       handleBrowseHistoryDown: () => browseReplHistoryDown(workspaceLocation),
       handleBrowseHistoryUp: () => browseReplHistoryUp(workspaceLocation),
-      handleChapterSelect: (chapter: any, changeEvent: any) =>
-        chapterSelect(chapter, 'default', workspaceLocation),
-      handleClearContext: (library: Library) => beginClearContext(library, workspaceLocation),
+      handleClearContext: (library: Library, shouldInitLibrary: boolean) =>
+        beginClearContext(workspaceLocation, library, shouldInitLibrary),
       handleDeclarationNavigate: (cursorPosition: Position) =>
         navigateToDeclaration(workspaceLocation, cursorPosition),
       handleEditorEval: () => evalEditor(workspaceLocation),

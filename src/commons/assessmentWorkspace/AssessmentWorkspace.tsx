@@ -58,8 +58,7 @@ export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -341,7 +340,7 @@ class AssessmentWorkspace extends React.Component<
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library);
+    this.props.handleClearContext(question.library, true);
     this.props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       this.props.handleEditorValueChange(editorValue);

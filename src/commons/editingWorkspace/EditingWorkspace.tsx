@@ -52,7 +52,7 @@ export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -320,7 +320,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
         }
       };
     }
-    this.props.handleClearContext(library);
+    this.props.handleClearContext(library, true);
   };
 
   private resetWorkspaceValues = () => {

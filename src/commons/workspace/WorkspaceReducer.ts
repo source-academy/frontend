@@ -267,7 +267,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.variant,
             action.payload.library.moduleParams
           ),
-          globals: action.payload.library.globals
+          globals: action.payload.library.globals,
+          externalLibrary: action.payload.library.external.name
         }
       };
     case SEND_REPL_INPUT_TO_OUTPUT:

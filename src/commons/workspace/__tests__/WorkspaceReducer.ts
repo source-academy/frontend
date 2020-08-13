@@ -502,7 +502,8 @@ describe('END_CLEAR_CONTEXT', () => {
           [location]: {
             ...defaultWorkspaceManager[location],
             context,
-            globals: mockGlobals
+            globals: mockGlobals,
+            externalLibrary: 'SOUNDS' as const
           }
         })
       );

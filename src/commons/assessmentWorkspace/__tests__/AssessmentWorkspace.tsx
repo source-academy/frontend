@@ -24,7 +24,6 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleAssessmentFetch: (assessmentId: number) => {},
   handleBrowseHistoryDown: () => {},
   handleBrowseHistoryUp: () => {},
-  handleChapterSelect: (chapter: any, changeEvent: any) => {},
   handleClearContext: (library: Library) => {},
   handleDeclarationNavigate: (cursorPosition: Position) => {},
   handleEditorEval: () => {},

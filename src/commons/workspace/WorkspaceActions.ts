@@ -116,10 +116,15 @@ export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: W
  *
  * @see Library in assessmentShape.ts
  */
-export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
+export const beginClearContext = (
+  workspaceLocation: WorkspaceLocation,
+  library: Library,
+  shouldInitLibrary: boolean
+) =>
   action(BEGIN_CLEAR_CONTEXT, {
     library,
-    workspaceLocation
+    workspaceLocation,
+    shouldInitLibrary
   });
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
