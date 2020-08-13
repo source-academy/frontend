@@ -419,7 +419,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<Assessm
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
-      } catch (e) { }
+      } catch (e) {}
       return entry;
     });
     return q;
@@ -1040,6 +1040,6 @@ const computeGradingStatus = (
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
-        ? 'graded'
-        : 'grading'
+      ? 'graded'
+      : 'grading'
     : 'excluded';
