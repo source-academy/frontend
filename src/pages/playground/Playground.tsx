@@ -38,7 +38,7 @@ import {
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   playgroundQuestionId,
-  resetPlaygroundInit,
+  resetPlaygroundLogging,
   savePlaygroundLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
@@ -223,7 +223,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
     }
 
-    resetPlaygroundInit(props.sourceChapter, props.externalLibraryName, props.editorValue);
+    resetPlaygroundLogging(props.sourceChapter, props.externalLibraryName, props.editorValue);
   }, [props]);
 
   const uploadPerHour = React.useCallback(() => {
@@ -236,14 +236,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   // Second useEffect called here just in case.
   React.useEffect(() => {
     uploadPerHour();
-    const currentAssessmentIds = getLoggedAssessmentIds();
-    if (
-      currentAssessmentIds.assessmentId !== playgroundQuestionId &&
-      currentAssessmentIds.questionID !== playgroundQuestionId
-    ) {
-      uploadLogs();
-    }
-  }, [uploadPerHour, uploadLogs]);
+  }, [uploadPerHour]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();

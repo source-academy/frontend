@@ -24,7 +24,7 @@ export const hasExceededLocalStorageSpace = () => {
 
 export const playgroundQuestionId: number = -1;
 
-export const resetPlaygroundInit = (
+export const resetPlaygroundLogging = (
   chapter: number,
   externalLibrary: ExternalLibraryName,
   editorValue: string
@@ -41,6 +41,7 @@ export const resetPlaygroundInit = (
   if (!isEqual(playgroundPlayback.init, newInit)) {
     playgroundPlayback.init = newInit;
   }
+  playgroundPlayback.inputs = [];
   localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
 };
 
@@ -65,7 +66,7 @@ export const getPlaygroundLogs = () => {
   return playgroundPlayback;
 };
 
-export const resetAssessmentInit = (
+export const resetAssessmentLogging = (
   chapter: number,
   externalLibrary: ExternalLibraryName,
   editorValue: string
@@ -82,6 +83,7 @@ export const resetAssessmentInit = (
   if (!isEqual(assessmentPlayback.init, newInit)) {
     assessmentPlayback.init = newInit;
   }
+  assessmentPlayback.inputs = [];
   localStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
 };
 

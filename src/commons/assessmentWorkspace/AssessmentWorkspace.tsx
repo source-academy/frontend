@@ -29,7 +29,7 @@ import {
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   playgroundQuestionId,
-  resetAssessmentInit,
+  resetAssessmentLogging,
   saveAssessmentLog,
   saveLoggedAssessmentIds
 } from '../../features/keystrokes/KeystrokesHelper';
@@ -141,7 +141,7 @@ class AssessmentWorkspace extends React.Component<
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
   }
-> {
+  > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
@@ -230,7 +230,7 @@ class AssessmentWorkspace extends React.Component<
     }
 
     saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
-    resetAssessmentInit(
+    resetAssessmentLogging(
       this.props.assessment!.questions[this.props.questionId].library.chapter,
       this.props.assessment!.questions[this.props.questionId].library.external.name,
       this.props.editorValue ? this.props.editorValue : ''
@@ -357,22 +357,22 @@ class AssessmentWorkspace extends React.Component<
     const editorProps =
       question.type === QuestionTypes.programming
         ? {
-            editorSessionId: '',
-            editorValue: this.props.editorValue!,
-            handleDeclarationNavigate: this.props.handleDeclarationNavigate,
-            handleEditorEval: this.props.handleEditorEval,
-            handleEditorValueChange: this.props.handleEditorValueChange,
-            handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
-            breakpoints: this.props.breakpoints,
-            highlightedLines: this.props.highlightedLines,
-            newCursorPosition: this.props.newCursorPosition,
-            handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
-            handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-            isEditorAutorun: false,
-            onChangeMethod: onChangeMethod,
-            onCursorChangeMethod: onCursorChangeMethod,
-            onSelectionChangeMethod: onSelectionChangeMethod
-          }
+          editorSessionId: '',
+          editorValue: this.props.editorValue!,
+          handleDeclarationNavigate: this.props.handleDeclarationNavigate,
+          handleEditorEval: this.props.handleEditorEval,
+          handleEditorValueChange: this.props.handleEditorValueChange,
+          handleUpdateHasUnsavedChanges: this.props.handleUpdateHasUnsavedChanges,
+          breakpoints: this.props.breakpoints,
+          highlightedLines: this.props.highlightedLines,
+          newCursorPosition: this.props.newCursorPosition,
+          handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
+          handlePromptAutocomplete: this.props.handlePromptAutocomplete,
+          isEditorAutorun: false,
+          onChangeMethod: onChangeMethod,
+          onCursorChangeMethod: onCursorChangeMethod,
+          onSelectionChangeMethod: onSelectionChangeMethod
+        }
         : undefined;
     const workspaceProps: WorkspaceProps = {
       controlBarProps: this.controlBarProps(questionId),
@@ -666,15 +666,15 @@ class AssessmentWorkspace extends React.Component<
 
     const saveButton =
       this.props.canSave &&
-      this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
-        <ControlButtonSaveButton
-          hasUnsavedChanges={this.props.hasUnsavedChanges}
-          onClickSave={onClickSave}
-          key="save"
-        />
-      ) : null;
+        this.props.assessment!.questions[questionId].type !== QuestionTypes.mcq ? (
+          <ControlButtonSaveButton
+            hasUnsavedChanges={this.props.hasUnsavedChanges}
+            onClickSave={onClickSave}
+            key="save"
+          />
+        ) : null;
 
-    const handleChapterSelect = () => {};
+    const handleChapterSelect = () => { };
 
     const chapterSelect = (
       <ControlBarChapterSelect
