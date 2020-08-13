@@ -12,13 +12,6 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  // editorValue is the prop that is going to change all the time
-  // use a ref so that the callbacks below can be memoised
-  const editorValueRef = React.useRef<string>(inProps.editorValue);
-  React.useEffect(() => {
-    editorValueRef.current = inProps.editorValue;
-  }, [inProps.editorValue]);
-
   const { sourceChapter } = inProps;
 
   const refactor = React.useCallback(() => {
@@ -26,7 +19,7 @@ const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
     if (!editor) {
       return;
     }
-    const code = editorValueRef.current;
+    const code = editor.getValue();
     const position = editor.getCursorPosition();
     const sourceLocations = getAllOccurrencesInScope(code, createContext(sourceChapter), {
       line: position.row + 1, // getCursorPosition returns 0-indexed row, function here takes in 1-indexed row
@@ -38,7 +31,7 @@ const useRefactor: EditorHook = (inProps, outProps, keyBindings, reactAceRef) =>
       loc => new Range(loc.start.line - 1, loc.start.column, loc.end.line - 1, loc.end.column)
     );
     ranges.forEach(range => selection.addRange(range));
-  }, [editorValueRef, reactAceRef, sourceChapter]);
+  }, [reactAceRef, sourceChapter]);
 
   keyBindings.refactor = refactor;
 };

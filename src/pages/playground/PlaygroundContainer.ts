@@ -16,11 +16,8 @@ import {
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
-  finishInvite,
-  initInvite,
-  invalidEditorSessionId,
   setEditorSessionId,
-  setWebsocketStatus
+  setSharedbConnected
 } from '../../commons/collabEditing/CollabEditingActions';
 import { Position } from '../../commons/editor/EditorTypes';
 import { SideContentType } from '../../commons/sideContent/SideContentTypes';
@@ -79,12 +76,10 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
   queryString: state.playground.queryString,
   shortURL: state.playground.shortURL,
   replValue: state.workspaces.playground.replValue,
-  sharedbAceIsInviting: state.workspaces.playground.sharedbAceIsInviting,
-  sharedbAceInitValue: state.workspaces.playground.sharedbAceInitValue,
   sideContentHeight: state.workspaces.playground.sideContentHeight,
   sourceChapter: state.workspaces.playground.context.chapter,
   sourceVariant: state.workspaces.playground.context.variant,
-  websocketStatus: state.workspaces.playground.websocketStatus,
+  sharedbConnected: state.workspaces.playground.sharedbConnected,
   externalLibraryName: state.workspaces.playground.externalLibrary,
   usingSubst: state.playground.usingSubst,
   persistenceUser: state.session.googleUser,
@@ -115,23 +110,20 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
         changeEditorWidth(widthChange.toString(), workspaceLocation),
       handleEditorUpdateBreakpoints: (breakpoints: string[]) =>
         setEditorBreakpoint(breakpoints, workspaceLocation),
-      handleFinishInvite: () => finishInvite(workspaceLocation),
       handleGenerateLz: generateLzString,
       handleShortenURL: (s: string) => shortenURL(s),
       handleUpdateShortURL: (s: string) => updateShortURL(s),
       handleInterruptEval: () => beginInterruptExecution(workspaceLocation),
-      handleInvalidEditorSessionId: () => invalidEditorSessionId(),
       handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) =>
         externalLibrarySelect(externalLibraryName, workspaceLocation, initialise),
-      handleInitInvite: (editorValue: string) => initInvite(editorValue, workspaceLocation),
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
       handleSetEditorSessionId: (editorSessionId: string) =>
         setEditorSessionId(workspaceLocation, editorSessionId),
       handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
-      handleSetWebsocketStatus: (websocketStatus: number) =>
-        setWebsocketStatus(workspaceLocation, websocketStatus),
+      handleSetSharedbConnected: (connected: boolean) =>
+        setSharedbConnected(workspaceLocation, connected),
       handleSideContentHeightChange: (heightChange: number) =>
         changeSideContentHeight(heightChange, workspaceLocation),
       handleToggleEditorAutorun: () => toggleEditorAutorun(workspaceLocation),

@@ -48,7 +48,7 @@ export function createChapter(
     chapConstants.frame.xOffset,
     chapConstants.frame.yOffset,
     ImageAssets.chapterSelectFrame.key
-  );
+  ).setScale(0.99);
 
   // Chapter completed rectangle
   const chapCompleteRect = new Phaser.GameObjects.Rectangle(
