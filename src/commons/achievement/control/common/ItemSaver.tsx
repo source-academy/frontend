@@ -12,8 +12,8 @@ function ItemSaver(props: ItemSaverProps) {
 
   return (
     <div className="saver">
-      <Button icon={IconNames.FLOPPY_DISK} text={'Save'} intent={'primary'} onClick={saveChanges} />
-      <Button icon={IconNames.CROSS} text={'Discard'} intent={'danger'} onClick={discardChanges} />
+      <Button icon={IconNames.FLOPPY_DISK} text="Save" intent="primary" onClick={saveChanges} />
+      <Button icon={IconNames.CROSS} text="Discard" intent="danger" onClick={discardChanges} />
     </div>
   );
 }

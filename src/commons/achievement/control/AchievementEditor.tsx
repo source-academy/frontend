@@ -2,15 +2,14 @@ import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 import AchievementAdder from './achievementEditor/AchievementAdder';
-import EditableAchievementCard from './achievementEditor/EditableAchievementCard';
+import EditableCard from './achievementEditor/EditableCard';
 
 type AchievementEditorProps = {
-  forceRender: () => void;
   requestPublish: () => void;
 };
 
 function AchievementEditor(props: AchievementEditorProps) {
-  const { forceRender, requestPublish } = props;
+  const { requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
 
@@ -36,13 +35,7 @@ function AchievementEditor(props: AchievementEditorProps) {
    */
   const generateEditableCards = (achievementIds: number[]) =>
     achievementIds.map(id => (
-      <EditableAchievementCard
-        key={id}
-        id={id}
-        forceRender={forceRender}
-        releaseId={releaseId}
-        requestPublish={requestPublish}
-      />
+      <EditableCard key={id} id={id} releaseId={releaseId} requestPublish={requestPublish} />
     ));
 
   return (

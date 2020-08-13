@@ -15,15 +15,14 @@ import EditableOptions from './EditableOptions';
 import EditableTitle from './EditableTitle';
 import EditableView from './EditableView';
 
-type EditableAchievementCardProps = {
+type EditableCardProps = {
   id: number;
-  forceRender: () => void;
   releaseId: (id: number) => void;
   requestPublish: () => void;
 };
 
-function EditableAchievementCard(props: EditableAchievementCardProps) {
-  const { id, forceRender, releaseId, requestPublish } = props;
+function EditableCard(props: EditableCardProps) {
+  const { id, releaseId, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
   const achievementReference = inferencer.getAchievement(id);
@@ -53,7 +52,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(false);
     releaseId(id);
     requestPublish();
-    forceRender();
   };
 
   const handleDiscardChanges = () => {
@@ -66,7 +64,6 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
     setIsDirty(false);
     releaseId(id);
     requestPublish();
-    forceRender();
   };
 
   // TODO: Replace all of the following useState with useReducer for editable content
@@ -190,4 +187,4 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   );
 }
 
-export default EditableAchievementCard;
+export default EditableCard;

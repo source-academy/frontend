@@ -9,13 +9,12 @@ import ItemSaver from '../common/ItemSaver';
 
 type EditableGoalProps = {
   id: number;
-  forceRender: () => void;
   releaseId: (id: number) => void;
   requestPublish: () => void;
 };
 
 function EditableGoal(props: EditableGoalProps) {
-  const { id, forceRender, releaseId, requestPublish } = props;
+  const { id, releaseId, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
   const goalReference = inferencer.getGoalDefinition(id);
@@ -35,7 +34,6 @@ function EditableGoal(props: EditableGoalProps) {
     setIsDirty(false);
     releaseId(id);
     requestPublish();
-    forceRender();
   };
 
   const handleDiscardChanges = () => {
@@ -48,7 +46,6 @@ function EditableGoal(props: EditableGoalProps) {
     setIsDirty(false);
     releaseId(id);
     requestPublish();
-    forceRender();
   };
 
   // TODO: Replace all of the following useState with useReducer for editable content

@@ -43,7 +43,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
             className="command-button"
             icon={IconNames.CLOUD_UPLOAD}
             intent="primary"
-            text={'Publish Changes'}
+            text="Publish Changes"
             onClick={handlePublish}
           />
         )}

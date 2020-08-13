@@ -5,12 +5,11 @@ import EditableGoal from './goalEditor/EditableGoal';
 import GoalAdder from './goalEditor/GoalAdder';
 
 type GoalEditorProps = {
-  forceRender: () => void;
   requestPublish: () => void;
 };
 
 function GoalEditor(props: GoalEditorProps) {
-  const { forceRender, requestPublish } = props;
+  const { requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
 
@@ -36,13 +35,7 @@ function GoalEditor(props: GoalEditorProps) {
    */
   const generateEditableGoals = (goalIds: number[]) =>
     goalIds.map(id => (
-      <EditableGoal
-        key={id}
-        id={id}
-        forceRender={forceRender}
-        releaseId={releaseId}
-        requestPublish={requestPublish}
-      />
+      <EditableGoal key={id} id={id} releaseId={releaseId} requestPublish={requestPublish} />
     ));
 
   return (

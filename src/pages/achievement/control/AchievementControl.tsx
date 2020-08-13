@@ -54,7 +54,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
     handleBulkUpdateAchievements(achievements);
     setAwaitPublish(false);
   };
-  const requestPublish = () => setAwaitPublish(true);
+  const requestPublish = () => {
+    setAwaitPublish(true);
+    forceRender();
+  };
 
   /**
    * Allows editor components to trigger a page re-render so that the AchievementPreview
@@ -76,9 +79,9 @@ function AchievementControl(props: DispatchProps & StateProps) {
       <div className="AchievementControl">
         <AchievementPreview awaitPublish={awaitPublish} handlePublish={handlePublish} />
 
-        <AchievementEditor forceRender={forceRender} requestPublish={requestPublish} />
+        <AchievementEditor requestPublish={requestPublish} />
 
-        <GoalEditor forceRender={forceRender} requestPublish={requestPublish} />
+        <GoalEditor requestPublish={requestPublish} />
       </div>
     </AchievementContext.Provider>
   );

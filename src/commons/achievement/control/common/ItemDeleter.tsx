@@ -14,16 +14,11 @@ function ItemDeleter(props: ItemDeleterProps) {
 
   return (
     <div className="deleter">
-      <Button text={'Delete'} icon={IconNames.TRASH} intent={'danger'} onClick={toggleOpen} />
-      <Dialog title={'Confirm Delete'} isOpen={isOpen} onClose={toggleOpen}>
+      <Button text="Delete" icon={IconNames.TRASH} intent="danger" onClick={toggleOpen} />
+      <Dialog title="Confirm Delete" isOpen={isOpen} onClose={toggleOpen}>
         <p> Are you sure you want to delete this item?</p>
 
-        <Button
-          text={'Delete'}
-          className={'editor-button'}
-          intent={'danger'}
-          onClick={deleteItem}
-        />
+        <Button text="Delete" className="editor-button" intent="danger" onClick={deleteItem} />
       </Dialog>
     </div>
   );
