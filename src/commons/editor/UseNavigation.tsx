@@ -22,7 +22,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     const editor = reactAceRef.current!.editor;
     const pos = editor.selection.getCursor();
     const token = editor.session.getTokenAt(pos.row, pos.column);
-    const url = Links.textbook;
+    const url = Links.sourceDocs;
 
     const ext = Documentation.externalLibraries[external];
 
@@ -47,18 +47,16 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
         token !== null &&
         (/\bsupport.function\b/.test(token.type) || /\bbuiltinConsts\b/.test(token.type))
       ) {
-        window.open(`${url}source/${externalUrl}/global.html#${token.value}`); // opens external library link
+        window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
       }
     } else if (
       token !== null &&
       (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
     ) {
-      window.open(
-        `${url}source/source_${sourceChapter}${sourceVariant}/global.html#${token.value}`
-      ); // opens builtn library link
+      window.open(`${url}source_${sourceChapter}${sourceVariant}/global.html#${token.value}`); // opens builtn library link
     }
     if (token !== null && /\bstorage.type\b/.test(token.type)) {
-      window.open(`${url}source/source_${sourceChapter}.pdf`);
+      window.open(`${url}source_${sourceChapter}.pdf`);
     }
   }, [reactAceRef, sourceChapter, sourceVariant, handleDeclarationNavigate, external, externalUrl]);
 
