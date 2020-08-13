@@ -68,13 +68,11 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
  *
  * @param {number} id unique id of the goal
  * @param {string} text goal description
- * @param {number} maxExp maximum attainable exp of the goal
  * @param {GoalMeta} meta contains meta data relevant to the goal type
  */
 export type GoalDefinition = {
   id: number;
   text: string;
-  maxExp: number;
   meta: GoalMeta;
 };
 
@@ -84,11 +82,13 @@ export type GoalDefinition = {
  *
  * @param {number} id unique id of the goal
  * @param {number} exp student's current exp of the goal
+ * @param {number} maxExp maximum attainable exp of the goal (computed by server)
  * @param {boolean} completed student's completion status of the goal
  */
 export type GoalProgress = {
   id: number;
   exp: number;
+  maxExp: number;
   completed: boolean;
 };
 
@@ -103,16 +103,18 @@ export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
 export type AssessmentMeta = {
   type: GoalType.ASSESSMENT;
   assessmentId: string; // e.g. 'M1A', 'P2'
-  requiredCompletionExp: number;
+  requiredCompletionFrac: number; // between [0..1]
 };
 
 export type BinaryMeta = {
   type: GoalType.BINARY;
   condition: string;
+  maxExp: number;
 };
 
 export type ManualMeta = {
   type: GoalType.MANUAL;
+  maxExp: number;
 };
 
 /**
