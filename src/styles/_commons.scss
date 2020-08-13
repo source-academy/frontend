@@ -7,6 +7,14 @@
     margin-left: 0px;
   }
 
+  .#{$ns}-non-ideal-state {
+    padding-bottom: 0.7rem;
+
+    > .#{$ns}-non-ideal-state-visual .#{$ns}-icon {
+      display: flex;
+    }
+  }
+
   .contentdisplay-content-parent {
     margin-top: 20px;
     margin-bottom: 20px;
