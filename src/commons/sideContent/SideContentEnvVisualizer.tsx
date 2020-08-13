@@ -33,7 +33,7 @@ class SideContentEnvVisualizer extends React.Component<{}, State> {
           <br />
           <br />
           The environment model diagram follows a notation introduced in{' '}
-          <a href={Links.sourceDocsChapter3_2} rel="noopener noreferrer" target="_blank">
+          <a href={Links.textbookChapter3_2} rel="noopener noreferrer" target="_blank">
             <i>
               Structure and Interpretation of Computer Programs, JavaScript Adaptation, Chapter 3,
               Section 2
