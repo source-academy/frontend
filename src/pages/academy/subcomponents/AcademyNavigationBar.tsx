@@ -86,7 +86,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon="satellite" />
-          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Ground Control</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Ground Control</div>
         </NavLink>
 
         <NavLink
@@ -95,7 +95,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon="globe" />
-          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Dashboard</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Dashboard</div>
         </NavLink>
 
         <NavLink
@@ -104,7 +104,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.MOBILE_VIDEO} />
-          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Sourcereel</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Sourcereel</div>
         </NavLink>
 
         <NavLink
@@ -113,7 +113,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.ENDORSED} />
-          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Grading</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Grading</div>
           <NotificationBadgeContainer
             notificationFilter={filterNotificationsByType('Grading')}
             disableHover={true}
@@ -126,7 +126,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CROWN} />
-          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
+          <div className="navbar-button-text hidden-xs hidden-sm">Story Simulator</div>
         </NavLink>
       </NavbarGroup>
     ) : null}
