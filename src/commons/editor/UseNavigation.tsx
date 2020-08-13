@@ -13,18 +13,14 @@ import { EditorHook } from './Editor';
 // reactAceRef is the underlying reactAce instance for hooking.
 
 const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) => {
-  const { sourceChapter, handleDeclarationNavigate } = inProps;
-  const sourceVariant = inProps.sourceVariant === 'default' ? '' : `_${inProps.sourceVariant}`;
-  const external = inProps.externalLibraryName === undefined ? 'NONE' : inProps.externalLibraryName;
-  const externalUrl = inProps.externalLibraryName === 'ALL' ? `External%20libraries` : external;
+  const propsRef = React.useRef(inProps);
+  propsRef.current = inProps;
 
   const handleNavigate = React.useCallback(() => {
     const editor = reactAceRef.current!.editor;
     const pos = editor.selection.getCursor();
     const token = editor.session.getTokenAt(pos.row, pos.column);
-    const url = Links.sourceDocs;
-
-    const ext = Documentation.externalLibraries[external];
+    const { sourceChapter, handleDeclarationNavigate } = propsRef.current;
 
     handleDeclarationNavigate(editor.getCursorPosition());
 
@@ -42,10 +38,21 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
       return;
     }
 
+    const url = Links.sourceDocs;
+    const sourceVariant =
+      propsRef.current.sourceVariant === 'default' ? '' : `_${propsRef.current.sourceVariant}`;
+    const external =
+      propsRef.current.externalLibraryName === undefined
+        ? 'NONE'
+        : propsRef.current.externalLibraryName;
+    const externalUrl =
+      propsRef.current.externalLibraryName === 'ALL' ? `External%20libraries` : external;
+    const ext = Documentation.externalLibraries[external];
+
     if (ext.some((node: { caption: string }) => node.caption === (token && token.value))) {
       if (
         token !== null &&
-        (/\bsupport.function\b/.test(token.type) || /\bbuiltinConsts\b/.test(token.type))
+        (/\bsupport.function\b/.test(token.type) || /\bbuiltinconsts\b/.test(token.type))
       ) {
         window.open(`${url}${externalUrl}/global.html#${token.value}`); // opens external library link
       }
@@ -58,7 +65,7 @@ const useNavigation: EditorHook = (inProps, outProps, keyBindings, reactAceRef) 
     if (token !== null && /\bstorage.type\b/.test(token.type)) {
       window.open(`${url}source_${sourceChapter}.pdf`);
     }
-  }, [reactAceRef, sourceChapter, sourceVariant, handleDeclarationNavigate, external, externalUrl]);
+  }, [reactAceRef]);
 
   keyBindings.navigate = handleNavigate;
 };
