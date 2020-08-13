@@ -54,11 +54,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
         </div>
       ) : (
         <ul className="preview-container">
-          {generateAchievementTasks(
-            inferencer.listTaskIdsbyPosition(),
-            FilterStatus.ALL,
-            focusState
-          )}
+          {generateAchievementTasks(inferencer.listSortedTaskIds(), FilterStatus.ALL, focusState)}
         </ul>
       )}
     </div>

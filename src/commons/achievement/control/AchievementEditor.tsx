@@ -51,7 +51,7 @@ function AchievementEditor(props: AchievementEditorProps) {
         <AchievementAdder allowNewId={allowNewId} setNewId={setNewId} />
       </div>
       <ul className="achievement-container">
-        {generateEditableCards(inferencer.listIds().reverse())}
+        {generateEditableCards(inferencer.getAllAchievementIds().reverse())}
       </ul>
     </div>
   );

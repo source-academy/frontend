@@ -87,7 +87,7 @@ function Dashboard(props: DispatchProps & StateProps) {
           </div>
 
           <ul className="task-container">
-            {generateAchievementTasks(inferencer.listTaskIdsbyPosition(), filterStatus, focusState)}
+            {generateAchievementTasks(inferencer.listSortedTaskIds(), filterStatus, focusState)}
           </ul>
 
           <div className="view-container">

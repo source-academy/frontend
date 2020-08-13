@@ -230,7 +230,6 @@ export const mockGoals: AchievementGoal[] = [
   {
     id: 0,
     text: 'Bonus for completing Colorful Carpet & Beyond the Second Dimension Achievements',
-    maxExp: 100,
     meta: {
       type: GoalType.BINARY,
       condition: `AND(
@@ -241,39 +240,40 @@ export const mockGoals: AchievementGoal[] = [
         {
           event: 'achievement',
           restriction: 1,
-        })`
+        })`,
+      maxExp: 100
     },
     exp: 0,
+    maxExp: 100,
     completed: false
   },
   {
     id: 1,
     text: 'XP earned from Beyond the Second Dimension Mission',
-    maxExp: 250,
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentId: '5',
-      requiredCompletionExp: 200
+      requiredCompletionFrac: 0.5
     },
     exp: 213,
+    maxExp: 250,
     completed: true
   },
   {
     id: 2,
     text: 'XP earned from Colorful Carpet Mission',
-    maxExp: 250,
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentId: '3',
-      requiredCompletionExp: 200
+      requiredCompletionFrac: 0.8
     },
     exp: 0,
+    maxExp: 250,
     completed: false
   },
   {
     id: 3,
     text: 'Bonus for completing Curve Introduction & Curve Manipulation Achievements',
-    maxExp: 100,
     meta: {
       type: GoalType.BINARY,
       condition: `AND(
@@ -284,93 +284,99 @@ export const mockGoals: AchievementGoal[] = [
         {
           event: 'achievement',
           restriction: 5
-        })`
+        })`,
+      maxExp: 100
     },
     exp: 0,
+    maxExp: 100,
     completed: false
   },
   {
     id: 4,
     text: 'XP earned from Curve Introduction Mission',
-    maxExp: 250,
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentId: '7',
-      requiredCompletionExp: 150
+      requiredCompletionFrac: 150
     },
     exp: 178,
+    maxExp: 250,
     completed: true
   },
   {
     id: 5,
     text: 'XP earned from Curve Manipulation Mission',
-    maxExp: 250,
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentId: '8',
-      requiredCompletionExp: 200
+      requiredCompletionFrac: 0.8
     },
     exp: 191,
+    maxExp: 250,
     completed: false
   },
   {
     id: 6,
     text: 'Submit Source 3 Path',
-    maxExp: 100,
     meta: {
       type: GoalType.BINARY,
       condition: `{
         event: 'assessment-submission',
         restriction: paths.SOURCE_THREE
-      }`
+      }`,
+      maxExp: 100
     },
     exp: 100,
+    maxExp: 100,
     completed: true
   },
   {
     id: 7,
     text: 'XP earned from Source 3 Path',
-    maxExp: 300,
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentId: '12',
-      requiredCompletionExp: 300
+      requiredCompletionFrac: 1
     },
     exp: 300,
+    maxExp: 300,
     completed: true
   },
   {
     id: 8,
     text: 'Each Top Voted answer in Piazza gives 10 XP',
-    maxExp: 100,
     meta: {
-      type: GoalType.MANUAL
+      type: GoalType.MANUAL,
+      maxExp: 100
     },
     exp: 40,
+    maxExp: 100,
     completed: false
   },
   {
     id: 9,
     text: 'Submit 1 PR to Source Academy Github',
-    maxExp: 100,
     meta: {
-      type: GoalType.MANUAL
+      type: GoalType.MANUAL,
+      maxExp: 100
     },
     exp: 100,
+    maxExp: 100,
     completed: true
   },
   {
     id: 10,
     text: 'Be the Koolest Kidz in SOC by redeeming this 100 XP achievement yourself',
-    maxExp: 100,
     meta: {
       type: GoalType.BINARY,
       condition: `{
         event: 'achievement',
         restriction: 'false',
-      }`
+      }`,
+      maxExp: 100
     },
     exp: 0,
+    maxExp: 100,
     completed: false
   }
 ];

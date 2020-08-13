@@ -24,7 +24,7 @@ function EditableGoal(props: EditableGoalProps) {
     () => cloneDeep(goalReference) // Expensive, only clone once on initialization
   );
   const resetEditableGoal = () => setEditableGoal(cloneDeep(goalReference));
-  const { text, maxExp, meta } = editableGoal;
+  const { text, meta } = editableGoal;
 
   // A save/discard button appears on top of the card when it's dirty
   const [isDirty, setIsDirty] = useState<boolean>(false);
@@ -60,15 +60,6 @@ function EditableGoal(props: EditableGoalProps) {
     setIsDirty(true);
   };
 
-  const handleChangeMaxExp = (maxExpString: string) => {
-    const maxExp = isNaN(parseInt(maxExpString)) ? 0 : parseInt(maxExpString);
-    setEditableGoal({
-      ...editableGoal,
-      maxExp: maxExp
-    });
-    setIsDirty(true);
-  };
-
   const handleChangeMeta = (metaString: string) => {
     const meta = JSON.parse(metaString);
     setEditableGoal({
@@ -82,11 +73,6 @@ function EditableGoal(props: EditableGoalProps) {
     <div className="editable-goal">
       <h3>{id}</h3>
       <EditableText placeholder="Enter goal text here" value={text} onChange={handleChangeText} />
-      <EditableText
-        placeholder="Enter max EXP here"
-        value={String(maxExp)}
-        onChange={handleChangeMaxExp}
-      />
       <EditableText
         placeholder="Enter goal meta here"
         value={JSON.stringify(meta)}

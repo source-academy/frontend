@@ -29,9 +29,7 @@ describe('Achievements change when', () => {
 
     inferencer.insertAchievement(sampleAchievement);
     expect(inferencer.getAllAchievements().length).toEqual(13);
-
-    expect(inferencer.doesAchievementExist(sampleAchievement.id)).toEqual(true);
-    expect(inferencer.getAchievementItem(sampleAchievement.id)).toEqual(sampleAchievement);
+    expect(inferencer.getAchievement(sampleAchievement.id)).toEqual(sampleAchievement);
 
     inferencer.removeAchievement(sampleAchievement.id);
     expect(inferencer.getAllAchievements().length).toEqual(12);

@@ -26,7 +26,7 @@ function EditableAchievementCard(props: EditableAchievementCardProps) {
   const { id, forceRender, releaseId, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const achievementReference = inferencer.getAchievementItem(id);
+  const achievementReference = inferencer.getAchievement(id);
 
   const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(
     () => cloneDeep(achievementReference) // Expensive, only clone once on initialization

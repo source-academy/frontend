@@ -60,7 +60,7 @@ function EditableOptions(props: EditableOptionsProps) {
         />
         <h3>Goal Ids</h3>
         <EditableGoalIds
-          allGoalIds={inferencer.listAllGoalIds()}
+          allGoalIds={inferencer.getAllGoalIds()}
           changeGoalIds={changeGoalIds}
           goalIds={goalIds}
         />

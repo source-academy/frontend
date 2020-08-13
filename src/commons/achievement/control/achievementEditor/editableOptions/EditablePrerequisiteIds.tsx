@@ -18,7 +18,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
     .getAllAchievements()
     .forEach(achievement => titleToId.set(achievement.title, achievement.id));
   const getId = (title: string) => titleToId.get(title)!;
-  const getTitle = (id: number) => inferencer.getAchievementItem(id).title;
+  const getTitle = (id: number) => inferencer.getAchievement(id).title;
 
   const PrerequisiteSelect = MultiSelect.ofType<number>();
   const prerequisiteRenderer: ItemRenderer<number> = (id, { handleClick }) => (

@@ -39,7 +39,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
   }, [handleGetAchievements, handleGetOwnGoals]);
 
   const achievements = inferencer.getAllAchievements();
-  const goals = inferencer.getAllGoalDefinitions();
+  const goals = inferencer.getAllGoals();
 
   // TODO: <Prompt />
 

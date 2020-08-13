@@ -3,8 +3,8 @@ import { GoalDefinition, GoalType } from 'src/features/achievement/AchievementTy
 export const goalTemplate: GoalDefinition = {
   id: 0,
   text: 'Goal Text Here',
-  maxExp: 0,
   meta: {
-    type: GoalType.MANUAL
+    type: GoalType.MANUAL,
+    maxExp: 0
   }
 };

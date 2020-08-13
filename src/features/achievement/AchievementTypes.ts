@@ -64,7 +64,6 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
 
 /**
  * Information of an achievement goal definition
- * NOTE: Achievement EXP named to deconflict with Assessment XP
  *
  * @param {number} id unique id of the goal
  * @param {string} text goal description
@@ -90,6 +89,12 @@ export type GoalProgress = {
   exp: number;
   maxExp: number;
   completed: boolean;
+};
+
+export const defaultGoalProgress = {
+  exp: 0,
+  maxExp: 0,
+  completed: false
 };
 
 export enum GoalType {
