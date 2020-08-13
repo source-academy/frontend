@@ -127,13 +127,12 @@ export async function postKeystrokeLogs(
   questionId: number,
   playbackData: PlaybackData
 ): Promise<Response | null> {
-  const resp = await sendToLogger(``, 'POST', {
+  const resp = await sendToLogger(`assessment-logger`, 'POST', {
     accessToken: tokens.accessToken,
     body: { assessmentId: assessmentId, questionId: questionId, playbackData: playbackData },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
-    shouldAutoLogout: false,
-    shouldRefresh: true
+    shouldAutoLogout: false
   });
 
   return resp;
@@ -420,7 +419,7 @@ export async function getAssessment(id: number, tokens: Tokens): Promise<Assessm
     q.library.globals = Object.entries(q.library.globals as object).map(entry => {
       try {
         entry[1] = (window as any).eval(entry[1]);
-      } catch (e) {}
+      } catch (e) { }
       return entry;
     });
     return q;
@@ -956,6 +955,7 @@ export async function sendToLogger(
   if (!opts.noHeaderAccept) {
     headers.append('Accept', 'application/json');
   }
+
   if (opts.accessToken) {
     headers.append('Authorization', `Bearer ${opts.accessToken}`);
   }
@@ -969,20 +969,11 @@ export async function sendToLogger(
       fetchOpts.body = JSON.stringify(opts.body);
     }
   }
+
   try {
-    const resp = await fetch(`${Constants.cadetLoggerUrl}/logs/${path}`, fetchOpts);
+    const resp = await fetch(`${Constants.cadetLoggerUrl}/${path}`, fetchOpts);
     // response.ok is (200 <= response.status <= 299)
     // response.status of > 299 does not raise error; so deal with in in the try clause
-    if (opts.shouldRefresh && resp && resp.status === 401) {
-      const newTokens = await postRefresh(opts.refreshToken!);
-      store.dispatch(actions.setTokens(newTokens!));
-      const newOpts = {
-        ...opts,
-        accessToken: newTokens!.accessToken,
-        shouldRefresh: false
-      };
-      return request(path, method, newOpts);
-    }
     if (resp && !resp.ok && opts.shouldAutoLogout === false) {
       // this clause is mostly for SUBMIT_ANSWER; show an error message instead
       // and ask student to manually logout, so that they have a chance to save
@@ -1049,6 +1040,6 @@ const computeGradingStatus = (
     ? numGraded === 0
       ? 'none'
       : numGraded === numQuestions
-      ? 'graded'
-      : 'grading'
+        ? 'graded'
+        : 'grading'
     : 'excluded';

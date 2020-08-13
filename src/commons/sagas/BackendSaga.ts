@@ -642,11 +642,6 @@ function* BackendSaga(): SagaIterator {
     const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
     if (!respMsg) {
       yield handleResponseError(respMsg);
-    } else if (respMsg === 'OK') {
-      yield call(showSuccessMessage, 'Keystrokes Uploaded successfully!', 2000);
-    } else {
-      yield call(showWarningMessage, respMsg, 10000);
-      return;
     }
   });
 
