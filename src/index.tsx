@@ -14,7 +14,11 @@ import { register as registerServiceWorker } from 'src/commons/utils/RegisterSer
 import { store } from 'src/pages/createStore';
 
 if (Constants.sentryDsn) {
-  Sentry.init({ dsn: Constants.sentryDsn, environment: Constants.sourceAcademyEnvironment });
+  Sentry.init({
+    dsn: Constants.sentryDsn,
+    environment: Constants.sourceAcademyEnvironment,
+    release: `cadet-frontend@${Constants.sourceAcademyVersion}`
+  });
   const userId = store.getState().session.userId;
   Sentry.setUser(typeof userId !== 'undefined' ? { id: userId.toString() } : null);
 }
