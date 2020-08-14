@@ -172,7 +172,7 @@ const moveCursor = (editor: AceEditor['editor'], position: Position) => {
 
 /* Override handler, so does not trigger when focus is in editor */
 const handlers = {
-  goGreen: () => { }
+  goGreen: () => {}
 };
 
 const EditorBase = React.memo(

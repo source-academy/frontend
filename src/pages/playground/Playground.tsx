@@ -294,11 +294,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       handleChapterSelect(chapter, variant);
     },
-    [
-      hasBreakpoints,
-      selectedTab,
-      pushLog,
-    ]
+    [hasBreakpoints, selectedTab, pushLog]
   );
 
   const chapterSelect = React.useMemo(
