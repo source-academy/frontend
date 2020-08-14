@@ -1,4 +1,4 @@
-import { Collapse, Icon } from '@blueprintjs/core';
+import { Button, Collapse, Icon, PopoverPosition, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
@@ -34,43 +34,40 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
   }
 
   public render() {
+    const autograderTooltip = (
+      <div className="autograder-help-tooltip">
+        <p>Click on each testcase below to execute it with the program in the editor.</p>
+        <p>
+          To execute all testcases at once, evaluate the program in the editor with this tab active.
+        </p>
+        <p>A green or red background indicates a passed or failed testcase respectively.</p>
+        <p>Private testcases (only visible to staff when grading) have a grey background.</p>
+      </div>
+    );
+
+    const columnHeader = (colClass: string, colTitle: string) => (
+      <div className={colClass}>
+        {colTitle}
+        <Icon icon={IconNames.CARET_DOWN} />
+      </div>
+    );
+
     const testcasesHeader = (
       <div className="testcases-header">
-        <div className="header-fn">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Testcase (click to run)
-        </div>
-        <div className="header-expected">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Expected result
-        </div>
-        <div className="header-actual">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Actual result
-        </div>
+        {columnHeader('header-fn', 'Testcase')}
+        {columnHeader('header-expected', 'Expected result')}
+        {columnHeader('header-actual', 'Actual result')}
       </div>
     );
 
     const resultsHeader = (
       <div className="results-header">
         <div className="header-data">
-          <div className="header-sn">
-            <Icon icon={IconNames.CARET_DOWN} />
-            S/N
-          </div>
-          <div className="header-status">
-            <Icon icon={IconNames.CARET_DOWN} />
-            Testcase status
-          </div>
+          {columnHeader('header-sn', 'S/N')}
+          {columnHeader('header-status', 'Testcase status')}
         </div>
-        <div className="header-expected">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Expected result
-        </div>
-        <div className="header-actual">
-          <Icon icon={IconNames.CARET_DOWN} />
-          Actual result
-        </div>
+        {columnHeader('header-expected', 'Expected result')}
+        {columnHeader('header-actual', 'Actual result')}
       </div>
     );
 
@@ -106,13 +103,22 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
     const collapseButton = (label: string, isOpen: boolean, toggleFunc: () => void) =>
       controlButton(label, isOpen ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT, toggleFunc, {
         className: 'collapse-button',
-        iconOnRight: true,
         minimal: true
       });
 
     return (
       <div className="Autograder">
-        {collapseButton('Testcases', this.state.showTestcases, this.toggleTestcases)}
+        <Button
+          className="collapse-button"
+          icon={this.state.showTestcases ? IconNames.CARET_DOWN : IconNames.CARET_RIGHT}
+          minimal={true}
+          onClick={this.toggleTestcases}
+        >
+          <span>Testcases</span>
+          <Tooltip content={autograderTooltip} position={PopoverPosition.LEFT} boundary={'window'}>
+            <Icon icon={IconNames.HELP} />
+          </Tooltip>
+        </Button>
         <Collapse isOpen={this.state.showTestcases} keepChildrenMounted={true}>
           {testcases}
         </Collapse>
@@ -124,17 +130,9 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
     );
   }
 
-  private toggleTestcases = () =>
-    this.setState({
-      ...this.state,
-      showTestcases: !this.state.showTestcases
-    });
+  private toggleTestcases = () => this.setState({ showTestcases: !this.state.showTestcases });
 
-  private toggleResults = () =>
-    this.setState({
-      ...this.state,
-      showResults: !this.state.showResults
-    });
+  private toggleResults = () => this.setState({ showResults: !this.state.showResults });
 }
 
 export default SideContentAutograder;

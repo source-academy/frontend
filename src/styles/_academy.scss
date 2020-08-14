@@ -292,6 +292,10 @@
     justify-content: center;
     padding-left: 1em;
   }
+
+  &:not(.ag-header-cell-sortable) .ag-header-cell-label {
+    padding-right: 1em;
+  }
 }
 
 .ag-cell {

@@ -182,7 +182,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
       <>
         {submissionText}
         <p>
-          Early submissions grant you additional XP, but{' '}
+          Finalising your submission early grants you additional XP, but{' '}
           <span className="warning">this action is irreversible.</span>
         </p>
       </>
@@ -194,7 +194,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
         isCloseButtonShown={true}
         isOpen={this.state.betchaAssessment !== null}
         onClose={this.setBetchaAssessmentNull}
-        title="Betcha: Early Submission"
+        title="Finalise submission?"
       >
         <div className={Classes.DIALOG_BODY}>
           <Text>{betchaText}</Text>
@@ -202,7 +202,7 @@ class Assessment extends React.Component<AssessmentProps, State> {
         <div className={Classes.DIALOG_FOOTER}>
           <ButtonGroup>
             {controlButton('Cancel', null, this.setBetchaAssessmentNull, { minimal: false })}
-            {controlButton('Finalise Submission', null, this.submitAssessment, {
+            {controlButton('Finalise', null, this.submitAssessment, {
               minimal: false,
               intent: Intent.DANGER
             })}

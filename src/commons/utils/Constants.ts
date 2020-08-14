@@ -4,7 +4,8 @@ function isTrue(value?: string): boolean {
 
 const isTest = process.env.NODE_ENV === 'test';
 
-const sourceAcademyVersion = process.env.REACT_APP_VERSION;
+const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
+const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
 const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
@@ -49,11 +50,11 @@ export enum Links {
 
   sourceAcademyAssets = 'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com',
   sourceDocs = 'https://source-academy.github.io/source/',
-  sourceDocsChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
-  sourceDocsChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
   techSVC = 'mailto:techsvc@comp.nus.edu.sg',
   techSVCNumber = '6516 2736',
   textbook = 'https://source-academy.github.io/sicp/',
+  textbookChapter2_2 = 'https://source-academy.github.io/sicp/chapters/2.2.html',
+  textbookChapter3_2 = 'https://source-academy.github.io/sicp/chapters/3.2.html',
 
   aceHotkeys = 'https://github.com/ajaxorg/ace/wiki/Default-Keyboard-Shortcuts',
   sourceHotkeys = 'https://github.com/source-academy/cadet-frontend/wiki/Source-Academy-Keyboard-Shortcuts',
@@ -72,6 +73,7 @@ export enum Links {
 
 const Constants = {
   sourceAcademyVersion,
+  sourceAcademyEnvironment,
   backendUrl,
   cadetLoggerUrl,
   useBackend,

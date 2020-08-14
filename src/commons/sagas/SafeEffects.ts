@@ -25,6 +25,10 @@ function handleUncaughtError(error: any) {
   console.error(error);
 }
 
+function isIterator(obj: any) {
+  return obj && typeof obj.next === 'function' && typeof obj.throw === 'function';
+}
+
 export function safeTakeEvery<P extends ActionPattern, A extends ActionMatchingPattern<P>>(
   pattern: P,
   worker: (action: A) => any
@@ -36,7 +40,10 @@ export function safeTakeEvery<P extends ActionPattern, Fn extends (...args: any[
 ): ForkEffect<never> {
   function* wrappedWorker(...args: HelperWorkerParameters<ActionMatchingPattern<P>, Fn>) {
     try {
-      yield* worker(...args);
+      const result = worker(...args);
+      if (isIterator(result)) {
+        yield* result;
+      }
     } catch (error) {
       handleUncaughtError(error);
     }
@@ -55,7 +62,10 @@ export function safeTakeLatest<P extends ActionPattern, Fn extends (...args: any
 ): ForkEffect<never> {
   function* wrappedWorker(...args: HelperWorkerParameters<ActionMatchingPattern<P>, Fn>) {
     try {
-      yield* worker(...args);
+      const result = worker(...args);
+      if (isIterator(result)) {
+        yield* result;
+      }
     } catch (error) {
       handleUncaughtError(error);
     }
