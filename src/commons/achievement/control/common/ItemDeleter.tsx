@@ -14,7 +14,7 @@ function ItemDeleter(props: ItemDeleterProps) {
 
   return (
     <>
-      <Tooltip content="Delete Achievement">
+      <Tooltip content="Delete Item">
         <Button icon={IconNames.TRASH} intent="danger" onClick={toggleOpen} />
       </Tooltip>
       <Dialog title="Confirm Delete" isOpen={isOpen} onClose={toggleOpen}>

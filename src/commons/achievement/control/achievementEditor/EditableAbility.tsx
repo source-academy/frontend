@@ -18,7 +18,7 @@ function EditableAbility(props: EditableAbilityProps) {
   );
 
   return (
-    <Tooltip content="Edit Ability">
+    <Tooltip content="Change Ability">
       <AbilitySelect
         items={Object.values(AchievementAbility)}
         onItemSelect={changeAbility}
