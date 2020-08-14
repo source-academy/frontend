@@ -3,11 +3,11 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import EditableGoalIds from './editableOptions/EditableGoalIds';
-import EditablePosition from './editableOptions/EditablePosition';
-import EditablePrerequisiteIds from './editableOptions/EditablePrerequisiteIds';
+import EditableGoalIds from './achievementSettings/EditableGoalIds';
+import EditablePosition from './achievementSettings/EditablePosition';
+import EditablePrerequisiteIds from './achievementSettings/EditablePrerequisiteIds';
 
-type EditableSettingsProps = {
+type AchievementSettingsProps = {
   id: number;
   cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
@@ -19,7 +19,7 @@ type EditableSettingsProps = {
   prerequisiteIds: number[];
 };
 
-function EditableSettings(props: EditableSettingsProps) {
+function AchievementSettings(props: AchievementSettingsProps) {
   const {
     id,
     cardBackground,
@@ -73,4 +73,4 @@ function EditableSettings(props: EditableSettingsProps) {
   );
 }
 
-export default EditableSettings;
+export default AchievementSettings;

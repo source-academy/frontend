@@ -68,18 +68,23 @@ function EditableGoal(props: EditableGoalProps) {
 
   return (
     <li className="editable-goal">
-      <h3>{id}</h3>
-      {isDirty ? (
-        <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
-      ) : (
-        <ItemDeleter deleteItem={handleDeleteGoal} />
-      )}
-      <EditableText placeholder="Enter goal text here" value={text} onChange={handleChangeText} />
-      <EditableText
-        placeholder="Enter goal meta here"
-        value={JSON.stringify(meta)}
-        onChange={handleChangeMeta}
-      />
+      <div className="action-button">
+        {isDirty ? (
+          <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
+        ) : (
+          <ItemDeleter deleteItem={handleDeleteGoal} />
+        )}
+      </div>
+      <h3>
+        <EditableText placeholder="Enter goal text here" value={text} onChange={handleChangeText} />
+      </h3>
+      <div className="meta">
+        <EditableText
+          placeholder="Enter goal meta here"
+          value={JSON.stringify(meta)}
+          onChange={handleChangeMeta}
+        />
+      </div>
     </li>
   );
 }

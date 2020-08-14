@@ -28,7 +28,7 @@
     margin: 0 auto;
     min-width: max-content;
     overflow: hidden;
-    padding: $default-spacing;
+    padding: $default-spacing $default-spacing / 2;
   }
 
   // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
@@ -343,7 +343,18 @@
         background: white;
         display: flex;
         flex-direction: column;
+        padding: $content-spacing;
         width: $card-width;
+
+        .action-button {
+          align-items: center;
+          display: flex;
+          justify-content: center;
+        }
+
+        h3 {
+          margin: 0.5em 0 0 0;
+        }
       }
     }
   }

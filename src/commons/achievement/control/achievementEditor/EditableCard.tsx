@@ -9,9 +9,9 @@ import {
 } from '../../../../features/achievement/AchievementTypes';
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
+import AchievementSettings from './AchievementSettings';
 import EditableAbility from './EditableAbility';
 import EditableDate from './EditableDate';
-import EditableSettings from './EditableSettings';
 import EditableTitle from './EditableTitle';
 import EditableView from './EditableView';
 
@@ -169,7 +169,7 @@ function EditableCard(props: EditableCardProps) {
 
       <div className="content-button">
         <EditableView view={view} changeView={handleChangeView} />
-        <EditableSettings
+        <AchievementSettings
           id={id}
           cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}

@@ -6,7 +6,7 @@ import {
 } from '../../../../features/achievement/AchievementTypes';
 
 export const viewTemplate: AchievementView = {
-  canvasUrl: `${canvasUrl}/annotated-canvas.png`,
+  canvasUrl: `${canvasUrl}/default-canvas.png`,
   description: 'View Description here',
   completionText: 'Completion Text here'
 };
@@ -19,6 +19,6 @@ export const achievementTemplate: AchievementItem = {
   position: 0,
   prerequisiteIds: [],
   goalIds: [],
-  cardTileUrl: `${cardTileUrl}/annotated-tile.png`,
+  cardTileUrl: `${cardTileUrl}/default-tile.png`,
   view: viewTemplate
 };
