@@ -40,7 +40,7 @@ function GoalEditor(props: GoalEditorProps) {
 
   return (
     <div className="goal-editor">
-      <div className="goal-command">
+      <div className="command">
         <GoalAdder allowNewId={allowNewId} setNewId={setNewId} />
       </div>
       <ul className="goal-container">

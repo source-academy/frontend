@@ -337,7 +337,14 @@
 
     .goal-container {
       @extend %container;
-      background: white;
+      width: $card-width + $default-spacing * 2;
+
+      .editable-goal {
+        background: white;
+        display: flex;
+        flex-direction: column;
+        width: $card-width;
+      }
     }
   }
 
