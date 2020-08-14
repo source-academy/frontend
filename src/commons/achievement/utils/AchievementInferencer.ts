@@ -48,11 +48,14 @@ class AchievementNode {
 class AchievementInferencer {
   private nodeList: Map<number, AchievementNode> = new Map(); // key = achievementId, value = AchievementNode
   private goalList: Map<number, AchievementGoal> = new Map(); // key = goalId, value = AchievementGoal
+  private textToId: Map<string, number> = new Map(); // key = goalText, value = goalId
+  private titleToId: Map<string, number> = new Map(); // key = achievementTitle, value = achievementId
 
   constructor(achievements: AchievementItem[], goals: AchievementGoal[]) {
     this.nodeList = this.constructNodeList(achievements);
     this.goalList = this.constructGoalList(goals);
     this.processNodes();
+    this.processGoals();
   }
 
   /**
@@ -144,6 +147,9 @@ class AchievementInferencer {
     definition.id = newId;
     this.goalList.set(newId, { ...definition, ...defaultGoalProgress });
 
+    // finally, process the goalList
+    this.processGoals();
+
     return newId;
   }
 
@@ -170,8 +176,9 @@ class AchievementInferencer {
     // directly replace the GoalDefinition in goalList
     this.goalList.set(definition.id, { ...definition, ...defaultGoalProgress });
 
-    // then, process the nodeList
+    // then, process the nodeList and goalList
     this.processNodes();
+    this.processGoals();
   }
 
   /**
@@ -224,8 +231,9 @@ class AchievementInferencer {
     // then, remove the goalId from all achievement goalIds
     this.nodeList.forEach(node => sanitizeNode(node));
 
-    // finally, process the nodeList
+    // finally, process the nodeList and goalList
     this.processNodes();
+    this.processGoals();
   }
 
   /**
@@ -270,6 +278,24 @@ class AchievementInferencer {
     }
 
     return childGoalIds.map(goalId => this.goalList.get(goalId)!);
+  }
+
+  /**
+   * Returns the Goal Id associate to the Goal Text
+   *
+   * @param text goalText
+   */
+  public getIdByText(text: string) {
+    return this.textToId.get(text)!;
+  }
+
+  /**
+   * Returns the Achievement Id associate to the Achievement Title
+   *
+   * @param title achievementTitle
+   */
+  public getIdByTitle(title: string) {
+    return this.titleToId.get(title)!;
   }
 
   /**
@@ -384,6 +410,16 @@ class AchievementInferencer {
       this.generateMaxExp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
+
+      const { title, id } = node.achievement;
+      this.titleToId.set(title, id);
+    });
+  }
+
+  private processGoals() {
+    this.goalList.forEach(goal => {
+      const { text, id } = goal;
+      this.textToId.set(text, id);
     });
   }
 

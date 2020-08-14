@@ -52,27 +52,21 @@ function EditableSettings(props: EditableSettingsProps) {
             onChange={changeCardBackground}
             value={cardBackground}
           />
-          <h3>
-            Insert before position
-            <EditablePosition changePosition={changePosition} position={position} />
-          </h3>
+          <h3>Insert before position</h3>
           <p>Note: Select position 0 to hide achievement</p>
-          <h3>
-            Prerequisite Ids
-            <EditablePrerequisiteIds
-              availableIds={inferencer.listAvailablePrerequisiteIds(id)}
-              changePrerequisiteIds={changePrerequisiteIds}
-              prerequisiteIds={prerequisiteIds}
-            />
-          </h3>
-          <h3>
-            Goal Ids
-            <EditableGoalIds
-              allGoalIds={inferencer.getAllGoalIds()}
-              changeGoalIds={changeGoalIds}
-              goalIds={goalIds}
-            />
-          </h3>
+          <EditablePosition changePosition={changePosition} position={position} />
+          <h3>Prerequisites</h3>
+          <EditablePrerequisiteIds
+            availableIds={inferencer.listAvailablePrerequisiteIds(id)}
+            changePrerequisiteIds={changePrerequisiteIds}
+            prerequisiteIds={prerequisiteIds}
+          />
+          <h3>Goals</h3>
+          <EditableGoalIds
+            allGoalIds={inferencer.getAllGoalIds()}
+            changeGoalIds={changeGoalIds}
+            goalIds={goalIds}
+          />
         </div>
       </Dialog>
     </>

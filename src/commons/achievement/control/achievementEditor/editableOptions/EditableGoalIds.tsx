@@ -1,7 +1,8 @@
 import { MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
 import { without } from 'lodash';
-import React from 'react';
+import React, { useContext } from 'react';
+import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditableGoalIdsProps = {
   allGoalIds: number[];
@@ -12,9 +13,13 @@ type EditableGoalIdsProps = {
 function EditableGoalIds(props: EditableGoalIdsProps) {
   const { allGoalIds, changeGoalIds, goalIds } = props;
 
+  const inferencer = useContext(AchievementContext);
+  const getId = inferencer.getIdByText;
+  const getText = (id: number) => inferencer.getGoalDefinition(id).text;
+
   const GoalSelect = MultiSelect.ofType<number>();
   const goalRenderer: ItemRenderer<number> = (id, { handleClick }) => (
-    <MenuItem key={id} onClick={handleClick} text={id} />
+    <MenuItem key={id} onClick={handleClick} text={getText(id)} />
   );
 
   const selectedGoals = new Set(goalIds);
@@ -39,8 +44,8 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
       noResults={<MenuItem disabled={true} text="No available goal" />}
       onItemSelect={handleSelectGoal}
       selectedItems={[...selectedGoals]}
-      tagInputProps={{ onRemove: id => handleRemoveGoal(Number(id)) }}
-      tagRenderer={String}
+      tagInputProps={{ onRemove: text => handleRemoveGoal(getId(text)) }}
+      tagRenderer={getText}
     />
   );
 }

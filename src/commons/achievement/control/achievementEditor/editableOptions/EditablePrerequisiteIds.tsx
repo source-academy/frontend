@@ -13,11 +13,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
   const { availableIds, changePrerequisiteIds, prerequisiteIds } = props;
 
   const inferencer = useContext(AchievementContext);
-  const titleToId: Map<string, number> = new Map();
-  inferencer
-    .getAllAchievements()
-    .forEach(achievement => titleToId.set(achievement.title, achievement.id));
-  const getId = (title: string) => titleToId.get(title)!;
+  const getId = inferencer.getIdByTitle;
   const getTitle = (id: number) => inferencer.getAchievement(id).title;
 
   const PrerequisiteSelect = MultiSelect.ofType<number>();
