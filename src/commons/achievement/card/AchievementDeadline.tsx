@@ -28,9 +28,7 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
   return (
     <div className="deadline">
       <Icon icon={IconNames.STOPWATCH} color={deadlineColor} />
-      <span style={{ color: deadlineColor }}>
-        <p>{prettifyDeadline(deadline)}</p>
-      </span>
+      <p style={{ color: deadlineColor }}>{prettifyDeadline(deadline)}</p>
     </div>
   );
 }

@@ -18,7 +18,7 @@ function ItemDeleter(props: ItemDeleterProps) {
         <Button icon={IconNames.TRASH} intent="danger" onClick={toggleOpen} />
       </Tooltip>
       <Dialog title="Confirm Delete" isOpen={isOpen} onClose={toggleOpen}>
-        <p> Are you sure you want to delete this item?</p>
+        <p style={{ padding: '0.5em' }}>Are you sure you want to delete this item?</p>
 
         <Button text="Delete" className="editor-button" intent="danger" onClick={deleteItem} />
       </Dialog>

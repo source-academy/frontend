@@ -30,7 +30,8 @@ function EditableDate(props: EditableDateProps) {
         style={{
           background: '#fff',
           maxWidth: 'max-content',
-          padding: '1em'
+          padding: '1em',
+          textAlign: 'center'
         }}
       >
         <DatePicker

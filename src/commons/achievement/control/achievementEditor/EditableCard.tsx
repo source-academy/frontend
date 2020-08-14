@@ -162,8 +162,8 @@ function EditableCard(props: EditableCardProps) {
         </div>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
-          <EditableDate type="Release" date={deadline} changeDate={handleChangeDeadline} />
-          <EditableDate type="Deadline" date={release} changeDate={handleChangeRelease} />
+          <EditableDate type="Release" date={release} changeDate={handleChangeRelease} />
+          <EditableDate type="Deadline" date={deadline} changeDate={handleChangeDeadline} />
         </div>
       </div>
 

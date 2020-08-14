@@ -44,29 +44,36 @@ function EditableSettings(props: EditableSettingsProps) {
       </Tooltip>
 
       <Dialog title="More Settings" icon={IconNames.WRENCH} isOpen={isOpen} onClose={toggleOpen}>
-        <h3>Card Background</h3>
-        <EditableText
-          placeholder="Enter image URL here"
-          multiline={true}
-          onChange={changeCardBackground}
-          value={cardBackground}
-        />
-        <h3>
-          Insert before position:
-          <EditablePosition changePosition={changePosition} position={position} />
-        </h3>
-        <h3>Prerequisite Ids</h3>
-        <EditablePrerequisiteIds
-          availableIds={inferencer.listAvailablePrerequisiteIds(id)}
-          changePrerequisiteIds={changePrerequisiteIds}
-          prerequisiteIds={prerequisiteIds}
-        />
-        <h3>Goal Ids</h3>
-        <EditableGoalIds
-          allGoalIds={inferencer.getAllGoalIds()}
-          changeGoalIds={changeGoalIds}
-          goalIds={goalIds}
-        />
+        <div style={{ padding: '0 0.5em' }}>
+          <h3>Card Background</h3>
+          <EditableText
+            placeholder="Enter image URL here"
+            multiline={true}
+            onChange={changeCardBackground}
+            value={cardBackground}
+          />
+          <h3>
+            Insert before position
+            <EditablePosition changePosition={changePosition} position={position} />
+          </h3>
+          <p>Note: Select position 0 to hide achievement</p>
+          <h3>
+            Prerequisite Ids
+            <EditablePrerequisiteIds
+              availableIds={inferencer.listAvailablePrerequisiteIds(id)}
+              changePrerequisiteIds={changePrerequisiteIds}
+              prerequisiteIds={prerequisiteIds}
+            />
+          </h3>
+          <h3>
+            Goal Ids
+            <EditableGoalIds
+              allGoalIds={inferencer.getAllGoalIds()}
+              changeGoalIds={changeGoalIds}
+              goalIds={goalIds}
+            />
+          </h3>
+        </div>
       </Dialog>
     </>
   );
