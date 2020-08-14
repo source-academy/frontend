@@ -1,4 +1,4 @@
-import { Button, Dialog } from '@blueprintjs/core';
+import { Button, Dialog, Tooltip } from '@blueprintjs/core';
 import { DatePicker } from '@blueprintjs/datetime';
 import React, { useState } from 'react';
 import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
@@ -15,11 +15,13 @@ function EditableDate(props: EditableDateProps) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
-  const buttonText = date === undefined ? `Set ${type}` : `${type}: ${prettifyDate(date)}`;
+  const hoverText = date === undefined ? `No ${type}` : `${prettifyDate(date)}`;
 
   return (
-    <div className="deadline">
-      <Button onClick={toggleOpen}>{buttonText}</Button>
+    <>
+      <Tooltip content={hoverText}>
+        <Button minimal={true} outlined={true} onClick={toggleOpen}>{`${type}`}</Button>
+      </Tooltip>
       <Dialog
         title={`Edit ${type}`}
         isCloseButtonShown={false}
@@ -38,7 +40,7 @@ function EditableDate(props: EditableDateProps) {
         />
         <Button text={`Remove ${type}`} onClick={() => changeDate(undefined)} />
       </Dialog>
-    </div>
+    </>
   );
 }
 

@@ -1,4 +1,5 @@
 import { Button } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
@@ -18,9 +19,10 @@ function AchievementAdder(props: AchievementAdderProps) {
 
   return (
     <Button
-      className="main-adder"
+      className="command-button"
+      icon={IconNames.NEW_OBJECT}
       onClick={handleAddAchievement}
-      text="Add A New Item"
+      text="Create Achievement"
       disabled={!allowNewId}
     />
   );

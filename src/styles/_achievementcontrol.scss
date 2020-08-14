@@ -1,4 +1,16 @@
 .AchievementControl {
+  // Canvas aspect ratio 2:1
+  $canvas-height: 18em;
+  $canvas-width: 36em;
+  // Card aspect ratio 2:1
+  $card-height: 5em;
+  $card-width: 30em;
+  // View aspect ratio 18:25
+  $view-height: 50em;
+  $view-width: $canvas-width;
+
+  $canvas-spacing: 0.3em;
+  $content-spacing: 0.5em;
   $default-spacing: 1em;
 
   background: black url(#{$achievement-assets}/background.png) center/cover no-repeat fixed;
@@ -20,17 +32,25 @@
   }
 
   // Command buttons on top of the interfaces, e.g. Add A Task, Publish Changes, etc.
-  %command {
+  .command {
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    .command-button {
+      display: flex;
+      height: 1em;
+      margin: $default-spacing;
+    }
   }
 
   // Unordered list container, has a vertical scrollbar
   %container {
+    align-items: center;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
+    height: 90%;
     list-style-type: none;
     margin: 0;
     overflow-y: auto;
@@ -48,35 +68,10 @@
   }
 
   .achievement-preview {
-    $canvas-spacing: 0.3em;
-    $content-spacing: 0.5em;
-    // Canvas aspect ratio 2:1
-    $canvas-height: 18em;
-    $canvas-width: 36em;
-    // Card aspect ratio 2:1
-    $card-height: 5em;
-    $card-width: 30em;
-    // View aspect ratio 18:25
-    $view-height: 50em;
-    $view-width: $canvas-width;
-
     @extend %platform;
 
-    .command {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-
-      .command-button {
-        display: flex;
-        height: 1em;
-        margin: $default-spacing;
-      }
-    }
     .preview-container {
       @extend %container;
-      align-items: center;
-      height: 90%;
       width: $view-width + $default-spacing * 2;
 
       .no-view {
@@ -287,122 +282,51 @@
   .achievement-editor {
     @extend %platform;
 
-    .achievement-command {
-      @extend %command;
-    }
-
     .achievement-container {
       @extend %container;
+      width: $card-width + $default-spacing * 2;
 
-      .editable-achievement {
-        width: 90%;
-        background-color: #d9d9d9;
-
-        height: 20%;
-        margin-bottom: 10px;
-
+      .editable-card {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
+        height: $card-height;
+        width: $card-width;
 
-        .top-bar {
-          display: flex;
-          flex-direction: row;
-          justify-content: space-between;
-        }
-
-        .bp3-dialog-container {
+        .action-button {
           align-items: center;
+          display: flex;
+          flex-direction: row;
+          height: $card-height;
           justify-content: center;
+          width: $card-height;
+        }
 
-          .goal {
+        .content {
+          display: flex;
+          flex-direction: column;
+          height: $card-height;
+          width: $card-width * 0.64;
+
+          .title {
+            align-items: center;
             display: flex;
-            flex-direction: row;
-            justify-content: space-evenly;
+            height: $card-height * 0.5;
 
-            .goal-medal {
-              display: flex;
-              flex-direction: column;
-              flex-basis: 25%;
-
-              text-align: center;
-              align-items: center;
-              justify-content: center;
-            }
-
-            .goal-text {
-              display: flex;
-              text-align: center;
-              align-items: center;
-              justify-content: center;
+            h3 {
+              max-width: 100%;
             }
           }
 
-          .view-editor {
-            width: 100%;
+          .details {
             display: flex;
-            justify-content: center;
-            text-align: center;
-
-            .background-card {
-              max-width: 100%;
-              background-color: #333e50;
-            }
-
-            .view-img {
-              max-width: 100%;
-            }
           }
         }
 
-        .main {
+        .content-button {
+          align-items: center;
           display: flex;
-          flex-direction: row;
-          flex-basis: 80%;
-
-          .dropdown {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-basis: 10%;
-          }
-
-          .icon {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-basis: 10%;
-          }
-
-          .display {
-            display: flex;
-            justify-content: center;
-            margin-left: 10%;
-            width: 100%;
-            flex-direction: column;
-
-            .details {
-              display: flex;
-              flex-direction: row;
-              justify-content: space-evenly;
-
-              .ability {
-                flex-basis: 40%;
-              }
-
-              .deadline {
-                display: flex;
-                flex-direction: row;
-                flex-basis: 30%;
-              }
-
-              .exp {
-                display: flex;
-                margin-left: 5%;
-                flex-direction: row;
-                flex-basis: 30%;
-              }
-            }
-          }
+          margin: $default-spacing;
+          margin-left: auto;
         }
       }
     }
@@ -415,15 +339,6 @@
       @extend %container;
       background: white;
     }
-  }
-
-  .bp3-dialog-container {
-    align-items: flex-start;
-    justify-content: flex-start;
-  }
-
-  .panel-disabler {
-    pointer-events: none;
   }
 
   // Scroll Bar

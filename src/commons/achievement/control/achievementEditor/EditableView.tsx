@@ -1,7 +1,7 @@
-import { Button, Dialog, EditableText } from '@blueprintjs/core';
+import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import { AchievementView } from 'src/features/achievement/AchievementTypes';
-
 type EditableViewProps = {
   view: AchievementView;
   changeView: any;
@@ -24,10 +24,12 @@ function EditableView(props: EditableViewProps) {
     changeView({ ...view, completionText: completionText });
 
   return (
-    <div className="editable-view">
-      <Button text="Edit View" onClick={toggleOpen} />
+    <>
+      <Tooltip content="Edit View">
+        <Button icon={IconNames.WIDGET_HEADER} onClick={toggleOpen} />
+      </Tooltip>
 
-      <Dialog title="Edit View" isOpen={isOpen} onClose={toggleOpen}>
+      <Dialog title="Edit View" icon={IconNames.WIDGET_HEADER} isOpen={isOpen} onClose={toggleOpen}>
         <h3>View Image</h3>
         <EditableText
           placeholder="Enter image URL here"
@@ -50,7 +52,7 @@ function EditableView(props: EditableViewProps) {
           value={completionText}
         />
       </Dialog>
-    </div>
+    </>
   );
 }
 

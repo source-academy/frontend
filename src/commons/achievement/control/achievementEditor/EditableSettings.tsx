@@ -1,4 +1,5 @@
-import { Button, Dialog, EditableText } from '@blueprintjs/core';
+import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
@@ -6,7 +7,7 @@ import EditableGoalIds from './editableOptions/EditableGoalIds';
 import EditablePosition from './editableOptions/EditablePosition';
 import EditablePrerequisiteIds from './editableOptions/EditablePrerequisiteIds';
 
-type EditableOptionsProps = {
+type EditableSettingsProps = {
   id: number;
   cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
@@ -18,7 +19,7 @@ type EditableOptionsProps = {
   prerequisiteIds: number[];
 };
 
-function EditableOptions(props: EditableOptionsProps) {
+function EditableSettings(props: EditableSettingsProps) {
   const {
     id,
     cardBackground,
@@ -37,10 +38,12 @@ function EditableOptions(props: EditableOptionsProps) {
   const toggleOpen = () => setOpen(!isOpen);
 
   return (
-    <div className="editable-tool">
-      <Button text="More Options" onClick={toggleOpen} />
+    <>
+      <Tooltip content="More Settings">
+        <Button icon={IconNames.WRENCH} onClick={toggleOpen} />
+      </Tooltip>
 
-      <Dialog title="More Options" isOpen={isOpen} onClose={toggleOpen}>
+      <Dialog title="More Settings" icon={IconNames.WRENCH} isOpen={isOpen} onClose={toggleOpen}>
         <h3>Card Background</h3>
         <EditableText
           placeholder="Enter image URL here"
@@ -65,8 +68,8 @@ function EditableOptions(props: EditableOptionsProps) {
           goalIds={goalIds}
         />
       </Dialog>
-    </div>
+    </>
   );
 }
 
-export default EditableOptions;
+export default EditableSettings;

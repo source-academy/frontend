@@ -40,7 +40,7 @@ function AchievementEditor(props: AchievementEditorProps) {
 
   return (
     <div className="achievement-editor">
-      <div className="achievement-command">
+      <div className="command">
         <AchievementAdder allowNewId={allowNewId} setNewId={setNewId} />
       </div>
       <ul className="achievement-container">

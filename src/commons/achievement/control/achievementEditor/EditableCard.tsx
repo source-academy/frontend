@@ -11,7 +11,7 @@ import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import EditableAbility from './EditableAbility';
 import EditableDate from './EditableDate';
-import EditableOptions from './EditableOptions';
+import EditableSettings from './EditableSettings';
 import EditableTitle from './EditableTitle';
 import EditableView from './EditableView';
 
@@ -142,15 +142,34 @@ function EditableCard(props: EditableCardProps) {
   };
 
   return (
-    <div
+    <li
       className="editable-card"
       style={{
         background: `url(${cardTileUrl}) center/cover`
       }}
     >
       <div className="action-button">
+        {isDirty ? (
+          <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
+        ) : (
+          <ItemDeleter deleteItem={handleDeleteAchievement} />
+        )}
+      </div>
+
+      <div className="content">
+        <div className="title">
+          <EditableTitle title={title} changeTitle={handleChangeTitle} />
+        </div>
+        <div className="details">
+          <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
+          <EditableDate type="Release" date={deadline} changeDate={handleChangeDeadline} />
+          <EditableDate type="Deadline" date={release} changeDate={handleChangeRelease} />
+        </div>
+      </div>
+
+      <div className="content-button">
         <EditableView view={view} changeView={handleChangeView} />
-        <EditableOptions
+        <EditableSettings
           id={id}
           cardBackground={cardTileUrl}
           changeCardBackground={handleChangeCardBackground}
@@ -162,28 +181,7 @@ function EditableCard(props: EditableCardProps) {
           prerequisiteIds={prerequisiteIds}
         />
       </div>
-
-      <div className="content">
-        <div className="heading">
-          <EditableTitle title={title} changeTitle={handleChangeTitle} />
-          <div className="status">
-            {isDirty ? (
-              <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
-            ) : (
-              <ItemDeleter deleteItem={handleDeleteAchievement} />
-            )}
-          </div>
-
-          <div className="details">
-            <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
-
-            <EditableDate type="Release" date={deadline} changeDate={handleChangeDeadline} />
-
-            <EditableDate type="Deadline" date={release} changeDate={handleChangeRelease} />
-          </div>
-        </div>
-      </div>
-    </div>
+    </li>
   );
 }
 
