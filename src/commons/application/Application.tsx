@@ -23,7 +23,8 @@ export type DispatchProps = {
   handleClearContext: (
     chapter: number,
     variant: Variant,
-    externalLibraryName: ExternalLibraryName
+    externalLibraryName: ExternalLibraryName,
+    shouldInitLibrary: boolean
   ) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -136,7 +137,7 @@ const parsePlayground = (props: ApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, variant, externalLibraryName);
+    props.handleClearContext(chapter, variant, externalLibraryName, true);
     props.handleExternalLibrarySelect(externalLibraryName);
     props.handleSetExecTime(execTime);
   }

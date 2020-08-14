@@ -191,12 +191,13 @@ test('beginClearContext generates correct action object', () => {
     globals: []
   };
 
-  const action = beginClearContext(library, playgroundWorkspace);
+  const action = beginClearContext(playgroundWorkspace, library, true);
   expect(action).toEqual({
     type: BEGIN_CLEAR_CONTEXT,
     payload: {
       library,
-      workspaceLocation: playgroundWorkspace
+      workspaceLocation: playgroundWorkspace,
+      shouldInitLibrary: true
     }
   });
 });

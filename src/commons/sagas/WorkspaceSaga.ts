@@ -81,26 +81,26 @@ export default function* WorkspaceSaga(): SagaIterator {
       return [prependCode, editorCode] as [string, string];
     });
 
-    const chapter: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
-    );
-    const symbols: string[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
-    const variant: Variant = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
-    );
+    const [chapter, execTime, symbols, externalLibraryName, globals, variant]: [
+      number,
+      number,
+      string[],
+      ExternalLibraryName,
+      Array<[string, any]>,
+      Variant
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].execTime,
+      state.workspaces[workspaceLocation].context.externalSymbols,
+      state.workspaces[workspaceLocation].externalLibrary,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].context.variant
+    ]);
     const library = {
       chapter,
       variant,
       external: {
-        name: ExternalLibraryName.NONE,
+        name: externalLibraryName,
         symbols
       },
       globals
@@ -108,7 +108,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
     // Clear the context, with the same chapter and externalSymbols as before.
-    yield put(actions.beginClearContext(library, workspaceLocation));
+    yield put(actions.beginClearContext(workspaceLocation, library, false));
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
@@ -339,33 +339,32 @@ export default function* WorkspaceSaga(): SagaIterator {
   });
 
   yield takeEvery(CHAPTER_SELECT, function* (action: ReturnType<typeof actions.chapterSelect>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const newChapter = action.payload.chapter;
-    const oldVariant = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
-    );
-    const newVariant = action.payload.variant;
-    const oldChapter = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
+    const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
+    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
+      Variant,
+      number,
+      string[],
+      Array<[string, any]>,
+      ExternalLibraryName
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.variant,
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].context.externalSymbols,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].externalLibrary
+    ]);
 
-    const symbols: string[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
     if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
         chapter: newChapter,
         variant: newVariant,
         external: {
-          name: ExternalLibraryName.NONE,
+          name: externalLibraryName,
           symbols
         },
         globals
       };
-      yield put(actions.beginClearContext(library, workspaceLocation));
+      yield put(actions.beginClearContext(workspaceLocation, library, false));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
       yield call(
@@ -390,17 +389,16 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(PLAYGROUND_EXTERNAL_SELECT, function* (
     action: ReturnType<typeof actions.externalLibrarySelect>
   ) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const chapter = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
-    const newExternalLibraryName = action.payload.externalLibraryName;
-    const oldExternalLibraryName = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
-    );
+    const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
+    const [chapter, globals, oldExternalLibraryName]: [
+      number,
+      Array<[string, any]>,
+      ExternalLibraryName
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].externalLibrary
+    ]);
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library = {
       chapter,
@@ -412,7 +410,7 @@ export default function* WorkspaceSaga(): SagaIterator {
     };
     if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield put(actions.beginClearContext(library, workspaceLocation));
+      yield put(actions.beginClearContext(workspaceLocation, library, true));
       yield put(actions.clearReplOutput(workspaceLocation));
       if (!action.payload.initialise) {
         yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
@@ -481,20 +479,22 @@ export default function* WorkspaceSaga(): SagaIterator {
     action: ReturnType<typeof actions.beginClearContext>
   ) {
     yield* checkWebGLAvailable();
-    const externalLibraryName = action.payload.library.external.name;
-    switch (externalLibraryName) {
-      case ExternalLibraryName.RUNES:
-        (window as any).loadLib('RUNES');
-        (window as any).getReadyWebGLForCanvas('3d');
-        (window as any).getReadyStringifyForRunes(stringify);
-        break;
-      case ExternalLibraryName.CURVES:
-        (window as any).loadLib('CURVES');
-        (window as any).getReadyWebGLForCanvas('curve');
-        break;
-      case ExternalLibraryName.MACHINELEARNING:
-        (window as any).loadLib('MACHINELEARNING');
-        break;
+    if (action.payload.shouldInitLibrary) {
+      const externalLibraryName = action.payload.library.external.name;
+      switch (externalLibraryName) {
+        case ExternalLibraryName.RUNES:
+          (window as any).loadLib('RUNES');
+          (window as any).getReadyWebGLForCanvas('3d');
+          (window as any).getReadyStringifyForRunes(stringify);
+          break;
+        case ExternalLibraryName.CURVES:
+          (window as any).loadLib('CURVES');
+          (window as any).getReadyWebGLForCanvas('curve');
+          break;
+        case ExternalLibraryName.MACHINELEARNING:
+          (window as any).loadLib('MACHINELEARNING');
+          break;
+      }
     }
     const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {
