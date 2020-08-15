@@ -1,3 +1,4 @@
+import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 
@@ -12,7 +13,6 @@ import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
 import EditableAbility from './EditableAbility';
 import EditableDate from './EditableDate';
-import EditableTitle from './EditableTitle';
 import EditableView from './EditableView';
 
 type EditableCardProps = {
@@ -157,9 +157,13 @@ function EditableCard(props: EditableCardProps) {
       </div>
 
       <div className="content">
-        <div className="title">
-          <EditableTitle title={title} changeTitle={handleChangeTitle} />
-        </div>
+        <h3 className="title">
+          <EditableText
+            placeholder="Enter your title here"
+            value={title}
+            onChange={handleChangeTitle}
+          />
+        </h3>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
           <EditableDate type="Release" date={release} changeDate={handleChangeRelease} />

@@ -94,6 +94,7 @@
           display: flex;
           flex-direction: column;
           height: $canvas-height;
+          text-align: center;
           width: $canvas-width;
 
           h1 {
@@ -110,7 +111,6 @@
             color: yellow;
             font-size: 0.85em;
             margin: auto auto 1em;
-            text-align: center;
             width: 80%;
           }
         }
@@ -305,16 +305,13 @@
           display: flex;
           flex-direction: column;
           height: $card-height;
+          justify-content: space-evenly;
           width: $card-width * 0.64;
 
           .title {
             align-items: center;
             display: flex;
-            height: $card-height * 0.5;
-
-            h3 {
-              max-width: 100%;
-            }
+            margin: 0;
           }
 
           .details {

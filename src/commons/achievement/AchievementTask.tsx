@@ -1,3 +1,4 @@
+import { Collapse } from '@blueprintjs/core';
 import React, { useContext, useState } from 'react';
 
 import {
@@ -73,7 +74,7 @@ function AchievementTask(props: AchievementTaskProps) {
             shouldRender={shouldRender(id)}
             toggleDropdown={toggleDropdown}
           />
-          {isDropdownOpen && (
+          <Collapse isOpen={isDropdownOpen} keepChildrenMounted={true}>
             <div className="prerequisite-container">
               {prerequisiteIds.map(prerequisiteId => (
                 <div className="prerequisite" key={prerequisiteId}>
@@ -92,7 +93,7 @@ function AchievementTask(props: AchievementTaskProps) {
                 </div>
               ))}
             </div>
-          )}
+          </Collapse>
         </li>
       )}
     </>
