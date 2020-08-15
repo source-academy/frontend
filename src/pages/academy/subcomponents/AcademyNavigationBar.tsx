@@ -75,7 +75,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
       >
         <Icon icon={IconNames.MANUAL} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Practical</div>
+        <div className="navbar-button-text hidden-xs hidden-sm">Other</div>
       </NavLink>
     </NavbarGroup>
     {props.role === Role.Admin || props.role === Role.Staff ? (
