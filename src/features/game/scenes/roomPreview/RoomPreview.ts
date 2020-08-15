@@ -272,20 +272,19 @@ export default class RoomPreview extends Phaser.Scene {
    * progression.
    */
   private getDefaultBackgroundKey() {
-    const completedAssessmentIds = this.getUserStateManager().getAssessments().reverse();
-
     // Once reversed, the first element is the submitted assessment with the most recent close date
+    const completedAssessmentIds = this.getUserStateManager().getAssessments().reverse();
     const backgroundMapping = SourceAcademyGame.getInstance().getRoomPreviewMapping();
-    let backgroundKey;
+
+    // Iterative search for assessment with valid mapping
     for (let i = 0; i < completedAssessmentIds.length; i++) {
-      backgroundKey = backgroundMapping.get(completedAssessmentIds[i]);
-      if (backgroundKey) return completedAssessmentIds[i];
+      if (backgroundMapping.has(completedAssessmentIds[i])) {
+        return completedAssessmentIds[i];
+      }
     }
 
     // If there is no valid mapping, we use default background image
-    if (!backgroundKey) backgroundKey = ImageAssets.sourceCrashedPod.key;
-
-    return backgroundKey;
+    return ImageAssets.sourceCrashedPod.key;
   }
 
   /**
