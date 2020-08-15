@@ -2,10 +2,11 @@ import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
-import { GoalDefinition } from 'src/features/achievement/AchievementTypes';
+import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
+import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
   id: number;
@@ -57,8 +58,7 @@ function EditableGoal(props: EditableGoalProps) {
     setIsDirty(true);
   };
 
-  const handleChangeMeta = (metaString: string) => {
-    const meta = JSON.parse(metaString);
+  const handleChangeMeta = (meta: GoalMeta) => {
     setEditableGoal({
       ...editableGoal,
       meta: meta
@@ -79,11 +79,7 @@ function EditableGoal(props: EditableGoalProps) {
         <EditableText placeholder="Enter goal text here" value={text} onChange={handleChangeText} />
       </h3>
       <div className="meta">
-        <EditableText
-          placeholder="Enter goal meta here"
-          value={JSON.stringify(meta)}
-          onChange={handleChangeMeta}
-        />
+        <EditableMeta meta={meta} changeMeta={handleChangeMeta} />
       </div>
     </li>
   );
