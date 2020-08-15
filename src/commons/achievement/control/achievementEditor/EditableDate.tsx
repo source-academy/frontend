@@ -23,14 +23,14 @@ function EditableDate(props: EditableDateProps) {
         <Button minimal={true} outlined={true} onClick={toggleOpen}>{`${type}`}</Button>
       </Tooltip>
       <Dialog
-        title={`Edit ${type}`}
+        title={`${type}`}
         isCloseButtonShown={false}
         isOpen={isOpen}
         onClose={toggleOpen}
         style={{
           background: '#fff',
           maxWidth: 'max-content',
-          padding: '1em',
+          padding: '0.25em',
           textAlign: 'center'
         }}
       >
