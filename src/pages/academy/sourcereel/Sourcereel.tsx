@@ -101,7 +101,7 @@ export type StateProps = {
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   highlightedLines: HighlightedLines[];
   inputToApply: Input | null;
   isDebugging: boolean;
@@ -283,7 +283,10 @@ class Sourcereel extends React.Component<SourcereelProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
+        externalLibrary: this.props.externalLibraryName
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {

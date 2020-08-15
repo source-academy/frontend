@@ -1,5 +1,6 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 import {
   CodeOutput,
@@ -41,7 +42,10 @@ test('Repl renders correctly', () => {
     handleReplEval: () => {},
     handleReplOutputClear: () => {},
     output: [mockResultOutput, mockCodeOutput, mockErrorOutput, mockRunningOutput],
-    replValue: ''
+    replValue: '',
+    sourceChapter: 1,
+    sourceVariant: 'default' as const,
+    externalLibrary: ExternalLibraryName.NONE
   };
   const app = <Repl {...props} />;
   const tree = shallow(app);

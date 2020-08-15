@@ -42,9 +42,11 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleClearContext: (
         chapter: number,
         variant: Variant,
-        externalLibraryName: ExternalLibraryName
+        externalLibraryName: ExternalLibraryName,
+        shouldInitLibrary: boolean
       ) =>
         beginClearContext(
+          workspaceLocation,
           {
             chapter,
             variant,
@@ -54,7 +56,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
             },
             globals: []
           },
-          workspaceLocation
+          shouldInitLibrary
         ),
       handleEditorValueChange: (val: string) => updateEditorValue(val, workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>

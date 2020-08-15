@@ -45,7 +45,9 @@ import {
 } from '../../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
+  CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
+  CLEAR_REPL_OUTPUT,
   ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
@@ -119,7 +121,7 @@ describe('EVAL_EDITOR', () => {
       expectSaga(workspaceSaga)
         .withState(newDefaultState)
         .put(beginInterruptExecution(workspaceLocation))
-        .put(beginClearContext(library, workspaceLocation))
+        .put(beginClearContext(workspaceLocation, library, false))
         .put(clearReplOutput(workspaceLocation))
         // calls evalCode here with the prepend in elevated Context: silent run
         .call.like({
@@ -343,7 +345,7 @@ describe('EVAL_TESTCASE', () => {
         .withState(newDefaultState)
         // Should not interrupt execution, clear context or clear REPL
         .not.put(beginInterruptExecution(workspaceLocation))
-        .not.put(beginClearContext(library, workspaceLocation))
+        .not.put(beginClearContext(workspaceLocation, library, false))
         .not.put(clearReplOutput(workspaceLocation))
         // Expect it to shard a new privileged context here and execute chunks in order
         // calls evalCode here with the prepend in elevated Context: silent run
@@ -424,7 +426,7 @@ describe('CHAPTER_SELECT', () => {
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .put(beginClearContext(library, workspaceLocation))
+      .put(beginClearContext(workspaceLocation, library, false))
       .put(clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
       .dispatch({
@@ -437,23 +439,13 @@ describe('CHAPTER_SELECT', () => {
   test('does not call beginClearContext, clearReplOutput and showSuccessMessage when oldChapter === newChapter and oldVariant === newVariant', () => {
     const newChapter = 4;
     const newVariant: Variant = 'default';
-    const library: Library = {
-      chapter: newChapter,
-      variant: newVariant,
-      external: {
-        name: 'NONE' as ExternalLibraryName,
-        symbols: context.externalSymbols
-      },
-      globals
-    };
-
     const newDefaultState = generateDefaultState(workspaceLocation, { context, globals });
 
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .not.put(beginClearContext(library, workspaceLocation))
-      .not.put(clearReplOutput(workspaceLocation))
-      .not.call(showSuccessMessage, `Switched to Source \xa7${newChapter}`, 1000)
+      .not.put.actionType(BEGIN_CLEAR_CONTEXT)
+      .not.put.actionType(CLEAR_REPL_OUTPUT)
+      .not.call.fn(showSuccessMessage)
       .dispatch({
         type: CHAPTER_SELECT,
         payload: { chapter: newChapter, variant: newVariant, workspaceLocation }
@@ -505,7 +497,7 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
       .put(changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .put(beginClearContext(library, workspaceLocation))
+      .put(beginClearContext(workspaceLocation, library, true))
       .put(clearReplOutput(workspaceLocation))
       .call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
       .dispatch({
@@ -521,29 +513,18 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
   test('does not call the above when oldExternalLibraryName === newExternalLibraryName', () => {
     const oldExternalLibraryName = ExternalLibraryName.RUNES;
     const newExternalLibraryName = ExternalLibraryName.RUNES;
-
     const newDefaultState = generateDefaultState(workspaceLocation, {
       context,
       globals,
       externalLibrary: oldExternalLibraryName
     });
 
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library: Library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
-
     return expectSaga(workspaceSaga)
       .withState(newDefaultState)
-      .not.put(changeExternalLibrary(newExternalLibraryName, workspaceLocation))
-      .not.put(beginClearContext(library, workspaceLocation))
-      .not.put(clearReplOutput(workspaceLocation))
-      .not.call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000)
+      .not.put.actionType(CHANGE_EXTERNAL_LIBRARY)
+      .not.put.actionType(BEGIN_CLEAR_CONTEXT)
+      .not.put.actionType(CLEAR_REPL_OUTPUT)
+      .not.call.fn(showSuccessMessage)
       .dispatch({
         type: PLAYGROUND_EXTERNAL_SELECT,
         payload: {
@@ -626,7 +607,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
       .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
-        payload: { library, workspaceLocation }
+        payload: { library, workspaceLocation, shouldInitLibrary: true }
       })
       .silentRun()
       .then(() => {
@@ -655,7 +636,7 @@ describe('BEGIN_CLEAR_CONTEXT', () => {
       .put.like({ action: endClearContext(library, workspaceLocation) })
       .dispatch({
         type: BEGIN_CLEAR_CONTEXT,
-        payload: { library, workspaceLocation }
+        payload: { library, workspaceLocation, shouldInitLibrary: true }
       })
       .silentRun()
       .then(() => {

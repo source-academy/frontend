@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { mockAchievements, mockGoals } from 'src/commons/mocks/AchievementMocks';
+import { AchievementGoal, AchievementItem } from 'src/features/achievement/AchievementTypes';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -15,8 +15,8 @@ function Game() {
   // TODO: Replace with actual achievements and goals
   // const achievements = useSelector((state: OverallState) => state.achievement.achievements);
   // const goals = useSelector((state: OverallState) => state.achievement.goals);
-  const achievements = mockAchievements;
-  const goals = mockGoals;
+  const achievements = [] as AchievementItem[];
+  const goals = [] as AchievementGoal[];
 
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);

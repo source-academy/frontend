@@ -485,6 +485,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: {
       sourceChapter: props.sourceChapter,
       sourceVariant: props.sourceVariant,
+      externalLibrary: props.externalLibraryName,
       output: props.output,
       replValue: props.replValue,
       handleBrowseHistoryDown: props.handleBrowseHistoryDown,

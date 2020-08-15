@@ -105,5 +105,7 @@ For more info on specific frontend projects, please consult [our wiki](https://g
 
 There are a few additional environment variables that are used when building and deploying for production.
 
-- `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
-- `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
+1. `REACT_APP_VERSION`: A version string shown in the console on app launch.
+1. `REACT_APP_ENVIRONMENT`: An environment string. Currently it is only used to differentiate different deploys in Sentry.
+1. `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
+1. `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
