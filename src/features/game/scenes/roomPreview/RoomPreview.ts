@@ -276,11 +276,10 @@ export default class RoomPreview extends Phaser.Scene {
 
     // Once reversed, the first element is the submitted assessment with the most recent close date
     const backgroundMapping = SourceAcademyGame.getInstance().getRoomPreviewMapping();
-
     let backgroundKey;
     for (let i = 0; i < completedAssessmentIds.length; i++) {
       backgroundKey = backgroundMapping.get(completedAssessmentIds[i]);
-      if (backgroundKey) break;
+      if (backgroundKey) return completedAssessmentIds[i];
     }
 
     // If there is no valid mapping, we use default background image
