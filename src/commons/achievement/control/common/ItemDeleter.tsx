@@ -1,28 +1,31 @@
-import { Button, Dialog, Tooltip } from '@blueprintjs/core';
+import { Button, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useState } from 'react';
+import React from 'react';
+import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
 type ItemDeleterProps = {
-  deleteItem: any;
+  deleteItem: () => void;
 };
 
 function ItemDeleter(props: ItemDeleterProps) {
   const { deleteItem } = props;
 
-  const [isOpen, setOpen] = useState<boolean>(false);
-  const toggleOpen = () => setOpen(!isOpen);
+  const handleConfirmDelete = async () => {
+    const confirm = await showSimpleConfirmDialog({
+      contents: 'Are you sure you want to delete?',
+      positiveIntent: 'danger',
+      positiveLabel: 'Yes, delete',
+      negativeLabel: 'No'
+    });
+    if (confirm) {
+      deleteItem();
+    }
+  };
 
   return (
-    <>
-      <Tooltip content="Delete Item">
-        <Button icon={IconNames.TRASH} intent="danger" onClick={toggleOpen} />
-      </Tooltip>
-      <Dialog title="Confirm Delete" isOpen={isOpen} onClose={toggleOpen}>
-        <p style={{ padding: '0.5em' }}>Are you sure you want to delete this item?</p>
-
-        <Button text="Delete" className="editor-button" intent="danger" onClick={deleteItem} />
-      </Dialog>
-    </>
+    <Tooltip content="Delete">
+      <Button icon={IconNames.TRASH} intent="danger" onClick={handleConfirmDelete} />
+    </Tooltip>
   );
 }
 
