@@ -1,3 +1,5 @@
+import { BooleanExpression } from './ExpressionTypes';
+
 export const BULK_UPDATE_ACHIEVEMENTS = 'BULK_UPDATE_ACHIEVEMENTS';
 export const BULK_UPDATE_GOALS = 'BULK_UPDATE_GOALS';
 export const EDIT_ACHIEVEMENT = 'EDIT_ACHIEVEMENT';
@@ -113,7 +115,7 @@ export type AssessmentMeta = {
 
 export type BinaryMeta = {
   type: GoalType.BINARY;
-  condition: string;
+  condition: BooleanExpression;
   maxExp: number;
 };
 

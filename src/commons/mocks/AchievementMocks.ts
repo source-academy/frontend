@@ -4,6 +4,7 @@ import {
   AchievementItem,
   GoalType
 } from '../../features/achievement/AchievementTypes';
+import { AND, EventTypes } from '../../features/achievement/ExpressionTypes';
 
 export const mockAchievements: AchievementItem[] = [
   {
@@ -232,15 +233,10 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Bonus for completing Colorful Carpet & Beyond the Second Dimension Achievements',
     meta: {
       type: GoalType.BINARY,
-      condition: `AND(
-        {
-          event: 'achievement',
-          restriction: 2,
-        },
-        {
-          event: 'achievement',
-          restriction: 1,
-        })`,
+      condition: AND(
+        { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2A' },
+        { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2B' }
+      ),
       maxExp: 100
     },
     exp: 0,
@@ -276,15 +272,16 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Bonus for completing Curve Introduction & Curve Manipulation Achievements',
     meta: {
       type: GoalType.BINARY,
-      condition: `AND(
+      condition: AND(
         {
-          event: 'achievement',
-          restriction: 4
+          event: EventTypes.ASSESSMENT_GRADING,
+          restriction: 'M3'
         },
         {
-          event: 'achievement',
-          restriction: 5
-        })`,
+          event: EventTypes.ASSESSMENT_GRADING,
+          restriction: 'M4A'
+        }
+      ),
       maxExp: 100
     },
     exp: 0,
@@ -320,10 +317,10 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Submit Source 3 Path',
     meta: {
       type: GoalType.BINARY,
-      condition: `{
-        event: 'assessment-submission',
-        restriction: paths.SOURCE_THREE
-      }`,
+      condition: {
+        event: EventTypes.ASSESSMENT_SUBMISSION,
+        restriction: 'P3'
+      },
       maxExp: 100
     },
     exp: 100,
@@ -369,10 +366,7 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Be the Koolest Kidz in SOC by redeeming this 100 XP achievement yourself',
     meta: {
       type: GoalType.BINARY,
-      condition: `{
-        event: 'achievement',
-        restriction: 'false',
-      }`,
+      condition: false,
       maxExp: 100
     },
     exp: 0,
