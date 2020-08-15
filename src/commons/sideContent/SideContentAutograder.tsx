@@ -4,8 +4,8 @@ import * as React from 'react';
 
 import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
 import controlButton from '../ControlButton';
-import SideContentAutograderCard from './SideContentAutograderCard';
 import SideContentResultCard from './SideContentResultCard';
+import SideContentTestcaseCard from './SideContentTestcaseCard';
 
 export type SideContentAutograderProps = DispatchProps & StateProps;
 
@@ -76,7 +76,7 @@ class SideContentAutograder extends React.Component<SideContentAutograderProps, 
         <div>
           {testcasesHeader}
           {this.props.testcases.map((testcase, index) => (
-            <SideContentAutograderCard
+            <SideContentTestcaseCard
               key={index}
               index={index}
               testcase={testcase}
