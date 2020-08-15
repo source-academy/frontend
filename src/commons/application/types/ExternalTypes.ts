@@ -68,7 +68,8 @@ const runesLibrary = [
   'anaglyph',
   'overlay_frac',
   'overlay',
-  'hollusion' // currently not documented; animation not working
+  'hollusion', // currently not documented; animation not working
+  'picture_mse'
 ];
 
 const curvesLibrary = [
