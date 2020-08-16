@@ -19,7 +19,8 @@ const getLocalStorageSpace = () => {
 };
 
 export const hasExceededLocalStorageSpace = () => {
-  return getLocalStorageSpace() > fiveMbInKb;
+  return getLocalStorageSpace() > fiveMbInKb || 
+    getPlaygroundLogs().inputs.length + getAssessmentLogs().inputs.length >= 1000;
 };
 
 export const playgroundQuestionId: number = -1;

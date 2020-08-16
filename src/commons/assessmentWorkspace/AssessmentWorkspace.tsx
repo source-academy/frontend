@@ -192,8 +192,6 @@ class AssessmentWorkspace extends React.Component<
     }
 
     saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
-
-    this.uploadPerHour();
   }
 
   /**
@@ -203,13 +201,6 @@ class AssessmentWorkspace extends React.Component<
   public componentDidUpdate() {
     this.checkWorkspaceReset(this.props);
   }
-
-  public uploadPerHour = () => {
-    const interval = setInterval(() => {
-      this.uploadLogs();
-    }, oneHourInMilliSeconds);
-    return () => clearInterval(interval);
-  };
 
   public uploadLogs = () => {
     const assessmentIDs = getLoggedAssessmentIds();

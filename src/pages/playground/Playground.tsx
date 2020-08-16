@@ -220,18 +220,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   }, [props]);
 
-  const uploadPerHour = React.useCallback(() => {
-    const interval = setInterval(() => {
-      uploadLogs();
-    }, oneHourInMilliSeconds);
-    return () => clearInterval(interval);
-  }, [uploadLogs]);
-
-  // Second useEffect called here just in case.
-  React.useEffect(() => {
-    uploadPerHour();
-  }, [uploadPerHour]);
-
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();
     uploadLogs();
