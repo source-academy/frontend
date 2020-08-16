@@ -237,10 +237,10 @@ export const mockGoals: AchievementGoal[] = [
         { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2A' },
         { event: EventTypes.ASSESSMENT_GRADING, restriction: 'M2B' }
       ),
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 0,
-    maxExp: 100,
+    xp: 0,
+    maxXp: 100,
     completed: false
   },
   {
@@ -248,11 +248,11 @@ export const mockGoals: AchievementGoal[] = [
     text: 'XP earned from Beyond the Second Dimension Mission',
     meta: {
       type: GoalType.ASSESSMENT,
-      assessmentId: '5',
+      assessmentNumber: 'M2B',
       requiredCompletionFrac: 0.5
     },
-    exp: 213,
-    maxExp: 250,
+    xp: 213,
+    maxXp: 250,
     completed: true
   },
   {
@@ -260,11 +260,11 @@ export const mockGoals: AchievementGoal[] = [
     text: 'XP earned from Colorful Carpet Mission',
     meta: {
       type: GoalType.ASSESSMENT,
-      assessmentId: '3',
+      assessmentNumber: 'M2A',
       requiredCompletionFrac: 0.8
     },
-    exp: 0,
-    maxExp: 250,
+    xp: 0,
+    maxXp: 250,
     completed: false
   },
   {
@@ -282,10 +282,10 @@ export const mockGoals: AchievementGoal[] = [
           restriction: 'M4A'
         }
       ),
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 0,
-    maxExp: 100,
+    xp: 0,
+    maxXp: 100,
     completed: false
   },
   {
@@ -293,11 +293,11 @@ export const mockGoals: AchievementGoal[] = [
     text: 'XP earned from Curve Introduction Mission',
     meta: {
       type: GoalType.ASSESSMENT,
-      assessmentId: '7',
+      assessmentNumber: 'M3',
       requiredCompletionFrac: 150
     },
-    exp: 178,
-    maxExp: 250,
+    xp: 178,
+    maxXp: 250,
     completed: true
   },
   {
@@ -305,11 +305,11 @@ export const mockGoals: AchievementGoal[] = [
     text: 'XP earned from Curve Manipulation Mission',
     meta: {
       type: GoalType.ASSESSMENT,
-      assessmentId: '8',
+      assessmentNumber: 'M4A',
       requiredCompletionFrac: 0.8
     },
-    exp: 191,
-    maxExp: 250,
+    xp: 191,
+    maxXp: 250,
     completed: false
   },
   {
@@ -321,10 +321,10 @@ export const mockGoals: AchievementGoal[] = [
         event: EventTypes.ASSESSMENT_SUBMISSION,
         restriction: 'P3'
       },
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 100,
-    maxExp: 100,
+    xp: 100,
+    maxXp: 100,
     completed: true
   },
   {
@@ -332,11 +332,11 @@ export const mockGoals: AchievementGoal[] = [
     text: 'XP earned from Source 3 Path',
     meta: {
       type: GoalType.ASSESSMENT,
-      assessmentId: '12',
+      assessmentNumber: 'P3',
       requiredCompletionFrac: 1
     },
-    exp: 300,
-    maxExp: 300,
+    xp: 300,
+    maxXp: 300,
     completed: true
   },
   {
@@ -344,10 +344,10 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Each Top Voted answer in Piazza gives 10 XP',
     meta: {
       type: GoalType.MANUAL,
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 40,
-    maxExp: 100,
+    xp: 40,
+    maxXp: 100,
     completed: false
   },
   {
@@ -355,10 +355,10 @@ export const mockGoals: AchievementGoal[] = [
     text: 'Submit 1 PR to Source Academy Github',
     meta: {
       type: GoalType.MANUAL,
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 100,
-    maxExp: 100,
+    xp: 100,
+    maxXp: 100,
     completed: true
   },
   {
@@ -367,10 +367,10 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.BINARY,
       condition: false,
-      maxExp: 100
+      maxXp: 100
     },
-    exp: 0,
-    maxExp: 100,
+    xp: 0,
+    maxXp: 100,
     completed: false
   }
 ];

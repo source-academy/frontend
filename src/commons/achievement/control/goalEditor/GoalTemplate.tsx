@@ -5,6 +5,6 @@ export const goalTemplate: GoalDefinition = {
   text: 'Goal Text Here',
   meta: {
     type: GoalType.MANUAL,
-    maxExp: 0
+    maxXp: 0
   }
 };

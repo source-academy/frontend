@@ -5,7 +5,7 @@ import { AchievementContext, handleGlow } from 'src/features/achievement/Achieve
 
 import { AchievementStatus } from '../../features/achievement/AchievementTypes';
 import AchievementDeadline from './card/AchievementDeadline';
-import AchievementExp from './card/AchievementExp';
+import AchievementXp from './card/AchievementXp';
 
 type AchievementCardProps = {
   id: number;
@@ -24,7 +24,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const { ability, cardTileUrl, title } = inferencer.getAchievement(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
-  const displayExp = inferencer.getAchievementMaxExp(id);
+  const displayXp = inferencer.getAchievementMaxXp(id);
   const progressFrac = inferencer.getProgressFrac(id);
   const status = inferencer.getStatus(id);
 
@@ -62,7 +62,7 @@ function AchievementCard(props: AchievementCardProps) {
             <p>{ability}</p>
           </div>
           <AchievementDeadline deadline={displayDeadline} ability={ability} />
-          <AchievementExp exp={displayExp} isBonus={hasDropdown} />
+          <AchievementXp xp={displayXp} isBonus={hasDropdown} />
         </div>
 
         <ProgressBar

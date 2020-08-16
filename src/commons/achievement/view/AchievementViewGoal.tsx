@@ -12,13 +12,13 @@ type AchievementViewGoalProps = {
  * @param goal an array of goalId
  */
 const mapGoalToJSX = (goal: AchievementGoal) => {
-  const { id, text, maxExp, exp } = goal;
+  const { id, text, maxXp, xp } = goal;
   return (
     <div className="goal" key={id}>
       <div className="goal-badge">
         <span className="goal-icon" />
         <p>
-          {exp} / {maxExp} XP
+          {xp} / {maxXp} XP
         </p>
       </div>
       <p>{text}</p>

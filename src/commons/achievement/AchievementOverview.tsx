@@ -12,11 +12,11 @@ function AchievementOverview(props: AchievementOverviewProps) {
   const { name, studio } = props;
 
   const inferencer = useContext(AchievementContext);
-  const studentExp = inferencer.getTotalExp();
+  const studentXp = inferencer.getTotalXp();
 
   return (
     <div className="achievement-overview">
-      <AchievementLevel studentExp={studentExp} />
+      <AchievementLevel studentXp={studentXp} />
       <h3>{name}</h3>
       <h3>{studio}</h3>
     </div>

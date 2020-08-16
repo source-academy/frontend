@@ -79,23 +79,22 @@ export type GoalDefinition = {
 
 /**
  * Information of an achievement goal progress
- * NOTE: Achievement EXP named to deconflict with Assessment XP
  *
  * @param {number} id unique id of the goal
- * @param {number} exp student's current exp of the goal
- * @param {number} maxExp maximum attainable exp of the goal (computed by server)
+ * @param {number} xp student's current XP of the goal
+ * @param {number} maxXp maximum attainable XP of the goal (computed by server)
  * @param {boolean} completed student's completion status of the goal
  */
 export type GoalProgress = {
   id: number;
-  exp: number;
-  maxExp: number;
+  xp: number;
+  maxXp: number;
   completed: boolean;
 };
 
 export const defaultGoalProgress = {
-  exp: 0,
-  maxExp: 0,
+  xp: 0,
+  maxXp: 0,
   completed: false
 };
 
@@ -109,19 +108,19 @@ export type GoalMeta = AssessmentMeta | BinaryMeta | ManualMeta;
 
 export type AssessmentMeta = {
   type: GoalType.ASSESSMENT;
-  assessmentId: string; // e.g. 'M1A', 'P2'
+  assessmentNumber: string; // e.g. 'M1A', 'P2'
   requiredCompletionFrac: number; // between [0..1]
 };
 
 export type BinaryMeta = {
   type: GoalType.BINARY;
   condition: BooleanExpression;
-  maxExp: number;
+  maxXp: number;
 };
 
 export type ManualMeta = {
   type: GoalType.MANUAL;
-  maxExp: number;
+  maxXp: number;
 };
 
 /**

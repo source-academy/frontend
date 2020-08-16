@@ -33,7 +33,7 @@ function AchievementView(props: AchievementViewProps) {
   const achievement = inferencer.getAchievement(focusId);
   const { ability, deadline, title, view } = achievement;
   const { canvasUrl, completionText, description } = view;
-  const awardedExp = inferencer.getAchievementExp(focusId);
+  const awardedXp = inferencer.getAchievementXp(focusId);
   const goals = inferencer.listGoals(focusId);
   const prereqGoals = inferencer.listPrerequisiteGoals(focusId);
   const status = inferencer.getStatus(focusId);
@@ -62,7 +62,7 @@ function AchievementView(props: AchievementViewProps) {
       {status === AchievementStatus.COMPLETED && (
         <>
           <hr />
-          <AchievementViewCompletion awardedExp={awardedExp} completionText={completionText} />
+          <AchievementViewCompletion awardedXp={awardedXp} completionText={completionText} />
         </>
       )}
     </div>

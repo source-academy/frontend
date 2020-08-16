@@ -5,7 +5,7 @@ import { defaultAchievement } from '../../commons/application/ApplicationTypes';
 import { Links } from '../../commons/utils/Constants';
 import { AchievementAbility, FilterStatus } from './AchievementTypes';
 
-export const expPerLevel = 1000;
+export const xpPerLevel = 1000;
 
 const { achievements: defaultAchievements, goals: defaultGoals } = defaultAchievement;
 export const AchievementContext = React.createContext(

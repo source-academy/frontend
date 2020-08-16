@@ -12,7 +12,7 @@ import { isExpired } from './DateHelper';
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
- * @param {number} maxExp total achievable EXP of the achievement
+ * @param {number} maxXp maximum attainable XP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
  * @param {Set<number>} children a set of immediate prerequisites id
@@ -21,7 +21,7 @@ import { isExpired } from './DateHelper';
 class AchievementNode {
   public achievement: AchievementItem;
   public displayDeadline?: Date;
-  public maxExp: number;
+  public maxXp: number;
   public progressFrac: number;
   public status: AchievementStatus;
   public children: Set<number>;
@@ -32,7 +32,7 @@ class AchievementNode {
 
     this.achievement = achievement;
     this.displayDeadline = deadline;
-    this.maxExp = 0;
+    this.maxXp = 0;
     this.progressFrac = 0;
     this.status = AchievementStatus.ACTIVE;
     this.children = new Set(prerequisiteIds);
@@ -299,29 +299,29 @@ class AchievementInferencer {
   }
 
   /**
-   * Returns EXP earned from the achievement
+   * Returns XP earned from the achievement
    *
    * @param id Achievement Id
    */
-  public getAchievementExp(id: number) {
+  public getAchievementXp(id: number) {
     const { goalIds } = this.nodeList.get(id)!.achievement;
-    return goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+    return goalIds.reduce((xp, goalId) => xp + this.goalList.get(goalId)!.xp, 0);
   }
 
   /**
-   * Returns the maximum attainable EXP from the achievement
+   * Returns the maximum attainable XP from the achievement
    *
    * @param id Achievement Id
    */
-  public getAchievementMaxExp(id: number) {
-    return this.nodeList.get(id)!.maxExp;
+  public getAchievementMaxXp(id: number) {
+    return this.nodeList.get(id)!.maxXp;
   }
 
   /**
-   * Returns total EXP earned from all goals
+   * Returns total XP earned from all goals
    */
-  public getTotalExp() {
-    return this.getAllGoals().reduce((totalExp, goal) => totalExp + goal.exp, 0);
+  public getTotalXp() {
+    return this.getAllGoals().reduce((totalXp, goal) => totalXp + goal.xp, 0);
   }
 
   /**
@@ -407,7 +407,7 @@ class AchievementInferencer {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
-      this.generateMaxExp(node);
+      this.generateMaxXp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
 
@@ -504,13 +504,13 @@ class AchievementInferencer {
   }
 
   /**
-   * Calculates the achievement maximum attainable EXP
+   * Calculates the achievement maximum attainable XP
    *
    * @param node the AchievementNode
    */
-  private generateMaxExp(node: AchievementNode) {
+  private generateMaxXp(node: AchievementNode) {
     const { goalIds } = node.achievement;
-    node.maxExp = goalIds.reduce((maxExp, goalId) => maxExp + this.goalList.get(goalId)!.maxExp, 0);
+    node.maxXp = goalIds.reduce((maxXp, goalId) => maxXp + this.goalList.get(goalId)!.maxXp, 0);
   }
 
   /**
@@ -520,9 +520,9 @@ class AchievementInferencer {
    */
   private generateProgressFrac(node: AchievementNode) {
     const { goalIds } = node.achievement;
-    const exp = goalIds.reduce((exp, goalId) => exp + this.goalList.get(goalId)!.exp, 0);
+    const xp = goalIds.reduce((xp, goalId) => xp + this.goalList.get(goalId)!.xp, 0);
 
-    node.progressFrac = node.maxExp === 0 ? 0 : Math.min(exp / node.maxExp, 1);
+    node.progressFrac = node.maxXp === 0 ? 0 : Math.min(xp / node.maxXp, 1);
   }
 
   /**
