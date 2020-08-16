@@ -45,6 +45,15 @@ export const resetPlaygroundLogging = (
   localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
 };
 
+export const setResetLoggingFlag = (flag: boolean) => {
+  localStorage.setItem('LoggingFlag', JSON.stringify(flag));
+};
+
+export const getResetLoggingFlag = () => {
+  const loggingFlag: string | null = localStorage.getItem('LoggingFlag');
+  return JSON.parse(loggingFlag ? loggingFlag : "false");
+};
+
 export const savePlaygroundLog = (newInput: Input) => {
   const playgroundLogs: string | null = localStorage.getItem('PlaygroundLogs');
   const playgroundPlayback: PlaybackData = JSON.parse(

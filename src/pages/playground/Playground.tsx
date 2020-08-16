@@ -35,11 +35,12 @@ import {
   getAssessmentLogs,
   getLoggedAssessmentIds,
   getPlaygroundLogs,
+  getResetLoggingFlag, 
   hasExceededLocalStorageSpace,
   oneHourInMilliSeconds,
   playgroundQuestionId,
   resetPlaygroundLogging,
-  savePlaygroundLog
+  savePlaygroundLog,
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -214,7 +215,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
     }
 
-    resetPlaygroundLogging(props.sourceChapter, props.externalLibraryName, props.editorValue);
+    if (getResetLoggingFlag()) {
+      resetPlaygroundLogging(props.sourceChapter, props.externalLibraryName, props.editorValue);
+    }
   }, [props]);
 
   const uploadPerHour = React.useCallback(() => {

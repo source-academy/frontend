@@ -29,6 +29,7 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
+import { setResetLoggingFlag } from '../../features/keystrokes/KeystrokesHelper';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -642,6 +643,9 @@ function* BackendSaga(): SagaIterator {
     const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
     if (!respMsg) {
       yield handleResponseError(respMsg);
+      yield setResetLoggingFlag(false);
+    } else {
+      yield setResetLoggingFlag(true);
     }
   });
 
