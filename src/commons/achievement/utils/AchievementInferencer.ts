@@ -1,3 +1,6 @@
+import assert from 'assert';
+
+import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
   AchievementGoal,
   AchievementItem,
@@ -92,7 +95,18 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievement(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.achievement;
+  }
+
+  /**
+   * Returns the AchievementGoal
+   *
+   * @param id Goal Id
+   */
+  public getGoal(id: number) {
+    assert(this.goalList.has(id), `goal ${id} not found`);
+    return this.goalList.get(id)!;
   }
 
   /**
@@ -101,6 +115,7 @@ class AchievementInferencer {
    * @param id Goal Id
    */
   public getGoalDefinition(id: number) {
+    assert(this.goalList.has(id), `goal definition ${id} not found`);
     return this.goalList.get(id)! as GoalDefinition;
   }
 
@@ -261,8 +276,8 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public listGoals(id: number) {
-    const { goalIds } = this.nodeList.get(id)!.achievement;
-    return goalIds.map(goalId => this.goalList.get(goalId)!);
+    const { goalIds } = this.getAchievement(id);
+    return goalIds.map(goalId => this.getGoal(goalId));
   }
 
   /**
@@ -272,12 +287,12 @@ class AchievementInferencer {
    */
   public listPrerequisiteGoals(id: number) {
     const childGoalIds: number[] = [];
-    for (const childId of this.nodeList.get(id)!.children) {
-      const { goalIds } = this.nodeList.get(childId)!.achievement;
+    for (const childId of this.getImmediateChildren(id)) {
+      const { goalIds } = this.getAchievement(childId);
       goalIds.forEach(goalId => childGoalIds.push(goalId));
     }
 
-    return childGoalIds.map(goalId => this.goalList.get(goalId)!);
+    return childGoalIds.map(goalId => this.getGoal(goalId));
   }
 
   /**
@@ -286,6 +301,7 @@ class AchievementInferencer {
    * @param text goalText
    */
   public getIdByText(text: string) {
+    assert(this.textToId.has(text), `Goal ${text} not found`);
     return this.textToId.get(text)!;
   }
 
@@ -295,6 +311,7 @@ class AchievementInferencer {
    * @param title achievementTitle
    */
   public getIdByTitle(title: string) {
+    assert(this.titleToId.has(title), `Achievement ${title} not found`);
     return this.titleToId.get(title)!;
   }
 
@@ -304,8 +321,8 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievementXp(id: number) {
-    const { goalIds } = this.nodeList.get(id)!.achievement;
-    return goalIds.reduce((xp, goalId) => xp + this.goalList.get(goalId)!.xp, 0);
+    const { goalIds } = this.getAchievement(id);
+    return goalIds.reduce((xp, goalId) => xp + this.getGoal(goalId).xp, 0);
   }
 
   /**
@@ -314,6 +331,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievementMaxXp(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.maxXp;
   }
 
@@ -330,6 +348,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getProgressFrac(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.progressFrac;
   }
 
@@ -339,6 +358,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getStatus(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.status;
   }
 
@@ -348,6 +368,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getDisplayDeadline(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.displayDeadline;
   }
 
@@ -358,6 +379,7 @@ class AchievementInferencer {
    * @param childId Child Achievement Id
    */
   public isImmediateChild(id: number, childId: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.children.has(childId);
   }
 
@@ -367,6 +389,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getImmediateChildren(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.children;
   }
 
@@ -377,6 +400,7 @@ class AchievementInferencer {
    * @param childId Descendant Achievement Id
    */
   public isDescendant(id: number, childId: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.descendant.has(childId);
   }
 
@@ -386,6 +410,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getDescendants(id: number) {
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
     return this.nodeList.get(id)!.descendant;
   }
 
@@ -404,6 +429,8 @@ class AchievementInferencer {
    * Recalculates the AchievementNode data of each achievements, O(N) operation
    */
   private processNodes() {
+    this.titleToId = new Map();
+
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
@@ -417,6 +444,8 @@ class AchievementInferencer {
   }
 
   private processGoals() {
+    this.textToId = new Map();
+
     this.goalList.forEach(goal => {
       const { text, id } = goal;
       this.textToId.set(text, id);
@@ -455,9 +484,13 @@ class AchievementInferencer {
   private generateDescendant(node: AchievementNode) {
     for (const childId of node.descendant) {
       if (childId === node.achievement.id) {
-        console.error('Circular dependency detected');
+        const { title } = node.achievement;
+        // NOTE: not the best error handling practice, but as long as admin verifies the
+        // data in AchievementPreview and do not publish new achievements with circular
+        // dependency error, it should be suffice
+        showDangerMessage(`Circular dependency detected in achievement ${title}`, 30000);
       }
-      for (const grandchildId of this.nodeList.get(childId)!.descendant) {
+      for (const grandchildId of this.getDescendants(childId)) {
         // Newly added grandchild is appended to the back of the set.
         node.descendant.add(grandchildId);
         // Hence the great grandchildren will be added when the iterator reaches there
@@ -495,7 +528,7 @@ class AchievementInferencer {
     // Temporary array of all descendants' deadlines
     const descendantDeadlines: (Date | undefined)[] = [];
     for (const childId of node.descendant) {
-      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
+      const childDeadline = this.getAchievement(childId).deadline;
       descendantDeadlines.push(childDeadline);
     }
 
@@ -510,7 +543,7 @@ class AchievementInferencer {
    */
   private generateMaxXp(node: AchievementNode) {
     const { goalIds } = node.achievement;
-    node.maxXp = goalIds.reduce((maxXp, goalId) => maxXp + this.goalList.get(goalId)!.maxXp, 0);
+    node.maxXp = goalIds.reduce((maxXp, goalId) => maxXp + this.getGoal(goalId).maxXp, 0);
   }
 
   /**
@@ -520,7 +553,7 @@ class AchievementInferencer {
    */
   private generateProgressFrac(node: AchievementNode) {
     const { goalIds } = node.achievement;
-    const xp = goalIds.reduce((xp, goalId) => xp + this.goalList.get(goalId)!.xp, 0);
+    const xp = goalIds.reduce((xp, goalId) => xp + this.getGoal(goalId).xp, 0);
 
     node.progressFrac = node.maxXp === 0 ? 0 : Math.min(xp / node.maxXp, 1);
   }
@@ -540,12 +573,12 @@ class AchievementInferencer {
     const achievementCompleted =
       goalIds.length !== 0 &&
       goalIds
-        .map(goalId => this.goalList.get(goalId)!.completed)
+        .map(goalId => this.getGoal(goalId).completed)
         .reduce((result, goalCompleted) => result && goalCompleted, true);
 
     const descendantDeadlines = [];
     for (const childId of node.descendant) {
-      const childDeadline = this.nodeList.get(childId)!.achievement.deadline;
+      const childDeadline = this.getAchievement(childId).deadline;
       descendantDeadlines.push(childDeadline);
     }
     const hasUnexpiredDeadline = descendantDeadlines.reduce(
