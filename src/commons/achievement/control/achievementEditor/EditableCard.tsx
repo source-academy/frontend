@@ -83,7 +83,7 @@ function EditableCard(props: EditableCardProps) {
     setIsDirty(true);
   };
 
-  const handleChangeDeadline = (deadline: Date) => {
+  const handleChangeDeadline = (deadline?: Date) => {
     setEditableAchievement({
       ...editableAchievement,
       deadline: deadline
@@ -117,7 +117,7 @@ function EditableCard(props: EditableCardProps) {
     setIsDirty(true);
   };
 
-  const handleChangeRelease = (release: Date) => {
+  const handleChangeRelease = (release?: Date) => {
     setEditableAchievement({
       ...editableAchievement,
       release: release

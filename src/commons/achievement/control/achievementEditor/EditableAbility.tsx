@@ -5,7 +5,7 @@ import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
 type EditableAbilityProps = {
   ability: AchievementAbility;
-  changeAbility: any;
+  changeAbility: (ability: AchievementAbility) => void;
 };
 
 function EditableAbility(props: EditableAbilityProps) {

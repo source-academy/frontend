@@ -6,7 +6,7 @@ import { prettifyDate } from 'src/commons/achievement/utils/DateHelper';
 type EditableDateProps = {
   type: string;
   date?: Date;
-  changeDate: any;
+  changeDate: (date?: Date) => void;
 };
 
 function EditableDate(props: EditableDateProps) {

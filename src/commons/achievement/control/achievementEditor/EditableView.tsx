@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { AchievementView } from 'src/features/achievement/AchievementTypes';
 type EditableViewProps = {
   view: AchievementView;
-  changeView: any;
+  changeView: (view: AchievementView) => void;
 };
 
 function EditableView(props: EditableViewProps) {

@@ -4,8 +4,8 @@ import React from 'react';
 import { showSuccessMessage, showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 
 type ItemSaverProps = {
-  discardChanges: any;
-  saveChanges: any;
+  discardChanges: () => void;
+  saveChanges: () => void;
 };
 
 function ItemSaver(props: ItemSaverProps) {
