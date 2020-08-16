@@ -35,11 +35,11 @@ import {
   getAssessmentLogs,
   getLoggedAssessmentIds,
   getPlaygroundLogs,
-  getResetLoggingFlag, 
+  getResetLoggingFlag,
   hasExceededLocalStorageSpace,
   playgroundQuestionId,
   resetPlaygroundLogging,
-  savePlaygroundLog,
+  savePlaygroundLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
