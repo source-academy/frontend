@@ -1,7 +1,8 @@
-import { Button, MenuItem } from '@blueprintjs/core';
-import { ItemRenderer, Select } from '@blueprintjs/select';
+import { EditableText } from '@blueprintjs/core';
 import React, { useState } from 'react';
-import { GoalMeta, GoalType } from 'src/features/achievement/AchievementTypes';
+import { GoalMeta } from 'src/features/achievement/AchievementTypes';
+
+import ItemSaver from '../common/ItemSaver';
 
 type EditableMetaProps = {
   meta: GoalMeta;
@@ -9,24 +10,41 @@ type EditableMetaProps = {
 };
 
 function EditableMeta(props: EditableMetaProps) {
-  const { meta } = props;
+  const { meta, changeMeta } = props;
 
-  const [goalType, setGoalType] = useState<GoalType>(meta.type);
+  const [editableMeta, setEditableMeta] = useState<string>(JSON.stringify(meta));
+  const resetEditableMeta = () => setEditableMeta(JSON.stringify(meta));
 
-  const GoalTypeSelect = Select.ofType<GoalType>();
-  const goalTypeRenderer: ItemRenderer<GoalType> = (type, { handleClick }) => (
-    <MenuItem key={type} onClick={handleClick} text={type} />
-  );
+  const [isDirty, setIsDirty] = useState<boolean>(false);
+
+  const handleChangeMeta = (metaString: string) => {
+    setEditableMeta(metaString);
+    setIsDirty(true);
+  };
+
+  const handleSaveChanges = () => {
+    const parsedMeta = JSON.parse(editableMeta);
+    changeMeta(parsedMeta);
+    setIsDirty(false);
+  };
+
+  const handleDiscardChanges = () => {
+    resetEditableMeta();
+    setIsDirty(false);
+  };
 
   return (
-    <GoalTypeSelect
-      items={Object.values(GoalType)}
-      onItemSelect={setGoalType}
-      itemRenderer={goalTypeRenderer}
-      filterable={false}
-    >
-      <Button text={goalType} />
-    </GoalTypeSelect>
+    <>
+      <EditableText
+        placeholder="Enter goal meta here"
+        value={editableMeta}
+        multiline={true}
+        onChange={handleChangeMeta}
+      />
+      {isDirty && (
+        <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
+      )}
+    </>
   );
 }
 
