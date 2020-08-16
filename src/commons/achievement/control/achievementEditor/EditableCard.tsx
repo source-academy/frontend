@@ -152,7 +152,7 @@ function EditableCard(props: EditableCardProps) {
         {isDirty ? (
           <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
         ) : (
-          <ItemDeleter deleteItem={handleDeleteAchievement} />
+          <ItemDeleter item={title} handleDelete={handleDeleteAchievement} />
         )}
       </div>
 

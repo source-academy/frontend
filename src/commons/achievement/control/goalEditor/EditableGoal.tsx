@@ -72,7 +72,7 @@ function EditableGoal(props: EditableGoalProps) {
         {isDirty ? (
           <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
         ) : (
-          <ItemDeleter deleteItem={handleDeleteGoal} />
+          <ItemDeleter item={text} handleDelete={handleDeleteGoal} />
         )}
       </div>
       <h3>
