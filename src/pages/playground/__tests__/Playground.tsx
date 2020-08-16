@@ -8,6 +8,7 @@ import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import Playground, { PlaygroundProps } from '../Playground';
+import { UnsentLog } from 'src/features/keystrokes/KeystrokesHelper';
 
 const baseProps = {
   editorValue: '',
@@ -72,7 +73,8 @@ const baseProps = {
     assessmentId: number,
     questionId: number,
     playbackData: PlaybackData
-  ) => {}
+  ) => {}, 
+  handleUnsentLogsUpload: (unsentLogs: UnsentLog[]) => {}
 };
 
 const testValueProps: PlaygroundProps = {

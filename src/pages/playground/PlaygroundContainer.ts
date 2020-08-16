@@ -11,7 +11,8 @@ import {
 } from '../../commons/application/actions/InterpreterActions';
 import {
   logoutGoogle,
-  uploadKeystrokeLogs
+  uploadKeystrokeLogs,
+  uploadUnsentLogs
 } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -139,7 +140,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleKeystrokeUpload: uploadKeystrokeLogs
+      handleKeystrokeUpload: uploadKeystrokeLogs, 
+      handleUnsentLogsUpload: uploadUnsentLogs, 
     },
     dispatch
   );

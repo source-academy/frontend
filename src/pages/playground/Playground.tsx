@@ -33,10 +33,14 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   getPlaygroundLogs,
+  getUnsentLogs, 
   hasExceededLocalStorageSpace,
   playgroundQuestionId,
+  resetAllPlaygroundLogs, 
   savePlaygroundLog,
-  setLastPlaygroundInputs
+  saveUnsentLog, 
+  setLastPlaygroundInputs,
+  UnsentLog,
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -91,6 +95,7 @@ export type DispatchProps = {
     questionId: number,
     playbackData: PlaybackData
   ) => void;
+  handleUnsentLogsUpload: (unsentLogs: UnsentLog[]) => void;
 };
 
 export type StateProps = {
@@ -131,14 +136,32 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
+
+  window.addEventListener('beforeunload', (event) => {
+    // Cancel the event as stated by the standard.
+    event.preventDefault();
+    // Chrome requires returnValue to be set.
+    event.returnValue = '';
+  
+    const playgroundLogs = getPlaygroundLogs();
+
+    if (playgroundLogs.inputs.length > 0) {
+      saveUnsentLog(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
+      resetAllPlaygroundLogs();
+    }
+  });
+
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
     propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
 
+    
     // Only fetch default Playground sublanguage when not loaded via a share link
     if (propsRef.current.location.hash === '') {
       propsRef.current.handleFetchSublanguage();
     }
+
+    propsRef.current.handleUnsentLogsUpload(getUnsentLogs());
   }, []);
 
   const handlers = React.useMemo(

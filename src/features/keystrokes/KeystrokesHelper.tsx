@@ -30,9 +30,15 @@ export const hasExceededLocalStorageSpace = () => {
   );
 };
 
-export const saveUnsentLog = (assessmentId: number, questionId: number, playbackData: PlaybackData) => {
+export const getUnsentLogs = () => {
   const unsentLogsAsString: string | null = localStorage.getItem("unsentLogs");
-  const unsentLogs: UnsentLog[] = JSON.parse(unsentLogsAsString ? unsentLogsAsString : "[]");
+  const unsentLogs: UnsentLog[] = JSON.parse(unsentLogsAsString ? unsentLogsAsString : JSON.stringify([]));
+  console.log(unsentLogs);
+  return unsentLogs;
+}
+
+export const saveUnsentLog = (assessmentId: number, questionId: number, playbackData: PlaybackData) => {
+  const unsentLogs: UnsentLog[] = getUnsentLogs();
 
   const newUnsentLog: UnsentLog = {
     assessmentId: assessmentId, 
@@ -49,6 +55,16 @@ export const clearUnsentLogs = () => {
 }
 
 export const playgroundQuestionId: number = -1;
+
+export const resetAllPlaygroundLogs = () => {
+  const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
+  const playgroundPlayback: PlaybackData = JSON.parse(
+    playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
+  );
+  playgroundPlayback.inputs = [];
+
+  sessionStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
+}
 
 export const resetPlaygroundLogging = () => {
   const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
@@ -112,10 +128,11 @@ export const getPlaygroundLogs = () => {
   const playgroundPlayback: PlaybackData = JSON.parse(
     playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
   );
+
   return playgroundPlayback;
 };
 
-export const resetAlAssessmentLogs = () => {
+export const resetAllAssessmentLogs = () => {
   const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
   const assessmentPlayback: PlaybackData = JSON.parse(
     assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
