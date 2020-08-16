@@ -4,13 +4,11 @@ import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import { Documentation } from '../documentation/Documentation';
 import { useMergedRef } from '../utils/Hooks';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
@@ -23,6 +21,7 @@ import useNavigation from './UseNavigation';
 import useRefactor from './UseRefactor';
 import useShareAce from './UseShareAce';
 import useTypeInference from './UseTypeInference';
+import { getModeString, selectMode } from '../utils/AceHelper';
 
 export type EditorKeyBindingHandlers = { [name in KeyFunction]?: () => void };
 export type EditorHook = (
@@ -81,19 +80,6 @@ const getMarkers = (
     className: 'myMarker',
     type: 'fullLine'
   }));
-};
-
-const getModeString = (chapter: number, variant: Variant, library: string) =>
-  `source${chapter}${variant}${library}`;
-
-/**
- * This _modifies global state_ and defines a new Ace mode globally.
- *
- * Don't call this directly in render functions!
- */
-const selectMode = (chapter: number, variant: Variant, library: string) => {
-  HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
-  ModeSelector(chapter, variant, library);
 };
 
 const makeHandleGutterClick = (
@@ -194,22 +180,15 @@ const EditorBase = React.memo(
       props.externalLibraryName || 'NONE'
     ];
 
-    // we would normally use use(Layout)Effect here, however useEffect actually
-    // runs after DOM changes are committed, which means that Ace might try to
-    // load the mode before we cause it to be defined i.e. breaking syntax
-    // highlighting
+    // this function defines the Ace language and highlighting mode for the
+    // given combination of chapter, variant and external library. it CANNOT be
+    // put in useEffect as it MUST be called before the mode is set on the Ace
+    // editor, and use(Layout)Effect runs after that happens.
     //
-    // so we use useMemo here so that
-    // (1) selectMode is called before the mode is set on the Editor
-    // (2) we still save on calls to ace.define (versus just calling it directly)
-    //
-    // note that since repeated calls to ace.define are actually okay (just a
-    // waste of compute cycles) it is okay to use useMemo (which doesn't guarantee
-    // that it will _only_ call when the dependencies change) or not even wrap
-    // this in a hook
-    React.useMemo(() => {
-      selectMode(sourceChapter, sourceVariant, externalLibraryName);
-    }, [sourceChapter, sourceVariant, externalLibraryName]);
+    // this used to be in useMemo, but selectMode now checks if the mode is
+    // already defined and doesn't do it, so it is now OK to keep calling this
+    // unconditionally.
+    selectMode(sourceChapter, sourceVariant, externalLibraryName);
 
     React.useLayoutEffect(() => {
       if (!reactAceRef.current) {

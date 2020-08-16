@@ -83,7 +83,7 @@ export type StateProps = {
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
@@ -222,7 +222,10 @@ class Sourcecast extends React.Component<SourcecastProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
+        externalLibrary: this.props.externalLibraryName
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {

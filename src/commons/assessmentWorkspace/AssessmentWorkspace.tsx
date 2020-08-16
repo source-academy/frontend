@@ -76,8 +76,7 @@ export type DispatchProps = {
   handleAssessmentFetch: (assessmentId: number) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -397,7 +396,10 @@ class AssessmentWorkspace extends React.Component<
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue
+        replValue: this.props.replValue,
+        sourceChapter: question?.library?.chapter || 4,
+        sourceVariant: 'default',
+        externalLibrary: question?.library?.external?.name || 'NONE'
       }
     };
     return (
@@ -460,7 +462,7 @@ class AssessmentWorkspace extends React.Component<
       editorPostpend,
       editorTestcases
     });
-    this.props.handleClearContext(question.library);
+    this.props.handleClearContext(question.library, true);
     this.props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       this.props.handleEditorValueChange(editorValue);
