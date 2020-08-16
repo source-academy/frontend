@@ -29,7 +29,11 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
-import { playgroundQuestionId, resetAssessmentLogging, resetPlaygroundLogging } from '../../features/keystrokes/KeystrokesHelper';
+import {
+  playgroundQuestionId,
+  resetAssessmentLogging,
+  resetPlaygroundLogging
+} from '../../features/keystrokes/KeystrokesHelper';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
