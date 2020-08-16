@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Prompt } from 'react-router';
 
 import AchievementEditor from '../../../commons/achievement/control/AchievementEditor';
 import AchievementPreview from '../../../commons/achievement/control/AchievementPreview';
@@ -41,8 +42,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
   const achievements = inferencer.getAllAchievements();
   const goals = inferencer.getAllGoals();
 
-  // TODO: <Prompt />
-
   /**
    * Monitors changes that are awaiting publish
    */
@@ -76,6 +75,11 @@ function AchievementControl(props: DispatchProps & StateProps) {
 
   return (
     <AchievementContext.Provider value={inferencer}>
+      <Prompt
+        when={awaitPublish}
+        message="You have unpublished changes. Are you sure you want to leave?"
+      />
+
       <div className="AchievementControl">
         <AchievementPreview awaitPublish={awaitPublish} handlePublish={handlePublish} />
 
