@@ -18,8 +18,10 @@ const getLocalStorageSpace = () => {
 };
 
 export const hasExceededLocalStorageSpace = () => {
-  return getLocalStorageSpace() > fiveMbInKb || 
-    getPlaygroundLogs().inputs.length + getAssessmentLogs().inputs.length >= 1000;
+  return (
+    getLocalStorageSpace() > fiveMbInKb ||
+    getPlaygroundLogs().inputs.length + getAssessmentLogs().inputs.length >= 1000
+  );
 };
 
 export const playgroundQuestionId: number = -1;
@@ -51,7 +53,7 @@ export const setResetLoggingFlag = (flag: boolean) => {
 
 export const getResetLoggingFlag = () => {
   const loggingFlag: string | null = localStorage.getItem('LoggingFlag');
-  return JSON.parse(loggingFlag ? loggingFlag : "false");
+  return JSON.parse(loggingFlag ? loggingFlag : 'false');
 };
 
 export const savePlaygroundLog = (newInput: Input) => {
