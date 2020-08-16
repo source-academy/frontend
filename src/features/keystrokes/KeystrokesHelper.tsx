@@ -3,7 +3,6 @@ import { isEqual } from 'lodash';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Input, PlaybackData } from '../sourceRecorder/SourceRecorderTypes';
 
-export const oneHourInMilliSeconds = 3600000;
 const oneByteInBits = 8;
 const oneKbInBytes = 1024;
 const fiveMbInKb = 5 * 1024;
