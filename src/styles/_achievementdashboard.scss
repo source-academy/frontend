@@ -67,20 +67,19 @@
         }
       }
 
-      /* Temporarily removed
       .milestone {
-        background-color: rgba(0, 0, 0, 0.7);
-        border: 1px solid #90ff12;
-        box-shadow: 0 0 10px #90ff12;
+        background-color: rgba(0, 0, 0, 0.9);
+        border: 1px solid yellow;
+        box-shadow: 0 0 10px yellow;
         display: flex;
         flex-direction: column;
-        margin: 20em 0 0 1em;
-        padding: 1em 2em;
+        margin: 20em 0 0 0;
+        padding: 1em 2.5em;
         position: absolute;
         z-index: 2;
 
         h2 {
-          margin: 0;
+          margin: $default-spacing;
           text-align: center;
           text-decoration: underline;
         }
@@ -89,12 +88,14 @@
           align-items: center;
           display: flex;
           flex-direction: row;
+          margin: $default-spacing;
 
           .description {
-            padding: 1em 0 0 0;
+            margin: 0;
+            padding: 0 0 0 $default-spacing;
           }
         }
-      } */
+      }
     }
 
     .level,

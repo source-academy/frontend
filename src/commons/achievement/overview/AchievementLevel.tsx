@@ -20,8 +20,8 @@ function AchievementLevel(props: AchievementLevelProps) {
   const progressFrac = progress / expPerLevel;
 
   return (
-    <div className="level">
-      <div className="level-badge" onMouseEnter={displayMilestone} onMouseLeave={hideMilestone}>
+    <div className="level" onMouseEnter={displayMilestone} onMouseLeave={hideMilestone}>
+      <div className="level-badge">
         <span className="level-icon" />
         <p>{level}</p>
       </div>
