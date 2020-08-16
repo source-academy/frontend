@@ -30,7 +30,7 @@ import {
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
 import {
-  clearUnsentLogs, 
+  clearUnsentLogs,
   playgroundQuestionId,
   resetAssessmentLogging,
   resetPlaygroundLogging
@@ -678,12 +678,11 @@ function* BackendSaga(): SagaIterator {
 
       if (!respMsg) {
         yield handleResponseError(respMsg);
-        return; 
+        return;
       }
     }
 
     clearUnsentLogs();
-
   });
 
   /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(

@@ -172,6 +172,4 @@ export const uploadKeystrokeLogs = (
   playbackData: PlaybackData
 ) => action(UPLOAD_KEYSTROKE_LOGS, { assessmentId, questionId, playbackData });
 
-export const uploadUnsentLogs = (
-  log: UnsentLog[]
-) => action(UPLOAD_UNSENT_LOGS, log);
+export const uploadUnsentLogs = (log: UnsentLog[]) => action(UPLOAD_UNSENT_LOGS, log);

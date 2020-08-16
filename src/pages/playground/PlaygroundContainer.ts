@@ -140,8 +140,8 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
       handlePersistenceLogOut: logoutGoogle,
-      handleKeystrokeUpload: uploadKeystrokeLogs, 
-      handleUnsentLogsUpload: uploadUnsentLogs, 
+      handleKeystrokeUpload: uploadKeystrokeLogs,
+      handleUnsentLogsUpload: uploadUnsentLogs
     },
     dispatch
   );

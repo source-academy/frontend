@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { UnsentLog } from 'src/features/keystrokes/KeystrokesHelper';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
@@ -8,7 +9,6 @@ import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
 import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import Playground, { PlaygroundProps } from '../Playground';
-import { UnsentLog } from 'src/features/keystrokes/KeystrokesHelper';
 
 const baseProps = {
   editorValue: '',
@@ -73,7 +73,7 @@ const baseProps = {
     assessmentId: number,
     questionId: number,
     playbackData: PlaybackData
-  ) => {}, 
+  ) => {},
   handleUnsentLogsUpload: (unsentLogs: UnsentLog[]) => {}
 };
 

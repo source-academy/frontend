@@ -33,14 +33,14 @@ import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelp
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import {
   getPlaygroundLogs,
-  getUnsentLogs, 
+  getUnsentLogs,
   hasExceededLocalStorageSpace,
   playgroundQuestionId,
-  resetAllPlaygroundLogs, 
+  resetAllPlaygroundLogs,
   savePlaygroundLog,
-  saveUnsentLog, 
+  saveUnsentLog,
   setLastPlaygroundInputs,
-  UnsentLog,
+  UnsentLog
 } from '../../features/keystrokes/KeystrokesHelper';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
@@ -136,13 +136,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
-
-  window.addEventListener('beforeunload', (event) => {
+  window.addEventListener('beforeunload', event => {
     // Cancel the event as stated by the standard.
     event.preventDefault();
     // Chrome requires returnValue to be set.
     event.returnValue = '';
-  
+
     const playgroundLogs = getPlaygroundLogs();
 
     if (playgroundLogs.inputs.length > 0) {
@@ -155,7 +154,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     // Fixes some errors with runes and curves (see PR #1420)
     propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
 
-    
     // Only fetch default Playground sublanguage when not loaded via a share link
     if (propsRef.current.location.hash === '') {
       propsRef.current.handleFetchSublanguage();

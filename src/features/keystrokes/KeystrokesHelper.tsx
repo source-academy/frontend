@@ -9,9 +9,9 @@ const fiveMbInKb = 5 * 1024;
 
 export type UnsentLog = {
   assessmentId: number;
-  questionId: number; 
+  questionId: number;
   playbackData: PlaybackData;
-}
+};
 
 const getSessionStorageSpace = () => {
   let allStrings = '';
@@ -31,28 +31,34 @@ export const hasExceededLocalStorageSpace = () => {
 };
 
 export const getUnsentLogs = () => {
-  const unsentLogsAsString: string | null = localStorage.getItem("unsentLogs");
-  const unsentLogs: UnsentLog[] = JSON.parse(unsentLogsAsString ? unsentLogsAsString : JSON.stringify([]));
+  const unsentLogsAsString: string | null = localStorage.getItem('unsentLogs');
+  const unsentLogs: UnsentLog[] = JSON.parse(
+    unsentLogsAsString ? unsentLogsAsString : JSON.stringify([])
+  );
   console.log(unsentLogs);
   return unsentLogs;
-}
+};
 
-export const saveUnsentLog = (assessmentId: number, questionId: number, playbackData: PlaybackData) => {
+export const saveUnsentLog = (
+  assessmentId: number,
+  questionId: number,
+  playbackData: PlaybackData
+) => {
   const unsentLogs: UnsentLog[] = getUnsentLogs();
 
   const newUnsentLog: UnsentLog = {
-    assessmentId: assessmentId, 
-    questionId: questionId, 
+    assessmentId: assessmentId,
+    questionId: questionId,
     playbackData: playbackData
   };
 
   unsentLogs.push(newUnsentLog);
-  localStorage.setItem("unsentLogs", JSON.stringify(unsentLogs));
-}
+  localStorage.setItem('unsentLogs', JSON.stringify(unsentLogs));
+};
 
 export const clearUnsentLogs = () => {
-  localStorage.setItem("unsentLogs", JSON.stringify("[]"));
-}
+  localStorage.setItem('unsentLogs', JSON.stringify('[]'));
+};
 
 export const playgroundQuestionId: number = -1;
 
@@ -64,7 +70,7 @@ export const resetAllPlaygroundLogs = () => {
   playgroundPlayback.inputs = [];
 
   sessionStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
-}
+};
 
 export const resetPlaygroundLogging = () => {
   const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
@@ -140,7 +146,7 @@ export const resetAllAssessmentLogs = () => {
   assessmentPlayback.inputs = [];
 
   sessionStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
-}
+};
 
 export const resetAssessmentLogging = () => {
   const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
