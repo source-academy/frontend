@@ -30,6 +30,7 @@ import {
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
 import {
+  clearUnsentLogs, 
   playgroundQuestionId,
   resetAssessmentLogging,
   resetPlaygroundLogging
@@ -50,7 +51,8 @@ import {
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
-  UPLOAD_KEYSTROKE_LOGS
+  UPLOAD_KEYSTROKE_LOGS,
+  UPLOAD_UNSENT_LOGS
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
@@ -655,6 +657,33 @@ function* BackendSaga(): SagaIterator {
         resetAssessmentLogging();
       }
     }
+  });
+
+  yield takeEvery(UPLOAD_UNSENT_LOGS, function* (
+    action: ReturnType<typeof actions.uploadUnsentLogs>
+  ) {
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+
+    const unsentLogs = action.payload;
+    for (let i = 0; i < unsentLogs.length; i++) {
+      const unsentLog = unsentLogs[i];
+      const playbackData = unsentLog.playbackData;
+      const assessmentId = unsentLog.assessmentId;
+      const questionId = unsentLog.questionId;
+
+      const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
+
+      if (!respMsg) {
+        yield handleResponseError(respMsg);
+        return; 
+      }
+    }
+
+    clearUnsentLogs();
+
   });
 
   /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(

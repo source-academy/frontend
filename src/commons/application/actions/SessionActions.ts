@@ -1,6 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { UnsentLog } from '../../../features/keystrokes/KeystrokesHelper';
 import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
@@ -34,7 +35,8 @@ import {
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
   UPDATE_NOTIFICATIONS,
-  UPLOAD_KEYSTROKE_LOGS
+  UPLOAD_KEYSTROKE_LOGS,
+  UPLOAD_UNSENT_LOGS
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -169,3 +171,7 @@ export const uploadKeystrokeLogs = (
   questionId: number,
   playbackData: PlaybackData
 ) => action(UPLOAD_KEYSTROKE_LOGS, { assessmentId, questionId, playbackData });
+
+export const uploadUnsentLogs = (
+  log: UnsentLog[]
+) => action(UPLOAD_UNSENT_LOGS, log);

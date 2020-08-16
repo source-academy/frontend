@@ -31,6 +31,7 @@ export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
 export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
+export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
 
 export type SessionState = {
   readonly accessToken?: string;

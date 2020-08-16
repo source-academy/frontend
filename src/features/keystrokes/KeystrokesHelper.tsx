@@ -7,6 +7,12 @@ const oneByteInBits = 8;
 const oneKbInBytes = 1024;
 const fiveMbInKb = 5 * 1024;
 
+export type UnsentLog = {
+  assessmentId: number;
+  questionId: number; 
+  playbackData: PlaybackData;
+}
+
 const getSessionStorageSpace = () => {
   let allStrings = '';
   for (const key in window.sessionStorage) {
@@ -23,6 +29,24 @@ export const hasExceededLocalStorageSpace = () => {
     getPlaygroundLogs().inputs.length + getAssessmentLogs().inputs.length >= 1000
   );
 };
+
+export const saveUnsentLog = (assessmentId: number, questionId: number, playbackData: PlaybackData) => {
+  const unsentLogsAsString: string | null = localStorage.getItem("unsentLogs");
+  const unsentLogs: UnsentLog[] = JSON.parse(unsentLogsAsString ? unsentLogsAsString : "[]");
+
+  const newUnsentLog: UnsentLog = {
+    assessmentId: assessmentId, 
+    questionId: questionId, 
+    playbackData: playbackData
+  };
+
+  unsentLogs.push(newUnsentLog);
+  localStorage.setItem("unsentLogs", JSON.stringify(unsentLogs));
+}
+
+export const clearUnsentLogs = () => {
+  localStorage.setItem("unsentLogs", JSON.stringify("[]"));
+}
 
 export const playgroundQuestionId: number = -1;
 
