@@ -29,7 +29,7 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
-import { setResetLoggingFlag } from '../../features/keystrokes/KeystrokesHelper';
+import { playgroundQuestionId, resetAssessmentLogging, resetPlaygroundLogging } from '../../features/keystrokes/KeystrokesHelper';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -637,15 +637,19 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
+
     const playbackData = action.payload.playbackData;
     const assessmentId = action.payload.assessmentId;
     const questionId = action.payload.questionId;
     const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
     if (!respMsg) {
       yield handleResponseError(respMsg);
-      yield setResetLoggingFlag(false);
     } else {
-      yield setResetLoggingFlag(true);
+      if (assessmentId === playgroundQuestionId && questionId === playgroundQuestionId) {
+        resetPlaygroundLogging();
+      } else {
+        resetAssessmentLogging();
+      }
     }
   });
 

@@ -25,12 +25,10 @@ import {
 import {
   getAssessmentLogs,
   getLoggedAssessmentIds,
-  getPlaygroundLogs,
   hasExceededLocalStorageSpace,
-  playgroundQuestionId,
-  resetAssessmentLogging,
   saveAssessmentLog,
-  saveLoggedAssessmentIds
+  saveLoggedAssessmentIds,
+  setLastAssessmentInputs
 } from '../../features/keystrokes/KeystrokesHelper';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
@@ -204,7 +202,6 @@ class AssessmentWorkspace extends React.Component<
   public uploadLogs = () => {
     const assessmentIDs = getLoggedAssessmentIds();
     const assessmentLogs = getAssessmentLogs();
-    const playgroundLogs = getPlaygroundLogs();
 
     if (assessmentLogs.inputs.length !== 0) {
       this.props.handleKeystrokeUpload(
@@ -212,18 +209,18 @@ class AssessmentWorkspace extends React.Component<
         assessmentIDs.questionId,
         assessmentLogs
       );
-    }
 
-    if (playgroundLogs.inputs.length !== 0) {
-      this.props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
+      const question = this.props.assessment!.questions[this.props.questionId];
+      const editorValue = this.props.editorValue ? this.props.editorValue : '';
+
+      setLastAssessmentInputs(
+        question.library.chapter,
+        question.library.external.name,
+        editorValue
+      );
     }
 
     saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
-    resetAssessmentLogging(
-      this.props.assessment!.questions[this.props.questionId].library.chapter,
-      this.props.assessment!.questions[this.props.questionId].library.external.name,
-      this.props.editorValue ? this.props.editorValue : ''
-    );
   };
 
   public pushLog = (newInput: Input) => {

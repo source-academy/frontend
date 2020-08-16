@@ -26,24 +26,21 @@ export const hasExceededLocalStorageSpace = () => {
 
 export const playgroundQuestionId: number = -1;
 
-export const resetPlaygroundLogging = (
-  chapter: number,
-  externalLibrary: ExternalLibraryName,
-  editorValue: string
-) => {
+export const resetPlaygroundLogging = () => {
   const playgroundLogs: string | null = localStorage.getItem('PlaygroundLogs');
   const playgroundPlayback: PlaybackData = JSON.parse(
     playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
   );
+  const lastInputs = getLastPlaygroundInputs();
   const newInit = {
-    chapter: chapter,
-    externalLibrary: externalLibrary,
-    editorValue: editorValue
+    chapter: lastInputs.chapter,
+    externalLibrary: lastInputs.externalLibrary,
+    editorValue: lastInputs.editorValue
   };
   if (!isEqual(playgroundPlayback.init, newInit)) {
     playgroundPlayback.init = newInit;
   }
-  playgroundPlayback.inputs = [];
+  playgroundPlayback.inputs = getPlaygroundLogs().inputs.splice(0, lastInputs.lastIndex);
   localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
 };
 
@@ -54,6 +51,27 @@ export const setResetLoggingFlag = (flag: boolean) => {
 export const getResetLoggingFlag = () => {
   const loggingFlag: string | null = localStorage.getItem('LoggingFlag');
   return JSON.parse(loggingFlag ? loggingFlag : 'false');
+};
+
+export const setLastPlaygroundInputs = (
+  chapter: number,
+  externalLibrary: ExternalLibraryName,
+  editorValue: string
+) => {
+  const lastIndex = getPlaygroundLogs().inputs.length;
+  const lastInputs = {
+    chapter: chapter,
+    externalLibrary: externalLibrary,
+    editorValue: editorValue,
+    lastIndex: lastIndex
+  };
+  localStorage.setItem('LastPlaygroundIndex', JSON.stringify(lastInputs));
+};
+
+export const getLastPlaygroundInputs = () => {
+  const lastInputs = localStorage.getItem('LastPlaygroundIndex');
+  const lastInputsAsObject = JSON.parse(lastInputs ? lastInputs : '0');
+  return lastInputsAsObject;
 };
 
 export const savePlaygroundLog = (newInput: Input) => {
@@ -73,25 +91,44 @@ export const getPlaygroundLogs = () => {
   return playgroundPlayback;
 };
 
-export const resetAssessmentLogging = (
-  chapter: number,
-  externalLibrary: ExternalLibraryName,
-  editorValue: string
-) => {
+export const resetAssessmentLogging = () => {
   const assessmentLogs: string | null = localStorage.getItem('AssessmentLogs');
   const assessmentPlayback: PlaybackData = JSON.parse(
     assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
   );
+  const lastInputs = getLastAssessmentInputs();
   const newInit = {
-    chapter: chapter,
-    externalLibrary: externalLibrary,
-    editorValue: editorValue
+    chapter: lastInputs.chapter,
+    externalLibrary: lastInputs.externalLibrary,
+    editorValue: lastInputs.editorValue
   };
   if (!isEqual(assessmentPlayback.init, newInit)) {
     assessmentPlayback.init = newInit;
   }
-  assessmentPlayback.inputs = [];
+  assessmentPlayback.inputs = getAssessmentLogs().inputs.splice(0, lastInputs.lastIndex);
+
   localStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
+};
+
+export const setLastAssessmentInputs = (
+  chapter: number,
+  externalLibrary: ExternalLibraryName,
+  editorValue: string
+) => {
+  const lastIndex = getAssessmentLogs().inputs.length;
+  const lastInputs = {
+    chapter: chapter,
+    externalLibrary: externalLibrary,
+    editorValue: editorValue,
+    lastIndex: lastIndex
+  };
+  localStorage.setItem('LastAssessmentLogIndex', JSON.stringify(lastInputs));
+};
+
+export const getLastAssessmentInputs = () => {
+  const lastInputs = localStorage.getItem('LastAssessmentLogIndex');
+  const lastInputsAsObject = JSON.parse(lastInputs ? lastInputs : '0');
+  return lastInputsAsObject;
 };
 
 export const saveAssessmentLog = (newInput: Input) => {
