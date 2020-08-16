@@ -32,7 +32,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
 
   const handleRemovePrereq = (removeId?: number) => {
     if (removeId === undefined) return;
-    
+
     selectedPrereqs.delete(removeId);
     availablePrereqs.add(removeId);
     changePrerequisiteIds([...selectedPrereqs]);
