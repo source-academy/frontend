@@ -13,8 +13,8 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
   const { availableIds, changePrerequisiteIds, prerequisiteIds } = props;
 
   const inferencer = useContext(AchievementContext);
-  const getId = inferencer.getIdByTitle;
-  const getTitle = (id: number) => inferencer.getAchievement(id).title;
+  const getId = (title: string) => inferencer.getIdByTitle(title);
+  const getTitle = (id: number) => inferencer.getTitleById(id);
 
   const PrerequisiteSelect = MultiSelect.ofType<number>();
   const prerequisiteRenderer: ItemRenderer<number> = (id, { handleClick }) => (
@@ -30,7 +30,9 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
     changePrerequisiteIds([...selectedPrereqs]);
   };
 
-  const handleRemovePrereq = (removeId: number) => {
+  const handleRemovePrereq = (removeId?: number) => {
+    if (removeId === undefined) return;
+    
     selectedPrereqs.delete(removeId);
     availablePrereqs.add(removeId);
     changePrerequisiteIds([...selectedPrereqs]);

@@ -296,23 +296,39 @@ class AchievementInferencer {
   }
 
   /**
-   * Returns the Goal Id associate to the Goal Text
+   * Returns the Goal Id associate to the Goal Text or undefined
    *
    * @param text goalText
    */
   public getIdByText(text: string) {
-    assert(this.textToId.has(text), `Goal ${text} not found`);
-    return this.textToId.get(text)!;
+    return this.textToId.get(text);
   }
 
   /**
-   * Returns the Achievement Id associate to the Achievement Title
+   * Returns the Goal Text associate to the Goal Id or undefined
+   *
+   * @param text goalId
+   */
+  public getTextById(id: number) {
+    return this.goalList.get(id)?.text;
+  }
+
+  /**
+   * Returns the Achievement Id associate to the Achievement Title or undefined
    *
    * @param title achievementTitle
    */
   public getIdByTitle(title: string) {
-    assert(this.titleToId.has(title), `Achievement ${title} not found`);
-    return this.titleToId.get(title)!;
+    return this.titleToId.get(title);
+  }
+
+  /**
+   * Returns the Achievement Title associate to the Achievement Id or undefined
+   *
+   * @param text achievementId
+   */
+  public getTitleById(id: number) {
+    return this.nodeList.get(id)?.achievement.title;
   }
 
   /**

@@ -14,8 +14,8 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
   const { allGoalIds, changeGoalIds, goalIds } = props;
 
   const inferencer = useContext(AchievementContext);
-  const getId = inferencer.getIdByText;
-  const getText = (id: number) => inferencer.getGoalDefinition(id).text;
+  const getId = (text: string) => inferencer.getIdByText(text);
+  const getText = (id: number) => inferencer.getTextById(id);
 
   const GoalSelect = MultiSelect.ofType<number>();
   const goalRenderer: ItemRenderer<number> = (id, { handleClick }) => (
@@ -31,7 +31,9 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
     changeGoalIds([...selectedGoals]);
   };
 
-  const handleRemoveGoal = (removeId: number) => {
+  const handleRemoveGoal = (removeId?: number) => {
+    if (removeId === undefined) return;
+
     selectedGoals.delete(removeId);
     availableGoals.add(removeId);
     changeGoalIds([...selectedGoals]);
