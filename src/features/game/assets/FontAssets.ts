@@ -6,6 +6,11 @@ const FontAssets: AssetMap<FontAsset> = {
     pngPath: '../assets/zekton.png',
     fntPath: '../assets/zekton.fnt'
   },
+  zektonDarkFont: {
+    key: 'zektonDark',
+    pngPath: '../assets/zekton_dark.png',
+    fntPath: '../assets/zekton.fnt'
+  },
   alienCowsFont: {
     key: 'alienAndCows',
     pngPath: '../assets/alien_and_cows.png',
@@ -15,11 +20,6 @@ const FontAssets: AssetMap<FontAsset> = {
     key: 'alienLeague',
     pngPath: '../assets/alien_league.png',
     fntPath: '../assets/alien_league.fnt'
-  },
-  educatedDeersFont: {
-    key: 'educatedDeers',
-    pngPath: '../assets/educated_deers.png',
-    fntPath: '../assets/educated_deers.fnt'
   },
   pixelFont: {
     key: 'pixel',

@@ -16,6 +16,7 @@ export const CHANGE_EDITOR_WIDTH = 'CHANGE_EDITOR_WIDTH';
 export const CHANGE_EXEC_TIME = 'CHANGE_EXEC_TIME';
 export const CHANGE_EXTERNAL_LIBRARY = 'CHANGE_EXTERNAL_LIBRARY';
 export const CHANGE_SIDE_CONTENT_HEIGHT = 'CHANGE_SIDE_CONTENT_HEIGHT';
+export const CHANGE_STEP_LIMIT = 'CHANGE_STEP_LIMIT';
 export const CHAPTER_SELECT = 'CHAPTER_SELECT';
 export const CLEAR_REPL_INPUT = 'CLEAR_REPL_INPUT';
 export const CLEAR_REPL_OUTPUT = 'CLEAR_REPL_OUTPUT';
@@ -42,9 +43,9 @@ export const UPDATE_EDITOR_BREAKPOINTS = 'UPDATE_EDITOR_BREAKPOINTS';
 export const UPDATE_HAS_UNSAVED_CHANGES = 'UPDATE_HAS_UNSAVED_CHANGES';
 export const UPDATE_REPL_VALUE = 'UPDATE_REPL_VALUE';
 export const UPDATE_WORKSPACE = 'UPDATE_WORKSPACE';
-export const FETCH_CHAPTER = 'FETCH_CHAPTER';
-export const UPDATE_CHAPTER = 'UPDATE_CHAPTER';
-export const CHANGE_CHAPTER = 'CHANGE_CHAPTER';
+export const FETCH_SUBLANGUAGE = 'FETCH_SUBLANGUAGE';
+export const UPDATE_SUBLANGUAGE = 'UPDATE_SUBLANGUAGE';
+export const CHANGE_SUBLANGUAGE = 'CHANGE_SUBLANGUAGE';
 
 export type WorkspaceLocation = keyof WorkspaceManagerState;
 
@@ -98,11 +99,10 @@ export type WorkspaceState = {
   readonly externalLibrary: ExternalLibraryName;
   readonly replHistory: ReplHistory;
   readonly replValue: string;
-  readonly sharedbAceInitValue: string;
-  readonly sharedbAceIsInviting: boolean;
+  readonly sharedbConnected: boolean;
   readonly sideContentActiveTab: SideContentType;
   readonly sideContentHeight?: number;
-  readonly websocketStatus: number;
+  readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
 };

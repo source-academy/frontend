@@ -182,13 +182,14 @@ var halfEyeDistance = 0.03 // rune 3d only
 
 //----------------------Global variables----------------------
 // common
+var stringify // stringify function we should use (eg for error messages)
 var gl // the WebGL context
 var curShaderProgram // the shader program currently in use
 var normalShaderProgram // the default shader program
 var vertexBuffer
 var vertexPositionAttribute // location of a_position
 var colorAttribute // location of a_color
-const canvas = createCanvas(); // the <canvas> object that is used to display webGL output
+var canvas = canvas || createCanvas(); // the <canvas> object that is used to display webGL output
 
 // rune 2d and 3d
 var instance_ext // ANGLE_instanced_arrays extension
@@ -262,6 +263,10 @@ function createCanvas() {
   return canvas;
 }
 
+function getReadyStringifyForRunes(stringify_) {
+  stringify = stringify_
+}
+
 /*
  * Gets the WebGL object (gl) ready for usage. Use this
  * to reset the mode of rendering i.e to change from 2d to 3d runes.
@@ -275,6 +280,9 @@ function createCanvas() {
  */
 function getReadyWebGLForCanvas(mode) {
   // Get the rendering context for WebGL
+  if (!canvas) {
+    canvas = createCanvas();
+  }
   gl = initWebGL(canvas)
   if (gl) {
     gl.clearColor(1.0, 1.0, 1.0, 1.0) // Set clear color to white, fully opaque

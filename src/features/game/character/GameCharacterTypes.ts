@@ -12,4 +12,5 @@ export type Character = {
   expressions: Map<string, AssetKey>;
   defaultExpression: string;
   defaultPosition: GamePosition;
+  scale: number;
 };

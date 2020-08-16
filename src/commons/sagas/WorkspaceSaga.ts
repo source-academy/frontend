@@ -14,15 +14,16 @@ import { parse } from 'js-slang/dist/parser/parser';
 import { manualToggleDebugger } from 'js-slang/dist/stdlib/inspector';
 import { typeCheck } from 'js-slang/dist/typeChecker/typeChecker';
 import { Variant } from 'js-slang/dist/types';
+import { stringify } from 'js-slang/dist/utils/stringify';
 import { validateAndAnnotate } from 'js-slang/dist/validator/validator';
 import { random } from 'lodash';
 import Phaser from 'phaser';
 import { SagaIterator } from 'redux-saga';
-import { call, delay, put, race, select, take, takeEvery } from 'redux-saga/effects';
+import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
-import { OverallState, styliseChapter } from '../application/ApplicationTypes';
+import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   BEGIN_DEBUG_PAUSE,
@@ -34,10 +35,10 @@ import {
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase, TestcaseType, TestcaseTypes } from '../assessment/AssessmentTypes';
-import { INVALID_EDITOR_SESSION_ID } from '../collabEditing/CollabEditingTypes';
 import { Documentation } from '../documentation/Documentation';
 import { SideContentType } from '../sideContent/SideContentTypes';
 import { actions } from '../utils/ActionsHelper';
+import { getInfiniteLoopData, reportInfiniteLoopError } from '../utils/InfiniteLoopReporter';
 import {
   getBlockExtraMethodsString,
   getDifferenceInMethods,
@@ -49,6 +50,7 @@ import {
   visualiseEnv
 } from '../utils/JsSlangHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { makeExternalBuiltins as makeSourcerorExternalBuiltins } from '../utils/SourcerorHelper';
 import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
@@ -65,6 +67,7 @@ import {
   UPDATE_EDITOR_BREAKPOINTS,
   WorkspaceLocation
 } from '../workspace/WorkspaceTypes';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 let breakpoints: string[] = [];
 export default function* WorkspaceSaga(): SagaIterator {
@@ -77,35 +80,27 @@ export default function* WorkspaceSaga(): SagaIterator {
       const editorCode = state.workspaces[workspaceLocation].editorValue!;
       return [prependCode, editorCode] as [string, string];
     });
-    const [prepend, tempvalue] = code;
-    const exploded = tempvalue.split('\n');
-    for (const i in breakpoints) {
-      if (typeof i === 'string') {
-        const index: number = +i;
-        exploded[index] = 'debugger;' + exploded[index];
-      }
-    }
-    const value = exploded.join('\n');
-    const chapter: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
-    const execTime: number = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].execTime
-    );
-    const symbols: string[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
-    const variant: Variant = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
-    );
+
+    const [chapter, execTime, symbols, externalLibraryName, globals, variant]: [
+      number,
+      number,
+      string[],
+      ExternalLibraryName,
+      Array<[string, any]>,
+      Variant
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].execTime,
+      state.workspaces[workspaceLocation].context.externalSymbols,
+      state.workspaces[workspaceLocation].externalLibrary,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].context.variant
+    ]);
     const library = {
       chapter,
       variant,
       external: {
-        name: ExternalLibraryName.NONE,
+        name: externalLibraryName,
         symbols
       },
       globals
@@ -113,9 +108,34 @@ export default function* WorkspaceSaga(): SagaIterator {
     // End any code that is running right now.
     yield put(actions.beginInterruptExecution(workspaceLocation));
     // Clear the context, with the same chapter and externalSymbols as before.
-    yield put(actions.beginClearContext(library, workspaceLocation));
+    yield put(actions.beginClearContext(workspaceLocation, library, false));
     yield put(actions.clearReplOutput(workspaceLocation));
     context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+
+    const [prepend, tempvalue] = code;
+    let value = tempvalue;
+    // Check for initial syntax errors. If there are errors, we continue with
+    // eval and let it print the error messages.
+    parse(tempvalue, context);
+    if (!context.errors.length) {
+      // Otherwise we step through the breakpoints one by one and check them.
+      const exploded = tempvalue.split('\n');
+      for (const b in breakpoints) {
+        if (typeof b !== 'string') {
+          continue;
+        }
+
+        const index: number = +b;
+        context.errors = [];
+        exploded[index] = 'debugger;' + exploded[index];
+        value = exploded.join('\n');
+        parse(value, context);
+        if (context.errors.length) {
+          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
+          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
+        }
+      }
+    }
 
     // Evaluate the prepend silently with a privileged context, if it exists
     if (prepend.length) {
@@ -200,12 +220,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
     );
     yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  });
-
-  yield takeEvery(INVALID_EDITOR_SESSION_ID, function* (
-    action: ReturnType<typeof actions.invalidEditorSessionId>
-  ) {
-    yield call(showWarningMessage, 'Invalid ID Input', 1000);
   });
 
   yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
@@ -325,36 +339,39 @@ export default function* WorkspaceSaga(): SagaIterator {
   });
 
   yield takeEvery(CHAPTER_SELECT, function* (action: ReturnType<typeof actions.chapterSelect>) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const newChapter = action.payload.chapter;
-    const oldVariant = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.variant
-    );
-    const newVariant = action.payload.variant;
-    const oldChapter = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
+    const { workspaceLocation, chapter: newChapter, variant: newVariant } = action.payload;
+    const [oldVariant, oldChapter, symbols, globals, externalLibraryName]: [
+      Variant,
+      number,
+      string[],
+      Array<[string, any]>,
+      ExternalLibraryName
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.variant,
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].context.externalSymbols,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].externalLibrary
+    ]);
 
-    const symbols: string[] = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.externalSymbols
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
     if (newChapter !== oldChapter || newVariant !== oldVariant) {
       const library = {
         chapter: newChapter,
         variant: newVariant,
         external: {
-          name: ExternalLibraryName.NONE,
+          name: externalLibraryName,
           symbols
         },
         globals
       };
-      yield put(actions.beginClearContext(library, workspaceLocation));
+      yield put(actions.beginClearContext(workspaceLocation, library, false));
       yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.debuggerReset(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${styliseChapter(newChapter, newVariant)}`, 1000);
+      yield call(
+        showSuccessMessage,
+        `Switched to ${styliseSublanguage(newChapter, newVariant)}`,
+        1000
+      );
     }
   });
 
@@ -372,17 +389,16 @@ export default function* WorkspaceSaga(): SagaIterator {
   yield takeEvery(PLAYGROUND_EXTERNAL_SELECT, function* (
     action: ReturnType<typeof actions.externalLibrarySelect>
   ) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const chapter = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].context.chapter
-    );
-    const globals: Array<[string, any]> = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].globals
-    );
-    const newExternalLibraryName = action.payload.externalLibraryName;
-    const oldExternalLibraryName = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
-    );
+    const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
+    const [chapter, globals, oldExternalLibraryName]: [
+      number,
+      Array<[string, any]>,
+      ExternalLibraryName
+    ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].context.chapter,
+      state.workspaces[workspaceLocation].globals,
+      state.workspaces[workspaceLocation].externalLibrary
+    ]);
     const symbols = externalLibraries.get(newExternalLibraryName)!;
     const library = {
       chapter,
@@ -392,11 +408,13 @@ export default function* WorkspaceSaga(): SagaIterator {
       },
       globals
     };
-    if (newExternalLibraryName !== oldExternalLibraryName) {
+    if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
       yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield put(actions.beginClearContext(library, workspaceLocation));
+      yield put(actions.beginClearContext(workspaceLocation, library, true));
       yield put(actions.clearReplOutput(workspaceLocation));
-      yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+      if (!action.payload.initialise) {
+        yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+      }
     }
   });
 
@@ -461,29 +479,39 @@ export default function* WorkspaceSaga(): SagaIterator {
     action: ReturnType<typeof actions.beginClearContext>
   ) {
     yield* checkWebGLAvailable();
-    const externalLibraryName = action.payload.library.external.name;
-    switch (externalLibraryName) {
-      case ExternalLibraryName.RUNES:
-        (window as any).loadLib('RUNES');
-        (window as any).getReadyWebGLForCanvas('3d');
-        break;
-      case ExternalLibraryName.CURVES:
-        (window as any).loadLib('CURVES');
-        (window as any).getReadyWebGLForCanvas('curve');
-        break;
-      case ExternalLibraryName.MACHINELEARNING:
-        (window as any).loadLib('MACHINELEARNING');
-        break;
+    if (action.payload.shouldInitLibrary) {
+      const externalLibraryName = action.payload.library.external.name;
+      switch (externalLibraryName) {
+        case ExternalLibraryName.RUNES:
+          (window as any).loadLib('RUNES');
+          (window as any).getReadyWebGLForCanvas('3d');
+          (window as any).getReadyStringifyForRunes(stringify);
+          break;
+        case ExternalLibraryName.CURVES:
+          (window as any).loadLib('CURVES');
+          (window as any).getReadyWebGLForCanvas('curve');
+          break;
+        case ExternalLibraryName.MACHINELEARNING:
+          (window as any).loadLib('MACHINELEARNING');
+          break;
+      }
     }
     const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
     for (const [key, value] of globals) {
       window[key] = value;
     }
-    action.payload.library.moduleParams = {
-      runes: {},
-      phaser: Phaser
-    };
-    yield put(actions.endClearContext(action.payload.library, action.payload.workspaceLocation));
+    yield put(
+      actions.endClearContext(
+        {
+          ...action.payload.library,
+          moduleParams: {
+            runes: {},
+            phaser: Phaser
+          }
+        },
+        action.payload.workspaceLocation
+      )
+    );
     yield undefined;
   });
 
@@ -576,6 +604,9 @@ export function* evalCode(
   const substIsActive: boolean = yield select(
     (state: OverallState) => (state.playground as PlaygroundState).usingSubst
   );
+  const stepLimit: number = yield select(
+    (state: OverallState) => state.workspaces[workspaceLocation].stepLimit
+  );
   const substActiveAndCorrectChapter =
     context.chapter <= 2 && workspaceLocation === 'playground' && substIsActive;
   if (substActiveAndCorrectChapter) {
@@ -594,12 +625,14 @@ export function* evalCode(
         : call(runInContext, code, context, {
             executionMethod: 'interpreter',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           });
     } else if (variant === 'lazy') {
       return call(runInContext, code, context, {
         scheduler: 'preemptive',
         originalMaxExecTime: execTime,
+        stepLimit: stepLimit,
         useSubst: substActiveAndCorrectChapter
       });
     } else if (variant === 'wasm') {
@@ -610,10 +643,21 @@ export function* evalCode(
   }
   async function wasm_compile_and_run(wasmCode: string, wasmContext: Context): Promise<Result> {
     return Sourceror.compile(wasmCode, wasmContext)
-      .then((wasmModule: WebAssembly.Module) => Sourceror.run(wasmModule, wasmContext))
+      .then((wasmModule: WebAssembly.Module) => {
+        const transcoder = new Sourceror.Transcoder();
+        return Sourceror.run(
+          wasmModule,
+          Sourceror.makePlatformImports(makeSourcerorExternalBuiltins(wasmContext), transcoder),
+          transcoder,
+          wasmContext
+        );
+      })
       .then(
-        (returnedValue: any) => ({ status: 'finished', context, value: returnedValue }),
-        _ => ({ status: 'error' })
+        (returnedValue: any): Result => ({ status: 'finished', context, value: returnedValue }),
+        (e: any): Result => {
+          console.log(e);
+          return { status: 'error' };
+        }
       );
   }
 
@@ -629,6 +673,7 @@ export function* evalCode(
         : call(runInContext, code, context, {
             scheduler: 'preemptive',
             originalMaxExecTime: execTime,
+            stepLimit: stepLimit,
             useSubst: substActiveAndCorrectChapter
           }),
 
@@ -676,6 +721,16 @@ export function* evalCode(
     const parsed = parse(code, context);
     const typeErrors = parsed && typeCheck(validateAndAnnotate(parsed!, context), context)[1];
     context.errors = oldErrors;
+
+    // report infinite loops but only for 'vanilla'/default source
+    if (context.variant === 'default') {
+      const infiniteLoopData = getInfiniteLoopData(context, code);
+      if (infiniteLoopData) {
+        const [error, code] = infiniteLoopData;
+        yield call(reportInfiniteLoopError, error, code);
+      }
+    }
+
     if (typeErrors && typeErrors.length > 0) {
       yield put(
         actions.sendReplInputToOutput('Hints:\n' + parseError(typeErrors), workspaceLocation)

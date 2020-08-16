@@ -17,36 +17,59 @@ export default class GamePhaseManager {
   public phaseMap: Map<GamePhaseType, IGameUI>;
   private phaseStack: GamePhaseType[];
   private inputManager: GameInputManager;
+  private interruptCheckCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean;
   private interruptTransitionCallback: (
     prevPhase: GamePhaseType,
     newPhase: GamePhaseType
-  ) => Promise<boolean> | void;
+  ) => Promise<void>;
   private transitionCallback: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => void;
 
   constructor(phaseMap: Map<GamePhaseType, IGameUI>, inputManager: GameInputManager) {
     this.phaseStack = [GamePhaseType.None];
     this.phaseMap = phaseMap;
-    this.interruptTransitionCallback = Constants.nullFunction;
+    this.interruptCheckCallback = () => false;
+    this.interruptTransitionCallback = async () => Constants.nullFunction();
     this.transitionCallback = Constants.nullFunction;
     this.inputManager = inputManager;
   }
 
+  /**
+   * Add an additional phase into the phase map.
+   *
+   * @param gamePhaseType type of phase
+   * @param gameUI gameUI to be activated at the phase
+   */
   public addPhaseToMap(gamePhaseType: GamePhaseType, gameUI: IGameUI) {
     this.phaseMap.set(gamePhaseType, gameUI);
   }
 
   /**
-   * Set the interrupt callback of the phase manager. The callback will be executed
-   * before every phase transition. The function signature must accept a
-   * GamePhaseType and returns a boolean.
+   * Set the interrupt check of the phase manager. Interrupt check is called
+   * to determine whether interrupt callback is called. The function
+   * signature must return a boolean.
    *
-   * If the boolean returned is true, phase manager will not transition to the
+   * If the boolean returned is true, interrupt callback will be executed.
+   *
+   * @param fn callback
+   */
+  public setInterruptCheckCallback(
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => boolean
+  ) {
+    this.interruptCheckCallback = fn;
+  }
+
+  /**
+   * Set the interrupt callback of the phase manager.
+   * The callback will be executed before every phase transition.
+   *
+   * Will use the interruptCheck function to determine whether this function
+   * is executed. If executed, phase manager will not transition to the
    * new phase i.e. interrupt the phase transition.
    *
    * @param fn callback
    */
   public setInterruptCallback(
-    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<boolean>
+    fn: (prevPhase: GamePhaseType, newPhase: GamePhaseType) => Promise<void>
   ) {
     this.interruptTransitionCallback = fn;
   }
@@ -117,11 +140,11 @@ export default class GamePhaseManager {
     this.inputManager.enableMouseInput(false);
     await this.phaseMap.get(prevPhase)!.deactivateUI();
 
-    // Execute phase transition callback.
-    // If executed, we no longer do transition to the new phase.
-    if (await this.interruptTransitionCallback(prevPhase, newPhase)) {
+    if (this.interruptCheckCallback(prevPhase, newPhase)) {
+      // Enable input in case interrupt transition callback needs it
       this.inputManager.enableMouseInput(true);
       this.inputManager.enableKeyboardInput(true);
+      await this.interruptTransitionCallback(prevPhase, newPhase);
       return;
     }
 

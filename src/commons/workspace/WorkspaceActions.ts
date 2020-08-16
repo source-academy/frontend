@@ -3,6 +3,7 @@ import { Variant } from 'js-slang/dist/types';
 import { action } from 'typesafe-actions';
 
 import { SET_EDITOR_READONLY } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
+import { SourceLanguage } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { HIGHLIGHT_LINE } from '../application/types/InterpreterTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -12,12 +13,13 @@ import {
   BEGIN_CLEAR_CONTEXT,
   BROWSE_REPL_HISTORY_DOWN,
   BROWSE_REPL_HISTORY_UP,
-  CHANGE_CHAPTER,
   CHANGE_EDITOR_HEIGHT,
   CHANGE_EDITOR_WIDTH,
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_STEP_LIMIT,
+  CHANGE_SUBLANGUAGE,
   CHAPTER_SELECT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
@@ -27,7 +29,7 @@ import {
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
-  FETCH_CHAPTER,
+  FETCH_SUBLANGUAGE,
   MOVE_CURSOR,
   NAV_DECLARATION,
   PLAYGROUND_EXTERNAL_SELECT,
@@ -37,13 +39,13 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_BREAKPOINTS,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SUBLANGUAGE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceState
@@ -70,6 +72,9 @@ export const changeExecTime = (execTime: string, workspaceLocation: WorkspaceLoc
 export const changeSideContentHeight = (height: number, workspaceLocation: WorkspaceLocation) =>
   action(CHANGE_SIDE_CONTENT_HEIGHT, { height, workspaceLocation });
 
+export const changeStepLimit = (stepLimit: number, workspaceLocation: WorkspaceLocation) =>
+  action(CHANGE_STEP_LIMIT, { stepLimit, workspaceLocation });
+
 export const chapterSelect = (
   chapter: number,
   variant: Variant,
@@ -83,11 +88,13 @@ export const chapterSelect = (
 
 export const externalLibrarySelect = (
   externalLibraryName: ExternalLibraryName,
-  workspaceLocation: WorkspaceLocation
+  workspaceLocation: WorkspaceLocation,
+  initialise?: boolean
 ) =>
   action(PLAYGROUND_EXTERNAL_SELECT, {
     externalLibraryName,
-    workspaceLocation
+    workspaceLocation,
+    initialise: initialise || false
   });
 
 export const toggleEditorAutorun = (workspaceLocation: WorkspaceLocation) =>
@@ -109,10 +116,15 @@ export const updateActiveTab = (activeTab: SideContentType, workspaceLocation: W
  *
  * @see Library in assessmentShape.ts
  */
-export const beginClearContext = (library: Library, workspaceLocation: WorkspaceLocation) =>
+export const beginClearContext = (
+  workspaceLocation: WorkspaceLocation,
+  library: Library,
+  shouldInitLibrary: boolean
+) =>
   action(BEGIN_CLEAR_CONTEXT, {
     library,
-    workspaceLocation
+    workspaceLocation,
+    shouldInitLibrary
   });
 
 export const clearReplInput = (workspaceLocation: WorkspaceLocation) =>
@@ -239,13 +251,13 @@ export const updateHasUnsavedChanges = (
     hasUnsavedChanges
   });
 
-export const fetchChapter = () => action(FETCH_CHAPTER);
+export const fetchSublanguage = () => action(FETCH_SUBLANGUAGE);
 
-export const changeChapter = (chapter: number, variant: Variant) =>
-  action(CHANGE_CHAPTER, { chapter, variant });
+export const changeSublanguage = (sublang: SourceLanguage) =>
+  action(CHANGE_SUBLANGUAGE, { sublang });
 
-export const updateChapter = (chapter: number, variant: Variant) =>
-  action(UPDATE_CHAPTER, { chapter, variant });
+export const updateSublanguage = (sublang: SourceLanguage) =>
+  action(UPDATE_SUBLANGUAGE, { sublang });
 
 export const promptAutocomplete = (
   workspaceLocation: WorkspaceLocation,

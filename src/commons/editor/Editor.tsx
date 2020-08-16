@@ -5,13 +5,12 @@ import 'ace-builds/src-noconflict/ext-searchbox';
 import 'js-slang/dist/editors/ace/theme/source';
 
 import { ContextMenu as BPContextMenu } from '@blueprintjs/core';
-import { HighlightRulesSelector, ModeSelector } from 'js-slang/dist/editors/ace/modes/source';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps } from 'react-ace';
 import { HotKeys } from 'react-hotkeys';
 
-import { Documentation } from '../documentation/Documentation';
+import { getModeString, selectMode } from '../utils/AceHelper';
 import { useMergedRef } from '../utils/Hooks';
 import { keyBindings, KeyFunction } from './EditorHotkeys';
 import { AceMouseEvent, HighlightedLines, Position } from './EditorTypes';
@@ -53,10 +52,9 @@ type DispatchProps = {
   handleReplValueChange?: (newCode: string) => void;
   handleReplEval?: () => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFinishInvite?: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
   handleSendReplInputToOutput?: (newOutput: string) => void;
-  handleSetWebsocketStatus?: (websocketStatus: number) => void;
+  handleSetSharedbConnected?: (connected: boolean) => void;
   handleUpdateHasUnsavedChanges?: (hasUnsavedChanges: boolean) => void;
 };
 
@@ -67,8 +65,6 @@ type StateProps = {
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
   newCursorPosition?: Position;
-  sharedbAceInitValue?: string;
-  sharedbAceIsInviting?: boolean;
   sourceChapter?: number;
   externalLibraryName?: string;
   sourceVariant?: Variant;
@@ -86,19 +82,6 @@ const getMarkers = (
     className: 'myMarker',
     type: 'fullLine'
   }));
-};
-
-const getModeString = (chapter: number, variant: Variant, library: string) =>
-  `source${chapter}${variant}${library}`;
-
-/**
- * This _modifies global state_ and defines a new Ace mode globally.
- *
- * Don't call this directly in render functions!
- */
-const selectMode = (chapter: number, variant: Variant, library: string) => {
-  HighlightRulesSelector(chapter, variant, library, Documentation.externalLibraries[library]);
-  ModeSelector(chapter, variant, library);
 };
 
 const toggleBreakpoint = (editor: Ace.Editor, row: number) => {
@@ -180,6 +163,7 @@ const makeCompleter = (handlePromptAutocomplete: DispatchProps['handlePromptAuto
       callback();
       return;
     }
+
     // console.log(pos); // Cursor col is insertion location i.e. last char col + 1
     handlePromptAutocomplete(pos.row + 1, pos.column, callback);
   }
@@ -197,222 +181,223 @@ const handlers = {
   goGreen: () => {}
 };
 
-const EditorBase = React.forwardRef<AceEditor, EditorProps>(function EditorBase(
-  props,
-  forwardedRef
-) {
-  // ----------------- GLOBAL REFS ----------------
-  const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
+const EditorBase = React.memo(
+  React.forwardRef<AceEditor, EditorProps>(function EditorBase(props, forwardedRef) {
+    // ----------------- GLOBAL REFS ----------------
 
-  // Refs for things that technically shouldn't change... but just in case.
-  const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
-  const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
+    const reactAceRef: React.MutableRefObject<AceEditor | null> = React.useRef(null);
 
-  React.useEffect(() => {
-    handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
-    handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
-  }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
+    // Refs for things that technically shouldn't change... but just in case.
+    const handleEditorUpdateBreakpointsRef = React.useRef(props.handleEditorUpdateBreakpoints);
+    const handlePromptAutocompleteRef = React.useRef(props.handlePromptAutocomplete);
 
-  // -------------- HOTKEYS / CONTEXTMENU GLOBALS --------------
+    React.useEffect(() => {
+      handleEditorUpdateBreakpointsRef.current = props.handleEditorUpdateBreakpoints;
+      handlePromptAutocompleteRef.current = props.handlePromptAutocomplete;
+    }, [props.handleEditorUpdateBreakpoints, props.handlePromptAutocomplete]);
 
-  const { handleEditorEval } = props;
+    // -------------- HOTKEYS / CONTEXTMENU GLOBALS --------------
 
-  const keyHandlers: EditorKeyBindingHandlers = {
-    evaluate: handleEditorEval
-  };
+    const { handleEditorEval } = props;
 
-  const contextMenuHandlers: ContextMenuHandlers = {
-    toggleBreakpoint: (row: number) => {
+    const keyHandlers: EditorKeyBindingHandlers = {
+      evaluate: handleEditorEval
+    };
+
+    const contextMenuHandlers: ContextMenuHandlers = {
+      toggleBreakpoint: (row: number) => {
+        if (!reactAceRef.current) {
+          return;
+        }
+        toggleBreakpoint(reactAceRef.current?.editor, row);
+      }
+    };
+
+    // ----------------- LANGUAGE RELATED ----------------
+
+    const [sourceChapter, sourceVariant, externalLibraryName] = [
+      props.sourceChapter || 1,
+      props.sourceVariant || 'default',
+      props.externalLibraryName || 'NONE'
+    ];
+
+    // this function defines the Ace language and highlighting mode for the
+    // given combination of chapter, variant and external library. it CANNOT be
+    // put in useEffect as it MUST be called before the mode is set on the Ace
+    // editor, and use(Layout)Effect runs after that happens.
+    //
+    // this used to be in useMemo, but selectMode now checks if the mode is
+    // already defined and doesn't do it, so it is now OK to keep calling this
+    // unconditionally.
+    selectMode(sourceChapter, sourceVariant, externalLibraryName);
+
+    // ----------------- RUN ONCE PER INSTANCE ----------------
+
+    // This needs to be defined later, unfortunately.
+    // Too tedious to rearrange the code otherwise.
+    const showContextMenuRef = React.useRef((e: MouseEvent) => {});
+
+    React.useLayoutEffect(() => {
       if (!reactAceRef.current) {
         return;
       }
-      toggleBreakpoint(reactAceRef.current?.editor, row);
+      const editor = reactAceRef.current.editor;
+      const session = editor.getSession();
+      // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
+      // The () => ref.current() are designed to use the latest instance only.
+
+      // NOTE: the two `any`s below are because the Ace editor typedefs are
+      // hopelessly incomplete
+      editor.on(
+        'gutterclick' as any,
+        makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
+      );
+
+      const gutter = (editor.renderer as any).$gutter as HTMLElement;
+      gutter.addEventListener('contextmenu', showContextMenuRef.current);
+      document.addEventListener('click', () => BPContextMenu.hide());
+
+      // Change all info annotations to error annotations
+      session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
+
+      // Start autocompletion
+      acequire('ace/ext/language_tools').setCompleters([
+        makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
+      ]);
+      // This should run exactly once.
+    }, []);
+
+    // ----------------- BIND CURSOR MOVEMENTS ----------------
+
+    React.useLayoutEffect(() => {
+      if (!reactAceRef.current) {
+        return;
+      }
+      const newCursorPosition = props.newCursorPosition;
+      if (newCursorPosition) {
+        moveCursor(reactAceRef.current.editor, newCursorPosition);
+      }
+    }, [props.newCursorPosition]);
+
+    const aceEditorProps: IAceEditorProps = {
+      className: 'react-ace',
+      editorProps: {
+        $blockScrolling: Infinity
+      },
+      markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
+      fontSize: 17,
+      height: '100%',
+      highlightActiveLine: false,
+      mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
+      theme: 'source',
+      value: props.editorValue,
+      width: '100%',
+      setOptions: {
+        enableBasicAutocompletion: true,
+        enableLiveAutocompletion: true,
+        fontFamily: "'Inconsolata', monospace"
+      }
+    };
+
+    // Hooks must not change after an editor is instantiated, so to prevent that
+    // we store the original value and always use that only
+    const [hooks] = React.useState(props.hooks);
+    if (hooks) {
+      // Note: the following is extremely non-standard use of hooks
+      // DO NOT refactor this into any form where the hook is called from a lambda
+      for (const hook of hooks) {
+        hook(props, aceEditorProps, keyHandlers, reactAceRef, contextMenuHandlers);
+      }
     }
-  };
 
-  // ----------------- LANGUAGE RELATED ----------------
+    // ----------------- DON'T KNOW HOW TO CLASSIFY ----------------
 
-  const [sourceChapter, sourceVariant, externalLibraryName] = [
-    props.sourceChapter || 1,
-    props.sourceVariant || 'default',
-    props.externalLibraryName || 'NONE'
-  ];
+    const { handleUpdateHasUnsavedChanges, handleEditorValueChange, isEditorAutorun } = props;
 
-  React.useEffect(() => {
-    selectMode(sourceChapter, sourceVariant, externalLibraryName);
-  }, [sourceChapter, sourceVariant, externalLibraryName]);
+    const hooksOnChange = aceEditorProps.onChange;
 
-  // ----------------- RUN ONCE PER INSTANCE ----------------
-
-  // This needs to be defined later, unfortunately.
-  // Too tedious to rearrange the code otherwise.
-  const showContextMenuRef = React.useRef((e: MouseEvent) => {});
-
-  React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
-      return;
-    }
-    const editor = reactAceRef.current.editor;
-    const session = editor.getSession();
-    // NOTE: Everything in this function is designed to run exactly ONCE per instance of react-ace.
-    // The () => ref.current() are designed to use the latest instance only.
-
-    // NOTE: the two `any`s below are because the Ace editor typedefs are
-    // hopelessly incomplete
-    editor.on(
-      'gutterclick' as any,
-      makeHandleGutterClick((...args) => handleEditorUpdateBreakpointsRef.current(...args)) as any
+    aceEditorProps.onChange = React.useCallback(
+      (newCode: string, delta: Ace.Delta) => {
+        if (!reactAceRef.current) {
+          return;
+        }
+        handleEditorValueChange(newCode);
+        if (handleUpdateHasUnsavedChanges) {
+          handleUpdateHasUnsavedChanges(true);
+        }
+        const annotations = reactAceRef.current.editor.getSession().getAnnotations();
+        if (isEditorAutorun && annotations.length === 0) {
+          handleEditorEval();
+        }
+        hooksOnChange && hooksOnChange(newCode, delta);
+      },
+      [
+        handleEditorValueChange,
+        handleUpdateHasUnsavedChanges,
+        isEditorAutorun,
+        hooksOnChange,
+        handleEditorEval
+      ]
     );
 
-    const gutter = (editor.renderer as any).$gutter as HTMLElement;
-    gutter.addEventListener('contextmenu', showContextMenuRef.current);
-    document.addEventListener('click', () => BPContextMenu.hide());
+    // ----------------- BIND CONTEXT MENU ----------------
 
-    // Change all info annotations to error annotations
-    session.on('changeAnnotation' as any, makeHandleAnnotationChange(session));
+    // const [isContextMenuOpen, setContextMenuOpen] = React.useState(false);
 
-    // Start autocompletion
-    acequire('ace/ext/language_tools').setCompleters([
-      makeCompleter((...args) => handlePromptAutocompleteRef.current(...args))
-    ]);
-    // This should run exactly once.
-  }, [
-    reactAceRef,
-    handleEditorUpdateBreakpointsRef,
-    handlePromptAutocompleteRef,
-    contextMenuHandlers
-  ]);
-
-  // ----------------- BIND CURSOR MOVEMENTS ----------------
-
-  React.useLayoutEffect(() => {
-    if (!reactAceRef.current) {
-      return;
-    }
-    const newCursorPosition = props.newCursorPosition;
-    if (newCursorPosition) {
-      moveCursor(reactAceRef.current.editor, newCursorPosition);
-    }
-  }, [reactAceRef, props.newCursorPosition]);
-
-  const { handleUpdateHasUnsavedChanges, handleEditorValueChange, isEditorAutorun } = props;
-
-  // ----------------- DON'T KNOW HOW TO CLASSIFY ----------------
-
-  const onChange = React.useCallback(
-    (newCode: string, delta: Ace.Delta) => {
-      if (!reactAceRef.current) {
-        return;
-      }
-      if (handleUpdateHasUnsavedChanges) {
-        handleUpdateHasUnsavedChanges(true);
-      }
-      handleEditorValueChange(newCode);
-      const annotations = reactAceRef.current.editor.getSession().getAnnotations();
-      if (isEditorAutorun && annotations.length === 0) {
-        handleEditorEval();
-      }
-    },
-    [
-      reactAceRef,
-      handleUpdateHasUnsavedChanges,
-      handleEditorValueChange,
-      handleEditorEval,
-      isEditorAutorun
-    ]
-  );
-
-  const aceEditorProps: IAceEditorProps = {
-    className: 'react-ace',
-    editorProps: {
-      $blockScrolling: Infinity
-    },
-    markers: React.useMemo(() => getMarkers(props.highlightedLines), [props.highlightedLines]),
-    fontSize: 17,
-    height: '100%',
-    highlightActiveLine: false,
-    mode: getModeString(sourceChapter, sourceVariant, externalLibraryName),
-    theme: 'source',
-    value: props.editorValue,
-    width: '100%',
-    setOptions: {
-      enableBasicAutocompletion: true,
-      enableLiveAutocompletion: true,
-      fontFamily: "'Inconsolata', monospace"
-    },
-    onChange
-  };
-
-  // -------------- LOAD ALL PLUGINS --------------
-
-  // Hooks must not change after an editor is instantiated, so to prevent that
-  // we store the original value and always use that only
-  const [hooks] = React.useState(props.hooks);
-  if (hooks) {
-    // Note: the following is extremely non-standard use of hooks
-    // DO NOT refactor this into any form where the hook is called from a lambda
-    for (const hook of hooks) {
-      hook(props, aceEditorProps, keyHandlers, reactAceRef, contextMenuHandlers);
-    }
-  }
-
-  // ----------------- BIND CONTEXT MENU ----------------
-  // const [isContextMenuOpen, setContextMenuOpen] = React.useState(false);
-
-  const showContextMenu = React.useCallback(
-    (e: MouseEvent) => {
-      const editor = reactAceRef.current!.editor;
-      if (isNotGutterClick(e) || !editor.isFocused()) {
-        return;
-      }
-      const target = e.target! as HTMLDivElement;
-      const row = getRowFromAceGutterElement(target);
-
-      e.preventDefault();
-      BPContextMenu.show(
-        <GutterContextMenu row={row} handlers={contextMenuHandlers} />,
-        { left: e.clientX, top: e.clientY },
-        () => {
-          // setContextMenuOpen(false);
+    const showContextMenu = React.useCallback(
+      (e: MouseEvent) => {
+        const editor = reactAceRef.current!.editor;
+        if (isNotGutterClick(e) || !editor.isFocused()) {
+          return;
         }
-      );
-      // indicate that context menu is open so we can add a CSS class to this element
-      // setContextMenuOpen(true);
-    },
-    [contextMenuHandlers, reactAceRef]
-  );
+        const target = e.target! as HTMLDivElement;
+        const row = getRowFromAceGutterElement(target);
 
-  // This needs to be used earlier, otherwise this shd be made a const.
-  showContextMenuRef.current = showContextMenu;
+        e.preventDefault();
+        BPContextMenu.show(
+          <GutterContextMenu row={row} handlers={contextMenuHandlers} />,
+          { left: e.clientX, top: e.clientY },
+          () => {
+            // setContextMenuOpen(false);
+          }
+        );
+        // indicate that context menu is open so we can add a CSS class to this element
+        // setContextMenuOpen(true);
+      },
+      [contextMenuHandlers]
+    );
 
-  // ----------------- BIND HOTKEYS ----------------
+    // This needs to be used earlier, otherwise this shd be made a const.
+    showContextMenuRef.current = showContextMenu;
 
-  aceEditorProps.commands = Object.entries(keyHandlers)
-    .filter(([_, exec]) => exec)
-    .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+    // ----------------- BIND HOTKEYS ----------------
 
-  return (
-    <HotKeys className="Editor" handlers={handlers}>
-      <div className="row editor-react-ace">
-        <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
-      </div>
-    </HotKeys>
-  );
-});
+    aceEditorProps.commands = Object.entries(keyHandlers)
+      .filter(([_, exec]) => exec)
+      .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
+
+    return (
+      <HotKeys className="Editor" handlers={handlers}>
+        <div className="row editor-react-ace">
+          <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
+        </div>
+      </HotKeys>
+    );
+  })
+);
+
+// Don't create a new list every render.
+const hooks = [
+  useHighlighting,
+  useNavigation,
+  useTypeInference,
+  useShareAce,
+  useRefactor,
+  useComments
+];
 
 const Editor = React.forwardRef<AceEditor, EditorProps>((props, ref) => (
-  <EditorBase
-    {...props}
-    hooks={[
-      useHighlighting,
-      useNavigation,
-      useTypeInference,
-      useShareAce,
-      useRefactor,
-      useComments
-    ]}
-    ref={ref}
-  />
+  <EditorBase {...props} hooks={hooks} ref={ref} />
 ));
 
 export default Editor;

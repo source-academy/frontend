@@ -31,6 +31,7 @@ The project requires some environment variables to be set to work properly. In t
 1. `REACT_APP_BACKEND_URL`: The base URL of the backend. If you are testing with a local backend, the value in `.env.example` matches the default development configuration of the backend.
 1. `REACT_APP_USE_BACKEND`: Set to false if not running together with the [backend](https://github.com/source-academy/cadet).
 1. `REACT_APP_MODULE_BACKEND_URL`: The base URL from which Source modules are loaded. (This is a js-slang feature, but of course it has to be configured here.) You can just use the default value in development.
+1. `REACT_APP_SHAREDB_BACKEND_URL`: The base URL of the [ShareDB collaborative editor backend](https://github.com/source-academy/sharedb-ace-backend). The protocol must be HTTP or HTTPS (it will automatically be set to WS/WSS as appropriate). **Must end in a trailing `/`.**
 
 #### URL shortener configuration
 
@@ -104,5 +105,7 @@ For more info on specific frontend projects, please consult [our wiki](https://g
 
 There are a few additional environment variables that are used when building and deploying for production.
 
-- `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
-- `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
+1. `REACT_APP_VERSION`: A version string shown in the console on app launch.
+1. `REACT_APP_ENVIRONMENT`: An environment string. Currently it is only used to differentiate different deploys in Sentry.
+1. `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
+1. `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.

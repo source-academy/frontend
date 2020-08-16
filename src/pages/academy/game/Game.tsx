@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { clearData } from 'src/features/game/save/GameSaveRequests';
+import { AchievementGoal, AchievementItem } from 'src/features/achievement/AchievementTypes';
+import { saveData } from 'src/features/game/save/GameSaveRequests';
+import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
   AccountInfo,
   createSourceAcademyGame
@@ -9,25 +11,36 @@ import SourceAcademyGame, {
 
 function Game() {
   const session = useSelector((state: OverallState) => state.session);
+
+  // TODO: Replace with actual achievements and goals
+  // const achievements = useSelector((state: OverallState) => state.achievement.achievements);
+  // const goals = useSelector((state: OverallState) => state.achievement.goals);
+  const achievements = [] as AchievementItem[];
+  const goals = [] as AchievementGoal[];
+
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
 
   React.useEffect(() => {
-    createSourceAcademyGame();
+    const game = createSourceAcademyGame();
     return () => {
-      SourceAcademyGame.getInstance().isMounted = false;
-      SourceAcademyGame.getInstance().stopAllSounds();
+      game.isMounted = false;
+      game.stopAllSounds();
+      game.destroy(true);
     };
   }, []);
 
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
-    if (session.name === 'Test Student') {
+    SourceAcademyGame.getInstance().setAchievements(achievements);
+    SourceAcademyGame.getInstance().setGoals(goals);
+
+    if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
-      SourceAcademyGame.getInstance().toggleUsingMock();
+      SourceAcademyGame.getInstance().toggleUsingMock(true);
     }
-  }, [session]);
+  }, [achievements, goals, session]);
 
   return (
     <>
@@ -36,7 +49,8 @@ function Game() {
         <div className="Horizontal">
           <button
             onClick={async () => {
-              await clearData();
+              await saveData({} as FullSaveState);
+              alert('Game cleared! Please refresh');
             }}
           >
             Clear data

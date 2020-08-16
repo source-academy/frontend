@@ -74,7 +74,6 @@ export default class ActionParser {
     switch (gameActionType) {
       case GameActionType.ObtainCollectible:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assertItemType(GameItemType.collectibles, actionParams[0], actionType);
         break;
 
       case GameActionType.CompleteObjective:
@@ -82,7 +81,7 @@ export default class ActionParser {
         Parser.validator.assert(GameEntityType.objectives, actionParams[0], actionType);
         break;
 
-      case GameActionType.LocationChange:
+      case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
         actionParamObj.id = actionParams[0];
         Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
@@ -158,6 +157,14 @@ export default class ActionParser {
         actionParamObj.id = actionParams[0];
         actionParamObj.locationId = actionParams[1];
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[2]);
+        break;
+
+      case GameActionType.NavigateToAssessment:
+        actionParamObj.assessmentId = actionParams[0];
+        break;
+
+      case GameActionType.Delay:
+        actionParamObj.duration = parseInt(actionParams[0]) * 1000;
         break;
     }
 

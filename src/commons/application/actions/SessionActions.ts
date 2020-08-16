@@ -7,7 +7,6 @@ import {
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
 import { GameState, Role, Story } from '../ApplicationTypes';
-import * as actionTypes from '../types/ActionTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -18,6 +17,8 @@ import {
   FETCH_NOTIFICATIONS,
   LOGIN,
   LOGOUT_GOOGLE,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SET_GOOGLE_USER,
   SET_TOKENS,
   SET_USER,
@@ -54,8 +55,6 @@ export const login = (providerId: string) => action(LOGIN, providerId);
 
 export const logoutGoogle = () => action(LOGOUT_GOOGLE);
 
-export const setGameState = (gameState: GameState) => action(actionTypes.SET_GAME_STATE, gameState);
-
 export const setTokens = ({
   accessToken,
   refreshToken
@@ -69,6 +68,7 @@ export const setTokens = ({
   });
 
 export const setUser = (user: {
+  userId: number;
   name: string;
   role: Role;
   group: string | null;
@@ -116,6 +116,12 @@ export const submitGradingAndContinue = (
     xpAdjustment,
     comments
   });
+
+export const reautogradeSubmission = (submissionId: number) =>
+  action(REAUTOGRADE_SUBMISSION, submissionId);
+
+export const reautogradeAnswer = (submissionId: number, questionId: number) =>
+  action(REAUTOGRADE_ANSWER, { submissionId, questionId });
 
 export const updateHistoryHelpers = (loc: string) => action(UPDATE_HISTORY_HELPERS, loc);
 

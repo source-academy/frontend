@@ -18,6 +18,7 @@ import { ControlBarExternalLibrarySelect } from '../../commons/controlBar/Contro
 import { ControlBarPersistenceButtons } from '../../commons/controlBar/ControlBarPersistenceButtons';
 import { ControlBarSessionButtons } from '../../commons/controlBar/ControlBarSessionButton';
 import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareButton';
+import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
@@ -38,6 +39,7 @@ export type DispatchProps = {
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
   handleChangeExecTime: (execTime: number) => void;
+  handleChangeStepLimit: (stepLimit: number) => void;
   handleChapterSelect: (chapter: number, variant: Variant) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
@@ -45,20 +47,18 @@ export type DispatchProps = {
   handleEditorValueChange: (val: string) => void;
   handleEditorWidthChange: (widthChange: number) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleFinishInvite: () => void;
+  handleFetchSublanguage: () => void;
   handleGenerateLz: () => void;
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
-  handleInvalidEditorSessionId: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName) => void;
-  handleInitInvite: (value: string) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName, force?: boolean) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
   handleSendReplInputToOutput: (code: string) => void;
   handleSetEditorSessionId: (editorSessionId: string) => void;
-  handleSetWebsocketStatus: (websocketStatus: number) => void;
+  handleSetSharedbConnected: (connected: boolean) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleUsingSubst: (usingSubst: boolean) => void;
   handleDebuggerPause: () => void;
@@ -92,12 +92,11 @@ export type StateProps = {
   shortURL?: string;
   replValue: string;
   sideContentHeight?: number;
-  sharedbAceInitValue: string;
-  sharedbAceIsInviting: boolean;
   sourceChapter: number;
   sourceVariant: Variant;
-  websocketStatus: number;
-  externalLibraryName: string;
+  stepLimit: number;
+  sharedbConnected: boolean;
+  externalLibraryName: ExternalLibraryName;
   usingSubst: boolean;
   persistenceUser: string | undefined;
   persistenceFile: PersistenceFile | undefined;
@@ -106,28 +105,35 @@ export type StateProps = {
 const keyMap = { goGreen: 'h u l k' };
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const propsRef = React.useRef(props);
+  propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
+  React.useEffect(() => {
+    // Fixes some errors with runes and curves (see PR #1420)
+    propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
+
+    // Only fetch default Playground sublanguage when not loaded via a share link
+    if (propsRef.current.location.hash === '') {
+      propsRef.current.handleFetchSublanguage();
+    }
+  }, []);
+
   const handlers = React.useMemo(
     () => ({
       goGreen: () => setIsGreen(!isGreen)
     }),
-    [isGreen, setIsGreen]
+    [isGreen]
   );
 
-  const { handleEditorValueChange } = props;
-  const onEditorValueChange = React.useCallback(
-    val => {
-      setLastEdit(new Date());
-      handleEditorValueChange(val);
-    },
-    [handleEditorValueChange]
-  );
+  const onEditorValueChange = React.useCallback(val => {
+    setLastEdit(new Date());
+    propsRef.current.handleEditorValueChange(val);
+  }, []);
 
-  const { handleUsingSubst, handleReplOutputClear, sourceChapter } = props;
   const onChangeTabs = React.useCallback(
     (
       newTabId: SideContentType,
@@ -137,6 +143,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       if (newTabId === prevTabId) {
         return;
       }
+
+      const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
 
       if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
         handleUsingSubst(true);
@@ -149,7 +157,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       setSelectedTab(newTabId);
     },
-    [handleReplOutputClear, handleUsingSubst, hasBreakpoints, sourceChapter]
+    [hasBreakpoints]
   );
 
   const processStepperOutput = (output: InterpreterOutput[]) => {
@@ -195,9 +203,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
     ]
   );
 
-  const { handleChapterSelect } = props;
   const chapterSelectHandler = React.useCallback(
     ({ chapter, variant }: { chapter: number; variant: Variant }, e: any) => {
+      const { handleUsingSubst, handleReplOutputClear, handleChapterSelect } = propsRef.current;
       if ((chapter <= 2 && hasBreakpoints) || selectedTab === SideContentType.substVisualizer) {
         handleUsingSubst(true);
       }
@@ -207,7 +215,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       }
       handleChapterSelect(chapter, variant);
     },
-    [handleReplOutputClear, handleUsingSubst, hasBreakpoints, handleChapterSelect, selectedTab]
+    [hasBreakpoints, selectedTab]
   );
 
   const chapterSelect = React.useMemo(
@@ -276,16 +284,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handlePersistenceUpdateFile
   ]);
 
-  const { handleChangeExecTime, execTime } = props;
   const executionTime = React.useMemo(
     () => (
       <ControlBarExecutionTime
-        execTime={execTime}
-        handleChangeExecTime={(execTime: number) => handleChangeExecTime(execTime)}
+        execTime={props.execTime}
+        handleChangeExecTime={props.handleChangeExecTime}
         key="execution_time"
       />
     ),
-    [execTime, handleChangeExecTime]
+    [props.execTime, props.handleChangeExecTime]
+  );
+
+  const stepperStepLimit = React.useMemo(
+    () => (
+      <ControlBarStepLimit
+        stepLimit={props.stepLimit}
+        handleChangeStepLimit={props.handleChangeStepLimit}
+        key="step_limit"
+      />
+    ),
+    [props.handleChangeStepLimit, props.stepLimit]
   );
 
   const { handleExternalSelect, externalLibraryName } = props;
@@ -302,26 +320,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [externalLibraryName, handleExternalSelect]
   );
 
-  const sessionButtons = React.useMemo(
-    () => (
-      <ControlBarSessionButtons
-        editorSessionId={props.editorSessionId}
-        editorValue={props.editorValue}
-        handleInitInvite={props.handleInitInvite}
-        handleInvalidEditorSessionId={props.handleInvalidEditorSessionId}
-        handleSetEditorSessionId={props.handleSetEditorSessionId}
-        websocketStatus={props.websocketStatus}
-        key="session"
-      />
-    ),
-    [
-      props.editorSessionId,
-      props.editorValue,
-      props.handleInitInvite,
-      props.handleInvalidEditorSessionId,
-      props.handleSetEditorSessionId,
-      props.websocketStatus
-    ]
+  // No point memoing this, it uses props.editorValue
+  const sessionButtons = (
+    <ControlBarSessionButtons
+      editorSessionId={props.editorSessionId}
+      editorValue={props.editorValue}
+      handleSetEditorSessionId={props.handleSetEditorSessionId}
+      sharedbConnected={props.sharedbConnected}
+      key="session"
+    />
   );
 
   const shareButton = React.useMemo(
@@ -389,8 +396,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       tabs.push(envVisualizerTab);
     }
 
-    if (props.sourceChapter <= 2 && props.sourceVariant !== 'wasm') {
-      // Enable Subst Visualizer for Source 1 & 2
+    if (props.sourceChapter <= 2 && props.sourceVariant === 'default') {
+      // Enable Subst Visualizer only for default Source 1 & 2
       tabs.push({
         label: 'Stepper',
         iconName: IconNames.FLOW_REVIEW,
@@ -408,6 +415,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant
   ]);
 
+  const handleEditorUpdateBreakpoints = React.useCallback(
+    (breakpoints: string[]) => {
+      // get rid of holes in array
+      const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
+      if (numberOfBreakpoints > 0) {
+        setHasBreakpoints(true);
+        if (propsRef.current.sourceChapter <= 2) {
+          /**
+           * There are breakpoints set on Source Chapter 2, so we set the
+           * Redux state for the editor to evaluate to the substituter
+           */
+
+          propsRef.current.handleUsingSubst(true);
+        }
+      }
+      if (numberOfBreakpoints === 0) {
+        setHasBreakpoints(false);
+
+        if (selectedTab !== SideContentType.substVisualizer) {
+          propsRef.current.handleReplOutputClear();
+          propsRef.current.handleUsingSubst(false);
+        }
+      }
+      propsRef.current.handleEditorUpdateBreakpoints(breakpoints);
+    },
+    [selectedTab]
+  );
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -417,9 +452,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
-        executionTime
+        props.usingSubst ? stepperStepLimit : executionTime
       ],
-      replButtons: [props.sourceVariant !== 'concurrent' ? evalButton : null, clearButton]
+      replButtons: [
+        props.sourceVariant !== 'concurrent' && props.sourceVariant !== 'wasm' ? evalButton : null,
+        clearButton
+      ]
     },
     editorProps: {
       sourceChapter: props.sourceChapter,
@@ -432,38 +470,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleEditorValueChange: onEditorValueChange,
       handleSendReplInputToOutput: props.handleSendReplInputToOutput,
       handlePromptAutocomplete: props.handlePromptAutocomplete,
-      handleFinishInvite: props.handleFinishInvite,
-      sharedbAceInitValue: props.sharedbAceInitValue,
-      sharedbAceIsInviting: props.sharedbAceIsInviting,
       isEditorAutorun: props.isEditorAutorun,
       breakpoints: props.breakpoints,
       highlightedLines: props.highlightedLines,
       newCursorPosition: props.newCursorPosition,
-      handleEditorUpdateBreakpoints: (breakpoints: string[]) => {
-        // get rid of holes in array
-        const numberOfBreakpoints = breakpoints.filter(arrayItem => !!arrayItem).length;
-        if (numberOfBreakpoints > 0) {
-          setHasBreakpoints(true);
-          if (props.sourceChapter <= 2) {
-            /**
-             * There are breakpoints set on Source Chapter 2, so we set the
-             * Redux state for the editor to evaluate to the substituter
-             */
-
-            props.handleUsingSubst(true);
-          }
-        }
-        if (numberOfBreakpoints === 0) {
-          setHasBreakpoints(false);
-
-          if (selectedTab !== SideContentType.substVisualizer) {
-            props.handleReplOutputClear();
-            props.handleUsingSubst(false);
-          }
-        }
-        props.handleEditorUpdateBreakpoints(breakpoints);
-      },
-      handleSetWebsocketStatus: props.handleSetWebsocketStatus
+      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+      handleSetSharedbConnected: props.handleSetSharedbConnected
     },
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
@@ -473,6 +485,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     replProps: {
       sourceChapter: props.sourceChapter,
       sourceVariant: props.sourceVariant,
+      externalLibrary: props.externalLibraryName,
       output: props.output,
       replValue: props.replValue,
       handleBrowseHistoryDown: props.handleBrowseHistoryDown,

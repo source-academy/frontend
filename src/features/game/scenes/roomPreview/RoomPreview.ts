@@ -48,7 +48,6 @@ export default class RoomPreview extends Phaser.Scene {
   private preloadSpritesheetMap: Map<string, [string, object]>;
 
   private verifCont: Phaser.GameObjects.Container | undefined;
-  private verifMask: Phaser.GameObjects.Graphics | undefined;
 
   private context?: Context;
 
@@ -70,9 +69,7 @@ export default class RoomPreview extends Phaser.Scene {
     addLoadingScreen(this);
 
     // Initialise one verified tag to be used throughout the CMR
-    const [verifCont, verifMask] = createVerifiedHoverContainer(this);
-    this.verifCont = verifCont as Phaser.GameObjects.Container;
-    this.verifMask = verifMask as Phaser.GameObjects.Graphics;
+    this.verifCont = createVerifiedHoverContainer(this);
   }
 
   public async create() {
@@ -128,7 +125,16 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public update() {
-    // this.eval(`update();`);
+    /**
+     * runInContext appends new frame everytime it is run,
+     * which leads to out of memory error when we run
+     * runInContext as often as FPS of the game for `update()`.
+     *
+     * Hence, we replace the scope instead of appending
+     * new one each time.
+     */
+    this.context!.nativeStorage.globals = this.context!.nativeStorage.globals!.previousScope;
+    this.eval(`update();`);
   }
 
   public createContext() {
@@ -227,7 +233,6 @@ export default class RoomPreview extends Phaser.Scene {
    */
   private attachVerificationTag(sprite: Phaser.GameObjects.Sprite) {
     const verifCont = this.getVerifCont();
-    const verifMask = this.getVerifMask();
 
     sprite.setInteractive({ pixelPerfect: true, useHandCursor: true });
     sprite.addListener(Phaser.Input.Events.GAMEOBJECT_POINTER_OVER, () =>
@@ -241,8 +246,6 @@ export default class RoomPreview extends Phaser.Scene {
       (pointer: Phaser.Input.Pointer) => {
         verifCont.x = pointer.x + 10;
         verifCont.y = pointer.y - 10;
-        verifMask.x = pointer.x + 10;
-        verifMask.y = pointer.y - 10;
       }
     );
     return sprite;
@@ -269,9 +272,18 @@ export default class RoomPreview extends Phaser.Scene {
    * progression.
    */
   private getDefaultBackgroundKey() {
-    const completedAssessment = this.getUserStateManager().getAssessments();
-    // Escape type check for now
-    mandatory(completedAssessment);
+    // Once reversed, the first element is the submitted assessment with the most recent close date
+    const completedAssessmentIds = this.getUserStateManager().getAssessments().reverse();
+    const backgroundMapping = SourceAcademyGame.getInstance().getRoomPreviewMapping();
+
+    // Iterative search for assessment with valid mapping
+    for (let i = 0; i < completedAssessmentIds.length; i++) {
+      if (backgroundMapping.has(completedAssessmentIds[i])) {
+        return completedAssessmentIds[i];
+      }
+    }
+
+    // If there is no valid mapping, we use default background image
     return ImageAssets.sourceCrashedPod.key;
   }
 
@@ -287,7 +299,6 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   private getVerifCont = () => mandatory(this.verifCont);
-  private getVerifMask = () => mandatory(this.verifMask);
   private getUserStateManager = () => SourceAcademyGame.getInstance().getUserStateManager();
 
   public getInputManager = () => mandatory(this.inputManager);

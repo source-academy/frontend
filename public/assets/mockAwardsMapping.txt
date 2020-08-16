@@ -5,8 +5,8 @@ collectibles
         computer-award, /objects/cmd-monitor03/normal.png, Computer, Computer is advanced technology
 
 achievements
-    301
+    1
         place-award, /images/2d-2018-1st-place.png, Rune Master, This is an award you get for obtaining rune master
-    302
+    2
         popular-award, /images/2d-2018-1st-popular.png, Popular, Wow, Mr. Popular! :)
 

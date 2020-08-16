@@ -56,8 +56,8 @@ class MainMenu extends Phaser.Scene {
 
     const buttonPositions = calcTableFormatPos({
       numOfItems: buttons.length,
-      maxXSpace: mainMenuConstants.optButtonsXSpace,
-      maxYSpace: mainMenuConstants.optButtonsYSpace,
+      maxXSpace: mainMenuConstants.optButton.xSpace,
+      maxYSpace: mainMenuConstants.optButton.ySpace,
       numItemLimit: mainMenuConstants.maxOptButtonsRow,
       redistributeLast: true
     });

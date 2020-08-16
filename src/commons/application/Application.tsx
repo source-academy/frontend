@@ -2,6 +2,7 @@ import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
+import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
@@ -16,14 +17,14 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
-
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
   handleClearContext: (
     chapter: number,
     variant: Variant,
-    externalLibraryName: ExternalLibraryName
+    externalLibraryName: ExternalLibraryName,
+    shouldInitLibrary: boolean
   ) => void;
   handleEditorValueChange: (val: string) => void;
   handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
@@ -43,14 +44,25 @@ export type StateProps = {
   currentExternalLibrary: ExternalLibraryName;
 };
 
-const assessmentRegExp = ':assessmentId(-?\\d+)?/:questionId(\\d+)?';
-
 class Application extends React.Component<ApplicationProps, {}> {
   public componentDidMount() {
     parsePlayground(this.props);
   }
 
   public render() {
+    const fullPaths = Constants.playgroundOnly
+      ? null
+      : [
+          <Route path="/academy" component={toAcademy(this.props)} key={0} />,
+          <Route
+            path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
+            render={toIncubator}
+            key={1}
+          />,
+          <Route path="/achievement" component={toAchievement(this.props)} key={2} />,
+          <Route path="/login" render={toLogin(this.props)} key={3} />
+        ];
+
     return (
       <div className="Application">
         <NavigationBar
@@ -60,27 +72,18 @@ class Application extends React.Component<ApplicationProps, {}> {
           title={this.props.title}
         />
         <div className="Application__main">
-          {/* Unfortunately Switches cannot contain fragments :( */}
-          {Constants.playgroundOnly ? (
-            <Switch>
-              <Route path="/playground" component={Playground} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route exact={true} path="/" render={this.redirectToPlayground} />
-              <Route component={NotFound} />
-            </Switch>
-          ) : (
-            <Switch>
-              <Route path="/academy" component={toAcademy(this.props)} />
-              <Route path={`/mission-control/${assessmentRegExp}`} render={toIncubator} />
-              <Route path="/playground" component={Playground} />
-              <Route path="/login" render={toLogin(this.props)} />
-              <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
-              <Route exact={true} path="/" render={this.redirectToAcademy} />
-              <Route component={NotFound} />
-            </Switch>
-          )}
+          <Switch>
+            <Route path="/playground" component={Playground} />
+            <Route path="/contributors" component={Contributors} />
+            <Route path="/sourcecast" component={SourcecastContainer} />
+            {fullPaths}
+            <Route
+              exact={true}
+              path="/"
+              render={Constants.playgroundOnly ? this.redirectToPlayground : this.redirectToAcademy}
+            />
+            <Route component={NotFound} />
+          </Switch>
         </div>
       </div>
     );
@@ -99,6 +102,16 @@ const toAcademy = (props: ApplicationProps) =>
   props.accessToken === undefined || props.role === undefined
     ? () => <Redirect to="/login" />
     : () => <Academy accessToken={props.accessToken} role={props.role!} />;
+
+/**
+ * A user routes to /achievement,
+ *  1. If the user is logged in, render the Achievement component
+ *  2. If the user is not logged in, redirect to /login
+ */
+const toAchievement = (props: ApplicationProps) =>
+  props.accessToken === undefined || props.role === undefined
+    ? () => <Redirect to="/login" />
+    : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
@@ -124,7 +137,7 @@ const parsePlayground = (props: ApplicationProps) => {
   if (prgrm) {
     props.handleEditorValueChange(prgrm);
     props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, variant, externalLibraryName);
+    props.handleClearContext(chapter, variant, externalLibraryName, true);
     props.handleExternalLibrarySelect(externalLibraryName);
     props.handleSetExecTime(execTime);
   }

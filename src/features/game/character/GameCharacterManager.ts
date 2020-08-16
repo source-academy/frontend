@@ -52,7 +52,7 @@ export default class CharacterManager implements StateObserver {
     overridePosition?: GamePosition
   ) {
     const character = GameGlobalAPI.getInstance().getCharacterById(characterId);
-    const { defaultPosition, defaultExpression, expressions } = character;
+    const { defaultPosition, defaultExpression, expressions, scale } = character;
     const characterXPosition = CharConstants.charRect.x[overridePosition || defaultPosition];
     const assetKey = expressions.get(overrideExpression || defaultExpression)!;
 
@@ -63,7 +63,7 @@ export default class CharacterManager implements StateObserver {
       assetKey
     ).setOrigin(0.5, 1);
 
-    resize(characterSprite, CharConstants.charWidth);
+    resize(characterSprite, CharConstants.charWidth * scale);
     return characterSprite;
   }
 

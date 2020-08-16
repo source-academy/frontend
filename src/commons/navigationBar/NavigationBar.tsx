@@ -39,7 +39,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
             to="/academy"
           >
             <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading className="hidden-xs hidden-sm">Source Academy</NavbarHeading>
+            <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
           </NavLink>{' '}
           <NavLink
             activeClassName={Classes.ACTIVE}
@@ -47,7 +47,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
             to="/sourcecast"
           >
             <Icon icon={IconNames.MUSIC} />
-            <div className="navbar-button-text hidden-xs hidden-sm">Sourcecast</div>
+            <div className="navbar-button-text hidden-xs">Sourcecast</div>
           </NavLink>
         </>
       )}
@@ -57,10 +57,20 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs hidden-sm">
+        <div className="navbar-button-text hidden-xs">
           {Constants.playgroundOnly ? 'Source Academy Playground' : 'Playground'}
         </div>
       </NavLink>
+      {props.role && (
+        <NavLink
+          activeClassName={Classes.ACTIVE}
+          className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+          to="/achievement"
+        >
+          <Icon icon={IconNames.MOUNTAIN} />
+          <div className="navbar-button-text hidden-xs">Achievement</div>
+        </NavLink>
+      )}
     </NavbarGroup>
 
     <NavbarGroup align={Alignment.RIGHT}>
@@ -70,7 +80,7 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
-        <div className="navbar-button-text hidden-xs hidden-sm">Contributors</div>
+        <div className="navbar-button-text hidden-xs">Contributors</div>
       </NavLink>
 
       <div className="visible-xs">

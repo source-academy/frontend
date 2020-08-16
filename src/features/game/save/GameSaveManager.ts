@@ -1,7 +1,7 @@
 import GameManager from '../scenes/gameManager/GameManager';
 import SourceAcademyGame from '../SourceAcademyGame';
 import { mandatory } from '../utils/GameUtils';
-import { createEmptySaveState, gameStateToJson } from './GameSaveHelper';
+import { createEmptyGameSaveState, createEmptySaveState, gameStateToJson } from './GameSaveHelper';
 import { loadData, saveData } from './GameSaveRequests';
 import { FullSaveState, GameSaveState, SettingsJson } from './GameSaveTypes';
 
@@ -42,7 +42,7 @@ export default class GameSaveManager {
     this.chapterNum = chapterNum;
     this.checkpointNum = checkpointNum;
     if (!continueGame) {
-      this.fullSaveState.gameSaveStates[chapterNum] = {} as GameSaveState;
+      this.fullSaveState.gameSaveStates[chapterNum] = createEmptyGameSaveState();
     }
   }
 
@@ -78,10 +78,11 @@ export default class GameSaveManager {
    * @param completedChapter the number of the completed chapter
    */
   public async saveChapterComplete(completedChapter: number) {
+    this.fullSaveState.gameSaveStates[completedChapter].chapterNewlyCompleted = true;
     if (completedChapter > this.getLargestCompletedChapterNum()) {
       this.fullSaveState.userSaveState.largestCompletedChapter = completedChapter;
-      await saveData(this.fullSaveState);
     }
+    await saveData(this.fullSaveState);
   }
 
   /**
@@ -126,20 +127,27 @@ export default class GameSaveManager {
    * Gets user's gamestate for this chapter
    */
   public getGameSaveState(): GameSaveState {
-    return this.fullSaveState.gameSaveStates[this.getChapterNum()];
+    return this.fullSaveState.gameSaveStates[this.getChapterNum()] || createEmptyGameSaveState();
   }
 
   /**
-   * Gets user's location for this chapter
+   * Gets user's location for this chapter if chapter has been created
    */
   public getLoadedLocation() {
-    return this.fullSaveState.gameSaveStates[this.getChapterNum()].currentLocation;
+    return this.getGameSaveState().currentLocation;
+  }
+  /**
+   * Returns the save state for a particular chapter, if no data, then create an empty save state
+   */
+  public getChapterSaveState(index: number) {
+    return this.fullSaveState.gameSaveStates[index] || createEmptyGameSaveState();
   }
 
-  public getTriggeredActions = () => this.getGameSaveState().triggeredActions || [];
-  public getTriggeredInteractions = () => this.getGameSaveState().triggeredInteractions || [];
-  public getCompletedObjectives = () => this.getGameSaveState().completedObjectives || [];
+  public getTriggeredStateChangeActions = () => this.getGameSaveState().triggeredStateChangeActions;
+  public getTriggeredInteractions = () => this.getGameSaveState().triggeredInteractions;
+  public getCompletedObjectives = () => this.getGameSaveState().completedObjectives;
   public getLoadedPhase = () => this.getGameSaveState().currentPhase;
+  public getChapterNewlyCompleted = () => this.getGameSaveState().chapterNewlyCompleted;
 
   public getChapterNum = () => mandatory(this.chapterNum);
   public getCheckpointNum = () => mandatory(this.checkpointNum);

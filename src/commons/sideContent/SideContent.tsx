@@ -64,15 +64,11 @@ const SideContent = (props: SideContentProps) => {
   }, []);
 
   // Fetch debuggerContext from store
-  let debuggerContext: DebuggerContext;
-  if (props.workspaceLocation) {
-    debuggerContext = workspaces[props.workspaceLocation].debuggerContext;
-  } else {
-    debuggerContext = {} as DebuggerContext;
-  }
+  const debuggerContext: DebuggerContext | undefined =
+    props.workspaceLocation && workspaces[props.workspaceLocation].debuggerContext;
 
   React.useEffect(() => {
-    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext));
+    const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 

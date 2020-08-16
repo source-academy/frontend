@@ -1,13 +1,15 @@
 import ImageAssets from '../../assets/ImageAssets';
 import SoundAssets from '../../assets/SoundAssets';
 import { screenCenter, screenSize } from '../../commons/CommonConstants';
+import { blackScreen } from '../../effects/FadeEffect';
+import { putWorkerMessage } from '../../effects/WorkerMessage';
 import GameLayerManager from '../../layer/GameLayerManager';
 import { Layer } from '../../layer/GameLayerTypes';
 import SourceAcademyGame from '../../SourceAcademyGame';
 import { createButton } from '../../utils/ButtonUtils';
 import { mandatory } from '../../utils/GameUtils';
 import { calcTableFormatPos, Direction } from '../../utils/StyleUtils';
-import mainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
+import MainMenuConstants, { mainMenuStyle } from './MainMenuConstants';
 
 /**
  * Main Menu
@@ -27,7 +29,8 @@ class MainMenu extends Phaser.Scene {
     this.renderBackground();
     this.renderOptionButtons();
 
-    SourceAcademyGame.getInstance().getSoundManager().unlock();
+    putWorkerMessage(this, 'T', screenCenter.x * 1.12, screenCenter.y * 1.1);
+
     SourceAcademyGame.getInstance().getSoundManager().playBgMusic(SoundAssets.galacticHarmony.key);
   }
 
@@ -39,10 +42,18 @@ class MainMenu extends Phaser.Scene {
       this,
       screenCenter.x,
       screenCenter.y,
-      ImageAssets.mainMenuBackground.key
+      ImageAssets.spaceshipBg.key
     ).setDisplaySize(screenSize.x, screenSize.y);
-
+    const blackOverlay = blackScreen(this).setAlpha(0.15);
+    const saBanner = new Phaser.GameObjects.Image(
+      this,
+      MainMenuConstants.saBanner.x,
+      MainMenuConstants.saBanner.y,
+      ImageAssets.saBanner.key
+    ).setAlpha(0.7);
     this.getLayerManager().addToLayer(Layer.Background, backgroundImg);
+    this.getLayerManager().addToLayer(Layer.Background, blackOverlay);
+    this.getLayerManager().addToLayer(Layer.Background, saBanner);
   }
 
   /**
@@ -56,14 +67,14 @@ class MainMenu extends Phaser.Scene {
     const buttonPositions = calcTableFormatPos({
       direction: Direction.Column,
       numOfItems: buttons.length,
-      maxYSpace: mainMenuConstants.buttonYSpace
+      maxYSpace: MainMenuConstants.button.ySpace
     });
 
     optionsContainer.add(
       buttons.map((button, index) =>
         this.createOptionButton(
           button.text,
-          buttonPositions[index][0] + mainMenuConstants.bannerHide,
+          buttonPositions[index][0] + MainMenuConstants.banner.xHide,
           buttonPositions[index][1],
           button.callback
         )
@@ -87,13 +98,13 @@ class MainMenu extends Phaser.Scene {
     const tweenOnHover = (target: Phaser.GameObjects.Container) => {
       this.tweens.add({
         targets: target,
-        ...mainMenuConstants.onFocusOptTween
+        ...MainMenuConstants.onFocusTween
       });
     };
     const tweenOffHover = (target: Phaser.GameObjects.Container) => {
       this.tweens.add({
         targets: target,
-        ...mainMenuConstants.outFocusOptTween
+        ...MainMenuConstants.outFocusTween
       });
     };
 
@@ -101,7 +112,7 @@ class MainMenu extends Phaser.Scene {
     const optButton: Phaser.GameObjects.Container = createButton(this, {
       assetKey: ImageAssets.mainMenuOptBanner.key,
       message: text,
-      textConfig: { x: mainMenuConstants.textXOffset, y: 0, oriX: 1.0, oriY: 0.1 },
+      textConfig: MainMenuConstants.buttonTextConfig,
       bitMapTextStyle: mainMenuStyle,
       onUp: callback,
       onHover: () => tweenOnHover(optButton),
@@ -119,35 +130,35 @@ class MainMenu extends Phaser.Scene {
   private getOptionButtons() {
     return [
       {
-        text: mainMenuConstants.optionsText.chapterSelect,
+        text: MainMenuConstants.text.chapterSelect,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('ChapterSelect');
         }
       },
       {
-        text: mainMenuConstants.optionsText.awards,
+        text: MainMenuConstants.text.awards,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('AwardsHall');
         }
       },
       {
-        text: mainMenuConstants.optionsText.studentRoom,
+        text: MainMenuConstants.text.studentRoom,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('RoomPreview');
         }
       },
       {
-        text: mainMenuConstants.optionsText.settings,
+        text: MainMenuConstants.text.settings,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('Settings');
         }
       },
       {
-        text: mainMenuConstants.optionsText.bindings,
+        text: MainMenuConstants.text.bindings,
         callback: () => {
           this.getLayerManager().clearAllLayers();
           this.scene.start('Bindings');

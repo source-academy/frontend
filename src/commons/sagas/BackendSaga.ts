@@ -1,9 +1,9 @@
 /*eslint no-eval: "error"*/
 /*eslint-env browser*/
 import { SagaIterator } from 'redux-saga';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select } from 'redux-saga/effects';
 
-import { OverallState, Role } from '../../commons/application/ApplicationTypes';
+import { OverallState, Role, SourceLanguage } from '../../commons/application/ApplicationTypes';
 import {
   Assessment,
   AssessmentOverview,
@@ -16,7 +16,11 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../commons/notificationBadge/NotificationBadgeTypes';
-import { CHANGE_CHAPTER, WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
+import {
+  CHANGE_SUBLANGUAGE,
+  FETCH_SUBLANGUAGE,
+  WorkspaceLocation
+} from '../../commons/workspace/WorkspaceTypes';
 import { FETCH_GROUP_GRADING_SUMMARY } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import {
@@ -35,6 +39,8 @@ import {
   FETCH_GRADING,
   FETCH_GRADING_OVERVIEWS,
   FETCH_NOTIFICATIONS,
+  REAUTOGRADE_ANSWER,
+  REAUTOGRADE_SUBMISSION,
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
@@ -44,8 +50,8 @@ import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
+import { AsyncReturnType } from '../utils/TypeHelper';
 import {
-  changeChapter,
   changeDateAssessment,
   deleteAssessment,
   deleteSourcecastEntry,
@@ -56,6 +62,7 @@ import {
   getGradingSummary,
   getNotifications,
   getSourcecastIndex,
+  getSublanguage,
   getUser,
   handleResponseError,
   postAcknowledgeNotifications,
@@ -63,11 +70,15 @@ import {
   postAssessment,
   postAuth,
   postGrading,
+  postReautogradeAnswer,
+  postReautogradeSubmission,
   postSourcecast,
+  postSublanguage,
   postUnsubmit,
   publishAssessment,
   uploadAssessment
 } from './RequestsSaga';
+import { safeTakeEvery as takeEvery } from './SafeEffects';
 
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
@@ -124,15 +135,11 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
-    const role = yield select((state: OverallState) => state.session.role!);
-    if (role !== Role.Student) {
-      return yield call(showWarningMessage, 'Answer rejected - only students can submit answers.');
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
+
     const questionId = action.payload.id;
     const answer = action.payload.answer;
     const resp = yield call(postAnswer, questionId, answer, tokens);
@@ -171,14 +178,6 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
-    const role: Role = yield select((state: OverallState) => state.session.role);
-    if (role !== Role.Student) {
-      return yield call(
-        showWarningMessage,
-        'Submission rejected - only students can submit assessments.'
-      );
-    }
-
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
@@ -348,6 +347,30 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
+  yield takeEvery(REAUTOGRADE_SUBMISSION, function* (
+    action: ReturnType<typeof actions.reautogradeSubmission>
+  ) {
+    const submissionId = action.payload;
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const result = yield call(postReautogradeSubmission, submissionId, tokens);
+    yield call(handleReautogradeResponse, result);
+  });
+
+  yield takeEvery(REAUTOGRADE_ANSWER, function* (
+    action: ReturnType<typeof actions.reautogradeAnswer>
+  ) {
+    const { submissionId, questionId } = action.payload;
+    const tokens = yield select((state: OverallState) => ({
+      accessToken: state.session.accessToken,
+      refreshToken: state.session.refreshToken
+    }));
+    const result = yield call(postReautogradeAnswer, submissionId, questionId, tokens);
+    yield call(handleReautogradeResponse, result);
+  });
+
   yield takeEvery(FETCH_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
@@ -446,14 +469,14 @@ function* BackendSaga(): SagaIterator {
   ) {
     const role = yield select((state: OverallState) => state.session.role!);
     if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can save sourcecast.');
+      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
     }
-    const { title, description, audio, playbackData } = action.payload;
+    const { title, description, uid, audio, playbackData } = action.payload;
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const resp = yield postSourcecast(title, description, audio, playbackData, tokens);
+    const resp = yield postSourcecast(title, description, uid, audio, playbackData, tokens);
 
     if (!resp || !resp.ok) {
       yield handleResponseError(resp, new Map());
@@ -464,21 +487,40 @@ function* BackendSaga(): SagaIterator {
     yield history.push('/sourcecast');
   });
 
-  yield takeEvery(CHANGE_CHAPTER, function* (action: ReturnType<typeof actions.changeChapter>) {
+  yield takeEvery(FETCH_SUBLANGUAGE, function* (
+    action: ReturnType<typeof actions.fetchSublanguage>
+  ) {
+    const sublang: SourceLanguage | null = yield call(getSublanguage);
+
+    if (!sublang) {
+      yield call(showWarningMessage, `Failed to load default Source sublanguage for Playground!`);
+      return;
+    }
+
+    yield put(actions.updateSublanguage(sublang));
+  });
+
+  yield takeEvery(CHANGE_SUBLANGUAGE, function* (
+    action: ReturnType<typeof actions.changeSublanguage>
+  ) {
     const tokens = yield select((state: OverallState) => ({
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
 
-    const chapter = action.payload;
-    const resp: Response = yield call(changeChapter, chapter.chapter, chapter.variant, tokens);
+    const { sublang } = action.payload;
+    const resp: Response = yield call(postSublanguage, sublang.chapter, sublang.variant, tokens);
 
+    const codes: Map<number, string> = new Map([
+      [400, 'Request rejected - invalid chapter-variant combination.'],
+      [403, 'Request rejected - only staff are allowed to set the default sublanguage.']
+    ]);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
+      yield handleResponseError(resp, codes);
       return;
     }
 
-    yield put(actions.updateChapter(chapter.chapter, chapter.variant));
+    yield put(actions.updateSublanguage(sublang));
     yield call(showSuccessMessage, 'Updated successfully!', 1000);
   });
 
@@ -584,29 +626,21 @@ function* BackendSaga(): SagaIterator {
     }
     yield put(actions.fetchAssessmentOverviews());
   });
+}
 
-  /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
-    action: ReturnType<typeof actions.fetchTestStories>
-  ) {
-    // TODO: implement when stories backend is implemented
-  }); */
-
-  // Related to game, disabled for now
-  /*
-  yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const gameState: GameState = action.payload;
-    const resp = yield putUserGameState(gameState, tokens);
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-    yield put(actions.setGameState(gameState));
-  });
-  */
+function* handleReautogradeResponse(result: AsyncReturnType<typeof postReautogradeSubmission>) {
+  switch (result) {
+    case true:
+      yield call(showSuccessMessage, 'Autograde job queued successfully.');
+      break;
+    case 'not_found':
+    case false:
+      yield call(showWarningMessage, 'Failed to queue autograde job.');
+      break;
+    case 'not_submitted':
+      yield call(showWarningMessage, 'Cannot reautograde non-submitted submission.');
+      break;
+  }
 }
 
 export default BackendSaga;

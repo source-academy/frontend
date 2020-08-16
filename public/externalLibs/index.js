@@ -8,7 +8,19 @@ function dynamicallyLoadScript(url) {
   /** Forces scripts to be loaded in order. */
   script.async = false
   script.defer = true
-  document.head.appendChild(script)
+  // make sure document.body exists, since the scripts we load
+  // assume that it does
+  if (document.body) {
+    document.body.appendChild(script)
+  } else {
+    var observer = new MutationObserver(function() {
+      if (document.body) {
+        document.body.appendChild(script)
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.documentElement, { childList: true });
+  }
 }
 
 /**

@@ -25,12 +25,7 @@ import {
   HIGHLIGHT_LINE
 } from '../application/types/InterpreterTypes';
 import { Testcase } from '../assessment/AssessmentTypes';
-import {
-  FINISH_INVITE,
-  INIT_INVITE,
-  SET_EDITOR_SESSION_ID,
-  SET_WEBSOCKET_STATUS
-} from '../collabEditing/CollabEditingTypes';
+import { SET_EDITOR_SESSION_ID, SET_SHAREDB_CONNECTED } from '../collabEditing/CollabEditingTypes';
 import { NOTIFY_PROGRAM_EVALUATED } from '../sideContent/SideContentTypes';
 import { SourceActionType } from '../utils/ActionsHelper';
 import Constants from '../utils/Constants';
@@ -43,6 +38,7 @@ import {
   CHANGE_EXEC_TIME,
   CHANGE_EXTERNAL_LIBRARY,
   CHANGE_SIDE_CONTENT_HEIGHT,
+  CHANGE_STEP_LIMIT,
   CLEAR_REPL_INPUT,
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
@@ -55,12 +51,12 @@ import {
   SEND_REPL_INPUT_TO_OUTPUT,
   TOGGLE_EDITOR_AUTORUN,
   UPDATE_ACTIVE_TAB,
-  UPDATE_CHAPTER,
   UPDATE_CURRENT_ASSESSMENT_ID,
   UPDATE_CURRENT_SUBMISSION_ID,
   UPDATE_EDITOR_VALUE,
   UPDATE_HAS_UNSAVED_CHANGES,
   UPDATE_REPL_VALUE,
+  UPDATE_SUBLANGUAGE,
   UPDATE_WORKSPACE,
   WorkspaceLocation,
   WorkspaceManagerState
@@ -227,6 +223,14 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           sideContentHeight: action.payload.height
         }
       };
+    case CHANGE_STEP_LIMIT:
+      return {
+        ...state,
+        [workspaceLocation]: {
+          ...state[workspaceLocation],
+          stepLimit: action.payload.stepLimit
+        }
+      };
     case CLEAR_REPL_INPUT:
       return {
         ...state,
@@ -263,7 +267,8 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
             action.payload.library.variant,
             action.payload.library.moduleParams
           ),
-          globals: action.payload.library.globals
+          globals: action.payload.library.globals,
+          externalLibrary: action.payload.library.external.name
         }
       };
     case SEND_REPL_INPUT_TO_OUTPUT:
@@ -520,23 +525,6 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           ...action.payload.workspaceOptions
         }
       };
-    case INIT_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceInitValue: action.payload.editorValue,
-          sharedbAceIsInviting: true
-        }
-      };
-    case FINISH_INVITE:
-      return {
-        ...state,
-        [workspaceLocation]: {
-          ...state[workspaceLocation],
-          sharedbAceIsInviting: false
-        }
-      };
     /**
      * Updates workspace without changing anything
      * which has not been specified
@@ -566,12 +554,12 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           editorReadonly: action.payload.editorReadonly
         }
       };
-    case SET_WEBSOCKET_STATUS:
+    case SET_SHAREDB_CONNECTED:
       return {
         ...state,
         [workspaceLocation]: {
           ...state[workspaceLocation],
-          websocketStatus: action.payload.websocketStatus
+          sharedbConnected: action.payload.connected
         }
       };
     case TOGGLE_EDITOR_AUTORUN:
@@ -648,15 +636,15 @@ export const WorkspaceReducer: Reducer<WorkspaceManagerState> = (
           hasUnsavedChanges: action.payload.hasUnsavedChanges
         }
       };
-    case UPDATE_CHAPTER:
+    case UPDATE_SUBLANGUAGE:
       return {
         ...state,
         playground: {
           ...state.playground,
           context: {
             ...state.playground.context,
-            chapter: action.payload.chapter,
-            variant: action.payload.variant
+            chapter: action.payload.sublang.chapter,
+            variant: action.payload.sublang.variant
           }
         }
       };

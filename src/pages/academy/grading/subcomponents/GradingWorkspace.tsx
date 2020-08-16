@@ -37,8 +37,7 @@ export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
   handleBrowseHistoryDown: () => void;
   handleBrowseHistoryUp: () => void;
-  handleChapterSelect: (chapter: any, changeEvent: any) => void;
-  handleClearContext: (library: Library) => void;
+  handleClearContext: (library: Library, shouldInitLibrary: boolean) => void;
   handleDeclarationNavigate: (cursorPosition: Position) => void;
   handleEditorEval: () => void;
   handleEditorValueChange: (val: string) => void;
@@ -179,7 +178,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
               newCursorPosition: this.props.newCursorPosition,
               handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
               handlePromptAutocomplete: this.props.handlePromptAutocomplete,
-              isEditorAutorun: false
+              isEditorAutorun: false,
+              sourceChapter: question?.library?.chapter || 4,
+              sourceVariant: 'default',
+              externalLibraryName: question?.library?.external?.name || 'NONE'
             }
           : undefined,
       editorHeight: this.props.editorHeight,
@@ -199,7 +201,10 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         handleReplEval: this.props.handleReplEval,
         handleReplValueChange: this.props.handleReplValueChange,
         output: this.props.output,
-        replValue: this.props.replValue
+        replValue: this.props.replValue,
+        sourceChapter: question?.library?.chapter || 4,
+        sourceVariant: 'default',
+        externalLibrary: question?.library?.external?.name || 'NONE'
       }
     };
     return (
@@ -253,7 +258,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       editorPostpend,
       editorTestcases
     });
-    props.handleClearContext(question.library);
+    props.handleClearContext(question.library, true);
     props.handleUpdateHasUnsavedChanges(false);
     if (editorValue) {
       props.handleEditorValueChange(editorValue);

@@ -3,6 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { RouteComponentProps } from 'react-router';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -32,7 +33,7 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type SourcecastProps = DispatchProps & StateProps;
+export type SourcecastProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -62,6 +63,7 @@ export type DispatchProps = {
   handleSetSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -81,7 +83,7 @@ export type StateProps = {
   editorValue: string;
   editorHeight?: number;
   editorWidth: string;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   breakpoints: string[];
   highlightedLines: HighlightedLines[];
   isEditorAutorun: boolean;
@@ -100,10 +102,17 @@ export type StateProps = {
   sourcecastIndex: SourcecastData[] | null;
   sourceChapter: number;
   sourceVariant: Variant;
+  uid: string | null;
 };
 
 class Sourcecast extends React.Component<SourcecastProps> {
+  public componentDidMount() {
+    this.props.handleFetchSourcecastIndex();
+  }
+
   public componentDidUpdate(prevProps: SourcecastProps) {
+    parseSourcecastUID(this.props);
+
     const { inputToApply } = this.props;
 
     if (!inputToApply || inputToApply === prevProps.inputToApply) {
@@ -119,6 +128,9 @@ class Sourcecast extends React.Component<SourcecastProps> {
         break;
       case 'externalLibrarySelect':
         this.props.handleExternalSelect(inputToApply.data);
+        break;
+      case 'forcePause':
+        this.props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
   }
@@ -210,7 +222,10 @@ class Sourcecast extends React.Component<SourcecastProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
+        externalLibrary: this.props.externalLibraryName
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
@@ -230,7 +245,6 @@ class Sourcecast extends React.Component<SourcecastProps> {
                   </Pre>
                 </span>
                 <SourceRecorderTable
-                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
                   handleSetSourcecastData={this.props.handleSetSourcecastData}
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
@@ -271,6 +285,26 @@ class Sourcecast extends React.Component<SourcecastProps> {
     );
   }
 }
+
+const parseSourcecastUID = (props: SourcecastProps) => {
+  const pathname = props.location.pathname;
+  if (pathname.length > 11) {
+    const uid = pathname.substr(12);
+    if (uid !== props.uid && props.sourcecastIndex) {
+      props.sourcecastIndex
+        .filter(data => data.uid === uid)
+        .forEach(data => {
+          props.handleSetSourcecastData(
+            data.title,
+            data.description,
+            data.uid,
+            data.url,
+            JSON.parse(data.playbackData)
+          );
+        });
+    }
+  }
+};
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
 

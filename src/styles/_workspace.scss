@@ -398,7 +398,7 @@ $code-color-error: #ff4444;
         margin-top: 70px;
 
         .sa-substituter {
-          margin: 11px;
+          margin: 15px;
           height: unset;
 
           .beforeMarker {
@@ -781,9 +781,24 @@ $code-color-error: #ff4444;
   .Autograder {
     min-width: 640px;
 
-    > .collapse-button {
+    *:focus {
+      /* Disable blue border when an Autograder sub-element is in focus */
+      outline: none;
+    }
+
+    .collapse-button {
       width: 100%;
       background: rgba(0, 0, 0, 0.2);
+
+      > .#{$ns}-button-text {
+        > span:not(:last-child) {
+          margin-right: 7px;
+        }
+
+        > span:not(:first-child) {
+          margin-left: 7px;
+        }
+      }
     }
 
     .testcases-header,
@@ -795,7 +810,7 @@ $code-color-error: #ff4444;
       padding: 0.4rem 0.6rem;
 
       .#{$ns}-icon {
-        margin-right: 4px;
+        margin-left: 4px;
       }
     }
 
@@ -1043,4 +1058,17 @@ $code-color-error: #ff4444;
 /* otherwise, a thick outline will show on click due to react-hotkeys */
 .workspace:focus {
   outline: 0;
+}
+
+/* Tooltip content is rendered in a Blueprint Portal outside the main body */
+.autograder-help-tooltip {
+  max-width: 275px;
+
+  > p {
+    margin-bottom: 6px;
+  }
+
+  > p:last-child {
+    margin-bottom: 0;
+  }
 }

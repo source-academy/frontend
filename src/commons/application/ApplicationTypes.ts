@@ -1,6 +1,7 @@
 import { SourceError, Variant } from 'js-slang/dist/types';
 
 import { AcademyState } from '../../features/academy/AcademyTypes';
+import { AchievementState } from '../../features/achievement/AchievementTypes';
 import { DashboardState } from '../../features/dashboard/DashboardTypes';
 import { Grading } from '../../features/grading/GradingTypes';
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
@@ -20,6 +21,7 @@ import { SessionState } from './types/SessionTypes';
 
 export type OverallState = {
   readonly academy: AcademyState;
+  readonly achievement: AchievementState;
   readonly application: ApplicationState;
   readonly playground: PlaygroundState;
   readonly session: SessionState;
@@ -101,15 +103,30 @@ export enum Role {
 }
 
 /**
- * Defines what chapters are available for usage.
+ * Defines the Source sublanguages available for use.
  * For external libraries, see ExternalLibrariesTypes.ts
  */
 export type SourceLanguage = {
   chapter: number;
   variant: Variant;
+  displayName: string;
 };
 
-export const sourceLanguages: SourceLanguage[] = [
+const variantDisplay: Map<Variant, string> = new Map([
+  ['wasm', 'WebAssembly'],
+  ['non-det', 'Non-Det'],
+  ['concurrent', 'Concurrent'],
+  ['lazy', 'Lazy'],
+  ['gpu', 'GPU']
+]);
+
+export const styliseSublanguage = (chapter: number, variant: Variant = 'default') => {
+  return `Source \xa7${chapter}${
+    variantDisplay.has(variant) ? ` ${variantDisplay.get(variant)}` : ''
+  }`;
+};
+
+const sublanguages: { chapter: number; variant: Variant }[] = [
   { chapter: 1, variant: 'default' },
   { chapter: 1, variant: 'wasm' },
   { chapter: 1, variant: 'lazy' },
@@ -122,21 +139,15 @@ export const sourceLanguages: SourceLanguage[] = [
   { chapter: 4, variant: 'gpu' }
 ];
 
-const variantDisplay: Map<Variant, string> = new Map([
-  ['wasm', 'WebAssembly'],
-  ['non-det', 'Non-Det'],
-  ['concurrent', 'Concurrent'],
-  ['lazy', 'Lazy'],
-  ['gpu', 'GPU']
-]);
+export const sourceLanguages = sublanguages.map(sublang => {
+  return {
+    ...sublang,
+    displayName: styliseSublanguage(sublang.chapter, sublang.variant)
+  };
+});
 
-export const styliseChapter = (chap: number, variant: Variant = 'default') => {
-  let res = `Source \xa7${chap}`;
-  if (variantDisplay.has(variant)) {
-    res += ' ' + variantDisplay.get(variant);
-  }
-  return res;
-};
+export const defaultLanguages = sourceLanguages.filter(sublang => sublang.variant === 'default');
+export const variantLanguages = sourceLanguages.filter(sublang => sublang.variant !== 'default');
 
 const currentEnvironment = (): ApplicationEnvironment => {
   switch (process.env.NODE_ENV) {
@@ -160,6 +171,11 @@ export const defaultApplication: ApplicationState = {
 
 export const defaultDashboard: DashboardState = {
   gradingSummary: []
+};
+
+export const defaultAchievement: AchievementState = {
+  achievements: [],
+  goals: []
 };
 
 export const defaultPlayground: PlaygroundState = {
@@ -201,10 +217,9 @@ export const createDefaultWorkspace = (workspaceLocation: WorkspaceLocation): Wo
     originalValue: ''
   },
   replValue: '',
-  sharedbAceInitValue: '',
-  sharedbAceIsInviting: false,
+  sharedbConnected: false,
   sideContentActiveTab: SideContentType.questionOverview,
-  websocketStatus: 0,
+  stepLimit: 1000,
   globals: [],
   isEditorAutorun: false,
   isRunning: false,
@@ -246,7 +261,8 @@ export const defaultWorkspaceManager: WorkspaceManagerState = {
     playbackDuration: 0,
     playbackStatus: PlaybackStatus.paused,
     sourcecastIndex: null,
-    title: null
+    title: null,
+    uid: null
   },
   sourcereel: {
     ...createDefaultWorkspace('sourcereel'),
@@ -291,6 +307,7 @@ export const defaultSession: SessionState = {
 
 export const defaultState: OverallState = {
   academy: defaultAcademy,
+  achievement: defaultAchievement,
   application: defaultApplication,
   dashboard: defaultDashboard,
   playground: defaultPlayground,

@@ -18,6 +18,7 @@ import {
 export const saveSourcecastData = (
   title: string,
   description: string,
+  uid: string,
   audio: Blob,
   playbackData: PlaybackData,
   workspaceLocation: WorkspaceLocation
@@ -25,6 +26,7 @@ export const saveSourcecastData = (
   action(SAVE_SOURCECAST_DATA, {
     title,
     description,
+    uid,
     audio,
     audioUrl: window.URL.createObjectURL(audio),
     playbackData,
@@ -52,6 +54,7 @@ export const setInputToApply = (inputToApply: Input, workspaceLocation: Workspac
 export const setSourcecastData = (
   title: string,
   description: string,
+  uid: string,
   audioUrl: string,
   playbackData: PlaybackData,
   workspaceLocation: WorkspaceLocation
@@ -59,6 +62,7 @@ export const setSourcecastData = (
   action(SET_SOURCECAST_DATA, {
     title,
     description,
+    uid,
     audioUrl,
     playbackData,
     workspaceLocation

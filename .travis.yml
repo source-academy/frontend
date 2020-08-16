@@ -12,6 +12,7 @@ before_install:
   - export NODE_OPTIONS=--max_old_space_size=8192
   - export GENERATE_SOURCEMAP=false
 script:
+  - yarn run tsc
   - yarn run format:ci
   - yarn run eslint
   - travis_wait 30 yarn run build

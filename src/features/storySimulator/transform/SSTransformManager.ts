@@ -4,8 +4,17 @@ import { multiplyDimensions } from 'src/features/game/utils/SpriteUtils';
 
 import { CursorMode } from '../cursorMode/SSCursorModeTypes';
 import ObjectPlacement from '../scenes/ObjectPlacement/ObjectPlacement';
-import transformConstants from './SSTransformManagerConstants';
+import TransformConstants from './SSTransformManagerConstants';
 
+/**
+ * This manager manages transformation (changing of dimensions and coordinates)
+ * of on-screen assets, ie bounding boxes and objects
+ *
+ * For dragging: It firstly renders the chagnes in real time using Phaser's drag listener
+ * When mouse is detached, it updates the details for bbox/objects by contacting their managers
+ *
+ * For resizing: The `[` and `]` keys are used to resize an object
+ */
 export default class SSTransformManager {
   private activeSelection: Phaser.GameObjects.Image | Phaser.GameObjects.Rectangle | undefined;
   private activeSelectRect: Phaser.GameObjects.Rectangle | undefined;
@@ -67,12 +76,12 @@ export default class SSTransformManager {
     if (!this.activeSelection || !this.activeSelectRect) {
       return;
     }
-    const factor = enlarge ? transformConstants.scaleFactor : 1 / transformConstants.scaleFactor;
+    const factor = enlarge ? TransformConstants.scaleFactor : 1 / TransformConstants.scaleFactor;
     multiplyDimensions(this.activeSelection, factor);
     this.activeSelectRect.displayHeight =
-      this.activeSelection.displayHeight + transformConstants.activeSelectMargin;
+      this.activeSelection.displayHeight + TransformConstants.activeSelectMargin;
     this.activeSelectRect.displayWidth =
-      this.activeSelection.displayWidth + transformConstants.activeSelectMargin;
+      this.activeSelection.displayWidth + TransformConstants.activeSelectMargin;
 
     if (this.activeSelection.data.get('type') === 'object') {
       objectPlacement.setObjAttribute(
@@ -111,9 +120,9 @@ export default class SSTransformManager {
     this.activeSelectRect.y = gameObject.y;
 
     this.activeSelectRect.displayHeight =
-      gameObject.displayHeight + transformConstants.activeSelectMargin;
+      gameObject.displayHeight + TransformConstants.activeSelectMargin;
     this.activeSelectRect.displayWidth =
-      gameObject.displayWidth + transformConstants.activeSelectMargin;
+      gameObject.displayWidth + TransformConstants.activeSelectMargin;
   }
 
   public deselect() {

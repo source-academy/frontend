@@ -65,12 +65,14 @@ export type DispatchProps = {
   handleSaveSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audio: Blob,
     playbackData: PlaybackData
   ) => void;
   handleSetSourcecastData: (
     title: string,
     description: string,
+    uid: string,
     audioUrl: string,
     playbackData: PlaybackData
   ) => void;
@@ -99,7 +101,7 @@ export type StateProps = {
   editorValue: string;
   editorWidth: string;
   enableDebugging: boolean;
-  externalLibraryName: string;
+  externalLibraryName: ExternalLibraryName;
   highlightedLines: HighlightedLines[];
   inputToApply: Input | null;
   isDebugging: boolean;
@@ -122,6 +124,10 @@ export type StateProps = {
 };
 
 class Sourcereel extends React.Component<SourcereelProps> {
+  public componentDidMount() {
+    this.props.handleFetchSourcecastIndex();
+  }
+
   public componentDidUpdate(prevProps: SourcereelProps) {
     const { inputToApply } = this.props;
 
@@ -138,6 +144,9 @@ class Sourcereel extends React.Component<SourcereelProps> {
         break;
       case 'externalLibrarySelect':
         this.props.handleExternalSelect(inputToApply.data);
+        break;
+      case 'forcePause':
+        this.props.handleSetSourcecastStatus(PlaybackStatus.forcedPaused);
         break;
     }
   }
@@ -274,7 +283,10 @@ class Sourcereel extends React.Component<SourcereelProps> {
         handleBrowseHistoryDown: this.props.handleBrowseHistoryDown,
         handleBrowseHistoryUp: this.props.handleBrowseHistoryUp,
         handleReplEval: this.props.handleReplEval,
-        handleReplValueChange: this.props.handleReplValueChange
+        handleReplValueChange: this.props.handleReplValueChange,
+        sourceChapter: this.props.sourceChapter,
+        sourceVariant: this.props.sourceVariant,
+        externalLibrary: this.props.externalLibraryName
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
@@ -295,6 +307,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
                   getTimerDuration={this.getTimerDuration}
                   playbackData={this.props.playbackData}
                   handleRecordInit={this.handleRecordInit}
+                  handleRecordPause={this.handleRecordPause}
                   handleResetInputs={this.props.handleResetInputs}
                   handleSaveSourcecastData={this.props.handleSaveSourcecastData}
                   handleSetSourcecastData={this.props.handleSetSourcecastData}
@@ -318,7 +331,6 @@ class Sourcereel extends React.Component<SourcereelProps> {
               <div>
                 <SourcecastTable
                   handleDeleteSourcecastEntry={this.props.handleDeleteSourcecastEntry}
-                  handleFetchSourcecastIndex={this.props.handleFetchSourcecastIndex}
                   sourcecastIndex={this.props.sourcecastIndex}
                 />
               </div>
@@ -368,6 +380,13 @@ class Sourcereel extends React.Component<SourcereelProps> {
       chapter: this.props.sourceChapter,
       externalLibrary: this.props.externalLibraryName as ExternalLibraryName,
       editorValue: this.props.editorValue
+    });
+
+  private handleRecordPause = () =>
+    this.props.handleRecordInput({
+      time: this.getTimerDuration(),
+      type: 'forcePause',
+      data: null
     });
 }
 

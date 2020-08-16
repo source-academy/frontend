@@ -13,14 +13,13 @@ import GamePhaseManager from '../phase/GamePhaseManager';
 export type BitmapFontStyle = {
   key: string;
   size: number;
-  fill: number;
   align: number;
 };
 
 /**
  * @typedef {string} ItemId - id associated with an item.
  * Item can be any of the following:
- * (Dialogue | ObjectProperty | BboxProperty | Character | Action | CollectibleProperty)
+ * (Dialogue | ObjectProperty | BboxProperty | Character | Action | AwardProperty)
  */
 export type ItemId = string;
 
@@ -85,7 +84,7 @@ export enum GameSize {
 export type TextConfig = { x: number; y: number; oriX: number; oriY: number };
 
 /**
- * Interface for basic scene, which incorporates input, sound, and layer manager.
+ * Interface for basic scene, which incorporates input, phaser, and layer manager.
  * Due to the three managers, the scene should also provide a way to clean up
  * the necessary managers.
  *
@@ -96,4 +95,13 @@ export interface IBaseScene extends Phaser.Scene {
   getInputManager: () => GameInputManager;
   getPhaseManager: () => GamePhaseManager;
   cleanUp: () => void;
+}
+
+/**
+ * Interface for scene which possess a layer manager.
+ *
+ * @interface
+ */
+export interface ILayeredScene extends Phaser.Scene {
+  getLayerManager: () => GameLayerManager;
 }

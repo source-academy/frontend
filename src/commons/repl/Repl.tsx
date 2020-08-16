@@ -7,8 +7,9 @@ import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
-import ReplInput, { ReplInputProps } from './ReplInput';
+import ReplInput from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
 export type ReplProps = DispatchProps & StateProps;
@@ -18,8 +19,9 @@ type StateProps = {
   replValue: string;
   hidden?: boolean;
   usingSubst?: boolean;
-  sourceChapter?: number;
-  sourceVariant?: Variant;
+  sourceChapter: number;
+  sourceVariant: Variant;
+  externalLibrary: ExternalLibraryName;
 };
 
 type DispatchProps = {
@@ -38,7 +40,6 @@ class Repl extends React.PureComponent<ReplProps, {}> {
     const cards = this.props.output.map((slice, index) => (
       <Output output={slice} key={index} usingSubst={this.props.usingSubst || false} />
     ));
-    const inputProps: ReplInputProps = this.props as ReplInputProps;
     return (
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
@@ -47,7 +48,9 @@ class Repl extends React.PureComponent<ReplProps, {}> {
             className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
             handlers={handlers}
           >
-            {this.props.sourceVariant !== 'concurrent' ? <ReplInput {...inputProps} /> : null}
+            {this.props.sourceVariant !== 'concurrent' && this.props.sourceVariant !== 'wasm' ? (
+              <ReplInput {...this.props} />
+            ) : null}
           </HotKeys>
         </div>
       </div>
