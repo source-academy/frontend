@@ -32,7 +32,7 @@ function AchievementView(props: AchievementViewProps) {
 
   const achievement = inferencer.getAchievement(focusId);
   const { ability, deadline, title, view } = achievement;
-  const { canvasUrl, completionText, description } = view;
+  const { coverImage, completionText, description } = view;
   const awardedXp = inferencer.getAchievementXp(focusId);
   const goals = inferencer.listGoals(focusId);
   const prereqGoals = inferencer.listPrerequisiteGoals(focusId);
@@ -41,9 +41,9 @@ function AchievementView(props: AchievementViewProps) {
   return (
     <div className="view" style={{ ...getAbilityGlow(ability), ...getAbilityBackground(ability) }}>
       <div
-        className="canvas"
+        className="cover"
         style={{
-          background: `url(${canvasUrl}) center/cover`
+          background: `url(${coverImage}) center/cover`
         }}
       >
         <h1>{title.toUpperCase()}</h1>

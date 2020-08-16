@@ -13,11 +13,11 @@ const sampleAchievement: AchievementItem = {
   prerequisiteIds: [],
   goalIds: [],
   position: 0,
-  cardTileUrl:
-    'https://www.publicdomainpictures.net/pictures/30000/velka/plain-white-background.jpg',
+  cardBackground:
+    'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-background/default.png',
   view: {
-    canvasUrl:
-      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/canvas/annotated-canvas.png',
+    coverImage:
+      'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/cover-image/default.png',
     description: '',
     completionText: ''
   }

@@ -61,31 +61,31 @@ export const handleGlow = (id: number, focusId: number, ability: AchievementAbil
   ability === AchievementAbility.FLEX || id === focusId ? getAbilityGlow(ability) : undefined;
 
 export const achievementAssets = `${Links.sourceAcademyAssets}/achievement`;
-export const backgroundUrl = `${achievementAssets}/background`;
-export const canvasUrl = `${achievementAssets}/canvas`;
-export const cardTileUrl = `${achievementAssets}/card-tile`;
+export const backgroundUrl = `${achievementAssets}/view-background`;
+export const cardBackgroundUrl = `${achievementAssets}/card-background`;
+export const coverImageUrl = `${achievementAssets}/cover-image`;
 
 export const getAbilityBackground = (ability: AchievementAbility) => {
   switch (ability) {
     case AchievementAbility.CORE:
       return {
-        background: `url(${backgroundUrl}/core-background.png) no-repeat center/cover`
+        background: `url(${backgroundUrl}/core.png) no-repeat center/cover`
       };
     case AchievementAbility.EFFORT:
       return {
-        background: `url(${backgroundUrl}/effort-background.png) no-repeat center/cover`
+        background: `url(${backgroundUrl}/effort.png) no-repeat center/cover`
       };
     case AchievementAbility.EXPLORATION:
       return {
-        background: `url(${backgroundUrl}/exploration-background.png) no-repeat center/cover`
+        background: `url(${backgroundUrl}/exploration.png) no-repeat center/cover`
       };
     case AchievementAbility.COMMUNITY:
       return {
-        background: `url(${backgroundUrl}/community-background.png) no-repeat center/cover`
+        background: `url(${backgroundUrl}/community.png) no-repeat center/cover`
       };
     case AchievementAbility.FLEX:
       return {
-        background: `url(${backgroundUrl}/flex-background.png) no-repeat center/cover`
+        background: `url(${backgroundUrl}/flex.png) no-repeat center/cover`
       };
     default:
       return {

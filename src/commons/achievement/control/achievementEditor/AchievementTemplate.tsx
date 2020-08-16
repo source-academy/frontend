@@ -1,4 +1,7 @@
-import { canvasUrl, cardTileUrl } from '../../../../features/achievement/AchievementConstants';
+import {
+  cardBackgroundUrl,
+  coverImageUrl
+} from '../../../../features/achievement/AchievementConstants';
 import {
   AchievementAbility,
   AchievementItem,
@@ -6,9 +9,9 @@ import {
 } from '../../../../features/achievement/AchievementTypes';
 
 export const viewTemplate: AchievementView = {
-  canvasUrl: `${canvasUrl}/default-canvas.png`,
-  description: 'View Description here',
-  completionText: 'Completion Text here'
+  coverImage: `${coverImageUrl}/default.png`,
+  description: '',
+  completionText: ''
 };
 
 export const achievementTemplate: AchievementItem = {
@@ -19,6 +22,6 @@ export const achievementTemplate: AchievementItem = {
   position: 0,
   prerequisiteIds: [],
   goalIds: [],
-  cardTileUrl: `${cardTileUrl}/default-tile.png`,
+  cardBackground: `${cardBackgroundUrl}/default.png`,
   view: viewTemplate
 };

@@ -33,7 +33,7 @@ function EditableCard(props: EditableCardProps) {
   const resetEditableAchievement = () => setEditableAchievement(cloneDeep(achievementReference));
   const {
     ability,
-    cardTileUrl,
+    cardBackground,
     deadline,
     goalIds,
     position,
@@ -75,10 +75,10 @@ function EditableCard(props: EditableCardProps) {
     setIsDirty(true);
   };
 
-  const handleChangeCardBackground = (cardTileUrl: string) => {
+  const handleChangeCardBackground = (cardBackground: string) => {
     setEditableAchievement({
       ...editableAchievement,
-      cardTileUrl: cardTileUrl
+      cardBackground: cardBackground
     });
     setIsDirty(true);
   };
@@ -145,7 +145,7 @@ function EditableCard(props: EditableCardProps) {
     <li
       className="editable-card"
       style={{
-        background: `url(${cardTileUrl}) center/cover`
+        background: `url(${cardBackground}) center/cover`
       }}
     >
       <div className="action-button">
@@ -175,7 +175,7 @@ function EditableCard(props: EditableCardProps) {
         <EditableView view={view} changeView={handleChangeView} />
         <AchievementSettings
           id={id}
-          cardBackground={cardTileUrl}
+          cardBackground={cardBackground}
           changeCardBackground={handleChangeCardBackground}
           changeGoalIds={handleChangeGoalIds}
           changePosition={handleChangePosition}

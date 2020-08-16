@@ -106,9 +106,9 @@
 
   .achievement-main {
     $border-glow-radius: 10px;
-    // Canvas aspect ratio 2:1
-    $canvas-height: 18em;
-    $canvas-width: 36em;
+    // Cover aspect ratio 2:1
+    $cover-height: 18em;
+    $cover-width: 36em;
     // Card aspect ratio 2:1
     $card-height: 5em;
     $card-width: 30em;
@@ -116,7 +116,7 @@
     $default-spacing: 1em;
     // View aspect ratio 18:25
     $view-height: 50em;
-    $view-width: $canvas-width;
+    $view-width: $cover-width;
 
     align-items: center;
     display: flex;
@@ -285,7 +285,7 @@
     }
 
     .view-container {
-      $canvas-spacing: 0.3em;
+      $cover-spacing: 0.3em;
       $content-spacing: 0.5em;
 
       @extend %container;
@@ -315,21 +315,21 @@
         min-height: $view-height;
         width: $view-width;
 
-        .canvas {
+        .cover {
           display: flex;
           flex-direction: column;
-          height: $canvas-height;
+          height: $cover-height;
           text-align: center;
-          width: $canvas-width;
+          width: $cover-width;
 
           h1 {
             margin: 0.5em auto 0;
-            padding: $canvas-spacing;
+            padding: $cover-spacing;
           }
 
           p {
             margin: 0 auto;
-            padding: $canvas-spacing;
+            padding: $cover-spacing;
           }
 
           .description {

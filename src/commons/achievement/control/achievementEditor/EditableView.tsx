@@ -13,9 +13,9 @@ function EditableView(props: EditableViewProps) {
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
-  const { canvasUrl, description, completionText } = view;
+  const { coverImage, description, completionText } = view;
 
-  const changeCanvasUrl = (canvasUrl: string) => changeView({ ...view, canvasUrl: canvasUrl });
+  const changeCoverImage = (coverImage: string) => changeView({ ...view, coverImage });
 
   const changeDescription = (description: string) =>
     changeView({ ...view, description: description });
@@ -31,12 +31,12 @@ function EditableView(props: EditableViewProps) {
 
       <Dialog title="Edit View" icon={IconNames.WIDGET_HEADER} isOpen={isOpen} onClose={toggleOpen}>
         <div style={{ padding: '0 0.5em' }}>
-          <h3>View Image</h3>
+          <h3>Cover Image</h3>
           <EditableText
-            placeholder="Enter image URL here"
+            placeholder="Enter cover image URL here"
             multiline={true}
-            onChange={changeCanvasUrl}
-            value={canvasUrl}
+            onChange={changeCoverImage}
+            value={coverImage}
           />
           <h3>Description</h3>
           <EditableText

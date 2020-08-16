@@ -22,7 +22,7 @@ function AchievementCard(props: AchievementCardProps) {
 
   const [focusId, setFocusId] = focusState;
 
-  const { ability, cardTileUrl, title } = inferencer.getAchievement(id);
+  const { ability, cardBackground, title } = inferencer.getAchievement(id);
   const displayDeadline = inferencer.getDisplayDeadline(id);
   const displayXp = inferencer.getAchievementMaxXp(id);
   const progressFrac = inferencer.getProgressFrac(id);
@@ -38,7 +38,7 @@ function AchievementCard(props: AchievementCardProps) {
       style={{
         ...handleGlow(id, focusId, ability),
         opacity: shouldRender ? '100%' : '20%',
-        background: `url(${cardTileUrl}) center/cover`
+        background: `url(${cardBackground}) center/cover`
       }}
       onClick={() => setFocusId(id)}
       onClickCapture={toggleDropdown}

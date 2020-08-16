@@ -47,7 +47,7 @@ function AchievementSettings(props: AchievementSettingsProps) {
         <div style={{ padding: '0 0.5em' }}>
           <h3>Card Background</h3>
           <EditableText
-            placeholder="Enter image URL here"
+            placeholder="Enter card background URL here"
             multiline={true}
             onChange={changeCardBackground}
             value={cardBackground}
