@@ -37,7 +37,6 @@ import {
   getPlaygroundLogs,
   getResetLoggingFlag, 
   hasExceededLocalStorageSpace,
-  oneHourInMilliSeconds,
   playgroundQuestionId,
   resetPlaygroundLogging,
   savePlaygroundLog,

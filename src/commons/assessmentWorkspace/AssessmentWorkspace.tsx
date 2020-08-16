@@ -27,7 +27,6 @@ import {
   getLoggedAssessmentIds,
   getPlaygroundLogs,
   hasExceededLocalStorageSpace,
-  oneHourInMilliSeconds,
   playgroundQuestionId,
   resetAssessmentLogging,
   saveAssessmentLog,
