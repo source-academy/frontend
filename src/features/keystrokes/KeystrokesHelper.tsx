@@ -7,11 +7,11 @@ const oneByteInBits = 8;
 const oneKbInBytes = 1024;
 const fiveMbInKb = 5 * 1024;
 
-const getLocalStorageSpace = () => {
+const getSessionStorageSpace = () => {
   let allStrings = '';
-  for (const key in window.localStorage) {
-    if (window.localStorage.hasOwnProperty(key)) {
-      allStrings += window.localStorage[key];
+  for (const key in window.sessionStorage) {
+    if (window.sessionStorage.hasOwnProperty(key)) {
+      allStrings += window.sessionStorage[key];
     }
   }
   return allStrings ? 3 + (allStrings.length * 16) / (oneByteInBits * oneKbInBytes) : 0;
@@ -19,7 +19,7 @@ const getLocalStorageSpace = () => {
 
 export const hasExceededLocalStorageSpace = () => {
   return (
-    getLocalStorageSpace() > fiveMbInKb ||
+    getSessionStorageSpace() > fiveMbInKb ||
     getPlaygroundLogs().inputs.length + getAssessmentLogs().inputs.length >= 1000
   );
 };
@@ -27,7 +27,7 @@ export const hasExceededLocalStorageSpace = () => {
 export const playgroundQuestionId: number = -1;
 
 export const resetPlaygroundLogging = () => {
-  const playgroundLogs: string | null = localStorage.getItem('PlaygroundLogs');
+  const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
   const playgroundPlayback: PlaybackData = JSON.parse(
     playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
   );
@@ -41,15 +41,15 @@ export const resetPlaygroundLogging = () => {
     playgroundPlayback.init = newInit;
   }
   playgroundPlayback.inputs = getPlaygroundLogs().inputs.splice(0, lastInputs.lastIndex);
-  localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
+  sessionStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
 };
 
 export const setResetLoggingFlag = (flag: boolean) => {
-  localStorage.setItem('LoggingFlag', JSON.stringify(flag));
+  sessionStorage.setItem('LoggingFlag', JSON.stringify(flag));
 };
 
 export const getResetLoggingFlag = () => {
-  const loggingFlag: string | null = localStorage.getItem('LoggingFlag');
+  const loggingFlag: string | null = sessionStorage.getItem('LoggingFlag');
   return JSON.parse(loggingFlag ? loggingFlag : 'false');
 };
 
@@ -65,34 +65,44 @@ export const setLastPlaygroundInputs = (
     editorValue: editorValue,
     lastIndex: lastIndex
   };
-  localStorage.setItem('LastPlaygroundIndex', JSON.stringify(lastInputs));
+  sessionStorage.setItem('LastPlaygroundIndex', JSON.stringify(lastInputs));
 };
 
 export const getLastPlaygroundInputs = () => {
-  const lastInputs = localStorage.getItem('LastPlaygroundIndex');
+  const lastInputs = sessionStorage.getItem('LastPlaygroundIndex');
   const lastInputsAsObject = JSON.parse(lastInputs ? lastInputs : '0');
   return lastInputsAsObject;
 };
 
 export const savePlaygroundLog = (newInput: Input) => {
-  const playgroundLogs: string | null = localStorage.getItem('PlaygroundLogs');
+  const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
   const playgroundPlayback: PlaybackData = JSON.parse(
     playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
   );
   playgroundPlayback.inputs.push(newInput);
-  localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
+  sessionStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
 };
 
 export const getPlaygroundLogs = () => {
-  const playgroundLogs: string | null = localStorage.getItem('PlaygroundLogs');
+  const playgroundLogs: string | null = sessionStorage.getItem('PlaygroundLogs');
   const playgroundPlayback: PlaybackData = JSON.parse(
     playgroundLogs ? playgroundLogs : JSON.stringify(defaultPlaybackData)
   );
   return playgroundPlayback;
 };
 
+export const resetAlAssessmentLogs = () => {
+  const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
+  const assessmentPlayback: PlaybackData = JSON.parse(
+    assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
+  );
+  assessmentPlayback.inputs = [];
+
+  sessionStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
+}
+
 export const resetAssessmentLogging = () => {
-  const assessmentLogs: string | null = localStorage.getItem('AssessmentLogs');
+  const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
   const assessmentPlayback: PlaybackData = JSON.parse(
     assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
   );
@@ -107,7 +117,7 @@ export const resetAssessmentLogging = () => {
   }
   assessmentPlayback.inputs = getAssessmentLogs().inputs.splice(0, lastInputs.lastIndex);
 
-  localStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
+  sessionStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
 };
 
 export const setLastAssessmentInputs = (
@@ -122,26 +132,26 @@ export const setLastAssessmentInputs = (
     editorValue: editorValue,
     lastIndex: lastIndex
   };
-  localStorage.setItem('LastAssessmentLogIndex', JSON.stringify(lastInputs));
+  sessionStorage.setItem('LastAssessmentLogIndex', JSON.stringify(lastInputs));
 };
 
 export const getLastAssessmentInputs = () => {
-  const lastInputs = localStorage.getItem('LastAssessmentLogIndex');
+  const lastInputs = sessionStorage.getItem('LastAssessmentLogIndex');
   const lastInputsAsObject = JSON.parse(lastInputs ? lastInputs : '0');
   return lastInputsAsObject;
 };
 
 export const saveAssessmentLog = (newInput: Input) => {
-  const assessmentLogs: string | null = localStorage.getItem('AssessmentLogs');
+  const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
   const assessmentPlayback: PlaybackData = JSON.parse(
     assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
   );
   assessmentPlayback.inputs.push(newInput);
-  localStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
+  sessionStorage.setItem('AssessmentLogs', JSON.stringify(assessmentPlayback));
 };
 
 export const getAssessmentLogs = () => {
-  const assessmentLogs: string | null = localStorage.getItem('AssessmentLogs');
+  const assessmentLogs: string | null = sessionStorage.getItem('AssessmentLogs');
   const assessmentPlayback: PlaybackData = JSON.parse(
     assessmentLogs ? assessmentLogs : JSON.stringify(defaultPlaybackData)
   );
@@ -149,17 +159,17 @@ export const getAssessmentLogs = () => {
 };
 
 export const saveLoggedAssessmentIds = (assessmentId: number, questionId: number) => {
-  const questionParamsString: string | null = localStorage.getItem('LoggedAssessmentIds');
+  const questionParamsString: string | null = sessionStorage.getItem('LoggedAssessmentIds');
   const questionParams = JSON.parse(
     questionParamsString ? questionParamsString : JSON.stringify(defaultAssessmentIds)
   );
   questionParams.assessmentId = assessmentId;
   questionParams.questionId = questionId;
-  localStorage.setItem('LoggedAssessmentIds', JSON.stringify(questionParams));
+  sessionStorage.setItem('LoggedAssessmentIds', JSON.stringify(questionParams));
 };
 
 export const getLoggedAssessmentIds = () => {
-  const questionParamsString: string | null = localStorage.getItem('LoggedAssessmentIds');
+  const questionParamsString: string | null = sessionStorage.getItem('LoggedAssessmentIds');
   const questionParams = JSON.parse(
     questionParamsString ? questionParamsString : JSON.stringify(defaultAssessmentIds)
   );
