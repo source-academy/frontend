@@ -52,10 +52,6 @@ export const savePlaygroundLog = (newInput: Input) => {
   );
   playgroundPlayback.inputs.push(newInput);
   localStorage.setItem('PlaygroundLogs', JSON.stringify(playgroundPlayback));
-
-  const neww = localStorage.getItem('PlaygroundLogs');
-  const hehexd: PlaybackData = JSON.parse(neww ? neww : JSON.stringify(defaultPlaybackData));
-  console.log(hehexd);
 };
 
 export const getPlaygroundLogs = () => {
