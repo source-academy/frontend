@@ -74,17 +74,17 @@ function EditableGoal(props: EditableGoalProps) {
   const handleDiscardChanges = () => dispatch({ type: 'DISCARD_CHANGES', payload: goalClone });
 
   const handleSaveChanges = () => {
+    dispatch({ type: 'SAVE_CHANGES' });
     inferencer.modifyGoalDefinition(editableGoal);
     releaseId(id);
     requestPublish();
-    dispatch({ type: 'SAVE_CHANGES' });
   };
 
   const handleDeleteGoal = () => {
+    dispatch({ type: 'DELETE_GOAL' });
     inferencer.removeGoalDefinition(id);
     releaseId(id);
     requestPublish();
-    dispatch({ type: 'DELETE_GOAL' });
   };
 
   const handleChangeText = (text: string) => dispatch({ type: 'CHANGE_TEXT', payload: text });

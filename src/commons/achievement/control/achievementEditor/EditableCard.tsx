@@ -152,17 +152,17 @@ function EditableCard(props: EditableCardProps) {
     dispatch({ type: 'DISCARD_CHANGES', payload: achievementClone });
 
   const handleSaveChanges = () => {
+    dispatch({ type: 'SAVE_CHANGES' });
     inferencer.modifyAchievement(editableAchievement);
     releaseId(id);
     requestPublish();
-    dispatch({ type: 'SAVE_CHANGES' });
   };
 
   const handleDeleteAchievement = () => {
+    dispatch({ type: 'DELETE_ACHIEVEMENT' });
     inferencer.removeAchievement(id);
     releaseId(id);
     requestPublish();
-    dispatch({ type: 'DELETE_ACHIEVEMENT' });
   };
 
   const handleChangeAbility = (ability: AchievementAbility) =>

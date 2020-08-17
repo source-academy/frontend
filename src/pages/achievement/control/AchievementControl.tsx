@@ -61,14 +61,6 @@ function AchievementControl(props: DispatchProps & StateProps) {
   /**
    * Allows editor components to trigger a page re-render so that the AchievementPreview
    * displays the latest local changes
-   *
-   * NOTE: AchievementContext should be able to observe the changes in the inferencer
-   * and automatically trigger a re-render in all child components. However, in
-   * <EditableAchievementCard /> modifying an achievement is done by calling
-   * inferencer.modifyAchievement() instead of using useState hooks recommended by React.
-   * Hence the AchievementContext is unaware of the changes and a forceRender() is needed.
-   *
-   * TODO: Refactor the <EditableAchievementCard /> workflow and deprecate forceRender()
    */
   const [render, setRender] = useState<boolean>();
   const forceRender = () => setRender(!render);
