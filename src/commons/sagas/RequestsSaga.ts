@@ -220,6 +220,7 @@ export async function bulkUpdateAchievements(
   });
 
   return resp;
+  // TODO: confirmation notification
 }
 
 /**
@@ -239,6 +240,7 @@ export async function bulkUpdateGoals(
   });
 
   return resp;
+  // TODO: confirmation notification
 }
 
 /**

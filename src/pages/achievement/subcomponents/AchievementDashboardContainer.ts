@@ -21,7 +21,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
     {
       handleGetAchievements: getAchievements,
       handleGetOwnGoals: getOwnGoals
-      // TODO: handleGetGoals: getGoals
     },
     dispatch
   );

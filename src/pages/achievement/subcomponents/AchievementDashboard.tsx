@@ -13,7 +13,6 @@ import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 export type DispatchProps = {
   handleGetAchievements: () => void;
   handleGetOwnGoals: () => void;
-  // TODO: handleGetGoals: () => void;
 };
 
 export type StateProps = {
