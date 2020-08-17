@@ -1,6 +1,6 @@
 import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useReducer } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
@@ -14,57 +14,82 @@ type EditableGoalProps = {
   requestPublish: () => void;
 };
 
+const reducer = (
+  state: { editableGoal: GoalDefinition; isDirty: boolean },
+  action: { type: string; payload?: any }
+) => {
+  switch (action.type) {
+    case 'SAVE_CHANGES':
+      return {
+        ...state,
+        isDirty: false
+      };
+    case 'DISCARD_CHANGES':
+      return {
+        editableGoal: action.payload,
+        isDirty: false
+      };
+    case 'DELETE_GOAL':
+      return {
+        ...state,
+        isDirty: false
+      };
+    case 'CHANGE_TEXT':
+      return {
+        editableGoal: {
+          ...state.editableGoal,
+          text: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_META':
+      return {
+        editableGoal: {
+          ...state.editableGoal,
+          meta: action.payload
+        },
+        isDirty: true
+      };
+    default:
+      return state;
+  }
+};
+
+const initialState = {
+  editableGoal: {} as GoalDefinition,
+  isDirty: false
+};
+
 function EditableGoal(props: EditableGoalProps) {
   const { id, releaseId, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const goalReference = inferencer.getGoalDefinition(id);
+  const goal = inferencer.getGoalDefinition(id);
+  const goalClone = useMemo(() => cloneDeep(goal), [goal]);
 
-  const [editableGoal, setEditableGoal] = useState<GoalDefinition>(
-    () => cloneDeep(goalReference) // Expensive, only clone once on initialization
-  );
-  const resetEditableGoal = () => setEditableGoal(cloneDeep(goalReference));
+  const [state, dispatch] = useReducer(reducer, { ...initialState, editableGoal: goalClone });
+  const { editableGoal, isDirty } = state;
   const { text, meta } = editableGoal;
 
-  // A save/discard button appears on top of the card when it's dirty
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const handleDiscardChanges = () => dispatch({ type: 'DISCARD_CHANGES', payload: goalClone });
 
-  // TODO: Replace the following 3 useState with useReducer for state management & cleanup
   const handleSaveChanges = () => {
     inferencer.modifyGoalDefinition(editableGoal);
-    setIsDirty(false);
     releaseId(id);
     requestPublish();
-  };
-
-  const handleDiscardChanges = () => {
-    resetEditableGoal();
-    setIsDirty(false);
+    dispatch({ type: 'SAVE_CHANGES' });
   };
 
   const handleDeleteGoal = () => {
     inferencer.removeGoalDefinition(id);
-    setIsDirty(false);
     releaseId(id);
     requestPublish();
+    dispatch({ type: 'DELETE_GOAL' });
   };
 
-  // TODO: Replace all of the following useState with useReducer for editable content
-  const handleChangeText = (text: string) => {
-    setEditableGoal({
-      ...editableGoal,
-      text: text
-    });
-    setIsDirty(true);
-  };
+  const handleChangeText = (text: string) => dispatch({ type: 'CHANGE_TEXT', payload: text });
 
-  const handleChangeMeta = (meta: GoalMeta) => {
-    setEditableGoal({
-      ...editableGoal,
-      meta: meta
-    });
-    setIsDirty(true);
-  };
+  const handleChangeMeta = (meta: GoalMeta) => dispatch({ type: 'CHANGE_META', payload: meta });
 
   return (
     <li className="editable-goal">
