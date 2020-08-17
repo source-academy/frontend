@@ -139,7 +139,7 @@ class AchievementInferencer {
 
     // finally, process the nodeList
     this.processNodes();
-    this.normalizePositions(achievement.id);
+    this.normalizePositions();
 
     return newId;
   }
@@ -179,7 +179,7 @@ class AchievementInferencer {
 
     // then, process the nodeList
     this.processNodes();
-    this.normalizePositions(achievement.id);
+    this.normalizePositions(achievement.id, achievement.position);
   }
 
   /**
@@ -611,24 +611,33 @@ class AchievementInferencer {
 
   /**
    * Reassign the achievement position number without changing their orders.
-   * If priorityId is supplied, the achievement will be given order priority
-   * when two achievements have the same position number.
+   * If anchorId and anchorPosition is supplied, the anchor achievement is
+   * guaranteed to have its position set at anchorPosition.
    *
-   * @param priorityId achievementId
+   * @param anchorId achievementId
    */
-  private normalizePositions(priorityId?: number) {
-    const sortedTasks = this.getAllAchievements()
-      .filter(achievement => achievement.isTask)
-      .sort((taskA, taskB) =>
-        taskA.position === taskB.position
-          ? taskA.id === priorityId
-            ? -1
-            : 1
-          : taskA.position - taskB.position
-      );
-
+  private normalizePositions(anchorId?: number, anchorPosition?: number) {
     let newPosition = 1;
-    sortedTasks.forEach(task => (task.position = newPosition++));
+    this.getAllAchievements()
+      .filter(achievement => achievement.isTask)
+      .sort((taskA, taskB) => taskA.position - taskB.position)
+      .forEach(sortedTask => (sortedTask.position = newPosition++));
+
+    // If some achievement got misplaced at the anchorPosition, swap it
+    // back with the anchor achievement
+    if (anchorId !== undefined && anchorPosition !== undefined && anchorPosition !== 0) {
+      const anchorAchievement = this.getAchievement(anchorId);
+      const newPosition = anchorAchievement.position;
+      if (newPosition !== anchorPosition) {
+        const misplacedAchievement = this.getAllAchievements().find(
+          achievement => achievement.position === anchorPosition
+        );
+        if (misplacedAchievement) {
+          misplacedAchievement.position = newPosition;
+          anchorAchievement.position = anchorPosition;
+        }
+      }
+    }
   }
 }
 

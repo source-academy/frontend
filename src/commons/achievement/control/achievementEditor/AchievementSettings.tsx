@@ -52,7 +52,7 @@ function AchievementSettings(props: AchievementSettingsProps) {
             placeholder="Enter card background URL here"
             value={cardBackground}
           />
-          <h3>Insert before position</h3>
+          <h3>Position</h3>
           <p>Note: Select position 0 to hide achievement</p>
           <EditablePosition changePosition={changePosition} position={position} />
           <h3>Prerequisites</h3>
