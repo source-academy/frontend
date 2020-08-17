@@ -4,19 +4,19 @@ import React from 'react';
 import { showSimpleConfirmDialog } from 'src/commons/utils/DialogHelper';
 
 type ItemDeleterProps = {
-  item: string;
   handleDelete: () => void;
+  item: string;
 };
 
 function ItemDeleter(props: ItemDeleterProps) {
-  const { item, handleDelete } = props;
+  const { handleDelete, item } = props;
 
   const handleConfirmDelete = async () => {
     const confirm = await showSimpleConfirmDialog({
       contents: `Are you sure you want to delete '${item}' ?`,
+      negativeLabel: 'No',
       positiveIntent: 'danger',
-      positiveLabel: 'Yes, delete',
-      negativeLabel: 'No'
+      positiveLabel: 'Yes, delete'
     });
     if (confirm) {
       handleDelete();

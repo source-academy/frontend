@@ -5,13 +5,13 @@ import { getFilterColor } from '../../features/achievement/AchievementConstants'
 import { FilterStatus } from '../../features/achievement/AchievementTypes';
 
 type AchievementFilterProps = {
-  ownStatus: FilterStatus;
-  icon: IconName;
   filterState: [FilterStatus, any];
+  icon: IconName;
+  ownStatus: FilterStatus;
 };
 
 function AchievementFilter(props: AchievementFilterProps) {
-  const { ownStatus, icon, filterState } = props;
+  const { filterState, icon, ownStatus } = props;
 
   const [globalStatus, setGlobalStatus] = filterState;
 
@@ -21,7 +21,7 @@ function AchievementFilter(props: AchievementFilterProps) {
       onClick={() => setGlobalStatus(ownStatus)}
       style={{ color: getFilterColor(globalStatus, ownStatus) }}
     >
-      <Icon iconSize={30} icon={icon} />
+      <Icon icon={icon} iconSize={30} />
       <p>{ownStatus}</p>
     </div>
   );

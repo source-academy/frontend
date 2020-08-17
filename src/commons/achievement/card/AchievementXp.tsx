@@ -3,8 +3,8 @@ import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 
 type AchievementXpProps = {
-  xp: number;
   isBonus: boolean;
+  xp: number;
 };
 
 const stringifyXp = (xp: number, isBonus: boolean) => {
@@ -12,7 +12,7 @@ const stringifyXp = (xp: number, isBonus: boolean) => {
 };
 
 function AchievementXp(props: AchievementXpProps) {
-  const { xp, isBonus } = props;
+  const { isBonus, xp } = props;
 
   return (
     <div className="xp">

@@ -20,10 +20,9 @@ function EditableDate(props: EditableDateProps) {
   return (
     <>
       <Tooltip content={hoverText}>
-        <Button minimal={true} outlined={true} onClick={toggleOpen}>{`${type}`}</Button>
+        <Button minimal={true} onClick={toggleOpen} outlined={true}>{`${type}`}</Button>
       </Tooltip>
       <Dialog
-        title={`${type}`}
         isCloseButtonShown={false}
         isOpen={isOpen}
         onClose={toggleOpen}
@@ -33,13 +32,14 @@ function EditableDate(props: EditableDateProps) {
           padding: '0.25em',
           textAlign: 'center'
         }}
+        title={`${type}`}
       >
         <DatePicker
+          onChange={changeDate}
           timePickerProps={{ showArrowButtons: true }}
           value={date}
-          onChange={changeDate}
         />
-        <Button text={`Remove ${type}`} onClick={() => changeDate(undefined)} />
+        <Button onClick={() => changeDate(undefined)} text={`Remove ${type}`} />
       </Dialog>
     </>
   );

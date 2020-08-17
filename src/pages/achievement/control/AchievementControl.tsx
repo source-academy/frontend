@@ -76,8 +76,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
   return (
     <AchievementContext.Provider value={inferencer}>
       <Prompt
-        when={awaitPublish}
         message="You have unpublished changes. Are you sure you want to leave?"
+        when={awaitPublish}
       />
 
       <div className="AchievementControl">

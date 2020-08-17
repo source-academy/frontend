@@ -35,13 +35,13 @@ function AchievementCard(props: AchievementCardProps) {
   return (
     <div
       className="achievement-card"
+      onClick={() => setFocusId(id)}
+      onClickCapture={toggleDropdown}
       style={{
         ...handleGlow(id, focusId, ability),
         opacity: shouldRender ? '100%' : '20%',
         background: `url(${cardBackground}) center/cover`
       }}
-      onClick={() => setFocusId(id)}
-      onClickCapture={toggleDropdown}
     >
       <div className="dropdown-button">
         {hasDropdown && (
@@ -61,16 +61,16 @@ function AchievementCard(props: AchievementCardProps) {
           <div className="ability">
             <p>{ability}</p>
           </div>
-          <AchievementDeadline deadline={displayDeadline} ability={ability} />
-          <AchievementXp xp={displayXp} isBonus={hasDropdown} />
+          <AchievementDeadline ability={ability} deadline={displayDeadline} />
+          <AchievementXp isBonus={hasDropdown} xp={displayXp} />
         </div>
 
         <ProgressBar
+          animate={false}
           className="progress"
           intent={progressFrac === 1 ? 'success' : undefined}
-          value={progressFrac}
-          animate={false}
           stripes={false}
+          value={progressFrac}
         />
       </div>
     </div>

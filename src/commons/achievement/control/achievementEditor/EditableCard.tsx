@@ -152,27 +152,27 @@ function EditableCard(props: EditableCardProps) {
         {isDirty ? (
           <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
         ) : (
-          <ItemDeleter item={title} handleDelete={handleDeleteAchievement} />
+          <ItemDeleter handleDelete={handleDeleteAchievement} item={title} />
         )}
       </div>
 
       <div className="content">
         <h3 className="title">
           <EditableText
+            onChange={handleChangeTitle}
             placeholder="Enter your title here"
             value={title}
-            onChange={handleChangeTitle}
           />
         </h3>
         <div className="details">
           <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
-          <EditableDate type="Release" date={release} changeDate={handleChangeRelease} />
-          <EditableDate type="Deadline" date={deadline} changeDate={handleChangeDeadline} />
+          <EditableDate changeDate={handleChangeRelease} date={release} type="Release" />
+          <EditableDate changeDate={handleChangeDeadline} date={deadline} type="Deadline" />
         </div>
       </div>
 
       <div className="content-button">
-        <EditableView view={view} changeView={handleChangeView} />
+        <EditableView changeView={handleChangeView} view={view} />
         <AchievementSettings
           id={id}
           cardBackground={cardBackground}

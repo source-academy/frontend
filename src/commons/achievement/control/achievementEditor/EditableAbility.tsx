@@ -20,10 +20,10 @@ function EditableAbility(props: EditableAbilityProps) {
   return (
     <Tooltip content="Change Ability">
       <AbilitySelect
+        filterable={false}
+        itemRenderer={abilityRenderer}
         items={Object.values(AchievementAbility)}
         onItemSelect={changeAbility}
-        itemRenderer={abilityRenderer}
-        filterable={false}
       >
         <Button minimal={true} outlined={true} text={ability} />
       </AbilitySelect>

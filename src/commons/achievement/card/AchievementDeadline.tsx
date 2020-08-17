@@ -7,14 +7,14 @@ import { AchievementAbility } from '../../../features/achievement/AchievementTyp
 import { isExpired, prettifyDeadline, timeFromExpired } from '../utils/DateHelper';
 
 type AchievementDeadlineProps = {
-  deadline?: Date;
   ability: AchievementAbility;
+  deadline?: Date;
 };
 
 const twoDays = new Date(0, 0, 2).getTime() - new Date(0, 0, 0).getTime();
 
 function AchievementDeadline(props: AchievementDeadlineProps) {
-  const { deadline, ability } = props;
+  const { ability, deadline } = props;
 
   // red deadline color for core achievements that are expiring in less than 2 days
   const deadlineColor =
@@ -27,7 +27,7 @@ function AchievementDeadline(props: AchievementDeadlineProps) {
 
   return (
     <div className="deadline">
-      <Icon icon={IconNames.STOPWATCH} color={deadlineColor} />
+      <Icon color={deadlineColor} icon={IconNames.STOPWATCH} />
       <p style={{ color: deadlineColor }}>{prettifyDeadline(deadline)}</p>
     </div>
   );

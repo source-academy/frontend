@@ -20,10 +20,10 @@ function GoalAdder(props: GoalAdderProps) {
   return (
     <Button
       className="command-button"
+      disabled={!allowNewId}
       icon={IconNames.NEW_OBJECT}
       onClick={handleAddGoal}
       text="Create Goal"
-      disabled={!allowNewId}
     />
   );
 }

@@ -72,14 +72,14 @@ function EditableGoal(props: EditableGoalProps) {
         {isDirty ? (
           <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
         ) : (
-          <ItemDeleter item={text} handleDelete={handleDeleteGoal} />
+          <ItemDeleter handleDelete={handleDeleteGoal} item={text} />
         )}
       </div>
       <h3>
-        <EditableText placeholder="Enter goal text here" value={text} onChange={handleChangeText} />
+        <EditableText onChange={handleChangeText} placeholder="Enter goal text here" value={text} />
       </h3>
       <div className="meta">
-        <EditableMeta meta={meta} changeMeta={handleChangeMeta} />
+        <EditableMeta changeMeta={handleChangeMeta} meta={meta} />
       </div>
     </li>
   );

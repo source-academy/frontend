@@ -27,10 +27,10 @@ function AchievementLevel(props: AchievementLevelProps) {
       </div>
       <span className="level-progress">
         <ProgressBar
-          className="progress-bar"
-          value={progressFrac}
           animate={false}
+          className="progress-bar"
           stripes={false}
+          value={progressFrac}
         />
         <p>
           {progress} / {xpPerLevel} XP

@@ -17,9 +17,9 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
+  group: string | null;
   inferencer: AchievementInferencer;
   name?: string;
-  group: string | null;
 };
 
 /**
@@ -39,7 +39,7 @@ export const generateAchievementTasks = (
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { inferencer, name, group, handleGetAchievements, handleGetOwnGoals } = props;
+  const { group, handleGetAchievements, handleGetOwnGoals, inferencer, name } = props;
 
   /**
    * The dashboard fetches the latest achievements and goals from backend
@@ -70,19 +70,19 @@ function Dashboard(props: DispatchProps & StateProps) {
         <div className="achievement-main">
           <div className="filter-container">
             <AchievementFilter
-              ownStatus={FilterStatus.ALL}
+              filterState={filterState}
               icon={IconNames.GLOBE}
-              filterState={filterState}
+              ownStatus={FilterStatus.ALL}
             />
             <AchievementFilter
-              ownStatus={FilterStatus.ACTIVE}
+              filterState={filterState}
               icon={IconNames.LOCATE}
-              filterState={filterState}
+              ownStatus={FilterStatus.ACTIVE}
             />
             <AchievementFilter
-              ownStatus={FilterStatus.COMPLETED}
-              icon={IconNames.ENDORSED}
               filterState={filterState}
+              icon={IconNames.ENDORSED}
+              ownStatus={FilterStatus.COMPLETED}
             />
           </div>
 

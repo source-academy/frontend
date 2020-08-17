@@ -20,10 +20,10 @@ function AchievementAdder(props: AchievementAdderProps) {
   return (
     <Button
       className="command-button"
+      disabled={!allowNewId}
       icon={IconNames.NEW_OBJECT}
       onClick={handleAddAchievement}
       text="Create Achievement"
-      disabled={!allowNewId}
     />
   );
 }

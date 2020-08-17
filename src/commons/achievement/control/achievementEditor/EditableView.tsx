@@ -3,17 +3,16 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import { AchievementView } from 'src/features/achievement/AchievementTypes';
 type EditableViewProps = {
-  view: AchievementView;
   changeView: (view: AchievementView) => void;
+  view: AchievementView;
 };
 
 function EditableView(props: EditableViewProps) {
-  const { view, changeView } = props;
+  const { changeView, view } = props;
+  const { coverImage, description, completionText } = view;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
-
-  const { coverImage, description, completionText } = view;
 
   const changeCoverImage = (coverImage: string) => changeView({ ...view, coverImage });
 
@@ -33,23 +32,23 @@ function EditableView(props: EditableViewProps) {
         <div style={{ padding: '0 0.5em' }}>
           <h3>Cover Image</h3>
           <EditableText
-            placeholder="Enter cover image URL here"
             multiline={true}
             onChange={changeCoverImage}
+            placeholder="Enter cover image URL here"
             value={coverImage}
           />
           <h3>Description</h3>
           <EditableText
-            placeholder="Enter description here"
             multiline={true}
             onChange={changeDescription}
+            placeholder="Enter description here"
             value={description}
           />
           <h3>Completion Text</h3>
           <EditableText
-            placeholder="Enter completion text here"
             multiline={true}
             onChange={changeCompletionText}
+            placeholder="Enter completion text here"
             value={completionText}
           />
         </div>

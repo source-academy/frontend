@@ -18,12 +18,11 @@ function AchievementTask(props: AchievementTaskProps) {
   const { id, filterStatus, focusState } = props;
 
   const inferencer = useContext(AchievementContext);
+  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
+  const taskColor = getAbilityColor(inferencer.getAchievement(id).ability);
 
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
-
-  const prerequisiteIds = [...inferencer.getImmediateChildren(id)];
-  const taskColor = getAbilityColor(inferencer.getAchievement(id).ability);
 
   /**
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
