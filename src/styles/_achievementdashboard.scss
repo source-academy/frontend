@@ -74,7 +74,7 @@
         display: flex;
         flex-direction: column;
         margin: 20em 0 0 0;
-        padding: 1em 2.5em;
+        padding: 0.5em 2.5em;
         position: absolute;
         z-index: 2;
 
@@ -94,6 +94,13 @@
             margin: 0;
             padding: 0 0 0 $default-spacing;
           }
+        }
+
+        .footer {
+          color: cyan;
+          font-size: 80%;
+          text-align: center;
+          margin: $default-spacing;
         }
       }
     }
