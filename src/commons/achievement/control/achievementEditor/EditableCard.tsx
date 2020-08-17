@@ -1,6 +1,6 @@
 import { EditableText } from '@blueprintjs/core';
 import { cloneDeep } from 'lodash';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useMemo, useReducer } from 'react';
 
 import { AchievementContext } from '../../../../features/achievement/AchievementConstants';
 import {
@@ -21,16 +21,121 @@ type EditableCardProps = {
   requestPublish: () => void;
 };
 
+const reducer = (
+  state: { editableAchievement: AchievementItem; isDirty: boolean },
+  action: { type: string; payload?: any }
+) => {
+  switch (action.type) {
+    case 'SAVE_CHANGES':
+      return {
+        ...state,
+        isDirty: false
+      };
+    case 'DISCARD_CHANGES':
+      return {
+        editableAchievement: action.payload,
+        isDirty: false
+      };
+    case 'DELETE_ACHIEVEMENT':
+      return {
+        ...state,
+        isDirty: false
+      };
+    case 'CHANGE_ABILITY':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          ability: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_CARD_BACKGROUND':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          cardBackground: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_DEADLINE':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          deadline: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_GOAL_IDS':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          goalIds: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_POSITION':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          isTask: action.payload !== 0,
+          position: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_PREREQUISITE_IDS':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          prerequisiteIds: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_RELEASE':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          release: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_TITLE':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          title: action.payload
+        },
+        isDirty: true
+      };
+    case 'CHANGE_VIEW':
+      return {
+        editableAchievement: {
+          ...state.editableAchievement,
+          view: action.payload
+        },
+        isDirty: true
+      };
+    default:
+      return state;
+  }
+};
+
+const initialState = {
+  editableAchievement: {} as AchievementItem,
+  isDirty: false
+};
+
 function EditableCard(props: EditableCardProps) {
   const { id, releaseId, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const achievementReference = inferencer.getAchievement(id);
+  const achievement = inferencer.getAchievement(id);
+  const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
-  const [editableAchievement, setEditableAchievement] = useState<AchievementItem>(
-    () => cloneDeep(achievementReference) // Expensive, only clone once on initialization
-  );
-  const resetEditableAchievement = () => setEditableAchievement(cloneDeep(achievementReference));
+  const [state, dispatch] = useReducer(reducer, {
+    ...initialState,
+    editableAchievement: achievementClone
+  });
+  const { editableAchievement, isDirty } = state;
   const {
     ability,
     cardBackground,
@@ -43,103 +148,48 @@ function EditableCard(props: EditableCardProps) {
     view
   } = editableAchievement;
 
-  // A save/discard button appears on top of the card when it's dirty
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const handleDiscardChanges = () =>
+    dispatch({ type: 'DISCARD_CHANGES', payload: achievementClone });
 
-  // TODO: Replace the following 3 useState with useReducer for state management & cleanup
   const handleSaveChanges = () => {
     inferencer.modifyAchievement(editableAchievement);
-    setIsDirty(false);
     releaseId(id);
     requestPublish();
-  };
-
-  const handleDiscardChanges = () => {
-    resetEditableAchievement();
-    setIsDirty(false);
+    dispatch({ type: 'SAVE_CHANGES' });
   };
 
   const handleDeleteAchievement = () => {
     inferencer.removeAchievement(id);
-    setIsDirty(false);
     releaseId(id);
     requestPublish();
+    dispatch({ type: 'DELETE_ACHIEVEMENT' });
   };
 
-  // TODO: Replace all of the following useState with useReducer for editable content
-  const handleChangeAbility = (ability: AchievementAbility) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      ability: ability
-    });
-    setIsDirty(true);
-  };
+  const handleChangeAbility = (ability: AchievementAbility) =>
+    dispatch({ type: 'CHANGE_ABILITY', payload: ability });
 
-  const handleChangeCardBackground = (cardBackground: string) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      cardBackground: cardBackground
-    });
-    setIsDirty(true);
-  };
+  const handleChangeCardBackground = (cardBackground: string) =>
+    dispatch({ type: 'CHANGE_CARD_BACKGROUND', payload: cardBackground });
 
-  const handleChangeDeadline = (deadline?: Date) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      deadline: deadline
-    });
-    setIsDirty(true);
-  };
+  const handleChangeDeadline = (deadline?: Date) =>
+    dispatch({ type: 'CHANGE_DEADLINE', payload: deadline });
 
-  const handleChangeGoalIds = (goalIds: number[]) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      goalIds: goalIds
-    });
-    setIsDirty(true);
-  };
+  const handleChangeGoalIds = (goalIds: number[]) =>
+    dispatch({ type: 'CHANGE_GOAL_IDS', payload: goalIds });
 
-  const handleChangePosition = (position: number) => {
-    const isTask = position !== 0;
-    setEditableAchievement({
-      ...editableAchievement,
-      isTask: isTask,
-      position: position
-    });
-    setIsDirty(true);
-  };
+  const handleChangePosition = (position: number) =>
+    dispatch({ type: 'CHANGE_POSITION', payload: position });
 
-  const handleChangePrerequisiteIds = (prerequisiteIds: number[]) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      prerequisiteIds: prerequisiteIds
-    });
-    setIsDirty(true);
-  };
+  const handleChangePrerequisiteIds = (prerequisiteIds: number[]) =>
+    dispatch({ type: 'CHANGE_PREREQUISITE_IDS', payload: prerequisiteIds });
 
-  const handleChangeRelease = (release?: Date) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      release: release
-    });
-    setIsDirty(true);
-  };
+  const handleChangeRelease = (release?: Date) =>
+    dispatch({ type: 'CHANGE_RELEASE', payload: release });
 
-  const handleChangeTitle = (title: string) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      title: title
-    });
-    setIsDirty(true);
-  };
+  const handleChangeTitle = (title: string) => dispatch({ type: 'CHANGE_TITLE', payload: title });
 
-  const handleChangeView = (view: AchievementView) => {
-    setEditableAchievement({
-      ...editableAchievement,
-      view: view
-    });
-    setIsDirty(true);
-  };
+  const handleChangeView = (view: AchievementView) =>
+    dispatch({ type: 'CHANGE_VIEW', payload: view });
 
   return (
     <li
