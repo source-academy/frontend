@@ -294,7 +294,7 @@ export const mockGoals: AchievementGoal[] = [
     meta: {
       type: GoalType.ASSESSMENT,
       assessmentNumber: 'M3',
-      requiredCompletionFrac: 150
+      requiredCompletionFrac: 0.5
     },
     xp: 178,
     maxXp: 250,

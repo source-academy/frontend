@@ -1,49 +1,55 @@
-import { EditableText } from '@blueprintjs/core';
-import React, { useState } from 'react';
-import { GoalMeta } from 'src/features/achievement/AchievementTypes';
+import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
+import { ItemRenderer, Select } from '@blueprintjs/select';
+import React from 'react';
+import { GoalMeta, GoalType } from 'src/features/achievement/AchievementTypes';
 
-import ItemSaver from '../common/ItemSaver';
+import { metaTemplate } from './GoalTemplate';
+import EditableAssessmentMeta from './metaDetails/EditableAssessmentMeta';
+import EditableBinaryMeta from './metaDetails/EditableBinaryMeta';
+import EditableManualMeta from './metaDetails/EditableManualMeta';
 
 type EditableMetaProps = {
-  meta: GoalMeta;
   changeMeta: (meta: GoalMeta) => void;
+  meta: GoalMeta;
 };
 
 function EditableMeta(props: EditableMetaProps) {
-  const { meta, changeMeta } = props;
+  const { changeMeta, meta } = props;
+  const { type } = meta;
 
-  const [editableMeta, setEditableMeta] = useState<string>(JSON.stringify(meta));
-  const resetEditableMeta = () => setEditableMeta(JSON.stringify(meta));
+  const TypeSelect = Select.ofType<GoalType>();
+  const typeRenderer: ItemRenderer<GoalType> = (type, { handleClick }) => (
+    <MenuItem key={type} onClick={handleClick} text={type} />
+  );
 
-  const [isDirty, setIsDirty] = useState<boolean>(false);
+  const handleChangeType = (type: GoalType) => changeMeta(metaTemplate(type));
 
-  const handleChangeMeta = (metaString: string) => {
-    setEditableMeta(metaString);
-    setIsDirty(true);
-  };
-
-  const handleSaveChanges = () => {
-    const parsedMeta = JSON.parse(editableMeta);
-    changeMeta(parsedMeta);
-    setIsDirty(false);
-  };
-
-  const handleDiscardChanges = () => {
-    resetEditableMeta();
-    setIsDirty(false);
+  const editableMetaDetails = (type: GoalType) => {
+    switch (type) {
+      case GoalType.ASSESSMENT:
+        return <EditableAssessmentMeta changeMeta={changeMeta} meta={meta} />;
+      case GoalType.BINARY:
+        return <EditableBinaryMeta changeMeta={changeMeta} meta={meta} />;
+      case GoalType.MANUAL:
+        return <EditableManualMeta changeMeta={changeMeta} meta={meta} />;
+      default:
+        return null;
+    }
   };
 
   return (
     <>
-      <EditableText
-        placeholder="Enter goal meta here"
-        value={editableMeta}
-        multiline={true}
-        onChange={handleChangeMeta}
-      />
-      {isDirty && (
-        <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
-      )}
+      <Tooltip content="Change Goal Type">
+        <TypeSelect
+          filterable={false}
+          itemRenderer={typeRenderer}
+          items={Object.values(GoalType)}
+          onItemSelect={handleChangeType}
+        >
+          <Button minimal={true} outlined={true} text={type} />
+        </TypeSelect>
+      </Tooltip>
+      {editableMetaDetails(type)}
     </>
   );
 }
