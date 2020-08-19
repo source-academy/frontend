@@ -4,14 +4,12 @@ import React from 'react';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableBinaryMetaProps = {
+  binaryMeta: BinaryMeta;
   changeMeta: (meta: GoalMeta) => void;
-  meta: GoalMeta;
 };
 
 function EditableBinaryMeta(props: EditableBinaryMetaProps) {
-  const { changeMeta, meta } = props;
-
-  const binaryMeta = meta as BinaryMeta;
+  const { binaryMeta, changeMeta } = props;
   const { condition, maxXp } = binaryMeta;
 
   const changeCondition = (conditionString: string) => {

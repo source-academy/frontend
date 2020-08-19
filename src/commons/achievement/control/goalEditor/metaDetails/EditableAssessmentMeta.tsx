@@ -3,14 +3,12 @@ import React from 'react';
 import { AssessmentMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableAssessmentMetaProps = {
+  assessmentMeta: AssessmentMeta;
   changeMeta: (meta: GoalMeta) => void;
-  meta: GoalMeta;
 };
 
 function EditableAssessmentMeta(props: EditableAssessmentMetaProps) {
-  const { changeMeta, meta } = props;
-
-  const assessmentMeta = meta as AssessmentMeta;
+  const { assessmentMeta, changeMeta } = props;
   const { assessmentNumber, requiredCompletionFrac } = assessmentMeta;
 
   const changeAssessmentNumber = (assessmentNumber: string) =>

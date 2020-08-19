@@ -5,13 +5,11 @@ import { GoalMeta, ManualMeta } from 'src/features/achievement/AchievementTypes'
 
 type EditableManualMetaProps = {
   changeMeta: (meta: GoalMeta) => void;
-  meta: GoalMeta;
+  manualMeta: ManualMeta;
 };
 
 function EditableManualMeta(props: EditableManualMetaProps) {
-  const { changeMeta, meta } = props;
-
-  const manualMeta = meta as ManualMeta;
+  const { changeMeta, manualMeta } = props;
   const { maxXp } = manualMeta;
 
   const changeMaxXp = (maxXp: number) => changeMeta({ ...manualMeta, maxXp: maxXp });
