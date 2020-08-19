@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useReducer, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 import { FilterStatus } from 'src/features/achievement/AchievementTypes';
 import { generateAchievementTasks } from 'src/pages/achievement/subcomponents/AchievementDashboard';
@@ -18,8 +18,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
   const inferencer = useContext(AchievementContext);
 
   // Show AchievementView when viewMode is true, otherwise show AchievementTask
-  const [viewMode, setViewMode] = useState<boolean>(false);
-  const toggleMode = () => setViewMode(!viewMode);
+  const [viewMode, toggleMode] = useReducer(mode => !mode, false);
 
   /**
    * Marks the achievement id that is currently on focus (selected)
