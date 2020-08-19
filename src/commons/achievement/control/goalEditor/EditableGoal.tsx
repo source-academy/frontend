@@ -6,6 +6,7 @@ import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTy
 
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
+import { Action, ActionType, State } from './EditableGoalTypes';
 import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
@@ -14,35 +15,31 @@ type EditableGoalProps = {
   requestPublish: () => void;
 };
 
-const reducer = (
-  state: { editableGoal: GoalDefinition; isDirty: boolean },
-  action: { type: string; payload?: any }
-) => {
+const init = (goal: GoalDefinition): State => {
+  return {
+    editableGoal: goal,
+    isDirty: false
+  };
+};
+
+const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'SAVE_CHANGES':
+    case ActionType.SAVE_CHANGES:
       return {
         ...state,
         isDirty: false
       };
-    case 'DISCARD_CHANGES':
+    case ActionType.DISCARD_CHANGES:
       return {
         editableGoal: action.payload,
         isDirty: false
       };
-    case 'DELETE_GOAL':
+    case ActionType.DELETE_GOAL:
       return {
         ...state,
         isDirty: false
       };
-    case 'CHANGE_TEXT':
-      return {
-        editableGoal: {
-          ...state.editableGoal,
-          text: action.payload
-        },
-        isDirty: true
-      };
-    case 'CHANGE_META':
+    case ActionType.CHANGE_META:
       return {
         editableGoal: {
           ...state.editableGoal,
@@ -50,14 +47,17 @@ const reducer = (
         },
         isDirty: true
       };
+    case ActionType.CHANGE_TEXT:
+      return {
+        editableGoal: {
+          ...state.editableGoal,
+          text: action.payload
+        },
+        isDirty: true
+      };
     default:
       return state;
   }
-};
-
-const initialState = {
-  editableGoal: {} as GoalDefinition,
-  isDirty: false
 };
 
 function EditableGoal(props: EditableGoalProps) {
@@ -67,44 +67,44 @@ function EditableGoal(props: EditableGoalProps) {
   const goal = inferencer.getGoalDefinition(id);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
 
-  const [state, dispatch] = useReducer(reducer, { ...initialState, editableGoal: goalClone });
+  const [state, dispatch] = useReducer(reducer, goalClone, init);
   const { editableGoal, isDirty } = state;
-  const { text, meta } = editableGoal;
+  const { meta, text } = editableGoal;
 
-  const handleDiscardChanges = () => dispatch({ type: 'DISCARD_CHANGES', payload: goalClone });
-
-  const handleSaveChanges = () => {
-    dispatch({ type: 'SAVE_CHANGES' });
+  const saveChanges = () => {
+    dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyGoalDefinition(editableGoal);
     releaseId(id);
     requestPublish();
   };
 
-  const handleDeleteGoal = () => {
-    dispatch({ type: 'DELETE_GOAL' });
+  const discardChanges = () => dispatch({ type: ActionType.DISCARD_CHANGES, payload: goalClone });
+
+  const deleteGoal = () => {
+    dispatch({ type: ActionType.DELETE_GOAL });
     inferencer.removeGoalDefinition(id);
     releaseId(id);
     requestPublish();
   };
 
-  const handleChangeText = (text: string) => dispatch({ type: 'CHANGE_TEXT', payload: text });
+  const changeMeta = (meta: GoalMeta) => dispatch({ type: ActionType.CHANGE_META, payload: meta });
 
-  const handleChangeMeta = (meta: GoalMeta) => dispatch({ type: 'CHANGE_META', payload: meta });
+  const changeText = (text: string) => dispatch({ type: ActionType.CHANGE_TEXT, payload: text });
 
   return (
     <li className="editable-goal">
       <div className="action-button">
         {isDirty ? (
-          <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
+          <ItemSaver discardChanges={discardChanges} saveChanges={saveChanges} />
         ) : (
-          <ItemDeleter handleDelete={handleDeleteGoal} item={text} />
+          <ItemDeleter handleDelete={deleteGoal} item={text} />
         )}
       </div>
       <h3>
-        <EditableText onChange={handleChangeText} placeholder="Enter goal text here" value={text} />
+        <EditableText onChange={changeText} placeholder="Enter goal text here" value={text} />
       </h3>
       <div className="meta">
-        <EditableMeta changeMeta={handleChangeMeta} meta={meta} />
+        <EditableMeta changeMeta={changeMeta} meta={meta} />
       </div>
     </li>
   );
