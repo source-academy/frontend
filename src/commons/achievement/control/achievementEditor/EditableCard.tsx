@@ -12,6 +12,7 @@ import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
 import EditableAbility from './EditableAbility';
+import { Action, ActionType, State } from './EditableCardTypes';
 import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 
@@ -21,27 +22,28 @@ type EditableCardProps = {
   requestPublish: () => void;
 };
 
-const reducer = (
-  state: { editableAchievement: AchievementItem; isDirty: boolean },
-  action: { type: string; payload?: any }
-) => {
+const init = (achievement: AchievementItem): State => {
+  return {
+    editableAchievement: achievement,
+    isDirty: false
+  };
+};
+
+const reducer = (state: State, action: Action) => {
   switch (action.type) {
-    case 'SAVE_CHANGES':
+    case ActionType.SAVE_CHANGES:
       return {
         ...state,
         isDirty: false
       };
-    case 'DISCARD_CHANGES':
-      return {
-        editableAchievement: action.payload,
-        isDirty: false
-      };
-    case 'DELETE_ACHIEVEMENT':
+    case ActionType.DISCARD_CHANGES:
+      return init(action.payload);
+    case ActionType.DELETE_ACHIEVEMENT:
       return {
         ...state,
         isDirty: false
       };
-    case 'CHANGE_ABILITY':
+    case ActionType.CHANGE_ABILITY:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -49,7 +51,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_CARD_BACKGROUND':
+    case ActionType.CHANGE_CARD_BACKGROUND:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -57,7 +59,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_DEADLINE':
+    case ActionType.CHANGE_DEADLINE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -65,7 +67,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_GOAL_IDS':
+    case ActionType.CHANGE_GOAL_IDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -73,7 +75,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_POSITION':
+    case ActionType.CHANGE_POSITION:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -82,7 +84,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_PREREQUISITE_IDS':
+    case ActionType.CHANGE_PREREQUISITE_IDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -90,7 +92,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_RELEASE':
+    case ActionType.CHANGE_RELEASE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -98,7 +100,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_TITLE':
+    case ActionType.CHANGE_TITLE:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -106,7 +108,7 @@ const reducer = (
         },
         isDirty: true
       };
-    case 'CHANGE_VIEW':
+    case ActionType.CHANGE_VIEW:
       return {
         editableAchievement: {
           ...state.editableAchievement,
@@ -119,11 +121,6 @@ const reducer = (
   }
 };
 
-const initialState = {
-  editableAchievement: {} as AchievementItem,
-  isDirty: false
-};
-
 function EditableCard(props: EditableCardProps) {
   const { id, releaseId, requestPublish } = props;
 
@@ -131,65 +128,53 @@ function EditableCard(props: EditableCardProps) {
   const achievement = inferencer.getAchievement(id);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
-  const [state, dispatch] = useReducer(reducer, {
-    ...initialState,
-    editableAchievement: achievementClone
-  });
+  const [state, dispatch] = useReducer(reducer, achievementClone, init);
   const { editableAchievement, isDirty } = state;
-  const {
-    ability,
-    cardBackground,
-    deadline,
-    goalIds,
-    position,
-    prerequisiteIds,
-    release,
-    title,
-    view
-  } = editableAchievement;
+  const { ability, cardBackground, deadline, release, title, view } = editableAchievement;
 
-  const handleDiscardChanges = () =>
-    dispatch({ type: 'DISCARD_CHANGES', payload: achievementClone });
-
-  const handleSaveChanges = () => {
-    dispatch({ type: 'SAVE_CHANGES' });
+  const saveChanges = () => {
+    dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyAchievement(editableAchievement);
     releaseId(id);
     requestPublish();
   };
 
-  const handleDeleteAchievement = () => {
-    dispatch({ type: 'DELETE_ACHIEVEMENT' });
+  const discardChanges = () =>
+    dispatch({ type: ActionType.DISCARD_CHANGES, payload: achievementClone });
+
+  const deleteAchievement = () => {
+    dispatch({ type: ActionType.DELETE_ACHIEVEMENT });
     inferencer.removeAchievement(id);
     releaseId(id);
     requestPublish();
   };
 
-  const handleChangeAbility = (ability: AchievementAbility) =>
-    dispatch({ type: 'CHANGE_ABILITY', payload: ability });
+  const changeAbility = (ability: AchievementAbility) =>
+    dispatch({ type: ActionType.CHANGE_ABILITY, payload: ability });
 
-  const handleChangeCardBackground = (cardBackground: string) =>
-    dispatch({ type: 'CHANGE_CARD_BACKGROUND', payload: cardBackground });
+  const changeCardBackground = (cardBackground: string) =>
+    dispatch({ type: ActionType.CHANGE_CARD_BACKGROUND, payload: cardBackground });
 
-  const handleChangeDeadline = (deadline?: Date) =>
-    dispatch({ type: 'CHANGE_DEADLINE', payload: deadline });
+  const changeDeadline = (deadline?: Date) =>
+    dispatch({ type: ActionType.CHANGE_DEADLINE, payload: deadline });
 
-  const handleChangeGoalIds = (goalIds: number[]) =>
-    dispatch({ type: 'CHANGE_GOAL_IDS', payload: goalIds });
+  const changeGoalIds = (goalIds: number[]) =>
+    dispatch({ type: ActionType.CHANGE_GOAL_IDS, payload: goalIds });
 
-  const handleChangePosition = (position: number) =>
-    dispatch({ type: 'CHANGE_POSITION', payload: position });
+  const changePosition = (position: number) =>
+    dispatch({ type: ActionType.CHANGE_POSITION, payload: position });
 
-  const handleChangePrerequisiteIds = (prerequisiteIds: number[]) =>
-    dispatch({ type: 'CHANGE_PREREQUISITE_IDS', payload: prerequisiteIds });
+  const changePrerequisiteIds = (prerequisiteIds: number[]) =>
+    dispatch({ type: ActionType.CHANGE_PREREQUISITE_IDS, payload: prerequisiteIds });
 
-  const handleChangeRelease = (release?: Date) =>
-    dispatch({ type: 'CHANGE_RELEASE', payload: release });
+  const changeRelease = (release?: Date) =>
+    dispatch({ type: ActionType.CHANGE_RELEASE, payload: release });
 
-  const handleChangeTitle = (title: string) => dispatch({ type: 'CHANGE_TITLE', payload: title });
+  const changeTitle = (title: string) =>
+    dispatch({ type: ActionType.CHANGE_TITLE, payload: title });
 
-  const handleChangeView = (view: AchievementView) =>
-    dispatch({ type: 'CHANGE_VIEW', payload: view });
+  const changeView = (view: AchievementView) =>
+    dispatch({ type: ActionType.CHANGE_VIEW, payload: view });
 
   return (
     <li
@@ -200,39 +185,31 @@ function EditableCard(props: EditableCardProps) {
     >
       <div className="action-button">
         {isDirty ? (
-          <ItemSaver discardChanges={handleDiscardChanges} saveChanges={handleSaveChanges} />
+          <ItemSaver discardChanges={discardChanges} saveChanges={saveChanges} />
         ) : (
-          <ItemDeleter handleDelete={handleDeleteAchievement} item={title} />
+          <ItemDeleter handleDelete={deleteAchievement} item={title} />
         )}
       </div>
 
       <div className="content">
         <h3 className="title">
-          <EditableText
-            onChange={handleChangeTitle}
-            placeholder="Enter your title here"
-            value={title}
-          />
+          <EditableText onChange={changeTitle} placeholder="Enter your title here" value={title} />
         </h3>
         <div className="details">
-          <EditableAbility ability={ability} changeAbility={handleChangeAbility} />
-          <EditableDate changeDate={handleChangeRelease} date={release} type="Release" />
-          <EditableDate changeDate={handleChangeDeadline} date={deadline} type="Deadline" />
+          <EditableAbility ability={ability} changeAbility={changeAbility} />
+          <EditableDate changeDate={changeRelease} date={release} type="Release" />
+          <EditableDate changeDate={changeDeadline} date={deadline} type="Deadline" />
         </div>
       </div>
 
       <div className="content-button">
-        <EditableView changeView={handleChangeView} view={view} />
+        <EditableView changeView={changeView} view={view} />
         <AchievementSettings
-          id={id}
-          cardBackground={cardBackground}
-          changeCardBackground={handleChangeCardBackground}
-          changeGoalIds={handleChangeGoalIds}
-          changePosition={handleChangePosition}
-          changePrerequisiteIds={handleChangePrerequisiteIds}
-          goalIds={goalIds}
-          position={position}
-          prerequisiteIds={prerequisiteIds}
+          changeCardBackground={changeCardBackground}
+          changeGoalIds={changeGoalIds}
+          changePosition={changePosition}
+          changePrerequisiteIds={changePrerequisiteIds}
+          editableAchievement={editableAchievement}
         />
       </div>
     </li>

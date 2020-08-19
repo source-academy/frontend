@@ -2,35 +2,29 @@ import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React, { useContext, useState } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
+import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalIds from './achievementSettings/EditableGoalIds';
 import EditablePosition from './achievementSettings/EditablePosition';
 import EditablePrerequisiteIds from './achievementSettings/EditablePrerequisiteIds';
 
 type AchievementSettingsProps = {
-  id: number;
-  cardBackground: string;
   changeCardBackground: (cardBackground: string) => void;
   changeGoalIds: (goalIds: number[]) => void;
   changePosition: (position: number) => void;
   changePrerequisiteIds: (prerequisiteIds: number[]) => void;
-  goalIds: number[];
-  position: number;
-  prerequisiteIds: number[];
+  editableAchievement: AchievementItem;
 };
 
 function AchievementSettings(props: AchievementSettingsProps) {
   const {
-    id,
-    cardBackground,
     changeCardBackground,
     changeGoalIds,
     changePosition,
     changePrerequisiteIds,
-    goalIds,
-    position,
-    prerequisiteIds
+    editableAchievement
   } = props;
+  const { id, cardBackground, goalIds, position, prerequisiteIds } = editableAchievement;
 
   const inferencer = useContext(AchievementContext);
 
