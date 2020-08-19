@@ -10,10 +10,10 @@ import { AchievementContext } from '../../../features/achievement/AchievementCon
 import { AchievementItem, GoalDefinition } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleBulkUpdateAchievements: (achievements: AchievementItem[]) => void;
-  handleBulkUpdateGoals: (goals: GoalDefinition[]) => void;
-  handleGetAchievements: () => void;
-  handleGetOwnGoals: () => void;
+  bulkUpdateAchievements: (achievements: AchievementItem[]) => void;
+  bulkUpdateGoals: (goals: GoalDefinition[]) => void;
+  getAchievements: () => void;
+  getOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -22,10 +22,10 @@ export type StateProps = {
 
 function AchievementControl(props: DispatchProps & StateProps) {
   const {
-    handleBulkUpdateAchievements,
-    handleBulkUpdateGoals,
-    handleGetAchievements,
-    handleGetOwnGoals,
+    bulkUpdateAchievements,
+    bulkUpdateGoals,
+    getAchievements,
+    getOwnGoals,
     inferencer
   } = props;
 
@@ -34,10 +34,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
    */
   useEffect(() => {
     if (Constants.useBackend) {
-      handleGetAchievements();
-      handleGetOwnGoals();
+      getAchievements();
+      getOwnGoals();
     }
-  }, [handleGetAchievements, handleGetOwnGoals]);
+  }, [getAchievements, getOwnGoals]);
 
   const achievements = inferencer.getAllAchievements();
   const goals = inferencer.getAllGoals();
@@ -46,10 +46,10 @@ function AchievementControl(props: DispatchProps & StateProps) {
    * Monitors changes that are awaiting publish
    */
   const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
-  const handlePublish = () => {
+  const publishChanges = () => {
     // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
-    handleBulkUpdateGoals(goals);
-    handleBulkUpdateAchievements(achievements);
+    bulkUpdateGoals(goals);
+    bulkUpdateAchievements(achievements);
     setAwaitPublish(false);
   };
   const requestPublish = () => {
@@ -80,7 +80,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
       />
 
       <div className="AchievementControl">
-        <AchievementPreview awaitPublish={awaitPublish} handlePublish={handlePublish} />
+        <AchievementPreview awaitPublish={awaitPublish} publishChanges={publishChanges} />
 
         <AchievementEditor requestPublish={requestPublish} />
 

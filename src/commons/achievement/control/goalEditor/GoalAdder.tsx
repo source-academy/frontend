@@ -15,14 +15,14 @@ function GoalAdder(props: GoalAdderProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  const handleAddGoal = () => setNewId(inferencer.insertGoalDefinition(goalTemplate));
+  const addGoal = () => setNewId(inferencer.insertGoalDefinition(goalTemplate));
 
   return (
     <Button
       className="command-button"
       disabled={!allowNewId}
       icon={IconNames.NEW_OBJECT}
-      onClick={handleAddGoal}
+      onClick={addGoal}
       text="Create Goal"
     />
   );

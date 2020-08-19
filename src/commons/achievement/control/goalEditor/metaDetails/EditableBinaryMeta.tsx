@@ -14,12 +14,12 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
   const binaryMeta = meta as BinaryMeta;
   const { condition, maxXp } = binaryMeta;
 
-  const handleChangeCondition = (conditionString: string) => {
+  const changeCondition = (conditionString: string) => {
     const condition = JSON.parse(conditionString);
     changeMeta({ ...binaryMeta, condition: condition });
   };
 
-  const handleChangeMaxXp = (maxXp: number) => changeMeta({ ...binaryMeta, maxXp: maxXp });
+  const changeMaxXp = (maxXp: number) => changeMeta({ ...binaryMeta, maxXp: maxXp });
 
   return (
     <>
@@ -28,14 +28,14 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
           allowNumericCharactersOnly={true}
           leftIcon={IconNames.BANK_ACCOUNT}
           min={0}
-          onValueChange={handleChangeMaxXp}
+          onValueChange={changeMaxXp}
           placeholder="Enter max XP here"
           value={maxXp}
         />
       </Tooltip>
       <Tooltip content="Condition">
         <EditableText
-          onChange={handleChangeCondition}
+          onChange={changeCondition}
           multiline={true}
           placeholder="Enter condition here"
           value={JSON.stringify(condition)}

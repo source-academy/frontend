@@ -19,8 +19,8 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleGetAchievements: getAchievements,
-      handleGetOwnGoals: getOwnGoals
+      getAchievements,
+      getOwnGoals
     },
     dispatch
   );

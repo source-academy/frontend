@@ -25,13 +25,13 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
   const selectedGoals = new Set(goalIds);
   const availableGoals = new Set(without(allGoalIds, ...goalIds));
 
-  const handleSelectGoal = (selectId: number) => {
+  const selectGoal = (selectId: number) => {
     selectedGoals.add(selectId);
     availableGoals.delete(selectId);
     changeGoalIds([...selectedGoals]);
   };
 
-  const handleRemoveGoal = (removeId?: number) => {
+  const removeGoal = (removeId?: number) => {
     if (removeId === undefined) return;
 
     selectedGoals.delete(removeId);
@@ -44,9 +44,9 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
       itemRenderer={goalRenderer}
       items={[...availableGoals]}
       noResults={<MenuItem disabled={true} text="No available goal" />}
-      onItemSelect={handleSelectGoal}
+      onItemSelect={selectGoal}
       selectedItems={[...selectedGoals]}
-      tagInputProps={{ onRemove: text => handleRemoveGoal(getId(text)) }}
+      tagInputProps={{ onRemove: text => removeGoal(getId(text)) }}
       tagRenderer={getText}
     />
   );

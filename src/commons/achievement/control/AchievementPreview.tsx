@@ -9,11 +9,11 @@ import AchievementView from '../AchievementView';
 
 type AchievementPreviewProps = {
   awaitPublish: boolean;
-  handlePublish: () => void;
+  publishChanges: () => void;
 };
 
 function AchievementPreview(props: AchievementPreviewProps) {
-  const { awaitPublish, handlePublish } = props;
+  const { awaitPublish, publishChanges } = props;
 
   const inferencer = useContext(AchievementContext);
 
@@ -44,7 +44,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
             icon={IconNames.CLOUD_UPLOAD}
             intent="primary"
             text="Publish Changes"
-            onClick={handlePublish}
+            onClick={publishChanges}
           />
         )}
       </div>

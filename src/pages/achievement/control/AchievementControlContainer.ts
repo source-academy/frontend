@@ -22,10 +22,10 @@ const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => 
 const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dispatch) =>
   bindActionCreators(
     {
-      handleBulkUpdateAchievements: bulkUpdateAchievements,
-      handleBulkUpdateGoals: bulkUpdateGoals,
-      handleGetAchievements: getAchievements,
-      handleGetOwnGoals: getOwnGoals
+      bulkUpdateAchievements,
+      bulkUpdateGoals,
+      getAchievements,
+      getOwnGoals
     },
     dispatch
   );

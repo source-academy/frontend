@@ -22,7 +22,8 @@ function EditableMeta(props: EditableMetaProps) {
     <MenuItem key={type} onClick={handleClick} text={type} />
   );
 
-  const handleChangeType = (type: GoalType) => changeMeta(metaTemplate(type));
+  // TODO: memo?
+  const changeType = (type: GoalType) => changeMeta(metaTemplate(type));
 
   const editableMetaDetails = (type: GoalType) => {
     switch (type) {
@@ -44,7 +45,7 @@ function EditableMeta(props: EditableMetaProps) {
           filterable={false}
           itemRenderer={typeRenderer}
           items={Object.values(GoalType)}
-          onItemSelect={handleChangeType}
+          onItemSelect={changeType}
         >
           <Button minimal={true} outlined={true} text={type} />
         </TypeSelect>

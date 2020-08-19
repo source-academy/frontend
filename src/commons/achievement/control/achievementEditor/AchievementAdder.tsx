@@ -15,14 +15,14 @@ function AchievementAdder(props: AchievementAdderProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  const handleAddAchievement = () => setNewId(inferencer.insertAchievement(achievementTemplate));
+  const addAchievement = () => setNewId(inferencer.insertAchievement(achievementTemplate));
 
   return (
     <Button
       className="command-button"
       disabled={!allowNewId}
       icon={IconNames.NEW_OBJECT}
-      onClick={handleAddAchievement}
+      onClick={addAchievement}
       text="Create Achievement"
     />
   );

@@ -11,8 +11,8 @@ import { AchievementContext } from '../../../features/achievement/AchievementCon
 import { FilterStatus } from '../../../features/achievement/AchievementTypes';
 
 export type DispatchProps = {
-  handleGetAchievements: () => void;
-  handleGetOwnGoals: () => void;
+  getAchievements: () => void;
+  getOwnGoals: () => void;
 };
 
 export type StateProps = {
@@ -38,7 +38,7 @@ export const generateAchievementTasks = (
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
-  const { group, handleGetAchievements, handleGetOwnGoals, inferencer, name } = props;
+  const { group, getAchievements, getOwnGoals, inferencer, name } = props;
 
   /**
    * The dashboard fetches the latest achievements and goals from backend
@@ -46,10 +46,10 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   useEffect(() => {
     if (Constants.useBackend) {
-      handleGetAchievements();
-      handleGetOwnGoals();
+      getAchievements();
+      getOwnGoals();
     }
-  }, [handleGetAchievements, handleGetOwnGoals]);
+  }, [getAchievements, getOwnGoals]);
 
   const filterState = useState<FilterStatus>(FilterStatus.ALL);
   const [filterStatus] = filterState;
