@@ -41,8 +41,7 @@ function Dashboard(props: DispatchProps & StateProps) {
   const { group, getAchievements, getOwnGoals, inferencer, name } = props;
 
   /**
-   * The dashboard fetches the latest achievements and goals from backend
-   * when the page is rendered
+   * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
     if (Constants.useBackend) {

@@ -30,7 +30,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
   } = props;
 
   /**
-   * The latest achievements and goals from backend are fetched when the page is rendered
+   * Fetch the latest achievements and goals from backend when the page is rendered
    */
   useEffect(() => {
     if (Constants.useBackend) {
@@ -39,17 +39,14 @@ function AchievementControl(props: DispatchProps & StateProps) {
     }
   }, [getAchievements, getOwnGoals]);
 
-  const achievements = inferencer.getAllAchievements();
-  const goals = inferencer.getAllGoals();
-
   /**
    * Monitors changes that are awaiting publish
    */
   const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
   const publishChanges = () => {
     // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
-    bulkUpdateGoals(goals);
-    bulkUpdateAchievements(achievements);
+    bulkUpdateGoals(inferencer.getAllGoals());
+    bulkUpdateAchievements(inferencer.getAllAchievements());
     setAwaitPublish(false);
   };
   const requestPublish = () => {
