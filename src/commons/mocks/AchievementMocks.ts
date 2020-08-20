@@ -136,14 +136,14 @@ export const mockAchievements: AchievementItem[] = [
     }
   },
   {
-    id: 7,
+    id: 21,
     title: 'The Source-rer',
     ability: AchievementAbility.EFFORT,
     deadline: new Date(2020, 7, 21, 0, 0, 0),
     isTask: true,
     position: 3,
     prerequisiteIds: [],
-    goalIds: [6, 7],
+    goalIds: [16, 18],
     cardBackground:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-background/the-source-rer.png',
     view: {
@@ -191,13 +191,13 @@ export const mockAchievements: AchievementItem[] = [
     }
   },
   {
-    id: 10,
+    id: 16,
     title: "That's the Spirit",
     ability: AchievementAbility.EXPLORATION,
     isTask: true,
     position: 5,
     prerequisiteIds: [],
-    goalIds: [9],
+    goalIds: [14],
     cardBackground:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-background/thats-the-spirit.png',
     view: {
@@ -209,13 +209,13 @@ export const mockAchievements: AchievementItem[] = [
     }
   },
   {
-    id: 11,
+    id: 13,
     title: 'Kool Kidz',
     ability: AchievementAbility.FLEX,
     isTask: true,
     position: 6,
     prerequisiteIds: [],
-    goalIds: [10],
+    goalIds: [11],
     cardBackground:
       'https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/achievement/card-background/default.png',
     view: {
@@ -313,7 +313,7 @@ export const mockGoals: AchievementGoal[] = [
     completed: false
   },
   {
-    id: 6,
+    id: 16,
     text: 'Submit Source 3 Path',
     meta: {
       type: GoalType.BINARY,
@@ -328,7 +328,7 @@ export const mockGoals: AchievementGoal[] = [
     completed: true
   },
   {
-    id: 7,
+    id: 18,
     text: 'XP earned from Source 3 Path',
     meta: {
       type: GoalType.ASSESSMENT,
@@ -351,7 +351,7 @@ export const mockGoals: AchievementGoal[] = [
     completed: false
   },
   {
-    id: 9,
+    id: 14,
     text: 'Submit 1 PR to Source Academy Github',
     meta: {
       type: GoalType.MANUAL,
@@ -362,7 +362,7 @@ export const mockGoals: AchievementGoal[] = [
     completed: true
   },
   {
-    id: 10,
+    id: 11,
     text: 'Be the Koolest Kidz in SOC by redeeming this 100 XP achievement yourself',
     meta: {
       type: GoalType.BINARY,
