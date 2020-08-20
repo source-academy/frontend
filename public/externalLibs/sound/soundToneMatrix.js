@@ -409,7 +409,7 @@ function letter_name_to_midi_note(note) {
 }
 
 function letter_name_to_frequency(note) {
-  return midi_note_to_frequency(note_to_midi_note(note));
+  return midi_note_to_frequency(letter_name_to_midi_note(note));
 }
 
 function midi_note_to_frequency(note) {
