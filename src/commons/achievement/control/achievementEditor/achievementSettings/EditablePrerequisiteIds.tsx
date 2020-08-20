@@ -4,15 +4,16 @@ import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditablePrerequisiteIdsProps = {
-  availableIds: number[];
   changePrerequisiteIds: (prerequisiteIds: number[]) => void;
+  id: number;
   prerequisiteIds: number[];
 };
 
 function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
-  const { availableIds, changePrerequisiteIds, prerequisiteIds } = props;
+  const { changePrerequisiteIds, id, prerequisiteIds } = props;
 
   const inferencer = useContext(AchievementContext);
+  const availableIds = inferencer.listAvailablePrerequisiteIds(id);
   const getId = (title: string) => inferencer.getIdByTitle(title);
   const getTitle = (id: number) => inferencer.getTitleById(id);
 

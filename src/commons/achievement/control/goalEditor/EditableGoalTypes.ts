@@ -1,6 +1,6 @@
 import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
-export enum ActionType {
+export enum EditableGoalActionType {
   CHANGE_META = 'CHANGE_META',
   CHANGE_TEXT = 'CHANGE_TEXT',
   DELETE_GOAL = 'DELETE_GOAL',
@@ -8,27 +8,27 @@ export enum ActionType {
   SAVE_CHANGES = 'SAVE_CHANGES'
 }
 
-export type Action =
+export type EditableGoalAction =
   | {
-      type: ActionType.CHANGE_META;
+      type: EditableGoalActionType.CHANGE_META;
       payload: GoalMeta;
     }
   | {
-      type: ActionType.CHANGE_TEXT;
+      type: EditableGoalActionType.CHANGE_TEXT;
       payload: string;
     }
   | {
-      type: ActionType.DELETE_GOAL;
+      type: EditableGoalActionType.DELETE_GOAL;
     }
   | {
-      type: ActionType.DISCARD_CHANGES;
+      type: EditableGoalActionType.DISCARD_CHANGES;
       payload: GoalDefinition;
     }
   | {
-      type: ActionType.SAVE_CHANGES;
+      type: EditableGoalActionType.SAVE_CHANGES;
     };
 
-export type State = {
+export type EditableGoalState = {
   editableGoal: GoalDefinition;
   isDirty: boolean;
 };

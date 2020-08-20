@@ -614,7 +614,8 @@ class AchievementInferencer {
    * If anchorId and anchorPosition is supplied, the anchor achievement is
    * guaranteed to have its position set at anchorPosition.
    *
-   * @param anchorId achievementId
+   * @param anchorId anchor achievementId
+   * @param anchorPosition anchor position
    */
   private normalizePositions(anchorId?: number, anchorPosition?: number) {
     let newPosition = 1;
@@ -625,7 +626,7 @@ class AchievementInferencer {
 
     // If some achievement got misplaced at the anchorPosition, swap it
     // back with the anchor achievement
-    if (anchorId !== undefined && anchorPosition !== undefined && anchorPosition !== 0) {
+    if (anchorId && anchorPosition && anchorPosition !== 0) {
       const anchorAchievement = this.getAchievement(anchorId);
       const newPosition = anchorAchievement.position;
       if (newPosition !== anchorPosition) {

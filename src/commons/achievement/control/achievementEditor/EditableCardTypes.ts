@@ -4,7 +4,7 @@ import {
   AchievementView
 } from 'src/features/achievement/AchievementTypes';
 
-export enum ActionType {
+export enum EditableCardActionType {
   CHANGE_ABILITY = 'CHANGE_ABILITY',
   CHANGE_CARD_BACKGROUND = 'CHANGE_CARD_BACKGROUND',
   CHANGE_DEADLINE = 'CHANGE_DEADLINE',
@@ -19,55 +19,55 @@ export enum ActionType {
   SAVE_CHANGES = 'SAVE_CHANGES'
 }
 
-export type Action =
+export type EditableCardAction =
   | {
-      type: ActionType.CHANGE_ABILITY;
+      type: EditableCardActionType.CHANGE_ABILITY;
       payload: AchievementAbility;
     }
   | {
-      type: ActionType.CHANGE_CARD_BACKGROUND;
+      type: EditableCardActionType.CHANGE_CARD_BACKGROUND;
       payload: string;
     }
   | {
-      type: ActionType.CHANGE_DEADLINE;
+      type: EditableCardActionType.CHANGE_DEADLINE;
       payload: Date | undefined;
     }
   | {
-      type: ActionType.CHANGE_GOAL_IDS;
+      type: EditableCardActionType.CHANGE_GOAL_IDS;
       payload: number[];
     }
   | {
-      type: ActionType.CHANGE_POSITION;
+      type: EditableCardActionType.CHANGE_POSITION;
       payload: number;
     }
   | {
-      type: ActionType.CHANGE_PREREQUISITE_IDS;
+      type: EditableCardActionType.CHANGE_PREREQUISITE_IDS;
       payload: number[];
     }
   | {
-      type: ActionType.CHANGE_RELEASE;
+      type: EditableCardActionType.CHANGE_RELEASE;
       payload: Date | undefined;
     }
   | {
-      type: ActionType.CHANGE_TITLE;
+      type: EditableCardActionType.CHANGE_TITLE;
       payload: string;
     }
   | {
-      type: ActionType.CHANGE_VIEW;
+      type: EditableCardActionType.CHANGE_VIEW;
       payload: AchievementView;
     }
   | {
-      type: ActionType.DELETE_ACHIEVEMENT;
+      type: EditableCardActionType.DELETE_ACHIEVEMENT;
     }
   | {
-      type: ActionType.DISCARD_CHANGES;
+      type: EditableCardActionType.DISCARD_CHANGES;
       payload: AchievementItem;
     }
   | {
-      type: ActionType.SAVE_CHANGES;
+      type: EditableCardActionType.SAVE_CHANGES;
     };
 
-export type State = {
+export type EditableCardState = {
   editableAchievement: AchievementItem;
   isDirty: boolean;
 };

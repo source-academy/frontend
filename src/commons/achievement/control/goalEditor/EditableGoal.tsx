@@ -6,7 +6,11 @@ import { GoalDefinition, GoalMeta } from 'src/features/achievement/AchievementTy
 
 import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
-import { Action, ActionType, State } from './EditableGoalTypes';
+import {
+  EditableGoalAction as Action,
+  EditableGoalActionType as ActionType,
+  EditableGoalState as State
+} from './EditableGoalTypes';
 import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
@@ -30,10 +34,7 @@ const reducer = (state: State, action: Action) => {
         isDirty: false
       };
     case ActionType.DISCARD_CHANGES:
-      return {
-        editableGoal: action.payload,
-        isDirty: false
-      };
+      return init(action.payload);
     case ActionType.DELETE_GOAL:
       return {
         ...state,

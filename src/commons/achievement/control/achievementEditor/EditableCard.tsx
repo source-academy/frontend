@@ -12,7 +12,11 @@ import ItemDeleter from '../common/ItemDeleter';
 import ItemSaver from '../common/ItemSaver';
 import AchievementSettings from './AchievementSettings';
 import EditableAbility from './EditableAbility';
-import { Action, ActionType, State } from './EditableCardTypes';
+import {
+  EditableCardAction as Action,
+  EditableCardActionType as ActionType,
+  EditableCardState as State
+} from './EditableCardTypes';
 import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 

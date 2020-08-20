@@ -1,7 +1,6 @@
 import { Button, Dialog, EditableText, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React, { useContext, useState } from 'react';
-import { AchievementContext } from 'src/features/achievement/AchievementConstants';
+import React, { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
 import EditableGoalIds from './achievementSettings/EditableGoalIds';
@@ -26,8 +25,6 @@ function AchievementSettings(props: AchievementSettingsProps) {
   } = props;
   const { id, cardBackground, goalIds, position, prerequisiteIds } = editableAchievement;
 
-  const inferencer = useContext(AchievementContext);
-
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
 
@@ -51,16 +48,12 @@ function AchievementSettings(props: AchievementSettingsProps) {
           <EditablePosition changePosition={changePosition} position={position} />
           <h3>Prerequisites</h3>
           <EditablePrerequisiteIds
-            availableIds={inferencer.listAvailablePrerequisiteIds(id)}
             changePrerequisiteIds={changePrerequisiteIds}
+            id={id}
             prerequisiteIds={prerequisiteIds}
           />
           <h3>Goals</h3>
-          <EditableGoalIds
-            allGoalIds={inferencer.getAllGoalIds()}
-            changeGoalIds={changeGoalIds}
-            goalIds={goalIds}
-          />
+          <EditableGoalIds changeGoalIds={changeGoalIds} goalIds={goalIds} />
         </div>
       </Dialog>
     </>

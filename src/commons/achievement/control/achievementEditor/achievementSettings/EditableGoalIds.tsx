@@ -5,15 +5,15 @@ import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditableGoalIdsProps = {
-  allGoalIds: number[];
   changeGoalIds: (goalIds: number[]) => void;
   goalIds: number[];
 };
 
 function EditableGoalIds(props: EditableGoalIdsProps) {
-  const { allGoalIds, changeGoalIds, goalIds } = props;
+  const { changeGoalIds, goalIds } = props;
 
   const inferencer = useContext(AchievementContext);
+  const allGoalIds = inferencer.getAllGoalIds();
   const getId = (text: string) => inferencer.getIdByText(text);
   const getText = (id: number) => inferencer.getTextById(id);
 
