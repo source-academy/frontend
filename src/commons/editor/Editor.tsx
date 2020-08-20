@@ -249,7 +249,7 @@ const EditorBase = React.memo(
       setOptions: {
         enableBasicAutocompletion: true,
         enableLiveAutocompletion: true,
-        fontFamily: "'Inconsolata', monospace"
+        fontFamily: "'Inconsolata', 'Consolas', monospace"
       }
     };
 
