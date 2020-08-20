@@ -5,9 +5,8 @@ import { defaultAchievement } from '../../commons/application/ApplicationTypes';
 import { Links } from '../../commons/utils/Constants';
 import { AchievementAbility, FilterStatus } from './AchievementTypes';
 
-const { achievements: defaultAchievements, goals: defaultGoals } = defaultAchievement;
 export const AchievementContext = React.createContext(
-  new AchievementInferencer(defaultAchievements, defaultGoals)
+  new AchievementInferencer(defaultAchievement.achievements, defaultAchievement.goals)
 );
 
 export enum DeadlineColors {
