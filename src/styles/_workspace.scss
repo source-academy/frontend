@@ -439,17 +439,17 @@ $code-color-error: #ff4444;
               margin: 0px;
               text-align: left;
               /**
-              * white-space, word-wrap and word-break
-              * are specified to allow all output to wrap.
-              */
+                * white-space, word-wrap and word-break
+                * are specified to allow all output to wrap.
+                */
               white-space: pre-wrap;
               word-wrap: break-word;
               word-break: break-word;
               /**
-              * Use same fonts as ace-editor for
-              * output. Taken from react-ace
-              * sourcecode, font size modified.
-              */
+                * Use same fonts as ace-editor for
+                * output. Taken from react-ace
+                * sourcecode, font size modified.
+                */
               font: 16px / normal 'Inconsolata', 'Consolas', monospace;
 
               .canvas-container {
@@ -701,17 +701,18 @@ $code-color-error: #ff4444;
         color: inherit;
         padding: 0px;
         margin: 0px;
-        /* white-space, word-wrap and word-break
-         * are specified to allow all output to wrap.
-         */
+        /**
+          * white-space, word-wrap and word-break
+          * are specified to allow all output to wrap.
+          */
         white-space: pre-wrap;
         word-wrap: break-word;
         word-break: break-word;
         /**
- * Use same fonts as ace-editor for
- * output. Taken from react-ace
- * sourcecode, font size modified.
- */
+          * Use same fonts as ace-editor for
+          * output. Taken from react-ace
+          * sourcecode, font size modified.
+          */
         font: 16px / normal 'Inconsolata', 'Consolas', monospace;
       }
 
