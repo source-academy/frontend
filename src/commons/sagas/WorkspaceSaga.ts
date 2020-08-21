@@ -782,7 +782,7 @@ export function* evalCode(
       // Avoid displaying message if there are no testcases
       if (testcases.length > 0) {
         // Display a message to the user
-        yield call(showSuccessMessage, `Running all testcases!`, 750);
+        yield call(showSuccessMessage, `Running all testcases!`, 2000);
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
           /** Run testcases synchronously - this blocks the generator until result of current
