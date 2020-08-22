@@ -15,6 +15,7 @@ import { isExpired } from './DateHelper';
  *
  * @param {AchievementItem} achievement the achievement item
  * @param {Date | undefined} displayDeadline deadline displayed on the achievement card
+ * @param {number} xp attained XP of the achievement
  * @param {number} maxXp maximum attainable XP of the achievement
  * @param {number} progressFrac progress percentage in fraction. It is always between 0 to 1, both inclusive.
  * @param {AchievementStatus} status the achievement status
@@ -24,6 +25,7 @@ import { isExpired } from './DateHelper';
 class AchievementNode {
   public achievement: AchievementItem;
   public displayDeadline?: Date;
+  public xp: number;
   public maxXp: number;
   public progressFrac: number;
   public status: AchievementStatus;
@@ -35,6 +37,7 @@ class AchievementNode {
 
     this.achievement = achievement;
     this.displayDeadline = deadline;
+    this.xp = 0;
     this.maxXp = 0;
     this.progressFrac = 0;
     this.status = AchievementStatus.ACTIVE;
@@ -337,8 +340,8 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievementXp(id: number) {
-    const { goalIds } = this.getAchievement(id);
-    return goalIds.reduce((xp, goalId) => xp + this.getGoal(goalId).xp, 0);
+    assert(this.nodeList.has(id), `achievement ${id} not found`);
+    return this.nodeList.get(id)!.xp;
   }
 
   /**
@@ -450,7 +453,7 @@ class AchievementInferencer {
     this.nodeList.forEach(node => {
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
-      this.generateMaxXp(node);
+      this.generateXpAndMaxXp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
 
@@ -553,12 +556,13 @@ class AchievementInferencer {
   }
 
   /**
-   * Calculates the achievement maximum attainable XP
+   * Calculates the achievement attained XP and maximum attainable XP
    *
    * @param node the AchievementNode
    */
-  private generateMaxXp(node: AchievementNode) {
+  private generateXpAndMaxXp(node: AchievementNode) {
     const { goalIds } = node.achievement;
+    node.xp = goalIds.reduce((xp, goalId) => xp + this.getGoal(goalId).xp, 0);
     node.maxXp = goalIds.reduce((maxXp, goalId) => maxXp + this.getGoal(goalId).maxXp, 0);
   }
 
