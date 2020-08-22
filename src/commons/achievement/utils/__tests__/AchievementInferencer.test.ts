@@ -71,6 +71,7 @@ describe('Achievement Inferencer Constructor', () => {
     const testAchievement1: AchievementItem = { ...testAchievement, id: 1 };
     const testAchievement2: AchievementItem = { ...testAchievement, id: 2 };
     const testAchievement3: AchievementItem = { ...testAchievement, id: 2 };
+
     const testGoal1: AchievementGoal = { ...testGoal, id: 1 };
     const testGoal2: AchievementGoal = { ...testGoal, id: 1 };
     const testGoal3: AchievementGoal = { ...testGoal, id: 2 };
@@ -127,38 +128,42 @@ describe('Achievement Inferencer Getter', () => {
   });
 
   test('List goals', () => {
-    const testAchievement1 = { ...testAchievement, id: 123, goalIds: [456, 123] };
-    const testAchievement2 = { ...testAchievement, id: 456, goalIds: [] };
-    const testGoal1 = { ...testGoal, id: 123 };
-    const testGoal2 = { ...testGoal, id: 456 };
+    const testAchievement1: AchievementItem = { ...testAchievement, id: 1, goalIds: [2, 1] };
+    const testAchievement2: AchievementItem = { ...testAchievement, id: 2, goalIds: [] };
+
+    const testGoal1: AchievementGoal = { ...testGoal, id: 1 };
+    const testGoal2: AchievementGoal = { ...testGoal, id: 2 };
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2],
       [testGoal1, testGoal2]
     );
 
-    expect(inferencer.listGoals(123)[0]).toBe(testGoal2);
-    expect(inferencer.listGoals(123)[1]).toBe(testGoal1);
-    expect(inferencer.listGoals(456)).toEqual([]);
+    expect(inferencer.listGoals(1).length).toBe(2);
+    expect(inferencer.listGoals(1)[0]).toBe(testGoal2);
+    expect(inferencer.listGoals(1)[1]).toBe(testGoal1);
+    expect(inferencer.listGoals(2)).toEqual([]);
   });
 
   test('List prerequisite goals', () => {
-    const testAchievement1 = {
+    const testAchievement1: AchievementItem = {
       ...testAchievement,
-      id: 123,
-      prerequisiteIds: [456]
+      id: 1,
+      prerequisiteIds: [2]
     };
-    const testAchievement2 = { ...testAchievement, id: 456, goalIds: [456, 123] };
-    const testGoal1 = { ...testGoal, id: 123 };
-    const testGoal2 = { ...testGoal, id: 456 };
+    const testAchievement2: AchievementItem = { ...testAchievement, id: 2, goalIds: [2, 1] };
+
+    const testGoal1: AchievementGoal = { ...testGoal, id: 1 };
+    const testGoal2: AchievementGoal = { ...testGoal, id: 2 };
 
     const inferencer = new AchievementInferencer(
       [testAchievement1, testAchievement2],
       [testGoal1, testGoal2]
     );
 
-    expect(inferencer.listPrerequisiteGoals(123)[0]).toBe(testGoal2);
-    expect(inferencer.listPrerequisiteGoals(123)[1]).toBe(testGoal1);
+    expect(inferencer.listPrerequisiteGoals(1).length).toBe(2);
+    expect(inferencer.listPrerequisiteGoals(1)[0]).toBe(testGoal2);
+    expect(inferencer.listPrerequisiteGoals(1)[1]).toBe(testGoal1);
   });
 });
 
@@ -170,6 +175,7 @@ describe('Achievement ID to Title', () => {
     id: achievementId,
     title: achievementTitle
   };
+
   const inferencer = new AchievementInferencer([testAchievement1], []);
 
   test('Returns undefined for non-existing ID', () => {
@@ -193,6 +199,7 @@ describe('Goal ID to Text', () => {
   const goalId = 123;
   const goalText = 'g0@L T3xt h3R3';
   const testGoal1: AchievementGoal = { ...testGoal, id: goalId, text: goalText };
+
   const inferencer = new AchievementInferencer([], [testGoal1]);
 
   test('Returns undefined for non-existing ID', () => {
@@ -209,5 +216,34 @@ describe('Goal ID to Text', () => {
 
   test('Returns ID for existing goal text', () => {
     expect(inferencer.getIdByText(goalText)).toBe(goalId);
+  });
+});
+
+describe('Achievement XP System', () => {
+  const testAchievement1: AchievementItem = { ...testAchievement, id: 1, goalIds: [1, 2] };
+
+  const testGoal1: AchievementGoal = { ...testGoal, id: 1, xp: 100, maxXp: 100 };
+  const testGoal2: AchievementGoal = { ...testGoal, id: 2, xp: 20, maxXp: 100 };
+  const testGoal3: AchievementGoal = { ...testGoal, id: 3, xp: 3, maxXp: 100 };
+
+  const inferencer = new AchievementInferencer(
+    [testAchievement1],
+    [testGoal1, testGoal2, testGoal3]
+  );
+
+  test('Returns XP earned from an achievement', () => {
+    expect(inferencer.getAchievementXp(1)).toBe(120);
+  });
+
+  test('Returns Max XP earned from an achievement', () => {
+    expect(inferencer.getAchievementMaxXp(1)).toBe(200);
+  });
+
+  test('Returns Total XP earned from all goals', () => {
+    expect(inferencer.getTotalXp()).toBe(123);
+  });
+
+  test('Returns progress frac from an achievement', () => {
+    expect(inferencer.getProgressFrac(1)).toBeCloseTo(120 / 200);
   });
 });
