@@ -3,7 +3,7 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
-import { goalTemplate } from './GoalTemplate';
+import { goalDefinitionTemplate } from './GoalTemplate';
 
 type GoalAdderProps = {
   allowNewId: boolean;
@@ -15,7 +15,7 @@ function GoalAdder(props: GoalAdderProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  const addGoal = () => setNewId(inferencer.insertGoalDefinition(goalTemplate));
+  const addGoal = () => setNewId(inferencer.insertGoalDefinition(goalDefinitionTemplate));
 
   return (
     <Button

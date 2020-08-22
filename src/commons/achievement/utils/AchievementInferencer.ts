@@ -1,4 +1,3 @@
-import assert from 'assert';
 import { uniq } from 'lodash';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
@@ -9,6 +8,8 @@ import {
   defaultGoalProgress,
   GoalDefinition
 } from '../../../features/achievement/AchievementTypes';
+import { achievementTemplate } from '../control/achievementEditor/AchievementTemplate';
+import { goalDefinitionTemplate, goalTemplate } from '../control/goalEditor/GoalTemplate';
 import { isExpired } from './DateHelper';
 
 /**
@@ -99,8 +100,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievement(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.achievement;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.achievement : achievementTemplate;
   }
 
   /**
@@ -109,8 +109,7 @@ class AchievementInferencer {
    * @param id Goal Id
    */
   public getGoal(id: number) {
-    assert(this.goalList.has(id), `goal ${id} not found`);
-    return this.goalList.get(id)!;
+    return this.goalList.has(id) ? this.goalList.get(id)! : goalTemplate;
   }
 
   /**
@@ -119,8 +118,9 @@ class AchievementInferencer {
    * @param id Goal Id
    */
   public getGoalDefinition(id: number) {
-    assert(this.goalList.has(id), `goal definition ${id} not found`);
-    return this.goalList.get(id)! as GoalDefinition;
+    return this.goalList.has(id)
+      ? (this.goalList.get(id)! as GoalDefinition)
+      : goalDefinitionTemplate;
   }
 
   /**
@@ -341,8 +341,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievementXp(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.xp;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.xp : 0;
   }
 
   /**
@@ -351,8 +350,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievementMaxXp(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.maxXp;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.maxXp : 0;
   }
 
   /**
@@ -371,8 +369,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getProgressFrac(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.progressFrac;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.progressFrac : 0;
   }
 
   /**
@@ -381,8 +378,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getStatus(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.status;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.status : AchievementStatus.ACTIVE;
   }
 
   /**
@@ -391,8 +387,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getDisplayDeadline(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.displayDeadline;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.displayDeadline : undefined;
   }
 
   /**
@@ -402,8 +397,7 @@ class AchievementInferencer {
    * @param childId Child Achievement Id
    */
   public isImmediateChild(id: number, childId: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.children.has(childId);
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.children.has(childId) : false;
   }
 
   /**
@@ -412,8 +406,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getImmediateChildren(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.children;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.children : new Set<number>();
   }
 
   /**
@@ -423,8 +416,7 @@ class AchievementInferencer {
    * @param childId Descendant Achievement Id
    */
   public isDescendant(id: number, childId: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.descendant.has(childId);
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.descendant.has(childId) : false;
   }
 
   /**
@@ -433,8 +425,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getDescendants(id: number) {
-    assert(this.nodeList.has(id), `achievement ${id} not found`);
-    return this.nodeList.get(id)!.descendant;
+    return this.nodeList.has(id) ? this.nodeList.get(id)!.descendant : new Set<number>();
   }
 
   /**

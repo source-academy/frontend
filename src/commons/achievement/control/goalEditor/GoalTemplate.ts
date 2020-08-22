@@ -1,4 +1,10 @@
-import { GoalDefinition, GoalMeta, GoalType } from 'src/features/achievement/AchievementTypes';
+import {
+  AchievementGoal,
+  GoalDefinition,
+  GoalMeta,
+  GoalProgress,
+  GoalType
+} from 'src/features/achievement/AchievementTypes';
 
 export const metaTemplate = (type: GoalType): GoalMeta => {
   switch (type) {
@@ -22,8 +28,20 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
   }
 };
 
-export const goalTemplate: GoalDefinition = {
-  id: 0,
+export const goalDefinitionTemplate: GoalDefinition = {
+  id: -1,
   text: 'Goal Text Here',
   meta: metaTemplate(GoalType.MANUAL)
+};
+
+const goalProgressTemplate: GoalProgress = {
+  id: -1,
+  xp: 0,
+  maxXp: 0,
+  completed: false
+};
+
+export const goalTemplate: AchievementGoal = {
+  ...goalDefinitionTemplate,
+  ...goalProgressTemplate
 };
