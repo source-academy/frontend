@@ -30,9 +30,8 @@ const testGoal: AchievementGoal = {
   id: 0,
   text: 'Test Goal',
   meta: {
-    type: GoalType.ASSESSMENT,
-    assessmentNumber: 'M1A',
-    requiredCompletionFrac: 1
+    type: GoalType.MANUAL,
+    maxXp: 0
   },
   xp: 0,
   maxXp: 0,
@@ -160,5 +159,55 @@ describe('Achievement Inferencer Getter', () => {
 
     expect(inferencer.listPrerequisiteGoals(123)[0]).toBe(testGoal2);
     expect(inferencer.listPrerequisiteGoals(123)[1]).toBe(testGoal1);
+  });
+});
+
+describe('Achievement ID to Title', () => {
+  const achievementId = 123;
+  const achievementTitle = 'AcH1Ev3m3Nt t1tL3 h3R3';
+  const testAchievement1: AchievementItem = {
+    ...testAchievement,
+    id: achievementId,
+    title: achievementTitle
+  };
+  const inferencer = new AchievementInferencer([testAchievement1], []);
+
+  test('Returns undefined for non-existing ID', () => {
+    expect(inferencer.getTitleById(1)).toBeUndefined();
+  });
+
+  test('Returns achievement title for existing ID', () => {
+    expect(inferencer.getTitleById(achievementId)).toBe(achievementTitle);
+  });
+
+  test('Returns undefined for non-existing achievement title', () => {
+    expect(inferencer.getIdByTitle('IUisL0v3')).toBeUndefined();
+  });
+
+  test('Returns ID for existing achievement title', () => {
+    expect(inferencer.getIdByTitle(achievementTitle)).toBe(achievementId);
+  });
+});
+
+describe('Goal ID to Text', () => {
+  const goalId = 123;
+  const goalText = 'g0@L T3xt h3R3';
+  const testGoal1: AchievementGoal = { ...testGoal, id: goalId, text: goalText };
+  const inferencer = new AchievementInferencer([], [testGoal1]);
+
+  test('Returns undefined for non-existing ID', () => {
+    expect(inferencer.getTextById(1)).toBeUndefined();
+  });
+
+  test('Returns goal text for existing ID', () => {
+    expect(inferencer.getTextById(goalId)).toBe(goalText);
+  });
+
+  test('Returns undefined for non-existing goal text', () => {
+    expect(inferencer.getIdByText('IUisL0v3')).toBeUndefined();
+  });
+
+  test('Returns ID for existing goal text', () => {
+    expect(inferencer.getIdByText(goalText)).toBe(goalId);
   });
 });
