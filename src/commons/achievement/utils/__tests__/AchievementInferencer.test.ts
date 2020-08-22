@@ -219,24 +219,85 @@ describe('Goal ID to Text', () => {
   });
 });
 
+describe('Achievement Prerequisite System', () => {
+  const testAchievement1: AchievementItem = {
+    ...testAchievement,
+    id: 1,
+    prerequisiteIds: [2, 3]
+  };
+  const testAchievement2: AchievementItem = { ...testAchievement, id: 2 };
+  const testAchievement3: AchievementItem = { ...testAchievement, id: 3, prerequisiteIds: [4] };
+  const testAchievement4: AchievementItem = { ...testAchievement, id: 4, prerequisiteIds: [5] };
+  const testAchievement5: AchievementItem = { ...testAchievement, id: 5 };
+
+  const inferencer = new AchievementInferencer(
+    [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
+    []
+  );
+
+  test('Is immediate children', () => {
+    expect(inferencer.isImmediateChild(1, 2)).toBeTruthy();
+    expect(inferencer.isImmediateChild(1, 3)).toBeTruthy();
+    expect(inferencer.isImmediateChild(1, 4)).toBeFalsy();
+    expect(inferencer.isImmediateChild(1, 5)).toBeFalsy();
+    expect(inferencer.isImmediateChild(1, 101)).toBeFalsy();
+  });
+
+  test('Get immediate children', () => {
+    expect(inferencer.getImmediateChildren(1)).toEqual(new Set([2, 3]));
+    expect(inferencer.getImmediateChildren(2)).toEqual(new Set());
+    expect(inferencer.getImmediateChildren(3)).toEqual(new Set([4]));
+    expect(inferencer.getImmediateChildren(4)).toEqual(new Set([5]));
+    expect(inferencer.getImmediateChildren(101)).toEqual(new Set());
+  });
+
+  test('Is descendant', () => {
+    expect(inferencer.isDescendant(1, 2)).toBeTruthy();
+    expect(inferencer.isDescendant(1, 3)).toBeTruthy();
+    expect(inferencer.isDescendant(1, 4)).toBeTruthy();
+    expect(inferencer.isDescendant(1, 5)).toBeTruthy();
+    expect(inferencer.isDescendant(1, 101)).toBeFalsy();
+  });
+
+  test('Get descendants', () => {
+    expect(inferencer.getDescendants(1)).toEqual(new Set([2, 3, 4, 5]));
+    expect(inferencer.getDescendants(2)).toEqual(new Set());
+    expect(inferencer.getDescendants(3)).toEqual(new Set([4, 5]));
+    expect(inferencer.getDescendants(4)).toEqual(new Set([5]));
+    expect(inferencer.getDescendants(101)).toEqual(new Set());
+  });
+
+  test('List available prerequisite IDs', () => {
+    expect(inferencer.listAvailablePrerequisiteIds(1)).toEqual([]);
+    expect(inferencer.listAvailablePrerequisiteIds(2)).toEqual([3, 4, 5]);
+    expect(inferencer.listAvailablePrerequisiteIds(3)).toEqual([2]);
+    expect(inferencer.listAvailablePrerequisiteIds(4)).toEqual([2]);
+    expect(inferencer.listAvailablePrerequisiteIds(5)).toEqual([2]);
+    expect(inferencer.listAvailablePrerequisiteIds(101)).toEqual([1, 2, 3, 4, 5]);
+  });
+});
+
 describe('Achievement XP System', () => {
   const testAchievement1: AchievementItem = { ...testAchievement, id: 1, goalIds: [1, 2] };
+  const testAchievement2: AchievementItem = { ...testAchievement, id: 2, goalIds: [] };
 
   const testGoal1: AchievementGoal = { ...testGoal, id: 1, xp: 100, maxXp: 100 };
   const testGoal2: AchievementGoal = { ...testGoal, id: 2, xp: 20, maxXp: 100 };
   const testGoal3: AchievementGoal = { ...testGoal, id: 3, xp: 3, maxXp: 100 };
 
   const inferencer = new AchievementInferencer(
-    [testAchievement1],
+    [testAchievement1, testAchievement2],
     [testGoal1, testGoal2, testGoal3]
   );
 
   test('Returns XP earned from an achievement', () => {
     expect(inferencer.getAchievementXp(1)).toBe(120);
+    expect(inferencer.getAchievementXp(2)).toBe(0);
   });
 
   test('Returns Max XP earned from an achievement', () => {
     expect(inferencer.getAchievementMaxXp(1)).toBe(200);
+    expect(inferencer.getAchievementMaxXp(2)).toBe(0);
   });
 
   test('Returns Total XP earned from all goals', () => {
@@ -245,5 +306,8 @@ describe('Achievement XP System', () => {
 
   test('Returns progress frac from an achievement', () => {
     expect(inferencer.getProgressFrac(1)).toBeCloseTo(120 / 200);
+    expect(inferencer.getProgressFrac(2)).toBe(0);
   });
 });
+
+describe('Achievement Deadline & Status System', () => {});
