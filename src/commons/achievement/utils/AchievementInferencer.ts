@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { uniq } from 'lodash';
 
 import { showDangerMessage } from '../../../commons/utils/NotificationsHelper';
 import {
@@ -356,6 +357,9 @@ class AchievementInferencer {
 
   /**
    * Returns total XP earned from all goals
+   *
+   * Note: Goals that do not belong to any achievement is also added into the total XP
+   * calculation
    */
   public getTotalXp() {
     return this.getAllGoals().reduce((totalXp, goal) => totalXp + goal.xp, 0);
@@ -451,14 +455,17 @@ class AchievementInferencer {
     this.titleToId = new Map();
 
     this.nodeList.forEach(node => {
+      const { title, id } = node.achievement;
+      this.titleToId.set(title, id);
+
+      node.achievement.prerequisiteIds = uniq(node.achievement.prerequisiteIds);
+      node.achievement.goalIds = uniq(node.achievement.goalIds);
+
       this.generateDescendant(node);
       this.generateDisplayDeadline(node);
       this.generateXpAndMaxXp(node);
       this.generateProgressFrac(node);
       this.generateStatus(node);
-
-      const { title, id } = node.achievement;
-      this.titleToId.set(title, id);
     });
   }
 
@@ -504,7 +511,7 @@ class AchievementInferencer {
     for (const childId of node.descendant) {
       if (childId === node.achievement.id) {
         const { title } = node.achievement;
-        // NOTE: not the best error handling practice, but as long as admin verifies the
+        // Note: not the best error handling practice, but as long as admin verifies the
         // data in AchievementPreview and do not publish new achievements with circular
         // dependency error, it should be suffice
         showDangerMessage(`Circular dependency detected in achievement ${title}`, 30000);
