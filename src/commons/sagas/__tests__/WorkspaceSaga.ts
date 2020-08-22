@@ -709,7 +709,7 @@ describe('evalCode', () => {
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
-        .not.call(showSuccessMessage, 'Running all testcases!', 750)
+        .not.call(showSuccessMessage, 'Running all testcases!', 2000)
         .not.put(evalTestcase(workspaceLocation, 0))
         .silentRun();
     });
@@ -732,7 +732,7 @@ describe('evalCode', () => {
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .call(showSuccessMessage, 'Running all testcases!', 2000)
         .put(evalTestcase(workspaceLocation, 0))
         .dispatch({
           type: EVAL_TESTCASE_SUCCESS,
@@ -773,7 +773,7 @@ describe('evalCode', () => {
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .call(showSuccessMessage, 'Running all testcases!', 2000)
         .put(evalTestcase(workspaceLocation, 0))
         .dispatch({
           type: EVAL_TESTCASE_FAILURE,
@@ -801,7 +801,7 @@ describe('evalCode', () => {
           useSubst: false
         })
         .put(evalInterpreterSuccess(value, workspaceLocation))
-        .call(showSuccessMessage, 'Running all testcases!', 750)
+        .call(showSuccessMessage, 'Running all testcases!', 2000)
         .put(evalTestcase(workspaceLocation, 0))
         .dispatch({
           type: EVAL_TESTCASE_SUCCESS,

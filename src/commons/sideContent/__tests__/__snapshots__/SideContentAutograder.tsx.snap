@@ -315,7 +315,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
                 </Blueprint3.Icon>
               </div>
             </div>
-            <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            <SideContentTestcaseCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -327,8 +327,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard correct\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -340,8 +340,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -353,8 +353,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -366,7 +366,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
+            </SideContentTestcaseCard>
           </div>
         </div>
       </div>
@@ -525,7 +525,7 @@ exports[`Autograder renders private testcases with different statuses correctly 
                 </Blueprint3.Icon>
               </div>
             </div>
-            <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            <SideContentTestcaseCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard correct private\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -547,8 +547,8 @@ exports[`Autograder renders private testcases with different statuses correctly 
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard private\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -570,8 +570,8 @@ exports[`Autograder renders private testcases with different statuses correctly 
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard correct private\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -593,8 +593,8 @@ exports[`Autograder renders private testcases with different statuses correctly 
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong private\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -616,8 +616,8 @@ exports[`Autograder renders private testcases with different statuses correctly 
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong private\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -639,7 +639,7 @@ exports[`Autograder renders private testcases with different statuses correctly 
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
+            </SideContentTestcaseCard>
           </div>
         </div>
       </div>
@@ -772,7 +772,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                 </Blueprint3.Icon>
               </div>
             </div>
-            <SideContentAutograderCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            <SideContentTestcaseCard index={0} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard correct\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -794,8 +794,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={1} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -817,8 +817,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={2} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard correct\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -840,8 +840,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={3} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -863,8 +863,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
-            <SideContentAutograderCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
+            </SideContentTestcaseCard>
+            <SideContentTestcaseCard index={4} testcase={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
               <div className=\\"AutograderCard wrong\\">
                 <Blueprint3.Card className=\\"bp3-interactive\\" elevation={1} onClick={[Function (anonymous)]} interactive={false}>
                   <div className=\\"bp3-card bp3-elevation-1 bp3-interactive\\" onClick={[Function (anonymous)]}>
@@ -886,7 +886,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
                   </div>
                 </Blueprint3.Card>
               </div>
-            </SideContentAutograderCard>
+            </SideContentTestcaseCard>
           </div>
         </div>
       </div>
