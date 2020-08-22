@@ -8,8 +8,6 @@ import {
   defaultGoalProgress,
   GoalDefinition
 } from '../../../features/achievement/AchievementTypes';
-import { achievementTemplate } from '../control/achievementEditor/AchievementTemplate';
-import { goalDefinitionTemplate, goalTemplate } from '../control/goalEditor/GoalTemplate';
 import { isExpired } from './DateHelper';
 
 /**
@@ -100,7 +98,7 @@ class AchievementInferencer {
    * @param id Achievement Id
    */
   public getAchievement(id: number) {
-    return this.nodeList.has(id) ? this.nodeList.get(id)!.achievement : achievementTemplate;
+    return this.nodeList.get(id)!.achievement;
   }
 
   /**
@@ -109,7 +107,7 @@ class AchievementInferencer {
    * @param id Goal Id
    */
   public getGoal(id: number) {
-    return this.goalList.has(id) ? this.goalList.get(id)! : goalTemplate;
+    return this.goalList.get(id)!;
   }
 
   /**
@@ -118,9 +116,7 @@ class AchievementInferencer {
    * @param id Goal Id
    */
   public getGoalDefinition(id: number) {
-    return this.goalList.has(id)
-      ? (this.goalList.get(id)! as GoalDefinition)
-      : goalDefinitionTemplate;
+    return this.goalList.get(id)! as GoalDefinition;
   }
 
   /**
