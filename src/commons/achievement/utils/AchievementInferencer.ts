@@ -93,12 +93,26 @@ class AchievementInferencer {
   }
 
   /**
+   * Returns true if achievement exists
+   */
+  public hasAchievement(id: number) {
+    return this.nodeList.has(id);
+  }
+
+  /**
    * Returns the AchievementItem
    *
    * @param id Achievement Id
    */
   public getAchievement(id: number) {
     return this.nodeList.get(id)!.achievement;
+  }
+
+  /**
+   * Returns true if goal exists
+   */
+  public hasGoal(id: number) {
+    return this.goalList.has(id);
   }
 
   /**
@@ -139,7 +153,7 @@ class AchievementInferencer {
 
     // finally, process the nodeList
     this.processNodes();
-    this.normalizePositions();
+    this.normalizePositions(achievement.id, achievement.position);
 
     return newId;
   }
@@ -614,6 +628,9 @@ class AchievementInferencer {
       .filter(achievement => achievement.isTask)
       .sort((taskA, taskB) => taskA.position - taskB.position)
       .forEach(sortedTask => (sortedTask.position = newPosition++));
+    this.getAllAchievements()
+      .filter(achievement => !achievement.isTask)
+      .forEach(nonTask => (nonTask.position = 0));
 
     // If some achievement got misplaced at the anchorPosition, swap it
     // back with the anchor achievement

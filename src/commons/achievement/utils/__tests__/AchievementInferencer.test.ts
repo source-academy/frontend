@@ -101,6 +101,166 @@ describe('Achievement Inferencer Constructor', () => {
   });
 });
 
+describe('Achievement Setter', () => {
+  const testAchievement1: AchievementItem = {
+    ...testAchievement,
+    id: 1,
+    title: 'Test Achievement 1',
+    prerequisiteIds: [2, 2, 3, 3, 3, 4],
+    goalIds: [1, 2, 2, 1]
+  };
+
+  const testGoal1: AchievementGoal = {
+    ...testGoal,
+    id: 1,
+    text: 'Test Goal 1'
+  };
+
+  const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+
+  test('Insert new achievement', () => {
+    // Before insertion
+    expect(inferencer.getAllAchievements().length).toBe(mockAchievements.length);
+    expect(inferencer.getIdByTitle('Test Achievement 1')).toBeUndefined();
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+
+    // After insertion
+    expect(inferencer.getAllAchievements().length).toBe(mockAchievements.length + 1);
+    expect(inferencer.getAchievement(1)).toBe(mockAchievements[1]);
+    expect(inferencer.getAchievement(newId)).toBe(testAchievement1);
+    expect(inferencer.getTitleById(newId)).toBe('Test Achievement 1');
+    expect(inferencer.getIdByTitle('Test Achievement 1')).toBe(newId);
+    expect(inferencer.getAchievement(newId).prerequisiteIds).toEqual([2, 3, 4]);
+    expect(inferencer.getAchievement(newId).goalIds).toEqual([1, 2]);
+  });
+
+  test('Insert new goal definition', () => {
+    // Before insertion
+    expect(inferencer.getAllGoals().length).toBe(mockGoals.length);
+    expect(inferencer.getIdByText('Test Goal 1')).toBeUndefined();
+
+    const newId = inferencer.insertGoalDefinition(testGoal1);
+
+    // After insertion
+    expect(inferencer.getAllGoals().length).toBe(mockGoals.length + 1);
+    expect(inferencer.getGoalDefinition(1)).toBe(mockGoals[1]);
+    expect(inferencer.getGoalDefinition(newId)).toEqual(testGoal1);
+    expect(inferencer.getTextById(newId)).toBe('Test Goal 1');
+    expect(inferencer.getIdByText('Test Goal 1')).toBe(newId);
+  });
+
+  test('Modify achievement', () => {
+    const newId = inferencer.insertAchievement(testAchievement1);
+    const testAchievement2: AchievementItem = {
+      ...testAchievement,
+      id: newId,
+      title: 'Test Achievement 2'
+    };
+
+    // Before modification
+    expect(inferencer.getAchievement(newId)).toBe(testAchievement1);
+    expect(inferencer.getTitleById(newId)).toBe('Test Achievement 1');
+    expect(inferencer.getIdByTitle('Test Achievement 1')).toBe(newId);
+
+    inferencer.modifyAchievement(testAchievement2);
+
+    // After modification
+    expect(inferencer.getAchievement(newId)).toBe(testAchievement2);
+    expect(inferencer.getTitleById(newId)).toBe('Test Achievement 2');
+    expect(inferencer.getIdByTitle('Test Achievement 2')).toBe(newId);
+  });
+
+  test('Modify goal definition', () => {
+    const newId = inferencer.insertGoalDefinition(testGoal1);
+    const testGoal2: AchievementGoal = {
+      ...testGoal,
+      id: newId,
+      text: 'Test Goal 2'
+    };
+
+    // Before modification
+    expect(inferencer.getGoalDefinition(newId)).toEqual(testGoal1);
+    expect(inferencer.getTextById(newId)).toBe('Test Goal 1');
+    expect(inferencer.getIdByText('Test Goal 1')).toBe(newId);
+
+    inferencer.modifyGoalDefinition(testGoal2);
+
+    // After modification
+    expect(inferencer.getGoalDefinition(newId)).toEqual(testGoal2);
+    expect(inferencer.getTextById(newId)).toBe('Test Goal 2');
+    expect(inferencer.getIdByText('Test Goal 2')).toBe(newId);
+  });
+
+  test('Remove achievement', () => {
+    const { title } = inferencer.getAchievement(2);
+
+    // Before removal
+    expect(inferencer.hasAchievement(2)).toBeTruthy();
+    expect(
+      inferencer
+        .getAllAchievements()
+        .reduce(
+          (hasPrereq, achievement) =>
+            achievement.prerequisiteIds.find(id => id === 2) !== undefined || hasPrereq,
+          false
+        )
+    ).toBeTruthy();
+    expect(inferencer.getTitleById(2)).toBe(title);
+    expect(inferencer.getIdByTitle(title)).toBe(2);
+
+    inferencer.removeAchievement(2);
+
+    // After removal
+    expect(inferencer.hasAchievement(2)).toBeFalsy();
+    expect(
+      inferencer
+        .getAllAchievements()
+        .reduce(
+          (hasPrereq, achievement) =>
+            achievement.prerequisiteIds.find(id => id === 2) !== undefined || hasPrereq,
+          false
+        )
+    ).toBeFalsy();
+    expect(inferencer.getTitleById(2)).toBeUndefined();
+    expect(inferencer.getIdByTitle(title)).toBeUndefined();
+  });
+
+  test('Remove goal definition', () => {
+    const { text } = inferencer.getGoalDefinition(2);
+
+    // Before removal
+    expect(inferencer.hasGoal(2)).toBeTruthy();
+    expect(
+      inferencer
+        .getAllAchievements()
+        .reduce(
+          (hasGoal, achievement) =>
+            achievement.goalIds.find(id => id === 2) !== undefined || hasGoal,
+          false
+        )
+    ).toBeTruthy();
+    expect(inferencer.getTextById(2)).toBe(text);
+    expect(inferencer.getIdByText(text)).toBe(2);
+
+    inferencer.removeGoalDefinition(2);
+
+    // After removal
+    expect(inferencer.hasGoal(2)).toBeFalsy();
+    expect(
+      inferencer
+        .getAllAchievements()
+        .reduce(
+          (hasGoal, achievement) =>
+            achievement.goalIds.find(id => id === 2) !== undefined || hasGoal,
+          false
+        )
+    ).toBeFalsy();
+    expect(inferencer.getTextById(2)).toBeUndefined();
+    expect(inferencer.getIdByText(text)).toBeUndefined();
+  });
+});
+
 describe('Achievement Inferencer Getter', () => {
   const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
@@ -429,5 +589,106 @@ describe('Achievement Status', () => {
     expect(inferencer.getStatus(4)).toBe(AchievementStatus.ACTIVE);
 
     expect(inferencer.getStatus(2)).toBe(AchievementStatus.EXPIRED);
+  });
+});
+
+describe('Achievement Position', () => {
+  const listPositions = () =>
+    inferencer
+      .getAllAchievements()
+      .filter(achievement => achievement.position !== 0)
+      .map(achievement => achievement.position)
+      .sort((a, b) => a - b);
+  const mockPositions = [1, 2, 3, 4, 5, 6];
+
+  const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
+
+  test('Mock achievement positions', () => {
+    expect(listPositions()).toEqual(mockPositions);
+  });
+
+  test('Insert non-task', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: false };
+
+    inferencer.insertAchievement(testAchievement1);
+
+    expect(listPositions()).toEqual(mockPositions);
+  });
+
+  test('Insert task', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: true };
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+
+    expect(inferencer.getAchievement(newId).position).toBe(1);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
+
+    inferencer.removeAchievement(newId);
+  });
+
+  test('Insert task with anchor position', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: true, position: 3 };
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+
+    expect(inferencer.getAchievement(newId).position).toBe(3);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
+
+    inferencer.removeAchievement(newId);
+  });
+
+  test('Modify task with anchor position', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: true, position: 3 };
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+
+    inferencer.modifyAchievement({ ...testAchievement1, position: 2 });
+    expect(inferencer.getAchievement(newId).position).toBe(2);
+
+    inferencer.modifyAchievement({ ...testAchievement1, position: 7 });
+    expect(inferencer.getAchievement(newId).position).toBe(7);
+
+    inferencer.modifyAchievement({ ...testAchievement1, position: 10 });
+    expect(inferencer.getAchievement(newId).position).toBe(7);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
+
+    inferencer.modifyAchievement({ ...testAchievement1, isTask: false, position: 0 });
+    expect(inferencer.getAchievement(newId).position).toBe(0);
+    expect(listPositions()).toEqual(mockPositions);
+
+    inferencer.removeAchievement(newId);
+  });
+
+  test('Remove task', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: true, position: 4 };
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+
+    //Before removal
+    expect(inferencer.getAchievement(newId).position).toBe(4);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
+
+    inferencer.removeAchievement(newId);
+
+    //After removal
+    expect(listPositions()).toEqual(mockPositions);
+  });
+
+  test('Remove non-task', () => {
+    const testAchievement1: AchievementItem = { ...testAchievement, isTask: true, position: 4 };
+    const testAchievement2: AchievementItem = { ...testAchievement, id: 1 };
+
+    const newId = inferencer.insertAchievement(testAchievement1);
+    inferencer.modifyAchievement(testAchievement2);
+
+    //Before removal
+    expect(inferencer.getAchievement(newId).position).toBe(4);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
+
+    inferencer.removeAchievement(1);
+
+    //After removal
+    expect(inferencer.getAchievement(newId).position).toBe(4);
+    expect(listPositions()).toEqual([...mockPositions, 7]);
   });
 });
