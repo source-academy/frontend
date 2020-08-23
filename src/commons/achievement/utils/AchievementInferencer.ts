@@ -514,7 +514,8 @@ class AchievementInferencer {
   /**
    * Set the node's display deadline by comparing with all descendants' deadlines
    *
-   * Note: display deadline is the closest unexpired deadline of all descendants
+   * Displays the closest unexpired deadline of all descendants. If none (e.g. descendant
+   * deadlines are expired or undefined), then display the node's own deadline
    *
    * @param node the AchievementNode
    */

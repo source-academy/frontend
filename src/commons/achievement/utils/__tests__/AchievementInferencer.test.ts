@@ -39,35 +39,35 @@ const testGoal: AchievementGoal = {
 };
 
 describe('Achievement Inferencer Constructor', () => {
-  test('Accepts empty achievements and goals', () => {
+  test('Empty achievements and goals', () => {
     const inferencer = new AchievementInferencer([], []);
 
     expect(inferencer.getAllAchievements()).toEqual([]);
     expect(inferencer.getAllGoals()).toEqual([]);
   });
 
-  test('Accepts non-empty achievements and empty goals', () => {
+  test('Non-empty achievements and empty goals', () => {
     const inferencer = new AchievementInferencer([testAchievement], []);
 
     expect(inferencer.getAllAchievements()).toEqual([testAchievement]);
     expect(inferencer.getAllGoals()).toEqual([]);
   });
 
-  test('Accepts empty achievements and non-empty goals', () => {
+  test('Empty achievements and non-empty goals', () => {
     const inferencer = new AchievementInferencer([], [testGoal]);
 
     expect(inferencer.getAllAchievements()).toEqual([]);
     expect(inferencer.getAllGoals()).toEqual([testGoal]);
   });
 
-  test('Accepts non-empty achievements and non-empty goals', () => {
+  test('Non-empty achievements and non-empty goals', () => {
     const inferencer = new AchievementInferencer(mockAchievements, mockGoals);
 
     expect(inferencer.getAllAchievements()).toEqual(mockAchievements);
     expect(inferencer.getAllGoals()).toEqual(mockGoals);
   });
 
-  describe('Expected Overlapping ID Behaviors', () => {
+  describe('Overlapping IDs', () => {
     const testAchievement1: AchievementItem = { ...testAchievement, id: 1 };
     const testAchievement2: AchievementItem = { ...testAchievement, id: 2 };
     const testAchievement3: AchievementItem = { ...testAchievement, id: 2 };
@@ -146,11 +146,7 @@ describe('Achievement Inferencer Getter', () => {
   });
 
   test('List prerequisite goals', () => {
-    const testAchievement1: AchievementItem = {
-      ...testAchievement,
-      id: 1,
-      prerequisiteIds: [2]
-    };
+    const testAchievement1: AchievementItem = { ...testAchievement, id: 1, prerequisiteIds: [2] };
     const testAchievement2: AchievementItem = { ...testAchievement, id: 2, goalIds: [2, 1] };
 
     const testGoal1: AchievementGoal = { ...testGoal, id: 1 };
@@ -178,19 +174,19 @@ describe('Achievement ID to Title', () => {
 
   const inferencer = new AchievementInferencer([testAchievement1], []);
 
-  test('Returns undefined for non-existing ID', () => {
+  test('Non-existing achievement ID', () => {
     expect(inferencer.getTitleById(1)).toBeUndefined();
   });
 
-  test('Returns achievement title for existing ID', () => {
+  test('Existing achievement ID', () => {
     expect(inferencer.getTitleById(achievementId)).toBe(achievementTitle);
   });
 
-  test('Returns undefined for non-existing achievement title', () => {
+  test('Non-existing achievement title', () => {
     expect(inferencer.getIdByTitle('IUisL0v3')).toBeUndefined();
   });
 
-  test('Returns ID for existing achievement title', () => {
+  test('Existing achievement title', () => {
     expect(inferencer.getIdByTitle(achievementTitle)).toBe(achievementId);
   });
 });
@@ -202,29 +198,25 @@ describe('Goal ID to Text', () => {
 
   const inferencer = new AchievementInferencer([], [testGoal1]);
 
-  test('Returns undefined for non-existing ID', () => {
+  test('Non-existing goal ID', () => {
     expect(inferencer.getTextById(1)).toBeUndefined();
   });
 
-  test('Returns goal text for existing ID', () => {
+  test('Existing goal ID', () => {
     expect(inferencer.getTextById(goalId)).toBe(goalText);
   });
 
-  test('Returns undefined for non-existing goal text', () => {
+  test('Non-existing goal text', () => {
     expect(inferencer.getIdByText('IUisL0v3')).toBeUndefined();
   });
 
-  test('Returns ID for existing goal text', () => {
+  test('Existing goal text', () => {
     expect(inferencer.getIdByText(goalText)).toBe(goalId);
   });
 });
 
 describe('Achievement Prerequisite System', () => {
-  const testAchievement1: AchievementItem = {
-    ...testAchievement,
-    id: 1,
-    prerequisiteIds: [2, 3]
-  };
+  const testAchievement1: AchievementItem = { ...testAchievement, id: 1, prerequisiteIds: [2, 3] };
   const testAchievement2: AchievementItem = { ...testAchievement, id: 2 };
   const testAchievement3: AchievementItem = { ...testAchievement, id: 3, prerequisiteIds: [4] };
   const testAchievement4: AchievementItem = { ...testAchievement, id: 4, prerequisiteIds: [5] };
@@ -290,24 +282,107 @@ describe('Achievement XP System', () => {
     [testGoal1, testGoal2, testGoal3]
   );
 
-  test('Returns XP earned from an achievement', () => {
+  test('XP earned from an achievement', () => {
     expect(inferencer.getAchievementXp(1)).toBe(120);
     expect(inferencer.getAchievementXp(2)).toBe(0);
   });
 
-  test('Returns Max XP earned from an achievement', () => {
+  test('Max XP earned from an achievement', () => {
     expect(inferencer.getAchievementMaxXp(1)).toBe(200);
     expect(inferencer.getAchievementMaxXp(2)).toBe(0);
   });
 
-  test('Returns Total XP earned from all goals', () => {
+  test('Total XP earned from all goals', () => {
     expect(inferencer.getTotalXp()).toBe(123);
   });
 
-  test('Returns progress frac from an achievement', () => {
+  test('Progress frac from an achievement', () => {
     expect(inferencer.getProgressFrac(1)).toBeCloseTo(120 / 200);
     expect(inferencer.getProgressFrac(2)).toBe(0);
   });
 });
 
-describe('Achievement Deadline & Status System', () => {});
+describe('Achievement Display Deadline', () => {
+  const expiredDeadline = new Date(1920, 1, 1);
+  const closerExpiredDeadline = new Date(2020, 1, 1);
+  const closestUnexpiredDeadline = new Date(2070, 1, 1);
+  const closerUnexpiredDeadline = new Date(2120, 1, 1);
+  const unexpiredDeadline = new Date(2220, 1, 1);
+
+  const testAchievement1: AchievementItem = { ...testAchievement, id: 1, prerequisiteIds: [2, 5] };
+  const testAchievement2: AchievementItem = { ...testAchievement, id: 2, prerequisiteIds: [3, 4] };
+  const testAchievement3: AchievementItem = { ...testAchievement, id: 3 };
+  const testAchievement4: AchievementItem = { ...testAchievement, id: 4 };
+  const testAchievement5: AchievementItem = { ...testAchievement, id: 5 };
+
+  test('All deadlines undefined', () => {
+    const inferencer = new AchievementInferencer(
+      [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
+      []
+    );
+
+    expect(inferencer.getDisplayDeadline(1)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(2)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(3)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(4)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(5)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(101)).toBeUndefined();
+  });
+
+  test('All deadlines expired', () => {
+    testAchievement1.deadline = expiredDeadline;
+    testAchievement2.deadline = expiredDeadline;
+    testAchievement3.deadline = expiredDeadline;
+    testAchievement4.deadline = expiredDeadline;
+    testAchievement5.deadline = expiredDeadline;
+
+    const inferencer = new AchievementInferencer(
+      [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
+      []
+    );
+
+    expect(inferencer.getDisplayDeadline(1)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(2)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(3)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(4)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(5)).toEqual(expiredDeadline);
+  });
+
+  test('Display own deadline if no unexpired descendant deadline', () => {
+    testAchievement1.deadline = expiredDeadline;
+    testAchievement2.deadline = undefined;
+    testAchievement3.deadline = expiredDeadline;
+    testAchievement4.deadline = undefined;
+    testAchievement5.deadline = closerExpiredDeadline;
+
+    const inferencer = new AchievementInferencer(
+      [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
+      []
+    );
+
+    expect(inferencer.getDisplayDeadline(1)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(2)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(3)).toEqual(expiredDeadline);
+    expect(inferencer.getDisplayDeadline(4)).toBeUndefined();
+    expect(inferencer.getDisplayDeadline(5)).toEqual(closerExpiredDeadline);
+  });
+
+  test('Display closest unexpired deadline', () => {
+    testAchievement1.deadline = undefined;
+    testAchievement2.deadline = expiredDeadline;
+    testAchievement3.deadline = closestUnexpiredDeadline;
+    testAchievement4.deadline = unexpiredDeadline;
+    testAchievement5.deadline = closerUnexpiredDeadline;
+
+    const inferencer = new AchievementInferencer(
+      [testAchievement1, testAchievement2, testAchievement3, testAchievement4, testAchievement5],
+      []
+    );
+
+    expect(inferencer.getDisplayDeadline(1)).toEqual(closestUnexpiredDeadline);
+    expect(inferencer.getDisplayDeadline(2)).toEqual(closestUnexpiredDeadline);
+    expect(inferencer.getDisplayDeadline(3)).toEqual(closestUnexpiredDeadline);
+    expect(inferencer.getDisplayDeadline(4)).toEqual(unexpiredDeadline);
+    expect(inferencer.getDisplayDeadline(5)).toEqual(closerUnexpiredDeadline);
+  });
+});
