@@ -583,7 +583,7 @@ class AchievementInferencer {
    * @param node the AchievementNode
    */
   private generateStatus(node: AchievementNode) {
-    const { deadline, goalIds } = node.achievement;
+    const { goalIds } = node.achievement;
 
     const achievementCompleted =
       goalIds.length !== 0 &&
@@ -591,15 +591,7 @@ class AchievementInferencer {
         .map(goalId => this.getGoal(goalId).completed)
         .reduce((result, goalCompleted) => result && goalCompleted, true);
 
-    const descendantDeadlines = [];
-    for (const childId of node.descendant) {
-      const childDeadline = this.getAchievement(childId).deadline;
-      descendantDeadlines.push(childDeadline);
-    }
-    const hasUnexpiredDeadline = descendantDeadlines.reduce(
-      (result, deadline) => result || !isExpired(deadline),
-      !isExpired(deadline)
-    );
+    const hasUnexpiredDeadline = !isExpired(node.displayDeadline);
 
     node.status = achievementCompleted
       ? AchievementStatus.COMPLETED

@@ -3,6 +3,7 @@ import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
+  AchievementStatus,
   GoalType
 } from 'src/features/achievement/AchievementTypes';
 
@@ -384,5 +385,49 @@ describe('Achievement Display Deadline', () => {
     expect(inferencer.getDisplayDeadline(3)).toEqual(closestUnexpiredDeadline);
     expect(inferencer.getDisplayDeadline(4)).toEqual(unexpiredDeadline);
     expect(inferencer.getDisplayDeadline(5)).toEqual(closerUnexpiredDeadline);
+  });
+});
+
+describe('Achievement Status', () => {
+  const fullyCompleted: AchievementItem = { ...testAchievement, id: 1, goalIds: [1, 2] };
+  const partiallyCompleted: AchievementItem = { ...testAchievement, id: 2, goalIds: [1, 3] };
+  const notCompleted: AchievementItem = { ...testAchievement, id: 3, goalIds: [3] };
+  const emptyGoal: AchievementItem = { ...testAchievement, id: 4, goalIds: [] };
+
+  const testGoal1: AchievementGoal = { ...testGoal, id: 1, completed: true };
+  const testGoal2: AchievementGoal = { ...testGoal, id: 2, completed: true };
+  const testGoal3: AchievementGoal = { ...testGoal, id: 3, completed: false };
+
+  test('Completed status', () => {
+    const inferencer = new AchievementInferencer(
+      [fullyCompleted, partiallyCompleted, notCompleted, emptyGoal],
+      [testGoal1, testGoal2, testGoal3]
+    );
+
+    expect(inferencer.getStatus(1)).toBe(AchievementStatus.COMPLETED);
+    expect(inferencer.getStatus(2)).not.toBe(AchievementStatus.COMPLETED);
+    expect(inferencer.getStatus(3)).not.toBe(AchievementStatus.COMPLETED);
+    expect(inferencer.getStatus(4)).not.toBe(AchievementStatus.COMPLETED);
+  });
+
+  test('Active & Expired status', () => {
+    const expiredDeadline = new Date(1920, 1, 1);
+    const unexpiredDeadline = new Date(2220, 1, 1);
+
+    const deadlineExpired: AchievementItem = { ...partiallyCompleted, deadline: expiredDeadline };
+    const deadlineUnexpired: AchievementItem = { ...notCompleted, deadline: unexpiredDeadline };
+    const noDeadline: AchievementItem = { ...emptyGoal, deadline: undefined };
+
+    const inferencer = new AchievementInferencer(
+      [fullyCompleted, deadlineExpired, deadlineUnexpired, noDeadline],
+      [testGoal1, testGoal2, testGoal3]
+    );
+
+    expect(inferencer.getStatus(1)).not.toBe(AchievementStatus.ACTIVE);
+    expect(inferencer.getStatus(2)).not.toBe(AchievementStatus.ACTIVE);
+    expect(inferencer.getStatus(3)).toBe(AchievementStatus.ACTIVE);
+    expect(inferencer.getStatus(4)).toBe(AchievementStatus.ACTIVE);
+
+    expect(inferencer.getStatus(2)).toBe(AchievementStatus.EXPIRED);
   });
 });
