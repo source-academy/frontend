@@ -394,6 +394,7 @@ describe('Achievement Prerequisite System', () => {
     expect(inferencer.isImmediateChild(1, 4)).toBeFalsy();
     expect(inferencer.isImmediateChild(1, 5)).toBeFalsy();
     expect(inferencer.isImmediateChild(1, 101)).toBeFalsy();
+    expect(inferencer.isImmediateChild(101, 1)).toBeFalsy();
   });
 
   test('Get immediate children', () => {
@@ -410,6 +411,7 @@ describe('Achievement Prerequisite System', () => {
     expect(inferencer.isDescendant(1, 4)).toBeTruthy();
     expect(inferencer.isDescendant(1, 5)).toBeTruthy();
     expect(inferencer.isDescendant(1, 101)).toBeFalsy();
+    expect(inferencer.isDescendant(101, 1)).toBeFalsy();
   });
 
   test('Get descendants', () => {
@@ -446,11 +448,13 @@ describe('Achievement XP System', () => {
   test('XP earned from an achievement', () => {
     expect(inferencer.getAchievementXp(1)).toBe(120);
     expect(inferencer.getAchievementXp(2)).toBe(0);
+    expect(inferencer.getAchievementXp(101)).toBe(0);
   });
 
   test('Max XP earned from an achievement', () => {
     expect(inferencer.getAchievementMaxXp(1)).toBe(200);
     expect(inferencer.getAchievementMaxXp(2)).toBe(0);
+    expect(inferencer.getAchievementMaxXp(101)).toBe(0);
   });
 
   test('Total XP earned from all goals', () => {
@@ -460,6 +464,7 @@ describe('Achievement XP System', () => {
   test('Progress frac from an achievement', () => {
     expect(inferencer.getProgressFrac(1)).toBeCloseTo(120 / 200);
     expect(inferencer.getProgressFrac(2)).toBe(0);
+    expect(inferencer.getProgressFrac(101)).toBe(0);
   });
 });
 
@@ -587,6 +592,7 @@ describe('Achievement Status', () => {
     expect(inferencer.getStatus(2)).not.toBe(AchievementStatus.ACTIVE);
     expect(inferencer.getStatus(3)).toBe(AchievementStatus.ACTIVE);
     expect(inferencer.getStatus(4)).toBe(AchievementStatus.ACTIVE);
+    expect(inferencer.getStatus(101)).toBe(AchievementStatus.ACTIVE);
 
     expect(inferencer.getStatus(2)).toBe(AchievementStatus.EXPIRED);
   });
