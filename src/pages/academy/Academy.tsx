@@ -27,7 +27,6 @@ export type StateProps = {
 };
 
 export type OwnProps = {
-  accessToken?: string;
   role: Role;
 };
 
