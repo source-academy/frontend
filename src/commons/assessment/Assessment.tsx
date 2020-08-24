@@ -341,55 +341,56 @@ class Assessment extends React.Component<AssessmentProps, State> {
     index: number,
     renderAttemptButton: boolean,
     renderGradingStatus: boolean
-  ) => (
-    <div key={index}>
-      <Card className="row listing" elevation={Elevation.ONE}>
-        <div className="col-xs-3 listing-picture">
-          <NotificationBadge
-            className="badge"
-            notificationFilter={filterNotificationsByAssessment(overview.id)}
-            large={true}
-          />
-          <img
-            alt="Assessment"
-            className={`cover-image-${overview.status}`}
-            src={overview.coverImage ? overview.coverImage : defaultCoverImage}
-          />
-        </div>
-        <div className="col-xs-9 listing-text">
-          {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
-          <div className="listing-grade">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `Grade: ${overview.grade} / ${overview.maxGrade}`
-                : `Max Grade: ${overview.maxGrade}`}
-            </H6>
+  ) => {
+    const showGrade = overview.gradingStatus === 'graded' || overview.category === 'Path';
+    return (
+      <div key={index}>
+        <Card className="row listing" elevation={Elevation.ONE}>
+          <div className="col-xs-3 listing-picture">
+            <NotificationBadge
+              className="badge"
+              notificationFilter={filterNotificationsByAssessment(overview.id)}
+              large={true}
+            />
+            <img
+              alt="Assessment"
+              className={`cover-image-${overview.status}`}
+              src={overview.coverImage ? overview.coverImage : defaultCoverImage}
+            />
           </div>
-          <div className="listing-xp">
-            <H6>
-              {beforeNow(overview.openAt)
-                ? `XP: ${overview.xp} / ${overview.maxXp}`
-                : `Max XP: ${overview.maxXp}`}
-            </H6>
-          </div>
-          <div className="listing-description">
-            <Markdown content={overview.shortSummary} />
-          </div>
-          <div className="listing-footer">
-            <Text className="listing-due-date">
-              <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
-              {beforeNow(overview.openAt)
-                ? `Due: ${getPrettyDate(overview.closeAt)}`
-                : `Opens at: ${getPrettyDate(overview.openAt)}`}
-            </Text>
-            <div className="listing-button">
-              {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+          <div className="col-xs-9 listing-text">
+            {this.makeOverviewCardTitle(overview, index, renderGradingStatus)}
+            <div className="listing-grade">
+              <H6>
+                {showGrade
+                  ? `Grade: ${overview.grade} / ${overview.maxGrade}`
+                  : `Max Grade: ${overview.maxGrade}`}
+              </H6>
+            </div>
+            <div className="listing-xp">
+              <H6>
+                {showGrade ? `XP: ${overview.xp} / ${overview.maxXp}` : `Max XP: ${overview.maxXp}`}
+              </H6>
+            </div>
+            <div className="listing-description">
+              <Markdown content={overview.shortSummary} />
+            </div>
+            <div className="listing-footer">
+              <Text className="listing-due-date">
+                <Icon className="listing-due-icon" iconSize={12} icon={IconNames.TIME} />
+                {beforeNow(overview.openAt)
+                  ? `Due: ${getPrettyDate(overview.closeAt)}`
+                  : `Opens at: ${getPrettyDate(overview.openAt)}`}
+              </Text>
+              <div className="listing-button">
+                {renderAttemptButton ? this.makeAssessmentInteractButton(overview) : null}
+              </div>
             </div>
           </div>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
+  };
 
   private makeOverviewCardTitle = (
     overview: AssessmentOverview,

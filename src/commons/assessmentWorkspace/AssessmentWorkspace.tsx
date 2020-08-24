@@ -352,6 +352,7 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
+    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const tabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
@@ -373,7 +374,9 @@ class AssessmentWorkspace extends React.Component<
         body: (
           <SideContentAutograder
             testcases={props.editorTestcases}
-            autogradingResults={props.autogradingResults}
+            autogradingResults={
+              isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+            }
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
@@ -381,7 +384,6 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       }
     ];
-    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
       tabs.push({
         label: `Report Card`,
