@@ -809,3 +809,23 @@ function drawCurve(drawMode, curvePosArray) {
 function ShapeDrawn(canvas) {
   this.$canvas = canvas;
 }
+
+/**
+ * compares two Pictures and returns the mean squared error of the pixel intensities.
+ * @param {Picture} picture1
+ * @param {Picture} picture2
+ * @return {number} mse
+ * example: picture_mse(show(heart), show(nova));
+ */
+function picture_mse(picture1, picture2) {
+  var width = picture1.$canvas.width
+  var height = picture1.$canvas.height
+  var data1 = picture1.$canvas.getContext('2d').getImageData(0, 0, width, height).data
+  var data2 = picture2.$canvas.getContext('2d').getImageData(0, 0, width, height).data
+  var sq_err = 0
+  for (var i = 0; i < data1.length; i++) {
+    var err = (data1[i] - data2[i]) / 255
+    sq_err += err * err
+  }
+  return sq_err / data1.length
+}
