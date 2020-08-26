@@ -15,7 +15,9 @@ exports[`EditableAchievementExp component renders correctly 1`] = `
             </svg>
           </span>
         </Blueprint3.Icon>
-        <input type=\\"text\\" placeholder=\\"Enter a number here\\" value=\\"0\\" onChange={[Function: onChange]} className=\\"bp3-input\\" style={{...}} />
+        <AsyncControllableInput type=\\"text\\" placeholder=\\"Enter a number here\\" value=\\"0\\" onChange={[Function: onChange]} className=\\"bp3-input\\" inputRef={[undefined]} style={{...}}>
+          <input type=\\"text\\" placeholder=\\"Enter a number here\\" value=\\"0\\" onChange={[Function (anonymous)]} className=\\"bp3-input\\" style={{...}} onCompositionStart={[Function (anonymous)]} onCompositionEnd={[Function (anonymous)]} />
+        </AsyncControllableInput>
         <span className=\\"bp3-input-action\\">
           <p>
             XP
