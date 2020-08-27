@@ -105,7 +105,8 @@ const curvesLibrary = [
   'alternative_unit_circle', // undocumented
   'full_view_proportional', // undocumented
   'squeeze_full_view', // undocumented
-  'squeeze_rectangular_portion' // undocumented
+  'squeeze_rectangular_portion', // undocumented
+  'picture_mse'
 ];
 
 const soundsLibrary = [

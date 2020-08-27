@@ -35,7 +35,6 @@ export type DispatchProps = {
 };
 
 export type StateProps = {
-  accessToken?: string;
   currentPlaygroundChapter: number;
   currentPlaygroundVariant: Variant;
   role?: Role;
@@ -53,13 +52,13 @@ class Application extends React.Component<ApplicationProps, {}> {
     const fullPaths = Constants.playgroundOnly
       ? null
       : [
-          <Route path="/academy" component={toAcademy(this.props)} key={0} />,
+          <Route path="/academy" render={toAcademy(this.props)} key={0} />,
           <Route
             path={'/mission-control/:assessmentId(-?\\d+)?/:questionId(\\d+)?'}
             render={toIncubator}
             key={1}
           />,
-          <Route path="/achievement" component={toAchievement(this.props)} key={2} />,
+          <Route path="/achievement" render={toAchievement(this.props)} key={2} />,
           <Route path="/login" render={toLogin(this.props)} key={3} />
         ];
 
@@ -98,20 +97,16 @@ class Application extends React.Component<ApplicationProps, {}> {
  *  1. If the user is logged in, render the Academy component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAcademy = (props: ApplicationProps) =>
-  props.accessToken === undefined || props.role === undefined
-    ? () => <Redirect to="/login" />
-    : () => <Academy accessToken={props.accessToken} role={props.role!} />;
+const toAcademy = ({ role }: ApplicationProps) =>
+  role === undefined ? () => <Redirect to="/login" /> : () => <Academy role={role} />;
 
 /**
  * A user routes to /achievement,
  *  1. If the user is logged in, render the Achievement component
  *  2. If the user is not logged in, redirect to /login
  */
-const toAchievement = (props: ApplicationProps) =>
-  props.accessToken === undefined || props.role === undefined
-    ? () => <Redirect to="/login" />
-    : () => <Achievement />;
+const toAchievement = ({ role }: ApplicationProps) =>
+  role === undefined ? () => <Redirect to="/login" /> : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);

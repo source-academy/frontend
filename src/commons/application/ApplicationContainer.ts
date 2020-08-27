@@ -26,7 +26,6 @@ import { externalLibraries, ExternalLibraryName } from './types/ExternalTypes';
  */
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   title: state.application.title,
-  accessToken: state.session.accessToken,
   role: state.session.role,
   name: state.session.name,
   currentPlaygroundChapter: state.workspaces.playground.context.chapter,

@@ -224,7 +224,7 @@ class SourcecastEditor extends React.PureComponent<SourceRecorderEditorProps, {}
             value={this.props.editorValue}
             width="100%"
             setOptions={{
-              fontFamily: "'Inconsolata', monospace"
+              fontFamily: "'Inconsolata', 'Consolas', monospace"
             }}
           />
         </div>

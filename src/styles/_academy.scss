@@ -33,6 +33,19 @@
   }
 }
 
+// Following two CSS declarations are intended to override the default monospace
+// font selected by Firefox on Windows
+.#{$ns}-code-block {
+  font-family: 'Consolas', monospace;
+}
+
+.#{$ns}-running-text {
+  pre,
+  code {
+    font-family: 'Consolas', monospace;
+  }
+}
+
 // Fix excessive margins applied by bp3-running-text style
 .md,
 .markdown-notification {
