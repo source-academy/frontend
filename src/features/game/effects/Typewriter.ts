@@ -31,6 +31,10 @@ export function Typewriter(
   let charPointer = 0;
   let typeWriting: NodeJS.Timeout;
 
+  const clearTyping = () => {
+    typeWriting && clearInterval(typeWriting);
+  };
+
   /* Reset line and type out */
   const changeLine = (message: string) => {
     if (!message) return;
@@ -39,7 +43,7 @@ export function Typewriter(
     textSprite.text = '';
     charPointer = 0;
 
-    typeWriting && clearInterval(typeWriting);
+    clearTyping();
     typeWriting = setInterval(() => {
       textSprite.text += line[charPointer++];
       if (charPointer === line.length) {
@@ -48,7 +52,7 @@ export function Typewriter(
     }, typeWriterInterval);
   };
 
-  return { container: textSprite, changeLine };
+  return { container: textSprite, changeLine, clearTyping };
 }
 
 export default Typewriter;
