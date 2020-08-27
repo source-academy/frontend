@@ -22,19 +22,21 @@ class FsmBrain {
   private stateStack: Array<FsmState>;
   private isTransitioning: boolean;
   private defaultState: FsmState;
+  private changeLimit: number;
 
-  constructor(behaviours: Map<FsmState, FsmBehaviour>, defaultState: FsmState) {
+  constructor(behaviours: Map<FsmState, FsmBehaviour>, defaultState: FsmState, changeLimit = 0.01) {
     this.behaviours = behaviours;
     this.stateStack = new Array<FsmState>();
     this.isTransitioning = false;
     this.defaultState = defaultState;
+    this.changeLimit = changeLimit;
 
     // Start with default state
     this.transitionTo(this.behaviours.get(this.defaultState)!);
   }
 
   public update() {
-    if (this.isTransitioning) return;
+    if (this.isTransitioning || Math.random() > this.changeLimit) return;
 
     const currentState = this.getCurrentState() || Constants.nullInteractionId;
     const currentBehaviour = this.behaviours.get(currentState);
@@ -89,7 +91,13 @@ class FsmBrain {
 export class Pet {
   private fsmBrain: FsmBrain;
 
-  constructor(behaviours: Map<FsmState, FsmBehaviour>, defaultState: FsmState) {
+  constructor(
+    scene: Phaser.Scene,
+    behaviours: Map<FsmState, FsmBehaviour>,
+    defaultState: FsmState,
+    x: number,
+    y: number
+  ) {
     this.fsmBrain = new FsmBrain(behaviours, defaultState);
   }
 
