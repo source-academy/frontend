@@ -18,3 +18,12 @@ exports[`Application renders correctly 1`] = `
   </div>
 </div>"
 `;
+
+exports[`Application shows disabled when in disabled period 1`] = `
+"<div className=\\"Application\\">
+  <NavigationBar handleLogOut={[Function: handleLogOut]} role={[undefined]} name={[undefined]} title=\\"Cadet\\" />
+  <div className=\\"Application__main\\">
+    <Disabled reason=\\"Testing\\" />
+  </div>
+</div>"
+`;
