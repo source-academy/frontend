@@ -1,4 +1,4 @@
-.NotFound {
+.NoPage {
   top: 50px;
   background-size: cover;
   background-image: linear-gradient(
@@ -7,7 +7,7 @@
       rgba(0, 0, 0, 0.6),
       rgba(0, 0, 0, 0.3)
     ),
-    url('#{$images-path}/not_found_background.jpg');
+    url('#{$images-path}/no_page_background.jpg');
   height: 100%;
   width: 100%;
   flex: 1 1 100%;

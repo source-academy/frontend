@@ -1,11 +1,13 @@
 import { Variant } from 'js-slang/dist/types';
 import { decompressFromEncodedURIComponent } from 'lz-string';
+import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 import Achievement from 'src/pages/achievement/AchievementContainer';
 
 import Academy from '../../pages/academy/AcademyContainer';
 import Contributors from '../../pages/contributors/Contributors';
+import Disabled from '../../pages/disabled/Disabled';
 import Login from '../../pages/login/LoginContainer';
 import MissionControlContainer from '../../pages/missionControl/MissionControlContainer';
 import NotFound from '../../pages/notFound/NotFound';
@@ -17,6 +19,7 @@ import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
 import { Role, sourceLanguages } from './ApplicationTypes';
 import { ExternalLibraryName } from './types/ExternalTypes';
+
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
@@ -43,9 +46,34 @@ export type StateProps = {
   currentExternalLibrary: ExternalLibraryName;
 };
 
-class Application extends React.Component<ApplicationProps, {}> {
+interface ApplicationState {
+  disabled: string | boolean;
+}
+
+class Application extends React.Component<ApplicationProps, ApplicationState> {
+  private intervalId: number | undefined;
+
+  public constructor(props: ApplicationProps) {
+    super(props);
+    this.state = { disabled: computeDisabledState() };
+  }
+
   public componentDidMount() {
     parsePlayground(this.props);
+    if (Constants.disablePeriods.length > 0) {
+      this.intervalId = window.setInterval(() => {
+        const disabled = computeDisabledState();
+        if (this.state.disabled !== disabled) {
+          this.setState({ disabled });
+        }
+      }, 5000);
+    }
+  }
+
+  public componentWillUnmount() {
+    if (this.intervalId) {
+      window.clearInterval(this.intervalId);
+    }
   }
 
   public render() {
@@ -71,18 +99,27 @@ class Application extends React.Component<ApplicationProps, {}> {
           title={this.props.title}
         />
         <div className="Application__main">
-          <Switch>
-            <Route path="/playground" component={Playground} />
-            <Route path="/contributors" component={Contributors} />
-            <Route path="/sourcecast" component={SourcecastContainer} />
-            {fullPaths}
-            <Route
-              exact={true}
-              path="/"
-              render={Constants.playgroundOnly ? this.redirectToPlayground : this.redirectToAcademy}
+          {this.state.disabled && (
+            <Disabled
+              reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined}
             />
-            <Route component={NotFound} />
-          </Switch>
+          )}
+          {!this.state.disabled && (
+            <Switch>
+              <Route path="/playground" component={Playground} />
+              <Route path="/contributors" component={Contributors} />
+              <Route path="/sourcecast" component={SourcecastContainer} />
+              {fullPaths}
+              <Route
+                exact={true}
+                path="/"
+                render={
+                  Constants.playgroundOnly ? this.redirectToPlayground : this.redirectToAcademy
+                }
+              />
+              <Route component={NotFound} />
+            </Switch>
+          )}
         </div>
       </div>
     );
@@ -174,5 +211,15 @@ const parseExecTime = (props: RouteComponentProps<{}>) => {
   const execTime = stringParamToInt(time) || 1000;
   return `${execTime < 1000 ? 1000 : execTime}`;
 };
+
+function computeDisabledState() {
+  const now = moment();
+  for (const { start, end, reason } of Constants.disablePeriods) {
+    if (start.isBefore(now) && end.isAfter(now)) {
+      return reason || true;
+    }
+  }
+  return false;
+}
 
 export default Application;
