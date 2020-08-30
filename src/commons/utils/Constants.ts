@@ -43,19 +43,21 @@ for (let i = 1; ; ++i) {
 
 const disablePeriods: Array<{ start: Moment; end: Moment; reason?: string }> = [];
 
-for (let i = 1; ; ++i) {
-  const startStr = process.env[`REACT_APP_DISABLE${i}_START`];
-  const endStr = process.env[`REACT_APP_DISABLE${i}_END`];
-  if (!startStr || !endStr) {
-    break;
+if (!test) {
+  for (let i = 1; ; ++i) {
+    const startStr = process.env[`REACT_APP_DISABLE${i}_START`];
+    const endStr = process.env[`REACT_APP_DISABLE${i}_END`];
+    if (!startStr || !endStr) {
+      break;
+    }
+    const reason = process.env[`REACT_APP_DISABLE${i}_REASON`];
+    const start = moment(startStr);
+    const end = moment(endStr);
+    if (end.isBefore(start) || moment().isAfter(end)) {
+      continue;
+    }
+    disablePeriods.push({ start, end, reason });
   }
-  const reason = process.env[`REACT_APP_DISABLE${i}_REASON`];
-  const start = moment(startStr);
-  const end = moment(endStr);
-  if (end.isBefore(start) || moment().isAfter(end)) {
-    continue;
-  }
-  disablePeriods.push({ start, end, reason });
 }
 
 export enum Links {
