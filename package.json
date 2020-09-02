@@ -84,7 +84,7 @@
     "@types/gapi": "^0.0.39",
     "@types/gapi.auth2": "^0.0.52",
     "@types/gapi.client": "^1.0.3",
-    "@types/gapi.client.drive": "^3.0.8",
+    "@types/gapi.client.drive": "^3.0.9",
     "@types/google.picker": "^0.0.34",
     "@types/invariant": "^2.2.33",
     "@types/jest": "^26.0.9",
