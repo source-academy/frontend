@@ -77,6 +77,7 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
   }
 
   public render() {
+    const loginPath = <Route path="/login" render={toLogin(this.props)} key="login" />;
     const fullPaths = Constants.playgroundOnly
       ? null
       : [
@@ -87,8 +88,9 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
             key={1}
           />,
           <Route path="/achievement" render={toAchievement(this.props)} key={2} />,
-          <Route path="/login" render={toLogin(this.props)} key={3} />
+          loginPath
         ];
+    const disabled = !['staff', 'admin'].includes(this.props.role!) && this.state.disabled;
 
     return (
       <div className="Application">
@@ -99,12 +101,20 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
           title={this.props.title}
         />
         <div className="Application__main">
-          {this.state.disabled && (
-            <Disabled
-              reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined}
-            />
+          {disabled && (
+            <Switch>
+              {!Constants.playgroundOnly && loginPath}
+              {/* if not logged in, and we're not a playground-only deploy, then redirect to login (for staff) */}
+              {!this.props.role && !Constants.playgroundOnly
+                ? [
+                    <Route path="/academy" render={redirectToLogin} key={0} />,
+                    <Route exact={true} path="/" render={redirectToLogin} key={1} />
+                  ]
+                : []}
+              <Route render={this.renderDisabled.bind(this)} />
+            </Switch>
           )}
-          {!this.state.disabled && (
+          {!disabled && (
             <Switch>
               <Route path="/playground" component={Playground} />
               <Route path="/contributors" component={Contributors} />
@@ -113,9 +123,7 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
               <Route
                 exact={true}
                 path="/"
-                render={
-                  Constants.playgroundOnly ? this.redirectToPlayground : this.redirectToAcademy
-                }
+                render={Constants.playgroundOnly ? redirectToPlayground : redirectToAcademy}
               />
               <Route component={NotFound} />
             </Switch>
@@ -125,9 +133,14 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
     );
   }
 
-  private redirectToPlayground = () => <Redirect to="/playground" />;
-  private redirectToAcademy = () => <Redirect to="/academy" />;
+  private renderDisabled = () => (
+    <Disabled reason={typeof this.state.disabled === 'string' ? this.state.disabled : undefined} />
+  );
 }
+
+const redirectToPlayground = () => <Redirect to="/playground" />;
+const redirectToAcademy = () => <Redirect to="/academy" />;
+const redirectToLogin = () => <Redirect to="/login" />;
 
 /**
  * A user routes to /academy,
@@ -135,7 +148,7 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
  *  2. If the user is not logged in, redirect to /login
  */
 const toAcademy = ({ role }: ApplicationProps) =>
-  role === undefined ? () => <Redirect to="/login" /> : () => <Academy role={role} />;
+  role === undefined ? redirectToLogin : () => <Academy role={role} />;
 
 /**
  * A user routes to /achievement,
@@ -143,7 +156,7 @@ const toAcademy = ({ role }: ApplicationProps) =>
  *  2. If the user is not logged in, redirect to /login
  */
 const toAchievement = ({ role }: ApplicationProps) =>
-  role === undefined ? () => <Redirect to="/login" /> : () => <Achievement />;
+  role === undefined ? redirectToLogin : () => <Achievement />;
 
 const toLogin = (props: ApplicationProps) => () => {
   const qstr = parseQuery(props.location.search);
