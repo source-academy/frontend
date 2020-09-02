@@ -55,7 +55,6 @@ import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
-  ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_SILENT,
@@ -458,16 +457,6 @@ export default function* WorkspaceSaga(): SagaIterator {
       return true;
     }
   }
-
-  /**
-   * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
-   * To abstract this to other libraries, add a call to the all() effect.
-   */
-  yield takeEvery(ENSURE_LIBRARIES_LOADED, function* (
-    action: ReturnType<typeof actions.ensureLibrariesLoaded>
-  ) {
-    yield* checkWebGLAvailable();
-  });
 
   /**
    * Handles the side effect of resetting the WebGL context when context is reset.

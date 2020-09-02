@@ -1,5 +1,3 @@
-import { Variant } from 'js-slang/dist/types';
-import { decompressFromEncodedURIComponent } from 'lz-string';
 import moment from 'moment';
 import * as React from 'react';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
@@ -15,35 +13,19 @@ import Playground from '../../pages/playground/PlaygroundContainer';
 import SourcecastContainer from '../../pages/sourcecast/SourcecastContainer';
 import NavigationBar from '../navigationBar/NavigationBar';
 import Constants from '../utils/Constants';
-import { stringParamToInt } from '../utils/ParamParseHelper';
 import { parseQuery } from '../utils/QueryHelper';
-import { Role, sourceLanguages } from './ApplicationTypes';
-import { ExternalLibraryName } from './types/ExternalTypes';
+import { Role } from './ApplicationTypes';
 
 export type ApplicationProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
 export type DispatchProps = {
-  handleClearContext: (
-    chapter: number,
-    variant: Variant,
-    externalLibraryName: ExternalLibraryName,
-    shouldInitLibrary: boolean
-  ) => void;
-  handleEditorValueChange: (val: string) => void;
-  handleEditorUpdateBreakpoints: (breakpoints: string[]) => void;
-  handleEnsureLibrariesLoaded: () => void;
   handleLogOut: () => void;
-  handleExternalLibrarySelect: (external: ExternalLibraryName) => void;
-  handleSetExecTime: (execTime: string) => void;
 };
 
 export type StateProps = {
-  currentPlaygroundChapter: number;
-  currentPlaygroundVariant: Variant;
   role?: Role;
   title: string;
   name?: string;
-  currentExternalLibrary: ExternalLibraryName;
 };
 
 interface ApplicationState {
@@ -59,7 +41,6 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
   }
 
   public componentDidMount() {
-    parsePlayground(this.props);
     if (Constants.disablePeriods.length > 0) {
       this.intervalId = window.setInterval(() => {
         const disabled = computeDisabledState();
@@ -173,57 +154,7 @@ const toLogin = (props: ApplicationProps) => () => {
   );
 };
 
-const parsePlayground = (props: ApplicationProps) => {
-  const prgrm = parsePrgrm(props);
-  const chapter = parseChapter(props) || props.currentPlaygroundChapter;
-  const variant = parseVariant(props, chapter) || props.currentPlaygroundVariant;
-  const externalLibraryName = parseExternalLibrary(props) || props.currentExternalLibrary;
-  const execTime = parseExecTime(props);
-  if (prgrm) {
-    props.handleEditorValueChange(prgrm);
-    props.handleEnsureLibrariesLoaded();
-    props.handleClearContext(chapter, variant, externalLibraryName, true);
-    props.handleExternalLibrarySelect(externalLibraryName);
-    props.handleSetExecTime(execTime);
-  }
-};
-
-const toIncubator = (routerProps: RouteComponentProps<any>) => <MissionControlContainer />;
-
-const parsePrgrm = (props: RouteComponentProps<{}>) => {
-  const qsParsed = parseQuery(props.location.hash);
-  // legacy support
-  const program = qsParsed.lz !== undefined ? qsParsed.lz : qsParsed.prgrm;
-  return program !== undefined ? decompressFromEncodedURIComponent(program) : undefined;
-};
-
-const parseChapter = (props: RouteComponentProps<{}>) => {
-  return stringParamToInt(parseQuery(props.location.hash).chap) || undefined;
-};
-
-const parseVariant = (props: RouteComponentProps<{}>, chap: number) => {
-  const variantQuery = parseQuery(props.location.hash).variant;
-  // find a language with this variant and chapter (if any)
-  const matchingLang = sourceLanguages.find(
-    language => language.chapter === chap && language.variant === variantQuery
-  );
-
-  const variant: Variant = matchingLang ? matchingLang.variant : 'default';
-
-  return variant;
-};
-
-const parseExternalLibrary = (props: RouteComponentProps<{}>) => {
-  const ext = parseQuery(props.location.hash).ext || '';
-  return Object.values(ExternalLibraryName).find(v => v === ext) || ExternalLibraryName.NONE;
-};
-
-const parseExecTime = (props: RouteComponentProps<{}>) => {
-  const time = parseQuery(props.location.hash).exec || '1000';
-  // Parse the time string to a number, defaulting execTime to 1000
-  const execTime = stringParamToInt(time) || 1000;
-  return `${execTime < 1000 ? 1000 : execTime}`;
-};
+const toIncubator = () => <MissionControlContainer />;
 
 function computeDisabledState() {
   const now = moment();

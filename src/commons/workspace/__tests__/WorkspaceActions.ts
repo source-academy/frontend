@@ -17,7 +17,6 @@ import {
   clearReplOutput,
   clearReplOutputLast,
   endClearContext,
-  ensureLibrariesLoaded,
   evalEditor,
   evalRepl,
   evalTestcase,
@@ -53,7 +52,6 @@ import {
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
   END_CLEAR_CONTEXT,
-  ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
@@ -249,13 +247,6 @@ test('endClearContext generates correct action object', () => {
       library,
       workspaceLocation: playgroundWorkspace
     }
-  });
-});
-
-test('ensureLibrariesLoaded generates correct action object', () => {
-  const action = ensureLibrariesLoaded();
-  expect(action).toEqual({
-    type: ENSURE_LIBRARIES_LOADED
   });
 });
 
