@@ -86,7 +86,7 @@
     "@types/gapi.client": "^1.0.3",
     "@types/gapi.client.drive": "^3.0.8",
     "@types/google.picker": "^0.0.34",
-    "@types/invariant": "^2.2.33",
+    "@types/invariant": "^2.2.34",
     "@types/jest": "^26.0.9",
     "@types/jwt-decode": "^2.2.1",
     "@types/lodash": "^4.14.159",
