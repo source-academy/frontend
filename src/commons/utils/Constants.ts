@@ -43,7 +43,7 @@ for (let i = 1; ; ++i) {
 
 const disablePeriods: Array<{ start: Moment; end: Moment; reason?: string }> = [];
 
-if (!test) {
+if (!isTest) {
   for (let i = 1; ; ++i) {
     const startStr = process.env[`REACT_APP_DISABLE${i}_START`];
     const endStr = process.env[`REACT_APP_DISABLE${i}_END`];
