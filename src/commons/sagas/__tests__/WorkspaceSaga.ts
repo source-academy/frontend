@@ -48,7 +48,6 @@ import {
   CHANGE_EXTERNAL_LIBRARY,
   CHAPTER_SELECT,
   CLEAR_REPL_OUTPUT,
-  ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
@@ -531,34 +530,6 @@ describe('PLAYGROUND_EXTERNAL_SELECT', () => {
           externalLibraryName: newExternalLibraryName,
           workspaceLocation
         }
-      })
-      .silentRun();
-  });
-});
-
-describe('ENSURE_LIBRARIES_LOADED', () => {
-  test('does not call showWarningMessage when getReadyWebGLForCanvas is not undefined', () => {
-    (window as any).getReadyWebGLForCanvas = jest.fn();
-
-    return expectSaga(workspaceSaga)
-      .not.call(showWarningMessage, 'Error loading libraries', 750)
-      .dispatch({
-        type: ENSURE_LIBRARIES_LOADED
-      })
-      .silentRun();
-  });
-
-  test('calls showWarningMessage when race condition timeouts', () => {
-    return expectSaga(workspaceSaga)
-      .provide({
-        race: () => ({
-          loadedScripts: undefined,
-          timeout: true
-        })
-      })
-      .call(showWarningMessage, 'Error loading libraries', 750)
-      .dispatch({
-        type: ENSURE_LIBRARIES_LOADED
       })
       .silentRun();
   });
