@@ -24,6 +24,7 @@ import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
+import { Tokens, User } from '../application/types/SessionTypes';
 import { Notification } from '../notificationBadge/NotificationBadgeTypes';
 import { actions } from '../utils/ActionsHelper';
 import { castLibrary } from '../utils/CastBackend';
@@ -52,10 +53,6 @@ type RequestOptions = {
   shouldRefresh?: boolean;
 };
 
-type Tokens = {
-  accessToken: string;
-  refreshToken: string;
-};
 /**
  * POST /auth
  */
@@ -104,7 +101,7 @@ async function postRefresh(refreshToken: string): Promise<Tokens | null> {
 /**
  * GET /user
  */
-export async function getUser(tokens: Tokens): Promise<object | null> {
+export async function getUser(tokens: Tokens): Promise<User | null> {
   const resp = await request('user', 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
@@ -765,7 +762,7 @@ export async function changeDateAssessment(
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return resp ? await resp.text() : null;
+  return resp;
 }
 
 export async function deleteAssessment(id: number, tokens: Tokens) {
@@ -804,7 +801,7 @@ export const uploadAssessment = async (file: File, tokens: Tokens, forceUpdate: 
     shouldAutoLogout: false,
     shouldRefresh: true
   });
-  return resp ? await resp.text() : null;
+  return resp;
 };
 
 export async function getGradingSummary(tokens: Tokens): Promise<GradingSummary | null> {
@@ -926,36 +923,23 @@ export async function request(
  * or a HTTP error status code (not 2xx).
  *
  * @param   {(Response|null)}     resp    Result of the failed HTTP request
- * @param   {Map<number, string>} codes   Optional Map for status codes to custom warning messages
  */
-export function* handleResponseError(resp: Response | null, codes?: Map<number, string>) {
+export function* handleResponseError(resp: Response | null) {
   // Default: check if the response is null
   if (!resp) {
     yield call(showWarningMessage, "Couldn't reach our servers. Are you online?");
     return;
   }
 
-  let errorMessage: string;
+  let respText = yield resp.text();
 
-  // Show a generic message if the failed response is missing a status code
-  if (!resp.status) {
-    errorMessage = 'Something went wrong (received response with no status code)';
-  } else if (codes && codes.has(resp.status)) {
-    // If the optional map was supplied, check the response against it with its status code
-    errorMessage = codes.get(resp.status)!;
-  } else {
-    // Otherwise match on the status code for common status codes
-    switch (resp.status) {
-      case 401:
-        errorMessage = 'Session expired. Please login again.';
-        break;
-      default:
-        errorMessage = `Something went wrong (got ${resp.status} response)`;
-        break;
-    }
+  if (respText.length > 100 && resp.status) {
+    // This happens when error is not properly handled in backend
+    // Hence returning status code instead for bug reporting
+    respText = `Something went wrong (got ${resp.status} response)`;
   }
 
-  yield call(showWarningMessage, errorMessage);
+  yield call(showWarningMessage, respText);
 }
 
 const capitalise = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
