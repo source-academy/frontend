@@ -21,7 +21,7 @@ export default class MusicParser {
   public static parse(locationId: LocationId, soundList: string[], soundType: GameSoundType) {
     soundList.forEach((musicDetails, musicIndex) => {
       const [id, assetPath, volume] = StringUtils.splitByChar(musicDetails, ',');
-      Parser.validator.register(id);
+      Parser.validator.registerId(id);
 
       Parser.checkpoint.map.addSoundAsset({
         key: id,
