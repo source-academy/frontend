@@ -58,7 +58,6 @@ import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
 import { history } from '../utils/HistoryHelper';
 import { showSuccessMessage, showWarningMessage } from '../utils/NotificationsHelper';
-import { AsyncReturnType } from '../utils/TypeHelper';
 import {
   changeDateAssessment,
   deleteAssessment,
@@ -159,8 +158,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield call(postAnswer, questionId, answer, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield call(showSuccessMessage, 'Saved!', 1000);
@@ -198,8 +196,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield call(showSuccessMessage, 'Submitted!', 2000);
@@ -265,8 +262,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield postUnsubmit(submissionId, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     const overviews: GradingOverview[] = yield select(
@@ -308,8 +304,7 @@ function* BackendSaga(): SagaIterator {
       comments
     );
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield call(showSuccessMessage, 'Submitted!', 1000);
@@ -368,13 +363,9 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const result: AsyncReturnType<typeof postReautogradeSubmission> = yield call(
-      postReautogradeSubmission,
-      submissionId,
-      tokens
-    );
+    const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
 
-    yield call(handleReautogradeResponse, result);
+    yield call(handleReautogradeResponse, resp);
   });
 
   yield takeEvery(REAUTOGRADE_ANSWER, function* (
@@ -385,14 +376,14 @@ function* BackendSaga(): SagaIterator {
       accessToken: state.session.accessToken,
       refreshToken: state.session.refreshToken
     }));
-    const result: AsyncReturnType<typeof postReautogradeSubmission> = yield call(
+    const resp: Response | null = yield call(
       postReautogradeAnswer,
       submissionId,
       questionId,
       tokens
     );
 
-    yield call(handleReautogradeResponse, result);
+    yield call(handleReautogradeResponse, resp);
   });
 
   yield takeEvery(FETCH_NOTIFICATIONS, function* (
@@ -438,8 +429,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
   });
 
@@ -459,8 +449,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
@@ -508,8 +497,7 @@ function* BackendSaga(): SagaIterator {
       tokens
     );
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield call(showSuccessMessage, 'Saved successfully!', 1000);
@@ -521,8 +509,10 @@ function* BackendSaga(): SagaIterator {
   ) {
     const sublang: SourceLanguage | null = yield call(getSublanguage);
     if (!sublang) {
-      yield call(showWarningMessage, `Failed to load default Source sublanguage for Playground!`);
-      return;
+      return yield call(
+        showWarningMessage,
+        `Failed to load default Source sublanguage for Playground!`
+      );
     }
 
     yield put(actions.updateSublanguage(sublang));
@@ -544,8 +534,7 @@ function* BackendSaga(): SagaIterator {
       tokens
     );
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield put(actions.updateSublanguage(sublang));
@@ -579,8 +568,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield put(actions.fetchAssessmentOverviews());
@@ -598,8 +586,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield deleteAssessment(id, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield put(actions.fetchAssessmentOverviews());
@@ -618,8 +605,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield publishAssessment(id, togglePublishTo, tokens);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     yield put(actions.fetchAssessmentOverviews());
@@ -643,8 +629,7 @@ function* BackendSaga(): SagaIterator {
 
     const resp: Response | null = yield uploadAssessment(file, tokens, forceUpdate);
     if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
+      return yield handleResponseError(resp);
     }
 
     const respText: string = yield resp.text();
@@ -658,19 +643,16 @@ function* BackendSaga(): SagaIterator {
   });
 }
 
-function* handleReautogradeResponse(result: AsyncReturnType<typeof postReautogradeSubmission>) {
-  switch (result) {
-    case true:
-      yield call(showSuccessMessage, 'Autograde job queued successfully.');
-      break;
-    case 'not_found':
-    case false:
-      yield call(showWarningMessage, 'Failed to queue autograde job.');
-      break;
-    case 'not_submitted':
-      yield call(showWarningMessage, 'Cannot reautograde non-submitted submission.');
-      break;
+function* handleReautogradeResponse(resp: Response | null) {
+  if (resp && resp.ok) {
+    return yield call(showSuccessMessage, 'Autograde job queued successfully.');
   }
+
+  if (resp && resp.status === 400) {
+    return yield call(showWarningMessage, 'Cannot reautograde non-submitted submission.');
+  }
+
+  return yield call(showWarningMessage, 'Failed to queue autograde job.');
 }
 
 export default BackendSaga;

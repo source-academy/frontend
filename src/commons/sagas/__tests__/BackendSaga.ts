@@ -97,6 +97,7 @@ const mockStates = {
 };
 
 const okResp = { ok: true };
+const errorResp = { ok: false };
 // ----------------------------------------
 
 describe('Test FETCH_AUTH action', () => {
@@ -496,7 +497,7 @@ describe('Test REAUTOGRADE_SUBMISSION Action', () => {
   test('when successful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), true]])
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), okResp]])
       .call(postReautogradeSubmission, submissionId, mockTokens)
       .call.fn(showSuccessMessage)
       .not.call.fn(showWarningMessage)
@@ -507,7 +508,7 @@ describe('Test REAUTOGRADE_SUBMISSION Action', () => {
   test('when unsuccessful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), false]])
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), errorResp]])
       .call(postReautogradeSubmission, submissionId, mockTokens)
       .not.call.fn(showSuccessMessage)
       .call.fn(showWarningMessage)
@@ -523,7 +524,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
   test('when successful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), true]])
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), okResp]])
       .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
       .call.fn(showSuccessMessage)
       .not.call.fn(showWarningMessage)
@@ -535,7 +536,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
     const submissionId = 123;
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), false]])
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), errorResp]])
       .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
       .not.call.fn(showSuccessMessage)
       .call.fn(showWarningMessage)
