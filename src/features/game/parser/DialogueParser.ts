@@ -39,7 +39,7 @@ export default class DialogueParser {
    */
   private static parseDialogue(dialogueDetails: string, dialogueBody: string[]) {
     const [dialogueId, title] = StringUtils.splitWithLimit(dialogueDetails, ',', 1);
-    Parser.validator.register(dialogueId);
+    Parser.validator.registerId(dialogueId);
 
     const content = this.parseDialogueContent(dialogueBody);
     const dialogue: Dialogue = { title, content };

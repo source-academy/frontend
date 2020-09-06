@@ -63,7 +63,7 @@ class Parser {
     const [key, value] = StringUtils.splitByChar(checkpointConfig, ':');
     switch (key) {
       case 'startingLoc':
-        Parser.validator.assert(GameEntityType.locations, value);
+        Parser.validator.assertEntityType(GameEntityType.locations, value);
         Parser.checkpoint.startingLoc = value;
         break;
       default:
