@@ -1,4 +1,4 @@
-(function(exports) {
+(function (exports) {
   var container = document.createElement('div');
   container.id = 'inspector-container';
 
@@ -11,9 +11,14 @@
     'apply_in_underlying_javascript',
     'array_length',
     'assoc',
+    'black',
+    'blue',
+    'brown',
     'build_list',
     'build_stream',
+    'color',
     'display',
+    'display_list',
     'draw_data',
     'enum_list',
     'enum_stream',
@@ -22,8 +27,11 @@
     'eval_stream',
     'filter',
     'for_each',
+    'get_time',
+    'green',
     'has_own_property',
     'head',
+    'indigo',
     'integers_from',
     'is',
     'is_NaN',
@@ -89,17 +97,31 @@
     'math_toSource',
     'math_trunc',
     'member',
+    'orange',
     'pair',
     'parse',
     'parse_int',
+    'pink',
     'prompt',
+    'purple',
+    'quarter_turn_left',
+    'quarter_turn_right',
+    'random_color',
     'raw_display',
+    'red',
     'remove',
     'remove_all',
     'reverse',
+    'rotate',
     'runtime',
+    'scale',
+    'scale_independent',
     'set_head',
     'set_tail',
+    'show',
+    'stack',
+    'stack_frac',
+    'stackn',
     'stream',
     'stream_append',
     'stream_filter',
@@ -115,7 +137,10 @@
     'stream_to_list',
     'stringify',
     'tail',
-    'undefined'
+    'translate',
+    'undefined',
+    'white',
+    'yellow'
   ];
 
   function filter(str) {
@@ -187,7 +212,8 @@
       if (icon) {
         icon.classList.add('side-content-tab-alert'); // this blinks the icon
       }
-    } else if (icon) {  // here we have no context! don't alert the inspector...
+    } else if (icon) {
+      // here we have no context! don't alert the inspector...
       document.getElementById('inspector-default-text').hidden = false;
       icon.classList.remove('side-content-tab-alert');
       container.innerHTML = '';
@@ -217,7 +243,7 @@
   exports.Inspector = {
     builtins,
     filter,
-    init: function(parent) {
+    init: function (parent) {
       parent.appendChild(container);
     },
     updateContext,
