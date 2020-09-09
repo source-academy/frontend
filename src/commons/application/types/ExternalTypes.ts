@@ -156,18 +156,14 @@ const videoLibrary = [
   'red_of',
   'green_of',
   'blue_of',
-  'set_rgb',
-  'copy_pixel',
+  'alpha_of',
+  'set_rgba',
   'copy_image',
-  'constrain_color',
   'compose_filter',
-  'make_distortion_filter',
-  'make_static_distortion_filter',
-  'pixel_similar',
-  'get_video_width',
-  'get_video_height',
   'apply_filter',
-  'reset_filter'
+  'reset_filter',
+  'video_height',
+  'video_width'
 ];
 
 const machineLearningLibrary = [
