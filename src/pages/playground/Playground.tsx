@@ -586,9 +586,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ]
     },
     editorProps: {
-      onChangeMethod: onChangeMethod,
-      onCursorChangeMethod: onCursorChangeMethod,
-      onSelectionChangeMethod: onSelectionChangeMethod,
+      onChange: onChangeMethod,
+      onCursorChange: onCursorChangeMethod,
+      onSelectionChange: onSelectionChangeMethod,
       sourceChapter: props.sourceChapter,
       externalLibraryName: props.externalLibraryName,
       sourceVariant: props.sourceVariant,

@@ -6,7 +6,8 @@ import 'js-slang/dist/editors/ace/theme/source';
 
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import AceEditor, { IAceEditorProps } from 'react-ace';
+import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
+import * as AceBuilds from "ace-builds";
 import { HotKeys } from 'react-hotkeys';
 
 import { useMergedRef } from '../utils/Hooks';
@@ -38,7 +39,7 @@ export type EditorHook = (
  * @property handleEvalEditor  - A callback function for evaluation
  *           of the editor's content, using `slang`
  */
-export type EditorProps = DispatchProps & StateProps;
+export type EditorProps = DispatchProps & StateProps & OnEvent;
 
 type DispatchProps = {
   handleDeclarationNavigate: (cursorPosition: Position) => void;
@@ -64,10 +65,27 @@ type StateProps = {
   externalLibraryName?: string;
   sourceVariant?: Variant;
   hooks?: EditorHook[];
-  onChangeMethod?: any; // TODO: Add to help with keystroke logging
-  onCursorChangeMethod?: any; // TODO: Add to help with keystroke logging
-  onSelectionChangeMethod?: any;
 };
+
+type OnEvent = {
+  onSelectionChange?: (value: any, event?: any) => void;
+  onCursorChange?: (value: any, event?: any) => void;
+  onInput?: (event?: any) => void;
+  onLoad?: (editor: Ace.Editor) => void;
+  onValidate?: (annotations: Ace.Annotation[]) => void;
+  onBeforeLoad?: (ace: typeof AceBuilds) => void;
+  onChange?: (value: string, event?: any) => void;
+  onSelection?: (selectedText: string, event?: any) => void;
+  onCopy?: (value: string) => void;
+  onPaste?: (value: string) => void;
+  onFocus?: (event: any, editor?: Ace.Editor) => void;
+  onBlur?: (event: any, editor?: Ace.Editor) => void;
+  onScroll?: (editor: IEditorProps) => void;
+};
+
+const EventT: Array<keyof OnEvent> = ["onSelectionChange", "onCursorChange", "onInput", "onLoad",
+  "onValidate", "onBeforeLoad", "onChange", "onSelection", "onCopy", "onPaste", "onFocus", 
+  "onBlur", "onScroll"];
 
 const getMarkers = (
   highlightedLines: StateProps['highlightedLines']
@@ -297,14 +315,37 @@ const EditorBase = React.memo(
       .filter(([_, exec]) => exec)
       .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
 
+    // Merge in .onEvent ace editor props
+    // This prevents user errors such as 
+      // TRYING TO ADD AN ONCHANGE PROP WHICH KILLS THE ABOVE ONCHANGE.
+      // **triggered**
+    EventT.forEach((eventT) => {
+      const propFn = props[eventT];
+      if(propFn) {
+        /* eslint-disable */ 
+        const currFn = aceEditorProps[eventT];
+        if(!currFn) {
+          // Typescript isn't smart enough to know that the types of both LHS/RHS are the same.
+          // @ts-ignore 
+          aceEditorProps[eventT] = propFn; 
+        } else {
+          aceEditorProps[eventT] = function(...args: any[]) {
+            // Impossible to define a function which takes in the arbitrary number of correct arguments...
+            // @ts-ignore
+            currFn(...args);
+            // @ts-ignore
+            propFn(...args);
+          }
+        }
+        /* eslint-enable */
+      }
+    });
+
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
           <AceEditor
             {...aceEditorProps}
-            onChange={props.onChangeMethod}
-            onCursorChange={props.onCursorChangeMethod}
-            onSelectionChange={props.onSelectionChangeMethod}
             ref={useMergedRef(reactAceRef, forwardedRef)}
           />
         </div>

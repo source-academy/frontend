@@ -355,9 +355,9 @@ class AssessmentWorkspace extends React.Component<
             handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: this.props.handlePromptAutocomplete,
             isEditorAutorun: false,
-            onChangeMethod: onChangeMethod,
-            onCursorChangeMethod: onCursorChangeMethod,
-            onSelectionChangeMethod: onSelectionChangeMethod
+            onChange: onChangeMethod,
+            onCursorChange: onCursorChangeMethod,
+            onSelectionChange: onSelectionChangeMethod
           }
         : undefined;
     const workspaceProps: WorkspaceProps = {
