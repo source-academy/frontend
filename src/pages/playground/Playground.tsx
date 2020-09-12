@@ -41,7 +41,7 @@ import {
   saveUnsentLog,
   setLastPlaygroundInputs,
   UnsentLog
-} from '../../features/keystrokes/KeystrokesHelper';
+} from '../../features/eventLogging';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,

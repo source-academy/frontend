@@ -29,7 +29,7 @@ import {
   saveAssessmentLog,
   saveLoggedAssessmentIds,
   setLastAssessmentInputs
-} from '../../features/keystrokes/KeystrokesHelper';
+} from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,

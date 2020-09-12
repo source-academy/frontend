@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { UnsentLog } from 'src/features/keystrokes/KeystrokesHelper';
+import { UnsentLog } from 'src/features/eventLogging';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';

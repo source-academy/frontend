@@ -34,7 +34,7 @@ import {
   playgroundQuestionId,
   resetAssessmentLogging,
   resetPlaygroundLogging
-} from '../../features/keystrokes/KeystrokesHelper';
+} from '../../features/eventLogging';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';

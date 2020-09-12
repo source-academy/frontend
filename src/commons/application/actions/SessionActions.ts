@@ -1,7 +1,7 @@
 import { action } from 'typesafe-actions'; // EDITED
 
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
-import { UnsentLog } from '../../../features/keystrokes/KeystrokesHelper';
+import { UnsentLog } from '../../../features/eventLogging';
 import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import {
