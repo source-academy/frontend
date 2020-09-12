@@ -1,13 +1,11 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
-import { UnsentLog } from 'src/features/eventLogging';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
 import { mockRouterProps } from '../../../commons/mocks/ComponentMocks';
 import { SideContentType } from '../../../commons/sideContent/SideContentTypes';
-import { PlaybackData } from '../../../features/sourceRecorder/SourceRecorderTypes';
 import Playground, { PlaygroundProps } from '../Playground';
 
 const baseProps = {
@@ -69,12 +67,6 @@ const baseProps = {
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
   handlePersistenceLogOut: () => {},
-  handleKeystrokeUpload: (
-    assessmentId: number,
-    questionId: number,
-    playbackData: PlaybackData
-  ) => {},
-  handleUnsentLogsUpload: (unsentLogs: UnsentLog[]) => {}
 };
 
 const testValueProps: PlaygroundProps = {

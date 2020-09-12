@@ -10,7 +10,6 @@ import {
 import {
   fetchAssessment,
   submitAnswer,
-  uploadKeystrokeLogs
 } from '../application/actions/SessionActions';
 import { OverallState } from '../application/ApplicationTypes';
 import { Library } from '../assessment/AssessmentTypes';
@@ -104,7 +103,6 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleDebuggerReset: () => debuggerReset(workspaceLocation),
       handlePromptAutocomplete: (row: number, col: number, callback: any) =>
         promptAutocomplete(workspaceLocation, row, col, callback),
-      handleKeystrokeUpload: uploadKeystrokeLogs
     },
     dispatch
   );

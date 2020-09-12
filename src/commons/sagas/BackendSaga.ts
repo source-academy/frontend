@@ -29,12 +29,6 @@ import {
   PUBLISH_ASSESSMENT,
   UPLOAD_ASSESSMENT
 } from '../../features/groundControl/GroundControlTypes';
-import {
-  clearUnsentLogs,
-  playgroundQuestionId,
-  resetAssessmentLogging,
-  resetPlaygroundLogging
-} from '../../features/eventLogging';
 import { FETCH_SOURCECAST_INDEX } from '../../features/sourceRecorder/sourcecast/SourcecastTypes';
 import { SAVE_SOURCECAST_DATA } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { DELETE_SOURCECAST_ENTRY } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
@@ -51,8 +45,6 @@ import {
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
   UNSUBMIT_SUBMISSION,
-  UPLOAD_KEYSTROKE_LOGS,
-  UPLOAD_UNSENT_LOGS
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';
@@ -78,7 +70,6 @@ import {
   postAssessment,
   postAuth,
   postGrading,
-  postKeystrokeLogs,
   postReautogradeAnswer,
   postReautogradeSubmission,
   postSourcecast,
@@ -634,55 +625,6 @@ function* BackendSaga(): SagaIterator {
       return;
     }
     yield put(actions.fetchAssessmentOverviews());
-  });
-
-  yield takeEvery(UPLOAD_KEYSTROKE_LOGS, function* (
-    action: ReturnType<typeof actions.uploadKeystrokeLogs>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const playbackData = action.payload.playbackData;
-    const assessmentId = action.payload.assessmentId;
-    const questionId = action.payload.questionId;
-    const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
-    if (!respMsg) {
-      yield handleResponseError(respMsg);
-    } else {
-      if (assessmentId === playgroundQuestionId && questionId === playgroundQuestionId) {
-        resetPlaygroundLogging();
-      } else {
-        resetAssessmentLogging();
-      }
-    }
-  });
-
-  yield takeEvery(UPLOAD_UNSENT_LOGS, function* (
-    action: ReturnType<typeof actions.uploadUnsentLogs>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
-    const unsentLogs = action.payload;
-    for (let i = 0; i < unsentLogs.length; i++) {
-      const unsentLog = unsentLogs[i];
-      const playbackData = unsentLog.playbackData;
-      const assessmentId = unsentLog.assessmentId;
-      const questionId = unsentLog.questionId;
-
-      const respMsg = yield postKeystrokeLogs(tokens, assessmentId, questionId, playbackData);
-
-      if (!respMsg) {
-        yield handleResponseError(respMsg);
-        return;
-      }
-    }
-
-    clearUnsentLogs();
   });
 
   /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(

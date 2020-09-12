@@ -31,22 +31,10 @@ import { SideContentTab, SideContentType } from '../../commons/sideContent/SideC
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
-import {
-  getPlaygroundLogs,
-  getUnsentLogs,
-  hasExceededLocalStorageSpace,
-  playgroundQuestionId,
-  resetAllPlaygroundLogs,
-  savePlaygroundLog,
-  saveUnsentLog,
-  setLastPlaygroundInputs,
-  UnsentLog
-} from '../../features/eventLogging';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
   Input,
-  PlaybackData,
   SelectionRange
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
@@ -90,12 +78,6 @@ export type DispatchProps = {
   handlePersistenceUpdateFile: (file: PersistenceFile) => void;
   handlePersistenceInitialise: () => void;
   handlePersistenceLogOut: () => void;
-  handleKeystrokeUpload: (
-    assessmentId: number,
-    questionId: number,
-    playbackData: PlaybackData
-  ) => void;
-  handleUnsentLogsUpload: (unsentLogs: UnsentLog[]) => void;
 };
 
 export type StateProps = {
@@ -136,19 +118,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
 
-  window.addEventListener('beforeunload', event => {
-    // Cancel the event as stated by the standard.
-    event.preventDefault();
-    // Chrome requires returnValue to be set.
-    event.returnValue = '';
-
-    const playgroundLogs = getPlaygroundLogs();
-
-    if (playgroundLogs.inputs.length > 0) {
-      saveUnsentLog(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
-      resetAllPlaygroundLogs();
-    }
-  });
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -158,8 +127,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     if (propsRef.current.location.hash === '') {
       propsRef.current.handleFetchSublanguage();
     }
-
-    propsRef.current.handleUnsentLogsUpload(getUnsentLogs());
   }, []);
 
   const handlers = React.useMemo(
@@ -215,29 +182,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  const uploadLogs = React.useCallback(() => {
-    const playgroundLogs = getPlaygroundLogs();
-
-    if (playgroundLogs.inputs.length !== 0) {
-      props.handleKeystrokeUpload(playgroundQuestionId, playgroundQuestionId, playgroundLogs);
-      setLastPlaygroundInputs(props.sourceChapter, props.externalLibraryName, props.editorValue);
-    }
-  }, [props]);
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();
-    uploadLogs();
-  }, [props, uploadLogs]);
+  }, [props]);
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
-      savePlaygroundLog(newInput);
-
-      if (hasExceededLocalStorageSpace()) {
-        uploadLogs();
-      }
+      console.log("LOGGING", newInput);
     },
-    [uploadLogs]
+    []
   );
 
   const autorunButtons = React.useMemo(

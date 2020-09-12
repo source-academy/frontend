@@ -18,18 +18,10 @@ import {
   CodeDelta,
   Input,
   KeyboardCommand,
-  PlaybackData,
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
-import {
-  getAssessmentLogs,
-  getLoggedAssessmentIds,
-  hasExceededLocalStorageSpace,
-  saveAssessmentLog,
-  saveLoggedAssessmentIds,
-  setLastAssessmentInputs
-} from '../../features/eventLogging';
+import { } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -94,11 +86,6 @@ export type DispatchProps = {
   handleDebuggerResume: () => void;
   handleDebuggerReset: () => void;
   handlePromptAutocomplete: (row: number, col: number, callback: any) => void;
-  handleKeystrokeUpload: (
-    assessmentId: number,
-    questionId: number,
-    playbackData: PlaybackData
-  ) => void;
 };
 
 export type OwnProps = {
@@ -179,16 +166,7 @@ class AssessmentWorkspace extends React.Component<
     }
 
     this.props.handleEditorValueChange(answer);
-
-    const currentAssessmentIds = getLoggedAssessmentIds();
-    if (
-      currentAssessmentIds.assessmentId !== this.props.assessmentId &&
-      currentAssessmentIds.questionID !== this.props.questionId
-    ) {
-      this.uploadLogs();
-    }
-
-    saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
+    console.log("INIT-ASSESSMENT");
   }
 
   /**
@@ -196,39 +174,12 @@ class AssessmentWorkspace extends React.Component<
    * if a workspace reset is needed.
    */
   public componentDidUpdate() {
-    this.checkWorkspaceReset(this.props);
+    this.checkWorkspaceReset();
   }
 
-  public uploadLogs = () => {
-    const assessmentIDs = getLoggedAssessmentIds();
-    const assessmentLogs = getAssessmentLogs();
-
-    if (assessmentLogs.inputs.length !== 0) {
-      this.props.handleKeystrokeUpload(
-        assessmentIDs.assessmentId,
-        assessmentIDs.questionId,
-        assessmentLogs
-      );
-
-      const question = this.props.assessment!.questions[this.props.questionId];
-      const editorValue = this.props.editorValue ? this.props.editorValue : '';
-
-      setLastAssessmentInputs(
-        question.library.chapter,
-        question.library.external.name,
-        editorValue
-      );
-    }
-
-    saveLoggedAssessmentIds(this.props.assessmentId, this.props.questionId);
-  };
 
   public pushLog = (newInput: Input) => {
-    saveAssessmentLog(newInput);
-
-    if (hasExceededLocalStorageSpace()) {
-      this.uploadLogs();
-    }
+    console.log("LOGGING", newInput);
   };
 
   public render() {
@@ -402,7 +353,7 @@ class AssessmentWorkspace extends React.Component<
    * Checks if there is a need to reset the workspace, then executes
    * a dispatch (in the props) if needed.
    */
-  private checkWorkspaceReset(props: AssessmentWorkspaceProps) {
+  private checkWorkspaceReset() {
     /* Don't reset workspace if assessment not fetched yet. */
     if (this.props.assessment === undefined) {
       return;
@@ -584,7 +535,6 @@ class AssessmentWorkspace extends React.Component<
         this.props.assessment!.questions[questionId].id,
         this.props.editorValue!
       );
-      this.uploadLogs();
     };
     const onClickResetTemplate = () => {
       this.setState({ showResetTemplateOverlay: true });
