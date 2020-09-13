@@ -1,5 +1,3 @@
-// import { isEqual } from 'lodash';
-
 import { v4 as uuid } from 'uuid';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -12,14 +10,13 @@ export type UnsentLog = {
 
 export const playgroundQuestionId: number = -1;
 
-
 type PlaybackInitial = {
   chapter: number;
   externalLibrary: ExternalLibraryName;
   editorValue: string;
-}
+};
 
-type PlaybackInitialTagged = PlaybackInitial & { assessmentId: number; type: "init" };
+type PlaybackInitialTagged = PlaybackInitial & { assessmentId: number; type: 'init' };
 type Input = RecorderInput | PlaybackInitialTagged;
 
 export function log(id: string, input: Input) {
@@ -28,10 +25,9 @@ export function log(id: string, input: Input) {
   console.log(id, input);
 }
 
-
 // Creates a session, then logs it.
 export function initSession(assessmentId: number, initialState: PlaybackInitial): string {
   const id = uuid();
-  log(id, { ...initialState, assessmentId, type: "init" });
+  log(id, { ...initialState, assessmentId, type: 'init' });
   return id;
 }

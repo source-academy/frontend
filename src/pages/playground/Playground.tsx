@@ -118,12 +118,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
-  const [sessionId, setSessionId] = React.useState(() => initSession(-1, {
-    editorValue: propsRef.current.editorValue,
-    externalLibrary: propsRef.current.externalLibraryName,
-    chapter: propsRef.current.sourceChapter
-  }));
-
+  const [sessionId, setSessionId] = React.useState(() =>
+    initSession(-1, {
+      editorValue: propsRef.current.editorValue,
+      externalLibrary: propsRef.current.externalLibraryName,
+      chapter: propsRef.current.sourceChapter
+    })
+  );
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -138,11 +139,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
   React.useEffect(() => {
     console.log('change session id on editor session change');
     // When the editor session Id changes, then treat it as a new session.
-    setSessionId(initSession(-1, {
-      editorValue: propsRef.current.editorValue,
-      externalLibrary: propsRef.current.externalLibraryName,
-      chapter: propsRef.current.sourceChapter
-    }));
+    setSessionId(
+      initSession(-1, {
+        editorValue: propsRef.current.editorValue,
+        externalLibrary: propsRef.current.externalLibraryName,
+        chapter: propsRef.current.sourceChapter
+      })
+    );
   }, [props.editorSessionId]);
 
   const handlers = React.useMemo(
@@ -197,7 +200,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
       return [];
     }
   };
-
 
   const handleEvalCallback = React.useCallback(() => {
     props.handleEditorEval();

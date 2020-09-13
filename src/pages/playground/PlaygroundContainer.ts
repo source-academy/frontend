@@ -9,9 +9,7 @@ import {
   debuggerReset,
   debuggerResume
 } from '../../commons/application/actions/InterpreterActions';
-import {
-  logoutGoogle,
-} from '../../commons/application/actions/SessionActions';
+import { logoutGoogle } from '../../commons/application/actions/SessionActions';
 import { OverallState } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import {
@@ -137,7 +135,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handlePersistenceSaveFile: persistenceSaveFileAs,
       handlePersistenceUpdateFile: persistenceSaveFile,
       handlePersistenceInitialise: persistenceInitialise,
-      handlePersistenceLogOut: logoutGoogle,
+      handlePersistenceLogOut: logoutGoogle
     },
     dispatch
   );

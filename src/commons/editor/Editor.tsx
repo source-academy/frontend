@@ -7,7 +7,7 @@ import 'js-slang/dist/editors/ace/theme/source';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor, { IAceEditorProps, IEditorProps } from 'react-ace';
-import * as AceBuilds from "ace-builds";
+import * as AceBuilds from 'ace-builds';
 import { HotKeys } from 'react-hotkeys';
 
 import { useMergedRef } from '../utils/Hooks';
@@ -83,9 +83,21 @@ type OnEvent = {
   onScroll?: (editor: IEditorProps) => void;
 };
 
-const EventT: Array<keyof OnEvent> = ["onSelectionChange", "onCursorChange", "onInput", "onLoad",
-  "onValidate", "onBeforeLoad", "onChange", "onSelection", "onCopy", "onPaste", "onFocus", 
-  "onBlur", "onScroll"];
+const EventT: Array<keyof OnEvent> = [
+  'onSelectionChange',
+  'onCursorChange',
+  'onInput',
+  'onLoad',
+  'onValidate',
+  'onBeforeLoad',
+  'onChange',
+  'onSelection',
+  'onCopy',
+  'onPaste',
+  'onFocus',
+  'onBlur',
+  'onScroll'
+];
 
 const getMarkers = (
   highlightedLines: StateProps['highlightedLines']
@@ -316,26 +328,27 @@ const EditorBase = React.memo(
       .map(([name, exec]) => ({ name, bindKey: keyBindings[name], exec: exec! }));
 
     // Merge in .onEvent ace editor props
-    // This prevents user errors such as 
-      // TRYING TO ADD AN ONCHANGE PROP WHICH KILLS THE ABOVE ONCHANGE.
-      // **triggered**
-    EventT.forEach((eventT) => {
+    // This prevents user errors such as
+    // TRYING TO ADD AN ONCHANGE PROP WHICH KILLS THE ABOVE ONCHANGE.
+    // **triggered**
+    EventT.forEach(eventT => {
       const propFn = props[eventT];
-      if(propFn) {
-        /* eslint-disable */ 
+      if (propFn) {
+        /* eslint-disable */
+
         const currFn = aceEditorProps[eventT];
-        if(!currFn) {
+        if (!currFn) {
           // Typescript isn't smart enough to know that the types of both LHS/RHS are the same.
-          // @ts-ignore 
-          aceEditorProps[eventT] = propFn; 
+          // @ts-ignore
+          aceEditorProps[eventT] = propFn;
         } else {
-          aceEditorProps[eventT] = function(...args: any[]) {
+          aceEditorProps[eventT] = function (...args: any[]) {
             // Impossible to define a function which takes in the arbitrary number of correct arguments...
             // @ts-ignore
             currFn(...args);
             // @ts-ignore
             propFn(...args);
-          }
+          };
         }
         /* eslint-enable */
       }
@@ -344,10 +357,7 @@ const EditorBase = React.memo(
     return (
       <HotKeys className="Editor" handlers={handlers}>
         <div className="row editor-react-ace">
-          <AceEditor
-            {...aceEditorProps}
-            ref={useMergedRef(reactAceRef, forwardedRef)}
-          />
+          <AceEditor {...aceEditorProps} ref={useMergedRef(reactAceRef, forwardedRef)} />
         </div>
       </HotKeys>
     );

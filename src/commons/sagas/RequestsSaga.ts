@@ -116,7 +116,6 @@ export async function getUser(tokens: Tokens): Promise<object | null> {
   return await resp.json();
 }
 
-
 /**
  * GET /achievements
  *

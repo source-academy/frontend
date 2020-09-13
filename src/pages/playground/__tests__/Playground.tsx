@@ -66,7 +66,7 @@ const baseProps = {
   handlePersistenceSaveFile: () => {},
   handlePersistenceInitialise: () => {},
   handlePersistenceUpdateFile: () => {},
-  handlePersistenceLogOut: () => {},
+  handlePersistenceLogOut: () => {}
 };
 
 const testValueProps: PlaygroundProps = {

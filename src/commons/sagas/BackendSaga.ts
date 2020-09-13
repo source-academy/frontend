@@ -44,7 +44,7 @@ import {
   SUBMIT_ANSWER,
   SUBMIT_GRADING,
   SUBMIT_GRADING_AND_CONTINUE,
-  UNSUBMIT_SUBMISSION,
+  UNSUBMIT_SUBMISSION
 } from '../application/types/SessionTypes';
 import { actions } from '../utils/ActionsHelper';
 import { computeRedirectUri, getClientId, getDefaultProvider } from '../utils/AuthHelper';

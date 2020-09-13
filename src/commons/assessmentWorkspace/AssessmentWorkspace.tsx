@@ -131,7 +131,7 @@ class AssessmentWorkspace extends React.Component<
     this.state = {
       showOverlay: false,
       showResetTemplateOverlay: false,
-      sessionId: "",
+      sessionId: ''
     };
 
     this.props.handleEditorValueChange('');
@@ -178,7 +178,6 @@ class AssessmentWorkspace extends React.Component<
   public componentDidUpdate() {
     this.checkWorkspaceReset();
   }
-
 
   public pushLog = (newInput: Input) => {
     log(this.state.sessionId, newInput);
@@ -397,8 +396,8 @@ class AssessmentWorkspace extends React.Component<
         sessionId: initSession(this.props.assessment.id, {
           chapter: question.library.chapter,
           externalLibrary: question?.library?.external?.name || 'NONE',
-          editorValue,
-        }) 
+          editorValue
+        })
       });
     }
 
