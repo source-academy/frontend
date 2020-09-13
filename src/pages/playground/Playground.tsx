@@ -7,6 +7,7 @@ import { isEqual } from 'lodash';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
+import { initSession, log } from 'src/features/eventLogging';
 
 import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -117,6 +118,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState(() => initSession(-1, {
+    editorValue: propsRef.current.editorValue,
+    externalLibrary: propsRef.current.externalLibraryName,
+    chapter: propsRef.current.sourceChapter
+  }));
 
 
   React.useEffect(() => {
@@ -128,6 +134,16 @@ const Playground: React.FC<PlaygroundProps> = props => {
       propsRef.current.handleFetchSublanguage();
     }
   }, []);
+
+  React.useEffect(() => {
+    console.log('change session id on editor session change');
+    // When the editor session Id changes, then treat it as a new session.
+    setSessionId(initSession(-1, {
+      editorValue: propsRef.current.editorValue,
+      externalLibrary: propsRef.current.externalLibraryName,
+      chapter: propsRef.current.sourceChapter
+    }));
+  }, [props.editorSessionId]);
 
   const handlers = React.useMemo(
     () => ({
@@ -189,9 +205,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const pushLog = React.useCallback(
     (newInput: Input) => {
-      console.log("LOGGING", newInput);
+      log(sessionId, newInput);
     },
-    []
+    [sessionId]
   );
 
   const autorunButtons = React.useMemo(

@@ -1,8 +1,9 @@
 // import { isEqual } from 'lodash';
 
-// import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { /*Input,*/ PlaybackData } from '../sourceRecorder/SourceRecorderTypes';
+import { v4 as uuid } from 'uuid';
 
+import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import { Input as RecorderInput, PlaybackData } from '../sourceRecorder/SourceRecorderTypes';
 export type UnsentLog = {
   assessmentId: number;
   questionId: number;
@@ -11,11 +12,26 @@ export type UnsentLog = {
 
 export const playgroundQuestionId: number = -1;
 
-// const defaultPlaybackData: PlaybackData = {
-//   init: {
-//     chapter: 1,
-//     externalLibrary: ExternalLibraryName.NONE,
-//     editorValue: ''
-//   },
-//   inputs: []
-// };
+
+type PlaybackInitial = {
+  chapter: number;
+  externalLibrary: ExternalLibraryName;
+  editorValue: string;
+}
+
+type PlaybackInitialTagged = PlaybackInitial & { assessmentId: number; type: "init" };
+type Input = RecorderInput | PlaybackInitialTagged;
+
+export function log(id: string, input: Input) {
+  // TODO: lob it into indexedDB.
+  // TODO: disable logging if not logged in.
+  console.log(id, input);
+}
+
+
+// Creates a session, then logs it.
+export function initSession(assessmentId: number, initialState: PlaybackInitial): string {
+  const id = uuid();
+  log(id, { ...initialState, assessmentId, type: "init" });
+  return id;
+}

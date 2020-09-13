@@ -21,7 +21,7 @@ import {
   SelectionRange
 } from 'src/features/sourceRecorder/SourceRecorderTypes';
 
-import { } from '../../features/eventLogging';
+import { initSession, log } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import {
   Assessment,
@@ -123,13 +123,15 @@ class AssessmentWorkspace extends React.Component<
   {
     showOverlay: boolean;
     showResetTemplateOverlay: boolean;
+    sessionId: string;
   }
 > {
   public constructor(props: AssessmentWorkspaceProps) {
     super(props);
     this.state = {
       showOverlay: false,
-      showResetTemplateOverlay: false
+      showResetTemplateOverlay: false,
+      sessionId: "",
     };
 
     this.props.handleEditorValueChange('');
@@ -148,7 +150,8 @@ class AssessmentWorkspace extends React.Component<
     if (!this.props.assessment) {
       return;
     }
-
+    // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
+    // checkWorkspaceReset does exactly the same thing.
     let questionId = this.props.questionId;
     if (this.props.questionId >= this.props.assessment.questions.length) {
       questionId = this.props.assessment.questions.length - 1;
@@ -166,7 +169,6 @@ class AssessmentWorkspace extends React.Component<
     }
 
     this.props.handleEditorValueChange(answer);
-    console.log("INIT-ASSESSMENT");
   }
 
   /**
@@ -179,7 +181,7 @@ class AssessmentWorkspace extends React.Component<
 
 
   public pushLog = (newInput: Input) => {
-    console.log("LOGGING", newInput);
+    log(this.state.sessionId, newInput);
   };
 
   public render() {
@@ -389,6 +391,15 @@ class AssessmentWorkspace extends React.Component<
       if (!editorValue) {
         editorValue = questionData.solutionTemplate!;
       }
+
+      // Initialize session once the editorValue is known.
+      this.setState({
+        sessionId: initSession(this.props.assessment.id, {
+          chapter: question.library.chapter,
+          externalLibrary: question?.library?.external?.name || 'NONE',
+          editorValue,
+        }) 
+      });
     }
 
     this.props.handleEditorUpdateBreakpoints([]);

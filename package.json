@@ -34,6 +34,7 @@
     "@blueprintjs/select": "^3.13.6",
     "@sentry/browser": "^5.20.1",
     "@sourceacademy/sharedb-ace": "^2.0.2",
+    "@types/uuid": "^8.3.0",
     "ace-builds": "^1.4.12",
     "acorn": "^7.4.0",
     "ag-grid-community": "^23.2.1",
@@ -69,6 +70,7 @@
     "showdown": "^1.9.1",
     "sourceror": "^0.7.0",
     "typesafe-actions": "^5.1.0",
+    "uuid": "^8.3.0",
     "xml2js": "^0.4.23",
     "yareco": "^0.1.5"
   },
