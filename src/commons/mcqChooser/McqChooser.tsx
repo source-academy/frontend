@@ -46,9 +46,6 @@ class McqChooser extends React.PureComponent<McqChooserProps, {}> {
   private onButtonClickFactory = (i: number) => (e: any) => {
     if (i !== this.props.mcq.answer) {
       this.props.handleMCQSubmit(i);
-      this.setState({
-        mcqOption: i
-      });
     }
     const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint;
     if (shouldDisplayMessage) {
