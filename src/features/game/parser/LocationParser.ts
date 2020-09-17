@@ -54,7 +54,7 @@ export default class LocationParser {
         break;
       case 'nav':
         configValues.forEach(otherLocationId => {
-          Parser.validator.assert(GameEntityType.locations, otherLocationId);
+          Parser.validator.assertEntityType(GameEntityType.locations, otherLocationId);
           location.navigation.add(otherLocationId);
         });
         break;

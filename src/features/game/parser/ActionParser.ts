@@ -78,13 +78,13 @@ export default class ActionParser {
 
       case GameActionType.CompleteObjective:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assert(GameEntityType.objectives, actionParams[0], actionType);
+        Parser.validator.assertEntityType(GameEntityType.objectives, actionParams[0], actionType);
         break;
 
       case GameActionType.PreviewLocation:
       case GameActionType.ChangeBackground:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
+        Parser.validator.assertEntityType(GameEntityType.locations, actionParams[0], actionType);
         break;
 
       case GameActionType.ShowDialogue:
@@ -98,7 +98,7 @@ export default class ActionParser {
         actionParamObj.gameItemType = gameItemType;
 
         actionParamObj.locationId = actionParams[1];
-        Parser.validator.assert(GameEntityType.locations, actionParams[1], actionType);
+        Parser.validator.assertEntityType(GameEntityType.locations, actionParams[1], actionType);
 
         actionParamObj.id = actionParams[2];
         Parser.validator.assertItemType(gameItemType, actionParams[2], actionType);
@@ -106,7 +106,7 @@ export default class ActionParser {
 
       case GameActionType.AddLocationMode:
       case GameActionType.RemoveLocationMode:
-        Parser.validator.assert(GameEntityType.locations, actionParams[0], actionType);
+        Parser.validator.assertEntityType(GameEntityType.locations, actionParams[0], actionType);
         actionParamObj.locationId = actionParams[0];
         actionParamObj.mode = ParserConverter.stringToGameMode(actionParams[1]);
         break;
@@ -133,12 +133,12 @@ export default class ActionParser {
 
       case GameActionType.PlayBGM:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assert(GameEntityType.bgms, actionParams[0], actionType);
+        Parser.validator.assertEntityType(GameEntityType.bgms, actionParams[0], actionType);
         break;
 
       case GameActionType.PlaySFX:
         actionParamObj.id = actionParams[0];
-        Parser.validator.assert(GameEntityType.sfxs, actionParams[0], actionType);
+        Parser.validator.assertEntityType(GameEntityType.sfxs, actionParams[0], actionType);
         break;
 
       case GameActionType.ShowObjectLayer:
@@ -153,7 +153,7 @@ export default class ActionParser {
 
       case GameActionType.MoveCharacter:
         Parser.validator.assertItemType(GameItemType.characters, actionParams[0], actionType);
-        Parser.validator.assert(GameEntityType.locations, actionParams[1], actionType);
+        Parser.validator.assertEntityType(GameEntityType.locations, actionParams[1], actionType);
         actionParamObj.id = actionParams[0];
         actionParamObj.locationId = actionParams[1];
         actionParamObj.position = ParserConverter.stringToPosition(actionParams[2]);
