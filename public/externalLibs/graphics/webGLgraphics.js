@@ -217,17 +217,20 @@ var rightFramebuffer
 var copyTexture
 
 //----------------------Common functions----------------------
-function open_viewport(name, horiz, vert, aa_off) {
-  var canvas
-  canvas = open_pixmap(name, horiz, vert, aa_off)
-  document.body.appendChild(canvas)
-  canvas.setAttribute(
-    'style',
-    canvas.getAttribute('style') +
-      ' display: block; margin-left: auto; margin-right: auto; padding: 25px'
-  )
-  return canvas
-}
+
+// Appears to be unused
+
+// function open_viewport(name, horiz, vert, aa_off) {
+//   var canvas
+//   canvas = open_pixmap(name, horiz, vert, aa_off)
+//   document.body.appendChild(canvas)
+//   canvas.setAttribute(
+//     'style',
+//     canvas.getAttribute('style') +
+//       ' display: block; margin-left: auto; margin-right: auto; padding: 25px'
+//   )
+//   return canvas
+// }
 
 function open_pixmap(name, horiz, vert, aa_off) {
   var this_aa
@@ -237,7 +240,6 @@ function open_pixmap(name, horiz, vert, aa_off) {
     this_aa = antialias
   }
   var canvas = document.createElement('canvas')
-  canvas.id = 'main-canvas'
   //this part uses actual canvas impl.
   canvas.width = horiz * this_aa
   canvas.height = vert * this_aa
@@ -248,7 +250,7 @@ function open_pixmap(name, horiz, vert, aa_off) {
 }
 
 /**
- * Creates a <canvas> object. Should only be called once.
+ * Creates a <canvas> object.
  *
  * Post-condition: canvas is defined as the selected <canvas>
  *   object in the document.
@@ -280,9 +282,11 @@ function getReadyStringifyForRunes(stringify_) {
  */
 function getReadyWebGLForCanvas(mode) {
   // Get the rendering context for WebGL
-  if (!canvas) {
-    canvas = createCanvas();
+  if (canvas) {
+    // remove the previous canvas from the DOM
+    canvas.remove();
   }
+  canvas = createCanvas();
   gl = initWebGL(canvas)
   if (gl) {
     gl.clearColor(1.0, 1.0, 1.0, 1.0) // Set clear color to white, fully opaque
@@ -315,42 +319,44 @@ function getReadyWebGLForCanvas(mode) {
   }
 }
 
-function getReadyWebGL(mode, name, horiz, vert, aa_off) {
-  // mode can be "2d", "3d" or "curve"
-  // Create <canvas> element
-  var canvas = open_viewport(name, horiz, vert, aa_off)
+// Appears to be unused
 
-  // Get the rendering context for WebGL
-  gl = initWebGL(canvas)
-  if (gl) {
-    gl.clearColor(1.0, 1.0, 1.0, 1.0) // Set clear color to white, fully opaque
-    gl.enable(gl.DEPTH_TEST) // Enable depth testing
-    gl.depthFunc(gl.LEQUAL) // Near things obscure far things
-    // Clear the color as well as the depth buffer.
-    clear_viewport()
+// function getReadyWebGL(mode, name, horiz, vert, aa_off) {
+//   // mode can be "2d", "3d" or "curve"
+//   // Create <canvas> element
+//   var canvas = open_viewport(name, horiz, vert, aa_off)
 
-    //TODO: Revise this, it seems unnecessary
-    // Align the drawable canvas in the middle
-    gl.viewport((canvas.width - canvas.height) / 2, 0, canvas.height, canvas.height)
+//   // Get the rendering context for WebGL
+//   gl = initWebGL(canvas)
+//   if (gl) {
+//     gl.clearColor(1.0, 1.0, 1.0, 1.0) // Set clear color to white, fully opaque
+//     gl.enable(gl.DEPTH_TEST) // Enable depth testing
+//     gl.depthFunc(gl.LEQUAL) // Near things obscure far things
+//     // Clear the color as well as the depth buffer.
+//     clear_viewport()
 
-    // setup a GLSL program i.e. vertex and fragment shader
-    if (!(normalShaderProgram = initShader(mode))) {
-      return
-    }
-    curShaderProgram = normalShaderProgram
-    gl.useProgram(curShaderProgram)
+//     //TODO: Revise this, it seems unnecessary
+//     // Align the drawable canvas in the middle
+//     gl.viewport((canvas.width - canvas.height) / 2, 0, canvas.height, canvas.height)
 
-    // rune-specific operations
-    if (mode === '2d' || mode === '3d') {
-        initRuneCommon()
-        initRune3d()
-    }
+//     // setup a GLSL program i.e. vertex and fragment shader
+//     if (!(normalShaderProgram = initShader(mode))) {
+//       return
+//     }
+//     curShaderProgram = normalShaderProgram
+//     gl.useProgram(curShaderProgram)
 
-    if (mode === 'curve') {
-      initCurveAttributes(curShaderProgram)
-    }
-  }
-}
+//     // rune-specific operations
+//     if (mode === '2d' || mode === '3d') {
+//         initRuneCommon()
+//         initRune3d()
+//     }
+
+//     if (mode === 'curve') {
+//       initCurveAttributes(curShaderProgram)
+//     }
+//   }
+// }
 
 function initWebGL(canvas) {
   var gl = null
@@ -802,4 +808,24 @@ function drawCurve(drawMode, curvePosArray) {
 
 function ShapeDrawn(canvas) {
   this.$canvas = canvas;
+}
+
+/**
+ * compares two Pictures and returns the mean squared error of the pixel intensities.
+ * @param {Picture} picture1
+ * @param {Picture} picture2
+ * @return {number} mse
+ * example: picture_mse(show(heart), show(nova));
+ */
+function picture_mse(picture1, picture2) {
+  var width = picture1.$canvas.width
+  var height = picture1.$canvas.height
+  var data1 = picture1.$canvas.getContext('2d').getImageData(0, 0, width, height).data
+  var data2 = picture2.$canvas.getContext('2d').getImageData(0, 0, width, height).data
+  var sq_err = 0
+  for (var i = 0; i < data1.length; i++) {
+    var err = (data1[i] - data2[i]) / 255
+    sq_err += err * err
+  }
+  return sq_err / data1.length
 }

@@ -3,14 +3,20 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
 
-const NotFound: React.SFC<{}> = () => (
+interface DisabledProps {
+  reason?: string;
+}
+
+const Disabled: React.FC<DisabledProps> = ({ reason }) => (
   <div className={classNames('NoPage', Classes.DARK)}>
     <NonIdealState
       icon={IconNames.ERROR}
-      title="404 Not Found"
-      description="The requested resource could not be found"
+      title="Disabled"
+      description={`The Source Academy has been disabled${
+        reason ? ` for this reason: ${reason}` : ''
+      }.`}
     />
   </div>
 );
 
-export default NotFound;
+export default Disabled;

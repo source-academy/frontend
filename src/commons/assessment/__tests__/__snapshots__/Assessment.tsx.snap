@@ -387,14 +387,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -504,14 +504,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -621,14 +621,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 3 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 2 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -740,14 +740,14 @@ exports[`Assessment page does not show attempt Button for upcoming assessments f
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 2 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 1 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1270,14 +1270,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1387,14 +1387,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 4 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 3 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1504,14 +1504,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 3 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 2 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>
@@ -1623,14 +1623,14 @@ exports[`Assessment page with multiple loaded missions renders correctly 1`] = `
                                   <div className=\\"listing-grade\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        Grade: 2 / 3000
+                                        Max Grade: 3000
                                       </h6>
                                     </Component>
                                   </div>
                                   <div className=\\"listing-xp\\">
                                     <Component>
                                       <h6 className=\\"bp3-heading\\">
-                                        XP: 1 / 1000
+                                        Max XP: 1000
                                       </h6>
                                     </Component>
                                   </div>

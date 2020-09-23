@@ -138,7 +138,7 @@ export default class RoomPreview extends Phaser.Scene {
   }
 
   public createContext() {
-    this.context = createContext(4, [], {}, 'gpu', {
+    this.context = createContext(4, [], 'playground', 'default', {
       scene: this,
       phaser: Phaser,
       preloadImageMap: this.preloadImageMap,
@@ -148,7 +148,6 @@ export default class RoomPreview extends Phaser.Scene {
       screenSize: screenSize,
       createAward: (x: number, y: number, key: ItemId) => this.createAward(x, y, key)
     });
-    this.context.externalContext = 'playground';
   }
 
   private async eval(code: string) {

@@ -61,6 +61,7 @@ class DialogueRenderer {
    */
   public destroy() {
     const gameManager = GameGlobalAPI.getInstance().getGameManager();
+    this.typewriter.clearTyping();
     this.blinkingDiamond.clearBlink();
     this.getDialogueBox().off(Phaser.Input.Events.GAMEOBJECT_POINTER_UP);
     fadeAndDestroy(gameManager, this.getDialogueContainer());

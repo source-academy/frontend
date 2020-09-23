@@ -99,13 +99,7 @@ const gradingEditorButtonClass = 'grading-editor-button';
 class GradingEditor extends React.Component<GradingEditorProps, State> {
   constructor(props: GradingEditorProps) {
     super(props);
-    this.state = {
-      gradeAdjustmentInput: props.gradeAdjustment.toString(),
-      xpAdjustmentInput: props.xpAdjustment.toString(),
-      editorValue: props.comments,
-      selectedTab: 'write',
-      currentlySaving: false
-    };
+    this.state = this.makeInitialState();
   }
 
   public render() {
@@ -286,6 +280,15 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
     );
   }
 
+  public componentDidUpdate(prevProps: GradingEditorProps, prevState: State) {
+    if (
+      prevProps.submissionId !== this.props.submissionId ||
+      prevProps.questionId !== this.props.questionId
+    ) {
+      this.setState(this.makeInitialState());
+    }
+  }
+
   /**
    * A custom icons provider. It uses a bulky mapping function
    * defined below.
@@ -445,6 +448,16 @@ class GradingEditor extends React.Component<GradingEditorProps, State> {
         openLinksInNewWindow={true}
       />
     );
+
+  private makeInitialState(): State {
+    return {
+      gradeAdjustmentInput: this.props.gradeAdjustment.toString(),
+      xpAdjustmentInput: this.props.xpAdjustment.toString(),
+      editorValue: this.props.comments,
+      selectedTab: 'write',
+      currentlySaving: false
+    };
+  }
 }
 
 /**

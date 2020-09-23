@@ -1,3 +1,5 @@
+import moment, { Moment } from 'moment';
+
 function isTrue(value?: string): boolean {
   return typeof value === 'string' && value.toUpperCase() === 'TRUE';
 }
@@ -37,6 +39,25 @@ for (let i = 1; ; ++i) {
   const endpoint = process.env[`REACT_APP_OAUTH2_PROVIDER${i}_ENDPOINT`] || '';
 
   authProviders.set(id, { name, endpoint, isDefault: i === 1 });
+}
+
+const disablePeriods: Array<{ start: Moment; end: Moment; reason?: string }> = [];
+
+if (!isTest) {
+  for (let i = 1; ; ++i) {
+    const startStr = process.env[`REACT_APP_DISABLE${i}_START`];
+    const endStr = process.env[`REACT_APP_DISABLE${i}_END`];
+    if (!startStr || !endStr) {
+      break;
+    }
+    const reason = process.env[`REACT_APP_DISABLE${i}_REASON`];
+    const start = moment(startStr);
+    const end = moment(endStr);
+    if (end.isBefore(start) || moment().isAfter(end)) {
+      continue;
+    }
+    disablePeriods.push({ start, end, reason });
+  }
 }
 
 export enum Links {
@@ -88,7 +109,8 @@ const Constants = {
   googleClientId,
   googleApiKey,
   googleAppId,
-  sharedbBackendUrl
+  sharedbBackendUrl,
+  disablePeriods
 };
 
 export default Constants;

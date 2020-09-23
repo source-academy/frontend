@@ -16,23 +16,30 @@ type AssertionDetail = {
 };
 
 /**
- * This class acts as a validator to ensure that all the ids
- * that are used as arguments inside actions or in the txt are correct ids
- * that have been declared in other parts of the txt.
+ * Parser Validator has two functions:
  *
- * e.g. this class ensures that if make_object_glow(door) is called,
- * "door" is an object id that as declared in 'objects' paragraph
- * somewhere in the txt.
+ * A. Duplicate ID checker
+ * Asserts that there are no duplicated IDs in the text file
  *
- * This helps story writers ensure the validity of their txt file
- * and also prevents game engine from running into id-not-found error
+ * Implementation: Keep a set of IDs declared.
+ * As IDs are added onto the set, check and throw error if ID
+ * is added twice onto the set.
  *
- * How it works: Since the action "make_object_glow(door)" might be declared before the
- * object "door" is even declared, when the action is parsed, you can call this class
- * to store and remember the assertion that "door" must be a objectId,
- * Once the parser finishes parsing the entire txt,
- * you can run the verifyAssertions function of this class
- * to check all the assertions made is true.
+ * B. Type assertion manager
+ * Assert that all the IDs used are declared somewhere in the text file.
+ *
+ * e.g.
+ * Say make_object_glow(door) is called
+ * Since make_object_glow takes in an Object Id as parameter,
+ * we assert that "door" is an Object ID declared in the text.
+ *
+ * Implementation: Store all the assertions by type when ID is used.
+ * At the end of the parsing process, verify that all type assertions exist
+ * by counterchecking with items in the Checkpoint Object.
+ *
+ * Note the two types of assertions:
+ * Game item assertions - Item ID e.g. Dialogue, Object, Bbox, Character, Action, Award
+ * Game entity assertions - Entity ID e.g. Location, Bgm, Sfx, Objectives
  */
 export default class ParserValidator {
   private gameItemAsserts: Map<GameItemType, AssertionDetail[]>;
@@ -45,64 +52,58 @@ export default class ParserValidator {
     this.allItemIds = new Set();
   }
 
+  ////////////////////////////
+  //  Duplicate ID Checker  //
+  ////////////////////////////
+
   /**
-   * We register an item ids to check for possible duplicates
-   * with other item ids
+   * We register item id to check for possible duplicates
+   * with other item ids.
    *
-   * @param id new ID for a game item or game entity
+   * @param {string} id an object ID e.g. ItemId / Location ID / Objective ID / BGM ID / SFX ID
    */
-  public register(id: string) {
+  public registerId(id: string) {
     if (this.allItemIds.has(id)) {
       throw new Error(`Duplicate item id ${id}`);
     }
     this.allItemIds.add(id);
   }
 
-  /**
-   * This class stores an assertion that a certain ItemId is
-   * of a certain type, e.g. assertItemType('objects', 'door')
-   * ensures that 'door' is of type 'objects'
-   *
-   * @param gameItemType The attribute that the itemId needs to be
-   * @param itemId the itemId that needs to be checked for validity
-   * @param actionType Action type e.g. make_object_glow if the assertion
-   *                   was made while parsing an action
-   */
-  public assertItemType(gameItemType: GameItemType, itemId: ItemId, actionType?: string) {
-    if (!this.gameItemAsserts.get(gameItemType)) {
-      this.gameItemAsserts.set(gameItemType, []);
-    }
-    this.gameItemAsserts.get(gameItemType)!.push({ itemId, actionType });
-    return itemId;
-  }
-
-  /**
-   * This class stores an assertion that a certain entity is
-   * of a certain type, e.g. assert('locations', 'room')
-   * ensures that 'room' is of locations type.
-   *
-   * @param gameEntityType The attribute that the id needs to be
-   * @param id the itemId that needs to be checked for validity
-   * @param actionType Action type e.g. make_object_glow if the assertion
-   *                   was made while parsing an action
-   */
-  public assert(gameEntityType: GameEntityType, id: string, actionType?: string) {
-    if (!this.gameEntityAsserts.get(gameEntityType)) {
-      this.gameEntityAsserts.set(gameEntityType, []);
-    }
-    this.gameEntityAsserts.get(gameEntityType)!.push({ itemId: id, actionType });
-    return id;
-  }
-
-  public assertItemTypes(gameItemType: GameItemType, itemIds: string[], actionType?: string) {
-    itemIds.forEach(itemId => this.assertItemType(gameItemType, itemId, actionType));
-  }
+  /////////////////////////////
+  //  Type assertion manager //
+  /////////////////////////////
 
   public verifyAssertions() {
     this.verifyGameItemAssert();
     this.verifyGameEntityAsserts();
   }
 
+  //////////////////////////////////////////////
+  //  Type assertion manager - Game Item Type //
+  //////////////////////////////////////////////
+
+  /**
+   * This function stores game item type assertions.
+   *
+   * @param gameItemType the attribute that the itemId needs to be
+   * @param itemId the itemId that needs to be checked for validity
+   * @param actionType action type e.g. make_object_glow if the assertion
+   *                   was made while parsing an action
+   */
+  public assertItemType(gameItemType: GameItemType, itemId: ItemId, actionType?: string) {
+    if (gameItemType === GameItemType.talkTopics) {
+      gameItemType = GameItemType.dialogues;
+    }
+    if (!this.gameItemAsserts.get(gameItemType)) {
+      this.gameItemAsserts.set(gameItemType, []);
+    }
+    this.gameItemAsserts.get(gameItemType)!.push({ itemId, actionType });
+  }
+
+  /**
+   * This function verifies all game item type assertions,
+   * ensuring that each ID used belongs to the correct type.
+   */
   private verifyGameItemAssert() {
     this.gameItemAsserts.forEach(
       (assertionDetails: AssertionDetail[], gameItemType: GameItemType) => {
@@ -119,6 +120,47 @@ export default class ParserValidator {
     );
   }
 
+  /**
+   * Similar to assert item type, but used for asserting multiple game item types at once.
+   *
+   * @param gameItemType item type that the ID must be
+   * @param itemIds item IDs of the item to assert
+   * @param actionType action type e.g. make_object_glow if the assertion
+   *                   was made while parsing an action
+   */
+  public assertItemTypes(gameItemType: GameItemType, itemIds: string[], actionType?: string) {
+    itemIds.forEach(itemId => this.assertItemType(gameItemType, itemId, actionType));
+  }
+
+  ////////////////////////////////////////////////
+  //  Type assertion manager - Game Entity Type //
+  ////////////////////////////////////////////////
+
+  /**
+   * This function stores game entity type assertions.
+   * ensures that 'room' is of locations type.
+   *
+   * @param gameEntityType the attribute that the id needs to be
+   * @param id the itemId that needs to be checked for validity
+   * @param actionType action type e.g. make_object_glow if the assertion
+   *                   was made while parsing an action
+   */
+  public assertEntityType(gameEntityType: GameEntityType, id: string, actionType?: string) {
+    if (!this.gameEntityAsserts.get(gameEntityType)) {
+      this.gameEntityAsserts.set(gameEntityType, []);
+    }
+    this.gameEntityAsserts.get(gameEntityType)!.push({ itemId: id, actionType });
+  }
+
+  /**
+   * This function verifies game entity assertions that have been stored.
+   * ensures that 'room' is of locations type.
+   *
+   * @param gameEntityType the attribute that the id needs to be
+   * @param id the itemId that needs to be checked for validity
+   * @param actionType action type e.g. make_object_glow if the assertion
+   *                   was made while parsing an action
+   */
   private verifyGameEntityAsserts() {
     this.gameEntityAsserts.forEach(
       (assertionDetails: AssertionDetail[], gameEntityType: GameEntityType) => {
@@ -128,6 +170,7 @@ export default class ParserValidator {
             case GameEntityType.locations:
               Parser.checkpoint.map.getLocationAtId(itemId);
               break;
+
             case GameEntityType.objectives:
               if (Parser.checkpoint.objectives.getObjectives().get(itemId) === undefined) {
                 if (actionType) {
@@ -136,6 +179,7 @@ export default class ParserValidator {
                 throw new Error(`Cannot find objective id "${itemId}"`);
               }
               break;
+
             case GameEntityType.bgms:
               const numberOfBgm = Parser.checkpoint.map
                 .getSoundAssets()
@@ -147,6 +191,7 @@ export default class ParserValidator {
                 throw new Error(`More than 1 bgm key "${itemId}"`);
               }
               break;
+
             case GameEntityType.sfxs:
               const numberOfSfx = Parser.checkpoint.map
                 .getSoundAssets()
