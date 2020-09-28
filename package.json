@@ -10,7 +10,7 @@
     "update-ui-snapshots": "Update UI test snapshots"
   },
   "scripts": {
-    "build": "cross-env EXTEND_ESLINT=true craco build",
+    "build": "cross-env EXTEND_ESLINT=true NODE_OPTIONS=--max_old_space_size=8192 craco build",
     "coverage": "./scripts/coverage-fix.sh do && craco test --coverage && ./scripts/coverage-fix.sh undo",
     "format": "eslint --ext \".js,.jsx,.ts,.tsx\" --fix src && prettier --write \"src/**/*.{js,jsx,ts,tsx}\" && prettier --write --parser scss \"src/**/*.scss\"",
     "format:tsx": "prettier --list-different \"src/**/*.{js,jsx,ts,tsx}\"",
@@ -20,7 +20,8 @@
     "test": "craco test",
     "test-coveralls": "./scripts/test-coveralls.sh",
     "update-ui-snapshots": "jest --updateSnapshot",
-    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src"
+    "eslint": "eslint --ext \".js,.jsx,.ts,.tsx\" src",
+    "build-serviceworker": "node ./scripts/build-serviceworker.js"
   },
   "husky": {
     "hooks": {

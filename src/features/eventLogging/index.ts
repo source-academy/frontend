@@ -1,8 +1,8 @@
-import { memoize } from 'lodash';
 import { v4 as uuid } from 'uuid';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { Input as RecorderInput, PlaybackData } from '../sourceRecorder/SourceRecorderTypes';
+
 export type UnsentLog = {
   assessmentId: number;
   questionId: number;
@@ -36,7 +36,7 @@ export function log(id: string, input: Input) {
     sessionId: id,
     assessmentId: assessmentIdLookup[id]
   }).then(() => {
-    get_records().then(x => console.log('records:', x));
+    get_records().then((x: any) => console.log('records:', x));
   });
 }
 
@@ -106,11 +106,10 @@ function save_record(record: LogRecord) {
 }
 
 // Retrieving and uploading records
-// TODO: put into a serviceworker.
 // This forces it to be singleton,
 // preventing multiple uploads without a lock.
 
-export function get_records() {
+export function get_records(): Promise<Array<LogRecord & { id: number }>> {
   return new Promise((resolve, reject) => {
     getDb().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -121,4 +120,31 @@ export function get_records() {
       };
     });
   });
+}
+
+export function delete_records_upto(id: number) {
+  return new Promise((resolve, reject) => {
+    getDb().then(db => {
+      const transaction = db.transaction([STORE_NAME], 'readwrite');
+      const range = IDBKeyRange.bound(0, id, false, false);
+      const objectStore = transaction.objectStore(STORE_NAME);
+      objectStore.delete(range);
+      transaction.oncomplete = resolve;
+      transaction.onerror = reject;
+    });
+  });
+}
+
+// Importing lodash for this is apparently a bad idea.
+// This saves 70kb. Out of 72kb.
+function memoize<T>(fn: () => T) {
+  let answer: T | null = null;
+  return () => {
+    if (!answer) {
+      answer = fn();
+      return answer;
+    } else {
+      return answer;
+    }
+  };
 }
