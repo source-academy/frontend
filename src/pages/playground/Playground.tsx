@@ -30,6 +30,7 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
+import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
@@ -509,6 +510,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
         toSpawn: () => true
       });
     }
+
+    tabs.push(remoteExecutionTab);
+
     return tabs;
   }, [
     playgroundIntroductionTab,
@@ -697,6 +701,14 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
+  toSpawn: () => true
+};
+
+const remoteExecutionTab: SideContentTab = {
+  label: 'Remote Execution',
+  iconName: IconNames.SATELLITE,
+  body: <SideContentRemoteExecution workspace="playground" />,
+  id: SideContentType.remoteExecution,
   toSpawn: () => true
 };
 

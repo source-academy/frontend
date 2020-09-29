@@ -23,6 +23,7 @@ import { call, delay, put, race, select, take } from 'redux-saga/effects';
 import * as Sourceror from 'sourceror';
 
 import { PlaygroundState } from '../../features/playground/PlaygroundTypes';
+import { DeviceSession } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { OverallState, styliseSublanguage } from '../application/ApplicationTypes';
 import { externalLibraries, ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
@@ -74,26 +75,36 @@ export default function* WorkspaceSaga(): SagaIterator {
 
   yield takeEvery(EVAL_EDITOR, function* (action: ReturnType<typeof actions.evalEditor>) {
     const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select((state: OverallState) => {
-      const prependCode = state.workspaces[workspaceLocation].editorPrepend;
-      const editorCode = state.workspaces[workspaceLocation].editorValue!;
-      return [prependCode, editorCode] as [string, string];
-    });
-
-    const [chapter, execTime, symbols, externalLibraryName, globals, variant]: [
+    const [
+      prepend,
+      editorCode,
+      chapter,
+      execTime,
+      symbols,
+      externalLibraryName,
+      globals,
+      variant,
+      remoteExecutionSession
+    ]: [
+      string,
+      string,
       number,
       number,
       string[],
       ExternalLibraryName,
       Array<[string, any]>,
-      Variant
+      Variant,
+      DeviceSession | undefined
     ] = yield select((state: OverallState) => [
+      state.workspaces[workspaceLocation].editorPrepend,
+      state.workspaces[workspaceLocation].editorValue!,
       state.workspaces[workspaceLocation].context.chapter,
       state.workspaces[workspaceLocation].execTime,
       state.workspaces[workspaceLocation].context.externalSymbols,
       state.workspaces[workspaceLocation].externalLibrary,
       state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].context.variant
+      state.workspaces[workspaceLocation].context.variant,
+      state.session.remoteExecutionSession
     ]);
     const library = {
       chapter,
@@ -104,47 +115,51 @@ export default function* WorkspaceSaga(): SagaIterator {
       },
       globals
     };
-    // End any code that is running right now.
-    yield put(actions.beginInterruptExecution(workspaceLocation));
-    // Clear the context, with the same chapter and externalSymbols as before.
-    yield put(actions.beginClearContext(workspaceLocation, library, false));
-    yield put(actions.clearReplOutput(workspaceLocation));
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
-    const [prepend, tempvalue] = code;
-    let value = tempvalue;
-    // Check for initial syntax errors. If there are errors, we continue with
-    // eval and let it print the error messages.
-    parse(tempvalue, context);
-    if (!context.errors.length) {
-      // Otherwise we step through the breakpoints one by one and check them.
-      const exploded = tempvalue.split('\n');
-      for (const b in breakpoints) {
-        if (typeof b !== 'string') {
-          continue;
-        }
+    if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
+      yield put(actions.clearReplOutput(workspaceLocation));
+      yield put(actions.remoteExecRun(editorCode));
+    } else {
+      // End any code that is running right now.
+      yield put(actions.beginInterruptExecution(workspaceLocation));
+      // Clear the context, with the same chapter and externalSymbols as before.
+      yield put(actions.beginClearContext(workspaceLocation, library, false));
+      yield put(actions.clearReplOutput(workspaceLocation));
+      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+      let value = editorCode;
+      // Check for initial syntax errors. If there are errors, we continue with
+      // eval and let it print the error messages.
+      parse(value, context);
+      if (!context.errors.length) {
+        // Otherwise we step through the breakpoints one by one and check them.
+        const exploded = editorCode.split('\n');
+        for (const b in breakpoints) {
+          if (typeof b !== 'string') {
+            continue;
+          }
 
-        const index: number = +b;
-        context.errors = [];
-        exploded[index] = 'debugger;' + exploded[index];
-        value = exploded.join('\n');
-        parse(value, context);
-        if (context.errors.length) {
-          const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
-          yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
+          const index: number = +b;
+          context.errors = [];
+          exploded[index] = 'debugger;' + exploded[index];
+          value = exploded.join('\n');
+          parse(value, context);
+          if (context.errors.length) {
+            const msg = 'Hint: Misplaced breakpoint at line ' + (index + 1) + '.';
+            yield put(actions.sendReplInputToOutput(msg, workspaceLocation));
+          }
         }
       }
-    }
 
-    // Evaluate the prepend silently with a privileged context, if it exists
-    if (prepend.length) {
-      const elevatedContext = makeElevatedContext(context);
-      yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
-      // Block use of methods from privileged context
-      yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
-    }
+      // Evaluate the prepend silently with a privileged context, if it exists
+      if (prepend.length) {
+        const elevatedContext = makeElevatedContext(context);
+        yield call(evalCode, prepend, elevatedContext, execTime, workspaceLocation, EVAL_SILENT);
+        // Block use of methods from privileged context
+        yield* blockExtraMethods(elevatedContext, context, execTime, workspaceLocation);
+      }
 
-    yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
+      yield call(evalCode, value, context, execTime, workspaceLocation, EVAL_EDITOR);
+    }
   });
 
   yield takeEvery(PROMPT_AUTOCOMPLETE, function* (

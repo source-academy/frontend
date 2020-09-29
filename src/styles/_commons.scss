@@ -48,6 +48,7 @@
   https://github.com/palantir/blueprint/pull/3403
 */
 .#{$ns}-overlay {
+  /* breaks context menu :( */
   .#{$ns}-overlay-backdrop {
     position: sticky;
     height: 100%;

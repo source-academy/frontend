@@ -22,6 +22,10 @@ import {
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
+import {
+  Device,
+  WebSocketEndpointInformation
+} from '../../features/remoteExecution/RemoteExecutionTypes';
 import { PlaybackData, SourcecastData } from '../../features/sourceRecorder/SourceRecorderTypes';
 import { store } from '../../pages/createStore';
 import { Tokens, User } from '../application/types/SessionTypes';
@@ -864,6 +868,125 @@ export const postSublanguage = async (
 
   return resp;
 };
+
+/**
+ * GET /devices
+ */
+export async function fetchDevices(tokens: Tokens): Promise<Device | null> {
+  const resp = await request('devices', 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  return resp && resp.ok ? resp.json() : null;
+}
+
+/**
+ * GET /devices/:id/ws_endpoint
+ */
+export async function getDeviceWSEndpoint(
+  device: Device,
+  tokens: Tokens
+): Promise<WebSocketEndpointInformation | null> {
+  const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  return resp && resp.ok ? resp.json() : null;
+}
+
+/**
+ * POST /devices
+ */
+export async function registerDevice(device: Omit<Device, 'id'>, tokens?: Tokens): Promise<Device> {
+  tokens = fillTokens(tokens);
+  const resp = await request('devices', 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true,
+    shouldAutoLogout: false,
+    body: device
+  });
+
+  if (!resp) {
+    throw new Error('Unknown error occurred.');
+  }
+
+  if (!resp.ok) {
+    const message = await resp.text();
+    throw new Error(`Failed to register: ${message}`);
+  }
+
+  return resp.json();
+}
+
+/**
+ * POST /devices/:id
+ */
+export async function editDevice(
+  device: Pick<Device, 'id' | 'title'>,
+  tokens?: Tokens
+): Promise<boolean> {
+  tokens = fillTokens(tokens);
+  const resp = await request(`devices/${device.id}`, 'POST', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true,
+    shouldAutoLogout: false,
+    body: { title: device.title }
+  });
+
+  if (!resp) {
+    throw new Error('Unknown error occurred.');
+  }
+
+  if (!resp.ok) {
+    const message = await resp.text();
+    throw new Error(`Failed to edit: ${message}`);
+  }
+
+  return true;
+}
+
+/**
+ * DELETE /devices/:id
+ */
+export async function deleteDevice(device: Pick<Device, 'id'>, tokens?: Tokens): Promise<boolean> {
+  tokens = fillTokens(tokens);
+  const resp = await request(`devices/${device.id}`, 'DELETE', {
+    accessToken: tokens.accessToken,
+    refreshToken: tokens.refreshToken,
+    shouldRefresh: true
+  });
+
+  if (!resp) {
+    throw new Error('Unknown error occurred.');
+  }
+
+  if (!resp.ok) {
+    const message = await resp.text();
+    throw new Error(`Failed to delete: ${message}`);
+  }
+
+  return true;
+}
+
+function fillTokens(tokens?: Tokens): Tokens {
+  tokens = tokens || getTokensFromStore();
+  if (!tokens) {
+    throw new Error('Not logged in.');
+  }
+  return tokens;
+}
+
+function getTokensFromStore(): Tokens | undefined {
+  const { accessToken, refreshToken } = store.getState().session;
+
+  return accessToken && refreshToken ? { accessToken, refreshToken } : undefined;
+}
 
 /**
  * @returns {(Response|null)} Response if successful, otherwise null.
