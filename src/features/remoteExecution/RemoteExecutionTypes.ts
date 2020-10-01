@@ -46,6 +46,8 @@ export const deviceTypes: DeviceType[] = [
   {
     id: 'EV3',
     name: 'Lego Mindstorms EV3',
+    // This list must be in the same order as the list here:
+    // https://github.com/source-academy/sinter/blob/ev3/devices/ev3/src/ev3_functions.c#L652
     internalFunctions: [
       'ev3_pause',
       'ev3_connected',
@@ -80,7 +82,9 @@ export const deviceTypes: DeviceType[] = [
       'ev3_touchSensor4',
       'ev3_touchSensorPressed',
       'ev3_hello',
-      'ev3_waitForButtonPress'
+      'ev3_waitForButtonPress',
+      'ev3_speak',
+      'ev3_playSequence'
     ]
   }
 ];
