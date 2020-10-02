@@ -1739,10 +1739,10 @@
   dependencies:
     "@types/gapi" "*"
 
-"@types/gapi.client.drive@^3.0.8":
-  version "3.0.8"
-  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.8.tgz#7c91b21a8dcc526a366844f56814de7cf4566329"
-  integrity sha512-VKnITcwgEozkqbFE6kyu6fjTM046ikzBiHvmApl3c+naFvDQI5/5ikSIGCMyLRJAr9+5ZGiQL/cvNCT5gMs31A==
+"@types/gapi.client.drive@^3.0.10":
+  version "3.0.10"
+  resolved "https://registry.yarnpkg.com/@types/gapi.client.drive/-/gapi.client.drive-3.0.10.tgz#545f71475de01e7de43ac2e3e7934aed2a8b2680"
+  integrity sha512-1Tb1s8N2tpA+8OCgtueG1Yo+6xyzhE8ZMqg4H225PSarbyWNJcGnkEm6XnFxFnDCVD95nx/Y68I3TeV4wS/nzw==
   dependencies:
     "@types/gapi.client" "*"
 
