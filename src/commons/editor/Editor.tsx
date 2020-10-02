@@ -116,7 +116,7 @@ const makeHandleAnnotationChange = (session: Ace.EditSession) => () => {
   for (const anno of annotations) {
     if (anno.type === 'info') {
       anno.type = 'error';
-      // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore // Probably some undocumented type
       anno.className = 'ace_error';
       count++;

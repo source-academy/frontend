@@ -15,7 +15,7 @@ exports[`EditableAchievementAbility component renders correctly 1`] = `
                       <div onKeyDown={[Function (anonymous)]} onKeyUp={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
                         <div>
                           <Blueprint3.Button className=\\"bp3-minimal\\" text=\\"Community\\">
-                            <button type=\\"button\\" className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                            <button type=\\"button\\" className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                               <Blueprint3.Icon icon={[undefined]} />
                               <span className=\\"bp3-button-text\\">
                                 Community

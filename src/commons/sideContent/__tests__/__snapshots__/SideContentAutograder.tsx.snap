@@ -4,7 +4,7 @@ exports[`Autograder renders autograder results with different statuses correctly
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
-      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
           <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -60,7 +60,7 @@ exports[`Autograder renders autograder results with different statuses correctly
       </div>
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -224,7 +224,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
-      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
           <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -372,7 +372,7 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
       </div>
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -434,7 +434,7 @@ exports[`Autograder renders private testcases with different statuses correctly 
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
-      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
           <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -645,7 +645,7 @@ exports[`Autograder renders private testcases with different statuses correctly 
       </div>
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
@@ -681,7 +681,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
 "<SideContentAutograder autogradingResults={{...}} testcases={{...}} handleTestcaseEval={[Function: handleTestcaseEval]}>
   <div className=\\"Autograder\\">
     <Blueprint3.Button className=\\"collapse-button\\" icon=\\"caret-down\\" minimal={true} onClick={[Function (anonymous)]}>
-      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon=\\"caret-down\\">
           <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>
             <svg fill={[undefined]} data-icon=\\"caret-down\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
@@ -892,7 +892,7 @@ exports[`Autograder renders public testcases with different statuses correctly 1
       </div>
     </Blueprint3.Collapse>
     <Blueprint3.Button disabled={false} fill={false} intent=\\"none\\" minimal={true} className=\\"collapse-button\\" type={[undefined]} icon={{...}} onClick={[Function (anonymous)]}>
-      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type={[undefined]} disabled={[undefined]} className=\\"bp3-button bp3-minimal collapse-button\\" onClick={[Function (anonymous)]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={{...}}>
           <Blueprint3.Icon icon=\\"caret-down\\" color={[undefined]}>
             <span icon=\\"caret-down\\" className=\\"bp3-icon bp3-icon-caret-down\\" title={[undefined]}>

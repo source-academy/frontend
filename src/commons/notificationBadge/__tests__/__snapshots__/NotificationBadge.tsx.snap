@@ -14,7 +14,7 @@ exports[`Badge renders properly with notifications 1`] = `
                 <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                   <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                     <Blueprint3.Icon icon={[undefined]} />
-                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
                       <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
                         4
                       </span>
@@ -45,7 +45,7 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 1`]
                 <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                   <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                     <Blueprint3.Icon icon={[undefined]} />
-                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
                       <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
                         4
                       </span>
@@ -76,7 +76,7 @@ exports[`Badge with filter, filterNotificationsByAssessment renders properly 2`]
                 <Blueprint3.Tag intent=\\"danger\\" round={true} large={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
                   <span disabled={[undefined]} className=\\"bp3-tag bp3-intent-danger bp3-round\\" tabIndex={[undefined]}>
                     <Blueprint3.Icon icon={[undefined]} />
-                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\">
+                    <Blueprint3.Text className=\\"bp3-fill\\" ellipsize={true} tagName=\\"span\\" title={[undefined]}>
                       <span className=\\"bp3-text-overflow-ellipsis bp3-fill\\" title={[undefined]}>
                         4
                       </span>

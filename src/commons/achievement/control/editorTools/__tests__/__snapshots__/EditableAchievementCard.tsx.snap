@@ -9,7 +9,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
           <div>
             <div>
               <Blueprint3.Button text=\\"Edit View\\" onClick={[Function: onClick]}>
-                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                   <Blueprint3.Icon icon={[undefined]} />
                   <span className=\\"bp3-button-text\\">
                     Edit View
@@ -30,7 +30,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
           <div>
             <div>
               <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
-                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                   <Blueprint3.Icon icon={[undefined]} />
                   <span className=\\"bp3-button-text\\">
                     Edit Background
@@ -73,7 +73,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
                                   <div onKeyDown={[Function (anonymous)]} onKeyUp={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
                                     <div>
                                       <Blueprint3.Button className=\\"bp3-minimal\\" text=\\"Core\\">
-                                        <button type=\\"button\\" className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                                        <button type=\\"button\\" className=\\"bp3-button bp3-minimal\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                                           <Blueprint3.Icon icon={[undefined]} />
                                           <span className=\\"bp3-button-text\\">
                                             Core
@@ -107,7 +107,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
                               <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                 <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                   <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
+                                    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
                                       <Blueprint3.Icon icon={[undefined]} />
                                       <span className=\\"bp3-button-text\\">
                                         Change Deadline
@@ -142,7 +142,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
                               <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                                 <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                                   <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                                    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
+                                    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
                                       <Blueprint3.Icon icon={[undefined]} />
                                       <span className=\\"bp3-button-text\\">
                                         Change Release
@@ -170,7 +170,7 @@ exports[`EditableAchievementCard component renders correctly 1`] = `
         <div className=\\"details\\">
           <AchievementDeleter deleteAchievement={[Function: handleDeleteAchievement]}>
             <Blueprint3.Button icon=\\"trash\\" text=\\"Delete Achievement\\" intent=\\"danger\\" onClick={[Function: onClick]}>
-              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+              <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                 <Blueprint3.Icon icon=\\"trash\\">
                   <span icon=\\"trash\\" className=\\"bp3-icon bp3-icon-trash\\" title={[undefined]}>
                     <svg fill={[undefined]} data-icon=\\"trash\\" width={16} height={16} viewBox=\\"0 0 16 16\\">
