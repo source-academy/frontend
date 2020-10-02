@@ -35,7 +35,7 @@
     "@sentry/browser": "^5.20.1",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "ace-builds": "^1.4.12",
-    "acorn": "^7.4.0",
+    "acorn": "^8.0.2",
     "ag-grid-community": "^23.2.1",
     "ag-grid-react": "^23.2.1",
     "array-move": "^3.0.1",
