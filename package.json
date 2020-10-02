@@ -32,7 +32,7 @@
     "@blueprintjs/datetime": "^3.18.5",
     "@blueprintjs/icons": "^3.20.0",
     "@blueprintjs/select": "^3.13.6",
-    "@sentry/browser": "^5.20.1",
+    "@sentry/browser": "^5.24.2",
     "@sourceacademy/sharedb-ace": "^2.0.2",
     "ace-builds": "^1.4.12",
     "acorn": "^7.4.0",
