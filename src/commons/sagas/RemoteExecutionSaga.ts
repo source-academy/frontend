@@ -2,7 +2,7 @@ import { SlingClient } from '@sourceacademy/sling-client';
 import { assemble, compile, Context } from 'js-slang';
 import { ExceptionError } from 'js-slang/dist/errors/errors';
 import { SagaIterator } from 'redux-saga';
-import { call, put, race, select, take, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, race, select, take } from 'redux-saga/effects';
 
 import {
   Device,
@@ -16,9 +16,11 @@ import {
 } from '../../features/remoteExecution/RemoteExecutionTypes';
 import { store } from '../../pages/createStore';
 import { OverallState } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { BEGIN_INTERRUPT_EXECUTION } from '../application/types/InterpreterTypes';
 import { actions } from '../utils/ActionsHelper';
 import { fetchDevices, getDeviceWSEndpoint } from './RequestsSaga';
+import { safeTakeEvery as takeEvery, safeTakeLatest as takeLatest } from './SafeEffects';
 
 const dummyLocation = {
   start: { line: 0, column: 0 },
@@ -54,7 +56,7 @@ export function* remoteExecutionSaga(): SagaIterator {
     }
   });
 
-  yield takeLatest(REMOTE_EXEC_CONNECT, function* (
+  yield takeEvery(REMOTE_EXEC_CONNECT, function* (
     action: ReturnType<typeof actions.remoteExecConnect>
   ) {
     const [tokens, session]: [any, DeviceSession | undefined] = yield select(
@@ -66,13 +68,19 @@ export function* remoteExecutionSaga(): SagaIterator {
         state.session.remoteExecutionSession
       ]
     );
+    const { device, workspace } = action.payload;
     const endpoint: WebSocketEndpointInformation | null = yield call(
       getDeviceWSEndpoint,
-      action.payload.device,
+      device,
       tokens
     );
     if (!endpoint) {
-      // TODO handle error
+      yield put(
+        actions.remoteExecUpdateSession({
+          ...action.payload,
+          connection: { status: 'FAILED', error: 'Could not retrieve MQTT endpoint' }
+        })
+      );
       return;
     }
 
@@ -87,7 +95,7 @@ export function* remoteExecutionSaga(): SagaIterator {
     });
     client.on('statusChange', isRunning => {
       store.dispatch(
-        actions.updateWorkspace(action.payload.workspace, {
+        actions.updateWorkspace(workspace, {
           isRunning
         })
       );
@@ -95,31 +103,60 @@ export function* remoteExecutionSaga(): SagaIterator {
     client.on('display', (message, type) => {
       switch (type) {
         case 'output':
-          store.dispatch(actions.handleConsoleLog(`${message}`, action.payload.workspace));
+          store.dispatch(actions.handleConsoleLog(`${message}`, workspace));
           break;
         case 'error': {
           const error = new ExceptionError(new Error(`${message}`), dummyLocation);
-          store.dispatch(actions.evalInterpreterError([error], action.payload.workspace));
+          store.dispatch(actions.evalInterpreterError([error], workspace));
           break;
         }
         case 'result':
-          store.dispatch(actions.evalInterpreterSuccess(message, action.payload.workspace));
+          store.dispatch(actions.evalInterpreterSuccess(message, workspace));
           break;
       }
     });
+    const deviceType = deviceTypesById.get(device.type);
 
     yield put(
       actions.remoteExecUpdateSession({
-        ...action.payload,
+        device,
+        workspace,
         connection: { status: 'CONNECTING', client, endpoint }
       })
     );
+    yield put(
+      actions.updateWorkspace(workspace, {
+        isRunning: false,
+        isEditorAutorun: false,
+        isDebugging: false,
+        externalLibrary: deviceType?.deviceLibraryName,
+        output: []
+      })
+    );
+    yield put(
+      actions.beginClearContext(
+        workspace,
+        {
+          chapter: deviceType?.languageChapter || 3,
+          variant: 'default',
+          external: {
+            name: deviceType?.deviceLibraryName || ExternalLibraryName.NONE,
+            symbols: deviceType?.internalFunctions || []
+          },
+          globals: []
+        },
+        false
+      )
+    );
     try {
-      // TODO cancel connect and handle error
       const connectPromise = new Promise((resolve, reject) => {
-        client.once('connect', () => resolve(true));
-        client.once('error', reject);
-        client.connect();
+        try {
+          client.once('connect', () => resolve(true));
+          client.once('error', reject);
+          client.connect();
+        } catch {
+          reject();
+        }
       });
       const connectOrCancel: {
         connect?: boolean;
@@ -128,7 +165,7 @@ export function* remoteExecutionSaga(): SagaIterator {
         reconnect: take(REMOTE_EXEC_CONNECT),
         disconnect: take(REMOTE_EXEC_DISCONNECT)
       });
-      if (connectOrCancel.connect === true) {
+      if (connectOrCancel.connect) {
         yield put(
           actions.remoteExecUpdateSession({
             ...action.payload,
@@ -155,11 +192,15 @@ export function* remoteExecutionSaga(): SagaIterator {
     const session: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession
     );
-    const oldClient = session?.connection.client;
+    if (!session) {
+      return;
+    }
+    const oldClient = session.connection.client;
     if (oldClient) {
       oldClient.disconnect();
     }
     yield put(actions.remoteExecUpdateSession(undefined));
+    yield put(actions.externalLibrarySelect(ExternalLibraryName.NONE, session.workspace, true));
   });
 
   yield takeEvery(REMOTE_EXEC_RUN, function* ({
@@ -168,14 +209,27 @@ export function* remoteExecutionSaga(): SagaIterator {
     const session: DeviceSession | undefined = yield select(
       (state: OverallState) => state.session.remoteExecutionSession
     );
-    if (!session || session.connection.status !== 'CONNECTED') {
+    if (!session) {
       return;
     }
+    if (session.connection.status !== 'CONNECTED') {
+      yield put(
+        actions.updateWorkspace(session.workspace, {
+          isRunning: false
+        })
+      );
+      return;
+    }
+
+    yield put(actions.clearReplOutput(session.workspace));
 
     const client = session.connection.client;
     const context: Context = yield select(
       (state: OverallState) => state.workspaces[session.workspace].context
     );
+    // clear the context of errors (note: the way this works is that the context
+    // is mutated by js-slang anyway, so it's ok to do it like this)
+    context.errors.length = 0;
     const compiled: ReturnType<typeof compile> = yield call(
       compile,
       program,

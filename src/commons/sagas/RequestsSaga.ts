@@ -892,7 +892,8 @@ export async function getDeviceWSEndpoint(
   const resp = await request(`devices/${device.id}/ws_endpoint`, 'GET', {
     accessToken: tokens.accessToken,
     refreshToken: tokens.refreshToken,
-    shouldRefresh: true
+    shouldRefresh: true,
+    shouldAutoLogout: false
   });
 
   return resp && resp.ok ? resp.json() : null;

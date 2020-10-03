@@ -10,7 +10,7 @@ import {
 } from '@blueprintjs/core';
 import classNames from 'classnames';
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { Dispatch } from 'redux';
 
@@ -86,6 +86,35 @@ const DeviceMenuItemButtons = ({
   </>
 );
 
+const DeviceContent = ({ session }: { session?: DeviceSession }) => {
+  if (!session) {
+    return (
+      <>
+        <p>Not connected to a device&mdash;programs are run in your local browser.</p>
+        <p>Select a device from the right.</p>
+      </>
+    );
+  }
+  const { device, connection } = session;
+  switch (connection.status) {
+    case 'CONNECTED':
+      return (
+        <p>
+          Connected to {device.title} ({device.type}).
+        </p>
+      );
+    case 'CONNECTING':
+      return <NonIdealState description="Connecting..." icon={<Spinner />} />;
+    default:
+    case 'FAILED':
+      return (
+        <Callout intent="danger">
+          Could not connect to {device.title}: {connection.error || 'unknown error'}
+        </Callout>
+      );
+  }
+};
+
 const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = props => {
   const [dialogState, setDialogState] = React.useState<Device | true | undefined>(undefined);
 
@@ -93,14 +122,17 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
     boolean,
     Device[] | undefined,
     DeviceSession | undefined
-  ] = useSelector((store: OverallState) => [
-    !!store.session.accessToken && !!store.session.role,
-    store.session.remoteExecutionDevices,
-    store.session.remoteExecutionSession
-  ]);
+  ] = useSelector(
+    (store: OverallState) => [
+      !!store.session.accessToken && !!store.session.role,
+      store.session.remoteExecutionDevices,
+      store.session.remoteExecutionSession
+    ],
+    shallowEqual
+  );
   const dispatch = useDispatch();
 
-  const isConnecting = currentSession && currentSession.connection.status === 'CONNECTING';
+  const isConnected = currentSession?.connection.status === 'CONNECTED';
 
   React.useEffect(() => {
     // this is not supposed to happen - the destructor below should disconnect
@@ -142,20 +174,7 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
   return (
     <div className="sa-remote-execution row">
       <div className="col-xs-6">
-        {!currentDevice && (
-          <>
-            <p>Not connected to a device&mdash;programs are run in your local browser.</p>
-            <p>Select a device from the right.</p>
-          </>
-        )}
-        {currentDevice &&
-          (isConnecting ? (
-            <NonIdealState description="Connecting..." icon={<Spinner />} />
-          ) : (
-            <p>
-              Connected to {currentDevice.title} ({currentDevice.type}).
-            </p>
-          ))}
+        <DeviceContent session={currentSession} />
       </div>
       <div className="col-xs-6 devices-menu-container">
         <Menu className={classNames(Classes.ELEVATION_0)}>
@@ -167,22 +186,22 @@ const SideContentRemoteExecution: React.FC<SideContentRemoteExecutionProps> = pr
           />
           {devices &&
             devices.map(device => {
-              const thisConnected = currentDevice?.id === device.id;
+              const thisDevice = currentDevice?.id === device.id;
               return (
                 <MenuItem
                   key={device.id}
                   onClick={() => dispatch(actions.remoteExecConnect(props.workspace, device))}
                   text={`${device.title} (${device.type})`}
-                  icon={thisConnected ? 'tick' : undefined}
+                  icon={thisDevice ? 'tick' : undefined}
                   labelElement={
                     <DeviceMenuItemButtons
                       onEditDevice={setDialogState}
-                      isConnected={thisConnected}
+                      isConnected={thisDevice && isConnected}
                       device={device}
                       dispatch={dispatch}
                     />
                   }
-                  intent={thisConnected ? 'success' : undefined}
+                  intent={thisDevice && isConnected ? 'success' : undefined}
                 />
               );
             })}

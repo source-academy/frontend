@@ -7,13 +7,21 @@ import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
 import { initSession, log } from 'src/features/eventLogging';
 
-import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import {
+  InterpreterOutput,
+  OverallState,
+  sourceLanguages
+} from '../../commons/application/ApplicationTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -160,6 +168,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
     })
   );
 
+  const usingRemoteExecution = useSelector(
+    (state: OverallState) => !!state.session.remoteExecutionSession
+  );
+
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
     propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
@@ -180,6 +192,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
       })
     );
   }, [props.editorSessionId]);
+  React.useEffect(() => {
+    if (!usingRemoteExecution && !externalLibraries.has(props.externalLibraryName)) {
+      propsRef.current.handleExternalSelect(ExternalLibraryName.NONE, true);
+    }
+  }, [usingRemoteExecution, props.externalLibraryName]);
 
   const hash = props.location.hash;
   React.useEffect(() => {
@@ -262,6 +279,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
         key="autorun"
+        autorunDisabled={usingRemoteExecution}
+        pauseDisabled={usingRemoteExecution}
       />
     ),
     [
@@ -273,7 +292,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleToggleEditorAutorun,
       props.isDebugging,
       props.isEditorAutorun,
-      props.isRunning
+      props.isRunning,
+      usingRemoteExecution
     ]
   );
 
@@ -308,9 +328,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={props.sourceChapter}
         sourceVariant={props.sourceVariant}
         key="chapter"
+        disabled={usingRemoteExecution}
       />
     ),
-    [chapterSelectHandler, props.sourceChapter, props.sourceVariant]
+    [chapterSelectHandler, props.sourceChapter, props.sourceVariant, usingRemoteExecution]
   );
 
   const clearButton = React.useMemo(
@@ -414,9 +435,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
           handleExternalSelectAndRecord(name)
         }
         key="external_library"
+        disabled={usingRemoteExecution}
       />
     ),
-    [externalLibraryName, handleExternalSelectAndRecord]
+    [externalLibraryName, handleExternalSelectAndRecord, usingRemoteExecution]
   );
 
   // No point memoing this, it uses props.editorValue
@@ -486,14 +508,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
       tabs.push(FaceapiDisplayTab);
     }
-    if (props.sourceChapter >= 2) {
+    if (props.sourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
     if (
       props.sourceChapter >= 3 &&
       props.sourceVariant !== 'concurrent' &&
-      props.sourceVariant !== 'non-det'
+      props.sourceVariant !== 'non-det' &&
+      !usingRemoteExecution
     ) {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
@@ -520,7 +543,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.handleSendReplInputToOutput,
     props.output,
     props.sourceChapter,
-    props.sourceVariant
+    props.sourceVariant,
+    usingRemoteExecution
   ]);
 
   const onChangeMethod = React.useCallback(
@@ -596,6 +620,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
+  const replDisabled =
+    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -605,12 +631,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
-        props.usingSubst ? stepperStepLimit : executionTime
+        usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ],
-      replButtons: [
-        props.sourceVariant !== 'concurrent' && props.sourceVariant !== 'wasm' ? evalButton : null,
-        clearButton
-      ]
+      replButtons: [replDisabled ? null : evalButton, clearButton]
     },
     editorProps: {
       onChange: onChangeMethod,
@@ -649,6 +672,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleReplEval: props.handleReplEval,
       handleReplValueChange: props.handleReplValueChange,
       hidden: selectedTab === SideContentType.substVisualizer,
+      inputHidden: replDisabled,
       usingSubst: props.usingSubst
     },
     sideContentHeight: props.sideContentHeight,

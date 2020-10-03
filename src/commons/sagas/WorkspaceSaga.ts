@@ -117,7 +117,6 @@ export default function* WorkspaceSaga(): SagaIterator {
     };
 
     if (remoteExecutionSession && remoteExecutionSession.workspace === workspaceLocation) {
-      yield put(actions.clearReplOutput(workspaceLocation));
       yield put(actions.remoteExecRun(editorCode));
     } else {
       // End any code that is running right now.

@@ -1,4 +1,5 @@
 import { SlingClient } from '@sourceacademy/sling-client';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
 
 import { WorkspaceLocation } from '../../commons/workspace/WorkspaceTypes';
 
@@ -40,6 +41,8 @@ export interface DeviceType {
   id: string;
   name: string;
   internalFunctions: string[];
+  languageChapter: number;
+  deviceLibraryName: ExternalLibraryName;
 }
 
 export const deviceTypes: DeviceType[] = [
@@ -85,7 +88,9 @@ export const deviceTypes: DeviceType[] = [
       'ev3_waitForButtonPress',
       'ev3_speak',
       'ev3_playSequence'
-    ]
+    ],
+    languageChapter: 3,
+    deviceLibraryName: ExternalLibraryName.EV3
   }
 ];
 
