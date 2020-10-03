@@ -27,7 +27,7 @@ export interface WebSocketEndpointInformation {
 }
 
 export type DeviceConnection =
-  | { status: 'CONNECTING'; client: SlingClient; endpoint: WebSocketEndpointInformation }
+  | { status: 'CONNECTING'; client?: SlingClient; endpoint?: WebSocketEndpointInformation }
   | { status: 'CONNECTED'; client: SlingClient; endpoint: WebSocketEndpointInformation }
   | { status: 'FAILED'; error?: string; client?: SlingClient };
 

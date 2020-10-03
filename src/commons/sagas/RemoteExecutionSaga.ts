@@ -69,6 +69,13 @@ export function* remoteExecutionSaga(): SagaIterator {
       ]
     );
     const { device, workspace } = action.payload;
+    yield put(
+      actions.remoteExecUpdateSession({
+        device,
+        workspace,
+        connection: { status: 'CONNECTING' }
+      })
+    );
     const endpoint: WebSocketEndpointInformation | null = yield call(
       getDeviceWSEndpoint,
       device,
@@ -86,7 +93,9 @@ export function* remoteExecutionSaga(): SagaIterator {
 
     const oldClient = session?.connection.client;
     if (oldClient) {
-      oldClient.disconnect();
+      try {
+        oldClient.disconnect();
+      } catch {}
     }
     const client: SlingClient = new SlingClient({
       clientId: `${endpoint.clientNamePrefix}${generateClientNonce()}`,
