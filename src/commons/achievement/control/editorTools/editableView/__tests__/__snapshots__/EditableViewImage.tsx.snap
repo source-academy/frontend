@@ -4,7 +4,7 @@ exports[`EditableViewImage component renders correctly 1`] = `
 "<EditableViewImage canvasUrl=\\"https://source-academy-assets.s3-ap-southeast-1.amazonaws.com/locations/planet-y-orbit/crashing.png\\" title=\\"Sample Title\\" setCanvasUrl={[Function: setCanvasUrl]}>
   <div>
     <Blueprint3.Button text=\\"Edit Image\\" onClick={[Function: onClick]}>
-      <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={[undefined]} />
         <span className=\\"bp3-button-text\\">
           Edit Image
