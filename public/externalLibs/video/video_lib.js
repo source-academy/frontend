@@ -236,7 +236,7 @@ _VD.draw = function(timestamp) {
 }
 
 // we translate from the buffer to 2D array 
-_VD.make2DArray = function(pixelData, res) {
+_VD.readFromBuffer = function(pixelData, res) {
     for (let i = 0; i < _WIDTH; i++) {
         for (let j = 0; j < _HEIGHT; j++) {
             const p = (j * _WIDTH * 4) + i * 4;
@@ -268,7 +268,7 @@ _VD.drawFrame = function() {
     _VD.context.drawImage(_VD.video, 0, 0, _WIDTH, _HEIGHT);
    
     const pixelObj = _VD.context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    _VD.make2DArray(pixelObj.data, _VD.pixels)
+    _VD.readFromBuffer(pixelObj.data, _VD.pixels)
     
     //runtime check to guard against crashes 
     try {
@@ -296,6 +296,9 @@ _VD.updateDimensions = function(w, h) {
         return;
     }
 
+    const status = _VD.isPlaying;
+    _VD.stopVideo();
+
     _WIDTH = w;
     _HEIGHT = h;
     
@@ -306,7 +309,7 @@ _VD.updateDimensions = function(w, h) {
 
     _VD.setupData();
 
-    if (!_VD.isPlaying) {
+    if (!status) {
         setTimeout(() => _VD.snapPicture(), 50);
         return;
     }
