@@ -15,6 +15,7 @@ import { PLAYGROUND_UPDATE_PERSISTENCE_FILE } from '../../../features/playground
 // store import is mocked
 jest.mock('../../../pages/createStore');
 
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const PersistenceSaga = require('../PersistenceSaga').default;
 
 const USER_EMAIL = 'test@email.com';

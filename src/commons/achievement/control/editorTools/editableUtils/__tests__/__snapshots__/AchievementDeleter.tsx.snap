@@ -3,7 +3,7 @@
 exports[`AchievementDeleter component renders correctly 1`] = `
 "<AchievementDeleter deleteAchievement={[Function: deleteAchievement]}>
   <Blueprint3.Button icon=\\"trash\\" text=\\"Delete Achievement\\" intent=\\"danger\\" onClick={[Function: onClick]}>
-    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button bp3-intent-danger\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
       <Blueprint3.Icon icon=\\"trash\\">
         <span icon=\\"trash\\" className=\\"bp3-icon bp3-icon-trash\\" title={[undefined]}>
           <svg fill={[undefined]} data-icon=\\"trash\\" width={16} height={16} viewBox=\\"0 0 16 16\\">

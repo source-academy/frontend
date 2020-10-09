@@ -17,7 +17,7 @@ function handleUncaughtError(error: any) {
     // react-error-overlay is a "special" package that's automatically included
     // in development mode by CRA
 
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     import('react-error-overlay').then(reo => reo.reportRuntimeError(error));
   }

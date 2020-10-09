@@ -10,7 +10,7 @@ import { Documentation } from '../documentation/Documentation';
  */
 export const selectMode = (chapter: number, variant: Variant, library: string) => {
   if (
-    // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     typeof ace.define.modules[`ace/mode/${getModeString(chapter, variant, library)}`]?.Mode ===
     'function'

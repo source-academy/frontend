@@ -5,7 +5,7 @@ exports[`EditableAchievementBackground component renders correctly 1`] = `
   <div>
     <div>
       <Blueprint3.Button text=\\"Edit Background\\" onClick={[Function: onClick]}>
-        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
           <Blueprint3.Icon icon={[undefined]} />
           <span className=\\"bp3-button-text\\">
             Edit Background

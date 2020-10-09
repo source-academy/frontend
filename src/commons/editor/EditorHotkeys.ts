@@ -1,5 +1,3 @@
-export type KeyFunction = keyof typeof keyBindings;
-
 export const keyBindings = {
   evaluate: {
     win: 'Shift-Enter',
@@ -22,3 +20,5 @@ export const keyBindings = {
     mac: 'Command-Shift-M'
   }
 };
+
+export type KeyFunction = keyof typeof keyBindings;
