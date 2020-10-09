@@ -87,7 +87,13 @@ export const deviceTypes: DeviceType[] = [
       'ev3_hello',
       'ev3_waitForButtonPress',
       'ev3_speak',
-      'ev3_playSequence'
+      'ev3_playSequence',
+      'ev3_ledLeftGreen',
+      'ev3_ledLeftRed',
+      'ev3_ledRightGreen',
+      'ev3_ledRightRed',
+      'ev3_ledGetBrightness',
+      'ev3_ledSetBrightness'
     ],
     languageChapter: 3,
     deviceLibraryName: ExternalLibraryName.EV3
