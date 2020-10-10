@@ -237,9 +237,9 @@ _VD.draw = function(timestamp) {
 
 // we translate from the buffer to 2D array 
 _VD.readFromBuffer = function(pixelData, res) {
-    for (let i = 0; i < _WIDTH; i++) {
-        for (let j = 0; j < _HEIGHT; j++) {
-            const p = (j * _WIDTH * 4) + i * 4;
+    for (let i = 0; i < _HEIGHT; i++) {
+        for (let j = 0; j < _WIDTH; j++) {
+            const p = (i * _WIDTH * 4) + j * 4;
             res[i][j] = [
                 pixelData[p],
                 pixelData[p + 1],
@@ -252,9 +252,9 @@ _VD.readFromBuffer = function(pixelData, res) {
 
 // we write back to the buffer (to draw on frame)
 _VD.writeToBuffer = function(buffer, data) {
-    for (let i = 0; i < _WIDTH; i++) {
-        for (let j = 0; j < _HEIGHT; j++) {
-            const p = (j * _WIDTH * 4) + i * 4;
+    for (let i = 0; i < _HEIGHT; i++) {
+        for (let j = 0; j < _WIDTH; j++) {
+            const p = (i * _WIDTH * 4) + j * 4;
             buffer[p] = data[i][j][0]; 
             buffer[p + 1] = data[i][j][1]; 
             buffer[p + 2] = data[i][j][2]; 
