@@ -180,7 +180,7 @@ _VD.deinit = function() {
 // connects to Webcam and starts video stream
 _VD.loadMedia = function() {
     if (!navigator.mediaDevices.getUserMedia) {
-        console.log('The browser you are using does not support getUserMedia');
+        console.error('The browser you are using does not support getUserMedia');
         return;
     }
 
@@ -192,10 +192,10 @@ _VD.loadMedia = function() {
     navigator.mediaDevices
         .getUserMedia({ video: true })
         .then( stream => {
-            _VD.video.srcObject = stream
+            _VD.video.srcObject = stream;
         })
         .catch( err => {
-            console.log(err);
+            console.error(err.name + ': ' + err.message);
         })
     
     _VD.startVideo();
@@ -207,7 +207,7 @@ _VD.startVideo = function() {
         return;
     }
     _VD.isPlaying = true;
-    _VD.requestID = window.requestAnimationFrame(_VD.draw)
+    _VD.requestID = window.requestAnimationFrame(_VD.draw);
 }
 
 // stops the loop that is drawing on frame
@@ -217,7 +217,7 @@ _VD.stopVideo = function() {
     }
 
     _VD.isPlaying = false;
-    window.cancelAnimationFrame(_VD.requestID)
+    window.cancelAnimationFrame(_VD.requestID);
 }
 
 // draws on frame at every (1ms / _FPS) 
@@ -268,19 +268,20 @@ _VD.drawFrame = function() {
     _VD.context.drawImage(_VD.video, 0, 0, _WIDTH, _HEIGHT);
    
     const pixelObj = _VD.context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    _VD.readFromBuffer(pixelObj.data, _VD.pixels)
+    _VD.readFromBuffer(pixelObj.data, _VD.pixels);
     
     //runtime check to guard against crashes 
     try {
-        _VD.filter(_VD.pixels, _VD.temp)
+        _VD.filter(_VD.pixels, _VD.temp);
     } catch(e) {
-        console.log("Error with filter function: " + e)
-        console.log("Filter is reset to default")
+        console.error("Error with filter function: ");
+        console.error(e.name + ': ' + e.message);
+        console.error("Filter is reset to default");
         _VD.filter = copy_image;
         _VD.filter(_VD.pixels, _VD.temp);
     }
     
-    _VD.writeToBuffer(pixelObj.data, _VD.temp)
+    _VD.writeToBuffer(pixelObj.data, _VD.temp);
     _VD.context.putImageData(pixelObj, 0, 0);
 }
 
