@@ -24,21 +24,22 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
     this.handleHeightChange = this.handleHeightChange.bind(this);
   }
   public componentDidMount() {
-    if (this.$video && this.$canvas) {
-      (window as any).VD.init(this.$video, this.$canvas);
+    const _VD = (window as any)._VD;
+    if (this.$video && this.$canvas && _VD) {
+      _VD.init(this.$video, this.$canvas);
     }
   }
   public componentWillUnmount() {
-    (window as any).VD.deinit();
+    (window as any)._VD?.deinit();
   }
   public handleStartVideo() {
-    (window as any).VD.handleStartVideo();
+    (window as any)._VD?.startVideo();
   }
   public handleSnapPicture() {
-    (window as any).VD.handleSnapPicture();
+    (window as any)._VD?.snapPicture();
   }
   public handleCloseVideo() {
-    (window as any).VD.handleCloseVideo();
+    (window as any)._VD?.stopVideo();
   }
   public handleWidthChange(n: number) {
     if (n > 0) {
@@ -59,7 +60,7 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
     }
   }
   public handleUpdateDimensions(n: number, m: number) {
-    (window as any).VD.handleUpdateDimensions(n, m);
+    (window as any)._VD?.updateDimensions(n, m);
   }
   // UI can be improved
   public render() {
