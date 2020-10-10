@@ -118,8 +118,8 @@ function reset_filter() {
  * @returns {undefined} 
  */
 function copy_image(src, dest) {
-    for (let i = 0; i < _WIDTH; i++) {
-        for (let j = 0; j < _HEIGHT; j++) {
+    for (let i = 0; i < _HEIGHT; i++) {
+        for (let j = 0; j < _WIDTH; j++) {
             dest[i][j] = src[i][j];
         }
     }
