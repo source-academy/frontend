@@ -160,7 +160,7 @@ const videoLibrary = [
   'set_rgba',
   'copy_image',
   'compose_filter',
-  'apply_filter',
+  'install_filter',
   'reset_filter',
   'video_height',
   'video_width'

@@ -11,7 +11,7 @@ a function that is applied to two images:
 the source image and the destination image. We can install
 a given filter to be used to transform
 the images that the camera captures into images
-displayed on the output screen by using the function `apply_filter`.
+displayed on the output screen by using the function `install_filter`.
 The output screen is shown in the Source Academy in the tab with
 the "camera" icon.
 

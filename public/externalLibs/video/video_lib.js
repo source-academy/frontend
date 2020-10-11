@@ -80,7 +80,7 @@ function set_rgba(px,r,g,b,a) { // assigns the r,g,b values to this px
  * @param {f} filter - the filter to be installed
  * @returns {undefined} 
  */
-function apply_filter(filter) { 
+function install_filter(filter) { 
     _VD.filter = filter;
     if (!_VD.isPlaying) {
         _VD.snapPicture();
@@ -107,7 +107,7 @@ function compose_filter(filter1, filter2) {
  * @returns {undefined} 
  */
 function reset_filter() {
-    apply_filter(copy_image);
+    install_filter(copy_image);
 }
 
 /**
@@ -274,9 +274,8 @@ _VD.drawFrame = function() {
     try {
         _VD.filter(_VD.pixels, _VD.temp);
     } catch(e) {
-        console.error("Error with filter function: ");
-        console.error(e.name + ': ' + e.message);
-        console.error("Filter is reset to default");
+        console.error("There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message);
+
         _VD.filter = copy_image;
         _VD.filter(_VD.pixels, _VD.temp);
     }
