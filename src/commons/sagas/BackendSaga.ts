@@ -87,6 +87,13 @@ import {
 } from './RequestsSaga';
 import { safeTakeEvery as takeEvery } from './SafeEffects';
 
+function selectTokens() {
+  return select((state: OverallState) => ({
+    accessToken: state.session.accessToken,
+    refreshToken: state.session.refreshToken
+  }));
+}
+
 function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_AUTH, function* (action: ReturnType<typeof actions.fetchAuth>) {
     const { code, providerId: payloadProviderId } = action.payload;
@@ -119,10 +126,7 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(FETCH_ASSESSMENT_OVERVIEWS, function* () {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const assessmentOverviews: AssessmentOverview[] | null = yield call(
       getAssessmentOverviews,
@@ -134,10 +138,7 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(FETCH_ASSESSMENT, function* (action: ReturnType<typeof actions.fetchAssessment>) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const id = action.payload;
 
@@ -148,11 +149,7 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(SUBMIT_ANSWER, function* (action: ReturnType<typeof actions.submitAnswer>) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-
+    const tokens: Tokens = yield selectTokens();
     const questionId = action.payload.id;
     const answer = action.payload.answer;
 
@@ -188,10 +185,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(SUBMIT_ASSESSMENT, function* (
     action: ReturnType<typeof actions.submitAssessment>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const assessmentId = action.payload;
 
     const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
@@ -218,10 +212,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_GRADING_OVERVIEWS, function* (
     action: ReturnType<typeof actions.fetchGradingOverviews>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const filterToGroup = action.payload;
 
@@ -236,10 +227,7 @@ function* BackendSaga(): SagaIterator {
   });
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
     const grading: Grading | null = yield call(getGrading, id, tokens);
@@ -254,10 +242,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(UNSUBMIT_SUBMISSION, function* (
     action: ReturnType<typeof actions.unsubmitSubmission>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const { submissionId } = action.payload;
 
     const resp: Response | null = yield postUnsubmit(submissionId, tokens);
@@ -290,10 +275,7 @@ function* BackendSaga(): SagaIterator {
     }
 
     const { submissionId, questionId, gradeAdjustment, xpAdjustment, comments } = action.payload;
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const resp: Response | null = yield postGrading(
       submissionId,
@@ -359,10 +341,7 @@ function* BackendSaga(): SagaIterator {
     action: ReturnType<typeof actions.reautogradeSubmission>
   ) {
     const submissionId = action.payload;
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
 
     yield call(handleReautogradeResponse, resp);
@@ -372,10 +351,7 @@ function* BackendSaga(): SagaIterator {
     action: ReturnType<typeof actions.reautogradeAnswer>
   ) {
     const { submissionId, questionId } = action.payload;
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const resp: Response | null = yield call(
       postReautogradeAnswer,
       submissionId,
@@ -389,10 +365,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.fetchNotifications>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const notifications: Notification[] = yield call(getNotifications, tokens);
 
     yield put(actions.updateNotifications(notifications));
@@ -401,10 +374,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function* (
     action: ReturnType<typeof actions.acknowledgeNotifications>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
     const notifications: Notification[] = yield select(
       (state: OverallState) => state.session.notifications
@@ -441,10 +411,7 @@ function* BackendSaga(): SagaIterator {
       return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
     }
 
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const { id } = action.payload;
 
     const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
@@ -463,10 +430,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_SOURCECAST_INDEX, function* (
     action: ReturnType<typeof actions.fetchSourcecastIndex>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
     if (sourcecastIndex) {
@@ -483,10 +447,7 @@ function* BackendSaga(): SagaIterator {
     }
 
     const { title, description, uid, audio, playbackData } = action.payload;
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const resp: Response | null = yield postSourcecast(
       title,
@@ -521,10 +482,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(CHANGE_SUBLANGUAGE, function* (
     action: ReturnType<typeof actions.changeSublanguage>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const { sublang } = action.payload;
 
     const resp: Response | null = yield call(
@@ -544,10 +502,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* (
     action: ReturnType<typeof actions.fetchGroupGradingSummary>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
 
     const groupOverviews: GradingSummary | null = yield call(getGradingSummary, tokens);
     if (groupOverviews) {
@@ -558,10 +513,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(CHANGE_DATE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.changeDateAssessment>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const id = action.payload.id;
     const closeAt = action.payload.closeAt;
     const openAt = action.payload.openAt;
@@ -578,10 +530,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(DELETE_ASSESSMENT, function* (
     action: ReturnType<typeof actions.deleteAssessment>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const id = action.payload;
 
     const resp: Response | null = yield deleteAssessment(id, tokens);
@@ -596,10 +545,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(PUBLISH_ASSESSMENT, function* (
     action: ReturnType<typeof actions.publishAssessment>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const id = action.payload.id;
     const togglePublishTo = action.payload.togglePublishTo;
 
@@ -620,10 +566,7 @@ function* BackendSaga(): SagaIterator {
   yield takeEvery(UPLOAD_ASSESSMENT, function* (
     action: ReturnType<typeof actions.uploadAssessment>
   ) {
-    const tokens: Tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+    const tokens: Tokens = yield selectTokens();
     const file = action.payload.file;
     const forceUpdate = action.payload.forceUpdate;
 

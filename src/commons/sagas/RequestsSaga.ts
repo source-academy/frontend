@@ -105,8 +105,7 @@ const postRefresh = async (refreshToken: string): Promise<Tokens | null> => {
  */
 export const getUser = async (tokens: Tokens): Promise<User | null> => {
   const resp = await request('user', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
   if (!resp || !resp.ok) {
@@ -123,8 +122,7 @@ export const getUser = async (tokens: Tokens): Promise<User | null> => {
  */
 export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[] | null> => {
   const resp = await request('achievements', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
 
@@ -156,8 +154,7 @@ export const getGoals = async (
   studentId: number
 ): Promise<AchievementGoal[] | null> => {
   const resp = await request(`achievements/goals/${studentId}`, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
 
@@ -182,8 +179,7 @@ export const getGoals = async (
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
   const resp = await request('achievements/goals', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
 
@@ -211,10 +207,9 @@ export const editAchievement = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.id}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { achievement: achievement },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -230,10 +225,9 @@ export const editGoal = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { definition: definition },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -250,10 +244,9 @@ export const updateGoalProgress = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -269,10 +262,9 @@ export const removeAchievement = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { achievement: achievement },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -289,10 +281,9 @@ export const removeGoal = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { definition: definition },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -307,8 +298,7 @@ export const getAssessmentOverviews = async (
   tokens: Tokens
 ): Promise<AssessmentOverview[] | null> => {
   const resp = await request('assessments', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
   if (!resp || !resp.ok) {
@@ -341,8 +331,7 @@ export const getAssessmentOverviews = async (
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
   let resp = await request(`assessments/${id}`, 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -357,8 +346,7 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
     }
 
     resp = await request(`assessments/${id}`, 'POST', {
-      accessToken: tokens.accessToken,
-      refreshToken: tokens.refreshToken,
+      ...tokens,
       body: {
         password: input
       },
@@ -418,10 +406,9 @@ export const postAnswer = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/question/${id}/submit`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { answer: `${answer}` },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -433,9 +420,8 @@ export const postAnswer = async (
  */
 export const postAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`assessments/${id}/submit`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false, // 400 if some questions unattempted
     shouldRefresh: true
   });
@@ -451,8 +437,7 @@ export const getGradingOverviews = async (
   group: boolean
 ): Promise<GradingOverview[] | null> => {
   const resp = await request(`grading?group=${group}`, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
   if (!resp) {
@@ -506,8 +491,7 @@ export const getGradingOverviews = async (
  */
 export const getGrading = async (submissionId: number, tokens: Tokens): Promise<Grading | null> => {
   const resp = await request(`grading/${submissionId}`, 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
 
@@ -570,7 +554,7 @@ export const postGrading = async (
   comments?: string
 ): Promise<Response | null> => {
   const resp = await request(`grading/${submissionId}/${questionId}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: {
       grading: {
         adjustment: gradeAdjustment,
@@ -579,7 +563,6 @@ export const postGrading = async (
       }
     },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -595,8 +578,7 @@ export const postReautogradeSubmission = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`grading/${submissionId}/autograde`, 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -614,8 +596,7 @@ export const postReautogradeAnswer = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`grading/${submissionId}/${questionId}/autograde`, 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -632,9 +613,8 @@ export const postUnsubmit = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`grading/${submissionId}/unsubmit`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -647,8 +627,7 @@ export const postUnsubmit = async (
  */
 export const getNotifications = async (tokens: Tokens): Promise<Notification[]> => {
   const resp: Response | null = await request('notification', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldAutoLogout: false
   });
 
@@ -684,8 +663,7 @@ export const postAcknowledgeNotifications = async (
   ids: number[]
 ): Promise<Response | null> => {
   const resp: Response | null = await request('notification/acknowledge', 'POST', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     body: { notificationIds: ids },
     shouldAutoLogout: false
   });
@@ -701,9 +679,8 @@ export const deleteSourcecastEntry = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`sourcecast/${id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -716,8 +693,7 @@ export const deleteSourcecastEntry = async (
  */
 export const getSourcecastIndex = async (tokens: Tokens): Promise<SourcecastData[] | null> => {
   const resp = await request('sourcecast', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -747,11 +723,10 @@ export const postSourcecast = async (
   formData.append('sourcecast[audio]', audio, filename);
   formData.append('sourcecast[playbackData]', JSON.stringify(playbackData));
   const resp = await request(`sourcecast`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: formData,
     noContentType: true,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -769,10 +744,9 @@ export const changeDateAssessment = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/update/${id}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { closeAt, openAt },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -785,9 +759,8 @@ export const changeDateAssessment = async (
  */
 export const deleteAssessment = async (id: number, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`assessments/${id}`, 'DELETE', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -804,10 +777,9 @@ export const publishAssessment = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`assessments/publish/${id}`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { togglePublishTo },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -827,11 +799,10 @@ export const uploadAssessment = async (
   formData.append('assessment[file]', file);
   formData.append('forceUpdate', String(forceUpdate));
   const resp = await request(`assessments`, 'POST', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: formData,
     noContentType: true,
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
@@ -844,8 +815,7 @@ export const uploadAssessment = async (
  */
 export const getGradingSummary = async (tokens: Tokens): Promise<GradingSummary | null> => {
   const resp = await request('grading/summary', 'GET', {
-    accessToken: tokens.accessToken,
-    refreshToken: tokens.refreshToken,
+    ...tokens,
     shouldRefresh: true
   });
   if (!resp || !resp.ok) {
@@ -885,10 +855,9 @@ export const postSublanguage = async (
   tokens: Tokens
 ): Promise<Response | null> => {
   const resp = await request(`settings/sublanguage`, 'PUT', {
-    accessToken: tokens.accessToken,
+    ...tokens,
     body: { chapter, variant },
     noHeaderAccept: true,
-    refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
     shouldRefresh: true
   });
