@@ -2,6 +2,8 @@ import { Classes, NonIdealState, Spinner } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
+import { ExternalLibraryName } from 'src/commons/application/types/ExternalTypes';
+import SideContentVideoDisplay from 'src/commons/sideContent/SideContentVideoDisplay';
 
 import { InterpreterOutput } from '../../../../commons/application/ApplicationTypes';
 import {
@@ -325,13 +327,24 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       }
     ];
 
-    const functionsAttached = props.grading![questionId].question.library.external.symbols;
+    const externalLibrary = props.grading![questionId].question.library.external;
+    const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
         iconName: IconNames.GRID_VIEW,
         body: <SideContentToneMatrix />,
         id: SideContentType.toneMatrix,
+        toSpawn: () => true
+      });
+    }
+
+    if (externalLibrary.name === ExternalLibraryName.PIXNFLIX) {
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay />,
+        id: SideContentType.videoDisplay,
         toSpawn: () => true
       });
     }

@@ -15,6 +15,7 @@ import { stringify } from 'js-slang/dist/utils/stringify';
 import * as React from 'react';
 
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -43,6 +44,7 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
@@ -404,7 +406,8 @@ class AssessmentWorkspace extends React.Component<
       });
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    const externalLibrary = props.assessment!.questions[questionId].library.external;
+    const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
@@ -414,6 +417,17 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       });
     }
+
+    if (externalLibrary.name === ExternalLibraryName.PIXNFLIX) {
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay />,
+        id: SideContentType.videoDisplay,
+        toSpawn: () => true
+      });
+    }
+
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,
