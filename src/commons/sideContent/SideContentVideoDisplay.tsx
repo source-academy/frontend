@@ -15,7 +15,7 @@ type State = {
 };
 
 type Props = {
-  replChange: (newValue: string) => void;
+  replChange: (code: string) => void;
 };
 
 class SideContentVideoDisplay extends React.Component<Props, State> {
@@ -248,7 +248,6 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
           />
         </div>
 
-        <br />
         <br />
         <p style={{ fontFamily: 'courier' }}>
           Note: Is video lagging? Switch to 'still image' or adjust FPS rate! Error's will be
