@@ -11,7 +11,6 @@ type State = {
   FPS: number;
   mode: SideContentVideoDisplayMode;
   needSetup: boolean;
-  polling: boolean;
 };
 
 type Props = {
@@ -29,8 +28,7 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
       height: (window as any)._HEIGHT,
       FPS: (window as any)._FPS,
       mode: 'video' as SideContentVideoDisplayMode,
-      needSetup: true,
-      polling: false
+      needSetup: true
     };
   }
 
@@ -47,43 +45,23 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
   public setupVideoService = () => {
     const _VD = (window as any)._VD;
     if (this.$video && this.$canvas && _VD) {
-      _VD.init(this.$video, this.$canvas);
-      this.setState(
-        {
-          width: (window as any)._WIDTH,
-          height: (window as any)._HEIGHT,
-          FPS: (window as any)._FPS,
-          mode: 'video' as SideContentVideoDisplayMode,
-          needSetup: false,
-          polling: true
-        },
-        this.pollForError
-      );
+      _VD.init(this.$video, this.$canvas, this.printError);
+      this.setState({
+        width: (window as any)._WIDTH,
+        height: (window as any)._HEIGHT,
+        FPS: (window as any)._FPS,
+        mode: 'video' as SideContentVideoDisplayMode,
+        needSetup: false
+      });
     }
   };
 
-  public checkAndPrintError = () => {
-    const _VD = (window as any)._VD;
-    if (!_VD || _VD.errorDisplay[1] === '') {
-      return;
-    }
-
-    if (_VD.errorDisplay[0]) {
-      this.props.replChange(parseError(_VD.errorDisplay[1]));
+  public printError = (err: any, isSlangErr: boolean) => {
+    if (isSlangErr) {
+      this.props.replChange(parseError(err));
     } else {
-      this.props.replChange(_VD.errorDisplay[1]);
+      this.props.replChange(err);
     }
-  };
-
-  public pollForError = () => {
-    if (!this.state.polling) {
-      return;
-    }
-
-    setTimeout(() => {
-      this.checkAndPrintError();
-      this.pollForError();
-    }, this.state.FPS * 100);
   };
 
   public closeVideo = () => {
@@ -91,18 +69,14 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
   };
 
   public handleStartVideo = () => {
-    this.setState({ polling: true }, this.pollForError);
     (window as any)._VD?.startVideo();
   };
 
   public handleSnapPicture = () => {
-    this.setState({ polling: false });
     (window as any)._VD?.snapPicture();
-    this.checkAndPrintError();
   };
 
   public handleCloseVideo = () => {
-    this.setState({ polling: false });
     (window as any)._VD?.stopVideo();
   };
 
@@ -250,9 +224,7 @@ class SideContentVideoDisplay extends React.Component<Props, State> {
 
         <br />
         <p style={{ fontFamily: 'courier' }}>
-          Note: Is video lagging? Switch to 'still image' or adjust FPS rate! Error's will be
-          displayed below. If you are seeing Infinite Loop error - increase the timeout (clock icon)
-          at the top or reduce video dimensions (or make your program faster).
+          Note: Is video lagging? Switch to 'still image' or adjust FPS rate!
         </p>
       </div>
     );

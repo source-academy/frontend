@@ -81,9 +81,6 @@ function set_rgba(px,r,g,b,a) { // assigns the r,g,b values to this px
  * @returns {undefined} 
  */
 function install_filter(filter) { 
-    //reset any errors here
-    _VD.errorDisplay = [false, ""]
-
     _VD.filter = filter;
     if (!_VD.isPlaying) {
         _VD.snapPicture();
@@ -150,7 +147,6 @@ _VD.isPlaying = false;
 _VD.filter = copy_image;
 _VD.pixels = [];
 _VD.temp = [];
-_VD.errorDisplay = [false, ""];
 
 // initializes our arrays which we use for drawing 
 _VD.setupData = function() {
@@ -161,10 +157,11 @@ _VD.setupData = function() {
 }
 
 // constructor that sets up initial state
-_VD.init = function($video, $canvas) { 
+_VD.init = function($video, $canvas, errLogger) { 
     _VD.video = $video;
     _VD.canvas = $canvas;
     _VD.context = _VD.canvas.getContext('2d');
+    _VD.errLogger = errLogger;
 
     _VD.setupData();
     _VD.loadMedia();
@@ -184,9 +181,9 @@ _VD.deinit = function() {
 // connects to Webcam and starts video stream
 _VD.loadMedia = function() {
     if (!navigator.mediaDevices.getUserMedia) {
-        const errMsg = 'The browser you are using does not support getUserMedia'
+        const errMsg = 'The browser you are using does not support getUserMedia';
         console.error(errMsg);
-        _VD.errorDisplay = [false, errMsg]
+        _VD.errLogger(errMsg, false);
         return;
     }
 
@@ -203,7 +200,7 @@ _VD.loadMedia = function() {
         .catch( err => {
             const errMsg = err.name + ": " + err.message;
             console.error(errMsg);
-            _VD.errorDisplay = [false, errMsg]
+            _VD.errLogger(errMsg, false)
         })
     
     _VD.startVideo();
@@ -275,13 +272,13 @@ _VD.isPixelFilled = function(pixel) {
 
 // we write back to the buffer (to draw on frame)
 _VD.writeToBuffer = function(buffer, data) {
+    let ok = true;
+
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
             const p = (i * _WIDTH * 4) + j * 4;
             if (!_VD.isPixelFilled(data[i][j])) {
-                const warnMsg = "You have invalid values for some pixels! Reseting them to default (0)"
-                console.warn(warnMsg)
-                _VD.errorDisplay = [false, warnMsg] 
+                ok = false;
             }
             
             buffer[p] = data[i][j][0]; 
@@ -290,6 +287,12 @@ _VD.writeToBuffer = function(buffer, data) {
             buffer[p + 3] = data[i][j][3];
         }
     }   
+
+    if (!ok) {
+        const warnMsg = "You have invalid values for some pixels! Reseting them to default (0)";
+        console.warn(warnMsg);
+        _VD.errLogger(warnMsg, false);
+    }
 }
 
 // main function that applies filter on video and draws 
@@ -307,10 +310,13 @@ _VD.drawFrame = function() {
         console.error(JSON.stringify(e))
         const errMsg = "There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message; 
         console.error(errMsg);
-
-        _VD.errorDisplay = [false, JSON.stringify(errMsg)];
+        
         if (!e.name) {
-            _VD.errorDisplay = [true, [e]];
+            _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider increasing the timeout period (clock icon) at the top / reducing the video dimensions.")
+
+            _VD.errLogger([e], true);
+        } else {
+            _VD.errLogger(errMsg, false)
         }
 
         _VD.filter = copy_image;
