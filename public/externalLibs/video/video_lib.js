@@ -252,7 +252,12 @@ _VD.readFromBuffer = function(pixelData, src, dest) {
                 pixelData[p + 3]
             ];
 
-            dest[i][j] = src[i][j];
+            dest[i][j] = [
+                pixelData[p],
+                pixelData[p + 1],
+                pixelData[p + 2],
+                pixelData[p + 3]
+            ];
         }
     }
 }
