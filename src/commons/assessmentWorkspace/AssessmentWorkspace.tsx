@@ -71,6 +71,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -422,7 +423,7 @@ class AssessmentWorkspace extends React.Component<
       tabs.push({
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
-        body: <SideContentVideoDisplay />,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
         id: SideContentType.videoDisplay,
         toSpawn: () => true
       });
