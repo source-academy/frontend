@@ -1,5 +1,6 @@
 import { Button, ButtonGroup, Divider, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
+import { parseError } from 'js-slang';
 import * as React from 'react';
 
 export type SideContentVideoDisplayMode = 'video' | 'still';
@@ -7,61 +8,138 @@ export type SideContentVideoDisplayMode = 'video' | 'still';
 type State = {
   width: number;
   height: number;
+  FPS: number;
   mode: SideContentVideoDisplayMode;
+  needSetup: boolean;
+  polling: boolean;
 };
 
-class SideContentVideoDisplay extends React.Component<{}, State> {
+type Props = {
+  replChange: (newValue: string) => void;
+};
+
+class SideContentVideoDisplay extends React.Component<Props, State> {
   private $video: HTMLElement | null = null;
   private $canvas: HTMLElement | null = null;
+
   constructor(props: any) {
     super(props);
     this.state = {
       width: (window as any)._WIDTH,
       height: (window as any)._HEIGHT,
-      mode: 'video' as SideContentVideoDisplayMode
+      FPS: (window as any)._FPS,
+      mode: 'video' as SideContentVideoDisplayMode,
+      needSetup: true,
+      polling: false
     };
-    this.handleWidthChange = this.handleWidthChange.bind(this);
-    this.handleHeightChange = this.handleHeightChange.bind(this);
   }
+
   public componentDidMount() {
+    this.setupVideoService();
+    window.addEventListener('beforeunload', this.closeVideo);
+  }
+
+  public componentWillUnmount() {
+    this.closeVideo();
+    window.removeEventListener('beforeunload', this.closeVideo);
+  }
+
+  public setupVideoService = () => {
     const _VD = (window as any)._VD;
     if (this.$video && this.$canvas && _VD) {
       _VD.init(this.$video, this.$canvas);
+      this.setState(
+        {
+          width: (window as any)._WIDTH,
+          height: (window as any)._HEIGHT,
+          FPS: (window as any)._FPS,
+          mode: 'video' as SideContentVideoDisplayMode,
+          needSetup: false,
+          polling: true
+        },
+        this.pollForError
+      );
     }
-  }
-  public componentWillUnmount() {
+  };
+
+  public checkAndPrintError = () => {
+    const _VD = (window as any)._VD;
+    if (!_VD || _VD.errorDisplay[1] === '') {
+      return;
+    }
+
+    if (_VD.errorDisplay[0]) {
+      this.props.replChange(parseError(_VD.errorDisplay[1]));
+    } else {
+      this.props.replChange(_VD.errorDisplay[1]);
+    }
+  };
+
+  public pollForError = () => {
+    if (!this.state.polling) {
+      return;
+    }
+
+    setTimeout(() => {
+      this.checkAndPrintError();
+      this.pollForError();
+    }, this.state.FPS * 100);
+  };
+
+  public closeVideo = () => {
     (window as any)._VD?.deinit();
-  }
-  public handleStartVideo() {
+  };
+
+  public handleStartVideo = () => {
+    this.setState({ polling: true }, this.pollForError);
     (window as any)._VD?.startVideo();
-  }
-  public handleSnapPicture() {
+  };
+
+  public handleSnapPicture = () => {
+    this.setState({ polling: false });
     (window as any)._VD?.snapPicture();
-  }
-  public handleCloseVideo() {
+    this.checkAndPrintError();
+  };
+
+  public handleCloseVideo = () => {
+    this.setState({ polling: false });
     (window as any)._VD?.stopVideo();
-  }
-  public handleWidthChange(n: number) {
-    if (n > 0) {
+  };
+
+  public handleWidthChange = (n: number) => {
+    if (n > 0 && n <= 500) {
       this.setState({
         width: n,
         height: this.state.height
       });
       this.handleUpdateDimensions(n, this.state.height);
     }
-  }
-  public handleHeightChange(m: number) {
-    if (m > 0) {
+  };
+
+  public handleHeightChange = (m: number) => {
+    if (m > 0 && m <= 500) {
       this.setState({
         width: this.state.width,
         height: m
       });
       this.handleUpdateDimensions(this.state.width, m);
     }
-  }
-  public handleUpdateDimensions(n: number, m: number) {
+  };
+
+  public handleFPSChange = (m: number) => {
+    //these magic numbers are based off video library
+    if (m > 2 && m < 30) {
+      this.setState({
+        FPS: m
+      });
+      (window as any)._VD?.updateFPS(m);
+    }
+  };
+
+  public handleUpdateDimensions = (n: number, m: number) => {
     (window as any)._VD?.updateDimensions(n, m);
-  }
+  };
+
   // UI can be improved
   public render() {
     const hideVideo = {
@@ -73,6 +151,22 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
 
     return (
       <div className="sa-video">
+        {this.state.needSetup ? (
+          <div>
+            <p>
+              Looks like the video did not have time to load. Click the button below to activate.
+            </p>
+            <Button
+              className={'sa-live-video-button'}
+              text={'Start Video'}
+              onClick={this.setupVideoService}
+            />
+            <br />
+            <br />
+          </div>
+        ) : (
+          <div></div>
+        )}
         <div className="sa-video-header">
           <div className="sa-video-header-element">
             <ButtonGroup>
@@ -104,6 +198,7 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
                   minorStepSize={1}
                   stepSize={10}
                   majorStepSize={100}
+                  max={500}
                 />
               </Tooltip>
             </div>
@@ -117,6 +212,22 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
                   minorStepSize={1}
                   stepSize={10}
                   majorStepSize={100}
+                  max={500}
+                />
+              </Tooltip>
+            </div>
+            <div className="sa-video-header-numeric-input">
+              <Tooltip content="Change FPS">
+                <NumericInput
+                  leftIcon={IconNames.STOPWATCH}
+                  style={{ width: 60 }}
+                  value={this.state.FPS}
+                  onValueChange={this.handleFPSChange}
+                  minorStepSize={null}
+                  stepSize={1}
+                  majorStepSize={null}
+                  max={30}
+                  min={2}
                 />
               </Tooltip>
             </div>
@@ -136,6 +247,14 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
             height={(window as any)._HEIGHT}
           />
         </div>
+
+        <br />
+        <br />
+        <p style={{ fontFamily: 'courier' }}>
+          Note: Is video lagging? Switch to 'still image' or adjust FPS rate! Error's will be
+          displayed below. If you are seeing Infinite Loop error - increase the timeout (clock icon)
+          at the top or reduce video dimensions (or make your program faster).
+        </p>
       </div>
     );
   }

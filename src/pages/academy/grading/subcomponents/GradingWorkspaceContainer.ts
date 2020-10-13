@@ -26,6 +26,7 @@ import {
   navigateToDeclaration,
   promptAutocomplete,
   resetWorkspace,
+  sendReplInputToOutput,
   setEditorBreakpoint,
   updateActiveTab,
   updateCurrentSubmissionId,
@@ -86,6 +87,7 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       handleReplEval: () => evalRepl(workspaceLocation),
       handleReplOutputClear: () => clearReplOutput(workspaceLocation),
       handleReplValueChange: (newValue: string) => updateReplValue(newValue, workspaceLocation),
+      handleSendReplInputToOutput: (code: string) => sendReplInputToOutput(code, workspaceLocation),
       handleResetWorkspace: (options: Partial<WorkspaceState>) =>
         resetWorkspace(workspaceLocation, options),
       handleSideContentHeightChange: (heightChange: number) =>
