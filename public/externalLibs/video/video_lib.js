@@ -53,7 +53,7 @@ function alpha_of(px) {
 }
 
 /**
- * Assigns the red, green, blue and alpha components of a pixel 
+ * Assigns the red, green, blue and alpha components of a pixel
  * <CODE>px</CODE> to given values
  * @param {px} Pixel - given Pixel
  * @param {r} Number - the red component as a number between 0 and 255
@@ -61,7 +61,7 @@ function alpha_of(px) {
  * @param {b} Number - the blue component as a number between 0 and 255
  * @param {a} Number - the alpha component as a number between 0 and 255
  * @param {px} Pixel - given Pixel
- * @returns {undefined} 
+ * @returns {undefined}
  */
 function set_rgba(px,r,g,b,a) { // assigns the r,g,b values to this px
     px[0] = r;
@@ -78,9 +78,9 @@ function set_rgba(px,r,g,b,a) { // assigns the r,g,b values to this px
  * of Pixels: the source image and the destination
  * image.
  * @param {f} filter - the filter to be installed
- * @returns {undefined} 
+ * @returns {undefined}
  */
-function install_filter(filter) { 
+function install_filter(filter) {
     _VD.filter = filter;
     if (!_VD.isPlaying) {
         _VD.snapPicture();
@@ -88,11 +88,11 @@ function install_filter(filter) {
 }
 
 /**
- * Returns a new filter that is the result of applying both 
- * filter1 and filter 2 together 
- * @param {filter1} filter - the first filter 
+ * Returns a new filter that is the result of applying both
+ * filter1 and filter 2 together
+ * @param {filter1} filter - the first filter
  * @param {filter2} filter - the second filter
- * @returns {undefined} 
+ * @returns {undefined}
  */
 function compose_filter(filter1, filter2) {
     return (src, dest) => {
@@ -103,19 +103,19 @@ function compose_filter(filter1, filter2) {
 }
 
 /**
- * Resets any filter applied on the video 
- * @returns {undefined} 
+ * Resets any filter applied on the video
+ * @returns {undefined}
  */
 function reset_filter() {
     install_filter(copy_image);
 }
 
 /**
- * The default filter that just copies the input 2D 
- * grid to output 
+ * The default filter that just copies the input 2D
+ * grid to output
  * @param {src} pixel - 2D input src of pixels
  * @param {dest} pixel - 2D output src of pixels
- * @returns {undefined} 
+ * @returns {undefined}
  */
 function copy_image(src, dest) {
     for (let i = 0; i < _HEIGHT; i++) {
@@ -127,28 +127,28 @@ function copy_image(src, dest) {
 
 /*
  *
- * INTERNAL FUNCTIONS 
- * 
+ * INTERNAL FUNCTIONS
+ *
  */
 
-//Frame Size 
+//Frame Size
 var _WIDTH = 400;
 var _HEIGHT = 300;
 
 //FPS
 var _FPS = 20;
 
-//Object that preserves the state we need 
+//Object that preserves the state we need
 _VD = {};
 
-_VD.startTime = null; 
+_VD.startTime = null;
 _VD.requestID = null;
 _VD.isPlaying = false;
 _VD.filter = copy_image;
 _VD.pixels = [];
 _VD.temp = [];
 
-// initializes our arrays which we use for drawing 
+// initializes our arrays which we use for drawing
 _VD.setupData = function() {
     for (let i = 0; i < _WIDTH; i++) {
         _VD.pixels[i] = [];
@@ -157,10 +157,11 @@ _VD.setupData = function() {
 }
 
 // constructor that sets up initial state
-_VD.init = function($video, $canvas) { 
+_VD.init = function($video, $canvas, $onError) {
     _VD.video = $video;
     _VD.canvas = $canvas;
     _VD.context = _VD.canvas.getContext('2d');
+    _VD.onError = $onError;
 
     _VD.setupData();
     _VD.loadMedia();
@@ -168,6 +169,7 @@ _VD.init = function($video, $canvas) {
 
 // destructor that does necessary cleanup
 _VD.deinit = function() {
+    _VD.onError = null;
     const stream = _VD.video.srcObject;
     if (!stream) {
         return;
@@ -188,7 +190,7 @@ _VD.loadMedia = function() {
     if (_VD.video.srcObject) {
         return;
     }
-    
+
     navigator.mediaDevices
         .getUserMedia({ video: true })
         .then( stream => {
@@ -197,7 +199,7 @@ _VD.loadMedia = function() {
         .catch( err => {
             console.error(err.name + ': ' + err.message);
         })
-    
+
     _VD.startVideo();
 }
 
@@ -220,14 +222,14 @@ _VD.stopVideo = function() {
     window.cancelAnimationFrame(_VD.requestID);
 }
 
-// draws on frame at every (1ms / _FPS) 
+// draws on frame at every (1ms / _FPS)
 _VD.draw = function(timestamp) {
     _VD.requestID = window.requestAnimationFrame(_VD.draw);
-    
+
     if (!_VD.startTime) {
         _VD.startTime = timestamp;
     }
-    
+
     const elapsed = timestamp - _VD.startTime;
     if (elapsed > (1000 / _FPS)) {
         _VD.drawFrame();
@@ -235,7 +237,7 @@ _VD.draw = function(timestamp) {
     }
 }
 
-// we translate from the buffer to 2D array 
+// we translate from the buffer to 2D array
 _VD.readFromBuffer = function(pixelData, res) {
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
@@ -255,31 +257,34 @@ _VD.writeToBuffer = function(buffer, data) {
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
             const p = (i * _WIDTH * 4) + j * 4;
-            buffer[p] = data[i][j][0]; 
-            buffer[p + 1] = data[i][j][1]; 
-            buffer[p + 2] = data[i][j][2]; 
-            buffer[p + 3] = data[i][j][3]; 
+            buffer[p] = data[i][j][0];
+            buffer[p + 1] = data[i][j][1];
+            buffer[p + 2] = data[i][j][2];
+            buffer[p + 3] = data[i][j][3];
         }
-    }   
+    }
 }
 
-// main function that applies filter on video and draws 
+// main function that applies filter on video and draws
 _VD.drawFrame = function() {
     _VD.context.drawImage(_VD.video, 0, 0, _WIDTH, _HEIGHT);
-   
+
     const pixelObj = _VD.context.getImageData(0, 0, _WIDTH, _HEIGHT);
     _VD.readFromBuffer(pixelObj.data, _VD.pixels);
-    
-    //runtime check to guard against crashes 
+
+    //runtime check to guard against crashes
     try {
         _VD.filter(_VD.pixels, _VD.temp);
     } catch(e) {
+        if (_VD.onError) {
+            _VD.onError(e);
+        }
         console.error("There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message);
 
         _VD.filter = copy_image;
         _VD.filter(_VD.pixels, _VD.temp);
     }
-    
+
     _VD.writeToBuffer(pixelObj.data, _VD.temp);
     _VD.context.putImageData(pixelObj, 0, 0);
 }
@@ -301,7 +306,7 @@ _VD.updateDimensions = function(w, h) {
 
     _WIDTH = w;
     _HEIGHT = h;
-    
+
     _VD.video.width = w;
     _VD.video.height = h;
     _VD.canvas.width = w;

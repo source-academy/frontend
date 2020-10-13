@@ -2,6 +2,8 @@ import { Button, ButtonGroup, Divider, NumericInput, Tooltip } from '@blueprintj
 import { IconNames } from '@blueprintjs/icons';
 import * as React from 'react';
 
+import { showWarningMessage } from '../../commons/utils/NotificationsHelper';
+
 export type SideContentVideoDisplayMode = 'video' | 'still';
 
 type State = {
@@ -26,7 +28,7 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
   public componentDidMount() {
     const _VD = (window as any)._VD;
     if (this.$video && this.$canvas && _VD) {
-      _VD.init(this.$video, this.$canvas);
+      _VD.init(this.$video, this.$canvas, this.handleError);
     }
   }
   public componentWillUnmount() {
@@ -61,6 +63,9 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
   }
   public handleUpdateDimensions(n: number, m: number) {
     (window as any)._VD?.updateDimensions(n, m);
+  }
+  public handleError(_e: Error) {
+    showWarningMessage("There was an error with the applied filter", 1000);
   }
   // UI can be improved
   public render() {
