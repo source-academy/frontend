@@ -51,6 +51,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
   handleTestcaseEval: (testcaseId: number) => void;
@@ -343,7 +344,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       tabs.push({
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
-        body: <SideContentVideoDisplay />,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
         id: SideContentType.videoDisplay,
         toSpawn: () => true
       });
