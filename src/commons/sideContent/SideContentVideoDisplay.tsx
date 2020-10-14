@@ -65,7 +65,7 @@ class SideContentVideoDisplay extends React.Component<{}, State> {
     (window as any)._VD?.updateDimensions(n, m);
   }
   public handleError(_e: Error) {
-    showWarningMessage("There was an error with the applied filter", 1000);
+    showWarningMessage('There was an error with the applied filter', 1000);
   }
   // UI can be improved
   public render() {
