@@ -419,7 +419,10 @@ class AssessmentWorkspace extends React.Component<
       });
     }
 
-    if (externalLibrary.name === ExternalLibraryName.PIXNFLIX) {
+    if (
+      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
+      externalLibrary.name === ExternalLibraryName.ALL
+    ) {
       tabs.push({
         label: 'Video Display',
         iconName: IconNames.MOBILE_VIDEO,
