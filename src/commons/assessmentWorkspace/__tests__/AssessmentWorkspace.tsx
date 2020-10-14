@@ -35,6 +35,7 @@ const defaultProps: AssessmentWorkspaceProps = {
   handleReplEval: () => {},
   handleReplOutputClear: () => {},
   handleReplValueChange: (newValue: string) => {},
+  handleSendReplInputToOutput: (code: string) => {},
   handleResetWorkspace: () => {},
   handleSave: (id: number, answer: string | number) => {},
   handleSideContentHeightChange: (heightChange: number) => {},

@@ -136,7 +136,7 @@ var _WIDTH = 400;
 var _HEIGHT = 300;
 
 //FPS
-var _FPS = 20;
+var _FPS = 10;
 
 //Object that preserves the state we need 
 _VD = {};
@@ -157,10 +157,11 @@ _VD.setupData = function() {
 }
 
 // constructor that sets up initial state
-_VD.init = function($video, $canvas) { 
+_VD.init = function($video, $canvas, errLogger) { 
     _VD.video = $video;
     _VD.canvas = $canvas;
     _VD.context = _VD.canvas.getContext('2d');
+    _VD.errLogger = errLogger;
 
     _VD.setupData();
     _VD.loadMedia();
@@ -180,7 +181,9 @@ _VD.deinit = function() {
 // connects to Webcam and starts video stream
 _VD.loadMedia = function() {
     if (!navigator.mediaDevices.getUserMedia) {
-        console.error('The browser you are using does not support getUserMedia');
+        const errMsg = 'The browser you are using does not support getUserMedia';
+        console.error(errMsg);
+        _VD.errLogger(errMsg, false);
         return;
     }
 
@@ -195,7 +198,9 @@ _VD.loadMedia = function() {
             _VD.video.srcObject = stream;
         })
         .catch( err => {
-            console.error(err.name + ': ' + err.message);
+            const errMsg = err.name + ": " + err.message;
+            console.error(errMsg);
+            _VD.errLogger(errMsg, false)
         })
     
     _VD.startVideo();
@@ -220,7 +225,7 @@ _VD.stopVideo = function() {
     window.cancelAnimationFrame(_VD.requestID);
 }
 
-// draws on frame at every (1ms / _FPS) 
+// draws on frame at every (1s / _FPS) 
 _VD.draw = function(timestamp) {
     _VD.requestID = window.requestAnimationFrame(_VD.draw);
     
@@ -236,11 +241,18 @@ _VD.draw = function(timestamp) {
 }
 
 // we translate from the buffer to 2D array 
-_VD.readFromBuffer = function(pixelData, res) {
+_VD.readFromBuffer = function(pixelData, src, dest) {
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
             const p = (i * _WIDTH * 4) + j * 4;
-            res[i][j] = [
+            src[i][j] = [
+                pixelData[p],
+                pixelData[p + 1],
+                pixelData[p + 2],
+                pixelData[p + 3]
+            ];
+
+            dest[i][j] = [
                 pixelData[p],
                 pixelData[p + 1],
                 pixelData[p + 2],
@@ -250,17 +262,42 @@ _VD.readFromBuffer = function(pixelData, res) {
     }
 }
 
+// we check if all values in the pixel are between 0 to 255 (or update to default)
+_VD.isPixelFilled = function(pixel) {
+    let ok = true;
+    for (let i = 0; i < 4; i++) {
+        if (pixel[i] >= 0 && pixel[i] <= 255) {
+            continue;
+        }
+        ok = false;
+        pixel[i] = 0;
+    }
+    return ok;
+}
+
 // we write back to the buffer (to draw on frame)
 _VD.writeToBuffer = function(buffer, data) {
+    let ok = true;
+
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
             const p = (i * _WIDTH * 4) + j * 4;
+            if (!_VD.isPixelFilled(data[i][j])) {
+                ok = false;
+            }
+            
             buffer[p] = data[i][j][0]; 
             buffer[p + 1] = data[i][j][1]; 
             buffer[p + 2] = data[i][j][2]; 
-            buffer[p + 3] = data[i][j][3]; 
+            buffer[p + 3] = data[i][j][3];
         }
     }   
+
+    if (!ok) {
+        const warnMsg = "You have invalid values for some pixels! Reseting them to default (0)";
+        console.warn(warnMsg);
+        _VD.errLogger(warnMsg, false);
+    }
 }
 
 // main function that applies filter on video and draws 
@@ -268,19 +305,29 @@ _VD.drawFrame = function() {
     _VD.context.drawImage(_VD.video, 0, 0, _WIDTH, _HEIGHT);
    
     const pixelObj = _VD.context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    _VD.readFromBuffer(pixelObj.data, _VD.pixels);
+    _VD.readFromBuffer(pixelObj.data, _VD.pixels, _VD.temp);
     
     //runtime check to guard against crashes 
     try {
         _VD.filter(_VD.pixels, _VD.temp);
+        _VD.writeToBuffer(pixelObj.data, _VD.temp);
     } catch(e) {
-        console.error("There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message);
+        console.error(JSON.stringify(e))
+        const errMsg = "There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message; 
+        console.error(errMsg);
+        
+        if (!e.name) {
+            _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider increasing the timeout period (clock icon) at the top / reducing the video dimensions.")
+
+            _VD.errLogger([e], true);
+        } else {
+            _VD.errLogger(errMsg, false)
+        }
 
         _VD.filter = copy_image;
         _VD.filter(_VD.pixels, _VD.temp);
     }
-    
-    _VD.writeToBuffer(pixelObj.data, _VD.temp);
+  
     _VD.context.putImageData(pixelObj, 0, 0);
 }
 
@@ -290,9 +337,29 @@ _VD.snapPicture = function() {
     _VD.stopVideo();
 }
 
+_VD.updateFPS = function(fps) {
+    //prevent too big of an increase
+    if (fps < 2 || fps > 30) {
+        return;
+    }
+
+    const status = _VD.isPlaying;
+    _VD.stopVideo();
+
+    _FPS = fps;
+    _VD.setupData();
+
+    if (!status) {
+        setTimeout(() => _VD.snapPicture(), 50);
+        return;
+    }
+
+    _VD.startVideo();
+}
+
 // update the frame dimensions
 _VD.updateDimensions = function(w, h) {
-    if (w === _WIDTH && h === _HEIGHT) {
+    if (w === _WIDTH && h === _HEIGHT || w > 500 || h > 500) {
         return;
     }
 

@@ -417,7 +417,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.externalLibraryName === ExternalLibraryName.ALL
     ) {
       // Enable video tab only when 'PIX&FLIX' is selected
-      tabs.push(videoDisplayTab);
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        toSpawn: () => true
+      });
     }
     if (props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
@@ -451,6 +456,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     playgroundIntroductionTab,
     props.externalLibraryName,
+    props.handleSendReplInputToOutput,
     props.output,
     props.sourceChapter,
     props.sourceVariant
@@ -563,13 +569,6 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  toSpawn: () => true
-};
-
-const videoDisplayTab: SideContentTab = {
-  label: 'Video Display',
-  iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />,
   toSpawn: () => true
 };
 
