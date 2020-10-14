@@ -241,18 +241,11 @@ _VD.draw = function(timestamp) {
 }
 
 // we translate from the buffer to 2D array 
-_VD.readFromBuffer = function(pixelData, src, dest) {
+_VD.readFromBuffer = function(pixelData, src) {
     for (let i = 0; i < _HEIGHT; i++) {
         for (let j = 0; j < _WIDTH; j++) {
             const p = (i * _WIDTH * 4) + j * 4;
             src[i][j] = [
-                pixelData[p],
-                pixelData[p + 1],
-                pixelData[p + 2],
-                pixelData[p + 3]
-            ];
-
-            dest[i][j] = [
                 pixelData[p],
                 pixelData[p + 1],
                 pixelData[p + 2],
@@ -305,7 +298,7 @@ _VD.drawFrame = function() {
     _VD.context.drawImage(_VD.video, 0, 0, _WIDTH, _HEIGHT);
    
     const pixelObj = _VD.context.getImageData(0, 0, _WIDTH, _HEIGHT);
-    _VD.readFromBuffer(pixelObj.data, _VD.pixels, _VD.temp);
+    _VD.readFromBuffer(pixelObj.data, _VD.pixels);
     
     //runtime check to guard against crashes 
     try {
