@@ -81,9 +81,6 @@ function set_rgba(px,r,g,b,a) { // assigns the r,g,b values to this px
  * @returns {undefined} 
  */
 function install_filter(filter) { 
-    //reset any errors here
-    _VD.errorDisplay = [false, ""]
-
     _VD.filter = filter;
     if (!_VD.isPlaying) {
         _VD.snapPicture();
@@ -150,7 +147,6 @@ _VD.isPlaying = false;
 _VD.filter = copy_image;
 _VD.pixels = [];
 _VD.temp = [];
-_VD.errorDisplay = [false, ""];
 
 // initializes our arrays which we use for drawing 
 _VD.setupData = function() {
@@ -314,7 +310,7 @@ _VD.drawFrame = function() {
         console.error(errMsg);
         
         if (!e.name) {
-            _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider reducing the video dimensions.")
+            _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider increasing the timeout period (clock icon) at the top / reducing the video dimensions.")
 
             _VD.errLogger([e], true);
         } else {
