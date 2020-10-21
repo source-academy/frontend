@@ -183,7 +183,7 @@ _VD.loadMedia = function() {
     if (!navigator.mediaDevices.getUserMedia) {
         const errMsg = 'The browser you are using does not support getUserMedia';
         console.error(errMsg);
-        _VD.errLogger(errMsg, false);
+        _VD.errLogger && _VD.errLogger(errMsg, false);
         return;
     }
 
@@ -200,7 +200,7 @@ _VD.loadMedia = function() {
         .catch( err => {
             const errMsg = err.name + ": " + err.message;
             console.error(errMsg);
-            _VD.errLogger(errMsg, false)
+            _VD.errLogger && _VD.errLogger(errMsg, false)
         })
     
     _VD.startVideo();
@@ -289,7 +289,7 @@ _VD.writeToBuffer = function(buffer, data) {
     if (!ok) {
         const warnMsg = "You have invalid values for some pixels! Reseting them to default (0)";
         console.warn(warnMsg);
-        _VD.errLogger(warnMsg, false);
+        _VD.errLogger && _VD.errLogger(warnMsg, false);
     }
 }
 
@@ -309,12 +309,14 @@ _VD.drawFrame = function() {
         const errMsg = "There is an error with filter function, filter will be reset to default. " + e.name + ": " + e.message; 
         console.error(errMsg);
         
-        if (!e.name) {
-            _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider increasing the timeout period (clock icon) at the top / reducing the video dimensions.")
+        if (_VD.errLogger) {
+            if (!e.name) {
+                _VD.errLogger("There is an error with filter function (error shown below). Filter will be reset back to the default. If you are facing an infinite loop error, you can consider increasing the timeout period (clock icon) at the top / reducing the video dimensions.")
 
-            _VD.errLogger([e], true);
-        } else {
-            _VD.errLogger(errMsg, false)
+                _VD.errLogger([e], true);
+            } else {
+                _VD.errLogger(errMsg, false)
+            }
         }
 
         _VD.filter = copy_image;
