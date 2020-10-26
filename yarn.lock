@@ -7478,10 +7478,10 @@ js-slang@^0.4.60:
     source-map "^0.7.3"
     xmlhttprequest-ts "^1.0.1"
 
-js-slang@^0.4.67:
-  version "0.4.67"
-  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.67.tgz#d09ac124c700cdc0ed5b94bf08afb54f077a472a"
-  integrity sha512-o/fnqLQkE3HosnnFmjx139xcGn/GkhgLjbL07AkyS64uq8O1mcTnAF4220X3yvfr0Kt0GfpBNoLqfeYFFs5rtw==
+js-slang@^0.4.69:
+  version "0.4.69"
+  resolved "https://registry.yarnpkg.com/js-slang/-/js-slang-0.4.69.tgz#b8ae4157bf476f491511bf140e98c22531a22beb"
+  integrity sha512-VnIdOKJZ4AkxHzMpDJBNe+3tLZKhKtb9fKHn/75fxBIprgmzKZWG74CaNCH61uU1ac/ItmscD7Tfb2TcFcdRww==
   dependencies:
     "@types/estree" "0.0.45"
     acorn "^8.0.3"
