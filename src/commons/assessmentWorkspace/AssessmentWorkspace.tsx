@@ -392,16 +392,18 @@ class AssessmentWorkspace extends React.Component<
       }
 
       // Initialize session once the editorValue is known.
-      this.setState({
-        sessionId: initSession(
-          `${(this.props.assessment as any).number}/${this.props.questionId}`,
-          {
-            chapter: question.library.chapter,
-            externalLibrary: question?.library?.external?.name || 'NONE',
-            editorValue
-          }
-        )
-      });
+      if (!this.state.sessionId) {
+        this.setState({
+          sessionId: initSession(
+            `${(this.props.assessment as any).number}/${this.props.questionId}`,
+            {
+              chapter: question.library.chapter,
+              externalLibrary: question?.library?.external?.name || 'NONE',
+              editorValue
+            }
+          )
+        });
+      }
     }
 
     this.props.handleEditorUpdateBreakpoints([]);
