@@ -393,11 +393,14 @@ class AssessmentWorkspace extends React.Component<
 
       // Initialize session once the editorValue is known.
       this.setState({
-        sessionId: initSession(this.props.assessment.id, {
-          chapter: question.library.chapter,
-          externalLibrary: question?.library?.external?.name || 'NONE',
-          editorValue
-        })
+        sessionId: initSession(
+          `${(this.props.assessment as any).number}/${this.props.questionId}`,
+          {
+            chapter: question.library.chapter,
+            externalLibrary: question?.library?.external?.name || 'NONE',
+            editorValue
+          }
+        )
       });
     }
 

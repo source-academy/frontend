@@ -1,13 +1,7 @@
 import { v4 as uuid } from 'uuid';
 
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
-import { Input as RecorderInput, PlaybackData } from '../sourceRecorder/SourceRecorderTypes';
-
-export type UnsentLog = {
-  assessmentId: number;
-  questionId: number;
-  playbackData: PlaybackData;
-};
+import { Input as RecorderInput } from '../sourceRecorder/SourceRecorderTypes';
 
 export const playgroundQuestionId: number = -1;
 
@@ -18,35 +12,34 @@ type PlaybackInitial = {
 };
 
 type PlaybackInitialTagged = PlaybackInitial & {
-  assessmentId: number;
   type: 'init';
   time: number;
 };
+
 type Input = RecorderInput | PlaybackInitialTagged;
 
-const assessmentIdLookup: { [id: string]: number } = {};
+const questionIdLookup: { [id: string]: string } = {};
 
 // ------------------- EXTERNAL API -------------------
 
+const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 export function log(id: string, input: Input) {
-  // TODO: disable logging if not logged in.
-  console.log(id, input);
+  if (!cadetLoggerUrl) {
+    return;
+  } // This is set statically
   save_record({
     ...input,
-    sessionId: id,
-    assessmentId: assessmentIdLookup[id]
-  }).then(() => {
-    get_records().then((x: any) => console.log('records:', x));
+    questionId: questionIdLookup[id],
+    sessionId: id
   });
 }
 
 // Creates a session, then logs it.
-export function initSession(assessmentId: number, initialState: PlaybackInitial): string {
+export function initSession(questionId: string, initialState: PlaybackInitial): string {
   const id = uuid();
-  assessmentIdLookup[id] = assessmentId;
+  questionIdLookup[id] = questionId;
   log(id, {
     ...initialState,
-    assessmentId,
     type: 'init',
     time: Date.now()
   });
@@ -56,9 +49,12 @@ export function initSession(assessmentId: number, initialState: PlaybackInitial)
 // ------------------- INDEXEDDB API -------------------
 type LogRecord = Input & {
   sessionId: string;
-  assessmentId: number;
+  questionId: string;
   time: number;
 };
+
+// Yes, past tense. For when it is inside the log.
+export type LoggedRecord = LogRecord & { id: number };
 
 const VERSION = 1;
 const DB_NAME = 'evtlogs';
@@ -109,7 +105,7 @@ function save_record(record: LogRecord) {
 // This forces it to be singleton,
 // preventing multiple uploads without a lock.
 
-export function get_records(): Promise<Array<LogRecord & { id: number }>> {
+export function get_records(): Promise<LoggedRecord[]> {
   return new Promise((resolve, reject) => {
     getDb().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');

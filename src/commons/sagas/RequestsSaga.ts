@@ -1,4 +1,5 @@
 import { call } from 'redux-saga/effects';
+import { set_access_token as set_serviceworker_access_token } from 'src/features/eventLogging/ServiceWorker';
 
 import { SourceLanguage, styliseSublanguage } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -897,6 +898,7 @@ export async function request(
     if (opts.shouldRefresh && resp && resp.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
       store.dispatch(actions.setTokens(newTokens!));
+      set_serviceworker_access_token(newTokens?.accessToken!); // Grant the same token to the serviceworker.
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,

@@ -119,7 +119,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
   const [sessionId, setSessionId] = React.useState(() =>
-    initSession(-1, {
+    initSession('playground', {
       editorValue: propsRef.current.editorValue,
       externalLibrary: propsRef.current.externalLibraryName,
       chapter: propsRef.current.sourceChapter
@@ -137,10 +137,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, []);
 
   React.useEffect(() => {
-    console.log('change session id on editor session change');
     // When the editor session Id changes, then treat it as a new session.
     setSessionId(
-      initSession(-1, {
+      initSession('playground', {
         editorValue: propsRef.current.editorValue,
         externalLibrary: propsRef.current.externalLibraryName,
         chapter: propsRef.current.sourceChapter

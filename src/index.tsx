@@ -11,6 +11,7 @@ import Constants, { Links } from 'src/commons/utils/Constants';
 import { history } from 'src/commons/utils/HistoryHelper';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
+import { set_access_token as set_serviceworker_access_token } from 'src/features/eventLogging/ServiceWorker';
 import { store } from 'src/pages/createStore';
 
 if (Constants.sentryDsn) {
@@ -49,5 +50,15 @@ registerServiceWorker({
       'A new version of Source Academy is available. Please refresh the browser.',
       0
     );
+  }
+});
+
+// Seriously: registerServiceWorker onSuccess and onUpdate are separate paths.
+// Neither of them actually fire in localhost...
+navigator.serviceWorker.ready.then(() => {
+  const token = store.getState().session.accessToken;
+  if (token) {
+    // Initial access token on startup.
+    set_serviceworker_access_token(token);
   }
 });
