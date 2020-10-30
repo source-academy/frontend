@@ -343,6 +343,8 @@ function set_timeout(f, t) {
   if (typeof f === 'function' && typeof t === 'number') {
     var timeoutObj = set_time_out_renamed(f, t);
     timeout_objects.push(timeoutObj);
+  } else {
+    throw new Error('set_timeout(f, t) expects a function and a number respectively.');
   }
 }
 
