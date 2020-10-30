@@ -340,8 +340,10 @@ ToneMatrix.clear_matrix = clear_matrix;
 var set_time_out_renamed = window.setTimeout;
 
 function set_timeout(f, t) {
-  var timeoutObj = set_time_out_renamed(f, t);
-  timeout_objects.push(timeoutObj);
+  if (typeof f === 'function' && typeof t === 'number') {
+    var timeoutObj = set_time_out_renamed(f, t);
+    timeout_objects.push(timeoutObj);
+  }
 }
 
 function clear_all_timeout() {
