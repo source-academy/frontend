@@ -34,13 +34,13 @@ const cracoConfig = (module.exports = {
         include: /node_modules/,
         type: 'javascript/auto'
       });
-      if(process.env.NODE_ENV == "production") {
+      if(process.env.NODE_ENV === "production") {
         // Make a second webpack config with a different entry point and output.
         // This preserves pretty much all other settings.
         const currEntryPoint = webpackConfig.entry[0];
         const serviceWorkerBuild = _.clone(webpackConfig);
         serviceWorkerBuild.entry = path.join(currEntryPoint, "../sw-custom.ts");
-        serviceWorkerBuild.output = { 
+        serviceWorkerBuild.output = {
           path: webpackConfig.output.path,
           publicPath: webpackConfig.output.publicPath,
           filename: "sw-custom.js"
@@ -49,11 +49,15 @@ const cracoConfig = (module.exports = {
         delete serviceWorkerBuild.optimization.splitChunks;
         delete serviceWorkerBuild.optimization.runtimeChunk;
 
-        return [webpackConfig, serviceWorkerBuild];
-        
+        const ret = [webpackConfig, serviceWorkerBuild];
+        // Fix CRA's print line
+        // FIXME maybe we should just eject at this point...
+        ret.output = webpackConfig.output;
+        return ret;
+
         // If there's multiple webpack configs, it will build them in **parallel**
-        // This breaks the following: 
-        /* 
+        // This breaks the following:
+        /*
         Frankly this doesn't matter :D
         The project was built assuming it is hosted at /.
         You can control this with the homepage field in your package.json.

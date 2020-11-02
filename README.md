@@ -120,10 +120,3 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_CADET_LOGGER`: Log server url. To enable, build with the serviceworker. (`yarn build`, then `yarn build-serviceworker`)
    - To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
    - The custom serviceworker is only built with `yarn build`, then `yarn build-serviceworker`. It is not available in any other version.
-
-
-## Known issues:
-
-yarn build: Cannot read `publicPath` of undefined.    
-- Ignore this, this is caused by a craco hack to enable multiple entryPoints in the build (serviceWorkerBuild in craco.config.js).
-
