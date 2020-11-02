@@ -3,12 +3,14 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
+import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
+import { initSession, log } from 'src/features/eventLogging';
 
 import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
@@ -34,6 +36,11 @@ import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoD
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
+import {
+  CodeDelta,
+  Input,
+  SelectionRange
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -144,6 +151,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState(() =>
+    initSession('playground', {
+      editorValue: propsRef.current.editorValue,
+      externalLibrary: propsRef.current.externalLibraryName,
+      chapter: propsRef.current.sourceChapter
+    })
+  );
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -154,6 +168,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
       propsRef.current.handleFetchSublanguage();
     }
   }, []);
+
+  React.useEffect(() => {
+    // When the editor session Id changes, then treat it as a new session.
+    setSessionId(
+      initSession('playground', {
+        editorValue: propsRef.current.editorValue,
+        externalLibrary: propsRef.current.externalLibraryName,
+        chapter: propsRef.current.sourceChapter
+      })
+    );
+  }, [props.editorSessionId]);
 
   const hash = props.location.hash;
   React.useEffect(() => {
@@ -216,6 +241,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
+  const pushLog = React.useCallback(
+    (newInput: Input) => {
+      log(sessionId, newInput);
+    },
+    [sessionId]
+  );
+
   const autorunButtons = React.useMemo(
     () => (
       <ControlBarAutorunButtons
@@ -254,9 +286,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleReplOutputClear();
         handleUsingSubst(false);
       }
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'chapterSelect',
+        data: chapter
+      };
+
+      pushLog(input);
+
       handleChapterSelect(chapter, variant);
     },
-    [hasBreakpoints, selectedTab]
+    [hasBreakpoints, selectedTab, pushLog]
   );
 
   const chapterSelect = React.useMemo(
@@ -347,18 +388,34 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [props.handleChangeStepLimit, props.stepLimit]
   );
 
-  const { handleExternalSelect, externalLibraryName } = props;
+  const { handleExternalSelect, externalLibraryName, handleEditorValueChange } = props;
+
+  const handleExternalSelectAndRecord = React.useCallback(
+    (name: ExternalLibraryName) => {
+      handleExternalSelect(name);
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'externalLibrarySelect',
+        data: name
+      };
+
+      pushLog(input);
+    },
+    [handleExternalSelect, pushLog]
+  );
+
   const externalLibrarySelect = React.useMemo(
     () => (
       <ControlBarExternalLibrarySelect
         externalLibraryName={externalLibraryName}
         handleExternalSelect={({ name }: { name: ExternalLibraryName }, e: any) =>
-          handleExternalSelect(name)
+          handleExternalSelectAndRecord(name)
         }
         key="external_library"
       />
     ),
-    [externalLibraryName, handleExternalSelect]
+    [externalLibraryName, handleExternalSelectAndRecord]
   );
 
   // No point memoing this, it uses props.editorValue
@@ -462,6 +519,51 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant
   ]);
 
+  const onChangeMethod = React.useCallback(
+    (newCode: string, delta: CodeDelta) => {
+      handleEditorValueChange(newCode);
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'codeDelta',
+        data: delta
+      };
+
+      pushLog(input);
+    },
+    [handleEditorValueChange, pushLog]
+  );
+
+  const onCursorChangeMethod = React.useCallback(
+    (selection: any) => {
+      const input: Input = {
+        time: Date.now(),
+        type: 'cursorPositionChange',
+        data: selection.getCursor()
+      };
+
+      pushLog(input);
+    },
+    [pushLog]
+  );
+
+  const onSelectionChangeMethod = React.useCallback(
+    (selection: any) => {
+      const range: SelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
+      if (!isEqual(range.start, range.end)) {
+        const input: Input = {
+          time: Date.now(),
+          type: 'selectionRangeData',
+          data: { range, isBackwards }
+        };
+
+        pushLog(input);
+      }
+    },
+    [pushLog]
+  );
+
   const handleEditorUpdateBreakpoints = React.useCallback(
     (breakpoints: string[]) => {
       // get rid of holes in array
@@ -507,6 +609,9 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ]
     },
     editorProps: {
+      onChange: onChangeMethod,
+      onCursorChange: onCursorChangeMethod,
+      onSelectionChange: onSelectionChangeMethod,
       sourceChapter: props.sourceChapter,
       externalLibraryName: props.externalLibraryName,
       sourceVariant: props.sourceVariant,

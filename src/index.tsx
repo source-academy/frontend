@@ -11,6 +11,7 @@ import Constants, { Links } from 'src/commons/utils/Constants';
 import { history } from 'src/commons/utils/HistoryHelper';
 import { showWarningMessage } from 'src/commons/utils/NotificationsHelper';
 import { register as registerServiceWorker } from 'src/commons/utils/RegisterServiceWorker';
+import { triggerSyncLogs } from 'src/features/eventLogging/client';
 import { store } from 'src/pages/createStore';
 
 if (Constants.sentryDsn) {
@@ -51,3 +52,12 @@ registerServiceWorker({
     );
   }
 });
+
+if (Constants.cadetLoggerUrl) {
+  // Seriously: registerServiceWorker onSuccess and onUpdate are separate paths.
+  // Neither of them actually fire in localhost...
+  const sync = () => triggerSyncLogs(store.getState().session.accessToken);
+  navigator.serviceWorker.ready.then(() => {
+    setInterval(sync, Constants.cadetLoggerInterval);
+  });
+}
