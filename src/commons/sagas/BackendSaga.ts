@@ -584,29 +584,6 @@ function* BackendSaga(): SagaIterator {
 
     yield put(actions.fetchAssessmentOverviews());
   });
-
-  /* yield takeEvery(actionTypes.FETCH_TEST_STORIES, function*(
-    action: ReturnType<typeof actions.fetchTestStories>
-  ) {
-    // TODO: implement when stories backend is implemented
-  }); */
-
-  // Related to game, disabled for now
-  /*
-  yield takeEvery(SAVE_USER_STATE, function*(action: ReturnType<typeof actions.saveUserData>) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
-    const gameState: GameState = action.payload;
-    const resp = yield putUserGameState(gameState, tokens);
-    if (!resp || !resp.ok) {
-      yield handleResponseError(resp);
-      return;
-    }
-    yield put(actions.setGameState(gameState));
-  });
-  */
 }
 
 function* handleReautogradeResponse(resp: Response | null) {
