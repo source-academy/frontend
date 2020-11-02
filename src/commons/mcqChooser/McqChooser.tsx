@@ -10,24 +10,14 @@ export type McqChooserProps = {
   handleMCQSubmit: (choiceId: number) => void;
 };
 
-type State = {
-  mcqOption: number | null;
-};
-
-class McqChooser extends React.PureComponent<McqChooserProps, State> {
-  constructor(props: McqChooserProps) {
-    super(props);
-    this.state = {
-      mcqOption: props.mcq.answer
-    };
-  }
+class McqChooser extends React.PureComponent<McqChooserProps, {}> {
   public render() {
     const options = this.props.mcq.choices.map((choice, i) => (
       <Button
         key={i}
         className="mcq-option col-xs-12"
-        active={i === this.state.mcqOption}
-        intent={this.getButtonIntent(i, this.state.mcqOption, this.props.mcq.solution)}
+        active={i === this.props.mcq.answer}
+        intent={this.getButtonIntent(i, this.props.mcq.answer, this.props.mcq.solution)}
         onClick={this.onButtonClickFactory(i)}
         minimal={true}
       >
@@ -54,11 +44,8 @@ class McqChooser extends React.PureComponent<McqChooserProps, State> {
    * @param i the id of the answer
    */
   private onButtonClickFactory = (i: number) => (e: any) => {
-    if (i !== this.state.mcqOption) {
+    if (i !== this.props.mcq.answer) {
       this.props.handleMCQSubmit(i);
-      this.setState({
-        mcqOption: i
-      });
     }
     const shouldDisplayMessage = this.props.mcq.solution !== null && this.props.mcq.choices[i].hint;
     if (shouldDisplayMessage) {

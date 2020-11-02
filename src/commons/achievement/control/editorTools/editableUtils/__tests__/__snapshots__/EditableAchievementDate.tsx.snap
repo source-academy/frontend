@@ -13,7 +13,7 @@ exports[`EditableAchievementDate component renders correctly 1`] = `
                   <Blueprint3.ResizeSensor onResize={[Function (anonymous)]}>
                     <span onBlur={[Function (anonymous)]} onFocus={[Function (anonymous)]} onMouseEnter={[Function (anonymous)]} onMouseLeave={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                       <Blueprint3.Button onClick={[Function: onClick]} className=\\"\\" disabled={[undefined]} tabIndex={0}>
-                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
+                        <button type=\\"button\\" onClick={[Function: onClick]} className=\\"bp3-button\\" disabled={[undefined]} tabIndex={0} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]}>
                           <Blueprint3.Icon icon={[undefined]} />
                           <span className=\\"bp3-button-text\\">
                             Change Deadline

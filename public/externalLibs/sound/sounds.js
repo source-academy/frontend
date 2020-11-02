@@ -57,10 +57,11 @@ function discretize_from(wave, duration, elapsed_duration, sample_length, data) 
     }
 }
 
-// Quantize real amplitude values into standard 4-bit PCM levels
+// Quantize real amplitude values into standard 16-bit PCM levels
+// The range is [-32768, 32767] (see riffwave.js)
 function quantize(data) {
     for (var i = 0; i < data.length; i++) {
-        data[i] = Math.round((data[i] + 1) * 126);
+        data[i] = Math.floor(data[i] * 32767.999);
     }
     return data;
 }
@@ -101,6 +102,7 @@ function raw_to_audio(_data) {
     var riffwave = new RIFFWAVE();
     riffwave.header.sampleRate = FS;
     riffwave.header.numChannels = 1;
+    riffwave.header.bitsPerSample = 16;
     riffwave.Make(data);
     var audio = new Audio(riffwave.dataURI);
     return audio;
@@ -495,7 +497,7 @@ function letter_name_to_midi_note(note) {
  * @returns {Number} frequency of corresponding note in Hz
  */
 function letter_name_to_frequency(note) {
-    return midi_note_to_frequency(note_to_midi_note(note));
+    return midi_note_to_frequency(letter_name_to_midi_note(note));
 }
 
 /**

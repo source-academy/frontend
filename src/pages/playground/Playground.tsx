@@ -4,12 +4,15 @@ import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
 import { isEqual } from 'lodash';
+import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { RouteComponentProps } from 'react-router';
+import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
+import { parseQuery } from 'src/commons/utils/QueryHelper';
 import { initSession, log } from 'src/features/eventLogging';
 
-import { InterpreterOutput } from '../../commons/application/ApplicationTypes';
+import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
 import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
@@ -59,7 +62,7 @@ export type DispatchProps = {
   handleShortenURL: (s: string) => void;
   handleUpdateShortURL: (s: string) => void;
   handleInterruptEval: () => void;
-  handleExternalSelect: (externalLibraryName: ExternalLibraryName, force?: boolean) => void;
+  handleExternalSelect: (externalLibraryName: ExternalLibraryName, initialise?: boolean) => void;
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
@@ -111,6 +114,36 @@ export type StateProps = {
 
 const keyMap = { goGreen: 'h u l k' };
 
+function handleHash(hash: string, props: PlaygroundProps) {
+  const qs = parseQuery(hash);
+
+  const programLz = qs.lz ?? qs.prgrm;
+  const program = programLz && decompressFromEncodedURIComponent(programLz);
+  if (program) {
+    props.handleEditorValueChange(program);
+  }
+
+  const chapter = stringParamToInt(qs.chap) || undefined;
+  const variant: Variant =
+    sourceLanguages.find(
+      language => language.chapter === chapter && language.variant === qs.variant
+    )?.variant ?? 'default';
+  if (chapter) {
+    props.handleChapterSelect(chapter, variant);
+  }
+
+  const ext =
+    Object.values(ExternalLibraryName).find(v => v === qs.ext) || ExternalLibraryName.NONE;
+  if (ext) {
+    props.handleExternalSelect(ext, true);
+  }
+
+  const execTime = Math.max(stringParamToInt(qs.exec || '1000') || 1000, 1000);
+  if (execTime) {
+    props.handleChangeExecTime(execTime);
+  }
+}
+
 const Playground: React.FC<PlaygroundProps> = props => {
   const propsRef = React.useRef(props);
   propsRef.current = props;
@@ -131,7 +164,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     propsRef.current.handleExternalSelect(propsRef.current.externalLibraryName, true);
 
     // Only fetch default Playground sublanguage when not loaded via a share link
-    if (propsRef.current.location.hash === '') {
+    if (!propsRef.current.location.hash) {
       propsRef.current.handleFetchSublanguage();
     }
   }, []);
@@ -146,6 +179,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
       })
     );
   }, [props.editorSessionId]);
+
+  const hash = props.location.hash;
+  React.useEffect(() => {
+    if (!hash) {
+      return;
+    }
+    handleHash(hash, propsRef.current);
+  }, [hash]);
 
   const handlers = React.useMemo(
     () => ({
@@ -437,7 +478,12 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.externalLibraryName === ExternalLibraryName.ALL
     ) {
       // Enable video tab only when 'PIX&FLIX' is selected
-      tabs.push(videoDisplayTab);
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        toSpawn: () => true
+      });
     }
     if (props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
@@ -471,6 +517,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   }, [
     playgroundIntroductionTab,
     props.externalLibraryName,
+    props.handleSendReplInputToOutput,
     props.output,
     props.sourceChapter,
     props.sourceVariant
@@ -622,13 +669,6 @@ const listVisualizerTab: SideContentTab = {
   iconName: IconNames.EYE_OPEN,
   body: <SideContentListVisualizer />,
   id: SideContentType.dataVisualiser,
-  toSpawn: () => true
-};
-
-const videoDisplayTab: SideContentTab = {
-  label: 'Video Display',
-  iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />,
   toSpawn: () => true
 };
 

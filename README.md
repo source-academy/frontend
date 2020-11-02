@@ -60,6 +60,14 @@ The following properties are used for the Playground Google Drive integration. Y
 
 See [here](https://github.com/source-academy/cadet-frontend/wiki/Google-Drive-Persistence) a guide on obtaining the above values from the Google API Console.
 
+#### Disable periods
+
+The frontend can be configured to disable itself (based on user's system time) during certain periods e.g. during e-exams. Note that this is not foolproof, but it can be combined with other strategies e.g. taking down the frontend entirely (but this is needed to counteract the service worker).
+
+1. `REACT_APP_DISABLEn_START`: The time from which to disable the frontend.
+1. `REACT_APP_DISABLEn_END`: The time until which to disable the frontend.
+1. `REACT_APP_DISABLEn_REASON`: Optional. A reason shown for the disablement.
+
 #### Other configuration
 
 1. `REACT_APP_PLAYGROUND_ONLY`: Whether to build the "playground-only" version, which disables the Academy components, so only the Playground is available. This is what we deploy onto [GitHub Pages](https://source-academy.github.io).

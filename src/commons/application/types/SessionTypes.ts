@@ -54,3 +54,18 @@ export type SessionState = {
   readonly notifications: Notification[];
   readonly googleUser?: string;
 };
+
+export type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type User = {
+  userId: number;
+  name: string;
+  role: Role;
+  group: string | null;
+  grade: number;
+  story?: Story;
+  gameState?: GameState;
+};

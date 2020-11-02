@@ -55,7 +55,6 @@ import { notifyProgramEvaluated } from '../workspace/WorkspaceActions';
 import {
   BEGIN_CLEAR_CONTEXT,
   CHAPTER_SELECT,
-  ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_SILENT,
@@ -460,16 +459,6 @@ export default function* WorkspaceSaga(): SagaIterator {
   }
 
   /**
-   * Makes a call to checkWebGLAvailable to ensure that the Graphics libraries are loaded.
-   * To abstract this to other libraries, add a call to the all() effect.
-   */
-  yield takeEvery(ENSURE_LIBRARIES_LOADED, function* (
-    action: ReturnType<typeof actions.ensureLibrariesLoaded>
-  ) {
-    yield* checkWebGLAvailable();
-  });
-
-  /**
    * Handles the side effect of resetting the WebGL context when context is reset.
    *
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
@@ -782,7 +771,7 @@ export function* evalCode(
       // Avoid displaying message if there are no testcases
       if (testcases.length > 0) {
         // Display a message to the user
-        yield call(showSuccessMessage, `Running all testcases!`, 750);
+        yield call(showSuccessMessage, `Running all testcases!`, 2000);
         for (const idx of testcases.keys()) {
           yield put(actions.evalTestcase(workspaceLocation, idx));
           /** Run testcases synchronously - this blocks the generator until result of current

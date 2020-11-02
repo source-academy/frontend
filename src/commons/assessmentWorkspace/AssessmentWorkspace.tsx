@@ -23,6 +23,7 @@ import {
 
 import { initSession, log } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
+import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -51,6 +52,7 @@ import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
 import Constants from '../utils/Constants';
 import { history } from '../utils/HistoryHelper';
 import { showWarningMessage } from '../utils/NotificationsHelper';
@@ -76,6 +78,7 @@ export type DispatchProps = {
   handleReplEval: () => void;
   handleReplOutputClear: () => void;
   handleReplValueChange: (newValue: string) => void;
+  handleSendReplInputToOutput: (code: string) => void;
   handleResetWorkspace: (options: Partial<WorkspaceState>) => void;
   handleSave: (id: number, answer: number | string) => void;
   handleSideContentHeightChange: (heightChange: number) => void;
@@ -427,6 +430,7 @@ class AssessmentWorkspace extends React.Component<
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
+    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const tabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
@@ -448,7 +452,9 @@ class AssessmentWorkspace extends React.Component<
         body: (
           <SideContentAutograder
             testcases={props.editorTestcases}
-            autogradingResults={props.autogradingResults}
+            autogradingResults={
+              isGraded || props.assessment!.category === 'Path' ? props.autogradingResults : []
+            }
             handleTestcaseEval={this.props.handleTestcaseEval}
           />
         ),
@@ -456,7 +462,6 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       }
     ];
-    const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     if (isGraded) {
       tabs.push({
         label: `Report Card`,
@@ -477,7 +482,8 @@ class AssessmentWorkspace extends React.Component<
       });
     }
 
-    const functionsAttached = props.assessment!.questions[questionId].library.external.symbols;
+    const externalLibrary = props.assessment!.questions[questionId].library.external;
+    const functionsAttached = externalLibrary.symbols;
     if (functionsAttached.includes('get_matrix')) {
       tabs.push({
         label: `Tone Matrix`,
@@ -487,6 +493,20 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       });
     }
+
+    if (
+      externalLibrary.name === ExternalLibraryName.PIXNFLIX ||
+      externalLibrary.name === ExternalLibraryName.ALL
+    ) {
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        id: SideContentType.videoDisplay,
+        toSpawn: () => true
+      });
+    }
+
     return {
       handleActiveTabChange: props.handleActiveTabChange,
       defaultSelectedTabId: isGraded ? SideContentType.grading : SideContentType.questionOverview,

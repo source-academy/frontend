@@ -340,8 +340,12 @@ ToneMatrix.clear_matrix = clear_matrix;
 var set_time_out_renamed = window.setTimeout;
 
 function set_timeout(f, t) {
-  var timeoutObj = set_time_out_renamed(f, t);
-  timeout_objects.push(timeoutObj);
+  if (typeof f === 'function' && typeof t === 'number') {
+    var timeoutObj = set_time_out_renamed(f, t);
+    timeout_objects.push(timeoutObj);
+  } else {
+    throw new Error('set_timeout(f, t) expects a function and a number respectively.');
+  }
 }
 
 function clear_all_timeout() {
@@ -409,7 +413,7 @@ function letter_name_to_midi_note(note) {
 }
 
 function letter_name_to_frequency(note) {
-  return midi_note_to_frequency(note_to_midi_note(note));
+  return midi_note_to_frequency(letter_name_to_midi_note(note));
 }
 
 function midi_note_to_frequency(note) {

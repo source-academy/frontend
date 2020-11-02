@@ -3,7 +3,7 @@
 exports[`TaskAdder component renders correctly 1`] = `
 "<TaskAdder inferencer={{...}} saveChanges={[Function: saveChanges]}>
   <Blueprint3.Button className=\\"main-adder\\" onClick={[Function: toggleDialogOpen]} text=\\"Add A Task\\">
-    <button type=\\"button\\" className=\\"bp3-button main-adder\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+    <button type=\\"button\\" className=\\"bp3-button main-adder\\" onClick={[Function: toggleDialogOpen]} disabled={[undefined]} onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
       <Blueprint3.Icon icon={[undefined]} />
       <span className=\\"bp3-button-text\\">
         Add A Task

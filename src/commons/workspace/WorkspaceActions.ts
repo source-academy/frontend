@@ -25,7 +25,6 @@ import {
   CLEAR_REPL_OUTPUT,
   CLEAR_REPL_OUTPUT_LAST,
   END_CLEAR_CONTEXT,
-  ENSURE_LIBRARIES_LOADED,
   EVAL_EDITOR,
   EVAL_REPL,
   EVAL_TESTCASE,
@@ -153,8 +152,6 @@ export const endClearContext = (library: Library, workspaceLocation: WorkspaceLo
     library,
     workspaceLocation
   });
-
-export const ensureLibrariesLoaded = () => action(ENSURE_LIBRARIES_LOADED);
 
 export const evalEditor = (workspaceLocation: WorkspaceLocation) =>
   action(EVAL_EDITOR, { workspaceLocation });

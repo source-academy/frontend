@@ -14,7 +14,7 @@ exports[`TaskPositionInserter component renders correctly 1`] = `
                     <span onClick={[Function (anonymous)]} className=\\"bp3-popover-target\\">
                       <div onKeyDown={[Function (anonymous)]} onKeyUp={[undefined]} className=\\"\\" disabled={[undefined]} tabIndex={[undefined]}>
                         <Blueprint3.Button className=\\"move-button\\" text={1}>
-                          <button type=\\"button\\" className=\\"bp3-button move-button\\" disabled={[undefined]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+                          <button type=\\"button\\" className=\\"bp3-button move-button\\" disabled={[undefined]} onBlur={[Function (anonymous)]} onClick={[undefined]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
                             <Blueprint3.Icon icon={[undefined]} />
                             <span className=\\"bp3-button-text\\">
                               1
@@ -34,7 +34,7 @@ exports[`TaskPositionInserter component renders correctly 1`] = `
       </Blueprint3.QueryList>
     </Blueprint3.Select>
     <Blueprint3.Button onClick={[Function: action]} text=\\"Change Position\\" disabled={false}>
-      <button type=\\"button\\" onClick={[Function: action]} disabled={[undefined]} className=\\"bp3-button\\" onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
+      <button type=\\"button\\" onClick={[Function: action]} disabled={[undefined]} className=\\"bp3-button\\" onBlur={[Function (anonymous)]} onKeyDown={[Function (anonymous)]} onKeyUp={[Function (anonymous)]} tabIndex={[undefined]}>
         <Blueprint3.Icon icon={[undefined]} />
         <span className=\\"bp3-button-text\\">
           Change Position

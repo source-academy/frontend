@@ -25,7 +25,8 @@ export enum SideContentType {
   questionOverview = 'question_overview',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
-  toneMatrix = 'tone_matrix'
+  toneMatrix = 'tone_matrix',
+  videoDisplay = 'video_display'
 }
 
 /**
