@@ -186,6 +186,57 @@ class AssessmentWorkspace extends React.Component<
     log(this.state.sessionId, newInput);
   };
 
+  private onChangeMethod = (newCode: string, delta: CodeDelta) => {
+    if (this.props.handleUpdateHasUnsavedChanges) {
+      this.props.handleUpdateHasUnsavedChanges(true);
+    }
+
+    this.props.handleEditorValueChange(newCode);
+
+    const input: Input = {
+      time: Date.now(),
+      type: 'codeDelta',
+      data: delta
+    };
+
+    this.pushLog(input);
+  };
+
+  private onCursorChangeMethod = (selection: any) => {
+    const input: Input = {
+      time: Date.now(),
+      type: 'cursorPositionChange',
+      data: selection.getCursor()
+    };
+
+    this.pushLog(input);
+  };
+
+  private onSelectionChangeMethod = (selection: any) => {
+    const range: SelectionRange = selection.getRange();
+    const isBackwards: boolean = selection.isBackwards();
+    if (!isEqual(range.start, range.end)) {
+      const input: Input = {
+        time: Date.now(),
+        type: 'selectionRangeData',
+        data: { range, isBackwards }
+      };
+
+      this.pushLog(input);
+    }
+  };
+
+  private handleEval = () => {
+    this.props.handleEditorEval();
+    const input: Input = {
+      time: Date.now(),
+      type: 'keyboardCommand',
+      data: KeyboardCommand.run
+    };
+
+    this.pushLog(input);
+  };
+
   public render() {
     if (this.props.assessment === undefined || this.props.assessment.questions.length === 0) {
       return (
@@ -248,47 +299,6 @@ class AssessmentWorkspace extends React.Component<
       </Dialog>
     );
 
-    // TODO: Add Handler to Save key stroke
-    const onChangeMethod = (newCode: string, delta: CodeDelta) => {
-      if (this.props.handleUpdateHasUnsavedChanges) {
-        this.props.handleUpdateHasUnsavedChanges(true);
-      }
-
-      this.props.handleEditorValueChange(newCode);
-
-      const input: Input = {
-        time: Date.now(),
-        type: 'codeDelta',
-        data: delta
-      };
-
-      this.pushLog(input);
-    };
-
-    const onCursorChangeMethod = (selection: any) => {
-      const input: Input = {
-        time: Date.now(),
-        type: 'cursorPositionChange',
-        data: selection.getCursor()
-      };
-
-      this.pushLog(input);
-    };
-
-    const onSelectionChangeMethod = (selection: any) => {
-      const range: SelectionRange = selection.getRange();
-      const isBackwards: boolean = selection.isBackwards();
-      if (!isEqual(range.start, range.end)) {
-        const input: Input = {
-          time: Date.now(),
-          type: 'selectionRangeData',
-          data: { range, isBackwards }
-        };
-
-        this.pushLog(input);
-      }
-    };
-
     /* If questionId is out of bounds, set it to the max. */
     const questionId =
       this.props.questionId >= this.props.assessment.questions.length
@@ -310,9 +320,9 @@ class AssessmentWorkspace extends React.Component<
             handleEditorUpdateBreakpoints: this.props.handleEditorUpdateBreakpoints,
             handlePromptAutocomplete: this.props.handlePromptAutocomplete,
             isEditorAutorun: false,
-            onChange: onChangeMethod,
-            onCursorChange: onCursorChangeMethod,
-            onSelectionChange: onSelectionChangeMethod
+            onChange: this.onChangeMethod,
+            onCursorChange: this.onCursorChangeMethod,
+            onSelectionChange: this.onSelectionChangeMethod
           }
         : undefined;
     const workspaceProps: WorkspaceProps = {
@@ -524,15 +534,11 @@ class AssessmentWorkspace extends React.Component<
       this.props.assessment!.questions.length
     ];
 
-    const onClickPrevious = () => {
+    const onClickPrevious = () =>
       history.push(assessmentWorkspacePath + `/${(questionId - 1).toString()}`);
-    };
-    const onClickNext = () => {
+    const onClickNext = () =>
       history.push(assessmentWorkspacePath + `/${(questionId + 1).toString()}`);
-    };
-    const onClickReturn = () => {
-      history.push(listingPath);
-    };
+    const onClickReturn = () => history.push(listingPath);
 
     // Returns a nullary function that defers the navigation of the browser window, until the
     // student's answer passes some checks - presently only used for Paths
@@ -565,12 +571,11 @@ class AssessmentWorkspace extends React.Component<
       };
     };
 
-    const onClickSave = () => {
+    const onClickSave = () =>
       this.props.handleSave(
         this.props.assessment!.questions[questionId].id,
         this.props.editorValue!
       );
-    };
     const onClickResetTemplate = () => {
       this.setState({ showResetTemplateOverlay: true });
     };
@@ -624,19 +629,7 @@ class AssessmentWorkspace extends React.Component<
         <ControlBarResetButton onClick={onClickResetTemplate} key="reset_template" />
       ) : null;
 
-    // TODO: Add Handler to Save Run
-    const handleEval = () => {
-      this.props.handleEditorEval();
-      const input: Input = {
-        time: Date.now(),
-        type: 'keyboardCommand',
-        data: KeyboardCommand.run
-      };
-
-      this.pushLog(input);
-    };
-
-    const runButton = <ControlBarRunButton handleEditorEval={handleEval} key="run" />;
+    const runButton = <ControlBarRunButton handleEditorEval={this.handleEval} key="run" />;
 
     const saveButton =
       this.props.canSave &&

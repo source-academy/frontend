@@ -1,4 +1,4 @@
-import { delete_records_upto, get_records, LoggedRecord } from '.';
+import { deleteRecordsUpto, getRecords, LoggedRecord } from '.';
 
 const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 // Hardcode, otherwise they will include the entire .env file into the serviceWorker.
@@ -25,7 +25,7 @@ export function main() {
         // upload later.
         return;
       }
-      const records = await get_records();
+      const records = await getRecords();
       const last = records.length;
       if (last === 0) {
         return;
@@ -36,7 +36,7 @@ export function main() {
 
       const lastId = records[last - 1].id;
       // Delete records
-      await delete_records_upto(lastId);
+      await deleteRecordsUpto(lastId);
     } catch (e) {
       // Do nothing: retry later.
     }
@@ -63,7 +63,7 @@ const setAccessTokenRetry = retryLatest(5000); // this allows the latest set_acc
 // Can't share cookies across threads.
 // At least not yet, it's in proposal: https://developers.google.com/web/updates/2018/09/asynchronous-access-to-http-cookies
 // This sends the access token out to the serviceworker.
-export async function set_access_token(accessToken: string) {
+export async function setAccessToken(accessToken: string) {
   if ('serviceWorker' in navigator) {
     setAccessTokenRetry(() => {
       if (!navigator.serviceWorker.controller) {

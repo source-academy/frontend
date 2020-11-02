@@ -241,10 +241,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  const handleEvalCallback = React.useCallback(() => {
-    props.handleEditorEval();
-  }, [props]);
-
   const pushLog = React.useCallback(
     (newInput: Input) => {
       log(sessionId, newInput);
@@ -258,7 +254,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleDebuggerPause={props.handleDebuggerPause}
         handleDebuggerReset={props.handleDebuggerReset}
         handleDebuggerResume={props.handleDebuggerResume}
-        handleEditorEval={handleEvalCallback}
+        handleEditorEval={props.handleEditorEval}
         handleInterruptEval={props.handleInterruptEval}
         handleToggleEditorAutorun={props.handleToggleEditorAutorun}
         isDebugging={props.isDebugging}
@@ -271,7 +267,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleDebuggerPause,
       props.handleDebuggerReset,
       props.handleDebuggerResume,
-      handleEvalCallback,
+      props.handleEditorEval,
       props.handleInterruptEval,
       props.handleToggleEditorAutorun,
       props.isDebugging,
@@ -523,41 +519,50 @@ const Playground: React.FC<PlaygroundProps> = props => {
     props.sourceVariant
   ]);
 
-  const onChangeMethod = (newCode: string, delta: CodeDelta) => {
-    handleEditorValueChange(newCode);
+  const onChangeMethod = React.useCallback(
+    (newCode: string, delta: CodeDelta) => {
+      handleEditorValueChange(newCode);
 
-    const input: Input = {
-      time: Date.now(),
-      type: 'codeDelta',
-      data: delta
-    };
-
-    pushLog(input);
-  };
-
-  const onCursorChangeMethod = (selection: any) => {
-    const input: Input = {
-      time: Date.now(),
-      type: 'cursorPositionChange',
-      data: selection.getCursor()
-    };
-
-    pushLog(input);
-  };
-
-  const onSelectionChangeMethod = (selection: any) => {
-    const range: SelectionRange = selection.getRange();
-    const isBackwards: boolean = selection.isBackwards();
-    if (!isEqual(range.start, range.end)) {
       const input: Input = {
         time: Date.now(),
-        type: 'selectionRangeData',
-        data: { range, isBackwards }
+        type: 'codeDelta',
+        data: delta
       };
 
       pushLog(input);
-    }
-  };
+    },
+    [handleEditorValueChange, pushLog]
+  );
+
+  const onCursorChangeMethod = React.useCallback(
+    (selection: any) => {
+      const input: Input = {
+        time: Date.now(),
+        type: 'cursorPositionChange',
+        data: selection.getCursor()
+      };
+
+      pushLog(input);
+    },
+    [pushLog]
+  );
+
+  const onSelectionChangeMethod = React.useCallback(
+    (selection: any) => {
+      const range: SelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
+      if (!isEqual(range.start, range.end)) {
+        const input: Input = {
+          time: Date.now(),
+          type: 'selectionRangeData',
+          data: { range, isBackwards }
+        };
+
+        pushLog(input);
+      }
+    },
+    [pushLog]
+  );
 
   const handleEditorUpdateBreakpoints = React.useCallback(
     (breakpoints: string[]) => {

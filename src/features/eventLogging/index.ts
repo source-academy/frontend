@@ -27,7 +27,7 @@ export function log(id: string, input: Input) {
   if (!cadetLoggerUrl) {
     return;
   } // This is set statically
-  save_record({
+  saveRecord({
     ...input,
     questionId: questionIdLookup[id],
     sessionId: id
@@ -59,7 +59,7 @@ export type LoggedRecord = LogRecord & { id: number };
 const VERSION = 1;
 const DB_NAME = 'evtlogs';
 const STORE_NAME = 'logs';
-const getDb = memoize(
+const getDB = memoize(
   (): Promise<IDBDatabase> => {
     return new Promise((resolve, reject) => {
       // Make a request
@@ -87,9 +87,9 @@ const getDb = memoize(
   }
 );
 
-function save_record(record: LogRecord) {
+function saveRecord(record: LogRecord) {
   return new Promise((resolve, reject) => {
-    getDb().then(db => {
+    getDB().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       transaction.oncomplete = resolve;
       transaction.onerror = reject;
@@ -105,9 +105,9 @@ function save_record(record: LogRecord) {
 // This forces it to be singleton,
 // preventing multiple uploads without a lock.
 
-export function get_records(): Promise<LoggedRecord[]> {
+export function getRecords(): Promise<LoggedRecord[]> {
   return new Promise((resolve, reject) => {
-    getDb().then(db => {
+    getDB().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       const objectStore = transaction.objectStore(STORE_NAME);
       objectStore.getAll().onsuccess = function (evt) {
@@ -118,9 +118,9 @@ export function get_records(): Promise<LoggedRecord[]> {
   });
 }
 
-export function delete_records_upto(id: number) {
+export function deleteRecordsUpto(id: number) {
   return new Promise((resolve, reject) => {
-    getDb().then(db => {
+    getDB().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
       const range = IDBKeyRange.bound(0, id, false, false);
       const objectStore = transaction.objectStore(STORE_NAME);
