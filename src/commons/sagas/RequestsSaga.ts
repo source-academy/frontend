@@ -910,7 +910,7 @@ export const request = async (
     if (opts.shouldRefresh && resp && resp.status === 401) {
       const newTokens = await postRefresh(opts.refreshToken!);
       store.dispatch(actions.setTokens(newTokens!));
-      set_serviceworker_access_token(newTokens?.accessToken!); // Grant the same token to the serviceworker.
+      set_serviceworker_access_token(newTokens!.accessToken!); // Grant the same token to the serviceworker.
       const newOpts = {
         ...opts,
         accessToken: newTokens!.accessToken,
