@@ -4,6 +4,7 @@ import { SYNC_LOGS } from './client';
 
 declare const self: ServiceWorkerGlobalScope;
 
+let currentlyUploading = false;
 const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 
 // This needs to be a library, so i'm simply going to export a main function
@@ -21,7 +22,11 @@ export function main() {
 }
 
 async function trySyncLogs(accessToken: string) {
+  if (currentlyUploading) {
+    return;
+  }
   try {
+    currentlyUploading = true;
     const records = await getRecords();
     const last = records.length;
     if (last === 0) {
@@ -36,6 +41,8 @@ async function trySyncLogs(accessToken: string) {
     await deleteRecordsUpto(lastId);
   } catch (e) {
     // Do nothing: retry later.
+  } finally {
+    currentlyUploading = false;
   }
 }
 
