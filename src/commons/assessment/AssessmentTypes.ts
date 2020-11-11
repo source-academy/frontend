@@ -176,6 +176,7 @@ export type AutogradingError = {
   location?: string;
   errorLine?: string;
   errorExplanation?: string;
+  errorMessage?: string;
 };
 
 export const emptyLibrary = (): Library => {

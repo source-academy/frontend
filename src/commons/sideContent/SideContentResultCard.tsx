@@ -13,12 +13,19 @@ type StateProps = {
 
 const buildErrorString = (errors: AutogradingError[]) =>
   errors
-    .map(error =>
-      error.errorType === 'timeout'
-        ? 'Timeout: Submission exceeded time limit for this test case.'
-        : `Line ${error.line}: Error: ${error.errorExplanation}`
-    )
-    .join('\n');
+    .map(error => {
+      switch (error.errorType) {
+        case 'timeout':
+          return '[TIMEOUT] Submission exceeded time limit for this test case.';
+        case 'syntax':
+          return `[SYNTAX] Line ${error.line}: Error: ${error.errorExplanation}`;
+        case 'systemError':
+          return `[RUNTIME] ${error.errorMessage}`;
+        default:
+          return `[UNKNOWN] Autograder error: type ${error.errorType}`;
+      }
+    })
+    .join('\n\n');
 
 const SideContentResultCard: React.FunctionComponent<SideContentResultCardProps> = props => {
   const { index, result } = props;

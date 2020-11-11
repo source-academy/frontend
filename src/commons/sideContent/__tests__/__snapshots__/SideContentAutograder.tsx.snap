@@ -204,8 +204,57 @@ exports[`Autograder renders autograder results with different statuses correctly
                     </Component>
                     <Component className=\\"result-actual\\">
                       <pre className=\\"bp3-code-block result-actual\\">
-                        Timeout: Submission exceeded time limit for this test case.
-                        Line 1: Error: Just kidding!
+                        [UNKNOWN] Autograder error: type dummyErrorType
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentResultCard>
+            <SideContentResultCard index={3} result={{...}}>
+              <div className=\\"ResultCard wrong\\">
+                <Blueprint3.Card elevation={1} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1\\">
+                    <div className=\\"result-data\\">
+                      <div className=\\"result-idx\\">
+                        4
+                      </div>
+                      <div className=\\"result-status\\">
+                        ERROR
+                      </div>
+                    </div>
+                    <Component className=\\"result-expected\\">
+                      <pre className=\\"bp3-code-block result-expected\\" />
+                    </Component>
+                    <Component className=\\"result-actual\\">
+                      <pre className=\\"bp3-code-block result-actual\\">
+                        [RUNTIME] Cannot read property &#39;getUniformLocation&#39; of null
+                      </pre>
+                    </Component>
+                  </div>
+                </Blueprint3.Card>
+              </div>
+            </SideContentResultCard>
+            <SideContentResultCard index={4} result={{...}}>
+              <div className=\\"ResultCard wrong\\">
+                <Blueprint3.Card elevation={1} interactive={false}>
+                  <div className=\\"bp3-card bp3-elevation-1\\">
+                    <div className=\\"result-data\\">
+                      <div className=\\"result-idx\\">
+                        5
+                      </div>
+                      <div className=\\"result-status\\">
+                        ERROR
+                      </div>
+                    </div>
+                    <Component className=\\"result-expected\\">
+                      <pre className=\\"bp3-code-block result-expected\\" />
+                    </Component>
+                    <Component className=\\"result-actual\\">
+                      <pre className=\\"bp3-code-block result-actual\\">
+                        [TIMEOUT] Submission exceeded time limit for this test case.
+                        
+                        [SYNTAX] Line 2: Error: Missing semicolon at the end of statement
                       </pre>
                     </Component>
                   </div>
