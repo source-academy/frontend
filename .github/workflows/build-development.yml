@@ -56,9 +56,9 @@ jobs:
         REACT_APP_SHAREDB_BACKEND_URL: ${{ secrets.REACT_APP_SHAREDB_BACKEND_URL }}
         SW_EXCLUDE_REGEXES: '["^/source", "^/sicp", "^/modules", "^/ev3-source"]'
         PUBLIC_URL: "https://source-academy.github.io"
-        REACT_APP_DISABLE1_START: "2020-10-23T10:00+08"
-        REACT_APP_DISABLE1_END: "2020-10-23T12:00+08"
-        REACT_APP_DISABLE1_REASON: "CS1101S Reading Assessment 2"
+        REACT_APP_DISABLE1_START: "2020-11-24T16:30+08"
+        REACT_APP_DISABLE1_END: "2020-11-24T20:30+08"
+        REACT_APP_DISABLE1_REASON: "CS1101S Final Assessment"
 
     - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
