@@ -7,10 +7,6 @@ jobs:
   deploy:
     name: Run CI
     runs-on: ubuntu-latest
-    # run workflow on push to branch OR pull request from fork (but not pull
-    # request from branch to master, as then we already have the workflow from
-    # push)
-    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.repository != github.event.pull_request.head.repo.full_name)
     steps:
     - uses: actions/checkout@master
     - name: Use Node.js
@@ -39,3 +35,8 @@ jobs:
         yarn run eslint
         yarn run build
         yarn run test-coveralls
+    - name: Coveralls
+      uses: coverallsapp/github-action@master
+      with:
+        path-to-lcov: lcov.info
+        github-token: ${{ secrets.GITHUB_TOKEN }}
