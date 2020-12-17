@@ -2,8 +2,7 @@
   /**
    * Setup Stage
    */
-  var stage
-  var container = document.createElement('div')
+  const container = document.createElement('div')
   container.id = 'list-visualizer-container'
   container.hidden = true
   document.body.appendChild(container)
@@ -117,9 +116,18 @@
   /**
    *  A tree object built based on a list or pair.
    */
-  function Tree() {
-    this.rootNode = new TreeNode()
+  class Tree {
+    constructor() {
+      this.rootNode = new TreeNode()
+    }
+    /**
+       *  Gets the drawer function of a tree
+       */
+    getDrawer() {
+      return new TreeDrawer(this)
+    }
   }
+
   /**
       A node in a binary tree.
       left : pointer to the left subtree
@@ -130,174 +138,167 @@
       data2: right data item stored in the node. Similar to data.
               if list dicipline is enforced, all data2 shall be empty
   */
-  function TreeNode() {
-    this.data = null
-    this.data2 = null
-    this.left = null
-    this.right = null
-  }
-
-  /**
-   *  Gets the drawer function of a tree
-   */
-  Tree.prototype.getDrawer = function() {
-    return new TreeDrawer(this)
+  class TreeNode {
+    constructor() {
+      this.data = null
+      this.data2 = null
+      this.left = null
+      this.right = null
+    }
   }
 
   /**
    *  Drawer function of a tree
    */
-  function TreeDrawer(tree) {
-    this.tree = tree
-  }
+  class TreeDrawer {
+    constructor(tree) {
+      this.tree = tree
+    }
+    /**
+       *  Draws a tree at x,y on a give layer.
+       *  It actually calls drawNode and draws the root at x,y
+       */
+    draw(x, y, layer) {
+      this.drawNode(this.tree.rootNode, x, y, layer)
+    }
+    /**
+       *  Draws a root node at x, y on a given layer.
+       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
+       *  If so, it checks the position of the children and draws an arrow pointing to the children.
+       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+       */
+    drawNode(node, x, y, layer) {
+      if (node !== null) {
+        // draws the content
+        if (node.isFunction) {
+          realDrawFunctionNode(node.id, x, y, x, y, layer)
+        } else {
+          realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+        }
 
-  /**
-   *  Draws a tree at x,y on a give layer.
-   *  It actually calls drawNode and draws the root at x,y
-   */
-  TreeDrawer.prototype.draw = function(x, y, layer) {
-    this.drawNode(this.tree.rootNode, x, y, layer)
-  }
+        // if it has a left new child, draw it
+        if (node.left !== null) {
+          this.drawLeft(node.left, x, y, layer)
+          // (FIXME the next check may be redundant)
+          // if it's left child is part of a cycle and it's been drawn, link back to that node instead
+        } else if (node.leftid != null) {
+          backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+        } else if ((node.data === null) && !!node.isFunction) {
+          var nullbox = new NodeEmptyHead_list(x, y)
+          nullbox.put(layer)
+        }
 
-  /**
-   *  Draws a root node at x, y on a given layer.
-   *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-   */
-  TreeDrawer.prototype.drawNode = function(node, x, y, layer) {
-    if (node !== null) {
-      // draws the content
-      if (node.isFunction) {
-        realDrawFunctionNode(node.id, x, y, x, y, layer)
-      } else {
-        realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
+        // similarly for right child
+        if (node.right !== null) {
+          this.drawRight(node.right, x, y, layer)
+          // (FIXME the next check may be redundant)
+        } else if (node.rightid != null) {
+          backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
+          // if the tail is an empty box, draw the respective representation
+        } else if (node.data2 === null) {
+          var nullbox = new NodeEmpty_list(x, y)
+          nullbox.put(layer)
+        }
       }
+    }
+    /**
+       *  Draws a node at x, y on a given layer, making necessary left shift depending how far the structure of subtree
+       *  extends to the right.
+       *
+       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
+       *  If so, it checks the position of the children and draws an arrow pointing to the children.
+       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+       */
+    drawLeft(node, parentX, parentY, layer) {
+      var count, x, y
+      // checks if it has a right child, how far it extends to the right direction
+      if (node.right === null) {
+        count = 0
+      } else {
+        count = 1 + this.shiftScaleCount(node.right)
+      }
+      // shifts left accordingly
+      x = parentX - tcon.distanceX - count * tcon.distanceX
+      y = parentY + tcon.distanceY
 
-      // if it has a left new child, draw it
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+      }
       if (node.left !== null) {
         this.drawLeft(node.left, x, y, layer)
-        // (FIXME the next check may be redundant)
-        // if it's left child is part of a cycle and it's been drawn, link back to that node instead
       } else if (node.leftid != null) {
         backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-      } else if ((node.data === null) && !!node.isFunction) {
+      } else if ((node.data === null) && !node.isFunction) {
         var nullbox = new NodeEmptyHead_list(x, y)
         nullbox.put(layer)
       }
-
-      // similarly for right child
       if (node.right !== null) {
         this.drawRight(node.right, x, y, layer)
-        // (FIXME the next check may be redundant)
       } else if (node.rightid != null) {
         backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-        // if the tail is an empty box, draw the respective representation
       } else if (node.data2 === null) {
         var nullbox = new NodeEmpty_list(x, y)
         nullbox.put(layer)
       }
     }
-  }
+    /**
+       *  Draws a node at x, y on a given layer, making necessary right shift depending how far the structure of subtree
+       *  extends to the left.
+       *
+       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
+       *  If so, it checks the position of the children and draws an arrow pointing to the children.
+       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
+       */
+    drawRight(node, parentX, parentY, layer) {
+      var count, x, y
+      if (node.left === null) {
+        count = 0
+      } else {
+        count = 1 + this.shiftScaleCount(node.left)
+      }
+      x = parentX + tcon.distanceX + count * tcon.distanceX
+      y = parentY + tcon.distanceY
 
-  /**
-   *  Draws a node at x, y on a given layer, making necessary left shift depending how far the structure of subtree
-   *  extends to the right.
-   *
-   *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-   */
-  TreeDrawer.prototype.drawLeft = function(node, parentX, parentY, layer) {
-    var count, x, y
-    // checks if it has a right child, how far it extends to the right direction
-    if (node.right === null) {
-      count = 0
-    } else {
-      count = 1 + this.shiftScaleCount(node.right)
-    }
-    // shifts left accordingly
-    x = parentX - tcon.distanceX - count * tcon.distanceX
-    y = parentY + tcon.distanceY
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+      }
 
-    if (node.isFunction) {
-      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-    } else {
-      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-    }
-    if (node.left !== null) {
-      this.drawLeft(node.left, x, y, layer)
-    } else if (node.leftid != null) {
-      backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-    } else if ((node.data === null) && !node.isFunction) {
+      if (node.left !== null) {
+        this.drawLeft(node.left, x, y, layer)
+      } else if (node.leftid != null) {
+        backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+      } else if ((node.data === null) && !node.isFunction) {
         var nullbox = new NodeEmptyHead_list(x, y)
         nullbox.put(layer)
-    }
-    if (node.right !== null) {
-      this.drawRight(node.right, x, y, layer)
-    } else if (node.rightid != null) {
-      backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-    } else if (node.data2 === null) {
-      var nullbox = new NodeEmpty_list(x, y)
-      nullbox.put(layer)
-    }
-  }
-
-  /**
-   *  Draws a node at x, y on a given layer, making necessary right shift depending how far the structure of subtree
-   *  extends to the left.
-   *
-   *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
-   *  If so, it checks the position of the children and draws an arrow pointing to the children.
-   *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-   */
-  TreeDrawer.prototype.drawRight = function(node, parentX, parentY, layer) {
-    var count, x, y
-    if (node.left === null) {
-      count = 0
-    } else {
-      count = 1 + this.shiftScaleCount(node.left)
-    }
-    x = parentX + tcon.distanceX + count * tcon.distanceX
-    y = parentY + tcon.distanceY
-
-    if (node.isFunction) {
-      realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-    } else {
-      realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-    }
-
-    if (node.left !== null) {
-      this.drawLeft(node.left, x, y, layer)
-    } else if (node.leftid != null) {
-      backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-    } else if ((node.data === null) && !node.isFunction) {
-        var nullbox = new NodeEmptyHead_list(x, y)
+      }
+      if (node.right !== null) {
+        this.drawRight(node.right, x, y, layer)
+      } else if (node.rightid != null) {
+        backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
+      } else if (node.data2 === null) {
+        var nullbox = new NodeEmpty_list(x, y)
         nullbox.put(layer)
+      }
     }
-    if (node.right !== null) {
-      this.drawRight(node.right, x, y, layer)
-    } else if (node.rightid != null) {
-      backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-    } else if (node.data2 === null) {
-      var nullbox = new NodeEmpty_list(x, y)
-      nullbox.put(layer)
+    /**
+       * Returns the distance necessary for the shift of each node, calculated recursively.
+       */
+    shiftScaleCount(node) {
+      var count = 0
+      // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
+      if (node.left !== null) {
+        count = count + 1 + this.shiftScaleCount(node.left)
+      }
+      // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
+      if (node.right !== null) {
+        count = count + 1 + this.shiftScaleCount(node.right)
+      }
+      return count
     }
-  }
-  /**
-   * Returns the distance necessary for the shift of each node, calculated recursively.
-   */
-  TreeDrawer.prototype.shiftScaleCount = function(node) {
-    var count = 0
-    // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
-    if (node.left !== null) {
-      count = count + 1 + this.shiftScaleCount(node.left)
-    }
-    // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
-    if (node.right !== null) {
-      count = count + 1 + this.shiftScaleCount(node.right)
-    }
-    return count
   }
 
   // a list of nodes drawn for a tree. Used to check if a node has appeared before.
@@ -386,246 +387,246 @@
    *  Creates a Kinetic.Group that is used to represent a node in a tree. It takes up to two data items.
    *  The data items are simply converted with toString()
    */
-  function NodeBox(value, value2) {
-    // this.image is the inner content
-    this.image = new Kinetic.Group()
+  class NodeBox {
+    constructor(value, value2) {
+      // this.image is the inner content
+      this.image = new Kinetic.Group()
 
-    // outer rectangle
-    var rect = new Kinetic.Rect({
-      width: tcon.boxWidth,
-      height: tcon.boxHeight,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white',
-      fill: '#17181A'
-    })
-
-    // vertical bar seen in the box
-    var line = new Kinetic.Line({
-      points: [tcon.boxWidth * tcon.vertBarPos, 0, tcon.boxWidth * tcon.vertBarPos, tcon.boxHeight],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    })
-
-    var txtValue
-    var label
-    // text for data item #1
-    if (value !== null && (!is_list(value) || !is_null(value))) {
-      txtValue = toText(value)
-      label = false
-      if (txtValue === false) {
-        label = true
-        nodeLabel++
-        displaySpecialContent(nodeLabel, value)
-      }
-      var txt = new Kinetic.Text({
-        text: label ? '*' + nodeLabel : txtValue,
-        align: 'center',
-        width: tcon.vertBarPos * tcon.boxWidth,
-        y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-        fontStyle: label ? 'italic' : 'normal',
-        fill: 'white'
+      // outer rectangle
+      var rect = new Kinetic.Rect({
+        width: tcon.boxWidth,
+        height: tcon.boxHeight,
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white',
+        fill: '#17181A'
       })
-      this.image.add(txt)
-    } else if (!is_list(value) && is_null(value)) {
-      var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
-      var emptyBox = empty.getRaw()
-      this.image.add(emptyBox)
-    }
 
-    // text for data item #2
-    if (value2 !== null) {
-      txtValue = toText(value2)
-      label = false
-      if (txtValue === false) {
-        label = true
-        nodeLabel++
-        displaySpecialContent(nodeLabel, value2)
-      }
-      var txt2 = new Kinetic.Text({
-        text: label ? '*' + nodeLabel : txtValue,
-        align: 'center',
-        width: tcon.vertBarPos * tcon.boxWidth,
-        x: tcon.vertBarPos * tcon.boxWidth,
-        y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-        fontStyle: label ? 'italic' : 'normal',
-        fill: 'white'
+      // vertical bar seen in the box
+      var line = new Kinetic.Line({
+        points: [tcon.boxWidth * tcon.vertBarPos, 0, tcon.boxWidth * tcon.vertBarPos, tcon.boxHeight],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
       })
-      this.image.add(txt2)
-    }
 
-    this.image.add(rect)
-    this.image.add(line)
+      var txtValue
+      var label
+      // text for data item #1
+      if (value !== null && (!is_list(value) || !is_null(value))) {
+        txtValue = toText(value)
+        label = false
+        if (txtValue === false) {
+          label = true
+          nodeLabel++
+          displaySpecialContent(nodeLabel, value)
+        }
+        var txt = new Kinetic.Text({
+          text: label ? '*' + nodeLabel : txtValue,
+          align: 'center',
+          width: tcon.vertBarPos * tcon.boxWidth,
+          y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+          fontStyle: label ? 'italic' : 'normal',
+          fill: 'white'
+        })
+        this.image.add(txt)
+      } else if (!is_list(value) && is_null(value)) {
+        var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
+        var emptyBox = empty.getRaw()
+        this.image.add(emptyBox)
+      }
 
-    // text need to be on top of the box background
-    if (value !== null && (!is_list(value) || !is_null(value))) {
-      txt.moveToTop()
-    } else if (emptyBox) {
-      emptyBox.moveToTop()
+      // text for data item #2
+      if (value2 !== null) {
+        txtValue = toText(value2)
+        label = false
+        if (txtValue === false) {
+          label = true
+          nodeLabel++
+          displaySpecialContent(nodeLabel, value2)
+        }
+        var txt2 = new Kinetic.Text({
+          text: label ? '*' + nodeLabel : txtValue,
+          align: 'center',
+          width: tcon.vertBarPos * tcon.boxWidth,
+          x: tcon.vertBarPos * tcon.boxWidth,
+          y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+          fontStyle: label ? 'italic' : 'normal',
+          fill: 'white'
+        })
+        this.image.add(txt2)
+      }
+
+      this.image.add(rect)
+      this.image.add(line)
+
+      // text need to be on top of the box background
+      if (value !== null && (!is_list(value) || !is_null(value))) {
+        txt.moveToTop()
+      } else if (emptyBox) {
+        emptyBox.moveToTop()
+      }
+      if (value2 !== null) {
+        txt2.moveToTop()
+      }
     }
-    if (value2 !== null) {
-      txt2.moveToTop()
+    /**
+       *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
+       */
+    connectTo(x, y) {
+      // starting point
+      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
+
+      // end point
+      if (x > 0) {
+        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+      } else {
+        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+      }
+
+      var pointer = new Kinetic.Line({
+        points: [start, end],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      })
+      // the angle of the incoming arrow
+      var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+
+      // left and right part of an arrow head, rotated to the calculated angle
+      if (x > 0) {
+        var left = {
+          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        }
+        var right = {
+          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        }
+      } else {
+        var left = {
+          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        }
+        var right = {
+          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        }
+      }
+
+      var arrow = new Kinetic.Line({
+        points: [left, start, right],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      })
+
+      this.image.getParent().add(pointer)
+      this.image.getParent().add(arrow)
+    }
+    /**
+       *  equivalent to container.add(this.image)
+       */
+    put(container) {
+      container.add(this.image)
     }
   }
 
   /**
   *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
   */
-  function NodeCircles() {
-    this.image = new Kinetic.Group()
+  class NodeCircles {
+    constructor() {
+      this.image = new Kinetic.Group()
 
-    var leftCircle = new Kinetic.Circle({
-      radius: 15,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white',
-      x: tcon.boxWidth / 2 - 20,
-      y: tcon.boxHeight / 2
-    })
+      var leftCircle = new Kinetic.Circle({
+        radius: 15,
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white',
+        x: tcon.boxWidth / 2 - 20,
+        y: tcon.boxHeight / 2
+      })
 
-    var rightCircle = new Kinetic.Circle({
-      radius: 15,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white',
-      x: tcon.boxWidth / 2 + 10,
-      y: tcon.boxHeight / 2
-    })
+      var rightCircle = new Kinetic.Circle({
+        radius: 15,
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white',
+        x: tcon.boxWidth / 2 + 10,
+        y: tcon.boxHeight / 2
+      })
 
-    var leftDot = new Kinetic.Circle({
-      radius: 4,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white',
-      fill: 'white',
-      x: tcon.boxWidth / 2 - 20,
-      y: tcon.boxHeight / 2
-    })
+      var leftDot = new Kinetic.Circle({
+        radius: 4,
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white',
+        fill: 'white',
+        x: tcon.boxWidth / 2 - 20,
+        y: tcon.boxHeight / 2
+      })
 
-    var rightDot = new Kinetic.Circle({
-      radius: 4,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white',
-      fill: 'white',
-      x: tcon.boxWidth / 2 + 10,
-      y: tcon.boxHeight / 2
-    })
+      var rightDot = new Kinetic.Circle({
+        radius: 4,
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white',
+        fill: 'white',
+        x: tcon.boxWidth / 2 + 10,
+        y: tcon.boxHeight / 2
+      })
 
-    this.image.add(leftCircle)
-    this.image.add(rightCircle)
-    this.image.add(leftDot)
-    this.image.add(rightDot)
-  }
-  
-  /**
-   *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
-   */
-  NodeBox.prototype.connectTo = function(x, y) {
-    // starting point
-    var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
-
-    // end point
-    if (x > 0) {
-      var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
-    } else {
-      var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+      this.image.add(leftCircle)
+      this.image.add(rightCircle)
+      this.image.add(leftDot)
+      this.image.add(rightDot)
     }
+    connectTo(x, y) {
+      // starting point
+      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
 
-    var pointer = new Kinetic.Line({
-      points: [start, end],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    })
-    // the angle of the incoming arrow
-    var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+      // end point
+      if (x > 0) {
+        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+      } else {
+        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+      }
 
-    // left and right part of an arrow head, rotated to the calculated angle
-    if (x > 0) {
-      var left = {
-        x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+      var pointer = new Kinetic.Line({
+        points: [start, end],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      })
+      // the angle of the incoming arrow
+      var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+
+      // left and right part of an arrow head, rotated to the calculated angle
+      if (x > 0) {
+        var left = {
+          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        }
+        var right = {
+          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        }
+      } else {
+        var left = {
+          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        }
+        var right = {
+          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        }
       }
-      var right = {
-        x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-      }
-    } else {
-      var left = {
-        x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-      }
-      var right = {
-        x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-      }
+
+      var arrow = new Kinetic.Line({
+        points: [left, start, right],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      })
+
+      this.image.getParent().add(pointer)
+      this.image.getParent().add(arrow)
     }
-
-    var arrow = new Kinetic.Line({
-      points: [left, start, right],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    })
-
-    this.image.getParent().add(pointer)
-    this.image.getParent().add(arrow)
-  }
-	
-	NodeCircles.prototype.connectTo = function(x, y) {
-    // starting point
-    var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
-
-    // end point
-    if (x > 0) {
-      var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
-    } else {
-      var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+    put(container) {
+      container.add(this.image)
     }
-
-    var pointer = new Kinetic.Line({
-      points: [start, end],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    })
-    // the angle of the incoming arrow
-    var angle = Math.atan((end.y - start.y) / (end.x - start.x))
-
-    // left and right part of an arrow head, rotated to the calculated angle
-    if (x > 0) {
-      var left = {
-        x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-      }
-      var right = {
-        x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-      }
-    } else {
-      var left = {
-        x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-      }
-      var right = {
-        x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-        y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-      }
-    }
-
-    var arrow = new Kinetic.Line({
-      points: [left, start, right],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    })
-
-    this.image.getParent().add(pointer)
-    this.image.getParent().add(arrow)
   }
-
-  /**
-   *  equivalent to container.add(this.image)
-   */
-  NodeBox.prototype.put = function(container) {
-    container.add(this.image)
-  }
-	
-	NodeCircles.prototype.put = function(container) {
-		container.add(this.image)
-	}
 
   /**
    *  Connects a box to a previously known box, the arrow path is more complicated.
@@ -830,79 +831,79 @@
   /**
    *  Complements a NodeBox when the tail is an empty box.
    */
-  function NodeEmpty_list(x, y) {
-    var null_box = new Kinetic.Line({
-      x: x,
-      y: y,
-      points: [
-        tcon.boxWidth * tcon.vertBarPos,
-        tcon.boxHeight,
-        tcon.boxWidth * tcon.vertBarPos,
-        0,
-        tcon.boxWidth,
-        0,
-        tcon.boxWidth * tcon.vertBarPos,
-        tcon.boxHeight,
-        tcon.boxWidth,
-        tcon.boxHeight,
-        tcon.boxWidth,
-        0
-      ],
-      strokeWidth: tcon.strokeWidth - 1,
-      stroke: 'white'
-    })
-    this.image = null_box
-  }
-
-  /**
-   *  Adds it to a container
-   */
-  NodeEmpty_list.prototype.put = function(container) {
-    container.add(this.image)
-  }
-
-  NodeEmpty_list.prototype.getRaw = function() {
-    return this.image
+  class NodeEmpty_list {
+    constructor(x, y) {
+      var null_box = new Kinetic.Line({
+        x: x,
+        y: y,
+        points: [
+          tcon.boxWidth * tcon.vertBarPos,
+          tcon.boxHeight,
+          tcon.boxWidth * tcon.vertBarPos,
+          0,
+          tcon.boxWidth,
+          0,
+          tcon.boxWidth * tcon.vertBarPos,
+          tcon.boxHeight,
+          tcon.boxWidth,
+          tcon.boxHeight,
+          tcon.boxWidth,
+          0
+        ],
+        strokeWidth: tcon.strokeWidth - 1,
+        stroke: 'white'
+      })
+      this.image = null_box
+    }
+    /**
+       *  Adds it to a container
+       */
+    put(container) {
+      container.add(this.image)
+    }
+    getRaw() {
+      return this.image
+    }
   }
 
   /**
    *  Complements a NodeBox when the head is an empty box.
    */
-  function NodeEmptyHead_list(x, y) {
-    var null_box = new Kinetic.Line({
-      x: x - tcon.boxWidth / 2,
-      y: y,
-      points: [
-        tcon.boxWidth * tcon.vertBarPos,
-        tcon.boxHeight,
-        tcon.boxWidth * tcon.vertBarPos,
-        0,
-        tcon.boxWidth,
-        0,
-        tcon.boxWidth * tcon.vertBarPos,
-        tcon.boxHeight,
-        tcon.boxWidth,
-        tcon.boxHeight,
-        tcon.boxWidth,
-        0
-      ],
-      strokeWidth: tcon.strokeWidth - 1,
-      stroke: 'white'
-    })
-    this.image = null_box
+  class NodeEmptyHead_list {
+    constructor(x, y) {
+      var null_box = new Kinetic.Line({
+        x: x - tcon.boxWidth / 2,
+        y: y,
+        points: [
+          tcon.boxWidth * tcon.vertBarPos,
+          tcon.boxHeight,
+          tcon.boxWidth * tcon.vertBarPos,
+          0,
+          tcon.boxWidth,
+          0,
+          tcon.boxWidth * tcon.vertBarPos,
+          tcon.boxHeight,
+          tcon.boxWidth,
+          tcon.boxHeight,
+          tcon.boxWidth,
+          0
+        ],
+        strokeWidth: tcon.strokeWidth - 1,
+        stroke: 'white'
+      })
+      this.image = null_box
+    }
+    /**
+       *  Adds it to a container
+       */
+    put(container) {
+      container.add(this.image)
+    }
+    getRaw() {
+      return this.image
+    }
   }
 
-  /**
-   *  Adds it to a container
-   */
-  NodeEmptyHead_list.prototype.put = function(container) {
-    container.add(this.image)
-  }
-
-  NodeEmptyHead_list.prototype.getRaw = function() {
-    return this.image
-  }
-  
   // A list of layers drawn, used for history
   var layerList = []
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
@@ -932,7 +933,7 @@
      * In practice, likely due to browser auto-scaling, for large drawings this results in
      * some of the drawing being cut off. Hence the width and height formulas used are approximations.
      */
-    stage = new Kinetic.Stage({
+    let stage = new Kinetic.Stage({
       width: findListWidth(xs) * 60 + 60,
       height: findListHeight(xs) * 60 + 100,
       container: 'list-visualizer-container'
