@@ -1,11 +1,11 @@
-;(function(exports) {
+; (function (exports) {
   /**
    * Setup Stage
    */
-  const container = document.createElement('div')
-  container.id = 'list-visualizer-container'
-  container.hidden = true
-  document.body.appendChild(container)
+  const container = document.createElement('div');
+  container.id = 'list-visualizer-container';
+  container.hidden = true;
+  document.body.appendChild(container);
 
   /**
    *  Converts a list, or a pair, to a tree object. Wrapper function.
@@ -29,17 +29,17 @@
         node.left = perms.indexOf(head_node);
       } else {
         node.left = is_pair(head_node) ? construct_tree(head_node) :
-                    is_function(head_node) ? construct_function(head_node) :
-                    construct_data_node(head_node);
+          is_function(head_node) ? construct_function(head_node) :
+            construct_data_node(head_node);
       }
-      
+
       if (perms.indexOf(tail_node) > -1) {
         // tree already built
         node.right = perms.indexOf(tail_node);
       } else {
         node.right = is_pair(tail_node) ? construct_tree(tail_node) :
-                     is_function(tail_node) ? construct_function(tail_node) :
-                     construct_data_node(tail_node);
+          is_function(tail_node) ? construct_function(tail_node) :
+            construct_data_node(tail_node);
       }
 
       return node;
@@ -64,15 +64,15 @@
 
       return node;
     }
-    
+
     // keeps track of all sublists in order to detect cycles
-    var perms = []
-    var tree = new Tree()
-    var counter = 0
-    tree.rootNode = construct_tree(lst)
-    return tree
+    var perms = [];
+    var tree = new Tree();
+    var counter = 0;
+    tree.rootNode = construct_tree(lst);
+    return tree;
   }
-  
+
   var tcon = {
     strokeWidth: 2,
     stroke: 'white',
@@ -84,7 +84,7 @@
     vertBarPos: 0.5,
     boxSpacingX: 50,
     boxSpacingY: 60,
-		
+
     circleRadius: 12,
 
     arrowSpace: 5,
@@ -96,13 +96,13 @@
 
     padding: 5,
     canvasWidth: 1000
-  }
+  };
 
   function displaySpecialContent(nodeLabel, value) {
     if (typeof display === 'function') {
-      display('*' + nodeLabel + ': ' + value)
+      display('*' + nodeLabel + ': ' + value);
     } else {
-      console.log('*' + nodeLabel + ': ' + value)
+      console.log('*' + nodeLabel + ': ' + value);
     }
   }
   /**
@@ -156,7 +156,6 @@
     }
   }
 
-
   /**
    *  Drawer function of a tree
    */
@@ -203,7 +202,7 @@
         var nullbox = new NodeEmptyHead_list(x, y);
         nullbox.put(layer);
       }
-      
+
       if (node.right != null) {
         if (node.right instanceof TreeNode) {
           this.drawRight(node.right, x, y, layer);
@@ -272,62 +271,62 @@
   }
 
   // a list of nodes drawn for a tree. Used to check if a node has appeared before.
-  var nodelist = []
+  var nodelist = [];
   // keeps track the extreme left end of the tree. In units of pixels.
-  var minLeft = 500
+  var minLeft = 500;
 
   /**
    *  Internal function that puts two data at x1, y1 on a given layer. Connects it to it's parent which is at x2, y2
    */
   function realDrawPairNode(data, data2, id, x1, y1, x2, y2, layer) {
-    var box = new NodeBox(data, data2)
-    var node = new Kinetic.Group()
+    var box = new NodeBox(data, data2);
+    var node = new Kinetic.Group();
 
-    box.put(node)
+    box.put(node);
 
     // no pointer is drawn to root
     if (x2 !== x1) {
-      box.connectTo(x2 - x1, y2 - y1)
+      box.connectTo(x2 - x1, y2 - y1);
     }
 
-    node.setX(x1)
-    node.setY(y1)
-    layer.add(node)
+    node.setX(x1);
+    node.setY(y1);
+    layer.add(node);
 
     // add node to the known list
-    nodelist[id] = node
+    nodelist[id] = node;
     // update left extreme of the tree
-    minLeft = Math.min(minLeft, x1)
+    minLeft = Math.min(minLeft, x1);
   }
-	
-  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
-    var circle = new NodeCircles()
-    var node = new Kinetic.Group()
 
-    circle.put(node)
+  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
+    var circle = new NodeCircles();
+    var node = new Kinetic.Group();
+
+    circle.put(node);
 
     if (x2 !== x1) {
-      circle.connectTo(x2 - x1, y2 - y1)
+      circle.connectTo(x2 - x1, y2 - y1);
     }
 
-    node.setX(x1)
-    node.setY(y1)
-    layer.add(node)
+    node.setX(x1);
+    node.setY(y1);
+    layer.add(node);
 
     // add node to the known list
-    nodelist[id] = node
+    nodelist[id] = node;
     // update left extreme of the tree
-    minLeft = Math.min(minLeft, x1)
+    minLeft = Math.min(minLeft, x1);
   }
-  
+
   /**
    *   Draws a tree object on the canvas at x,y on a given layer
    */
   function drawTree(tree, x, y, layer) {
-    var drawer = tree.getDrawer()
-    drawer.draw(x, y, layer)
+    var drawer = tree.getDrawer();
+    drawer.draw(x, y, layer);
 
-    layer.draw()
+    layer.draw();
   }
 
   /**
@@ -335,20 +334,20 @@
    */
   function toText(data, full) {
     if (full) {
-      return '' + data
+      return '' + data;
     } else {
-      var type = typeof data
+      var type = typeof data;
       if (type === 'function' || type === 'object') {
-        return false
+        return false;
       } else if (type === "string") {
-        var str = '' + data
+        var str = '' + data;
         if (str.length > 5) {
-          return false
+          return false;
         } else {
-          return '"' + str + '"'
+          return '"' + str + '"';
         }
       } else {
-        return '' + data
+        return '' + data;
       }
     }
   }
@@ -376,19 +375,19 @@
         points: [tcon.boxWidth * tcon.vertBarPos, 0, tcon.boxWidth * tcon.vertBarPos, tcon.boxHeight],
         strokeWidth: tcon.strokeWidth,
         stroke: 'white',
-      })
+      });
 
       this.image.add(rect);
       this.image.add(line);
 
       // text for data item #1
       if (leftValue !== null && (!is_list(leftValue) || !is_null(leftValue))) {
-        const txtValue = toText(leftValue)
-        const label = false
+        const txtValue = toText(leftValue);
+        const label = false;
         if (txtValue === false) {
-          label = true
-          nodeLabel++
-          displaySpecialContent(nodeLabel, leftValue)
+          label = true;
+          nodeLabel++;
+          displaySpecialContent(nodeLabel, leftValue);
         }
         var txt = new Kinetic.Text({
           text: label ? '*' + nodeLabel : txtValue,
@@ -397,22 +396,22 @@
           y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
           fontStyle: label ? 'italic' : 'normal',
           fill: 'white'
-        })
-        this.image.add(txt)
+        });
+        this.image.add(txt);
       } else if (!is_list(leftValue) && is_null(leftValue)) {
-        var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
-        var emptyBox = empty.getRaw()
-        this.image.add(emptyBox)
+        var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0);
+        var emptyBox = empty.getRaw();
+        this.image.add(emptyBox);
       }
 
       // text for data item #2
       if (rightValue !== null) {
-        const txtValue = toText(rightValue)
-        const label = false
+        const txtValue = toText(rightValue);
+        const label = false;
         if (txtValue === false) {
-          label = true
-          nodeLabel++
-          displaySpecialContent(nodeLabel, rightValue)
+          label = true;
+          nodeLabel++;
+          displaySpecialContent(nodeLabel, rightValue);
         }
         var txt2 = new Kinetic.Text({
           text: label ? '*' + nodeLabel : txtValue,
@@ -422,8 +421,8 @@
           y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
           fontStyle: label ? 'italic' : 'normal',
           fill: 'white'
-        })
-        this.image.add(txt2)
+        });
+        this.image.add(txt2);
       } else {
         const emptyBox = new NodeEmpty_list(0, 0).getRaw();
         this.image.add(emptyBox);
@@ -434,58 +433,58 @@
        */
     connectTo(x, y) {
       // starting point
-      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
+      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
 
       // end point
       if (x > 0) {
-        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
       } else {
-        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
       }
 
       var pointer = new Kinetic.Line({
         points: [start, end],
         strokeWidth: tcon.strokeWidth,
         stroke: 'white'
-      })
+      });
       // the angle of the incoming arrow
-      var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
 
       // left and right part of an arrow head, rotated to the calculated angle
       if (x > 0) {
         var left = {
           x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
           y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
         var right = {
           x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
           y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
       } else {
         var left = {
           x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
           y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
         var right = {
           x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
           y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
       }
 
       var arrow = new Kinetic.Line({
         points: [left, start, right],
         strokeWidth: tcon.strokeWidth,
         stroke: 'white'
-      })
+      });
 
-      this.image.getParent().add(pointer)
-      this.image.getParent().add(arrow)
+      this.image.getParent().add(pointer);
+      this.image.getParent().add(arrow);
     }
     /**
        *  equivalent to container.add(this.image)
        */
     put(container) {
-      container.add(this.image)
+      container.add(this.image);
     }
   }
 
@@ -494,7 +493,7 @@
   */
   class NodeCircles {
     constructor() {
-      this.image = new Kinetic.Group()
+      this.image = new Kinetic.Group();
 
       var leftCircle = new Kinetic.Circle({
         radius: 15,
@@ -502,7 +501,7 @@
         stroke: 'white',
         x: tcon.boxWidth / 2 - 20,
         y: tcon.boxHeight / 2
-      })
+      });
 
       var rightCircle = new Kinetic.Circle({
         radius: 15,
@@ -510,7 +509,7 @@
         stroke: 'white',
         x: tcon.boxWidth / 2 + 10,
         y: tcon.boxHeight / 2
-      })
+      });
 
       var leftDot = new Kinetic.Circle({
         radius: 4,
@@ -519,7 +518,7 @@
         fill: 'white',
         x: tcon.boxWidth / 2 - 20,
         y: tcon.boxHeight / 2
-      })
+      });
 
       var rightDot = new Kinetic.Circle({
         radius: 4,
@@ -528,64 +527,64 @@
         fill: 'white',
         x: tcon.boxWidth / 2 + 10,
         y: tcon.boxHeight / 2
-      })
+      });
 
-      this.image.add(leftCircle)
-      this.image.add(rightCircle)
-      this.image.add(leftDot)
-      this.image.add(rightDot)
+      this.image.add(leftCircle);
+      this.image.add(rightCircle);
+      this.image.add(leftDot);
+      this.image.add(rightDot);
     }
     connectTo(x, y) {
       // starting point
-      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace }
+      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
 
       // end point
       if (x > 0) {
-        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 }
+        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
       } else {
-        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 }
+        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
       }
 
       var pointer = new Kinetic.Line({
         points: [start, end],
         strokeWidth: tcon.strokeWidth,
         stroke: 'white'
-      })
+      });
       // the angle of the incoming arrow
-      var angle = Math.atan((end.y - start.y) / (end.x - start.x))
+      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
 
       // left and right part of an arrow head, rotated to the calculated angle
       if (x > 0) {
         var left = {
           x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
           y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
         var right = {
           x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
           y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
       } else {
         var left = {
           x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
           y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
         var right = {
           x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
           y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        }
+        };
       }
 
       var arrow = new Kinetic.Line({
         points: [left, start, right],
         strokeWidth: tcon.strokeWidth,
         stroke: 'white'
-      })
+      });
 
-      this.image.getParent().add(pointer)
-      this.image.getParent().add(arrow)
+      this.image.getParent().add(pointer);
+      this.image.getParent().add(arrow);
     }
     put(container) {
-      container.add(this.image)
+      container.add(this.image);
     }
   }
 
@@ -611,7 +610,7 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else if (x1 <= x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
       // lower left to upper right
       var path = [
@@ -626,7 +625,7 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else if (x1 > x2) {
       // upper right to lower left
       var path = [
@@ -639,7 +638,7 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else {
       // upper left to lower right
       var path = [
@@ -652,10 +651,10 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     }
-    var endX = path[path.length - 2]
-    var endY = path[path.length - 1]
+    var endX = path[path.length - 2];
+    var endY = path[path.length - 1];
     var arrowPath = [
       endX - Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
       endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
@@ -663,13 +662,13 @@
       endY,
       endX + Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
       endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength
-    ]
+    ];
     // pointy arrow
     var arrow = new Kinetic.Line({
       points: arrowPath,
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
+    });
 
     // first segment of the path
     var pointerHead = new Kinetic.Line({
@@ -681,19 +680,19 @@
       ],
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
+    });
 
     // following segments of the path
     var pointer = new Kinetic.Line({
       points: path,
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
-    layer.add(pointerHead)
-    layer.add(pointer)
-    layer.add(arrow)
+    });
+    layer.add(pointerHead);
+    layer.add(pointer);
+    layer.add(arrow);
     // since arrow path is complicated, move to bottom in case it covers some other box
-    pointer.moveToBottom()
+    pointer.moveToBottom();
   }
 
   /**
@@ -713,7 +712,7 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else if (x1 <= x2 && y1 > (y2 - tcon.boxHeight - 1)) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
@@ -727,7 +726,7 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else if (x1 > x2) {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
@@ -739,7 +738,7 @@
         y2 - tcon.boxSpacingY * 3 / 8 + 7,
         x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     } else {
       var path = [
         //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
@@ -751,10 +750,10 @@
         y2 - tcon.boxSpacingY * 3 / 8,
         x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
         y2 - tcon.arrowSpace
-      ]
+      ];
     }
-    var endX = path[path.length - 2]
-    var endY = path[path.length - 1]
+    var endX = path[path.length - 2];
+    var endY = path[path.length - 1];
     var arrowPath = [
       endX - Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
       endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
@@ -762,12 +761,12 @@
       endY,
       endX + Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
       endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength
-    ]
+    ];
     var arrow = new Kinetic.Line({
       points: arrowPath,
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
+    });
     var pointerHead = new Kinetic.Line({
       points: [
         x1 + tcon.boxWidth * 3 / 4,
@@ -777,16 +776,16 @@
       ],
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
+    });
     var pointer = new Kinetic.Line({
       points: path,
       strokeWidth: tcon.strokeWidth,
       stroke: 'white'
-    })
-    layer.add(pointerHead)
-    layer.add(pointer)
-    layer.add(arrow)
-    pointer.moveToBottom()
+    });
+    layer.add(pointerHead);
+    layer.add(pointer);
+    layer.add(arrow);
+    pointer.moveToBottom();
   }
 
   /**
@@ -813,17 +812,17 @@
         ],
         strokeWidth: tcon.strokeWidth - 1,
         stroke: 'white'
-      })
-      this.image = null_box
+      });
+      this.image = null_box;
     }
     /**
        *  Adds it to a container
        */
     put(container) {
-      container.add(this.image)
+      container.add(this.image);
     }
     getRaw() {
-      return this.image
+      return this.image;
     }
   }
 
@@ -851,26 +850,26 @@
         ],
         strokeWidth: tcon.strokeWidth - 1,
         stroke: 'white'
-      })
-      this.image = null_box
+      });
+      this.image = null_box;
     }
     /**
        *  Adds it to a container
        */
     put(container) {
-      container.add(this.image)
+      container.add(this.image);
     }
     getRaw() {
-      return this.image
+      return this.image;
     }
   }
 
   // A list of layers drawn, used for history
-  var layerList = []
+  var layerList = [];
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
-  var currentListVisualizer = -1
+  var currentListVisualizer = -1;
   // label numbers when the data cannot be fit into the box
-  var nodeLabel = 0
+  var nodeLabel = 0;
   /**
    *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
    *  Then shift it to the left end.
@@ -878,10 +877,10 @@
   function draw(xs) {
     // Hides the default text
     (document.getElementById('data-visualizer-default-text')).hidden = true;
-    
+
     // Blink icon
     const icon = document.getElementById('data_visualiser-icon');
-    
+
     if (icon) {
       icon.classList.add('side-content-tab-alert');
     }
@@ -899,24 +898,24 @@
       height: findListHeight(xs) * 60 + 100,
       container: 'list-visualizer-container'
     });
-    minLeft = 500
-    nodelist = []
-    fnNodeList = []
-    nodeLabel = 0
+    minLeft = 500;
+    nodelist = [];
+    fnNodeList = [];
+    nodeLabel = 0;
     // hides all other layers
     for (var i = 0; i < layerList.length; i++) {
-      layerList[i].hide()
+      layerList[i].hide();
     }
     // creates a new layer and add to the stage
-    var layer = new Kinetic.Layer()
-    stage.add(layer)
-    layerList.push(layer)
+    var layer = new Kinetic.Layer();
+    stage.add(layer);
+    layerList.push(layer);
 
     if (!is_pair(xs) && !is_function(xs)) {
       if (is_null(xs)) {
-        var display = "null"
+        var display = "null";
       } else {
-        var display = toText(xs, true)
+        var display = toText(xs, true);
       }
       var txt = new Kinetic.Text({
         text: display,
@@ -926,108 +925,108 @@
         fontStyle: 'normal',
         fontSize: 20,
         fill: 'white'
-      })
-      layer.add(txt)
+      });
+      layer.add(txt);
     } else if (is_function(xs)) {
       // Draw a single function object
-      realDrawFunctionNode(0, 50, 50, 50, 50, layer)
+      realDrawFunctionNode(0, 50, 50, 50, 50, layer);
     } else {
       // attempts to draw the tree
-      drawTree(list_to_tree(xs), 500, 50, layer)
+      drawTree(list_to_tree(xs), 500, 50, layer);
     }
 
     // adjust the position
-    layer.setOffset(minLeft - 20, 0)
-    layer.draw()
+    layer.setOffset(minLeft - 20, 0);
+    layer.draw();
 
     // update current ID
-    currentListVisualizer = layerList.length - 1
+    currentListVisualizer = layerList.length - 1;
   }
-  exports.draw = draw
+  exports.draw = draw;
 
   /**
    *  Shows the layer with a given ID while hiding the others.
    */
   function showListVisualizer(id) {
     for (var i = 0; i < layerList.length; i++) {
-      layerList[i].hide()
+      layerList[i].hide();
     }
     if (layerList[id]) {
-      layerList[id].show()
-      currentListVisualizer = id
+      layerList[id].show();
+      currentListVisualizer = id;
     }
   }
 
   function clearListVisualizer() {
-    currentListVisualizer = -1
+    currentListVisualizer = -1;
     for (var i = 0; i < layerList.length; i++) {
-      layerList[i].hide()
+      layerList[i].hide();
     }
-    layerList = []
+    layerList = [];
   }
-	
+
   function is_function(data) {
-    return typeof(data) == "function"
+    return typeof (data) == "function";
   }
 
   /**
    * Find the height of a drawing (in number of "rows" of pairs)
-   */ 
+   */
   function findListHeight(xs) {
     // Store pairs/arrays that were traversed previously so as to not double-count their height.
-    const existing = []; 
+    const existing = [];
 
-    function helper(xs) {   
+    function helper(xs) {
       if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
-          return 0;
+        return 0;
       } else {
         let leftHeight;
         let rightHeight;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
-          leftHeight = 0;          
+          || (!is_pair(xs[0]) && !is_function(xs[0]))) {
+          leftHeight = 0;
         } else {
           existing.push(xs[0]);
           leftHeight = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
-          rightHeight = 0;          
+          || (!is_pair(xs[1]) && !is_function(xs[1]))) {
+          rightHeight = 0;
         } else {
           existing.push(xs[1]);
           rightHeight = helper(xs[1]);
         }
         return leftHeight > rightHeight
-              ? 1 + leftHeight
-              : 1 + rightHeight;
+          ? 1 + leftHeight
+          : 1 + rightHeight;
       }
     }
-    
+
     return helper(xs);
   }
 
   /**
    * Find the width of a drawing (in number of "columns" of pairs)
-   */ 
+   */
   function findListWidth(xs) {
     const existing = [];
 
-    function helper(xs) {   
+    function helper(xs) {
       if ((!is_pair(xs) && !is_function(xs)) || is_null(xs)) {
-          return 0;
+        return 0;
       } else {
         let leftWidth;
         let rightWidth;
         if (existing.includes(xs[0])
-            || (!is_pair(xs[0]) && !is_function(xs[0]))) {
-          leftWidth = 0;          
+          || (!is_pair(xs[0]) && !is_function(xs[0]))) {
+          leftWidth = 0;
         } else {
           existing.push(xs[0]);
           leftWidth = helper(xs[0]);
         }
         if (existing.includes(xs[1])
-            || (!is_pair(xs[1]) && !is_function(xs[1]))) {
-          rightWidth = 0;          
+          || (!is_pair(xs[1]) && !is_function(xs[1]))) {
+          rightWidth = 0;
         } else {
           existing.push(xs[1]);
           rightWidth = helper(xs[1]);
@@ -1038,27 +1037,27 @@
 
     return helper(xs);
   }
-	
+
   exports.ListVisualizer = {
     draw: draw,
     clear: clearListVisualizer,
-    init: function(parent) {
-      container.hidden = false
-      parent.appendChild(container)
+    init: function (parent) {
+      container.hidden = false;
+      parent.appendChild(container);
     },
-    next: function() {
+    next: function () {
       if (currentListVisualizer > 0) {
-        currentListVisualizer--
+        currentListVisualizer--;
       }
-      showListVisualizer(currentListVisualizer)
+      showListVisualizer(currentListVisualizer);
     },
-    previous: function() {
+    previous: function () {
       if (currentListVisualizer > 0) {
-        currentListVisualizer--
+        currentListVisualizer--;
       }
-      showListVisualizer(currentListVisualizer)
+      showListVisualizer(currentListVisualizer);
     }
-  }
+  };
 
-  setTimeout(() => {}, 1000)
-})(window)
+  setTimeout(() => { }, 1000);
+})(window);
