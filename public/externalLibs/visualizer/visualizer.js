@@ -13,64 +13,56 @@
   function list_to_tree(lst) {
     // actual function in the wrapper
     function construct_tree(lst) {
-      var thisNode = new TreeNode()
+      const node = new PairTreeNode();
 
       // memoise the current sublist
-      perms[counter] = lst
+      perms[counter] = lst;
       // assigns an ID to the current node
-      thisNode.id = counter
-      counter++
-      // if the head is also a list, draw it's sublist
-      if (is_pair(head(lst))) {
-        // check if such list has been built
-        if (perms.indexOf(head(lst)) > -1) {
-          thisNode.leftid = perms.indexOf(head(lst))
-        } else {
-          thisNode.left = construct_tree(head(lst))
-        }
-      } else if (is_function(head(lst))) { // draw the function object
-        if (perms.indexOf(head(lst)) > -1) { // check if function has been drawn
-          thisNode.leftid = perms.indexOf(head(lst))
-        } else { 
-          thisNode.left = construct_function(head(lst))
-        }
-      }	else {
-        // otherwise, it's a data item
-        thisNode.data = head(lst)
-      }
-      // similarly for right subtree.
-      if (is_pair(tail(lst)) || (is_list(tail(lst)) && is_null(tail(lst)))) {
-        if (perms.indexOf(tail(lst)) > -1) {
-          thisNode.rightid = perms.indexOf(tail(lst))
-        } else if (!is_null(tail(lst))) {
-          thisNode.right = construct_tree(tail(lst))
-        }
-      } else if (is_function(tail(lst))) {
-        if (perms.indexOf(tail(lst)) > -1) {
-          thisNode.rightid = perms.indexOf(tail(lst))
-        } else { 
-          thisNode.right = construct_function(tail(lst))
-        }
+      node.id = counter;
+      counter++;
+
+      const head_node = head(lst);
+      const tail_node = tail(lst);
+
+      if (perms.indexOf(head_node) > -1) {
+        // tree already built
+        node.left = perms.indexOf(head_node);
       } else {
-        thisNode.data2 = tail(lst)
+        node.left = is_pair(head_node) ? construct_tree(head_node) :
+                    is_function(head_node) ? construct_function(head_node) :
+                    construct_data_node(head_node);
       }
-      return thisNode
+      
+      if (perms.indexOf(tail_node) > -1) {
+        // tree already built
+        node.right = perms.indexOf(tail_node);
+      } else {
+        node.right = is_pair(tail_node) ? construct_tree(tail_node) :
+                     is_function(tail_node) ? construct_function(tail_node) :
+                     construct_data_node(tail_node);
+      }
+
+      return node;
     }
 
     /** 
      * Returns a new TreeNode that represents a function object instead of a sublist
      */
     function construct_function(fn) {
-      var thisNode = new TreeNode()
-      thisNode.data2 = " " // workaround to prevent nullbox from being drawn
+      const node = new FunctionTreeNode();
 
       // memoise current function
-      perms[counter] = fn
-      thisNode.id = counter
-      thisNode.isFunction = true
-      counter++
+      perms[counter] = fn;
+      node.id = counter;
+      counter++;
 
-      return thisNode
+      return node;
+    }
+
+    function construct_data_node(data) {
+      const node = new DataTreeNode(data);
+
+      return node;
     }
     
     // keeps track of all sublists in order to detect cycles
@@ -118,13 +110,25 @@
    */
   class Tree {
     constructor() {
-      this.rootNode = new TreeNode()
+      this.rootNode = new PairTreeNode();
     }
     /**
-       *  Gets the drawer function of a tree
-       */
+     *  Gets the drawer function of a tree
+     */
     getDrawer() {
-      return new TreeDrawer(this)
+      return new TreeDrawer(this);
+    }
+  }
+  class TreeNode {
+    constructor() {
+      this.left = null;
+      this.right = null;
+    }
+  }
+
+  class DrawableTreeNode extends TreeNode {
+    constructor() {
+      super();
     }
   }
 
@@ -132,34 +136,40 @@
       A node in a binary tree.
       left : pointer to the left subtree
       right: pointer to the right subtree
-      data: left data item stored in the node.
-              note that only leaves without left tail should/must have data.
-              data for intermediate nodes should be null.
-      data2: right data item stored in the node. Similar to data.
-              if list dicipline is enforced, all data2 shall be empty
   */
-  class TreeNode {
+  class PairTreeNode extends DrawableTreeNode {
     constructor() {
-      this.data = null
-      this.data2 = null
-      this.left = null
-      this.right = null
+      super();
     }
   }
+
+  class FunctionTreeNode extends DrawableTreeNode {
+    constructor() {
+      super();
+    }
+  }
+
+  class DataTreeNode extends TreeNode {
+    constructor(data) {
+      super();
+      this.data = data;
+    }
+  }
+
 
   /**
    *  Drawer function of a tree
    */
   class TreeDrawer {
     constructor(tree) {
-      this.tree = tree
+      this.tree = tree;
     }
     /**
        *  Draws a tree at x,y on a give layer.
        *  It actually calls drawNode and draws the root at x,y
        */
     draw(x, y, layer) {
-      this.drawRoot(this.tree.rootNode, x, y, layer)
+      this.drawRoot(this.tree.rootNode, x, y, layer);
     }
     /**
        *  Draws a root node at x, y on a given layer.
@@ -172,37 +182,34 @@
     }
 
     drawNode(node, x, y, parentX, parentY, layer) {
-      if (node === null) return;
+      if (!(node instanceof DrawableTreeNode)) return;
 
       // draws the content
-      if (node.isFunction) {
-        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+      if (node instanceof FunctionTreeNode) {
+        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer);
       } else {
-        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+        realDrawPairNode(node.left?.data, node.right?.data, node.id, x, y, parentX, parentY, layer);
       }
 
       // if it has a left new child, draw it
-      if (node.left !== null) {
-        this.drawLeft(node.left, x, y, layer)
-        // (FIXME the next check may be redundant)
-        // if it's left child is part of a cycle and it's been drawn, link back to that node instead
-      } else if (node.leftid != null) {
-        backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-      } else if ((node.data === null) && !!node.isFunction) {
-        var nullbox = new NodeEmptyHead_list(x, y)
-        nullbox.put(layer)
+      if (node.left != null) {
+        if (node.left instanceof TreeNode) {
+          this.drawLeft(node.left, x, y, layer);
+        } else {
+          // if its left child is part of a cycle and it's been drawn, link back to that node instead
+          backwardLeftEdge(x, y, nodelist[node.left].getX(), nodelist[node.left].getY(), layer);
+        }
+      } else {
+        var nullbox = new NodeEmptyHead_list(x, y);
+        nullbox.put(layer);
       }
-
-      // similarly for right child
-      if (node.right !== null) {
-        this.drawRight(node.right, x, y, layer)
-        // (FIXME the next check may be redundant)
-      } else if (node.rightid != null) {
-        backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-        // if the tail is an empty box, draw the respective representation
-      } else if (node.data2 === null) {
-        var nullbox = new NodeEmpty_list(x, y)
-        nullbox.put(layer)
+      
+      if (node.right != null) {
+        if (node.right instanceof TreeNode) {
+          this.drawRight(node.right, x, y, layer);
+        } else {
+          backwardRightEdge(x, y, nodelist[node.right].getX(), nodelist[node.right].getY(), layer);
+        }
       }
     }
     /**
@@ -214,16 +221,16 @@
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
     drawLeft(node, parentX, parentY, layer) {
-      var count, x, y
+      var count, x, y;
       // checks if it has a right child, how far it extends to the right direction
-      if (node.right === null) {
-        count = 0
+      if (node.right === null || node.right instanceof DataTreeNode) {
+        count = 0;
       } else {
-        count = 1 + this.shiftScaleCount(node.right)
+        count = 1 + this.shiftScaleCount(node.right);
       }
       // shifts left accordingly
-      x = parentX - tcon.distanceX - count * tcon.distanceX
-      y = parentY + tcon.distanceY
+      x = parentX - tcon.distanceX - count * tcon.distanceX;
+      y = parentY + tcon.distanceY;
 
       this.drawNode(node, x, y, parentX, parentY, layer);
     }
@@ -236,14 +243,14 @@
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
     drawRight(node, parentX, parentY, layer) {
-      var count, x, y
-      if (node.left === null) {
-        count = 0
+      var count, x, y;
+      if (node.left === null || node.left instanceof DataTreeNode) {
+        count = 0;
       } else {
-        count = 1 + this.shiftScaleCount(node.left)
+        count = 1 + this.shiftScaleCount(node.left);
       }
-      x = parentX + tcon.distanceX + count * tcon.distanceX
-      y = parentY + tcon.distanceY
+      x = parentX + tcon.distanceX + count * tcon.distanceX;
+      y = parentY + tcon.distanceY;
 
       this.drawNode(node, x, y, parentX, parentY, layer);
     }
@@ -251,16 +258,16 @@
        * Returns the distance necessary for the shift of each node, calculated recursively.
        */
     shiftScaleCount(node) {
-      var count = 0
+      var count = 0;
       // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
-      if (node.left !== null) {
-        count = count + 1 + this.shiftScaleCount(node.left)
+      if (node.left instanceof TreeNode || node.left instanceof DataTreeNode) {
+        count = count + 1 + this.shiftScaleCount(node.left);
       }
       // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
-      if (node.right !== null) {
-        count = count + 1 + this.shiftScaleCount(node.right)
+      if (node.right instanceof TreeNode || node.right instanceof DataTreeNode) {
+        count = count + 1 + this.shiftScaleCount(node.right);
       }
-      return count
+      return count;
     }
   }
 
@@ -272,7 +279,7 @@
   /**
    *  Internal function that puts two data at x1, y1 on a given layer. Connects it to it's parent which is at x2, y2
    */
-  function realDrawNode(data, data2, id, x1, y1, x2, y2, layer) {
+  function realDrawPairNode(data, data2, id, x1, y1, x2, y2, layer) {
     var box = new NodeBox(data, data2)
     var node = new Kinetic.Group()
 
@@ -351,36 +358,37 @@
    *  The data items are simply converted with toString()
    */
   class NodeBox {
-    constructor(value, value2) {
+    constructor(leftValue, rightValue) {
       // this.image is the inner content
-      this.image = new Kinetic.Group()
+      this.image = new Kinetic.Group();
 
       // outer rectangle
-      var rect = new Kinetic.Rect({
+      const rect = new Kinetic.Rect({
         width: tcon.boxWidth,
         height: tcon.boxHeight,
         strokeWidth: tcon.strokeWidth,
         stroke: 'white',
-        fill: '#17181A'
-      })
+        fill: '#17181A',
+      });
 
       // vertical bar seen in the box
-      var line = new Kinetic.Line({
+      const line = new Kinetic.Line({
         points: [tcon.boxWidth * tcon.vertBarPos, 0, tcon.boxWidth * tcon.vertBarPos, tcon.boxHeight],
         strokeWidth: tcon.strokeWidth,
-        stroke: 'white'
+        stroke: 'white',
       })
 
-      var txtValue
-      var label
+      this.image.add(rect);
+      this.image.add(line);
+
       // text for data item #1
-      if (value !== null && (!is_list(value) || !is_null(value))) {
-        txtValue = toText(value)
-        label = false
+      if (leftValue !== null && (!is_list(leftValue) || !is_null(leftValue))) {
+        const txtValue = toText(leftValue)
+        const label = false
         if (txtValue === false) {
           label = true
           nodeLabel++
-          displaySpecialContent(nodeLabel, value)
+          displaySpecialContent(nodeLabel, leftValue)
         }
         var txt = new Kinetic.Text({
           text: label ? '*' + nodeLabel : txtValue,
@@ -391,20 +399,20 @@
           fill: 'white'
         })
         this.image.add(txt)
-      } else if (!is_list(value) && is_null(value)) {
+      } else if (!is_list(leftValue) && is_null(leftValue)) {
         var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0)
         var emptyBox = empty.getRaw()
         this.image.add(emptyBox)
       }
 
       // text for data item #2
-      if (value2 !== null) {
-        txtValue = toText(value2)
-        label = false
+      if (rightValue !== null) {
+        const txtValue = toText(rightValue)
+        const label = false
         if (txtValue === false) {
           label = true
           nodeLabel++
-          displaySpecialContent(nodeLabel, value2)
+          displaySpecialContent(nodeLabel, rightValue)
         }
         var txt2 = new Kinetic.Text({
           text: label ? '*' + nodeLabel : txtValue,
@@ -416,19 +424,9 @@
           fill: 'white'
         })
         this.image.add(txt2)
-      }
-
-      this.image.add(rect)
-      this.image.add(line)
-
-      // text need to be on top of the box background
-      if (value !== null && (!is_list(value) || !is_null(value))) {
-        txt.moveToTop()
-      } else if (emptyBox) {
-        emptyBox.moveToTop()
-      }
-      if (value2 !== null) {
-        txt2.moveToTop()
+      } else {
+        const emptyBox = new NodeEmpty_list(0, 0).getRaw();
+        this.image.add(emptyBox);
       }
     }
     /**
