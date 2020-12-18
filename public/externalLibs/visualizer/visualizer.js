@@ -159,7 +159,7 @@
        *  It actually calls drawNode and draws the root at x,y
        */
     draw(x, y, layer) {
-      this.drawNode(this.tree.rootNode, x, y, layer)
+      this.drawRoot(this.tree.rootNode, x, y, layer)
     }
     /**
        *  Draws a root node at x, y on a given layer.
@@ -167,38 +167,42 @@
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
-    drawNode(node, x, y, layer) {
-      if (node !== null) {
-        // draws the content
-        if (node.isFunction) {
-          realDrawFunctionNode(node.id, x, y, x, y, layer)
-        } else {
-          realDrawNode(node.data, node.data2, node.id, x, y, x, y, layer)
-        }
+    drawRoot(node, x, y, layer) {
+      this.drawNode(node, x, y, x, y, layer);
+    }
 
-        // if it has a left new child, draw it
-        if (node.left !== null) {
-          this.drawLeft(node.left, x, y, layer)
-          // (FIXME the next check may be redundant)
-          // if it's left child is part of a cycle and it's been drawn, link back to that node instead
-        } else if (node.leftid != null) {
-          backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-        } else if ((node.data === null) && !!node.isFunction) {
-          var nullbox = new NodeEmptyHead_list(x, y)
-          nullbox.put(layer)
-        }
+    drawNode(node, x, y, parentX, parentY, layer) {
+      if (node === null) return;
 
-        // similarly for right child
-        if (node.right !== null) {
-          this.drawRight(node.right, x, y, layer)
-          // (FIXME the next check may be redundant)
-        } else if (node.rightid != null) {
-          backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-          // if the tail is an empty box, draw the respective representation
-        } else if (node.data2 === null) {
-          var nullbox = new NodeEmpty_list(x, y)
-          nullbox.put(layer)
-        }
+      // draws the content
+      if (node.isFunction) {
+        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
+      } else {
+        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
+      }
+
+      // if it has a left new child, draw it
+      if (node.left !== null) {
+        this.drawLeft(node.left, x, y, layer)
+        // (FIXME the next check may be redundant)
+        // if it's left child is part of a cycle and it's been drawn, link back to that node instead
+      } else if (node.leftid != null) {
+        backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
+      } else if ((node.data === null) && !!node.isFunction) {
+        var nullbox = new NodeEmptyHead_list(x, y)
+        nullbox.put(layer)
+      }
+
+      // similarly for right child
+      if (node.right !== null) {
+        this.drawRight(node.right, x, y, layer)
+        // (FIXME the next check may be redundant)
+      } else if (node.rightid != null) {
+        backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
+        // if the tail is an empty box, draw the respective representation
+      } else if (node.data2 === null) {
+        var nullbox = new NodeEmpty_list(x, y)
+        nullbox.put(layer)
       }
     }
     /**
@@ -221,27 +225,7 @@
       x = parentX - tcon.distanceX - count * tcon.distanceX
       y = parentY + tcon.distanceY
 
-      if (node.isFunction) {
-        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-      } else {
-        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-      }
-      if (node.left !== null) {
-        this.drawLeft(node.left, x, y, layer)
-      } else if (node.leftid != null) {
-        backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-      } else if ((node.data === null) && !node.isFunction) {
-        var nullbox = new NodeEmptyHead_list(x, y)
-        nullbox.put(layer)
-      }
-      if (node.right !== null) {
-        this.drawRight(node.right, x, y, layer)
-      } else if (node.rightid != null) {
-        backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-      } else if (node.data2 === null) {
-        var nullbox = new NodeEmpty_list(x, y)
-        nullbox.put(layer)
-      }
+      this.drawNode(node, x, y, parentX, parentY, layer);
     }
     /**
        *  Draws a node at x, y on a given layer, making necessary right shift depending how far the structure of subtree
@@ -261,28 +245,7 @@
       x = parentX + tcon.distanceX + count * tcon.distanceX
       y = parentY + tcon.distanceY
 
-      if (node.isFunction) {
-        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer)
-      } else {
-        realDrawNode(node.data, node.data2, node.id, x, y, parentX, parentY, layer)
-      }
-
-      if (node.left !== null) {
-        this.drawLeft(node.left, x, y, layer)
-      } else if (node.leftid != null) {
-        backwardLeftEdge(x, y, nodelist[node.leftid].getX(), nodelist[node.leftid].getY(), layer)
-      } else if ((node.data === null) && !node.isFunction) {
-        var nullbox = new NodeEmptyHead_list(x, y)
-        nullbox.put(layer)
-      }
-      if (node.right !== null) {
-        this.drawRight(node.right, x, y, layer)
-      } else if (node.rightid != null) {
-        backwardRightEdge(x, y, nodelist[node.rightid].getX(), nodelist[node.rightid].getY(), layer)
-      } else if (node.data2 === null) {
-        var nullbox = new NodeEmpty_list(x, y)
-        nullbox.put(layer)
-      }
+      this.drawNode(node, x, y, parentX, parentY, layer);
     }
     /**
        * Returns the distance necessary for the shift of each node, calculated recursively.
@@ -363,7 +326,7 @@
   /**
    *  Try to fit any data into the box. If not possible, assign a number and log it in the console.
    */
-    function toText(data, full) {
+  function toText(data, full) {
     if (full) {
       return '' + data
     } else {
