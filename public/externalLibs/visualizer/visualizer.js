@@ -92,8 +92,6 @@
     arrowLength: 8,
     arrowAngle: 0.5236, //25 - 0.4363,//20 - 0.3491,// 30 - 0.5236
 
-    triangeSize: 5,
-
     padding: 5,
     canvasWidth: 1000
   };
@@ -187,7 +185,7 @@
       if (node instanceof FunctionTreeNode) {
         realDrawFunctionNode(node.id, x, y, parentX, parentY, layer);
       } else {
-        realDrawPairNode(node.left?.data, node.right?.data, node.id, x, y, parentX, parentY, layer);
+        realDrawPairNode(node.left instanceof DataTreeNode ? node.left : null, node.right instanceof DataTreeNode ? node.right : null, node.id, x, y, parentX, parentY, layer);
       }
 
       // if it has a left new child, draw it
@@ -222,10 +220,10 @@
     drawLeft(node, parentX, parentY, layer) {
       var count, x, y;
       // checks if it has a right child, how far it extends to the right direction
-      if (node.right === null || node.right instanceof DataTreeNode) {
-        count = 0;
-      } else {
+      if (node.right instanceof DrawableTreeNode) {
         count = 1 + this.shiftScaleCount(node.right);
+      } else {
+        count = 0;
       }
       // shifts left accordingly
       x = parentX - tcon.distanceX - count * tcon.distanceX;
@@ -243,10 +241,10 @@
        */
     drawRight(node, parentX, parentY, layer) {
       var count, x, y;
-      if (node.left === null || node.left instanceof DataTreeNode) {
-        count = 0;
-      } else {
+      if (node.left instanceof DrawableTreeNode) {
         count = 1 + this.shiftScaleCount(node.left);
+      } else {
+        count = 0;
       }
       x = parentX + tcon.distanceX + count * tcon.distanceX;
       y = parentY + tcon.distanceY;
@@ -259,11 +257,11 @@
     shiftScaleCount(node) {
       var count = 0;
       // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
-      if (node.left instanceof TreeNode || node.left instanceof DataTreeNode) {
+      if (node.left instanceof DrawableTreeNode) {
         count = count + 1 + this.shiftScaleCount(node.left);
       }
       // if there is something on the right, it needs to be shifted to the left for 1 + how far that left child shifts
-      if (node.right instanceof TreeNode || node.right instanceof DataTreeNode) {
+      if (node.right instanceof DrawableTreeNode) {
         count = count + 1 + this.shiftScaleCount(node.right);
       }
       return count;
@@ -357,7 +355,7 @@
    *  The data items are simply converted with toString()
    */
   class NodeBox {
-    constructor(leftValue, rightValue) {
+    constructor(leftNode, rightNode) {
       // this.image is the inner content
       this.image = new Kinetic.Group();
 
@@ -380,53 +378,58 @@
       this.image.add(rect);
       this.image.add(line);
 
-      // text for data item #1
-      if (leftValue !== null && (!is_list(leftValue) || !is_null(leftValue))) {
-        const txtValue = toText(leftValue);
-        const label = false;
-        if (txtValue === false) {
-          label = true;
-          nodeLabel++;
-          displaySpecialContent(nodeLabel, leftValue);
+      if (leftNode instanceof DataTreeNode) {
+        const leftValue = leftNode.data;
+        if (!is_list(leftValue)) {
+          const txtValue = toText(leftValue);
+          const label = false;
+          if (txtValue === false) {
+            label = true;
+            nodeLabel++;
+            displaySpecialContent(nodeLabel, leftValue);
+          }
+          var txt = new Kinetic.Text({
+            text: label ? '*' + nodeLabel : txtValue,
+            align: 'center',
+            width: tcon.vertBarPos * tcon.boxWidth,
+            y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+            fontStyle: label ? 'italic' : 'normal',
+            fill: 'white'
+          });
+          this.image.add(txt);
+        } else if (is_null(leftValue)) {
+          var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0);
+          var emptyBox = empty.getRaw();
+          this.image.add(emptyBox);
         }
-        var txt = new Kinetic.Text({
-          text: label ? '*' + nodeLabel : txtValue,
-          align: 'center',
-          width: tcon.vertBarPos * tcon.boxWidth,
-          y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-          fontStyle: label ? 'italic' : 'normal',
-          fill: 'white'
-        });
-        this.image.add(txt);
-      } else if (!is_list(leftValue) && is_null(leftValue)) {
-        var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0);
-        var emptyBox = empty.getRaw();
-        this.image.add(emptyBox);
       }
 
-      // text for data item #2
-      if (rightValue !== null) {
-        const txtValue = toText(rightValue);
-        const label = false;
-        if (txtValue === false) {
-          label = true;
-          nodeLabel++;
-          displaySpecialContent(nodeLabel, rightValue);
+      if (rightNode instanceof DataTreeNode) {
+        const rightValue = rightNode.data;
+        if (!is_list(rightValue)) {
+          const txtValue = toText(rightValue);
+          const label = false;
+          if (txtValue === false) {
+            label = true;
+            nodeLabel++;
+            displaySpecialContent(nodeLabel, rightValue);
+          }
+          var txt2 = new Kinetic.Text({
+            text: label ? '*' + nodeLabel : txtValue,
+            align: 'center',
+            width: tcon.vertBarPos * tcon.boxWidth,
+            x: tcon.vertBarPos * tcon.boxWidth,
+            y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+            fontStyle: label ? 'italic' : 'normal',
+            fill: 'white'
+          });
+          this.image.add(txt2);
+        } else if (is_null(rightValue)) {
+          const emptyBox = new NodeEmpty_list(0, 0).getRaw();
+          this.image.add(emptyBox);
         }
-        var txt2 = new Kinetic.Text({
-          text: label ? '*' + nodeLabel : txtValue,
-          align: 'center',
-          width: tcon.vertBarPos * tcon.boxWidth,
-          x: tcon.vertBarPos * tcon.boxWidth,
-          y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-          fontStyle: label ? 'italic' : 'normal',
-          fill: 'white'
-        });
-        this.image.add(txt2);
-      } else {
-        const emptyBox = new NodeEmpty_list(0, 0).getRaw();
-        this.image.add(emptyBox);
       }
+
     }
     /**
        *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
