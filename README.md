@@ -20,6 +20,7 @@ The Source Academy is a gamified platform designed to teach students coding whil
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
 4. Run `yarn run start` to start the server at `localhost:8000`.
+
 In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. For this edition, there is no need for "Setting up your environment".
 
 ### Installation of Course Edition (interaction with cadet server)
