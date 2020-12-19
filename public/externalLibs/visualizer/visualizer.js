@@ -7,72 +7,6 @@
   container.hidden = true;
   document.body.appendChild(container);
 
-  /**
-   *  Converts a list, or a pair, to a tree object. Wrapper function.
-   */
-  function list_to_tree(lst) {
-    // actual function in the wrapper
-    function construct_tree(lst) {
-      const node = new PairTreeNode();
-
-      // memoise the current sublist
-      perms[counter] = lst;
-      // assigns an ID to the current node
-      node.id = counter;
-      counter++;
-
-      const head_node = head(lst);
-      const tail_node = tail(lst);
-
-      if (perms.indexOf(head_node) > -1) {
-        // tree already built
-        node.left = perms.indexOf(head_node);
-      } else {
-        node.left = is_pair(head_node) ? construct_tree(head_node) :
-          is_function(head_node) ? construct_function(head_node) :
-            construct_data_node(head_node);
-      }
-
-      if (perms.indexOf(tail_node) > -1) {
-        // tree already built
-        node.right = perms.indexOf(tail_node);
-      } else {
-        node.right = is_pair(tail_node) ? construct_tree(tail_node) :
-          is_function(tail_node) ? construct_function(tail_node) :
-            construct_data_node(tail_node);
-      }
-
-      return node;
-    }
-
-    /** 
-     * Returns a new TreeNode that represents a function object instead of a sublist
-     */
-    function construct_function(fn) {
-      const node = new FunctionTreeNode();
-
-      // memoise current function
-      perms[counter] = fn;
-      node.id = counter;
-      counter++;
-
-      return node;
-    }
-
-    function construct_data_node(data) {
-      const node = new DataTreeNode(data);
-
-      return node;
-    }
-
-    // keeps track of all sublists in order to detect cycles
-    var perms = [];
-    var tree = new Tree();
-    var counter = 0;
-    tree.rootNode = construct_tree(lst);
-    return tree;
-  }
-
   var tcon = {
     strokeWidth: 2,
     stroke: 'white',
@@ -109,6 +43,7 @@
   class Tree {
     constructor() {
       this.rootNode = new PairTreeNode();
+      this.nodes = [];
     }
     /**
      *  Gets the drawer function of a tree
@@ -116,7 +51,78 @@
     getDrawer() {
       return new TreeDrawer(this);
     }
+
+    getNodeFromId(id) {
+      return this.nodes[id];
+    }
+
+    static fromSourceList(lst) {
+      // actual function in the wrapper
+      function construct_tree(lst) {
+        const node = new PairTreeNode();
+
+        // memoise the current sublist
+        perms[counter] = lst;
+        // assigns an ID to the current node
+        node.id = counter;
+        tree.nodes[counter] = node;
+        counter++;
+
+        const head_node = head(lst);
+        const tail_node = tail(lst);
+
+        if (perms.indexOf(head_node) > -1) {
+          // tree already built
+          node.left = perms.indexOf(head_node);
+        } else {
+          node.left = is_pair(head_node) ? construct_tree(head_node) :
+            is_function(head_node) ? construct_function(head_node) :
+              construct_data_node(head_node);
+        }
+
+        if (perms.indexOf(tail_node) > -1) {
+          // tree already built
+          node.right = perms.indexOf(tail_node);
+        } else {
+          node.right = is_pair(tail_node) ? construct_tree(tail_node) :
+            is_function(tail_node) ? construct_function(tail_node) :
+              construct_data_node(tail_node);
+        }
+
+        return node;
+      }
+
+      /**
+       * Returns a new TreeNode that represents a function object instead of a sublist
+       */
+      function construct_function(fn) {
+        const node = new FunctionTreeNode();
+
+        // memoise current function
+        perms[counter] = fn;
+        node.id = counter;
+        tree.nodes[counter] = node;
+        counter++;
+
+        return node;
+      }
+
+      function construct_data_node(data) {
+        const node = new DataTreeNode(data);
+
+        return node;
+      }
+
+      // keeps track of all sublists in order to detect cycles
+      var tree = new Tree();
+      var perms = [];
+
+      var counter = 0;
+      tree.rootNode = construct_tree(lst);
+      return tree;
+    }
   }
+
   class TreeNode {
     constructor() {
       this.left = null;
@@ -127,6 +133,7 @@
   class DrawableTreeNode extends TreeNode {
     constructor() {
       super();
+      this.kineticGroup = null;
     }
   }
 
@@ -139,11 +146,55 @@
     constructor() {
       super();
     }
+
+    drawOnLayer(x, y, parentX, parentY, layer) {
+      const left_data = this.left instanceof DataTreeNode ? this.left : null;
+      const right_data = this.right instanceof DataTreeNode ? this.right : null;
+
+      var box = new NodeBox(left_data, right_data);
+      var node = new Kinetic.Group();
+
+      box.put(node);
+
+      // no pointer is drawn to root
+      if (parentX !== x) {
+        box.connectTo(parentX - x, parentY - y);
+      }
+
+      node.setX(x);
+      node.setY(y);
+      layer.add(node);
+
+      this.kineticGroup = node;
+
+      // update left extreme of the tree
+      minLeft = Math.min(minLeft, x);
+    }
   }
 
   class FunctionTreeNode extends DrawableTreeNode {
     constructor() {
       super();
+    }
+
+    drawOnLayer(x, y, parentX, parentY, layer) {
+      var circle = new NodeCircles();
+      var node = new Kinetic.Group();
+
+      circle.put(node);
+
+      if (parentX !== x) {
+        circle.connectTo(parentX - x, parentY - y);
+      }
+
+      node.setX(x);
+      node.setY(y);
+      layer.add(node);
+
+      this.kineticGroup = node;
+
+      // update left extreme of the tree
+      minLeft = Math.min(minLeft, x);
     }
   }
 
@@ -170,7 +221,7 @@
     }
     /**
        *  Draws a root node at x, y on a given layer.
-       *  It first draws the individual box, then see if it's children have been drawn before (by set_head and set_tail).
+       *  It first draws the individual box, then see if its children have been drawn before (by set_head and set_tail).
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
@@ -183,29 +234,27 @@
 
       // draws the content
       if (node instanceof FunctionTreeNode) {
-        realDrawFunctionNode(node.id, x, y, parentX, parentY, layer);
-      } else {
-        realDrawPairNode(node.left instanceof DataTreeNode ? node.left : null, node.right instanceof DataTreeNode ? node.right : null, node.id, x, y, parentX, parentY, layer);
-      }
-
-      // if it has a left new child, draw it
-      if (node.left != null) {
-        if (node.left instanceof TreeNode) {
-          this.drawLeft(node.left, x, y, layer);
-        } else {
-          // if its left child is part of a cycle and it's been drawn, link back to that node instead
-          backwardLeftEdge(x, y, nodelist[node.left].getX(), nodelist[node.left].getY(), layer);
+        node.drawOnLayer(x, y, parentX, parentY, layer);
+      } else if (node instanceof PairTreeNode) {
+        node.drawOnLayer(x, y, parentX, parentY, layer);
+        // if it has a left new child, draw it
+        if (node.left != null) {
+          if (node.left instanceof TreeNode) {
+            this.drawLeft(node.left, x, y, layer);
+          } else {
+            // if its left child is part of a cycle and it's been drawn, link back to that node instead
+            const drawnNode = this.tree.getNode(node.left).kineticGroup;
+            backwardLeftEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
+          }
         }
-      } else {
-        var nullbox = new NodeEmptyHead_list(x, y);
-        nullbox.put(layer);
-      }
 
-      if (node.right != null) {
-        if (node.right instanceof TreeNode) {
-          this.drawRight(node.right, x, y, layer);
-        } else {
-          backwardRightEdge(x, y, nodelist[node.right].getX(), nodelist[node.right].getY(), layer);
+        if (node.right != null) {
+          if (node.right instanceof TreeNode) {
+            this.drawRight(node.right, x, y, layer);
+          } else {
+            const drawnNode = this.tree.getNode(node.right).kineticGroup;
+            backwardRightEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
+          }
         }
       }
     }
@@ -268,54 +317,8 @@
     }
   }
 
-  // a list of nodes drawn for a tree. Used to check if a node has appeared before.
-  var nodelist = [];
   // keeps track the extreme left end of the tree. In units of pixels.
   var minLeft = 500;
-
-  /**
-   *  Internal function that puts two data at x1, y1 on a given layer. Connects it to it's parent which is at x2, y2
-   */
-  function realDrawPairNode(data, data2, id, x1, y1, x2, y2, layer) {
-    var box = new NodeBox(data, data2);
-    var node = new Kinetic.Group();
-
-    box.put(node);
-
-    // no pointer is drawn to root
-    if (x2 !== x1) {
-      box.connectTo(x2 - x1, y2 - y1);
-    }
-
-    node.setX(x1);
-    node.setY(y1);
-    layer.add(node);
-
-    // add node to the known list
-    nodelist[id] = node;
-    // update left extreme of the tree
-    minLeft = Math.min(minLeft, x1);
-  }
-
-  function realDrawFunctionNode(id, x1, y1, x2, y2, layer) {
-    var circle = new NodeCircles();
-    var node = new Kinetic.Group();
-
-    circle.put(node);
-
-    if (x2 !== x1) {
-      circle.connectTo(x2 - x1, y2 - y1);
-    }
-
-    node.setX(x1);
-    node.setY(y1);
-    layer.add(node);
-
-    // add node to the known list
-    nodelist[id] = node;
-    // update left extreme of the tree
-    minLeft = Math.min(minLeft, x1);
-  }
 
   /**
    *   Draws a tree object on the canvas at x,y on a given layer
@@ -350,12 +353,74 @@
     }
   }
 
+  class NodeDrawable {
+    /**
+     *  Connects a NodeDrawable to its parent at x, y by using line segments with arrow head
+     */
+    connectTo(x, y) {
+      // starting point
+      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
+
+      // end point
+      if (x > 0) {
+        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
+      } else {
+        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
+      }
+
+      var pointer = new Kinetic.Line({
+        points: [start, end],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      });
+      // the angle of the incoming arrow
+      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
+
+      // left and right part of an arrow head, rotated to the calculated angle
+      if (x > 0) {
+        var left = {
+          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        };
+        var right = {
+          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        };
+      } else {
+        var left = {
+          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        };
+        var right = {
+          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
+          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        };
+      }
+
+      var arrow = new Kinetic.Line({
+        points: [left, start, right],
+        strokeWidth: tcon.strokeWidth,
+        stroke: 'white'
+      });
+
+      this.image.getParent().add(pointer);
+      this.image.getParent().add(arrow);
+    }
+    /**
+       *  equivalent to container.add(this.image)
+       */
+    put(container) {
+      container.add(this.image);
+    }
+  }
+
   /**
    *  Creates a Kinetic.Group that is used to represent a node in a tree. It takes up to two data items.
    *  The data items are simply converted with toString()
    */
-  class NodeBox {
+  class NodeBox extends NodeDrawable {
     constructor(leftNode, rightNode) {
+      super();
       // this.image is the inner content
       this.image = new Kinetic.Group();
 
@@ -431,71 +496,14 @@
       }
 
     }
-    /**
-       *  Connects a NodeBox to its parent at x,y by using line segments with arrow head
-       */
-    connectTo(x, y) {
-      // starting point
-      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
-
-      // end point
-      if (x > 0) {
-        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
-      } else {
-        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
-      }
-
-      var pointer = new Kinetic.Line({
-        points: [start, end],
-        strokeWidth: tcon.strokeWidth,
-        stroke: 'white'
-      });
-      // the angle of the incoming arrow
-      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
-
-      // left and right part of an arrow head, rotated to the calculated angle
-      if (x > 0) {
-        var left = {
-          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        };
-        var right = {
-          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        };
-      } else {
-        var left = {
-          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        };
-        var right = {
-          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        };
-      }
-
-      var arrow = new Kinetic.Line({
-        points: [left, start, right],
-        strokeWidth: tcon.strokeWidth,
-        stroke: 'white'
-      });
-
-      this.image.getParent().add(pointer);
-      this.image.getParent().add(arrow);
-    }
-    /**
-       *  equivalent to container.add(this.image)
-       */
-    put(container) {
-      container.add(this.image);
-    }
   }
 
   /**
   *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
   */
-  class NodeCircles {
+  class NodeCircles extends NodeDrawable {
     constructor() {
+      super();
       this.image = new Kinetic.Group();
 
       var leftCircle = new Kinetic.Circle({
@@ -536,58 +544,6 @@
       this.image.add(rightCircle);
       this.image.add(leftDot);
       this.image.add(rightDot);
-    }
-    connectTo(x, y) {
-      // starting point
-      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
-
-      // end point
-      if (x > 0) {
-        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
-      } else {
-        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
-      }
-
-      var pointer = new Kinetic.Line({
-        points: [start, end],
-        strokeWidth: tcon.strokeWidth,
-        stroke: 'white'
-      });
-      // the angle of the incoming arrow
-      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
-
-      // left and right part of an arrow head, rotated to the calculated angle
-      if (x > 0) {
-        var left = {
-          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        };
-        var right = {
-          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        };
-      } else {
-        var left = {
-          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
-        };
-        var right = {
-          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
-        };
-      }
-
-      var arrow = new Kinetic.Line({
-        points: [left, start, right],
-        strokeWidth: tcon.strokeWidth,
-        stroke: 'white'
-      });
-
-      this.image.getParent().add(pointer);
-      this.image.getParent().add(arrow);
-    }
-    put(container) {
-      container.add(this.image);
     }
   }
 
@@ -829,44 +785,6 @@
     }
   }
 
-  /**
-   *  Complements a NodeBox when the head is an empty box.
-   */
-  class NodeEmptyHead_list {
-    constructor(x, y) {
-      var null_box = new Kinetic.Line({
-        x: x - tcon.boxWidth / 2,
-        y: y,
-        points: [
-          tcon.boxWidth * tcon.vertBarPos,
-          tcon.boxHeight,
-          tcon.boxWidth * tcon.vertBarPos,
-          0,
-          tcon.boxWidth,
-          0,
-          tcon.boxWidth * tcon.vertBarPos,
-          tcon.boxHeight,
-          tcon.boxWidth,
-          tcon.boxHeight,
-          tcon.boxWidth,
-          0
-        ],
-        strokeWidth: tcon.strokeWidth - 1,
-        stroke: 'white'
-      });
-      this.image = null_box;
-    }
-    /**
-       *  Adds it to a container
-       */
-    put(container) {
-      container.add(this.image);
-    }
-    getRaw() {
-      return this.image;
-    }
-  }
-
   // A list of layers drawn, used for history
   var layerList = [];
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
@@ -932,10 +850,10 @@
       layer.add(txt);
     } else if (is_function(xs)) {
       // Draw a single function object
-      realDrawFunctionNode(0, 50, 50, 50, 50, layer);
+      new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
     } else {
       // attempts to draw the tree
-      drawTree(list_to_tree(xs), 500, 50, layer);
+      drawTree(Tree.fromSourceList(xs), 500, 50, layer);
     }
 
     // adjust the position
