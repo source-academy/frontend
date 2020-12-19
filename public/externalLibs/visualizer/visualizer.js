@@ -52,7 +52,7 @@
       return new TreeDrawer(this);
     }
 
-    getNodeFromId(id) {
+    getNodeById(id) {
       return this.nodes[id];
     }
 
@@ -151,8 +151,8 @@
       const left_data = this.left instanceof DataTreeNode ? this.left : null;
       const right_data = this.right instanceof DataTreeNode ? this.right : null;
 
-      var box = new NodeBox(left_data, right_data);
-      var node = new Kinetic.Group();
+      const box = new NodeBox(left_data, right_data);
+      const node = new Kinetic.Group();
 
       box.put(node);
 
@@ -178,8 +178,8 @@
     }
 
     drawOnLayer(x, y, parentX, parentY, layer) {
-      var circle = new NodeCircles();
-      var node = new Kinetic.Group();
+      const circle = new NodeCircles();
+      const node = new Kinetic.Group();
 
       circle.put(node);
 
@@ -243,7 +243,7 @@
             this.drawLeft(node.left, x, y, layer);
           } else {
             // if its left child is part of a cycle and it's been drawn, link back to that node instead
-            const drawnNode = this.tree.getNode(node.left).kineticGroup;
+            const drawnNode = this.tree.getNodeById(node.left).kineticGroup;
             backwardLeftEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
           }
         }
@@ -252,7 +252,7 @@
           if (node.right instanceof TreeNode) {
             this.drawRight(node.right, x, y, layer);
           } else {
-            const drawnNode = this.tree.getNode(node.right).kineticGroup;
+            const drawnNode = this.tree.getNodeById(node.right).kineticGroup;
             backwardRightEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
           }
         }
@@ -267,7 +267,7 @@
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
     drawLeft(node, parentX, parentY, layer) {
-      var count, x, y;
+      let count;
       // checks if it has a right child, how far it extends to the right direction
       if (node.right instanceof DrawableTreeNode) {
         count = 1 + this.shiftScaleCount(node.right);
@@ -275,8 +275,8 @@
         count = 0;
       }
       // shifts left accordingly
-      x = parentX - tcon.distanceX - count * tcon.distanceX;
-      y = parentY + tcon.distanceY;
+      const x = parentX - tcon.distanceX - count * tcon.distanceX;
+      const y = parentY + tcon.distanceY;
 
       this.drawNode(node, x, y, parentX, parentY, layer);
     }
@@ -289,14 +289,14 @@
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
     drawRight(node, parentX, parentY, layer) {
-      var count, x, y;
+      let count;
       if (node.left instanceof DrawableTreeNode) {
         count = 1 + this.shiftScaleCount(node.left);
       } else {
         count = 0;
       }
-      x = parentX + tcon.distanceX + count * tcon.distanceX;
-      y = parentY + tcon.distanceY;
+      const x = parentX + tcon.distanceX + count * tcon.distanceX;
+      const y = parentY + tcon.distanceY;
 
       this.drawNode(node, x, y, parentX, parentY, layer);
     }
@@ -304,7 +304,7 @@
        * Returns the distance necessary for the shift of each node, calculated recursively.
        */
     shiftScaleCount(node) {
-      var count = 0;
+      let count = 0;
       // if there is something on the left, it needs to be shifted to the right for 1 + how far that right child shifts
       if (node.left instanceof DrawableTreeNode) {
         count = count + 1 + this.shiftScaleCount(node.left);
@@ -318,32 +318,23 @@
   }
 
   // keeps track the extreme left end of the tree. In units of pixels.
-  var minLeft = 500;
+  let minLeft = 500;
 
   /**
-   *   Draws a tree object on the canvas at x,y on a given layer
-   */
-  function drawTree(tree, x, y, layer) {
-    var drawer = tree.getDrawer();
-    drawer.draw(x, y, layer);
-
-    layer.draw();
-  }
-
-  /**
-   *  Try to fit any data into the box. If not possible, assign a number and log it in the console.
+   *  Returns data in text form, fitted into the box.
+   *  If not possible to fit data, return undefined. A number will be assigned and logged in the console.
    */
   function toText(data, full) {
     if (full) {
       return '' + data;
     } else {
-      var type = typeof data;
+      const type = typeof data;
       if (type === 'function' || type === 'object') {
-        return false;
+        return undefined;
       } else if (type === "string") {
-        var str = '' + data;
+        const str = '' + data;
         if (str.length > 5) {
-          return false;
+          return undefined;
         } else {
           return '"' + str + '"';
         }
@@ -440,61 +431,40 @@
         stroke: 'white',
       });
 
+      const createChildText = (childNode, isLeftNode) => {
+        if (childNode instanceof DataTreeNode) {
+          const nodeValue = childNode.data;
+          if (!is_list(nodeValue)) {
+            const textValue = toText(nodeValue);
+            if (textValue === undefined) {
+              nodeLabel++;
+              displaySpecialContent(nodeLabel, nodeValue);
+            }
+            return new Kinetic.Text({
+              text: textValue ?? '*' + nodeLabel,
+              align: 'center',
+              width: tcon.vertBarPos * tcon.boxWidth,
+              x: isLeftNode ? 0 : tcon.vertBarPos * tcon.boxWidth,
+              y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+              fontStyle: textValue === undefined ? 'italic' : 'normal',
+              fill: 'white'
+            });
+          } else if (is_null(nodeValue)) {
+            return new NodeEmpty_list(isLeftNode ? -tcon.boxWidth * tcon.vertBarPos: 0, 0).getRaw();
+          }
+        }
+      }
+      
       this.image.add(rect);
       this.image.add(line);
 
-      if (leftNode instanceof DataTreeNode) {
-        const leftValue = leftNode.data;
-        if (!is_list(leftValue)) {
-          const txtValue = toText(leftValue);
-          const label = false;
-          if (txtValue === false) {
-            label = true;
-            nodeLabel++;
-            displaySpecialContent(nodeLabel, leftValue);
-          }
-          var txt = new Kinetic.Text({
-            text: label ? '*' + nodeLabel : txtValue,
-            align: 'center',
-            width: tcon.vertBarPos * tcon.boxWidth,
-            y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-            fontStyle: label ? 'italic' : 'normal',
-            fill: 'white'
-          });
-          this.image.add(txt);
-        } else if (is_null(leftValue)) {
-          var empty = new NodeEmpty_list(-tcon.boxWidth * tcon.vertBarPos, 0);
-          var emptyBox = empty.getRaw();
-          this.image.add(emptyBox);
-        }
-      }
+      const leftText = createChildText(leftNode, true);
+      if (leftText)
+        this.image.add(leftText);
 
-      if (rightNode instanceof DataTreeNode) {
-        const rightValue = rightNode.data;
-        if (!is_list(rightValue)) {
-          const txtValue = toText(rightValue);
-          const label = false;
-          if (txtValue === false) {
-            label = true;
-            nodeLabel++;
-            displaySpecialContent(nodeLabel, rightValue);
-          }
-          var txt2 = new Kinetic.Text({
-            text: label ? '*' + nodeLabel : txtValue,
-            align: 'center',
-            width: tcon.vertBarPos * tcon.boxWidth,
-            x: tcon.vertBarPos * tcon.boxWidth,
-            y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
-            fontStyle: label ? 'italic' : 'normal',
-            fill: 'white'
-          });
-          this.image.add(txt2);
-        } else if (is_null(rightValue)) {
-          const emptyBox = new NodeEmpty_list(0, 0).getRaw();
-          this.image.add(emptyBox);
-        }
-      }
-
+      const rightText = createChildText(rightNode, false);
+      if (rightText)
+        this.image.add(rightText);
     }
   }
 
@@ -849,11 +819,9 @@
       });
       layer.add(txt);
     } else if (is_function(xs)) {
-      // Draw a single function object
       new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
     } else {
-      // attempts to draw the tree
-      drawTree(Tree.fromSourceList(xs), 500, 50, layer);
+      Tree.fromSourceList(xs).getDrawer().draw(500, 50, layer);
     }
 
     // adjust the position
@@ -863,7 +831,6 @@
     // update current ID
     currentListVisualizer = layerList.length - 1;
   }
-  exports.draw = draw;
 
   /**
    *  Shows the layer with a given ID while hiding the others.
@@ -959,6 +926,7 @@
     return helper(xs);
   }
 
+  exports.draw = draw;
   exports.ListVisualizer = {
     draw: draw,
     clear: clearListVisualizer,
