@@ -7,7 +7,7 @@
   container.hidden = true;
   document.body.appendChild(container);
 
-  var tcon = {
+  const drawingConfig = {
     strokeWidth: 2,
     stroke: 'white',
     distanceX: 50,
@@ -41,85 +41,105 @@
    *  A tree object built based on a list or pair.
    */
   class Tree {
-    constructor() {
-      this.rootNode = new PairTreeNode();
-      this.nodes = [];
+    /**
+     * Constructs a tree given a root node and a list of nodes.
+     * @param {PairTreeNode} rootNode The root node of the tree.
+     * @param {TreeNodes[]} nodes The memoized nodes of the tree in list form.
+     */
+    constructor(rootNode, nodes) {
+      this.rootNode = rootNode;
+      this.nodes = nodes;
     }
     /**
-     *  Gets the drawer function of a tree
+     * Returns a TreeDrawer that provides an interface to draw the tree.
+     * @param {Kinetic.Layer} layer The layer to draw the tree on.
      */
-    getDrawer() {
-      return new TreeDrawer(this);
+    beginDrawingOn(layer) {
+      return new TreeDrawer(this, layer);
     }
 
+    /**
+     * Returns the memoized node of the given id.
+     * @param {number} id The id of the node.
+     */
     getNodeById(id) {
       return this.nodes[id];
     }
 
-    static fromSourceList(lst) {
-      // actual function in the wrapper
-      function construct_tree(lst) {
+    static fromSourceTree(tree) {
+      /**
+       * Returns a node representing the given tree as a pair.
+       * Also memoizes the pair object, for the case where the
+       * pair appears multiple times in the data structure.
+       * @param {pair} tree The Source tree to construct a node for.
+       */
+      function constructTree(tree) {
         const node = new PairTreeNode();
 
-        // memoise the current sublist
-        perms[counter] = lst;
-        // assigns an ID to the current node
-        node.id = counter;
-        tree.nodes[counter] = node;
-        counter++;
+        visitedStructures[nodeCount] = tree;
+        node.id = nodeCount;
+        treeNodes[nodeCount] = node;
+        nodeCount++;
 
-        const head_node = head(lst);
-        const tail_node = tail(lst);
+        const headNode = head(tree);
+        const tailNode = tail(tree);
 
-        if (perms.indexOf(head_node) > -1) {
+        if (visitedStructures.indexOf(headNode) > -1) {
           // tree already built
-          node.left = perms.indexOf(head_node);
+          node.left = visitedStructures.indexOf(headNode);
         } else {
-          node.left = is_pair(head_node) ? construct_tree(head_node) :
-            is_function(head_node) ? construct_function(head_node) :
-              construct_data_node(head_node);
+          node.left = is_pair(headNode) ? constructTree(headNode) :
+            is_function(headNode) ? constructFunction(headNode) :
+              constructData(headNode);
         }
 
-        if (perms.indexOf(tail_node) > -1) {
+        if (visitedStructures.indexOf(tailNode) > -1) {
           // tree already built
-          node.right = perms.indexOf(tail_node);
+          node.right = visitedStructures.indexOf(tailNode);
         } else {
-          node.right = is_pair(tail_node) ? construct_tree(tail_node) :
-            is_function(tail_node) ? construct_function(tail_node) :
-              construct_data_node(tail_node);
+          node.right = is_pair(tailNode) ? constructTree(tailNode) :
+            is_function(tailNode) ? constructFunction(tailNode) :
+              constructData(tailNode);
         }
 
         return node;
       }
 
       /**
-       * Returns a new TreeNode that represents a function object instead of a sublist
+       * Returns a node representing the given function.
+       * Also memoizes the function object, for the case where the
+       * function appears multiple times in the data structure.
+       * @param {Function} func The function to construct a node for.
        */
-      function construct_function(fn) {
+      function constructFunction(func) {
         const node = new FunctionTreeNode();
 
         // memoise current function
-        perms[counter] = fn;
-        node.id = counter;
-        tree.nodes[counter] = node;
-        counter++;
+        visitedStructures[nodeCount] = func;
+        node.id = nodeCount;
+        treeNodes[nodeCount] = node;
+        nodeCount++;
 
         return node;
       }
 
-      function construct_data_node(data) {
+      /**
+       * Returns a node representing the given data.
+       * Anything except functions and pairs are considered data, including empty lists.
+       * @param {any} data The data to construct a node for.
+       */
+      function constructData(data) {
         const node = new DataTreeNode(data);
-
         return node;
       }
 
-      // keeps track of all sublists in order to detect cycles
-      var tree = new Tree();
-      var perms = [];
+      const visitedStructures = []; // detects cycles
+      const treeNodes = [];
+      let nodeCount = 0;
 
-      var counter = 0;
-      tree.rootNode = construct_tree(lst);
-      return tree;
+      const rootNode = constructTree(tree);
+
+      return new Tree(rootNode, treeNodes);
     }
   }
 
@@ -130,6 +150,10 @@
     }
   }
 
+  /**
+   * Represents a node that is drawable as a shape
+   * (i.e. pairs and functions).
+   */
   class DrawableTreeNode extends TreeNode {
     constructor() {
       super();
@@ -209,51 +233,54 @@
    *  Drawer function of a tree
    */
   class TreeDrawer {
-    constructor(tree) {
+    constructor(tree, layer) {
       this.tree = tree;
+      this.layer = layer;
     }
     /**
-       *  Draws a tree at x,y on a give layer.
-       *  It actually calls drawNode and draws the root at x,y
+       *  Draws a tree at x, y, by calling drawNode on the root at x, y.
        */
-    draw(x, y, layer) {
-      this.drawRoot(this.tree.rootNode, x, y, layer);
-    }
-    /**
-       *  Draws a root node at x, y on a given layer.
-       *  It first draws the individual box, then see if its children have been drawn before (by set_head and set_tail).
-       *  If so, it checks the position of the children and draws an arrow pointing to the children.
-       *  Otherwise, recursively draws the children, or a slash in case of empty lists.
-       */
-    drawRoot(node, x, y, layer) {
-      this.drawNode(node, x, y, x, y, layer);
+    draw(x, y) {
+      this.drawNode(this.tree.rootNode, x, y, x, y);
     }
 
-    drawNode(node, x, y, parentX, parentY, layer) {
+    /**
+     *  Draws the box for the pair representing the tree, then recursively draws its children.
+     *  A slash is drawn for empty lists.
+     * 
+     *  If a child node has been drawn previously, an arrow is drawn pointing to the children,
+     *  instead of drawing the child node again.
+     * @param {TreeNode} node The node to draw.
+     * @param {number} x The x position to draw at.
+     * @param {number} y The y position to draw at.
+     * @param {number} parentX The x position of the parent. If there is no parent, it is the same as x.
+     * @param {number} parentY The y position of the parent. If there is no parent, it is the same as y.
+     */
+    drawNode(node, x, y, parentX, parentY) {
       if (!(node instanceof DrawableTreeNode)) return;
 
       // draws the content
       if (node instanceof FunctionTreeNode) {
-        node.drawOnLayer(x, y, parentX, parentY, layer);
+        node.drawOnLayer(x, y, parentX, parentY, this.layer);
       } else if (node instanceof PairTreeNode) {
-        node.drawOnLayer(x, y, parentX, parentY, layer);
+        node.drawOnLayer(x, y, parentX, parentY, this.layer);
         // if it has a left new child, draw it
         if (node.left != null) {
           if (node.left instanceof TreeNode) {
-            this.drawLeft(node.left, x, y, layer);
+            this.drawLeft(node.left, x, y);
           } else {
             // if its left child is part of a cycle and it's been drawn, link back to that node instead
             const drawnNode = this.tree.getNodeById(node.left).kineticGroup;
-            backwardLeftEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
+            this.backwardLeftEdge(x, y, drawnNode.getX(), drawnNode.getY());
           }
         }
 
         if (node.right != null) {
           if (node.right instanceof TreeNode) {
-            this.drawRight(node.right, x, y, layer);
+            this.drawRight(node.right, x, y);
           } else {
             const drawnNode = this.tree.getNodeById(node.right).kineticGroup;
-            backwardRightEdge(x, y, drawnNode.getX(), drawnNode.getY(), layer);
+            this.backwardRightEdge(x, y, drawnNode.getX(), drawnNode.getY());
           }
         }
       }
@@ -266,7 +293,7 @@
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
-    drawLeft(node, parentX, parentY, layer) {
+    drawLeft(node, parentX, parentY) {
       let count;
       // checks if it has a right child, how far it extends to the right direction
       if (node.right instanceof DrawableTreeNode) {
@@ -275,10 +302,10 @@
         count = 0;
       }
       // shifts left accordingly
-      const x = parentX - tcon.distanceX - count * tcon.distanceX;
-      const y = parentY + tcon.distanceY;
+      const x = parentX - drawingConfig.distanceX - count * drawingConfig.distanceX;
+      const y = parentY + drawingConfig.distanceY;
 
-      this.drawNode(node, x, y, parentX, parentY, layer);
+      this.drawNode(node, x, y, parentX, parentY);
     }
     /**
        *  Draws a node at x, y on a given layer, making necessary right shift depending how far the structure of subtree
@@ -288,17 +315,17 @@
        *  If so, it checks the position of the children and draws an arrow pointing to the children.
        *  Otherwise, recursively draws the children, or a slash in case of empty lists.
        */
-    drawRight(node, parentX, parentY, layer) {
+    drawRight(node, parentX, parentY) {
       let count;
       if (node.left instanceof DrawableTreeNode) {
         count = 1 + this.shiftScaleCount(node.left);
       } else {
         count = 0;
       }
-      const x = parentX + tcon.distanceX + count * tcon.distanceX;
-      const y = parentY + tcon.distanceY;
+      const x = parentX + drawingConfig.distanceX + count * drawingConfig.distanceX;
+      const y = parentY + drawingConfig.distanceY;
 
-      this.drawNode(node, x, y, parentX, parentY, layer);
+      this.drawNode(node, x, y, parentX, parentY);
     }
     /**
        * Returns the distance necessary for the shift of each node, calculated recursively.
@@ -314,6 +341,209 @@
         count = count + 1 + this.shiftScaleCount(node.right);
       }
       return count;
+    }
+
+
+    /**
+     *  Connects a box to a previously known box, the arrow path is more complicated.
+     *  After coming out of the starting box, it moves to the left or the right for a short distance,
+     *  Then goes to the correct y-value and turns to reach the top of the end box.
+     *  It then directly points to the end box. All turnings are 90 degress.
+     */
+    backwardLeftEdge(x1, y1, x2, y2) {
+      // coordinates of all the turning points, execpt the first segment in the path
+      let path;
+      if (x1 > x2 && y1 >= (y2 - drawingConfig.boxHeight - 1)) {
+        // lower right to upper left
+        path = [
+          //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x2 - drawingConfig.boxSpacingX / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x2 - drawingConfig.boxSpacingX / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else if (x1 <= x2 && y1 >= (y2 - drawingConfig.boxHeight - 1)) {
+        // lower left to upper right
+        path = [
+          //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 - drawingConfig.boxSpacingX / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 - drawingConfig.boxSpacingX / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else if (x1 > x2) {
+        // upper right to lower left
+        path = [
+          //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else {
+        // upper left to lower right
+        path = [
+          //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      }
+      const endX = path[path.length - 2];
+      const endY = path[path.length - 1];
+      const arrowPath = [
+        endX - Math.cos(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endX,
+        endY,
+        endX + Math.cos(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength
+      ];
+      // pointy arrow
+      const arrow = new Kinetic.Line({
+        points: arrowPath,
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+
+      // first segment of the path
+      const pointerHead = new Kinetic.Line({
+        points: [
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxHeight / 2,
+          x1 + drawingConfig.boxWidth / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4
+        ],
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+
+      // following segments of the path
+      const pointer = new Kinetic.Line({
+        points: path,
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+      this.layer.add(pointerHead);
+      this.layer.add(pointer);
+      this.layer.add(arrow);
+      // since arrow path is complicated, move to bottom in case it covers some other box
+      pointer.moveToBottom();
+    }
+
+    /**
+     *  Same as backwardLeftEdge
+     */
+    backwardRightEdge(x1, y1, x2, y2) {
+      let path;
+      if (x1 > x2 && y1 > (y2 - drawingConfig.boxHeight - 1)) {
+        path = [
+          //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth + drawingConfig.boxSpacingX / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth + drawingConfig.boxSpacingX / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else if (x1 <= x2 && y1 > (y2 - drawingConfig.boxHeight - 1)) {
+        path = [
+          //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x2 + drawingConfig.boxWidth + drawingConfig.boxSpacingX / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x2 + drawingConfig.boxWidth + drawingConfig.boxSpacingX / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else if (x1 > x2) {
+        path = [
+          //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8 + 7,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8 + 7,
+          x2 + drawingConfig.boxWidth / 4 + drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      } else {
+        path = [
+          //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.boxSpacingY * 3 / 8,
+          x2 + drawingConfig.boxWidth / 4 - drawingConfig.arrowSpaceH,
+          y2 - drawingConfig.arrowSpace
+        ];
+      }
+      const endX = path[path.length - 2];
+      const endY = path[path.length - 1];
+      const arrowPath = [
+        endX - Math.cos(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endX,
+        endY,
+        endX + Math.cos(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+        endY - Math.sin(Math.PI / 2 - drawingConfig.arrowAngle) * drawingConfig.arrowLength
+      ];
+      const arrow = new Kinetic.Line({
+        points: arrowPath,
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+      const pointerHead = new Kinetic.Line({
+        points: [
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxHeight / 2,
+          x1 + drawingConfig.boxWidth * 3 / 4,
+          y1 + drawingConfig.boxSpacingY * 3 / 4
+        ],
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+      const pointer = new Kinetic.Line({
+        points: path,
+        strokeWidth: drawingConfig.strokeWidth,
+        stroke: 'white'
+      });
+      this.layer.add(pointerHead);
+      this.layer.add(pointer);
+      this.layer.add(arrow);
+      pointer.moveToBottom();
     }
   }
 
@@ -350,47 +580,49 @@
      */
     connectTo(x, y) {
       // starting point
-      var start = { x: tcon.boxWidth / 4, y: -tcon.arrowSpace };
+      const start = { x: drawingConfig.boxWidth / 4, y: -drawingConfig.arrowSpace };
 
       // end point
+      let end;
       if (x > 0) {
-        var end = { x: x + tcon.boxWidth / 4, y: y + tcon.boxHeight / 2 };
+        end = { x: x + drawingConfig.boxWidth / 4, y: y + drawingConfig.boxHeight / 2 };
       } else {
-        var end = { x: x + tcon.boxWidth * 3 / 4, y: y + tcon.boxHeight / 2 };
+        end = { x: x + drawingConfig.boxWidth * 3 / 4, y: y + drawingConfig.boxHeight / 2 };
       }
 
-      var pointer = new Kinetic.Line({
+      const pointer = new Kinetic.Line({
         points: [start, end],
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
       // the angle of the incoming arrow
-      var angle = Math.atan((end.y - start.y) / (end.x - start.x));
+      const angle = Math.atan((end.y - start.y) / (end.x - start.x));
 
       // left and right part of an arrow head, rotated to the calculated angle
+      let left, right;
       if (x > 0) {
-        var left = {
-          x: start.x + Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        left = {
+          x: start.x + Math.cos(angle + drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+          y: start.y + Math.sin(angle + drawingConfig.arrowAngle) * drawingConfig.arrowLength
         };
-        var right = {
-          x: start.x + Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y + Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        right = {
+          x: start.x + Math.cos(angle - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+          y: start.y + Math.sin(angle - drawingConfig.arrowAngle) * drawingConfig.arrowLength
         };
       } else {
-        var left = {
-          x: start.x - Math.cos(angle + tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle + tcon.arrowAngle) * tcon.arrowLength
+        left = {
+          x: start.x - Math.cos(angle + drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+          y: start.y - Math.sin(angle + drawingConfig.arrowAngle) * drawingConfig.arrowLength
         };
-        var right = {
-          x: start.x - Math.cos(angle - tcon.arrowAngle) * tcon.arrowLength,
-          y: start.y - Math.sin(angle - tcon.arrowAngle) * tcon.arrowLength
+        right = {
+          x: start.x - Math.cos(angle - drawingConfig.arrowAngle) * drawingConfig.arrowLength,
+          y: start.y - Math.sin(angle - drawingConfig.arrowAngle) * drawingConfig.arrowLength
         };
       }
 
-      var arrow = new Kinetic.Line({
+      const arrow = new Kinetic.Line({
         points: [left, start, right],
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white'
       });
 
@@ -417,17 +649,17 @@
 
       // outer rectangle
       const rect = new Kinetic.Rect({
-        width: tcon.boxWidth,
-        height: tcon.boxHeight,
-        strokeWidth: tcon.strokeWidth,
+        width: drawingConfig.boxWidth,
+        height: drawingConfig.boxHeight,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         fill: '#17181A',
       });
 
       // vertical bar seen in the box
       const line = new Kinetic.Line({
-        points: [tcon.boxWidth * tcon.vertBarPos, 0, tcon.boxWidth * tcon.vertBarPos, tcon.boxHeight],
-        strokeWidth: tcon.strokeWidth,
+        points: [drawingConfig.boxWidth * drawingConfig.vertBarPos, 0, drawingConfig.boxWidth * drawingConfig.vertBarPos, drawingConfig.boxHeight],
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
       });
 
@@ -443,14 +675,14 @@
             return new Kinetic.Text({
               text: textValue ?? '*' + nodeLabel,
               align: 'center',
-              width: tcon.vertBarPos * tcon.boxWidth,
-              x: isLeftNode ? 0 : tcon.vertBarPos * tcon.boxWidth,
-              y: Math.floor((tcon.boxHeight - 1.2 * 12) / 2),
+              width: drawingConfig.vertBarPos * drawingConfig.boxWidth,
+              x: isLeftNode ? 0 : drawingConfig.vertBarPos * drawingConfig.boxWidth,
+              y: Math.floor((drawingConfig.boxHeight - 1.2 * 12) / 2),
               fontStyle: textValue === undefined ? 'italic' : 'normal',
               fill: 'white'
             });
           } else if (is_null(nodeValue)) {
-            return new NodeEmpty_list(isLeftNode ? -tcon.boxWidth * tcon.vertBarPos: 0, 0).getRaw();
+            return new NodeEmpty_list(isLeftNode ? -drawingConfig.boxWidth * drawingConfig.vertBarPos: 0, 0).getRaw();
           }
         }
       }
@@ -476,38 +708,38 @@
       super();
       this.image = new Kinetic.Group();
 
-      var leftCircle = new Kinetic.Circle({
+      const leftCircle = new Kinetic.Circle({
         radius: 15,
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
-        x: tcon.boxWidth / 2 - 20,
-        y: tcon.boxHeight / 2
+        x: drawingConfig.boxWidth / 2 - 20,
+        y: drawingConfig.boxHeight / 2
       });
 
-      var rightCircle = new Kinetic.Circle({
+      const rightCircle = new Kinetic.Circle({
         radius: 15,
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
-        x: tcon.boxWidth / 2 + 10,
-        y: tcon.boxHeight / 2
+        x: drawingConfig.boxWidth / 2 + 10,
+        y: drawingConfig.boxHeight / 2
       });
 
-      var leftDot = new Kinetic.Circle({
+      const leftDot = new Kinetic.Circle({
         radius: 4,
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         fill: 'white',
-        x: tcon.boxWidth / 2 - 20,
-        y: tcon.boxHeight / 2
+        x: drawingConfig.boxWidth / 2 - 20,
+        y: drawingConfig.boxHeight / 2
       });
 
-      var rightDot = new Kinetic.Circle({
+      const rightDot = new Kinetic.Circle({
         radius: 4,
-        strokeWidth: tcon.strokeWidth,
+        strokeWidth: drawingConfig.strokeWidth,
         stroke: 'white',
         fill: 'white',
-        x: tcon.boxWidth / 2 + 10,
-        y: tcon.boxHeight / 2
+        x: drawingConfig.boxWidth / 2 + 10,
+        y: drawingConfig.boxHeight / 2
       });
 
       this.image.add(leftCircle);
@@ -518,228 +750,28 @@
   }
 
   /**
-   *  Connects a box to a previously known box, the arrow path is more complicated.
-   *  After coming out of the starting box, it moves to the left or the right for a short distance,
-   *  Then goes to the correct y-value and turns to reach the top of the end box.
-   *  It then directly points to the end box. All turnings are 90 degress.
-   */
-  function backwardLeftEdge(x1, y1, x2, y2, layer) {
-    // coordinates of all the turning points, execpt the first segment in the path
-    if (x1 > x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
-      // lower right to upper left
-      var path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x2 - tcon.boxSpacingX / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x2 - tcon.boxSpacingX / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else if (x1 <= x2 && y1 >= (y2 - tcon.boxHeight - 1)) {
-      // lower left to upper right
-      var path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 - tcon.boxSpacingX / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 - tcon.boxSpacingX / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else if (x1 > x2) {
-      // upper right to lower left
-      var path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else {
-      // upper left to lower right
-      var path = [
-        //x1 + tcon.boxWidth/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    }
-    var endX = path[path.length - 2];
-    var endY = path[path.length - 1];
-    var arrowPath = [
-      endX - Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endX,
-      endY,
-      endX + Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength
-    ];
-    // pointy arrow
-    var arrow = new Kinetic.Line({
-      points: arrowPath,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-
-    // first segment of the path
-    var pointerHead = new Kinetic.Line({
-      points: [
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxHeight / 2,
-        x1 + tcon.boxWidth / 4,
-        y1 + tcon.boxSpacingY * 3 / 4
-      ],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-
-    // following segments of the path
-    var pointer = new Kinetic.Line({
-      points: path,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-    layer.add(pointerHead);
-    layer.add(pointer);
-    layer.add(arrow);
-    // since arrow path is complicated, move to bottom in case it covers some other box
-    pointer.moveToBottom();
-  }
-
-  /**
-   *  Same as backwardLeftEdge
-   */
-  function backwardRightEdge(x1, y1, x2, y2, layer) {
-    if (x1 > x2 && y1 > (y2 - tcon.boxHeight - 1)) {
-      var path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth + tcon.boxSpacingX / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth + tcon.boxSpacingX / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else if (x1 <= x2 && y1 > (y2 - tcon.boxHeight - 1)) {
-      var path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x2 + tcon.boxWidth + tcon.boxSpacingX / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x2 + tcon.boxWidth + tcon.boxSpacingX / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else if (x1 > x2) {
-      var path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth * 3 / 4,
-        y2 - tcon.boxSpacingY * 3 / 8 + 7,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8 + 7,
-        x2 + tcon.boxWidth / 4 + tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    } else {
-      var path = [
-        //x1 + tcon.boxWidth*3/4, y1 + tcon.boxHeight/2,
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxSpacingY * 3 / 4,
-        x1 + tcon.boxWidth * 3 / 4,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.boxSpacingY * 3 / 8,
-        x2 + tcon.boxWidth / 4 - tcon.arrowSpaceH,
-        y2 - tcon.arrowSpace
-      ];
-    }
-    var endX = path[path.length - 2];
-    var endY = path[path.length - 1];
-    var arrowPath = [
-      endX - Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endX,
-      endY,
-      endX + Math.cos(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength,
-      endY - Math.sin(Math.PI / 2 - tcon.arrowAngle) * tcon.arrowLength
-    ];
-    var arrow = new Kinetic.Line({
-      points: arrowPath,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-    var pointerHead = new Kinetic.Line({
-      points: [
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxHeight / 2,
-        x1 + tcon.boxWidth * 3 / 4,
-        y1 + tcon.boxSpacingY * 3 / 4
-      ],
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-    var pointer = new Kinetic.Line({
-      points: path,
-      strokeWidth: tcon.strokeWidth,
-      stroke: 'white'
-    });
-    layer.add(pointerHead);
-    layer.add(pointer);
-    layer.add(arrow);
-    pointer.moveToBottom();
-  }
-
-  /**
    *  Complements a NodeBox when the tail is an empty box.
    */
   class NodeEmpty_list {
     constructor(x, y) {
-      var null_box = new Kinetic.Line({
+      const null_box = new Kinetic.Line({
         x: x,
         y: y,
         points: [
-          tcon.boxWidth * tcon.vertBarPos,
-          tcon.boxHeight,
-          tcon.boxWidth * tcon.vertBarPos,
+          drawingConfig.boxWidth * drawingConfig.vertBarPos,
+          drawingConfig.boxHeight,
+          drawingConfig.boxWidth * drawingConfig.vertBarPos,
           0,
-          tcon.boxWidth,
+          drawingConfig.boxWidth,
           0,
-          tcon.boxWidth * tcon.vertBarPos,
-          tcon.boxHeight,
-          tcon.boxWidth,
-          tcon.boxHeight,
-          tcon.boxWidth,
+          drawingConfig.boxWidth * drawingConfig.vertBarPos,
+          drawingConfig.boxHeight,
+          drawingConfig.boxWidth,
+          drawingConfig.boxHeight,
+          drawingConfig.boxWidth,
           0
         ],
-        strokeWidth: tcon.strokeWidth - 1,
+        strokeWidth: drawingConfig.strokeWidth - 1,
         stroke: 'white'
       });
       this.image = null_box;
@@ -756,11 +788,11 @@
   }
 
   // A list of layers drawn, used for history
-  var layerList = [];
+  let layerList = [];
   // ID of the current layer shown. Avoid changing this value externally as layer is not updated.
-  var currentListVisualizer = -1;
+  let currentListVisualizer = -1;
   // label numbers when the data cannot be fit into the box
-  var nodeLabel = 0;
+  let nodeLabel = 0;
   /**
    *  For student use. Draws a list by converting it into a tree object, attempts to draw on the canvas,
    *  Then shift it to the left end.
@@ -794,21 +826,22 @@
     fnNodeList = [];
     nodeLabel = 0;
     // hides all other layers
-    for (var i = 0; i < layerList.length; i++) {
+    for (let i = 0; i < layerList.length; i++) {
       layerList[i].hide();
     }
     // creates a new layer and add to the stage
-    var layer = new Kinetic.Layer();
+    const layer = new Kinetic.Layer();
     stage.add(layer);
     layerList.push(layer);
 
     if (!is_pair(xs) && !is_function(xs)) {
+      let display;
       if (is_null(xs)) {
-        var display = "null";
+        display = "null";
       } else {
-        var display = toText(xs, true);
+        display = toText(xs, true);
       }
-      var txt = new Kinetic.Text({
+      const text = new Kinetic.Text({
         text: display,
         align: 'center',
         x: 500,
@@ -817,11 +850,11 @@
         fontSize: 20,
         fill: 'white'
       });
-      layer.add(txt);
+      layer.add(text);
     } else if (is_function(xs)) {
       new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
     } else {
-      Tree.fromSourceList(xs).getDrawer().draw(500, 50, layer);
+      Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
     }
 
     // adjust the position
@@ -836,7 +869,7 @@
    *  Shows the layer with a given ID while hiding the others.
    */
   function showListVisualizer(id) {
-    for (var i = 0; i < layerList.length; i++) {
+    for (let i = 0; i < layerList.length; i++) {
       layerList[i].hide();
     }
     if (layerList[id]) {
@@ -847,7 +880,7 @@
 
   function clearListVisualizer() {
     currentListVisualizer = -1;
-    for (var i = 0; i < layerList.length; i++) {
+    for (let i = 0; i < layerList.length; i++) {
       layerList[i].hide();
     }
     layerList = [];
