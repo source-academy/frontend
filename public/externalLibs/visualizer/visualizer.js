@@ -172,13 +172,13 @@
     }
 
     drawOnLayer(x, y, parentX, parentY, layer) {
-      const left_data = this.left instanceof DataTreeNode ? this.left : null;
-      const right_data = this.right instanceof DataTreeNode ? this.right : null;
+      const leftData = this.left instanceof DataTreeNode ? this.left : null;
+      const rightData = this.right instanceof DataTreeNode ? this.right : null;
 
-      const box = new NodeBox(left_data, right_data);
+      const box = new PairDrawable(leftData, rightData);
       const node = new Kinetic.Group();
 
-      box.put(node);
+      box.addTo(node);
 
       // no pointer is drawn to root
       if (parentX !== x) {
@@ -202,10 +202,10 @@
     }
 
     drawOnLayer(x, y, parentX, parentY, layer) {
-      const circle = new NodeCircles();
+      const circle = new FunctionDrawable();
       const node = new Kinetic.Group();
 
-      circle.put(node);
+      circle.addTo(node);
 
       if (parentX !== x) {
         circle.connectTo(parentX - x, parentY - y);
@@ -575,6 +575,14 @@
   }
 
   class NodeDrawable {
+    constructor() {
+      this.image = null;
+    }
+
+    getImage() {
+      return this.image;
+    }
+
     /**
      *  Connects a NodeDrawable to its parent at x, y by using line segments with arrow head
      */
@@ -629,19 +637,21 @@
       this.image.getParent().add(pointer);
       this.image.getParent().add(arrow);
     }
+
     /**
-       *  equivalent to container.add(this.image)
-       */
-    put(container) {
+     * 
+     * @param {Kinetic.Group} container The Kinetic Group
+     */
+    addTo(container) {
       container.add(this.image);
     }
   }
 
   /**
-   *  Creates a Kinetic.Group that is used to represent a node in a tree. It takes up to two data items.
-   *  The data items are simply converted with toString()
+   *  Represents a pair in a tree. It takes up to two data items.
+   *  The data items are simply converted with toString().
    */
-  class NodeBox extends NodeDrawable {
+  class PairDrawable extends NodeDrawable {
     constructor(leftNode, rightNode) {
       super();
       // this.image is the inner content
@@ -682,11 +692,11 @@
               fill: 'white'
             });
           } else if (is_null(nodeValue)) {
-            return new NodeEmpty_list(isLeftNode ? -drawingConfig.boxWidth * drawingConfig.vertBarPos: 0, 0).getRaw();
+            return new NullDrawable(isLeftNode ? -drawingConfig.boxWidth * drawingConfig.vertBarPos : 0, 0).getImage();
           }
         }
-      }
-      
+      };
+
       this.image.add(rect);
       this.image.add(line);
 
@@ -703,7 +713,7 @@
   /**
   *  Creates a Kinetic.Group used to represent a function object. Similar to NodeBox().
   */
-  class NodeCircles extends NodeDrawable {
+  class FunctionDrawable extends NodeDrawable {
     constructor() {
       super();
       this.image = new Kinetic.Group();
@@ -752,9 +762,9 @@
   /**
    *  Complements a NodeBox when the tail is an empty box.
    */
-  class NodeEmpty_list {
+  class NullDrawable extends NodeDrawable {
     constructor(x, y) {
-      const null_box = new Kinetic.Line({
+      this.image = new Kinetic.Line({
         x: x,
         y: y,
         points: [
@@ -774,16 +784,6 @@
         strokeWidth: drawingConfig.strokeWidth - 1,
         stroke: 'white'
       });
-      this.image = null_box;
-    }
-    /**
-       *  Adds it to a container
-       */
-    put(container) {
-      container.add(this.image);
-    }
-    getRaw() {
-      return this.image;
     }
   }
 
@@ -834,15 +834,13 @@
     stage.add(layer);
     layerList.push(layer);
 
-    if (!is_pair(xs) && !is_function(xs)) {
-      let display;
-      if (is_null(xs)) {
-        display = "null";
-      } else {
-        display = toText(xs, true);
-      }
+    if (is_pair(xs)) {
+      Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
+    } else if (is_function(xs)) {
+      new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
+    } else {
       const text = new Kinetic.Text({
-        text: display,
+        text: toText(xs, true),
         align: 'center',
         x: 500,
         y: 50,
@@ -851,10 +849,6 @@
         fill: 'white'
       });
       layer.add(text);
-    } else if (is_function(xs)) {
-      new FunctionTreeNode().drawOnLayer(50, 50, 50, 50, layer);
-    } else {
-      Tree.fromSourceTree(xs).beginDrawingOn(layer).draw(500, 50);
     }
 
     // adjust the position
