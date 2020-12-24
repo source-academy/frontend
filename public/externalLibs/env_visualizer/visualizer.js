@@ -19,7 +19,6 @@
   const WHITE = "#FFFFFF";
   const GREEN = "#00FF00";
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
-  const CANVAS_PADDING = 75;
 
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
@@ -28,12 +27,12 @@
 
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
-  const DRAWING_LEFT_PADDING = 70; // left padding for entire drawing
+  const DRAWING_PADDING = 70; // side padding for entire drawing
   const FRAME_HEIGHT_LINE = 55; // height in px of each line of text in a frame;
   const FRAME_HEIGHT_PADDING = 20; // height in px to pad each frame with
   const FRAME_WIDTH_CHAR = 8; // width in px of each text character in a frame;
   const FRAME_WIDTH_PADDING = 50; // width in px to pad each frame with;
-  const FRAME_SPACING = 100; // spacing between horizontally adjacent frameObjects
+  const FRAME_SPACING = 20; // spacing between horizontally adjacent frameObjects
   const LEVEL_SPACING = 60; // spacing between vertical frame levels
   const OBJECT_FRAME_RIGHT_SPACING = 50; // space to right frame border
   const OBJECT_FRAME_TOP_SPACING = 35; // perpendicular distance to top border
@@ -179,12 +178,12 @@
     }
 
     // ENABLE IN PRODUCTION
-    // Hides the default text
-    (document.getElementById('env-visualizer-default-text')).hidden = true;
+    // // Hides the default text
+    // (document.getElementById('env-visualizer-default-text')).hidden = true;
 
-    // Blink icon
-    const icon = document.getElementById('env_visualiser-icon');
-    icon.classList.add('side-content-tab-alert');
+    // // Blink icon
+    // const icon = document.getElementById('env_visualiser-icon');
+    // icon.classList.add('side-content-tab-alert');
 
     // reset current drawing
     // reset all objects array
@@ -332,7 +331,7 @@
         // update total number of newFrameObjects in the current level
         if (levels[frameObject.level]) {
           levels[frameObject.level].count++;
-          levels[frameObject.level].frameObjects.push(frameObject);
+          if (!isEmptyFrame(frameObject)) levels[frameObject.level].frameObjects.push(frameObject);
         } else {
           levels[frameObject.level] = { count: 1 };
           levels[frameObject.level].frameObjects = [frameObject];
@@ -521,7 +520,7 @@
     positionItems(frameObjects);
 
     drawingWidth = Math.max(
-      getDrawingWidth(levels) + CANVAS_PADDING * 2,
+      getDrawingWidth(levels) + DRAWING_PADDING * 2,
       300
     );
 
@@ -540,7 +539,7 @@
         drawSceneObjects();
       } catch (e) {
         // DISABLE IN PRODUCTION
-        // console.error(drawSceneObjects, e.message);
+        console.error(drawSceneObjects, e.message);
       }
     });
 
@@ -672,6 +671,8 @@
         drawSceneFnObjects();
       });
     }
+    console.log('frameObjects are:', frameObjects);
+    console.log('fnObjects are:', fnObjects);
   }
 
   function drawBackground() {
@@ -1301,7 +1302,7 @@
     /**
      * Calculate x- and y-coordinates for each frame
      */
-    // const drawingWidth = getDrawingWidth(levels) + 2 * DRAWING_LEFT_PADDING;
+    // const drawingWidth = getDrawingWidth(levels) + 2 * DRAWING_PADDING;
     frameObjects.forEach(function (frameObject) {
       let currLevel = frameObject.level;
 
@@ -1330,12 +1331,12 @@
       level.frameObjects.forEach(function (frameObject) {
         const frameIndex = level.frameObjects.indexOf(frameObject);
         if (frameIndex > 0) {
-          frameObject.x = DRAWING_LEFT_PADDING;
+          frameObject.x = DRAWING_PADDING;
           for (let i = 0; i < frameIndex; i++) {
-            frameObject.x += frameWidthArray[i] + 20;
+            frameObject.x += frameWidthArray[i] + FRAME_SPACING;
           }
         } else {
-          frameObject.x = DRAWING_LEFT_PADDING;
+          frameObject.x = DRAWING_PADDING;
         }
       });
     }
