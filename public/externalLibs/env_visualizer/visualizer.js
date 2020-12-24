@@ -178,12 +178,12 @@
     }
 
     // ENABLE IN PRODUCTION
-    // // Hides the default text
-    // (document.getElementById('env-visualizer-default-text')).hidden = true;
+    // Hides the default text
+    (document.getElementById('env-visualizer-default-text')).hidden = true;
 
-    // // Blink icon
-    // const icon = document.getElementById('env_visualiser-icon');
-    // icon.classList.add('side-content-tab-alert');
+    // Blink icon
+    const icon = document.getElementById('env_visualiser-icon');
+    icon.classList.add('side-content-tab-alert');
 
     // reset current drawing
     // reset all objects array
@@ -539,7 +539,7 @@
         drawSceneObjects();
       } catch (e) {
         // DISABLE IN PRODUCTION
-        console.error(drawSceneObjects, e.message);
+        // console.error(drawSceneObjects, e.message);
       }
     });
 
@@ -671,8 +671,6 @@
         drawSceneFnObjects();
       });
     }
-    console.log('frameObjects are:', frameObjects);
-    console.log('fnObjects are:', fnObjects);
   }
 
   function drawBackground() {
