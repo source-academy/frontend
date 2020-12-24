@@ -539,7 +539,8 @@
       try {
         drawSceneObjects();
       } catch (e) {
-        console.error(drawSceneObjects, e.message);
+        // DISABLE IN PRODUCTION
+        // console.error(drawSceneObjects, e.message);
       }
     });
 
