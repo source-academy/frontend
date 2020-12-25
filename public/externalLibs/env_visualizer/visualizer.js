@@ -76,7 +76,8 @@
     frameObjectLayer = new Concrete.Layer(),
     arrowObjectLayer = new Concrete.Layer(),
     textObjectLayer = new Concrete.Layer(),
-    pairObjectLayer = new Concrete.Layer();
+    pairObjectLayer = new Concrete.Layer(),
+    tooltipLayer = new Concrete.Layer();
 
   // initialise the layers here
   const LAYERS = [
@@ -87,6 +88,7 @@
     pairObjectLayer,
     arrowObjectLayer,
     textObjectLayer,
+    tooltipLayer,
   ];
 
   let fnObjects = [],
@@ -820,7 +822,7 @@
   // Function Scene
   // --------------------------------------------------.
   function drawSceneFnObjects() {
-    let isSelected = false;
+    let isSelected = false; // check if any fnObject is selected
     fnObjectLayer.scene.clear();
     for (let i = 0; i < fnObjects.length; i++) {
       const fnObjParent = fnObjects[i].parent;
@@ -857,6 +859,10 @@
     const y = fnObject.y;
     context.save();
 
+    const color = !fnObject.hovered && !fnObject.selected ? SA_WHITE : GREEN;
+    context.fillStyle = color;
+    context.strokeStyle = color;
+
     // inner filled circle
     context.beginPath();
     context.arc(
@@ -867,10 +873,9 @@
       Math.PI * 2,
       false
     );
-    context.fillStyle = SA_WHITE;
     context.fill();
 
-    context.moveTo(x, y);
+    context.beginPath();
     context.arc(
       x - FNOBJECT_RADIUS,
       y,
@@ -879,14 +884,34 @@
       Math.PI * 2,
       false
     );
-    context.strokeStyle =
-      !fnObject.hovered && !fnObject.selected ? SA_WHITE : GREEN;
     context.stroke();
 
     context.beginPath();
+    context.arc(
+      x + FNOBJECT_RADIUS,
+      y,
+      INNER_RADIUS,
+      0,
+      Math.PI * 2,
+      false
+    );
+    context.fill();
+
+    context.beginPath();
+    context.arc(
+      x + FNOBJECT_RADIUS,
+      y,
+      FNOBJECT_RADIUS,
+      0,
+      Math.PI * 2,
+      false
+    );
+    context.stroke();
+
     if (fnObject.selected) {
       // TO-DO: refactor this
       // if (true) { //debug
+      context.save();
       let fnString = fnObject.fnString;
       let params;
       let body;
@@ -906,15 +931,18 @@
       context.font = FONT_SETTING;
       context.fillStyle = GREEN;
 
-      // TO-DO: refactor this part, quite messy
+      const marginLeft = 50,
+        lineHeight = 20;
+
+      // TO-DO: refactor this part, quite messy, consider entire text box as a whole, don't split them
       body = body.split("\n");
       context.fillText(
         `params: ${truncateString(context, params, TEXT_BOX_WIDTH).result
         }`,
-        x + 50,
+        x + marginLeft,
         y
       );
-      context.fillText("body:", x + 50, y + 20);
+      context.fillText("body:", x + marginLeft, y + lineHeight);
       let i = 0;
       let j = 0; // indicates the row
       while (j < 5 && i < body.length) {
@@ -922,8 +950,8 @@
           // dont fill text if it is a debugger line
           context.fillText(
             truncateString(context, body[i], TEXT_BOX_WIDTH).result,
-            x + 100,
-            y + 20 * (j + 1)
+            x + marginLeft * 2,
+            y + lineHeight * (j + 1)
           );
           j++;
         }
@@ -932,27 +960,9 @@
       if (i < body.length) {
         context.fillText("...", x + 120, y + 120);
       }
+      context.restore();
     }
-    context.moveTo(x + FNOBJECT_RADIUS, y);
-    context.arc(
-      x + FNOBJECT_RADIUS,
-      y,
-      INNER_RADIUS,
-      0,
-      Math.PI * 2,
-      false
-    );
-    context.fill();
-    context.moveTo(x + 2 * FNOBJECT_RADIUS, y);
-    context.arc(
-      x + FNOBJECT_RADIUS,
-      y,
-      FNOBJECT_RADIUS,
-      0,
-      Math.PI * 2,
-      false
-    );
-    context.stroke();
+
     context.restore();
   }
 
