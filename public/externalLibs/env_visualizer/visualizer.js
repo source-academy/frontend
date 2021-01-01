@@ -20,10 +20,12 @@
   const GREEN = "#00FF00";
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
 
+  const productionEnv = true;
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
   const TEXT_PADDING = 5;
   const TEXT_BOX_WIDTH = 200; // eg. width of function body text
+  const ARROW_GAP = 5;
 
   const FNOBJECT_RADIUS = 12; // radius of function object circle
   const DATA_OBJECT_SIDE = 24; // length of data object triangle
@@ -46,6 +48,7 @@
   // DATA STRUCTURE DIMENSIONS
   const DATA_UNIT_WIDTH = 80;
   const DATA_UNIT_HEIGHT = 40;
+
   const DRAW_ON_STARTUP = [
     drawBackground,
     drawSceneFrameObjects,
@@ -64,7 +67,8 @@
     drawHitArrowObjects,
   ];
 
-  let alreadyListened = false;
+  let alreadyListened = false, // check if event listener has already been attached to the container
+    alreadyInit = false; // check if draw_env has already been initialised
 
   /**
    * Create a different layer for each type of element. May be more useful
@@ -103,7 +107,8 @@
     dataObjectWrappers = [],
     levels = {},
     builtinsToDraw = [], // Initialise list of built-in functions to ignore (i.e. not draw)
-    builtins = [];
+    builtins = [],
+    arrowOverlapDetectors = { x: [], y: [] };
 
   //append -Object for objects that need to be drawn on scene (for easier reference)
   let drawnDataObjects = [],
@@ -143,9 +148,51 @@
   // --------------------------------------------------.
   // main function to be exported
   function draw_env(context) {
+
+    if (productionEnv) { // ENABLE IN PRODUCTION
+      // Hides the default text
+      (document.getElementById('env-visualizer-default-text')).hidden = true;
+
+      // Blink icon
+      const icon = document.getElementById('env_visualiser-icon');
+      icon.classList.add('side-content-tab-alert');
+    }
+
+    // reset current drawing
+    viewport.layers.forEach(function (layer) {
+      //clear layer by layer
+      layer.scene.clear();
+    });
+
+    // add layers that are configured above to the viewport
+    if (!alreadyInit) LAYERS.forEach((layer) => viewport.add(layer));
+
+    // TO-DO: refactor this, use for loop to reset
+    // reset all draw objects
+    fnObjects = [];
+    dataObjects = [];
+    frameObjects = [];
+    textObjects = [];
+    arrowObjects = [];
+    pairObjects = [];
+
+    levels = {};
+    dataObjectWrappers = [];
+    builtinsToDraw = [];
+    builtins = [];
+    drawnDataObjects = [];
+    cycleDetector = [];
+    arrowOverlapDetectors = { x: [], y: [] };
+
+    dataObjectKey = Math.pow(2, 24) - 1;
+    fnObjectKey = Math.pow(2, 22) - 1;
+    arrowObjectKey = Math.pow(2, 20) - 1;
+    textObjectKey = Math.pow(2, 18) - 1;
+    pairObjectKey = Math.pow(2, 16) - 1;
+    envKeyCounter = 0;
+
     // add built-in functions to list of builtins
     const contextEnvs = context.context.context.runtime.environments;
-
     const allEnvs = [];
 
     // process backwards so that global env comes first
@@ -178,34 +225,6 @@
     for (const i in externalSymbols) {
       builtins.push(externalSymbols[i]);
     }
-
-    // ENABLE IN PRODUCTION
-    // Hides the default text
-    (document.getElementById('env-visualizer-default-text')).hidden = true;
-
-    // Blink icon
-    const icon = document.getElementById('env_visualiser-icon');
-    icon.classList.add('side-content-tab-alert');
-
-    // reset current drawing
-    // reset all objects array
-    fnObjects = [];
-    dataObjects = [];
-    dataObjectWrappers = [];
-    levels = {};
-    builtinsToDraw = [];
-    textObjects = [];
-    arrowObjects = [];
-    pairObjects = [];
-    envKeyCounter = 0;
-
-    viewport.layers.forEach(function (layer) {
-      //clear layer by layer
-      layer.scene.clear();
-    });
-
-    // add layers that are configured above to the viewport
-    LAYERS.forEach((layer) => viewport.add(layer));
 
     // parse input from interpreter
     function parseInput(accFrames, environments) {
@@ -541,7 +560,9 @@
         drawSceneObjects();
       } catch (e) {
         // DISABLE IN PRODUCTION
-        // console.error(drawSceneObjects, e.message);
+        if (!productionEnv) {
+          console.error(drawSceneObjects, e.message);
+        }
       }
     });
 
@@ -673,6 +694,8 @@
         drawSceneFnObjects();
       });
     }
+
+    alreadyInit = true;
   }
 
   function drawBackground() {
@@ -916,11 +939,11 @@
       let params;
       let body;
       //filter out the params and body
-      if (fnObject.node.type === "FunctionDeclaration") {
+      if (fnObject.node.type === "FunctionDeclaration" || fnString.substring(0, 8) === "function") {
         params = fnString.substring(
           fnString.indexOf("("),
-          fnString.indexOf("{") - 1
-        );
+          fnString.indexOf("{")
+        ).trim();
         body = fnString.substring(fnString.indexOf("{"));
       } else {
         params = fnString.substring(0, fnString.indexOf("=") - 1);
@@ -1960,54 +1983,41 @@
       );
     } else {
       /**
-       * fnObject belongs to different frame.
-       * Three "offset" factors are used: startOffset, the index position of
-       * the source variable in the starting frame; fnOffset, the position
-       * of the target fnObject in the destination frame; and frameOffset, the
-       * position of the frame within its level. Offsetting the line
-       * by these factors prevents overlaps between arrowObjects that are pointing to
-       * different objects.
-       */
-      const startOffset = findElementPosition(fnObject, frameObject);
-      const fnOffset = findElementPosition(fnObject, fnObject.parent);
-      const frameOffset = findFrameIndexInLevel(frameObject);
-      const x0 = frameObject.x + name.length * 8 + 22,
-        y0 =
-          frameObject.y +
-          findElementNamePosition(name, frameObject) *
-          FRAME_HEIGHT_LINE +
-          35;
-      const xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
-        x1 = frameObject.x + frameObject.width + 10 + frameOffset * 20,
-        y1 = y0;
-      const x2 = x1,
-        y2 = frameObject.y - 20 + frameOffset * 5;
-      let x3 = xf + 12 + fnOffset * 7,
-        y3 = y2;
-      /**
        * From this position, the arrow needs to move upward to reach the
        * target fnObject. Make sure it does not intersect any other object
        * when doing so, or adjust its position if it does.
        * This currently only works for the frame level directly above the origin
        * frame, which suffices in most cases.
-       * TO-DO: Improve implementation to handle any number of frame levels.
+       * TO-DO: Improve implementation to handle any number of frame levels. (see issue sample 2, should form 2 stair steps)
        */
 
+      const frameOffset = findFrameIndexInLevel(frameObject); // TO-DO: remove this
+      let x0 = frameObject.x + name.length * 8 + 22,
+        y0 = frameObject.y +
+          findElementNamePosition(name, frameObject) *
+          FRAME_HEIGHT_LINE +
+          35,
+        xf = fnObject.x + FNOBJECT_RADIUS * 2 + 3,
+        x1 = frameObject.x + frameObject.width + 10 + frameOffset * 20,
+        y1 = y0,
+        x2 = x1,
+        y2 = frameObject.y - 20 + frameOffset * 5,
+        x3 = xf + 15,
+        y3 = y2,
+        x4 = x3,
+        y4 = yf;
+
+      // TO-DO: why is there a need for this?
       levels[frameObject.level - 1].frameObjects.forEach(function (
         frameObject
       ) {
-        const leftBound = frameObject.x;
-        let rightBound = frameObject.x + frameObject.width;
-        // if (frame.fnObjects.length !== 0) {
-        // rightBound += 84;
-        // }
+        const leftBound = frameObject.x,
+          rightBound = frameObject.x + frameObject.width;
         if (x3 > leftBound && x3 < rightBound) {
           // overlap
-          x3 = rightBound + 10 + fnOffset * 7;
+          x3 = rightBound + 10;
         }
       });
-      const x4 = x3,
-        y4 = yf;
 
       arrowObjects.push(
         initialiseArrowObject([
@@ -2121,7 +2131,10 @@
           initialiseArrowNode(x2, y2),
           initialiseArrowNode(x3, y3),
         ],
-        WHITE
+        {
+          color: WHITE,
+          detectOverlap: false,
+        }
       )
     );
   }
@@ -2487,8 +2500,8 @@
     } else if (typeof wrapperData[1] === "function") {
       // draw arrow layer
       if (
-        startX + (3 / 4) * DATA_UNIT_WIDTH <=
-        wrapperData[1].x + 4 * FNOBJECT_RADIUS
+        startX + (3 / 4) * DATA_UNIT_WIDTH <= // middle of pair box
+        wrapperData[1].x + 4 * FNOBJECT_RADIUS // right bound of fnobject
       ) {
         const x0 = startX + (3 / 4) * DATA_UNIT_WIDTH,
           y0 = startY + DATA_UNIT_HEIGHT / 2,
@@ -3024,7 +3037,7 @@
     context.font = FONT_SETTING;
     context.fillText("...", x0 + 50, y0 + DATA_UNIT_HEIGHT / 2);
     context.strokeStyle = SA_WHITE;
-    context.lineWidth = 2;
+    // context.lineWidth = 2;
     context.stroke();
     context.restore();
   }
@@ -3096,14 +3109,85 @@
     }
   }
 
-  function initialiseArrowObject(nodes, color = SA_WHITE) {
+  function checkArrowNodes(nodes) {
+    //return new nodes with no overlapped intermediate lines
+    if (nodes.length === 3) return nodes;
+    const newNodes = [];
+    newNodes[0] = nodes[0];
+    newNodes[nodes.length - 1] = nodes[nodes.length - 1];
+
+    function checkRange(x, range) {
+      // check if x is in the range
+      if (x < range[0]) {
+        return x >= range[1];
+      } else if (x === range[0]) {
+        return true;
+      } else {
+        return x <= range[1];
+      }
+    }
+
+    function checkOverlap(arrowOverlapDetector, s, t0, t1) {
+      // check if line with endpoints (s,t0) and (s,t1) (or (t0, s) and (t1, s)) is already within the arrowOverlapDetector
+      for (let i = 0; i < arrowOverlapDetector.length; i++) {
+        if (arrowOverlapDetector[i].coord === s && (checkRange(t0, arrowOverlapDetector[i].range) || checkRange(t1, arrowOverlapDetector[i].range))) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    for (let i = 1; i < nodes.length - 2; i++) {
+      // loop each intermediate line
+      const currentNode = nodes[i],
+        nextNode = nodes[i + 1];
+      if (currentNode.x === nextNode.x) { // vertical
+        if (checkOverlap(arrowOverlapDetectors.x, currentNode.x, currentNode.y, nextNode.y)) { //overlapping detected
+          let newX = currentNode.x + ARROW_GAP;
+          while (checkOverlap(arrowOverlapDetectors.x, newX, currentNode.y, nextNode.y)) {
+            newX = newX + ARROW_GAP;
+          }
+          arrowOverlapDetectors.x.push({ coord: newX, range: [currentNode.y, nextNode.y] });
+
+          newNodes[i] = { ...(newNodes[i] ? newNodes[i] : currentNode), x: newX };
+          newNodes[i + 1] = { ...nextNode, x: newX };
+        } else {
+          arrowOverlapDetectors.x.push({ coord: currentNode.x, range: [currentNode.y, nextNode.y] });
+          if (!newNodes[i]) newNodes[i] = currentNode;
+          newNodes[i + 1] = nextNode;
+        }
+      } else if (currentNode.y === nextNode.y) { // horizontal
+        if (checkOverlap(arrowOverlapDetectors.y, currentNode.y, currentNode.x, nextNode.x)) { //overlapping detected
+          let newY = currentNode.y + ARROW_GAP;
+          while (checkOverlap(arrowOverlapDetectors.y, newY, currentNode.x, nextNode.x)) {
+            newY = newY + ARROW_GAP;
+          }
+          arrowOverlapDetectors.y.push({ coord: newY, range: [currentNode.x, nextNode.x] });
+
+          newNodes[i] = { ...(newNodes[i] ? newNodes[i] : currentNode), y: newY };
+          newNodes[i + 1] = { ...nextNode, y: newY };
+        } else {
+          arrowOverlapDetectors.y.push({ coord: currentNode.y, range: [currentNode.x, nextNode.x] });
+          if (!newNodes[i]) newNodes[i] = currentNode;
+          newNodes[i + 1] = nextNode;
+        }
+      } else { // diagonal
+        if (!newNodes[i]) newNodes[i] = currentNode;
+        newNodes[i + 1] = nextNode;
+      }
+    }
+    return newNodes;
+  }
+
+  function initialiseArrowObject(nodes, options = {}) {
+    const { color, detectOverlap } = options;
     // TO-DO: consider adding layer
     const arrowObject = {
       key: arrowObjectKey,
       hovered: false,
       selected: false,
-      color,
-      nodes,
+      color: color ? color : SA_WHITE,
+      nodes: detectOverlap === false ? nodes : checkArrowNodes(nodes),
     };
     arrowObjectKey--;
     return arrowObject;
