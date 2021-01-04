@@ -16,6 +16,7 @@ export enum ExternalLibraryName {
   BINARYTREES = 'BINARYTREES',
   PIXNFLIX = 'PIXNFLIX',
   MACHINELEARNING = 'MACHINELEARNING',
+  EV3 = 'EV3', // Remote execution device library
   ALL = 'ALL'
 }
 

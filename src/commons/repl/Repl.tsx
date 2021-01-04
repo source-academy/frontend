@@ -18,6 +18,7 @@ type StateProps = {
   output: InterpreterOutput[];
   replValue: string;
   hidden?: boolean;
+  inputHidden?: boolean;
   usingSubst?: boolean;
   sourceChapter: number;
   sourceVariant: Variant;
@@ -44,21 +45,21 @@ class Repl extends React.PureComponent<ReplProps, {}> {
       <div className="Repl" style={{ display: this.props.hidden ? 'none' : undefined }}>
         <div className="repl-output-parent">
           {cards}
-          <HotKeys
-            className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
-            handlers={handlers}
-          >
-            {this.props.sourceVariant !== 'concurrent' && this.props.sourceVariant !== 'wasm' ? (
+          {!this.props.inputHidden && (
+            <HotKeys
+              className={classNames('repl-input-parent', 'row', Classes.CARD, Classes.ELEVATION_0)}
+              handlers={handlers}
+            >
               <ReplInput {...this.props} />
-            ) : null}
-          </HotKeys>
+            </HotKeys>
+          )}
         </div>
       </div>
     );
   }
 }
 
-export const Output: React.SFC<OutputProps> = (props: OutputProps) => {
+export const Output: React.FC<OutputProps> = (props: OutputProps) => {
   switch (props.output.type) {
     case 'code':
       return (

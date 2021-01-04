@@ -18,6 +18,7 @@ type DispatchProps = {
 type StateProps = {
   externalLibraryName: string;
   key: string;
+  disabled?: boolean;
 };
 
 export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrarySelectProps) {
@@ -41,11 +42,13 @@ export function ControlBarExternalLibrarySelect(props: ControlBarExternalLibrary
       onItemSelect={props.handleExternalSelect}
       itemRenderer={externalRenderer}
       filterable={false}
+      disabled={props.disabled}
     >
       <Button
         className={Classes.MINIMAL}
         text={props.externalLibraryName}
         rightIcon={IconNames.DOUBLE_CARET_VERTICAL}
+        disabled={props.disabled}
       />
     </ExternalSelectComponent>
   );
