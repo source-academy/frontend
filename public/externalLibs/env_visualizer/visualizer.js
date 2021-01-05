@@ -737,7 +737,7 @@
           if (fnObject) {
             if (!productionEnv) console.log(fnObject);
             fnObject.selected = true
-          };
+          }
         }
 
         drawSceneFnObjects();
@@ -754,7 +754,7 @@
           if (pairBlock) {
             if (!productionEnv) console.log(pairBlock);
             pairBlock.selected = true
-          };
+          }
         }
 
         drawScenePairBlocks();
@@ -771,7 +771,7 @@
           if (arrayBlock) {
             if (!productionEnv) console.log(arrayBlock);
             arrayBlock.selected = true
-          };
+          }
         }
 
         drawSceneArrayBlocks();
@@ -788,7 +788,7 @@
           if (frameObject) {
             if (!productionEnv) console.log(frameObject);
             frameObject.selected = true
-          };
+          }
         }
 
         drawSceneFrameObjects();
@@ -2240,7 +2240,9 @@
             shiftX,
             shiftY
           );
+        }
 
+        if (startIndex * (DATA_UNIT_WIDTH / 2) === shiftX) {
           arrowObjects.push(
             initialiseArrowObject([
               initialiseArrowNode(
