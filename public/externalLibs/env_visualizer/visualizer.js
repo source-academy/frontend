@@ -20,7 +20,7 @@
   const GREEN = "#00FF00";
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
 
-  const PRODUCTION_ENV = false;
+  const PRODUCTION_ENV = true;
   const DEBUG_MODE = !PRODUCTION_ENV && true;
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
