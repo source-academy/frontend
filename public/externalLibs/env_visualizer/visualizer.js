@@ -20,7 +20,7 @@
   const GREEN = "#00FF00";
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
 
-  const PRODUCTION_ENV = true;
+  const PRODUCTION_ENV = false;
   const DEBUG_MODE = !PRODUCTION_ENV && true;
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
@@ -2434,23 +2434,23 @@
         const newStartX = startX + DATA_UNIT_WIDTH * (3 / 4),
           newStartY = startY + DATA_UNIT_HEIGHT / 2;
 
-        if (Math.abs(tail.x - newStartX) < DATA_UNIT_WIDTH) { // vertically aligned
+        if (tail.y === newStartY) { // same level
           const x0 = newStartX,
             y0 = newStartY,
-            x1 = head.x,
-            y1 = head.y;
+            x1 = tail.x - FNOBJECT_RADIUS * 2,
+            y1 = tail.y;
+
           arrowObjects.push(
             initialiseArrowObject([
               initialiseArrowNode(x0, y0),
               initialiseArrowNode(x1, y1),
             ])
           );
-        } else if (tail.y === newStartY) { // same level
+        } else if (Math.abs(tail.x - newStartX) < DATA_UNIT_WIDTH) { // vertically aligned
           const x0 = newStartX,
             y0 = newStartY,
-            x1 = tail.x - FNOBJECT_RADIUS * 2,
+            x1 = tail.x,
             y1 = tail.y;
-
           arrowObjects.push(
             initialiseArrowObject([
               initialiseArrowNode(x0, y0),
