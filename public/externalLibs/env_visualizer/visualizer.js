@@ -53,6 +53,8 @@
 
   const DRAW_ON_STARTUP = [
     drawBackground,
+    drawSceneFrameArrows,
+    drawSceneFnFrameArrows,
     drawSceneFrameObjects,
     drawHitFrameObjects,
     drawSceneFnObjects,
@@ -62,7 +64,7 @@
     drawHitPairBlocks,
     drawSceneArrayBlocks,
     drawHitArrayBlocks,
-    initialiseArrowObjects,
+    drawSceneFrameValueArrows,
     drawSceneTextObjects,
     drawHitTextObjects,
     drawSceneArrowObjects,
@@ -1202,13 +1204,14 @@
 
   // Arrow Scene
   // --------------------------------------------------.
-  function initialiseArrowObjects() {
-    drawSceneFrameArrows();
-    drawSceneFrameValueArrows();
-    drawSceneFnFrameArrows();
-  }
+  // function initialiseArrowObjects() { // deprecated
+  //   drawSceneFrameArrows();
+  //   drawSceneFrameValueArrows();
+  //   drawSceneFnFrameArrows();
+  // }
 
   function drawSceneFrameValueArrows() {
+    // call after init data object, since this will require reassigned coordinates
     frameObjects.forEach(function (frameObject) {
       const { elements } = frameObject;
       for (const name in elements) {
