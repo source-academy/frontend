@@ -2434,7 +2434,7 @@
         const newStartX = startX + DATA_UNIT_WIDTH * (3 / 4),
           newStartY = startY + DATA_UNIT_HEIGHT / 2;
 
-        if (tail.x === newStartX) { // vertically aligned
+        if (Math.abs(tail.x - newStartX) < DATA_UNIT_WIDTH) { // vertically aligned
           const x0 = newStartX,
             y0 = newStartY,
             x1 = head.x,
@@ -2973,7 +2973,7 @@
     const newStartX = x0 + DATA_UNIT_WIDTH / 4,
       newStartY = y0 + DATA_UNIT_HEIGHT / 2;
 
-    if (fnObject.x === newStartX) { // vertically aligned
+    if (Math.abs(fnObject.x - newStartX) < DATA_UNIT_WIDTH) { // vertically aligned or close to that
       const x0 = newStartX,
         y0 = newStartY,
         x1 = fnObject.x,
