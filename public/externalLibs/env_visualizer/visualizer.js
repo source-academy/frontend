@@ -7,7 +7,7 @@
   const container = document.createElement("div");
   container.id = "env-visualizer-container";
   container.hidden = true;
-  container.style.width = 0; // fix the width so that the container does not expand tgt with the canvas
+  container.style.width = 0; // fix the problem of container expanding with the canvas
   document.body.appendChild(container);
   // create viewport
   const viewport = new Concrete.Viewport({
@@ -20,7 +20,8 @@
   const GREEN = "#00FF00";
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
 
-  const productionEnv = true;
+  const PRODUCTION_ENV = true;
+  const DEBUG_MODE = !PRODUCTION_ENV && true;
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
   const TEXT_PADDING = 5;
@@ -68,7 +69,7 @@
     drawHitArrowObjects,
   ];
 
-  let alreadyListened = false; // check if event listener has already been attached to the container
+  let alreadyListening = false; // check if event listener has already been attached to the container
 
   /**
    * Create a different layer for each type of element. May be more useful
@@ -104,15 +105,15 @@
    * another array of objects called boundDataObjectWrappers, which maps 1-to-1 to
    * the objects they represent in boundDataObjects.
    */
-  let fnObjects,
-    boundDataObjects,
-    boundDataObjectWrappers,
+  let boundDataObjectWrappers,
     builtins,
     levels,
     drawnArrowLines;
 
-  //append -Object for objects that need to be drawn on scene (for easier reference)
-  let drawnDataObjects,
+  // objects that need to be drawn
+  let fnObjects,
+    boundDataObjects,
+    drawnDataObjects,
     initialisedPairBlocks,
     initialisedArrayBlocks,
     frameObjects,
@@ -179,11 +180,10 @@
 
   // main function to be exported
   function draw_env(context) {
-    if (productionEnv) { // ENABLE IN PRODUCTION
-      // Hides the default text
+    if (PRODUCTION_ENV) {
+      // hide the default text
       (document.getElementById('env-visualizer-default-text')).hidden = true;
-
-      // Blink icon
+      // enable blink icon
       const icon = document.getElementById('env_visualiser-icon');
       icon.classList.add('side-content-tab-alert');
     }
@@ -205,8 +205,7 @@
       allEnvs.push(contextEnvs[i]);
     }
 
-    // TO-DO: refactor this
-    // Add extra props to primitive functionObjects
+    // Add extra props to primitive fnObjects
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
     const libraryEnv = allEnvs[1];
@@ -236,7 +235,7 @@
 
     initialisePrimitiveFnObjects();
 
-    // parse input from interpreter
+    // parse environments from interpreter
     function parseInput(accFrames, environments) {
       let newFrameObjects = [];
       /**
@@ -345,7 +344,7 @@
               env = env.tail;
             }
             // need to extract non empty parent frame from the frame
-            frameObject.parent = extractLoadedParentFrame(
+            frameObject.parent = extractParentFrame(
               getFrameByKey(accFrames, env.tail.envKeyCounter)
             );
           }
@@ -378,9 +377,6 @@
        * drawn next to the first frame where it is referenced; subsequent
        * references point back to the object.
        */
-
-      // dataPairsSeachedForFnObj array is used in findFnInPairData
-      // Helps to terminate search in recursive data structures;
       newFrameObjects.forEach(function (frameObject) {
         const { elements } = frameObject;
         for (const name in elements) {
@@ -409,7 +405,6 @@
         }
       });
 
-
       function findFnInDataObject(dataObject) {
         const traversedStructures = [];
 
@@ -424,20 +419,18 @@
           } else if (isFnObject(value)) {
             if (!fnObjects.includes(value)) {
               if (builtins.includes(getFnName(value))) {
-                getFrameByName(
+                const globalFrame = getFrameByName(
                   accFrames,
                   "global"
-                ).elements[
+                );
+                globalFrame.elements[
                   getFnName(value)
                 ] = value;
 
                 fnObjects.push(
                   initialiseFrameFnObject(
                     value,
-                    getFrameByName(
-                      accFrames,
-                      "global"
-                    )
+                    globalFrame
                   )
                 );
               } else {
@@ -480,7 +473,6 @@
         while (!allEnvs.includes(otherEnv)) {
           topLevelMissingEnvs.push(otherEnv);
           // find function definition expression to use as frame name
-
           if (isUndefined(otherEnv.callExpression)) {
             // When the environment is a loop, it doesn't have a call expression
             break;
@@ -506,7 +498,7 @@
               "(" + paramArray.join(", ") + ") => ...";
             otherEnv.vizName = paramString;
           } catch (e) {
-            if (!productionEnv) console.error(e);
+            if (!PRODUCTION_ENV) console.error(e.message);
             // for some reason or other the function definition expression is
             // not always available. In that case, just use the frame name
           }
@@ -598,15 +590,14 @@
       try {
         drawSceneObjects();
       } catch (e) {
-        // DISABLE IN PRODUCTION
-        if (!productionEnv) {
+        if (!PRODUCTION_ENV) {
           console.error(drawSceneObjects, e.message);
         }
       }
     });
 
-    if (!alreadyListened) {
-      alreadyListened = true;
+    if (!alreadyListening) {
+      alreadyListening = true;
       container.addEventListener("mousemove", function (evt) {
         let boundingRect = container.getBoundingClientRect(),
           x = evt.clientX - boundingRect.left,
@@ -735,7 +726,7 @@
         if (key >= 0 && key < Math.pow(2, 23)) {
           const fnObject = getObjFromKey(fnObjects, key);
           if (fnObject) {
-            if (!productionEnv) console.log(fnObject);
+            if (!PRODUCTION_ENV) console.log(fnObject);
             fnObject.selected = true
           }
         }
@@ -752,7 +743,7 @@
         if (key >= 0 && key < Math.pow(2, 16)) {
           const pairBlock = getObjFromKey(pairBlocks, key);
           if (pairBlock) {
-            if (!productionEnv) console.log(pairBlock);
+            if (!PRODUCTION_ENV) console.log(pairBlock);
             pairBlock.selected = true
           }
         }
@@ -769,7 +760,7 @@
         if (key >= 0 && key < Math.pow(2, 14)) {
           const arrayBlock = getObjFromKey(arrayBlocks, key);
           if (arrayBlock) {
-            if (!productionEnv) console.log(arrayBlock);
+            if (!PRODUCTION_ENV) console.log(arrayBlock);
             arrayBlock.selected = true
           }
         }
@@ -786,7 +777,7 @@
         if (key >= 0) {
           const frameObject = getObjFromKey(frameObjects, key);
           if (frameObject) {
-            if (!productionEnv) console.log(frameObject);
+            if (!PRODUCTION_ENV) console.log(frameObject);
             frameObject.selected = true
           }
         }
@@ -1029,7 +1020,7 @@
       let fnString = fnObject.fnString;
       let params;
       let body;
-      //filter out the params and body
+      // filter out the params and body
       if (fnObject.node.type === "FunctionDeclaration" || fnString.substring(0, 8) === "function") {
         params = fnString.substring(
           fnString.indexOf("("),
@@ -1172,15 +1163,11 @@
     dataObjectLayer.scene.clear();
     boundDataObjects.forEach(function (dataObject) {
       if (!isNull(dataObject)) {
-        const { draw, mainStructure, subStructure } = checkDraw(dataObject);
-        if (draw) {
+        if (checkDraw(dataObject)) {
           drawSceneDataObject(dataObject);
           drawnDataObjects.push(dataObject);
         } else {
-          reassignCoordinates(
-            mainStructure,
-            subStructure
-          );
+          reassignCoordinates(dataObject);
         }
       }
     });
@@ -1188,7 +1175,7 @@
   }
 
   function drawSceneDataObject(dataObject) {
-    const wrapper = getWrapperFromDataObject(dataObject),
+    const wrapper = getDataWrapper(dataObject),
       { x, y } = wrapper,
       scene = dataObjectLayer.scene,
       context = scene.context;
@@ -1257,7 +1244,7 @@
    * the frame.
    */
   function drawSceneFrameDataArrow(frameObject, name, dataObject) {
-    const wrapper = getWrapperFromDataObject(dataObject);
+    const wrapper = getDataWrapper(dataObject);
     arrowObjects.push(
       initialiseArrowObject([
         initialiseArrowNode(
@@ -1283,7 +1270,7 @@
    * to its destination.
    */
   function drawSceneFrameFnArrow(frameObject, name, fnObject) {
-    //frame to fnobject
+    // frame to fnobject
     const fnRight = fnObject.x + FNOBJECT_RADIUS * 2,
       fnLeft = fnObject.x - FNOBJECT_RADIUS * 2,
       fnHeight = fnObject.y;
@@ -1353,7 +1340,7 @@
 
   function drawSceneFnFrameArrow(fnObject) {
 
-    const frameObject = extractLoadedParentFrame(fnObject.source);
+    const frameObject = extractParentFrame(fnObject.source); // extract non empty parent frame
     let x0 = fnObject.x + FNOBJECT_RADIUS,
       y0 = fnObject.y,
       x1,
@@ -1381,7 +1368,7 @@
           : y0 - frameObject.y - frameObject.height / 2
       );
       x2 = frameObject.x +
-        (frameObject.x > fnObject.x ? 0 : frameObject.width); // if point to the right frame
+        (frameObject.x > fnObject.x ? 0 : frameObject.width); // point to the left side of fnObject if it is on the right
       y2 = y1;
     }
 
@@ -1403,7 +1390,7 @@
     // TO-DO: point straight to the parent of the parent if parent is empty
     if (isNull(frameObject.parent)) return; // TO-DO: when is parent null? global?
 
-    const parent = extractLoadedParentFrame(frameObject.parent);
+    const parent = extractParentFrame(frameObject.parent);
     const frameOffset = levels[parent.level].frameObjects.indexOf(
       frameObject.parent
     ); // the index of parent frame on its level
@@ -1467,7 +1454,7 @@
       context.strokeStyle = hovered ? GREEN : color;
       context.setLineDash(
         (nodes[i].x !== nodes[i + 1].x && nodes[i].y !== nodes[i + 1].y
-          ? [5, 5]
+          ? [5, 5] // dashed line if it is diagonal for aesthetic reasons
           : []
         )
       );
@@ -1542,7 +1529,8 @@
     context.font = FONT_SETTING;
 
     if (hovered) {
-      //---// add background to the text
+      //---// 
+      // add background to the text
       context.fillStyle = REGENT_GRAY_80;
       context.fillRect(
         x - TEXT_PADDING,
@@ -1692,7 +1680,7 @@
      */
     // for (const d in boundDataObjects) {
     boundDataObjects.forEach(dataObject => {
-      const wrapper = getWrapperFromDataObject(dataObject);
+      const wrapper = getDataWrapper(dataObject);
       const { parent } = wrapper;
       wrapper.x = parent.x + parent.width + OBJECT_FRAME_RIGHT_SPACING;
       wrapper.y =
@@ -1711,7 +1699,7 @@
 
         const { x, y } = (
           mainParent === subParent
-            ? getWrapperFromDataObject(subParent)
+            ? getDataWrapper(subParent)
             : getShiftInfo(subParent)
         );
 
@@ -1749,58 +1737,62 @@
    */
   function getDataObjectWidth(dataObject) {
 
-    const traversedStructures = []
+    const traversedStructures = [];
 
     function helper(value) {
-      if (
-        traversedStructures.includes(value) ||
-        belongToOtherObjects(dataObject, value)
-      ) {
-        return 0;
+      if (isDataObject(value)) {
+        if (
+          traversedStructures.includes(value) ||
+          !isFirstMainStructure(dataObject, value)
+        ) {
+          return 0;
+        } else if (isEmptyArray(value)) {
+          return DATA_UNIT_WIDTH / 4;
+        } else if (isArrayData(value)) {
+          traversedStructures.push(value);
+          let maxWidth = 0;
+
+
+          for (let i = value.length - 1; i >= 0; i--) {
+            const elementWidth = Math.max(
+              helper(value[i]), DATA_UNIT_WIDTH / 2
+            );
+            const totalWidth = elementWidth + i * (DATA_UNIT_WIDTH / 2);
+            if (totalWidth > maxWidth) {
+              maxWidth = totalWidth;
+            }
+          }
+
+          return maxWidth;
+
+        } else { // pair data
+          traversedStructures.push(value);
+          const pairDataLength = getPairDataLength(value);
+          let maxWidth = (
+            isFnObject(getNthTail(value, pairDataLength - 1)[1])
+              ? FN_MAX_WIDTH +
+              PAIR_SPACING +
+              pairDataLength * (DATA_UNIT_WIDTH + PAIR_SPACING)
+              : 0
+          );
+          for (let i = pairDataLength - 1; i >= 0; i--) {
+            const elementWidth = Math.max(
+              helper(getNthTail(value, i)[0]), DATA_UNIT_WIDTH
+            );
+            const totalWidth = elementWidth + i * (DATA_UNIT_WIDTH + PAIR_SPACING);
+            if (totalWidth > maxWidth) {
+              maxWidth = totalWidth;
+            }
+          }
+
+          return maxWidth;
+        }
       } else if (isFnObject(value)) {
         if (value.parent.mainStructure !== dataObject) {
           return 0;
         } else {
           return FN_MAX_WIDTH;
         }
-      } else if (isArrayData(value)) {
-        traversedStructures.push(value);
-        let maxWidth = 0;
-
-
-        for (let i = value.length - 1; i >= 0; i--) {
-          const elementWidth = Math.max(
-            helper(value[i]), DATA_UNIT_WIDTH / 2
-          );
-          const totalWidth = elementWidth + i * (DATA_UNIT_WIDTH / 2);
-          if (totalWidth > maxWidth) {
-            maxWidth = totalWidth;
-          }
-        }
-
-        return maxWidth;
-
-      } else if (isPairData(value)) {
-        traversedStructures.push(value);
-        const pairDataLength = getPairDataLength(value);
-        let maxWidth = (
-          isFnObject(getNthTail(value, pairDataLength - 1)[1])
-            ? FN_MAX_WIDTH +
-            PAIR_SPACING +
-            pairDataLength * (DATA_UNIT_WIDTH + PAIR_SPACING)
-            : 0
-        );
-        for (let i = pairDataLength - 1; i >= 0; i--) {
-          const elementWidth = Math.max(
-            helper(getNthTail(value, i)[0]), DATA_UNIT_WIDTH
-          );
-          const totalWidth = elementWidth + i * (DATA_UNIT_WIDTH + PAIR_SPACING);
-          if (totalWidth > maxWidth) {
-            maxWidth = totalWidth;
-          }
-        }
-
-        return maxWidth;
       } else {
         return 0;
       }
@@ -1808,7 +1800,7 @@
 
     // used for debug
     const width = helper(dataObject);
-    const wrapper = getWrapperFromDataObject(dataObject);
+    const wrapper = getDataWrapper(dataObject);
     if (isUndefined(wrapper.width)) wrapper.width = width;
     return width;
   }
@@ -1817,37 +1809,32 @@
   // Used in frame height calculations
   function getDataObjectHeight(dataObject) {
     const height = getDataUnitHeight(dataObject) * (DATA_UNIT_HEIGHT + PAIR_SPACING);
-    const wrapper = getWrapperFromDataObject(dataObject);
+    const wrapper = getDataWrapper(dataObject);
     if (isUndefined(wrapper.height)) wrapper.height = height;
     return height;
   }
 
   function getFrameHeight(frameObject) {
     // Assumes line spacing is separate from data object spacing
-    let elem_lines = 0;
-    let data_space = 0;
+    let elemLines = 0;
+    let dataSpace = 0;
 
     for (const name in frameObject.elements) {
       const value = frameObject.elements[name];
       if (isFnObject(value)) {
-        elem_lines += 1;
+        elemLines += 1;
       } else if (isDataObject(value)) {
-        const { parent } = getWrapperFromDataObject(
-          value
-        );
-
-        if (parent === frameObject) {
-          data_space += getDataObjectHeight(value);
+        if (getDataWrapper(value).parent === frameObject) {
+          dataSpace += getDataObjectHeight(value);
         } else {
-          data_space += FRAME_HEIGHT_LINE;
+          dataSpace += FRAME_HEIGHT_LINE;
         }
       } else {
-        elem_lines += 1;
+        elemLines += 1;
       }
     }
-
     return (
-      data_space + elem_lines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING
+      dataSpace + elemLines * FRAME_HEIGHT_LINE + FRAME_HEIGHT_PADDING
     );
   }
 
@@ -1886,7 +1873,7 @@
         const value = frameObject.elements[name];
         // Can be either primitive, function or array
         if (isDataObject(value)) {
-          const wrapper = getWrapperFromDataObject(value);
+          const wrapper = getDataWrapper(value);
           if (wrapper.parent === frameObject) {
             maxWidth = Math.max(
               maxWidth,
@@ -1961,10 +1948,10 @@
   // --------------------------------------------------.
   // For both function objects and data objects
 
-  function extractLoadedParentFrame(frameObject) {
+  function extractParentFrame(frameObject) {
     // extract a frame object that is non empty from an outer frame object
     if (isEmptyFrame(frameObject)) {
-      return extractLoadedParentFrame(frameObject.parent);
+      return extractParentFrame(frameObject.parent);
     } else {
       return frameObject;
     }
@@ -2058,7 +2045,7 @@
 
   function getFnObject(fnObject) {
     if (fnObjects[fnObjects.indexOf(fnObject)] === undefined) {
-      if (!productionEnv) console.error('FnObject not found in the array');
+      if (DEBUG_MODE) console.warn('FnObject not found in the array');
     }
     return fnObject;
   }
@@ -2132,14 +2119,20 @@
     return arrayBlock;
   }
 
-  function initialiseArrayBlocks(
+  function initialiseArrayBlocks( // TO-DO: fix the logic behind empty array
     dataObject,
     wrapper,
     startX,
     startY,
-    startIndex = 0
+    startIndex = 0 // default pointer at 0 (if dataObject is nonempty array)
   ) {
-    if (
+    if (isEmptyArray(dataObject)) {
+      // need to do a check for empty array since initialiseArrayBlocks can take empty array as input
+      // startIndex is irrelevant for empty array 
+      arrayBlocks.push(
+        initialiseArrayBlock(startX, startY, dataObject, wrapper, null)
+      );
+    } else if (
       startIndex < dataObject.length &&
       (
         isUndefined(initialisedArrayBlocks[startIndex]) ||
@@ -2172,13 +2165,12 @@
       if (isArrayData(element)) {
         const { x: shiftX, y: shiftY } = getShiftInfo(element);
 
-        if (!belongToOtherObjects(mainStructure, element)) {
+        if (checkDraw(element)) {
           initialiseArrayBlocks(
             element,
             wrapper,
             startX,
-            shiftY,
-            0
+            shiftY
           )
         }
 
@@ -2229,11 +2221,11 @@
         }
 
 
-      } else if (isPairData(element)) {
-        const { draw } = checkDraw(element);
+      } else if (isPairData(element)) { // TO-DO: add more pointing methods, 
+        // so far it is just pointing directly to the pair data
         const { x: shiftX, y: shiftY } = getShiftInfo(element);
 
-        if (draw) {
+        if (checkDraw(element)) {
           initialisePairBlocks(
             element,
             wrapper,
@@ -2242,34 +2234,18 @@
           );
         }
 
-        if (startIndex * (DATA_UNIT_WIDTH / 2) === shiftX) {
-          arrowObjects.push(
-            initialiseArrowObject([
-              initialiseArrowNode(
-                newStartX,
-                newStartY
-              ),
-              initialiseArrowNode(
-                newStartX,
-                shiftY
-              ),
-            ])
-          );
-        } else {
-          arrowObjects.push(
-            initialiseArrowObject([
-              initialiseArrowNode(
-                newStartX,
-                newStartY,
-              ),
-              initialiseArrowNode(
-                shiftX + DATA_UNIT_WIDTH / 4,
-                shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
-              )
-            ])
-          );
-        }
-
+        arrowObjects.push(
+          initialiseArrowObject([
+            initialiseArrowNode(
+              newStartX,
+              newStartY,
+            ),
+            initialiseArrowNode(
+              shiftX + DATA_UNIT_WIDTH / 4,
+              shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
+            )
+          ])
+        );
       } else if (isNull(element)) {
         drawLine(
           context,
@@ -2314,13 +2290,13 @@
   }
 
   function drawSceneArrayBlock(arrayBlock) {
-    const { x, y, hovered } = arrayBlock;
+    const { x, y, hovered, index } = arrayBlock;
     var scene = arrayBlockLayer.scene,
       context = scene.context;
     context.save();
     //---//
     context.strokeStyle = hovered ? GREEN : SA_WHITE;
-    context.strokeRect(x, y, DATA_UNIT_WIDTH / 2, DATA_UNIT_HEIGHT);
+    context.strokeRect(x, y, DATA_UNIT_WIDTH / (isNull(index) ? 4 : 2), DATA_UNIT_HEIGHT);
     context.stroke();
     //---//
     context.restore();
@@ -2342,12 +2318,6 @@
 
   // Data Helpers
   // --------------------------------------------------.
-
-  function isDataObject(value) {
-    // or typeof value === "object" && value !== null
-    return Array.isArray(value);
-  }
-
   function initialisePairBlock(x, y, mainStructure, subStructure, wrapper) {
     // TO-DO: consider adding layer prop
     const pairBlock = {
@@ -2385,10 +2355,10 @@
       );
       // tail
       if (isDataObject(tail)) {
-        const { draw } = checkDraw(tail);
         const { x: shiftX, y: shiftY } = getShiftInfo(tail);
         const newStartX = startX + DATA_UNIT_WIDTH * (3 / 4),
           newStartY = startY + DATA_UNIT_HEIGHT / 2;
+        const draw = checkDraw(tail);
 
         if (draw) {
           if (isArrayData(tail)) {
@@ -2417,7 +2387,7 @@
               ])
             );
           } else {
-            //cycle is on the same level
+            // cycle is on the same level
             const x0 = newStartX,
               y0 = newStartY,
               x1 = newStartX,
@@ -2464,7 +2434,7 @@
         const newStartX = startX + DATA_UNIT_WIDTH * (3 / 4),
           newStartY = startY + DATA_UNIT_HEIGHT / 2;
 
-        if (tail.x === newStartX) {
+        if (tail.x === newStartX) { // vertically aligned
           const x0 = newStartX,
             y0 = newStartY,
             x1 = head.x,
@@ -2538,13 +2508,12 @@
 
       // head
       if (isDataObject(head)) {
-        const { draw } = checkDraw(head);
         const { x: shiftX, y: shiftY } = getShiftInfo(head);
         const newStartX = startX + DATA_UNIT_WIDTH / 4,
           newStartY = startY + DATA_UNIT_HEIGHT / 2;
 
         // check if need to draw the data object or it has already been drawn
-        if (draw) {
+        if (checkDraw(head)) {
           if (isArrayData(head)) {
             initialiseArrayBlocks(
               head,
@@ -2563,14 +2532,14 @@
         }
 
         if (shiftY === startY) {
-          //cycle is on the same level
+          // cycle is on the same level
           const x0 = newStartX,
             y0 = newStartY,
             x1 = newStartX,
             y1 = newStartY - DATA_UNIT_HEIGHT / 2 - 10,
             x2 = shiftX + DATA_UNIT_WIDTH * (1 / 4),
-            y2 = newStartY - DATA_UNIT_HEIGHT / 2 - 10,
-            x3 = shiftX + DATA_UNIT_WIDTH * (1 / 4),
+            y2 = y1,
+            x3 = x2,
             y3 = shiftY;
 
           arrowObjects.push(
@@ -2646,7 +2615,7 @@
   }
 
   function isEmptyArray(xs) {
-    return xs.length === 0;
+    return isDataObject(xs) && xs.length === 0;
   }
 
   function isMember(v, list) {
@@ -2656,6 +2625,11 @@
     } else {
       return v === list[0] || isMember(v, list[1]);
     }
+  }
+
+  function isDataObject(value) {
+    // or typeof value === "object" && value !== null
+    return Array.isArray(value);
   }
 
   // Current check to check if data structure is an array
@@ -2690,7 +2664,7 @@
     }
   }
 
-  function getWrapperFromDataObject(dataObject) {
+  function getDataWrapper(dataObject) {
     return boundDataObjectWrappers[boundDataObjects.indexOf(dataObject)];
   }
 
@@ -2713,19 +2687,22 @@
    */
   function getShiftInfo(dataObject) {
 
-    const mainStructure = findMainStructure(dataObject);
+    const mainStructure = getFirstMainStructure(dataObject);
 
-    function helper(value) {
+    function helper(value) { // get relative pos of dataObject wrt the value 
+      // can be any value
       if (
-        value === dataObject ||
-        isEmptyArray(value)
+        !isDataObject(value) ||
+        isEmptyArray(value) ||
+        value === dataObject
       ) {
         return { x: 0, y: 0 };
       } else if (isArrayData(value)) {
-        const result = {};
+        const result = { x: 0, y: 0 };
+
         for (let i = 0; i < value.length; i++) {
           const subStructure = value[i];
-          if (checkSubStructure(subStructure, dataObject) && subStructure !== mainStructure) {
+          if (isSubStructure(subStructure, dataObject) && subStructure !== mainStructure) {
             const { x, y } = helper(subStructure);
             result.x = x + (DATA_UNIT_WIDTH / 2) * i;
             result.y = y +
@@ -2733,17 +2710,18 @@
               Math.max(getDataUnitHeight(value, i + 1), 1);
           }
         }
+
         return result
-      } else {
+      } else { // pair data
         const head = value[0],
           tail = value[1];
-        if (checkSubStructure(tail, dataObject)) {
+        if (isSubStructure(tail, dataObject)) {
           const { x, y } = helper(tail);
           return {
             x: x + (DATA_UNIT_WIDTH + PAIR_SPACING),
             y
           }
-        } else {
+        } else { // must be in head 
           const { x, y } = helper(head);
           return {
             x,
@@ -2756,19 +2734,19 @@
       }
     }
 
-    const wrapper = getWrapperFromDataObject(mainStructure);
+    const wrapper = getDataWrapper(mainStructure);
 
     if (wrapper) {
       const { x: relativeX, y: relativeY } = helper(mainStructure);
       const { x: wrapperX, y: wrapperY } = wrapper;
       return { x: wrapperX + relativeX, y: wrapperY + relativeY };
     } else {
-      if (!productionEnv) console.error('wrapper does not exist', dataObject);
+      if (DEBUG_MODE) console.warn('wrapper does not exist', dataObject);
       return { x: 0, y: 0 };
     }
   }
 
-  function checkSubStructure(d1, d2) {
+  function isSubStructure(d1, d2) {
 
     let traversedStructures = [];
 
@@ -2792,66 +2770,91 @@
     return isDataObject(d2) && helper(d1, d2);
   }
 
-  function findMainStructures(subStructure) {
+  function getMainStructures(subStructure) {
     return boundDataObjects.filter(
-      dataObject => checkSubStructure(dataObject, subStructure)
+      dataObject => isSubStructure(dataObject, subStructure)
     )
   }
 
-  function findMainStructure(subStructure) {
-    return findMainStructures(subStructure)[0];
+  function getFirstMainStructure(subStructure) {
+    return getMainStructures(subStructure)[0];
   }
 
-  function foundInOtherObjects(mainStructure, subStructure) {
-    return boundDataObjects
-      .filter(dataObject => dataObject !== mainStructure)
-      .reduce((acc, dataObject) => {
-        return acc || checkSubStructure(dataObject, subStructure)
-      }, false);
+  // function foundInOtherObjects(mainStructure, subStructure) { // deprecated
+  //     return boundDataObjects
+  //         .filter(dataObject => dataObject !== mainStructure)
+  //         .reduce((acc, dataObject) => {
+  //             return acc || isSubStructure(dataObject, subStructure)
+  //         }, false);
+  // }
+
+  // function belongToOtherObjects(mainStructure, subStructure) {
+  //     return foundInOtherObjects(mainStructure, subStructure) &&
+  //         getFirstMainStructure(subStructure) !== mainStructure;
+  // }
+
+  function isFirstMainStructure(mainStructure, subStructure) {
+    return getFirstMainStructure(subStructure) === mainStructure;
   }
 
-  function belongToOtherObjects(mainStructure, subStructure) {
-    return foundInOtherObjects(mainStructure, subStructure) &&
-      findMainStructure(subStructure) !== mainStructure;
+  function checkDraw(dataObject) {
+    // technically can use isFirstMainStructure
+    // use this instead of isFirstMainStructure to check if need to draw
+    return drawnDataObjects.every(
+      drawnDataObject => !isSubStructure(drawnDataObject, dataObject)
+    );
   }
 
   function getTailUnitHeight(dataObject, currIndex = 0) {
     if (isArrayData(dataObject)) {
       return getDataUnitHeight(dataObject, currIndex + 1);
     } else {
-      return getDataUnitHeight(dataObject[1]);
+      const tail = dataObject[1];
+      return (isDataObject(tail) ? getDataUnitHeight(tail) : 0);
     }
   }
 
-  function getDataUnitHeight(dataObject, startIndex = 0) {
+  function getDataUnitHeight(
+    dataObject, // only array or pair data
+    startIndex = 0 // if dataObject is a non empty array, default pointer at 0
+    // does not apply to empty array
+  ) {
     const traversedStructures = [],
-      mainStructure = findMainStructure(dataObject);
+      mainStructure = getFirstMainStructure(dataObject);
 
-    let heightBeforeIndex = 0;
-    function helper(value, prevValue, index = 0) {
-      if (belongToOtherObjects(mainStructure, value)) {
-        return 0;
-      } else if (isArrayData(value)) {
-        if (traversedStructures.includes(value) || index >= value.length) {
+    let heightBeforeIndex = 0; // if dataObject is a non empty array, 
+    // the height of the part before the pointer
+    function helper( // get data unit height of value given that prevValue is its subparent
+      value, // can be any value
+      prevValue // the subparent of value, the dataObject that directly contains the value 
+    ) {
+      if (isDataObject(value)) {
+        if (!isFirstMainStructure(mainStructure, value)) {
           return 0;
-        } else {
-          traversedStructures.push(value);
-          return 1 + value.reduce((acc, subValue, currIndex) => {
-            if (value === dataObject && currIndex === index) {
-              heightBeforeIndex = acc;
-            }
-            return acc + helper(subValue, value);
-          }, 0);
-        }
-      } else if (isPairData(value)) {
-        const head = value[0],
-          tail = value[1];
-        if (traversedStructures.includes(value)) {
-          return 0;
-        } else {
-          traversedStructures.push(value);
-          const tailHeight = helper(tail, value) - 1;
-          return 1 + helper(head, value) + (tailHeight > 0 ? tailHeight : 0);
+        } else if (isArrayData(value)) {
+          if (traversedStructures.includes(value)) {
+            return 0;
+          } else if (isEmptyArray(value)) {
+            return 1;
+          } else {
+            traversedStructures.push(value);
+            return 1 + value.reduce((acc, subValue, currIndex) => {
+              if (value === dataObject && currIndex === startIndex) {
+                heightBeforeIndex = acc;
+              }
+              return acc + helper(subValue, value); // accumulate all height of its elements
+            }, 0);
+          }
+        } else { // pair data
+          const head = value[0],
+            tail = value[1];
+          if (traversedStructures.includes(value)) {
+            return 0;
+          } else {
+            traversedStructures.push(value);
+            const tailHeight = helper(tail, value) - 1;
+            return 1 + helper(head, value) + (tailHeight > 0 ? tailHeight : 0);
+          }
         }
       } else if (isFnObject(value)) {
         if (
@@ -2866,44 +2869,28 @@
         return 0;
       }
     }
-    if (startIndex > 0) {
-      const totalHeight = helper(dataObject, null, startIndex);
 
+    if (isArrayData(dataObject)) {
+      if (isEmptyArray(dataObject)) {
+        return helper(dataObject, null);
+      } else if (startIndex >= dataObject.length) {
+        return 0;
+      }
+      const totalHeight = helper(dataObject, null);
       return totalHeight - heightBeforeIndex;
-    } else if (isDataObject(dataObject)) {
+    } else if (isPairData(dataObject)) {
       return helper(dataObject, null);
     } else {
+      if (DEBUG_MODE) console.warn('not a data object:', dataObject);
       return 0;
     }
   }
 
-  function checkDraw(dataObject) {
-    // returns a structure that contains a boolean to indicate whether
-    // or not to draw dataObject. If boolean is false, also returns the main
-    // and substructure that is involved
-    const result = {
-      draw: true,
-      mainStructure: null,
-      subStructure: null,
-    };
-
-    drawnDataObjects.forEach(drawnDataObject => {
-      if (checkSubStructure(drawnDataObject, dataObject)) {
-        result.draw = false;
-        result.mainStructure = drawnDataObject;
-        result.subStructure = dataObject;
-        return result;
-      }
-    });
-
-    return result;
-  }
-
-  function reassignCoordinates(d1, d2) {
-    // if we do not need to draw d2, reassign x and y coordinates to
+  function reassignCoordinates(dataObject) {
+    // if we do not need to draw dataObject, reassign x and y coordinates to
     // be the corresponding coordinates of d1
-    const trueCoordinates = getShiftInfo(d2);
-    const wrapper = getWrapperFromDataObject(d2);
+    const trueCoordinates = getShiftInfo(dataObject);
+    const wrapper = getDataWrapper(dataObject);
     wrapper.x = trueCoordinates.x;
     wrapper.y = trueCoordinates.y;
   }
@@ -3004,11 +2991,11 @@
       // far from data vertically
       const x0 = newStartX,
         y0 = newStartY,
-        x1 = newStartX,
+        x1 = x0,
         y1 = fnObject.y + FNOBJECT_RADIUS * 2 * (fnObject.y < newStartY ? 1 : -1),
         x2 = fnObject.x,
         y2 = y1,
-        x3 = fnObject.x,
+        x3 = x2,
         y3 = fnObject.y;
 
       arrowObjects.push(
@@ -3023,10 +3010,10 @@
       // close to data vertically
       const x0 = newStartX,
         y0 = newStartY,
-        x1 = newStartX,
+        x1 = x0,
         y1 = fnObject.y,
         x2 = fnObject.x + (fnObject.x > newStartX ? 0 : FNOBJECT_RADIUS * 2),
-        y2 = fnObject.y;
+        y2 = y1;
 
       arrowObjects.push(
         initialiseArrowObject([
@@ -3063,7 +3050,7 @@
   }
 
   function checkArrowNodes(nodes) {
-    //return new nodes with no overlapped intermediate lines
+    // return new nodes with no overlapped intermediate lines
     registerEndLines(nodes);
     if (nodes.length <= 3) return nodes;
     const newNodes = [];
