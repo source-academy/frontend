@@ -23,6 +23,7 @@ export enum SideContentType {
   introduction = 'introduction',
   inspector = 'inspector',
   questionOverview = 'question_overview',
+  remoteExecution = 'remote_execution',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
   toneMatrix = 'tone_matrix',
