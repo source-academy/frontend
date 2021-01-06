@@ -21,7 +21,7 @@
   const REGENT_GRAY_80 = "#8a9ba8cc"; // 80% opacity
 
   const PRODUCTION_ENV = true;
-  const DEBUG_MODE = !PRODUCTION_ENV && true;
+  const DEBUG_MODE = !PRODUCTION_ENV && true; // to see debug messages
   const FONT_SETTING = "14px Roboto Mono, Courier New";
   const FONT_HEIGHT = 14;
   const TEXT_PADDING = 5;
@@ -49,27 +49,33 @@
   const DATA_UNIT_WIDTH = 80; // width of a pair block 
   const DATA_UNIT_HEIGHT = 40; // height of a array or pair block
 
+  // functions prefixed with intialise- are reponsible for collecting the objects to draw
+  // order of collector and draw functions matter
   const DRAW_ON_STARTUP = [
     drawBackground,
-    drawSceneFrameArrows,
-    drawSceneFnFrameArrows,
-    drawSceneFrameObjects,
+    initialiseFrameArrows, // initialise function or collector function
+    initialiseFnFrameArrows,
+    drawSceneFrameObjects, // actual draw function
     drawHitFrameObjects,
     drawSceneFnObjects,
     drawHitFnObjects,
-    drawSceneDataObjects,
+    initialiseDataObjects,
+    // invoke initialiseFrameValueArrows after initialiseDataObjects
+    // since some coordinates need to be reassigned
+    initialiseFrameValueArrows,
     drawScenePairBlocks,
     drawHitPairBlocks,
     drawSceneArrayBlocks,
     drawHitArrayBlocks,
-    drawSceneFrameValueArrows,
     drawSceneTextObjects,
     drawHitTextObjects,
     drawSceneArrowObjects,
     drawHitArrowObjects,
   ];
 
-  let alreadyListening = false; // check if event listener has already been attached to the container
+  // TO-DO: can invoke addEventListener outside draw_env
+  // check if event listener has already been attached to the container
+  let alreadyListening = false;
 
   /**
    * Create a different layer for each type of element. May be more useful
@@ -96,7 +102,7 @@
     textObjectLayer,
   ];
 
-  LAYERS.forEach((layer) => viewport.add(layer));
+  LAYERS.forEach(layer => viewport.add(layer));
 
   /**
    * Unlike function objects, data objects are represented internally not as
@@ -182,16 +188,14 @@
   function draw_env(context) {
     if (PRODUCTION_ENV) {
       // hide the default text
-      (document.getElementById('env-visualizer-default-text')).hidden = true;
-      // enable blink icon
-      const icon = document.getElementById('env_visualiser-icon');
-      icon.classList.add('side-content-tab-alert');
+      (document.getElementById("env-visualizer-default-text")).hidden = true;
+      // blink icon
+      const icon = document.getElementById("env_visualiser-icon");
+      icon.classList.add("side-content-tab-alert");
     }
 
     // reset current drawing
-    viewport.layers.forEach(function (layer) {
-      layer.scene.clear();
-    });
+    viewport.layers.forEach(layer => layer.scene.clear());
 
     // reset all variables
     resetVariables();
@@ -205,7 +209,6 @@
       allEnvs.push(contextEnvs[i]);
     }
 
-    // Add extra props to primitive fnObjects
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
     const libraryEnv = allEnvs[1];
@@ -221,6 +224,7 @@
     }
 
     function initialisePrimitiveFnObjects() {
+      // Add extra props to primitive fnObjects
       const primitiveElems = { ...globalElems, ...libraryElems };
       for (const name in primitiveElems) {
         const value = primitiveElems[name];
@@ -288,7 +292,7 @@
         newFrameObject.elements = {};
         if (newFrameObject.name === "global") {
           newFrameObject.elements["(predeclared names)"] = "";
-          // don't copy over built-in functions
+          // don"t copy over built-in functions
         } else if (
           environment.name === "programEnvironment" &&
           environment.tail.name === "global"
@@ -474,7 +478,7 @@
           topLevelMissingEnvs.push(otherEnv);
           // find function definition expression to use as frame name
           if (isUndefined(otherEnv.callExpression)) {
-            // When the environment is a loop, it doesn't have a call expression
+            // When the environment is a loop, it doesn"t have a call expression
             break;
           }
 
@@ -491,16 +495,16 @@
           const params = pointer.params;
           let paramArray = [];
           try {
-            params.forEach(function (p) {
-              paramArray.push(p.name);
+            params.forEach(param => {
+              paramArray.push(param.name);
             });
             const paramString =
               "(" + paramArray.join(", ") + ") => ...";
             otherEnv.vizName = paramString;
           } catch (e) {
-            if (!PRODUCTION_ENV) console.error(e.message);
             // for some reason or other the function definition expression is
             // not always available. In that case, just use the frame name
+            if (DEBUG_MODE) console.error(e.message);
           }
           otherEnv = otherEnv.tail;
         }
@@ -525,7 +529,7 @@
       if (topLevelMissingEnvs.length > 0) {
         const allMissingEnvs = [];
 
-        topLevelMissingEnvs.forEach((missingEnv) => {
+        topLevelMissingEnvs.forEach(missingEnv => {
           const extractedEnvs = extractEnvs(missingEnv);
           extractedEnvs.push.apply(allMissingEnvs, extractedEnvs);
           allEnvs.push.apply(allEnvs, extractedEnvs);
@@ -578,7 +582,7 @@
 
     drawingHeight = getDrawingHeight();
 
-    viewport.layers.forEach(function (layer) {
+    viewport.layers.forEach(layer => {
       //set size layer by layer
       layer.setSize(drawingWidth, drawingHeight);
     });
@@ -586,13 +590,11 @@
     viewport.setSize(drawingWidth, drawingHeight);
 
     // invoke all drawing functions
-    DRAW_ON_STARTUP.forEach((drawSceneObjects) => {
+    DRAW_ON_STARTUP.forEach(drawSceneObjects => {
       try {
         drawSceneObjects();
       } catch (e) {
-        if (!PRODUCTION_ENV) {
-          console.error(drawSceneObjects, e.message);
-        }
+        if (DEBUG_MODE) console.error(drawSceneObjects, e.message)
       }
     });
 
@@ -726,7 +728,7 @@
         if (key >= 0 && key < Math.pow(2, 23)) {
           const fnObject = getObjFromKey(fnObjects, key);
           if (fnObject) {
-            if (!PRODUCTION_ENV) console.log(fnObject);
+            if (DEBUG_MODE) console.log(fnObject);
             fnObject.selected = true
           }
         }
@@ -743,7 +745,7 @@
         if (key >= 0 && key < Math.pow(2, 16)) {
           const pairBlock = getObjFromKey(pairBlocks, key);
           if (pairBlock) {
-            if (!PRODUCTION_ENV) console.log(pairBlock);
+            if (DEBUG_MODE) console.log(pairBlock);
             pairBlock.selected = true
           }
         }
@@ -760,7 +762,7 @@
         if (key >= 0 && key < Math.pow(2, 14)) {
           const arrayBlock = getObjFromKey(arrayBlocks, key);
           if (arrayBlock) {
-            if (!PRODUCTION_ENV) console.log(arrayBlock);
+            if (DEBUG_MODE) console.log(arrayBlock);
             arrayBlock.selected = true
           }
         }
@@ -777,7 +779,7 @@
         if (key >= 0) {
           const frameObject = getObjFromKey(frameObjects, key);
           if (frameObject) {
-            if (!PRODUCTION_ENV) console.log(frameObject);
+            if (DEBUG_MODE) console.log(frameObject);
             frameObject.selected = true
           }
         }
@@ -903,7 +905,7 @@
 
         }
       }
-      if (isDataObject(value)) {
+      if (isDataObject(value) && !belongToOtherData(value)) {
         i += getDataUnitHeight(value);
       } else {
         i++;
@@ -1037,7 +1039,7 @@
       const marginLeft = 50,
         lineHeight = 20;
 
-      // TO-DO: refactor this part, quite messy, consider entire text box as a whole, don't split them
+      // TO-DO: refactor this part, quite messy, consider entire text box as a whole, don"t split them
       body = body.split("\n");
       context.fillText(
         `params: ${truncateText(context, params, MAX_TEXT_WIDTH).result
@@ -1154,7 +1156,7 @@
     context.restore();
   }
 
-  function drawSceneDataObjects() {
+  function initialiseDataObjects() {
     // drawDataObjects array is declared as a global array below but must
     // be reset whenever this fn is called
     drawnDataObjects = [];
@@ -1162,7 +1164,7 @@
     boundDataObjects.forEach(function (dataObject) {
       if (!isNull(dataObject)) {
         if (checkDraw(dataObject)) {
-          drawSceneDataObject(dataObject);
+          initialiseDataObject(dataObject);
           drawnDataObjects.push(dataObject);
         } else {
           reassignCoordinates(dataObject);
@@ -1172,7 +1174,7 @@
     viewport.render();
   }
 
-  function drawSceneDataObject(dataObject) {
+  function initialiseDataObject(dataObject) {
     const wrapper = getDataWrapper(dataObject),
       { x, y } = wrapper,
       scene = dataObjectLayer.scene,
@@ -1201,38 +1203,38 @@
   // Arrow Scene
   // --------------------------------------------------.
   // function initialiseArrowObjects() { // deprecated
-  //   drawSceneFrameArrows();
-  //   drawSceneFrameValueArrows();
-  //   drawSceneFnFrameArrows();
+  //   initialiseFrameArrows();
+  //   initialiseFrameValueArrows();
+  //   initialiseFnFrameArrows();
   // }
 
-  function drawSceneFrameValueArrows() {
+  function initialiseFrameValueArrows() {
     // call after init data object, since this will require reassigned coordinates
     frameObjects.forEach(function (frameObject) {
       const { elements } = frameObject;
       for (const name in elements) {
         const value = elements[name];
         if (isDataObject(value)) {
-          drawSceneFrameDataArrow(frameObject, name, value);
+          initialiseFrameDataArrow(frameObject, name, value);
         } else if (isFnObject(value)) {
-          drawSceneFrameFnArrow(frameObject, name, value);
+          initialiseFrameFnArrow(frameObject, name, value);
         }
       }
     });
     viewport.render();
   }
 
-  function drawSceneFnFrameArrows() {
+  function initialiseFnFrameArrows() {
     fnObjects.forEach(function (fnObject) {
-      drawSceneFnFrameArrow(fnObject);
+      initialiseFnFrameArrow(fnObject);
     });
     viewport.render();
   }
 
-  function drawSceneFrameArrows() {
+  function initialiseFrameArrows() {
     frameObjects.forEach(function (frameObject) {
       if (!isEmptyFrame(frameObject)) {
-        drawSceneFrameArrow(frameObject);
+        initialiseFrameArrow(frameObject);
       }
     });
     viewport.render();
@@ -1242,16 +1244,16 @@
    * Trivial - the arrow just points straight to a fixed position relative to
    * the frame.
    */
-  function drawSceneFrameDataArrow(frameObject, name, dataObject) {
+  function initialiseFrameDataArrow(frameObject, name, dataObject) {
     const wrapper = getDataWrapper(dataObject);
     arrowObjects.push(
       initialiseArrowObject([
-        initialiseArrowNode(
+        makeArrowNode(
           frameObject.x + (name.length + 1) * FRAME_WIDTH_CHAR + FRAME_PADDING_LEFT * 2,
           frameObject.y +
-          findElementNamePosition(name, frameObject) * FRAME_HEIGHT_LINE + FRAME_PADDING_TOP
+          getElementNamePosition(name, frameObject) * FRAME_HEIGHT_LINE + FRAME_PADDING_TOP
         ),
-        initialiseArrowNode(
+        makeArrowNode(
           wrapper.x,
           wrapper.y +
           DATA_UNIT_HEIGHT / 2
@@ -1266,7 +1268,7 @@
    * a different frame. If so, more care is needed to route the arrow back up
    * to its destination.
    */
-  function drawSceneFrameFnArrow(frameObject, name, fnObject) {
+  function initialiseFrameFnArrow(frameObject, name, fnObject) {
     // frame to fnobject
     const fnRight = fnObject.x + FNOBJECT_RADIUS * 2,
       fnLeft = fnObject.x - FNOBJECT_RADIUS * 2,
@@ -1277,14 +1279,14 @@
       // simply draw straight arrow from frame to function
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(
+          makeArrowNode(
             frameObject.x + (name.length + 1) * FRAME_WIDTH_CHAR + FRAME_PADDING_LEFT * 2,
             frameObject.y +
-            findElementNamePosition(name, frameObject) *
+            getElementNamePosition(name, frameObject) *
             FRAME_HEIGHT_LINE +
             FRAME_PADDING_TOP
           ),
-          initialiseArrowNode(
+          makeArrowNode(
             fnLeft,
             fnHeight
           ),
@@ -1300,12 +1302,12 @@
        * TO-DO: Improve implementation to handle any number of frame levels. (see issue sample 2, should form 2 stair steps)
        */
       // TO-DO: what is this for? remove this
-      const frameOffset = findFrameIndexInLevel(frameObject);
+      const frameOffset = getFrameIndexInLevel(frameObject);
       const x0 = frameObject.x
         + (name.length + 1) * FRAME_WIDTH_CHAR
         + FRAME_PADDING_LEFT * 2,
         y0 = frameObject.y +
-          findElementNamePosition(name, frameObject) *
+          getElementNamePosition(name, frameObject) *
           FRAME_HEIGHT_LINE +
           FRAME_PADDING_TOP,
         x1 = frameObject.x
@@ -1326,18 +1328,18 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
-          initialiseArrowNode(x3, y3),
-          initialiseArrowNode(x4, y4),
-          initialiseArrowNode(xf, yf),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
+          makeArrowNode(x3, y3),
+          makeArrowNode(x4, y4),
+          makeArrowNode(xf, yf),
         ])
       );
     }
   }
 
-  function drawSceneFnFrameArrow(fnObject) {
+  function initialiseFnFrameArrow(fnObject) {
 
     const frameObject = extractParentFrame(fnObject.source); // extract non empty parent frame
     const x0 = fnObject.x + FNOBJECT_RADIUS,
@@ -1355,9 +1357,9 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
         ])
       );
     } else if (
@@ -1372,9 +1374,9 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
         ])
       );
     } else {
@@ -1391,10 +1393,10 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
-          initialiseArrowNode(x3, y3),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
+          makeArrowNode(x3, y3),
         ])
       );
     }
@@ -1405,7 +1407,7 @@
    * Uses an offset factor to prevent lines overlapping, similar to with
    * frame-function arrowObjects.
    */
-  function drawSceneFrameArrow(frameObject) {
+  function initialiseFrameArrow(frameObject) {
     // TO-DO: point straight to the parent of the parent if parent is empty
     if (isNull(frameObject.parent)) return; // TO-DO: when is parent null? global?
 
@@ -1425,10 +1427,10 @@
     arrowObjects.push(
       initialiseArrowObject(
         [
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
-          initialiseArrowNode(x3, y3),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
+          makeArrowNode(x3, y3),
         ],
         {
           color: WHITE,
@@ -1612,7 +1614,7 @@
   // --------------------------------------------------.
 
   function reorderLayers() {
-    LAYERS.forEach((layer) => layer.moveToTop());
+    LAYERS.forEach(layer => layer.moveToTop());
   }
 
   function getObjFromKey(objects, key) {
@@ -1697,23 +1699,22 @@
     /**
      * Calculate coordinates for each fnObject and dataObject.
      */
-    // for (const d in boundDataObjects) {
     boundDataObjects.forEach(dataObject => {
       const wrapper = getDataWrapper(dataObject);
       const { parent } = wrapper;
       wrapper.x = parent.x + parent.width + FRAME_MARGIN_RIGHT;
       wrapper.y =
         parent.y +
-        findElementPosition(dataObject, parent) * FRAME_HEIGHT_LINE +
+        getElementPosition(dataObject, parent) * FRAME_HEIGHT_LINE +
         FRAME_PADDING_TOP -
         DATA_UNIT_HEIGHT / 2;
     });
 
     fnObjects.forEach(function (fnObject) {
       // Checks the parent of the function, calculate the coordinates accordingly
-      const { parent, parenttype, subparenttype } = fnObject;
+      const { parent, parentType } = fnObject;
 
-      if (parenttype === "data") {
+      if (parentType === "data") {
         const { mainStructure: mainParent, subStructure: subParent, index } = parent;
 
         const { x, y } = (
@@ -1724,7 +1725,7 @@
 
         // If function resides in tail, shift it rightward
         if (
-          subparenttype === "pair" &&
+          isPairData(subParent) &&
           subParent[1] === fnObject
         ) {
           fnObject.x = x + DATA_UNIT_WIDTH + FNOBJECT_RADIUS * 2 + PAIR_SPACING;
@@ -1735,7 +1736,7 @@
             Math.max(
               getTailUnitHeight(
                 subParent,
-                (subparenttype === "array" ? index : 0)
+                (isArrayData(subParent) ? index : 0)
               ),
               1
             );
@@ -1745,7 +1746,7 @@
           parent.x + parent.width + FRAME_MARGIN_RIGHT + FNOBJECT_RADIUS * 2;
         fnObject.y =
           parent.y +
-          findElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE +
+          getElementPosition(fnObject, parent) * FRAME_HEIGHT_LINE +
           FRAME_PADDING_TOP;
       }
     });
@@ -1762,7 +1763,7 @@
       if (isDataObject(value)) {
         if (
           traversedStructures.includes(value) ||
-          !isFirstMainStructure(dataObject, value)
+          !isParentMainStructure(dataObject, value)
         ) {
           return 0;
         } else if (isEmptyArray(value)) {
@@ -1770,7 +1771,6 @@
         } else if (isArrayData(value)) {
           traversedStructures.push(value);
           let maxWidth = 0;
-
 
           for (let i = value.length - 1; i >= 0; i--) {
             const elementWidth = Math.max(
@@ -1844,7 +1844,10 @@
       if (isFnObject(value)) {
         elemLines += 1;
       } else if (isDataObject(value)) {
-        if (getDataWrapper(value).parent === frameObject) {
+        if (
+          getDataWrapper(value).parent === frameObject
+          && !belongToOtherData(value, value)
+        ) {
           dataObjectHeight += getDataObjectHeight(value);
         } else {
           dataObjectHeight += FRAME_HEIGHT_LINE;
@@ -1862,7 +1865,6 @@
     const { elements } = frameObject;
     for (const name in elements) {
       const value = elements[name];
-      // if (true) {
       let currLength;
       const literals = ["number", "string", "boolean"];
       if (literals.includes(typeof value)) {
@@ -1876,7 +1878,6 @@
         currLength = name.length;
       }
       maxLength = Math.max(maxLength, currLength);
-      // }
     }
     return maxLength * FRAME_WIDTH_CHAR + FRAME_WIDTH_PADDING;
   }
@@ -1976,7 +1977,7 @@
     }
   }
 
-  function findFrameIndexInLevel(frameObject) {
+  function getFrameIndexInLevel(frameObject) {
     const { level } = frameObject;
     return levels[level].frameObjects.indexOf(frameObject);
   }
@@ -1989,33 +1990,33 @@
     );
   }
 
-  function findElementPosition(element, frameObject) {
+  function getElementPosition(element, frameObject) {
     let position = 0;
     const { elements } = frameObject;
     for (const name in elements) {
       const value = elements[name];
       if (value === element) {
         break;
-      } else if (isDataObject(value)) {
+      } else if (isDataObject(value) && !belongToOtherData(value)) {
         position += getDataUnitHeight(value);
       } else {
-        position += 1;
+        position++;
       }
     }
     return position;
   }
 
-  function findElementNamePosition(elementName, frameObject) {
+  function getElementNamePosition(elementName, frameObject) {
     let position = 0;
     const { elements } = frameObject;
     for (const name in elements) {
       const value = elements[name];
       if (name === elementName) {
         break;
-      } else if (isDataObject(value)) {
+      } else if (isDataObject(value) && !belongToOtherData(value)) {
         position += getDataUnitHeight(value);
       } else {
-        position += 1;
+        position++;
       }
     }
     return position;
@@ -2055,7 +2056,7 @@
 
   function getFrameByName(frameObjects, name) {
     // TO-DO: change this, this will need to ensure that frame name is unique
-    // return the first matched name
+    // return the first matched frameObject with the name
     for (const i in frameObjects) {
       if (frameObjects[i].name === name) {
         return frameObjects[i];
@@ -2066,7 +2067,7 @@
 
   function getFnObject(fnObject) {
     if (fnObjects[fnObjects.indexOf(fnObject)] === undefined) {
-      if (DEBUG_MODE) console.warn('FnObject not found in the array');
+      if (DEBUG_MODE) console.warn("FnObject not found in the array");
     }
     return fnObject;
   }
@@ -2096,9 +2097,9 @@
     // TO-DO: a fnobject can have multiple parents, refactor this using es6 syntax
     // add more props to the fnobject
     fnObject.key = fnObjectKey--;
-    try {
+    if (!isUndefined(fnObject.fun)) {
       fnObject.fnString = fnObject.fun.toString();
-    } catch (e) {
+    } else {
       fnObject.fnString = fnObject.toString();
     }
     fnObject.hovered = false;
@@ -2112,14 +2113,13 @@
     // TO-DO: parent is an array, make parent an object here, dont make it an array
     // [the entire parent data structure, the pair that contains the fnobject]
     initialiseFnObject(fnObject, parent);
-    fnObject.parenttype = "data";
-    fnObject.subparenttype = (isArrayData(parent.subStructure) ? "array" : "pair");
+    fnObject.parentType = "data";
     return fnObject;
   }
 
   function initialiseFrameFnObject(fnObject, parent) {
     initialiseFnObject(fnObject, parent);
-    fnObject.parenttype = "frame";
+    fnObject.parentType = "frame";
     return fnObject;
   }
 
@@ -2199,11 +2199,11 @@
         if (startX === shiftX) { // point up or down 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(
+              makeArrowNode(
                 newStartX,
                 newStartY
               ),
-              initialiseArrowNode(
+              makeArrowNode(
                 newStartX,
                 shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
               ),
@@ -2221,20 +2221,20 @@
 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
-              initialiseArrowNode(x2, y2),
-              initialiseArrowNode(x3, y3),
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
+              makeArrowNode(x2, y2),
+              makeArrowNode(x3, y3),
             ])
           );
         } else { // point up or down
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(
+              makeArrowNode(
                 newStartX,
                 newStartY
               ),
-              initialiseArrowNode(
+              makeArrowNode(
                 shiftX + DATA_UNIT_WIDTH / 4,
                 shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
               ),
@@ -2258,11 +2258,11 @@
 
         arrowObjects.push(
           initialiseArrowObject([
-            initialiseArrowNode(
+            makeArrowNode(
               newStartX,
               newStartY,
             ),
-            initialiseArrowNode(
+            makeArrowNode(
               shiftX + DATA_UNIT_WIDTH / 4,
               shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
             )
@@ -2318,7 +2318,7 @@
     context.save();
     //---//
     context.strokeStyle = hovered ? GREEN : SA_WHITE;
-    context.strokeRect(x, y, DATA_UNIT_WIDTH / (isNull(index) ? 4 : 2), DATA_UNIT_HEIGHT);
+    context.strokeRect(x, y, DATA_UNIT_WIDTH / (isNull(index) ? 3 : 2), DATA_UNIT_HEIGHT);
     context.stroke();
     //---//
     context.restore();
@@ -2405,8 +2405,8 @@
           if (draw) {
             arrowObjects.push(
               initialiseArrowObject([
-                initialiseArrowNode(newStartX, newStartY),
-                initialiseArrowNode(shiftX, newStartY),
+                makeArrowNode(newStartX, newStartY),
+                makeArrowNode(shiftX, newStartY),
               ])
             );
           } else {
@@ -2422,21 +2422,21 @@
 
             arrowObjects.push(
               initialiseArrowObject([
-                initialiseArrowNode(x0, y0),
-                initialiseArrowNode(x1, y1),
-                initialiseArrowNode(x2, y2),
-                initialiseArrowNode(x3, y3),
+                makeArrowNode(x0, y0),
+                makeArrowNode(x1, y1),
+                makeArrowNode(x2, y2),
+                makeArrowNode(x3, y3),
               ])
             );
           }
         } else {
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(
+              makeArrowNode(
                 newStartX,
                 newStartY
               ),
-              initialiseArrowNode(
+              makeArrowNode(
                 shiftX + DATA_UNIT_WIDTH / 4,
                 shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
               ),
@@ -2465,8 +2465,8 @@
 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
             ])
           );
         } else if (Math.abs(tail.x - newStartX) < DATA_UNIT_WIDTH) { // vertically aligned
@@ -2476,8 +2476,8 @@
             y1 = tail.y;
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
             ])
           );
         } else if (
@@ -2496,10 +2496,10 @@
 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
-              initialiseArrowNode(x2, y2),
-              initialiseArrowNode(x3, y3)
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
+              makeArrowNode(x2, y2),
+              makeArrowNode(x3, y3)
             ])
           );
         } else {
@@ -2513,9 +2513,9 @@
 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
-              initialiseArrowNode(x2, y2),
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
+              makeArrowNode(x2, y2),
             ])
           );
         }
@@ -2567,20 +2567,20 @@
 
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(x0, y0),
-              initialiseArrowNode(x1, y1),
-              initialiseArrowNode(x2, y2),
-              initialiseArrowNode(x3, y3),
+              makeArrowNode(x0, y0),
+              makeArrowNode(x1, y1),
+              makeArrowNode(x2, y2),
+              makeArrowNode(x3, y3),
             ])
           );
         } else {
           arrowObjects.push(
             initialiseArrowObject([
-              initialiseArrowNode(
+              makeArrowNode(
                 newStartX,
                 newStartY
               ),
-              initialiseArrowNode(
+              makeArrowNode(
                 shiftX + DATA_UNIT_WIDTH / 4,
                 shiftY + (shiftY > startY ? 0 : DATA_UNIT_HEIGHT)
               ),
@@ -2710,34 +2710,39 @@
    */
   function getShiftInfo(dataObject) {
 
-    const mainStructure = getFirstMainStructure(dataObject);
+    const parentMainStructure = getParentMainStructure(dataObject); // get the first parent mainstructure of this dataobject
 
-    function helper(value) { // get relative pos of dataObject wrt the value 
-      // can be any value
-      if (
-        !isDataObject(value) ||
-        isEmptyArray(value) ||
-        value === dataObject
+    function helper(parentStructure) {
+      // get relative pos of dataObject wrt the parentStructure 
+      if (!isDataObject(parentStructure)) {
+        if (DEBUG_MODE) console.warn(
+          "Please only pass in dataObject as argument.",
+          parentStructure
+        );
+        return { x: 0, y: 0 };
+      } else if (
+        isEmptyArray(parentStructure) ||
+        parentStructure === dataObject
       ) {
         return { x: 0, y: 0 };
-      } else if (isArrayData(value)) {
+      } else if (isArrayData(parentStructure)) {
         const result = { x: 0, y: 0 };
 
-        for (let i = 0; i < value.length; i++) {
-          const subStructure = value[i];
-          if (isSubStructure(subStructure, dataObject) && subStructure !== mainStructure) {
+        for (let i = 0; i < parentStructure.length; i++) {
+          const subStructure = parentStructure[i];
+          if (isSubStructure(subStructure, dataObject) && subStructure !== parentMainStructure) {
             const { x, y } = helper(subStructure);
             result.x = x + (DATA_UNIT_WIDTH / 2) * i;
             result.y = y +
               (DATA_UNIT_HEIGHT + PAIR_SPACING) *
-              Math.max(getDataUnitHeight(value, i + 1), 1);
+              Math.max(getDataUnitHeight(parentStructure, i + 1), 1);
           }
         }
 
         return result
       } else { // pair data
-        const head = value[0],
-          tail = value[1];
+        const head = parentStructure[0],
+          tail = parentStructure[1];
         if (isSubStructure(tail, dataObject)) {
           const { x, y } = helper(tail);
           return {
@@ -2750,21 +2755,24 @@
             x,
             y: y +
               (DATA_UNIT_HEIGHT + PAIR_SPACING) *
-              Math.max(getDataUnitHeight(tail), 1)
+              Math.max(getTailUnitHeight(parentStructure), 1)
           };
         }
-
       }
     }
 
-    const wrapper = getDataWrapper(mainStructure);
+    const wrapper = getDataWrapper(parentMainStructure);
 
     if (wrapper) {
-      const { x: relativeX, y: relativeY } = helper(mainStructure);
+      const wrapper = getDataWrapper(parentMainStructure);
+      const { x: relativeX, y: relativeY } = helper(parentMainStructure);
       const { x: wrapperX, y: wrapperY } = wrapper;
       return { x: wrapperX + relativeX, y: wrapperY + relativeY };
     } else {
-      if (DEBUG_MODE) console.warn('wrapper does not exist', dataObject);
+      if (DEBUG_MODE) console.warn(
+        "Wrapper does not exist. Please only pass in dataObject as argument.",
+        dataObject
+      );
       return { x: 0, y: 0 };
     }
   }
@@ -2793,13 +2801,15 @@
     return isDataObject(d2) && helper(d1, d2);
   }
 
-  function getMainStructures(subStructure) {
+  function getMainStructures(dataObject) {
+    // mainstructures are those boundDataObjects that contain the dataobject 
     return boundDataObjects.filter(
-      dataObject => isSubStructure(dataObject, subStructure)
+      boundDataObject => isSubStructure(boundDataObject, dataObject)
     )
   }
 
-  function getFirstMainStructure(subStructure) {
+  function getParentMainStructure(subStructure) {
+    // parent mainstructure is the first mainstructure among all mainstructures
     return getMainStructures(subStructure)[0];
   }
 
@@ -2813,22 +2823,35 @@
 
   // function belongToOtherObjects(mainStructure, subStructure) {
   //     return foundInOtherObjects(mainStructure, subStructure) &&
-  //         getFirstMainStructure(subStructure) !== mainStructure;
+  //         getParentMainStructure(subStructure) !== mainStructure;
   // }
 
-  function isFirstMainStructure(mainStructure, subStructure) {
-    return getFirstMainStructure(subStructure) === mainStructure;
+  function isParentMainStructure(mainStructure, datObject) {
+    if (DEBUG_MODE) {
+      if (!isSubStructure(mainStructure, datObject)) {
+        console.warn("Not a mainStructure of datObject", mainStructure, datObject);
+      } else if (!boundDataObjects.includes(mainStructure)) {
+        console.warn("Not a mainstructure", mainStructure, datObject);
+      }
+    }
+    return getParentMainStructure(datObject) === mainStructure;
+  }
+
+  function belongToOtherData(dataObject) {
+    // dataObject is drawn as a substructure of other dataObject
+    return !isParentMainStructure(dataObject, dataObject);
   }
 
   function checkDraw(dataObject) {
-    // technically can use isFirstMainStructure
-    // use this instead of isFirstMainStructure to check if need to draw
+    // use this instead of isParentMainStructure to check if need to draw
     return drawnDataObjects.every(
       drawnDataObject => !isSubStructure(drawnDataObject, dataObject)
     );
   }
 
   function getTailUnitHeight(dataObject, currIndex = 0) {
+    // get unit height of the tail of the dataobject
+    // can be array or pair data
     if (isArrayData(dataObject)) {
       return getDataUnitHeight(dataObject, currIndex + 1);
     } else {
@@ -2843,7 +2866,7 @@
     // does not apply to empty array
   ) {
     const traversedStructures = [],
-      mainStructure = getFirstMainStructure(dataObject);
+      mainStructure = getParentMainStructure(dataObject);
 
     let heightBeforeIndex = 0; // if dataObject is a non empty array, 
     // the height of the part before the pointer
@@ -2852,7 +2875,7 @@
       prevValue // the subparent of value, the dataObject that directly contains the value 
     ) {
       if (isDataObject(value)) {
-        if (!isFirstMainStructure(mainStructure, value)) {
+        if (!isParentMainStructure(mainStructure, value)) {
           return 0;
         } else if (isArrayData(value)) {
           if (traversedStructures.includes(value)) {
@@ -2881,7 +2904,7 @@
         }
       } else if (isFnObject(value)) {
         if (
-          value.parenttype === "frame" ||
+          value.parentType === "frame" ||
           value.parent.subStructure !== prevValue
         ) {
           return 0;
@@ -2904,7 +2927,10 @@
     } else if (isPairData(dataObject)) {
       return helper(dataObject, null);
     } else {
-      if (DEBUG_MODE) console.warn('not a data object:', dataObject);
+      if (DEBUG_MODE) console.warn(
+        "Please only pass in dataObject as argument.",
+        dataObject
+      );
       return 0;
     }
   }
@@ -3003,8 +3029,8 @@
         y1 = fnObject.y;
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
         ])
       );
     } else if (
@@ -3023,10 +3049,10 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
-          initialiseArrowNode(x3, y3),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
+          makeArrowNode(x3, y3),
         ])
       );
     } else {
@@ -3040,9 +3066,9 @@
 
       arrowObjects.push(
         initialiseArrowObject([
-          initialiseArrowNode(x0, y0),
-          initialiseArrowNode(x1, y1),
-          initialiseArrowNode(x2, y2),
+          makeArrowNode(x0, y0),
+          makeArrowNode(x1, y1),
+          makeArrowNode(x2, y2),
         ])
       );
     }
@@ -3177,7 +3203,7 @@
     return arrowObject;
   }
 
-  function initialiseArrowNode(x, y) {
+  function makeArrowNode(x, y) {
     return { x, y };
   }
 
