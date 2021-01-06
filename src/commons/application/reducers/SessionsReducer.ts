@@ -1,5 +1,9 @@
 import { Reducer } from 'redux';
 
+import {
+  REMOTE_EXEC_UPDATE_DEVICES,
+  REMOTE_EXEC_UPDATE_SESSION
+} from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { SourceActionType } from '../../utils/ActionsHelper';
 import { defaultSession } from '../ApplicationTypes';
 import { LOG_OUT } from '../types/CommonsTypes';
@@ -81,6 +85,16 @@ export const SessionsReducer: Reducer<SessionState> = (
       return {
         ...state,
         notifications: action.payload
+      };
+    case REMOTE_EXEC_UPDATE_DEVICES:
+      return {
+        ...state,
+        remoteExecutionDevices: action.payload
+      };
+    case REMOTE_EXEC_UPDATE_SESSION:
+      return {
+        ...state,
+        remoteExecutionSession: action.payload
       };
     default:
       return state;

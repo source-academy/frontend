@@ -55,7 +55,6 @@ type StateProps = {
 const SideContent = (props: SideContentProps) => {
   const { tabs, defaultSelectedTabId, handleActiveTabChange, onChange } = props;
   const [dynamicTabs, setDynamicTabs] = React.useState(tabs);
-  const workspaces = useSelector((state: OverallState) => state.workspaces);
 
   React.useEffect(() => {
     // Set initial sideContentActiveTab for this workspace
@@ -64,8 +63,10 @@ const SideContent = (props: SideContentProps) => {
   }, []);
 
   // Fetch debuggerContext from store
-  const debuggerContext: DebuggerContext | undefined =
-    props.workspaceLocation && workspaces[props.workspaceLocation].debuggerContext;
+  const debuggerContext = useSelector(
+    (state: OverallState) =>
+      props.workspaceLocation && state.workspaces[props.workspaceLocation].debuggerContext
+  );
 
   React.useEffect(() => {
     const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));

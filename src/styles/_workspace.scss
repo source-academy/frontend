@@ -547,6 +547,29 @@ $code-color-error: #ff4444;
         border-radius: 0 0 3px 3px;
       }
     }
+
+    .sa-remote-execution {
+      margin: 6px;
+
+      .devices-menu-container {
+        max-height: 60vh;
+        overflow-y: auto;
+        .#{$ns}-menu {
+          margin: 1px;
+          box-sizing: border-box;
+
+          .edit-buttons {
+            display: inline-block;
+            margin-left: 4px;
+
+            .#{$ns}-button.#{$ns}-small {
+              margin-top: -7px;
+              margin-bottom: -3px;
+            }
+          }
+        }
+      }
+    }
   }
 
   .side-content-tooltip {
