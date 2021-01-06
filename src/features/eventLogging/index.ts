@@ -24,7 +24,7 @@ const questionIdLookup: { [id: string]: string } = {};
 
 const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
 export function log(id: string, input: Input) {
-  if (!cadetLoggerUrl) {
+  if (process.env.NODE_ENV === 'test' || !cadetLoggerUrl) {
     return;
   } // This is set statically
   saveRecord({

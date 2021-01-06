@@ -33,7 +33,9 @@ import {
   SourcecastData
 } from '../../features/sourceRecorder/SourceRecorderTypes';
 
-export type SourcecastProps = DispatchProps & StateProps & RouteComponentProps<{}>;
+export type SourcecastProps = DispatchProps &
+  StateProps &
+  RouteComponentProps<{ sourcecastId: string }>;
 
 export type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -111,7 +113,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
   }
 
   public componentDidUpdate(prevProps: SourcecastProps) {
-    parseSourcecastUID(this.props);
+    this.handleQueryParam();
 
     const { inputToApply } = this.props;
 
@@ -284,27 +286,23 @@ class Sourcecast extends React.Component<SourcecastProps> {
       </div>
     );
   }
-}
 
-const parseSourcecastUID = (props: SourcecastProps) => {
-  const pathname = props.location.pathname;
-  if (pathname.length > 11) {
-    const uid = pathname.substr(12);
-    if (uid !== props.uid && props.sourcecastIndex) {
-      props.sourcecastIndex
-        .filter(data => data.uid === uid)
-        .forEach(data => {
-          props.handleSetSourcecastData(
-            data.title,
-            data.description,
-            data.uid,
-            data.url,
-            JSON.parse(data.playbackData)
-          );
-        });
+  private handleQueryParam() {
+    const newUid = this.props.match.params.sourcecastId;
+    if (newUid && newUid !== this.props.uid && this.props.sourcecastIndex) {
+      const cast = this.props.sourcecastIndex.find(data => data.uid === newUid);
+      if (cast) {
+        this.props.handleSetSourcecastData(
+          cast.title,
+          cast.description,
+          cast.uid,
+          cast.url,
+          JSON.parse(cast.playbackData)
+        );
+      }
     }
   }
-};
+}
 
 const INTRODUCTION = 'Welcome to Sourcecast!';
 

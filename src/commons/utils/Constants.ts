@@ -9,7 +9,7 @@ const isTest = process.env.NODE_ENV === 'test';
 const sourceAcademyVersion = process.env.REACT_APP_VERSION || 'local';
 const sourceAcademyEnvironment = process.env.REACT_APP_ENVIRONMENT || 'dev';
 const backendUrl = process.env.REACT_APP_BACKEND_URL;
-const cadetLoggerUrl = process.env.REACT_APP_CADET_LOGGER;
+const cadetLoggerUrl = isTest ? undefined : process.env.REACT_APP_CADET_LOGGER;
 const cadetLoggerInterval = parseInt(process.env.REACT_APP_CADET_LOGGER_INTERVAL || '10000', 10);
 const useBackend = !isTest && isTrue(process.env.REACT_APP_USE_BACKEND);
 const defaultSourceChapter = 4;
