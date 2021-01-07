@@ -150,7 +150,7 @@
     fnObjects = [];
     boundDataObjects = [];
     boundDataObjectWrappers = [];
-    builtins = [];
+    builtins = { names: [], values: [] };
     levels = {};
     drawnArrowLines = { x: [], y: [] };
     drawnDataObjects = [];
@@ -214,13 +214,15 @@
     const libraryEnv = allEnvs[1];
     const libraryElems = libraryEnv.head;
 
-    builtins = builtins.concat(Object.keys(globalElems));
-    builtins = builtins.concat(Object.keys(libraryElems));
+    builtins.names = builtins.names.concat(Object.keys(globalElems));
+    builtins.names = builtins.names.concat(Object.keys(libraryElems));
+    builtins.values = builtins.values.concat(Object.values(globalElems));
+    builtins.values = builtins.values.concat(Object.values(libraryElems));
 
     // add library-specific built-in functions to list of builtins
     const externalSymbols = context.context.context.externalSymbols;
     for (const i in externalSymbols) {
-      builtins.push(externalSymbols[i]);
+      builtins.names.push(externalSymbols[i]);
     }
 
     function initialisePrimitiveFnObjects() {
@@ -304,11 +306,7 @@
           for (const name in envElems) {
             const value = envElems[name];
             newFrameObject.elements[name] = value;
-            if (
-              isFnObject(value) &&
-              builtins.indexOf("" + getFnName(value)) > 0 &&
-              getFnName(value)
-            ) {
+            if (isPrimitiveFnObject(value)) {
               // this is a built-in function referenced to in a later frame,
               // e.g. "const a = pair". In this case, add it to the global frame
               // to be drawn and subsequently referenced.
@@ -420,31 +418,29 @@
         ) {
           if (traversedStructures.includes(value)) {
             // do nothing
-          } else if (isFnObject(value)) {
-            if (!fnObjects.includes(value)) {
-              if (builtins.includes(getFnName(value))) {
-                const globalFrame = getFrameByName(
-                  accFrames,
-                  "global"
-                );
-                globalFrame.elements[
-                  getFnName(value)
-                ] = value;
+          } else if (isFnObject(value) && !fnObjects.includes(value)) {
+            if (isPrimitiveFnObject(value)) {
+              const globalFrame = getFrameByName(
+                accFrames,
+                "global"
+              );
+              globalFrame.elements[
+                getFnName(value)
+              ] = value;
 
-                fnObjects.push(
-                  initialiseFrameFnObject(
-                    value,
-                    globalFrame
-                  )
-                );
-              } else {
-                fnObjects.push(
-                  initialiseDataFnObject(
-                    value,
-                    { mainStructure, subStructure, index }
-                  )
-                );
-              }
+              fnObjects.push(
+                initialiseFrameFnObject(
+                  value,
+                  globalFrame
+                )
+              );
+            } else {
+              fnObjects.push(
+                initialiseDataFnObject(
+                  value,
+                  { mainStructure, subStructure, index }
+                )
+              );
             }
           } else if (isDataObject(value)) {
             traversedStructures.push(value);
@@ -1968,6 +1964,11 @@
   // --------------------------------------------------.
   // For both function objects and data objects
 
+
+  function isPrimitiveFnObject(value) {
+    return isFnObject(value) && builtins.values.includes(value);
+  }
+
   function extractParentFrame(frameObject) {
     // extract a frame object that is non empty from an outer frame object
     if (isEmptyFrame(frameObject)) {
@@ -2488,7 +2489,7 @@
           const x0 = newStartX,
             y0 = newStartY,
             x1 = newStartX,
-            y1 = tail.y + FNOBJECT_RADIUS * 2 * (tail.y < newStartY ? 1 : -1),
+            y1 = tail.y + 25 * (tail.y < newStartY ? 1 : -1),
             x2 = tail.x,
             y2 = y1,
             x3 = tail.x,
@@ -3041,7 +3042,7 @@
       const x0 = newStartX,
         y0 = newStartY,
         x1 = x0,
-        y1 = fnObject.y + FNOBJECT_RADIUS * 2 * (fnObject.y < newStartY ? 1 : -1),
+        y1 = fnObject.y + 25 * (fnObject.y < newStartY ? 1 : -1),
         x2 = fnObject.x,
         y2 = y1,
         x3 = x2,
