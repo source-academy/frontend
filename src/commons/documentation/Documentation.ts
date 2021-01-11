@@ -1,4 +1,5 @@
 import { SourceDocumentation } from 'js-slang';
+import { deviceTypes } from 'src/features/remoteExecution/RemoteExecutionTypes';
 
 import { externalLibraries } from '../application/types/ExternalTypes';
 
@@ -14,25 +15,32 @@ function shortenCaption(name: string): string {
   return (name = name.substring(0, MAX_CAPTION_LENGTH - 3) + '...');
 }
 
-for (const [lib, names] of externalLibraries) {
-  const libDocs = names.map((name: string) => {
-    if (name in SourceDocumentation.ext_lib) {
-      return {
-        caption: shortenCaption(name),
-        value: name,
-        meta: SourceDocumentation.ext_lib[name].meta,
-        docHTML: SourceDocumentation.ext_lib[name].description
-      };
-    } else {
-      return {
-        caption: shortenCaption(name),
-        value: name,
-        meta: 'const'
-      };
-    }
-  });
+function mapExternalLibraryName(name: string) {
+  if (name in SourceDocumentation.ext_lib) {
+    return {
+      caption: shortenCaption(name),
+      value: name,
+      meta: SourceDocumentation.ext_lib[name].meta,
+      docHTML: SourceDocumentation.ext_lib[name].description
+    };
+  } else {
+    return {
+      caption: shortenCaption(name),
+      value: name,
+      meta: 'const'
+    };
+  }
+}
 
-  externalLibrariesDocumentation[lib] = libDocs;
+for (const [lib, names] of externalLibraries) {
+  externalLibrariesDocumentation[lib] = names.map(mapExternalLibraryName);
+}
+
+// Add remote device libraries
+for (const deviceType of deviceTypes) {
+  externalLibrariesDocumentation[deviceType.deviceLibraryName] = deviceType.internalFunctions.map(
+    mapExternalLibraryName
+  );
 }
 
 const builtinDocumentation = {};
