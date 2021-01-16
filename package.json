@@ -52,7 +52,7 @@
     "moment": "^2.29.0",
     "normalize.css": "^8.0.1",
     "phaser": "^3.24.1",
-    "query-string": "^6.13.5",
+    "query-string": "^6.13.8",
     "re-resizable": "^6.6.1",
     "react": "^16.13.1",
     "react-ace": "~9.0.0",
