@@ -7,7 +7,7 @@ type SideContentConstestEntryCardProps = DispatchProps & StateProps
 
 // to be adjusted based on how to react to onClick
 type DispatchProps = {
-    handleContestEntryClick: (studentUsername: string) => void; 
+    handleContestEntryClick: (studentUsername: string, program: string) => void; 
 }
 
 type StateProps = {
@@ -19,7 +19,10 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
 
     return (
         <div>
-            <Card className={Classes.INTERACTIVE} onClick={e => handleContestEntryClick(contestEntry.studentUsername)}>
+            <Card className={Classes.INTERACTIVE} onClick={() => handleContestEntryClick(
+                contestEntry.studentUsername,
+                contestEntry.program
+            )}>
                 <Pre>{contestEntry.studentUsername}</Pre>
                 <Pre>Score</Pre>
             </Card>

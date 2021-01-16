@@ -28,6 +28,7 @@ import {
   Assessment,
   AssessmentCategories,
   AutogradingResult,
+  ContestEntry,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
@@ -437,28 +438,46 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
-  contestVotingTabs: SideContentTab[] = [
-    {
-      label: 'Contest Voting',
-      iconName: IconNames.NEW_LAYERS,
-      body: <SideContentContestVoter />,
-      toSpawn: () => true
-    }, 
-    {
-      label: 'Contest Winners',
-      iconName: IconNames.CROWN,
-      body: <SideContentContestLeaderboard />,
-      toSpawn: () => true
-    }
-  ]
-
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
     questionId: number
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
-    const tabs: SideContentTab[] = [
+    const handleContestEntryClick = (studentUsername: string, program: string) => {
+      this.props.handleEditorValueChange(program)
+    }; 
+
+    // to be synced up with the Elixir backend and API calls be made
+    const dummyEntries: ContestEntry[] = [
+        {
+          studentUsername: 'e0111x', 
+          program: 'console.log(\'hello world\')'
+        },
+        {
+          studentUsername: 'e0222x',
+          program: 'Student 2'
+        }
+    ]
+    
+    const contestVotingTabs: SideContentTab[] = [
+      {
+        label: 'Contest Voting',
+        iconName: IconNames.NEW_LAYERS,
+        body: <SideContentContestVoter
+          handleContestEntryClick={handleContestEntryClick}
+          contestEntries={dummyEntries} />,
+        toSpawn: () => true
+      }, 
+      {
+        label: 'Contest Winners',
+        iconName: IconNames.CROWN,
+        body: <SideContentContestLeaderboard />,
+        toSpawn: () => true
+      }
+    ]
+
+    const defaultTabs: SideContentTab[] = [
       {
         label: `Task ${questionId + 1}`,
         iconName: IconNames.NINJA,
@@ -489,8 +508,9 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       }
     ];
+    const tabs: SideContentTab[] = defaultTabs
     /* Contest voting tab test - further logic will be added */
-    tabs.push(...this.contestVotingTabs)
+    tabs.push(...contestVotingTabs)
     if (isGraded) {
       tabs.push({
         label: `Report Card`,
