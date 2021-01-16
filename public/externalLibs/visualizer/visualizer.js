@@ -764,6 +764,7 @@
    */
   class NullDrawable extends NodeDrawable {
     constructor(x, y) {
+      super();
       this.image = new Kinetic.Line({
         x: x,
         y: y,
