@@ -50,6 +50,8 @@ import { HighlightedLines, Position } from '../editor/EditorTypes';
 import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
+import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
+import SideContentContestVoter from '../sideContent/SideContentContestVoter';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
@@ -435,6 +437,21 @@ class AssessmentWorkspace extends React.Component<
     }
   }
 
+  contestVotingTabs: SideContentTab[] = [
+    {
+      label: 'Contest Voting',
+      iconName: IconNames.NEW_LAYERS,
+      body: <SideContentContestVoter />,
+      toSpawn: () => true
+    }, 
+    {
+      label: 'Contest Winners',
+      iconName: IconNames.CROWN,
+      body: <SideContentContestLeaderboard />,
+      toSpawn: () => true
+    }
+  ]
+
   /** Pre-condition: IAssessment has been loaded */
   private sideContentProps: (p: AssessmentWorkspaceProps, q: number) => SideContentProps = (
     props: AssessmentWorkspaceProps,
@@ -472,6 +489,8 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       }
     ];
+    /* Contest voting tab test - further logic will be added */
+    tabs.push(...this.contestVotingTabs)
     if (isGraded) {
       tabs.push({
         label: `Report Card`,

@@ -158,6 +158,11 @@ export type Testcase = {
   type: TestcaseType;
 };
 
+export type ContestEntry = {
+  studentUsername: string;
+  program: string; //contest entry program to be input into editor  
+}
+
 export type MCQChoice = {
   content: string;
   hint: string | null;
