@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
 
 import AchievementInferencer from '../../../utils/AchievementInferencer';
 import { achievementTemplate } from '../AchievementTemplate';

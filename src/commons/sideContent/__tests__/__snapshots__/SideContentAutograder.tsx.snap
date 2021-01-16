@@ -19,8 +19,8 @@ exports[`Autograder renders autograder results with different statuses correctly
           <span>
             Testcases
           </span>
-          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-            <Blueprint3.Popover interactionKind=\\"hover-target\\" content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+            <Blueprint3.Popover interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
               <Manager>
                 <span className=\\"bp3-popover-wrapper\\">
                   <Reference innerRef={[Function: target]}>
@@ -288,8 +288,8 @@ exports[`Autograder renders hidden testcases with different statuses correctly 1
           <span>
             Testcases
           </span>
-          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-            <Blueprint3.Popover interactionKind=\\"hover-target\\" content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+            <Blueprint3.Popover interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
               <Manager>
                 <span className=\\"bp3-popover-wrapper\\">
                   <Reference innerRef={[Function: target]}>
@@ -459,7 +459,7 @@ exports[`Autograder renders placeholders correctly when testcases and results ar
     <span>
       Testcases
     </span>
-    <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
+    <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
       <Blueprint3.Icon icon=\\"help\\" />
     </Blueprint3.Tooltip>
   </Blueprint3.Button>
@@ -498,8 +498,8 @@ exports[`Autograder renders private testcases with different statuses correctly 
           <span>
             Testcases
           </span>
-          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-            <Blueprint3.Popover interactionKind=\\"hover-target\\" content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+            <Blueprint3.Popover interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
               <Manager>
                 <span className=\\"bp3-popover-wrapper\\">
                   <Reference innerRef={[Function: target]}>
@@ -745,8 +745,8 @@ exports[`Autograder renders public testcases with different statuses correctly 1
           <span>
             Testcases
           </span>
-          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100}>
-            <Blueprint3.Popover interactionKind=\\"hover-target\\" content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} minimal={false} modifiers={{...}} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
+          <Blueprint3.Tooltip content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+            <Blueprint3.Popover interactionKind=\\"hover-target\\" modifiers={{...}} content={{...}} position=\\"left\\" boundary=\\"window\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100} autoFocus={false} canEscapeKeyClose={false} enforceFocus={false} lazy={true} popoverClassName=\\"bp3-tooltip\\" portalContainer={[undefined]} captureDismiss={false} defaultIsOpen={false} disabled={false} fill={false} hasBackdrop={false} inheritDarkTheme={true} openOnTargetFocus={true} targetTagName=\\"span\\" usePortal={true} wrapperTagName=\\"span\\">
               <Manager>
                 <span className=\\"bp3-popover-wrapper\\">
                   <Reference innerRef={[Function: target]}>

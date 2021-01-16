@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme';
 import moment from 'moment';
-import * as React from 'react';
 import Constants from 'src/commons/utils/Constants';
 
 import { mockRouterProps } from '../../mocks/ComponentMocks';

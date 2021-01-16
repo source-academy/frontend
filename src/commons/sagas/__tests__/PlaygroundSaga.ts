@@ -1,8 +1,8 @@
 import { Variant } from 'js-slang/dist/types';
 import { compressToEncodedURIComponent } from 'lz-string';
 import * as qs from 'query-string';
-import { expectSaga } from 'redux-saga-test-plan';
 import { call } from 'redux-saga/effects';
+import { expectSaga } from 'redux-saga-test-plan';
 
 import { changeQueryString, updateShortURL } from '../../../features/playground/PlaygroundActions';
 import { GENERATE_LZ_STRING, SHORTEN_URL } from '../../../features/playground/PlaygroundTypes';
