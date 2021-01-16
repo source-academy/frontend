@@ -10644,10 +10644,10 @@ react-lifecycles-compat@^3.0.4:
   resolved "https://registry.yarnpkg.com/react-lifecycles-compat/-/react-lifecycles-compat-3.0.4.tgz#4f1a273afdfc8f3488a8c516bfda78f872352362"
   integrity sha512-fBASbA6LnOU9dOU2eW7aQ8xmYBSXUIWr+UmF9b1efZBazGNO+rcXT/icdKnYm2pTwcRylVUYwW7H1PHfLekVzA==
 
-react-mde@^10.2.1:
-  version "10.2.1"
-  resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-10.2.1.tgz#6debedbbed224155f5f4c025ae0c1655a41d385c"
-  integrity sha512-rq99Y6xQknZRQSzUpkY5KJRl3cE7GpiC+bSG2L10T2m1p6Y90zQxC060TWk1yoeXtGtveao1NXEV1UcpvOhRsQ==
+react-mde@^11.0.0:
+  version "11.0.0"
+  resolved "https://registry.yarnpkg.com/react-mde/-/react-mde-11.0.0.tgz#78b4d85c7d3508efef59cfc9e7b1432b8b72d2f0"
+  integrity sha512-U3k/ITPXklEjXkKhR7rgI3Y7ii5V62slSmG+/rYDQaCAabNwX+5dULKpIxWWSyqi+PvsuRVEYx6vV4sECMMbCw==
 
 react-popper@^1.3.7:
   version "1.3.7"
