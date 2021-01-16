@@ -99,7 +99,7 @@ class Application extends React.Component<ApplicationProps, ApplicationState> {
             <Switch>
               <Route path="/playground" component={Playground} />
               <Route path="/contributors" component={Contributors} />
-              <Route path="/sourcecast" component={SourcecastContainer} />
+              <Route path="/sourcecast/:sourcecastId?" component={SourcecastContainer} />
               {fullPaths}
               <Route
                 exact={true}
