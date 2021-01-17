@@ -179,6 +179,10 @@ export type ContestVotingSubmission = {
   [key: string]: number;
 };
 
+export type ContestVotingSubmission = {
+  [key: string]: number
+}
+
 export type MCQChoice = {
   content: string;
   hint: string | null;
