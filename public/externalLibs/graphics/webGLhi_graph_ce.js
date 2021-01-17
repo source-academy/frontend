@@ -57,17 +57,26 @@ function arc(t) {
 
 // SOME CURVE-TRANSFORMS
 
-function invert(curve) {
-  return function(t) {
-    return curve(1 - t)
+function applyTransformation(transformation, curve) {
+  if (curve instanceof Curve) {
+    var tempCurve = curve.getCurve()
+    curve.setCurve(transformation(tempCurve))
+    return curve
+  } else {
+    return transformation(curve)
   }
 }
 
+function invert(curve) {
+  return applyTransformation(c => (t => c(1 - t)), curve)
+}
+
 function rotate_pi_over_2(curve) {
-  return function(t) {
-    var ct = curve(t)
+  var transformation = c => (t => {
+    var ct = c(t)
     return make_point(-y_of(ct), x_of(ct))
-  }
+  })
+  return applyTransformation(transformation, curve)
 }
 
 // CONSTRUCTORS OF CURVE-TRANSFORMS
@@ -76,10 +85,11 @@ function rotate_pi_over_2(curve) {
 
 function translate(x0, y0) {
   return function(curve) {
-    return function(t) {
-      var ct = curve(t)
+    var transformation = c => (function(t) {
+      var ct = c(t)
       return make_point(x0 + x_of(ct), y0 + y_of(ct))
-    }
+    })
+    return applyTransformation(transformation, curve)
   }
 }
 
@@ -89,32 +99,35 @@ function rotate_around_origin(theta) {
   var cth = Math.cos(theta)
   var sth = Math.sin(theta)
   return function(curve) {
-    return function(t) {
-      var ct = curve(t)
+    var transformation = c => (function(t) {
+      var ct = c(t)
       var x = x_of(ct)
       var y = y_of(ct)
       return make_point(cth * x - sth * y, sth * x + cth * y)
-    }
+    })
+    return applyTransformation(transformation, curve)
   }
 }
 
 function deriv_t(n) {
   var delta_t = 1 / n
   return function(curve) {
-    return function(t) {
-      var ct = curve(t)
-      var ctdelta = curve(t + delta_t)
+    var transformation = c => (function(t) {
+      var ct = c(t)
+      var ctdelta = c(t + delta_t)
       return make_point((x_of(ctdelta) - x_of(ct)) / delta_t, (y_of(ctdelta) - y_of(ct)) / delta_t)
-    }
-  }
+    })
+    return applyTransformation(transformation, curve)
+      }
 }
 
 function scale_x_y(a, b) {
   return function(curve) {
-    return function(t) {
-      var ct = curve(t)
+    var transformation = c => (function(t) {
+      var ct = c(t)
       return make_point(a * x_of(ct), b * y_of(ct))
-    }
+    })
+    return applyTransformation(transformation, curve)
   }
 }
 
@@ -182,13 +195,26 @@ function full_view_proportional(xlo, xhi, ylo, yhi) {
 // Behavior is unspecified on closed curves (with start-point = end-point).
 
 function put_in_standard_position(curve) {
-  var start_point = curve(0)
-  var curve_started_at_origin = translate(-x_of(start_point), -y_of(start_point))(curve)
-  var new_end_point = curve_started_at_origin(1)
-  var theta = Math.atan2(y_of(new_end_point), x_of(new_end_point))
-  var curve_ended_at_x_axis = rotate_around_origin(-theta)(curve_started_at_origin)
-  var end_point_on_x_axis = x_of(curve_ended_at_x_axis(1))
-  return scale(1 / end_point_on_x_axis)(curve_ended_at_x_axis)
+  if (curve instanceof Curve) {
+    var wrapper = new Curve()
+    var start_point = curve.getCurve()(0)
+    var curve_started_at_origin = translate(-x_of(start_point), -y_of(start_point))(curve.getCurve())
+    var new_end_point = curve_started_at_origin(1)
+    var theta = Math.atan2(y_of(new_end_point), x_of(new_end_point))
+    var curve_ended_at_x_axis = rotate_around_origin(-theta)(curve_started_at_origin)
+    var end_point_on_x_axis = x_of(curve_ended_at_x_axis(1))
+    wrapper.setCurve(scale(1 / end_point_on_x_axis)(curve_ended_at_x_axis))
+    wrapper.setColor(curve.getColor())
+    return wrapper
+  } else {
+    var start_point = curve(0)
+    var curve_started_at_origin = translate(-x_of(start_point), -y_of(start_point))(curve)
+    var new_end_point = curve_started_at_origin(1)
+    var theta = Math.atan2(y_of(new_end_point), x_of(new_end_point))
+    var curve_ended_at_x_axis = rotate_around_origin(-theta)(curve_started_at_origin)
+    var end_point_on_x_axis = x_of(curve_ended_at_x_axis(1))
+    return scale(1 / end_point_on_x_axis)(curve_ended_at_x_axis)
+  }
 }
 
 // Binary-transform = (Curve,Curve --> Curve)
@@ -196,21 +222,42 @@ function put_in_standard_position(curve) {
 // CONNECT-RIGIDLY makes a curve consisting of curve1 followed by curve2.
 
 function connect_rigidly(curve1, curve2) {
-  return function(t) {
-    if (t < 1 / 2) {
-      return curve1(2 * t)
-    } else {
-      return curve2(2 * t - 1)
-    }
+  if (!(curve1 instanceof Curve)) {
+    var temp = new Curve()
+    temp.setCurve(curve1)
+    temp.setColor(t => [0, 0, 0, 1])
+    curve1 = temp
   }
+  if (!(curve2 instanceof Curve)) {
+    var temp = new Curve()
+    temp.setCurve(curve2)
+    temp.setColor(t => [0, 0, 0, 1])
+    curve2 = temp
+  }
+  var wrapper = new Curve()
+  wrapper.setCurve(t => {
+    if (t < 1 / 2) {
+      return curve1.getCurve()(2 * t)
+    } else {
+      return curve2.getCurve()(2 * t - 1)
+    }
+  })
+  wrapper.setColor(t => {
+    if (t < 1 / 2) {
+      return curve1.getColor()(2 * t)
+    } else {
+      return curve2.getColor()(2 * t - 1)
+    }
+  })
+  return wrapper
 }
 
 // CONNECT-ENDS makes a curve consisting of curve1 followed by
 // a copy of curve2 starting at the end of curve1
 
 function connect_ends(curve1, curve2) {
-  var start_point_of_curve2 = curve2(0)
-  var end_point_of_curve1 = curve1(1)
+  var start_point_of_curve2 = curve2 instanceof Curve ? curve2.getCurve()(0) : curve2(0)
+  var end_point_of_curve1 = curve1 instanceof Curve ? curve1.getCurve()(1) : curve1(1)
   return connect_rigidly(
     curve1,
     translate(
@@ -219,6 +266,7 @@ function connect_ends(curve1, curve2) {
     )(curve2)
   )
 }
+
 
 // function connect_ends(curve1, curve2) {...}
 
