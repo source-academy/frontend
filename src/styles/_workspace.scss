@@ -802,7 +802,9 @@ $code-color-error: #ff4444;
     }
   }
 
-  .Autograder {
+  .Autograder,
+  .ContestEntryVoting,
+  .ContestLeaderboard {
     min-width: 640px;
 
     *:focus {
@@ -826,7 +828,8 @@ $code-color-error: #ff4444;
     }
 
     .testcases-header,
-    .results-header {
+    .results-header,
+    .contestentries-header {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -875,6 +878,16 @@ $code-color-error: #ff4444;
       }
     }
 
+    .contestentries-header {
+      .header-entryid {
+        width: 55%
+      }
+      
+      .header-entryrank {
+        width: 45%;
+      }
+    }
+
     pre {
       color: $code-color-code;
     }
@@ -887,8 +900,10 @@ $code-color-error: #ff4444;
   }
 
   .AutograderCard,
-  .ResultCard {
+  .ResultCard,
+  .ContestEntryCard {
     /* Wrapper container (Blueprint Card) for each testcase and autograder result */
+    /* Wrapper container for each Contest Entry Voting cards */  
     .#{$ns}-card {
       border-color: rgb(26, 37, 48);
       border-style: solid;
@@ -937,6 +952,21 @@ $code-color-error: #ff4444;
       border-top-style: solid;
       border-top-width: 1px;
       border-color: #1a2530;
+    }
+  }
+
+  .ContestEntryCard {
+    /* Nested Blueprint Card component for Contest Entry Card */
+    .#{$ns}-card {
+      .contestentry-entryid {
+        width: 55%;
+        text-align: center;
+      }
+
+      .contestentry-rank {
+        width: 45%;
+        text-align: center;
+      }
     }
   }
 

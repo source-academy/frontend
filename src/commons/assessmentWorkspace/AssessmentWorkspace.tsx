@@ -52,7 +52,7 @@ import Markdown from '../Markdown';
 import { SideContentProps } from '../sideContent/SideContent';
 import SideContentAutograder from '../sideContent/SideContentAutograder';
 import SideContentContestLeaderboard from '../sideContent/SideContentContestLeaderboard';
-import SideContentContestVoter from '../sideContent/SideContentContestVoter';
+import SideContentContestVotingContainer from '../sideContent/SideContentContestVotingContainer';
 import SideContentToneMatrix from '../sideContent/SideContentToneMatrix';
 import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../sideContent/SideContentVideoDisplay';
@@ -464,15 +464,18 @@ class AssessmentWorkspace extends React.Component<
       {
         label: 'Contest Voting',
         iconName: IconNames.NEW_LAYERS,
-        body: <SideContentContestVoter
+        body: <SideContentContestVotingContainer
           handleContestEntryClick={handleContestEntryClick}
           contestEntries={dummyEntries} />,
         toSpawn: () => true
       }, 
       {
-        label: 'Contest Winners',
+        label: 'Contest Leaderboard',
         iconName: IconNames.CROWN,
-        body: <SideContentContestLeaderboard />,
+        body: <SideContentContestLeaderboard
+          handleContestEntryClick={handleContestEntryClick}
+          orderedContestEntries={dummyEntries}
+         />,
         toSpawn: () => true
       }
     ]

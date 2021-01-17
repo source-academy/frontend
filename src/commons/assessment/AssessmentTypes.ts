@@ -163,6 +163,10 @@ export type ContestEntry = {
   program: string; //contest entry program to be input into editor  
 }
 
+export type ContestVotingSubmission = {
+  [key: string]: number
+}
+
 export type MCQChoice = {
   content: string;
   hint: string | null;
