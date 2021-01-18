@@ -14,8 +14,8 @@
     container: container
   });
 
-  const PRODUCTION_ENV = true;
-  const DEBUG_MODE = !PRODUCTION_ENV && true; // enable to see debug messages in development
+  const { PRODUCTION_MODE = true } = window;
+  const DEBUG_MODE = !PRODUCTION_MODE && true; // enable to see debug messages in development
 
   const SA_WHITE = '#999999';
   const SA_BLUE = '#2c3e50';
@@ -53,13 +53,13 @@
     drawBackground,
     initialiseFrameArrows,
     initialiseFnFrameArrows,
-    initialiseFrameTitles,
     drawSceneFrameObjects,
     drawHitFrameObjects,
     drawSceneFnObjects,
     drawHitFnObjects,
     initialiseDataObjects,
     initialiseFrameValueArrows,
+    initialiseFrameTexts,
     drawScenePairBlocks,
     drawHitPairBlocks,
     drawSceneArrayBlocks,
@@ -180,7 +180,7 @@
 
   // main function to be exported
   function draw_env(context) {
-    if (PRODUCTION_ENV) {
+    if (PRODUCTION_MODE) {
       // hide the default text
       document.getElementById('env-visualizer-default-text').hidden = true;
       // blink icon
@@ -730,9 +730,10 @@
 
   // Frame Scene
   // --------------------------------------------------.
-  function initialiseFrameTitles() {
+  function initialiseFrameTexts() {
     frameObjects.forEach(frameObject => {
-      const { name, x, y } = frameObject;
+      const { name, x, y, elements } = frameObject;
+
       let frameName;
       switch (name) {
         case 'forLoop':
@@ -757,6 +758,79 @@
       textObjects.push(
         initialiseTextObject(frameName, x, y - 10, { color: WHITE, maxWidth: 100, isSymbol: true })
       );
+
+      // render text in frame
+      const textConfig = { color: WHITE, maxWidth: Infinity, isSymbol: true };
+      let i = 0;
+      let textX = x + FRAME_PADDING_LEFT;
+      let textY = y + FRAME_PADDING_TOP;
+
+      for (const name in elements) {
+        const value = elements[name];
+        if (isNull(value)) {
+          // null primitive in Source
+          textObjects.push(
+            initialiseTextObject(
+              `${'' + name}: null`,
+              textX,
+              textY + i * FRAME_HEIGHT_LINE,
+              textConfig
+            )
+          );
+        } else {
+          switch (typeof value) {
+            case 'number':
+            case 'boolean':
+            case 'undefined':
+              textObjects.push(
+                initialiseTextObject(
+                  `${'' + name}: ${'' + value}`,
+                  textX,
+                  textY + i * FRAME_HEIGHT_LINE,
+                  textConfig
+                )
+              );
+              break;
+            case 'string':
+              if (name === '(predeclared names)') {
+                textObjects.push(
+                  initialiseTextObject(
+                    `${'' + name}`,
+                    textX,
+                    textY + i * FRAME_HEIGHT_LINE,
+                    textConfig
+                  )
+                );
+              } else {
+                textObjects.push(
+                  initialiseTextObject(
+                    `${'' + name}: "${'' + value}"`,
+                    textX,
+                    textY + i * FRAME_HEIGHT_LINE,
+                    textConfig
+                  )
+                );
+              }
+              break;
+            default:
+              textObjects.push(
+                initialiseTextObject(
+                  `${'' + name}:`,
+                  textX,
+                  textY + i * FRAME_HEIGHT_LINE,
+                  textConfig
+                )
+              );
+          }
+        }
+        if (isDataObject(value) && !belongToOtherData(value)) {
+          i += getDataUnitHeight(value);
+        } else {
+          i++;
+        }
+      }
+
+      // context.restore();
     });
   }
 
@@ -780,50 +854,11 @@
   function drawSceneFrameObject(frameObject) {
     const scene = frameObject.layer.scene,
       context = scene.context,
-      { x, y, elements, width, height, hovered } = frameObject;
+      { x, y, width, height, hovered } = frameObject;
     context.save();
-    context.font = FONT_SETTING;
     context.fillStyle = WHITE;
     context.beginPath();
 
-    // render text in frame
-    let i = 0;
-    let textX = x + FRAME_PADDING_LEFT;
-    let textY = y + FRAME_PADDING_TOP;
-
-    for (const name in elements) {
-      const value = elements[name];
-      if (isNull(value)) {
-        // null primitive in Source
-        context.fillText(`${'' + name}: null`, textX, textY + i * FRAME_HEIGHT_LINE);
-      } else {
-        switch (typeof value) {
-          case 'number':
-          case 'boolean':
-          case 'undefined':
-            context.fillText(`${'' + name}: ${'' + value}`, textX, textY + i * FRAME_HEIGHT_LINE);
-            break;
-          case 'string':
-            if (name === '(predeclared names)') {
-              context.fillText(`${'' + name}`, textX, textY + i * FRAME_HEIGHT_LINE);
-            } else {
-              context.fillText(
-                `${'' + name}: "${'' + value}"`,
-                textX,
-                textY + i * FRAME_HEIGHT_LINE
-              );
-            }
-            break;
-          default:
-            context.fillText(`${'' + name}:`, textX, textY + i * FRAME_HEIGHT_LINE);
-        }
-      }
-      if (isDataObject(value) && !belongToOtherData(value)) {
-        i += getDataUnitHeight(value);
-      } else {
-        i++;
-      }
-    }
     context.strokeStyle = hovered ? GREEN : WHITE;
     context.strokeRect(x, y, width, height);
 
@@ -1401,16 +1436,13 @@
   }
 
   function drawHitTextObject(textObject) {
-    const { value, x, y, key } = textObject,
+    const { value, x, y, key, maxWidth } = textObject,
       hit = textObjectLayer.hit,
       context = hit.context;
     context.save();
     context.font = FONT_SETTING;
     context.fillStyle = hit.getColorFromIndex(key);
-    const textWidth = Math.min(
-      context.measureText(value).width + TEXT_PADDING * 2,
-      DATA_UNIT_WIDTH / 2
-    );
+    const textWidth = Math.min(context.measureText(value).width + TEXT_PADDING * 2, maxWidth);
     //---//
     context.fillRect(x - TEXT_PADDING, y - FONT_HEIGHT, textWidth, FONT_HEIGHT + TEXT_PADDING);
     //---//
