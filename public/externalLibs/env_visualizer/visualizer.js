@@ -14,7 +14,7 @@
     container: container
   });
 
-  const { PRODUCTION_MODE = true } = window;
+  const { PRODUCTION_MODE = true } = exports;
   const DEBUG_MODE = !PRODUCTION_MODE && true; // enable to see debug messages in development
 
   const SA_WHITE = '#999999';
@@ -230,7 +230,7 @@
     }
 
     // parse input from the interpreter
-    function parseInput(accFrames, environments) {
+    function parseInput(environments, accFrames = []) {
       let newFrameObjects = [];
       /**
        * environments is the array of environments in the interpreter.
@@ -464,11 +464,11 @@
           Array.prototype.push.apply(allMissingEnvs, extractedEnvs);
         });
 
-        // remove repeated env in the array using Set constructor
+        // remove repeated envs in the array
         const uniqMissingEnvs = [...new Set(allMissingEnvs)];
         Array.prototype.push.apply(allEnvs, uniqMissingEnvs);
 
-        newFrameObjects = parseInput(accFrames, uniqMissingEnvs);
+        newFrameObjects = parseInput(uniqMissingEnvs, accFrames);
       }
 
       /**
@@ -484,7 +484,7 @@
       return accFrames;
     }
 
-    frameObjects = parseInput([], allEnvs);
+    frameObjects = parseInput(allEnvs);
     /**
      * Find the source frame for each fnObject. The source frame is the frame
      * which generated the function. This may be different from the parent
