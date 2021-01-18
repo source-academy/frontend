@@ -730,108 +730,6 @@
 
   // Frame Scene
   // --------------------------------------------------.
-  function initialiseFrameTexts() {
-    frameObjects.forEach(frameObject => {
-      const { name, x, y, elements } = frameObject;
-
-      let frameName;
-      switch (name) {
-        case 'forLoop':
-          frameName = 'Body of for-loop';
-          break;
-        case 'forBlock':
-          frameName = 'Control variable of for-loop';
-          break;
-        case 'block':
-          frameName = 'Block';
-          break;
-        case 'global':
-          frameName = 'Global';
-          break;
-        case 'functionBody':
-          frameName = 'Function Body';
-          break;
-        default:
-          frameName = name;
-      }
-
-      textObjects.push(
-        initialiseTextObject(frameName, x, y - 10, { color: WHITE, maxWidth: 100, isSymbol: true })
-      );
-
-      // render text in frame
-      const textConfig = { color: WHITE, maxWidth: Infinity, isSymbol: true };
-      let i = 0;
-      let textX = x + FRAME_PADDING_LEFT;
-      let textY = y + FRAME_PADDING_TOP;
-
-      for (const name in elements) {
-        const value = elements[name];
-        if (isNull(value)) {
-          // null primitive in Source
-          textObjects.push(
-            initialiseTextObject(
-              `${'' + name}: null`,
-              textX,
-              textY + i * FRAME_HEIGHT_LINE,
-              textConfig
-            )
-          );
-        } else {
-          switch (typeof value) {
-            case 'number':
-            case 'boolean':
-            case 'undefined':
-              textObjects.push(
-                initialiseTextObject(
-                  `${'' + name}: ${'' + value}`,
-                  textX,
-                  textY + i * FRAME_HEIGHT_LINE,
-                  textConfig
-                )
-              );
-              break;
-            case 'string':
-              if (name === '(predeclared names)') {
-                textObjects.push(
-                  initialiseTextObject(
-                    `${'' + name}`,
-                    textX,
-                    textY + i * FRAME_HEIGHT_LINE,
-                    textConfig
-                  )
-                );
-              } else {
-                textObjects.push(
-                  initialiseTextObject(
-                    `${'' + name}: "${'' + value}"`,
-                    textX,
-                    textY + i * FRAME_HEIGHT_LINE,
-                    textConfig
-                  )
-                );
-              }
-              break;
-            default:
-              textObjects.push(
-                initialiseTextObject(
-                  `${'' + name}:`,
-                  textX,
-                  textY + i * FRAME_HEIGHT_LINE,
-                  textConfig
-                )
-              );
-          }
-        }
-        if (isDataObject(value) && !belongToOtherData(value)) {
-          i += getDataUnitHeight(value);
-        } else {
-          i++;
-        }
-      }
-    });
-  }
-
   function drawSceneFrameObjects() {
     const scene = frameObjectLayer.scene;
     scene.clear();
@@ -1381,7 +1279,6 @@
     let hoveredText;
     scene.clear();
     textObjects.forEach(function (textObject) {
-      // drawSceneTextObject(textObject);
       if (textObject.hovered) {
         hoveredText = textObject;
       } else {
@@ -1454,7 +1351,6 @@
   */
   // General Helpers
   // --------------------------------------------------.
-
   function reorderLayers() {
     LAYERS.forEach(layer => layer.moveToTop());
   }
@@ -1775,8 +1671,6 @@
 
   // Frame Helpers
   // --------------------------------------------------.
-  // For both function objects and data objects
-
   function isPrimitiveFnObject(value) {
     return isFnObject(value) && builtins.values.includes(value);
   }
@@ -1830,6 +1724,108 @@
       }
     }
     return position;
+  }
+
+  function initialiseFrameTexts() {
+    frameObjects.forEach(frameObject => {
+      const { name, x, y, elements } = frameObject;
+
+      let frameName;
+      switch (name) {
+        case 'forLoop':
+          frameName = 'Body of for-loop';
+          break;
+        case 'forBlock':
+          frameName = 'Control variable of for-loop';
+          break;
+        case 'block':
+          frameName = 'Block';
+          break;
+        case 'global':
+          frameName = 'Global';
+          break;
+        case 'functionBody':
+          frameName = 'Function Body';
+          break;
+        default:
+          frameName = name;
+      }
+
+      textObjects.push(
+        initialiseTextObject(frameName, x, y - 10, { color: WHITE, maxWidth: 100, isSymbol: true })
+      );
+
+      // render text in frame
+      const textConfig = { color: WHITE, maxWidth: Infinity, isSymbol: true };
+      let i = 0;
+      let textX = x + FRAME_PADDING_LEFT;
+      let textY = y + FRAME_PADDING_TOP;
+
+      for (const name in elements) {
+        const value = elements[name];
+        if (isNull(value)) {
+          // null primitive in Source
+          textObjects.push(
+            initialiseTextObject(
+              `${'' + name}: null`,
+              textX,
+              textY + i * FRAME_HEIGHT_LINE,
+              textConfig
+            )
+          );
+        } else {
+          switch (typeof value) {
+            case 'number':
+            case 'boolean':
+            case 'undefined':
+              textObjects.push(
+                initialiseTextObject(
+                  `${'' + name}: ${'' + value}`,
+                  textX,
+                  textY + i * FRAME_HEIGHT_LINE,
+                  textConfig
+                )
+              );
+              break;
+            case 'string':
+              if (name === '(predeclared names)') {
+                textObjects.push(
+                  initialiseTextObject(
+                    `${'' + name}`,
+                    textX,
+                    textY + i * FRAME_HEIGHT_LINE,
+                    textConfig
+                  )
+                );
+              } else {
+                textObjects.push(
+                  initialiseTextObject(
+                    `${'' + name}: "${'' + value}"`,
+                    textX,
+                    textY + i * FRAME_HEIGHT_LINE,
+                    textConfig
+                  )
+                );
+              }
+              break;
+            default:
+              textObjects.push(
+                initialiseTextObject(
+                  `${'' + name}:`,
+                  textX,
+                  textY + i * FRAME_HEIGHT_LINE,
+                  textConfig
+                )
+              );
+          }
+        }
+        if (isDataObject(value) && !belongToOtherData(value)) {
+          i += getDataUnitHeight(value);
+        } else {
+          i++;
+        }
+      }
+    });
   }
 
   function initialiseFrameObject(frameName, key) {
