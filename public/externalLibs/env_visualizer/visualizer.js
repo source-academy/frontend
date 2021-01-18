@@ -829,8 +829,6 @@
           i++;
         }
       }
-
-      // context.restore();
     });
   }
 
@@ -2779,24 +2777,26 @@
     }
   }
 
-  // TODO: combine registerArrowPaths and registerEndPaths
+  function registerArrowPath(node1, node2) {
+    if (node1.x === node2.x) {
+      drawnArrowLines.x.push({
+        coord: node1.x,
+        range: [node1.y, node2.y]
+      });
+    } else if (node1.y === node2.y) {
+      drawnArrowLines.y.push({
+        coord: node1.y,
+        range: [node1.x, node2.x]
+      });
+    }
+  }
+
   // push all arrow segments into the arrow overlap detector
   function registerArrowPaths(nodes) {
     for (let i = 0; i < nodes.length - 1; i++) {
       const currNode = nodes[i],
         nextNode = nodes[i + 1];
-
-      if (currNode.x === nextNode.x) {
-        drawnArrowLines.x.push({
-          coord: currNode.x,
-          range: [currNode.y, nextNode.y]
-        });
-      } else if (currNode.y === nextNode.y) {
-        drawnArrowLines.y.push({
-          coord: currNode.y,
-          range: [currNode.x, nextNode.x]
-        });
-      }
+      registerArrowPath(currNode, nextNode);
     }
 
     return nodes;
@@ -2808,17 +2808,7 @@
       if (i === 0 || i === nodes.length - 2) {
         const currNode = nodes[i],
           nextNode = nodes[i + 1];
-        if (currNode.x === nextNode.x) {
-          drawnArrowLines.x.push({
-            coord: currNode.x,
-            range: [currNode.y, nextNode.y]
-          });
-        } else if (currNode.y === nextNode.y) {
-          drawnArrowLines.y.push({
-            coord: currNode.y,
-            range: [currNode.x, nextNode.x]
-          });
-        }
+        registerArrowPath(currNode, nextNode);
       }
     }
   }
