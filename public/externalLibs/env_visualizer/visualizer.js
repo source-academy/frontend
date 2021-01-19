@@ -191,8 +191,21 @@
     resetVariables();
 
     // process backwards so that global env comes first
-    const allEnvs = context.runtime.environments;
-    allEnvs.reverse();
+    const allEnvs = checkEnvs(context.runtime.environments.reverse());
+
+    function checkEnvs(envs) {
+      let newEnvs = [];
+      let prevEnv = null;
+      for (let i = 0; i < envs.length; i++) {
+        const currEnv = envs[i];
+        if (currEnv.tail !== prevEnv) {
+          newEnvs = [...extractEnvs(currEnv), ...envs.slice(i + 1)];
+        }
+        prevEnv = currEnv;
+      }
+
+      return isEmptyArray(newEnvs) ? envs : newEnvs;
+    }
 
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
@@ -300,6 +313,7 @@
               getFrameByKey(accFrames, env.tail.envKeyCounter)
             );
           }
+
           // For loops do not have frameObject.parent, only while loops and functions do
           if (frameObject.parent) {
             frameObject.parent.children.push(frameObject.key);
@@ -414,34 +428,20 @@
         }
       });
 
-      // a helper func to extract all the missing tail envs from the given environment
-      function extractEnvs(environment) {
-        // TODO: include in general helper functions
-        if (
-          isNull(environment) ||
-          environment.name === 'programEnvironment' ||
-          environment.name === 'global'
-        ) {
-          return [];
-        } else {
-          // prepend the extracted tail envs, so that the outermost environment comes last
-          return [...extractEnvs(environment.tail), environment];
-        }
-      }
-
       // extract all envs from the top level missing envs
       if (topLevelMissingEnvs.length > 0) {
         const allMissingEnvs = [];
 
         topLevelMissingEnvs.forEach(missingEnv => {
-          const extractedEnvs = extractEnvs(missingEnv);
+          const extractedEnvs = extractEnvs(missingEnv).filter(
+            env => env.name !== 'global' && env.name !== 'programEnvironment'
+          );
           Array.prototype.push.apply(allMissingEnvs, extractedEnvs);
         });
 
         // remove repeated envs in the array
         const uniqMissingEnvs = [...new Set(allMissingEnvs)];
         Array.prototype.push.apply(allEnvs, uniqMissingEnvs);
-
         newFrameObjects = parseInput(uniqMissingEnvs, accFrames);
       }
 
@@ -1326,6 +1326,16 @@
   */
   // General Helpers
   // --------------------------------------------------.
+  // a helper func to extract all the tail envs from the given environment
+  function extractEnvs(environment) {
+    if (isNull(environment)) {
+      return [];
+    } else {
+      // prepend the extracted tail envs, so that the outermost environment comes last
+      return [...extractEnvs(environment.tail), environment];
+    }
+  }
+
   function reorderLayers() {
     LAYERS.forEach(layer => layer.moveToTop());
   }
@@ -1651,8 +1661,11 @@
   }
 
   // extract the first non-empty ancestor frameObject from the given frameObject
-  const extractParentFrame = frameObj =>
-    isEmptyFrame(frameObj) ? extractParentFrame(frameObj.parent) : frameObj;
+  const extractParentFrame = frameObj => {
+    return !isNull(frameObj) && isEmptyFrame(frameObj)
+      ? extractParentFrame(frameObj.parent)
+      : frameObj;
+  };
 
   function getFrameIndexInLevel(frameObject) {
     const { level } = frameObject;
