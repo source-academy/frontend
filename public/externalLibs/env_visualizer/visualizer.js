@@ -9,10 +9,7 @@
   container.hidden = true;
   container.style.width = 0;
   document.body.appendChild(container);
-  // create viewport
-  const viewport = new Concrete.Viewport({
-    container: container
-  });
+  const viewport = new Concrete.Viewport({ container });
 
   const { PRODUCTION_MODE = true } = exports;
   const DEBUG_MODE = !PRODUCTION_MODE && true; // enable to see debug messages in development
@@ -74,10 +71,9 @@
   // check if event listeners have already been attached to the container
   let alreadyListening = false;
 
-  /**
-   * Create a different layer for each type of element. May be more useful
-   * in future for manipulating groups of elements.
-   */
+  // Create a different layer for each type of element. May be more useful
+  // in future for manipulating groups of elements.
+
   const backgroundLayer = new Concrete.Layer(),
     fnObjectLayer = new Concrete.Layer(),
     dataObjectLayer = new Concrete.Layer(),
@@ -167,7 +163,6 @@
     envKeyCounter = 0;
   }
 
-  resetVariables();
   /*
   |--------------------------------------------------------------------------
   | Draw functions
@@ -179,7 +174,8 @@
   // --------------------------------------------------.
 
   // main function to be exported
-  function draw_env(context) {
+  function draw_env({ context: { context } }) {
+    if (DEBUG_MODE) console.log(context);
     if (PRODUCTION_MODE) {
       // hide the default text
       document.getElementById('env-visualizer-default-text').hidden = true;
@@ -194,37 +190,28 @@
     // reset all variables
     resetVariables();
 
-    // add built-in functions to list of builtins
-    const contextEnvs = context.context.context.runtime.environments;
-    const allEnvs = [];
-
     // process backwards so that global env comes first
-    for (let i = contextEnvs.length - 1; i >= 0; i--) {
-      allEnvs.push(contextEnvs[i]);
-    }
+    const allEnvs = context.runtime.environments;
+    allEnvs.reverse();
 
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
     const libraryEnv = allEnvs[1];
     const libraryElems = libraryEnv.head;
 
-    builtins.names = [...Object.keys(globalElems), ...Object.keys(libraryElems)];
+    builtins.names = [
+      ...Object.keys(globalElems),
+      ...Object.keys(libraryElems),
+      ...context.externalSymbols
+    ];
     builtins.values = [...Object.values(globalElems), ...Object.values(libraryElems)];
-
-    // add library-specific built-in functions to list of builtins
-    const externalSymbols = context.context.context.externalSymbols;
-    for (const i in externalSymbols) {
-      builtins.names.push(externalSymbols[i]);
-    }
 
     // add extra props to primitive fnObjects
     const primitiveElems = { ...globalElems, ...libraryElems };
-    for (const name in primitiveElems) {
-      const value = primitiveElems[name];
+    for (const [name, value] of Object.entries(primitiveElems)) {
       if (isFnObject(value)) {
         value.environment = globalEnv;
-        value.node = {};
-        value.node.type = 'FunctionDeclaration';
+        value.node = { type: 'FunctionDeclaration' };
         value.functionName = '' + name;
       }
     }
@@ -234,7 +221,7 @@
       let newFrameObjects = [];
       /**
        * environments is the array of environments in the interpreter.
-       * newFrameObjects is the current newFrameObjects being created
+       * newFrameObjects are the current newFrameObjects being created
        * accFrames is all newFrameObjects created so far (including from previous
        * recursive calls of parseInput).
        */
@@ -244,51 +231,40 @@
        * Each frame represents one frame to be drawn
        */
       environments.forEach(function (environment) {
-        let newFrameObject;
         environment.envKeyCounter = envKeyCounter++;
 
         /**
          * There are two environments named programEnvironment. We only want one
          * corresponding "Program" frame.
          */
-        if (environment.name === 'programEnvironment') {
-          let isProgEnvPresent = false;
-          // look through existing frame objects, check if program frame already exists
-          newFrameObjects.forEach(function (frameObject) {
-            if (frameObject.name === 'Program') {
-              newFrameObject = frameObject;
-              isProgEnvPresent = true;
-            }
-          });
-          if (!isProgEnvPresent) {
-            newFrameObject = initialiseFrameObject('Program', environment.envKeyCounter);
-            newFrameObjects.push(newFrameObject);
-            accFrames.push(newFrameObject);
-          }
-        } else {
-          newFrameObject = initialiseFrameObject(
-            environment.name.replace('Environment', ''),
-            environment.envKeyCounter
-          );
+        let newFrameObject =
+          environment.name === 'programEnvironment' &&
+          newFrameObjects.find(({ name }) => name === 'program');
+        if (!newFrameObject) {
+          newFrameObject = {
+            key: environment.envKeyCounter,
+            name: environment.name.replace('Environment', ''),
+            hovered: false,
+            selected: false,
+            layer: frameObjectLayer,
+            color: WHITE,
+            children: [],
+            elements: {}
+          };
           newFrameObjects.push(newFrameObject);
           accFrames.push(newFrameObject);
         }
 
         // extract elements from the head of the environment into the frame
-        newFrameObject.elements = {};
         if (newFrameObject.name === 'global') {
           newFrameObject.elements['(predeclared names)'] = '';
           // don't copy over built-in functions
         } else if (
-          environment.name === 'programEnvironment' &&
-          environment.tail.name === 'global'
+          // ignore library function frame
+          !(environment.name === 'programEnvironment' && environment.tail.name === 'global')
         ) {
-          // do nothing (this environment contains library functions)
-        } else {
           // copy everything (possibly including redeclared built-ins) over
-          const envElems = environment.head;
-          for (const name in envElems) {
-            const value = envElems[name];
+          for (const [name, value] of Object.entries(environment.head)) {
             newFrameObject.elements[name] = value;
             if (isPrimitiveFnObject(value)) {
               // this is a built-in function referenced to in a later frame,
@@ -311,10 +287,11 @@
           frameObject.parent = null;
           frameObject.level = 0;
         } else {
-          if (frameObject.name === 'Program') {
+          if (frameObject.name === 'program') {
             frameObject.parent = getFrameByName(accFrames, 'global');
           } else {
             let env = getEnvByKeyCounter(environments, frameObject.key);
+            // if we are pointing to the library program env, point instead to the actual program env
             if (env.tail.name === 'programEnvironment') {
               env = env.tail;
             }
@@ -336,8 +313,7 @@
           levels[frameObject.level].count++;
           if (!isEmptyFrame(frameObject)) levels[frameObject.level].frameObjects.push(frameObject);
         } else {
-          levels[frameObject.level] = { count: 1 };
-          levels[frameObject.level].frameObjects = [frameObject];
+          levels[frameObject.level] = { count: 1, frameObjects: [frameObject] };
         }
 
         frameObject.levelObject = levels[frameObject.level];
@@ -349,9 +325,7 @@
        * references point back to the object.
        */
       newFrameObjects.forEach(function (frameObject) {
-        const { elements } = frameObject;
-        for (const name in elements) {
-          const value = elements[name];
+        for (const [name, value] of Object.entries(frameObject.elements)) {
           if (isFnObject(value) && !fnObjects.includes(value)) {
             fnObjects.push(initialiseFrameFnObject(value, frameObject));
           } else if (isDataObject(value) && !boundDataObjects.includes(value)) {
@@ -496,7 +470,7 @@
         fnObject.source = getFrameByName(frameObjects, 'global');
       } else if (fnObject.environment.envKeyCounter === 2) {
         // program environment functions
-        fnObject.source = getFrameByName(frameObjects, 'Program');
+        fnObject.source = getFrameByName(frameObjects, 'program');
       } else {
         fnObject.source = getFrameByKey(frameObjects, fnObject.environment.envKeyCounter);
       }
@@ -731,30 +705,31 @@
   // Frame Scene
   // --------------------------------------------------.
   function drawSceneFrameObjects() {
-    const scene = frameObjectLayer.scene;
-    scene.clear();
-    frameObjects.forEach(function (frameObject) {
-      if (!isEmptyFrame(frameObject)) {
-        drawSceneFrameObject(frameObject);
-      }
-    });
+    frameObjectLayer.scene.clear();
+    frameObjects.forEach(
+      frameObject => isEmptyFrame(frameObject) || drawSceneFrameObject(frameObject)
+    );
     viewport.render();
   }
 
   function drawHitFrameObjects() {
-    frameObjects.forEach(function (frameObject) {
-      drawHitFrameObject(frameObject);
-    });
+    frameObjects.forEach(drawHitFrameObject);
   }
 
-  function drawSceneFrameObject(frameObject) {
-    const scene = frameObject.layer.scene,
-      context = scene.context,
-      { x, y, width, height, hovered } = frameObject;
+  function drawSceneFrameObject({
+    x,
+    y,
+    width,
+    height,
+    hovered,
+    layer: {
+      scene: { context }
+    }
+  }) {
     context.save();
+
     context.fillStyle = WHITE;
     context.beginPath();
-
     context.strokeStyle = hovered ? GREEN : WHITE;
     context.strokeRect(x, y, width, height);
 
@@ -1676,23 +1651,15 @@
   }
 
   // extract the first non-empty ancestor frameObject from the given frameObject
-  function extractParentFrame(frameObject) {
-    if (isEmptyFrame(frameObject)) {
-      return extractParentFrame(frameObject.parent);
-    } else {
-      return frameObject;
-    }
-  }
+  const extractParentFrame = frameObj =>
+    isEmptyFrame(frameObj) ? extractParentFrame(frameObj.parent) : frameObj;
 
   function getFrameIndexInLevel(frameObject) {
     const { level } = frameObject;
     return levels[level].frameObjects.indexOf(frameObject);
   }
 
-  function isEmptyFrame(frameObject) {
-    const { elements } = frameObject;
-    return Object.keys(elements).length === 0 && elements.constructor === Object;
-  }
+  const isEmptyFrame = ({ elements }) => Object.keys(elements).length === 0;
 
   function getElementPosition(element, frameObject) {
     let position = 0;
@@ -1828,20 +1795,6 @@
     });
   }
 
-  function initialiseFrameObject(frameName, key) {
-    // key of frame object is same as its corresponding envkeycounter
-    const frameObject = {
-      key,
-      name: frameName,
-      hovered: false,
-      selected: false,
-      layer: frameObjectLayer,
-      color: WHITE,
-      children: []
-    };
-    return frameObject;
-  }
-
   function getFrameByKey(frameObjects, key) {
     for (const i in frameObjects) {
       if (frameObjects[i].key === key) {
@@ -1851,25 +1804,11 @@
     return null;
   }
 
-  function getEnvByKeyCounter(frameObjects, key) {
-    for (const i in frameObjects) {
-      if (frameObjects[i].envKeyCounter === key) {
-        return frameObjects[i];
-      }
-    }
-    return null;
-  }
-
-  function getFrameByName(frameObjects, name) {
-    // TODO: change the implementation to ensure that frame name is unique
-    // return the first matched frameObject with the name
-    for (const i in frameObjects) {
-      if (frameObjects[i].name === name) {
-        return frameObjects[i];
-      }
-    }
-    return null;
-  }
+  const getEnvByKeyCounter = (frameObjects, key) =>
+    frameObjects.find(frame => frame.envKeyCounter === key) || null;
+  // TODO: change the implementation to ensure that frame name is unique
+  const getFrameByName = (frameObjects, name) =>
+    frameObjects.find(frame => frame.name === name) || null;
 
   function getFnObject(fnObject) {
     if (fnObjects[fnObjects.indexOf(fnObject)] === undefined) {
