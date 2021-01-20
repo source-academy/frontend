@@ -1827,12 +1827,13 @@
   const getFrameByName = (frameObjects, name) =>
     frameObjects.find(frame => frame.name === name) || null;
 
-  function getFnObject(fnObject) {
-    if (fnObjects[fnObjects.indexOf(fnObject)] === undefined) {
-      if (DEBUG_MODE) console.warn('FnObject not found in the array');
-    }
-    return fnObject;
-  }
+  // deprecated
+  // function getFnObject(fnObject) {
+  //   if (fnObjects[fnObjects.indexOf(fnObject)] === undefined) {
+  //     if (DEBUG_MODE) console.warn('FnObject not found in the array');
+  //   }
+  //   return fnObject;
+  // }
 
   function getFnName(fn) {
     if (fn.node === undefined || (fn.node.type === 'FunctionDeclaration' && !fn.functionName)) {
@@ -2279,13 +2280,13 @@
   }
 
   // deprecated
-  function getDataObjectFromKey(key) {
-    for (const d in boundDataObjects) {
-      if (boundDataObjects[d].key === key) {
-        return boundDataObjects[d];
-      }
-    }
-  }
+  // function getDataObjectFromKey(key) {
+  //   for (const d in boundDataObjects) {
+  //     if (boundDataObjects[d].key === key) {
+  //       return boundDataObjects[d];
+  //     }
+  //   }
+  // }
 
   function isNull(x) {
     return x === null;
@@ -2299,22 +2300,24 @@
     return typeof x === 'string';
   }
 
-  function isNumber(x) {
-    return typeof x === 'number';
-  }
+  // deprecated
+  // function isNumber(x) {
+  //   return typeof x === 'number';
+  // }
 
   function isEmptyArray(xs) {
     return isDataObject(xs) && xs.length === 0;
   }
 
+  // deprecated
   // check if v is a member of the list
-  function isMember(v, list) {
-    if (isNull(list)) {
-      return false;
-    } else {
-      return v === list[0] || isMember(v, list[1]);
-    }
-  }
+  // function isMember(v, list) {
+  //   if (isNull(list)) {
+  //     return false;
+  //   } else {
+  //     return v === list[0] || isMember(v, list[1]);
+  //   }
+  // }
 
   function isDataObject(value) {
     // or typeof value === "object" && value !== null
@@ -2459,7 +2462,7 @@
       }
     }
 
-    return isDataObject(d2) && helper(d1, d2);
+    return isDataObject(d2) && helper(d1);
   }
 
   // mainstructures are those boundDataObjects that contain the dataobject
