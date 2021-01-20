@@ -193,20 +193,6 @@
     // process backwards so that global env comes first
     const allEnvs = checkEnvs(context.runtime.environments.reverse());
 
-    function checkEnvs(envs) {
-      let newEnvs = [];
-      let prevEnv = null;
-      for (let i = 0; i < envs.length; i++) {
-        const currEnv = envs[i];
-        if (currEnv.tail !== prevEnv) {
-          newEnvs = [...extractEnvs(currEnv), ...envs.slice(i + 1)];
-        }
-        prevEnv = currEnv;
-      }
-
-      return isEmptyArray(newEnvs) ? envs : newEnvs;
-    }
-
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
     const libraryEnv = allEnvs[1];
@@ -1326,7 +1312,25 @@
   */
   // General Helpers
   // --------------------------------------------------.
-  // a helper func to extract all the tail envs from the given environment
+  // return an array of all environments
+  function checkEnvs(envs) {
+    let newEnvs = [];
+
+    for (let i = envs.length - 1; i >= 0; i--) {
+      const currEnv = envs[i];
+      const prevEnv = i === 0 ? null : envs[i - 1];
+      // make sure all the tail environments are properly extracted
+      // and pushed to the environments array
+      if (currEnv.tail !== prevEnv) {
+        newEnvs = [...extractEnvs(currEnv), ...envs.slice(i + 1)];
+        break;
+      }
+    }
+
+    return isEmptyArray(newEnvs) ? envs : newEnvs;
+  }
+
+  // extract all the tail envs from the given environment
   function extractEnvs(environment) {
     if (isNull(environment)) {
       return [];
@@ -1661,11 +1665,11 @@
   }
 
   // extract the first non-empty ancestor frameObject from the given frameObject
-  const extractParentFrame = frameObj => {
-    return !isNull(frameObj) && isEmptyFrame(frameObj)
-      ? extractParentFrame(frameObj.parent)
-      : frameObj;
-  };
+  function extractParentFrame(frameObject) {
+    return !isNull(frameObject) && isEmptyFrame(frameObject)
+      ? extractParentFrame(frameObject.parent)
+      : frameObject;
+  }
 
   function getFrameIndexInLevel(frameObject) {
     const { level } = frameObject;
