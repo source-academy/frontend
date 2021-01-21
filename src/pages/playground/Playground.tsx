@@ -8,10 +8,8 @@ import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
 import { useSelector } from 'react-redux';
+import { useMediaQuery } from 'react-responsive';
 import { RouteComponentProps } from 'react-router';
-import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
-import { parseQuery } from 'src/commons/utils/QueryHelper';
-import { initSession, log } from 'src/features/eventLogging';
 
 import {
   InterpreterOutput,
@@ -34,6 +32,9 @@ import { ControlBarShareButton } from '../../commons/controlBar/ControlBarShareB
 import { ControlBarStepLimit } from '../../commons/controlBar/ControlBarStepLimit';
 import { HighlightedLines, Position } from '../../commons/editor/EditorTypes';
 import Markdown from '../../commons/Markdown';
+import MobileWorkspace, {
+  MobileWorkspaceProps
+} from '../../commons/mobileWorkspace/MobileWorkspace';
 import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVisualizer';
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
@@ -43,7 +44,10 @@ import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSub
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
+import { stringParamToInt } from '../../commons/utils/ParamParseHelper';
+import { parseQuery } from '../../commons/utils/QueryHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
+import { initSession, log } from '../../features/eventLogging';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
 import {
   CodeDelta,
@@ -686,7 +690,43 @@ const Playground: React.FC<PlaygroundProps> = props => {
     sideContentIsResizeable: selectedTab !== SideContentType.substVisualizer
   };
 
-  return (
+  const mobileWorkspaceProps: MobileWorkspaceProps = {
+    editorProps: {
+      // TODO: Abstract this duplicate away
+      onChange: onChangeMethod,
+      onCursorChange: onCursorChangeMethod,
+      onSelectionChange: onSelectionChangeMethod,
+      sourceChapter: props.sourceChapter,
+      externalLibraryName: props.externalLibraryName,
+      sourceVariant: props.sourceVariant,
+      editorValue: props.editorValue,
+      editorSessionId: props.editorSessionId,
+      handleDeclarationNavigate: props.handleDeclarationNavigate,
+      handleEditorEval: props.handleEditorEval,
+      handleEditorValueChange: onEditorValueChange,
+      handleSendReplInputToOutput: props.handleSendReplInputToOutput,
+      handlePromptAutocomplete: props.handlePromptAutocomplete,
+      isEditorAutorun: props.isEditorAutorun,
+      breakpoints: props.breakpoints,
+      highlightedLines: props.highlightedLines,
+      newCursorPosition: props.newCursorPosition,
+      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+      handleSetSharedbConnected: props.handleSetSharedbConnected
+    },
+    mobileSideContentProps: {
+      defaultSelectedTabId: selectedTab,
+      // handleActiveTabChange: props.handleActiveTabChange,
+      onChange: onChangeTabs,
+      tabs,
+      workspaceLocation: 'playground'
+    }
+  };
+
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  return isMobile ? (
+    <MobileWorkspace {...mobileWorkspaceProps} />
+  ) : (
     <HotKeys
       className={classNames('Playground', Classes.DARK, isGreen ? 'GreenScreen' : undefined)}
       keyMap={keyMap}
