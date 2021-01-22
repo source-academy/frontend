@@ -179,10 +179,10 @@ export const getGoals = async (
 };
 
 /**
- * GET achievements/goals
+ * GET self/goals
  */
 export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | null> => {
-  const resp = await request('achievements/goals', 'GET', {
+  const resp = await request('self/goals', 'GET', {
     ...tokens,
     shouldRefresh: true
   });
