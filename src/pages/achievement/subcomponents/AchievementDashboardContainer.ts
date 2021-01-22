@@ -10,7 +10,7 @@ import Dashboard, { DispatchProps, StateProps } from './AchievementDashboard';
 
 const mapStateToProps: MapStateToProps<StateProps, {}, OverallState> = state => ({
   group: state.session.group,
-  inferencer: Constants.useBackend
+  inferencer: Constants.useAchievementBackend
     ? new AchievementInferencer(state.achievement.achievements, state.achievement.goals)
     : new AchievementInferencer(mockAchievements, mockGoals),
   name: state.session.name
