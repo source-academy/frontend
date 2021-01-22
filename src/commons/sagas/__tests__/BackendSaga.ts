@@ -196,7 +196,7 @@ describe('Test FETCH_ASSESSMENT_OVERVIEWS action', () => {
 });
 
 describe('Test FETCH_ASSESSMENT action', () => {
-  test('when assesment is obtained', () => {
+  test('when assessment is obtained', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -207,7 +207,7 @@ describe('Test FETCH_ASSESSMENT action', () => {
       .silentRun();
   });
 
-  test('when assesment is null', () => {
+  test('when assessment is null', () => {
     const mockId = mockAssessment.id;
     return expectSaga(BackendSaga)
       .withState({ session: mockTokens })
@@ -334,30 +334,6 @@ describe('Test SUBMIT_ANSWER action', () => {
       .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
       .silentRun();
   });
-
-  test('when response has HTTP status code 403 (Forbidden)', () => {
-    const mockAnsweredAssessmentQuestion = { ...mockAssessmentQuestion, answer: '42' };
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Student } })
-      .provide([
-        [
-          call(
-            postAnswer,
-            mockAnsweredAssessmentQuestion.id,
-            mockAnsweredAssessmentQuestion.answer,
-            mockTokens
-          ),
-          { ...errorResp, status: 403 }
-        ]
-      ])
-      .call(showWarningMessage, 'Answer rejected - assessment not open or already finalised.')
-      .not.call.fn(showSuccessMessage)
-      .not.put.actionType(UPDATE_ASSESSMENT)
-      .not.put.actionType(UPDATE_HAS_UNSAVED_CHANGES)
-      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
-      .dispatch({ type: SUBMIT_ANSWER, payload: mockAnsweredAssessmentQuestion })
-      .silentRun();
-  });
 });
 
 describe('Test SUBMIT_ASSESSMENT action', () => {
@@ -381,21 +357,6 @@ describe('Test SUBMIT_ASSESSMENT action', () => {
     return expect(mockStates.session.assessmentOverviews[0].status).not.toEqual(
       AssessmentStatuses.submitted
     );
-  });
-
-  test('when response has HTTP status code 403 (Forbidden)', () => {
-    return expectSaga(BackendSaga)
-      .withState({ session: { ...mockTokens, role: Role.Student } })
-      .provide([[call(postAssessment, 0, mockTokens), { ...errorResp, status: 403 }]])
-      .call(postAssessment, 0, mockTokens)
-      .call(
-        showWarningMessage,
-        'Not allowed to finalise - assessment not open or already finalised.'
-      )
-      .not.put.actionType(UPDATE_ASSESSMENT_OVERVIEWS)
-      .hasFinalState({ session: { ...mockTokens, role: Role.Student } })
-      .dispatch({ type: SUBMIT_ASSESSMENT, payload: 0 })
-      .silentRun();
   });
 
   test('when response is null', () => {
@@ -460,18 +421,6 @@ describe('Test ACKNOWLEDGE_NOTIFICATIONS action', () => {
             notifications.filter(notification => ids.includes(notification.id))
         }
       })
-      .silentRun();
-  });
-
-  test('when response has HTTP status code 404 (Not Found)', () => {
-    const ids = mockNotifications.map(n => n.id);
-    return expectSaga(BackendSaga)
-      .withState(mockStates)
-      .provide([
-        [call(postAcknowledgeNotifications, mockTokens, ids), { ...errorResp, status: 404 }]
-      ])
-      .call(showWarningMessage, 'Something went wrong (got 404 response)')
-      .dispatch({ type: ACKNOWLEDGE_NOTIFICATIONS, payload: {} })
       .silentRun();
   });
 });
@@ -548,7 +497,7 @@ describe('Test REAUTOGRADE_SUBMISSION Action', () => {
   test('when successful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), true]])
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), okResp]])
       .call(postReautogradeSubmission, submissionId, mockTokens)
       .call.fn(showSuccessMessage)
       .not.call.fn(showWarningMessage)
@@ -559,7 +508,7 @@ describe('Test REAUTOGRADE_SUBMISSION Action', () => {
   test('when unsuccessful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), false]])
+      .provide([[call(postReautogradeSubmission, submissionId, mockTokens), errorResp]])
       .call(postReautogradeSubmission, submissionId, mockTokens)
       .not.call.fn(showSuccessMessage)
       .call.fn(showWarningMessage)
@@ -575,7 +524,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
   test('when successful', () => {
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), true]])
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), okResp]])
       .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
       .call.fn(showSuccessMessage)
       .not.call.fn(showWarningMessage)
@@ -587,7 +536,7 @@ describe('Test REAUTOGRADE_ANSWER Action', () => {
     const submissionId = 123;
     return expectSaga(BackendSaga)
       .withState({ session: { ...mockTokens, role: Role.Staff } })
-      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), false]])
+      .provide([[call(postReautogradeAnswer, submissionId, questionId, mockTokens), errorResp]])
       .call(postReautogradeAnswer, submissionId, questionId, mockTokens)
       .not.call.fn(showSuccessMessage)
       .call.fn(showWarningMessage)

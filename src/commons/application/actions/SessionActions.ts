@@ -6,7 +6,6 @@ import {
   Notification,
   NotificationFilterFunction
 } from '../../notificationBadge/NotificationBadgeTypes';
-import { GameState, Role, Story } from '../ApplicationTypes';
 import {
   ACKNOWLEDGE_NOTIFICATIONS,
   FETCH_ASSESSMENT,
@@ -32,7 +31,8 @@ import {
   UPDATE_GRADING,
   UPDATE_GRADING_OVERVIEWS,
   UPDATE_HISTORY_HELPERS,
-  UPDATE_NOTIFICATIONS
+  UPDATE_NOTIFICATIONS,
+  User
 } from '../types/SessionTypes';
 
 export const fetchAuth = (code: string, providerId?: string) =>
@@ -67,15 +67,7 @@ export const setTokens = ({
     refreshToken
   });
 
-export const setUser = (user: {
-  userId: number;
-  name: string;
-  role: Role;
-  group: string | null;
-  grade: number;
-  story?: Story;
-  gameState?: GameState;
-}) => action(SET_USER, user);
+export const setUser = (user: User) => action(SET_USER, user);
 
 export const setGoogleUser = (user?: string) => action(SET_GOOGLE_USER, user);
 

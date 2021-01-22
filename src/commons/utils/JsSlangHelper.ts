@@ -155,7 +155,7 @@ function loadStandardLibraries(proxyContext: Context, customBuiltIns: CustomBuil
 export function makeElevatedContext(context: Context) {
   function ProxyFrame() {}
   ProxyFrame.prototype = context.runtime.environments[0].head;
-  // eslint-disable-next-line @typescript-eslint/ban-ts-ignore
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
   const fakeFrame: { [key: string]: any } = new ProxyFrame();
   // Explanation: Proxy doesn't work for defineProperty in use-strict.

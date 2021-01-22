@@ -3,15 +3,25 @@ import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import { isStepperOutput } from 'js-slang/dist/stepper/stepper';
 import { Variant } from 'js-slang/dist/types';
+import { isEqual } from 'lodash';
 import { decompressFromEncodedURIComponent } from 'lz-string';
 import * as React from 'react';
 import { HotKeys } from 'react-hotkeys';
+import { useSelector } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { stringParamToInt } from 'src/commons/utils/ParamParseHelper';
 import { parseQuery } from 'src/commons/utils/QueryHelper';
+import { initSession, log } from 'src/features/eventLogging';
 
-import { InterpreterOutput, sourceLanguages } from '../../commons/application/ApplicationTypes';
-import { ExternalLibraryName } from '../../commons/application/types/ExternalTypes';
+import {
+  InterpreterOutput,
+  OverallState,
+  sourceLanguages
+} from '../../commons/application/ApplicationTypes';
+import {
+  externalLibraries,
+  ExternalLibraryName
+} from '../../commons/application/types/ExternalTypes';
 import { ControlBarAutorunButtons } from '../../commons/controlBar/ControlBarAutorunButtons';
 import { ControlBarChapterSelect } from '../../commons/controlBar/ControlBarChapterSelect';
 import { ControlBarClearButton } from '../../commons/controlBar/ControlBarClearButton';
@@ -28,12 +38,18 @@ import SideContentEnvVisualizer from '../../commons/sideContent/SideContentEnvVi
 import SideContentFaceapiDisplay from '../../commons/sideContent/SideContentFaceapiDisplay';
 import SideContentInspector from '../../commons/sideContent/SideContentInspector';
 import SideContentListVisualizer from '../../commons/sideContent/SideContentListVisualizer';
+import SideContentRemoteExecution from '../../commons/sideContent/SideContentRemoteExecution';
 import SideContentSubstVisualizer from '../../commons/sideContent/SideContentSubstVisualizer';
 import { SideContentTab, SideContentType } from '../../commons/sideContent/SideContentTypes';
 import SideContentVideoDisplay from '../../commons/sideContent/SideContentVideoDisplay';
 import { generateSourceIntroduction } from '../../commons/utils/IntroductionHelper';
 import Workspace, { WorkspaceProps } from '../../commons/workspace/Workspace';
 import { PersistenceFile } from '../../features/persistence/PersistenceTypes';
+import {
+  CodeDelta,
+  Input,
+  SelectionRange
+} from '../../features/sourceRecorder/SourceRecorderTypes';
 
 export type PlaygroundProps = DispatchProps & StateProps & RouteComponentProps<{}>;
 
@@ -144,6 +160,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const [isGreen, setIsGreen] = React.useState(false);
   const [selectedTab, setSelectedTab] = React.useState(SideContentType.introduction);
   const [hasBreakpoints, setHasBreakpoints] = React.useState(false);
+  const [sessionId, setSessionId] = React.useState(() =>
+    initSession('playground', {
+      editorValue: propsRef.current.editorValue,
+      externalLibrary: propsRef.current.externalLibraryName,
+      chapter: propsRef.current.sourceChapter
+    })
+  );
+
+  const usingRemoteExecution = useSelector(
+    (state: OverallState) => !!state.session.remoteExecutionSession
+  );
 
   React.useEffect(() => {
     // Fixes some errors with runes and curves (see PR #1420)
@@ -154,6 +181,22 @@ const Playground: React.FC<PlaygroundProps> = props => {
       propsRef.current.handleFetchSublanguage();
     }
   }, []);
+
+  React.useEffect(() => {
+    // When the editor session Id changes, then treat it as a new session.
+    setSessionId(
+      initSession('playground', {
+        editorValue: propsRef.current.editorValue,
+        externalLibrary: propsRef.current.externalLibraryName,
+        chapter: propsRef.current.sourceChapter
+      })
+    );
+  }, [props.editorSessionId]);
+  React.useEffect(() => {
+    if (!usingRemoteExecution && !externalLibraries.has(props.externalLibraryName)) {
+      propsRef.current.handleExternalSelect(ExternalLibraryName.NONE, true);
+    }
+  }, [usingRemoteExecution, props.externalLibraryName]);
 
   const hash = props.location.hash;
   React.useEffect(() => {
@@ -216,6 +259,13 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
+  const pushLog = React.useCallback(
+    (newInput: Input) => {
+      log(sessionId, newInput);
+    },
+    [sessionId]
+  );
+
   const autorunButtons = React.useMemo(
     () => (
       <ControlBarAutorunButtons
@@ -229,6 +279,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
         isEditorAutorun={props.isEditorAutorun}
         isRunning={props.isRunning}
         key="autorun"
+        autorunDisabled={usingRemoteExecution}
+        pauseDisabled={usingRemoteExecution}
       />
     ),
     [
@@ -240,7 +292,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.handleToggleEditorAutorun,
       props.isDebugging,
       props.isEditorAutorun,
-      props.isRunning
+      props.isRunning,
+      usingRemoteExecution
     ]
   );
 
@@ -254,9 +307,18 @@ const Playground: React.FC<PlaygroundProps> = props => {
         handleReplOutputClear();
         handleUsingSubst(false);
       }
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'chapterSelect',
+        data: chapter
+      };
+
+      pushLog(input);
+
       handleChapterSelect(chapter, variant);
     },
-    [hasBreakpoints, selectedTab]
+    [hasBreakpoints, selectedTab, pushLog]
   );
 
   const chapterSelect = React.useMemo(
@@ -266,9 +328,10 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sourceChapter={props.sourceChapter}
         sourceVariant={props.sourceVariant}
         key="chapter"
+        disabled={usingRemoteExecution}
       />
     ),
-    [chapterSelectHandler, props.sourceChapter, props.sourceVariant]
+    [chapterSelectHandler, props.sourceChapter, props.sourceVariant, usingRemoteExecution]
   );
 
   const clearButton = React.useMemo(
@@ -347,18 +410,35 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [props.handleChangeStepLimit, props.stepLimit]
   );
 
-  const { handleExternalSelect, externalLibraryName } = props;
+  const { handleExternalSelect, externalLibraryName, handleEditorValueChange } = props;
+
+  const handleExternalSelectAndRecord = React.useCallback(
+    (name: ExternalLibraryName) => {
+      handleExternalSelect(name);
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'externalLibrarySelect',
+        data: name
+      };
+
+      pushLog(input);
+    },
+    [handleExternalSelect, pushLog]
+  );
+
   const externalLibrarySelect = React.useMemo(
     () => (
       <ControlBarExternalLibrarySelect
         externalLibraryName={externalLibraryName}
         handleExternalSelect={({ name }: { name: ExternalLibraryName }, e: any) =>
-          handleExternalSelect(name)
+          handleExternalSelectAndRecord(name)
         }
         key="external_library"
+        disabled={usingRemoteExecution}
       />
     ),
-    [externalLibraryName, handleExternalSelect]
+    [externalLibraryName, handleExternalSelectAndRecord, usingRemoteExecution]
   );
 
   // No point memoing this, it uses props.editorValue
@@ -417,20 +497,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
       props.externalLibraryName === ExternalLibraryName.ALL
     ) {
       // Enable video tab only when 'PIX&FLIX' is selected
-      tabs.push(videoDisplayTab);
+      tabs.push({
+        label: 'Video Display',
+        iconName: IconNames.MOBILE_VIDEO,
+        body: <SideContentVideoDisplay replChange={props.handleSendReplInputToOutput} />,
+        toSpawn: () => true
+      });
     }
     if (props.externalLibraryName === ExternalLibraryName.MACHINELEARNING) {
       // Enable Face API Display only when 'MACHINELEARNING' is selected
       tabs.push(FaceapiDisplayTab);
     }
-    if (props.sourceChapter >= 2) {
+    if (props.sourceChapter >= 2 && !usingRemoteExecution) {
       // Enable Data Visualizer for Source Chapter 2 and above
       tabs.push(listVisualizerTab);
     }
     if (
       props.sourceChapter >= 3 &&
       props.sourceVariant !== 'concurrent' &&
-      props.sourceVariant !== 'non-det'
+      props.sourceVariant !== 'non-det' &&
+      !usingRemoteExecution
     ) {
       // Enable Inspector, Env Visualizer for Source Chapter 3 and above
       tabs.push(inspectorTab);
@@ -447,14 +533,64 @@ const Playground: React.FC<PlaygroundProps> = props => {
         toSpawn: () => true
       });
     }
+
+    tabs.push(remoteExecutionTab);
+
     return tabs;
   }, [
     playgroundIntroductionTab,
     props.externalLibraryName,
+    props.handleSendReplInputToOutput,
     props.output,
     props.sourceChapter,
-    props.sourceVariant
+    props.sourceVariant,
+    usingRemoteExecution
   ]);
+
+  const onChangeMethod = React.useCallback(
+    (newCode: string, delta: CodeDelta) => {
+      handleEditorValueChange(newCode);
+
+      const input: Input = {
+        time: Date.now(),
+        type: 'codeDelta',
+        data: delta
+      };
+
+      pushLog(input);
+    },
+    [handleEditorValueChange, pushLog]
+  );
+
+  const onCursorChangeMethod = React.useCallback(
+    (selection: any) => {
+      const input: Input = {
+        time: Date.now(),
+        type: 'cursorPositionChange',
+        data: selection.getCursor()
+      };
+
+      pushLog(input);
+    },
+    [pushLog]
+  );
+
+  const onSelectionChangeMethod = React.useCallback(
+    (selection: any) => {
+      const range: SelectionRange = selection.getRange();
+      const isBackwards: boolean = selection.isBackwards();
+      if (!isEqual(range.start, range.end)) {
+        const input: Input = {
+          time: Date.now(),
+          type: 'selectionRangeData',
+          data: { range, isBackwards }
+        };
+
+        pushLog(input);
+      }
+    },
+    [pushLog]
+  );
 
   const handleEditorUpdateBreakpoints = React.useCallback(
     (breakpoints: string[]) => {
@@ -484,6 +620,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     [selectedTab]
   );
 
+  const replDisabled =
+    props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -493,14 +631,14 @@ const Playground: React.FC<PlaygroundProps> = props => {
         props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
         sessionButtons,
         persistenceButtons,
-        props.usingSubst ? stepperStepLimit : executionTime
+        usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
       ],
-      replButtons: [
-        props.sourceVariant !== 'concurrent' && props.sourceVariant !== 'wasm' ? evalButton : null,
-        clearButton
-      ]
+      replButtons: [replDisabled ? null : evalButton, clearButton]
     },
     editorProps: {
+      onChange: onChangeMethod,
+      onCursorChange: onCursorChangeMethod,
+      onSelectionChange: onSelectionChangeMethod,
       sourceChapter: props.sourceChapter,
       externalLibraryName: props.externalLibraryName,
       sourceVariant: props.sourceVariant,
@@ -534,6 +672,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
       handleReplEval: props.handleReplEval,
       handleReplValueChange: props.handleReplValueChange,
       hidden: selectedTab === SideContentType.substVisualizer,
+      inputHidden: replDisabled,
       usingSubst: props.usingSubst
     },
     sideContentHeight: props.sideContentHeight,
@@ -566,13 +705,6 @@ const listVisualizerTab: SideContentTab = {
   toSpawn: () => true
 };
 
-const videoDisplayTab: SideContentTab = {
-  label: 'Video Display',
-  iconName: IconNames.MOBILE_VIDEO,
-  body: <SideContentVideoDisplay />,
-  toSpawn: () => true
-};
-
 const FaceapiDisplayTab: SideContentTab = {
   label: 'Face API Display',
   iconName: IconNames.MUGSHOT,
@@ -593,6 +725,14 @@ const envVisualizerTab: SideContentTab = {
   iconName: IconNames.GLOBE,
   body: <SideContentEnvVisualizer />,
   id: SideContentType.envVisualiser,
+  toSpawn: () => true
+};
+
+const remoteExecutionTab: SideContentTab = {
+  label: 'Remote Execution',
+  iconName: IconNames.SATELLITE,
+  body: <SideContentRemoteExecution workspace="playground" />,
+  id: SideContentType.remoteExecution,
   toSpawn: () => true
 };
 

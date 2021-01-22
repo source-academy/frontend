@@ -1,4 +1,5 @@
 import { Grading, GradingOverview } from '../../../features/grading/GradingTypes';
+import { Device, DeviceSession } from '../../../features/remoteExecution/RemoteExecutionTypes';
 import { Assessment, AssessmentOverview } from '../../assessment/AssessmentTypes';
 import { Notification } from '../../notificationBadge/NotificationBadgeTypes';
 import { HistoryHelper } from '../../utils/HistoryHelper';
@@ -30,6 +31,9 @@ export const FETCH_NOTIFICATIONS = 'FETCH_NOTIFICATIONS';
 export const ACKNOWLEDGE_NOTIFICATIONS = 'ACKNOWLEDGE_NOTIFICATIONS';
 export const UPDATE_NOTIFICATIONS = 'UPDATE_NOTIFICATIONS';
 
+export const UPLOAD_KEYSTROKE_LOGS = 'UPLOAD_KEYSTROKE_LOGS';
+export const UPLOAD_UNSENT_LOGS = 'UPLOAD_UNSENT_LOGS';
+
 export type SessionState = {
   readonly accessToken?: string;
   readonly assessmentOverviews?: AssessmentOverview[];
@@ -50,4 +54,21 @@ export type SessionState = {
   readonly xp: number;
   readonly notifications: Notification[];
   readonly googleUser?: string;
+  readonly remoteExecutionDevices?: Device[];
+  readonly remoteExecutionSession?: DeviceSession;
+};
+
+export type Tokens = {
+  accessToken: string;
+  refreshToken: string;
+};
+
+export type User = {
+  userId: number;
+  name: string;
+  role: Role;
+  group: string | null;
+  grade: number;
+  story?: Story;
+  gameState?: GameState;
 };

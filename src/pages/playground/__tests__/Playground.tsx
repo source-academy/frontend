@@ -1,6 +1,8 @@
 import { shallow } from 'enzyme';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
+import { Provider } from 'react-redux';
+import { mockInitialStore } from 'src/commons/mocks/StoreMocks';
 
 import { ExternalLibraryName } from '../../../commons/application/types/ExternalTypes';
 import { Position } from '../../../commons/editor/EditorTypes';
@@ -81,14 +83,24 @@ const playgroundLinkProps: PlaygroundProps = {
   editorValue: 'This should not show up'
 };
 
+const mockStore = mockInitialStore();
+
 test('Playground renders correctly', () => {
-  const app = <Playground {...testValueProps} />;
+  const app = (
+    <Provider store={mockStore}>
+      <Playground {...testValueProps} />
+    </Provider>
+  );
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
 });
 
 test('Playground with link renders correctly', () => {
-  const app = <Playground {...playgroundLinkProps} />;
+  const app = (
+    <Provider store={mockStore}>
+      <Playground {...playgroundLinkProps} />
+    </Provider>
+  );
   const tree = shallow(app);
   expect(tree.debug()).toMatchSnapshot();
 });

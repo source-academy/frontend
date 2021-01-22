@@ -3,6 +3,7 @@ import { ErrorSeverity, ErrorType, SourceError } from 'js-slang/dist/types';
 import * as React from 'react';
 
 import { AutogradingResult, Testcase, TestcaseTypes } from '../../assessment/AssessmentTypes';
+import { mockGrading } from '../../mocks/GradingMocks';
 import SideContentAutograder, { SideContentAutograderProps } from '../SideContentAutograder';
 
 const mockErrors: SourceError[] = [
@@ -63,29 +64,19 @@ const mockPrivateTestcases: Testcase[] = [
 
 const privateTestcaseCardClasses = publicTestcaseCardClasses.map(classes => `${classes} private`);
 
-const mockAutogradingResults: AutogradingResult[] = [
-  { resultType: 'pass' },
-  { resultType: 'fail', expected: '8', actual: '5' },
-  {
-    resultType: 'error',
-    errors: [
-      { errorType: 'timeout' },
-      {
-        errorType: 'syntax',
-        line: 1,
-        location: 'student',
-        errorLine: 'function fibonacci(n) {',
-        errorExplanation: 'Just kidding!'
-      }
-    ]
-  }
-];
+const mockAutogradingResults: AutogradingResult[] = mockGrading[0].question.autogradingResults;
 
-const resultCardClasses = ['ResultCard correct', 'ResultCard wrong', 'ResultCard wrong'];
+const resultCardClasses = [
+  'ResultCard correct',
+  'ResultCard wrong',
+  'ResultCard wrong',
+  'ResultCard wrong',
+  'ResultCard wrong'
+];
 
 /*  ===== Tester comments =====
     Issue:
-      https://github.com/airbnb/enzyme/issues/836 
+      https://github.com/airbnb/enzyme/issues/836
     Description:
       tree.find(<HTML Selector>) returns two copies of every non-top-level element, as Enzyme
       returns both React component instances in addition to DOM nodes. This is INTENDED behaviour.
@@ -229,7 +220,7 @@ test('Autograder renders autograder results with different statuses correctly', 
   //    Correct data rendered in the 'Testcase status', 'Expected result' and 'Actual result' cells
   //    Correct CSS styling applied to each Card
   const cards = tree.find('.ResultCard');
-  expect(cards).toHaveLength(3);
+  expect(cards).toHaveLength(5);
   expect(cards.map(node => node.getDOMNode().className)).toEqual(resultCardClasses);
   // Extract the text contained within the cells: see above comment for textContent
   const resultCellsValues = cards.map(card => {
@@ -240,11 +231,14 @@ test('Autograder renders autograder results with different statuses correctly', 
   expect(resultCellsValues).toEqual([
     ['1', 'PASS', '', ''],
     ['2', 'FAIL', '8', '5'],
+    ['3', 'ERROR', '', '[UNKNOWN] Autograder error: type dummyErrorType'],
+    ['4', 'ERROR', '', "[RUNTIME] Cannot read property 'getUniformLocation' of null"],
     [
-      '3',
+      '5',
       'ERROR',
       '',
-      'Timeout: Submission exceeded time limit for this test case.\nLine 1: Error: Just kidding!'
+      '[TIMEOUT] Submission exceeded time limit for this test case.\n\n' +
+        '[SYNTAX] Line 2: Error: Missing semicolon at the end of statement'
     ]
   ]);
 });

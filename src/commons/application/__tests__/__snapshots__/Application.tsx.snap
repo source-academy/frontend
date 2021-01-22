@@ -7,7 +7,7 @@ exports[`Application renders correctly 1`] = `
     <Switch>
       <Route path=\\"/playground\\" component={[Function: C]} />
       <Route path=\\"/contributors\\" component={[function]} />
-      <Route path=\\"/sourcecast\\" component={{...}} />
+      <Route path=\\"/sourcecast/:sourcecastId?\\" component={[Function: C]} />
       <Route path=\\"/academy\\" render={[Function: redirectToLogin]} />
       <Route path=\\"/mission-control/:assessmentId(-?\\\\\\\\d+)?/:questionId(\\\\\\\\d+)?\\" render={[Function: toIncubator]} />
       <Route path=\\"/achievement\\" render={[Function: redirectToLogin]} />

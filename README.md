@@ -15,7 +15,18 @@ The Source Academy is a gamified platform designed to teach students coding whil
 
 ## Getting Started
 
-### Installation
+### Installation of Public Edition (playground only, no backend)
+
+1. Install a stable version of NodeJS. The active LTS or current version should work fine.
+2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
+3. Run `yarn install` to install dependencies.
+4. Run `yarn run start` to start the server at `localhost:8000`. **It might take a couple of minutes for the server to start.**
+5. Point your browser to `http://localhost:8000` to see your local Source Academy.
+
+In this edition, you will only see the Playground with all its tools, but no login options or homework submission features. For this edition, there is no need for "Setting up your environment".
+
+### Installation of Course Edition
+
 1. Install a stable version of NodeJS. The active LTS or current version should work fine.
 2. Clone this repository and navigate to it using "cd" in your command line or shell tool.
 3. Run `yarn install` to install dependencies.
@@ -117,3 +128,7 @@ There are a few additional environment variables that are used when building and
 1. `REACT_APP_ENVIRONMENT`: An environment string. Currently it is only used to differentiate different deploys in Sentry.
 1. `REACT_APP_SENTRY_DSN`: The Sentry DSN for error monitoring.
 1. `SW_EXCLUDE_REGEXES`: A JSON array of regexes as strings. This is appended to `navigateFallbackBlacklist` in [Workbox's configuration](https://developers.google.com/web/tools/workbox/reference-docs/latest/module-workbox-webpack-plugin.GenerateSW#GenerateSW). This is used in our [GitHub Pages deploy](https://source-academy.github.io) so that it does not conflict with the subsites we host on GitHub Pages.
+1. `REACT_APP_CADET_LOGGER`: Log server url. To enable, build with the serviceworker. (`yarn build`, then `yarn build-serviceworker`)
+   - To test with cadet-logger on localhost, set it to `http://localhost:8001/assessment-logger`.
+   - The custom serviceworker is only built with `yarn build`, then `yarn build-serviceworker`. It is not available in any other version.
+1. `REACT_APP_CADET_LOGGER_INTERVAL`: The interval (in ms) that the frontend should upload logs.
