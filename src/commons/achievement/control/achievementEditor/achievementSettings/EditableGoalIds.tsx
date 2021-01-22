@@ -46,7 +46,7 @@ function EditableGoalIds(props: EditableGoalIdsProps) {
       noResults={<MenuItem disabled={true} text="No available goal" />}
       onItemSelect={selectGoal}
       selectedItems={[...selectedGoals]}
-      tagInputProps={{ onRemove: text => removeGoal(getId(text)) }}
+      tagInputProps={{ onRemove: text => removeGoal(getId(text!.toString())) }}
       tagRenderer={getText}
     />
   );

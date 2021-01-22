@@ -1,6 +1,6 @@
 import { MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditablePrerequisiteIdsProps = {
@@ -46,7 +46,7 @@ function EditablePrerequisiteIds(props: EditablePrerequisiteIdsProps) {
       noResults={<MenuItem disabled={true} text="No available achievement" />}
       onItemSelect={selectPrereq}
       selectedItems={[...selectedPrereqs]}
-      tagInputProps={{ onRemove: title => removePrereq(getId(title)) }}
+      tagInputProps={{ onRemove: title => removePrereq(getId(title!.toString())) }}
       tagRenderer={getTitle}
     />
   );

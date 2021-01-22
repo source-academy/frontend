@@ -1,6 +1,6 @@
 import { Button, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditablePositionProps = {

@@ -1,6 +1,5 @@
 import { Button, MenuItem, Tooltip } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
 import { AchievementAbility } from 'src/features/achievement/AchievementTypes';
 
 type EditableAbilityProps = {

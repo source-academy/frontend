@@ -1,6 +1,5 @@
 import { EditableText, NumericInput, Tooltip } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 import { BinaryMeta, GoalMeta } from 'src/features/achievement/AchievementTypes';
 
 type EditableBinaryMetaProps = {
