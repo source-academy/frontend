@@ -97,22 +97,23 @@ export default function* AchievementSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(REMOVE_ACHIEVEMENT, function* (
-    action: ReturnType<typeof actions.removeAchievement>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+  yield takeEvery(
+    REMOVE_ACHIEVEMENT,
+    function* (action: ReturnType<typeof actions.removeAchievement>) {
+      const tokens = yield select((state: OverallState) => ({
+        accessToken: state.session.accessToken,
+        refreshToken: state.session.refreshToken
+      }));
 
-    const achievement = action.payload;
+      const achievement = action.payload;
 
-    const resp = yield call(removeAchievement, achievement, tokens);
+      const resp = yield call(removeAchievement, achievement, tokens);
 
-    if (!resp) {
-      return;
+      if (!resp) {
+        return;
+      }
     }
-  });
+  );
 
   yield takeEvery(REMOVE_GOAL, function* (action: ReturnType<typeof actions.removeGoal>) {
     const tokens = yield select((state: OverallState) => ({
@@ -129,20 +130,21 @@ export default function* AchievementSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(UPDATE_GOAL_PROGRESS, function* (
-    action: ReturnType<typeof actions.updateGoalProgress>
-  ) {
-    const tokens = yield select((state: OverallState) => ({
-      accessToken: state.session.accessToken,
-      refreshToken: state.session.refreshToken
-    }));
+  yield takeEvery(
+    UPDATE_GOAL_PROGRESS,
+    function* (action: ReturnType<typeof actions.updateGoalProgress>) {
+      const tokens = yield select((state: OverallState) => ({
+        accessToken: state.session.accessToken,
+        refreshToken: state.session.refreshToken
+      }));
 
-    const { studentId, progress } = action.payload;
+      const { studentId, progress } = action.payload;
 
-    const resp = yield call(updateGoalProgress, studentId, progress, tokens);
+      const resp = yield call(updateGoalProgress, studentId, progress, tokens);
 
-    if (!resp) {
-      return;
+      if (!resp) {
+        return;
+      }
     }
-  });
+  );
 }

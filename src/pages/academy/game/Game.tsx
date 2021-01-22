@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useSelector } from 'react-redux';
 import { OverallState } from 'src/commons/application/ApplicationTypes';
-import { AchievementGoal, AchievementItem } from 'src/features/achievement/AchievementTypes';
 import { saveData } from 'src/features/game/save/GameSaveRequests';
 import { FullSaveState } from 'src/features/game/save/GameSaveTypes';
 import SourceAcademyGame, {
@@ -15,8 +14,6 @@ function Game() {
   // TODO: Replace with actual achievements and goals
   // const achievements = useSelector((state: OverallState) => state.achievement.achievements);
   // const goals = useSelector((state: OverallState) => state.achievement.goals);
-  const achievements = [] as AchievementItem[];
-  const goals = [] as AchievementGoal[];
 
   const [isTestStudent, setIsTestStudent] = React.useState(false);
   const [isUsingMock, setIsUsingMock] = React.useState(false);
@@ -32,15 +29,16 @@ function Game() {
 
   React.useEffect(() => {
     SourceAcademyGame.getInstance().setAccountInfo(session as AccountInfo);
-    SourceAcademyGame.getInstance().setAchievements(achievements);
-    SourceAcademyGame.getInstance().setGoals(goals);
+    // TODO see above
+    SourceAcademyGame.getInstance().setAchievements([]);
+    SourceAcademyGame.getInstance().setGoals([]);
 
     if (process.env.NODE_ENV === 'development') {
       setIsTestStudent(true);
       setIsUsingMock(true);
       SourceAcademyGame.getInstance().toggleUsingMock(true);
     }
-  }, [achievements, goals, session]);
+  }, [session]);
 
   return (
     <>
