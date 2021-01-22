@@ -1,5 +1,4 @@
 import { Icon, IconName } from '@blueprintjs/core';
-import React from 'react';
 
 import { getFilterColor } from '../../features/achievement/AchievementConstants';
 import { FilterStatus } from '../../features/achievement/AchievementTypes';

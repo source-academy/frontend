@@ -47,7 +47,7 @@ export async function displayNotification(scene: IBaseScene, message: string): P
   // Wait for fade in to finish
   await sleep(Constants.fadeDuration * 2);
 
-  const showNotification = new Promise(resolve => {
+  const showNotification = new Promise<void>(resolve => {
     dialogueRenderer.getDialogueBox().on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       SourceAcademyGame.getInstance().getSoundManager().playSound(SoundAssets.notifExit.key);
       fadeAndDestroy(scene, notifText, { fadeDuration: Constants.fadeDuration / 4 });

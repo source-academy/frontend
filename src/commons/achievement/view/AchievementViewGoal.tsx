@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { AchievementGoal } from '../../../features/achievement/AchievementTypes';
 
 type AchievementViewGoalProps = {

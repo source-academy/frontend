@@ -1,7 +1,7 @@
 import { MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, MultiSelect } from '@blueprintjs/select';
 import { without } from 'lodash';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditableGoalIdsProps = {
