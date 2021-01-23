@@ -6,6 +6,7 @@ import {
   Assessment,
   AssessmentCategory,
   AssessmentOverview,
+  ContestEntry,
   GradingStatus,
   IProgrammingQuestion,
   QuestionType,
@@ -331,6 +332,37 @@ export const getAssessmentOverviews = async (
 };
 
 /**
+ * Used to fetch entries linked to userid & asssessment id based for contest voting questions
+ * GET /contestvoting/{assessmentId}/{userId}
+ * @param assessmentId id of the contest assignment
+ * @param userId id of unique user
+ */
+export const getContestEntries = async (assessmentId: number, userId: User['userId'], tokens: Tokens): Promise<ContestEntry[]> => {
+  // TODO: FIX THIS CORS ERROR
+  // const resp = await request(`contestvoting/${assessmentId}/${userId}`, 'GET', {
+  //   ...tokens,
+  //   shouldAutoLogout: false,
+  //   shouldRefresh: true
+  // });
+
+  // if (!resp || !resp.ok) {
+  //   return [];
+  // }
+  
+  // return (await resp?.json())?.contestEntries as ContestEntry[] ?? []; 
+  return [
+      {
+        studentUsername: 'e0111x', 
+        program: 'console.log(\'hello world\')'
+      },
+      {
+        studentUsername: 'e0222x',
+        program: 'Student 2'
+      }
+  ]
+}
+
+/**
  * GET /assessments/{assessmentId}
  */
 export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessment | null> => {
@@ -364,10 +396,11 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
   }
 
   const assessment = (await resp.json()) as Assessment;
-  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest'
-  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest'
+  // backend has property ->     type: 'mission' | 'sidequest' | 'path' | 'contest' | 'contestvoting'
+  //              we have -> category: 'Mission' | 'Sidequest' | 'Path' | 'Contest' | 'ContestVoting'
   assessment.category = capitalise((assessment as any).type) as AssessmentCategory;
   delete (assessment as any).type;
+
   assessment.questions = assessment.questions.map(q => {
     if (q.type === QuestionTypes.programming) {
       const question = q as IProgrammingQuestion;
@@ -397,7 +430,6 @@ export const getAssessment = async (id: number, tokens: Tokens): Promise<Assessm
 
     return q;
   });
-
   return assessment;
 };
 

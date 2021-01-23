@@ -22,11 +22,11 @@ const SideContentContestVoterContainer: React.FunctionComponent<SideContentConte
     const { contestEntries, handleContestEntryClick } = props;
     const [votingSubmission, setVotingSubmission]= useState<ContestVotingSubmission>({})
 
-    // TODO: Write Backend API calls to fetch contest entries
+    // TODO: Fix backend call to fetch entries CORS error
     // TODO: Write Backend API call to submit VotingSubmission { } JSON Data
+    // TODO: Write Backend API call to fetch ordered leaderboard entries (with names)
     // TODO: Validate VotingSubmission Data
     // TODO: Find a way to persist and incorportate submission of the data
-    // TODO: Write Backend API call to fetch ordered leaderboard entries (with names)
     // TODO: Conditionally render tabs based on contest state (finished, pending)
 
     // Submitted to the backend as result

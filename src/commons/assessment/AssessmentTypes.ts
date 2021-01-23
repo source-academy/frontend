@@ -28,6 +28,7 @@ export type GradingStatus = keyof typeof GradingStatuses;
 
 export enum AssessmentCategories {
   Contest = 'Contest',
+  ContestVoting = 'ContestVoting', 
   Mission = 'Mission',
   Path = 'Path',
   Sidequest = 'Sidequest',
@@ -47,7 +48,8 @@ export type TestcaseType = keyof typeof TestcaseTypes;
 
 export enum QuestionTypes {
   programming = 'programming',
-  mcq = 'mcq'
+  mcq = 'mcq',
+  voting = 'voting'
 }
 export type QuestionType = keyof typeof QuestionTypes;
 
@@ -114,8 +116,13 @@ export interface IMCQQuestion extends BaseQuestion {
   type: 'mcq';
 }
 
+export interface IContestVotingQuestion extends BaseQuestion {
+  contestEntries: ContestEntry[];
+  type: 'voting';
+}
+
 export type BaseQuestion = {
-  answer: string | number | null;
+  answer: string | number | number[] | null;
   comments?: string;
   content: string;
   editorValue?: string | null;
@@ -135,7 +142,7 @@ export type BaseQuestion = {
   xp: number;
 };
 
-export type Question = IProgrammingQuestion | IMCQQuestion;
+export type Question = IProgrammingQuestion | IMCQQuestion | IContestVotingQuestion;
 
 export type Library = {
   chapter: number;

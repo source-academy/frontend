@@ -24,11 +24,13 @@ import {
 import { initSession, log } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
+import { User } from '../application/types/SessionTypes'
 import {
   Assessment,
   AssessmentCategories,
   AutogradingResult,
   ContestEntry,
+  IContestVotingQuestion,
   IMCQQuestion,
   IProgrammingQuestion,
   Library,
@@ -102,12 +104,14 @@ export type OwnProps = {
 };
 
 export type StateProps = {
+  userId?: User['userId'],
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
   editorValue: string | null;
   editorPostpend: string;
   editorTestcases: Testcase[];
+  contestEntries?: ContestEntry[];
   editorHeight?: number;
   editorWidth: string;
   breakpoints: string[];
@@ -155,7 +159,7 @@ class AssessmentWorkspace extends React.Component<
     }
     if (!this.props.assessment) {
       return;
-    }
+    } 
     // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
     // checkWorkspaceReset does exactly the same thing.
     let questionId = this.props.questionId;
@@ -394,6 +398,7 @@ class AssessmentWorkspace extends React.Component<
     let editorPrepend: string = '';
     let editorPostpend: string = '';
     let editorTestcases: Testcase[] = [];
+    let contestEntries: ContestEntry[] = []; 
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
@@ -420,6 +425,9 @@ class AssessmentWorkspace extends React.Component<
           )
         });
       }
+    }  else if (question.type === QuestionTypes.voting) {
+      const questionData = question as IContestVotingQuestion;
+      contestEntries = questionData.contestEntries;
     }
 
     this.props.handleEditorUpdateBreakpoints([]);
@@ -429,7 +437,8 @@ class AssessmentWorkspace extends React.Component<
       editorPrepend,
       editorValue,
       editorPostpend,
-      editorTestcases
+      editorTestcases,
+      contestEntries
     });
     this.props.handleClearContext(question.library, true);
     this.props.handleUpdateHasUnsavedChanges(false);
@@ -466,7 +475,7 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.NEW_LAYERS,
         body: <SideContentContestVotingContainer
           handleContestEntryClick={handleContestEntryClick}
-          contestEntries={dummyEntries} />,
+          contestEntries={this.props.contestEntries ?? []} />,
         toSpawn: () => true
       }, 
       {
@@ -474,11 +483,11 @@ class AssessmentWorkspace extends React.Component<
         iconName: IconNames.CROWN,
         body: <SideContentContestLeaderboard
           handleContestEntryClick={handleContestEntryClick}
-          orderedContestEntries={dummyEntries}
+          orderedContestEntries={(dummyEntries)}
          />,
         toSpawn: () => true
       }
-    ]
+    ]; 
 
     const defaultTabs: SideContentTab[] = [
       {
@@ -512,8 +521,12 @@ class AssessmentWorkspace extends React.Component<
       }
     ];
     const tabs: SideContentTab[] = defaultTabs
-    /* Contest voting tab test - further logic will be added */
-    tabs.push(...contestVotingTabs)
+
+    // only render contest voting tabs when assessment is a ContestVoting type
+    if (props.assessment!.category === AssessmentCategories.ContestVoting) {
+      tabs.push(...contestVotingTabs)
+    }
+    
     if (isGraded) {
       tabs.push({
         label: `Report Card`,

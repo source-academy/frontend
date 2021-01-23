@@ -329,7 +329,7 @@ export const assessmentToXml = (
     task.GRADERDEPLOYMENT = exportLibrary(assessment.graderDeployment!);
   }
 
-  assessment.questions.forEach((question: IProgrammingQuestion | IMCQQuestion) => {
+  assessment.questions.forEach((question: Question) => {
     const problem = {
       $: {
         type: question.type,

@@ -39,6 +39,7 @@ import AssessmentWorkspace, { DispatchProps, OwnProps, StateProps } from './Asse
 
 const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (state, props) => {
   return {
+    userId: state.session.userId,
     assessment: state.session.assessments.get(props.assessmentId),
     autogradingResults: state.workspaces.assessment.autogradingResults,
     editorPrepend: state.workspaces.assessment.editorPrepend,
@@ -58,7 +59,8 @@ const mapStateToProps: MapStateToProps<StateProps, OwnProps, OverallState> = (st
     replValue: state.workspaces.assessment.replValue,
     sideContentHeight: state.workspaces.assessment.sideContentHeight,
     storedAssessmentId: state.workspaces.assessment.currentAssessment,
-    storedQuestionId: state.workspaces.assessment.currentQuestion
+    storedQuestionId: state.workspaces.assessment.currentQuestion,
+    contestEntries: state.workspaces.assessment.contestEntries
   };
 };
 
