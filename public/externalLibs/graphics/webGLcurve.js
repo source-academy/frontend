@@ -296,7 +296,7 @@ function z_of(pt) {
  * @returns {Number} Red component of the Point
  */
 function r_of(pt) {
-  return pt.getColor()[0];
+  return pt.getColor()[0] * 255;
 }
 
 /**
@@ -305,7 +305,7 @@ function r_of(pt) {
  * @returns {Number} Green component of the Point
  */
 function g_of(pt) {
-  return pt.getColor()[1];
+  return pt.getColor()[1] * 255;
 }
 
 /**
@@ -314,5 +314,5 @@ function g_of(pt) {
  * @returns {Number} Blue component of the Point
  */
 function b_of(pt) {
-  return pt.getColor()[2];
+  return pt.getColor()[2] * 255;
 }
