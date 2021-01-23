@@ -4,7 +4,7 @@ import { SourcecastWorkspaceState } from '../../features/sourceRecorder/sourceca
 import { SourcereelWorkspaceState } from '../../features/sourceRecorder/sourcereel/SourcereelTypes';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { AutogradingResult, Testcase } from '../assessment/AssessmentTypes';
+import { AutogradingResult, ContestEntry, Testcase } from '../assessment/AssessmentTypes';
 import { HighlightedLines, Position } from '../editor/EditorTypes';
 import { SideContentType } from '../sideContent/SideContentTypes';
 
@@ -104,6 +104,7 @@ export type WorkspaceState = {
   readonly stepLimit: number;
   readonly globals: Array<[string, any]>;
   readonly debuggerContext: DebuggerContext;
+  readonly contestEntries?: ContestEntry[];
 };
 
 type ReplHistory = {
