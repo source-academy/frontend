@@ -25,20 +25,20 @@ test('NavigationBar renders correctly with student role', () => {
 });
 
 test('NavigationBarMobileSideMenu renders "Not logged in" correctly', () => {
-  const props ={
+  const props = {
     isOpen: true,
     onClose: () => {}
-  }
+  };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();
-})
+});
 
 test('NavigationBarMobileSideMenu renders correctly with student role', () => {
-  const props ={
+  const props = {
     isOpen: true,
     onClose: () => {},
     role: Role.Student
-  }
+  };
   const tree = shallow(<NavigationBarMobileSideMenu {...props} />);
   expect(tree.debug()).toMatchSnapshot();
-})
+});
