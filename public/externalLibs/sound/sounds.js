@@ -183,12 +183,9 @@ function play_unsafe(sound) {
         var duration = get_duration(sound);
         
         _playing = true;
-
-        // Create AudioContext (test this out might fix safari issue)
-        //const AudioContext = window.AudioContext || window.webkitAudioContext;
-        
+      
         // Main audio context
-        _player = new AudioContext();
+        _player = new (window.AudioContext || window.webkitAudioContext)();;
 
         // Controls Length of buffer in seconds.
         var buffer_length = 0.1;
