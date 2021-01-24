@@ -277,8 +277,11 @@ var _safeplayer;
  * @returns {Sound} given Sound
  */
 function play(sound) {
+    // Type-check sound
+    if (!is_sound(sound)) {
+        throw new Error("play is expecting sound, but encountered " + sound);
     // If a sound is already playing, terminate execution.
-    if (_safeplaying || _playing) {
+    } else if (_safeplaying || _playing) {
         throw new Error("play: audio system still playing previous sound");
     } else if (get_duration(sound) <= 0) {
         return sound;
