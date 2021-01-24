@@ -417,7 +417,8 @@ function letter_name_to_frequency(note) {
 }
 
 function midi_note_to_frequency(note) {
-  return 8.1757989156 * Math.pow(2, (note / 12));
+  // Frequency of midi note 0 / C0.
+  return 8.17579891564371 * Math.pow(2, (note / 12));
 }
 
 function linear_decay(decay_period) {
