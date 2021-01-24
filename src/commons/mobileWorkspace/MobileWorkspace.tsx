@@ -3,9 +3,9 @@ import { Prompt } from 'react-router';
 
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
+import Repl, { ReplProps } from '../repl/Repl';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
-// TODO: Check prop types again
 export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
@@ -13,13 +13,11 @@ type StateProps = {
 
   // TODO: Check what is editorProps and mcqChooserProps doing
   // ControlBar props
-  // Repl props
   editorProps?: EditorProps;
   customEditor?: JSX.Element; // NOTE: So far only used in Sourcecast and Sourcereel
   hasUnsavedChanges?: boolean; // Not used in Playground - check in the future
   mcqProps?: McqChooserProps; // Not used in Playground - check in the future
-  // TODO: SideContent props
-  // TODO: Remove sideContentProps.handleActiveTabChange from Redux... it is local to Workspace (updates active tab in Redux store for no reason)
+  replProps: ReplProps;
   mobileSideContentProps: MobileSideContentProps;
 };
 
@@ -34,6 +32,15 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     }
   };
 
+  const createReplOutput = () => {
+    return <Repl {...props.replProps} />;
+  };
+
+  const createEditorProps = {
+    createWorkspaceInput: createWorkspaceInput,
+    createReplOutput: createReplOutput
+  };
+
   return (
     <div className="workspace">
       {props.hasUnsavedChanges ? (
@@ -41,20 +48,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
           message={'You have changes that may not be saved. Are you sure you want to leave?'}
         />
       ) : null}
-      {/* TODO: Update CSS for mobile-workspace-parent remove flex: row, overflow:hidden, etc. */}
-      <div className="workspace-parent">{createWorkspaceInput()}</div>
 
-      {/* TODO: Remove styling */}
-      <div
-        style={{
-          height: '50px', // 80px
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
-        <MobileSideContent />
-      </div>
+      {/* TODO: Update CSS for mobile workspace-parent remove flex: row, overflow:hidden, etc. */}
+
+      <MobileSideContent {...props.mobileSideContentProps} {...createEditorProps} />
     </div>
   );
 };
