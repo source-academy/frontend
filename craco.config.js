@@ -1,17 +1,21 @@
-const _ = require('lodash');
-const path = require("path");
-
 const cracoConfig = (module.exports = {
   webpack: {
     configure: webpackConfig => {
-      // modify Workbox configuration
-      if (cracoConfig.workbox) {
-        const workboxPlugin = webpackConfig.plugins.find(
-          plugin => plugin.constructor.name === 'GenerateSW'
-        );
-        if (workboxPlugin) {
-          workboxPlugin.config = cracoConfig.workbox(workboxPlugin.config);
-        }
+      // avoid the entire process.env being inserted into the service worker
+      // if SW_EXCLUDE_REGEXES is unset
+      const definePlugin = webpackConfig.plugins.find(
+        plugin => plugin.constructor.name === 'DefinePlugin'
+      );
+      const inlineProcessEnv = definePlugin.definitions['process.env'];
+      if (!inlineProcessEnv.hasOwnProperty('SW_EXCLUDE_REGEXES')) {
+        inlineProcessEnv.SW_EXCLUDE_REGEXES = undefined;
+      }
+
+      const injectManifestPlugin = webpackConfig.plugins.find(
+        plugin => plugin.constructor.name === 'InjectManifest'
+      );
+      if (injectManifestPlugin) {
+        injectManifestPlugin.config.maximumFileSizeToCacheInBytes = 10 * 1024 * 1024;
       }
 
       // add rules to pack WASM (for Sourceror)
@@ -26,7 +30,7 @@ const cracoConfig = (module.exports = {
           }
         });
       });
-      webpackConfig.output.webassemblyModuleFilename = "static/[hash].module.wasm";
+      webpackConfig.output.webassemblyModuleFilename = 'static/[hash].module.wasm';
 
       // workaround .mjs files by Acorn
       webpackConfig.module.rules.push({
@@ -34,47 +38,8 @@ const cracoConfig = (module.exports = {
         include: /node_modules/,
         type: 'javascript/auto'
       });
-      if(process.env.NODE_ENV === "production") {
-        // Make a second webpack config with a different entry point and output.
-        // This preserves pretty much all other settings.
-        const currEntryPoint = webpackConfig.entry[0];
-        const serviceWorkerBuild = _.clone(webpackConfig);
-        serviceWorkerBuild.entry = path.join(currEntryPoint, "../sw-custom.ts");
-        serviceWorkerBuild.output = {
-          path: webpackConfig.output.path,
-          publicPath: webpackConfig.output.publicPath,
-          filename: "sw-custom.js"
-        };
 
-        delete serviceWorkerBuild.optimization.splitChunks;
-        delete serviceWorkerBuild.optimization.runtimeChunk;
-
-        const ret = [webpackConfig, serviceWorkerBuild];
-        // Fix CRA's print line
-        // FIXME maybe we should just eject at this point...
-        ret.output = webpackConfig.output;
-        return ret;
-
-        // If there's multiple webpack configs, it will build them in **parallel**
-        // This breaks the following:
-        /*
-        Frankly this doesn't matter :D
-        The project was built assuming it is hosted at /.
-        You can control this with the homepage field in your package.json.
-
-        The build folder is ready to be deployed.
-        You may serve it with a static server:
-
-          serve -s build
-
-        Find out more about deployment here:
-
-          bit.ly/CRA-deploy
-        */
-      } else {
-        return webpackConfig;
-      }
-
+      return webpackConfig;
     }
   },
   jest: {
@@ -86,13 +51,5 @@ const cracoConfig = (module.exports = {
       jestConfig.moduleNameMapper['ace-builds'] = '<rootDir>/node_modules/ace-builds';
       return jestConfig;
     }
-  },
-  workbox: workboxConfig => {
-    if (process.env.SW_EXCLUDE_REGEXES) {
-      workboxConfig.navigateFallbackBlacklist.push(
-        ...JSON.parse(process.env.SW_EXCLUDE_REGEXES).map(str => new RegExp(str))
-      );
-    }
-    return workboxConfig;
   }
 });

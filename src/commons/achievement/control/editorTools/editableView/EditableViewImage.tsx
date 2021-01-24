@@ -1,5 +1,5 @@
 import { Button, EditableText } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type EditableViewImageProps = {
   canvasUrl: string;

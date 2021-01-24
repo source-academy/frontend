@@ -1,5 +1,4 @@
 import { EditableText } from '@blueprintjs/core';
-import React from 'react';
 
 type EditableAchievementTitleProps = {
   title: string;

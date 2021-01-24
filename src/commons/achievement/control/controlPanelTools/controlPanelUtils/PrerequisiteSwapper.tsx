@@ -1,6 +1,5 @@
 import { Button, Classes, Dialog, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
 
 import AchievementInferencer from '../../../utils/AchievementInferencer';
 
