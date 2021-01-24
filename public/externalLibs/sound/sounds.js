@@ -269,7 +269,7 @@ function play_unsafe(sound) {
 // (i.e. plays sound properly, but possibly with
 // a delay).
 var _safeplaying = false;
-var _safeaudio = null;
+var _safeplayer;
 
 /**
  * plays a given Sound using your computer's sound device
@@ -283,13 +283,29 @@ function play(sound) {
     } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
-        // Discretize the input sound
-        var data = discretize(get_wave(sound), get_duration(sound));
-        _safeaudio = raw_to_audio(data);
+        // Initialize audio context
+        _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
 
-        _safeaudio.addEventListener('ended', stop);
-        _safeaudio.play();
+        // Create mono buffer
+        let theBuffer = _safeplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let channel = theBuffer.getChannelData(0);
+
+        // Discretize the function and clip amplitude
+        let temp;
+        const wave = get_wave(sound);
+        for (let i = 0; i < theBuffer.length; i++) {
+            temp = wave(i/FS);
+            channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+        }
+
+        // Connect data to output destination
+        let source = _safeplayer.createBufferSource();
+        source.buffer = theBuffer;
+        
+        source.connect(_safeplayer.destination);
         _safeplaying = true;
+        source.start();
+        source.onended = () => stop();
         return sound;
     }
 }
@@ -322,14 +338,14 @@ function string_to_sound(str) {
  * @returns {undefined} undefined
  */
 function stop() {
-    // If using normal play()
+    // If using play_unsafe()
     if (_playing) {
         _player.close();
     }
-    // If using play_safe()
+    // If using safe play()
     if (_safeplaying) {
-        _safeaudio.pause();
-        _safeaudio = null;
+        _safeplayer.close();
+        _safeplayer = null;
     }
     _playing = false;
     _safeplaying = false;
