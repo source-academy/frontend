@@ -42,7 +42,7 @@ exports[`NavigationBar renders "Not logged in" correctly 1`] = `
 </Fragment>"
 `;
 
-exports[`NavigationBar renders correctly with username 1`] = `
+exports[`NavigationBar renders correctly with student role 1`] = `
 "<Fragment>
   <Blueprint3.Navbar className=\\"NavigationBar primary-navbar bp3-dark\\">
     <Blueprint3.NavbarGroup align=\\"left\\">
@@ -64,6 +64,12 @@ exports[`NavigationBar renders correctly with username 1`] = `
           Playground
         </div>
       </NavLink>
+      <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/achievement\\">
+        <Blueprint3.Icon icon=\\"mountain\\" />
+        <div className=\\"navbar-button-text\\">
+          Achievement
+        </div>
+      </NavLink>
     </Blueprint3.NavbarGroup>
     <Blueprint3.NavbarGroup align=\\"right\\">
       <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\" to=\\"/contributors\\">
@@ -72,6 +78,12 @@ exports[`NavigationBar renders correctly with username 1`] = `
           Contributors
         </div>
       </NavLink>
+      <div className=\\"hidden-xs\\">
+        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
+      </div>
+      <Blueprint3.Tooltip content=\\"Toggle Telebay\\" position=\\"bottom\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+        <Blueprint3.Button onClick={[Function: onClick]} icon=\\"compass\\" minimal={true} style={{...}} />
+      </Blueprint3.Tooltip>
       <div className=\\"visible-xs\\">
         <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
       </div>
@@ -81,5 +93,80 @@ exports[`NavigationBar renders correctly with username 1`] = `
       <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
+  <AcademyNavigationBar role=\\"student\\" />
 </Fragment>"
+`;
+
+exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"Telebay\\" icon=\\"compass\\" className=\\"bp3-dark\\" canOutsideClickClose={true} style={{...}} vertical={false}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast/:sourcecastId?\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"music\\" />
+    <div>
+      Sourcecast
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"code\\" />
+    <div>
+      Playground
+    </div>
+  </NavLink>
+</Blueprint3.Drawer>"
+`;
+
+exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
+"<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"Telebay\\" icon=\\"compass\\" className=\\"bp3-dark\\" canOutsideClickClose={true} style={{...}} vertical={false}>
+  <NavLink to=\\"/academy/missions\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"flame\\" />
+    <div>
+      Missions
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/quests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"lightbulb\\" />
+    <div>
+      Quests
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/paths\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"predictive-analysis\\" />
+    <div>
+      Paths
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/contests\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"comparison\\" />
+    <div>
+      Contests
+    </div>
+    <Connect(NotificationBadge) notificationFilter={[Function (anonymous)]} disableHover={true} />
+  </NavLink>
+  <NavLink to=\\"/academy/practicals\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"manual\\" />
+    <div>
+      Others
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast/:sourcecastId?\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"music\\" />
+    <div>
+      Sourcecast
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/playground\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"code\\" />
+    <div>
+      Playground
+    </div>
+  </NavLink>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/achievement\\" onClick={[Function: onClose]}>
+    <Blueprint3.Icon icon=\\"mountain\\" />
+    <div>
+      Achievement
+    </div>
+  </NavLink>
+</Blueprint3.Drawer>"
 `;
