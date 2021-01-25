@@ -27,6 +27,7 @@ function map(f, xs) {
 // Low-level sound support
 // ---------------------------------------------
 
+/*
 // Samples a continuous wave to a discrete waves at sampling rate for duration
 // in seconds
 function discretize(wave, duration) {
@@ -38,6 +39,7 @@ function discretize(wave, duration) {
 
     return vector;
 }
+*/
 
 // Discretizes a Sound to a Sound starting from elapsed_duration, for
 // sample_length seconds
@@ -57,6 +59,7 @@ function discretize_from(wave, duration, elapsed_duration, sample_length, data) 
     }
 }
 
+/*
 // Quantize real amplitude values into standard 16-bit PCM levels
 // The range is [-32768, 32767] (see riffwave.js)
 function quantize(data) {
@@ -107,6 +110,8 @@ function raw_to_audio(_data) {
     var audio = new Audio(riffwave.dataURI);
     return audio;
 }
+
+*/
 
 // ---------------------------------------------
 // Source API for Students
@@ -184,8 +189,10 @@ function play_unsafe(sound) {
         
         _playing = true;
       
-        // Main audio context
-        _player = new (window.AudioContext || window.webkitAudioContext)();;
+        // Instantiate audio context if it has not been instantiated
+        if (!_player) {
+            _player = new (window.AudioContext || window.webkitAudioContext)();
+        }
 
         // Controls Length of buffer in seconds.
         var buffer_length = 0.1;
@@ -205,7 +212,8 @@ function play_unsafe(sound) {
         function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
             // If sound has exceeded duration, early return to stop calls.
             if (elapsed_duration > duration || !_playing) { 
-                stop();
+                current_sound.disconnect(_player.destination);
+                _playing = false;
                 return;
             }
 
@@ -286,8 +294,10 @@ function play(sound) {
     } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
-        // Initialize audio context
-        _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
+        // Instantiate audio context if it has not been instantiated.
+        if (!_safeplayer) {
+            _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
+        }
 
         // Create mono buffer
         let theBuffer = _safeplayer.createBuffer(1, FS * get_duration(sound), FS);
@@ -308,7 +318,10 @@ function play(sound) {
         source.connect(_safeplayer.destination);
         _safeplaying = true;
         source.start();
-        source.onended = () => stop();
+        source.onended = () => {
+            source.disconnect(_safeplayer.destination);
+            _safeplaying = false;
+        }
         return sound;
     }
 }
@@ -344,6 +357,7 @@ function stop() {
     // If using play_unsafe()
     if (_playing) {
         _player.close();
+        _player = null;
     }
     // If using safe play()
     if (_safeplaying) {
@@ -593,15 +607,51 @@ function sawtooth_sound(freq, duration) {
 
 /**
  * plays a given sound without regard if a sound is already playing
- * @param {sound} sound - given sound
- * @returns {undefined} undefined
+ * @param {Sound} sound - given sound
+ * @returns {Sound}  given sound
  */
 function play_concurrently(sound) {
-    // Discretize the input sound
-    var data = discretize(get_wave(sound), get_duration(sound));
-    _safeaudio = raw_to_audio(data);
+    // Type-check sound
+    if (!is_sound(sound)) {
+        throw new Error("play_concurrently is expecting sound, but encountered " + sound);
+    }  else if (get_duration(sound) <= 0) {
+        return sound;
+    } else {
+        // Instantiate audio context if it has not been instantiated
+        if (!_safeplayer) {
+            _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
+        }
 
-    _safeaudio.addEventListener('ended', stop);
-    _safeaudio.play();
-    _safeplaying = true;
+        // Create mono buffer
+        let theBuffer = _safeplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let channel = theBuffer.getChannelData(0);
+
+        // Discretize the function and clip amplitude
+        let temp;
+        const wave = get_wave(sound);
+        for (let i = 0; i < theBuffer.length; i++) {
+            temp = wave(i/FS);
+            channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+        }
+
+        // Connect data to output destination
+        let source = _safeplayer.createBufferSource();
+        source.buffer = theBuffer;
+        
+        source.connect(_safeplayer.destination);
+        _safeplaying = true;
+        source.start();
+        source.onended = () => {
+            source.disconnect(_safeplayer.destination);
+            _safeplaying = false;
+        }
+        return sound;
+    }
+    // Discretize the input sound
+    // var data = discretize(get_wave(sound), get_duration(sound));
+    // _safeaudio = raw_to_audio(data);
+    // 
+    // _safeaudio.addEventListener('ended', stop);
+    // _safeaudio.play();
+    // _safeplaying = true;
 }
