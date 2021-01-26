@@ -1,5 +1,5 @@
 import { Button, Dialog } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type AchievementDeleterProps = {
   deleteAchievement: any;

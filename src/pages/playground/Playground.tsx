@@ -158,6 +158,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
+  const isMobile = useMediaQuery({ maxWidth: 768 });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -209,6 +210,24 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
     handleHash(hash, propsRef.current);
   }, [hash]);
+
+  // TODO: Look at onChangeTabs implementation below (missing some reducers here)
+  /**
+   * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
+   */
+  React.useEffect(() => {
+    if (isMobile && selectedTab === SideContentType.introduction) {
+      props.handleActiveTabChange(SideContentType.mobileEditor);
+      setSelectedTab(SideContentType.mobileEditor);
+    } else if (
+      !isMobile &&
+      (selectedTab === SideContentType.mobileEditor ||
+        selectedTab === SideContentType.mobileEditorRun)
+    ) {
+      setSelectedTab(SideContentType.introduction);
+      props.handleActiveTabChange(SideContentType.introduction);
+    }
+  }, [isMobile, props, selectedTab]);
 
   const handlers = React.useMemo(
     () => ({
@@ -551,6 +570,11 @@ const Playground: React.FC<PlaygroundProps> = props => {
     usingRemoteExecution
   ]);
 
+  // Remove Intro and Remote Execution tabs for mobile
+  const mobileTabs = [...tabs];
+  mobileTabs.shift();
+  mobileTabs.pop();
+
   const onChangeMethod = React.useCallback(
     (newCode: string, delta: CodeDelta) => {
       handleEditorValueChange(newCode);
@@ -626,6 +650,44 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const replDisabled =
     props.sourceVariant === 'concurrent' || props.sourceVariant === 'wasm' || usingRemoteExecution;
+
+  const editorProps = {
+    onChange: onChangeMethod,
+    onCursorChange: onCursorChangeMethod,
+    onSelectionChange: onSelectionChangeMethod,
+    sourceChapter: props.sourceChapter,
+    externalLibraryName: props.externalLibraryName,
+    sourceVariant: props.sourceVariant,
+    editorValue: props.editorValue,
+    editorSessionId: props.editorSessionId,
+    handleDeclarationNavigate: props.handleDeclarationNavigate,
+    handleEditorEval: props.handleEditorEval,
+    handleEditorValueChange: onEditorValueChange,
+    handleSendReplInputToOutput: props.handleSendReplInputToOutput,
+    handlePromptAutocomplete: props.handlePromptAutocomplete,
+    isEditorAutorun: props.isEditorAutorun,
+    breakpoints: props.breakpoints,
+    highlightedLines: props.highlightedLines,
+    newCursorPosition: props.newCursorPosition,
+    handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
+    handleSetSharedbConnected: props.handleSetSharedbConnected
+  };
+
+  const replProps = {
+    sourceChapter: props.sourceChapter,
+    sourceVariant: props.sourceVariant,
+    externalLibrary: props.externalLibraryName,
+    output: props.output,
+    replValue: props.replValue,
+    handleBrowseHistoryDown: props.handleBrowseHistoryDown,
+    handleBrowseHistoryUp: props.handleBrowseHistoryUp,
+    handleReplEval: props.handleReplEval,
+    handleReplValueChange: props.handleReplValueChange,
+    hidden: selectedTab === SideContentType.substVisualizer,
+    inputHidden: replDisabled,
+    usingSubst: props.usingSubst
+  };
+
   const workspaceProps: WorkspaceProps = {
     controlBarProps: {
       editorButtons: [
@@ -639,49 +701,17 @@ const Playground: React.FC<PlaygroundProps> = props => {
       ],
       replButtons: [replDisabled ? null : evalButton, clearButton]
     },
-    editorProps: {
-      onChange: onChangeMethod,
-      onCursorChange: onCursorChangeMethod,
-      onSelectionChange: onSelectionChangeMethod,
-      sourceChapter: props.sourceChapter,
-      externalLibraryName: props.externalLibraryName,
-      sourceVariant: props.sourceVariant,
-      editorValue: props.editorValue,
-      editorSessionId: props.editorSessionId,
-      handleDeclarationNavigate: props.handleDeclarationNavigate,
-      handleEditorEval: props.handleEditorEval,
-      handleEditorValueChange: onEditorValueChange,
-      handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-      handlePromptAutocomplete: props.handlePromptAutocomplete,
-      isEditorAutorun: props.isEditorAutorun,
-      breakpoints: props.breakpoints,
-      highlightedLines: props.highlightedLines,
-      newCursorPosition: props.newCursorPosition,
-      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-      handleSetSharedbConnected: props.handleSetSharedbConnected
-    },
+    editorProps: editorProps,
     editorHeight: props.editorHeight,
     editorWidth: props.editorWidth,
     handleEditorHeightChange: props.handleEditorHeightChange,
     handleEditorWidthChange: props.handleEditorWidthChange,
     handleSideContentHeightChange: props.handleSideContentHeightChange,
-    replProps: {
-      sourceChapter: props.sourceChapter,
-      sourceVariant: props.sourceVariant,
-      externalLibrary: props.externalLibraryName,
-      output: props.output,
-      replValue: props.replValue,
-      handleBrowseHistoryDown: props.handleBrowseHistoryDown,
-      handleBrowseHistoryUp: props.handleBrowseHistoryUp,
-      handleReplEval: props.handleReplEval,
-      handleReplValueChange: props.handleReplValueChange,
-      hidden: selectedTab === SideContentType.substVisualizer,
-      inputHidden: replDisabled,
-      usingSubst: props.usingSubst
-    },
+    replProps: replProps,
     sideContentHeight: props.sideContentHeight,
     sideContentProps: {
       defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
       onChange: onChangeTabs,
       tabs,
@@ -691,6 +721,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
+<<<<<<< HEAD
     editorProps: {
       // TODO: Abstract this duplicate away
       onChange: onChangeMethod,
@@ -724,6 +755,24 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
+=======
+    // TODO: ControlBar props
+    // TODO: Repl props
+    editorProps: editorProps,
+    replProps: replProps,
+    mobileSideContentProps: {
+      // TODO: Abstract this duplicate away
+      defaultSelectedTabId: selectedTab,
+      selectedTabId: selectedTab,
+      handleActiveTabChange: props.handleActiveTabChange,
+      onChange: onChangeTabs,
+      mobileTabs,
+      workspaceLocation: 'playground',
+      handleEditorEval: props.handleEditorEval
+    }
+  };
+
+>>>>>>> ca153cae4e0c346cadd415b068ef6eacc6634e91
   return isMobile ? (
     <MobileWorkspace {...mobileWorkspaceProps} />
   ) : (

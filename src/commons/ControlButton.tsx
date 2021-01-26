@@ -1,5 +1,4 @@
 import { Button, IButtonProps, Icon, IconName, Intent } from '@blueprintjs/core';
-import * as React from 'react';
 
 type controlButtonOptionals = {
   className?: string;

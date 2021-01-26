@@ -1,5 +1,4 @@
 import { Button } from '@blueprintjs/core';
-import React from 'react';
 
 type TaskUploaderProps = {
   pendingUpload: boolean;

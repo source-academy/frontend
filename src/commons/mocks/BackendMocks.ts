@@ -64,16 +64,19 @@ export function* mockBackendSaga(): SagaIterator {
     yield put(actions.updateAssessment({ ...assessment }));
   });
 
-  yield takeEvery(FETCH_GRADING_OVERVIEWS, function* (
-    action: ReturnType<typeof actions.fetchGradingOverviews>
-  ) {
-    const accessToken = yield select((state: OverallState) => state.session.accessToken);
-    const filterToGroup = action.payload;
-    const gradingOverviews = yield call(() => mockFetchGradingOverview(accessToken, filterToGroup));
-    if (gradingOverviews !== null) {
-      yield put(actions.updateGradingOverviews([...gradingOverviews]));
+  yield takeEvery(
+    FETCH_GRADING_OVERVIEWS,
+    function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
+      const accessToken = yield select((state: OverallState) => state.session.accessToken);
+      const filterToGroup = action.payload;
+      const gradingOverviews = yield call(() =>
+        mockFetchGradingOverview(accessToken, filterToGroup)
+      );
+      if (gradingOverviews !== null) {
+        yield put(actions.updateGradingOverviews([...gradingOverviews]));
+      }
     }
-  });
+  );
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const submissionId = action.payload;
@@ -109,30 +112,31 @@ export function* mockBackendSaga(): SagaIterator {
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
-  yield takeEvery(UNSUBMIT_SUBMISSION, function* (
-    action: ReturnType<typeof actions.unsubmitSubmission>
-  ) {
-    const { submissionId } = action.payload;
-    const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews || []
-    );
-    const index = overviews.findIndex(
-      overview =>
-        overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
-    );
-    if (index === -1) {
-      yield call(showWarningMessage, '400: Bad Request');
-      return;
-    }
-    const newOverviews = (overviews as GradingOverview[]).map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, submissionStatus: 'attempted' };
+  yield takeEvery(
+    UNSUBMIT_SUBMISSION,
+    function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
+      const { submissionId } = action.payload;
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews || []
+      );
+      const index = overviews.findIndex(
+        overview =>
+          overview.submissionId === submissionId && overview.submissionStatus === 'submitted'
+      );
+      if (index === -1) {
+        yield call(showWarningMessage, '400: Bad Request');
+        return;
       }
-      return overview;
-    });
-    yield call(showSuccessMessage, 'Unsubmitted!', 1000);
-    yield put(actions.updateGradingOverviews(newOverviews));
-  });
+      const newOverviews = (overviews as GradingOverview[]).map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, submissionStatus: 'attempted' };
+        }
+        return overview;
+      });
+      yield call(showSuccessMessage, 'Unsubmitted!', 1000);
+      yield put(actions.updateGradingOverviews(newOverviews));
+    }
+  );
 
   const sendGrade = function* (
     action: ReturnType<typeof actions.submitGrading | typeof actions.submitGradingAndContinue>
@@ -183,39 +187,41 @@ export function* mockBackendSaga(): SagaIterator {
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
-  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function* (
-    action: ReturnType<typeof actions.acknowledgeNotifications>
-  ) {
-    const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
+  yield takeEvery(
+    ACKNOWLEDGE_NOTIFICATIONS,
+    function* (action: ReturnType<typeof actions.acknowledgeNotifications>) {
+      const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
 
-    const notifications: Notification[] = yield select(
-      (state: OverallState) => state.session.notifications
-    );
+      const notifications: Notification[] = yield select(
+        (state: OverallState) => state.session.notifications
+      );
 
-    let notificationsToAcknowledge = notifications;
+      let notificationsToAcknowledge = notifications;
 
-    if (notificationFilter) {
-      notificationsToAcknowledge = notificationFilter(notifications);
+      if (notificationFilter) {
+        notificationsToAcknowledge = notificationFilter(notifications);
+      }
+
+      if (notificationsToAcknowledge.length === 0) {
+        return;
+      }
+
+      const ids = notificationsToAcknowledge.map(n => n.id);
+
+      const newNotifications: Notification[] = notifications.filter(
+        notification => !ids.includes(notification.id)
+      );
+
+      yield put(actions.updateNotifications(newNotifications));
     }
+  );
 
-    if (notificationsToAcknowledge.length === 0) {
-      return;
+  yield takeEvery(
+    FETCH_NOTIFICATIONS,
+    function* (action: ReturnType<typeof actions.fetchNotifications>) {
+      yield put(actions.updateNotifications(mockNotifications));
     }
-
-    const ids = notificationsToAcknowledge.map(n => n.id);
-
-    const newNotifications: Notification[] = notifications.filter(
-      notification => !ids.includes(notification.id)
-    );
-
-    yield put(actions.updateNotifications(newNotifications));
-  });
-
-  yield takeEvery(FETCH_NOTIFICATIONS, function* (
-    action: ReturnType<typeof actions.fetchNotifications>
-  ) {
-    yield put(actions.updateNotifications(mockNotifications));
-  });
+  );
 
   yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* () {
     yield put(actions.updateGroupGradingSummary([...mockGradingSummary]));

@@ -1,4 +1,4 @@
-/* eslint-disable simple-import-sort/sort */
+/* eslint-disable simple-import-sort/imports */
 import { Ace, require as acequire } from 'ace-builds';
 import 'ace-builds/src-noconflict/ext-language_tools';
 import 'ace-builds/src-noconflict/ext-searchbox';

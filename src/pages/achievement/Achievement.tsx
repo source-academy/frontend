@@ -1,4 +1,3 @@
-import React from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
