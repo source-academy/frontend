@@ -7,7 +7,7 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'DefinePlugin'
       );
       const inlineProcessEnv = definePlugin.definitions['process.env'];
-      if (!inlineProcessEnv.hasOwnProperty('REACT_APP_SW_EXCLUDE_REGEXES')) {
+      if (!inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES) {
         inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
       }
 
