@@ -21,7 +21,7 @@ precacheAndRoute(self.__WB_MANIFEST);
 // are fulfilled with your index.html shell. Learn more at
 // https://developers.google.com/web/fundamentals/architecture/app-shell
 const fileExtensionRegexp = new RegExp('/[^/?]+\\.[^/]+$');
-const SW_EXCLUDE_REGEXES = process.env.SW_EXCLUDE_REGEXES;
+const SW_EXCLUDE_REGEXES = process.env.REACT_APP_SW_EXCLUDE_REGEXES;
 const ignorePathnameRegexps = (JSON.parse(SW_EXCLUDE_REGEXES || '[]') as string[]).map(
   str => new RegExp(str)
 );
