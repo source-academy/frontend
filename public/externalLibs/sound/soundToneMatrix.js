@@ -359,9 +359,9 @@ function clear_all_timeout() {
 // functions from mission 14
 function letter_name_to_midi_note(note) {
   // we don't consider double flat/ double sharp
-  var note = note.split("");
-  var res = 12; //MIDI notes for mysterious C0
-  var n = note[0].toUpperCase();
+  note = [...note];
+  let res = 12; // C0 is midi note 12
+  const n = note[0].toUpperCase();
   switch (n) {
     case 'D':
       res = res + 2;
@@ -417,7 +417,7 @@ function letter_name_to_frequency(note) {
 }
 
 function midi_note_to_frequency(note) {
-  // Frequency of midi note 0 / C0.
+  // Frequency of midi note 0 / C-1.
   return 8.17579891564371 * Math.pow(2, (note / 12));
 }
 
@@ -447,11 +447,11 @@ function linear_decay(decay_period) {
  */
 function adsr(attack_ratio, decay_ratio, sustain_level, release_ratio) {
   return sound => {
-    var wave = get_wave(sound);
-    var duration = get_duration(sound);
-    var attack_time = duration * attack_ratio;
-    var decay_time = duration * decay_ratio;
-    var release_time = duration * release_ratio;
+    let wave = get_wave(sound);
+    let duration = get_duration(sound);
+    let attack_time = duration * attack_ratio;
+    let decay_time = duration * decay_ratio;
+    let release_time = duration * release_ratio;
     return make_sound( x => {
       if (x < attack_time) {
         return wave(x) * (x / attack_time);
@@ -574,7 +574,7 @@ function cello(note, duration) {
 }
 
 function string_to_list_of_numbers(string) {
-  var array_of_numbers = string.split("");
+  const array_of_numbers = [...string];
   return map(function (x) {
     return parseInt(x);
   }, vector_to_list(array_of_numbers));

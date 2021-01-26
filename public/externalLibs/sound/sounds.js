@@ -1,5 +1,5 @@
 // Constants
-var FS = 44100; // Standard sampling rate for all problems
+const FS = 44100; // Standard sampling rate for all problems
 
 const fourier_expansion_level = 5; // expansion level for
                                    // square, sawtooth, triangle
@@ -9,16 +9,16 @@ const fourier_expansion_level = 5; // expansion level for
 // ---------------------------------------------
 
 function append(xs, ys) {
-    var v1 = list_to_vector(xs);
-    var v2 = list_to_vector(ys);
-    var vector = v1.concat(v2);
+    const v1 = list_to_vector(xs);
+    const v2 = list_to_vector(ys);
+    const vector = v1.concat(v2);
     return vector_to_list(vector);
 }
 
 function map(f, xs) {
-    var vector = list_to_vector(xs);
-    for (var i=0; i<vector.length; i++) {
-        vector[i] = f(vector[i]);
+    const vector = list_to_vector(xs);
+    for (let val of vector) {
+        val = f(val);
     }
     return vector_to_list(vector);
 }
@@ -45,12 +45,12 @@ function discretize(wave, duration) {
 // sample_length seconds
 function discretize_from(wave, duration, elapsed_duration, sample_length, data) {
     if (elapsed_duration + sample_length > duration) {
-        for (var i = elapsed_duration * FS; i < duration * FS; i++) {
+        for (let i = elapsed_duration * FS; i < duration * FS; i++) {
             data[i - elapsed_duration * FS] = wave(i / FS);
         }
         return data;
     } else if (duration - elapsed_duration > 0) {
-        for (var i = elapsed_duration * FS;
+        for (let i = elapsed_duration * FS;
 	     i < (elapsed_duration + sample_length) * FS;
 	     i++) {
             data[i - elapsed_duration * FS] = wave(i / FS);
@@ -170,13 +170,13 @@ function is_sound(x) {
 
 // Keeps track of whether play() is currently running,
 // and the current audio context.
-var _playing = false;
-var _player;
+let _playing = false;
+let _player;
 
 function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
-        throw new Error("play is expecting sound, but encountered " + sound);
+        throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution
     } else if (_playing || _safeplaying) {
         throw new Error("play: audio system still playing previous sound");
@@ -184,8 +184,8 @@ function play_unsafe(sound) {
         return sound;
     } else {
         // Declaring duration and wave variables
-        var wave = get_wave(sound);
-        var duration = get_duration(sound);
+        let wave = get_wave(sound);
+        let duration = get_duration(sound);
         
         _playing = true;
       
@@ -195,18 +195,18 @@ function play_unsafe(sound) {
         }
 
         // Controls Length of buffer in seconds.
-        var buffer_length = 0.1;
+        const buffer_length = 0.1;
 
         // Define Buffer Size
-        var bufferSize = FS * buffer_length;
+        const bufferSize = FS * buffer_length;
 
         // Create two buffers
-        var buffer1 = _player.createBuffer(1, bufferSize, FS);
-        var buffer2 = _player.createBuffer(1, bufferSize, FS);
+        let buffer1 = _player.createBuffer(1, bufferSize, FS);
+        let buffer2 = _player.createBuffer(1, bufferSize, FS);
 
         // Keep track of elapsed_duration & first run of ping_pong
-        var elapsed_duration = 0;
-        var first_run = true;
+        let elapsed_duration = 0;
+        let first_run = true;
 
         // Schedules playback of sounds
         function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
@@ -263,10 +263,10 @@ function play_unsafe(sound) {
             elapsed_duration += buffer_length;
 
             current_sound.onended =
-            event => 
+            () => 
                 ping_pong(next_sound, current_sound, next_buffer, current_buffer);
         }
-        var start_time = _player.currentTime;
+        let start_time = _player.currentTime;
         ping_pong(null, null, buffer1, buffer2);
         return sound;
     }
@@ -276,8 +276,8 @@ function play_unsafe(sound) {
 // Discretizes full sound before playing
 // (i.e. plays sound properly, but possibly with
 // a delay).
-var _safeplaying = false;
-var _safeplayer;
+let _safeplaying = false;
+let _safeplayer;
 
 /**
  * plays a given Sound using your computer's sound device
@@ -287,7 +287,7 @@ var _safeplayer;
 function play(sound) {
     // Type-check sound
     if (!is_sound(sound)) {
-        throw new Error("play is expecting sound, but encountered " + sound);
+        throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution.
     } else if (_safeplaying || _playing) {
         throw new Error("play: audio system still playing previous sound");
@@ -385,11 +385,11 @@ function stop() {
  */
 function consecutively(list_of_sounds) {
     function consec_two(ss1, ss2) {
-        var wave1 = head(ss1);
-        var wave2 = head(ss2);
-        var dur1 = tail(ss1);
-        var dur2 = tail(ss2);
-        var new_wave = t => t < dur1 ? wave1(t) : wave2(t - dur1);
+        const wave1 = head(ss1);
+        const wave2 = head(ss2);
+        const dur1 = tail(ss1);
+        const dur2 = tail(ss2);
+        const new_wave = t => t < dur1 ? wave1(t) : wave2(t - dur1);
         return pair(new_wave, dur1 + dur2);
     }
     return accumulate(consec_two, silence_sound(0), list_of_sounds);
@@ -406,21 +406,21 @@ function consecutively(list_of_sounds) {
  */
 function simultaneously(list_of_sounds) {
     function musher(ss1, ss2) {
-        var wave1 = head(ss1);
-        var wave2 = head(ss2);
-        var dur1 = tail(ss1);
-        var dur2 = tail(ss2);
+        const wave1 = head(ss1);
+        const wave2 = head(ss2);
+        const dur1 = tail(ss1);
+        const dur2 = tail(ss2);
         // new_wave assumes sound discipline (ie, wave(t) = 0 after t > dur)
-        var new_wave = t => wave1(t) + wave2(t);
+        const new_wave = t => wave1(t) + wave2(t);
         // new_dur is higher of the two dur
-        var new_dur = dur1 < dur2 ? dur2 : dur1;
+        const new_dur = dur1 < dur2 ? dur2 : dur1;
         return pair(new_wave, new_dur);
     }
 
-    var mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
-    var normalised_wave =  t =>
+    const mushed_sounds = accumulate(musher, silence_sound(0), list_of_sounds);
+    const normalised_wave =  t =>
 	(head(mushed_sounds))(t) / length(list_of_sounds);
-    var highest_duration = tail(mushed_sounds);
+    const highest_duration = tail(mushed_sounds);
     return pair(normalised_wave, highest_duration);
 }
 
@@ -465,38 +465,38 @@ function silence_sound(duration) {
  */
 function letter_name_to_midi_note(note) {
     // we don't consider double flat/ double sharp
-    var note = note.split("");
-    var res = 12; //MIDI notes for mysterious C0
-    var n = note[0].toUpperCase();
-    switch(n) {
-        case 'D': 
+    note = [...note];
+    let res = 12; // C0 is midi note 12
+    const n = note[0].toUpperCase();
+    switch (n) {
+        case 'D':
             res = res + 2;
             break;
 
-        case 'E': 
+        case 'E':
             res = res + 4;
             break;
 
-        case 'F': 
+        case 'F':
             res = res + 5;
             break;
 
-        case 'G': 
+        case 'G':
             res = res + 7;
             break;
 
-        case 'A': 
+        case 'A':
             res = res + 9;
             break;
 
-        case 'B': 
+        case 'B':
             res = res + 11;
             break;
 
-        default :
+        default:
             break;
     }
-
+  
     if (note.length === 2) {
         res = parseInt(note[1]) * 12 + res;
     } else if (note.length === 3) {
@@ -504,19 +504,19 @@ function letter_name_to_midi_note(note) {
             case '#':
                 res = res + 1;
                 break;
-
+  
             case 'b':
                 res = res - 1;
                 break;
-
+  
             default:
                 break;
         }
-        res = parseInt(note[2]) * 12 + res;
+    res = parseInt(note[2]) * 12 + res;
     }
-
+  
     return res;
-}
+  }
 
 
 /**
@@ -537,7 +537,7 @@ function letter_name_to_frequency(note) {
  * @returns {Number} frequency of the note in Hz
  */
 function midi_note_to_frequency(note) {
-    // Frequency of midi note 0 / C0.
+    // Frequency of midi note 0 / C-1.
     return 8.17579891564371 * Math.pow(2, (note / 12));
 }
 
@@ -549,8 +549,8 @@ function midi_note_to_frequency(note) {
  */
 function square_sound(freq, duration) {
     function fourier_expansion_square(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 1; i <= fourier_expansion_level; i++) {
             answer = answer +
 		Math.sin(2 * Math.PI * (2 * i - 1) * freq * t)
 		/
@@ -571,8 +571,8 @@ function square_sound(freq, duration) {
  */
 function triangle_sound(freq, duration) {
     function fourier_expansion_triangle(t) {
-        var answer = 0;
-        for (var i = 0; i < fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 0; i < fourier_expansion_level; i++) {
             answer = answer +
 		Math.pow(-1, i) *
 		Math.sin((2 * i + 1) * t * freq * Math.PI * 2)
@@ -594,8 +594,8 @@ function triangle_sound(freq, duration) {
  */
 function sawtooth_sound(freq, duration) {
     function fourier_expansion_sawtooth(t) {
-        var answer = 0;
-        for (var i = 1; i <= fourier_expansion_level; i++) {
+        let answer = 0;
+        for (let i = 1; i <= fourier_expansion_level; i++) {
             answer = answer + Math.sin(2 * Math.PI * i * freq * t) / i;
         }
         return answer;
@@ -613,7 +613,7 @@ function sawtooth_sound(freq, duration) {
 function play_concurrently(sound) {
     // Type-check sound
     if (!is_sound(sound)) {
-        throw new Error("play_concurrently is expecting sound, but encountered " + sound);
+        throw new Error(`play_concurrently is expecting sound, but encountered ${sound}`);
     }  else if (get_duration(sound) <= 0) {
         return sound;
     } else {
