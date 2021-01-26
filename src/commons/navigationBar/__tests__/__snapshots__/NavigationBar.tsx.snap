@@ -78,12 +78,6 @@ exports[`NavigationBar renders correctly with student role 1`] = `
           Contributors
         </div>
       </NavLink>
-      <div className=\\"hidden-xs\\">
-        <Blueprint3.NavbarDivider className=\\"default-divider\\" />
-      </div>
-      <Blueprint3.Tooltip content=\\"Toggle Telebay\\" position=\\"bottom\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
-        <Blueprint3.Button onClick={[Function: onClick]} icon=\\"compass\\" minimal={true} style={{...}} />
-      </Blueprint3.Tooltip>
       <div className=\\"visible-xs\\">
         <Blueprint3.NavbarDivider className=\\"thin-divider\\" />
       </div>
@@ -93,13 +87,12 @@ exports[`NavigationBar renders correctly with student role 1`] = `
       <Dropdown handleLogOut={[Function: handleLogOut]} name={[undefined]} />
     </Blueprint3.NavbarGroup>
   </Blueprint3.Navbar>
-  <AcademyNavigationBar role=\\"student\\" />
 </Fragment>"
 `;
 
 exports[`NavigationBarMobileSideMenu renders "Not logged in" correctly 1`] = `
 "<Blueprint3.Drawer isOpen={true} position=\\"left\\" onClose={[Function: onClose]} title=\\"Telebay\\" icon=\\"compass\\" className=\\"bp3-dark\\" canOutsideClickClose={true} style={{...}} vertical={false}>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast/:sourcecastId?\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"music\\" />
     <div>
       Sourcecast
@@ -150,7 +143,7 @@ exports[`NavigationBarMobileSideMenu renders correctly with student role 1`] = `
       Others
     </div>
   </NavLink>
-  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast/:sourcecastId?\\" onClick={[Function: onClose]}>
+  <NavLink activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link__mobile bp3-button bp3-minimal bp3-large\\" to=\\"/sourcecast\\" onClick={[Function: onClose]}>
     <Blueprint3.Icon icon=\\"music\\" />
     <div>
       Sourcecast

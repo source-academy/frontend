@@ -133,7 +133,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
         Classes.MINIMAL,
         Classes.LARGE
       )}
-      to="/sourcecast/:sourcecastId?"
+      to="/sourcecast"
       onClick={props.onClose}
     >
       <Icon icon={IconNames.MUSIC} />

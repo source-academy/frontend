@@ -6,9 +6,7 @@ import {
   Navbar,
   NavbarDivider,
   NavbarGroup,
-  NavbarHeading,
-  Position,
-  Tooltip
+  NavbarHeading
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
@@ -16,7 +14,6 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink } from 'react-router-dom';
 
-import AcademyNavigationBar from '../../pages/academy/subcomponents/AcademyNavigationBar';
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
@@ -36,7 +33,6 @@ type StateProps = {
 
 const NavigationBar: React.FC<NavigationBarProps> = props => {
   const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
-  const [desktopMenuOpen, setDesktopMenuOpen] = React.useState(true);
   const isMobile = useMediaQuery({ maxWidth: 768 });
 
   const playgroundOnlyNavbarLeft = (
@@ -130,23 +126,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
         <div className="navbar-button-text hidden-sm hidden-xs">Contributors</div>
       </NavLink>
 
-      {!Constants.playgroundOnly && props.role && !isMobile && (
-        <>
-          <div className="hidden-xs">
-            <NavbarDivider className="default-divider" />
-          </div>
-
-          <Tooltip content="Toggle Telebay" position={Position.BOTTOM}>
-            <Button
-              onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
-              icon={IconNames.COMPASS}
-              minimal={true}
-              style={{ outline: 'none' }}
-            />
-          </Tooltip>
-        </>
-      )}
-
       <div className="visible-xs">
         <NavbarDivider className="thin-divider" />
       </div>
@@ -168,9 +147,6 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
           : desktopNavbarLeft}
         {commonNavbarRight}
       </Navbar>
-      {!Constants.playgroundOnly && props.role && !isMobile && desktopMenuOpen && (
-        <AcademyNavigationBar role={props.role} />
-      )}
     </>
   );
 };
