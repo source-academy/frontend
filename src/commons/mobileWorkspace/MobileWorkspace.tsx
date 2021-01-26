@@ -37,12 +37,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * Callback for isPortrait useMediaQuery()
    */
   const orientationChangeCallback = (isPortrait: boolean) => {
-
     // Triggers when Android user loaded page in landscape mode and viewheight has not been handled
     if (isPortrait && !isIOS && !handledAndroidViewheight.current) {
       document.documentElement.style.setProperty('overflow', 'auto');
       const metaViewport = document.querySelector('meta[name=viewport]');
-      metaViewport!.setAttribute('content', 'height=' + window.innerHeight + 'px, width=device-width');
+      metaViewport!.setAttribute(
+        'content',
+        'height=' + window.innerHeight + 'px, width=device-width'
+      );
 
       handledAndroidViewheight.current = true;
     }
@@ -51,9 +53,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     if (!isPortrait) {
       editorRef.current!.editor.blur();
     }
-  }
-  
-  const isPortrait = useMediaQuery({ orientation: "portrait"}, undefined, orientationChangeCallback);
+  };
+
+  const isPortrait = useMediaQuery(
+    { orientation: 'portrait' },
+    undefined,
+    orientationChangeCallback
+  );
 
   /**
    * If Android user loads page in portrait, handle the web browser viewheight
@@ -62,11 +68,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     if (isPortrait && !isIOS) {
       document.documentElement.style.setProperty('overflow', 'auto');
       const metaViewport = document.querySelector('meta[name=viewport]');
-      metaViewport!.setAttribute('content', 'height=' + window.innerHeight + 'px, width=device-width');
+      metaViewport!.setAttribute(
+        'content',
+        'height=' + window.innerHeight + 'px, width=device-width'
+      );
 
       handledAndroidViewheight.current = true;
     }
-  }, []);
+  }, [isPortrait, isIOS]);
 
   const editorRef = React.useRef<ReactAce>(null);
 
@@ -97,7 +106,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         />
       ) : null}
 
-      <Dialog 
+      <Dialog
         isOpen={!isPortrait}
         canEscapeKeyClose={false}
         canOutsideClickClose={false}
