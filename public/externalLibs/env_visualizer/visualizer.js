@@ -178,10 +178,11 @@
     if (DEBUG_MODE) console.log(context);
     if (PRODUCTION_MODE) {
       // hide the default text
-      document.getElementById('env-visualizer-default-text').hidden = true;
+      const defaultText = document.getElementById('env-visualizer-default-text');
+      defaultText && (defaultText.hidden = true);
       // blink icon
       const icon = document.getElementById('env_visualiser-icon');
-      icon.classList.add('side-content-tab-alert');
+      icon && icon.classList.add('side-content-tab-alert');
     }
 
     // reset current drawing
@@ -325,7 +326,8 @@
        * references point back to the object.
        */
       newFrameObjects.forEach(function (frameObject) {
-        for (const [name, value] of Object.entries(frameObject.elements)) {
+        const { elements } = frameObject;
+        for (const [name, value] of Object.entries(elements)) {
           if (isFnObject(value) && !fnObjects.includes(value)) {
             fnObjects.push(initialiseFrameFnObject(value, frameObject));
           } else if (isDataObject(value) && !boundDataObjects.includes(value)) {
@@ -959,8 +961,7 @@
   function initialiseFrameValueArrows() {
     frameObjects.forEach(function (frameObject) {
       const { elements } = frameObject;
-      for (const name in elements) {
-        const value = elements[name];
+      for (const [name, value] of Object.entries(elements)) {
         if (isDataObject(value)) {
           initialiseFrameDataArrow(frameObject, name, value);
         } else if (isFnObject(value)) {
@@ -1540,8 +1541,7 @@
     let dataObjectHeight = 0;
     const { elements } = frameObject;
 
-    for (const name in elements) {
-      const value = elements[name];
+    Object.values(elements).forEach(value => {
       if (isFnObject(value)) {
         elemLines += 1;
       } else if (isDataObject(value)) {
@@ -1556,7 +1556,8 @@
       } else {
         elemLines += 1;
       }
-    }
+    });
+
     return dataObjectHeight + elemLines * FRAME_HEIGHT_LINE + FRAME_PADDING_BOTTOM;
   }
 
@@ -1564,8 +1565,7 @@
   function getFrameWidth(frameObject) {
     let maxLength = 0;
     const { elements } = frameObject;
-    for (const name in elements) {
-      const value = elements[name];
+    for (const [name, value] of Object.entries(elements)) {
       let currLength;
       const literals = ['number', 'string', 'boolean'];
       if (literals.includes(typeof value)) {
@@ -1587,8 +1587,7 @@
       return frameObject.width;
     } else {
       let maxWidth = 0;
-      for (const name in elements) {
-        const value = elements[name];
+      Object.values(elements).forEach(value => {
         // Can be either primitive, function or array
         if (isDataObject(value)) {
           const wrapper = getDataObjectWrapper(value);
@@ -1606,7 +1605,8 @@
             );
           }
         }
-      }
+      });
+
       return frameObject.width + maxWidth + FRAME_MARGIN_RIGHT;
     }
   }
@@ -1697,8 +1697,7 @@
   function getElementNamePosition(elementName, frameObject) {
     let position = 0;
     const { elements } = frameObject;
-    for (const name in elements) {
-      const value = elements[name];
+    for (const [name, value] of Object.entries(elements)) {
       if (name === elementName) {
         break;
       } else if (isDataObject(value) && !belongToOtherData(value)) {
@@ -1745,8 +1744,7 @@
       let textX = x + FRAME_PADDING_LEFT;
       let textY = y + FRAME_PADDING_TOP;
 
-      for (const name in elements) {
-        const value = elements[name];
+      for (const [name, value] of Object.entries(elements)) {
         if (isNull(value)) {
           // null primitive in Source
           textObjects.push(
