@@ -107,7 +107,7 @@ function deriv_t(n) {
       return make_color_point((x_of(ctdelta) - x_of(ct)) / delta_t, (y_of(ctdelta) - y_of(ct)) / delta_t, r_of(ct), g_of(ct), b_of(ct))
     })
     return transformation(curve)
-      }
+  }
 }
 
 function scale_x_y(a, b) {

@@ -75,6 +75,7 @@ const runesLibrary = [
 
 const curvesLibrary = [
   'make_point',
+  'make_3D_point',
   'make_color_point',
   'draw_points_on',
   'draw_connected',
@@ -82,6 +83,7 @@ const curvesLibrary = [
   'draw_connected_squeezed_to_window',
   'draw_connected_full_view',
   'draw_connected_full_view_proportional',
+  'draw_3D_connected',
   'x_of',
   'y_of',
   'z_of',
