@@ -300,7 +300,7 @@ function r_of(pt) {
 }
 
 /**
- * retrieves the red component of a given Point
+ * retrieves the green component of a given Point
  * @param {Point} p - given point
  * @returns {Number} Green component of the Point
  */
@@ -309,7 +309,7 @@ function g_of(pt) {
 }
 
 /**
- * retrieves the red component of a given Point
+ * retrieves the blue component of a given Point
  * @param {Point} p - given point
  * @returns {Number} Blue component of the Point
  */
