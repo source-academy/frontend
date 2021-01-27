@@ -1,4 +1,5 @@
 import * as React from 'react';
+import MediaQuery from 'react-responsive';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
@@ -48,7 +49,9 @@ class Academy extends React.Component<AcademyProps> {
         : null;
     return (
       <div className="Academy">
-        <AcademyNavigationBar role={this.props.role} />
+        <MediaQuery minWidth={769}>
+          <AcademyNavigationBar role={this.props.role} />
+        </MediaQuery>
         <Switch>
           <Route
             path={`/academy/${assessmentCategoryLink(
