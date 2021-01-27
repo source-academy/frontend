@@ -16,11 +16,11 @@ import * as React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { NavLink } from 'react-router-dom';
 
-import AcademyNavigationBar from '../../pages/academy/subcomponents/AcademyNavigationBar';
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
-import NavigationBarMobileSideMenu from './NavigationBarMobileSideMenu';
+import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
+import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
 
