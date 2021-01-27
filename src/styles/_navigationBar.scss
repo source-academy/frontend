@@ -36,6 +36,15 @@ a.NavigationBar__link {
   }
 }
 
+a.NavigationBar__link__mobile {
+  color: inherit;
+  text-decoration: none;
+
+  > :first-child {
+    margin-right: 0.5rem;
+  }
+}
+
 /*
  * Style for the navigation bar of the entire site (used in Application)
  */
