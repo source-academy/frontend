@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
-import { Role } from 'src/commons/application/ApplicationTypes';
+import * as React from 'react';
 
+import { Role } from '../../../application/ApplicationTypes';
 import NavigationBarMobileSideMenu from '../NavigationBarMobileSideMenu';
 
 test('NavigationBarMobileSideMenu renders "Not logged in" correctly', () => {

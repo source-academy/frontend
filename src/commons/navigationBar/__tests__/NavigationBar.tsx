@@ -1,6 +1,7 @@
 import { shallow } from 'enzyme';
-import { Role } from 'src/commons/application/ApplicationTypes';
+import * as React from 'react';
 
+import { Role } from '../../application/ApplicationTypes';
 import NavigationBar from '../NavigationBar';
 
 test('NavigationBar renders "Not logged in" correctly', () => {
