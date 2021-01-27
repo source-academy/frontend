@@ -126,7 +126,7 @@ const AcademyNavigationBar: React.FunctionComponent<OwnProps> = props => (
           className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         >
           <Icon icon={IconNames.CROWN} />
-          <div className="navbar-button-text hidden-xs hidden-sm">Story Simulator</div>
+          <div className="navbar-button-text hidden-xs hidden-sm hidden-md">Story Simulator</div>
         </NavLink>
       </NavbarGroup>
     ) : null}
