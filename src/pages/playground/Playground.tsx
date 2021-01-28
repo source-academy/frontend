@@ -721,41 +721,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-<<<<<<< HEAD
-    editorProps: {
-      // TODO: Abstract this duplicate away
-      onChange: onChangeMethod,
-      onCursorChange: onCursorChangeMethod,
-      onSelectionChange: onSelectionChangeMethod,
-      sourceChapter: props.sourceChapter,
-      externalLibraryName: props.externalLibraryName,
-      sourceVariant: props.sourceVariant,
-      editorValue: props.editorValue,
-      editorSessionId: props.editorSessionId,
-      handleDeclarationNavigate: props.handleDeclarationNavigate,
-      handleEditorEval: props.handleEditorEval,
-      handleEditorValueChange: onEditorValueChange,
-      handleSendReplInputToOutput: props.handleSendReplInputToOutput,
-      handlePromptAutocomplete: props.handlePromptAutocomplete,
-      isEditorAutorun: props.isEditorAutorun,
-      breakpoints: props.breakpoints,
-      highlightedLines: props.highlightedLines,
-      newCursorPosition: props.newCursorPosition,
-      handleEditorUpdateBreakpoints: handleEditorUpdateBreakpoints,
-      handleSetSharedbConnected: props.handleSetSharedbConnected
-    },
-    mobileSideContentProps: {
-      defaultSelectedTabId: selectedTab,
-      // handleActiveTabChange: props.handleActiveTabChange,
-      onChange: onChangeTabs,
-      tabs,
-      workspaceLocation: 'playground'
-    }
-  };
-
-  const isMobile = useMediaQuery({ maxWidth: 768 });
-
-=======
     // TODO: ControlBar props
     // TODO: Repl props
     editorProps: editorProps,
@@ -772,7 +737,6 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
->>>>>>> ca153cae4e0c346cadd415b068ef6eacc6634e91
   return isMobile ? (
     <MobileWorkspace {...mobileWorkspaceProps} />
   ) : (
