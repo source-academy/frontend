@@ -1,7 +1,7 @@
 import { shallow } from 'enzyme';
 import * as React from 'react';
 
-import { Role } from '../../../../commons/application/ApplicationTypes';
+import { Role } from '../../../application/ApplicationTypes';
 import AcademyNavigationBar from '../AcademyNavigationBar';
 
 test('Grading NavLink does NOT renders for Role.Student', () => {

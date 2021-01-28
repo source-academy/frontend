@@ -1,5 +1,4 @@
 import * as React from 'react';
-import MediaQuery from 'react-responsive';
 import { Redirect, Route, RouteComponentProps, Switch } from 'react-router';
 
 import { Role } from '../../commons/application/ApplicationTypes';
@@ -15,7 +14,6 @@ import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
-import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
@@ -49,9 +47,6 @@ class Academy extends React.Component<AcademyProps> {
         : null;
     return (
       <div className="Academy">
-        <MediaQuery minWidth={769}>
-          <AcademyNavigationBar role={this.props.role} />
-        </MediaQuery>
         <Switch>
           <Route
             path={`/academy/${assessmentCategoryLink(
