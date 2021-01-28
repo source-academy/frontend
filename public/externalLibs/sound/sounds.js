@@ -114,17 +114,23 @@ function is_sound(x) {
     ((typeof get_duration(x)) === 'number');
 }
 
-// Keeps track of whether play() is currently running,
-// and the current audio context.
-let _playing = false;
-let _player;
+// Singular audio context for all playback functions
+let _audioplayer;
+// Track if a sound is currently playing
+let _playing;
 
+// Instantiates new audio context
+function init_audioCtx() {
+    _audioplayer = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+// Real time playback of a sound, unsuitable for complex sounds
 function play_unsafe(sound) {
     // type-check sound
     if ( !is_sound(sound) ) {
         throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution
-    } else if (_playing || _safeplaying) {
+    } else if (_playing) {
         throw new Error("play: audio system still playing previous sound");
     } else if (get_duration(sound) <= 0) {
         return sound;
@@ -136,8 +142,8 @@ function play_unsafe(sound) {
         _playing = true;
       
         // Instantiate audio context if it has not been instantiated
-        if (!_player) {
-            _player = new (window.AudioContext || window.webkitAudioContext)();
+        if (!_audioplayer) {
+            init_audioCtx();
         }
 
         // Controls Length of buffer in seconds.
@@ -147,8 +153,8 @@ function play_unsafe(sound) {
         const bufferSize = FS * buffer_length;
 
         // Create two buffers
-        let buffer1 = _player.createBuffer(1, bufferSize, FS);
-        let buffer2 = _player.createBuffer(1, bufferSize, FS);
+        let buffer1 = _audioplayer.createBuffer(1, bufferSize, FS);
+        let buffer2 = _audioplayer.createBuffer(1, bufferSize, FS);
 
         // Keep track of elapsed_duration & first run of ping_pong
         let elapsed_duration = 0;
@@ -158,7 +164,7 @@ function play_unsafe(sound) {
         function ping_pong(current_sound, next_sound, current_buffer, next_buffer) {
             // If sound has exceeded duration, early return to stop calls.
             if (elapsed_duration > duration || !_playing) { 
-                current_sound.disconnect(_player.destination);
+                current_sound.disconnect(_audioplayer.destination);
                 _playing = false;
                 return;
             }
@@ -174,13 +180,13 @@ function play_unsafe(sound) {
                         buffer_length, current_data);
 
                 // Create current_sound.
-                current_sound = new AudioBufferSourceNode(_player);
+                current_sound = new AudioBufferSourceNode(_audioplayer);
 
                 // Set current_sound's buffer to current_buffer.
                 current_sound.buffer = current_buffer;
 
                 // Play current_sound.
-                current_sound.connect(_player.destination);
+                current_sound.connect(_audioplayer.destination);
                 current_sound.start();
 
                 // Increment elapsed duration.
@@ -196,13 +202,13 @@ function play_unsafe(sound) {
                         buffer_length, next_data);
 
             // Create next_sound.
-            next_sound = new AudioBufferSourceNode(_player);
+            next_sound = new AudioBufferSourceNode(_audioplayer);
 
             // Set next_sound's buffer to next_buffer.
             next_sound.buffer = next_buffer;
 
             // Schedule next_sound to play after current_sound.
-            next_sound.connect(_player.destination);
+            next_sound.connect(_audioplayer.destination);
             next_sound.start(start_time + elapsed_duration);
 
             // Increment elapsed duration.
@@ -212,19 +218,15 @@ function play_unsafe(sound) {
             () => 
                 ping_pong(next_sound, current_sound, next_buffer, current_buffer);
         }
-        let start_time = _player.currentTime;
+        let start_time = _audioplayer.currentTime;
         ping_pong(null, null, buffer1, buffer2);
         return sound;
     }
 }
 
-// "Safe" playing for overly complex sounds.
-// Discretizes full sound before playing
-// (i.e. plays sound properly, but possibly with
-// a delay).
-let _safeplaying = false;
-let _safeplayer;
-
+// Fully processes a sound before playback
+// Frontloads processing so the sound plays back properly,
+//   but possibly with a delay
 /**
  * plays a given Sound using your computer's sound device
  * @param {Sound} sound - given Sound
@@ -235,18 +237,18 @@ function play(sound) {
     if (!is_sound(sound)) {
         throw new Error(`play is expecting sound, but encountered ${sound}`);
     // If a sound is already playing, terminate execution.
-    } else if (_safeplaying || _playing) {
+    } else if (_playing) {
         throw new Error("play: audio system still playing previous sound");
     } else if (get_duration(sound) <= 0) {
         return sound;
     } else {
         // Instantiate audio context if it has not been instantiated.
-        if (!_safeplayer) {
-            _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
+        if (!_audioplayer) {
+            init_audioCtx();
         }
 
         // Create mono buffer
-        let theBuffer = _safeplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let theBuffer = _audioplayer.createBuffer(1, FS * get_duration(sound), FS);
         let channel = theBuffer.getChannelData(0);
 
         // Discretize the function and clip amplitude
@@ -258,16 +260,17 @@ function play(sound) {
         }
 
         // Connect data to output destination
-        let source = _safeplayer.createBufferSource();
+        let source = _audioplayer.createBufferSource();
         source.buffer = theBuffer;
         
-        source.connect(_safeplayer.destination);
-        _safeplaying = true;
+        source.connect(_audioplayer.destination);
+        _playing = true;
         source.start();
         source.onended = () => {
-            source.disconnect(_safeplayer.destination);
-            _safeplaying = false;
+            source.disconnect(_audioplayer.destination);
+            _playing = false;
         }
+
         return sound;
     }
 }
@@ -300,18 +303,9 @@ function string_to_sound(str) {
  * @returns {undefined} undefined
  */
 function stop() {
-    // If using play_unsafe()
-    if (_playing) {
-        _player.close();
-        _player = null;
-    }
-    // If using safe play()
-    if (_safeplaying) {
-        _safeplayer.close();
-        _safeplayer = null;
-    }
+    _audioplayer.close();
+    _audioplayer = null;
     _playing = false;
-    _safeplaying = false;
 }
 
 // Concats a list of sounds
@@ -564,12 +558,12 @@ function play_concurrently(sound) {
         return sound;
     } else {
         // Instantiate audio context if it has not been instantiated
-        if (!_safeplayer) {
-            _safeplayer = new (window.AudioContext || window.webkitAudioContext)();
+        if (!_audioplayer) {
+            init_audioCtx();
         }
 
         // Create mono buffer
-        let theBuffer = _safeplayer.createBuffer(1, FS * get_duration(sound), FS);
+        let theBuffer = _audioplayer.createBuffer(1, FS * get_duration(sound), FS);
         let channel = theBuffer.getChannelData(0);
 
         // Discretize the function and clip amplitude
@@ -581,15 +575,15 @@ function play_concurrently(sound) {
         }
 
         // Connect data to output destination
-        let source = _safeplayer.createBufferSource();
+        let source = _audioplayer.createBufferSource();
         source.buffer = theBuffer;
         
-        source.connect(_safeplayer.destination);
-        _safeplaying = true;
+        source.connect(_audioplayer.destination);
+        _playing = true;
         source.start();
         source.onended = () => {
-            source.disconnect(_safeplayer.destination);
-            _safeplaying = false;
+            source.disconnect(_audioplayer.destination);
+            _playing = false;
         }
         return sound;
     }
