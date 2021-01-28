@@ -125,6 +125,126 @@ export default class StringUtils {
   }
 
   /**
+   * Splits text into string array, removes lines
+   * with only newlines and removes characters that
+   * are commented out in single and multi line
+   * comments
+   *
+   * @param text text to split
+   * @returns {Array<string>}
+   */
+  public static splitToLinesAndRemoveComments(text: string): string[] {
+    return this.removeMultiLineComments(text.split('\n'), '/*', '*/')
+      .map(line => this.removeSingleLineComment(line, '//'))
+      .map(line => line.trimRight())
+      .filter(line => line !== '');
+  }
+
+  /**
+   * Removes characters from string before/after
+   * specified comment characters
+   *
+   * Example input:
+   * removeSingleLineComment('Hello # World','#',false)
+   *
+   * Example output:
+   * 'Hello '
+   *
+   * @param text text with single line comments
+   * @param commentChars characters to denote comment region
+   * @param removeAfter (optional) true - remove characters after commentChars,
+   *                              false - remove characters before commentChars
+   * @returns {string}
+   */
+  public static removeSingleLineComment(
+    text: string,
+    commentChars: string,
+    removeAfter: boolean = true
+  ) {
+    const commentIndex = text.indexOf(commentChars);
+    return commentIndex === -1
+      ? text
+      : removeAfter
+      ? text.slice(0, commentIndex)
+      : text.slice(commentIndex + commentChars.length);
+  }
+
+  /**
+   * Give an array of lines with a
+   * a subset of lines commented out
+   * by specified comment characters,
+   * return an array of lines with
+   * commented-out lines and characters
+   * removed
+   *
+   * Example input:
+   * removeMultiLineComments(
+   * ['objectives',
+   * '    checkedScreen',
+   * '    talkedToLokKim1',
+   * '/!    talkedToLokKim2',
+   * '    talkedToLokKim3!/'],
+   *  '/!', '!/');
+   *
+   * Example output:
+   * ['objectives',
+   * '    checkedScreen',
+   * '    talkedToLokKim1']
+   *
+   * @param lines lines to remove comments from
+   * @param openCommentChars characters to denote open comment
+   * @param closeCommentChars characters to denote close comment
+   * @returns {Array<string>}
+   */
+  public static removeMultiLineComments(
+    lines: string[],
+    openCommentChars: string,
+    closeCommentChars: string
+  ): string[] {
+    const newLines = [];
+    let commentOpen = false;
+    for (let l = 0; l < lines.length; l++) {
+      const openCommentIndex = lines[l].indexOf(openCommentChars);
+      const closeCommentIndex = lines[l].indexOf(closeCommentChars);
+      const openCommentFound = openCommentIndex !== -1;
+      const closeCommentFound = closeCommentIndex !== -1;
+      let newLine = '';
+      if (commentOpen) {
+        if (closeCommentFound) {
+          if (openCommentFound && closeCommentIndex > openCommentIndex) {
+            console.error('Comment not closed: Line ' + (l + 1));
+          }
+          commentOpen = openCommentFound;
+          newLine = this.removeSingleLineComment(lines[l], closeCommentChars, false);
+          newLine = this.removeSingleLineComment(newLine, openCommentChars);
+        } else if (openCommentFound) {
+          console.error('Comment not closed: Line ' + (l + 1));
+        }
+      } else {
+        if (openCommentFound) {
+          commentOpen = !closeCommentFound;
+          if (closeCommentFound && openCommentIndex > closeCommentIndex) {
+            console.error('Comment not closed: Line ' + (l + 1));
+          }
+          newLine = closeCommentFound
+            ? lines[l].slice(0, openCommentIndex) +
+              lines[l].slice(closeCommentIndex + closeCommentChars.length)
+            : this.removeSingleLineComment(lines[l], openCommentChars);
+        } else if (closeCommentFound) {
+          console.error('Comment not opened: Line ' + (l + 1));
+        } else {
+          newLine = lines[l];
+        }
+      }
+      newLines.push(newLine);
+    }
+    if (commentOpen) {
+      console.error('Missing close comment at end of document');
+    }
+    return newLines;
+  }
+
+  /**
    * Capitalise first letter.
    *
    * @param word text to be capitalized
