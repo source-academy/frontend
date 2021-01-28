@@ -59,60 +59,6 @@ function discretize_from(wave, duration, elapsed_duration, sample_length, data) 
     }
 }
 
-/*
-// Quantize real amplitude values into standard 16-bit PCM levels
-// The range is [-32768, 32767] (see riffwave.js)
-function quantize(data) {
-    for (var i = 0; i < data.length; i++) {
-        data[i] = Math.floor(data[i] * 32767.999);
-    }
-    return data;
-}
-
-// Try to eliminate clicks by smoothening out sudden jumps at the end of a wave
-function simple_filter(data) {
-    for (var i = 0; i < data.length; i++) {
-        if (data[i] > 1) {
-          data[i] = 1;
-        }
-        if (data[i] < -1) {
-          data[i] = -1;
-        }
-    }
-    var old_value = 0;
-    for (var i = 0; i < data.length; i++) {
-        if (Math.abs(old_value - data[i]) > 0.01 && data[i] == 0) {
-            data[i] = old_value * 0.999;
-        }
-        old_value = data[i];
-    }
-    return data;
-}
-
-function copy(data) {
-    var ret = [];
-    for (var i = 0; i < data.length; i++) {
-        ret[i] = data[i];
-    }
-    return ret;
-}
-
-// Raw data to html5 audio element
-function raw_to_audio(_data) {
-    data = copy(_data);
-    data = simple_filter(data);
-    data = quantize(data);
-    var riffwave = new RIFFWAVE();
-    riffwave.header.sampleRate = FS;
-    riffwave.header.numChannels = 1;
-    riffwave.header.bitsPerSample = 16;
-    riffwave.Make(data);
-    var audio = new Audio(riffwave.dataURI);
-    return audio;
-}
-
-*/
-
 // ---------------------------------------------
 // Source API for Students
 // ---------------------------------------------
@@ -328,9 +274,9 @@ function play(sound) {
 
 // Requires 'All' libraries!
 function display_waveform(num_points_per_second, sound) {
-    let wave = get_wave(sound);
-    let duration = get_duration(sound);
-    let num_points = num_points_per_second * duration;
+    const wave = get_wave(sound);
+    const duration = get_duration(sound);
+    const num_points = num_points_per_second * duration;
     return draw_connected_full_view_proportional(num_points)(t => pair(t, wave(duration * t)));
 }
 
@@ -647,11 +593,5 @@ function play_concurrently(sound) {
         }
         return sound;
     }
-    // Discretize the input sound
-    // var data = discretize(get_wave(sound), get_duration(sound));
-    // _safeaudio = raw_to_audio(data);
-    // 
-    // _safeaudio.addEventListener('ended', stop);
-    // _safeaudio.play();
-    // _safeplaying = true;
+
 }
