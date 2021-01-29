@@ -585,7 +585,7 @@ function play_concurrently(sound) {
             source.disconnect(_audioplayer.destination);
             _playing = false;
         }
-        return;
+        
     }
 
 }
