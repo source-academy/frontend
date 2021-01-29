@@ -254,7 +254,7 @@ function play(sound) {
         // Discretize the function and clip amplitude
         let temp;
         const wave = get_wave(sound);
-        for (let i = 0; i < theBuffer.length; i++) {
+        for (let i = 0; i < channel.length; i++) {
             temp = wave(i/FS);
             channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
         }
@@ -569,7 +569,7 @@ function play_concurrently(sound) {
         // Discretize the function and clip amplitude
         let temp;
         const wave = get_wave(sound);
-        for (let i = 0; i < theBuffer.length; i++) {
+        for (let i = 0; i < channel.length; i++) {
             temp = wave(i/FS);
             channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
         }
