@@ -548,14 +548,14 @@ function sawtooth_sound(freq, duration) {
 /**
  * plays a given sound without regard if a sound is already playing
  * @param {Sound} sound - given sound
- * @returns {Sound}  given sound
+ * @returns {undefined}  undefined
  */
 function play_concurrently(sound) {
     // Type-check sound
     if (!is_sound(sound)) {
         throw new Error(`play_concurrently is expecting sound, but encountered ${sound}`);
     }  else if (get_duration(sound) <= 0) {
-        return sound;
+        return;
     } else {
         // Instantiate audio context if it has not been instantiated
         if (!_audioplayer) {
@@ -585,7 +585,7 @@ function play_concurrently(sound) {
             source.disconnect(_audioplayer.destination);
             _playing = false;
         }
-        return sound;
+        return;
     }
 
 }
