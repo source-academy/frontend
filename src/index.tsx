@@ -3,7 +3,6 @@ import 'src/styles/index.scss';
 import * as Sentry from '@sentry/browser';
 import { ConnectedRouter } from 'connected-react-router';
 import { setBackendStaticURL } from 'js-slang/dist/modules/moduleLoader';
-import * as React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import ApplicationContainer from 'src/commons/application/ApplicationContainer';

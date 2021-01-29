@@ -1,5 +1,4 @@
 import { EditableText } from '@blueprintjs/core';
-import React from 'react';
 
 type EditableViewDescriptionProps = {
   description: string;

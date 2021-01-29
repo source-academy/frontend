@@ -161,79 +161,81 @@ export default function* WorkspaceSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(PROMPT_AUTOCOMPLETE, function* (
-    action: ReturnType<typeof actions.promptAutocomplete>
-  ) {
-    const workspaceLocation = action.payload.workspaceLocation;
+  yield takeEvery(
+    PROMPT_AUTOCOMPLETE,
+    function* (action: ReturnType<typeof actions.promptAutocomplete>) {
+      const workspaceLocation = action.payload.workspaceLocation;
 
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
 
-    const code: string = yield select((state: OverallState) => {
-      const prependCode = state.workspaces[workspaceLocation].editorPrepend;
-      const editorCode = state.workspaces[workspaceLocation].editorValue!;
-      return [prependCode, editorCode] as [string, string];
-    });
-    const [prepend, editorValue] = code;
+      const code: string = yield select((state: OverallState) => {
+        const prependCode = state.workspaces[workspaceLocation].editorPrepend;
+        const editorCode = state.workspaces[workspaceLocation].editorValue!;
+        return [prependCode, editorCode] as [string, string];
+      });
+      const [prepend, editorValue] = code;
 
-    // Deal with prepended code
-    let autocompleteCode;
-    let prependLength = 0;
-    if (!prepend) {
-      autocompleteCode = editorValue;
-    } else {
-      prependLength = prepend.split('\n').length;
-      autocompleteCode = prepend + '\n' + editorValue;
+      // Deal with prepended code
+      let autocompleteCode;
+      let prependLength = 0;
+      if (!prepend) {
+        autocompleteCode = editorValue;
+      } else {
+        prependLength = prepend.split('\n').length;
+        autocompleteCode = prepend + '\n' + editorValue;
+      }
+
+      const [editorNames, displaySuggestions] = yield call(
+        getNames,
+        autocompleteCode,
+        action.payload.row + prependLength,
+        action.payload.column,
+        context
+      );
+
+      if (!displaySuggestions) {
+        yield call(action.payload.callback);
+        return;
+      }
+
+      const editorSuggestions = editorNames.map((name: any) => ({
+        caption: name.name,
+        value: name.name,
+        meta: name.meta,
+        score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
+      }));
+
+      let chapterName = context.chapter.toString();
+      if (context.variant !== 'default') {
+        chapterName += '_' + context.variant;
+      }
+
+      const builtinSuggestions = Documentation.builtins[chapterName] || [];
+
+      const extLib = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
+      );
+
+      const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
+
+      yield call(
+        action.payload.callback,
+        null,
+        editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
+      );
     }
+  );
 
-    const [editorNames, displaySuggestions] = yield call(
-      getNames,
-      autocompleteCode,
-      action.payload.row + prependLength,
-      action.payload.column,
-      context
-    );
-
-    if (!displaySuggestions) {
-      yield call(action.payload.callback);
-      return;
+  yield takeEvery(
+    TOGGLE_EDITOR_AUTORUN,
+    function* (action: ReturnType<typeof actions.toggleEditorAutorun>) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const isEditorAutorun = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
+      );
+      yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
     }
-
-    const editorSuggestions = editorNames.map((name: any) => ({
-      caption: name.name,
-      value: name.name,
-      meta: name.meta,
-      score: name.score ? name.score + 1000 : 1000 // Prioritize suggestions from code
-    }));
-
-    let chapterName = context.chapter.toString();
-    if (context.variant !== 'default') {
-      chapterName += '_' + context.variant;
-    }
-
-    const builtinSuggestions = Documentation.builtins[chapterName] || [];
-
-    const extLib = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].externalLibrary
-    );
-
-    const extLibSuggestions = Documentation.externalLibraries[extLib] || [];
-
-    yield call(
-      action.payload.callback,
-      null,
-      editorSuggestions.concat(builtinSuggestions, extLibSuggestions)
-    );
-  });
-
-  yield takeEvery(TOGGLE_EDITOR_AUTORUN, function* (
-    action: ReturnType<typeof actions.toggleEditorAutorun>
-  ) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const isEditorAutorun = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].isEditorAutorun
-    );
-    yield call(showWarningMessage, 'Autorun ' + (isEditorAutorun ? 'Started' : 'Stopped'), 750);
-  });
+  );
 
   yield takeEvery(EVAL_REPL, function* (action: ReturnType<typeof actions.evalRepl>) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -277,20 +279,22 @@ export default function* WorkspaceSaga(): SagaIterator {
     lastDebuggerResult = undefined;
   });
 
-  yield takeEvery(HIGHLIGHT_LINE, function* (
-    action: ReturnType<typeof actions.highlightEditorLine>
-  ) {
-    const workspaceLocation = action.payload.highlightedLines;
-    highlightLine(workspaceLocation[0]);
-    yield;
-  });
+  yield takeEvery(
+    HIGHLIGHT_LINE,
+    function* (action: ReturnType<typeof actions.highlightEditorLine>) {
+      const workspaceLocation = action.payload.highlightedLines;
+      highlightLine(workspaceLocation[0]);
+      yield;
+    }
+  );
 
-  yield takeEvery(UPDATE_EDITOR_BREAKPOINTS, function* (
-    action: ReturnType<typeof actions.setEditorBreakpoint>
-  ) {
-    breakpoints = action.payload.breakpoints;
-    yield;
-  });
+  yield takeEvery(
+    UPDATE_EDITOR_BREAKPOINTS,
+    function* (action: ReturnType<typeof actions.setEditorBreakpoint>) {
+      breakpoints = action.payload.breakpoints;
+      yield;
+    }
+  );
 
   yield takeEvery(EVAL_TESTCASE, function* (action: ReturnType<typeof actions.evalTestcase>) {
     const workspaceLocation = action.payload.workspaceLocation;
@@ -399,37 +403,38 @@ export default function* WorkspaceSaga(): SagaIterator {
    *
    * @see IWorkspaceManagerState @see WorkspaceState
    */
-  yield takeEvery(PLAYGROUND_EXTERNAL_SELECT, function* (
-    action: ReturnType<typeof actions.externalLibrarySelect>
-  ) {
-    const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
-    const [chapter, globals, oldExternalLibraryName]: [
-      number,
-      Array<[string, any]>,
-      ExternalLibraryName
-    ] = yield select((state: OverallState) => [
-      state.workspaces[workspaceLocation].context.chapter,
-      state.workspaces[workspaceLocation].globals,
-      state.workspaces[workspaceLocation].externalLibrary
-    ]);
-    const symbols = externalLibraries.get(newExternalLibraryName)!;
-    const library = {
-      chapter,
-      external: {
-        name: newExternalLibraryName,
-        symbols
-      },
-      globals
-    };
-    if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
-      yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
-      yield put(actions.beginClearContext(workspaceLocation, library, true));
-      yield put(actions.clearReplOutput(workspaceLocation));
-      if (!action.payload.initialise) {
-        yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+  yield takeEvery(
+    PLAYGROUND_EXTERNAL_SELECT,
+    function* (action: ReturnType<typeof actions.externalLibrarySelect>) {
+      const { workspaceLocation, externalLibraryName: newExternalLibraryName } = action.payload;
+      const [chapter, globals, oldExternalLibraryName]: [
+        number,
+        Array<[string, any]>,
+        ExternalLibraryName
+      ] = yield select((state: OverallState) => [
+        state.workspaces[workspaceLocation].context.chapter,
+        state.workspaces[workspaceLocation].globals,
+        state.workspaces[workspaceLocation].externalLibrary
+      ]);
+      const symbols = externalLibraries.get(newExternalLibraryName)!;
+      const library = {
+        chapter,
+        external: {
+          name: newExternalLibraryName,
+          symbols
+        },
+        globals
+      };
+      if (newExternalLibraryName !== oldExternalLibraryName || action.payload.initialise) {
+        yield put(actions.changeExternalLibrary(newExternalLibraryName, workspaceLocation));
+        yield put(actions.beginClearContext(workspaceLocation, library, true));
+        yield put(actions.clearReplOutput(workspaceLocation));
+        if (!action.payload.initialise) {
+          yield call(showSuccessMessage, `Switched to ${newExternalLibraryName} library`, 1000);
+        }
       }
     }
-  });
+  );
 
   /**
    * Ensures that the external JS libraries have been loaded by waiting
@@ -478,68 +483,70 @@ export default function* WorkspaceSaga(): SagaIterator {
    * @see webGLgraphics.js under 'public/externalLibs/graphics' for information on
    * the function.
    */
-  yield takeEvery(BEGIN_CLEAR_CONTEXT, function* (
-    action: ReturnType<typeof actions.beginClearContext>
-  ) {
-    yield* checkWebGLAvailable();
-    if (action.payload.shouldInitLibrary) {
-      const externalLibraryName = action.payload.library.external.name;
-      switch (externalLibraryName) {
-        case ExternalLibraryName.RUNES:
-          (window as any).loadLib('RUNES');
-          (window as any).getReadyWebGLForCanvas('3d');
-          (window as any).getReadyStringifyForRunes(stringify);
-          break;
-        case ExternalLibraryName.CURVES:
-          (window as any).loadLib('CURVES');
-          (window as any).getReadyWebGLForCanvas('curve');
-          break;
-        case ExternalLibraryName.MACHINELEARNING:
-          (window as any).loadLib('MACHINELEARNING');
-          break;
+  yield takeEvery(
+    BEGIN_CLEAR_CONTEXT,
+    function* (action: ReturnType<typeof actions.beginClearContext>) {
+      yield* checkWebGLAvailable();
+      if (action.payload.shouldInitLibrary) {
+        const externalLibraryName = action.payload.library.external.name;
+        switch (externalLibraryName) {
+          case ExternalLibraryName.RUNES:
+            (window as any).loadLib('RUNES');
+            (window as any).getReadyWebGLForCanvas('3d');
+            (window as any).getReadyStringifyForRunes(stringify);
+            break;
+          case ExternalLibraryName.CURVES:
+            (window as any).loadLib('CURVES');
+            (window as any).getReadyWebGLForCanvas('curve');
+            break;
+          case ExternalLibraryName.MACHINELEARNING:
+            (window as any).loadLib('MACHINELEARNING');
+            break;
+        }
+      }
+      const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
+      for (const [key, value] of globals) {
+        window[key] = value;
+      }
+      yield put(
+        actions.endClearContext(
+          {
+            ...action.payload.library,
+            moduleParams: {
+              runes: {},
+              phaser: Phaser
+            }
+          },
+          action.payload.workspaceLocation
+        )
+      );
+      yield undefined;
+    }
+  );
+
+  yield takeEvery(
+    NAV_DECLARATION,
+    function* (action: ReturnType<typeof actions.navigateToDeclaration>) {
+      const workspaceLocation = action.payload.workspaceLocation;
+      const code: string = yield select(
+        (state: OverallState) => state.workspaces[workspaceLocation].editorValue
+      );
+      context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
+
+      const result = findDeclaration(code, context, {
+        line: action.payload.cursorPosition.row + 1,
+        column: action.payload.cursorPosition.column
+      });
+      if (result) {
+        yield put(
+          actions.moveCursor(action.payload.workspaceLocation, {
+            row: result.start.line - 1,
+            column: result.start.column
+          })
+        );
       }
     }
-    const globals: Array<[string, any]> = action.payload.library.globals as Array<[string, any]>;
-    for (const [key, value] of globals) {
-      window[key] = value;
-    }
-    yield put(
-      actions.endClearContext(
-        {
-          ...action.payload.library,
-          moduleParams: {
-            runes: {},
-            phaser: Phaser
-          }
-        },
-        action.payload.workspaceLocation
-      )
-    );
-    yield undefined;
-  });
-
-  yield takeEvery(NAV_DECLARATION, function* (
-    action: ReturnType<typeof actions.navigateToDeclaration>
-  ) {
-    const workspaceLocation = action.payload.workspaceLocation;
-    const code: string = yield select(
-      (state: OverallState) => state.workspaces[workspaceLocation].editorValue
-    );
-    context = yield select((state: OverallState) => state.workspaces[workspaceLocation].context);
-
-    const result = findDeclaration(code, context, {
-      line: action.payload.cursorPosition.row + 1,
-      column: action.payload.cursorPosition.column
-    });
-    if (result) {
-      yield put(
-        actions.moveCursor(action.payload.workspaceLocation, {
-          row: result.start.line - 1,
-          column: result.start.column
-        })
-      );
-    }
-  });
+  );
 }
 
 let lastDebuggerResult: any;

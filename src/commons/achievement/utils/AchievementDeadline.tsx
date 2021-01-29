@@ -1,6 +1,5 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 import { DeadlineColors } from '../../../features/achievement/AchievementConstants';
 import { AchievementAbility } from '../../../features/achievement/AchievementTypes';

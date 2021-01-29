@@ -1,6 +1,5 @@
 import { Button, Classes, MenuItem } from '@blueprintjs/core';
 import { ItemRenderer, Select } from '@blueprintjs/select';
-import React from 'react';
 
 import { AchievementAbility } from '../../../../../features/achievement/AchievementTypes';
 

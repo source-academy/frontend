@@ -107,7 +107,7 @@ exports[`Grading NavLink renders for Role.Admin 1`] = `
     </NavLink>
     <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"crown\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Story Simulator
       </div>
     </NavLink>
@@ -181,7 +181,7 @@ exports[`Grading NavLink renders for Role.Staff 1`] = `
     </NavLink>
     <NavLink to=\\"/academy/storysimulator\\" activeClassName=\\"bp3-active\\" className=\\"NavigationBar__link bp3-button bp3-minimal\\">
       <Blueprint3.Icon icon=\\"crown\\" />
-      <div className=\\"navbar-button-text hidden-xs hidden-sm\\">
+      <div className=\\"navbar-button-text hidden-xs hidden-sm hidden-md\\">
         Story Simulator
       </div>
     </NavLink>
