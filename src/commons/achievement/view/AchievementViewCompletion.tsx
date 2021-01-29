@@ -1,5 +1,3 @@
-import React from 'react';
-
 type AchievementViewCompletionProps = {
   awardedExp: number;
   completionText: string;

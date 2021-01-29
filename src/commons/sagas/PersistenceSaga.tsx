@@ -1,5 +1,4 @@
 import { Intent } from '@blueprintjs/core';
-import * as React from 'react';
 import { SagaIterator } from 'redux-saga';
 import { call, put, select } from 'redux-saga/effects';
 
@@ -222,43 +221,44 @@ export function* persistenceSaga(): SagaIterator {
     }
   });
 
-  yield takeEvery(PERSISTENCE_SAVE_FILE, function* ({
-    payload: { id, name }
-  }: ReturnType<typeof actions.persistenceSaveFile>) {
-    let toastKey: string | undefined;
-    try {
-      toastKey = yield call(showMessage, {
-        message: `Saving as ${name}...`,
-        timeout: 0,
-        intent: Intent.PRIMARY
-      });
+  yield takeEvery(
+    PERSISTENCE_SAVE_FILE,
+    function* ({ payload: { id, name } }: ReturnType<typeof actions.persistenceSaveFile>) {
+      let toastKey: string | undefined;
+      try {
+        toastKey = yield call(showMessage, {
+          message: `Saving as ${name}...`,
+          timeout: 0,
+          intent: Intent.PRIMARY
+        });
 
-      yield call(ensureInitialisedAndAuthorised);
+        yield call(ensureInitialisedAndAuthorised);
 
-      const [code, chapter, variant, external] = yield select((state: OverallState) => [
-        state.workspaces.playground.editorValue,
-        state.workspaces.playground.context.chapter,
-        state.workspaces.playground.context.variant,
-        state.workspaces.playground.externalLibrary
-      ]);
+        const [code, chapter, variant, external] = yield select((state: OverallState) => [
+          state.workspaces.playground.editorValue,
+          state.workspaces.playground.context.chapter,
+          state.workspaces.playground.context.variant,
+          state.workspaces.playground.externalLibrary
+        ]);
 
-      const config: IPlaygroundConfig = {
-        chapter,
-        variant,
-        external
-      };
-      yield call(updateFile, id, name, MIME_SOURCE, code, config);
-      yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
-      yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
-    } catch (ex) {
-      console.error(ex);
-      yield call(showWarningMessage, `Error while saving file.`, 1000);
-    } finally {
-      if (toastKey) {
-        dismiss(toastKey);
+        const config: IPlaygroundConfig = {
+          chapter,
+          variant,
+          external
+        };
+        yield call(updateFile, id, name, MIME_SOURCE, code, config);
+        yield put(actions.playgroundUpdatePersistenceFile({ id, name, lastSaved: new Date() }));
+        yield call(showSuccessMessage, `${name} successfully saved to Google Drive.`, 1000);
+      } catch (ex) {
+        console.error(ex);
+        yield call(showWarningMessage, `Error while saving file.`, 1000);
+      } finally {
+        if (toastKey) {
+          dismiss(toastKey);
+        }
       }
     }
-  });
+  );
 
   yield takeEvery(PERSISTENCE_INITIALISE, ensureInitialised);
 }
@@ -279,7 +279,7 @@ interface IPlaygroundConfig {
 // These two properties make a Promise a good way to have a lazy singleton
 // (in this case, the singleton is not an object but the initialisation of the
 // gapi library)
-let startInitialisation: () => void;
+let startInitialisation: (_: void) => void;
 const initialisationPromise: Promise<void> = new Promise(res => {
   startInitialisation = res;
 }).then(initialise);

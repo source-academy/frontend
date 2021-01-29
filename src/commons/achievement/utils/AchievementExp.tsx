@@ -1,6 +1,5 @@
 import { Icon } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
-import React from 'react';
 
 type AchievementExpProps = {
   exp: number;

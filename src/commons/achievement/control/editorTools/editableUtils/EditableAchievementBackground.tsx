@@ -1,5 +1,5 @@
 import { Button, Dialog, EditableText } from '@blueprintjs/core';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 type EditableAchievementBackgroundProps = {
   cardTileUrl: string;

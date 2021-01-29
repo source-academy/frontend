@@ -182,49 +182,51 @@ function* BackendSaga(): SagaIterator {
     return yield put(actions.updateHasUnsavedChanges('assessment' as WorkspaceLocation, false));
   });
 
-  yield takeEvery(SUBMIT_ASSESSMENT, function* (
-    action: ReturnType<typeof actions.submitAssessment>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const assessmentId = action.payload;
+  yield takeEvery(
+    SUBMIT_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.submitAssessment>) {
+      const tokens: Tokens = yield selectTokens();
+      const assessmentId = action.payload;
 
-    const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    yield call(showSuccessMessage, 'Submitted!', 2000);
-
-    // Now, update the status of the assessment overview in the store
-    const overviews: AssessmentOverview[] = yield select(
-      (state: OverallState) => state.session.assessmentOverviews
-    );
-    const newOverviews = overviews.map(overview => {
-      if (overview.id === assessmentId) {
-        return { ...overview, status: AssessmentStatuses.submitted };
+      const resp: Response | null = yield call(postAssessment, assessmentId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
       }
-      return overview;
-    });
 
-    return yield put(actions.updateAssessmentOverviews(newOverviews));
-  });
+      yield call(showSuccessMessage, 'Submitted!', 2000);
 
-  yield takeEvery(FETCH_GRADING_OVERVIEWS, function* (
-    action: ReturnType<typeof actions.fetchGradingOverviews>
-  ) {
-    const tokens: Tokens = yield selectTokens();
+      // Now, update the status of the assessment overview in the store
+      const overviews: AssessmentOverview[] = yield select(
+        (state: OverallState) => state.session.assessmentOverviews
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.id === assessmentId) {
+          return { ...overview, status: AssessmentStatuses.submitted };
+        }
+        return overview;
+      });
 
-    const filterToGroup = action.payload;
-
-    const gradingOverviews: GradingOverview[] | null = yield call(
-      getGradingOverviews,
-      tokens,
-      filterToGroup
-    );
-    if (gradingOverviews) {
-      yield put(actions.updateGradingOverviews(gradingOverviews));
+      return yield put(actions.updateAssessmentOverviews(newOverviews));
     }
-  });
+  );
+
+  yield takeEvery(
+    FETCH_GRADING_OVERVIEWS,
+    function* (action: ReturnType<typeof actions.fetchGradingOverviews>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const filterToGroup = action.payload;
+
+      const gradingOverviews: GradingOverview[] | null = yield call(
+        getGradingOverviews,
+        tokens,
+        filterToGroup
+      );
+      if (gradingOverviews) {
+        yield put(actions.updateGradingOverviews(gradingOverviews));
+      }
+    }
+  );
 
   yield takeEvery(FETCH_GRADING, function* (action: ReturnType<typeof actions.fetchGrading>) {
     const tokens: Tokens = yield selectTokens();
@@ -239,30 +241,31 @@ function* BackendSaga(): SagaIterator {
   /**
    * Unsubmits the submission and updates the grading overviews of the new status.
    */
-  yield takeEvery(UNSUBMIT_SUBMISSION, function* (
-    action: ReturnType<typeof actions.unsubmitSubmission>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const { submissionId } = action.payload;
+  yield takeEvery(
+    UNSUBMIT_SUBMISSION,
+    function* (action: ReturnType<typeof actions.unsubmitSubmission>) {
+      const tokens: Tokens = yield selectTokens();
+      const { submissionId } = action.payload;
 
-    const resp: Response | null = yield postUnsubmit(submissionId, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const overviews: GradingOverview[] = yield select(
-      (state: OverallState) => state.session.gradingOverviews || []
-    );
-    const newOverviews = overviews.map(overview => {
-      if (overview.submissionId === submissionId) {
-        return { ...overview, submissionStatus: 'attempted' };
+      const resp: Response | null = yield postUnsubmit(submissionId, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
       }
-      return overview;
-    });
 
-    yield call(showSuccessMessage, 'Unsubmit successful', 1000);
-    yield put(actions.updateGradingOverviews(newOverviews));
-  });
+      const overviews: GradingOverview[] = yield select(
+        (state: OverallState) => state.session.gradingOverviews || []
+      );
+      const newOverviews = overviews.map(overview => {
+        if (overview.submissionId === submissionId) {
+          return { ...overview, submissionStatus: 'attempted' };
+        }
+        return overview;
+      });
+
+      yield call(showSuccessMessage, 'Unsubmit successful', 1000);
+      yield put(actions.updateGradingOverviews(newOverviews));
+    }
+  );
 
   const sendGrade = function* (
     action:
@@ -337,253 +340,267 @@ function* BackendSaga(): SagaIterator {
 
   yield takeEvery(SUBMIT_GRADING_AND_CONTINUE, sendGradeAndContinue);
 
-  yield takeEvery(REAUTOGRADE_SUBMISSION, function* (
-    action: ReturnType<typeof actions.reautogradeSubmission>
-  ) {
-    const submissionId = action.payload;
-    const tokens: Tokens = yield selectTokens();
-    const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
+  yield takeEvery(
+    REAUTOGRADE_SUBMISSION,
+    function* (action: ReturnType<typeof actions.reautogradeSubmission>) {
+      const submissionId = action.payload;
+      const tokens: Tokens = yield selectTokens();
+      const resp: Response | null = yield call(postReautogradeSubmission, submissionId, tokens);
 
-    yield call(handleReautogradeResponse, resp);
-  });
-
-  yield takeEvery(REAUTOGRADE_ANSWER, function* (
-    action: ReturnType<typeof actions.reautogradeAnswer>
-  ) {
-    const { submissionId, questionId } = action.payload;
-    const tokens: Tokens = yield selectTokens();
-    const resp: Response | null = yield call(
-      postReautogradeAnswer,
-      submissionId,
-      questionId,
-      tokens
-    );
-
-    yield call(handleReautogradeResponse, resp);
-  });
-
-  yield takeEvery(FETCH_NOTIFICATIONS, function* (
-    action: ReturnType<typeof actions.fetchNotifications>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const notifications: Notification[] = yield call(getNotifications, tokens);
-
-    yield put(actions.updateNotifications(notifications));
-  });
-
-  yield takeEvery(ACKNOWLEDGE_NOTIFICATIONS, function* (
-    action: ReturnType<typeof actions.acknowledgeNotifications>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
-    const notifications: Notification[] = yield select(
-      (state: OverallState) => state.session.notifications
-    );
-
-    let notificationsToAcknowledge = notifications;
-
-    if (notificationFilter) {
-      notificationsToAcknowledge = notificationFilter(notifications);
+      yield call(handleReautogradeResponse, resp);
     }
+  );
 
-    if (notificationsToAcknowledge.length === 0) {
-      return;
-    }
-
-    const ids = notificationsToAcknowledge.map(n => n.id);
-    const newNotifications: Notification[] = notifications.filter(
-      notification => !ids.includes(notification.id)
-    );
-
-    yield put(actions.updateNotifications(newNotifications));
-
-    const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-  });
-
-  yield takeEvery(DELETE_SOURCECAST_ENTRY, function* (
-    action: ReturnType<typeof actions.deleteSourcecastEntry>
-  ) {
-    const role: Role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
-    }
-
-    const tokens: Tokens = yield selectTokens();
-    const { id } = action.payload;
-
-    const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-    if (sourcecastIndex) {
-      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-    }
-
-    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  });
-
-  yield takeEvery(FETCH_SOURCECAST_INDEX, function* (
-    action: ReturnType<typeof actions.fetchSourcecastIndex>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-
-    const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
-    if (sourcecastIndex) {
-      yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
-    }
-  });
-
-  yield takeEvery(SAVE_SOURCECAST_DATA, function* (
-    action: ReturnType<typeof actions.saveSourcecastData>
-  ) {
-    const role: Role = yield select((state: OverallState) => state.session.role!);
-    if (role === Role.Student) {
-      return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
-    }
-
-    const { title, description, uid, audio, playbackData } = action.payload;
-    const tokens: Tokens = yield selectTokens();
-
-    const resp: Response | null = yield postSourcecast(
-      title,
-      description,
-      uid,
-      audio,
-      playbackData,
-      tokens
-    );
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
-    }
-
-    yield call(showSuccessMessage, 'Saved successfully!', 1000);
-    yield history.push('/sourcecast');
-  });
-
-  yield takeEvery(FETCH_SUBLANGUAGE, function* (
-    action: ReturnType<typeof actions.fetchSublanguage>
-  ) {
-    const sublang: SourceLanguage | null = yield call(getSublanguage);
-    if (!sublang) {
-      return yield call(
-        showWarningMessage,
-        `Failed to load default Source sublanguage for Playground!`
+  yield takeEvery(
+    REAUTOGRADE_ANSWER,
+    function* (action: ReturnType<typeof actions.reautogradeAnswer>) {
+      const { submissionId, questionId } = action.payload;
+      const tokens: Tokens = yield selectTokens();
+      const resp: Response | null = yield call(
+        postReautogradeAnswer,
+        submissionId,
+        questionId,
+        tokens
       );
+
+      yield call(handleReautogradeResponse, resp);
     }
+  );
 
-    yield put(actions.updateSublanguage(sublang));
-  });
+  yield takeEvery(
+    FETCH_NOTIFICATIONS,
+    function* (action: ReturnType<typeof actions.fetchNotifications>) {
+      const tokens: Tokens = yield selectTokens();
+      const notifications: Notification[] = yield call(getNotifications, tokens);
 
-  yield takeEvery(CHANGE_SUBLANGUAGE, function* (
-    action: ReturnType<typeof actions.changeSublanguage>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const { sublang } = action.payload;
-
-    const resp: Response | null = yield call(
-      postSublanguage,
-      sublang.chapter,
-      sublang.variant,
-      tokens
-    );
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
+      yield put(actions.updateNotifications(notifications));
     }
+  );
 
-    yield put(actions.updateSublanguage(sublang));
-    yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  });
+  yield takeEvery(
+    ACKNOWLEDGE_NOTIFICATIONS,
+    function* (action: ReturnType<typeof actions.acknowledgeNotifications>) {
+      const tokens: Tokens = yield selectTokens();
+      const notificationFilter: NotificationFilterFunction | undefined = action.payload.withFilter;
+      const notifications: Notification[] = yield select(
+        (state: OverallState) => state.session.notifications
+      );
 
-  yield takeEvery(FETCH_GROUP_GRADING_SUMMARY, function* (
-    action: ReturnType<typeof actions.fetchGroupGradingSummary>
-  ) {
-    const tokens: Tokens = yield selectTokens();
+      let notificationsToAcknowledge = notifications;
 
-    const groupOverviews: GradingSummary | null = yield call(getGradingSummary, tokens);
-    if (groupOverviews) {
-      yield put(actions.updateGroupGradingSummary(groupOverviews));
+      if (notificationFilter) {
+        notificationsToAcknowledge = notificationFilter(notifications);
+      }
+
+      if (notificationsToAcknowledge.length === 0) {
+        return;
+      }
+
+      const ids = notificationsToAcknowledge.map(n => n.id);
+      const newNotifications: Notification[] = notifications.filter(
+        notification => !ids.includes(notification.id)
+      );
+
+      yield put(actions.updateNotifications(newNotifications));
+
+      const resp: Response | null = yield call(postAcknowledgeNotifications, tokens, ids);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
     }
-  });
+  );
 
-  yield takeEvery(CHANGE_DATE_ASSESSMENT, function* (
-    action: ReturnType<typeof actions.changeDateAssessment>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const id = action.payload.id;
-    const closeAt = action.payload.closeAt;
-    const openAt = action.payload.openAt;
+  yield takeEvery(
+    DELETE_SOURCECAST_ENTRY,
+    function* (action: ReturnType<typeof actions.deleteSourcecastEntry>) {
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return yield call(showWarningMessage, 'Only staff can delete sourcecasts.');
+      }
 
-    const resp: Response | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
+      const tokens: Tokens = yield selectTokens();
+      const { id } = action.payload;
+
+      const resp: Response | null = yield deleteSourcecastEntry(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+      if (sourcecastIndex) {
+        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+      }
+
+      yield call(showSuccessMessage, 'Deleted successfully!', 1000);
     }
+  );
 
-    yield put(actions.fetchAssessmentOverviews());
-    yield call(showSuccessMessage, 'Updated successfully!', 1000);
-  });
+  yield takeEvery(
+    FETCH_SOURCECAST_INDEX,
+    function* (action: ReturnType<typeof actions.fetchSourcecastIndex>) {
+      const tokens: Tokens = yield selectTokens();
 
-  yield takeEvery(DELETE_ASSESSMENT, function* (
-    action: ReturnType<typeof actions.deleteAssessment>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const id = action.payload;
-
-    const resp: Response | null = yield deleteAssessment(id, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
+      const sourcecastIndex: SourcecastData[] | null = yield call(getSourcecastIndex, tokens);
+      if (sourcecastIndex) {
+        yield put(actions.updateSourcecastIndex(sourcecastIndex, action.payload.workspaceLocation));
+      }
     }
+  );
 
-    yield put(actions.fetchAssessmentOverviews());
-    yield call(showSuccessMessage, 'Deleted successfully!', 1000);
-  });
+  yield takeEvery(
+    SAVE_SOURCECAST_DATA,
+    function* (action: ReturnType<typeof actions.saveSourcecastData>) {
+      const role: Role = yield select((state: OverallState) => state.session.role!);
+      if (role === Role.Student) {
+        return yield call(showWarningMessage, 'Only staff can save sourcecasts.');
+      }
 
-  yield takeEvery(PUBLISH_ASSESSMENT, function* (
-    action: ReturnType<typeof actions.publishAssessment>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const id = action.payload.id;
-    const togglePublishTo = action.payload.togglePublishTo;
+      const { title, description, uid, audio, playbackData } = action.payload;
+      const tokens: Tokens = yield selectTokens();
 
-    const resp: Response | null = yield publishAssessment(id, togglePublishTo, tokens);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
+      const resp: Response | null = yield postSourcecast(
+        title,
+        description,
+        uid,
+        audio,
+        playbackData,
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield call(showSuccessMessage, 'Saved successfully!', 1000);
+      yield history.push('/sourcecast');
     }
+  );
 
-    yield put(actions.fetchAssessmentOverviews());
+  yield takeEvery(
+    FETCH_SUBLANGUAGE,
+    function* (action: ReturnType<typeof actions.fetchSublanguage>) {
+      const sublang: SourceLanguage | null = yield call(getSublanguage);
+      if (!sublang) {
+        return yield call(
+          showWarningMessage,
+          `Failed to load default Source sublanguage for Playground!`
+        );
+      }
 
-    if (togglePublishTo) {
-      yield call(showSuccessMessage, 'Published successfully!', 1000);
-    } else {
-      yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
+      yield put(actions.updateSublanguage(sublang));
     }
-  });
+  );
 
-  yield takeEvery(UPLOAD_ASSESSMENT, function* (
-    action: ReturnType<typeof actions.uploadAssessment>
-  ) {
-    const tokens: Tokens = yield selectTokens();
-    const file = action.payload.file;
-    const forceUpdate = action.payload.forceUpdate;
+  yield takeEvery(
+    CHANGE_SUBLANGUAGE,
+    function* (action: ReturnType<typeof actions.changeSublanguage>) {
+      const tokens: Tokens = yield selectTokens();
+      const { sublang } = action.payload;
 
-    const resp: Response | null = yield uploadAssessment(file, tokens, forceUpdate);
-    if (!resp || !resp.ok) {
-      return yield handleResponseError(resp);
+      const resp: Response | null = yield call(
+        postSublanguage,
+        sublang.chapter,
+        sublang.variant,
+        tokens
+      );
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.updateSublanguage(sublang));
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
     }
+  );
 
-    const respText: string = yield resp.text();
-    if (respText === 'OK') {
-      yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
-    } else if (respText === 'Force Update OK') {
-      yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+  yield takeEvery(
+    FETCH_GROUP_GRADING_SUMMARY,
+    function* (action: ReturnType<typeof actions.fetchGroupGradingSummary>) {
+      const tokens: Tokens = yield selectTokens();
+
+      const groupOverviews: GradingSummary | null = yield call(getGradingSummary, tokens);
+      if (groupOverviews) {
+        yield put(actions.updateGroupGradingSummary(groupOverviews));
+      }
     }
+  );
 
-    yield put(actions.fetchAssessmentOverviews());
-  });
+  yield takeEvery(
+    CHANGE_DATE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.changeDateAssessment>) {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const closeAt = action.payload.closeAt;
+      const openAt = action.payload.openAt;
+
+      const resp: Response | null = yield changeDateAssessment(id, closeAt, openAt, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Updated successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    DELETE_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.deleteAssessment>) {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload;
+
+      const resp: Response | null = yield deleteAssessment(id, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+      yield call(showSuccessMessage, 'Deleted successfully!', 1000);
+    }
+  );
+
+  yield takeEvery(
+    PUBLISH_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.publishAssessment>) {
+      const tokens: Tokens = yield selectTokens();
+      const id = action.payload.id;
+      const togglePublishTo = action.payload.togglePublishTo;
+
+      const resp: Response | null = yield publishAssessment(id, togglePublishTo, tokens);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+
+      if (togglePublishTo) {
+        yield call(showSuccessMessage, 'Published successfully!', 1000);
+      } else {
+        yield call(showSuccessMessage, 'Unpublished successfully!', 1000);
+      }
+    }
+  );
+
+  yield takeEvery(
+    UPLOAD_ASSESSMENT,
+    function* (action: ReturnType<typeof actions.uploadAssessment>) {
+      const tokens: Tokens = yield selectTokens();
+      const file = action.payload.file;
+      const forceUpdate = action.payload.forceUpdate;
+
+      const resp: Response | null = yield uploadAssessment(file, tokens, forceUpdate);
+      if (!resp || !resp.ok) {
+        return yield handleResponseError(resp);
+      }
+
+      const respText: string = yield resp.text();
+      if (respText === 'OK') {
+        yield call(showSuccessMessage, 'Uploaded successfully!', 2000);
+      } else if (respText === 'Force Update OK') {
+        yield call(showSuccessMessage, 'Assessment force updated successfully!', 2000);
+      }
+
+      yield put(actions.fetchAssessmentOverviews());
+    }
+  );
 }
 
 function* handleReautogradeResponse(resp: Response | null) {

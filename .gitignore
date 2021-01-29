@@ -27,6 +27,7 @@ terraform*
 cadet-frontend.iml
 
 npm-debug.log*
+.eslintcache
 
 # emacs backup files
 
