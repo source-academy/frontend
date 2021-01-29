@@ -357,6 +357,10 @@ function clear_all_timeout() {
 }
 
 // functions from mission 14
+
+const midi_zero_frequency = 8.17579891564371; // base midi frequency
+                                              // 440 * 2^(-69/12)
+
 function letter_name_to_midi_note(note) {
   // we don't consider double flat/ double sharp
   note = [...note];
@@ -417,8 +421,7 @@ function letter_name_to_frequency(note) {
 }
 
 function midi_note_to_frequency(note) {
-  // Frequency of midi note 0 / C-1.
-  return 8.17579891564371 * Math.pow(2, (note / 12));
+  return midi_zero_frequency * Math.pow(2, (note / 12));
 }
 
 function linear_decay(decay_period) {

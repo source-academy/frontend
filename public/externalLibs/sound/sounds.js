@@ -4,6 +4,9 @@ const FS = 44100; // Standard sampling rate for all problems
 const fourier_expansion_level = 5; // expansion level for
                                    // square, sawtooth, triangle
 
+const midi_zero_frequency = 8.17579891564371; // base midi frequency
+                                              // 440 * 2^(-69/12)
+
 // ---------------------------------------------
 // Fast reimplementations of the list library
 // ---------------------------------------------
@@ -477,8 +480,7 @@ function letter_name_to_frequency(note) {
  * @returns {Number} frequency of the note in Hz
  */
 function midi_note_to_frequency(note) {
-    // Frequency of midi note 0 / C-1.
-    return 8.17579891564371 * Math.pow(2, (note / 12));
+    return midi_zero_frequency * Math.pow(2, (note / 12));
 }
 
 /**
