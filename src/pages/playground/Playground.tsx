@@ -475,7 +475,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
   const playgroundIntroductionTab: SideContentTab = React.useMemo(
     () => ({
       label: 'Introduction',
-      iconName: IconNames.COMPASS,
+      iconName: IconNames.HOME,
       body: (
         <Markdown
           content={generateSourceIntroduction(props.sourceChapter, props.sourceVariant)}
