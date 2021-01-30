@@ -252,11 +252,22 @@ function play(sound) {
         let channel = theBuffer.getChannelData(0);
 
         // Discretize the function and clip amplitude
+        // Discretize the function and clip amplitude
         let temp;
+        let prev_value = 0;
+        
         const wave = get_wave(sound);
         for (let i = 0; i < channel.length; i++) {
             temp = wave(i/FS);
+            // clip amplitude
             channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+
+            // smoothen out sudden cut-outs
+            if (channel[i] == 0 && Math.abs(channel[i] - prev_value) > 0.01) {
+                channel[i] = prev_value * 0.999;
+            }
+
+            prev_value = channel[i];
         }
 
         // Connect data to output destination
@@ -568,10 +579,20 @@ function play_concurrently(sound) {
 
         // Discretize the function and clip amplitude
         let temp;
+        let prev_value = 0;
+
         const wave = get_wave(sound);
         for (let i = 0; i < channel.length; i++) {
             temp = wave(i/FS);
+            // clip amplitude
             channel[i] = temp > 1 ? 1 : temp < -1 ? -1 : temp;
+
+            // smoothen out sudden cut-outs
+            if (channel[i] == 0 && Math.abs(channel[i] - prev_value) > 0.01) {
+                channel[i] = prev_value * 0.999;
+            }
+
+            prev_value = channel[i];
         }
 
         // Connect data to output destination
