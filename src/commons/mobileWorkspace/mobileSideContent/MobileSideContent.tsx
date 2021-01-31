@@ -214,20 +214,20 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         }
       };
 
-      // TODO: Added this next line specifically for evaluating program upon pressing the run tab on mobile
+      handleActiveTabChange(newTabId);
+      if (onChange === undefined) {
+        resetAlert(prevTabId);
+      } else {
+        onChange(newTabId, prevTabId, event);
+        resetAlert(prevTabId);
+      }
+
+      // Evaluate program upon pressing the 'Run' tab on mobile
       if (newTabId === SideContentType.mobileEditorRun) {
         props.handleEditorEval();
         props.handleShowRepl();
       } else {
         props.handleHideRepl();
-      }
-
-      handleActiveTabChange(newTabId);
-      if (onChange === undefined) {
-        resetAlert(prevTabId);
-      } else {
-        onChange(newTabId, prevTabId, event); // this updates selected tab in Playground
-        resetAlert(prevTabId);
       }
     },
     [handleActiveTabChange, onChange, props]
