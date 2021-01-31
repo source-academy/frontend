@@ -1,7 +1,7 @@
 import { Classes, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
-import { IconName, IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
@@ -34,24 +34,61 @@ type StateProps = {
 };
 
 type OwnProps = {
-  createWorkspaceInput: () => JSX.Element;
-  createReplOutput: () => JSX.Element;
+  handleShowRepl: () => void;
+  handleHideRepl: () => void;
 };
 
 // TODO: Handle resizing bug - TypeError: Cannot read property 'clientHeight' of undefined
 // Workspace.tsx line 45
 // To reproduce: Occasionally happens when resizing from mobile to desktop
 
-// TODO: Discuss whether to shift this entire file into MobileWorkspace.tsx
-// Pros: There's little logic going on inside MobileWorkspace.tsx currently. Separating this out is unnecessary
-// Cons: File structure will differ from desktop version
-
 // TODO: NOTE that this component relies on SideContentType
 // (currently, we will not be creating a new MobileSideContentType due to high degree of overlap)
 
 // TODO: Remove inline styles when MobileWorkspace is stable enough (try to combine with existing SCSS)
 
-// TODO: Currently passing createWorkspaceInput and createReplOutput prop weirdly through 'OwnProps'
+// TODO: Currently passing draggableReplProps weirdly through 'OwnProps'
+
+// TODO: draw_data occasionally gives weird array output in Repl on first run. Is ok on subsequent runs. (Source 1)
+
+// TODO: Setting editor breakpoint and running program causes app to break
+
+// TODO: Handle Envt Visualizer overflow on mobile -> its breaking the entire mobile workspace
+
+// TODO: Add the hiding of SideContentTab panel description paragraph as state -> so that it will be consistent
+// between desktop and mobile workspaces (note that the current hiding logic breaks on iOS after orientation change)
+
+// TODO: Handle console warning messages
+
+// styled-components
+const EditorPanel = styled.div`
+  width: 100vw;
+  height: 100%;
+  z-index: 1;
+`;
+
+const SelectedPanel = styled.div`
+  height: 100%;
+  padding: 10px;
+  background-color: #2c3e50;
+`;
+
+const UnSelectedPanel = styled.div`
+  display: none;
+`;
+
+const TabsContainer = styled.div`
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  background-color: #182026;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.3), 0 -10px 20px rgba(0, 0, 0, 0.2);
+`;
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
   const {
@@ -78,9 +115,12 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
   );
 
   React.useEffect(() => {
-    const allActiveTabs = mobileTabs.concat(
-      getDynamicTabs(debuggerContext || ({} as DebuggerContext))
-    );
+    // Ensures that the 'Run' tab is at the end of the resulting array
+    const copy = [...mobileTabs];
+    const runTab = copy.pop();
+
+    const allActiveTabs = copy.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
+    allActiveTabs.push(runTab!);
     setDynamicTabs(allActiveTabs);
   }, [mobileTabs, debuggerContext]);
 
@@ -90,7 +130,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
    */
   const generateIconId = (tabId: TabId) => `${tabId}-icon`;
 
-  const renderedPanels = React.useMemo(() => {
+  /**
+   * renderedPanels is not memoized since a change in selectedTabId (when changing tabs)
+   * would force React.useMemo to recompute the nullary function anyway
+   */
+  const renderedPanels = () => {
     // TODO: Fix the styling of all the panels (e.g. subst_visualizer, inspector, etc.)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       const tabBody: JSX.Element = workspaceLocation
@@ -103,36 +147,25 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      // TODO: Style the wrapping div
-      return tab.id === selectedTabId ? (
-        <div style={{ height: '100%', padding: '10px', backgroundColor: '#2c3e50' }}>{tabBody}</div>
+      // Handle Editor and Run tabs specifically
+      return tab.id === SideContentType.mobileEditorRun ? (
+        tabBody
+      ) : tab.id === SideContentType.mobileEditor ? (
+        selectedTabId === SideContentType.mobileEditor ||
+        selectedTabId === SideContentType.mobileEditorRun ? (
+          <EditorPanel key={'editor'}>{tabBody}</EditorPanel>
+        ) : (
+          <UnSelectedPanel key={'editor'}>{tabBody}</UnSelectedPanel>
+        )
+      ) : tab.id === selectedTabId ? (
+        <SelectedPanel key={tab.id}>{tabBody}</SelectedPanel>
       ) : (
-        <div style={{ display: 'none' }}>{tabBody}</div>
+        <UnSelectedPanel key={tab.id}>{tabBody}</UnSelectedPanel>
       );
     };
 
-    const renderEditorPanel =
-      selectedTabId === SideContentType.mobileEditor ? (
-        props.createWorkspaceInput()
-      ) : (
-        <div style={{ display: 'none' }}>{props.createWorkspaceInput()}</div>
-      );
-
-    const renderReplPanel =
-      selectedTabId === SideContentType.mobileEditorRun ? (
-        <div style={{ marginLeft: '0.5rem', marginTop: '0.5rem', height: '100%' }}>
-          {props.createReplOutput()}
-        </div>
-      ) : (
-        <div style={{ display: 'none' }}>{props.createReplOutput()}</div>
-      );
-
-    return [
-      renderEditorPanel,
-      ...dynamicTabs.map(tab => renderPanel(tab, props.workspaceLocation)),
-      renderReplPanel
-    ];
-  }, [dynamicTabs, props, selectedTabId]);
+    return [...dynamicTabs.map(tab => renderPanel(tab, props.workspaceLocation))];
+  };
 
   const renderedTabs = React.useMemo(() => {
     const renderTab = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
@@ -184,6 +217,9 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       // TODO: Added this next line specifically for evaluating program upon pressing the run tab on mobile
       if (newTabId === SideContentType.mobileEditorRun) {
         props.handleEditorEval();
+        props.handleShowRepl();
+      } else {
+        props.handleHideRepl();
       }
 
       handleActiveTabChange(newTabId);
@@ -197,27 +233,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     [handleActiveTabChange, onChange, props]
   );
 
-  // TODO: Refactor into Playground together with createWorkspaceInput() and createReplOutput()
-  const generateIcon = (icon: IconName, label: string, id: SideContentType) => (
-    <Tooltip content={label}>
-      <div className="side-content-tooltip" id={generateIconId(id)}>
-        <Icon icon={icon} iconSize={20} />
-      </div>
-    </Tooltip>
-  );
-
   // TODO: Tabs component id "mobile-side-content" is not styled yet
   return (
     <>
-      {renderedPanels}
-      <div
-        style={{
-          height: '60px', // 80px
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center'
-        }}
-      >
+      {renderedPanels()}
+      <TabsContainer>
         <Tabs
           id="mobile-side-content"
           onChange={changeTabsCallback}
@@ -226,19 +246,9 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           selectedTabId={props.selectedTabId}
           className={Classes.DARK}
         >
-          <Tab
-            id={SideContentType.mobileEditor}
-            title={generateIcon(IconNames.EDIT, 'EDITOR', SideContentType.mobileEditor)}
-            className="side-content-tab"
-          />
           {renderedTabs}
-          <Tab
-            id={SideContentType.mobileEditorRun}
-            title={generateIcon(IconNames.PLAY, 'RUN', SideContentType.mobileEditorRun)}
-            className="side-content-tab"
-          />
         </Tabs>
-      </div>
+      </TabsContainer>
     </>
   );
 };

@@ -1,12 +1,16 @@
 import { Dialog } from '@blueprintjs/core';
+import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import ReactAce from 'react-ace/lib/ace';
+import { DraggableEvent } from 'react-draggable';
 import { useMediaQuery } from 'react-responsive';
 import { Prompt } from 'react-router';
 
 import Editor, { EditorProps } from '../editor/Editor';
 import McqChooser, { McqChooserProps } from '../mcqChooser/McqChooser';
 import Repl, { ReplProps } from '../repl/Repl';
+import { SideContentTab, SideContentType } from '../sideContent/SideContentTypes';
+import DraggableRepl from './mobileSideContent/DraggableRepl';
 import MobileSideContent, { MobileSideContentProps } from './mobileSideContent/MobileSideContent';
 
 export type MobileWorkspaceProps = StateProps;
@@ -26,6 +30,7 @@ type StateProps = {
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
+  const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
   /**
    * Boolean to track if Android browser viewheight has been handled.
@@ -89,13 +94,58 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
     }
   };
 
-  const createReplOutput = () => {
-    return <Repl {...props.replProps} />;
+  const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
+    setDraggableReplPosition(position);
   };
 
-  const createEditorProps = {
-    createWorkspaceInput: createWorkspaceInput,
-    createReplOutput: createReplOutput
+  const handleShowRepl = () => {
+    setDraggableReplPosition({ x: 0, y: -300 });
+  };
+
+  const handleHideRepl = () => {
+    setDraggableReplPosition({ x: 0, y: 0 });
+  };
+
+  const mobileEditorTab: SideContentTab = React.useMemo(
+    () => ({
+      label: 'Editor',
+      iconName: IconNames.EDIT,
+      body: createWorkspaceInput(),
+      id: SideContentType.mobileEditor,
+      toSpawn: () => true
+    }),
+    // eslint-disable-next-line
+    [props.customEditor, props.editorProps, props.mcqProps]
+  );
+
+  const mobileRunTab: SideContentTab = React.useMemo(
+    () => ({
+      label: 'Run',
+      iconName: IconNames.PLAY,
+      body: (
+        <DraggableRepl
+          key={'repl'}
+          position={draggableReplPosition}
+          onDrag={onDrag}
+          body={<Repl {...props.replProps} />}
+        />
+      ),
+      id: SideContentType.mobileEditorRun,
+      toSpawn: () => true
+    }),
+    [props.replProps, draggableReplPosition]
+  );
+
+  const updatedMobileSideContentProps = () => {
+    return {
+      ...props.mobileSideContentProps,
+      mobileTabs: [mobileEditorTab, ...props.mobileSideContentProps.mobileTabs, mobileRunTab]
+    };
+  };
+
+  const draggableReplProps = {
+    handleShowRepl: handleShowRepl,
+    handleHideRepl: handleHideRepl
   };
 
   return (
@@ -116,7 +166,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
       {/* TODO: Update CSS for mobile workspace-parent remove flex: row, overflow:hidden, etc. */}
 
-      <MobileSideContent {...props.mobileSideContentProps} {...createEditorProps} />
+      <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
     </div>
   );
 };
