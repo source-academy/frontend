@@ -211,12 +211,15 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleHash(hash, propsRef.current);
   }, [hash]);
 
-  // TODO: Look at onChangeTabs implementation below (missing some reducers here)
   /**
    * Handles toggling of relevant SideContentTabs when mobile breakpoint it hit
    */
   React.useEffect(() => {
-    if (isMobile && selectedTab === SideContentType.introduction) {
+    if (
+      isMobile &&
+      (selectedTab === SideContentType.introduction ||
+        selectedTab === SideContentType.remoteExecution)
+    ) {
       props.handleActiveTabChange(SideContentType.mobileEditor);
       setSelectedTab(SideContentType.mobileEditor);
     } else if (

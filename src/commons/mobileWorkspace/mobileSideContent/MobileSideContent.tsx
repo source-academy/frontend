@@ -40,16 +40,12 @@ type OwnProps = {
 
 // TODO: Handle resizing bug - TypeError: Cannot read property 'clientHeight' of undefined
 // Workspace.tsx line 45
-// To reproduce: Occasionally happens when resizing from mobile to desktop
+// To reproduce: Resize from mobile to desktop while on stepper tab
 
 // TODO: NOTE that this component relies on SideContentType
 // (currently, we will not be creating a new MobileSideContentType due to high degree of overlap)
 
 // TODO: Remove inline styles when MobileWorkspace is stable enough (try to combine with existing SCSS)
-
-// TODO: Currently passing draggableReplProps weirdly through 'OwnProps'
-
-// TODO: draw_data occasionally gives weird array output in Repl on first run. Is ok on subsequent runs. (Source 1)
 
 // TODO: Setting editor breakpoint and running program causes app to break
 
@@ -57,8 +53,6 @@ type OwnProps = {
 
 // TODO: Add the hiding of SideContentTab panel description paragraph as state -> so that it will be consistent
 // between desktop and mobile workspaces (note that the current hiding logic breaks on iOS after orientation change)
-
-// TODO: Handle console warning messages
 
 // styled-components
 const EditorPanel = styled.div`
