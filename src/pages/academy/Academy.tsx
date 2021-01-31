@@ -14,7 +14,6 @@ import Grading from './grading/GradingContainer';
 import GroundControl from './groundControl/GroundControlContainer';
 import Sourcereel from './sourcereel/SourcereelContainer';
 import StorySimulator from './storySimulator/StorySimulator';
-import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
 
 type AcademyProps = DispatchProps & StateProps & OwnProps & RouteComponentProps<{}>;
 
@@ -48,7 +47,6 @@ class Academy extends React.Component<AcademyProps> {
         : null;
     return (
       <div className="Academy">
-        <AcademyNavigationBar role={this.props.role} />
         <Switch>
           <Route
             path={`/academy/${assessmentCategoryLink(
