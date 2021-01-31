@@ -4,11 +4,11 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { Role } from '../application/ApplicationTypes';
-import { AssessmentCategories } from '../assessment/AssessmentTypes';
-import NotificationBadgeContainer from '../notificationBadge/NotificationBadgeContainer';
-import { filterNotificationsByType } from '../notificationBadge/NotificationBadgeHelper';
-import { assessmentCategoryLink } from '../utils/ParamParseHelper';
+import { Role } from '../../application/ApplicationTypes';
+import { AssessmentCategories } from '../../assessment/AssessmentTypes';
+import NotificationBadgeContainer from '../../notificationBadge/NotificationBadgeContainer';
+import { filterNotificationsByType } from '../../notificationBadge/NotificationBadgeHelper';
+import { assessmentCategoryLink } from '../../utils/ParamParseHelper';
 
 type NavigationBarMobileSideMenuProps = DrawerProps & OwnProps;
 
