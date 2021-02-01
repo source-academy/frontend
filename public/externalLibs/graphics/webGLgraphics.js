@@ -791,11 +791,11 @@ function initCurveAttributes(shaderProgram) {
   u_transformMatrix = gl.getUniformLocation(shaderProgram, 'u_transformMatrix')
 }
 
-function drawCurve(drawMode, curveObject) {
+function drawCurve(drawMode, curveObject, space) {
   var curvePosArray = curveObject.curvePos
   var curveColorArray = curveObject.color
   var magicNum = 60000
-  var itemSize = 2
+  var itemSize = space == '2D'? 2 : 3
   var colorSize = 4
   for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
     // since webGL only supports 16bits buffer, i.e. the no. of
@@ -824,41 +824,24 @@ function drawCurve(drawMode, curveObject) {
 
     gl.deleteBuffer(vertexBuffer)
   }
-}
 
-function draw3DCurve(drawMode, curveObject) {
-  var curvePosArray = curveObject.curvePos
-  var curveColorArray = curveObject.color
-  var magicNum = 60000
-  var itemSize = 3
-  var colorSize = 4
-  for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
-    // since webGL only supports 16bits buffer, i.e. the no. of
-    // points in the buffer must be lower than 65535, so I take
-    // 60000 as the "magic number"
-
-    // vertices
-    var subArray = curvePosArray.slice(i * magicNum * itemSize, (i + 1) * magicNum * itemSize)
-    vertexBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(subArray), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(vertexPositionAttribute, itemSize, gl.FLOAT, false, 0, 0)
-
-    // colors
-    var colors = curveColorArray.slice(i * magicNum * colorSize, (i + 1) * magicNum * colorSize)
-    colorBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(colorAttribute, colorSize, gl.FLOAT, false, 0, 0)
+  // if(space == '3D'){
+  //   // var matrixLocation = gl.getUniformLocation(, "u_transformMatrix");
+  //   // rotations
+  //   cubeRotation += 0.01
+  //   mat4.rotate(transMat,  // destination matrix
+  //   transMat,  // matrix to rotate
+  //   cubeRotation,     // amount to rotate in radians
+  //   [0, 0, 1]);       // axis to rotate around (Z)
+  //   mat4.rotate(transMat,  // destination matrix
+  //   transMat,  // matrix to rotate
+  //   cubeRotation * .7,// amount to rotate in radians
+  //   [0, 1, 0])     // axis to rotate around (X)
     
-    if (drawMode == 'lines') {
-      gl.drawArrays(gl.LINE_STRIP, 0, subArray.length / itemSize)
-    } else {
-      gl.drawArrays(gl.POINTS, 0, subArray.length / itemSize)
-    }
+  //   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
+  // }
 
-    gl.deleteBuffer(vertexBuffer)
-  }
+  // requestAnimationFrame(drawCurve)
 }
 
 function ShapeDrawn(canvas) {
