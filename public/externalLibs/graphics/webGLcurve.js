@@ -113,7 +113,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   if(space == '3D'){
     // var matrixLocation = gl.getUniformLocation(, "u_transformMatrix");
     // rotations
-    cubeRotation += 0.01
+    cubeRotation += 0.1 * Math.PI
     // mat4.rotate(transMat,  // destination matrix
     // transMat,  // matrix to rotate
     // cubeRotation,     // amount to rotate in radians
@@ -294,6 +294,25 @@ function make_color_point(x, y, r, g, b){
   p.setX(x)
   p.setY(y)
   p.setZ(0) //0 as default for 2D curves
+  p.setColor([r/255, g/255, b/255, 1])
+  return p
+}
+
+/**
+ * makes a colored Point with given x and y coordinates, and RGB values
+ * @param {Number} x - x-coordinate of new point
+ * @param {Number} y - y-coordinate of new point
+ * @param {Number} z - z-coordinate of new point
+ * @param {Number} r - red component of new point
+ * @param {Number} g - green component of new point
+ * @param {Number} b - blue component of new point
+ * @returns {Point} with x, y and z as coordinates, and r, g, and b as RGB values
+ */
+function make_3D_color_point(x, y, z, r, g, b){
+  var p = new Point()
+  p.setX(x)
+  p.setY(y)
+  p.setZ(z)
   p.setColor([r/255, g/255, b/255, 1])
   return p
 }

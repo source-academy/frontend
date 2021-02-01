@@ -77,6 +77,7 @@ const curvesLibrary = [
   'make_point',
   'make_3D_point',
   'make_color_point',
+  'make_3D_color_point',
   'draw_points_on',
   'draw_connected',
   'draw_points_squeezed_to_window',
