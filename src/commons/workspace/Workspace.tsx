@@ -44,12 +44,12 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
   public componentDidMount() {
     /**
      * Condition is true when Workspace component does not mount with stepper tab being selected.
-     * 
+     *
      * Condition is false when Workspace component mounts with stepper tab being selected,
      * which only occurs when we resize from mobile to desktop breakpoint while in the stepper tab.
      * This prevents us from accessing undefined sideDividerDiv, since it is not rendered when
      * the stepper tab is selected.
-     */ 
+     */
     if (this.props.sideContentIsResizeable) {
       this.maxDividerHeight = this.sideDividerDiv!.clientHeight;
     }
