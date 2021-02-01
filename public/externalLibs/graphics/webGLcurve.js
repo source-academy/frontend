@@ -1,8 +1,47 @@
+class Point{
+  x = undefined
+  y = undefined
+  z = undefined
+  color = undefined
+
+  setColor = function(color){
+    this.color = color
+  }
+  getColor = function(){
+    return this.color
+  }
+  
+  setX = function(number){
+    this.x = number
+  }
+  getX = function(){
+    return this.x
+  }
+  
+  setY = function(number){
+    this.y = number
+  }
+  getY = function(){
+    return this.y
+  }
+  
+  setZ = function(number){
+    this.z = number
+  }
+  getZ = function(){
+    return this.z
+  }
+
+}
+
 function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
+  curveColor = t => func(t).getColor()
   const viewport_size = 600
   const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   var curvePosArray = []
+  var curveColorArray = []
   var transMat = mat4.create()
+  var curveObject = {}
   // initialize the min/max to extreme values
   var min_x = Infinity
   var max_x = -Infinity
@@ -14,20 +53,25 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
     // where x,y is in [0, 1]
     // evaluator has a side effect of recording the max/min
     // x and y value for adjusting the position
+    curveObject = {}
     curvePosArray = []
+    curveColorArray = []
     for (var i = 0; i <= num; i += 1) {
-      var value = func(i / num)
+      var point = func(i / num)
       if (
-        typeof value !== 'object' ||
-        value.length !== 2 ||
-        typeof value[0] !== 'number' ||
-        typeof value[1] !== 'number'
+        !(point instanceof Point)
       ) {
-        throw 'Expected a point, encountered ' + value
+        throw 'Expected a point, encountered ' + point
       }
-      var x = value[0] * 2 - 1
-      var y = value[1] * 2 - 1
+      var x = point.getX() * 2 - 1
+      var y = point.getY() * 2 - 1
       curvePosArray.push(x, y)
+      var colorArray = curveColor(i / num)
+      var color_r = colorArray[0]
+      var color_g = colorArray[1]
+      var color_b = colorArray[2]
+      var color_a = colorArray[3]
+      curveColorArray.push(color_r, color_g, color_b, color_a)
       min_x = Math.min(min_x, x)
       max_x = Math.max(max_x, x)
       min_y = Math.min(min_y, y)
@@ -65,7 +109,9 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
   }
   clear_viewport()
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
-  drawCurve(drawMode, curvePosArray)
+  curveObject.curvePos = curvePosArray
+  curveObject.color = curveColorArray
+  drawCurve(drawMode, curveObject)
   copy_viewport(gl.canvas, frame);
   return new ShapeDrawn(frame);
 }
@@ -84,9 +130,8 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
  * @return {function} function of type Curve → Drawing
  */
 function draw_connected(num) {
-  return function(func) {
-    return generateCurve('none', 'lines', num, func)
-  }
+  return curve => 
+	generateCurve('none', 'lines', num, curve)
 }
 
 /**
@@ -192,23 +237,82 @@ function draw_connected_full_view_proportional(num) {
  * @returns {Point} with x and y as coordinates
  */
 function make_point(x, y) {
-  return [x, y]
+  var p = new Point()
+  p.setX(x)
+  p.setY(y)
+  p.setZ(0) //0 as default for 2D curves
+  p.setColor([0, 0, 0, 1]) //black as default
+  return p
 }
 
 /**
- * retrieves the x-coordinate a given Point
+ * makes a colored Point with given x and y coordinates, and RGB values
+ * @param {Number} x - x-coordinate of new point
+ * @param {Number} y - y-coordinate of new point
+ * @param {Number} r - red component of new point
+ * @param {Number} g - green component of new point
+ * @param {Number} b - blue component of new point
+ * @returns {Point} with x and y as coordinates, and r, g, and b as RGB values
+ */
+function make_color_point(x, y, r, g, b){
+  var p = new Point()
+  p.setX(x)
+  p.setY(y)
+  p.setZ(0) //0 as default for 2D curves
+  p.setColor([r/255, g/255, b/255, 1])
+  return p
+}
+
+/**
+ * retrieves the x-coordinate of a given Point
  * @param {Point} p - given point
  * @returns {Number} x-coordinate of the Point
  */
 function x_of(pt) {
-  return pt[0]
+  return pt.getX();
 }
 
 /**
- * retrieves the y-coordinate a given Point
+ * retrieves the y-coordinate of a given Point
  * @param {Point} p - given point
  * @returns {Number} y-coordinate of the Point
  */
 function y_of(pt) {
-  return pt[1]
+  return pt.getY();
+}
+
+/**
+ * retrieves the z-coordinate of a given Point
+ * @param {Point} p - given point
+ * @returns {Number} z-coordinate of the Point
+ */
+function z_of(pt) {
+  return pt.getZ();
+}
+
+/**
+ * retrieves the red component of a given Point
+ * @param {Point} p - given point
+ * @returns {Number} Red component of the Point
+ */
+function r_of(pt) {
+  return pt.getColor()[0] * 255;
+}
+
+/**
+ * retrieves the green component of a given Point
+ * @param {Point} p - given point
+ * @returns {Number} Green component of the Point
+ */
+function g_of(pt) {
+  return pt.getColor()[1] * 255;
+}
+
+/**
+ * retrieves the blue component of a given Point
+ * @param {Point} p - given point
+ * @returns {Number} Blue component of the Point
+ */
+function b_of(pt) {
+  return pt.getColor()[2] * 255;
 }
