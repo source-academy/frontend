@@ -38,6 +38,7 @@ type StateProps = {
 type OwnProps = {
   handleShowRepl: () => void;
   handleHideRepl: () => void;
+  disableRepl: (newState: boolean) => void;
 };
 
 // styled-components
@@ -205,11 +206,27 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
       }
 
       // Evaluate program upon pressing the 'Run' tab on mobile
-      if (newTabId === SideContentType.mobileEditorRun) {
+      if (
+        prevTabId === SideContentType.substVisualizer &&
+        newTabId === SideContentType.mobileEditorRun
+      ) {
+        props.handleEditorEval();
+      } else if (newTabId === SideContentType.mobileEditorRun) {
         props.handleEditorEval();
         props.handleShowRepl();
       } else {
         props.handleHideRepl();
+      }
+
+      // Disable draggable Repl when on stepper tab
+      if (
+        newTabId === SideContentType.substVisualizer ||
+        (prevTabId === SideContentType.substVisualizer &&
+          newTabId === SideContentType.mobileEditorRun)
+      ) {
+        props.disableRepl(true);
+      } else {
+        props.disableRepl(false);
       }
     },
     [handleActiveTabChange, onChange, props]

@@ -38,6 +38,9 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
+  // For disabling draggable Repl when in stepper tab
+  const [isDraggableReplDisabled, setIsDraggableReplDisabled] = React.useState(false);
+
   // TODO: Orientation change detection is buggy at certain browser dimensions
   // Reason: We changed the meta viewport, which somehow affected react-responsive's calculation of orientation change
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
@@ -55,7 +58,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       const metaViewport = document.querySelector('meta[name=viewport]');
       metaViewport!.setAttribute(
         'content',
-        'height=' + window.innerHeight + 'px, width=device-width'
+        'height=' + window.innerHeight + ', width=device-width'
       );
     } else if (!isPortrait && !isIOS) {
       // Reset the above CSS when browser is in landscape
@@ -114,12 +117,13 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
           position={draggableReplPosition}
           onDrag={onDrag}
           body={<Repl {...props.replProps} />}
+          disabled={isDraggableReplDisabled}
         />
       ),
       id: SideContentType.mobileEditorRun,
       toSpawn: () => true
     }),
-    [props.replProps, draggableReplPosition]
+    [props.replProps, draggableReplPosition, isDraggableReplDisabled]
   );
 
   const updatedMobileSideContentProps = () => {
@@ -131,7 +135,8 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
   const draggableReplProps = {
     handleShowRepl: handleShowRepl,
-    handleHideRepl: handleHideRepl
+    handleHideRepl: handleHideRepl,
+    disableRepl: setIsDraggableReplDisabled
   };
 
   return (

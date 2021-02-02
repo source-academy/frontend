@@ -256,16 +256,26 @@ const Playground: React.FC<PlaygroundProps> = props => {
 
       const { handleUsingSubst, handleReplOutputClear, sourceChapter } = propsRef.current;
 
-      if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
-        handleUsingSubst(true);
-      }
+      /**
+       * Do nothing when clicking the mobile 'Run' tab while on the stepper tab.
+       */
+      if (
+        !(
+          prevTabId === SideContentType.substVisualizer &&
+          newTabId === SideContentType.mobileEditorRun
+        )
+      ) {
+        if (sourceChapter <= 2 && newTabId === SideContentType.substVisualizer) {
+          handleUsingSubst(true);
+        }
 
-      if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
-        handleReplOutputClear();
-        handleUsingSubst(false);
-      }
+        if (prevTabId === SideContentType.substVisualizer && !hasBreakpoints) {
+          handleReplOutputClear();
+          handleUsingSubst(false);
+        }
 
-      setSelectedTab(newTabId);
+        setSelectedTab(newTabId);
+      }
     },
     [hasBreakpoints]
   );
