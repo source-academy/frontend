@@ -13,14 +13,16 @@ export type MobileSideContentProps = DispatchProps & StateProps;
 type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
 
-  // TODO: Check if onChange prop is optional, as it is currently optional in desktop version (it is not optional for Playground)
+  /**
+   * TODO: Check if onChange prop is optional for other Workspaces.
+   * It is currently optional in the desktop version, but is required in Playground.
+   */
   onChange?: (
     newTabId: SideContentType,
     prevTabId: SideContentType,
     event: React.MouseEvent<HTMLElement>
   ) => void;
 
-  // TODO: Ensure that all the pages currently progagate editorProps to their children, which contains this prop
   handleEditorEval: () => void;
 };
 
@@ -37,22 +39,6 @@ type OwnProps = {
   handleShowRepl: () => void;
   handleHideRepl: () => void;
 };
-
-// TODO: Handle resizing bug - TypeError: Cannot read property 'clientHeight' of undefined
-// Workspace.tsx line 45
-// To reproduce: Resize from mobile to desktop while on stepper tab
-
-// TODO: NOTE that this component relies on SideContentType
-// (currently, we will not be creating a new MobileSideContentType due to high degree of overlap)
-
-// TODO: Remove inline styles when MobileWorkspace is stable enough (try to combine with existing SCSS)
-
-// TODO: Setting editor breakpoint and running program causes app to break
-
-// TODO: Handle Envt Visualizer overflow on mobile -> its breaking the entire mobile workspace
-
-// TODO: Add the hiding of SideContentTab panel description paragraph as state -> so that it will be consistent
-// between desktop and mobile workspaces (note that the current hiding logic breaks on iOS after orientation change)
 
 // styled-components
 const EditorPanel = styled.div`
@@ -129,7 +115,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
    * would force React.useMemo to recompute the nullary function anyway
    */
   const renderedPanels = () => {
-    // TODO: Fix the styling of all the panels (e.g. subst_visualizer, inspector, etc.)
+    // TODO: Fix the CSS of all the panels (e.g. subst_visualizer, inspector, etc.)
     const renderPanel = (tab: SideContentTab, workspaceLocation?: WorkspaceLocation) => {
       const tabBody: JSX.Element = workspaceLocation
         ? {
@@ -141,10 +127,11 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           }
         : tab.body;
 
-      // Handle Editor and Run tabs specifically
       return tab.id === SideContentType.mobileEditorRun ? (
+        // Always render the draggable Repl
         tabBody
       ) : tab.id === SideContentType.mobileEditor ? (
+        // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
         selectedTabId === SideContentType.mobileEditor ||
         selectedTabId === SideContentType.mobileEditorRun ? (
           <EditorPanel key={'editor'}>{tabBody}</EditorPanel>
@@ -152,6 +139,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           <UnSelectedPanel key={'editor'}>{tabBody}</UnSelectedPanel>
         )
       ) : tab.id === selectedTabId ? (
+        // Render the other panels only when their corresponding tab is selected
         <SelectedPanel key={tab.id}>{tabBody}</SelectedPanel>
       ) : (
         <UnSelectedPanel key={tab.id}>{tabBody}</UnSelectedPanel>
@@ -227,7 +215,6 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
     [handleActiveTabChange, onChange, props]
   );
 
-  // TODO: Tabs component id "mobile-side-content" is not styled yet
   return (
     <>
       {renderedPanels()}

@@ -18,24 +18,28 @@ export type MobileWorkspaceProps = StateProps;
 type StateProps = {
   // Either editorProps or mcqProps must be provided
 
-  // TODO: Check what is editorProps and mcqChooserProps doing
-  // ControlBar props
+  // TODO: ControlBar props
   editorProps?: EditorProps;
-  customEditor?: JSX.Element; // NOTE: So far only used in Sourcecast and Sourcereel
-  hasUnsavedChanges?: boolean; // Not used in Playground - check in the future
-  mcqProps?: McqChooserProps; // Not used in Playground - check in the future
+  customEditor?: JSX.Element; // Only used in Sourcecast and Sourcereel - to test in the future
+  hasUnsavedChanges?: boolean; // Not used in Playground - to test in the future in other Workspaces
+  mcqProps?: McqChooserProps; // Not used in Playground - to test in the future in other Workspaces
   replProps: ReplProps;
   mobileSideContentProps: MobileSideContentProps;
 };
+
+// TODO: Setting editor breakpoint and running program causes app to break
+
+// TODO: Handle Envt Visualizer panel overflowing on mobile
+
+// TODO: Add the hiding of SideContentTab panel description paragraph as state -> so that it will be consistent
+// between desktop and mobile workspaces (note that the current hiding logic breaks on iOS after orientation change)
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
-  // TODO: This is not detecting orientation change when phone text is set to LARGE (Oneplus 6T)
-  // Thus callback is not called too
+  // TODO: Orientation change detection is buggy at certain browser dimensions
   // Reason: We changed the meta viewport, which somehow affected react-responsive's calculation of orientation change
-  // (lines 56-60)
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
 
   /**
@@ -145,8 +149,6 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         isCloseButtonShown={false}
         title="Please turn back to portrait orientation!"
       />
-
-      {/* TODO: Update CSS for mobile workspace-parent remove flex: row, overflow:hidden, etc. */}
 
       <MobileSideContent {...updatedMobileSideContentProps()} {...draggableReplProps} />
     </div>
