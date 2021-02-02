@@ -1,4 +1,4 @@
-import { Dialog } from '@blueprintjs/core';
+import { Dialog, FocusStyleManager } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import React from 'react';
 import ReactAce from 'react-ace/lib/ace';
@@ -44,6 +44,11 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // TODO: Orientation change detection is buggy at certain browser dimensions
   // Reason: We changed the meta viewport, which somehow affected react-responsive's calculation of orientation change
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
+
+  React.useEffect(() => {
+    // Get rid of the focus border
+    FocusStyleManager.onlyShowFocusOnTabs();
+  }, []);
 
   /**
    * Handle Android users' viewport height to prevent UI distortions when soft keyboard is up
