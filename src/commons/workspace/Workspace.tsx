@@ -1,3 +1,4 @@
+import { FocusStyleManager } from '@blueprintjs/core';
 import { Resizable, ResizableProps, ResizeCallback } from 're-resizable';
 import * as React from 'react';
 import { Prompt } from 'react-router';
@@ -53,6 +54,9 @@ class Workspace extends React.Component<WorkspaceProps, {}> {
     if (this.props.sideContentIsResizeable) {
       this.maxDividerHeight = this.sideDividerDiv!.clientHeight;
     }
+
+    // Get rid of the focus border
+    FocusStyleManager.onlyShowFocusOnTabs();
   }
 
   public componentDidUpdate() {

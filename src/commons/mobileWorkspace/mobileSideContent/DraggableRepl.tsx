@@ -22,7 +22,19 @@ const DragHandle = styled.div`
   width: 100%;
   background-color: #182026;
   box-shadow: inset 0 -1px 8px -3px rgba(200, 200, 200, 0.4);
-  cursor: pointer;
+  cursor: grab;
+`;
+
+const DragHandleDisabled = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 10px;
+  height: 14px;
+  width: 100%;
+  background-color: #182026;
+  box-shadow: inset 0 -1px 8px -3px rgba(200, 200, 200, 0.4);
+  cursor: not-allowed;
 `;
 
 const ReplContent = styled.div`
@@ -42,6 +54,7 @@ type DragReplProps = {
   position: { x: number; y: number };
   onDrag: DraggableEventHandler;
   body: JSX.Element;
+  disabled: boolean;
 };
 
 const DraggableRepl: React.FC<DragReplProps> = props => {
@@ -52,13 +65,22 @@ const DraggableRepl: React.FC<DragReplProps> = props => {
       position={props.position}
       bounds={{ top: -500, left: 0, right: 0, bottom: 0 }}
       onDrag={props.onDrag}
+      disabled={props.disabled}
     >
       <DraggablePanel>
-        <DragHandle id="draghandle">
-          {['1', '2', '3'].map(i => (
-            <Circle key={i} />
-          ))}
-        </DragHandle>
+        {!props.disabled ? (
+          <DragHandle id="draghandle">
+            {['1', '2', '3'].map(i => (
+              <Circle key={i} />
+            ))}
+          </DragHandle>
+        ) : (
+          <DragHandleDisabled id="draghandle">
+            {['1', '2', '3'].map(i => (
+              <Circle key={i} />
+            ))}
+          </DragHandleDisabled>
+        )}
         <ReplContent>{props.body}</ReplContent>
       </DraggablePanel>
     </Draggable>
