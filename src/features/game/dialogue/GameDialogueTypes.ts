@@ -19,6 +19,10 @@ export type DialogueLine = IGameActionable & {
   goto?: PartName;
 };
 
+export type PromptLine = DialogueLine & {
+  options: Map<String, PartName>
+};
+
 export type Dialogue = {
   title: string;
   content: DialogueObject;
