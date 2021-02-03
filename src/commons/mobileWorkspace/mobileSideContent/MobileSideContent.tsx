@@ -1,7 +1,6 @@
 import { Classes, Icon, Tab, TabId, Tabs, Tooltip } from '@blueprintjs/core';
 import React from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components';
 
 import { OverallState } from '../../application/ApplicationTypes';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
@@ -40,36 +39,6 @@ type OwnProps = {
   handleHideRepl: () => void;
   disableRepl: (newState: boolean) => void;
 };
-
-// styled-components
-const EditorPanel = styled.div`
-  width: 100vw;
-  height: 100%;
-  z-index: 1;
-`;
-
-const SelectedPanel = styled.div`
-  height: 100%;
-  padding: 10px;
-  background-color: #2c3e50;
-`;
-
-const UnSelectedPanel = styled.div`
-  display: none;
-`;
-
-const TabsContainer = styled.div`
-  height: 50px;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 3;
-  background-color: #182026;
-  position: fixed;
-  bottom: 0;
-  box-shadow: 0 -3px 8px rgba(0, 0, 0, 0.3), 0 -10px 20px rgba(0, 0, 0, 0.2);
-`;
 
 const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => {
   const {
@@ -135,15 +104,23 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         // Render the Editor Panel when the selected tab is 'Editor' or 'Run'
         selectedTabId === SideContentType.mobileEditor ||
         selectedTabId === SideContentType.mobileEditorRun ? (
-          <EditorPanel key={'editor'}>{tabBody}</EditorPanel>
+          <div className="mobile-editor-panel" key={'editor'}>
+            {tabBody}
+          </div>
         ) : (
-          <UnSelectedPanel key={'editor'}>{tabBody}</UnSelectedPanel>
+          <div className="mobile-unselected-panel" key={'editor'}>
+            {tabBody}
+          </div>
         )
       ) : tab.id === selectedTabId ? (
         // Render the other panels only when their corresponding tab is selected
-        <SelectedPanel key={tab.id}>{tabBody}</SelectedPanel>
+        <div className="mobile-selected-panel" key={tab.id}>
+          {tabBody}
+        </div>
       ) : (
-        <UnSelectedPanel key={tab.id}>{tabBody}</UnSelectedPanel>
+        <div className="mobile-unselected-panel" key={tab.id}>
+          {tabBody}
+        </div>
       );
     };
 
@@ -235,7 +212,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
   return (
     <>
       {renderedPanels()}
-      <TabsContainer>
+      <div className="mobile-tabs-container">
         <Tabs
           id="mobile-side-content"
           onChange={changeTabsCallback}
@@ -246,7 +223,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
         >
           {renderedTabs}
         </Tabs>
-      </TabsContainer>
+      </div>
     </>
   );
 };

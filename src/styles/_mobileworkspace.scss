@@ -1,0 +1,114 @@
+$shadow-dark: rgba(0, 0, 0, 0.5);
+$shadow-light: rgba(0, 0, 0, 0.2);
+
+.mobile-selected-panel {
+  height: 100%;
+  width: 100vw;
+  padding: 15px;
+  background-color: $cadet-color-2;
+  white-space: pre-wrap;
+  overflow: scroll;
+
+  .sa-substituter {
+    .#{$ns}-slider-label {
+      width: -webkit-max-content;
+      width: -moz-max-content;
+      width: max-content;
+      display: none;
+
+      &:first-child,
+      &:last-child {
+        display: inline;
+      }
+    }
+
+    .#{$ns}-card {
+      background-color: $cadet-color-1;
+      padding: 0.4rem 0.6rem 0.4rem 0.6rem;
+      margin: 2rem 0 0.5rem 0;
+
+      .resultOutput {
+        background-color: transparent;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        color: white;
+        padding: 0px;
+        margin: 0px;
+        text-align: left;
+
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        word-break: break-word;
+
+        font: 16px / normal 'Inconsolata', 'Consolas', monospace;
+      }
+    }
+  }
+}
+
+.mobile-unselected-panel {
+  display: none;
+}
+
+.mobile-editor-panel {
+  width: 100vw;
+  height: 100%;
+  z-index: 1;
+}
+
+.mobile-tabs-container {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 3;
+  background-color: $cadet-color-1;
+  position: fixed;
+  bottom: 0;
+  box-shadow: 0 -4px 8px $shadow-dark, 0 -6px 16px $shadow-light,
+    inset 0 14px 14px -16px rgba(206, 217, 224, 0.1);
+}
+
+.mobile-draggable {
+  width: 100%;
+  min-height: 1000px;
+  z-index: 2;
+  position: fixed;
+  bottom: -930px;
+  background-color: $cadet-color-3;
+  border-radius: 5px;
+  box-shadow: 0 0px 8px $shadow-dark, 0 0 16px $shadow-light;
+
+  .handle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+    height: 14px;
+    width: 100%;
+    background-color: $cadet-color-1;
+    box-shadow: inset 0 8px 6px -8px rgba(206, 217, 224, 0.2),
+      inset 0 -8px 6px -8px rgba(206, 217, 224, 0.2);
+
+    .enabled {
+      cursor: grab;
+    }
+    .disabled {
+      cursor: not-allowed;
+    }
+    .circle {
+      height: 6px;
+      width: 6px;
+      margin: 0 8px;
+      border-radius: 50%;
+      background-color: grey;
+    }
+  }
+
+  .REPL-content {
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+  }
+}
