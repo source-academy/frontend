@@ -93,6 +93,21 @@ export default class DialogueParser {
         case isGotoLabel(rawStr):
           dialogueLines[dialogueLines.length - 1].goto = rawStr.split(' ')[1];
           break;
+        case isPrompt(rawStr):
+          const prompt: DialogueLine = {
+            line: rawStr.slice(rawStr.indexOf('prompt:') + 7).trim(),
+            choices: new Map<string, string>()
+          };
+          while (lines[currIndex + 1] && isPromptChoice(lines[currIndex + 1])) {
+            currIndex++;
+            const choiceStr = lines[currIndex];
+            const arrowInd = choiceStr.indexOf(' > ');
+            const option = choiceStr.slice(0, arrowInd).trim();
+            const goto = choiceStr.slice(arrowInd + 3).split(' ')[1];
+            if (prompt.choices) prompt.choices.set(option, goto);
+          }
+          dialogueLines.push(prompt);
+          break;
         case isActionLabel(rawStr):
           const lastLine = dialogueLines[dialogueLines.length - 1];
           !lastLine.actionIds && (lastLine.actionIds = []);
@@ -121,3 +136,5 @@ const isInteger = (line: string) => new RegExp(/^[0-9]+$/).test(line);
 const isGotoLabel = (line: string) => new RegExp(/^goto [0-9]+$/).test(line);
 const isActionLabel = (line: string) => line && (line[0] === '\t' || line.slice(0, 4) === '    ');
 const isSpeaker = (line: string) => line && line[0] === '@';
+const isPrompt = (line: string) => line.trim().startsWith('prompt:');
+const isPromptChoice = (line: string) => line.includes('> goto');

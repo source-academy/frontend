@@ -1,4 +1,4 @@
-import { DialogueLine, DialogueObject } from './GameDialogueTypes';
+import { DialogueLine, DialogueObject, PartName } from './GameDialogueTypes';
 
 /**
  * Class for keeping track of which line, action, and speaker has to be shown next
@@ -38,5 +38,10 @@ export default class DialogueGenerator {
       this.currLineNum++;
     }
     return dialogueLine;
+  }
+
+  public updateGoto(goto: PartName) {
+    this.currPart = goto;
+    this.currLineNum = 0;
   }
 }

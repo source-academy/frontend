@@ -1,5 +1,6 @@
 import SoundAssets from '../assets/SoundAssets';
 import { ItemId } from '../commons/CommonTypes';
+import { promptWithChoices } from '../effects/Prompt';
 import { Layer } from '../layer/GameLayerTypes';
 import GameGlobalAPI from '../scenes/gameManager/GameGlobalAPI';
 import SourceAcademyGame from '../SourceAcademyGame';
@@ -50,10 +51,24 @@ export default class DialogueManager {
 
   private async showNextLine(resolve: () => void) {
     GameGlobalAPI.getInstance().playSound(SoundAssets.dialogueAdvance.key);
-    const { line, speakerDetail, actionIds } = this.getDialogueGenerator().generateNextLine();
+    const {
+      line,
+      speakerDetail,
+      actionIds,
+      choices
+    } = this.getDialogueGenerator().generateNextLine();
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
     this.getSpeakerRenderer().changeSpeakerTo(speakerDetail);
+    if (choices) {
+      const response = await promptWithChoices(
+        GameGlobalAPI.getInstance().getGameManager(),
+        line,
+        Array.from(choices.keys())
+      );
+      console.log(Array.from(choices.values())[response]);
+      this.getDialogueGenerator().updateGoto(Array.from(choices.values())[response]);
+    }
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);

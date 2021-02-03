@@ -17,10 +17,7 @@ export type DialogueLine = IGameActionable & {
   line: string;
   speakerDetail?: SpeakerDetail | null;
   goto?: PartName;
-};
-
-export type PromptLine = DialogueLine & {
-  options: Map<String, PartName>
+  choices?: Map<string, PartName>;
 };
 
 export type Dialogue = {
