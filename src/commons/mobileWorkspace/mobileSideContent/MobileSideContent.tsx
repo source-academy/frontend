@@ -51,6 +51,7 @@ const SelectedPanel = styled.div`
   height: 100%;
   padding: 10px;
   background-color: #2c3e50;
+  overflow: auto;
 `;
 
 const UnSelectedPanel = styled.div`
