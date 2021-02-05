@@ -795,7 +795,7 @@ function drawCurve(drawMode, curveObject, space) {
   var curvePosArray = curveObject.curvePos
   var curveColorArray = curveObject.color
   var magicNum = 60000
-  var itemSize = space == '2D'? 2 : 3
+  var itemSize = space === '2D'? 2 : 3
   var colorSize = 4
   for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
     // since webGL only supports 16bits buffer, i.e. the no. of
@@ -822,6 +822,17 @@ function drawCurve(drawMode, curveObject, space) {
       gl.drawArrays(gl.POINTS, 0, subArray.length / itemSize)
     }
 
+    gl.deleteBuffer(vertexBuffer)
+  }
+
+  if (space == '3D') {
+    var itemSize = 3
+    var drawCubeArray = curveObject.drawCube
+    vertexBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(drawCubeArray), gl.STATIC_DRAW)
+    gl.vertexAttribPointer(vertexPositionAttribute, itemSize, gl.FLOAT, false, 0, 0)
+    gl.drawArrays(gl.LINE_STRIP, 0, drawCubeArray.length / itemSize)
     gl.deleteBuffer(vertexBuffer)
   }
 

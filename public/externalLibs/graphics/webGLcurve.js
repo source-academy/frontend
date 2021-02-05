@@ -34,13 +34,13 @@ class Point{
 
 }
 
-var cubeRotation = 0
+var cubeRotation = -0.1 * Math.PI
 function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) {
-  curveColor = t => func(t).getColor()
   const viewport_size = 600
   const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   var curvePosArray = []
   var curveColorArray = []
+  var drawCubeArray = []
   var transMat = mat4.create()
   var curveObject = {}
   // initialize the min/max to extreme values
@@ -68,11 +68,10 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       var y = point.getY() * 2 - 1
       var z = point.getZ() * 2 - 1
       space == '2D' ? curvePosArray.push(x, y) : curvePosArray.push(x, y, z)
-      var colorArray = curveColor(i / num)
-      var color_r = colorArray[0]
-      var color_g = colorArray[1]
-      var color_b = colorArray[2]
-      var color_a = colorArray[3]
+      var color_r = point.getColor()[0]
+      var color_g = point.getColor()[1]
+      var color_b = point.getColor()[2]
+      var color_a = point.getColor()[3]
       curveColorArray.push(color_r, color_g, color_b, color_a)
       min_x = Math.min(min_x, x)
       max_x = Math.max(max_x, x)
@@ -111,6 +110,29 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   }
 
   if(space == '3D'){
+    // drawCube
+    drawCubeArray.push(
+      // TODO
+      -1,-1,-1,1,-1,-1,
+      1,-1,-1,1,1,-1,
+      1,1,-1,-1,1,-1,
+      -1,1,-1,-1,-1,-1,
+      -1,-1,-1,-1,-1,1,
+      -1,-1,1,1,-1,1,
+      1,-1,1,1,-1,-1,
+      1,-1,-1,1,-1,1,
+      1,-1,1,1,1,1,
+      1,1,1,1,1,-1,
+      1,1,-1,1,1,1,
+      1,1,1,-1,1,1,
+      -1,1,1,-1,1,-1,
+      -1,1,-1,-1,1,1,
+      -1,1,1,-1,-1,1
+    )
+    var scale = Math.sqrt(1 / 3.1)
+    mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, 0))
+    curveObject.drawCube = drawCubeArray
+
     // var matrixLocation = gl.getUniformLocation(, "u_transformMatrix");
     // rotations
     cubeRotation += 0.1 * Math.PI
@@ -121,18 +143,18 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     mat4.rotate(transMat,  // destination matrix
     transMat,  // matrix to rotate
     cubeRotation * .7,// amount to rotate in radians
-    [0, 1, 0])     // axis to rotate around (X)
+    [0, 1, 1])     // axis to rotate around (X)
   }
 
   clear_viewport()
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
   curveObject.curvePos = curvePosArray
   curveObject.color = curveColorArray
+  curveObject.drawCube = drawCubeArray
   drawCurve(drawMode, curveObject, space)
   requestAnimationFrame(drawCurve)
   copy_viewport(gl.canvas, frame)
   return new ShapeDrawn(frame)
-  
 }
 
 /**
