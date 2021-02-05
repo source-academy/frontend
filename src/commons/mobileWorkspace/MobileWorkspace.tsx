@@ -27,13 +27,6 @@ type StateProps = {
   mobileSideContentProps: MobileSideContentProps;
 };
 
-// TODO: Setting editor breakpoint and running program causes app to break
-
-// TODO: Handle Envt Visualizer panel overflowing on mobile
-
-// TODO: Add the hiding of SideContentTab panel description paragraph as state -> so that it will be consistent
-// between desktop and mobile workspaces (note that the current hiding logic breaks on iOS after orientation change)
-
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
