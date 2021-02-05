@@ -62,7 +62,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
           || pt.getY() < 0 || pt.getY() > 1
           || pt.getZ() < 0 || pt.getZ() > 1) {
           var wrapper = new Point()
-          wrapper.setColor([255,255,255,1])
+          wrapper.setColor([255,255,255,0])
           wrapper.setX(pt.getX())
           wrapper.setY(pt.getY())
           wrapper.setZ(pt.getZ())
@@ -106,44 +106,18 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   evaluator(numPoints, func)
 
   if (isFullView) {
-    var vert_padding = 0.05 * (max_y - min_y)
-    min_y -= vert_padding
-    max_y += vert_padding
     var horiz_padding = 0.05 * (max_x - min_x)
     min_x -= horiz_padding
     max_x += horiz_padding
+    var vert_padding = 0.05 * (max_y - min_y)
+    min_y -= vert_padding
+    max_y += vert_padding
     var depth_padding = 0.05 * (max_z - min_z)
     min_z -= depth_padding
     max_z += depth_padding
   }
 
-  if (scaleMode == 'fit') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
-    var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
-    scale = scale === 0 ? 1 : scale;
-    space == '3D' 
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
-                                     // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
-  } else if (scaleMode == 'stretch') {
-    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
-    var x_scale = max_x === min_x ? 1 : (max_x - min_x)
-    var y_scale = max_y === min_y ? 1 : (max_y - min_y)
-    var z_scale = max_z === min_z ? 1 : (max_z - min_z)
-    space == '3D'
-      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
-      : mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
-                                    // use 2 because the value is in [-1, 1]
-    space == '3D' 
-      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
-      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
-  } else {
-    // do nothing for normal situations
-  }
-
+  // box generation
   if(space == '3D'){
     // drawCube
     drawCubeArray.push(
@@ -164,9 +138,9 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       -1,1,1,-1,-1,1
     )
     var temp = []
-    var scale_x = 1
-    var scale_y = 1
-    var scale_z = 1
+    var scale_x = 2
+    var scale_y = 2
+    var scale_z = 2
     var translate_x = 0
     var translate_y = 0
     var translate_z = 0
@@ -207,7 +181,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       }
     }
     drawCubeArray = temp
-    var scale = Math.sqrt(1 / 3.1)
+    var scale = Math.sqrt(1 / 3.1) 
     mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
     curveObject.drawCube = drawCubeArray
 
@@ -222,6 +196,33 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     cubeRotation * .7,// amount to rotate in radians
     [0, 1, 1])     // axis to rotate around (X)
     cubeRotation += 0.1 * Math.PI
+  }
+
+  if (scaleMode == 'fit') {
+    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
+    scale = scale === 0 ? 1 : scale;
+    space == '3D' 
+      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
+      : mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
+                                     // use 2 because the value is in [-1, 1]
+    space == '3D' 
+      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
+      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+  } else if (scaleMode == 'stretch') {
+    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var x_scale = max_x === min_x ? 1 : (max_x - min_x)
+    var y_scale = max_y === min_y ? 1 : (max_y - min_y)
+    var z_scale = max_z === min_z ? 1 : (max_z - min_z)
+    space == '3D'
+      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
+      : mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
+                                    // use 2 because the value is in [-1, 1]
+    space == '3D' 
+      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
+      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+  } else {
+    // do nothing for normal situations
   }
 
   clear_viewport()
