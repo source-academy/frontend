@@ -161,18 +161,24 @@ shaders['copy-fragment-shader'] = [
 shaders['curve-vertex-shader'] = [
   'attribute vec2 a_position;',
   'uniform mat4 u_transformMatrix;',
+  'attribute vec4 a_color;',
+
+  'varying lowp vec4 v_color;',
 
   'void main() {',
   '    gl_PointSize = 2.0;',
   '    gl_Position = u_transformMatrix * vec4(a_position, 0, 1);',
+  '    v_color = a_color;',
   '}'
 ].join('\n')
 
 shaders['curve-fragment-shader'] = [
   'precision mediump float;',
 
+  'varying lowp vec4 v_color;',
+
   'void main() {',
-  '    gl_FragColor = vec4(0, 0, 0, 1);',
+  '    gl_FragColor = v_color;',
   '}'
 ].join('\n')
 
@@ -780,22 +786,36 @@ function copy_viewport(src, dest) {
 function initCurveAttributes(shaderProgram) {
   vertexPositionAttribute = gl.getAttribLocation(shaderProgram, 'a_position')
   gl.enableVertexAttribArray(vertexPositionAttribute)
+  colorAttribute = gl.getAttribLocation(shaderProgram, 'a_color') // bug, doesn't exist
+  gl.enableVertexAttribArray(colorAttribute)
   u_transformMatrix = gl.getUniformLocation(shaderProgram, 'u_transformMatrix')
 }
 
-function drawCurve(drawMode, curvePosArray) {
+function drawCurve(drawMode, curveObject) {
+  var curvePosArray = curveObject.curvePos
+  var curveColorArray = curveObject.color
   var magicNum = 60000
   var itemSize = 2
+  var colorSize = 4
   for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
     // since webGL only supports 16bits buffer, i.e. the no. of
     // points in the buffer must be lower than 65535, so I take
     // 60000 as the "magic number"
+
+    // vertices
     var subArray = curvePosArray.slice(i * magicNum * itemSize, (i + 1) * magicNum * itemSize)
     vertexBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(subArray), gl.STATIC_DRAW)
     gl.vertexAttribPointer(vertexPositionAttribute, itemSize, gl.FLOAT, false, 0, 0)
 
+    // colors
+    var colors = curveColorArray.slice(i * magicNum * colorSize, (i + 1) * magicNum * colorSize)
+    colorBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+    gl.vertexAttribPointer(colorAttribute, 2 * itemSize, gl.FLOAT, false, 0, 0)
+    
     if (drawMode == 'lines') {
       gl.drawArrays(gl.LINE_STRIP, 0, subArray.length / itemSize)
     } else {
