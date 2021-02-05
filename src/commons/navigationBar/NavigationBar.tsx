@@ -133,7 +133,7 @@ const NavigationBar: React.FC<NavigationBarProps> = props => {
       {!Constants.playgroundOnly && props.role && !isMobile && (
         <>
           <NavbarDivider className="default-divider" />
-          <Tooltip content="Toggle Telebay" position={Position.BOTTOM}>
+          <Tooltip content="Toggle Menu" position={Position.BOTTOM}>
             <Button
               onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
               icon={IconNames.COMPASS}
