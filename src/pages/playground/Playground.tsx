@@ -734,11 +734,20 @@ const Playground: React.FC<PlaygroundProps> = props => {
   };
 
   const mobileWorkspaceProps: MobileWorkspaceProps = {
-    // TODO: ControlBar props
-    // TODO: Repl props
     editorProps: editorProps,
     replProps: replProps,
     mobileSideContentProps: {
+      mobileControlBarProps: {
+        editorButtons: [
+          chapterSelect,
+          props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
+          shareButton,
+          sessionButtons,
+          persistenceButtons
+        ],
+        // TODO: Repl buttons to be removed
+        replButtons: [replDisabled ? null : evalButton, clearButton]
+      },
       // TODO: Abstract this duplicate away
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,

@@ -3,11 +3,13 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { OverallState } from '../../application/ApplicationTypes';
+import { ControlBarProps } from '../../controlBar/ControlBar';
 import { SideContentTab, SideContentType } from '../../sideContent/SideContentTypes';
 import { DebuggerContext, WorkspaceLocation } from '../../workspace/WorkspaceTypes';
 import { getDynamicTabs } from './../../sideContent/SideContentHelper';
+import MobileControlBar from './MobileControlBar';
 
-export type MobileSideContentProps = DispatchProps & StateProps;
+export type MobileSideContentProps = DispatchProps & StateProps & MobileControlBarProps;
 
 type DispatchProps = {
   handleActiveTabChange: (activeTab: SideContentType) => void;
@@ -32,6 +34,10 @@ type StateProps = {
   renderActiveTabPanelOnly?: boolean;
   mobileTabs: SideContentTab[];
   workspaceLocation?: WorkspaceLocation;
+};
+
+type MobileControlBarProps = {
+  mobileControlBarProps: ControlBarProps;
 };
 
 type OwnProps = {
@@ -222,6 +228,7 @@ const MobileSideContent: React.FC<MobileSideContentProps & OwnProps> = props => 
           className={Classes.DARK}
         >
           {renderedTabs}
+          <MobileControlBar {...props.mobileControlBarProps} />
         </Tabs>
       </div>
     </>

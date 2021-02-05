@@ -17,8 +17,6 @@ export type MobileWorkspaceProps = StateProps;
 
 type StateProps = {
   // Either editorProps or mcqProps must be provided
-
-  // TODO: ControlBar props
   editorProps?: EditorProps;
   customEditor?: JSX.Element; // Only used in Sourcecast and Sourcereel - to test in the future
   hasUnsavedChanges?: boolean; // Not used in Playground - to test in the future in other Workspaces
