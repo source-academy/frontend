@@ -32,7 +32,10 @@ const DraggableRepl: React.FC<DragReplProps> = props => {
             ))}
           </div>
         )}
-        <div className="REPL-content">{props.body}</div>
+        <div className="REPL-content">
+          {props.body}
+          <div className="block-box"></div>
+        </div>
       </div>
     </Draggable>
   );
