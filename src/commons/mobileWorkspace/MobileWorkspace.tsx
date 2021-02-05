@@ -80,11 +80,20 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   };
 
   const onDrag = (e: DraggableEvent, position: { x: number; y: number }): void => {
+    document.documentElement.style.setProperty(
+      '--mobile-repl-height',
+      Math.max(-position.y - 10, 0) + 'px'
+    );
     setDraggableReplPosition(position);
   };
 
   const handleShowRepl = () => {
-    setDraggableReplPosition({ x: 0, y: -300 });
+    const offset = -300;
+    document.documentElement.style.setProperty(
+      '--mobile-repl-height',
+      Math.max(-offset - 10, 0) + 'px'
+    );
+    setDraggableReplPosition({ x: 0, y: offset });
   };
 
   const handleHideRepl = () => {
