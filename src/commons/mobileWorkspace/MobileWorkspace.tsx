@@ -27,6 +27,7 @@ type StateProps = {
 
 const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   const isIOS = /iPhone|iPod/.test(navigator.platform);
+  const isPWA = window.matchMedia('(display-mode: standalone)').matches; // Checks if user is accessing from the PWA
   const [draggableReplPosition, setDraggableReplPosition] = React.useState({ x: 0, y: 0 });
 
   // For disabling draggable Repl when in stepper tab
@@ -42,9 +43,10 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   }, []);
 
   /**
-   * Effect forces the browser interface to not hide on scroll by setting the application
-   * height to be equal to the browser's inner height. This ensures that UI does not break
-   * due to hiding of the browser interface (when user is not on the Progressive Web App).
+   * If user is accessing the app from the mobile browser (and not PWA), the effect forces the browser
+   * interface to not hide on scroll by setting the application height to be equal to the browser's
+   * inner height. This ensures that UI does not break due to hiding of the browser interface (when user
+   * is not on the Progressive Web App).
    *
    * This effect fires on every re-render to ensure that the app UI does not break (e.g. during
    * orientation changes, toggling between mobile and desktop Workspaces, etc.)
@@ -54,10 +56,15 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
    * causing the app UI to break on Android devices.
    */
   React.useEffect(() => {
-    document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
+    if (!isPWA) {
+      document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
+    }
 
+    // Needed when toggling from mobile to desktop Workspace
     return () => {
-      document.documentElement.style.setProperty('--application-height', '100vh');
+      if (!isPWA) {
+        document.documentElement.style.setProperty('--application-height', '100vh');
+      }
     };
   });
 
@@ -83,12 +90,14 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
 
     // Reset above CSS and hides draggable Repl on orientation change
     return () => {
-      document.documentElement.style.setProperty('overflow', 'hidden');
-      const metaViewport = document.querySelector('meta[name=viewport]');
-      metaViewport!.setAttribute(
-        'content',
-        'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
-      );
+      if (!isIOS) {
+        document.documentElement.style.setProperty('overflow', 'hidden');
+        const metaViewport = document.querySelector('meta[name=viewport]');
+        metaViewport!.setAttribute(
+          'content',
+          'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
+        );
+      }
       handleHideRepl();
     };
   }, [isPortrait, isIOS]);
