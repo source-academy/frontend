@@ -85,9 +85,9 @@ function visualiseList(list: any) {
   }
 }
 
-export function visualiseEnv(context: Context) {
+export function visualiseEnv({ context }: { context: Context }) {
   if ((window as any).EnvVisualizer) {
-    (window as any).EnvVisualizer.draw_env({ context });
+    (window as any).EnvVisualizer.draw_env(context);
   } else {
     throw new Error('Env visualizer is not enabled');
   }
