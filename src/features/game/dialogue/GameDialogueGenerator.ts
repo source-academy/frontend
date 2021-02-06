@@ -40,7 +40,10 @@ export default class DialogueGenerator {
     return dialogueLine;
   }
 
-  public updateGoto(goto: PartName) {
+  /**
+   * @param goto new PartName to change currPart to
+   */
+  public updateCurrPart(goto: PartName) {
     this.currPart = goto;
     this.currLineNum = 0;
   }

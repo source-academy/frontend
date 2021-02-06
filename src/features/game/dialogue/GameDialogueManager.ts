@@ -55,7 +55,7 @@ export default class DialogueManager {
       line,
       speakerDetail,
       actionIds,
-      choices
+      prompt
     } = this.getDialogueGenerator().generateNextLine();
     const lineWithName = line.replace('{name}', this.getUsername());
     this.getDialogueRenderer().changeText(lineWithName);
@@ -63,13 +63,13 @@ export default class DialogueManager {
 
     // Disable interactions while processing actions
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), false);
-    if (choices) {
+    if (prompt) {
       const response = await promptWithChoices(
         GameGlobalAPI.getInstance().getGameManager(),
-        line,
-        Array.from(choices.keys())
+        prompt.promptTitle,
+        prompt.choices.map(choice => choice[0])
       );
-      this.getDialogueGenerator().updateGoto(Array.from(choices.values())[response]);
+      this.getDialogueGenerator().updateCurrPart(prompt.choices[response][1]);
     }
     await GameGlobalAPI.getInstance().processGameActionsInSamePhase(actionIds);
     GameGlobalAPI.getInstance().enableSprite(this.getDialogueRenderer().getDialogueBox(), true);

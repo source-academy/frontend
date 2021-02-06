@@ -8,21 +8,40 @@ import { SpeakerDetail } from '../character/GameCharacterTypes';
 export type PartName = string;
 
 /**
- * @typedef DialogueLine - a line in the dialogue which can be augmented with actions and gotos
+ * @typedef {string} Choice - choice option that is shown on a prompt button
+ */
+export type Choice = string;
+
+/**
+ * @typedef DialogueLine - a line in the dialogue which can be augmented with
+ * actions, gotos and prompts
  * @param line - the spoken text for this line
  * @param speakerDetail - change in speaker for this line if any
  * @param goto - which part of the dialogue to go to after this line.
+ * @param prompt - a user prompt that can trigger a different dialogue part
+ * based on user choice
  */
 export type DialogueLine = IGameActionable & {
   line: string;
   speakerDetail?: SpeakerDetail | null;
   goto?: PartName;
-  choices?: Map<string, PartName>;
+  prompt?: Prompt;
 };
 
 export type Dialogue = {
   title: string;
   content: DialogueObject;
+};
+
+/**
+ * @typedef Prompt - a prompt pop-up with a title and choices
+ * @param promptTitle - a line or question to provide context for prompt
+ * @param choices - possible options the user can select and associated
+ * gotos
+ */
+export type Prompt = {
+  promptTitle: string;
+  choices: [Choice, PartName][];
 };
 
 export type DialogueObject = Map<PartName, DialogueLine[]>;
