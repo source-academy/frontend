@@ -739,6 +739,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     mobileSideContentProps: {
       mobileControlBarProps: {
         editorButtons: [
+          autorunButtons,
           chapterSelect,
           props.sourceVariant !== 'concurrent' ? externalLibrarySelect : null,
           shareButton,
