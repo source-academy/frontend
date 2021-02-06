@@ -78,7 +78,7 @@ export default class DialogueParser {
    * This function parses one "part" of a dialogue,
    * and converts them into a series of DialogueLine's,
    * where DialogueLine encapsulates data on the text,
-   * (as well as speaker change, actions and gotos if any)
+   * (as well as speaker change, actions, gotos and prompts if any)
    *
    * @param {Array<string>} lines the lines inside one part of a dialogue
    * @returns {Array<DialogueLine>}
@@ -101,9 +101,9 @@ export default class DialogueParser {
           while (lines[currIndex + 1] && isPromptChoice(lines[currIndex + 1])) {
             currIndex++;
             const choiceStr = lines[currIndex];
-            const arrowInd = choiceStr.indexOf(' > ');
-            const option = choiceStr.slice(0, arrowInd).trim();
-            const goto = choiceStr.slice(arrowInd + 3).split(' ')[1];
+            const choiceArr = choiceStr.split('->');
+            const option = choiceArr[0].trim();
+            const goto = choiceArr[1].trim().split(' ')[1];
             if (prompt.choices) prompt.choices.set(option, goto);
           }
           dialogueLines.push(prompt);
@@ -137,4 +137,4 @@ const isGotoLabel = (line: string) => new RegExp(/^goto [0-9]+$/).test(line);
 const isActionLabel = (line: string) => line && (line[0] === '\t' || line.slice(0, 4) === '    ');
 const isSpeaker = (line: string) => line && line[0] === '@';
 const isPrompt = (line: string) => line.trim().startsWith('prompt:');
-const isPromptChoice = (line: string) => line.includes('> goto');
+const isPromptChoice = (line: string) => line.includes('-> goto');
