@@ -74,7 +74,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
   align-items: center;
   z-index: 3;
   background-color: $cadet-color-1;
-  position: fixed;
+  position: absolute;
   bottom: 0;
   box-shadow: 0 -4px 8px $shadow-dark, 0 -6px 16px $shadow-light,
     inset 0 14px 14px -16px rgba(206, 217, 224, 0.1);
@@ -93,10 +93,10 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
 .mobile-draggable {
   width: 100%;
-  height: 570px;
+  height: calc(var(--mobile-repl-height, 0px) + 70px);
   z-index: 2;
-  position: fixed;
-  bottom: -500px;
+  position: absolute;
+  bottom: calc(var(--mobile-repl-height, 0px) * -1);
   background-color: $cadet-color-3;
   border-radius: 5px;
   box-shadow: 0 0px 8px $shadow-dark, 0 0 16px $shadow-light;
@@ -130,7 +130,7 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 
   .REPL-content {
     width: 100%;
-    height: var(--mobile-repl-height);
+    height: var(--mobile-repl-inner-height, 0px);
     padding: 0 10px 10px 10px;
     overflow: auto;
 
