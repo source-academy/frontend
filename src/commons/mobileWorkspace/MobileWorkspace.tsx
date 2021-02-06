@@ -42,11 +42,34 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   }, []);
 
   /**
+   * Effect forces the browser interface to not hide on scroll by setting the application
+   * height to be equal to the browser's inner height. This ensures that UI does not break
+   * due to hiding of the browser interface (when user is not on the Progressive Web App).
+   *
+   * This effect fires on every re-render to ensure that the app UI does not break (e.g. during
+   * orientation changes, toggling between mobile and desktop Workspaces, etc.)
+   *
+   * NOTE: Vertical resizing on the desktop browser while in the mobile workspace is not handled.
+   * Adding a resize event listener is not feasible as it fires when the Android keyboard is up,
+   * causing the app UI to break on Android devices.
+   */
+  React.useEffect(() => {
+    document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
+
+    return () => {
+      document.documentElement.style.setProperty('--application-height', '100vh');
+    };
+  });
+
+  /**
    * Handle Android users' viewport height to prevent UI distortions when soft keyboard is up
    */
   React.useEffect(() => {
+    // Force mobile soft keyboard down when toggling from portrait to landscape.
     if (!isPortrait) {
-      editorRef.current!.editor.blur();
+      if (editorRef.current) {
+        editorRef.current.editor.blur();
+      }
     }
 
     if (isPortrait && !isIOS) {
@@ -56,15 +79,18 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         'content',
         'height=' + window.innerHeight + ', width=device-width'
       );
-    } else if (!isPortrait && !isIOS) {
-      // Reset the above CSS when browser is in landscape
+    }
+
+    // Reset above CSS and hides draggable Repl on orientation change
+    return () => {
       document.documentElement.style.setProperty('overflow', 'hidden');
       const metaViewport = document.querySelector('meta[name=viewport]');
       metaViewport!.setAttribute(
         'content',
         'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0'
       );
-    }
+      handleHideRepl();
+    };
   }, [isPortrait, isIOS]);
 
   const editorRef = React.useRef<ReactAce>(null);
