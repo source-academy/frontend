@@ -203,45 +203,74 @@ export default class StringUtils {
   ): string[] {
     const newLines = [];
     let commentOpen = false;
+
     for (let l = 0; l < lines.length; l++) {
-      const openCommentIndex = lines[l].indexOf(openCommentChars);
-      const closeCommentIndex = lines[l].indexOf(closeCommentChars);
-      const openCommentFound = openCommentIndex !== -1;
-      const closeCommentFound = closeCommentIndex !== -1;
-      let newLine = '';
-      if (commentOpen) {
-        if (closeCommentFound) {
-          if (openCommentFound && closeCommentIndex > openCommentIndex) {
-            console.error('Comment not closed: Line ' + (l + 1));
-          }
-          commentOpen = openCommentFound;
-          newLine = this.removeSingleLineComment(lines[l], closeCommentChars, false);
-          newLine = this.removeSingleLineComment(newLine, openCommentChars);
-        } else if (openCommentFound) {
-          console.error('Comment not closed: Line ' + (l + 1));
-        }
-      } else {
-        if (openCommentFound) {
-          commentOpen = !closeCommentFound;
-          if (closeCommentFound && openCommentIndex > closeCommentIndex) {
-            console.error('Comment not closed: Line ' + (l + 1));
-          }
-          newLine = closeCommentFound
-            ? lines[l].slice(0, openCommentIndex) +
-              lines[l].slice(closeCommentIndex + closeCommentChars.length)
-            : this.removeSingleLineComment(lines[l], openCommentChars);
-        } else if (closeCommentFound) {
-          console.error('Comment not opened: Line ' + (l + 1));
+      const line = lines[l];
+      const commentRegions = [];
+      const opens = this.findAllInstances(line, openCommentChars);
+      const closes = this.findAllInstances(line, closeCommentChars);
+      let activeIndex = 0,
+        oInd = 0,
+        cInd = 0;
+      let region = commentOpen ? [0] : [];
+
+      while (oInd < opens.length || cInd < closes.length) {
+        const prevActive = activeIndex;
+        activeIndex = commentOpen ? closes[cInd++] : opens[oInd++];
+        if (activeIndex <= prevActive) {
+          console.error(`Comment mismatch: Line ${l + 1},  Pos ${activeIndex + 1}`);
+          activeIndex = prevActive;
         } else {
-          newLine = lines[l];
+          region.push(activeIndex);
+          commentOpen = !commentOpen;
+        }
+        if (region.length === 2) {
+          commentRegions.push(region);
+          region = [];
         }
       }
-      newLines.push(newLine);
-    }
-    if (commentOpen) {
-      console.error('Missing close comment at end of document');
+      if (region.length === 1) {
+        region.push(line.length);
+        commentRegions.push(region);
+      }
+      newLines.push(this.removeCommentRegions(line, commentRegions, closeCommentChars.length));
     }
     return newLines;
+  }
+
+  /**
+   *
+   *
+   * @param text
+   * @param regions
+   * @returns
+   */
+  public static removeCommentRegions(text: string, regions: number[][], endOffset: number) {
+    let newString = '';
+    let prevEnd = 0;
+    regions.forEach(arr => {
+      newString += text.slice(prevEnd, arr[0]);
+      prevEnd = arr[1] + endOffset;
+    });
+    newString += text.slice(prevEnd, text.length);
+    return newString;
+  }
+
+  /**
+   *
+   *
+   * @param text
+   * @param substring
+   * @returns {Array<number>}
+   */
+  public static findAllInstances(text: string, substring: string): number[] {
+    const indices = [];
+    let index = text.indexOf(substring);
+    while (index !== -1) {
+      indices.push(index);
+      index = text.indexOf(substring, index + 1);
+    }
+    return indices;
   }
 
   /**
