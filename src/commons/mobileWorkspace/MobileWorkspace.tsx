@@ -76,7 +76,7 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
         document.documentElement.style.setProperty('--application-height', '100vh');
       }
     };
-  }, []);
+  }, [isPWA]);
 
   /*
    * This effect handles the updating of the app height (described in the previous effect) during orientation changes.
