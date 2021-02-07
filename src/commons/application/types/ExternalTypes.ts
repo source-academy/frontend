@@ -85,7 +85,7 @@ const curvesLibrary = [
   'draw_connected_full_view',
   'draw_connected_full_view_proportional',
   'draw_3D_connected',
-  'draw_3D_full_view',
+  // 'draw_3D_connected_full_view',
   'draw_3D_connected_full_view_proportional',
   'draw_3D_connected_squeezed_to_window',
   'draw_3D_points_on',

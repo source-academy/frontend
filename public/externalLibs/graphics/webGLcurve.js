@@ -34,7 +34,7 @@ class Point{
 
 }
 
-var cubeRotation = 0
+var cubeRotation = 0 //Used for testing
 function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) {
   const viewport_size = 600
   const frame = open_pixmap('frame', viewport_size, viewport_size, true);
@@ -42,6 +42,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   var curveColorArray = []
   var drawCubeArray = []
   var transMat = mat4.create()
+  var projMat = mat4.create()
   var curveObject = {}
   // initialize the min/max to extreme values
   var min_x = Infinity
@@ -102,7 +103,6 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       max_z = Math.max(max_z, z)
     }
   }
-
   evaluator(numPoints, func)
 
   if (isFullView) {
@@ -119,37 +119,25 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
 
   // box generation
   if(space == '3D'){
-    // drawCube
     drawCubeArray.push(
-      -1,-1,-1,1,-1,-1,
-      1,-1,-1,1,1,-1,
-      1,1,-1,-1,1,-1,
-      -1,1,-1,-1,-1,-1,
-      -1,-1,-1,-1,-1,1,
-      -1,-1,1,1,-1,1,
-      1,-1,1,1,-1,-1,
-      1,-1,-1,1,-1,1,
-      1,-1,1,1,1,1,
-      1,1,1,1,1,-1,
-      1,1,-1,1,1,1,
-      1,1,1,-1,1,1,
-      -1,1,1,-1,1,-1,
-      -1,1,-1,-1,1,1,
-      -1,1,1,-1,-1,1
+      -1, 1, 1, -1, -1, 1,
+      -1, -1, -1, -1, 1, -1,
+      1, 1, -1, 1, -1, -1,
+      -1, -1, -1, 1, -1, -1,
+      1, -1, 1, -1, -1, 1,
+      1, -1, 1, 1, 1, 1,
+      -1, 1, 1, -1, 1, -1,
+      1, 1, -1, 1, 1, 1
     )
     var temp = []
-    var scale_x = 2
-    var scale_y = 2
-    var scale_z = 2
-    var translate_x = 0
-    var translate_y = 0
-    var translate_z = 0
+    var scale_x, scale_y, scale_z
+    scale_x = scale_y = scale_z = 2
+    var translate_x, translate_y, translate_z
+    translate_x = translate_y = translate_z = 0
     if (scaleMode == 'fit') {
       var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
       scale = scale === 0 ? 1 : scale;
-      scale_x = scale
-      scale_y = scale
-      scale_z = scale
+      scale_x = scale_y = scale_z = scale
       translate_x = (min_x + max_x) / 2
       translate_y = (min_y + max_y) / 2
       translate_z = (min_z + max_z) / 2
@@ -185,16 +173,17 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
     curveObject.drawCube = drawCubeArray
 
-    // var matrixLocation = gl.getUniformLocation(, "u_transformMatrix");
-    // rotations
-    // mat4.rotate(transMat,  // destination matrix
-    // transMat,  // matrix to rotate
-    // cubeRotation,     // amount to rotate in radians
-    // [0, 0, 1]);       // axis to rotate around (Z)
+    mat4.translate(transMat, transMat, [0, 0, -5])
+    //Rotation
+    mat4.rotate(transMat,  // destination matrix
+      transMat,  // matrix to rotate
+      -(Math.PI/2),// amount to rotate in radians
+      [1, 0, 0])     // axis to rotate around X (static)
     mat4.rotate(transMat,  // destination matrix
     transMat,  // matrix to rotate
-    cubeRotation * .7,// amount to rotate in radians
-    [0, 1, 1])     // axis to rotate around (X)
+    // cubeRotation * .7,// amount to rotate in radians
+    -0.5,// amount to rotate in radians
+    [0, 0, 1])     // axis to rotate around Z (dynamic)
     cubeRotation += 0.1 * Math.PI
   }
 
@@ -225,13 +214,21 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     // do nothing for normal situations
   }
 
+  if(space == '3D'){
+    const fieldOfView = 45 * Math.PI / 180;   // in radians
+    const aspect = gl.canvas.width / gl.canvas.height;
+    const zNear = 0;
+    const zFar = 50.0;
+    mat4.perspective(projMat, fieldOfView, aspect, zNear, zFar);
+  }
+
   clear_viewport()
+  gl.uniformMatrix4fv(u_projectionMatrix, false, projMat)
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
   curveObject.curvePos = curvePosArray
   curveObject.color = curveColorArray
   curveObject.drawCube = drawCubeArray
   drawCurve(drawMode, curveObject, space)
-  requestAnimationFrame(drawCurve)
   copy_viewport(gl.canvas, frame)
   return new ShapeDrawn(frame)
 }
@@ -357,7 +354,7 @@ function draw_3D_connected(num) {
   }
 }
 
-function draw_3D_full_view(num) {
+function draw_3D_connected_full_view(num) {
   return function(func) {
     return generateCurve('stretch', 'lines', num, func, '3D', true)
   }
@@ -383,7 +380,7 @@ function draw_3D_points_on(num) {
 
 function draw_3D_points_squeezed_to_window(num) {
   return function(func) {
-    return generateCurve('fit', 'lines', num, func, '3D')
+    return generateCurve('fit', 'points', num, func, '3D')
   }
 }
 
