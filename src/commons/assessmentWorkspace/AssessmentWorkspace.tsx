@@ -24,7 +24,7 @@ import {
 import { initSession, log } from '../../features/eventLogging';
 import { InterpreterOutput } from '../application/ApplicationTypes';
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
-import { User } from '../application/types/SessionTypes'
+import { User } from '../application/types/SessionTypes';
 import {
   Assessment,
   AssessmentCategories,
@@ -104,7 +104,7 @@ export type OwnProps = {
 };
 
 export type StateProps = {
-  userId?: User['userId'],
+  userId?: User['userId'];
   assessment?: Assessment;
   autogradingResults: AutogradingResult[];
   editorPrepend: string;
@@ -159,7 +159,7 @@ class AssessmentWorkspace extends React.Component<
     }
     if (!this.props.assessment) {
       return;
-    } 
+    }
     // ------------- PLEASE NOTE, EVERYTHING BELOW THIS SEEMS TO BE UNUSED -------------
     // checkWorkspaceReset does exactly the same thing.
     let questionId = this.props.questionId;
@@ -313,7 +313,7 @@ class AssessmentWorkspace extends React.Component<
         : this.props.questionId;
     const question: Question = this.props.assessment.questions[questionId];
     const editorProps =
-      question.type === QuestionTypes.programming
+      question.type === QuestionTypes.programming || QuestionTypes.voting
         ? {
             editorSessionId: '',
             editorValue: this.props.editorValue!,
@@ -398,7 +398,7 @@ class AssessmentWorkspace extends React.Component<
     let editorPrepend: string = '';
     let editorPostpend: string = '';
     let editorTestcases: Testcase[] = [];
-    let contestEntries: ContestEntry[] = []; 
+    let contestEntries: ContestEntry[] = [];
 
     if (question.type === QuestionTypes.programming) {
       const questionData = question as IProgrammingQuestion;
@@ -425,8 +425,9 @@ class AssessmentWorkspace extends React.Component<
           )
         });
       }
-    }  else if (question.type === QuestionTypes.voting) {
+    } else if (question.type === QuestionTypes.voting) {
       const questionData = question as IContestVotingQuestion;
+      console.log(questionData);
       contestEntries = questionData.contestEntries;
     }
 
@@ -453,41 +454,61 @@ class AssessmentWorkspace extends React.Component<
     questionId: number
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
+    const isContestVoting = props.assessment!.questions[0]?.type === 'voting';
     const handleContestEntryClick = (studentUsername: string, program: string) => {
-      this.props.handleEditorValueChange(program)
-    }; 
+      this.props.handleEditorValueChange(program);
+    };
 
     // to be synced up with the Elixir backend and API calls be made
     const dummyEntries: ContestEntry[] = [
-        {
-          studentUsername: 'e0111x', 
-          program: 'console.log(\'hello world\')'
-        },
-        {
-          studentUsername: 'e0222x',
-          program: 'Student 2'
-        }
-    ]
-    
+      {
+        studentUsername: 'e0111x',
+        program: "console.log('hello world')"
+      },
+      {
+        studentUsername: 'e0222x',
+        program: 'Student 2'
+      }
+    ];
+
     const contestVotingTabs: SideContentTab[] = [
+      {
+        label: `Task ${questionId + 1}`,
+        iconName: IconNames.NINJA,
+        body: <Markdown content={props.assessment!.questions[questionId].content} />,
+        id: SideContentType.questionOverview,
+        toSpawn: () => true
+      },
+      {
+        label: `Contest Voting Briefing`,
+        iconName: IconNames.BRIEFCASE,
+        body: <Markdown content={props.assessment!.longSummary} />,
+        id: SideContentType.briefing,
+        toSpawn: () => true
+      },
       {
         label: 'Contest Voting',
         iconName: IconNames.NEW_LAYERS,
-        body: <SideContentContestVotingContainer
-          handleContestEntryClick={handleContestEntryClick}
-          contestEntries={this.props.contestEntries ?? []} />,
+        body: (
+          <SideContentContestVotingContainer
+            handleContestEntryClick={handleContestEntryClick}
+            contestEntries={this.props.contestEntries ?? []}
+          />
+        ),
         toSpawn: () => true
-      }, 
+      },
       {
         label: 'Contest Leaderboard',
         iconName: IconNames.CROWN,
-        body: <SideContentContestLeaderboard
-          handleContestEntryClick={handleContestEntryClick}
-          orderedContestEntries={(dummyEntries)}
-         />,
+        body: (
+          <SideContentContestLeaderboard
+            handleContestEntryClick={handleContestEntryClick}
+            orderedContestEntries={dummyEntries}
+          />
+        ),
         toSpawn: () => true
       }
-    ]; 
+    ];
 
     const defaultTabs: SideContentTab[] = [
       {
@@ -520,13 +541,14 @@ class AssessmentWorkspace extends React.Component<
         toSpawn: () => true
       }
     ];
-    const tabs: SideContentTab[] = defaultTabs
+
+    let tabs: SideContentTab[] = defaultTabs;
 
     // only render contest voting tabs when assessment is a ContestVoting type
-    if (props.assessment!.category === AssessmentCategories.ContestVoting) {
-      tabs.push(...contestVotingTabs)
+    if (isContestVoting) {
+      tabs = contestVotingTabs;
     }
-    
+
     if (isGraded) {
       tabs.push({
         label: `Report Card`,

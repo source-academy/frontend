@@ -148,18 +148,29 @@ function* BackendSaga(): SagaIterator {
 
     const assessment: Assessment | null = yield call(getAssessment, id, tokens);
     if (assessment) {
-      // if is contestvoting assessment type - then load all questions with contest entries.
-      if (assessment.category === AssessmentCategories.ContestVoting) {
-        const userId: User['userId'] | null = yield select((state: OverallState) => state.session.userId);
+      // if is contestvoting assessment type - then load voting questions with contest entries.
+      // precondition: if is contest voting assessment type - then first assessment question (index 0) must be of 'voting' type
+      if (
+        assessment.category === AssessmentCategories.Practical &&
+        assessment.questions[0]?.type === 'voting'
+      ) {
+        const userId: User['userId'] | null = yield select(
+          (state: OverallState) => state.session.userId
+        );
         if (userId) {
-          const contestEntries: ContestEntry[] = yield call(getContestEntries, assessment.id, userId, tokens)
-          const qs = assessment.questions
+          const contestEntries: ContestEntry[] = yield call(
+            getContestEntries,
+            assessment.id,
+            userId,
+            tokens
+          );
+          const qs = assessment.questions;
           assessment.questions = qs.map(q => {
-            if (q.type === QuestionTypes.voting) { 
-              q.contestEntries = contestEntries; 
+            if (q.type === QuestionTypes.voting) {
+              q.contestEntries = contestEntries;
             }
-            return q;  
-          }) 
+            return q;
+          });
         }
       }
       yield put(actions.updateAssessment(assessment));

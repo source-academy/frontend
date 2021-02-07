@@ -28,7 +28,6 @@ export type GradingStatus = keyof typeof GradingStatuses;
 
 export enum AssessmentCategories {
   Contest = 'Contest',
-  ContestVoting = 'ContestVoting', 
   Mission = 'Mission',
   Path = 'Path',
   Sidequest = 'Sidequest',
@@ -167,12 +166,12 @@ export type Testcase = {
 
 export type ContestEntry = {
   studentUsername: string;
-  program: string; //contest entry program to be input into editor  
-}
+  program: string; //contest entry program to be input into editor
+};
 
 export type ContestVotingSubmission = {
-  [key: string]: number
-}
+  [key: string]: number;
+};
 
 export type MCQChoice = {
   content: string;

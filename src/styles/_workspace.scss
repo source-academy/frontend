@@ -880,9 +880,9 @@ $code-color-error: #ff4444;
 
     .contestentries-header {
       .header-entryid {
-        width: 55%
+        width: 55%;
       }
-      
+
       .header-entryrank {
         width: 45%;
       }
@@ -903,7 +903,7 @@ $code-color-error: #ff4444;
   .ResultCard,
   .ContestEntryCard {
     /* Wrapper container (Blueprint Card) for each testcase and autograder result */
-    /* Wrapper container for each Contest Entry Voting cards */  
+    /* Wrapper container for each Contest Entry Voting cards */
     .#{$ns}-card {
       border-color: rgb(26, 37, 48);
       border-style: solid;

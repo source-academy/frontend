@@ -337,30 +337,34 @@ export const getAssessmentOverviews = async (
  * @param assessmentId id of the contest assignment
  * @param userId id of unique user
  */
-export const getContestEntries = async (assessmentId: number, userId: User['userId'], tokens: Tokens): Promise<ContestEntry[]> => {
+export const getContestEntries = async (
+  assessmentId: number,
+  userId: User['userId'],
+  tokens: Tokens
+): Promise<ContestEntry[]> => {
   // TODO: FIX THIS CORS ERROR
-  // const resp = await request(`contestvoting/${assessmentId}/${userId}`, 'GET', {
-  //   ...tokens,
-  //   shouldAutoLogout: false,
-  //   shouldRefresh: true
-  // });
+  const resp = await request(`contestvoting/${assessmentId}/${userId}`, 'GET', {
+    ...tokens,
+    shouldAutoLogout: false,
+    shouldRefresh: true
+  });
 
-  // if (!resp || !resp.ok) {
-  //   return [];
-  // }
-  
-  // return (await resp?.json())?.contestEntries as ContestEntry[] ?? []; 
-  return [
-      {
-        studentUsername: 'e0111x', 
-        program: 'console.log(\'hello world\')'
-      },
-      {
-        studentUsername: 'e0222x',
-        program: 'Student 2'
-      }
-  ]
-}
+  if (!resp || !resp.ok) {
+    return [];
+  }
+
+  return ((await resp?.json())?.contestEntries as ContestEntry[]) ?? [];
+  // return [
+  //   {
+  //     studentUsername: 'e0111x',
+  //     program: "console.log('hello world')"
+  //   },
+  //   {
+  //     studentUsername: 'e0222x',
+  //     program: 'Student 2'
+  //   }
+  // ];
+};
 
 /**
  * GET /assessments/{assessmentId}
