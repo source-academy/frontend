@@ -2503,20 +2503,20 @@ var Kinetic = {}
           b && b._drag(a),
           d.isListening() && a.preventDefault && a.preventDefault()
       },
-      _setMousePosition: function(a) {
-        var b = a.clientX - this._getContentPosition().left,
-          c = a.clientY - this._getContentPosition().top
-        this.mousePos = { x: b, y: c }
-      },
-      _setTouchPosition: function(a) {
-        var b, c, d
-        void 0 !== a.touches &&
-          1 === a.touches.length &&
-          ((b = a.touches[0]),
-          (c = b.clientX - this._getContentPosition().left),
-          (d = b.clientY - this._getContentPosition().top),
-          (this.touchPos = { x: c, y: d }))
-      },
+      // _setMousePosition: function(a) {
+      //   var b = a.clientX - this._getContentPosition().left,
+      //     c = a.clientY - this._getContentPosition().top
+      //   this.mousePos = { x: b, y: c }
+      // },
+      // _setTouchPosition: function(a) {
+      //   var b, c, d
+      //   void 0 !== a.touches &&
+      //     1 === a.touches.length &&
+      //     ((b = a.touches[0]),
+      //     (c = b.clientX - this._getContentPosition().left),
+      //     (d = b.clientY - this._getContentPosition().top),
+      //     (this.touchPos = { x: c, y: d }))
+      // },
       _getContentPosition: function() {
         var a = this.content.getBoundingClientRect()
         return { top: a.top, left: a.left }
