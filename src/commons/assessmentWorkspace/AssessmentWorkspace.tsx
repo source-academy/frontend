@@ -313,7 +313,7 @@ class AssessmentWorkspace extends React.Component<
         : this.props.questionId;
     const question: Question = this.props.assessment.questions[questionId];
     const editorProps =
-      question.type === QuestionTypes.programming || QuestionTypes.voting
+      question.type === QuestionTypes.programming || question.type === QuestionTypes.voting
         ? {
             editorSessionId: '',
             editorValue: this.props.editorValue!,
