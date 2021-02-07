@@ -33,39 +33,74 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
   // For disabling draggable Repl when in stepper tab
   const [isDraggableReplDisabled, setIsDraggableReplDisabled] = React.useState(false);
 
-  // TODO: Orientation change detection is buggy at certain browser dimensions
-  // Reason: We changed the meta viewport, which somehow affected react-responsive's calculation of orientation change
   const isPortrait = useMediaQuery({ orientation: 'portrait' });
 
-  React.useEffect(() => {
-    // Get rid of the focus border
-    FocusStyleManager.onlyShowFocusOnTabs();
-  }, []);
+  /**
+   * Stores the mobile browser's portrait dimensions.
+   *
+   * Necessary to manually detect Android keyboard up events (please see the following series of useEffects)
+   */
+  const browserDimensions = React.useRef({ height: 0, width: 0 });
 
   /**
-   * If user is accessing the app from the mobile browser (and not PWA), the effect forces the browser
+   * Set portrait browser dimensions if yet to be set. This is for the detection of Android keyboard up events below.
+   *
+   * If user loads the page in landscape, they are prompted by a <Dialog /> component (see JSX below) to rotate
+   * to portrait, which then triggers this effect again to set the browser dimensions.
+   */
+  React.useEffect(() => {
+    if (!isPWA && browserDimensions.current.height === 0 && isPortrait) {
+      browserDimensions.current = {
+        height: window.innerHeight,
+        width: window.innerWidth
+      };
+    }
+  }, [isPWA, isPortrait]);
+
+  /**
+   * If user is accessing the app from the mobile browser (and not PWA), this effect forces the browser
    * interface to not hide on scroll by setting the application height to be equal to the browser's
-   * inner height. This ensures that UI does not break due to hiding of the browser interface (when user
-   * is not on the Progressive Web App).
+   * inner height. This ensures that the app UI does not break due to hiding of the browser interface
+   * when user is not on the PWA.
    *
-   * This effect fires on every re-render to ensure that the app UI does not break (e.g. during
-   * orientation changes, toggling between mobile and desktop Workspaces, etc.)
-   *
-   * NOTE: Vertical resizing on the desktop browser while in the mobile workspace is not handled.
-   * Adding a resize event listener is not feasible as it fires when the Android keyboard is up,
-   * causing the app UI to break on Android devices.
+   * This effect fires once on component mount, and handles both portrait and landscape orientation loads.
    */
   React.useEffect(() => {
     if (!isPWA) {
       document.documentElement.style.setProperty('--application-height', window.innerHeight + 'px');
     }
 
-    // Needed when toggling from mobile to desktop Workspace
+    // Cleanup function necessary for the case where user toggles from mobile to desktop Workspace on orientation change
     return () => {
       if (!isPWA) {
         document.documentElement.style.setProperty('--application-height', '100vh');
       }
     };
+  }, []);
+
+  /*
+   * This effect handles the updating of the app height (described in the previous effect) during orientation changes.
+   * We do not fire this update if an Android keyboard up event is detected, to prevent the app UI from breaking.
+   * (the browser viewport height changes when the keyboard is up on Android devices, and also causes this effect to re-fire)
+   *
+   * NOTE: Vertical resizing of the mobile workspace in the desktop browser is not handled.
+   * This is because the current method of detection for Android keyboard up is the same as that of vertical resizing.
+   */
+  React.useEffect(() => {
+    if (!isPWA) {
+      // If mobile browser, and not an Android keyboard up event, set application height to prevent browser UI from hiding.
+      if (
+        !(
+          window.innerHeight < browserDimensions.current.height &&
+          window.innerWidth === browserDimensions.current.width
+        )
+      ) {
+        document.documentElement.style.setProperty(
+          '--application-height',
+          window.innerHeight + 'px'
+        );
+      }
+    }
   });
 
   /**
@@ -101,6 +136,11 @@ const MobileWorkspace: React.FC<MobileWorkspaceProps> = props => {
       handleHideRepl();
     };
   }, [isPortrait, isIOS]);
+
+  React.useEffect(() => {
+    // Get rid of the focus border on blueprint components
+    FocusStyleManager.onlyShowFocusOnTabs();
+  }, []);
 
   const editorRef = React.useRef<ReactAce>(null);
 
