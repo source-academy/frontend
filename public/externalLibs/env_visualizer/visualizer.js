@@ -208,8 +208,7 @@
     builtins.values = [...Object.values(globalElems), ...Object.values(libraryElems)];
 
     // add extra props to primitive fnObjects
-    const primitiveElems = { ...globalElems, ...libraryElems };
-    for (const [name, value] of Object.entries(primitiveElems)) {
+    for (const [name, value] of Object.entries(globalElems)) {
       if (isFnObject(value)) {
         value.environment = globalEnv;
         value.node = { type: 'FunctionDeclaration' };
