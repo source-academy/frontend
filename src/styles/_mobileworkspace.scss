@@ -4,16 +4,17 @@ $shadow-light: rgba(0, 0, 0, 0.2);
 .mobile-selected-panel {
   height: 100%;
   width: 100vw;
-  padding: 15px;
+  padding: 20px 15px 100px 15px;
   background-color: $cadet-color-2;
   white-space: pre-wrap;
   overflow: scroll;
 
   .sa-substituter {
+    overflow-x: visible;
+    padding: 0 5px;
+
     .#{$ns}-slider-label {
-      width: -webkit-max-content;
-      width: -moz-max-content;
-      width: max-content;
+      width: auto;
       display: none;
 
       &:first-child,
