@@ -125,13 +125,9 @@ $shadow-light: rgba(0, 0, 0, 0.2);
     overflow: auto;
 
     // showing top shadow only when scroll down
-    background: linear-gradient($cadet-color-3 100%, rgba(44,62,80, 0)),
+    background: linear-gradient($cadet-color-3 100%, rgba(44, 62, 80, 0)),
       // cover up initial shadow
-      radial-gradient(
-          farthest-side at 50% 0,
-          rgba(0, 0, 0, 1) 10%,
-          rgba(44,62,80, 0)
-        );
+      radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 1) 10%, rgba(44, 62, 80, 0));
     background-repeat: no-repeat;
     background-color: $cadet-color-3;
     background-size: 100% 20px, 100% 20px;
