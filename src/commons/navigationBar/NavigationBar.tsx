@@ -1,20 +1,26 @@
 import {
   Alignment,
+  Button,
   Classes,
   Icon,
   Navbar,
   NavbarDivider,
   NavbarGroup,
-  NavbarHeading
+  NavbarHeading,
+  Position,
+  Tooltip
 } from '@blueprintjs/core';
 import { IconNames } from '@blueprintjs/icons';
 import classNames from 'classnames';
 import * as React from 'react';
+import { useMediaQuery } from 'react-responsive';
 import { NavLink } from 'react-router-dom';
 
 import { Role } from '../application/ApplicationTypes';
 import Dropdown from '../dropdown/Dropdown';
 import Constants from '../utils/Constants';
+import AcademyNavigationBar from './subcomponents/AcademyNavigationBar';
+import NavigationBarMobileSideMenu from './subcomponents/NavigationBarMobileSideMenu';
 
 type NavigationBarProps = DispatchProps & StateProps;
 
@@ -28,39 +34,78 @@ type StateProps = {
   name?: string;
 };
 
-const NavigationBar: React.SFC<NavigationBarProps> = props => (
-  <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
+const NavigationBar: React.FC<NavigationBarProps> = props => {
+  const [mobileSideMenuOpen, setMobileSideMenuOpen] = React.useState(false);
+  const [desktopMenuOpen, setDesktopMenuOpen] = React.useState(true);
+  const isMobile = useMediaQuery({ maxWidth: 768 });
+
+  const playgroundOnlyNavbarLeft = (
     <NavbarGroup align={Alignment.LEFT}>
-      {!Constants.playgroundOnly && (
-        <>
-          <NavLink
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-            to="/academy"
-          >
-            <Icon icon={IconNames.SYMBOL_DIAMOND} />
-            <NavbarHeading className="hidden-xs">Source Academy</NavbarHeading>
-          </NavLink>{' '}
-          <NavLink
-            activeClassName={Classes.ACTIVE}
-            className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
-            to="/sourcecast"
-          >
-            <Icon icon={IconNames.MUSIC} />
-            <div className="navbar-button-text hidden-xs">Sourcecast</div>
-          </NavLink>
-        </>
-      )}
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link__mobile', Classes.BUTTON, Classes.MINIMAL)}
+        to="/playground"
+      >
+        <Icon icon={IconNames.CODE} />
+        <div>Source Academy Playground</div>
+      </NavLink>
+    </NavbarGroup>
+  );
+
+  const mobileNavbarLeft = (
+    <NavbarGroup align={Alignment.LEFT}>
+      <Button
+        onClick={() => setMobileSideMenuOpen(!mobileSideMenuOpen)}
+        icon={IconNames.MENU}
+        large={true}
+        minimal={true}
+      />
+
+      <NavLink
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/academy"
+      >
+        <Icon icon={IconNames.SYMBOL_DIAMOND} />
+        <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+      </NavLink>
+
+      <NavigationBarMobileSideMenu
+        role={props.role}
+        isOpen={mobileSideMenuOpen}
+        onClose={() => setMobileSideMenuOpen(false)}
+      />
+    </NavbarGroup>
+  );
+
+  const desktopNavbarLeft = (
+    <NavbarGroup align={Alignment.LEFT}>
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/academy"
+      >
+        <Icon icon={IconNames.SYMBOL_DIAMOND} />
+        <NavbarHeading style={{ paddingBottom: '0px' }}>Source Academy</NavbarHeading>
+      </NavLink>
+
+      <NavLink
+        activeClassName={Classes.ACTIVE}
+        className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
+        to="/sourcecast"
+      >
+        <Icon icon={IconNames.MUSIC} />
+        <div className="navbar-button-text">Sourcecast</div>
+      </NavLink>
+
       <NavLink
         activeClassName={Classes.ACTIVE}
         className={classNames('NavigationBar__link', Classes.BUTTON, Classes.MINIMAL)}
         to="/playground"
       >
         <Icon icon={IconNames.CODE} />
-        <div className="navbar-button-text hidden-xs">
-          {Constants.playgroundOnly ? 'Source Academy Playground' : 'Playground'}
-        </div>
+        <div className="navbar-button-text">Playground</div>
       </NavLink>
+
       {props.role && (
         <NavLink
           activeClassName={Classes.ACTIVE}
@@ -68,11 +113,13 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
           to="/achievement"
         >
           <Icon icon={IconNames.MOUNTAIN} />
-          <div className="navbar-button-text hidden-xs">Achievement</div>
+          <div className="navbar-button-text">Achievement</div>
         </NavLink>
       )}
     </NavbarGroup>
+  );
 
+  const commonNavbarRight = (
     <NavbarGroup align={Alignment.RIGHT}>
       <NavLink
         activeClassName={Classes.ACTIVE}
@@ -80,8 +127,22 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
         to="/contributors"
       >
         <Icon icon={IconNames.HEART} />
-        <div className="navbar-button-text hidden-xs">Contributors</div>
+        <div className="navbar-button-text hidden-sm hidden-xs">Contributors</div>
       </NavLink>
+
+      {!Constants.playgroundOnly && props.role && !isMobile && (
+        <>
+          <NavbarDivider className="default-divider" />
+          <Tooltip content="Toggle Telebay" position={Position.BOTTOM}>
+            <Button
+              onClick={() => setDesktopMenuOpen(!desktopMenuOpen)}
+              icon={IconNames.COMPASS}
+              minimal={true}
+              style={{ outline: 'none' }}
+            />
+          </Tooltip>
+        </>
+      )}
 
       <div className="visible-xs">
         <NavbarDivider className="thin-divider" />
@@ -92,7 +153,24 @@ const NavigationBar: React.SFC<NavigationBarProps> = props => (
 
       <Dropdown handleLogOut={props.handleLogOut} name={props.name} />
     </NavbarGroup>
-  </Navbar>
-);
+  );
+
+  return (
+    <>
+      <Navbar className={classNames('NavigationBar', 'primary-navbar', Classes.DARK)}>
+        {Constants.playgroundOnly
+          ? playgroundOnlyNavbarLeft
+          : isMobile
+          ? mobileNavbarLeft
+          : desktopNavbarLeft}
+        {commonNavbarRight}
+      </Navbar>
+
+      {!Constants.playgroundOnly && props.role && !isMobile && desktopMenuOpen && (
+        <AcademyNavigationBar role={props.role} />
+      )}
+    </>
+  );
+};
 
 export default NavigationBar;

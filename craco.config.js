@@ -7,8 +7,8 @@ const cracoConfig = (module.exports = {
         plugin => plugin.constructor.name === 'DefinePlugin'
       );
       const inlineProcessEnv = definePlugin.definitions['process.env'];
-      if (!inlineProcessEnv.hasOwnProperty('SW_EXCLUDE_REGEXES')) {
-        inlineProcessEnv.SW_EXCLUDE_REGEXES = undefined;
+      if (!inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES) {
+        inlineProcessEnv.REACT_APP_SW_EXCLUDE_REGEXES = undefined;
       }
 
       const injectManifestPlugin = webpackConfig.plugins.find(

@@ -33,7 +33,6 @@ function loadAllLibs() {
     // sound
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
-    '/externalLibs/sound/riffwave.js',
     '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
@@ -43,7 +42,7 @@ function loadAllLibs() {
     '/externalLibs/graphics/webGLcurve.js',
     '/externalLibs/graphics/webGLrune.js',
     // list visualizer
-    '/externalLibs/visualizer/KineticJS.js',
+    '/externalLibs/visualizer/konva.js',
     '/externalLibs/visualizer/visualizer.js',
     // binary tree library
     '/externalLibs/tree.js',
