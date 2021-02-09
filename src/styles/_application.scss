@@ -12,7 +12,7 @@ html {
 }
 
 .Application {
-  height: 100vh;
+  height: var(--application-height, 100vh);
   display: flex;
   flex-direction: column;
 }

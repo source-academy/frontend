@@ -79,7 +79,7 @@ exports[`NavigationBar renders correctly with student role 1`] = `
         </div>
       </NavLink>
       <Blueprint3.NavbarDivider className=\\"default-divider\\" />
-      <Blueprint3.Tooltip content=\\"Toggle Telebay\\" position=\\"bottom\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
+      <Blueprint3.Tooltip content=\\"Toggle Menu\\" position=\\"bottom\\" hoverCloseDelay={0} hoverOpenDelay={100} minimal={false} transitionDuration={100}>
         <Blueprint3.Button onClick={[Function: onClick]} icon=\\"compass\\" minimal={true} style={{...}} />
       </Blueprint3.Tooltip>
       <div className=\\"visible-xs\\">
