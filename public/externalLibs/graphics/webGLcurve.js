@@ -75,7 +75,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
         return pt
       }
     }
-
+    
     curveObject = {}
     curvePosArray = []
     curveColorArray = []
