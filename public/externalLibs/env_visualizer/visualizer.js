@@ -174,7 +174,7 @@
   // --------------------------------------------------.
 
   // main function to be exported
-  function draw_env({ context: { context } }) {
+  function draw_env(context) {
     if (DEBUG_MODE) console.log(context);
     if (PRODUCTION_MODE) {
       // hide the default text
@@ -192,7 +192,7 @@
     resetVariables();
 
     // process backwards so that global env comes first
-    const allEnvs = checkEnvs(context.runtime.environments.reverse());
+    const allEnvs = processEnvs(context.runtime.environments);
 
     const globalEnv = allEnvs[0];
     const globalElems = globalEnv.head;
@@ -204,11 +204,11 @@
       ...Object.keys(libraryElems),
       ...context.externalSymbols
     ];
+
     builtins.values = [...Object.values(globalElems), ...Object.values(libraryElems)];
 
     // add extra props to primitive fnObjects
-    const primitiveElems = { ...globalElems, ...libraryElems };
-    for (const [name, value] of Object.entries(primitiveElems)) {
+    for (const [name, value] of Object.entries(globalElems)) {
       if (isFnObject(value)) {
         value.environment = globalEnv;
         value.node = { type: 'FunctionDeclaration' };
@@ -1313,22 +1313,13 @@
   */
   // General Helpers
   // --------------------------------------------------.
-  // return an array of all environments
-  function checkEnvs(envs) {
-    let newEnvs = [];
-
-    for (let i = envs.length - 1; i >= 0; i--) {
-      const currEnv = envs[i];
-      const prevEnv = i === 0 ? null : envs[i - 1];
-      // make sure all the tail environments are properly extracted
-      // and pushed to the environments array
-      if (currEnv.tail !== prevEnv) {
-        newEnvs = [...extractEnvs(currEnv), ...envs.slice(i + 1)];
-        break;
-      }
+  // fully extract the environments into the array
+  function processEnvs(envs) {
+    if (envs[0].name === 'global') {
+      return [...extractEnvs(envs[envs.length - 1])];
+    } else {
+      return [...extractEnvs(envs[0])];
     }
-
-    return isEmptyArray(newEnvs) ? envs : newEnvs;
   }
 
   // extract all the tail envs from the given environment
