@@ -7,7 +7,6 @@ $code-color-error: #ff4444;
   height: 100%;
   background-color: $cadet-color-1;
   display: flex;
-  padding-top: 0.5rem;
   flex: 1 1 auto;
   flex-direction: column;
 
@@ -31,6 +30,7 @@ $code-color-error: #ff4444;
     justify-content: space-between;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
+    margin-top: 0.5rem;
     margin-bottom: 0.6rem;
   }
 
@@ -84,10 +84,8 @@ $code-color-error: #ff4444;
   .Editor {
     display: flex;
     flex-direction: column;
-    height: auto;
-    margin: 0 0.6rem 0.6rem 0.6rem;
-    padding-bottom: 0.6rem;
-    padding-left: 0.6rem;
+    height: 100%;
+    width: 100%;
 
     .editor-react-ace {
       flex: 1;

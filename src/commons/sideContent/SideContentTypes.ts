@@ -24,6 +24,8 @@ export enum SideContentType {
   inspector = 'inspector',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
+  mobileEditor = 'mobile_editor',
+  mobileEditorRun = 'mobile_editor_run',
   sourcereel = 'sourcereel',
   substVisualizer = 'subst_visualiser',
   toneMatrix = 'tone_matrix',

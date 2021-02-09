@@ -26,8 +26,7 @@ const NavigationBarMobileSideMenu: React.FC<NavigationBarMobileSideMenuProps> = 
     isOpen={props.isOpen}
     position="left"
     onClose={props.onClose}
-    title="Telebay"
-    icon={IconNames.COMPASS}
+    title=""
     className={Classes.DARK}
   >
     {props.role && (

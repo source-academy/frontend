@@ -99,7 +99,7 @@ class SideContentSubstVisualizer extends React.Component<SubstVisualizerProps, S
     return (
       <HotKeys keyMap={substKeyMap} handlers={substHandlers}>
         <div>
-          <div className="sa-substituter">
+          <div className="sa-substituter bp3-dark">
             <Slider
               disabled={!hasRunCode}
               min={1}
