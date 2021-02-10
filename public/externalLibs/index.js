@@ -33,7 +33,6 @@ function loadAllLibs() {
     // sound
     '/externalLibs/sound/sounds.js',
     '/externalLibs/sound/soundToneMatrix.js',
-    '/externalLibs/sound/riffwave.js',
     '/externalLibs/sound/microphone.js',
     // graphics
     '/externalLibs/graphics/gl-matrix.js',
