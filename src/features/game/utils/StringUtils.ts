@@ -216,7 +216,9 @@ export default class StringUtils {
 
       while (openInd < openIns.length || closeInd < closeIns.length) {
         const prevActive = activeIndex;
-        activeIndex = commentOpen ? (closeIns[closeInd++] + closeCommentChars.length) : openIns[openInd++];
+        activeIndex = commentOpen
+          ? closeIns[closeInd++] + closeCommentChars.length
+          : openIns[openInd++];
         if (activeIndex <= prevActive) {
           console.error(`Comment mismatch: Line ${l + 1},  Pos ${activeIndex + 1}`);
           activeIndex = prevActive;
@@ -240,7 +242,7 @@ export default class StringUtils {
 
   /**
    * Return a string whose content within the regions is removed
-   * for each region, it contains two element: the index of opening comment character 
+   * for each region, it contains two element: the index of opening comment character
    * and the index of closing comment character
    *
    * @param text the text to be removed from
@@ -261,7 +263,7 @@ export default class StringUtils {
   /**
    * Return an array of the starting indices of the substring within the text string
    *
-   * @param text 
+   * @param text
    * @param substring substring to search for
    * @returns {Array<number>}
    */
