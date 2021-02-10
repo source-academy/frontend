@@ -119,7 +119,9 @@ const soundsLibrary = [
   'make_sound',
   'get_wave',
   'get_duration',
+  'is_sound',
   'play',
+  'play_concurrently',
   'stop',
   'consecutively',
   'simultaneously',
@@ -132,8 +134,8 @@ const soundsLibrary = [
   'square_sound',
   'triangle_sound',
   'sawtooth_sound',
-  'play_unsafe',
-  'display_waveform',
+  'play_unsafe', // undocumented
+  'display_waveform', // undocumented
   /** Microphone Sounds */
   'init_record',
   'record',
