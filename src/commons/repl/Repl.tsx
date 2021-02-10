@@ -34,7 +34,7 @@ type DispatchProps = {
 
 type OwnProps = {
   replButtons: Array<JSX.Element | null>;
-}
+};
 
 class Repl extends React.PureComponent<ReplProps, {}> {
   public constructor(props: ReplProps) {

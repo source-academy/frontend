@@ -209,7 +209,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
       customEditor: <SourceRecorderEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,

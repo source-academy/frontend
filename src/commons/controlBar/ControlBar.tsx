@@ -30,7 +30,9 @@ function ControlBar(props: ControlBarProps) {
 
   const editingWorkspaceControl = () => {
     return (
-      <div className={classNames('ControlBar_editingWorkspace', Classes.BUTTON_GROUP)}>{props.editingWorkspaceButtons}</div>
+      <div className={classNames('ControlBar_editingWorkspace', Classes.BUTTON_GROUP)}>
+        {props.editingWorkspaceButtons}
+      </div>
     );
   };
 

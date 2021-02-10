@@ -641,7 +641,7 @@ class AssessmentWorkspace extends React.Component<
 
     return {
       editorButtons: [runButton, saveButton, resetButton, chapterSelect],
-      flowButtons: [previousButton, questionView, nextButton],
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
 
@@ -661,7 +661,7 @@ class AssessmentWorkspace extends React.Component<
       />
     );
 
-    return [evalButton, clearButton]
+    return [evalButton, clearButton];
   }
 }
 

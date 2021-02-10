@@ -402,7 +402,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     return {
       editorButtons: [runButton],
-      flowButtons: [previousButton, questionView, nextButton],
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
 

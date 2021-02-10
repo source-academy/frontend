@@ -27,7 +27,7 @@ type StateProps = {
 
 type OwnProps = {
   replButtons: Array<JSX.Element | null>;
-}
+};
 
 class ReplInput extends React.PureComponent<ReplInputProps, {}> {
   private replInputBottom?: HTMLDivElement;
@@ -71,9 +71,7 @@ class ReplInput extends React.PureComponent<ReplInputProps, {}> {
     // see the comment above this same call in Editor.tsx
     selectMode(this.props.sourceChapter, this.props.sourceVariant, this.props.externalLibrary);
 
-    const replButtons = () => (
-       this.props.replButtons
-    )
+    const replButtons = () => this.props.replButtons;
 
     return (
       <>

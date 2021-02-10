@@ -712,7 +712,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sessionButtons,
         persistenceButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
-      ],
+      ]
     },
     editorProps: editorProps,
     editorHeight: props.editorHeight,
@@ -745,7 +745,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
           shareButton,
           sessionButtons,
           persistenceButtons
-        ],
+        ]
       },
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
