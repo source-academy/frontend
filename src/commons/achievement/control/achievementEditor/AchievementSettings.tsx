@@ -3,27 +3,27 @@ import { IconNames } from '@blueprintjs/icons';
 import React, { useState } from 'react';
 import { AchievementItem } from 'src/features/achievement/AchievementTypes';
 
-import EditableGoalIds from './achievementSettings/EditableGoalIds';
+import EditableGoalUuids from './achievementSettings/EditableGoalUuids';
 import EditablePosition from './achievementSettings/EditablePosition';
-import EditablePrerequisiteIds from './achievementSettings/EditablePrerequisiteIds';
+import EditablePrerequisiteUuids from './achievementSettings/EditablePrerequisiteUuids';
 
 type AchievementSettingsProps = {
   changeCardBackground: (cardBackground: string) => void;
-  changeGoalIds: (goalIds: number[]) => void;
+  changeGoalUuids: (goalUuids: number[]) => void;
   changePosition: (position: number) => void;
-  changePrerequisiteIds: (prerequisiteIds: number[]) => void;
+  changePrerequisiteUuids: (prerequisiteUuids: number[]) => void;
   editableAchievement: AchievementItem;
 };
 
 function AchievementSettings(props: AchievementSettingsProps) {
   const {
     changeCardBackground,
-    changeGoalIds,
+    changeGoalUuids,
     changePosition,
-    changePrerequisiteIds,
+    changePrerequisiteUuids,
     editableAchievement
   } = props;
-  const { id, cardBackground, goalIds, position, prerequisiteIds } = editableAchievement;
+  const { uuid, cardBackground, goalUuids, position, prerequisiteUuids } = editableAchievement;
 
   const [isOpen, setOpen] = useState<boolean>(false);
   const toggleOpen = () => setOpen(!isOpen);
@@ -47,13 +47,13 @@ function AchievementSettings(props: AchievementSettingsProps) {
           <p>Note: Select position 0 to hide achievement</p>
           <EditablePosition changePosition={changePosition} position={position} />
           <h3>Prerequisites</h3>
-          <EditablePrerequisiteIds
-            changePrerequisiteIds={changePrerequisiteIds}
-            id={id}
-            prerequisiteIds={prerequisiteIds}
+          <EditablePrerequisiteUuids
+            changePrerequisiteUuids={changePrerequisiteUuids}
+            uuid={uuid}
+            prerequisiteUuids={prerequisiteUuids}
           />
           <h3>Goals</h3>
-          <EditableGoalIds changeGoalIds={changeGoalIds} goalIds={goalIds} />
+          <EditableGoalUuids changeGoalUuids={changeGoalUuids} goalUuids={goalUuids} />
         </div>
       </Dialog>
     </>

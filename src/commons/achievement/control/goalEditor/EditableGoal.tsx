@@ -14,8 +14,8 @@ import {
 import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
-  id: number;
-  releaseId: (id: number) => void;
+  uuid: number;
+  releaseUuid: (uuid: number) => void;
   requestPublish: () => void;
 };
 
@@ -62,10 +62,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 function EditableGoal(props: EditableGoalProps) {
-  const { id, releaseId, requestPublish } = props;
+  const { uuid, releaseUuid, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const goal = inferencer.getGoalDefinition(id);
+  const goal = inferencer.getGoalDefinition(uuid);
   const goalClone = useMemo(() => cloneDeep(goal), [goal]);
 
   const [state, dispatch] = useReducer(reducer, goalClone, init);
@@ -75,7 +75,7 @@ function EditableGoal(props: EditableGoalProps) {
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyGoalDefinition(editableGoal);
-    releaseId(id);
+    releaseUuid(uuid);
     requestPublish();
   };
 
@@ -83,8 +83,8 @@ function EditableGoal(props: EditableGoalProps) {
 
   const deleteGoal = () => {
     dispatch({ type: ActionType.DELETE_GOAL });
-    inferencer.removeGoalDefinition(id);
-    releaseId(id);
+    inferencer.removeGoalDefinition(uuid);
+    releaseUuid(uuid);
     requestPublish();
   };
 

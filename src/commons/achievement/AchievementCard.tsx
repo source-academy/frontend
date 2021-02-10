@@ -8,7 +8,7 @@ import AchievementDeadline from './card/AchievementDeadline';
 import AchievementXp from './card/AchievementXp';
 
 type AchievementCardProps = {
-  id: number;
+  uuid: number;
   focusState: [number, any];
   isDropdownOpen?: boolean;
   shouldRender: boolean;
@@ -16,29 +16,29 @@ type AchievementCardProps = {
 };
 
 function AchievementCard(props: AchievementCardProps) {
-  const { id, focusState, isDropdownOpen, shouldRender, toggleDropdown } = props;
+  const { uuid, focusState, isDropdownOpen, shouldRender, toggleDropdown } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  const [focusId, setFocusId] = focusState;
+  const [focusUuid, setFocusUuid] = focusState;
 
-  const { ability, cardBackground, title } = inferencer.getAchievement(id);
-  const displayDeadline = inferencer.getDisplayDeadline(id);
-  const displayXp = inferencer.getAchievementMaxXp(id);
-  const progressFrac = inferencer.getProgressFrac(id);
-  const status = inferencer.getStatus(id);
+  const { ability, cardBackground, title } = inferencer.getAchievement(uuid);
+  const displayDeadline = inferencer.getDisplayDeadline(uuid);
+  const displayXp = inferencer.getAchievementMaxXp(uuid);
+  const progressFrac = inferencer.getProgressFrac(uuid);
+  const status = inferencer.getStatus(uuid);
 
   // Only task card with prerequisites has dropdown button
   const hasDropdown =
-    isDropdownOpen !== undefined && inferencer.getImmediateChildren(id).size !== 0;
+    isDropdownOpen !== undefined && inferencer.getImmediateChildren(uuid).size !== 0;
 
   return (
     <div
       className="achievement-card"
-      onClick={() => setFocusId(id)}
+      onClick={() => setFocusUuid(uuid)}
       onClickCapture={toggleDropdown}
       style={{
-        ...handleGlow(id, focusId, ability),
+        ...handleGlow(uuid, focusUuid, ability),
         opacity: shouldRender ? '100%' : '20%',
         background: `url(${cardBackground}) center/cover`
       }}

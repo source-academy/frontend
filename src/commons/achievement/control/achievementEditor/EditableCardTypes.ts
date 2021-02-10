@@ -8,9 +8,9 @@ export enum EditableCardActionType {
   CHANGE_ABILITY = 'CHANGE_ABILITY',
   CHANGE_CARD_BACKGROUND = 'CHANGE_CARD_BACKGROUND',
   CHANGE_DEADLINE = 'CHANGE_DEADLINE',
-  CHANGE_GOAL_IDS = 'CHANGE_GOAL_IDS',
+  CHANGE_GOAL_UUIDS = 'CHANGE_GOAL_UUIDS',
   CHANGE_POSITION = 'CHANGE_POSITION',
-  CHANGE_PREREQUISITE_IDS = 'CHANGE_PREREQUISITE_IDS',
+  CHANGE_PREREQUISITE_UUIDS = 'CHANGE_PREREQUISITE_UUIDS',
   CHANGE_RELEASE = 'CHANGE_RELEASE',
   CHANGE_TITLE = 'CHANGE_TITLE',
   CHANGE_VIEW = 'CHANGE_VIEW',
@@ -33,7 +33,7 @@ export type EditableCardAction =
       payload: Date | undefined;
     }
   | {
-      type: EditableCardActionType.CHANGE_GOAL_IDS;
+      type: EditableCardActionType.CHANGE_GOAL_UUIDS;
       payload: number[];
     }
   | {
@@ -41,7 +41,7 @@ export type EditableCardAction =
       payload: number;
     }
   | {
-      type: EditableCardActionType.CHANGE_PREREQUISITE_IDS;
+      type: EditableCardActionType.CHANGE_PREREQUISITE_UUIDS;
       payload: number[];
     }
   | {

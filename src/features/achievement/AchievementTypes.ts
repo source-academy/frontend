@@ -36,28 +36,28 @@ export enum FilterStatus {
 /**
  * Information of an achievement item
  *
- * @param {number} id unique id of the achievement item
+ * @param {number} uuid unique uuid of the achievement item
  * @param {string} title title of the achievement
  * @param {AchievementAbility} ability ability of the achievement, string enum
  * @param {Date} deadline Optional, the deadline of the achievement
  * @param {Date} release Optional, the release date of the achievement
  * @param {boolean} isTask if true, the achievement is rendered as an achievement task
  * @param {number} position ordering of the achievement task, 0 for non-task
- * @param {number[]} prerequisiteIds an array of prerequisite ids
- * @param {number[]} goalIds an array of goal ids
+ * @param {number[]} prerequisiteUuids an array of prerequisite uuids
+ * @param {number[]} goalUuids an array of goal uuids
  * @param {string} cardBackground background image URL of the achievement card
  * @param {AchievementView} view the achievement view
  */
 export type AchievementItem = {
-  id: number;
+  uuid: number;
   title: string;
   ability: AchievementAbility;
   deadline?: Date;
   release?: Date;
   isTask: boolean;
   position: number;
-  prerequisiteIds: number[];
-  goalIds: number[];
+  prerequisiteUuids: number[];
+  goalUuids: number[];
   cardBackground: string;
   view: AchievementView;
 };
@@ -67,12 +67,12 @@ export type AchievementGoal = GoalDefinition & GoalProgress;
 /**
  * Information of an achievement goal definition
  *
- * @param {number} id unique id of the goal
+ * @param {number} uuid unique uuid of the goal
  * @param {string} text goal description
  * @param {GoalMeta} meta contains meta data relevant to the goal type
  */
 export type GoalDefinition = {
-  id: number;
+  uuid: number;
   text: string;
   meta: GoalMeta;
 };
@@ -80,13 +80,13 @@ export type GoalDefinition = {
 /**
  * Information of an achievement goal progress
  *
- * @param {number} id unique id of the goal
+ * @param {number} uuid unique uuid of the goal
  * @param {number} xp student's current XP of the goal
  * @param {number} maxXp maximum attainable XP of the goal (computed by server)
  * @param {boolean} completed student's completion status of the goal
  */
 export type GoalProgress = {
-  id: number;
+  uuid: number;
   xp: number;
   maxXp: number;
   completed: boolean;

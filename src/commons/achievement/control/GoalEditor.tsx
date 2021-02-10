@@ -14,37 +14,37 @@ function GoalEditor(props: GoalEditorProps) {
   const inferencer = useContext(AchievementContext);
 
   /**
-   * newId helps us to ensure that only ONE goal is added at any point of time.
+   * newUuid helps us to ensure that only ONE goal is added at any point of time.
    *
-   * By default,  the newId is NaN, which means currently no new goal
+   * By default,  the newUuid is NaN, which means currently no new goal
    * is being added and the admin is able to add a new goal.
    *
-   * Conversely, if the newId is not NaN, this means currently a goal
+   * Conversely, if the newUuid is not NaN, this means currently a goal
    * is being added to the system and the admin is not allowed to add two goals
-   * at one go. The newId holds the newly created goal id until the new goal
+   * at one go. The newUuid holds the newly created goal uuid until the new goal
    * is added into the inferencer.
    */
-  const [newId, setNewId] = useState<number>(NaN);
-  const allowNewId = isNaN(newId);
-  const releaseId = (id: number) => (id === newId ? setNewId(NaN) : undefined);
+  const [newUuid, setNewUuid] = useState<number>(NaN);
+  const allowNewUuid = isNaN(newUuid);
+  const releaseUuid = (uuid: number) => (uuid === newUuid ? setNewUuid(NaN) : undefined);
 
   /**
    * Generates <EditableGoal /> components
    *
-   * @param goalIds an array of goalId
+   * @param goalUuids an array of goalUuid
    */
-  const generateEditableGoals = (goalIds: number[]) =>
-    goalIds.map(id => (
-      <EditableGoal key={id} id={id} releaseId={releaseId} requestPublish={requestPublish} />
+  const generateEditableGoals = (goalUuids: number[]) =>
+    goalUuids.map(uuid => (
+      <EditableGoal key={uuid} uuid={uuid} releaseUuid={releaseUuid} requestPublish={requestPublish} />
     ));
 
   return (
     <div className="goal-editor">
       <div className="command">
-        <GoalAdder allowNewId={allowNewId} setNewId={setNewId} />
+        <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
       <ul className="goal-container">
-        {generateEditableGoals(inferencer.getAllGoalIds().sort((a, b) => b - a))}
+        {generateEditableGoals(inferencer.getAllGoalUuids().sort((a, b) => b - a))}
       </ul>
     </div>
   );

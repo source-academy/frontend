@@ -13,15 +13,15 @@ import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  focusId: number;
+  focusUuid: number;
 };
 
 function AchievementView(props: AchievementViewProps) {
-  const { focusId } = props;
+  const { focusUuid } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  if (isNaN(focusId)) {
+  if (isNaN(focusUuid)) {
     return (
       <div className="no-view">
         <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
@@ -30,13 +30,13 @@ function AchievementView(props: AchievementViewProps) {
     );
   }
 
-  const achievement = inferencer.getAchievement(focusId);
+  const achievement = inferencer.getAchievement(focusUuid);
   const { ability, deadline, title, view } = achievement;
   const { coverImage, completionText, description } = view;
-  const awardedXp = inferencer.getAchievementXp(focusId);
-  const goals = inferencer.listGoals(focusId);
-  const prereqGoals = inferencer.listPrerequisiteGoals(focusId);
-  const status = inferencer.getStatus(focusId);
+  const awardedXp = inferencer.getAchievementXp(focusUuid);
+  const goals = inferencer.listGoals(focusUuid);
+  const prereqGoals = inferencer.listPrerequisiteGoals(focusUuid);
+  const status = inferencer.getStatus(focusUuid);
 
   return (
     <div className="view" style={{ ...getAbilityGlow(ability), ...getAbilityBackground(ability) }}>

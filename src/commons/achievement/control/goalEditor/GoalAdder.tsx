@@ -6,21 +6,21 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 import { goalDefinitionTemplate } from './GoalTemplate';
 
 type GoalAdderProps = {
-  allowNewId: boolean;
-  setNewId: (id: number) => void;
+  allowNewUuid: boolean;
+  setNewUuid: (uuid: number) => void;
 };
 
 function GoalAdder(props: GoalAdderProps) {
-  const { allowNewId, setNewId } = props;
+  const { allowNewUuid, setNewUuid } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  const addGoal = () => setNewId(inferencer.insertGoalDefinition(goalDefinitionTemplate));
+  const addGoal = () => setNewUuid(inferencer.insertGoalDefinition(goalDefinitionTemplate));
 
   return (
     <Button
       className="command-button"
-      disabled={!allowNewId}
+      disabled={!allowNewUuid}
       icon={IconNames.NEW_OBJECT}
       onClick={addGoal}
       text="Create Goal"

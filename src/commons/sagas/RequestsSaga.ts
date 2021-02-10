@@ -140,12 +140,12 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
     (achievement: any) =>
       ({
         ...achievement,
-        id: achievement.id,
+        uuid: achievement.uuid,
         ability: achievement.ability as AchievementAbility,
         deadline: new Date(achievement.deadline),
         release: new Date(achievement.release),
         goals: achievement.goals || [],
-        prerequisiteIds: achievement.prerequisiteIds || []
+        prerequisiteUuids: achievement.prerequisiteUuids || []
       } as AchievementItem)
   );
 };
@@ -244,13 +244,13 @@ export async function bulkUpdateGoals(
 }
 
 /**
- * POST /achievements/:achievement_id
+ * POST /achievements/:achievement_uuid
  */
 export const editAchievement = async (
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.id}`, 'POST', {
+  const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
     ...tokens,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -262,13 +262,13 @@ export const editAchievement = async (
 };
 
 /**
- * POST /achievements/goals/{goalId}
+ * POST /achievements/goals/{goalUuid}
  */
 export const editGoal = async (
   definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.id}`, 'POST', {
+  const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
     ...tokens,
     body: { definition: definition },
     noHeaderAccept: true,
@@ -280,14 +280,14 @@ export const editGoal = async (
 };
 
 /**
- * POST /achievements/goals/{goalId}/{studentId}
+ * POST /achievements/goals/{goalUuid}/{studentId}
  */
 export const updateGoalProgress = async (
   studentId: number,
   progress: GoalProgress,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${progress.id}/${studentId}`, 'POST', {
+  const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
     body: { progress: progress },
     noHeaderAccept: true,
@@ -299,13 +299,13 @@ export const updateGoalProgress = async (
 };
 
 /**
- * DELETE /achievements/{achievementId}
+ * DELETE /achievements/{achievementUuid}
  */
 export const removeAchievement = async (
   achievement: AchievementItem,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.id}`, 'DELETE', {
+  const resp = await request(`achievements/${achievement.uuid}`, 'DELETE', {
     ...tokens,
     body: { achievement: achievement },
     noHeaderAccept: true,
@@ -324,7 +324,7 @@ export const removeGoal = async (
   definition: GoalDefinition,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.id}`, 'DELETE', {
+  const resp = await request(`achievements/goals/${definition.uuid}`, 'DELETE', {
     ...tokens,
     body: { definition: definition },
     noHeaderAccept: true,
