@@ -12,11 +12,6 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  BackendifyAchievementItem,
-  BackendifyGoalDefinition,
-  BackendifyGoalProgress
-} from '../../features/achievement/AchievementBackender';
-import {
   AchievementAbility,
   AchievementGoal,
   AchievementItem,
@@ -141,21 +136,16 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievements.map(
     (achievement: any) =>
       ({
         ...achievement,
-        uuid: parseInt(achievement.uuid),
+        uuid: achievement.uuid,
         ability: achievement.ability as AchievementAbility,
         deadline: new Date(achievement.deadline),
         release: new Date(achievement.release),
-        goalUuids: achievement.goalsUuids 
-          ? achievement.goalsUuids.map((uuid: string) => parseInt(uuid))
-          : [],
-        prerequisiteUuids: achievement.prerequisiteUuids
-          ? achievement.prerequisiteUuids.map((uuid: string) => parseInt(uuid))
-          : []
+        goals: achievement.goals || [],
+        prerequisiteUuids: achievement.prerequisiteUuids || []
       } as AchievementItem)
   );
 };
@@ -178,12 +168,10 @@ export const getGoals = async (
 
   const achievementGoals = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievementGoals.map(
     (goal: any) =>
       ({
         ...goal,
-        uuid: parseInt(goal.uuid),
         type: goal.type as GoalType,
         meta: goal.meta as GoalMeta
       } as AchievementGoal)
@@ -205,12 +193,10 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 
   const achievementGoals = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievementGoals.map(
     (goal: any) =>
       ({
         ...goal,
-        uuid: parseInt(goal.uuid),
         type: goal.type as GoalType,
         meta: goal.meta as GoalMeta
       } as AchievementGoal)
@@ -226,10 +212,7 @@ export async function bulkUpdateAchievements(
 ): Promise<Response | null> {
   const resp = await request(`admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    // Backendify call to be removed once UUID has been implemented
-    body: { 
-      achievements: achievements.map(achievement => BackendifyAchievementItem(achievement)) 
-    },
+    body: { achievements: achievements },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -249,10 +232,7 @@ export async function bulkUpdateGoals(
 ): Promise<Response | null> {
   const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
-    // Backendify call to be removed once UUID has been implemented
-    body: { 
-      goals: goals.map(goal => BackendifyGoalDefinition(goal)) 
-    },
+    body: { goals: goals },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -272,8 +252,7 @@ export const editAchievement = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { achievement: BackendifyAchievementItem(achievement) },
+    body: { achievement: achievement },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -291,8 +270,7 @@ export const editGoal = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${definition.uuid}`, 'POST', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { definition: BackendifyGoalDefinition(definition) },
+    body: { definition: definition },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -311,8 +289,7 @@ export const updateGoalProgress = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { progress: BackendifyGoalProgress(progress) },
+    body: { progress: progress },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -330,8 +307,7 @@ export const removeAchievement = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.uuid}`, 'DELETE', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { achievement: BackendifyAchievementItem(achievement) },
+    body: { achievement: achievement },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -350,8 +326,7 @@ export const removeGoal = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${definition.uuid}`, 'DELETE', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { definition: BackendifyGoalDefinition(definition) },
+    body: { definition: definition },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
