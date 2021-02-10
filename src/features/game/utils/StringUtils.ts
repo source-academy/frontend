@@ -216,7 +216,7 @@ export default class StringUtils {
 
       while (openInd < openIns.length || closeInd < closeIns.length) {
         const prevActive = activeIndex;
-        activeIndex = commentOpen ? closeIns[closeInd++] : openIns[openInd++];
+        activeIndex = commentOpen ? (closeIns[closeInd++] + closeCommentChars.length) : openIns[openInd++];
         if (activeIndex <= prevActive) {
           console.error(`Comment mismatch: Line ${l + 1},  Pos ${activeIndex + 1}`);
           activeIndex = prevActive;
@@ -233,25 +233,26 @@ export default class StringUtils {
         region.push(line.length);
         commentRegions.push(region);
       }
-      newLines.push(this.removeCommentRegions(line, commentRegions, closeCommentChars.length));
+      newLines.push(this.removeCommentRegions(line, commentRegions));
     }
     return newLines;
   }
 
   /**
+   * Return a string whose content within the regions is removed
+   * for each region, it contains two element: the index of opening comment character 
+   * and the index of closing comment character
    *
-   *
-   * @param text
-   * @param regions
-   * @param endOffset
-   * @returns
+   * @param text the text to be removed from
+   * @param regions contains all the regions of comments
+   * @returns {string}
    */
-  public static removeCommentRegions(text: string, regions: number[][], endOffset: number) {
+  public static removeCommentRegions(text: string, regions: number[][]) {
     let newString = '';
     let prevEnd = 0;
     regions.forEach(arr => {
       newString += text.slice(prevEnd, arr[0]);
-      prevEnd = arr[1] + endOffset;
+      prevEnd = arr[1];
     });
     newString += text.slice(prevEnd, text.length);
     return newString;
