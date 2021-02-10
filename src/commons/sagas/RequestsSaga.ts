@@ -210,7 +210,7 @@ export async function bulkUpdateAchievements(
   achievements: AchievementItem[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/achievements`, 'POST', {
+  const resp = await request(`admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
     body: { achievements: achievements },
     noHeaderAccept: true,
@@ -230,7 +230,7 @@ export async function bulkUpdateGoals(
   goals: GoalDefinition[],
   tokens: Tokens
 ): Promise<Response | null> {
-  const resp = await request(`admin/goals`, 'POST', {
+  const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
     body: { goals: goals },
     noHeaderAccept: true,
