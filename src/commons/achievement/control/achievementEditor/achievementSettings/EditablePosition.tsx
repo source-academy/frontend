@@ -12,7 +12,7 @@ function EditablePosition(props: EditablePositionProps) {
   const { changePosition, position } = props;
 
   const inferencer = useContext(AchievementContext);
-  const maxPosition = inferencer.listTaskIds().length + 1;
+  const maxPosition = inferencer.listTaskUuids().length + 1;
   const positionOptions = [...Array(maxPosition + 1).keys()]; // [0..maxPosition + 1]
 
   const PositionSelect = Select.ofType<number>();

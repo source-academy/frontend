@@ -44,7 +44,7 @@ function AchievementControl(props: DispatchProps & StateProps) {
    */
   const [awaitPublish, setAwaitPublish] = useState<boolean>(false);
   const publishChanges = () => {
-    // NOTE: Update goals first because goals must exist before their ID can be specified in achievements
+    // NOTE: Update goals first because goals must exist before their UUID can be specified in achievements
     bulkUpdateGoals(inferencer.getAllGoals());
     bulkUpdateAchievements(inferencer.getAllAchievements());
     setAwaitPublish(false);

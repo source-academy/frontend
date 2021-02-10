@@ -14,37 +14,37 @@ function AchievementEditor(props: AchievementEditorProps) {
   const inferencer = useContext(AchievementContext);
 
   /**
-   * newId helps us to ensure that only ONE achievement is added at any point of time.
+   * newUuid helps us to ensure that only ONE achievement is added at any point of time.
    *
-   * By default,  the newId is NaN, which means currently no new achievement
+   * By default,  the newUuid is NaN, which means currently no new achievement
    * is being added and the admin is able to add a new achievement.
    *
-   * Conversely, if the newId is not NaN, this means currently an achievement
+   * Conversely, if the newUuid is not NaN, this means currently an achievement
    * is being added to the system and the admin is not allowed to add two achievements
-   * at one go. The newId holds the newly created achievement id until the new achievement
+   * at one go. The newUuid holds the newly created achievement uuid until the new achievement
    * is added into the inferencer.
    */
-  const [newId, setNewId] = useState<number>(NaN);
-  const allowNewId = isNaN(newId);
-  const releaseId = (id: number) => (id === newId ? setNewId(NaN) : undefined);
+  const [newUuid, setNewUuid] = useState<number>(NaN);
+  const allowNewUuid = isNaN(newUuid);
+  const releaseUuid = (uuid: number) => (uuid === newUuid ? setNewUuid(NaN) : undefined);
 
   /**
    * Generates <EditableAchievementCard /> components
    *
-   * @param achievementIds an array of achievementId
+   * @param achievementUuids an array of achievementUuid
    */
-  const generateEditableCards = (achievementIds: number[]) =>
-    achievementIds.map(id => (
-      <EditableCard key={id} id={id} releaseId={releaseId} requestPublish={requestPublish} />
+  const generateEditableCards = (achievementUuids: number[]) =>
+    achievementUuids.map(uuid => (
+      <EditableCard key={uuid} uuid={uuid} releaseUuid={releaseUuid} requestPublish={requestPublish} />
     ));
 
   return (
     <div className="achievement-editor">
       <div className="command">
-        <AchievementAdder allowNewId={allowNewId} setNewId={setNewId} />
+        <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
       <ul className="achievement-container">
-        {generateEditableCards(inferencer.getAllAchievementIds().sort((a, b) => b - a))}
+        {generateEditableCards(inferencer.getAllAchievementUuids().sort((a, b) => b - a))}
       </ul>
     </div>
   );

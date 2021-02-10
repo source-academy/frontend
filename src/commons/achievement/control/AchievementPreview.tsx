@@ -21,11 +21,11 @@ function AchievementPreview(props: AchievementPreviewProps) {
   const [viewMode, toggleMode] = useReducer(mode => !mode, false);
 
   /**
-   * Marks the achievement id that is currently on focus (selected)
+   * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
   const focusState = useState<number>(NaN);
-  const [focusId] = focusState;
+  const [focusUuid] = focusState;
 
   return (
     <div className="achievement-preview">
@@ -49,11 +49,11 @@ function AchievementPreview(props: AchievementPreviewProps) {
       </div>
       {viewMode ? (
         <div className="preview-container">
-          <AchievementView focusId={focusId} />
+          <AchievementView focusUuid={focusUuid} />
         </div>
       ) : (
         <ul className="preview-container">
-          {generateAchievementTasks(inferencer.listSortedTaskIds(), FilterStatus.ALL, focusState)}
+          {generateAchievementTasks(inferencer.listSortedTaskUuids(), FilterStatus.ALL, focusState)}
         </ul>
       )}
     </div>

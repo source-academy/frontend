@@ -21,8 +21,8 @@ import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 
 type EditableCardProps = {
-  id: number;
-  releaseId: (id: number) => void;
+  uuid: number;
+  releaseUuid: (uuid: number) => void;
   requestPublish: () => void;
 };
 
@@ -71,11 +71,11 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
-    case ActionType.CHANGE_GOAL_IDS:
+    case ActionType.CHANGE_GOAL_UUIDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          goalIds: action.payload
+          goalUuids: action.payload
         },
         isDirty: true
       };
@@ -88,11 +88,11 @@ const reducer = (state: State, action: Action) => {
         },
         isDirty: true
       };
-    case ActionType.CHANGE_PREREQUISITE_IDS:
+    case ActionType.CHANGE_PREREQUISITE_UUIDS:
       return {
         editableAchievement: {
           ...state.editableAchievement,
-          prerequisiteIds: action.payload
+          prerequisiteUuids: action.payload
         },
         isDirty: true
       };
@@ -126,10 +126,10 @@ const reducer = (state: State, action: Action) => {
 };
 
 function EditableCard(props: EditableCardProps) {
-  const { id, releaseId, requestPublish } = props;
+  const { uuid, releaseUuid, requestPublish } = props;
 
   const inferencer = useContext(AchievementContext);
-  const achievement = inferencer.getAchievement(id);
+  const achievement = inferencer.getAchievement(uuid);
   const achievementClone = useMemo(() => cloneDeep(achievement), [achievement]);
 
   const [state, dispatch] = useReducer(reducer, achievementClone, init);
@@ -139,7 +139,7 @@ function EditableCard(props: EditableCardProps) {
   const saveChanges = () => {
     dispatch({ type: ActionType.SAVE_CHANGES });
     inferencer.modifyAchievement(editableAchievement);
-    releaseId(id);
+    releaseUuid(uuid);
     requestPublish();
   };
 
@@ -148,8 +148,8 @@ function EditableCard(props: EditableCardProps) {
 
   const deleteAchievement = () => {
     dispatch({ type: ActionType.DELETE_ACHIEVEMENT });
-    inferencer.removeAchievement(id);
-    releaseId(id);
+    inferencer.removeAchievement(uuid);
+    releaseUuid(uuid);
     requestPublish();
   };
 
@@ -162,14 +162,14 @@ function EditableCard(props: EditableCardProps) {
   const changeDeadline = (deadline?: Date) =>
     dispatch({ type: ActionType.CHANGE_DEADLINE, payload: deadline });
 
-  const changeGoalIds = (goalIds: number[]) =>
-    dispatch({ type: ActionType.CHANGE_GOAL_IDS, payload: goalIds });
+  const changeGoalUuids = (goalUuids: number[]) =>
+    dispatch({ type: ActionType.CHANGE_GOAL_UUIDS, payload: goalUuids });
 
   const changePosition = (position: number) =>
     dispatch({ type: ActionType.CHANGE_POSITION, payload: position });
 
-  const changePrerequisiteIds = (prerequisiteIds: number[]) =>
-    dispatch({ type: ActionType.CHANGE_PREREQUISITE_IDS, payload: prerequisiteIds });
+  const changePrerequisiteUuids = (prerequisiteUuids: number[]) =>
+    dispatch({ type: ActionType.CHANGE_PREREQUISITE_UUIDS, payload: prerequisiteUuids });
 
   const changeRelease = (release?: Date) =>
     dispatch({ type: ActionType.CHANGE_RELEASE, payload: release });
@@ -210,9 +210,9 @@ function EditableCard(props: EditableCardProps) {
         <EditableView changeView={changeView} view={view} />
         <AchievementSettings
           changeCardBackground={changeCardBackground}
-          changeGoalIds={changeGoalIds}
+          changeGoalUuids={changeGoalUuids}
           changePosition={changePosition}
-          changePrerequisiteIds={changePrerequisiteIds}
+          changePrerequisiteUuids={changePrerequisiteUuids}
           editableAchievement={editableAchievement}
         />
       </div>

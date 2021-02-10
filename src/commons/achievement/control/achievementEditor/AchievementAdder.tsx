@@ -6,21 +6,21 @@ import { AchievementContext } from 'src/features/achievement/AchievementConstant
 import { achievementTemplate } from './AchievementTemplate';
 
 type AchievementAdderProps = {
-  allowNewId: boolean;
-  setNewId: (id: number) => void;
+  allowNewUuid: boolean;
+  setNewUuid: (uuid: number) => void;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
-  const { allowNewId, setNewId } = props;
+  const { allowNewUuid, setNewUuid } = props;
 
   const inferencer = useContext(AchievementContext);
 
-  const addAchievement = () => setNewId(inferencer.insertAchievement(achievementTemplate));
+  const addAchievement = () => setNewUuid(inferencer.insertAchievement(achievementTemplate));
 
   return (
     <Button
       className="command-button"
-      disabled={!allowNewId}
+      disabled={!allowNewUuid}
       icon={IconNames.NEW_OBJECT}
       onClick={addAchievement}
       text="Create Achievement"

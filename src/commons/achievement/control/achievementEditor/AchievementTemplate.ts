@@ -15,13 +15,13 @@ export const viewTemplate: AchievementView = {
 };
 
 export const achievementTemplate: AchievementItem = {
-  id: -1,
+  uuid: -1,
   title: 'Achievement Title Here',
   ability: AchievementAbility.CORE,
   isTask: false,
   position: 0,
-  prerequisiteIds: [],
-  goalIds: [],
+  prerequisiteUuids: [],
+  goalUuids: [],
   cardBackground: `${cardBackgroundUrl}/default.png`,
   view: viewTemplate
 };

@@ -85,7 +85,7 @@ export const getFilterColor = (globalStatus: FilterStatus, ownStatus: FilterStat
   globalStatus === ownStatus ? FilterColors.BLUE : FilterColors.WHITE;
 
 // Make selected achievements + view and Flex achievements glow
-export const handleGlow = (id: number, focusId: number, ability: AchievementAbility) =>
-  ability === AchievementAbility.FLEX || id === focusId ? getAbilityGlow(ability) : undefined;
+export const handleGlow = (uuid: number, focusUuid: number, ability: AchievementAbility) =>
+  ability === AchievementAbility.FLEX || uuid === focusUuid ? getAbilityGlow(ability) : undefined;
 
 export const xpPerLevel = 1000;

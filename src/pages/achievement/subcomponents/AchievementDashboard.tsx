@@ -24,17 +24,17 @@ export type StateProps = {
 /**
  * Generates <AchievementTask /> components
  *
- * @param taskIds an array of achievementId
+ * @param taskUuids an array of achievementUuid
  * @param filterStatus the dashboard filter status
  * @param focusState the focused achievement state
  */
 export const generateAchievementTasks = (
-  taskIds: number[],
+  taskUuids: number[],
   filterStatus: FilterStatus,
   focusState: [number, any]
 ) =>
-  taskIds.map(taskId => (
-    <AchievementTask key={taskId} id={taskId} filterStatus={filterStatus} focusState={focusState} />
+  taskUuids.map(taskUuid => (
+    <AchievementTask key={taskUuid} uuid={taskUuid} filterStatus={filterStatus} focusState={focusState} />
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {
@@ -54,11 +54,11 @@ function Dashboard(props: DispatchProps & StateProps) {
   const [filterStatus] = filterState;
 
   /**
-   * Marks the achievement id that is currently on focus (selected)
+   * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
   const focusState = useState<number>(NaN);
-  const [focusId] = focusState;
+  const [focusUuid] = focusState;
 
   return (
     <AchievementContext.Provider value={inferencer}>
@@ -85,11 +85,11 @@ function Dashboard(props: DispatchProps & StateProps) {
           </div>
 
           <ul className="task-container">
-            {generateAchievementTasks(inferencer.listSortedTaskIds(), filterStatus, focusState)}
+            {generateAchievementTasks(inferencer.listSortedTaskUuids(), filterStatus, focusState)}
           </ul>
 
           <div className="view-container">
-            <AchievementView focusId={focusId} />
+            <AchievementView focusUuid={focusUuid} />
           </div>
         </div>
       </div>
