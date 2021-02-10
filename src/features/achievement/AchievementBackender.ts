@@ -7,26 +7,20 @@ import {
 
 export const BackendifyAchievementItem = (achievement: AchievementItem) => 
   ({
-    ability: achievement.ability,
-    cardBackground: achievement.cardBackground,
-    deadline: achievement.deadline ? achievement.deadline.toString() : "",
-    goalUuids: achievement.goalUuids.map(uuid => uuid.toString()),
-    isTask: achievement.isTask,
-    position: achievement.position,
-    prerequisiteUuids: achievement.prerequisiteUuids.map(uuid => uuid.toString()),
-    release: achievement.release ? achievement.release.toString() : "",
-    title: achievement.title,
+    ...achievement,
     uuid: achievement.uuid.toString(), 
-    view: achievement.view
+    prerequisiteUuids: achievement.prerequisiteUuids.map(uuid => uuid.toString()),
+    goalUuids: achievement.goalUuids.map(uuid => uuid.toString()),
+    deadline: achievement.deadline ? achievement.deadline.toString() : "",
+    release: achievement.release ? achievement.release.toString() : ""
   });
 
 export const BackendifyGoalDefinition = (goal: GoalDefinition) => 
   ({
-    maxXp: (goal.meta.type === GoalType.ASSESSMENT) ? 0 : goal.meta.maxXp,
-    meta: goal.meta,
-    text: goal.text,
+    ...goal,
+    uuid: goal.uuid.toString(),
     type: goal.meta.type,
-    uuid: goal.uuid.toString()
+    maxXp: (goal.meta.type === GoalType.ASSESSMENT) ? 0 : goal.meta.maxXp
   });
 
 export const BackendifyGoalProgress = (goal: GoalProgress) => 
