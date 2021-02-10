@@ -125,6 +125,159 @@ export default class StringUtils {
   }
 
   /**
+   * Splits text into string array, removes lines
+   * with only newlines and removes characters that
+   * are commented out in single and multi line
+   * comments
+   *
+   * @param text text to split
+   * @returns {Array<string>}
+   */
+  public static splitToLinesAndRemoveComments(text: string): string[] {
+    return this.removeMultiLineComments(text.split('\n'), '/*', '*/')
+      .map(line => this.removeSingleLineComment(line, '//'))
+      .map(line => line.trimRight())
+      .filter(line => line !== '');
+  }
+
+  /**
+   * Removes characters from string before/after
+   * specified comment characters
+   *
+   * Example input:
+   * removeSingleLineComment('Hello # World','#',false)
+   *
+   * Example output:
+   * 'Hello '
+   *
+   * @param text text with single line comments
+   * @param commentChars characters to denote comment region
+   * @param removeAfter (optional) true - remove characters after commentChars,
+   *                              false - remove characters before commentChars
+   * @returns {string}
+   */
+  public static removeSingleLineComment(
+    text: string,
+    commentChars: string,
+    removeAfter: boolean = true
+  ) {
+    const commentIndex = text.indexOf(commentChars);
+    return commentIndex === -1
+      ? text
+      : removeAfter
+      ? text.slice(0, commentIndex)
+      : text.slice(commentIndex + commentChars.length);
+  }
+
+  /**
+   * Given an array of lines with a
+   * a subset of characters commented out
+   * by specified open and close comment
+   * characters, Returns an array of lines
+   * with characters inside commented regions
+   * removed
+   *
+   * Example input:
+   * removeMultiLineComments(
+   * ['objectives',
+   * '    checkedScreen',
+   * '    talkedToLokKim1',
+   * '/!    talkedToLokKim2',
+   * '    talkedToLokKim3!/'],
+   *  '/!', '!/');
+   *
+   * Example output:
+   * ['objectives',
+   * '    checkedScreen',
+   * '    talkedToLokKim1']
+   *
+   * @param lines lines to remove comments from
+   * @param openCommentChars characters to denote open comment
+   * @param closeCommentChars characters to denote close comment
+   * @returns {Array<string>}
+   */
+  public static removeMultiLineComments(
+    lines: string[],
+    openCommentChars: string,
+    closeCommentChars: string
+  ): string[] {
+    const newLines = [];
+    let commentOpen = false;
+
+    for (let l = 0; l < lines.length; l++) {
+      const line = lines[l];
+      const commentRegions = [];
+      const openIns = this.findAllInstances(line, openCommentChars);
+      const closeIns = this.findAllInstances(line, closeCommentChars);
+      let activeIndex = 0; // current valid comment index in line
+      let openInd = 0; // open comment index in openIns
+      let closeInd = 0; // close comment index in closeIns
+      let region = commentOpen ? [0] : [];
+
+      while (openInd < openIns.length || closeInd < closeIns.length) {
+        const prevActive = activeIndex;
+        activeIndex = commentOpen
+          ? closeIns[closeInd++] + closeCommentChars.length
+          : openIns[openInd++];
+        if (activeIndex <= prevActive) {
+          console.error(`Comment mismatch: Line ${l + 1},  Pos ${activeIndex + 1}`);
+          activeIndex = prevActive;
+        } else {
+          region.push(activeIndex);
+          commentOpen = !commentOpen;
+        }
+        if (region.length === 2) {
+          commentRegions.push(region);
+          region = [];
+        }
+      }
+      if (region.length === 1) {
+        region.push(line.length);
+        commentRegions.push(region);
+      }
+      newLines.push(this.removeCommentRegions(line, commentRegions));
+    }
+    return newLines;
+  }
+
+  /**
+   * Return a string whose content within the regions is removed
+   * for each region, it contains two element: the index of opening comment character
+   * and the index of closing comment character
+   *
+   * @param text the text to be removed from
+   * @param regions contains all the regions of comments
+   * @returns {string}
+   */
+  public static removeCommentRegions(text: string, regions: number[][]) {
+    let newString = '';
+    let prevEnd = 0;
+    regions.forEach(arr => {
+      newString += text.slice(prevEnd, arr[0]);
+      prevEnd = arr[1];
+    });
+    newString += text.slice(prevEnd, text.length);
+    return newString;
+  }
+
+  /**
+   * Return an array of the starting indices of the substring within the text string
+   *
+   * @param text
+   * @param substring substring to search for
+   * @returns {Array<number>}
+   */
+  public static findAllInstances(text: string, substring: string): number[] {
+    const indices = [];
+    let index = text.indexOf(substring);
+    while (index !== -1) {
+      indices.push(index);
+      index = text.indexOf(substring, index + 1);
+    }
+    return indices;
+  }
+
+  /**
    * Capitalise first letter.
    *
    * @param word text to be capitalized
