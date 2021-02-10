@@ -770,6 +770,7 @@ $code-color-error: #ff4444;
     .repl-input-parent {
       padding: 0;
       margin-bottom: 0rem;
+      flex-wrap: nowrap;
     }
 
     .repl-react-ace {

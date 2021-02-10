@@ -12,7 +12,7 @@ import SideContentCanvasOutput from '../sideContent/SideContentCanvasOutput';
 import ReplInput from './ReplInput';
 import { OutputProps } from './ReplTypes';
 
-export type ReplProps = DispatchProps & StateProps;
+export type ReplProps = DispatchProps & StateProps & OwnProps;
 
 type StateProps = {
   output: InterpreterOutput[];
@@ -31,6 +31,10 @@ type DispatchProps = {
   handleReplEval: () => void;
   handleReplValueChange: (newCode: string) => void;
 };
+
+type OwnProps = {
+  replButtons: Array<JSX.Element | null>;
+}
 
 class Repl extends React.PureComponent<ReplProps, {}> {
   public constructor(props: ReplProps) {
