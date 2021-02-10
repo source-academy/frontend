@@ -170,11 +170,11 @@ export default class StringUtils {
   }
 
   /**
-   * Give an array of lines with a
-   * a subset of lines commented out
-   * by specified comment characters,
-   * return an array of lines with
-   * commented-out lines and characters
+   * Given an array of lines with a
+   * a subset of characters commented out
+   * by specified open and close comment
+   * characters, Returns an array of lines
+   * with characters inside commented regions
    * removed
    *
    * Example input:
@@ -207,16 +207,16 @@ export default class StringUtils {
     for (let l = 0; l < lines.length; l++) {
       const line = lines[l];
       const commentRegions = [];
-      const opens = this.findAllInstances(line, openCommentChars);
-      const closes = this.findAllInstances(line, closeCommentChars);
-      let activeIndex = 0,
-        oInd = 0,
-        cInd = 0;
+      const openIns = this.findAllInstances(line, openCommentChars);
+      const closeIns = this.findAllInstances(line, closeCommentChars);
+      let activeIndex = 0; // current valid comment index in line
+      let openInd = 0; // open comment index in openIns
+      let closeInd = 0; // close comment index in closeIns
       let region = commentOpen ? [0] : [];
 
-      while (oInd < opens.length || cInd < closes.length) {
+      while (openInd < openIns.length || closeInd < closeIns.length) {
         const prevActive = activeIndex;
-        activeIndex = commentOpen ? closes[cInd++] : opens[oInd++];
+        activeIndex = commentOpen ? closeIns[closeInd++] : openIns[openInd++];
         if (activeIndex <= prevActive) {
           console.error(`Comment mismatch: Line ${l + 1},  Pos ${activeIndex + 1}`);
           activeIndex = prevActive;
@@ -243,6 +243,7 @@ export default class StringUtils {
    *
    * @param text
    * @param regions
+   * @param endOffset
    * @returns
    */
   public static removeCommentRegions(text: string, regions: number[][], endOffset: number) {
