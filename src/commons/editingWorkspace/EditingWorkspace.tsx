@@ -705,7 +705,7 @@ class EditingWorkspace extends React.Component<EditingWorkspaceProps, State> {
       />
     );
 
-    return [clearButton, evalButton];
+    return [evalButton, clearButton];
   }
 }
 

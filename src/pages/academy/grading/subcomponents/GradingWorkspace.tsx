@@ -422,7 +422,7 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       />
     );
 
-    return [clearButton, evalButton];
+    return [evalButton, clearButton];
   }
 }
 
