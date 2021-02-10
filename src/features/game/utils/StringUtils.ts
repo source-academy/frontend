@@ -257,10 +257,10 @@ export default class StringUtils {
   }
 
   /**
+   * Return an array of the starting indices of the substring within the text string
    *
-   *
-   * @param text
-   * @param substring
+   * @param text 
+   * @param substring substring to search for
    * @returns {Array<number>}
    */
   public static findAllInstances(text: string, substring: string): number[] {

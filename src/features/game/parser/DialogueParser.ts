@@ -4,7 +4,6 @@ import { mapValues } from '../utils/GameUtils';
 import StringUtils from '../utils/StringUtils';
 import ActionParser from './ActionParser';
 import Parser from './Parser';
-import PromptParser from './PromptParser';
 import SpeakerParser from './SpeakerParser';
 
 /**
@@ -94,25 +93,6 @@ export default class DialogueParser {
         case isGotoLabel(rawStr):
           dialogueLines[dialogueLines.length - 1].goto = rawStr.split(' ')[1];
           break;
-<<<<<<< Updated upstream
-=======
-        case isPrompt(rawStr):
-          // const prompt: DialogueLine = {
-          //   line: rawStr.slice(rawStr.indexOf('prompt:') + 7).trim(),
-          //   choices: new Map<string, string>()
-          // };
-          // while (lines[currIndex + 1] && isPromptChoice(lines[currIndex + 1])) {
-          //   currIndex++;
-          //   const choiceStr = lines[currIndex];
-          //   const choiceArr = choiceStr.split('->');
-          //   const option = choiceArr[0].trim();
-          //   const goto = choiceArr[1].trim().split(' ')[1];
-          //   if (prompt.choices) prompt.choices.set(option, goto);
-          // }
-          const prompt = PromptParser.parse(lines, currIndex);
-          dialogueLines.push(prompt);
-          break;
->>>>>>> Stashed changes
         case isActionLabel(rawStr):
           const lastLine = dialogueLines[dialogueLines.length - 1];
           !lastLine.actionIds && (lastLine.actionIds = []);
@@ -141,7 +121,3 @@ const isInteger = (line: string) => new RegExp(/^[0-9]+$/).test(line);
 const isGotoLabel = (line: string) => new RegExp(/^goto [0-9]+$/).test(line);
 const isActionLabel = (line: string) => line && (line[0] === '\t' || line.slice(0, 4) === '    ');
 const isSpeaker = (line: string) => line && line[0] === '@';
-<<<<<<< Updated upstream
-=======
-const isPrompt = (line: string) => line.trim().startsWith('prompt:');
->>>>>>> Stashed changes
