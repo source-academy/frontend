@@ -34,7 +34,12 @@ export const generateAchievementTasks = (
   focusState: [number, any]
 ) =>
   taskUuids.map(taskUuid => (
-    <AchievementTask key={taskUuid} uuid={taskUuid} filterStatus={filterStatus} focusState={focusState} />
+    <AchievementTask
+      key={taskUuid}
+      uuid={taskUuid}
+      filterStatus={filterStatus}
+      focusState={focusState}
+    />
   ));
 
 function Dashboard(props: DispatchProps & StateProps) {

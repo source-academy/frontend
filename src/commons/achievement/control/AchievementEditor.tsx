@@ -35,7 +35,12 @@ function AchievementEditor(props: AchievementEditorProps) {
    */
   const generateEditableCards = (achievementUuids: number[]) =>
     achievementUuids.map(uuid => (
-      <EditableCard key={uuid} uuid={uuid} releaseUuid={releaseUuid} requestPublish={requestPublish} />
+      <EditableCard
+        key={uuid}
+        uuid={uuid}
+        releaseUuid={releaseUuid}
+        requestPublish={requestPublish}
+      />
     ));
 
   return (

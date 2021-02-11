@@ -219,7 +219,9 @@ class AchievementInferencer {
     const hasTarget = (node: AchievementNode) => node.children.has(targetUuid);
 
     const sanitizeNode = (node: AchievementNode) => {
-      const newPrerequisiteUuids = node.achievement.prerequisiteUuids.filter(uuid => uuid !== targetUuid);
+      const newPrerequisiteUuids = node.achievement.prerequisiteUuids.filter(
+        uuid => uuid !== targetUuid
+      );
       node.achievement.prerequisiteUuids = newPrerequisiteUuids;
 
       return new AchievementNode(node.achievement);
@@ -445,7 +447,8 @@ class AchievementInferencer {
    */
   public listAvailablePrerequisiteUuids(uuid: number) {
     return this.getAllAchievementUuids().filter(
-      target => target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid)
+      target =>
+        target !== uuid && !this.isDescendant(uuid, target) && !this.isDescendant(target, uuid)
     );
   }
 

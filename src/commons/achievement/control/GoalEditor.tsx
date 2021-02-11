@@ -35,7 +35,12 @@ function GoalEditor(props: GoalEditorProps) {
    */
   const generateEditableGoals = (goalUuids: number[]) =>
     goalUuids.map(uuid => (
-      <EditableGoal key={uuid} uuid={uuid} releaseUuid={releaseUuid} requestPublish={requestPublish} />
+      <EditableGoal
+        key={uuid}
+        uuid={uuid}
+        releaseUuid={releaseUuid}
+        requestPublish={requestPublish}
+      />
     ));
 
   return (

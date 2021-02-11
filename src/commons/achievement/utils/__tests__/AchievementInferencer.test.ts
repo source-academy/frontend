@@ -307,7 +307,11 @@ describe('Achievement Inferencer Getter', () => {
   });
 
   test('List prerequisite goals', () => {
-    const testAchievement1: AchievementItem = { ...testAchievement, uuid: 1, prerequisiteUuids: [2] };
+    const testAchievement1: AchievementItem = {
+      ...testAchievement,
+      uuid: 1,
+      prerequisiteUuids: [2]
+    };
     const testAchievement2: AchievementItem = { ...testAchievement, uuid: 2, goalUuids: [2, 1] };
 
     const testGoal1: AchievementGoal = { ...testGoal, uuid: 1 };
@@ -377,7 +381,11 @@ describe('Goal ID to Text', () => {
 });
 
 describe('Achievement Prerequisite System', () => {
-  const testAchievement1: AchievementItem = { ...testAchievement, uuid: 1, prerequisiteUuids: [2, 3] };
+  const testAchievement1: AchievementItem = {
+    ...testAchievement,
+    uuid: 1,
+    prerequisiteUuids: [2, 3]
+  };
   const testAchievement2: AchievementItem = { ...testAchievement, uuid: 2 };
   const testAchievement3: AchievementItem = { ...testAchievement, uuid: 3, prerequisiteUuids: [4] };
   const testAchievement4: AchievementItem = { ...testAchievement, uuid: 4, prerequisiteUuids: [5] };
@@ -475,8 +483,16 @@ describe('Achievement Display Deadline', () => {
   const closerUnexpiredDeadline = new Date(2120, 1, 1);
   const unexpiredDeadline = new Date(2220, 1, 1);
 
-  const testAchievement1: AchievementItem = { ...testAchievement, uuid: 1, prerequisiteUuids: [2, 5] };
-  const testAchievement2: AchievementItem = { ...testAchievement, uuid: 2, prerequisiteUuids: [3, 4] };
+  const testAchievement1: AchievementItem = {
+    ...testAchievement,
+    uuid: 1,
+    prerequisiteUuids: [2, 5]
+  };
+  const testAchievement2: AchievementItem = {
+    ...testAchievement,
+    uuid: 2,
+    prerequisiteUuids: [3, 4]
+  };
   const testAchievement3: AchievementItem = { ...testAchievement, uuid: 3 };
   const testAchievement4: AchievementItem = { ...testAchievement, uuid: 4 };
   const testAchievement5: AchievementItem = { ...testAchievement, uuid: 5 };
