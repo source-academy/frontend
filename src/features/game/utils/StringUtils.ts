@@ -206,7 +206,7 @@ export default class StringUtils {
 
     for (let l = 0; l < lines.length; l++) {
       const line = lines[l];
-      const commentRegions = [];
+      const commentRegions: [number, number][] = [];
       const openIns = this.findAllInstances(line, openCommentChars);
       const closeIns = this.findAllInstances(line, closeCommentChars);
       let activeIndex = 0; // current valid comment index in line
@@ -227,13 +227,12 @@ export default class StringUtils {
           commentOpen = !commentOpen;
         }
         if (region.length === 2) {
-          commentRegions.push(region);
+          commentRegions.push([region[0], region[1]]);
           region = [];
         }
       }
       if (region.length === 1) {
-        region.push(line.length);
-        commentRegions.push(region);
+        commentRegions.push([region[0], line.length]);
       }
       newLines.push(this.removeCommentRegions(line, commentRegions));
     }
@@ -242,14 +241,21 @@ export default class StringUtils {
 
   /**
    * Return a string whose content within the regions is removed
-   * for each region, it contains two element: the index of opening comment character
-   * and the index of closing comment character
+   * for each region; regions contain two elements: the index of
+   * the first character to ignore, and the index of the last character
+   * to ignore + 1, in the text string
+   *
+   * Example input (comment characters: '/!' and '!/'):
+   * removeCommentRegions('Sour/!ce Academ!/y', [[4,17]])
+   *
+   * Example output:
+   * 'Soury'
    *
    * @param text the text to be removed from
    * @param regions contains all the regions of comments
    * @returns {string}
    */
-  public static removeCommentRegions(text: string, regions: number[][]) {
+  public static removeCommentRegions(text: string, regions: [number, number][]) {
     let newString = '';
     let prevEnd = 0;
     regions.forEach(arr => {

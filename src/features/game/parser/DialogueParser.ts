@@ -95,13 +95,13 @@ export default class DialogueParser {
           dialogueLines[dialogueLines.length - 1].goto = rawStr.split(' ')[1];
           break;
         case isPrompt(rawStr):
-          const promptTitle = rawStr.trim();
-          const promptChoices: string[] = [];
+          const rawTitle = rawStr;
+          const rawChoices: string[] = [];
           while (lines[currIndex + 1] && isPromptChoice(lines[currIndex + 1])) {
             currIndex++;
-            promptChoices.push(lines[currIndex].trim());
+            rawChoices.push(lines[currIndex].trim());
           }
-          const prompt = PromptParser.parsePrompt(promptTitle, promptChoices);
+          const prompt = PromptParser.parsePrompt(rawTitle, rawChoices);
           dialogueLines[dialogueLines.length - 1].prompt = prompt;
           break;
         case isActionLabel(rawStr):
@@ -133,4 +133,4 @@ const isGotoLabel = (line: string) => new RegExp(/^goto [0-9]+$/).test(line);
 const isActionLabel = (line: string) => line && (line[0] === '\t' || line.slice(0, 4) === '    ');
 const isSpeaker = (line: string) => line && line[0] === '@';
 const isPrompt = (line: string) => line.trim().startsWith('prompt:');
-const isPromptChoice = (line: string) => line.includes('->') && line.includes('goto');
+const isPromptChoice = (line: string) => new RegExp(/-> +goto/).test(line);
