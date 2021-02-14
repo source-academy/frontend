@@ -57,30 +57,30 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     // where x,y is in [0, 1]
     // evaluator has a side effect of recording the max/min
     // x and y value for adjusting the position
-    function clip(pt) {
-      if (scaleMode == 'none') {
-        if (pt.getX() < 0 || pt.getX() > 1
-          || pt.getY() < 0 || pt.getY() > 1
-          || pt.getZ() < 0 || pt.getZ() > 1) {
-          var wrapper = new Point()
-          wrapper.setColor([255,255,255,0])
-          wrapper.setX(pt.getX())
-          wrapper.setY(pt.getY())
-          wrapper.setZ(pt.getZ())
-          return wrapper
-        } else {
-          return pt
-        }
-      } else {
-        return pt
-      }
-    }
+    // function clip(pt) {
+    //   if (scaleMode == 'none') {
+    //     if (pt.getX() < 0 || pt.getX() > 1
+    //       || pt.getY() < 0 || pt.getY() > 1
+    //       || pt.getZ() < 0 || pt.getZ() > 1) {
+    //       var wrapper = new Point()
+    //       wrapper.setColor([255,255,255,0])
+    //       wrapper.setX(pt.getX())
+    //       wrapper.setY(pt.getY())
+    //       wrapper.setZ(pt.getZ())
+    //       return wrapper
+    //     } else {
+    //       return pt
+    //     }
+    //   } else {
+    //     return pt
+    //   }
+    // }
     
     curveObject = {}
     curvePosArray = []
     curveColorArray = []
     for (var i = 0; i <= num; i += 1) {
-      var point = clip(func(i / num))
+      var point = func(i / num)
       if (
         !(point instanceof Point)
       ) {
