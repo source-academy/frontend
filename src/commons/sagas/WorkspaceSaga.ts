@@ -695,6 +695,8 @@ export function* evalCode(
     paused: take(BEGIN_DEBUG_PAUSE)
   });
 
+  console.log(result);
+
   if (interrupted) {
     interrupt(context);
     /* Redundancy, added ensure that interruption results in an error. */

@@ -22,6 +22,7 @@ export enum SideContentType {
   grading = 'grading',
   introduction = 'introduction',
   inspector = 'inspector',
+  module = 'module',
   questionOverview = 'question_overview',
   remoteExecution = 'remote_execution',
   mobileEditor = 'mobile_editor',
@@ -55,4 +56,20 @@ export type SideContentTab = {
   toSpawn: (context: DebuggerContext) => boolean;
   id?: SideContentType;
   disabled?: boolean;
+};
+
+export type ModuleSideContent = {
+  label: string;
+  iconName: IconName;
+  /**
+   * @todo Convert the any type for React parameter to React type
+   * @todo Convert the any type for props parameter
+   */
+  body: (React: any) => (props: any) => JSX.Element;
+  toSpawn: (context: DebuggerContext) => boolean;
+};
+
+export type Modules = {
+  functions: { [key: string]: Function };
+  sideContents: ModuleSideContent[];
 };
