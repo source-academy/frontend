@@ -8,7 +8,7 @@ import SideContentLeaderboardCard from './SideContentLeaderboardCard';
 export type SideContentContestLeaderboardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (studentUsername: string, program: string) => void;
+  handleContestEntryClick: (submission_id: number, answer: string) => void;
 };
 
 type StateProps = {
@@ -44,7 +44,7 @@ const SideContentContestLeaderboard: React.FunctionComponent<SideContentContestL
         {contestEntryHeader}
         {orderedContestEntries.map((contestEntry: ContestEntry, index: number) => (
           <SideContentLeaderboardCard
-            key={contestEntry.studentUsername}
+            key={contestEntry.submission_id}
             handleContestEntryClick={handleContestEntryClick}
             contestEntry={contestEntry}
             rank={index + 1}

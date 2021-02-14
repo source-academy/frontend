@@ -7,12 +7,13 @@ import { ContestEntry, ContestVotingSubmission } from '../assessment/AssessmentT
 type SideContentConstestEntryCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (studentUsername: string, program: string) => void;
+  handleContestEntryClick: (submission_id: number, answer: string) => void;
 };
 
 type StateProps = {
-  handleVotingSubmissionChange: (entryId: string, rank: number) => void;
+  handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   contestEntry: ContestEntry;
+  entryNumber: number;
   votingSubmission: ContestVotingSubmission;
   maxRank: number;
 };
@@ -23,6 +24,7 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
     handleVotingSubmissionChange,
     votingSubmission,
     contestEntry,
+    entryNumber,
     maxRank
   } = props;
 
@@ -31,18 +33,20 @@ const SideContentContestEntryCard: React.FunctionComponent<SideContentConstestEn
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}
-        onClick={() => handleContestEntryClick(contestEntry.studentUsername, contestEntry.program)}
+        onClick={() =>
+          handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
+        }
       >
-        <Pre className="contestentry-entryid">{contestEntry.studentUsername}</Pre>
+        <Pre className="contestentry-entryid">{entryNumber}</Pre>
         <Pre className="contestentry-rank">
           <NumericInput
-            value={votingSubmission[contestEntry.studentUsername]}
+            value={votingSubmission[contestEntry.submission_id] ?? contestEntry.score}
             onValueChange={(rank: number) =>
-              handleVotingSubmissionChange(contestEntry.studentUsername, rank)
+              handleVotingSubmissionChange(contestEntry.submission_id, rank)
             }
             min={1}
             max={maxRank}
-            placeholder={`Enter rank for ${contestEntry.studentUsername}`}
+            placeholder={`Enter rank for entry ${contestEntry.submission_id}`}
             allowNumericCharactersOnly
             fill
           />

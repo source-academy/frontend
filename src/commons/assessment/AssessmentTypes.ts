@@ -165,8 +165,13 @@ export type Testcase = {
 };
 
 export type ContestEntry = {
-  studentUsername: string;
-  program: string; //contest entry program to be input into editor
+  submission_id: number;
+  answer: Answer; //contest entry program to be input into editor
+  score?: number;
+};
+
+export type Answer = {
+  code: string;
 };
 
 export type ContestVotingSubmission = {

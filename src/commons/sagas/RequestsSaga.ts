@@ -353,15 +353,15 @@ export const getContestEntries = async (
     return [];
   }
 
-  return ((await resp?.json())?.contestEntries as ContestEntry[]) ?? [];
+  return ((await resp?.json()) as ContestEntry[]) ?? [];
   // return [
   //   {
-  //     studentUsername: 'e0111x',
-  //     program: "console.log('hello world')"
+  //     submission_id: 'e0111x',
+  //     answer: "console.log('hello world')"
   //   },
   //   {
-  //     studentUsername: 'e0222x',
-  //     program: 'Student 2'
+  //     submission_id: 'e0222x',
+  //     answer: 'Student 2'
   //   }
   // ];
 };

@@ -7,7 +7,7 @@ import { ContestEntry } from '../assessment/AssessmentTypes';
 type SideContentLeaderboardCardProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (studentUsername: string, program: string) => void;
+  handleContestEntryClick: (submission_id: number, answer: string) => void;
 };
 
 type StateProps = {
@@ -23,9 +23,11 @@ const SideContentLeaderboardCard: React.FunctionComponent<SideContentLeaderboard
       <Card
         className={Classes.INTERACTIVE}
         elevation={Elevation.ONE}
-        onClick={() => handleContestEntryClick(contestEntry.studentUsername, contestEntry.program)}
+        onClick={() =>
+          handleContestEntryClick(contestEntry.submission_id, contestEntry.answer.code ?? '')
+        }
       >
-        <Pre className="contestentry-entryid">{contestEntry.studentUsername}</Pre>
+        <Pre className="contestentry-entryid">{contestEntry.submission_id}</Pre>
         <Pre className="contestentry-rank">{rank}</Pre>
       </Card>
     </div>

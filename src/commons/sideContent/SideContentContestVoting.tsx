@@ -8,11 +8,11 @@ import SideContentContestEntryCard from './SideContentContestEntryCard';
 export type SideContentContestVotingProps = DispatchProps & StateProps;
 
 type DispatchProps = {
-  handleContestEntryClick: (studentUsername: string, program: string) => void;
+  handleContestEntryClick: (submission_id: number, answer: string) => void;
 };
 
 type StateProps = {
-  handleVotingSubmissionChange: (entryId: string, rank: number) => void;
+  handleVotingSubmissionChange: (entryId: number, rank: number) => void;
   votingSubmission: ContestVotingSubmission;
   contestEntries: ContestEntry[];
 };
@@ -56,9 +56,10 @@ const SideContentContestVoting: React.FunctionComponent<SideContentContestVoting
     () => (
       <div>
         {contestEntryHeader}
-        {contestEntries.map((contestEntry: ContestEntry) => (
+        {contestEntries.map((contestEntry: ContestEntry, index) => (
           <SideContentContestEntryCard
-            key={contestEntry.studentUsername}
+            entryNumber={index + 1}
+            key={contestEntry.submission_id}
             handleContestEntryClick={handleContestEntryClick}
             votingSubmission={votingSubmission}
             handleVotingSubmissionChange={handleVotingSubmissionChange}

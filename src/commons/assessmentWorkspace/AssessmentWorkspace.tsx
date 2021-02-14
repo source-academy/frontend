@@ -427,7 +427,6 @@ class AssessmentWorkspace extends React.Component<
       }
     } else if (question.type === QuestionTypes.voting) {
       const questionData = question as IContestVotingQuestion;
-      console.log(questionData);
       contestEntries = questionData.contestEntries;
     }
 
@@ -455,19 +454,19 @@ class AssessmentWorkspace extends React.Component<
   ) => {
     const isGraded = props.assessment!.questions[questionId].grader !== undefined;
     const isContestVoting = props.assessment!.questions[0]?.type === 'voting';
-    const handleContestEntryClick = (studentUsername: string, program: string) => {
-      this.props.handleEditorValueChange(program);
+    const handleContestEntryClick = (submission_id: number, answer: string) => {
+      this.props.handleEditorValueChange(answer);
     };
 
     // to be synced up with the Elixir backend and API calls be made
     const dummyEntries: ContestEntry[] = [
       {
-        studentUsername: 'e0111x',
-        program: "console.log('hello world')"
+        submission_id: 1,
+        answer: { code: "console.log('hello world')" }
       },
       {
-        studentUsername: 'e0222x',
-        program: 'Student 2'
+        submission_id: 2,
+        answer: { code: 'Student 2' }
       }
     ];
 
