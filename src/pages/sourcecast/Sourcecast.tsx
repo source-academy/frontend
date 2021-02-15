@@ -209,8 +209,7 @@ class Sourcecast extends React.Component<SourcecastProps> {
     };
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
-        replButtons: [evalButton, clearButton]
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
       customEditor: <SourceRecorderEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -227,7 +226,8 @@ class Sourcecast extends React.Component<SourcecastProps> {
         handleReplValueChange: this.props.handleReplValueChange,
         sourceChapter: this.props.sourceChapter,
         sourceVariant: this.props.sourceVariant,
-        externalLibrary: this.props.externalLibraryName
+        externalLibrary: this.props.externalLibraryName,
+        replButtons: [evalButton, clearButton]
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
