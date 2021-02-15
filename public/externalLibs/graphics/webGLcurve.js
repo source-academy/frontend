@@ -63,6 +63,9 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       max_y = Math.max(max_y, y)
       min_z = Math.min(min_z, z)
       max_z = Math.max(max_z, z)
+      if (Math.max(max_x, max_y, max_z, -min_x, -min_y, -min_z) > Math.pow(10, 32)) {
+        throw "The absolute value of the coordinates of the curve is too big!"
+      }
     }
   }
   evaluator(numPoints, func)
