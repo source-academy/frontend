@@ -837,7 +837,7 @@ function drawCurve(drawMode, curveObject, space) {
 
     var colors = []
     for (var i = 0; i < 16; i++) {
-      colors.push(0, 0, 0, 0)
+      colors.push(0.6, 0.6, 0.6, 0)
     }
     colorBuffer = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
