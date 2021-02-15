@@ -138,6 +138,10 @@ $shadow-light: rgba(0, 0, 0, 0.2);
       opacity: 0.8; // for background shadow to pass through
     }
 
+    .Repl {
+      margin: 0;
+    }
+
     canvas {
       // only rune shown in repl so this override will not affect others
       width: 100% !important;
