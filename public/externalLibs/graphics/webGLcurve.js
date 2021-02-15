@@ -202,30 +202,6 @@ function draw_connected(num) {
 
 /**
  * returns a function that turns a given Curve into a Drawing, 
- * by sampling the Curve at <CODE>num</CODE> sample points.
- * The Drawing consists of isolated points, and does not connect them.
- * When a program evaluates to a Drawing, the Source system
- * displays it graphically, in a window, instead of textually.
- * The parts between (0,0) and (1,1) of the resulting Drawing 
- * are shown in the window.
- * @param {Number} num - determines the number of points to be 
- * sampled. Including 0 and 1,
- * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function of type Curve → Drawing
- */
-function draw_points_on(num) {
-  return curve => 
-	generateCurve('none', 'points', num, curve, '2D')
-}
-
-function draw_points_full_view_proportional(num) {
-  return function(func) {
-    return generateCurve('fit', 'points', num, func, '2D', true)
-  }
-}
-
-/**
- * returns a function that turns a given Curve into a Drawing, 
  * by sampling the Curve at <CODE>num</CODE> sample points 
  * and connecting each pair with a line. 
  * When a program evaluates to a Drawing, the Source system
@@ -263,6 +239,56 @@ function draw_connected_full_view_proportional(num) {
   }
 }
 
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points.
+ * The Drawing consists of isolated points, and does not connect them.
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The parts between (0,0) and (1,1) of the resulting Drawing 
+ * are shown in the window.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
+function draw_points_on(num) {
+  return curve => 
+	generateCurve('none', 'points', num, curve, '2D')
+}
+
+/**
+ * returns a function that turns a given Curve into a Drawing, 
+ * by sampling the Curve at <CODE>num</CODE> sample points.
+ * The Drawing consists of isolated points, and does not connect them.
+ * When a program evaluates to a Drawing, the Source system
+ * displays it graphically, in a window, instead of textually.
+ * The Drawing is scaled proportionally with its size maximized 
+ * to fit entirely inside the window, with some padding.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
+function draw_points_full_view_proportional(num) {
+  return function(func) {
+    return generateCurve('fit', 'points', num, func, '2D', true)
+  }
+}
+
+/**
+ * returns a function that turns a given 3D Curve into a Drawing, 
+ * by sampling the 3D Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system 
+ * displays it graphically, in a window, instead of textually. 
+ * The parts between (0,0,0) and (1,1,1) of the resulting 
+ * Drawing are shown within the unit cube.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
 function draw_3D_connected(num) {
   return function(func) {
     return generateCurve('none', 'lines', num, func, '3D')
@@ -270,24 +296,77 @@ function draw_3D_connected(num) {
   }
 }
 
+/**
+ * returns a function that turns a given 3D Curve into a Drawing, 
+ * by sampling the 3D Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system 
+ * displays it graphically, in a window, instead of textually. 
+ * The Drawing is stretched or shrunk 
+ * to show the full curve 
+ * and maximize its width and height within the cube.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
 function draw_3D_connected_full_view(num) {
   return function(func) {
     return generateCurve('stretch', 'lines', num, func, '3D')
   }
 }
 
+/**
+ * returns a function that turns a given 3D Curve into a Drawing, 
+ * by sampling the 3D Curve at <CODE>num</CODE> sample points 
+ * and connecting each pair with a line. 
+ * When a program evaluates to a Drawing, the Source system 
+ * displays it graphically, in a window, instead of textually. 
+ * The Drawing is scaled proportionally with its size maximized 
+ * to fit entirely inside the cube.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
 function draw_3D_connected_full_view_proportional(num) {
   return function(func) {
     return generateCurve('fit', 'lines', num, func, '3D')
   }
 }
 
+/**
+ * returns a function that turns a given 3D Curve into a Drawing, 
+ * by sampling the 3D Curve at <CODE>num</CODE> sample points. 
+ * The Drawing consists of isolated points, and does not connect them. 
+ * When a program evaluates to a Drawing, the Source system 
+ * displays it graphically, in a window, instead of textually. 
+ * The parts between (0,0,0) and (1,1,1) of the resulting 
+ * Drawing are shown within the unit cube.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
 function draw_3D_points_on(num) {
   return function(func) {
     return generateCurve('none', 'points', num, func, '3D')
   }
 }
 
+/**
+ * returns a function that turns a given 3D Curve into a Drawing, 
+ * by sampling the 3D Curve at <CODE>num</CODE> sample points. 
+ * The Drawing consists of isolated points, and does not connect them. 
+ * When a program evaluates to a Drawing, the Source system 
+ * displays it graphically, in a window, instead of textually. 
+ * The Drawing is scaled proportionally with its size maximized 
+ * to fit entirely inside the cube.
+ * @param {Number} num - determines the number of points to be 
+ * sampled. Including 0 and 1,
+ * there are <CODE>num + 1</CODE> evenly spaced sample points.
+ * @return {function} function of type Curve → Drawing
+ */
 function draw_3D_points_full_view_proportional(num) {
   return function(func) {
     return generateCurve('fit', 'points', num, func, '3D')
@@ -304,32 +383,45 @@ function make_point(x, y) {
   return new Point(x, y, 0, 0, 0, 0)
 }
 
+/**
+ * makes a 3D Point with given x, y and z coordinates
+ * @param {Number} x - x-coordinate of new point
+ * @param {Number} y - y-coordinate of new point
+ * @param {Number} z - z-coordinate of new point
+ * @returns {Point} with x, y and z as coordinates
+ */
 function make_3D_point(x, y, z) {
   return new Point(x, y, z, 0, 0, 0)
 }
 
 /**
- * makes a colored Point with given x and y coordinates, and RGB values
+ * makes a color Point with given x and y coordinates, 
+ * and RGB values ranging from 0 to 255. 
+ * Any input lower than 0 for RGB will be rounded up to 0, 
+ * and any input higher than 255 will be rounded down to 255.
  * @param {Number} x - x-coordinate of new point
  * @param {Number} y - y-coordinate of new point
  * @param {Number} r - red component of new point
  * @param {Number} g - green component of new point
  * @param {Number} b - blue component of new point
- * @returns {Point} with x and y as coordinates, and r, g, and b as RGB values
+ * @returns {Point} with x and y as coordinates, and r, g and b as RGB values
  */
 function make_color_point(x, y, r, g, b){
   return new Point(x, y, 0, r/255, g/255, b/255)
 }
 
 /**
- * makes a colored Point with given x and y coordinates, and RGB values
+ * makes a 3D color Point with given x, y and z coordinates, 
+ * and RGB values ranging from 0 to 255. 
+ * Any input lower than 0 for RGB will be rounded up to 0, 
+ * and any input higher than 255 will be rounded down to 255.
  * @param {Number} x - x-coordinate of new point
  * @param {Number} y - y-coordinate of new point
  * @param {Number} z - z-coordinate of new point
  * @param {Number} r - red component of new point
  * @param {Number} g - green component of new point
  * @param {Number} b - blue component of new point
- * @returns {Point} with x, y and z as coordinates, and r, g, and b as RGB values
+ * @returns {Point} with x, y and z as coordinates, and r, g and b as RGB values
  */
 function make_3D_color_point(x, y, z, r, g, b){
   return new Point(x, y, z, r/255, g/255, b/255)
