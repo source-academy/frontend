@@ -114,9 +114,9 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       translate_y = (min_y + max_y) / 2
       translate_z = (min_z + max_z) / 2
     } else if (scaleMode == 'stretch') {
-      var x_scale = max_x === min_x ? 1 : (max_x - min_x)
-      var y_scale = max_y === min_y ? 1 : (max_y - min_y)
-      var z_scale = max_z === min_z ? 1 : (max_z - min_z)
+      var scale_x = max_x === min_x ? 1 : (max_x - min_x)
+      var scale_y = max_y === min_y ? 1 : (max_y - min_y)
+      var scale_z = max_z === min_z ? 1 : (max_z - min_z)
       translate_x = (min_x + max_x) / 2
       translate_y = (min_y + max_y) / 2
       translate_z = (min_z + max_z) / 2
