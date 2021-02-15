@@ -34,25 +34,48 @@ class Point{
 
 }
 
-function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
-  curveColor = t => func(t).getColor()
+var cubeRotation = 0 //Used for testing
+function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) {
   const viewport_size = 600
   const frame = open_pixmap('frame', viewport_size, viewport_size, true);
   var curvePosArray = []
   var curveColorArray = []
+  var drawCubeArray = []
   var transMat = mat4.create()
+  var projMat = mat4.create()
   var curveObject = {}
   // initialize the min/max to extreme values
   var min_x = Infinity
   var max_x = -Infinity
   var min_y = Infinity
   var max_y = -Infinity
+  var min_z = Infinity
+  var max_z = -Infinity
 
   function evaluator(num, func) {
     // func should take input of [0, 1] and output pair(x, y)
     // where x,y is in [0, 1]
     // evaluator has a side effect of recording the max/min
     // x and y value for adjusting the position
+    // function clip(pt) {
+    //   if (scaleMode == 'none') {
+    //     if (pt.getX() < 0 || pt.getX() > 1
+    //       || pt.getY() < 0 || pt.getY() > 1
+    //       || pt.getZ() < 0 || pt.getZ() > 1) {
+    //       var wrapper = new Point()
+    //       wrapper.setColor([255,255,255,0])
+    //       wrapper.setX(pt.getX())
+    //       wrapper.setY(pt.getY())
+    //       wrapper.setZ(pt.getZ())
+    //       return wrapper
+    //     } else {
+    //       return pt
+    //     }
+    //   } else {
+    //     return pt
+    //   }
+    // }
+    
     curveObject = {}
     curvePosArray = []
     curveColorArray = []
@@ -65,55 +88,149 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
       }
       var x = point.getX() * 2 - 1
       var y = point.getY() * 2 - 1
-      curvePosArray.push(x, y)
-      var colorArray = curveColor(i / num)
-      var color_r = colorArray[0]
-      var color_g = colorArray[1]
-      var color_b = colorArray[2]
-      var color_a = colorArray[3]
+      var z = point.getZ() * 2 - 1
+      space == '2D' ? curvePosArray.push(x, y) : curvePosArray.push(x, y, z)
+      var color_r = point.getColor()[0]
+      var color_g = point.getColor()[1]
+      var color_b = point.getColor()[2]
+      var color_a = point.getColor()[3]
       curveColorArray.push(color_r, color_g, color_b, color_a)
       min_x = Math.min(min_x, x)
       max_x = Math.max(max_x, x)
       min_y = Math.min(min_y, y)
       max_y = Math.max(max_y, y)
+      min_z = Math.min(min_z, z)
+      max_z = Math.max(max_z, z)
     }
   }
-
   evaluator(numPoints, func)
 
   if (isFullView) {
-    var vert_padding = 0.05 * (max_y - min_y)
-    min_y -= vert_padding
-    max_y += vert_padding
     var horiz_padding = 0.05 * (max_x - min_x)
     min_x -= horiz_padding
     max_x += horiz_padding
+    var vert_padding = 0.05 * (max_y - min_y)
+    min_y -= vert_padding
+    max_y += vert_padding
+    var depth_padding = 0.05 * (max_z - min_z)
+    min_z -= depth_padding
+    max_z += depth_padding
+  }
+
+  // box generation
+  if(space == '3D'){
+    drawCubeArray.push(
+      -1, 1, 1, -1, -1, 1,
+      -1, -1, -1, -1, 1, -1,
+      1, 1, -1, 1, -1, -1,
+      -1, -1, -1, 1, -1, -1,
+      1, -1, 1, -1, -1, 1,
+      1, -1, 1, 1, 1, 1,
+      -1, 1, 1, -1, 1, -1,
+      1, 1, -1, 1, 1, 1
+    )
+    var temp = []
+    var scale_x, scale_y, scale_z
+    scale_x = scale_y = scale_z = 2
+    var translate_x, translate_y, translate_z
+    translate_x = translate_y = translate_z = 0
+    if (scaleMode == 'fit') {
+      var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
+      scale = scale === 0 ? 1 : scale;
+      scale_x = scale_y = scale_z = scale
+      translate_x = (min_x + max_x) / 2
+      translate_y = (min_y + max_y) / 2
+      translate_z = (min_z + max_z) / 2
+    } else if (scaleMode == 'stretch') {
+      var x_scale = max_x === min_x ? 1 : (max_x - min_x)
+      var y_scale = max_y === min_y ? 1 : (max_y - min_y)
+      var z_scale = max_z === min_z ? 1 : (max_z - min_z)
+      translate_x = (min_x + max_x) / 2
+      translate_y = (min_y + max_y) / 2
+      translate_z = (min_z + max_z) / 2
+    }
+
+    for (var i = 0; i < drawCubeArray.length; i++) {
+      if (i % 3 == 0) {
+        var val = drawCubeArray[i];
+        val /= 2 / scale_x
+        val += translate_x
+        temp.push(val)
+      } else if (i % 3 == 1) {
+        var val = drawCubeArray[i];
+        val /= 2 / scale_y
+        val += translate_y
+        temp.push(val)
+      } else {
+        var val = drawCubeArray[i];
+        val /= 2 / scale_z
+        val += translate_z
+        temp.push(val)
+      }
+    }
+    drawCubeArray = temp
+    var scale = Math.sqrt(1 / 3.1) 
+    mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
+    curveObject.drawCube = drawCubeArray
+
+    mat4.translate(transMat, transMat, [0, 0, -5])
+    //Rotation
+    mat4.rotate(transMat,  // destination matrix
+      transMat,  // matrix to rotate
+      -(Math.PI/2),// amount to rotate in radians
+      [1, 0, 0])     // axis to rotate around X (static)
+    mat4.rotate(transMat,  // destination matrix
+    transMat,  // matrix to rotate
+    // cubeRotation * .7,// amount to rotate in radians
+    -0.5,// amount to rotate in radians
+    [0, 0, 1])     // axis to rotate around Z (dynamic)
+    cubeRotation += 0.1 * Math.PI
   }
 
   if (scaleMode == 'fit') {
-    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2]
-    var scale = Math.max(max_x - min_x, max_y - min_y)
+    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var scale = Math.max(max_x - min_x, max_y - min_y, max_z - min_z)
     scale = scale === 0 ? 1 : scale;
-    mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
+    space == '3D' 
+      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 2 / scale))
+      : mat4.scale(transMat, transMat, vec3.fromValues(2 / scale, 2 / scale, 0))
                                      // use 2 because the value is in [-1, 1]
-    mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    space == '3D' 
+      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
+      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else if (scaleMode == 'stretch') {
-    var center = [(min_x + max_x) / 2, (min_y + max_y) / 2]
+    var center = space == '3D' ? [(min_x + max_x) / 2, (min_y + max_y) / 2, (min_z + max_z) / 2] : [(min_x + max_x) / 2, (min_y + max_y) / 2]
     var x_scale = max_x === min_x ? 1 : (max_x - min_x)
     var y_scale = max_y === min_y ? 1 : (max_y - min_y)
-    mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
+    var z_scale = max_z === min_z ? 1 : (max_z - min_z)
+    space == '3D'
+      ? mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 2 / z_scale))
+      : mat4.scale(transMat, transMat, vec3.fromValues(2 / x_scale, 2 / y_scale, 0))
                                     // use 2 because the value is in [-1, 1]
-    mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
+    space == '3D' 
+      ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
+      : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
   } else {
     // do nothing for normal situations
   }
+
+  if(space == '3D'){
+    const fieldOfView = 45 * Math.PI / 180;   // in radians
+    const aspect = gl.canvas.width / gl.canvas.height;
+    const zNear = 0;
+    const zFar = 50.0;
+    mat4.perspective(projMat, fieldOfView, aspect, zNear, zFar);
+  }
+
   clear_viewport()
+  gl.uniformMatrix4fv(u_projectionMatrix, false, projMat)
   gl.uniformMatrix4fv(u_transformMatrix, false, transMat)
   curveObject.curvePos = curvePosArray
   curveObject.color = curveColorArray
-  drawCurve(drawMode, curveObject)
-  copy_viewport(gl.canvas, frame);
-  return new ShapeDrawn(frame);
+  curveObject.drawCube = drawCubeArray
+  drawCurve(drawMode, curveObject, space)
+  copy_viewport(gl.canvas, frame)
+  return new ShapeDrawn(frame)
 }
 
 /**
@@ -131,7 +248,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, isFullView) {
  */
 function draw_connected(num) {
   return curve => 
-	generateCurve('none', 'lines', num, curve)
+	generateCurve('none', 'lines', num, curve, '2D')
 }
 
 /**
@@ -149,7 +266,7 @@ function draw_connected(num) {
  */
 function draw_points_on(num) {
   return curve => 
-	generateCurve('none', 'points', num, curve)
+	generateCurve('none', 'points', num, curve, '2D')
 }
 
 /**
@@ -167,7 +284,7 @@ function draw_points_on(num) {
  */
 function draw_points_squeezed_to_window(num) {
   return function(func) {
-    return generateCurve('fit', 'points', num, func)
+    return generateCurve('fit', 'points', num, func, '2D')
   }
 }
 
@@ -187,7 +304,7 @@ function draw_points_squeezed_to_window(num) {
  */
 function draw_connected_squeezed_to_window(num) {
   return function(func) {
-    return generateCurve('fit', 'lines', num, func)
+    return generateCurve('fit', 'lines', num, func, '2D')
   }
 }
 
@@ -207,7 +324,7 @@ function draw_connected_squeezed_to_window(num) {
  */
 function draw_connected_full_view(num) {
   return function(func) {
-    return generateCurve('stretch', 'lines', num, func, true)
+    return generateCurve('stretch', 'lines', num, func, '2D', true)
   }
 }
 
@@ -226,7 +343,44 @@ function draw_connected_full_view(num) {
  */
 function draw_connected_full_view_proportional(num) {
   return function(func) {
-    return generateCurve('fit', 'lines', num, func, true)
+    return generateCurve('fit', 'lines', num, func, '2D', true)
+  }
+}
+
+function draw_3D_connected(num) {
+  return function(func) {
+    return generateCurve('none', 'lines', num, func, '3D')
+    //requestAnimationFrame(generateCurve)
+  }
+}
+
+function draw_3D_connected_full_view(num) {
+  return function(func) {
+    return generateCurve('stretch', 'lines', num, func, '3D', true)
+  }
+}
+
+function draw_3D_connected_full_view_proportional(num) {
+  return function(func) {
+    return generateCurve('fit', 'lines', num, func, '3D', true)
+  }
+}
+
+function draw_3D_connected_squeezed_to_window(num) {
+  return function(func) {
+    return generateCurve('fit', 'lines', num, func, '3D')
+  }
+}
+
+function draw_3D_points_on(num) {
+  return function(func) {
+    return generateCurve('none', 'points', num, func, '3D')
+  }
+}
+
+function draw_3D_points_squeezed_to_window(num) {
+  return function(func) {
+    return generateCurve('fit', 'points', num, func, '3D')
   }
 }
 
@@ -245,6 +399,15 @@ function make_point(x, y) {
   return p
 }
 
+function make_3D_point(x, y, z) {
+  var p = new Point()
+  p.setX(x)
+  p.setY(y)
+  p.setZ(z)
+  p.setColor([0, 0, 0, 1]) //black as default
+  return p
+}
+
 /**
  * makes a colored Point with given x and y coordinates, and RGB values
  * @param {Number} x - x-coordinate of new point
@@ -259,6 +422,25 @@ function make_color_point(x, y, r, g, b){
   p.setX(x)
   p.setY(y)
   p.setZ(0) //0 as default for 2D curves
+  p.setColor([r/255, g/255, b/255, 1])
+  return p
+}
+
+/**
+ * makes a colored Point with given x and y coordinates, and RGB values
+ * @param {Number} x - x-coordinate of new point
+ * @param {Number} y - y-coordinate of new point
+ * @param {Number} z - z-coordinate of new point
+ * @param {Number} r - red component of new point
+ * @param {Number} g - green component of new point
+ * @param {Number} b - blue component of new point
+ * @returns {Point} with x, y and z as coordinates, and r, g, and b as RGB values
+ */
+function make_3D_color_point(x, y, z, r, g, b){
+  var p = new Point()
+  p.setX(x)
+  p.setY(y)
+  p.setZ(z)
   p.setColor([r/255, g/255, b/255, 1])
   return p
 }
