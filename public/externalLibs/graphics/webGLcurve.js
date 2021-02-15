@@ -241,42 +241,9 @@ function draw_points_on(num) {
 	generateCurve('none', 'points', num, curve, '2D')
 }
 
-/**
- * returns a function that turns a given Curve into a Drawing, 
- * by sampling the Curve at <CODE>num</CODE> sample points.
- * The Drawing consists of isolated points, and does not connect them.
- * When a program evaluates to a Drawing, the Source system
- * displays it graphically, in a window, instead of textually.
- * The Drawing is squeezed such that all its parts are shown in the
- * window.
- * @param {Number} num - determines the number of points to be 
- * sampled. Including 0 and 1,
- * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function of type Curve → Drawing
- */
-function draw_points_squeezed_to_window(num) {
+function draw_points_full_view_proportional(num) {
   return function(func) {
-    return generateCurve('fit', 'points', num, func, '2D')
-  }
-}
-
-/**
- * returns a function that turns a given Curve into a Drawing, 
- * by sampling the Curve at <CODE>num</CODE> sample points 
- * and connecting each pair with a line. 
- * When a program evaluates to a Drawing, the Source system
- * displays it graphically, in a window, instead of textually.
- * The Drawing is resized proportionally such that it 
- * is shown as big as possible, and still fits entirely 
- * inside the window.
- * @param {Number} num - determines the number of points to be 
- * sampled. Including 0 and 1,
- * there are <CODE>num + 1</CODE> evenly spaced sample points.
- * @return {function} function of type Curve → Drawing
- */
-function draw_connected_squeezed_to_window(num) {
-  return function(func) {
-    return generateCurve('fit', 'lines', num, func, '2D')
+    return generateCurve('fit', 'points', num, func, '2D', true)
   }
 }
 
@@ -334,12 +301,6 @@ function draw_3D_connected_full_view(num) {
 
 function draw_3D_connected_full_view_proportional(num) {
   return function(func) {
-    return generateCurve('fit', 'lines', num, func, '3D', true)
-  }
-}
-
-function draw_3D_connected_squeezed_to_window(num) {
-  return function(func) {
     return generateCurve('fit', 'lines', num, func, '3D')
   }
 }
@@ -350,7 +311,7 @@ function draw_3D_points_on(num) {
   }
 }
 
-function draw_3D_points_squeezed_to_window(num) {
+function draw_3D_points_full_view_proportional(num) {
   return function(func) {
     return generateCurve('fit', 'points', num, func, '3D')
   }
