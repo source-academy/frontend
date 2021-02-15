@@ -69,24 +69,29 @@ function loadAllLibs() {
 function loadLib(externalLibraryName) {
   let files
   switch (externalLibraryName) {
-    case 'RUNES':
-      files = [
-        // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLrune.js'
-      ]
-      break
-    case 'CURVES':
-      files = [
-        // graphics
-        '/externalLibs/graphics/gl-matrix.js',
-        '/externalLibs/graphics/webGLhi_graph.js',
-        '/externalLibs/graphics/webGLhi_graph_ce.js',
-        '/externalLibs/graphics/webGLgraphics.js',
-        '/externalLibs/graphics/webGLcurve.js'
-      ]
-      break
+    /**
+     * Appears that loadAllLibs() have loaded the libraries 
+     * for RUNES and CURVES, and no longer necessary for 
+     * WorkspaceSaga.ts to call loadLib() for individual libraries.
+     */
+    // case 'RUNES':
+    //   files = [
+    //     // graphics
+    //     '/externalLibs/graphics/gl-matrix.js',
+    //     '/externalLibs/graphics/webGLgraphics.js',
+    //     '/externalLibs/graphics/webGLrune.js'
+    //   ]
+    //   break
+    // case 'CURVES':
+    //   files = [
+    //     // graphics
+    //     // '/externalLibs/graphics/gl-matrix.js',
+    //     // '/externalLibs/graphics/webGLhi_graph.js',
+    //     // '/externalLibs/graphics/webGLhi_graph_ce.js',
+    //     // '/externalLibs/graphics/webGLgraphics.js',
+    //     // '/externalLibs/graphics/webGLcurve.js'
+    //   ]
+    //   break
       case 'MACHINELEARNING':
       files = [
         // faceAPI

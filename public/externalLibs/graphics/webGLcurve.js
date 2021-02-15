@@ -4,30 +4,25 @@ class Point{
   z = undefined
   color = undefined
 
-  setColor = function(color){
-    this.color = color
+  constructor(x, y, z, r, g, b) {
+    this.x = x
+    this.y = y
+    this.z = z
+    this.color = [r, g, b, 1]
   }
+
   getColor = function(){
     return this.color
   }
   
-  setX = function(number){
-    this.x = number
-  }
   getX = function(){
     return this.x
   }
   
-  setY = function(number){
-    this.y = number
-  }
   getY = function(){
     return this.y
   }
   
-  setZ = function(number){
-    this.z = number
-  }
   getZ = function(){
     return this.z
   }
@@ -53,29 +48,6 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   var max_z = -Infinity
 
   function evaluator(num, func) {
-    // func should take input of [0, 1] and output pair(x, y)
-    // where x,y is in [0, 1]
-    // evaluator has a side effect of recording the max/min
-    // x and y value for adjusting the position
-    // function clip(pt) {
-    //   if (scaleMode == 'none') {
-    //     if (pt.getX() < 0 || pt.getX() > 1
-    //       || pt.getY() < 0 || pt.getY() > 1
-    //       || pt.getZ() < 0 || pt.getZ() > 1) {
-    //       var wrapper = new Point()
-    //       wrapper.setColor([255,255,255,0])
-    //       wrapper.setX(pt.getX())
-    //       wrapper.setY(pt.getY())
-    //       wrapper.setZ(pt.getZ())
-    //       return wrapper
-    //     } else {
-    //       return pt
-    //     }
-    //   } else {
-    //     return pt
-    //   }
-    // }
-    
     curveObject = {}
     curvePosArray = []
     curveColorArray = []
@@ -391,21 +363,11 @@ function draw_3D_points_squeezed_to_window(num) {
  * @returns {Point} with x and y as coordinates
  */
 function make_point(x, y) {
-  var p = new Point()
-  p.setX(x)
-  p.setY(y)
-  p.setZ(0) //0 as default for 2D curves
-  p.setColor([0, 0, 0, 1]) //black as default
-  return p
+  return new Point(x, y, 0, 0, 0, 0)
 }
 
 function make_3D_point(x, y, z) {
-  var p = new Point()
-  p.setX(x)
-  p.setY(y)
-  p.setZ(z)
-  p.setColor([0, 0, 0, 1]) //black as default
-  return p
+  return new Point(x, y, z, 0, 0, 0)
 }
 
 /**
@@ -418,12 +380,7 @@ function make_3D_point(x, y, z) {
  * @returns {Point} with x and y as coordinates, and r, g, and b as RGB values
  */
 function make_color_point(x, y, r, g, b){
-  var p = new Point()
-  p.setX(x)
-  p.setY(y)
-  p.setZ(0) //0 as default for 2D curves
-  p.setColor([r/255, g/255, b/255, 1])
-  return p
+  return new Point(x, y, 0, r/255, g/255, b/255)
 }
 
 /**
@@ -437,12 +394,7 @@ function make_color_point(x, y, r, g, b){
  * @returns {Point} with x, y and z as coordinates, and r, g, and b as RGB values
  */
 function make_3D_color_point(x, y, z, r, g, b){
-  var p = new Point()
-  p.setX(x)
-  p.setY(y)
-  p.setZ(z)
-  p.setColor([r/255, g/255, b/255, 1])
-  return p
+  return new Point(x, y, z, r/255, g/255, b/255)
 }
 
 /**

@@ -491,12 +491,12 @@ export default function* WorkspaceSaga(): SagaIterator {
         const externalLibraryName = action.payload.library.external.name;
         switch (externalLibraryName) {
           case ExternalLibraryName.RUNES:
-            (window as any).loadLib('RUNES');
+            // (window as any).loadLib('RUNES');
             (window as any).getReadyWebGLForCanvas('3d');
             (window as any).getReadyStringifyForRunes(stringify);
             break;
           case ExternalLibraryName.CURVES:
-            (window as any).loadLib('CURVES');
+            // (window as any).loadLib('CURVES');
             (window as any).getReadyWebGLForCanvas('curve');
             break;
           case ExternalLibraryName.MACHINELEARNING:
