@@ -69,7 +69,6 @@ const SideContent = (props: SideContentProps) => {
   );
   React.useEffect(() => {
     const allActiveTabs = tabs.concat(getDynamicTabs(debuggerContext || ({} as DebuggerContext)));
-    console.log(allActiveTabs);
     setDynamicTabs(allActiveTabs);
   }, [tabs, debuggerContext]);
 
