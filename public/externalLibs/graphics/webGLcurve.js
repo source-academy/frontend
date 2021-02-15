@@ -1,32 +1,22 @@
 class Point{
-  x = undefined
-  y = undefined
-  z = undefined
-  color = undefined
-
   constructor(x, y, z, r, g, b) {
     this.x = x
     this.y = y
     this.z = z
     this.color = [r, g, b, 1]
   }
-
   getColor = function(){
     return this.color
   }
-  
   getX = function(){
     return this.x
   }
-  
   getY = function(){
     return this.y
   }
-  
   getZ = function(){
     return this.z
   }
-
 }
 
 var cubeRotation = 0 //Used for testing
@@ -77,6 +67,7 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
   }
   evaluator(numPoints, func)
 
+  // padding for 2d draw connected full-view
   if (isFullView) {
     var horiz_padding = 0.05 * (max_x - min_x)
     min_x -= horiz_padding
@@ -101,7 +92,6 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
       -1, 1, 1, -1, 1, -1,
       1, 1, -1, 1, 1, 1
     )
-    var temp = []
     var scale_x, scale_y, scale_z
     scale_x = scale_y = scale_z = 2
     var translate_x, translate_y, translate_z
@@ -124,35 +114,24 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
 
     for (var i = 0; i < drawCubeArray.length; i++) {
       if (i % 3 == 0) {
-        var val = drawCubeArray[i];
-        val /= 2 / scale_x
-        val += translate_x
-        temp.push(val)
+        drawCubeArray[i] /= 2 / scale_x
+        drawCubeArray[i] += translate_x
       } else if (i % 3 == 1) {
-        var val = drawCubeArray[i];
-        val /= 2 / scale_y
-        val += translate_y
-        temp.push(val)
+        drawCubeArray[i] /= 2 / scale_y
+        drawCubeArray[i] += translate_y
       } else {
-        var val = drawCubeArray[i];
-        val /= 2 / scale_z
-        val += translate_z
-        temp.push(val)
+        drawCubeArray[i] /= 2 / scale_z
+        drawCubeArray[i] += translate_z
       }
     }
-    drawCubeArray = temp
     var scale = Math.sqrt(1 / 3.1) 
     mat4.scale(transMat, transMat, vec3.fromValues(scale, scale, scale))
     curveObject.drawCube = drawCubeArray
 
     mat4.translate(transMat, transMat, [0, 0, -5])
     //Rotation
-    mat4.rotate(transMat,  // destination matrix
-      transMat,  // matrix to rotate
-      -(Math.PI/2),// amount to rotate in radians
-      [1, 0, 0])     // axis to rotate around X (static)
-    mat4.rotate(transMat,  // destination matrix
-    transMat,  // matrix to rotate
+    mat4.rotate(transMat, transMat, -(Math.PI/2), [1, 0, 0]) // axis to rotate around X (static)
+    mat4.rotate(transMat, transMat,
     // cubeRotation * .7,// amount to rotate in radians
     -0.5,// amount to rotate in radians
     [0, 0, 1])     // axis to rotate around Z (dynamic)
@@ -182,12 +161,10 @@ function generateCurve(scaleMode, drawMode, numPoints, func, space, isFullView) 
     space == '3D' 
       ? mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], -center[2]))
       : mat4.translate(transMat, transMat, vec3.fromValues(-center[0], -center[1], 0))
-  } else {
-    // do nothing for normal situations
   }
 
   if(space == '3D'){
-    const fieldOfView = 45 * Math.PI / 180;   // in radians
+    const fieldOfView = 45 * Math.PI / 180;
     const aspect = gl.canvas.width / gl.canvas.height;
     const zNear = 0;
     const zFar = 50.0;
@@ -295,7 +272,7 @@ function draw_3D_connected(num) {
 
 function draw_3D_connected_full_view(num) {
   return function(func) {
-    return generateCurve('stretch', 'lines', num, func, '3D', true)
+    return generateCurve('stretch', 'lines', num, func, '3D')
   }
 }
 
