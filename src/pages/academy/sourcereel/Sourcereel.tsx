@@ -268,8 +268,7 @@ class Sourcereel extends React.Component<SourcereelProps> {
 
     const workspaceProps: WorkspaceProps = {
       controlBarProps: {
-        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect],
-        replButtons: [evalButton, clearButton]
+        editorButtons: [autorunButtons, chapterSelect, externalLibrarySelect]
       },
       customEditor: <SourcecastEditor {...editorProps} />,
       editorHeight: this.props.editorHeight,
@@ -286,7 +285,8 @@ class Sourcereel extends React.Component<SourcereelProps> {
         handleReplValueChange: this.props.handleReplValueChange,
         sourceChapter: this.props.sourceChapter,
         sourceVariant: this.props.sourceVariant,
-        externalLibrary: this.props.externalLibraryName
+        externalLibrary: this.props.externalLibraryName,
+        replButtons: [evalButton, clearButton]
       },
       sideContentHeight: this.props.sideContentHeight,
       sideContentProps: {
