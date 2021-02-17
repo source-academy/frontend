@@ -207,7 +207,8 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
         replValue: this.props.replValue,
         sourceChapter: question?.library?.chapter || 4,
         sourceVariant: 'default',
-        externalLibrary: question?.library?.external?.name || 'NONE'
+        externalLibrary: question?.library?.external?.name || 'NONE',
+        replButtons: this.replButtons()
       }
     };
     return (
@@ -374,21 +375,6 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
       history.push(gradingWorkspacePath + `/${(questionId + 1).toString()}`);
     const onClickReturn = () => history.push(listingPath);
 
-    const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
-    );
-
-    const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
-
     const nextButton = (
       <ControlBarNextButton
         onClickNext={onClickNext}
@@ -416,10 +402,28 @@ class GradingWorkspace extends React.Component<GradingWorkspaceProps> {
 
     return {
       editorButtons: [runButton],
-      flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton]
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
+
+  private replButtons() {
+    const clearButton = (
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
+    );
+
+    const evalButton = (
+      <ControlBarEvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    return [evalButton, clearButton];
+  }
 }
 
 export default GradingWorkspace;

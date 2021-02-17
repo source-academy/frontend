@@ -351,7 +351,8 @@ class AssessmentWorkspace extends React.Component<
         replValue: this.props.replValue,
         sourceChapter: question?.library?.chapter || 4,
         sourceVariant: 'default',
-        externalLibrary: question?.library?.external?.name || 'NONE'
+        externalLibrary: question?.library?.external?.name || 'NONE',
+        replButtons: this.replButtons()
       }
     };
     return (
@@ -580,21 +581,6 @@ class AssessmentWorkspace extends React.Component<
       this.setState({ showResetTemplateOverlay: true });
     };
 
-    const clearButton = (
-      <ControlBarClearButton
-        handleReplOutputClear={this.props.handleReplOutputClear}
-        key="clear_repl"
-      />
-    );
-
-    const evalButton = (
-      <ControlBarEvalButton
-        handleReplEval={this.props.handleReplEval}
-        isRunning={this.props.isRunning}
-        key="eval_repl"
-      />
-    );
-
     const nextButton = (
       <ControlBarNextButton
         onClickNext={
@@ -655,10 +641,28 @@ class AssessmentWorkspace extends React.Component<
 
     return {
       editorButtons: [runButton, saveButton, resetButton, chapterSelect],
-      flowButtons: [previousButton, questionView, nextButton],
-      replButtons: [evalButton, clearButton]
+      flowButtons: [previousButton, questionView, nextButton]
     };
   };
+
+  private replButtons() {
+    const clearButton = (
+      <ControlBarClearButton
+        handleReplOutputClear={this.props.handleReplOutputClear}
+        key="clear_repl"
+      />
+    );
+
+    const evalButton = (
+      <ControlBarEvalButton
+        handleReplEval={this.props.handleReplEval}
+        isRunning={this.props.isRunning}
+        key="eval_repl"
+      />
+    );
+
+    return [evalButton, clearButton];
+  }
 }
 
 export default AssessmentWorkspace;

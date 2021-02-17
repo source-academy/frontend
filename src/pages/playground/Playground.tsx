@@ -698,7 +698,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleReplValueChange: props.handleReplValueChange,
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
-    usingSubst: props.usingSubst
+    usingSubst: props.usingSubst,
+    replButtons: [replDisabled ? null : evalButton, clearButton]
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -711,8 +712,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sessionButtons,
         persistenceButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
-      ],
-      replButtons: [replDisabled ? null : evalButton, clearButton]
+      ]
     },
     editorProps: editorProps,
     editorHeight: props.editorHeight,
@@ -745,11 +745,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           shareButton,
           sessionButtons,
           persistenceButtons
-        ],
-        // TODO: Repl buttons to be removed
-        replButtons: [replDisabled ? null : evalButton, clearButton]
+        ]
       },
-      // TODO: Abstract this duplicate away
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,

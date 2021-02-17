@@ -1,12 +1,15 @@
+import { Classes } from '@blueprintjs/core';
+import classNames from 'classnames';
 import { Variant } from 'js-slang/dist/types';
 import * as React from 'react';
 import AceEditor from 'react-ace';
+import MediaQuery from 'react-responsive';
 
 import { ExternalLibraryName } from '../application/types/ExternalTypes';
 import { getModeString, selectMode } from '../utils/AceHelper';
 // source mode and chapter imported in Editor.tsx
 
-export type ReplInputProps = DispatchProps & StateProps;
+export type ReplInputProps = DispatchProps & StateProps & OwnProps;
 
 type DispatchProps = {
   handleBrowseHistoryDown: () => void;
@@ -20,6 +23,10 @@ type StateProps = {
   sourceChapter: number;
   sourceVariant: Variant;
   externalLibrary: ExternalLibraryName;
+};
+
+type OwnProps = {
+  replButtons: Array<JSX.Element | null>;
 };
 
 class ReplInput extends React.PureComponent<ReplInputProps, {}> {
@@ -63,6 +70,8 @@ class ReplInput extends React.PureComponent<ReplInputProps, {}> {
   public render() {
     // see the comment above this same call in Editor.tsx
     selectMode(this.props.sourceChapter, this.props.sourceVariant, this.props.externalLibrary);
+
+    const replButtons = () => this.props.replButtons;
 
     return (
       <>
@@ -114,7 +123,10 @@ class ReplInput extends React.PureComponent<ReplInputProps, {}> {
             fontFamily: "'Inconsolata', 'Consolas', monospace"
           }}
         />
-        <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
+        <div className={classNames(Classes.BUTTON_GROUP, Classes.DARK)}>{replButtons()}</div>
+        <MediaQuery minWidth={769}>
+          <div className="replInputBottom" ref={e => (this.replInputBottom = e!)} />
+        </MediaQuery>
       </>
     );
   }
