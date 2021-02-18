@@ -800,26 +800,6 @@ function drawCurve(drawMode, curveObject, space) {
   var itemSize = space === '2D'? 2 : 3
   var colorSize = 4
 
-  if (space == '3D') {
-    var drawCubeArray = curveObject.drawCube
-    vertexBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(drawCubeArray), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0)
-
-    var colors = []
-    for (var i = 0; i < 16; i++) {
-      colors.push(0.6, 0.6, 0.6, 0)
-    }
-    colorBuffer = gl.createBuffer()
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
-    gl.vertexAttribPointer(colorAttribute, 4, gl.FLOAT, false, 0, 0)
-
-    gl.drawArrays(gl.LINE_STRIP, 0, drawCubeArray.length / itemSize)
-    gl.deleteBuffer(vertexBuffer)
-  }
-  
   for (var i = 0; i <= curvePosArray.length / magicNum / itemSize; i++) {
     // since webGL only supports 16bits buffer, i.e. the no. of
     // points in the buffer must be lower than 65535, so I take
@@ -845,6 +825,26 @@ function drawCurve(drawMode, curveObject, space) {
       gl.drawArrays(gl.POINTS, 0, subArray.length / itemSize)
     }
 
+    gl.deleteBuffer(vertexBuffer)
+  }
+
+  if (space == '3D') {
+    var drawCubeArray = curveObject.drawCube
+    vertexBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(drawCubeArray), gl.STATIC_DRAW)
+    gl.vertexAttribPointer(vertexPositionAttribute, 3, gl.FLOAT, false, 0, 0)
+
+    var colors = []
+    for (var i = 0; i < 16; i++) {
+      colors.push(0, 0, 0, 0)
+    }
+    colorBuffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer)
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW)
+    gl.vertexAttribPointer(colorAttribute, 4, gl.FLOAT, false, 0, 0)
+
+    gl.drawArrays(gl.LINE_STRIP, 0, drawCubeArray.length / itemSize)
     gl.deleteBuffer(vertexBuffer)
   }
 }

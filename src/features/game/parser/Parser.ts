@@ -45,7 +45,7 @@ class Parser {
       Parser.init();
     }
 
-    const checkPointLines = StringUtils.splitToLinesAndRemoveComments(chapterText);
+    const checkPointLines = StringUtils.splitToLines(chapterText);
     const checkPointParagraphs = StringUtils.splitToParagraph(checkPointLines);
 
     checkPointParagraphs.forEach(([header, body]: [string, string[]]) => {
