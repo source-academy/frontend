@@ -27,9 +27,9 @@ type StateProps = {
 };
 
 export function ControlBarAutorunButtons(props: ControlBarAutorunButtonProps) {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
 
-  return isMobile ? (
+  return isMobileBreakpoint ? (
     <>
       {props.isRunning && controlButton('Stop', IconNames.STOP, props.handleInterruptEval)}
       {(!props.pauseDisabled &&
