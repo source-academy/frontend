@@ -16,7 +16,7 @@ class ContributorsDetails extends React.Component {
             The <i>Source Academy</i> is designed by and for students of the National University of
             Singapore. Students who completed the CS1101S module come back to coach their juniors as
             "Avengers" or to further develop and improve the Academy. This page includes all
-            developers who contributed to the Source Academy <i>Knight</i> (2020) and its its
+            developers who contributed to the Source Academy <i>Knight</i> (2020-21) and its its
             precursor, <i>Cadet</i> (2018). Both of these succeeded Source Academy 2 (2017) and
             ultimately the original Source Academy (2016).
           </p>
@@ -39,7 +39,9 @@ class ContributorsDetails extends React.Component {
             </p>
             {dot}
             <p className="wider">
-              Daryl Tan, Thomas Tan
+              Daryl Tan
+              <br />
+              Thomas Tan
               <br />
               <strong>(Source)</strong>
             </p>
