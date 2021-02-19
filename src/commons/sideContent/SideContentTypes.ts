@@ -58,17 +58,34 @@ export type SideContentTab = {
   disabled?: boolean;
 };
 
+/**
+ * Used for modules that dynamically spawn when imported
+ *
+ * @property label A string that will appear as the tooltip.
+ *
+ * @property iconName BlueprintJS IconName element, used to render the
+ *   icon which will be displayed over the SideContent panel.
+ *
+ * @property body The element to be rendered in the SideContent panel
+ *  when the tab is selected.
+ *
+ * @property toSpawn function that returns boolean to determine if
+ * side content tab should appear
+ */
 export type ModuleSideContent = {
   label: string;
   iconName: IconName;
-  /**
-   * @todo Convert the any type for React parameter to React type
-   * @todo Convert the any type for props parameter
-   */
   body: (React: any) => (props: any) => JSX.Element;
   toSpawn: (context: DebuggerContext) => boolean;
 };
 
+/**
+ * Module imported from js-slang
+ *
+ * @propety functions from the imported module
+ *
+ * @property sideContents an array of side content tabs to display on the front end
+ */
 export type Modules = {
   functions: { [key: string]: Function };
   sideContents: ModuleSideContent[];
