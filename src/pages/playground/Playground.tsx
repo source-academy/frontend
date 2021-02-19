@@ -158,7 +158,7 @@ function handleHash(hash: string, props: PlaygroundProps) {
 }
 
 const Playground: React.FC<PlaygroundProps> = props => {
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobileBreakpoint = useMediaQuery({ maxWidth: 768 });
   const propsRef = React.useRef(props);
   propsRef.current = props;
   const [lastEdit, setLastEdit] = React.useState(new Date());
@@ -216,21 +216,21 @@ const Playground: React.FC<PlaygroundProps> = props => {
    */
   React.useEffect(() => {
     if (
-      isMobile &&
+      isMobileBreakpoint &&
       (selectedTab === SideContentType.introduction ||
         selectedTab === SideContentType.remoteExecution)
     ) {
       props.handleActiveTabChange(SideContentType.mobileEditor);
       setSelectedTab(SideContentType.mobileEditor);
     } else if (
-      !isMobile &&
+      !isMobileBreakpoint &&
       (selectedTab === SideContentType.mobileEditor ||
         selectedTab === SideContentType.mobileEditorRun)
     ) {
       setSelectedTab(SideContentType.introduction);
       props.handleActiveTabChange(SideContentType.introduction);
     }
-  }, [isMobile, props, selectedTab]);
+  }, [isMobileBreakpoint, props, selectedTab]);
 
   const handlers = React.useMemo(
     () => ({
@@ -698,7 +698,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
     handleReplValueChange: props.handleReplValueChange,
     hidden: selectedTab === SideContentType.substVisualizer,
     inputHidden: replDisabled,
-    usingSubst: props.usingSubst
+    usingSubst: props.usingSubst,
+    replButtons: [replDisabled ? null : evalButton, clearButton]
   };
 
   const workspaceProps: WorkspaceProps = {
@@ -711,8 +712,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
         sessionButtons,
         persistenceButtons,
         usingRemoteExecution ? null : props.usingSubst ? stepperStepLimit : executionTime
-      ],
-      replButtons: [replDisabled ? null : evalButton, clearButton]
+      ]
     },
     editorProps: editorProps,
     editorHeight: props.editorHeight,
@@ -745,11 +745,8 @@ const Playground: React.FC<PlaygroundProps> = props => {
           shareButton,
           sessionButtons,
           persistenceButtons
-        ],
-        // TODO: Repl buttons to be removed
-        replButtons: [replDisabled ? null : evalButton, clearButton]
+        ]
       },
-      // TODO: Abstract this duplicate away
       defaultSelectedTabId: selectedTab,
       selectedTabId: selectedTab,
       handleActiveTabChange: props.handleActiveTabChange,
@@ -760,7 +757,7 @@ const Playground: React.FC<PlaygroundProps> = props => {
     }
   };
 
-  return isMobile ? (
+  return isMobileBreakpoint ? (
     <MobileWorkspace {...mobileWorkspaceProps} />
   ) : (
     <HotKeys
