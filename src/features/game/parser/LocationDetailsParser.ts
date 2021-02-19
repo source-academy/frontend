@@ -1,3 +1,4 @@
+import { AssetTypes } from '../commons/CommonTypes';
 import { createEmptyLocation } from '../location/GameMapHelper';
 import StringUtils from '../utils/StringUtils';
 import Parser from './Parser';
@@ -17,7 +18,11 @@ export default class LocationDetailsParser {
    */
   public static parse(locationDetails: string[]) {
     locationDetails.forEach(locationDetail => {
-      const [id, shortPath, name] = StringUtils.splitWithLimit(locationDetail, ',', 2);
+      const [id, shortPath, name, type, width, height, frame] = StringUtils.splitWithLimit(
+        locationDetail,
+        ',',
+        6
+      );
       Parser.validator.registerId(id);
 
       Parser.checkpoint.map.addLocation(id, {
@@ -26,10 +31,15 @@ export default class LocationDetailsParser {
         name,
         assetKey: this.locationAssetKey(shortPath)
       });
-      Parser.checkpoint.map.addMapAsset(
-        this.locationAssetKey(shortPath),
-        this.locationPath(shortPath)
-      );
+      Parser.checkpoint.map.addMapAsset(this.locationAssetKey(shortPath), {
+        assetPath: this.locationPath(shortPath),
+        assetType: AssetTypes[type] || AssetTypes.Image,
+        assetConfig: {
+          frameWidth: +width || 0,
+          frameHeight: +height || 0,
+          endFrame: +frame - 1 || 0
+        }
+      });
     });
   }
 

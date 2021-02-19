@@ -1,3 +1,4 @@
+import { AssetTypes, PictureAsset } from '../commons/CommonTypes';
 import { GameItemType, LocationId } from '../location/GameMapTypes';
 import { ObjectProperty } from '../objects/GameObjectTypes';
 import StringUtils from '../utils/StringUtils';
@@ -78,7 +79,17 @@ export default class ObjectParser {
       interactionId: objectId
     };
 
-    Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), this.objectPath(shortPath));
+    const mapAsset: PictureAsset = {
+      assetPath: this.objectPath(shortPath),
+      assetType: AssetTypes.Image,
+      assetConfig: {
+        frameHeight: 0,
+        frameWidth: 0,
+        endFrame: 0
+      }
+    };
+
+    Parser.checkpoint.map.addMapAsset(this.objectAssetKey(shortPath), mapAsset);
 
     Parser.checkpoint.map.setItemInMap(GameItemType.objects, objectId, objectProperty);
     if (addToLoc) {

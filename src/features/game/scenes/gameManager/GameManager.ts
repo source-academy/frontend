@@ -5,6 +5,7 @@ import GameBBoxManager from '../../boundingBoxes/GameBoundingBoxManager';
 import { GameCheckpoint } from '../../chapter/GameChapterTypes';
 import GameCharacterManager from '../../character/GameCharacterManager';
 import { Constants } from '../../commons/CommonConstants';
+import { AssetKey, AssetTypes, PictureAsset } from '../../commons/CommonTypes';
 import GameDialogueManager from '../../dialogue/GameDialogueManager';
 import { blackFade, blackScreen, fadeIn } from '../../effects/FadeEffect';
 import { addLoadingScreen } from '../../effects/LoadingScreen';
@@ -113,9 +114,27 @@ class GameManager extends Phaser.Scene {
   private preloadLocationsAssets() {
     const gameMap = this.getStateManager().getGameMap();
     GameGlobalAPI.getInstance().loadSounds(gameMap.getSoundAssets());
-    gameMap.getMapAssets().forEach((assetPath, assetKey) => {
-      this.load.image(assetKey, toS3Path(assetPath));
+    console.log(gameMap.getMapAssets());
+    gameMap.getMapAssets().forEach((picture, assetKey) => {
+      this.loadPicture(picture, assetKey);
+      //this.load.image(assetKey, toS3Path(picture.assetPath));
     });
+  }
+
+  private loadPicture(picture: PictureAsset, assetKey: AssetKey) {
+    switch (picture.assetType) {
+      case AssetTypes.Image:
+        this.load.image(assetKey, toS3Path(picture.assetPath));
+        //this.load.spritesheet(assetKey, toS3Path(picture.assetPath));
+        break;
+      case AssetTypes.Sprite:
+        this.load.spritesheet(assetKey, toS3Path(picture.assetPath), picture.assetConfig);
+        break;
+      case AssetTypes.Atlas:
+        break;
+      default:
+        break;
+    }
   }
 
   //////////////////////
