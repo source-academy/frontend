@@ -21,7 +21,7 @@ class ContributorsDetails extends React.Component {
             ultimately the original Source Academy (2016).
           </p>
           <div className="leadership">
-          <H5>
+            <H5>
               <strong>
                 <u>2021 Leadership</u>
               </strong>
