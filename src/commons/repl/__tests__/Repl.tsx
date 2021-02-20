@@ -45,7 +45,8 @@ test('Repl renders correctly', () => {
     replValue: '',
     sourceChapter: 1,
     sourceVariant: 'default' as const,
-    externalLibrary: ExternalLibraryName.NONE
+    externalLibrary: ExternalLibraryName.NONE,
+    replButtons: []
   };
   const app = <Repl {...props} />;
   const tree = shallow(app);
