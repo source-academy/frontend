@@ -8,8 +8,8 @@ import AchievementDeadline from './card/AchievementDeadline';
 import AchievementXp from './card/AchievementXp';
 
 type AchievementCardProps = {
-  uuid: number;
-  focusState: [number, any];
+  uuid: string;
+  focusState: [string, any];
   isDropdownOpen?: boolean;
   shouldRender: boolean;
   toggleDropdown?: () => void;

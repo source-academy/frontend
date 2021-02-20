@@ -34,7 +34,7 @@ export type EditableCardAction =
     }
   | {
       type: EditableCardActionType.CHANGE_GOAL_UUIDS;
-      payload: number[];
+      payload: string[];
     }
   | {
       type: EditableCardActionType.CHANGE_POSITION;
@@ -42,7 +42,7 @@ export type EditableCardAction =
     }
   | {
       type: EditableCardActionType.CHANGE_PREREQUISITE_UUIDS;
-      payload: number[];
+      payload: string[];
     }
   | {
       type: EditableCardActionType.CHANGE_RELEASE;

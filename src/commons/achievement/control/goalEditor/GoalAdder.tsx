@@ -7,7 +7,7 @@ import { goalDefinitionTemplate } from './GoalTemplate';
 
 type GoalAdderProps = {
   allowNewUuid: boolean;
-  setNewUuid: (uuid: number) => void;
+  setNewUuid: (uuid: string) => void;
 };
 
 function GoalAdder(props: GoalAdderProps) {

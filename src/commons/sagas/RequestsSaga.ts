@@ -12,7 +12,6 @@ import {
   QuestionTypes
 } from '../../commons/assessment/AssessmentTypes';
 import {
-  BackendifyAchievementItem,
   BackendifyGoalDefinition,
   BackendifyGoalProgress
 } from '../../features/achievement/AchievementBackender';
@@ -22,8 +21,7 @@ import {
   AchievementItem,
   GoalDefinition,
   GoalMeta,
-  GoalProgress,
-  GoalType
+  GoalProgress
 } from '../../features/achievement/AchievementTypes';
 import { GradingSummary } from '../../features/dashboard/DashboardTypes';
 import { Grading, GradingOverview, GradingQuestion } from '../../features/grading/GradingTypes';
@@ -141,21 +139,24 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
 
   const achievements = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievements.map(
     (achievement: any) =>
       ({
-        ...achievement,
-        uuid: parseInt(achievement.uuid),
+        uuid: achievement.uuid || '',
+        title: achievement.title || '',
         ability: achievement.ability as AchievementAbility,
         deadline: new Date(achievement.deadline),
         release: new Date(achievement.release),
-        goalUuids: achievement.goalsUuids 
-          ? achievement.goalsUuids.map((uuid: string) => parseInt(uuid))
-          : [],
-        prerequisiteUuids: achievement.prerequisiteUuids
-          ? achievement.prerequisiteUuids.map((uuid: string) => parseInt(uuid))
-          : []
+        isTask: achievement.isTask,
+        position: achievement.position,
+        prerequisiteUuids: achievement.prerequisiteUuids,
+        goalUuids: achievement.goalsUuids,
+        cardBackground: achievement.cardBackground || '',
+        view: { 
+          coverImage: achievement.view.coverImage || '',
+          completionText: achievement.view.completionText || '',
+          description: achievement.view.description || ''
+        }
       } as AchievementItem)
   );
 };
@@ -178,14 +179,15 @@ export const getGoals = async (
 
   const achievementGoals = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal,
-        uuid: parseInt(goal.uuid),
-        type: goal.type as GoalType,
-        meta: goal.meta as GoalMeta
+        uuid: goal.uuid || '',
+        text: goal.text || '',
+        meta: goal.meta as GoalMeta,
+        xp: goal.xp,
+        maxXp: goal.maxXp,
+        completed: goal.completed
       } as AchievementGoal)
   );
 };
@@ -205,14 +207,15 @@ export const getOwnGoals = async (tokens: Tokens): Promise<AchievementGoal[] | n
 
   const achievementGoals = await resp.json();
 
-  // parseInts will be removed once UUID is implemented
   return achievementGoals.map(
     (goal: any) =>
       ({
-        ...goal,
-        uuid: parseInt(goal.uuid),
-        type: goal.type as GoalType,
-        meta: goal.meta as GoalMeta
+        uuid: goal.uuid || '',
+        text: goal.text || '',
+        meta: goal.meta as GoalMeta,
+        xp: goal.xp,
+        maxXp: goal.maxXp,
+        completed: goal.completed
       } as AchievementGoal)
   );
 };
@@ -226,14 +229,7 @@ export async function bulkUpdateAchievements(
 ): Promise<Response | null> {
   const resp = await request(`admin/achievements`, 'PUT', {
     accessToken: tokens.accessToken,
-    // Backendify call to be removed once UUID has been implemented
-    body: { 
-      achievements: JSON.stringify(
-        achievements.map(
-          achievement => BackendifyAchievementItem(achievement)
-        )
-      ) 
-    },
+    body: { achievements: JSON.stringify(achievements) },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
     shouldAutoLogout: false,
@@ -253,7 +249,6 @@ export async function bulkUpdateGoals(
 ): Promise<Response | null> {
   const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
-    // Backendify call to be removed once UUID has been implemented
     body: { 
       goals: JSON.stringify(
         goals.map(
@@ -280,8 +275,7 @@ export const editAchievement = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/${achievement.uuid}`, 'POST', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { achievement: JSON.stringify(BackendifyAchievementItem(achievement)) },
+    body: { achievement: JSON.stringify(achievement) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -319,7 +313,6 @@ export const updateGoalProgress = async (
 ): Promise<Response | null> => {
   const resp = await request(`achievements/goals/${progress.uuid}/${studentId}`, 'POST', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
     body: { progress: JSON.stringify(BackendifyGoalProgress(progress)) },
     noHeaderAccept: true,
     shouldAutoLogout: false,
@@ -330,16 +323,15 @@ export const updateGoalProgress = async (
 };
 
 /**
- * DELETE /achievements/{achievementUuid}
+ * DELETE /admin/achievements/{achievementUuid}
  */
 export const removeAchievement = async (
-  achievement: AchievementItem,
+  uuid: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/${achievement.uuid}`, 'DELETE', {
+  const resp = await request(`admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { achievement: JSON.stringify(BackendifyAchievementItem(achievement)) },
+    body: { uuid: uuid },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true
@@ -349,17 +341,15 @@ export const removeAchievement = async (
 };
 
 /**
- * DELETE /achievements/goals
- *
+ * DELETE /admin/goals/{goalUuid}
  */
 export const removeGoal = async (
-  definition: GoalDefinition,
+  uuid: string,
   tokens: Tokens
 ): Promise<Response | null> => {
-  const resp = await request(`achievements/goals/${definition.uuid}`, 'DELETE', {
+  const resp = await request(`admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
-    // Backendify call to be removed once UUID has been implemented
-    body: { definition: JSON.stringify(BackendifyGoalDefinition(definition)) },
+    body: { uuid: uuid },
     noHeaderAccept: true,
     shouldAutoLogout: false,
     shouldRefresh: true

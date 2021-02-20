@@ -24,7 +24,7 @@ function AchievementPreview(props: AchievementPreviewProps) {
    * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
-  const focusState = useState<number>(NaN);
+  const focusState = useState<string>('');
   const [focusUuid] = focusState;
 
   return (

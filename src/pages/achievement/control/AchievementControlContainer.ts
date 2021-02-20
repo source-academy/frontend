@@ -9,7 +9,9 @@ import {
   bulkUpdateAchievements,
   bulkUpdateGoals,
   getAchievements,
-  getOwnGoals
+  getOwnGoals,
+  removeAchievement,
+  removeGoal
 } from '../../../features/achievement/AchievementActions';
 import AchievementControl, { DispatchProps, StateProps } from './AchievementControl';
 
@@ -25,7 +27,9 @@ const mapDispatchToProps: MapDispatchToProps<DispatchProps, {}> = (dispatch: Dis
       bulkUpdateAchievements,
       bulkUpdateGoals,
       getAchievements,
-      getOwnGoals
+      getOwnGoals,
+      removeAchievement,
+      removeGoal
     },
     dispatch
   );

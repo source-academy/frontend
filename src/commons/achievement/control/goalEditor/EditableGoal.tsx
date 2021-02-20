@@ -14,8 +14,8 @@ import {
 import EditableMeta from './EditableMeta';
 
 type EditableGoalProps = {
-  uuid: number;
-  releaseUuid: (uuid: number) => void;
+  uuid: string;
+  releaseUuid: (uuid: string) => void;
   requestPublish: () => void;
 };
 

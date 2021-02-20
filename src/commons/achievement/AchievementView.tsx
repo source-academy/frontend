@@ -13,7 +13,7 @@ import AchievementViewCompletion from './view/AchievementViewCompletion';
 import AchievementViewGoal from './view/AchievementViewGoal';
 
 type AchievementViewProps = {
-  focusUuid: number;
+  focusUuid: string;
 };
 
 function AchievementView(props: AchievementViewProps) {
@@ -21,7 +21,8 @@ function AchievementView(props: AchievementViewProps) {
 
   const inferencer = useContext(AchievementContext);
 
-  if (isNaN(focusUuid)) {
+  // NOTE: was originally isNaN, not sure how this should change for uuid
+  if (focusUuid === "") {
     return (
       <div className="no-view">
         <Icon icon={IconNames.MOUNTAIN} iconSize={60} />

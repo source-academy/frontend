@@ -5,8 +5,8 @@ import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditableGoalUuidsProps = {
-  changeGoalUuids: (goalUuids: number[]) => void;
-  goalUuids: number[];
+  changeGoalUuids: (goalUuids: string[]) => void;
+  goalUuids: string[];
 };
 
 function EditableGoalUuids(props: EditableGoalUuidsProps) {
@@ -15,23 +15,23 @@ function EditableGoalUuids(props: EditableGoalUuidsProps) {
   const inferencer = useContext(AchievementContext);
   const allGoalUuids = inferencer.getAllGoalUuids();
   const getUuid = (text: string) => inferencer.getUuidByText(text);
-  const getText = (uuid: number) => inferencer.getTextByUuid(uuid);
+  const getText = (uuid: string) => inferencer.getTextByUuid(uuid);
 
-  const GoalSelect = MultiSelect.ofType<number>();
-  const goalRenderer: ItemRenderer<number> = (uuid, { handleClick }) => (
+  const GoalSelect = MultiSelect.ofType<string>();
+  const goalRenderer: ItemRenderer<string> = (uuid, { handleClick }) => (
     <MenuItem key={uuid} onClick={handleClick} text={getText(uuid)} />
   );
 
   const selectedGoals = new Set(goalUuids);
   const availableGoals = new Set(without(allGoalUuids, ...goalUuids));
 
-  const selectGoal = (selectUuid: number) => {
+  const selectGoal = (selectUuid: string) => {
     selectedGoals.add(selectUuid);
     availableGoals.delete(selectUuid);
     changeGoalUuids([...selectedGoals]);
   };
 
-  const removeGoal = (removeUuid?: number) => {
+  const removeGoal = (removeUuid?: string) => {
     if (removeUuid === undefined) return;
 
     selectedGoals.delete(removeUuid);
