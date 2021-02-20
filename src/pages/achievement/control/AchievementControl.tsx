@@ -14,6 +14,8 @@ export type DispatchProps = {
   bulkUpdateGoals: (goals: GoalDefinition[]) => void;
   getAchievements: () => void;
   getOwnGoals: () => void;
+  removeAchievement: (uuid: string) => void;
+  removeGoal: (uuid: string) => void;
 };
 
 export type StateProps = {
@@ -26,6 +28,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
     bulkUpdateGoals,
     getAchievements,
     getOwnGoals,
+    removeAchievement,
+    removeGoal,
     inferencer
   } = props;
 
@@ -47,6 +51,8 @@ function AchievementControl(props: DispatchProps & StateProps) {
     // NOTE: Update goals first because goals must exist before their UUID can be specified in achievements
     bulkUpdateGoals(inferencer.getAllGoals());
     bulkUpdateAchievements(inferencer.getAllAchievements());
+    inferencer.getAchievementsToDelete().forEach(removeAchievement);
+    inferencer.getGoalsToDelete().forEach(removeGoal);
     setAwaitPublish(false);
   };
   const requestPublish = () => {

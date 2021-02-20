@@ -15,7 +15,7 @@ export const viewTemplate: AchievementView = {
 };
 
 export const achievementTemplate: AchievementItem = {
-  uuid: -1,
+  uuid: '',
   title: 'Achievement Title Here',
   ability: AchievementAbility.CORE,
   isTask: false,

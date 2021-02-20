@@ -29,13 +29,13 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
 };
 
 export const goalDefinitionTemplate: GoalDefinition = {
-  uuid: -1,
+  uuid: '',
   text: 'Goal Text Here',
-  meta: metaTemplate(GoalType.MANUAL)
+  meta: metaTemplate(GoalType.MANUAL),
 };
 
 const goalProgressTemplate: GoalProgress = {
-  uuid: -1,
+  uuid: '',
   xp: 0,
   maxXp: 0,
   completed: false

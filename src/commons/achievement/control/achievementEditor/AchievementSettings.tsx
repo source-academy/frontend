@@ -9,9 +9,9 @@ import EditablePrerequisiteUuids from './achievementSettings/EditablePrerequisit
 
 type AchievementSettingsProps = {
   changeCardBackground: (cardBackground: string) => void;
-  changeGoalUuids: (goalUuids: number[]) => void;
+  changeGoalUuids: (goalUuids: string[]) => void;
   changePosition: (position: number) => void;
-  changePrerequisiteUuids: (prerequisiteUuids: number[]) => void;
+  changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
   editableAchievement: AchievementItem;
 };
 

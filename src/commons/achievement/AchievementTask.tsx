@@ -9,9 +9,9 @@ import { AchievementStatus, FilterStatus } from '../../features/achievement/Achi
 import AchievementCard from './AchievementCard';
 
 type AchievementTaskProps = {
-  uuid: number;
+  uuid: string;
   filterStatus: FilterStatus;
-  focusState: [number, any];
+  focusState: [string, any];
 };
 
 function AchievementTask(props: AchievementTaskProps) {
@@ -28,7 +28,7 @@ function AchievementTask(props: AchievementTaskProps) {
    * Checks whether the AchievementItem (can be a task or prereq) should be rendered
    * based on the achievement dashboard filterStatus.
    */
-  const shouldRender = (uuid: number): boolean => {
+  const shouldRender = (uuid: string): boolean => {
     const status = inferencer.getStatus(uuid);
     switch (filterStatus) {
       case FilterStatus.ALL:
@@ -49,7 +49,7 @@ function AchievementTask(props: AchievementTaskProps) {
    * If there is at least 1 prerequisite that needs to be rendered,
    * the whole AchievementTask will be rendered together.
    */
-  const shouldRenderPrerequisites = (uuid: number) => {
+  const shouldRenderPrerequisites = (uuid: string) => {
     const children = [...inferencer.getImmediateChildren(uuid)];
     return children.reduce((canRender, prerequisite) => {
       return canRender || shouldRender(prerequisite);
@@ -60,7 +60,7 @@ function AchievementTask(props: AchievementTaskProps) {
    * If the main achievement or any of the prerequisites need to be rendered,
    * the whole achievement task will be rendered
    */
-  const shouldRenderTask = (uuid: number) => shouldRender(uuid) || shouldRenderPrerequisites(uuid);
+  const shouldRenderTask = (uuid: string) => shouldRender(uuid) || shouldRenderPrerequisites(uuid);
 
   return (
     <>

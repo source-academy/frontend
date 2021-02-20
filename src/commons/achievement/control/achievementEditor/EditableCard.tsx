@@ -21,8 +21,8 @@ import EditableDate from './EditableDate';
 import EditableView from './EditableView';
 
 type EditableCardProps = {
-  uuid: number;
-  releaseUuid: (uuid: number) => void;
+  uuid: string;
+  releaseUuid: (uuid: string) => void;
   requestPublish: () => void;
 };
 
@@ -162,13 +162,13 @@ function EditableCard(props: EditableCardProps) {
   const changeDeadline = (deadline?: Date) =>
     dispatch({ type: ActionType.CHANGE_DEADLINE, payload: deadline });
 
-  const changeGoalUuids = (goalUuids: number[]) =>
+  const changeGoalUuids = (goalUuids: string[]) =>
     dispatch({ type: ActionType.CHANGE_GOAL_UUIDS, payload: goalUuids });
 
   const changePosition = (position: number) =>
     dispatch({ type: ActionType.CHANGE_POSITION, payload: position });
 
-  const changePrerequisiteUuids = (prerequisiteUuids: number[]) =>
+  const changePrerequisiteUuids = (prerequisiteUuids: string[]) =>
     dispatch({ type: ActionType.CHANGE_PREREQUISITE_UUIDS, payload: prerequisiteUuids });
 
   const changeRelease = (release?: Date) =>

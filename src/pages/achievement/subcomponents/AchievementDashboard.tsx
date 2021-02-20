@@ -29,9 +29,9 @@ export type StateProps = {
  * @param focusState the focused achievement state
  */
 export const generateAchievementTasks = (
-  taskUuids: number[],
+  taskUuids: string[],
   filterStatus: FilterStatus,
-  focusState: [number, any]
+  focusState: [string, any]
 ) =>
   taskUuids.map(taskUuid => (
     <AchievementTask
@@ -50,8 +50,8 @@ function Dashboard(props: DispatchProps & StateProps) {
    */
   useEffect(() => {
     if (Constants.useAchievementBackend) {
-      getAchievements();
       getOwnGoals();
+      getAchievements();
     }
   }, [getAchievements, getOwnGoals]);
 
@@ -62,7 +62,7 @@ function Dashboard(props: DispatchProps & StateProps) {
    * Marks the achievement uuid that is currently on focus (selected)
    * If an achievement is focused, the cards glow and dashboard displays the AchievementView
    */
-  const focusState = useState<number>(NaN);
+  const focusState = useState<string>('');
   const [focusUuid] = focusState;
 
   return (

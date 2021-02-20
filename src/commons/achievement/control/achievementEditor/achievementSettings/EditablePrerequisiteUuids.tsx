@@ -4,9 +4,9 @@ import { useContext } from 'react';
 import { AchievementContext } from 'src/features/achievement/AchievementConstants';
 
 type EditablePrerequisiteUuidsProps = {
-  changePrerequisiteUuids: (prerequisiteUuids: number[]) => void;
-  uuid: number;
-  prerequisiteUuids: number[];
+  changePrerequisiteUuids: (prerequisiteUuids: string[]) => void;
+  uuid: string;
+  prerequisiteUuids: string[];
 };
 
 function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
@@ -15,23 +15,23 @@ function EditablePrerequisiteUuids(props: EditablePrerequisiteUuidsProps) {
   const inferencer = useContext(AchievementContext);
   const availableUuids = inferencer.listAvailablePrerequisiteUuids(uuid);
   const getUuid = (title: string) => inferencer.getUuidByTitle(title);
-  const getTitle = (uuid: number) => inferencer.getTitleByUuid(uuid);
+  const getTitle = (uuid: string) => inferencer.getTitleByUuid(uuid);
 
-  const PrerequisiteSelect = MultiSelect.ofType<number>();
-  const prerequisiteRenderer: ItemRenderer<number> = (uuid, { handleClick }) => (
+  const PrerequisiteSelect = MultiSelect.ofType<string>();
+  const prerequisiteRenderer: ItemRenderer<string> = (uuid, { handleClick }) => (
     <MenuItem key={uuid} onClick={handleClick} text={getTitle(uuid)} />
   );
 
   const selectedPrereqs = new Set(prerequisiteUuids);
   const availablePrereqs = new Set(availableUuids);
 
-  const selectPrereq = (selectUuid: number) => {
+  const selectPrereq = (selectUuid: string) => {
     selectedPrereqs.add(selectUuid);
     availablePrereqs.delete(selectUuid);
     changePrerequisiteUuids([...selectedPrereqs]);
   };
 
-  const removePrereq = (removeUuid?: number) => {
+  const removePrereq = (removeUuid?: string) => {
     if (removeUuid === undefined) return;
 
     selectedPrereqs.delete(removeUuid);

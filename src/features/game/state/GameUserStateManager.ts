@@ -91,7 +91,7 @@ export default class GameUserStateManager {
     const goals = SourceAcademyGame.getInstance().getGoals();
 
     // Convert goals to map
-    const goalMapping = new Map<number, AchievementGoal>();
+    const goalMapping = new Map<string, AchievementGoal>();
     goals.forEach(goal => goalMapping.set(goal.uuid, goal));
 
     achievements.forEach(achievement => {

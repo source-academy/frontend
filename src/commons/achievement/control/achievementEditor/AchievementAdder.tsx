@@ -7,7 +7,7 @@ import { achievementTemplate } from './AchievementTemplate';
 
 type AchievementAdderProps = {
   allowNewUuid: boolean;
-  setNewUuid: (uuid: number) => void;
+  setNewUuid: (uuid: string) => void;
 };
 
 function AchievementAdder(props: AchievementAdderProps) {
