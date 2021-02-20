@@ -10,7 +10,6 @@ import { AND, BooleanExpression, OR } from 'src/features/achievement/ExpressionT
  * Why is this even a possible boolean expression? why would anyone ever use false?
  */
 
-
 type EditableBinaryMetaProps = {
   binaryMeta: BinaryMeta;
   changeMeta: (meta: GoalMeta) => void;
@@ -25,7 +24,7 @@ const joinerRenderer: ItemRenderer<Joiner> = (joiner, { handleClick }) => (
 // Takes the current condition, splits it into an array of strings
 const conditionSplitter = (condition: BooleanExpression): string[] => {
   // only OR or AND Expressions have type property
-  if (typeof(condition) === 'object' && 'type' in condition) {
+  if (typeof condition === 'object' && 'type' in condition) {
     const { type, operands } = condition;
     const len = operands.length;
     const conditions = [];
@@ -41,7 +40,7 @@ const conditionSplitter = (condition: BooleanExpression): string[] => {
   } else {
     return [JSON.stringify(condition)];
   }
-}
+};
 
 function EditableBinaryMeta(props: EditableBinaryMetaProps) {
   const { binaryMeta, changeMeta } = props;
@@ -77,10 +76,10 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
 
   // Adds the and/or, adds the condition to be edited
   const addCondition = () => {
-    joiners.push("AND");
+    joiners.push('AND');
     conditions.push('{"event":"", "restriction":""}');
     changeCondition();
-  }
+  };
 
   const changeConditionArray = (cond: string, idx: number) => {
     conditions[idx] = cond;
@@ -102,7 +101,6 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
     joiners.length = joiners.length - 1;
     changeCondition();
   };
-    
 
   // Generates the components for editing conditions
   const generateConditions = () => {
@@ -110,35 +108,39 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
       <div key={idx}>
         {
           // even idx is condition, odd is joiner
-          idx % 2 === 0 ?
-          // the text to change the condition
-          <>
-            <Tooltip content="Condition">
-              <EditableText
-                onChange={value => changeConditionArray(value, idx / 2)}
-                multiline={true}
-                placeholder="Enter condition here"
-                value={op}
-              />
+          idx % 2 === 0 ? (
+            // the text to change the condition
+            <>
+              <Tooltip content="Condition">
+                <EditableText
+                  onChange={value => changeConditionArray(value, idx / 2)}
+                  multiline={true}
+                  placeholder="Enter condition here"
+                  value={op}
+                />
+              </Tooltip>
+              {
+                // should only be deleteable if not the only condition
+                conditions.length > 1 && (
+                  <Tooltip content="Delete Condition">
+                    <Button intent="danger" icon="trash" onClick={() => deleteCondition(idx)} />
+                  </Tooltip>
+                )
+              }
+            </>
+          ) : (
+            // the button to choose the joiner to use
+            <Tooltip content="And/Or">
+              <JoinerSelect
+                filterable={false}
+                itemRenderer={joinerRenderer}
+                items={['AND', 'OR']}
+                onItemSelect={value => changeJoinerArray(value, (idx - 1) / 2)}
+              >
+                <Button minimal={true} outlined={true} text={op} />
+              </JoinerSelect>
             </Tooltip>
-            { // should only be deleteable if not the only condition
-              conditions.length > 1 &&
-              <Tooltip content="Delete Condition">
-                <Button intent='danger' icon='trash' onClick={() => deleteCondition(idx)}/>
-              </Tooltip> 
-            }
-          </>:
-          // the button to choose the joiner to use
-          <Tooltip content="And/Or">
-            <JoinerSelect
-              filterable={false}
-              itemRenderer={joinerRenderer}
-              items={['AND', 'OR']}
-              onItemSelect={value => changeJoinerArray(value, (idx - 1) / 2)}
-            >
-              <Button minimal={true} outlined={true} text={op} />
-            </JoinerSelect>
-          </Tooltip>
+          )
         }
       </div>
     ));
@@ -158,7 +160,7 @@ function EditableBinaryMeta(props: EditableBinaryMetaProps) {
       </Tooltip>
       {generateConditions()}
       <br />
-      <Button minimal={true} outlined={true} text='Add Condition' onClick={addCondition} />
+      <Button minimal={true} outlined={true} text="Add Condition" onClick={addCondition} />
     </>
   );
 }

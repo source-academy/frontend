@@ -23,7 +23,7 @@ function GoalEditor(props: GoalEditorProps) {
    * is being added to the system and the admin is not allowed to add two goals
    * at one go. The newUuid holds the newly created goal uuid until the new goal
    * is added into the inferencer.
-   * 
+   *
    * NOTE: was previously NaN by default, not sure how this should change for uuid
    */
   const [newUuid, setNewUuid] = useState<string>('');
@@ -52,9 +52,7 @@ function GoalEditor(props: GoalEditorProps) {
       <div className="command">
         <GoalAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
-      <ul className="goal-container">
-        {generateEditableGoals(inferencer.getAllGoalUuids())}
-      </ul>
+      <ul className="goal-container">{generateEditableGoals(inferencer.getAllGoalUuids())}</ul>
     </div>
   );
 }

@@ -152,7 +152,7 @@ export const getAchievements = async (tokens: Tokens): Promise<AchievementItem[]
         prerequisiteUuids: achievement.prerequisiteUuids,
         goalUuids: achievement.goalsUuids,
         cardBackground: achievement.cardBackground || '',
-        view: { 
+        view: {
           coverImage: achievement.view.coverImage || '',
           completionText: achievement.view.completionText || '',
           description: achievement.view.description || ''
@@ -249,12 +249,8 @@ export async function bulkUpdateGoals(
 ): Promise<Response | null> {
   const resp = await request(`admin/goals`, 'PUT', {
     accessToken: tokens.accessToken,
-    body: { 
-      goals: JSON.stringify(
-        goals.map(
-          goal => BackendifyGoalDefinition(goal)
-        )
-      )
+    body: {
+      goals: JSON.stringify(goals.map(goal => BackendifyGoalDefinition(goal)))
     },
     noHeaderAccept: true,
     refreshToken: tokens.refreshToken,
@@ -325,10 +321,7 @@ export const updateGoalProgress = async (
 /**
  * DELETE /admin/achievements/{achievementUuid}
  */
-export const removeAchievement = async (
-  uuid: string,
-  tokens: Tokens
-): Promise<Response | null> => {
+export const removeAchievement = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`admin/achievements/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },
@@ -343,10 +336,7 @@ export const removeAchievement = async (
 /**
  * DELETE /admin/goals/{goalUuid}
  */
-export const removeGoal = async (
-  uuid: string,
-  tokens: Tokens
-): Promise<Response | null> => {
+export const removeGoal = async (uuid: string, tokens: Tokens): Promise<Response | null> => {
   const resp = await request(`admin/goals/${uuid}`, 'DELETE', {
     ...tokens,
     body: { uuid: uuid },

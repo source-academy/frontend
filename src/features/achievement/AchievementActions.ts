@@ -35,8 +35,7 @@ export const getGoals = (studentId: number) => action(GET_GOALS, studentId);
 
 export const getOwnGoals = () => action(GET_OWN_GOALS);
 
-export const removeAchievement = (uuid: string) =>
-  action(REMOVE_ACHIEVEMENT, uuid);
+export const removeAchievement = (uuid: string) => action(REMOVE_ACHIEVEMENT, uuid);
 
 export const removeGoal = (uuid: string) => action(REMOVE_GOAL, uuid);
 

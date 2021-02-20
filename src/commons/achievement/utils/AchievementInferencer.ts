@@ -138,22 +138,22 @@ class AchievementInferencer {
 
   /**
    * Returns the position of the achievement
-   * 
-   * @param uuid Achievement Uuid 
+   *
+   * @param uuid Achievement Uuid
    */
   public getAchievementPositionByUuid(uuid: string) {
     return this.nodeList.get(uuid)!.achievement.position;
   }
 
   /**
-   * Returns the uuids of the achievements that were deleted 
+   * Returns the uuids of the achievements that were deleted
    */
   public getAchievementsToDelete() {
     return this.achievementsToDelete;
   }
 
   /**
-   * Returns the uuids of the goals that were deleted 
+   * Returns the uuids of the goals that were deleted
    */
   public getGoalsToDelete() {
     return this.goalsToDelete;

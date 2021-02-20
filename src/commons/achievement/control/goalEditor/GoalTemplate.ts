@@ -31,7 +31,7 @@ export const metaTemplate = (type: GoalType): GoalMeta => {
 export const goalDefinitionTemplate: GoalDefinition = {
   uuid: '',
   text: 'Goal Text Here',
-  meta: metaTemplate(GoalType.MANUAL),
+  meta: metaTemplate(GoalType.MANUAL)
 };
 
 const goalProgressTemplate: GoalProgress = {

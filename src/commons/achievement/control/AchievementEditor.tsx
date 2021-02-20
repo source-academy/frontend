@@ -23,7 +23,7 @@ function AchievementEditor(props: AchievementEditorProps) {
    * is being added to the system and the admin is not allowed to add two achievements
    * at one go. The newUuid holds the newly created achievement uuid until the new achievement
    * is added into the inferencer.
-   * 
+   *
    * NOTE: was previously NaN by default, unsure how this should change for uuid
    */
   const [newUuid, setNewUuid] = useState<string>('');
@@ -53,9 +53,15 @@ function AchievementEditor(props: AchievementEditorProps) {
         <AchievementAdder allowNewUuid={allowNewUuid} setNewUuid={setNewUuid} />
       </div>
       <ul className="achievement-container">
-        {generateEditableCards(inferencer.getAllAchievementUuids().sort(
-          (a, b) => inferencer.getAchievementPositionByUuid(b) - inferencer.getAchievementPositionByUuid(a)
-        ))}
+        {generateEditableCards(
+          inferencer
+            .getAllAchievementUuids()
+            .sort(
+              (a, b) =>
+                inferencer.getAchievementPositionByUuid(b) -
+                inferencer.getAchievementPositionByUuid(a)
+            )
+        )}
       </ul>
     </div>
   );

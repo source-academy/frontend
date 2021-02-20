@@ -22,7 +22,7 @@ function AchievementView(props: AchievementViewProps) {
   const inferencer = useContext(AchievementContext);
 
   // NOTE: was originally isNaN, not sure how this should change for uuid
-  if (focusUuid === "") {
+  if (focusUuid === '') {
     return (
       <div className="no-view">
         <Icon icon={IconNames.MOUNTAIN} iconSize={60} />
